@@ -44,7 +44,6 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -87,15 +86,16 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
 		new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
 			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
 			new String[] { Long.class.getName() },
-			PhoneModelImpl.COMPANYID_COLUMN_BITMASK);
+			PhoneModelImpl.COMPANYID_COLUMN_BITMASK |
+			PhoneModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
 			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
@@ -130,208 +130,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	public List<Phone> findByCompanyId(long companyId, int start, int end)
 		throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the phones where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of phones
-	 * @param end the upper bound of the range of phones (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching phones
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Phone> findByCompanyId(long companyId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Phone phone : list) {
-				if ((companyId != phone.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_PHONE_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(PhoneModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				list = (List<Phone>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first phone in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching phone
-	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchPhoneException, SystemException {
-		Phone phone = fetchByCompanyId_First(companyId, orderByComparator);
-
-		if (phone != null) {
-			return phone;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPhoneException(msg.toString());
-	}
-
-	/**
-	 * Returns the first phone in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Phone> list = findByCompanyId(companyId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last phone in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching phone
-	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchPhoneException, SystemException {
-		Phone phone = fetchByCompanyId_Last(companyId, orderByComparator);
-
-		if (phone != null) {
-			return phone;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPhoneException(msg.toString());
-	}
-
-	/**
-	 * Returns the last phone in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByCompanyId(companyId);
-
-		List<Phone> list = findByCompanyId(companyId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -445,7 +243,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				}
 			}
 		}
-
 		else {
 			query.append(PhoneModelImpl.ORDER_BY_JPQL);
 		}
@@ -480,13 +277,262 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	}
 
 	/**
+	 * Returns an ordered range of all the phones where companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of phones
+	 * @param end the upper bound of the range of phones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching phones
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Phone> findByCompanyId(long companyId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId, start, end, orderByComparator };
+		}
+
+		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Phone phone : list) {
+				if ((companyId != phone.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_PHONE_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(PhoneModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				list = (List<Phone>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByCompanyId_First(long companyId)
+		throws NoSuchPhoneException, SystemException {
+		return findByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first phone in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPhoneException, SystemException {
+		Phone phone = fetchByCompanyId_First(companyId, orderByComparator);
+
+		if (phone != null) {
+			return phone;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPhoneException(msg.toString());
+	}
+
+	/**
+	 * Returns the first phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByCompanyId_First(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first phone in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Phone> list = findByCompanyId(companyId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByCompanyId_Last(long companyId)
+		throws NoSuchPhoneException, SystemException {
+		return findByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last phone in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPhoneException, SystemException {
+		Phone phone = fetchByCompanyId_Last(companyId, orderByComparator);
+
+		if (phone != null) {
+			return phone;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPhoneException(msg.toString());
+	}
+
+	/**
+	 * Returns the last phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByCompanyId_Last(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last phone in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByCompanyId(companyId);
+
+		List<Phone> list = findByCompanyId(companyId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the phones where companyId = &#63; from the database.
 	 *
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByCompanyId(long companyId) throws SystemException {
-		for (Phone phone : findByCompanyId(companyId)) {
+		for (Phone phone : findByCompanyId(companyId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(phone);
 		}
 	}
@@ -499,10 +545,12 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByCompanyId(long companyId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
+
 		Object[] finderArgs = new Object[] { companyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -525,18 +573,15 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -551,15 +596,16 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
 		new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
 			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
 			new String[] { Long.class.getName() },
-			PhoneModelImpl.USERID_COLUMN_BITMASK);
+			PhoneModelImpl.USERID_COLUMN_BITMASK |
+			PhoneModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
 			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
@@ -592,208 +638,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	public List<Phone> findByUserId(long userId, int start, int end)
 		throws SystemException {
 		return findByUserId(userId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the phones where userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId the user ID
-	 * @param start the lower bound of the range of phones
-	 * @param end the upper bound of the range of phones (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching phones
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Phone> findByUserId(long userId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId, start, end, orderByComparator };
-		}
-
-		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Phone phone : list) {
-				if ((userId != phone.getUserId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_PHONE_WHERE);
-
-			query.append(_FINDER_COLUMN_USERID_USERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(PhoneModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				list = (List<Phone>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first phone in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching phone
-	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone findByUserId_First(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchPhoneException, SystemException {
-		Phone phone = fetchByUserId_First(userId, orderByComparator);
-
-		if (phone != null) {
-			return phone;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPhoneException(msg.toString());
-	}
-
-	/**
-	 * Returns the first phone in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone fetchByUserId_First(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Phone> list = findByUserId(userId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last phone in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching phone
-	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone findByUserId_Last(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchPhoneException, SystemException {
-		Phone phone = fetchByUserId_Last(userId, orderByComparator);
-
-		if (phone != null) {
-			return phone;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPhoneException(msg.toString());
-	}
-
-	/**
-	 * Returns the last phone in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUserId(userId);
-
-		List<Phone> list = findByUserId(userId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -907,7 +751,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				}
 			}
 		}
-
 		else {
 			query.append(PhoneModelImpl.ORDER_BY_JPQL);
 		}
@@ -942,13 +785,260 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	}
 
 	/**
+	 * Returns an ordered range of all the phones where userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of phones
+	 * @param end the upper bound of the range of phones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching phones
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Phone> findByUserId(long userId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
+			finderArgs = new Object[] { userId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
+			finderArgs = new Object[] { userId, start, end, orderByComparator };
+		}
+
+		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Phone phone : list) {
+				if ((userId != phone.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_PHONE_WHERE);
+
+			query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(PhoneModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				list = (List<Phone>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the first matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByUserId_First(long userId)
+		throws NoSuchPhoneException, SystemException {
+		return findByUserId_First(userId, null);
+	}
+
+	/**
+	 * Returns the first phone in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByUserId_First(long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPhoneException, SystemException {
+		Phone phone = fetchByUserId_First(userId, orderByComparator);
+
+		if (phone != null) {
+			return phone;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPhoneException(msg.toString());
+	}
+
+	/**
+	 * Returns the first phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByUserId_First(long userId) throws SystemException {
+		return fetchByUserId_First(userId, null);
+	}
+
+	/**
+	 * Returns the first phone in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByUserId_First(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Phone> list = findByUserId(userId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the last matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByUserId_Last(long userId)
+		throws NoSuchPhoneException, SystemException {
+		return findByUserId_Last(userId, null);
+	}
+
+	/**
+	 * Returns the last phone in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByUserId_Last(long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPhoneException, SystemException {
+		Phone phone = fetchByUserId_Last(userId, orderByComparator);
+
+		if (phone != null) {
+			return phone;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPhoneException(msg.toString());
+	}
+
+	/**
+	 * Returns the last phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByUserId_Last(long userId) throws SystemException {
+		return fetchByUserId_Last(userId, null);
+	}
+
+	/**
+	 * Returns the last phone in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByUserId_Last(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUserId(userId);
+
+		List<Phone> list = findByUserId(userId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the phones where userId = &#63; from the database.
 	 *
 	 * @param userId the user ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUserId(long userId) throws SystemException {
-		for (Phone phone : findByUserId(userId)) {
+		for (Phone phone : findByUserId(userId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(phone);
 		}
 	}
@@ -961,10 +1051,12 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByUserId(long userId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_USERID;
+
 		Object[] finderArgs = new Object[] { userId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -987,18 +1079,15 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				qPos.add(userId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1013,15 +1102,16 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
 			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			PhoneModelImpl.COMPANYID_COLUMN_BITMASK |
-			PhoneModelImpl.CLASSNAMEID_COLUMN_BITMASK);
+			PhoneModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			PhoneModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
 			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
@@ -1058,229 +1148,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	public List<Phone> findByC_C(long companyId, long classNameId, int start,
 		int end) throws SystemException {
 		return findByC_C(companyId, classNameId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the phones where companyId = &#63; and classNameId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param start the lower bound of the range of phones
-	 * @param end the upper bound of the range of phones (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching phones
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Phone> findByC_C(long companyId, long classNameId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
-			finderArgs = new Object[] { companyId, classNameId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
-			finderArgs = new Object[] {
-					companyId, classNameId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Phone phone : list) {
-				if ((companyId != phone.getCompanyId()) ||
-						(classNameId != phone.getClassNameId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_PHONE_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(PhoneModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(classNameId);
-
-				list = (List<Phone>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first phone in the ordered set where companyId = &#63; and classNameId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching phone
-	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone findByC_C_First(long companyId, long classNameId,
-		OrderByComparator orderByComparator)
-		throws NoSuchPhoneException, SystemException {
-		Phone phone = fetchByC_C_First(companyId, classNameId, orderByComparator);
-
-		if (phone != null) {
-			return phone;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPhoneException(msg.toString());
-	}
-
-	/**
-	 * Returns the first phone in the ordered set where companyId = &#63; and classNameId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone fetchByC_C_First(long companyId, long classNameId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Phone> list = findByC_C(companyId, classNameId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last phone in the ordered set where companyId = &#63; and classNameId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching phone
-	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone findByC_C_Last(long companyId, long classNameId,
-		OrderByComparator orderByComparator)
-		throws NoSuchPhoneException, SystemException {
-		Phone phone = fetchByC_C_Last(companyId, classNameId, orderByComparator);
-
-		if (phone != null) {
-			return phone;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPhoneException(msg.toString());
-	}
-
-	/**
-	 * Returns the last phone in the ordered set where companyId = &#63; and classNameId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone fetchByC_C_Last(long companyId, long classNameId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByC_C(companyId, classNameId);
-
-		List<Phone> list = findByC_C(companyId, classNameId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1398,7 +1265,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				}
 			}
 		}
-
 		else {
 			query.append(PhoneModelImpl.ORDER_BY_JPQL);
 		}
@@ -1435,6 +1301,279 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	}
 
 	/**
+	 * Returns an ordered range of all the phones where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param start the lower bound of the range of phones
+	 * @param end the upper bound of the range of phones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching phones
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Phone> findByC_C(long companyId, long classNameId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
+			finderArgs = new Object[] { companyId, classNameId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
+			finderArgs = new Object[] {
+					companyId, classNameId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Phone phone : list) {
+				if ((companyId != phone.getCompanyId()) ||
+						(classNameId != phone.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_PHONE_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(PhoneModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(classNameId);
+
+				list = (List<Phone>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @return the first matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByC_C_First(long companyId, long classNameId)
+		throws NoSuchPhoneException, SystemException {
+		return findByC_C_First(companyId, classNameId, null);
+	}
+
+	/**
+	 * Returns the first phone in the ordered set where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByC_C_First(long companyId, long classNameId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPhoneException, SystemException {
+		Phone phone = fetchByC_C_First(companyId, classNameId, orderByComparator);
+
+		if (phone != null) {
+			return phone;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPhoneException(msg.toString());
+	}
+
+	/**
+	 * Returns the first phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByC_C_First(long companyId, long classNameId)
+		throws SystemException {
+		return fetchByC_C_First(companyId, classNameId, null);
+	}
+
+	/**
+	 * Returns the first phone in the ordered set where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByC_C_First(long companyId, long classNameId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Phone> list = findByC_C(companyId, classNameId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @return the last matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByC_C_Last(long companyId, long classNameId)
+		throws NoSuchPhoneException, SystemException {
+		return findByC_C_Last(companyId, classNameId, null);
+	}
+
+	/**
+	 * Returns the last phone in the ordered set where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByC_C_Last(long companyId, long classNameId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPhoneException, SystemException {
+		Phone phone = fetchByC_C_Last(companyId, classNameId, orderByComparator);
+
+		if (phone != null) {
+			return phone;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPhoneException(msg.toString());
+	}
+
+	/**
+	 * Returns the last phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByC_C_Last(long companyId, long classNameId)
+		throws SystemException {
+		return fetchByC_C_Last(companyId, classNameId, null);
+	}
+
+	/**
+	 * Returns the last phone in the ordered set where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByC_C_Last(long companyId, long classNameId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_C(companyId, classNameId);
+
+		List<Phone> list = findByC_C(companyId, classNameId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the phones where companyId = &#63; and classNameId = &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -1443,7 +1582,8 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	 */
 	public void removeByC_C(long companyId, long classNameId)
 		throws SystemException {
-		for (Phone phone : findByC_C(companyId, classNameId)) {
+		for (Phone phone : findByC_C(companyId, classNameId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(phone);
 		}
 	}
@@ -1458,10 +1598,12 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	 */
 	public int countByC_C(long companyId, long classNameId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C;
+
 		Object[] finderArgs = new Object[] { companyId, classNameId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1488,18 +1630,15 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				qPos.add(classNameId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -1515,8 +1654,8 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
 			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
@@ -1526,7 +1665,8 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 			},
 			PhoneModelImpl.COMPANYID_COLUMN_BITMASK |
 			PhoneModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			PhoneModelImpl.CLASSPK_COLUMN_BITMASK);
+			PhoneModelImpl.CLASSPK_COLUMN_BITMASK |
+			PhoneModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
 			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_C",
@@ -1567,250 +1707,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	public List<Phone> findByC_C_C(long companyId, long classNameId,
 		long classPK, int start, int end) throws SystemException {
 		return findByC_C_C(companyId, classNameId, classPK, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the phones where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param start the lower bound of the range of phones
-	 * @param end the upper bound of the range of phones (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching phones
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Phone> findByC_C_C(long companyId, long classNameId,
-		long classPK, int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C;
-			finderArgs = new Object[] { companyId, classNameId, classPK };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C;
-			finderArgs = new Object[] {
-					companyId, classNameId, classPK,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Phone phone : list) {
-				if ((companyId != phone.getCompanyId()) ||
-						(classNameId != phone.getClassNameId()) ||
-						(classPK != phone.getClassPK())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_PHONE_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_C_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_CLASSPK_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(PhoneModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				list = (List<Phone>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching phone
-	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone findByC_C_C_First(long companyId, long classNameId,
-		long classPK, OrderByComparator orderByComparator)
-		throws NoSuchPhoneException, SystemException {
-		Phone phone = fetchByC_C_C_First(companyId, classNameId, classPK,
-				orderByComparator);
-
-		if (phone != null) {
-			return phone;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPhoneException(msg.toString());
-	}
-
-	/**
-	 * Returns the first phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone fetchByC_C_C_First(long companyId, long classNameId,
-		long classPK, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<Phone> list = findByC_C_C(companyId, classNameId, classPK, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching phone
-	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone findByC_C_C_Last(long companyId, long classNameId,
-		long classPK, OrderByComparator orderByComparator)
-		throws NoSuchPhoneException, SystemException {
-		Phone phone = fetchByC_C_C_Last(companyId, classNameId, classPK,
-				orderByComparator);
-
-		if (phone != null) {
-			return phone;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPhoneException(msg.toString());
-	}
-
-	/**
-	 * Returns the last phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone fetchByC_C_C_Last(long companyId, long classNameId,
-		long classPK, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByC_C_C(companyId, classNameId, classPK);
-
-		List<Phone> list = findByC_C_C(companyId, classNameId, classPK,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1931,7 +1827,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				}
 			}
 		}
-
 		else {
 			query.append(PhoneModelImpl.ORDER_BY_JPQL);
 		}
@@ -1970,6 +1865,304 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	}
 
 	/**
+	 * Returns an ordered range of all the phones where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param start the lower bound of the range of phones
+	 * @param end the upper bound of the range of phones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching phones
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Phone> findByC_C_C(long companyId, long classNameId,
+		long classPK, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C;
+			finderArgs = new Object[] { companyId, classNameId, classPK };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C;
+			finderArgs = new Object[] {
+					companyId, classNameId, classPK,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Phone phone : list) {
+				if ((companyId != phone.getCompanyId()) ||
+						(classNameId != phone.getClassNameId()) ||
+						(classPK != phone.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_PHONE_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_C_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_CLASSPK_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(PhoneModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				list = (List<Phone>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the first matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByC_C_C_First(long companyId, long classNameId,
+		long classPK) throws NoSuchPhoneException, SystemException {
+		return findByC_C_C_First(companyId, classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the first phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByC_C_C_First(long companyId, long classNameId,
+		long classPK, OrderByComparator orderByComparator)
+		throws NoSuchPhoneException, SystemException {
+		Phone phone = fetchByC_C_C_First(companyId, classNameId, classPK,
+				orderByComparator);
+
+		if (phone != null) {
+			return phone;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPhoneException(msg.toString());
+	}
+
+	/**
+	 * Returns the first phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByC_C_C_First(long companyId, long classNameId,
+		long classPK) throws SystemException {
+		return fetchByC_C_C_First(companyId, classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the first phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByC_C_C_First(long companyId, long classNameId,
+		long classPK, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<Phone> list = findByC_C_C(companyId, classNameId, classPK, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the last matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByC_C_C_Last(long companyId, long classNameId, long classPK)
+		throws NoSuchPhoneException, SystemException {
+		return findByC_C_C_Last(companyId, classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the last phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByC_C_C_Last(long companyId, long classNameId,
+		long classPK, OrderByComparator orderByComparator)
+		throws NoSuchPhoneException, SystemException {
+		Phone phone = fetchByC_C_C_Last(companyId, classNameId, classPK,
+				orderByComparator);
+
+		if (phone != null) {
+			return phone;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPhoneException(msg.toString());
+	}
+
+	/**
+	 * Returns the last phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByC_C_C_Last(long companyId, long classNameId,
+		long classPK) throws SystemException {
+		return fetchByC_C_C_Last(companyId, classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the last phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByC_C_C_Last(long companyId, long classNameId,
+		long classPK, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByC_C_C(companyId, classNameId, classPK);
+
+		List<Phone> list = findByC_C_C(companyId, classNameId, classPK,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the phones where companyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -1979,7 +2172,8 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	 */
 	public void removeByC_C_C(long companyId, long classNameId, long classPK)
 		throws SystemException {
-		for (Phone phone : findByC_C_C(companyId, classNameId, classPK)) {
+		for (Phone phone : findByC_C_C(companyId, classNameId, classPK,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(phone);
 		}
 	}
@@ -1995,10 +2189,12 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	 */
 	public int countByC_C_C(long companyId, long classNameId, long classPK)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C_C;
+
 		Object[] finderArgs = new Object[] { companyId, classNameId, classPK };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C_C,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -2029,18 +2225,15 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				qPos.add(classPK);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C_C,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2058,8 +2251,8 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P =
 		new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
@@ -2072,7 +2265,8 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 			PhoneModelImpl.COMPANYID_COLUMN_BITMASK |
 			PhoneModelImpl.CLASSNAMEID_COLUMN_BITMASK |
 			PhoneModelImpl.CLASSPK_COLUMN_BITMASK |
-			PhoneModelImpl.PRIMARY_COLUMN_BITMASK);
+			PhoneModelImpl.PRIMARY_COLUMN_BITMASK |
+			PhoneModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_C_P = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
 			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_C_P",
@@ -2118,266 +2312,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 		throws SystemException {
 		return findByC_C_C_P(companyId, classNameId, classPK, primary, start,
 			end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the phones where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param primary the primary
-	 * @param start the lower bound of the range of phones
-	 * @param end the upper bound of the range of phones (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching phones
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Phone> findByC_C_C_P(long companyId, long classNameId,
-		long classPK, boolean primary, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P;
-			finderArgs = new Object[] { companyId, classNameId, classPK, primary };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C_P;
-			finderArgs = new Object[] {
-					companyId, classNameId, classPK, primary,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Phone phone : list) {
-				if ((companyId != phone.getCompanyId()) ||
-						(classNameId != phone.getClassNameId()) ||
-						(classPK != phone.getClassPK()) ||
-						(primary != phone.getPrimary())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(6 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(6);
-			}
-
-			query.append(_SQL_SELECT_PHONE_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_C_P_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_P_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_P_CLASSPK_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_P_PRIMARY_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(PhoneModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				qPos.add(primary);
-
-				list = (List<Phone>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param primary the primary
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching phone
-	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone findByC_C_C_P_First(long companyId, long classNameId,
-		long classPK, boolean primary, OrderByComparator orderByComparator)
-		throws NoSuchPhoneException, SystemException {
-		Phone phone = fetchByC_C_C_P_First(companyId, classNameId, classPK,
-				primary, orderByComparator);
-
-		if (phone != null) {
-			return phone;
-		}
-
-		StringBundler msg = new StringBundler(10);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(", primary=");
-		msg.append(primary);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPhoneException(msg.toString());
-	}
-
-	/**
-	 * Returns the first phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param primary the primary
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone fetchByC_C_C_P_First(long companyId, long classNameId,
-		long classPK, boolean primary, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<Phone> list = findByC_C_C_P(companyId, classNameId, classPK,
-				primary, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param primary the primary
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching phone
-	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone findByC_C_C_P_Last(long companyId, long classNameId,
-		long classPK, boolean primary, OrderByComparator orderByComparator)
-		throws NoSuchPhoneException, SystemException {
-		Phone phone = fetchByC_C_C_P_Last(companyId, classNameId, classPK,
-				primary, orderByComparator);
-
-		if (phone != null) {
-			return phone;
-		}
-
-		StringBundler msg = new StringBundler(10);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(", primary=");
-		msg.append(primary);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPhoneException(msg.toString());
-	}
-
-	/**
-	 * Returns the last phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param primary the primary
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone fetchByC_C_C_P_Last(long companyId, long classNameId,
-		long classPK, boolean primary, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByC_C_C_P(companyId, classNameId, classPK, primary);
-
-		List<Phone> list = findByC_C_C_P(companyId, classNameId, classPK,
-				primary, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2502,7 +2436,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				}
 			}
 		}
-
 		else {
 			query.append(PhoneModelImpl.ORDER_BY_JPQL);
 		}
@@ -2543,6 +2476,329 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	}
 
 	/**
+	 * Returns an ordered range of all the phones where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param primary the primary
+	 * @param start the lower bound of the range of phones
+	 * @param end the upper bound of the range of phones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching phones
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Phone> findByC_C_C_P(long companyId, long classNameId,
+		long classPK, boolean primary, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P;
+			finderArgs = new Object[] { companyId, classNameId, classPK, primary };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C_P;
+			finderArgs = new Object[] {
+					companyId, classNameId, classPK, primary,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Phone phone : list) {
+				if ((companyId != phone.getCompanyId()) ||
+						(classNameId != phone.getClassNameId()) ||
+						(classPK != phone.getClassPK()) ||
+						(primary != phone.getPrimary())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(6 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(6);
+			}
+
+			query.append(_SQL_SELECT_PHONE_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_C_P_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_P_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_P_CLASSPK_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_P_PRIMARY_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(PhoneModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				qPos.add(primary);
+
+				list = (List<Phone>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param primary the primary
+	 * @return the first matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByC_C_C_P_First(long companyId, long classNameId,
+		long classPK, boolean primary)
+		throws NoSuchPhoneException, SystemException {
+		return findByC_C_C_P_First(companyId, classNameId, classPK, primary,
+			null);
+	}
+
+	/**
+	 * Returns the first phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param primary the primary
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByC_C_C_P_First(long companyId, long classNameId,
+		long classPK, boolean primary, OrderByComparator orderByComparator)
+		throws NoSuchPhoneException, SystemException {
+		Phone phone = fetchByC_C_C_P_First(companyId, classNameId, classPK,
+				primary, orderByComparator);
+
+		if (phone != null) {
+			return phone;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(", primary=");
+		msg.append(primary);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPhoneException(msg.toString());
+	}
+
+	/**
+	 * Returns the first phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param primary the primary
+	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByC_C_C_P_First(long companyId, long classNameId,
+		long classPK, boolean primary) throws SystemException {
+		return fetchByC_C_C_P_First(companyId, classNameId, classPK, primary,
+			null);
+	}
+
+	/**
+	 * Returns the first phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param primary the primary
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByC_C_C_P_First(long companyId, long classNameId,
+		long classPK, boolean primary, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<Phone> list = findByC_C_C_P(companyId, classNameId, classPK,
+				primary, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param primary the primary
+	 * @return the last matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByC_C_C_P_Last(long companyId, long classNameId,
+		long classPK, boolean primary)
+		throws NoSuchPhoneException, SystemException {
+		return findByC_C_C_P_Last(companyId, classNameId, classPK, primary, null);
+	}
+
+	/**
+	 * Returns the last phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param primary the primary
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByC_C_C_P_Last(long companyId, long classNameId,
+		long classPK, boolean primary, OrderByComparator orderByComparator)
+		throws NoSuchPhoneException, SystemException {
+		Phone phone = fetchByC_C_C_P_Last(companyId, classNameId, classPK,
+				primary, orderByComparator);
+
+		if (phone != null) {
+			return phone;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(", primary=");
+		msg.append(primary);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPhoneException(msg.toString());
+	}
+
+	/**
+	 * Returns the last phone in the default ordered set defined by {@link PhoneModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param primary the primary
+	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByC_C_C_P_Last(long companyId, long classNameId,
+		long classPK, boolean primary) throws SystemException {
+		return fetchByC_C_C_P_Last(companyId, classNameId, classPK, primary,
+			null);
+	}
+
+	/**
+	 * Returns the last phone in the ordered set where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param primary the primary
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching phone, or <code>null</code> if a matching phone could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByC_C_C_P_Last(long companyId, long classNameId,
+		long classPK, boolean primary, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByC_C_C_P(companyId, classNameId, classPK, primary);
+
+		List<Phone> list = findByC_C_C_P(companyId, classNameId, classPK,
+				primary, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the phones where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -2554,7 +2810,7 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	public void removeByC_C_C_P(long companyId, long classNameId, long classPK,
 		boolean primary) throws SystemException {
 		for (Phone phone : findByC_C_C_P(companyId, classNameId, classPK,
-				primary)) {
+				primary, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(phone);
 		}
 	}
@@ -2571,12 +2827,14 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	 */
 	public int countByC_C_C_P(long companyId, long classNameId, long classPK,
 		boolean primary) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C_C_P;
+
 		Object[] finderArgs = new Object[] {
 				companyId, classNameId, classPK, primary
 			};
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C_C_P,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(5);
@@ -2611,18 +2869,15 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				qPos.add(primary);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C_C_P,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -3055,28 +3310,27 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 		if (phone == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				phone = (Phone)session.get(PhoneImpl.class,
 						Long.valueOf(phoneId));
+
+				if (phone != null) {
+					cacheResult(phone);
+				}
+				else {
+					EntityCacheUtil.putResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+						PhoneImpl.class, phoneId, _nullPhone);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+					PhoneImpl.class, phoneId);
 
 				throw processException(e);
 			}
 			finally {
-				if (phone != null) {
-					cacheResult(phone);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-						PhoneImpl.class, phoneId, _nullPhone);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -3126,7 +3380,7 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	public List<Phone> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -3167,30 +3421,18 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<Phone>)QueryUtil.list(q, getDialect(), start,
-							end, false);
+				list = (List<Phone>)QueryUtil.list(q, getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<Phone>)QueryUtil.list(q, getDialect(), start,
-							end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -3228,18 +3470,17 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				Query q = session.createQuery(_SQL_COUNT_PHONE);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -3275,6 +3516,7 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	public void destroy() {
 		EntityCacheUtil.removeCache(PhoneImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

@@ -53,7 +53,6 @@ import com.liferay.portlet.trash.service.persistence.TrashEntryPersistence;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -98,15 +97,16 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
 			DLFileShortcutImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
 			new String[] { String.class.getName() },
-			DLFileShortcutModelImpl.UUID_COLUMN_BITMASK);
+			DLFileShortcutModelImpl.UUID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FILESHORTCUTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
@@ -140,218 +140,6 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public List<DLFileShortcut> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the document library file shortcuts where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of document library file shortcuts
-	 * @param end the upper bound of the range of document library file shortcuts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching document library file shortcuts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<DLFileShortcut> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (DLFileShortcut dlFileShortcut : list) {
-				if (!Validator.equals(uuid, dlFileShortcut.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<DLFileShortcut>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first document library file shortcut in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library file shortcut
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchFileShortcutException, SystemException {
-		DLFileShortcut dlFileShortcut = fetchByUuid_First(uuid,
-				orderByComparator);
-
-		if (dlFileShortcut != null) {
-			return dlFileShortcut;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchFileShortcutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first document library file shortcut in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<DLFileShortcut> list = findByUuid(uuid, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last document library file shortcut in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library file shortcut
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchFileShortcutException, SystemException {
-		DLFileShortcut dlFileShortcut = fetchByUuid_Last(uuid, orderByComparator);
-
-		if (dlFileShortcut != null) {
-			return dlFileShortcut;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchFileShortcutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last document library file shortcut in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<DLFileShortcut> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -476,6 +264,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -509,13 +300,276 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	}
 
 	/**
+	 * Returns an ordered range of all the document library file shortcuts where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of document library file shortcuts
+	 * @param end the upper bound of the range of document library file shortcuts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching document library file shortcuts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<DLFileShortcut> findByUuid(String uuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileShortcut dlFileShortcut : list) {
+				if (!Validator.equals(uuid, dlFileShortcut.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<DLFileShortcut>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByUuid_First(String uuid)
+		throws NoSuchFileShortcutException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchFileShortcutException, SystemException {
+		DLFileShortcut dlFileShortcut = fetchByUuid_First(uuid,
+				orderByComparator);
+
+		if (dlFileShortcut != null) {
+			return dlFileShortcut;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFileShortcutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByUuid_First(String uuid)
+		throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<DLFileShortcut> list = findByUuid(uuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByUuid_Last(String uuid)
+		throws NoSuchFileShortcutException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByUuid_Last(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchFileShortcutException, SystemException {
+		DLFileShortcut dlFileShortcut = fetchByUuid_Last(uuid, orderByComparator);
+
+		if (dlFileShortcut != null) {
+			return dlFileShortcut;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFileShortcutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByUuid_Last(String uuid)
+		throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<DLFileShortcut> list = findByUuid(uuid, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the document library file shortcuts where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (DLFileShortcut dlFileShortcut : findByUuid(uuid)) {
+		for (DLFileShortcut dlFileShortcut : findByUuid(uuid,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(dlFileShortcut);
 		}
 	}
@@ -528,10 +582,12 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByUuid(String uuid) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+
 		Object[] finderArgs = new Object[] { uuid };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -566,18 +622,15 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -679,7 +732,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
 
@@ -716,16 +769,14 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 				List<DLFileShortcut> list = q.list();
 
-				result = list;
-
-				DLFileShortcut dlFileShortcut = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
 						finderArgs, list);
 				}
 				else {
-					dlFileShortcut = list.get(0);
+					DLFileShortcut dlFileShortcut = list.get(0);
+
+					result = dlFileShortcut;
 
 					cacheResult(dlFileShortcut);
 
@@ -736,28 +787,23 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 							finderArgs, dlFileShortcut);
 					}
 				}
-
-				return dlFileShortcut;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (DLFileShortcut)result;
-			}
+			return (DLFileShortcut)result;
 		}
 	}
 
@@ -786,10 +832,12 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
+
 		Object[] finderArgs = new Object[] { uuid, groupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -828,18 +876,15 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -858,8 +903,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
 		new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
@@ -868,7 +913,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
 			new String[] { String.class.getName(), Long.class.getName() },
 			DLFileShortcutModelImpl.UUID_COLUMN_BITMASK |
-			DLFileShortcutModelImpl.COMPANYID_COLUMN_BITMASK);
+			DLFileShortcutModelImpl.COMPANYID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FILESHORTCUTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
@@ -905,241 +951,6 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public List<DLFileShortcut> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the document library file shortcuts where uuid = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of document library file shortcuts
-	 * @param end the upper bound of the range of document library file shortcuts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching document library file shortcuts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<DLFileShortcut> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (DLFileShortcut dlFileShortcut : list) {
-				if (!Validator.equals(uuid, dlFileShortcut.getUuid()) ||
-						(companyId != dlFileShortcut.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				list = (List<DLFileShortcut>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first document library file shortcut in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library file shortcut
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchFileShortcutException, SystemException {
-		DLFileShortcut dlFileShortcut = fetchByUuid_C_First(uuid, companyId,
-				orderByComparator);
-
-		if (dlFileShortcut != null) {
-			return dlFileShortcut;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchFileShortcutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first document library file shortcut in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<DLFileShortcut> list = findByUuid_C(uuid, companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last document library file shortcut in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library file shortcut
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchFileShortcutException, SystemException {
-		DLFileShortcut dlFileShortcut = fetchByUuid_C_Last(uuid, companyId,
-				orderByComparator);
-
-		if (dlFileShortcut != null) {
-			return dlFileShortcut;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchFileShortcutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last document library file shortcut in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid_C(uuid, companyId);
-
-		List<DLFileShortcut> list = findByUuid_C(uuid, companyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1267,6 +1078,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1302,6 +1116,295 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	}
 
 	/**
+	 * Returns an ordered range of all the document library file shortcuts where uuid = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of document library file shortcuts
+	 * @param end the upper bound of the range of document library file shortcuts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching document library file shortcuts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<DLFileShortcut> findByUuid_C(String uuid, long companyId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] { uuid, companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] {
+					uuid, companyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileShortcut dlFileShortcut : list) {
+				if (!Validator.equals(uuid, dlFileShortcut.getUuid()) ||
+						(companyId != dlFileShortcut.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				list = (List<DLFileShortcut>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByUuid_C_First(String uuid, long companyId)
+		throws NoSuchFileShortcutException, SystemException {
+		return findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchFileShortcutException, SystemException {
+		DLFileShortcut dlFileShortcut = fetchByUuid_C_First(uuid, companyId,
+				orderByComparator);
+
+		if (dlFileShortcut != null) {
+			return dlFileShortcut;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFileShortcutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByUuid_C_First(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<DLFileShortcut> list = findByUuid_C(uuid, companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByUuid_C_Last(String uuid, long companyId)
+		throws NoSuchFileShortcutException, SystemException {
+		return findByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchFileShortcutException, SystemException {
+		DLFileShortcut dlFileShortcut = fetchByUuid_C_Last(uuid, companyId,
+				orderByComparator);
+
+		if (dlFileShortcut != null) {
+			return dlFileShortcut;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFileShortcutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByUuid_C_Last(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid_C(uuid, companyId);
+
+		List<DLFileShortcut> list = findByUuid_C(uuid, companyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the document library file shortcuts where uuid = &#63; and companyId = &#63; from the database.
 	 *
 	 * @param uuid the uuid
@@ -1310,7 +1413,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
-		for (DLFileShortcut dlFileShortcut : findByUuid_C(uuid, companyId)) {
+		for (DLFileShortcut dlFileShortcut : findByUuid_C(uuid, companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(dlFileShortcut);
 		}
 	}
@@ -1325,10 +1429,12 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
+
 		Object[] finderArgs = new Object[] { uuid, companyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1367,18 +1473,15 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1398,8 +1501,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TOFILEENTRYID =
 		new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
@@ -1407,7 +1510,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			DLFileShortcutImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByToFileEntryId",
 			new String[] { Long.class.getName() },
-			DLFileShortcutModelImpl.TOFILEENTRYID_COLUMN_BITMASK);
+			DLFileShortcutModelImpl.TOFILEENTRYID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FILESHORTCUTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_TOFILEENTRYID = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByToFileEntryId",
@@ -1442,213 +1546,6 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public List<DLFileShortcut> findByToFileEntryId(long toFileEntryId,
 		int start, int end) throws SystemException {
 		return findByToFileEntryId(toFileEntryId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the document library file shortcuts where toFileEntryId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param toFileEntryId the to file entry ID
-	 * @param start the lower bound of the range of document library file shortcuts
-	 * @param end the upper bound of the range of document library file shortcuts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching document library file shortcuts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<DLFileShortcut> findByToFileEntryId(long toFileEntryId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TOFILEENTRYID;
-			finderArgs = new Object[] { toFileEntryId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TOFILEENTRYID;
-			finderArgs = new Object[] {
-					toFileEntryId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (DLFileShortcut dlFileShortcut : list) {
-				if ((toFileEntryId != dlFileShortcut.getToFileEntryId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
-
-			query.append(_FINDER_COLUMN_TOFILEENTRYID_TOFILEENTRYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(toFileEntryId);
-
-				list = (List<DLFileShortcut>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first document library file shortcut in the ordered set where toFileEntryId = &#63;.
-	 *
-	 * @param toFileEntryId the to file entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library file shortcut
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut findByToFileEntryId_First(long toFileEntryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchFileShortcutException, SystemException {
-		DLFileShortcut dlFileShortcut = fetchByToFileEntryId_First(toFileEntryId,
-				orderByComparator);
-
-		if (dlFileShortcut != null) {
-			return dlFileShortcut;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("toFileEntryId=");
-		msg.append(toFileEntryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchFileShortcutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first document library file shortcut in the ordered set where toFileEntryId = &#63;.
-	 *
-	 * @param toFileEntryId the to file entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut fetchByToFileEntryId_First(long toFileEntryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<DLFileShortcut> list = findByToFileEntryId(toFileEntryId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last document library file shortcut in the ordered set where toFileEntryId = &#63;.
-	 *
-	 * @param toFileEntryId the to file entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library file shortcut
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut findByToFileEntryId_Last(long toFileEntryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchFileShortcutException, SystemException {
-		DLFileShortcut dlFileShortcut = fetchByToFileEntryId_Last(toFileEntryId,
-				orderByComparator);
-
-		if (dlFileShortcut != null) {
-			return dlFileShortcut;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("toFileEntryId=");
-		msg.append(toFileEntryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchFileShortcutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last document library file shortcut in the ordered set where toFileEntryId = &#63;.
-	 *
-	 * @param toFileEntryId the to file entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut fetchByToFileEntryId_Last(long toFileEntryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByToFileEntryId(toFileEntryId);
-
-		List<DLFileShortcut> list = findByToFileEntryId(toFileEntryId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1764,6 +1661,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1795,6 +1695,263 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	}
 
 	/**
+	 * Returns an ordered range of all the document library file shortcuts where toFileEntryId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param toFileEntryId the to file entry ID
+	 * @param start the lower bound of the range of document library file shortcuts
+	 * @param end the upper bound of the range of document library file shortcuts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching document library file shortcuts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<DLFileShortcut> findByToFileEntryId(long toFileEntryId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TOFILEENTRYID;
+			finderArgs = new Object[] { toFileEntryId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TOFILEENTRYID;
+			finderArgs = new Object[] {
+					toFileEntryId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileShortcut dlFileShortcut : list) {
+				if ((toFileEntryId != dlFileShortcut.getToFileEntryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
+
+			query.append(_FINDER_COLUMN_TOFILEENTRYID_TOFILEENTRYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(toFileEntryId);
+
+				list = (List<DLFileShortcut>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where toFileEntryId = &#63;.
+	 *
+	 * @param toFileEntryId the to file entry ID
+	 * @return the first matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByToFileEntryId_First(long toFileEntryId)
+		throws NoSuchFileShortcutException, SystemException {
+		return findByToFileEntryId_First(toFileEntryId, null);
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the ordered set where toFileEntryId = &#63;.
+	 *
+	 * @param toFileEntryId the to file entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByToFileEntryId_First(long toFileEntryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchFileShortcutException, SystemException {
+		DLFileShortcut dlFileShortcut = fetchByToFileEntryId_First(toFileEntryId,
+				orderByComparator);
+
+		if (dlFileShortcut != null) {
+			return dlFileShortcut;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("toFileEntryId=");
+		msg.append(toFileEntryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFileShortcutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where toFileEntryId = &#63;.
+	 *
+	 * @param toFileEntryId the to file entry ID
+	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByToFileEntryId_First(long toFileEntryId)
+		throws SystemException {
+		return fetchByToFileEntryId_First(toFileEntryId, null);
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the ordered set where toFileEntryId = &#63;.
+	 *
+	 * @param toFileEntryId the to file entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByToFileEntryId_First(long toFileEntryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<DLFileShortcut> list = findByToFileEntryId(toFileEntryId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where toFileEntryId = &#63;.
+	 *
+	 * @param toFileEntryId the to file entry ID
+	 * @return the last matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByToFileEntryId_Last(long toFileEntryId)
+		throws NoSuchFileShortcutException, SystemException {
+		return findByToFileEntryId_Last(toFileEntryId, null);
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the ordered set where toFileEntryId = &#63;.
+	 *
+	 * @param toFileEntryId the to file entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByToFileEntryId_Last(long toFileEntryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchFileShortcutException, SystemException {
+		DLFileShortcut dlFileShortcut = fetchByToFileEntryId_Last(toFileEntryId,
+				orderByComparator);
+
+		if (dlFileShortcut != null) {
+			return dlFileShortcut;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("toFileEntryId=");
+		msg.append(toFileEntryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFileShortcutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where toFileEntryId = &#63;.
+	 *
+	 * @param toFileEntryId the to file entry ID
+	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByToFileEntryId_Last(long toFileEntryId)
+		throws SystemException {
+		return fetchByToFileEntryId_Last(toFileEntryId, null);
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the ordered set where toFileEntryId = &#63;.
+	 *
+	 * @param toFileEntryId the to file entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByToFileEntryId_Last(long toFileEntryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByToFileEntryId(toFileEntryId);
+
+		List<DLFileShortcut> list = findByToFileEntryId(toFileEntryId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the document library file shortcuts where toFileEntryId = &#63; from the database.
 	 *
 	 * @param toFileEntryId the to file entry ID
@@ -1802,7 +1959,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	public void removeByToFileEntryId(long toFileEntryId)
 		throws SystemException {
-		for (DLFileShortcut dlFileShortcut : findByToFileEntryId(toFileEntryId)) {
+		for (DLFileShortcut dlFileShortcut : findByToFileEntryId(
+				toFileEntryId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(dlFileShortcut);
 		}
 	}
@@ -1816,10 +1974,12 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	public int countByToFileEntryId(long toFileEntryId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_TOFILEENTRYID;
+
 		Object[] finderArgs = new Object[] { toFileEntryId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_TOFILEENTRYID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -1842,18 +2002,15 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				qPos.add(toFileEntryId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_TOFILEENTRYID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1869,8 +2026,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
@@ -1878,7 +2035,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_F",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			DLFileShortcutModelImpl.GROUPID_COLUMN_BITMASK |
-			DLFileShortcutModelImpl.FOLDERID_COLUMN_BITMASK);
+			DLFileShortcutModelImpl.FOLDERID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FILESHORTCUTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_F = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_F",
@@ -1915,229 +2073,6 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public List<DLFileShortcut> findByG_F(long groupId, long folderId,
 		int start, int end) throws SystemException {
 		return findByG_F(groupId, folderId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the document library file shortcuts where groupId = &#63; and folderId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param start the lower bound of the range of document library file shortcuts
-	 * @param end the upper bound of the range of document library file shortcuts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching document library file shortcuts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<DLFileShortcut> findByG_F(long groupId, long folderId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F;
-			finderArgs = new Object[] { groupId, folderId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F;
-			finderArgs = new Object[] {
-					groupId, folderId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (DLFileShortcut dlFileShortcut : list) {
-				if ((groupId != dlFileShortcut.getGroupId()) ||
-						(folderId != dlFileShortcut.getFolderId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
-
-			query.append(_FINDER_COLUMN_G_F_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_F_FOLDERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(folderId);
-
-				list = (List<DLFileShortcut>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library file shortcut
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut findByG_F_First(long groupId, long folderId,
-		OrderByComparator orderByComparator)
-		throws NoSuchFileShortcutException, SystemException {
-		DLFileShortcut dlFileShortcut = fetchByG_F_First(groupId, folderId,
-				orderByComparator);
-
-		if (dlFileShortcut != null) {
-			return dlFileShortcut;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", folderId=");
-		msg.append(folderId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchFileShortcutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut fetchByG_F_First(long groupId, long folderId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<DLFileShortcut> list = findByG_F(groupId, folderId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library file shortcut
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut findByG_F_Last(long groupId, long folderId,
-		OrderByComparator orderByComparator)
-		throws NoSuchFileShortcutException, SystemException {
-		DLFileShortcut dlFileShortcut = fetchByG_F_Last(groupId, folderId,
-				orderByComparator);
-
-		if (dlFileShortcut != null) {
-			return dlFileShortcut;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", folderId=");
-		msg.append(folderId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchFileShortcutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut fetchByG_F_Last(long groupId, long folderId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByG_F(groupId, folderId);
-
-		List<DLFileShortcut> list = findByG_F(groupId, folderId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2255,6 +2190,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2349,7 +2287,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(3);
+			query = new StringBundler(4);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -2375,6 +2313,14 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -2554,6 +2500,14 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				DLFileShortcut.class.getName(),
@@ -2596,6 +2550,283 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	}
 
 	/**
+	 * Returns an ordered range of all the document library file shortcuts where groupId = &#63; and folderId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param start the lower bound of the range of document library file shortcuts
+	 * @param end the upper bound of the range of document library file shortcuts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching document library file shortcuts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<DLFileShortcut> findByG_F(long groupId, long folderId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F;
+			finderArgs = new Object[] { groupId, folderId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F;
+			finderArgs = new Object[] {
+					groupId, folderId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileShortcut dlFileShortcut : list) {
+				if ((groupId != dlFileShortcut.getGroupId()) ||
+						(folderId != dlFileShortcut.getFolderId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
+
+			query.append(_FINDER_COLUMN_G_F_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_F_FOLDERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(folderId);
+
+				list = (List<DLFileShortcut>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @return the first matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByG_F_First(long groupId, long folderId)
+		throws NoSuchFileShortcutException, SystemException {
+		return findByG_F_First(groupId, folderId, null);
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByG_F_First(long groupId, long folderId,
+		OrderByComparator orderByComparator)
+		throws NoSuchFileShortcutException, SystemException {
+		DLFileShortcut dlFileShortcut = fetchByG_F_First(groupId, folderId,
+				orderByComparator);
+
+		if (dlFileShortcut != null) {
+			return dlFileShortcut;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", folderId=");
+		msg.append(folderId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFileShortcutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByG_F_First(long groupId, long folderId)
+		throws SystemException {
+		return fetchByG_F_First(groupId, folderId, null);
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByG_F_First(long groupId, long folderId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<DLFileShortcut> list = findByG_F(groupId, folderId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @return the last matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByG_F_Last(long groupId, long folderId)
+		throws NoSuchFileShortcutException, SystemException {
+		return findByG_F_Last(groupId, folderId, null);
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByG_F_Last(long groupId, long folderId,
+		OrderByComparator orderByComparator)
+		throws NoSuchFileShortcutException, SystemException {
+		DLFileShortcut dlFileShortcut = fetchByG_F_Last(groupId, folderId,
+				orderByComparator);
+
+		if (dlFileShortcut != null) {
+			return dlFileShortcut;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", folderId=");
+		msg.append(folderId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFileShortcutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByG_F_Last(long groupId, long folderId)
+		throws SystemException {
+		return fetchByG_F_Last(groupId, folderId, null);
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByG_F_Last(long groupId, long folderId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_F(groupId, folderId);
+
+		List<DLFileShortcut> list = findByG_F(groupId, folderId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the document library file shortcuts where groupId = &#63; and folderId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -2604,7 +2835,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	public void removeByG_F(long groupId, long folderId)
 		throws SystemException {
-		for (DLFileShortcut dlFileShortcut : findByG_F(groupId, folderId)) {
+		for (DLFileShortcut dlFileShortcut : findByG_F(groupId, folderId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(dlFileShortcut);
 		}
 	}
@@ -2619,10 +2851,12 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	public int countByG_F(long groupId, long folderId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_F;
+
 		Object[] finderArgs = new Object[] { groupId, folderId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_F,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -2649,18 +2883,15 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				qPos.add(folderId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_F, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -2732,8 +2963,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
@@ -2745,7 +2976,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			},
 			DLFileShortcutModelImpl.GROUPID_COLUMN_BITMASK |
 			DLFileShortcutModelImpl.FOLDERID_COLUMN_BITMASK |
-			DLFileShortcutModelImpl.ACTIVE_COLUMN_BITMASK);
+			DLFileShortcutModelImpl.ACTIVE_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FILESHORTCUTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_F_A = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_F_A",
@@ -2787,247 +3019,6 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public List<DLFileShortcut> findByG_F_A(long groupId, long folderId,
 		boolean active, int start, int end) throws SystemException {
 		return findByG_F_A(groupId, folderId, active, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param active the active
-	 * @param start the lower bound of the range of document library file shortcuts
-	 * @param end the upper bound of the range of document library file shortcuts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching document library file shortcuts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<DLFileShortcut> findByG_F_A(long groupId, long folderId,
-		boolean active, int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A;
-			finderArgs = new Object[] { groupId, folderId, active };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F_A;
-			finderArgs = new Object[] {
-					groupId, folderId, active,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (DLFileShortcut dlFileShortcut : list) {
-				if ((groupId != dlFileShortcut.getGroupId()) ||
-						(folderId != dlFileShortcut.getFolderId()) ||
-						(active != dlFileShortcut.getActive())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
-
-			query.append(_FINDER_COLUMN_G_F_A_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_F_A_FOLDERID_2);
-
-			query.append(_FINDER_COLUMN_G_F_A_ACTIVE_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(folderId);
-
-				qPos.add(active);
-
-				list = (List<DLFileShortcut>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library file shortcut
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut findByG_F_A_First(long groupId, long folderId,
-		boolean active, OrderByComparator orderByComparator)
-		throws NoSuchFileShortcutException, SystemException {
-		DLFileShortcut dlFileShortcut = fetchByG_F_A_First(groupId, folderId,
-				active, orderByComparator);
-
-		if (dlFileShortcut != null) {
-			return dlFileShortcut;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", folderId=");
-		msg.append(folderId);
-
-		msg.append(", active=");
-		msg.append(active);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchFileShortcutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut fetchByG_F_A_First(long groupId, long folderId,
-		boolean active, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<DLFileShortcut> list = findByG_F_A(groupId, folderId, active, 0,
-				1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library file shortcut
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut findByG_F_A_Last(long groupId, long folderId,
-		boolean active, OrderByComparator orderByComparator)
-		throws NoSuchFileShortcutException, SystemException {
-		DLFileShortcut dlFileShortcut = fetchByG_F_A_Last(groupId, folderId,
-				active, orderByComparator);
-
-		if (dlFileShortcut != null) {
-			return dlFileShortcut;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", folderId=");
-		msg.append(folderId);
-
-		msg.append(", active=");
-		msg.append(active);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchFileShortcutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut fetchByG_F_A_Last(long groupId, long folderId,
-		boolean active, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByG_F_A(groupId, folderId, active);
-
-		List<DLFileShortcut> list = findByG_F_A(groupId, folderId, active,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3149,6 +3140,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -3249,7 +3243,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(4);
+			query = new StringBundler(5);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -3277,6 +3271,14 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -3462,6 +3464,14 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				DLFileShortcut.class.getName(),
@@ -3506,6 +3516,305 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	}
 
 	/**
+	 * Returns an ordered range of all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @param start the lower bound of the range of document library file shortcuts
+	 * @param end the upper bound of the range of document library file shortcuts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching document library file shortcuts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<DLFileShortcut> findByG_F_A(long groupId, long folderId,
+		boolean active, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A;
+			finderArgs = new Object[] { groupId, folderId, active };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F_A;
+			finderArgs = new Object[] {
+					groupId, folderId, active,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileShortcut dlFileShortcut : list) {
+				if ((groupId != dlFileShortcut.getGroupId()) ||
+						(folderId != dlFileShortcut.getFolderId()) ||
+						(active != dlFileShortcut.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
+
+			query.append(_FINDER_COLUMN_G_F_A_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_F_A_FOLDERID_2);
+
+			query.append(_FINDER_COLUMN_G_F_A_ACTIVE_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(folderId);
+
+				qPos.add(active);
+
+				list = (List<DLFileShortcut>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @return the first matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByG_F_A_First(long groupId, long folderId,
+		boolean active) throws NoSuchFileShortcutException, SystemException {
+		return findByG_F_A_First(groupId, folderId, active, null);
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByG_F_A_First(long groupId, long folderId,
+		boolean active, OrderByComparator orderByComparator)
+		throws NoSuchFileShortcutException, SystemException {
+		DLFileShortcut dlFileShortcut = fetchByG_F_A_First(groupId, folderId,
+				active, orderByComparator);
+
+		if (dlFileShortcut != null) {
+			return dlFileShortcut;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", folderId=");
+		msg.append(folderId);
+
+		msg.append(", active=");
+		msg.append(active);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFileShortcutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByG_F_A_First(long groupId, long folderId,
+		boolean active) throws SystemException {
+		return fetchByG_F_A_First(groupId, folderId, active, null);
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByG_F_A_First(long groupId, long folderId,
+		boolean active, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<DLFileShortcut> list = findByG_F_A(groupId, folderId, active, 0,
+				1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @return the last matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByG_F_A_Last(long groupId, long folderId,
+		boolean active) throws NoSuchFileShortcutException, SystemException {
+		return findByG_F_A_Last(groupId, folderId, active, null);
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByG_F_A_Last(long groupId, long folderId,
+		boolean active, OrderByComparator orderByComparator)
+		throws NoSuchFileShortcutException, SystemException {
+		DLFileShortcut dlFileShortcut = fetchByG_F_A_Last(groupId, folderId,
+				active, orderByComparator);
+
+		if (dlFileShortcut != null) {
+			return dlFileShortcut;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", folderId=");
+		msg.append(folderId);
+
+		msg.append(", active=");
+		msg.append(active);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFileShortcutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByG_F_A_Last(long groupId, long folderId,
+		boolean active) throws SystemException {
+		return fetchByG_F_A_Last(groupId, folderId, active, null);
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByG_F_A_Last(long groupId, long folderId,
+		boolean active, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_F_A(groupId, folderId, active);
+
+		List<DLFileShortcut> list = findByG_F_A(groupId, folderId, active,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -3516,7 +3825,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public void removeByG_F_A(long groupId, long folderId, boolean active)
 		throws SystemException {
 		for (DLFileShortcut dlFileShortcut : findByG_F_A(groupId, folderId,
-				active)) {
+				active, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(dlFileShortcut);
 		}
 	}
@@ -3532,10 +3841,12 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	public int countByG_F_A(long groupId, long folderId, boolean active)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_F_A;
+
 		Object[] finderArgs = new Object[] { groupId, folderId, active };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_F_A,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -3566,18 +3877,15 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				qPos.add(active);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_F_A,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -3655,8 +3963,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(), Integer.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A_S =
 		new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
@@ -3670,7 +3978,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			DLFileShortcutModelImpl.GROUPID_COLUMN_BITMASK |
 			DLFileShortcutModelImpl.FOLDERID_COLUMN_BITMASK |
 			DLFileShortcutModelImpl.ACTIVE_COLUMN_BITMASK |
-			DLFileShortcutModelImpl.STATUS_COLUMN_BITMASK);
+			DLFileShortcutModelImpl.STATUS_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FILESHORTCUTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_F_A_S = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_F_A_S",
@@ -3715,263 +4024,6 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 		boolean active, int status, int start, int end)
 		throws SystemException {
 		return findByG_F_A_S(groupId, folderId, active, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param active the active
-	 * @param status the status
-	 * @param start the lower bound of the range of document library file shortcuts
-	 * @param end the upper bound of the range of document library file shortcuts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching document library file shortcuts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<DLFileShortcut> findByG_F_A_S(long groupId, long folderId,
-		boolean active, int status, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A_S;
-			finderArgs = new Object[] { groupId, folderId, active, status };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F_A_S;
-			finderArgs = new Object[] {
-					groupId, folderId, active, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (DLFileShortcut dlFileShortcut : list) {
-				if ((groupId != dlFileShortcut.getGroupId()) ||
-						(folderId != dlFileShortcut.getFolderId()) ||
-						(active != dlFileShortcut.getActive()) ||
-						(status != dlFileShortcut.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(6 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
-
-			query.append(_FINDER_COLUMN_G_F_A_S_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_F_A_S_FOLDERID_2);
-
-			query.append(_FINDER_COLUMN_G_F_A_S_ACTIVE_2);
-
-			query.append(_FINDER_COLUMN_G_F_A_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(folderId);
-
-				qPos.add(active);
-
-				qPos.add(status);
-
-				list = (List<DLFileShortcut>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param active the active
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library file shortcut
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut findByG_F_A_S_First(long groupId, long folderId,
-		boolean active, int status, OrderByComparator orderByComparator)
-		throws NoSuchFileShortcutException, SystemException {
-		DLFileShortcut dlFileShortcut = fetchByG_F_A_S_First(groupId, folderId,
-				active, status, orderByComparator);
-
-		if (dlFileShortcut != null) {
-			return dlFileShortcut;
-		}
-
-		StringBundler msg = new StringBundler(10);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", folderId=");
-		msg.append(folderId);
-
-		msg.append(", active=");
-		msg.append(active);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchFileShortcutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param active the active
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut fetchByG_F_A_S_First(long groupId, long folderId,
-		boolean active, int status, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<DLFileShortcut> list = findByG_F_A_S(groupId, folderId, active,
-				status, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param active the active
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library file shortcut
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut findByG_F_A_S_Last(long groupId, long folderId,
-		boolean active, int status, OrderByComparator orderByComparator)
-		throws NoSuchFileShortcutException, SystemException {
-		DLFileShortcut dlFileShortcut = fetchByG_F_A_S_Last(groupId, folderId,
-				active, status, orderByComparator);
-
-		if (dlFileShortcut != null) {
-			return dlFileShortcut;
-		}
-
-		StringBundler msg = new StringBundler(10);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", folderId=");
-		msg.append(folderId);
-
-		msg.append(", active=");
-		msg.append(active);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchFileShortcutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param folderId the folder ID
-	 * @param active the active
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLFileShortcut fetchByG_F_A_S_Last(long groupId, long folderId,
-		boolean active, int status, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByG_F_A_S(groupId, folderId, active, status);
-
-		List<DLFileShortcut> list = findByG_F_A_S(groupId, folderId, active,
-				status, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -4097,6 +4149,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -4204,7 +4259,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(5);
+			query = new StringBundler(6);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -4234,6 +4289,14 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -4425,6 +4488,14 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				DLFileShortcut.class.getName(),
@@ -4471,6 +4542,327 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	}
 
 	/**
+	 * Returns an ordered range of all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @param status the status
+	 * @param start the lower bound of the range of document library file shortcuts
+	 * @param end the upper bound of the range of document library file shortcuts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching document library file shortcuts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<DLFileShortcut> findByG_F_A_S(long groupId, long folderId,
+		boolean active, int status, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A_S;
+			finderArgs = new Object[] { groupId, folderId, active, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F_A_S;
+			finderArgs = new Object[] {
+					groupId, folderId, active, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileShortcut dlFileShortcut : list) {
+				if ((groupId != dlFileShortcut.getGroupId()) ||
+						(folderId != dlFileShortcut.getFolderId()) ||
+						(active != dlFileShortcut.getActive()) ||
+						(status != dlFileShortcut.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(6 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(6);
+			}
+
+			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
+
+			query.append(_FINDER_COLUMN_G_F_A_S_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_F_A_S_FOLDERID_2);
+
+			query.append(_FINDER_COLUMN_G_F_A_S_ACTIVE_2);
+
+			query.append(_FINDER_COLUMN_G_F_A_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(folderId);
+
+				qPos.add(active);
+
+				qPos.add(status);
+
+				list = (List<DLFileShortcut>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @param status the status
+	 * @return the first matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByG_F_A_S_First(long groupId, long folderId,
+		boolean active, int status)
+		throws NoSuchFileShortcutException, SystemException {
+		return findByG_F_A_S_First(groupId, folderId, active, status, null);
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByG_F_A_S_First(long groupId, long folderId,
+		boolean active, int status, OrderByComparator orderByComparator)
+		throws NoSuchFileShortcutException, SystemException {
+		DLFileShortcut dlFileShortcut = fetchByG_F_A_S_First(groupId, folderId,
+				active, status, orderByComparator);
+
+		if (dlFileShortcut != null) {
+			return dlFileShortcut;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", folderId=");
+		msg.append(folderId);
+
+		msg.append(", active=");
+		msg.append(active);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFileShortcutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @param status the status
+	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByG_F_A_S_First(long groupId, long folderId,
+		boolean active, int status) throws SystemException {
+		return fetchByG_F_A_S_First(groupId, folderId, active, status, null);
+	}
+
+	/**
+	 * Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByG_F_A_S_First(long groupId, long folderId,
+		boolean active, int status, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<DLFileShortcut> list = findByG_F_A_S(groupId, folderId, active,
+				status, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @param status the status
+	 * @return the last matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByG_F_A_S_Last(long groupId, long folderId,
+		boolean active, int status)
+		throws NoSuchFileShortcutException, SystemException {
+		return findByG_F_A_S_Last(groupId, folderId, active, status, null);
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library file shortcut
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut findByG_F_A_S_Last(long groupId, long folderId,
+		boolean active, int status, OrderByComparator orderByComparator)
+		throws NoSuchFileShortcutException, SystemException {
+		DLFileShortcut dlFileShortcut = fetchByG_F_A_S_Last(groupId, folderId,
+				active, status, orderByComparator);
+
+		if (dlFileShortcut != null) {
+			return dlFileShortcut;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", folderId=");
+		msg.append(folderId);
+
+		msg.append(", active=");
+		msg.append(active);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFileShortcutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @param status the status
+	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByG_F_A_S_Last(long groupId, long folderId,
+		boolean active, int status) throws SystemException {
+		return fetchByG_F_A_S_Last(groupId, folderId, active, status, null);
+	}
+
+	/**
+	 * Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param folderId the folder ID
+	 * @param active the active
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut fetchByG_F_A_S_Last(long groupId, long folderId,
+		boolean active, int status, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_F_A_S(groupId, folderId, active, status);
+
+		List<DLFileShortcut> list = findByG_F_A_S(groupId, folderId, active,
+				status, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -4482,7 +4874,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public void removeByG_F_A_S(long groupId, long folderId, boolean active,
 		int status) throws SystemException {
 		for (DLFileShortcut dlFileShortcut : findByG_F_A_S(groupId, folderId,
-				active, status)) {
+				active, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(dlFileShortcut);
 		}
 	}
@@ -4499,10 +4891,12 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	public int countByG_F_A_S(long groupId, long folderId, boolean active,
 		int status) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_F_A_S;
+
 		Object[] finderArgs = new Object[] { groupId, folderId, active, status };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_F_A_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(5);
@@ -4537,18 +4931,15 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_F_A_S,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -5134,29 +5525,28 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 		if (dlFileShortcut == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				dlFileShortcut = (DLFileShortcut)session.get(DLFileShortcutImpl.class,
 						Long.valueOf(fileShortcutId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (dlFileShortcut != null) {
 					cacheResult(dlFileShortcut);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 						DLFileShortcutImpl.class, fileShortcutId,
 						_nullDLFileShortcut);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+					DLFileShortcutImpl.class, fileShortcutId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -5207,7 +5597,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public List<DLFileShortcut> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -5238,7 +5628,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_DLFILESHORTCUT;
+				sql = _SQL_SELECT_DLFILESHORTCUT.concat(DLFileShortcutModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
@@ -5248,30 +5638,19 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<DLFileShortcut>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+				list = (List<DLFileShortcut>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<DLFileShortcut>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -5309,18 +5688,17 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				Query q = session.createQuery(_SQL_COUNT_DLFILESHORTCUT);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -5356,6 +5734,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public void destroy() {
 		EntityCacheUtil.removeCache(DLFileShortcutImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

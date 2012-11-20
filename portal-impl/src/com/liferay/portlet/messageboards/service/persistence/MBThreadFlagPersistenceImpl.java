@@ -46,7 +46,6 @@ import com.liferay.portlet.messageboards.model.impl.MBThreadFlagModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -88,15 +87,16 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
 		new FinderPath(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadFlagModelImpl.FINDER_CACHE_ENABLED, MBThreadFlagImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
 			new String[] { Long.class.getName() },
-			MBThreadFlagModelImpl.USERID_COLUMN_BITMASK);
+			MBThreadFlagModelImpl.USERID_COLUMN_BITMASK |
+			MBThreadFlagModelImpl.THREADFLAGID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadFlagModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
@@ -130,206 +130,6 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 	public List<MBThreadFlag> findByUserId(long userId, int start, int end)
 		throws SystemException {
 		return findByUserId(userId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the message boards thread flags where userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId the user ID
-	 * @param start the lower bound of the range of message boards thread flags
-	 * @param end the upper bound of the range of message boards thread flags (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching message boards thread flags
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MBThreadFlag> findByUserId(long userId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId, start, end, orderByComparator };
-		}
-
-		List<MBThreadFlag> list = (List<MBThreadFlag>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (MBThreadFlag mbThreadFlag : list) {
-				if ((userId != mbThreadFlag.getUserId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_MBTHREADFLAG_WHERE);
-
-			query.append(_FINDER_COLUMN_USERID_USERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				list = (List<MBThreadFlag>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first message boards thread flag in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching message boards thread flag
-	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBThreadFlag findByUserId_First(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchThreadFlagException, SystemException {
-		MBThreadFlag mbThreadFlag = fetchByUserId_First(userId,
-				orderByComparator);
-
-		if (mbThreadFlag != null) {
-			return mbThreadFlag;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchThreadFlagException(msg.toString());
-	}
-
-	/**
-	 * Returns the first message boards thread flag in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBThreadFlag fetchByUserId_First(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<MBThreadFlag> list = findByUserId(userId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last message boards thread flag in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching message boards thread flag
-	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBThreadFlag findByUserId_Last(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchThreadFlagException, SystemException {
-		MBThreadFlag mbThreadFlag = fetchByUserId_Last(userId, orderByComparator);
-
-		if (mbThreadFlag != null) {
-			return mbThreadFlag;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchThreadFlagException(msg.toString());
-	}
-
-	/**
-	 * Returns the last message boards thread flag in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBThreadFlag fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUserId(userId);
-
-		List<MBThreadFlag> list = findByUserId(userId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -444,6 +244,9 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 				}
 			}
 		}
+		else {
+			query.append(MBThreadFlagModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -475,13 +278,264 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 	}
 
 	/**
+	 * Returns an ordered range of all the message boards thread flags where userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of message boards thread flags
+	 * @param end the upper bound of the range of message boards thread flags (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching message boards thread flags
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MBThreadFlag> findByUserId(long userId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
+			finderArgs = new Object[] { userId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
+			finderArgs = new Object[] { userId, start, end, orderByComparator };
+		}
+
+		List<MBThreadFlag> list = (List<MBThreadFlag>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThreadFlag mbThreadFlag : list) {
+				if ((userId != mbThreadFlag.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_MBTHREADFLAG_WHERE);
+
+			query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MBThreadFlagModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				list = (List<MBThreadFlag>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first message boards thread flag in the default ordered set defined by {@link MBThreadFlagModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the first matching message boards thread flag
+	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag findByUserId_First(long userId)
+		throws NoSuchThreadFlagException, SystemException {
+		return findByUserId_First(userId, null);
+	}
+
+	/**
+	 * Returns the first message boards thread flag in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards thread flag
+	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag findByUserId_First(long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchThreadFlagException, SystemException {
+		MBThreadFlag mbThreadFlag = fetchByUserId_First(userId,
+				orderByComparator);
+
+		if (mbThreadFlag != null) {
+			return mbThreadFlag;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchThreadFlagException(msg.toString());
+	}
+
+	/**
+	 * Returns the first message boards thread flag in the default ordered set defined by {@link MBThreadFlagModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the first matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag fetchByUserId_First(long userId)
+		throws SystemException {
+		return fetchByUserId_First(userId, null);
+	}
+
+	/**
+	 * Returns the first message boards thread flag in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag fetchByUserId_First(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<MBThreadFlag> list = findByUserId(userId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last message boards thread flag in the default ordered set defined by {@link MBThreadFlagModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the last matching message boards thread flag
+	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag findByUserId_Last(long userId)
+		throws NoSuchThreadFlagException, SystemException {
+		return findByUserId_Last(userId, null);
+	}
+
+	/**
+	 * Returns the last message boards thread flag in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards thread flag
+	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag findByUserId_Last(long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchThreadFlagException, SystemException {
+		MBThreadFlag mbThreadFlag = fetchByUserId_Last(userId, orderByComparator);
+
+		if (mbThreadFlag != null) {
+			return mbThreadFlag;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchThreadFlagException(msg.toString());
+	}
+
+	/**
+	 * Returns the last message boards thread flag in the default ordered set defined by {@link MBThreadFlagModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the last matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag fetchByUserId_Last(long userId)
+		throws SystemException {
+		return fetchByUserId_Last(userId, null);
+	}
+
+	/**
+	 * Returns the last message boards thread flag in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag fetchByUserId_Last(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUserId(userId);
+
+		List<MBThreadFlag> list = findByUserId(userId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the message boards thread flags where userId = &#63; from the database.
 	 *
 	 * @param userId the user ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUserId(long userId) throws SystemException {
-		for (MBThreadFlag mbThreadFlag : findByUserId(userId)) {
+		for (MBThreadFlag mbThreadFlag : findByUserId(userId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(mbThreadFlag);
 		}
 	}
@@ -494,10 +548,12 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByUserId(long userId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_USERID;
+
 		Object[] finderArgs = new Object[] { userId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -520,18 +576,15 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 				qPos.add(userId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -546,15 +599,16 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_THREADID =
 		new FinderPath(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadFlagModelImpl.FINDER_CACHE_ENABLED, MBThreadFlagImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByThreadId",
 			new String[] { Long.class.getName() },
-			MBThreadFlagModelImpl.THREADID_COLUMN_BITMASK);
+			MBThreadFlagModelImpl.THREADID_COLUMN_BITMASK |
+			MBThreadFlagModelImpl.THREADFLAGID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_THREADID = new FinderPath(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadFlagModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByThreadId",
@@ -589,208 +643,6 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 	public List<MBThreadFlag> findByThreadId(long threadId, int start, int end)
 		throws SystemException {
 		return findByThreadId(threadId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the message boards thread flags where threadId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param threadId the thread ID
-	 * @param start the lower bound of the range of message boards thread flags
-	 * @param end the upper bound of the range of message boards thread flags (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching message boards thread flags
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MBThreadFlag> findByThreadId(long threadId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_THREADID;
-			finderArgs = new Object[] { threadId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_THREADID;
-			finderArgs = new Object[] { threadId, start, end, orderByComparator };
-		}
-
-		List<MBThreadFlag> list = (List<MBThreadFlag>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (MBThreadFlag mbThreadFlag : list) {
-				if ((threadId != mbThreadFlag.getThreadId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_MBTHREADFLAG_WHERE);
-
-			query.append(_FINDER_COLUMN_THREADID_THREADID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(threadId);
-
-				list = (List<MBThreadFlag>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first message boards thread flag in the ordered set where threadId = &#63;.
-	 *
-	 * @param threadId the thread ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching message boards thread flag
-	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBThreadFlag findByThreadId_First(long threadId,
-		OrderByComparator orderByComparator)
-		throws NoSuchThreadFlagException, SystemException {
-		MBThreadFlag mbThreadFlag = fetchByThreadId_First(threadId,
-				orderByComparator);
-
-		if (mbThreadFlag != null) {
-			return mbThreadFlag;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("threadId=");
-		msg.append(threadId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchThreadFlagException(msg.toString());
-	}
-
-	/**
-	 * Returns the first message boards thread flag in the ordered set where threadId = &#63;.
-	 *
-	 * @param threadId the thread ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBThreadFlag fetchByThreadId_First(long threadId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<MBThreadFlag> list = findByThreadId(threadId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last message boards thread flag in the ordered set where threadId = &#63;.
-	 *
-	 * @param threadId the thread ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching message boards thread flag
-	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBThreadFlag findByThreadId_Last(long threadId,
-		OrderByComparator orderByComparator)
-		throws NoSuchThreadFlagException, SystemException {
-		MBThreadFlag mbThreadFlag = fetchByThreadId_Last(threadId,
-				orderByComparator);
-
-		if (mbThreadFlag != null) {
-			return mbThreadFlag;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("threadId=");
-		msg.append(threadId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchThreadFlagException(msg.toString());
-	}
-
-	/**
-	 * Returns the last message boards thread flag in the ordered set where threadId = &#63;.
-	 *
-	 * @param threadId the thread ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBThreadFlag fetchByThreadId_Last(long threadId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByThreadId(threadId);
-
-		List<MBThreadFlag> list = findByThreadId(threadId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -905,6 +757,9 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 				}
 			}
 		}
+		else {
+			query.append(MBThreadFlagModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -936,13 +791,266 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 	}
 
 	/**
+	 * Returns an ordered range of all the message boards thread flags where threadId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param threadId the thread ID
+	 * @param start the lower bound of the range of message boards thread flags
+	 * @param end the upper bound of the range of message boards thread flags (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching message boards thread flags
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MBThreadFlag> findByThreadId(long threadId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_THREADID;
+			finderArgs = new Object[] { threadId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_THREADID;
+			finderArgs = new Object[] { threadId, start, end, orderByComparator };
+		}
+
+		List<MBThreadFlag> list = (List<MBThreadFlag>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThreadFlag mbThreadFlag : list) {
+				if ((threadId != mbThreadFlag.getThreadId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_MBTHREADFLAG_WHERE);
+
+			query.append(_FINDER_COLUMN_THREADID_THREADID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MBThreadFlagModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(threadId);
+
+				list = (List<MBThreadFlag>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first message boards thread flag in the default ordered set defined by {@link MBThreadFlagModelImpl#ORDER_BY_JPQL} where threadId = &#63;.
+	 *
+	 * @param threadId the thread ID
+	 * @return the first matching message boards thread flag
+	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag findByThreadId_First(long threadId)
+		throws NoSuchThreadFlagException, SystemException {
+		return findByThreadId_First(threadId, null);
+	}
+
+	/**
+	 * Returns the first message boards thread flag in the ordered set where threadId = &#63;.
+	 *
+	 * @param threadId the thread ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards thread flag
+	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag findByThreadId_First(long threadId,
+		OrderByComparator orderByComparator)
+		throws NoSuchThreadFlagException, SystemException {
+		MBThreadFlag mbThreadFlag = fetchByThreadId_First(threadId,
+				orderByComparator);
+
+		if (mbThreadFlag != null) {
+			return mbThreadFlag;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("threadId=");
+		msg.append(threadId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchThreadFlagException(msg.toString());
+	}
+
+	/**
+	 * Returns the first message boards thread flag in the default ordered set defined by {@link MBThreadFlagModelImpl#ORDER_BY_JPQL} where threadId = &#63;.
+	 *
+	 * @param threadId the thread ID
+	 * @return the first matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag fetchByThreadId_First(long threadId)
+		throws SystemException {
+		return fetchByThreadId_First(threadId, null);
+	}
+
+	/**
+	 * Returns the first message boards thread flag in the ordered set where threadId = &#63;.
+	 *
+	 * @param threadId the thread ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag fetchByThreadId_First(long threadId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<MBThreadFlag> list = findByThreadId(threadId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last message boards thread flag in the default ordered set defined by {@link MBThreadFlagModelImpl#ORDER_BY_JPQL} where threadId = &#63;.
+	 *
+	 * @param threadId the thread ID
+	 * @return the last matching message boards thread flag
+	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag findByThreadId_Last(long threadId)
+		throws NoSuchThreadFlagException, SystemException {
+		return findByThreadId_Last(threadId, null);
+	}
+
+	/**
+	 * Returns the last message boards thread flag in the ordered set where threadId = &#63;.
+	 *
+	 * @param threadId the thread ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards thread flag
+	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag findByThreadId_Last(long threadId,
+		OrderByComparator orderByComparator)
+		throws NoSuchThreadFlagException, SystemException {
+		MBThreadFlag mbThreadFlag = fetchByThreadId_Last(threadId,
+				orderByComparator);
+
+		if (mbThreadFlag != null) {
+			return mbThreadFlag;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("threadId=");
+		msg.append(threadId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchThreadFlagException(msg.toString());
+	}
+
+	/**
+	 * Returns the last message boards thread flag in the default ordered set defined by {@link MBThreadFlagModelImpl#ORDER_BY_JPQL} where threadId = &#63;.
+	 *
+	 * @param threadId the thread ID
+	 * @return the last matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag fetchByThreadId_Last(long threadId)
+		throws SystemException {
+		return fetchByThreadId_Last(threadId, null);
+	}
+
+	/**
+	 * Returns the last message boards thread flag in the ordered set where threadId = &#63;.
+	 *
+	 * @param threadId the thread ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag fetchByThreadId_Last(long threadId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByThreadId(threadId);
+
+		List<MBThreadFlag> list = findByThreadId(threadId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the message boards thread flags where threadId = &#63; from the database.
 	 *
 	 * @param threadId the thread ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByThreadId(long threadId) throws SystemException {
-		for (MBThreadFlag mbThreadFlag : findByThreadId(threadId)) {
+		for (MBThreadFlag mbThreadFlag : findByThreadId(threadId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(mbThreadFlag);
 		}
 	}
@@ -955,10 +1063,12 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByThreadId(long threadId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_THREADID;
+
 		Object[] finderArgs = new Object[] { threadId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_THREADID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -981,18 +1091,15 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 				qPos.add(threadId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_THREADID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1001,103 +1108,100 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 	}
 
 	private static final String _FINDER_COLUMN_THREADID_THREADID_2 = "mbThreadFlag.threadId = ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_U_T = new FinderPath(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_U_T = new FinderPath(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadFlagModelImpl.FINDER_CACHE_ENABLED, MBThreadFlagImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByU_T",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByU_T",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_T = new FinderPath(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
+			MBThreadFlagModelImpl.FINDER_CACHE_ENABLED, MBThreadFlagImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByU_T",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			MBThreadFlagModelImpl.USERID_COLUMN_BITMASK |
-			MBThreadFlagModelImpl.THREADID_COLUMN_BITMASK);
+			MBThreadFlagModelImpl.THREADID_COLUMN_BITMASK |
+			MBThreadFlagModelImpl.THREADFLAGID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_T = new FinderPath(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadFlagModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByU_T",
 			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
-	 * Returns the message boards thread flag where userId = &#63; and threadId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchThreadFlagException} if it could not be found.
+	 * Returns an ordered range of all the message boards thread flags where userId = &#63; and threadId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param userId the user ID
 	 * @param threadId the thread ID
-	 * @return the matching message boards thread flag
-	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
+	 * @param start the lower bound of the range of message boards thread flags
+	 * @param end the upper bound of the range of message boards thread flags (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching message boards thread flags
 	 * @throws SystemException if a system exception occurred
 	 */
-	public MBThreadFlag findByU_T(long userId, long threadId)
-		throws NoSuchThreadFlagException, SystemException {
-		MBThreadFlag mbThreadFlag = fetchByU_T(userId, threadId);
-
-		if (mbThreadFlag == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userId=");
-			msg.append(userId);
-
-			msg.append(", threadId=");
-			msg.append(threadId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchThreadFlagException(msg.toString());
-		}
-
-		return mbThreadFlag;
-	}
-
-	/**
-	 * Returns the message boards thread flag where userId = &#63; and threadId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param userId the user ID
-	 * @param threadId the thread ID
-	 * @return the matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBThreadFlag fetchByU_T(long userId, long threadId)
+	protected List<MBThreadFlag> findByU_T(long userId, long threadId,
+		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		return fetchByU_T(userId, threadId, true);
-	}
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-	/**
-	 * Returns the message boards thread flag where userId = &#63; and threadId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param userId the user ID
-	 * @param threadId the thread ID
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBThreadFlag fetchByU_T(long userId, long threadId,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { userId, threadId };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_U_T,
-					finderArgs, this);
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_T;
+			finderArgs = new Object[] { userId, threadId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_T;
+			finderArgs = new Object[] {
+					userId, threadId,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		if (result instanceof MBThreadFlag) {
-			MBThreadFlag mbThreadFlag = (MBThreadFlag)result;
+		List<MBThreadFlag> list = (List<MBThreadFlag>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-			if ((userId != mbThreadFlag.getUserId()) ||
-					(threadId != mbThreadFlag.getThreadId())) {
-				result = null;
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThreadFlag mbThreadFlag : list) {
+				if ((userId != mbThreadFlag.getUserId()) ||
+						(threadId != mbThreadFlag.getThreadId())) {
+					list = null;
+
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
 
 			query.append(_SQL_SELECT_MBTHREADFLAG_WHERE);
 
 			query.append(_FINDER_COLUMN_U_T_USERID_2);
 
 			query.append(_FINDER_COLUMN_U_T_THREADID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MBThreadFlagModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = query.toString();
 
@@ -1114,65 +1218,207 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 
 				qPos.add(threadId);
 
-				List<MBThreadFlag> list = q.list();
+				list = (List<MBThreadFlag>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-				result = list;
+				cacheResult(list);
 
-				MBThreadFlag mbThreadFlag = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_T,
-						finderArgs, list);
-				}
-				else {
-					mbThreadFlag = list.get(0);
-
-					cacheResult(mbThreadFlag);
-
-					if ((mbThreadFlag.getUserId() != userId) ||
-							(mbThreadFlag.getThreadId() != threadId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_T,
-							finderArgs, mbThreadFlag);
-					}
-				}
-
-				return mbThreadFlag;
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_T,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (MBThreadFlag)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the message boards thread flag where userId = &#63; and threadId = &#63; from the database.
+	 * Returns the first message boards thread flag in the default ordered set defined by {@link MBThreadFlagModelImpl#ORDER_BY_JPQL} where userId = &#63; and threadId = &#63;.
 	 *
 	 * @param userId the user ID
 	 * @param threadId the thread ID
-	 * @return the message boards thread flag that was removed
+	 * @return the first matching message boards thread flag
+	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public MBThreadFlag removeByU_T(long userId, long threadId)
+	public MBThreadFlag findByU_T_First(long userId, long threadId)
 		throws NoSuchThreadFlagException, SystemException {
-		MBThreadFlag mbThreadFlag = findByU_T(userId, threadId);
+		return findByU_T_First(userId, threadId, null);
+	}
 
-		return remove(mbThreadFlag);
+	/**
+	 * Returns the first message boards thread flag in the ordered set where userId = &#63; and threadId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param threadId the thread ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards thread flag
+	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag findByU_T_First(long userId, long threadId,
+		OrderByComparator orderByComparator)
+		throws NoSuchThreadFlagException, SystemException {
+		MBThreadFlag mbThreadFlag = fetchByU_T_First(userId, threadId,
+				orderByComparator);
+
+		if (mbThreadFlag != null) {
+			return mbThreadFlag;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(", threadId=");
+		msg.append(threadId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchThreadFlagException(msg.toString());
+	}
+
+	/**
+	 * Returns the first message boards thread flag in the default ordered set defined by {@link MBThreadFlagModelImpl#ORDER_BY_JPQL} where userId = &#63; and threadId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param threadId the thread ID
+	 * @return the first matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag fetchByU_T_First(long userId, long threadId)
+		throws SystemException {
+		return fetchByU_T_First(userId, threadId, null);
+	}
+
+	/**
+	 * Returns the first message boards thread flag in the ordered set where userId = &#63; and threadId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param threadId the thread ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag fetchByU_T_First(long userId, long threadId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<MBThreadFlag> list = findByU_T(userId, threadId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last message boards thread flag in the default ordered set defined by {@link MBThreadFlagModelImpl#ORDER_BY_JPQL} where userId = &#63; and threadId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param threadId the thread ID
+	 * @return the last matching message boards thread flag
+	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag findByU_T_Last(long userId, long threadId)
+		throws NoSuchThreadFlagException, SystemException {
+		return findByU_T_Last(userId, threadId, null);
+	}
+
+	/**
+	 * Returns the last message boards thread flag in the ordered set where userId = &#63; and threadId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param threadId the thread ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards thread flag
+	 * @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag findByU_T_Last(long userId, long threadId,
+		OrderByComparator orderByComparator)
+		throws NoSuchThreadFlagException, SystemException {
+		MBThreadFlag mbThreadFlag = fetchByU_T_Last(userId, threadId,
+				orderByComparator);
+
+		if (mbThreadFlag != null) {
+			return mbThreadFlag;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(", threadId=");
+		msg.append(threadId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchThreadFlagException(msg.toString());
+	}
+
+	/**
+	 * Returns the last message boards thread flag in the default ordered set defined by {@link MBThreadFlagModelImpl#ORDER_BY_JPQL} where userId = &#63; and threadId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param threadId the thread ID
+	 * @return the last matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag fetchByU_T_Last(long userId, long threadId)
+		throws SystemException {
+		return fetchByU_T_Last(userId, threadId, null);
+	}
+
+	/**
+	 * Returns the last message boards thread flag in the ordered set where userId = &#63; and threadId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param threadId the thread ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBThreadFlag fetchByU_T_Last(long userId, long threadId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByU_T(userId, threadId);
+
+		List<MBThreadFlag> list = findByU_T(userId, threadId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the message boards thread flags where userId = &#63; and threadId = &#63; from the database.
+	 *
+	 * @param userId the user ID
+	 * @param threadId the thread ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByU_T(long userId, long threadId)
+		throws SystemException {
+		for (MBThreadFlag mbThreadFlag : findByU_T(userId, threadId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(mbThreadFlag);
+		}
 	}
 
 	/**
@@ -1184,10 +1430,12 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByU_T(long userId, long threadId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_U_T;
+
 		Object[] finderArgs = new Object[] { userId, threadId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_U_T,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1214,18 +1462,15 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 				qPos.add(threadId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_U_T, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -1244,12 +1489,6 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 	public void cacheResult(MBThreadFlag mbThreadFlag) {
 		EntityCacheUtil.putResult(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadFlagImpl.class, mbThreadFlag.getPrimaryKey(), mbThreadFlag);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_T,
-			new Object[] {
-				Long.valueOf(mbThreadFlag.getUserId()),
-				Long.valueOf(mbThreadFlag.getThreadId())
-			}, mbThreadFlag);
 
 		mbThreadFlag.resetOriginalValues();
 	}
@@ -1306,8 +1545,6 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(mbThreadFlag);
 	}
 
 	@Override
@@ -1318,17 +1555,7 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 		for (MBThreadFlag mbThreadFlag : mbThreadFlags) {
 			EntityCacheUtil.removeResult(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
 				MBThreadFlagImpl.class, mbThreadFlag.getPrimaryKey());
-
-			clearUniqueFindersCache(mbThreadFlag);
 		}
-	}
-
-	protected void clearUniqueFindersCache(MBThreadFlag mbThreadFlag) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_T,
-			new Object[] {
-				Long.valueOf(mbThreadFlag.getUserId()),
-				Long.valueOf(mbThreadFlag.getThreadId())
-			});
 	}
 
 	/**
@@ -1513,33 +1740,6 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 		EntityCacheUtil.putResult(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadFlagImpl.class, mbThreadFlag.getPrimaryKey(), mbThreadFlag);
 
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_T,
-				new Object[] {
-					Long.valueOf(mbThreadFlag.getUserId()),
-					Long.valueOf(mbThreadFlag.getThreadId())
-				}, mbThreadFlag);
-		}
-		else {
-			if ((mbThreadFlagModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_U_T.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(mbThreadFlagModelImpl.getOriginalUserId()),
-						Long.valueOf(mbThreadFlagModelImpl.getOriginalThreadId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_U_T, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_T, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_T,
-					new Object[] {
-						Long.valueOf(mbThreadFlag.getUserId()),
-						Long.valueOf(mbThreadFlag.getThreadId())
-					}, mbThreadFlag);
-			}
-		}
-
 		return mbThreadFlag;
 	}
 
@@ -1631,28 +1831,27 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 		if (mbThreadFlag == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mbThreadFlag = (MBThreadFlag)session.get(MBThreadFlagImpl.class,
 						Long.valueOf(threadFlagId));
+
+				if (mbThreadFlag != null) {
+					cacheResult(mbThreadFlag);
+				}
+				else {
+					EntityCacheUtil.putResult(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
+						MBThreadFlagImpl.class, threadFlagId, _nullMBThreadFlag);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
+					MBThreadFlagImpl.class, threadFlagId);
 
 				throw processException(e);
 			}
 			finally {
-				if (mbThreadFlag != null) {
-					cacheResult(mbThreadFlag);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
-						MBThreadFlagImpl.class, threadFlagId, _nullMBThreadFlag);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1703,7 +1902,7 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 	public List<MBThreadFlag> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -1734,7 +1933,7 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_MBTHREADFLAG;
+				sql = _SQL_SELECT_MBTHREADFLAG.concat(MBThreadFlagModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
@@ -1744,30 +1943,19 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<MBThreadFlag>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<MBThreadFlag>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<MBThreadFlag>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1805,18 +1993,17 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 				Query q = session.createQuery(_SQL_COUNT_MBTHREADFLAG);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1852,6 +2039,7 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 	public void destroy() {
 		EntityCacheUtil.removeCache(MBThreadFlagImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

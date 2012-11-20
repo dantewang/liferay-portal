@@ -64,6 +64,22 @@ public interface ServiceComponentPersistence extends BasePersistence<ServiceComp
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the service components before and after the current service component in the ordered set where buildNamespace = &#63;.
+	*
+	* @param serviceComponentId the primary key of the current service component
+	* @param buildNamespace the build namespace
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next service component
+	* @throws com.liferay.portal.NoSuchServiceComponentException if a service component with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ServiceComponent[] findByBuildNamespace_PrevAndNext(
+		long serviceComponentId, java.lang.String buildNamespace,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchServiceComponentException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the service components where buildNamespace = &#63;.
 	*
 	* <p>
@@ -83,6 +99,19 @@ public interface ServiceComponentPersistence extends BasePersistence<ServiceComp
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first service component in the default ordered set defined by {@link ServiceComponentModelImpl#ORDER_BY_JPQL} where buildNamespace = &#63;.
+	*
+	* @param buildNamespace the build namespace
+	* @return the first matching service component
+	* @throws com.liferay.portal.NoSuchServiceComponentException if a matching service component could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ServiceComponent findByBuildNamespace_First(
+		java.lang.String buildNamespace)
+		throws com.liferay.portal.NoSuchServiceComponentException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first service component in the ordered set where buildNamespace = &#63;.
 	*
 	* @param buildNamespace the build namespace
@@ -98,6 +127,17 @@ public interface ServiceComponentPersistence extends BasePersistence<ServiceComp
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first service component in the default ordered set defined by {@link ServiceComponentModelImpl#ORDER_BY_JPQL} where buildNamespace = &#63;.
+	*
+	* @param buildNamespace the build namespace
+	* @return the first matching service component, or <code>null</code> if a matching service component could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ServiceComponent fetchByBuildNamespace_First(
+		java.lang.String buildNamespace)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first service component in the ordered set where buildNamespace = &#63;.
 	*
 	* @param buildNamespace the build namespace
@@ -109,6 +149,19 @@ public interface ServiceComponentPersistence extends BasePersistence<ServiceComp
 		java.lang.String buildNamespace,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last service component in the default ordered set defined by {@link ServiceComponentModelImpl#ORDER_BY_JPQL} where buildNamespace = &#63;.
+	*
+	* @param buildNamespace the build namespace
+	* @return the last matching service component
+	* @throws com.liferay.portal.NoSuchServiceComponentException if a matching service component could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ServiceComponent findByBuildNamespace_Last(
+		java.lang.String buildNamespace)
+		throws com.liferay.portal.NoSuchServiceComponentException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last service component in the ordered set where buildNamespace = &#63;.
@@ -126,6 +179,17 @@ public interface ServiceComponentPersistence extends BasePersistence<ServiceComp
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last service component in the default ordered set defined by {@link ServiceComponentModelImpl#ORDER_BY_JPQL} where buildNamespace = &#63;.
+	*
+	* @param buildNamespace the build namespace
+	* @return the last matching service component, or <code>null</code> if a matching service component could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ServiceComponent fetchByBuildNamespace_Last(
+		java.lang.String buildNamespace)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last service component in the ordered set where buildNamespace = &#63;.
 	*
 	* @param buildNamespace the build namespace
@@ -137,22 +201,6 @@ public interface ServiceComponentPersistence extends BasePersistence<ServiceComp
 		java.lang.String buildNamespace,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the service components before and after the current service component in the ordered set where buildNamespace = &#63;.
-	*
-	* @param serviceComponentId the primary key of the current service component
-	* @param buildNamespace the build namespace
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next service component
-	* @throws com.liferay.portal.NoSuchServiceComponentException if a service component with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.ServiceComponent[] findByBuildNamespace_PrevAndNext(
-		long serviceComponentId, java.lang.String buildNamespace,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchServiceComponentException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the service components where buildNamespace = &#63; from the database.

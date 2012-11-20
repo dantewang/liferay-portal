@@ -143,6 +143,26 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Returns the document library file shortcuts before and after the current document library file shortcut in the ordered set where uuid = &#63;.
+	*
+	* @param fileShortcutId the primary key of the current document library file shortcut
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a document library file shortcut with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut[] findByUuid_PrevAndNext(
+		long fileShortcutId, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence()
+				   .findByUuid_PrevAndNext(fileShortcutId, uuid,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the document library file shortcuts where uuid = &#63;.
 	*
 	* <p>
@@ -164,6 +184,21 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence().findByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first document library file shortcut in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -181,6 +216,19 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first document library file shortcut in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -193,6 +241,21 @@ public class DLFileShortcutUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_First(uuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence().findByUuid_Last(uuid);
 	}
 
 	/**
@@ -213,6 +276,19 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_Last(uuid);
+	}
+
+	/**
 	* Returns the last document library file shortcut in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -225,26 +301,6 @@ public class DLFileShortcutUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_Last(uuid, orderByComparator);
-	}
-
-	/**
-	* Returns the document library file shortcuts before and after the current document library file shortcut in the ordered set where uuid = &#63;.
-	*
-	* @param fileShortcutId the primary key of the current document library file shortcut
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next document library file shortcut
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a document library file shortcut with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut[] findByUuid_PrevAndNext(
-		long fileShortcutId, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
-		return getPersistence()
-				   .findByUuid_PrevAndNext(fileShortcutId, uuid,
-			orderByComparator);
 	}
 
 	/**
@@ -378,6 +434,27 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Returns the document library file shortcuts before and after the current document library file shortcut in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param fileShortcutId the primary key of the current document library file shortcut
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a document library file shortcut with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut[] findByUuid_C_PrevAndNext(
+		long fileShortcutId, java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence()
+				   .findByUuid_C_PrevAndNext(fileShortcutId, uuid, companyId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the document library file shortcuts where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
@@ -401,6 +478,22 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence().findByUuid_C_First(uuid, companyId);
+	}
+
+	/**
 	* Returns the first document library file shortcut in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -420,6 +513,20 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_C_First(uuid, companyId);
+	}
+
+	/**
 	* Returns the first document library file shortcut in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -434,6 +541,22 @@ public class DLFileShortcutUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByUuid_C_First(uuid, companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence().findByUuid_C_Last(uuid, companyId);
 	}
 
 	/**
@@ -456,6 +579,20 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_C_Last(uuid, companyId);
+	}
+
+	/**
 	* Returns the last document library file shortcut in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -470,27 +607,6 @@ public class DLFileShortcutUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByUuid_C_Last(uuid, companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the document library file shortcuts before and after the current document library file shortcut in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param fileShortcutId the primary key of the current document library file shortcut
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next document library file shortcut
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a document library file shortcut with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut[] findByUuid_C_PrevAndNext(
-		long fileShortcutId, java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
-		return getPersistence()
-				   .findByUuid_C_PrevAndNext(fileShortcutId, uuid, companyId,
-			orderByComparator);
 	}
 
 	/**
@@ -551,6 +667,26 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Returns the document library file shortcuts before and after the current document library file shortcut in the ordered set where toFileEntryId = &#63;.
+	*
+	* @param fileShortcutId the primary key of the current document library file shortcut
+	* @param toFileEntryId the to file entry ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a document library file shortcut with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut[] findByToFileEntryId_PrevAndNext(
+		long fileShortcutId, long toFileEntryId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence()
+				   .findByToFileEntryId_PrevAndNext(fileShortcutId,
+			toFileEntryId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the document library file shortcuts where toFileEntryId = &#63;.
 	*
 	* <p>
@@ -574,6 +710,21 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where toFileEntryId = &#63;.
+	*
+	* @param toFileEntryId the to file entry ID
+	* @return the first matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByToFileEntryId_First(
+		long toFileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence().findByToFileEntryId_First(toFileEntryId);
+	}
+
+	/**
 	* Returns the first document library file shortcut in the ordered set where toFileEntryId = &#63;.
 	*
 	* @param toFileEntryId the to file entry ID
@@ -592,6 +743,19 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where toFileEntryId = &#63;.
+	*
+	* @param toFileEntryId the to file entry ID
+	* @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByToFileEntryId_First(
+		long toFileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByToFileEntryId_First(toFileEntryId);
+	}
+
+	/**
 	* Returns the first document library file shortcut in the ordered set where toFileEntryId = &#63;.
 	*
 	* @param toFileEntryId the to file entry ID
@@ -605,6 +769,21 @@ public class DLFileShortcutUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByToFileEntryId_First(toFileEntryId, orderByComparator);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where toFileEntryId = &#63;.
+	*
+	* @param toFileEntryId the to file entry ID
+	* @return the last matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByToFileEntryId_Last(
+		long toFileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence().findByToFileEntryId_Last(toFileEntryId);
 	}
 
 	/**
@@ -626,6 +805,19 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where toFileEntryId = &#63;.
+	*
+	* @param toFileEntryId the to file entry ID
+	* @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByToFileEntryId_Last(
+		long toFileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByToFileEntryId_Last(toFileEntryId);
+	}
+
+	/**
 	* Returns the last document library file shortcut in the ordered set where toFileEntryId = &#63;.
 	*
 	* @param toFileEntryId the to file entry ID
@@ -639,26 +831,6 @@ public class DLFileShortcutUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByToFileEntryId_Last(toFileEntryId, orderByComparator);
-	}
-
-	/**
-	* Returns the document library file shortcuts before and after the current document library file shortcut in the ordered set where toFileEntryId = &#63;.
-	*
-	* @param fileShortcutId the primary key of the current document library file shortcut
-	* @param toFileEntryId the to file entry ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next document library file shortcut
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a document library file shortcut with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut[] findByToFileEntryId_PrevAndNext(
-		long fileShortcutId, long toFileEntryId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
-		return getPersistence()
-				   .findByToFileEntryId_PrevAndNext(fileShortcutId,
-			toFileEntryId, orderByComparator);
 	}
 
 	/**
@@ -716,101 +888,6 @@ public class DLFileShortcutUtil {
 		long groupId, long folderId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByG_F(groupId, folderId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the document library file shortcuts where groupId = &#63; and folderId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param start the lower bound of the range of document library file shortcuts
-	* @param end the upper bound of the range of document library file shortcuts (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching document library file shortcuts
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileShortcut> findByG_F(
-		long groupId, long folderId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_F(groupId, folderId, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching document library file shortcut
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_First(
-		long groupId, long folderId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
-		return getPersistence()
-				   .findByG_F_First(groupId, folderId, orderByComparator);
-	}
-
-	/**
-	* Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_First(
-		long groupId, long folderId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_F_First(groupId, folderId, orderByComparator);
-	}
-
-	/**
-	* Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching document library file shortcut
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_Last(
-		long groupId, long folderId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
-		return getPersistence()
-				   .findByG_F_Last(groupId, folderId, orderByComparator);
-	}
-
-	/**
-	* Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_Last(
-		long groupId, long folderId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_F_Last(groupId, folderId, orderByComparator);
 	}
 
 	/**
@@ -914,6 +991,161 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the document library file shortcuts where groupId = &#63; and folderId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param start the lower bound of the range of document library file shortcuts
+	* @param end the upper bound of the range of document library file shortcuts (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching document library file shortcuts
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileShortcut> findByG_F(
+		long groupId, long folderId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_F(groupId, folderId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @return the first matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_First(
+		long groupId, long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence().findByG_F_First(groupId, folderId);
+	}
+
+	/**
+	* Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_First(
+		long groupId, long folderId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence()
+				   .findByG_F_First(groupId, folderId, orderByComparator);
+	}
+
+	/**
+	* Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_First(
+		long groupId, long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_F_First(groupId, folderId);
+	}
+
+	/**
+	* Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_First(
+		long groupId, long folderId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_F_First(groupId, folderId, orderByComparator);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @return the last matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_Last(
+		long groupId, long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence().findByG_F_Last(groupId, folderId);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_Last(
+		long groupId, long folderId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence()
+				   .findByG_F_Last(groupId, folderId, orderByComparator);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_Last(
+		long groupId, long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_F_Last(groupId, folderId);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_Last(
+		long groupId, long folderId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_F_Last(groupId, folderId, orderByComparator);
+	}
+
+	/**
 	* Removes all the document library file shortcuts where groupId = &#63; and folderId = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -986,111 +1218,6 @@ public class DLFileShortcutUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .findByG_F_A(groupId, folderId, active, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @param start the lower bound of the range of document library file shortcuts
-	* @param end the upper bound of the range of document library file shortcuts (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching document library file shortcuts
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileShortcut> findByG_F_A(
-		long groupId, long folderId, boolean active, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_F_A(groupId, folderId, active, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching document library file shortcut
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_A_First(
-		long groupId, long folderId, boolean active,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
-		return getPersistence()
-				   .findByG_F_A_First(groupId, folderId, active,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_A_First(
-		long groupId, long folderId, boolean active,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_F_A_First(groupId, folderId, active,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching document library file shortcut
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_A_Last(
-		long groupId, long folderId, boolean active,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
-		return getPersistence()
-				   .findByG_F_A_Last(groupId, folderId, active,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_A_Last(
-		long groupId, long folderId, boolean active,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_F_A_Last(groupId, folderId, active,
-			orderByComparator);
 	}
 
 	/**
@@ -1200,6 +1327,175 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param start the lower bound of the range of document library file shortcuts
+	* @param end the upper bound of the range of document library file shortcuts (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching document library file shortcuts
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileShortcut> findByG_F_A(
+		long groupId, long folderId, boolean active, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_F_A(groupId, folderId, active, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @return the first matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_A_First(
+		long groupId, long folderId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence().findByG_F_A_First(groupId, folderId, active);
+	}
+
+	/**
+	* Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_A_First(
+		long groupId, long folderId, boolean active,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence()
+				   .findByG_F_A_First(groupId, folderId, active,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_A_First(
+		long groupId, long folderId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_F_A_First(groupId, folderId, active);
+	}
+
+	/**
+	* Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_A_First(
+		long groupId, long folderId, boolean active,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_F_A_First(groupId, folderId, active,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @return the last matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_A_Last(
+		long groupId, long folderId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence().findByG_F_A_Last(groupId, folderId, active);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_A_Last(
+		long groupId, long folderId, boolean active,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence()
+				   .findByG_F_A_Last(groupId, folderId, active,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_A_Last(
+		long groupId, long folderId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_F_A_Last(groupId, folderId, active);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_A_Last(
+		long groupId, long folderId, boolean active,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_F_A_Last(groupId, folderId, active,
+			orderByComparator);
+	}
+
+	/**
 	* Removes all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -1278,117 +1574,6 @@ public class DLFileShortcutUtil {
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .findByG_F_A_S(groupId, folderId, active, status, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @param status the status
-	* @param start the lower bound of the range of document library file shortcuts
-	* @param end the upper bound of the range of document library file shortcuts (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching document library file shortcuts
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileShortcut> findByG_F_A_S(
-		long groupId, long folderId, boolean active, int status, int start,
-		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_F_A_S(groupId, folderId, active, status, start,
-			end, orderByComparator);
-	}
-
-	/**
-	* Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching document library file shortcut
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_A_S_First(
-		long groupId, long folderId, boolean active, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
-		return getPersistence()
-				   .findByG_F_A_S_First(groupId, folderId, active, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_A_S_First(
-		long groupId, long folderId, boolean active, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_F_A_S_First(groupId, folderId, active, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching document library file shortcut
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_A_S_Last(
-		long groupId, long folderId, boolean active, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
-		return getPersistence()
-				   .findByG_F_A_S_Last(groupId, folderId, active, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_A_S_Last(
-		long groupId, long folderId, boolean active, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_F_A_S_Last(groupId, folderId, active, status,
-			orderByComparator);
 	}
 
 	/**
@@ -1505,6 +1690,189 @@ public class DLFileShortcutUtil {
 		return getPersistence()
 				   .filterFindByG_F_A_S_PrevAndNext(fileShortcutId, groupId,
 			folderId, active, status, orderByComparator);
+	}
+
+	/**
+	* Returns an ordered range of all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param status the status
+	* @param start the lower bound of the range of document library file shortcuts
+	* @param end the upper bound of the range of document library file shortcuts (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching document library file shortcuts
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileShortcut> findByG_F_A_S(
+		long groupId, long folderId, boolean active, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_F_A_S(groupId, folderId, active, status, start,
+			end, orderByComparator);
+	}
+
+	/**
+	* Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param status the status
+	* @return the first matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_A_S_First(
+		long groupId, long folderId, boolean active, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence()
+				   .findByG_F_A_S_First(groupId, folderId, active, status);
+	}
+
+	/**
+	* Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_A_S_First(
+		long groupId, long folderId, boolean active, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence()
+				   .findByG_F_A_S_First(groupId, folderId, active, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param status the status
+	* @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_A_S_First(
+		long groupId, long folderId, boolean active, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_F_A_S_First(groupId, folderId, active, status);
+	}
+
+	/**
+	* Returns the first document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_A_S_First(
+		long groupId, long folderId, boolean active, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_F_A_S_First(groupId, folderId, active, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param status the status
+	* @return the last matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_A_S_Last(
+		long groupId, long folderId, boolean active, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence()
+				   .findByG_F_A_S_Last(groupId, folderId, active, status);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByG_F_A_S_Last(
+		long groupId, long folderId, boolean active, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence()
+				   .findByG_F_A_S_Last(groupId, folderId, active, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the default ordered set defined by {@link DLFileShortcutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param status the status
+	* @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_A_S_Last(
+		long groupId, long folderId, boolean active, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_F_A_S_Last(groupId, folderId, active, status);
+	}
+
+	/**
+	* Returns the last document library file shortcut in the ordered set where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching document library file shortcut, or <code>null</code> if a matching document library file shortcut could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByG_F_A_S_Last(
+		long groupId, long folderId, boolean active, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_F_A_S_Last(groupId, folderId, active, status,
+			orderByComparator);
 	}
 
 	/**

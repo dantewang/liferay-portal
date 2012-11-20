@@ -65,6 +65,22 @@ public interface ShoppingItemFieldPersistence extends BasePersistence<ShoppingIt
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the shopping item fields before and after the current shopping item field in the ordered set where itemId = &#63;.
+	*
+	* @param itemFieldId the primary key of the current shopping item field
+	* @param itemId the item ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next shopping item field
+	* @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a shopping item field with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingItemField[] findByItemId_PrevAndNext(
+		long itemFieldId, long itemId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemFieldException;
+
+	/**
 	* Returns an ordered range of all the shopping item fields where itemId = &#63;.
 	*
 	* <p>
@@ -84,6 +100,19 @@ public interface ShoppingItemFieldPersistence extends BasePersistence<ShoppingIt
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first shopping item field in the default ordered set defined by {@link ShoppingItemFieldModelImpl#ORDER_BY_JPQL} where itemId = &#63;.
+	*
+	* @param itemId the item ID
+	* @return the first matching shopping item field
+	* @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a matching shopping item field could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingItemField findByItemId_First(
+		long itemId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemFieldException;
+
+	/**
 	* Returns the first shopping item field in the ordered set where itemId = &#63;.
 	*
 	* @param itemId the item ID
@@ -99,6 +128,16 @@ public interface ShoppingItemFieldPersistence extends BasePersistence<ShoppingIt
 			com.liferay.portlet.shopping.NoSuchItemFieldException;
 
 	/**
+	* Returns the first shopping item field in the default ordered set defined by {@link ShoppingItemFieldModelImpl#ORDER_BY_JPQL} where itemId = &#63;.
+	*
+	* @param itemId the item ID
+	* @return the first matching shopping item field, or <code>null</code> if a matching shopping item field could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingItemField fetchByItemId_First(
+		long itemId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first shopping item field in the ordered set where itemId = &#63;.
 	*
 	* @param itemId the item ID
@@ -110,6 +149,19 @@ public interface ShoppingItemFieldPersistence extends BasePersistence<ShoppingIt
 		long itemId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last shopping item field in the default ordered set defined by {@link ShoppingItemFieldModelImpl#ORDER_BY_JPQL} where itemId = &#63;.
+	*
+	* @param itemId the item ID
+	* @return the last matching shopping item field
+	* @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a matching shopping item field could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingItemField findByItemId_Last(
+		long itemId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemFieldException;
 
 	/**
 	* Returns the last shopping item field in the ordered set where itemId = &#63;.
@@ -127,6 +179,16 @@ public interface ShoppingItemFieldPersistence extends BasePersistence<ShoppingIt
 			com.liferay.portlet.shopping.NoSuchItemFieldException;
 
 	/**
+	* Returns the last shopping item field in the default ordered set defined by {@link ShoppingItemFieldModelImpl#ORDER_BY_JPQL} where itemId = &#63;.
+	*
+	* @param itemId the item ID
+	* @return the last matching shopping item field, or <code>null</code> if a matching shopping item field could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingItemField fetchByItemId_Last(
+		long itemId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last shopping item field in the ordered set where itemId = &#63;.
 	*
 	* @param itemId the item ID
@@ -138,22 +200,6 @@ public interface ShoppingItemFieldPersistence extends BasePersistence<ShoppingIt
 		long itemId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the shopping item fields before and after the current shopping item field in the ordered set where itemId = &#63;.
-	*
-	* @param itemFieldId the primary key of the current shopping item field
-	* @param itemId the item ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next shopping item field
-	* @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a shopping item field with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingItemField[] findByItemId_PrevAndNext(
-		long itemFieldId, long itemId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchItemFieldException;
 
 	/**
 	* Removes all the shopping item fields where itemId = &#63; from the database.

@@ -64,78 +64,6 @@ public interface RolePersistence extends BasePersistence<Role> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns an ordered range of all the roles where companyId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param companyId the company ID
-	* @param start the lower bound of the range of roles
-	* @param end the upper bound of the range of roles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching roles
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.model.Role> findByCompanyId(
-		long companyId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first role in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching role
-	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role findByCompanyId_First(long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first role in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching role, or <code>null</code> if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role fetchByCompanyId_First(
-		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last role in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching role
-	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role findByCompanyId_Last(long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last role in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching role, or <code>null</code> if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role fetchByCompanyId_Last(long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns the roles before and after the current role in the ordered set where companyId = &#63;.
 	*
 	* @param roleId the primary key of the current role
@@ -215,6 +143,122 @@ public interface RolePersistence extends BasePersistence<Role> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns an ordered range of all the roles where companyId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param companyId the company ID
+	* @param start the lower bound of the range of roles
+	* @param end the upper bound of the range of roles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching roles
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.model.Role> findByCompanyId(
+		long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findByCompanyId_First(long companyId)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findByCompanyId_First(long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchByCompanyId_First(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchByCompanyId_First(
+		long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findByCompanyId_Last(long companyId)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findByCompanyId_Last(long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchByCompanyId_Last(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchByCompanyId_Last(long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Removes all the roles where companyId = &#63; from the database.
 	*
 	* @param companyId the company ID
@@ -269,81 +313,6 @@ public interface RolePersistence extends BasePersistence<Role> {
 	*/
 	public java.util.List<com.liferay.portal.model.Role> findByName(
 		java.lang.String name, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the roles where name = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param name the name
-	* @param start the lower bound of the range of roles
-	* @param end the upper bound of the range of roles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching roles
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.model.Role> findByName(
-		java.lang.String name, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first role in the ordered set where name = &#63;.
-	*
-	* @param name the name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching role
-	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role findByName_First(
-		java.lang.String name,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first role in the ordered set where name = &#63;.
-	*
-	* @param name the name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching role, or <code>null</code> if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role fetchByName_First(
-		java.lang.String name,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last role in the ordered set where name = &#63;.
-	*
-	* @param name the name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching role
-	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role findByName_Last(
-		java.lang.String name,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last role in the ordered set where name = &#63;.
-	*
-	* @param name the name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching role, or <code>null</code> if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role fetchByName_Last(
-		java.lang.String name,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -426,6 +395,126 @@ public interface RolePersistence extends BasePersistence<Role> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns an ordered range of all the roles where name = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param name the name
+	* @param start the lower bound of the range of roles
+	* @param end the upper bound of the range of roles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching roles
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.model.Role> findByName(
+		java.lang.String name, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	*
+	* @param name the name
+	* @return the first matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findByName_First(java.lang.String name)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the ordered set where name = &#63;.
+	*
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findByName_First(
+		java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	*
+	* @param name the name
+	* @return the first matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchByName_First(
+		java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the ordered set where name = &#63;.
+	*
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchByName_First(
+		java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	*
+	* @param name the name
+	* @return the last matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findByName_Last(java.lang.String name)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the ordered set where name = &#63;.
+	*
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findByName_Last(
+		java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	*
+	* @param name the name
+	* @return the last matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchByName_Last(java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the ordered set where name = &#63;.
+	*
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchByName_Last(
+		java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Removes all the roles where name = &#63; from the database.
 	*
 	* @param name the name
@@ -480,81 +569,6 @@ public interface RolePersistence extends BasePersistence<Role> {
 	*/
 	public java.util.List<com.liferay.portal.model.Role> findBySubtype(
 		java.lang.String subtype, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the roles where subtype = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param subtype the subtype
-	* @param start the lower bound of the range of roles
-	* @param end the upper bound of the range of roles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching roles
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.model.Role> findBySubtype(
-		java.lang.String subtype, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first role in the ordered set where subtype = &#63;.
-	*
-	* @param subtype the subtype
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching role
-	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role findBySubtype_First(
-		java.lang.String subtype,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first role in the ordered set where subtype = &#63;.
-	*
-	* @param subtype the subtype
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching role, or <code>null</code> if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role fetchBySubtype_First(
-		java.lang.String subtype,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last role in the ordered set where subtype = &#63;.
-	*
-	* @param subtype the subtype
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching role
-	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role findBySubtype_Last(
-		java.lang.String subtype,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last role in the ordered set where subtype = &#63;.
-	*
-	* @param subtype the subtype
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching role, or <code>null</code> if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role fetchBySubtype_Last(
-		java.lang.String subtype,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -635,6 +649,129 @@ public interface RolePersistence extends BasePersistence<Role> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchRoleException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns an ordered range of all the roles where subtype = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param subtype the subtype
+	* @param start the lower bound of the range of roles
+	* @param end the upper bound of the range of roles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching roles
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.model.Role> findBySubtype(
+		java.lang.String subtype, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where subtype = &#63;.
+	*
+	* @param subtype the subtype
+	* @return the first matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findBySubtype_First(
+		java.lang.String subtype)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the ordered set where subtype = &#63;.
+	*
+	* @param subtype the subtype
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findBySubtype_First(
+		java.lang.String subtype,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where subtype = &#63;.
+	*
+	* @param subtype the subtype
+	* @return the first matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchBySubtype_First(
+		java.lang.String subtype)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the ordered set where subtype = &#63;.
+	*
+	* @param subtype the subtype
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchBySubtype_First(
+		java.lang.String subtype,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where subtype = &#63;.
+	*
+	* @param subtype the subtype
+	* @return the last matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findBySubtype_Last(
+		java.lang.String subtype)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the ordered set where subtype = &#63;.
+	*
+	* @param subtype the subtype
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findBySubtype_Last(
+		java.lang.String subtype,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where subtype = &#63;.
+	*
+	* @param subtype the subtype
+	* @return the last matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchBySubtype_Last(
+		java.lang.String subtype)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the ordered set where subtype = &#63;.
+	*
+	* @param subtype the subtype
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchBySubtype_Last(
+		java.lang.String subtype,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the roles where subtype = &#63; from the database.
@@ -759,86 +896,6 @@ public interface RolePersistence extends BasePersistence<Role> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns an ordered range of all the roles where type = &#63; and subtype = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param type the type
-	* @param subtype the subtype
-	* @param start the lower bound of the range of roles
-	* @param end the upper bound of the range of roles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching roles
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.model.Role> findByT_S(int type,
-		java.lang.String subtype, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first role in the ordered set where type = &#63; and subtype = &#63;.
-	*
-	* @param type the type
-	* @param subtype the subtype
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching role
-	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role findByT_S_First(int type,
-		java.lang.String subtype,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first role in the ordered set where type = &#63; and subtype = &#63;.
-	*
-	* @param type the type
-	* @param subtype the subtype
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching role, or <code>null</code> if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role fetchByT_S_First(int type,
-		java.lang.String subtype,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last role in the ordered set where type = &#63; and subtype = &#63;.
-	*
-	* @param type the type
-	* @param subtype the subtype
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching role
-	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role findByT_S_Last(int type,
-		java.lang.String subtype,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last role in the ordered set where type = &#63; and subtype = &#63;.
-	*
-	* @param type the type
-	* @param subtype the subtype
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching role, or <code>null</code> if a matching role could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Role fetchByT_S_Last(int type,
-		java.lang.String subtype,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns the roles before and after the current role in the ordered set where type = &#63; and subtype = &#63;.
 	*
 	* @param roleId the primary key of the current role
@@ -921,6 +978,138 @@ public interface RolePersistence extends BasePersistence<Role> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchRoleException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns an ordered range of all the roles where type = &#63; and subtype = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param type the type
+	* @param subtype the subtype
+	* @param start the lower bound of the range of roles
+	* @param end the upper bound of the range of roles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching roles
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.model.Role> findByT_S(int type,
+		java.lang.String subtype, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where type = &#63; and subtype = &#63;.
+	*
+	* @param type the type
+	* @param subtype the subtype
+	* @return the first matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findByT_S_First(int type,
+		java.lang.String subtype)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the ordered set where type = &#63; and subtype = &#63;.
+	*
+	* @param type the type
+	* @param subtype the subtype
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findByT_S_First(int type,
+		java.lang.String subtype,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where type = &#63; and subtype = &#63;.
+	*
+	* @param type the type
+	* @param subtype the subtype
+	* @return the first matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchByT_S_First(int type,
+		java.lang.String subtype)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first role in the ordered set where type = &#63; and subtype = &#63;.
+	*
+	* @param type the type
+	* @param subtype the subtype
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchByT_S_First(int type,
+		java.lang.String subtype,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where type = &#63; and subtype = &#63;.
+	*
+	* @param type the type
+	* @param subtype the subtype
+	* @return the last matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findByT_S_Last(int type,
+		java.lang.String subtype)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the ordered set where type = &#63; and subtype = &#63;.
+	*
+	* @param type the type
+	* @param subtype the subtype
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching role
+	* @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role findByT_S_Last(int type,
+		java.lang.String subtype,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where type = &#63; and subtype = &#63;.
+	*
+	* @param type the type
+	* @param subtype the subtype
+	* @return the last matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchByT_S_Last(int type,
+		java.lang.String subtype)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last role in the ordered set where type = &#63; and subtype = &#63;.
+	*
+	* @param type the type
+	* @param subtype the subtype
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching role, or <code>null</code> if a matching role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Role fetchByT_S_Last(int type,
+		java.lang.String subtype,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the roles where type = &#63; and subtype = &#63; from the database.

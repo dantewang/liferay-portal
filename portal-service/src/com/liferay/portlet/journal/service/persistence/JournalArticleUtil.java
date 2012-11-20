@@ -143,6 +143,25 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the journal articles before and after the current journal article in the ordered set where uuid = &#63;.
+	*
+	* @param id the primary key of the current journal article
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle[] findByUuid_PrevAndNext(
+		long id, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByUuid_PrevAndNext(id, uuid, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal articles where uuid = &#63;.
 	*
 	* <p>
@@ -164,6 +183,21 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -181,6 +215,19 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -193,6 +240,21 @@ public class JournalArticleUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_First(uuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByUuid_Last(uuid);
 	}
 
 	/**
@@ -213,6 +275,19 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_Last(uuid);
+	}
+
+	/**
 	* Returns the last journal article in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -225,25 +300,6 @@ public class JournalArticleUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_Last(uuid, orderByComparator);
-	}
-
-	/**
-	* Returns the journal articles before and after the current journal article in the ordered set where uuid = &#63;.
-	*
-	* @param id the primary key of the current journal article
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle[] findByUuid_PrevAndNext(
-		long id, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByUuid_PrevAndNext(id, uuid, orderByComparator);
 	}
 
 	/**
@@ -377,6 +433,27 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the journal articles before and after the current journal article in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param id the primary key of the current journal article
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle[] findByUuid_C_PrevAndNext(
+		long id, java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByUuid_C_PrevAndNext(id, uuid, companyId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal articles where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
@@ -400,6 +477,22 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByUuid_C_First(uuid, companyId);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -419,6 +512,20 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_C_First(uuid, companyId);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -433,6 +540,22 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByUuid_C_First(uuid, companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByUuid_C_Last(uuid, companyId);
 	}
 
 	/**
@@ -455,6 +578,20 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_C_Last(uuid, companyId);
+	}
+
+	/**
 	* Returns the last journal article in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -469,27 +606,6 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByUuid_C_Last(uuid, companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the journal articles before and after the current journal article in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param id the primary key of the current journal article
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle[] findByUuid_C_PrevAndNext(
-		long id, java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByUuid_C_PrevAndNext(id, uuid, companyId,
-			orderByComparator);
 	}
 
 	/**
@@ -551,6 +667,26 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the journal articles before and after the current journal article in the ordered set where resourcePrimKey = &#63;.
+	*
+	* @param id the primary key of the current journal article
+	* @param resourcePrimKey the resource prim key
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle[] findByResourcePrimKey_PrevAndNext(
+		long id, long resourcePrimKey,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByResourcePrimKey_PrevAndNext(id, resourcePrimKey,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal articles where resourcePrimKey = &#63;.
 	*
 	* <p>
@@ -574,6 +710,21 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63;.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByResourcePrimKey_First(
+		long resourcePrimKey)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByResourcePrimKey_First(resourcePrimKey);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where resourcePrimKey = &#63;.
 	*
 	* @param resourcePrimKey the resource prim key
@@ -593,6 +744,19 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63;.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByResourcePrimKey_First(
+		long resourcePrimKey)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByResourcePrimKey_First(resourcePrimKey);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where resourcePrimKey = &#63;.
 	*
 	* @param resourcePrimKey the resource prim key
@@ -607,6 +771,21 @@ public class JournalArticleUtil {
 		return getPersistence()
 				   .fetchByResourcePrimKey_First(resourcePrimKey,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63;.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByResourcePrimKey_Last(
+		long resourcePrimKey)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByResourcePrimKey_Last(resourcePrimKey);
 	}
 
 	/**
@@ -629,6 +808,19 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63;.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByResourcePrimKey_Last(
+		long resourcePrimKey)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByResourcePrimKey_Last(resourcePrimKey);
+	}
+
+	/**
 	* Returns the last journal article in the ordered set where resourcePrimKey = &#63;.
 	*
 	* @param resourcePrimKey the resource prim key
@@ -642,26 +834,6 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByResourcePrimKey_Last(resourcePrimKey,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the journal articles before and after the current journal article in the ordered set where resourcePrimKey = &#63;.
-	*
-	* @param id the primary key of the current journal article
-	* @param resourcePrimKey the resource prim key
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle[] findByResourcePrimKey_PrevAndNext(
-		long id, long resourcePrimKey,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByResourcePrimKey_PrevAndNext(id, resourcePrimKey,
 			orderByComparator);
 	}
 
@@ -718,92 +890,6 @@ public class JournalArticleUtil {
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByGroupId(groupId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByGroupId(
-		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByGroupId(groupId, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence().findByGroupId_First(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence().findByGroupId_Last(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
 	}
 
 	/**
@@ -900,6 +986,148 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByGroupId(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByGroupId(groupId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByGroupId_First(groupId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByGroupId_Last(groupId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByGroupId_Last(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -967,6 +1195,25 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the journal articles before and after the current journal article in the ordered set where companyId = &#63;.
+	*
+	* @param id the primary key of the current journal article
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle[] findByCompanyId_PrevAndNext(
+		long id, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByCompanyId_PrevAndNext(id, companyId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal articles where companyId = &#63;.
 	*
 	* <p>
@@ -989,6 +1236,21 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -1007,6 +1269,19 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -1020,6 +1295,21 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_First(companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByCompanyId_Last(companyId);
 	}
 
 	/**
@@ -1041,6 +1331,19 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_Last(companyId);
+	}
+
+	/**
 	* Returns the last journal article in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -1054,25 +1357,6 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_Last(companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the journal articles before and after the current journal article in the ordered set where companyId = &#63;.
-	*
-	* @param id the primary key of the current journal article
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle[] findByCompanyId_PrevAndNext(
-		long id, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByCompanyId_PrevAndNext(id, companyId, orderByComparator);
 	}
 
 	/**
@@ -1131,6 +1415,26 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the journal articles before and after the current journal article in the ordered set where structureId = &#63;.
+	*
+	* @param id the primary key of the current journal article
+	* @param structureId the structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle[] findByStructureId_PrevAndNext(
+		long id, java.lang.String structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByStructureId_PrevAndNext(id, structureId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal articles where structureId = &#63;.
 	*
 	* <p>
@@ -1153,6 +1457,21 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByStructureId_First(
+		java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByStructureId_First(structureId);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where structureId = &#63;.
 	*
 	* @param structureId the structure ID
@@ -1171,6 +1490,19 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByStructureId_First(
+		java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByStructureId_First(structureId);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where structureId = &#63;.
 	*
 	* @param structureId the structure ID
@@ -1184,6 +1516,21 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByStructureId_First(structureId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByStructureId_Last(
+		java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByStructureId_Last(structureId);
 	}
 
 	/**
@@ -1205,6 +1552,19 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByStructureId_Last(
+		java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByStructureId_Last(structureId);
+	}
+
+	/**
 	* Returns the last journal article in the ordered set where structureId = &#63;.
 	*
 	* @param structureId the structure ID
@@ -1218,26 +1578,6 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByStructureId_Last(structureId, orderByComparator);
-	}
-
-	/**
-	* Returns the journal articles before and after the current journal article in the ordered set where structureId = &#63;.
-	*
-	* @param id the primary key of the current journal article
-	* @param structureId the structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle[] findByStructureId_PrevAndNext(
-		long id, java.lang.String structureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByStructureId_PrevAndNext(id, structureId,
-			orderByComparator);
 	}
 
 	/**
@@ -1296,6 +1636,26 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the journal articles before and after the current journal article in the ordered set where templateId = &#63;.
+	*
+	* @param id the primary key of the current journal article
+	* @param templateId the template ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle[] findByTemplateId_PrevAndNext(
+		long id, java.lang.String templateId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByTemplateId_PrevAndNext(id, templateId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal articles where templateId = &#63;.
 	*
 	* <p>
@@ -1318,6 +1678,21 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where templateId = &#63;.
+	*
+	* @param templateId the template ID
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByTemplateId_First(
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByTemplateId_First(templateId);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where templateId = &#63;.
 	*
 	* @param templateId the template ID
@@ -1336,6 +1711,19 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where templateId = &#63;.
+	*
+	* @param templateId the template ID
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByTemplateId_First(
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByTemplateId_First(templateId);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where templateId = &#63;.
 	*
 	* @param templateId the template ID
@@ -1349,6 +1737,21 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByTemplateId_First(templateId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where templateId = &#63;.
+	*
+	* @param templateId the template ID
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByTemplateId_Last(
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByTemplateId_Last(templateId);
 	}
 
 	/**
@@ -1370,6 +1773,19 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where templateId = &#63;.
+	*
+	* @param templateId the template ID
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByTemplateId_Last(
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByTemplateId_Last(templateId);
+	}
+
+	/**
 	* Returns the last journal article in the ordered set where templateId = &#63;.
 	*
 	* @param templateId the template ID
@@ -1383,26 +1799,6 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByTemplateId_Last(templateId, orderByComparator);
-	}
-
-	/**
-	* Returns the journal articles before and after the current journal article in the ordered set where templateId = &#63;.
-	*
-	* @param id the primary key of the current journal article
-	* @param templateId the template ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle[] findByTemplateId_PrevAndNext(
-		long id, java.lang.String templateId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByTemplateId_PrevAndNext(id, templateId,
-			orderByComparator);
 	}
 
 	/**
@@ -1461,6 +1857,26 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the journal articles before and after the current journal article in the ordered set where layoutUuid = &#63;.
+	*
+	* @param id the primary key of the current journal article
+	* @param layoutUuid the layout uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle[] findByLayoutUuid_PrevAndNext(
+		long id, java.lang.String layoutUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByLayoutUuid_PrevAndNext(id, layoutUuid,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal articles where layoutUuid = &#63;.
 	*
 	* <p>
@@ -1483,6 +1899,21 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where layoutUuid = &#63;.
+	*
+	* @param layoutUuid the layout uuid
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByLayoutUuid_First(
+		java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByLayoutUuid_First(layoutUuid);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where layoutUuid = &#63;.
 	*
 	* @param layoutUuid the layout uuid
@@ -1501,6 +1932,19 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where layoutUuid = &#63;.
+	*
+	* @param layoutUuid the layout uuid
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByLayoutUuid_First(
+		java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByLayoutUuid_First(layoutUuid);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where layoutUuid = &#63;.
 	*
 	* @param layoutUuid the layout uuid
@@ -1514,6 +1958,21 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByLayoutUuid_First(layoutUuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where layoutUuid = &#63;.
+	*
+	* @param layoutUuid the layout uuid
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByLayoutUuid_Last(
+		java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByLayoutUuid_Last(layoutUuid);
 	}
 
 	/**
@@ -1535,6 +1994,19 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where layoutUuid = &#63;.
+	*
+	* @param layoutUuid the layout uuid
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByLayoutUuid_Last(
+		java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByLayoutUuid_Last(layoutUuid);
+	}
+
+	/**
 	* Returns the last journal article in the ordered set where layoutUuid = &#63;.
 	*
 	* @param layoutUuid the layout uuid
@@ -1548,26 +2020,6 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByLayoutUuid_Last(layoutUuid, orderByComparator);
-	}
-
-	/**
-	* Returns the journal articles before and after the current journal article in the ordered set where layoutUuid = &#63;.
-	*
-	* @param id the primary key of the current journal article
-	* @param layoutUuid the layout uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle[] findByLayoutUuid_PrevAndNext(
-		long id, java.lang.String layoutUuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByLayoutUuid_PrevAndNext(id, layoutUuid,
-			orderByComparator);
 	}
 
 	/**
@@ -1626,6 +2078,26 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the journal articles before and after the current journal article in the ordered set where smallImageId = &#63;.
+	*
+	* @param id the primary key of the current journal article
+	* @param smallImageId the small image ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle[] findBySmallImageId_PrevAndNext(
+		long id, long smallImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findBySmallImageId_PrevAndNext(id, smallImageId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal articles where smallImageId = &#63;.
 	*
 	* <p>
@@ -1649,6 +2121,21 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findBySmallImageId_First(
+		long smallImageId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findBySmallImageId_First(smallImageId);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where smallImageId = &#63;.
 	*
 	* @param smallImageId the small image ID
@@ -1667,6 +2154,19 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchBySmallImageId_First(
+		long smallImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchBySmallImageId_First(smallImageId);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where smallImageId = &#63;.
 	*
 	* @param smallImageId the small image ID
@@ -1680,6 +2180,21 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchBySmallImageId_First(smallImageId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findBySmallImageId_Last(
+		long smallImageId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findBySmallImageId_Last(smallImageId);
 	}
 
 	/**
@@ -1701,6 +2216,19 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchBySmallImageId_Last(
+		long smallImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchBySmallImageId_Last(smallImageId);
+	}
+
+	/**
 	* Returns the last journal article in the ordered set where smallImageId = &#63;.
 	*
 	* @param smallImageId the small image ID
@@ -1714,26 +2242,6 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchBySmallImageId_Last(smallImageId, orderByComparator);
-	}
-
-	/**
-	* Returns the journal articles before and after the current journal article in the ordered set where smallImageId = &#63;.
-	*
-	* @param id the primary key of the current journal article
-	* @param smallImageId the small image ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle[] findBySmallImageId_PrevAndNext(
-		long id, long smallImageId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findBySmallImageId_PrevAndNext(id, smallImageId,
-			orderByComparator);
 	}
 
 	/**
@@ -1794,6 +2302,27 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the journal articles before and after the current journal article in the ordered set where resourcePrimKey = &#63; and status = &#63;.
+	*
+	* @param id the primary key of the current journal article
+	* @param resourcePrimKey the resource prim key
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle[] findByR_ST_PrevAndNext(
+		long id, long resourcePrimKey, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByR_ST_PrevAndNext(id, resourcePrimKey, status,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal articles where resourcePrimKey = &#63; and status = &#63;.
 	*
 	* <p>
@@ -1818,6 +2347,22 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and status = &#63;.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @param status the status
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByR_ST_First(
+		long resourcePrimKey, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByR_ST_First(resourcePrimKey, status);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where resourcePrimKey = &#63; and status = &#63;.
 	*
 	* @param resourcePrimKey the resource prim key
@@ -1837,6 +2382,20 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and status = &#63;.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @param status the status
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByR_ST_First(
+		long resourcePrimKey, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByR_ST_First(resourcePrimKey, status);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where resourcePrimKey = &#63; and status = &#63;.
 	*
 	* @param resourcePrimKey the resource prim key
@@ -1851,6 +2410,22 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByR_ST_First(resourcePrimKey, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and status = &#63;.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @param status the status
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByR_ST_Last(
+		long resourcePrimKey, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByR_ST_Last(resourcePrimKey, status);
 	}
 
 	/**
@@ -1873,6 +2448,20 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and status = &#63;.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @param status the status
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByR_ST_Last(
+		long resourcePrimKey, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByR_ST_Last(resourcePrimKey, status);
+	}
+
+	/**
 	* Returns the last journal article in the ordered set where resourcePrimKey = &#63; and status = &#63;.
 	*
 	* @param resourcePrimKey the resource prim key
@@ -1887,27 +2476,6 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByR_ST_Last(resourcePrimKey, status, orderByComparator);
-	}
-
-	/**
-	* Returns the journal articles before and after the current journal article in the ordered set where resourcePrimKey = &#63; and status = &#63;.
-	*
-	* @param id the primary key of the current journal article
-	* @param resourcePrimKey the resource prim key
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle[] findByR_ST_PrevAndNext(
-		long id, long resourcePrimKey, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByR_ST_PrevAndNext(id, resourcePrimKey, status,
-			orderByComparator);
 	}
 
 	/**
@@ -1967,101 +2535,6 @@ public class JournalArticleUtil {
 		long groupId, long userId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByG_U(groupId, userId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and userId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_U(
-		long groupId, long userId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_U(groupId, userId, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and userId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_U_First(
-		long groupId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_U_First(groupId, userId, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and userId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_U_First(
-		long groupId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_U_First(groupId, userId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and userId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_U_Last(
-		long groupId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_U_Last(groupId, userId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and userId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_U_Last(
-		long groupId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_U_Last(groupId, userId, orderByComparator);
 	}
 
 	/**
@@ -2164,6 +2637,161 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and userId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_U(
+		long groupId, long userId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_U(groupId, userId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_U_First(
+		long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_U_First(groupId, userId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_U_First(
+		long groupId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_U_First(groupId, userId, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_U_First(
+		long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_First(groupId, userId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_U_First(
+		long groupId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_First(groupId, userId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_U_Last(
+		long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_U_Last(groupId, userId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_U_Last(
+		long groupId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_U_Last(groupId, userId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_U_Last(
+		long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_Last(groupId, userId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_U_Last(
+		long groupId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_Last(groupId, userId, orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; and userId = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -2236,101 +2864,6 @@ public class JournalArticleUtil {
 	}
 
 	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and folderId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F(
-		long groupId, long folderId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_F(groupId, folderId, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and folderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_F_First(
-		long groupId, long folderId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_F_First(groupId, folderId, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and folderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_F_First(
-		long groupId, long folderId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_F_First(groupId, folderId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and folderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_F_Last(
-		long groupId, long folderId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_F_Last(groupId, folderId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and folderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_F_Last(
-		long groupId, long folderId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_F_Last(groupId, folderId, orderByComparator);
-	}
-
-	/**
 	* Returns the journal articles before and after the current journal article in the ordered set where groupId = &#63; and folderId = &#63;.
 	*
 	* @param id the primary key of the current journal article
@@ -2349,67 +2882,6 @@ public class JournalArticleUtil {
 		return getPersistence()
 				   .findByG_F_PrevAndNext(id, groupId, folderId,
 			orderByComparator);
-	}
-
-	/**
-	* Returns all the journal articles where groupId = &#63; and folderId = any &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param folderIds the folder IDs
-	* @return the matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F(
-		long groupId, long[] folderIds)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByG_F(groupId, folderIds);
-	}
-
-	/**
-	* Returns a range of all the journal articles where groupId = &#63; and folderId = any &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param folderIds the folder IDs
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @return the range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F(
-		long groupId, long[] folderIds, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByG_F(groupId, folderIds, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and folderId = any &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param folderIds the folder IDs
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F(
-		long groupId, long[] folderIds, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_F(groupId, folderIds, start, end, orderByComparator);
 	}
 
 	/**
@@ -2550,6 +3022,222 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and folderId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F(
+		long groupId, long folderId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_F(groupId, folderId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_F_First(
+		long groupId, long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_F_First(groupId, folderId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_F_First(
+		long groupId, long folderId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_F_First(groupId, folderId, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_F_First(
+		long groupId, long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_F_First(groupId, folderId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_F_First(
+		long groupId, long folderId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_F_First(groupId, folderId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_F_Last(
+		long groupId, long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_F_Last(groupId, folderId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_F_Last(
+		long groupId, long folderId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_F_Last(groupId, folderId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_F_Last(
+		long groupId, long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_F_Last(groupId, folderId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_F_Last(
+		long groupId, long folderId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_F_Last(groupId, folderId, orderByComparator);
+	}
+
+	/**
+	* Returns all the journal articles where groupId = &#63; and folderId = any &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param folderIds the folder IDs
+	* @return the matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F(
+		long groupId, long[] folderIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_F(groupId, folderIds);
+	}
+
+	/**
+	* Returns a range of all the journal articles where groupId = &#63; and folderId = any &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param folderIds the folder IDs
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @return the range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F(
+		long groupId, long[] folderIds, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_F(groupId, folderIds, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and folderId = any &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param folderIds the folder IDs
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F(
+		long groupId, long[] folderIds, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_F(groupId, folderIds, start, end, orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; and folderId = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -2645,101 +3333,6 @@ public class JournalArticleUtil {
 		long groupId, java.lang.String articleId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByG_A(groupId, articleId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and articleId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_A(
-		long groupId, java.lang.String articleId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_A(groupId, articleId, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and articleId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_A_First(
-		long groupId, java.lang.String articleId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_A_First(groupId, articleId, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and articleId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_A_First(
-		long groupId, java.lang.String articleId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_A_First(groupId, articleId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and articleId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_A_Last(
-		long groupId, java.lang.String articleId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_A_Last(groupId, articleId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and articleId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_A_Last(
-		long groupId, java.lang.String articleId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_A_Last(groupId, articleId, orderByComparator);
 	}
 
 	/**
@@ -2843,6 +3436,161 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and articleId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_A(
+		long groupId, java.lang.String articleId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_A(groupId, articleId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and articleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_A_First(
+		long groupId, java.lang.String articleId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_A_First(groupId, articleId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and articleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_A_First(
+		long groupId, java.lang.String articleId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_A_First(groupId, articleId, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and articleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_A_First(
+		long groupId, java.lang.String articleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_A_First(groupId, articleId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and articleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_A_First(
+		long groupId, java.lang.String articleId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_A_First(groupId, articleId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and articleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_A_Last(
+		long groupId, java.lang.String articleId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_A_Last(groupId, articleId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and articleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_A_Last(
+		long groupId, java.lang.String articleId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_A_Last(groupId, articleId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and articleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_A_Last(
+		long groupId, java.lang.String articleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_A_Last(groupId, articleId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and articleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_A_Last(
+		long groupId, java.lang.String articleId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_A_Last(groupId, articleId, orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; and articleId = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -2912,101 +3660,6 @@ public class JournalArticleUtil {
 		long groupId, java.lang.String urlTitle, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByG_UT(groupId, urlTitle, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and urlTitle = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_UT(
-		long groupId, java.lang.String urlTitle, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_UT(groupId, urlTitle, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and urlTitle = &#63;.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_UT_First(
-		long groupId, java.lang.String urlTitle,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_UT_First(groupId, urlTitle, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and urlTitle = &#63;.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_UT_First(
-		long groupId, java.lang.String urlTitle,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_UT_First(groupId, urlTitle, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and urlTitle = &#63;.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_UT_Last(
-		long groupId, java.lang.String urlTitle,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_UT_Last(groupId, urlTitle, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and urlTitle = &#63;.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_UT_Last(
-		long groupId, java.lang.String urlTitle,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_UT_Last(groupId, urlTitle, orderByComparator);
 	}
 
 	/**
@@ -3110,6 +3763,161 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and urlTitle = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_UT(
+		long groupId, java.lang.String urlTitle, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_UT(groupId, urlTitle, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and urlTitle = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_UT_First(
+		long groupId, java.lang.String urlTitle)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_UT_First(groupId, urlTitle);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and urlTitle = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_UT_First(
+		long groupId, java.lang.String urlTitle,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_UT_First(groupId, urlTitle, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and urlTitle = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_UT_First(
+		long groupId, java.lang.String urlTitle)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_UT_First(groupId, urlTitle);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and urlTitle = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_UT_First(
+		long groupId, java.lang.String urlTitle,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_UT_First(groupId, urlTitle, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and urlTitle = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_UT_Last(
+		long groupId, java.lang.String urlTitle)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_UT_Last(groupId, urlTitle);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and urlTitle = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_UT_Last(
+		long groupId, java.lang.String urlTitle,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_UT_Last(groupId, urlTitle, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and urlTitle = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_UT_Last(
+		long groupId, java.lang.String urlTitle)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_UT_Last(groupId, urlTitle);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and urlTitle = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_UT_Last(
+		long groupId, java.lang.String urlTitle,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_UT_Last(groupId, urlTitle, orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; and urlTitle = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -3179,102 +3987,6 @@ public class JournalArticleUtil {
 		long groupId, java.lang.String structureId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByG_S(groupId, structureId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and structureId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_S(
-		long groupId, java.lang.String structureId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_S(groupId, structureId, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and structureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_S_First(
-		long groupId, java.lang.String structureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_S_First(groupId, structureId, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and structureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_S_First(
-		long groupId, java.lang.String structureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_S_First(groupId, structureId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and structureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_S_Last(
-		long groupId, java.lang.String structureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_S_Last(groupId, structureId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and structureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_S_Last(
-		long groupId, java.lang.String structureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_S_Last(groupId, structureId, orderByComparator);
 	}
 
 	/**
@@ -3378,6 +4090,162 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and structureId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_S(
+		long groupId, java.lang.String structureId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_S(groupId, structureId, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_S_First(
+		long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_S_First(groupId, structureId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_S_First(
+		long groupId, java.lang.String structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_S_First(groupId, structureId, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_S_First(
+		long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_S_First(groupId, structureId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_S_First(
+		long groupId, java.lang.String structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_S_First(groupId, structureId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_S_Last(
+		long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_S_Last(groupId, structureId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_S_Last(
+		long groupId, java.lang.String structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_S_Last(groupId, structureId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_S_Last(
+		long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_S_Last(groupId, structureId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_S_Last(
+		long groupId, java.lang.String structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_S_Last(groupId, structureId, orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; and structureId = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -3448,101 +4316,6 @@ public class JournalArticleUtil {
 		long groupId, java.lang.String templateId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByG_T(groupId, templateId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and templateId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param templateId the template ID
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_T(
-		long groupId, java.lang.String templateId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_T(groupId, templateId, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and templateId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param templateId the template ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_T_First(
-		long groupId, java.lang.String templateId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_T_First(groupId, templateId, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and templateId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param templateId the template ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_T_First(
-		long groupId, java.lang.String templateId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_T_First(groupId, templateId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and templateId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param templateId the template ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_T_Last(
-		long groupId, java.lang.String templateId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_T_Last(groupId, templateId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and templateId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param templateId the template ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_T_Last(
-		long groupId, java.lang.String templateId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_T_Last(groupId, templateId, orderByComparator);
 	}
 
 	/**
@@ -3646,6 +4419,161 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and templateId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param templateId the template ID
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_T(
+		long groupId, java.lang.String templateId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_T(groupId, templateId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param templateId the template ID
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_T_First(
+		long groupId, java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_T_First(groupId, templateId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param templateId the template ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_T_First(
+		long groupId, java.lang.String templateId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_T_First(groupId, templateId, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param templateId the template ID
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_T_First(
+		long groupId, java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_T_First(groupId, templateId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param templateId the template ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_T_First(
+		long groupId, java.lang.String templateId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_T_First(groupId, templateId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param templateId the template ID
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_T_Last(
+		long groupId, java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_T_Last(groupId, templateId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param templateId the template ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_T_Last(
+		long groupId, java.lang.String templateId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_T_Last(groupId, templateId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param templateId the template ID
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_T_Last(
+		long groupId, java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_T_Last(groupId, templateId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param templateId the template ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_T_Last(
+		long groupId, java.lang.String templateId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_T_Last(groupId, templateId, orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; and templateId = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -3715,101 +4643,6 @@ public class JournalArticleUtil {
 		long groupId, java.lang.String layoutUuid, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByG_L(groupId, layoutUuid, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and layoutUuid = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param layoutUuid the layout uuid
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_L(
-		long groupId, java.lang.String layoutUuid, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_L(groupId, layoutUuid, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and layoutUuid = &#63;.
-	*
-	* @param groupId the group ID
-	* @param layoutUuid the layout uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_L_First(
-		long groupId, java.lang.String layoutUuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_L_First(groupId, layoutUuid, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and layoutUuid = &#63;.
-	*
-	* @param groupId the group ID
-	* @param layoutUuid the layout uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_L_First(
-		long groupId, java.lang.String layoutUuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_L_First(groupId, layoutUuid, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and layoutUuid = &#63;.
-	*
-	* @param groupId the group ID
-	* @param layoutUuid the layout uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_L_Last(
-		long groupId, java.lang.String layoutUuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_L_Last(groupId, layoutUuid, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and layoutUuid = &#63;.
-	*
-	* @param groupId the group ID
-	* @param layoutUuid the layout uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_L_Last(
-		long groupId, java.lang.String layoutUuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_L_Last(groupId, layoutUuid, orderByComparator);
 	}
 
 	/**
@@ -3913,6 +4746,161 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and layoutUuid = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param layoutUuid the layout uuid
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_L(
+		long groupId, java.lang.String layoutUuid, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_L(groupId, layoutUuid, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param layoutUuid the layout uuid
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_L_First(
+		long groupId, java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_L_First(groupId, layoutUuid);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param layoutUuid the layout uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_L_First(
+		long groupId, java.lang.String layoutUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_L_First(groupId, layoutUuid, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param layoutUuid the layout uuid
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_L_First(
+		long groupId, java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_L_First(groupId, layoutUuid);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param layoutUuid the layout uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_L_First(
+		long groupId, java.lang.String layoutUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_L_First(groupId, layoutUuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param layoutUuid the layout uuid
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_L_Last(
+		long groupId, java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_L_Last(groupId, layoutUuid);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param layoutUuid the layout uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_L_Last(
+		long groupId, java.lang.String layoutUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_L_Last(groupId, layoutUuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param layoutUuid the layout uuid
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_L_Last(
+		long groupId, java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_L_Last(groupId, layoutUuid);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param layoutUuid the layout uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_L_Last(
+		long groupId, java.lang.String layoutUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_L_Last(groupId, layoutUuid, orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; and layoutUuid = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -3982,101 +4970,6 @@ public class JournalArticleUtil {
 		long groupId, int status, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByG_ST(groupId, status, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and status = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_ST(
-		long groupId, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_ST(groupId, status, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_ST_First(
-		long groupId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_ST_First(groupId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_ST_First(
-		long groupId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_ST_First(groupId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_ST_Last(
-		long groupId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_ST_Last(groupId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_ST_Last(
-		long groupId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_ST_Last(groupId, status, orderByComparator);
 	}
 
 	/**
@@ -4180,6 +5073,161 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and status = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_ST(
+		long groupId, int status, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_ST(groupId, status, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_ST_First(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_ST_First(groupId, status);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_ST_First(
+		long groupId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_ST_First(groupId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_ST_First(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_ST_First(groupId, status);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_ST_First(
+		long groupId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_ST_First(groupId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_ST_Last(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_ST_Last(groupId, status);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_ST_Last(
+		long groupId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_ST_Last(groupId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_ST_Last(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_ST_Last(groupId, status);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_ST_Last(
+		long groupId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_ST_Last(groupId, status, orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; and status = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -4252,6 +5300,27 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the journal articles before and after the current journal article in the ordered set where companyId = &#63; and version = &#63;.
+	*
+	* @param id the primary key of the current journal article
+	* @param companyId the company ID
+	* @param version the version
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle[] findByC_V_PrevAndNext(
+		long id, long companyId, double version,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByC_V_PrevAndNext(id, companyId, version,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal articles where companyId = &#63; and version = &#63;.
 	*
 	* <p>
@@ -4275,6 +5344,22 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63; and version = &#63;.
+	*
+	* @param companyId the company ID
+	* @param version the version
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByC_V_First(
+		long companyId, double version)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByC_V_First(companyId, version);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where companyId = &#63; and version = &#63;.
 	*
 	* @param companyId the company ID
@@ -4294,6 +5379,20 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63; and version = &#63;.
+	*
+	* @param companyId the company ID
+	* @param version the version
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByC_V_First(
+		long companyId, double version)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_V_First(companyId, version);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where companyId = &#63; and version = &#63;.
 	*
 	* @param companyId the company ID
@@ -4308,6 +5407,22 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_V_First(companyId, version, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63; and version = &#63;.
+	*
+	* @param companyId the company ID
+	* @param version the version
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByC_V_Last(
+		long companyId, double version)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByC_V_Last(companyId, version);
 	}
 
 	/**
@@ -4330,6 +5445,20 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63; and version = &#63;.
+	*
+	* @param companyId the company ID
+	* @param version the version
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByC_V_Last(
+		long companyId, double version)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_V_Last(companyId, version);
+	}
+
+	/**
 	* Returns the last journal article in the ordered set where companyId = &#63; and version = &#63;.
 	*
 	* @param companyId the company ID
@@ -4344,27 +5473,6 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_V_Last(companyId, version, orderByComparator);
-	}
-
-	/**
-	* Returns the journal articles before and after the current journal article in the ordered set where companyId = &#63; and version = &#63;.
-	*
-	* @param id the primary key of the current journal article
-	* @param companyId the company ID
-	* @param version the version
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle[] findByC_V_PrevAndNext(
-		long id, long companyId, double version,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByC_V_PrevAndNext(id, companyId, version,
-			orderByComparator);
 	}
 
 	/**
@@ -4427,6 +5535,27 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the journal articles before and after the current journal article in the ordered set where companyId = &#63; and status = &#63;.
+	*
+	* @param id the primary key of the current journal article
+	* @param companyId the company ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle[] findByC_ST_PrevAndNext(
+		long id, long companyId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByC_ST_PrevAndNext(id, companyId, status,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal articles where companyId = &#63; and status = &#63;.
 	*
 	* <p>
@@ -4450,6 +5579,22 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByC_ST_First(
+		long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByC_ST_First(companyId, status);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where companyId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -4469,6 +5614,20 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByC_ST_First(
+		long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_ST_First(companyId, status);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where companyId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -4483,6 +5642,22 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_ST_First(companyId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByC_ST_Last(
+		long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByC_ST_Last(companyId, status);
 	}
 
 	/**
@@ -4505,6 +5680,20 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByC_ST_Last(
+		long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_ST_Last(companyId, status);
+	}
+
+	/**
 	* Returns the last journal article in the ordered set where companyId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -4519,27 +5708,6 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_ST_Last(companyId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the journal articles before and after the current journal article in the ordered set where companyId = &#63; and status = &#63;.
-	*
-	* @param id the primary key of the current journal article
-	* @param companyId the company ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle[] findByC_ST_PrevAndNext(
-		long id, long companyId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByC_ST_PrevAndNext(id, companyId, status,
-			orderByComparator);
 	}
 
 	/**
@@ -4605,111 +5773,6 @@ public class JournalArticleUtil {
 	}
 
 	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and folderId = &#63; and status = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param status the status
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F_ST(
-		long groupId, long folderId, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_F_ST(groupId, folderId, status, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and folderId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_F_ST_First(
-		long groupId, long folderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_F_ST_First(groupId, folderId, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and folderId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_F_ST_First(
-		long groupId, long folderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_F_ST_First(groupId, folderId, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and folderId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_F_ST_Last(
-		long groupId, long folderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_F_ST_Last(groupId, folderId, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and folderId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_F_ST_Last(
-		long groupId, long folderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_F_ST_Last(groupId, folderId, status,
-			orderByComparator);
-	}
-
-	/**
 	* Returns the journal articles before and after the current journal article in the ordered set where groupId = &#63; and folderId = &#63; and status = &#63;.
 	*
 	* @param id the primary key of the current journal article
@@ -4728,72 +5791,6 @@ public class JournalArticleUtil {
 			com.liferay.portlet.journal.NoSuchArticleException {
 		return getPersistence()
 				   .findByG_F_ST_PrevAndNext(id, groupId, folderId, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns all the journal articles where groupId = &#63; and folderId = &#63; and status = any &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param statuses the statuses
-	* @return the matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F_ST(
-		long groupId, long folderId, int[] statuses)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByG_F_ST(groupId, folderId, statuses);
-	}
-
-	/**
-	* Returns a range of all the journal articles where groupId = &#63; and folderId = &#63; and status = any &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param statuses the statuses
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @return the range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F_ST(
-		long groupId, long folderId, int[] statuses, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_F_ST(groupId, folderId, statuses, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and folderId = &#63; and status = any &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param statuses the statuses
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F_ST(
-		long groupId, long folderId, int[] statuses, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_F_ST(groupId, folderId, statuses, start, end,
 			orderByComparator);
 	}
 
@@ -4944,6 +5941,241 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and folderId = &#63; and status = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param status the status
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F_ST(
+		long groupId, long folderId, int status, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_F_ST(groupId, folderId, status, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param status the status
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_F_ST_First(
+		long groupId, long folderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_F_ST_First(groupId, folderId, status);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and folderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_F_ST_First(
+		long groupId, long folderId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_F_ST_First(groupId, folderId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param status the status
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_F_ST_First(
+		long groupId, long folderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_F_ST_First(groupId, folderId, status);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and folderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_F_ST_First(
+		long groupId, long folderId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_F_ST_First(groupId, folderId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param status the status
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_F_ST_Last(
+		long groupId, long folderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_F_ST_Last(groupId, folderId, status);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and folderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_F_ST_Last(
+		long groupId, long folderId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_F_ST_Last(groupId, folderId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and folderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param status the status
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_F_ST_Last(
+		long groupId, long folderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_F_ST_Last(groupId, folderId, status);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and folderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_F_ST_Last(
+		long groupId, long folderId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_F_ST_Last(groupId, folderId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns all the journal articles where groupId = &#63; and folderId = &#63; and status = any &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param statuses the statuses
+	* @return the matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F_ST(
+		long groupId, long folderId, int[] statuses)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_F_ST(groupId, folderId, statuses);
+	}
+
+	/**
+	* Returns a range of all the journal articles where groupId = &#63; and folderId = &#63; and status = any &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param statuses the statuses
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @return the range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F_ST(
+		long groupId, long folderId, int[] statuses, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_F_ST(groupId, folderId, statuses, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and folderId = &#63; and status = any &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param statuses the statuses
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_F_ST(
+		long groupId, long folderId, int[] statuses, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_F_ST(groupId, folderId, statuses, start, end,
+			orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; and folderId = &#63; and status = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -5048,111 +6280,6 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .findByG_C_C(groupId, classNameId, classPK, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_C_C(
-		long groupId, long classNameId, long classPK, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C_C(groupId, classNameId, classPK, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_C_First(
-		long groupId, long classNameId, long classPK,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_C_C_First(groupId, classNameId, classPK,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_C_First(
-		long groupId, long classNameId, long classPK,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_C_C_First(groupId, classNameId, classPK,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_C_Last(
-		long groupId, long classNameId, long classPK,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_C_C_Last(groupId, classNameId, classPK,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_C_Last(
-		long groupId, long classNameId, long classPK,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_C_C_Last(groupId, classNameId, classPK,
-			orderByComparator);
 	}
 
 	/**
@@ -5262,6 +6389,175 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_C_C(
+		long groupId, long classNameId, long classPK, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_C(groupId, classNameId, classPK, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_C_First(
+		long groupId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_C_C_First(groupId, classNameId, classPK);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_C_First(
+		long groupId, long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_C_C_First(groupId, classNameId, classPK,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_C_First(
+		long groupId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_C_C_First(groupId, classNameId, classPK);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_C_First(
+		long groupId, long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_C_First(groupId, classNameId, classPK,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_C_Last(
+		long groupId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_C_C_Last(groupId, classNameId, classPK);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_C_Last(
+		long groupId, long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_C_C_Last(groupId, classNameId, classPK,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_C_Last(
+		long groupId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_C_C_Last(groupId, classNameId, classPK);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_C_Last(
+		long groupId, long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_C_Last(groupId, classNameId, classPK,
+			orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -5305,70 +6601,165 @@ public class JournalArticleUtil {
 	}
 
 	/**
-	* Returns the journal article where groupId = &#63; and classNameId = &#63; and structureId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchArticleException} if it could not be found.
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and structureId = &#63;.
 	*
 	* @param groupId the group ID
 	* @param classNameId the class name ID
 	* @param structureId the structure ID
-	* @return the matching journal article
+	* @return the first matching journal article
 	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_S(
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_S_First(
 		long groupId, long classNameId, java.lang.String structureId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence().findByG_C_S(groupId, classNameId, structureId);
+		return getPersistence()
+				   .findByG_C_S_First(groupId, classNameId, structureId);
 	}
 
 	/**
-	* Returns the journal article where groupId = &#63; and classNameId = &#63; and structureId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first journal article in the ordered set where groupId = &#63; and classNameId = &#63; and structureId = &#63;.
 	*
 	* @param groupId the group ID
 	* @param classNameId the class name ID
 	* @param structureId the structure ID
-	* @return the matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_S(
-		long groupId, long classNameId, java.lang.String structureId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByG_C_S(groupId, classNameId, structureId);
-	}
-
-	/**
-	* Returns the journal article where groupId = &#63; and classNameId = &#63; and structureId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param structureId the structure ID
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_S(
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_S_First(
 		long groupId, long classNameId, java.lang.String structureId,
-		boolean retrieveFromCache)
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_C_S_First(groupId, classNameId, structureId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param structureId the structure ID
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_S_First(
+		long groupId, long classNameId, java.lang.String structureId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .fetchByG_C_S(groupId, classNameId, structureId,
-			retrieveFromCache);
+				   .fetchByG_C_S_First(groupId, classNameId, structureId);
 	}
 
 	/**
-	* Removes the journal article where groupId = &#63; and classNameId = &#63; and structureId = &#63; from the database.
+	* Returns the first journal article in the ordered set where groupId = &#63; and classNameId = &#63; and structureId = &#63;.
 	*
 	* @param groupId the group ID
 	* @param classNameId the class name ID
 	* @param structureId the structure ID
-	* @return the journal article that was removed
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.journal.model.JournalArticle removeByG_C_S(
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_S_First(
+		long groupId, long classNameId, java.lang.String structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_S_First(groupId, classNameId, structureId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param structureId the structure ID
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_S_Last(
 		long groupId, long classNameId, java.lang.String structureId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence().removeByG_C_S(groupId, classNameId, structureId);
+		return getPersistence()
+				   .findByG_C_S_Last(groupId, classNameId, structureId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and classNameId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param structureId the structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_S_Last(
+		long groupId, long classNameId, java.lang.String structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_C_S_Last(groupId, classNameId, structureId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param structureId the structure ID
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_S_Last(
+		long groupId, long classNameId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_S_Last(groupId, classNameId, structureId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and classNameId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param structureId the structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_S_Last(
+		long groupId, long classNameId, java.lang.String structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_S_Last(groupId, classNameId, structureId,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the journal articles where groupId = &#63; and classNameId = &#63; and structureId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param structureId the structure ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_C_S(long groupId, long classNameId,
+		java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_C_S(groupId, classNameId, structureId);
 	}
 
 	/**
@@ -5421,112 +6812,6 @@ public class JournalArticleUtil {
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .findByG_C_T(groupId, classNameId, templateId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param templateId the template ID
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_C_T(
-		long groupId, long classNameId, java.lang.String templateId, int start,
-		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C_T(groupId, classNameId, templateId, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param templateId the template ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_T_First(
-		long groupId, long classNameId, java.lang.String templateId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_C_T_First(groupId, classNameId, templateId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param templateId the template ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_T_First(
-		long groupId, long classNameId, java.lang.String templateId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_C_T_First(groupId, classNameId, templateId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param templateId the template ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_T_Last(
-		long groupId, long classNameId, java.lang.String templateId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_C_T_Last(groupId, classNameId, templateId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param templateId the template ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_T_Last(
-		long groupId, long classNameId, java.lang.String templateId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_C_T_Last(groupId, classNameId, templateId,
-			orderByComparator);
 	}
 
 	/**
@@ -5639,6 +6924,180 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param templateId the template ID
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_C_T(
+		long groupId, long classNameId, java.lang.String templateId, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_T(groupId, classNameId, templateId, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param templateId the template ID
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_T_First(
+		long groupId, long classNameId, java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_C_T_First(groupId, classNameId, templateId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param templateId the template ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_T_First(
+		long groupId, long classNameId, java.lang.String templateId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_C_T_First(groupId, classNameId, templateId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param templateId the template ID
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_T_First(
+		long groupId, long classNameId, java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_T_First(groupId, classNameId, templateId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param templateId the template ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_T_First(
+		long groupId, long classNameId, java.lang.String templateId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_T_First(groupId, classNameId, templateId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param templateId the template ID
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_T_Last(
+		long groupId, long classNameId, java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_C_T_Last(groupId, classNameId, templateId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param templateId the template ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_T_Last(
+		long groupId, long classNameId, java.lang.String templateId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_C_T_Last(groupId, classNameId, templateId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param templateId the template ID
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_T_Last(
+		long groupId, long classNameId, java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_T_Last(groupId, classNameId, templateId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param templateId the template ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_T_Last(
+		long groupId, long classNameId, java.lang.String templateId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_T_Last(groupId, classNameId, templateId,
+			orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; and classNameId = &#63; and templateId = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -5718,112 +7177,6 @@ public class JournalArticleUtil {
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .findByG_C_L(groupId, classNameId, layoutUuid, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param layoutUuid the layout uuid
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_C_L(
-		long groupId, long classNameId, java.lang.String layoutUuid, int start,
-		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C_L(groupId, classNameId, layoutUuid, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param layoutUuid the layout uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_L_First(
-		long groupId, long classNameId, java.lang.String layoutUuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_C_L_First(groupId, classNameId, layoutUuid,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param layoutUuid the layout uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_L_First(
-		long groupId, long classNameId, java.lang.String layoutUuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_C_L_First(groupId, classNameId, layoutUuid,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param layoutUuid the layout uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_L_Last(
-		long groupId, long classNameId, java.lang.String layoutUuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_C_L_Last(groupId, classNameId, layoutUuid,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param layoutUuid the layout uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_L_Last(
-		long groupId, long classNameId, java.lang.String layoutUuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_C_L_Last(groupId, classNameId, layoutUuid,
-			orderByComparator);
 	}
 
 	/**
@@ -5936,6 +7289,180 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param layoutUuid the layout uuid
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_C_L(
+		long groupId, long classNameId, java.lang.String layoutUuid, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_L(groupId, classNameId, layoutUuid, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param layoutUuid the layout uuid
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_L_First(
+		long groupId, long classNameId, java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_C_L_First(groupId, classNameId, layoutUuid);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param layoutUuid the layout uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_L_First(
+		long groupId, long classNameId, java.lang.String layoutUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_C_L_First(groupId, classNameId, layoutUuid,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param layoutUuid the layout uuid
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_L_First(
+		long groupId, long classNameId, java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_L_First(groupId, classNameId, layoutUuid);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param layoutUuid the layout uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_L_First(
+		long groupId, long classNameId, java.lang.String layoutUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_L_First(groupId, classNameId, layoutUuid,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param layoutUuid the layout uuid
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_L_Last(
+		long groupId, long classNameId, java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_C_L_Last(groupId, classNameId, layoutUuid);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param layoutUuid the layout uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_C_L_Last(
+		long groupId, long classNameId, java.lang.String layoutUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_C_L_Last(groupId, classNameId, layoutUuid,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param layoutUuid the layout uuid
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_L_Last(
+		long groupId, long classNameId, java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_L_Last(groupId, classNameId, layoutUuid);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param layoutUuid the layout uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_C_L_Last(
+		long groupId, long classNameId, java.lang.String layoutUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_L_Last(groupId, classNameId, layoutUuid,
+			orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -6015,111 +7542,6 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .findByG_U_C(groupId, userId, classNameId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and userId = &#63; and classNameId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_U_C(
-		long groupId, long userId, long classNameId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_U_C(groupId, userId, classNameId, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_U_C_First(
-		long groupId, long userId, long classNameId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_U_C_First(groupId, userId, classNameId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_U_C_First(
-		long groupId, long userId, long classNameId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_U_C_First(groupId, userId, classNameId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_U_C_Last(
-		long groupId, long userId, long classNameId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_U_C_Last(groupId, userId, classNameId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_U_C_Last(
-		long groupId, long userId, long classNameId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_U_C_Last(groupId, userId, classNameId,
-			orderByComparator);
 	}
 
 	/**
@@ -6226,6 +7648,175 @@ public class JournalArticleUtil {
 		return getPersistence()
 				   .filterFindByG_U_C_PrevAndNext(id, groupId, userId,
 			classNameId, orderByComparator);
+	}
+
+	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and userId = &#63; and classNameId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_U_C(
+		long groupId, long userId, long classNameId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_U_C(groupId, userId, classNameId, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_U_C_First(
+		long groupId, long userId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_U_C_First(groupId, userId, classNameId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_U_C_First(
+		long groupId, long userId, long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_U_C_First(groupId, userId, classNameId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_U_C_First(
+		long groupId, long userId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_C_First(groupId, userId, classNameId);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_U_C_First(
+		long groupId, long userId, long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_C_First(groupId, userId, classNameId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_U_C_Last(
+		long groupId, long userId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_U_C_Last(groupId, userId, classNameId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_U_C_Last(
+		long groupId, long userId, long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_U_C_Last(groupId, userId, classNameId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_U_C_Last(
+		long groupId, long userId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_C_Last(groupId, userId, classNameId);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_U_C_Last(
+		long groupId, long userId, long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_C_Last(groupId, userId, classNameId,
+			orderByComparator);
 	}
 
 	/**
@@ -6389,112 +7980,6 @@ public class JournalArticleUtil {
 	}
 
 	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and articleId = &#63; and status = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param status the status
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_A_ST(
-		long groupId, java.lang.String articleId, int status, int start,
-		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_A_ST(groupId, articleId, status, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and articleId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_A_ST_First(
-		long groupId, java.lang.String articleId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_A_ST_First(groupId, articleId, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and articleId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_A_ST_First(
-		long groupId, java.lang.String articleId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_A_ST_First(groupId, articleId, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and articleId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_A_ST_Last(
-		long groupId, java.lang.String articleId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_A_ST_Last(groupId, articleId, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and articleId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_A_ST_Last(
-		long groupId, java.lang.String articleId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_A_ST_Last(groupId, articleId, status,
-			orderByComparator);
-	}
-
-	/**
 	* Returns the journal articles before and after the current journal article in the ordered set where groupId = &#63; and articleId = &#63; and status = &#63;.
 	*
 	* @param id the primary key of the current journal article
@@ -6513,73 +7998,6 @@ public class JournalArticleUtil {
 			com.liferay.portlet.journal.NoSuchArticleException {
 		return getPersistence()
 				   .findByG_A_ST_PrevAndNext(id, groupId, articleId, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns all the journal articles where groupId = &#63; and articleId = &#63; and status = any &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param statuses the statuses
-	* @return the matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_A_ST(
-		long groupId, java.lang.String articleId, int[] statuses)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByG_A_ST(groupId, articleId, statuses);
-	}
-
-	/**
-	* Returns a range of all the journal articles where groupId = &#63; and articleId = &#63; and status = any &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param statuses the statuses
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @return the range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_A_ST(
-		long groupId, java.lang.String articleId, int[] statuses, int start,
-		int end) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_A_ST(groupId, articleId, statuses, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and articleId = &#63; and status = any &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param statuses the statuses
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_A_ST(
-		long groupId, java.lang.String articleId, int[] statuses, int start,
-		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_A_ST(groupId, articleId, statuses, start, end,
 			orderByComparator);
 	}
 
@@ -6732,6 +8150,243 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and articleId = &#63; and status = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param status the status
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_A_ST(
+		long groupId, java.lang.String articleId, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_A_ST(groupId, articleId, status, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and articleId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param status the status
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_A_ST_First(
+		long groupId, java.lang.String articleId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_A_ST_First(groupId, articleId, status);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and articleId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_A_ST_First(
+		long groupId, java.lang.String articleId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_A_ST_First(groupId, articleId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and articleId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param status the status
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_A_ST_First(
+		long groupId, java.lang.String articleId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_A_ST_First(groupId, articleId, status);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and articleId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_A_ST_First(
+		long groupId, java.lang.String articleId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_A_ST_First(groupId, articleId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and articleId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param status the status
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_A_ST_Last(
+		long groupId, java.lang.String articleId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_A_ST_Last(groupId, articleId, status);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and articleId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_A_ST_Last(
+		long groupId, java.lang.String articleId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_A_ST_Last(groupId, articleId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and articleId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param status the status
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_A_ST_Last(
+		long groupId, java.lang.String articleId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_A_ST_Last(groupId, articleId, status);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and articleId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_A_ST_Last(
+		long groupId, java.lang.String articleId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_A_ST_Last(groupId, articleId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns all the journal articles where groupId = &#63; and articleId = &#63; and status = any &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param statuses the statuses
+	* @return the matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_A_ST(
+		long groupId, java.lang.String articleId, int[] statuses)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_A_ST(groupId, articleId, statuses);
+	}
+
+	/**
+	* Returns a range of all the journal articles where groupId = &#63; and articleId = &#63; and status = any &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param statuses the statuses
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @return the range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_A_ST(
+		long groupId, java.lang.String articleId, int[] statuses, int start,
+		int end) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_A_ST(groupId, articleId, statuses, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and articleId = &#63; and status = any &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param statuses the statuses
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_A_ST(
+		long groupId, java.lang.String articleId, int[] statuses, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_A_ST(groupId, articleId, statuses, start, end,
+			orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; and articleId = &#63; and status = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -6838,112 +8493,6 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .findByG_UT_ST(groupId, urlTitle, status, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal articles where groupId = &#63; and urlTitle = &#63; and status = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @param status the status
-	* @param start the lower bound of the range of journal articles
-	* @param end the upper bound of the range of journal articles (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_UT_ST(
-		long groupId, java.lang.String urlTitle, int status, int start,
-		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_UT_ST(groupId, urlTitle, status, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and urlTitle = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_UT_ST_First(
-		long groupId, java.lang.String urlTitle, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_UT_ST_First(groupId, urlTitle, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal article in the ordered set where groupId = &#63; and urlTitle = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_UT_ST_First(
-		long groupId, java.lang.String urlTitle, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_UT_ST_First(groupId, urlTitle, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and urlTitle = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle findByG_UT_ST_Last(
-		long groupId, java.lang.String urlTitle, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByG_UT_ST_Last(groupId, urlTitle, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last journal article in the ordered set where groupId = &#63; and urlTitle = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_UT_ST_Last(
-		long groupId, java.lang.String urlTitle, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_UT_ST_Last(groupId, urlTitle, status,
-			orderByComparator);
 	}
 
 	/**
@@ -7054,6 +8603,176 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal articles where groupId = &#63; and urlTitle = &#63; and status = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param status the status
+	* @param start the lower bound of the range of journal articles
+	* @param end the upper bound of the range of journal articles (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> findByG_UT_ST(
+		long groupId, java.lang.String urlTitle, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_UT_ST(groupId, urlTitle, status, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and urlTitle = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param status the status
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_UT_ST_First(
+		long groupId, java.lang.String urlTitle, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_UT_ST_First(groupId, urlTitle, status);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and urlTitle = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_UT_ST_First(
+		long groupId, java.lang.String urlTitle, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_UT_ST_First(groupId, urlTitle, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and urlTitle = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param status the status
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_UT_ST_First(
+		long groupId, java.lang.String urlTitle, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_UT_ST_First(groupId, urlTitle, status);
+	}
+
+	/**
+	* Returns the first journal article in the ordered set where groupId = &#63; and urlTitle = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_UT_ST_First(
+		long groupId, java.lang.String urlTitle, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_UT_ST_First(groupId, urlTitle, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and urlTitle = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param status the status
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_UT_ST_Last(
+		long groupId, java.lang.String urlTitle, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByG_UT_ST_Last(groupId, urlTitle, status);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and urlTitle = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByG_UT_ST_Last(
+		long groupId, java.lang.String urlTitle, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByG_UT_ST_Last(groupId, urlTitle, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and urlTitle = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param status the status
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_UT_ST_Last(
+		long groupId, java.lang.String urlTitle, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_UT_ST_Last(groupId, urlTitle, status);
+	}
+
+	/**
+	* Returns the last journal article in the ordered set where groupId = &#63; and urlTitle = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByG_UT_ST_Last(
+		long groupId, java.lang.String urlTitle, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_UT_ST_Last(groupId, urlTitle, status,
+			orderByComparator);
+	}
+
+	/**
 	* Removes all the journal articles where groupId = &#63; and urlTitle = &#63; and status = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -7133,6 +8852,28 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the journal articles before and after the current journal article in the ordered set where companyId = &#63; and version = &#63; and status = &#63;.
+	*
+	* @param id the primary key of the current journal article
+	* @param companyId the company ID
+	* @param version the version
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle[] findByC_V_ST_PrevAndNext(
+		long id, long companyId, double version, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence()
+				   .findByC_V_ST_PrevAndNext(id, companyId, version, status,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal articles where companyId = &#63; and version = &#63; and status = &#63;.
 	*
 	* <p>
@@ -7158,6 +8899,23 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63; and version = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param version the version
+	* @param status the status
+	* @return the first matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByC_V_ST_First(
+		long companyId, double version, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByC_V_ST_First(companyId, version, status);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where companyId = &#63; and version = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -7179,6 +8937,21 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the first journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63; and version = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param version the version
+	* @param status the status
+	* @return the first matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByC_V_ST_First(
+		long companyId, double version, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_V_ST_First(companyId, version, status);
+	}
+
+	/**
 	* Returns the first journal article in the ordered set where companyId = &#63; and version = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -7195,6 +8968,23 @@ public class JournalArticleUtil {
 		return getPersistence()
 				   .fetchByC_V_ST_First(companyId, version, status,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63; and version = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param version the version
+	* @param status the status
+	* @return the last matching journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle findByC_V_ST_Last(
+		long companyId, double version, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException {
+		return getPersistence().findByC_V_ST_Last(companyId, version, status);
 	}
 
 	/**
@@ -7219,6 +9009,21 @@ public class JournalArticleUtil {
 	}
 
 	/**
+	* Returns the last journal article in the default ordered set defined by {@link JournalArticleModelImpl#ORDER_BY_JPQL} where companyId = &#63; and version = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param version the version
+	* @param status the status
+	* @return the last matching journal article, or <code>null</code> if a matching journal article could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticle fetchByC_V_ST_Last(
+		long companyId, double version, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_V_ST_Last(companyId, version, status);
+	}
+
+	/**
 	* Returns the last journal article in the ordered set where companyId = &#63; and version = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -7234,28 +9039,6 @@ public class JournalArticleUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_V_ST_Last(companyId, version, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the journal articles before and after the current journal article in the ordered set where companyId = &#63; and version = &#63; and status = &#63;.
-	*
-	* @param id the primary key of the current journal article
-	* @param companyId the company ID
-	* @param version the version
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticle[] findByC_V_ST_PrevAndNext(
-		long id, long companyId, double version, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException {
-		return getPersistence()
-				   .findByC_V_ST_PrevAndNext(id, companyId, version, status,
 			orderByComparator);
 	}
 

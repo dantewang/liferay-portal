@@ -45,7 +45,6 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -87,15 +86,16 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
 		new FinderPath(UserIdMapperModelImpl.ENTITY_CACHE_ENABLED,
 			UserIdMapperModelImpl.FINDER_CACHE_ENABLED, UserIdMapperImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
 			new String[] { Long.class.getName() },
-			UserIdMapperModelImpl.USERID_COLUMN_BITMASK);
+			UserIdMapperModelImpl.USERID_COLUMN_BITMASK |
+			UserIdMapperModelImpl.USERIDMAPPERID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(UserIdMapperModelImpl.ENTITY_CACHE_ENABLED,
 			UserIdMapperModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
@@ -129,206 +129,6 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 	public List<UserIdMapper> findByUserId(long userId, int start, int end)
 		throws SystemException {
 		return findByUserId(userId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the user ID mappers where userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId the user ID
-	 * @param start the lower bound of the range of user ID mappers
-	 * @param end the upper bound of the range of user ID mappers (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching user ID mappers
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<UserIdMapper> findByUserId(long userId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId, start, end, orderByComparator };
-		}
-
-		List<UserIdMapper> list = (List<UserIdMapper>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (UserIdMapper userIdMapper : list) {
-				if ((userId != userIdMapper.getUserId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_USERIDMAPPER_WHERE);
-
-			query.append(_FINDER_COLUMN_USERID_USERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				list = (List<UserIdMapper>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first user ID mapper in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user ID mapper
-	 * @throws com.liferay.portal.NoSuchUserIdMapperException if a matching user ID mapper could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserIdMapper findByUserId_First(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserIdMapperException, SystemException {
-		UserIdMapper userIdMapper = fetchByUserId_First(userId,
-				orderByComparator);
-
-		if (userIdMapper != null) {
-			return userIdMapper;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserIdMapperException(msg.toString());
-	}
-
-	/**
-	 * Returns the first user ID mapper in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user ID mapper, or <code>null</code> if a matching user ID mapper could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserIdMapper fetchByUserId_First(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<UserIdMapper> list = findByUserId(userId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last user ID mapper in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user ID mapper
-	 * @throws com.liferay.portal.NoSuchUserIdMapperException if a matching user ID mapper could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserIdMapper findByUserId_Last(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserIdMapperException, SystemException {
-		UserIdMapper userIdMapper = fetchByUserId_Last(userId, orderByComparator);
-
-		if (userIdMapper != null) {
-			return userIdMapper;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserIdMapperException(msg.toString());
-	}
-
-	/**
-	 * Returns the last user ID mapper in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user ID mapper, or <code>null</code> if a matching user ID mapper could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserIdMapper fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUserId(userId);
-
-		List<UserIdMapper> list = findByUserId(userId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -443,6 +243,9 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 				}
 			}
 		}
+		else {
+			query.append(UserIdMapperModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -474,13 +277,264 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 	}
 
 	/**
+	 * Returns an ordered range of all the user ID mappers where userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of user ID mappers
+	 * @param end the upper bound of the range of user ID mappers (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching user ID mappers
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<UserIdMapper> findByUserId(long userId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
+			finderArgs = new Object[] { userId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
+			finderArgs = new Object[] { userId, start, end, orderByComparator };
+		}
+
+		List<UserIdMapper> list = (List<UserIdMapper>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (UserIdMapper userIdMapper : list) {
+				if ((userId != userIdMapper.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_USERIDMAPPER_WHERE);
+
+			query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(UserIdMapperModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				list = (List<UserIdMapper>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first user ID mapper in the default ordered set defined by {@link UserIdMapperModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the first matching user ID mapper
+	 * @throws com.liferay.portal.NoSuchUserIdMapperException if a matching user ID mapper could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserIdMapper findByUserId_First(long userId)
+		throws NoSuchUserIdMapperException, SystemException {
+		return findByUserId_First(userId, null);
+	}
+
+	/**
+	 * Returns the first user ID mapper in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user ID mapper
+	 * @throws com.liferay.portal.NoSuchUserIdMapperException if a matching user ID mapper could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserIdMapper findByUserId_First(long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserIdMapperException, SystemException {
+		UserIdMapper userIdMapper = fetchByUserId_First(userId,
+				orderByComparator);
+
+		if (userIdMapper != null) {
+			return userIdMapper;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserIdMapperException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user ID mapper in the default ordered set defined by {@link UserIdMapperModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the first matching user ID mapper, or <code>null</code> if a matching user ID mapper could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserIdMapper fetchByUserId_First(long userId)
+		throws SystemException {
+		return fetchByUserId_First(userId, null);
+	}
+
+	/**
+	 * Returns the first user ID mapper in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user ID mapper, or <code>null</code> if a matching user ID mapper could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserIdMapper fetchByUserId_First(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<UserIdMapper> list = findByUserId(userId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user ID mapper in the default ordered set defined by {@link UserIdMapperModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the last matching user ID mapper
+	 * @throws com.liferay.portal.NoSuchUserIdMapperException if a matching user ID mapper could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserIdMapper findByUserId_Last(long userId)
+		throws NoSuchUserIdMapperException, SystemException {
+		return findByUserId_Last(userId, null);
+	}
+
+	/**
+	 * Returns the last user ID mapper in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user ID mapper
+	 * @throws com.liferay.portal.NoSuchUserIdMapperException if a matching user ID mapper could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserIdMapper findByUserId_Last(long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserIdMapperException, SystemException {
+		UserIdMapper userIdMapper = fetchByUserId_Last(userId, orderByComparator);
+
+		if (userIdMapper != null) {
+			return userIdMapper;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserIdMapperException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user ID mapper in the default ordered set defined by {@link UserIdMapperModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the last matching user ID mapper, or <code>null</code> if a matching user ID mapper could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserIdMapper fetchByUserId_Last(long userId)
+		throws SystemException {
+		return fetchByUserId_Last(userId, null);
+	}
+
+	/**
+	 * Returns the last user ID mapper in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user ID mapper, or <code>null</code> if a matching user ID mapper could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserIdMapper fetchByUserId_Last(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUserId(userId);
+
+		List<UserIdMapper> list = findByUserId(userId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the user ID mappers where userId = &#63; from the database.
 	 *
 	 * @param userId the user ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUserId(long userId) throws SystemException {
-		for (UserIdMapper userIdMapper : findByUserId(userId)) {
+		for (UserIdMapper userIdMapper : findByUserId(userId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(userIdMapper);
 		}
 	}
@@ -493,10 +547,12 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByUserId(long userId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_USERID;
+
 		Object[] finderArgs = new Object[] { userId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -519,18 +575,15 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 				qPos.add(userId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -629,7 +682,7 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_USERIDMAPPER_WHERE);
 
@@ -666,16 +719,14 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 
 				List<UserIdMapper> list = q.list();
 
-				result = list;
-
-				UserIdMapper userIdMapper = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_T,
 						finderArgs, list);
 				}
 				else {
-					userIdMapper = list.get(0);
+					UserIdMapper userIdMapper = list.get(0);
+
+					result = userIdMapper;
 
 					cacheResult(userIdMapper);
 
@@ -686,28 +737,23 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 							finderArgs, userIdMapper);
 					}
 				}
-
-				return userIdMapper;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_T,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_T,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (UserIdMapper)result;
-			}
+			return (UserIdMapper)result;
 		}
 	}
 
@@ -735,10 +781,12 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByU_T(long userId, String type) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_U_T;
+
 		Object[] finderArgs = new Object[] { userId, type };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_U_T,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -777,18 +825,15 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_U_T, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -891,7 +936,7 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_USERIDMAPPER_WHERE);
 
@@ -940,16 +985,14 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 
 				List<UserIdMapper> list = q.list();
 
-				result = list;
-
-				UserIdMapper userIdMapper = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_T_E,
 						finderArgs, list);
 				}
 				else {
-					userIdMapper = list.get(0);
+					UserIdMapper userIdMapper = list.get(0);
+
+					result = userIdMapper;
 
 					cacheResult(userIdMapper);
 
@@ -962,28 +1005,23 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 							finderArgs, userIdMapper);
 					}
 				}
-
-				return userIdMapper;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_T_E,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_T_E,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (UserIdMapper)result;
-			}
+			return (UserIdMapper)result;
 		}
 	}
 
@@ -1012,10 +1050,12 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 	 */
 	public int countByT_E(String type, String externalUserId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_T_E;
+
 		Object[] finderArgs = new Object[] { type, externalUserId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_T_E,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1066,18 +1106,15 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_E, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -1515,29 +1552,28 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 		if (userIdMapper == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				userIdMapper = (UserIdMapper)session.get(UserIdMapperImpl.class,
 						Long.valueOf(userIdMapperId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (userIdMapper != null) {
 					cacheResult(userIdMapper);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(UserIdMapperModelImpl.ENTITY_CACHE_ENABLED,
 						UserIdMapperImpl.class, userIdMapperId,
 						_nullUserIdMapper);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(UserIdMapperModelImpl.ENTITY_CACHE_ENABLED,
+					UserIdMapperImpl.class, userIdMapperId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1588,7 +1624,7 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 	public List<UserIdMapper> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -1619,7 +1655,7 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_USERIDMAPPER;
+				sql = _SQL_SELECT_USERIDMAPPER.concat(UserIdMapperModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
@@ -1629,30 +1665,19 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<UserIdMapper>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<UserIdMapper>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<UserIdMapper>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1690,18 +1715,17 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 				Query q = session.createQuery(_SQL_COUNT_USERIDMAPPER);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1737,6 +1761,7 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 	public void destroy() {
 		EntityCacheUtil.removeCache(UserIdMapperImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

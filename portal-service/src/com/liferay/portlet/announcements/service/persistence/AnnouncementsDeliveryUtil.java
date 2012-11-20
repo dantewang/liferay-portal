@@ -143,6 +143,26 @@ public class AnnouncementsDeliveryUtil {
 	}
 
 	/**
+	* Returns the announcements deliveries before and after the current announcements delivery in the ordered set where userId = &#63;.
+	*
+	* @param deliveryId the primary key of the current announcements delivery
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next announcements delivery
+	* @throws com.liferay.portlet.announcements.NoSuchDeliveryException if a announcements delivery with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.announcements.model.AnnouncementsDelivery[] findByUserId_PrevAndNext(
+		long deliveryId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.announcements.NoSuchDeliveryException {
+		return getPersistence()
+				   .findByUserId_PrevAndNext(deliveryId, userId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the announcements deliveries where userId = &#63;.
 	*
 	* <p>
@@ -165,6 +185,21 @@ public class AnnouncementsDeliveryUtil {
 	}
 
 	/**
+	* Returns the first announcements delivery in the default ordered set defined by {@link AnnouncementsDeliveryModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching announcements delivery
+	* @throws com.liferay.portlet.announcements.NoSuchDeliveryException if a matching announcements delivery could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.announcements.model.AnnouncementsDelivery findByUserId_First(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.announcements.NoSuchDeliveryException {
+		return getPersistence().findByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first announcements delivery in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -182,6 +217,18 @@ public class AnnouncementsDeliveryUtil {
 	}
 
 	/**
+	* Returns the first announcements delivery in the default ordered set defined by {@link AnnouncementsDeliveryModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching announcements delivery, or <code>null</code> if a matching announcements delivery could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.announcements.model.AnnouncementsDelivery fetchByUserId_First(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first announcements delivery in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -194,6 +241,21 @@ public class AnnouncementsDeliveryUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_First(userId, orderByComparator);
+	}
+
+	/**
+	* Returns the last announcements delivery in the default ordered set defined by {@link AnnouncementsDeliveryModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching announcements delivery
+	* @throws com.liferay.portlet.announcements.NoSuchDeliveryException if a matching announcements delivery could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.announcements.model.AnnouncementsDelivery findByUserId_Last(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.announcements.NoSuchDeliveryException {
+		return getPersistence().findByUserId_Last(userId);
 	}
 
 	/**
@@ -214,6 +276,18 @@ public class AnnouncementsDeliveryUtil {
 	}
 
 	/**
+	* Returns the last announcements delivery in the default ordered set defined by {@link AnnouncementsDeliveryModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching announcements delivery, or <code>null</code> if a matching announcements delivery could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.announcements.model.AnnouncementsDelivery fetchByUserId_Last(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_Last(userId);
+	}
+
+	/**
 	* Returns the last announcements delivery in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -226,26 +300,6 @@ public class AnnouncementsDeliveryUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_Last(userId, orderByComparator);
-	}
-
-	/**
-	* Returns the announcements deliveries before and after the current announcements delivery in the ordered set where userId = &#63;.
-	*
-	* @param deliveryId the primary key of the current announcements delivery
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next announcements delivery
-	* @throws com.liferay.portlet.announcements.NoSuchDeliveryException if a announcements delivery with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.announcements.model.AnnouncementsDelivery[] findByUserId_PrevAndNext(
-		long deliveryId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.announcements.NoSuchDeliveryException {
-		return getPersistence()
-				   .findByUserId_PrevAndNext(deliveryId, userId,
-			orderByComparator);
 	}
 
 	/**

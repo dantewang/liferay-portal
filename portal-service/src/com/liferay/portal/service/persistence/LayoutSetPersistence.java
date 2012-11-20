@@ -64,6 +64,22 @@ public interface LayoutSetPersistence extends BasePersistence<LayoutSet> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the layout sets before and after the current layout set in the ordered set where groupId = &#63;.
+	*
+	* @param layoutSetId the primary key of the current layout set
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next layout set
+	* @throws com.liferay.portal.NoSuchLayoutSetException if a layout set with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.LayoutSet[] findByGroupId_PrevAndNext(
+		long layoutSetId, long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchLayoutSetException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the layout sets where groupId = &#63;.
 	*
 	* <p>
@@ -83,6 +99,18 @@ public interface LayoutSetPersistence extends BasePersistence<LayoutSet> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first layout set in the default ordered set defined by {@link LayoutSetModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching layout set
+	* @throws com.liferay.portal.NoSuchLayoutSetException if a matching layout set could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.LayoutSet findByGroupId_First(long groupId)
+		throws com.liferay.portal.NoSuchLayoutSetException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first layout set in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -98,6 +126,16 @@ public interface LayoutSetPersistence extends BasePersistence<LayoutSet> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first layout set in the default ordered set defined by {@link LayoutSetModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching layout set, or <code>null</code> if a matching layout set could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.LayoutSet fetchByGroupId_First(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first layout set in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -109,6 +147,18 @@ public interface LayoutSetPersistence extends BasePersistence<LayoutSet> {
 		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last layout set in the default ordered set defined by {@link LayoutSetModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching layout set
+	* @throws com.liferay.portal.NoSuchLayoutSetException if a matching layout set could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.LayoutSet findByGroupId_Last(long groupId)
+		throws com.liferay.portal.NoSuchLayoutSetException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last layout set in the ordered set where groupId = &#63;.
@@ -125,6 +175,16 @@ public interface LayoutSetPersistence extends BasePersistence<LayoutSet> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last layout set in the default ordered set defined by {@link LayoutSetModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching layout set, or <code>null</code> if a matching layout set could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.LayoutSet fetchByGroupId_Last(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last layout set in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -136,22 +196,6 @@ public interface LayoutSetPersistence extends BasePersistence<LayoutSet> {
 		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the layout sets before and after the current layout set in the ordered set where groupId = &#63;.
-	*
-	* @param layoutSetId the primary key of the current layout set
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next layout set
-	* @throws com.liferay.portal.NoSuchLayoutSetException if a layout set with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.LayoutSet[] findByGroupId_PrevAndNext(
-		long layoutSetId, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchLayoutSetException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the layout sets where groupId = &#63; from the database.
@@ -201,6 +245,22 @@ public interface LayoutSetPersistence extends BasePersistence<LayoutSet> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the layout sets before and after the current layout set in the ordered set where layoutSetPrototypeUuid = &#63;.
+	*
+	* @param layoutSetId the primary key of the current layout set
+	* @param layoutSetPrototypeUuid the layout set prototype uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next layout set
+	* @throws com.liferay.portal.NoSuchLayoutSetException if a layout set with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.LayoutSet[] findByLayoutSetPrototypeUuid_PrevAndNext(
+		long layoutSetId, java.lang.String layoutSetPrototypeUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchLayoutSetException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the layout sets where layoutSetPrototypeUuid = &#63;.
 	*
 	* <p>
@@ -220,6 +280,19 @@ public interface LayoutSetPersistence extends BasePersistence<LayoutSet> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first layout set in the default ordered set defined by {@link LayoutSetModelImpl#ORDER_BY_JPQL} where layoutSetPrototypeUuid = &#63;.
+	*
+	* @param layoutSetPrototypeUuid the layout set prototype uuid
+	* @return the first matching layout set
+	* @throws com.liferay.portal.NoSuchLayoutSetException if a matching layout set could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.LayoutSet findByLayoutSetPrototypeUuid_First(
+		java.lang.String layoutSetPrototypeUuid)
+		throws com.liferay.portal.NoSuchLayoutSetException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first layout set in the ordered set where layoutSetPrototypeUuid = &#63;.
 	*
 	* @param layoutSetPrototypeUuid the layout set prototype uuid
@@ -235,6 +308,17 @@ public interface LayoutSetPersistence extends BasePersistence<LayoutSet> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first layout set in the default ordered set defined by {@link LayoutSetModelImpl#ORDER_BY_JPQL} where layoutSetPrototypeUuid = &#63;.
+	*
+	* @param layoutSetPrototypeUuid the layout set prototype uuid
+	* @return the first matching layout set, or <code>null</code> if a matching layout set could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.LayoutSet fetchByLayoutSetPrototypeUuid_First(
+		java.lang.String layoutSetPrototypeUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first layout set in the ordered set where layoutSetPrototypeUuid = &#63;.
 	*
 	* @param layoutSetPrototypeUuid the layout set prototype uuid
@@ -246,6 +330,19 @@ public interface LayoutSetPersistence extends BasePersistence<LayoutSet> {
 		java.lang.String layoutSetPrototypeUuid,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last layout set in the default ordered set defined by {@link LayoutSetModelImpl#ORDER_BY_JPQL} where layoutSetPrototypeUuid = &#63;.
+	*
+	* @param layoutSetPrototypeUuid the layout set prototype uuid
+	* @return the last matching layout set
+	* @throws com.liferay.portal.NoSuchLayoutSetException if a matching layout set could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.LayoutSet findByLayoutSetPrototypeUuid_Last(
+		java.lang.String layoutSetPrototypeUuid)
+		throws com.liferay.portal.NoSuchLayoutSetException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last layout set in the ordered set where layoutSetPrototypeUuid = &#63;.
@@ -263,6 +360,17 @@ public interface LayoutSetPersistence extends BasePersistence<LayoutSet> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last layout set in the default ordered set defined by {@link LayoutSetModelImpl#ORDER_BY_JPQL} where layoutSetPrototypeUuid = &#63;.
+	*
+	* @param layoutSetPrototypeUuid the layout set prototype uuid
+	* @return the last matching layout set, or <code>null</code> if a matching layout set could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.LayoutSet fetchByLayoutSetPrototypeUuid_Last(
+		java.lang.String layoutSetPrototypeUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last layout set in the ordered set where layoutSetPrototypeUuid = &#63;.
 	*
 	* @param layoutSetPrototypeUuid the layout set prototype uuid
@@ -274,22 +382,6 @@ public interface LayoutSetPersistence extends BasePersistence<LayoutSet> {
 		java.lang.String layoutSetPrototypeUuid,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the layout sets before and after the current layout set in the ordered set where layoutSetPrototypeUuid = &#63;.
-	*
-	* @param layoutSetId the primary key of the current layout set
-	* @param layoutSetPrototypeUuid the layout set prototype uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next layout set
-	* @throws com.liferay.portal.NoSuchLayoutSetException if a layout set with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.LayoutSet[] findByLayoutSetPrototypeUuid_PrevAndNext(
-		long layoutSetId, java.lang.String layoutSetPrototypeUuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchLayoutSetException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the layout sets where layoutSetPrototypeUuid = &#63; from the database.

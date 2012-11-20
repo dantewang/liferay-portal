@@ -45,7 +45,6 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -163,7 +162,7 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(2);
+			StringBundler query = new StringBundler(3);
 
 			query.append(_SQL_SELECT_VIRTUALHOST_WHERE);
 
@@ -196,16 +195,14 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 
 				List<VirtualHost> list = q.list();
 
-				result = list;
-
-				VirtualHost virtualHost = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_HOSTNAME,
 						finderArgs, list);
 				}
 				else {
-					virtualHost = list.get(0);
+					VirtualHost virtualHost = list.get(0);
+
+					result = virtualHost;
 
 					cacheResult(virtualHost);
 
@@ -215,28 +212,23 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 							finderArgs, virtualHost);
 					}
 				}
-
-				return virtualHost;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_HOSTNAME,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_HOSTNAME,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (VirtualHost)result;
-			}
+			return (VirtualHost)result;
 		}
 	}
 
@@ -262,10 +254,12 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByHostname(String hostname) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_HOSTNAME;
+
 		Object[] finderArgs = new Object[] { hostname };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_HOSTNAME,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -300,18 +294,15 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_HOSTNAME,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -412,7 +403,7 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_VIRTUALHOST_WHERE);
 
@@ -437,16 +428,14 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 
 				List<VirtualHost> list = q.list();
 
-				result = list;
-
-				VirtualHost virtualHost = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_L,
 						finderArgs, list);
 				}
 				else {
-					virtualHost = list.get(0);
+					VirtualHost virtualHost = list.get(0);
+
+					result = virtualHost;
 
 					cacheResult(virtualHost);
 
@@ -456,28 +445,23 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 							finderArgs, virtualHost);
 					}
 				}
-
-				return virtualHost;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_L,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_L,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (VirtualHost)result;
-			}
+			return (VirtualHost)result;
 		}
 	}
 
@@ -506,10 +490,12 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 	 */
 	public int countByC_L(long companyId, long layoutSetId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_L;
+
 		Object[] finderArgs = new Object[] { companyId, layoutSetId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_L,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -536,18 +522,15 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 				qPos.add(layoutSetId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_L, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -936,28 +919,27 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 		if (virtualHost == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				virtualHost = (VirtualHost)session.get(VirtualHostImpl.class,
 						Long.valueOf(virtualHostId));
+
+				if (virtualHost != null) {
+					cacheResult(virtualHost);
+				}
+				else {
+					EntityCacheUtil.putResult(VirtualHostModelImpl.ENTITY_CACHE_ENABLED,
+						VirtualHostImpl.class, virtualHostId, _nullVirtualHost);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(VirtualHostModelImpl.ENTITY_CACHE_ENABLED,
+					VirtualHostImpl.class, virtualHostId);
 
 				throw processException(e);
 			}
 			finally {
-				if (virtualHost != null) {
-					cacheResult(virtualHost);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(VirtualHostModelImpl.ENTITY_CACHE_ENABLED,
-						VirtualHostImpl.class, virtualHostId, _nullVirtualHost);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1008,7 +990,7 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 	public List<VirtualHost> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -1039,7 +1021,7 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_VIRTUALHOST;
+				sql = _SQL_SELECT_VIRTUALHOST.concat(VirtualHostModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
@@ -1049,30 +1031,19 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<VirtualHost>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<VirtualHost>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<VirtualHost>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1110,18 +1081,17 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 				Query q = session.createQuery(_SQL_COUNT_VIRTUALHOST);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1157,6 +1127,7 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 	public void destroy() {
 		EntityCacheUtil.removeCache(VirtualHostImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

@@ -56,7 +56,6 @@ import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -102,14 +101,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED,
 			AssetCategoryImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"findByUuid", new String[] { String.class.getName() },
-			AssetCategoryModelImpl.UUID_COLUMN_BITMASK);
+			AssetCategoryModelImpl.UUID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
@@ -143,221 +143,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public List<AssetCategory> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the asset categories where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of asset categories
-	 * @param end the upper bound of the range of asset categories (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetCategory> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetCategory assetCategory : list) {
-				if (!Validator.equals(uuid, assetCategory.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByUuid_First(uuid, orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<AssetCategory> list = findByUuid(uuid, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByUuid_Last(uuid, orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<AssetCategory> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -482,7 +267,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 			}
 		}
-
 		else {
 			query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -519,13 +303,275 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	}
 
 	/**
+	 * Returns an ordered range of all the asset categories where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of asset categories
+	 * @param end the upper bound of the range of asset categories (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetCategory> findByUuid(String uuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if (!Validator.equals(uuid, assetCategory.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByUuid_First(String uuid)
+		throws NoSuchCategoryException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByUuid_First(uuid, orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByUuid_First(String uuid)
+		throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AssetCategory> list = findByUuid(uuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByUuid_Last(String uuid)
+		throws NoSuchCategoryException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByUuid_Last(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByUuid_Last(uuid, orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByUuid_Last(String uuid)
+		throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<AssetCategory> list = findByUuid(uuid, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset categories where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (AssetCategory assetCategory : findByUuid(uuid)) {
+		for (AssetCategory assetCategory : findByUuid(uuid, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(assetCategory);
 		}
 	}
@@ -538,10 +584,12 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByUuid(String uuid) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+
 		Object[] finderArgs = new Object[] { uuid };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -576,18 +624,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -706,8 +751,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
 
-			query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -727,16 +770,14 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 				List<AssetCategory> list = q.list();
 
-				result = list;
-
-				AssetCategory assetCategory = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
 						finderArgs, list);
 				}
 				else {
-					assetCategory = list.get(0);
+					AssetCategory assetCategory = list.get(0);
+
+					result = assetCategory;
 
 					cacheResult(assetCategory);
 
@@ -747,28 +788,23 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 							finderArgs, assetCategory);
 					}
 				}
-
-				return assetCategory;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (AssetCategory)result;
-			}
+			return (AssetCategory)result;
 		}
 	}
 
@@ -797,10 +833,12 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
+
 		Object[] finderArgs = new Object[] { uuid, groupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -839,18 +877,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -869,8 +904,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
 		new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
@@ -879,7 +914,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			"findByUuid_C",
 			new String[] { String.class.getName(), Long.class.getName() },
 			AssetCategoryModelImpl.UUID_COLUMN_BITMASK |
-			AssetCategoryModelImpl.COMPANYID_COLUMN_BITMASK);
+			AssetCategoryModelImpl.COMPANYID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
@@ -916,245 +952,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public List<AssetCategory> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the asset categories where uuid = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of asset categories
-	 * @param end the upper bound of the range of asset categories (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetCategory> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetCategory assetCategory : list) {
-				if (!Validator.equals(uuid, assetCategory.getUuid()) ||
-						(companyId != assetCategory.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByUuid_C_First(uuid, companyId,
-				orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<AssetCategory> list = findByUuid_C(uuid, companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByUuid_C_Last(uuid, companyId,
-				orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid_C(uuid, companyId);
-
-		List<AssetCategory> list = findByUuid_C(uuid, companyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1282,7 +1079,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 			}
 		}
-
 		else {
 			query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -1321,6 +1117,295 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	}
 
 	/**
+	 * Returns an ordered range of all the asset categories where uuid = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of asset categories
+	 * @param end the upper bound of the range of asset categories (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetCategory> findByUuid_C(String uuid, long companyId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] { uuid, companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] {
+					uuid, companyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if (!Validator.equals(uuid, assetCategory.getUuid()) ||
+						(companyId != assetCategory.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByUuid_C_First(String uuid, long companyId)
+		throws NoSuchCategoryException, SystemException {
+		return findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByUuid_C_First(uuid, companyId,
+				orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByUuid_C_First(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AssetCategory> list = findByUuid_C(uuid, companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByUuid_C_Last(String uuid, long companyId)
+		throws NoSuchCategoryException, SystemException {
+		return findByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByUuid_C_Last(uuid, companyId,
+				orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByUuid_C_Last(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid_C(uuid, companyId);
+
+		List<AssetCategory> list = findByUuid_C(uuid, companyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset categories where uuid = &#63; and companyId = &#63; from the database.
 	 *
 	 * @param uuid the uuid
@@ -1329,7 +1414,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
-		for (AssetCategory assetCategory : findByUuid_C(uuid, companyId)) {
+		for (AssetCategory assetCategory : findByUuid_C(uuid, companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(assetCategory);
 		}
 	}
@@ -1344,10 +1430,12 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
+
 		Object[] finderArgs = new Object[] { uuid, companyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1386,18 +1474,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1416,15 +1501,16 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
 		new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED,
 			AssetCategoryImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"findByGroupId", new String[] { Long.class.getName() },
-			AssetCategoryModelImpl.GROUPID_COLUMN_BITMASK);
+			AssetCategoryModelImpl.GROUPID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
@@ -1458,212 +1544,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public List<AssetCategory> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the asset categories where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of asset categories
-	 * @param end the upper bound of the range of asset categories (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetCategory> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetCategory assetCategory : list) {
-				if ((groupId != assetCategory.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByGroupId_First(groupId,
-				orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<AssetCategory> list = findByGroupId(groupId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByGroupId_Last(groupId,
-				orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
-
-		List<AssetCategory> list = findByGroupId(groupId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1778,7 +1658,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 			}
 		}
-
 		else {
 			query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -1896,7 +1775,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
@@ -2077,7 +1955,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
@@ -2126,13 +2003,266 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	}
 
 	/**
+	 * Returns an ordered range of all the asset categories where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of asset categories
+	 * @param end the upper bound of the range of asset categories (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetCategory> findByGroupId(long groupId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
+
+		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if ((groupId != assetCategory.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByGroupId_First(long groupId)
+		throws NoSuchCategoryException, SystemException {
+		return findByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByGroupId_First(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByGroupId_First(groupId,
+				orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByGroupId_First(long groupId)
+		throws SystemException {
+		return fetchByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AssetCategory> list = findByGroupId(groupId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByGroupId_Last(long groupId)
+		throws NoSuchCategoryException, SystemException {
+		return findByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByGroupId_Last(groupId,
+				orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByGroupId_Last(long groupId)
+		throws SystemException {
+		return fetchByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByGroupId(groupId);
+
+		List<AssetCategory> list = findByGroupId(groupId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset categories where groupId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByGroupId(long groupId) throws SystemException {
-		for (AssetCategory assetCategory : findByGroupId(groupId)) {
+		for (AssetCategory assetCategory : findByGroupId(groupId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(assetCategory);
 		}
 	}
@@ -2145,10 +2275,12 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByGroupId(long groupId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
+
 		Object[] finderArgs = new Object[] { groupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -2171,18 +2303,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2247,15 +2376,16 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTCATEGORYID =
 		new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED,
 			AssetCategoryImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"findByParentCategoryId", new String[] { Long.class.getName() },
-			AssetCategoryModelImpl.PARENTCATEGORYID_COLUMN_BITMASK);
+			AssetCategoryModelImpl.PARENTCATEGORYID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_PARENTCATEGORYID = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
@@ -2290,217 +2420,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public List<AssetCategory> findByParentCategoryId(long parentCategoryId,
 		int start, int end) throws SystemException {
 		return findByParentCategoryId(parentCategoryId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the asset categories where parentCategoryId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param start the lower bound of the range of asset categories
-	 * @param end the upper bound of the range of asset categories (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetCategory> findByParentCategoryId(long parentCategoryId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTCATEGORYID;
-			finderArgs = new Object[] { parentCategoryId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PARENTCATEGORYID;
-			finderArgs = new Object[] {
-					parentCategoryId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetCategory assetCategory : list) {
-				if ((parentCategoryId != assetCategory.getParentCategoryId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
-
-			query.append(_FINDER_COLUMN_PARENTCATEGORYID_PARENTCATEGORYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(parentCategoryId);
-
-				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where parentCategoryId = &#63;.
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByParentCategoryId_First(long parentCategoryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByParentCategoryId_First(parentCategoryId,
-				orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("parentCategoryId=");
-		msg.append(parentCategoryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where parentCategoryId = &#63;.
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByParentCategoryId_First(long parentCategoryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<AssetCategory> list = findByParentCategoryId(parentCategoryId, 0,
-				1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where parentCategoryId = &#63;.
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByParentCategoryId_Last(long parentCategoryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByParentCategoryId_Last(parentCategoryId,
-				orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("parentCategoryId=");
-		msg.append(parentCategoryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where parentCategoryId = &#63;.
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByParentCategoryId_Last(long parentCategoryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByParentCategoryId(parentCategoryId);
-
-		List<AssetCategory> list = findByParentCategoryId(parentCategoryId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2615,7 +2534,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 			}
 		}
-
 		else {
 			query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -2650,6 +2568,263 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	}
 
 	/**
+	 * Returns an ordered range of all the asset categories where parentCategoryId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param start the lower bound of the range of asset categories
+	 * @param end the upper bound of the range of asset categories (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetCategory> findByParentCategoryId(long parentCategoryId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTCATEGORYID;
+			finderArgs = new Object[] { parentCategoryId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PARENTCATEGORYID;
+			finderArgs = new Object[] {
+					parentCategoryId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if ((parentCategoryId != assetCategory.getParentCategoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
+
+			query.append(_FINDER_COLUMN_PARENTCATEGORYID_PARENTCATEGORYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(parentCategoryId);
+
+				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByParentCategoryId_First(long parentCategoryId)
+		throws NoSuchCategoryException, SystemException {
+		return findByParentCategoryId_First(parentCategoryId, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where parentCategoryId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByParentCategoryId_First(long parentCategoryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByParentCategoryId_First(parentCategoryId,
+				orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("parentCategoryId=");
+		msg.append(parentCategoryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByParentCategoryId_First(long parentCategoryId)
+		throws SystemException {
+		return fetchByParentCategoryId_First(parentCategoryId, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where parentCategoryId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByParentCategoryId_First(long parentCategoryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AssetCategory> list = findByParentCategoryId(parentCategoryId, 0,
+				1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByParentCategoryId_Last(long parentCategoryId)
+		throws NoSuchCategoryException, SystemException {
+		return findByParentCategoryId_Last(parentCategoryId, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where parentCategoryId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByParentCategoryId_Last(long parentCategoryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByParentCategoryId_Last(parentCategoryId,
+				orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("parentCategoryId=");
+		msg.append(parentCategoryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByParentCategoryId_Last(long parentCategoryId)
+		throws SystemException {
+		return fetchByParentCategoryId_Last(parentCategoryId, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where parentCategoryId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByParentCategoryId_Last(long parentCategoryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByParentCategoryId(parentCategoryId);
+
+		List<AssetCategory> list = findByParentCategoryId(parentCategoryId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset categories where parentCategoryId = &#63; from the database.
 	 *
 	 * @param parentCategoryId the parent category ID
@@ -2658,7 +2833,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public void removeByParentCategoryId(long parentCategoryId)
 		throws SystemException {
 		for (AssetCategory assetCategory : findByParentCategoryId(
-				parentCategoryId)) {
+				parentCategoryId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(assetCategory);
 		}
 	}
@@ -2672,10 +2847,12 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public int countByParentCategoryId(long parentCategoryId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_PARENTCATEGORYID;
+
 		Object[] finderArgs = new Object[] { parentCategoryId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_PARENTCATEGORYID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -2698,18 +2875,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				qPos.add(parentCategoryId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_PARENTCATEGORYID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2727,15 +2901,16 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_VOCABULARYID =
 		new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED,
 			AssetCategoryImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"findByVocabularyId", new String[] { Long.class.getName() },
-			AssetCategoryModelImpl.VOCABULARYID_COLUMN_BITMASK);
+			AssetCategoryModelImpl.VOCABULARYID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_VOCABULARYID = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByVocabularyId",
@@ -2770,216 +2945,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public List<AssetCategory> findByVocabularyId(long vocabularyId, int start,
 		int end) throws SystemException {
 		return findByVocabularyId(vocabularyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the asset categories where vocabularyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param vocabularyId the vocabulary ID
-	 * @param start the lower bound of the range of asset categories
-	 * @param end the upper bound of the range of asset categories (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetCategory> findByVocabularyId(long vocabularyId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_VOCABULARYID;
-			finderArgs = new Object[] { vocabularyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_VOCABULARYID;
-			finderArgs = new Object[] {
-					vocabularyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetCategory assetCategory : list) {
-				if ((vocabularyId != assetCategory.getVocabularyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
-
-			query.append(_FINDER_COLUMN_VOCABULARYID_VOCABULARYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(vocabularyId);
-
-				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where vocabularyId = &#63;.
-	 *
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByVocabularyId_First(long vocabularyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByVocabularyId_First(vocabularyId,
-				orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("vocabularyId=");
-		msg.append(vocabularyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where vocabularyId = &#63;.
-	 *
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByVocabularyId_First(long vocabularyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<AssetCategory> list = findByVocabularyId(vocabularyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where vocabularyId = &#63;.
-	 *
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByVocabularyId_Last(long vocabularyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByVocabularyId_Last(vocabularyId,
-				orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("vocabularyId=");
-		msg.append(vocabularyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where vocabularyId = &#63;.
-	 *
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByVocabularyId_Last(long vocabularyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByVocabularyId(vocabularyId);
-
-		List<AssetCategory> list = findByVocabularyId(vocabularyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3094,7 +3059,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 			}
 		}
-
 		else {
 			query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -3129,6 +3093,262 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	}
 
 	/**
+	 * Returns an ordered range of all the asset categories where vocabularyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param vocabularyId the vocabulary ID
+	 * @param start the lower bound of the range of asset categories
+	 * @param end the upper bound of the range of asset categories (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetCategory> findByVocabularyId(long vocabularyId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_VOCABULARYID;
+			finderArgs = new Object[] { vocabularyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_VOCABULARYID;
+			finderArgs = new Object[] {
+					vocabularyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if ((vocabularyId != assetCategory.getVocabularyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
+
+			query.append(_FINDER_COLUMN_VOCABULARYID_VOCABULARYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(vocabularyId);
+
+				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where vocabularyId = &#63;.
+	 *
+	 * @param vocabularyId the vocabulary ID
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByVocabularyId_First(long vocabularyId)
+		throws NoSuchCategoryException, SystemException {
+		return findByVocabularyId_First(vocabularyId, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where vocabularyId = &#63;.
+	 *
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByVocabularyId_First(long vocabularyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByVocabularyId_First(vocabularyId,
+				orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("vocabularyId=");
+		msg.append(vocabularyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where vocabularyId = &#63;.
+	 *
+	 * @param vocabularyId the vocabulary ID
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByVocabularyId_First(long vocabularyId)
+		throws SystemException {
+		return fetchByVocabularyId_First(vocabularyId, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where vocabularyId = &#63;.
+	 *
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByVocabularyId_First(long vocabularyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AssetCategory> list = findByVocabularyId(vocabularyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where vocabularyId = &#63;.
+	 *
+	 * @param vocabularyId the vocabulary ID
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByVocabularyId_Last(long vocabularyId)
+		throws NoSuchCategoryException, SystemException {
+		return findByVocabularyId_Last(vocabularyId, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where vocabularyId = &#63;.
+	 *
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByVocabularyId_Last(long vocabularyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByVocabularyId_Last(vocabularyId,
+				orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("vocabularyId=");
+		msg.append(vocabularyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where vocabularyId = &#63;.
+	 *
+	 * @param vocabularyId the vocabulary ID
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByVocabularyId_Last(long vocabularyId)
+		throws SystemException {
+		return fetchByVocabularyId_Last(vocabularyId, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where vocabularyId = &#63;.
+	 *
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByVocabularyId_Last(long vocabularyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByVocabularyId(vocabularyId);
+
+		List<AssetCategory> list = findByVocabularyId(vocabularyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset categories where vocabularyId = &#63; from the database.
 	 *
 	 * @param vocabularyId the vocabulary ID
@@ -3136,7 +3356,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public void removeByVocabularyId(long vocabularyId)
 		throws SystemException {
-		for (AssetCategory assetCategory : findByVocabularyId(vocabularyId)) {
+		for (AssetCategory assetCategory : findByVocabularyId(vocabularyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(assetCategory);
 		}
 	}
@@ -3149,10 +3370,12 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByVocabularyId(long vocabularyId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_VOCABULARYID;
+
 		Object[] finderArgs = new Object[] { vocabularyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_VOCABULARYID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -3175,18 +3398,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				qPos.add(vocabularyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_VOCABULARYID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -3202,8 +3422,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_V = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED,
@@ -3211,7 +3431,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			"findByG_V",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			AssetCategoryModelImpl.GROUPID_COLUMN_BITMASK |
-			AssetCategoryModelImpl.VOCABULARYID_COLUMN_BITMASK);
+			AssetCategoryModelImpl.VOCABULARYID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_V = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_V",
@@ -3248,233 +3469,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public List<AssetCategory> findByG_V(long groupId, long vocabularyId,
 		int start, int end) throws SystemException {
 		return findByG_V(groupId, vocabularyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the asset categories where groupId = &#63; and vocabularyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param vocabularyId the vocabulary ID
-	 * @param start the lower bound of the range of asset categories
-	 * @param end the upper bound of the range of asset categories (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetCategory> findByG_V(long groupId, long vocabularyId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_V;
-			finderArgs = new Object[] { groupId, vocabularyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_V;
-			finderArgs = new Object[] {
-					groupId, vocabularyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetCategory assetCategory : list) {
-				if ((groupId != assetCategory.getGroupId()) ||
-						(vocabularyId != assetCategory.getVocabularyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
-
-			query.append(_FINDER_COLUMN_G_V_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_V_VOCABULARYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(vocabularyId);
-
-				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByG_V_First(long groupId, long vocabularyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByG_V_First(groupId, vocabularyId,
-				orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", vocabularyId=");
-		msg.append(vocabularyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByG_V_First(long groupId, long vocabularyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<AssetCategory> list = findByG_V(groupId, vocabularyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByG_V_Last(long groupId, long vocabularyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByG_V_Last(groupId, vocabularyId,
-				orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", vocabularyId=");
-		msg.append(vocabularyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByG_V_Last(long groupId, long vocabularyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByG_V(groupId, vocabularyId);
-
-		List<AssetCategory> list = findByG_V(groupId, vocabularyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3592,7 +3586,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 			}
 		}
-
 		else {
 			query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -3719,7 +3712,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
@@ -3905,7 +3897,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
@@ -3956,6 +3947,283 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	}
 
 	/**
+	 * Returns an ordered range of all the asset categories where groupId = &#63; and vocabularyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param vocabularyId the vocabulary ID
+	 * @param start the lower bound of the range of asset categories
+	 * @param end the upper bound of the range of asset categories (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetCategory> findByG_V(long groupId, long vocabularyId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_V;
+			finderArgs = new Object[] { groupId, vocabularyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_V;
+			finderArgs = new Object[] {
+					groupId, vocabularyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if ((groupId != assetCategory.getGroupId()) ||
+						(vocabularyId != assetCategory.getVocabularyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
+
+			query.append(_FINDER_COLUMN_G_V_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_V_VOCABULARYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(vocabularyId);
+
+				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param vocabularyId the vocabulary ID
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByG_V_First(long groupId, long vocabularyId)
+		throws NoSuchCategoryException, SystemException {
+		return findByG_V_First(groupId, vocabularyId, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByG_V_First(long groupId, long vocabularyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByG_V_First(groupId, vocabularyId,
+				orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", vocabularyId=");
+		msg.append(vocabularyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param vocabularyId the vocabulary ID
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByG_V_First(long groupId, long vocabularyId)
+		throws SystemException {
+		return fetchByG_V_First(groupId, vocabularyId, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByG_V_First(long groupId, long vocabularyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AssetCategory> list = findByG_V(groupId, vocabularyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param vocabularyId the vocabulary ID
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByG_V_Last(long groupId, long vocabularyId)
+		throws NoSuchCategoryException, SystemException {
+		return findByG_V_Last(groupId, vocabularyId, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByG_V_Last(long groupId, long vocabularyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByG_V_Last(groupId, vocabularyId,
+				orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", vocabularyId=");
+		msg.append(vocabularyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param vocabularyId the vocabulary ID
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByG_V_Last(long groupId, long vocabularyId)
+		throws SystemException {
+		return fetchByG_V_Last(groupId, vocabularyId, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByG_V_Last(long groupId, long vocabularyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_V(groupId, vocabularyId);
+
+		List<AssetCategory> list = findByG_V(groupId, vocabularyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset categories where groupId = &#63; and vocabularyId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -3964,7 +4232,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public void removeByG_V(long groupId, long vocabularyId)
 		throws SystemException {
-		for (AssetCategory assetCategory : findByG_V(groupId, vocabularyId)) {
+		for (AssetCategory assetCategory : findByG_V(groupId, vocabularyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(assetCategory);
 		}
 	}
@@ -3979,10 +4248,12 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public int countByG_V(long groupId, long vocabularyId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_V;
+
 		Object[] finderArgs = new Object[] { groupId, vocabularyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_V,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -4009,18 +4280,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				qPos.add(vocabularyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_V, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -4091,8 +4359,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_N = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED,
@@ -4137,245 +4405,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public List<AssetCategory> findByP_N(long parentCategoryId, String name,
 		int start, int end) throws SystemException {
 		return findByP_N(parentCategoryId, name, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the asset categories where parentCategoryId = &#63; and name = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param name the name
-	 * @param start the lower bound of the range of asset categories
-	 * @param end the upper bound of the range of asset categories (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetCategory> findByP_N(long parentCategoryId, String name,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_N;
-			finderArgs = new Object[] { parentCategoryId, name };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_P_N;
-			finderArgs = new Object[] {
-					parentCategoryId, name,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetCategory assetCategory : list) {
-				if ((parentCategoryId != assetCategory.getParentCategoryId()) ||
-						!Validator.equals(name, assetCategory.getName())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
-
-			query.append(_FINDER_COLUMN_P_N_PARENTCATEGORYID_2);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_P_N_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_P_N_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_P_N_NAME_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(parentCategoryId);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where parentCategoryId = &#63; and name = &#63;.
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByP_N_First(long parentCategoryId, String name,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByP_N_First(parentCategoryId, name,
-				orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("parentCategoryId=");
-		msg.append(parentCategoryId);
-
-		msg.append(", name=");
-		msg.append(name);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where parentCategoryId = &#63; and name = &#63;.
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByP_N_First(long parentCategoryId, String name,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<AssetCategory> list = findByP_N(parentCategoryId, name, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where parentCategoryId = &#63; and name = &#63;.
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByP_N_Last(long parentCategoryId, String name,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByP_N_Last(parentCategoryId, name,
-				orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("parentCategoryId=");
-		msg.append(parentCategoryId);
-
-		msg.append(", name=");
-		msg.append(name);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where parentCategoryId = &#63; and name = &#63;.
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByP_N_Last(long parentCategoryId, String name,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByP_N(parentCategoryId, name);
-
-		List<AssetCategory> list = findByP_N(parentCategoryId, name, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -4503,7 +4532,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 			}
 		}
-
 		else {
 			query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -4542,6 +4570,295 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	}
 
 	/**
+	 * Returns an ordered range of all the asset categories where parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @param start the lower bound of the range of asset categories
+	 * @param end the upper bound of the range of asset categories (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetCategory> findByP_N(long parentCategoryId, String name,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_N;
+			finderArgs = new Object[] { parentCategoryId, name };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_P_N;
+			finderArgs = new Object[] {
+					parentCategoryId, name,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if ((parentCategoryId != assetCategory.getParentCategoryId()) ||
+						!Validator.equals(name, assetCategory.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
+
+			query.append(_FINDER_COLUMN_P_N_PARENTCATEGORYID_2);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_P_N_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_P_N_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_P_N_NAME_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(parentCategoryId);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByP_N_First(long parentCategoryId, String name)
+		throws NoSuchCategoryException, SystemException {
+		return findByP_N_First(parentCategoryId, name, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByP_N_First(long parentCategoryId, String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByP_N_First(parentCategoryId, name,
+				orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("parentCategoryId=");
+		msg.append(parentCategoryId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByP_N_First(long parentCategoryId, String name)
+		throws SystemException {
+		return fetchByP_N_First(parentCategoryId, name, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByP_N_First(long parentCategoryId, String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AssetCategory> list = findByP_N(parentCategoryId, name, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByP_N_Last(long parentCategoryId, String name)
+		throws NoSuchCategoryException, SystemException {
+		return findByP_N_Last(parentCategoryId, name, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByP_N_Last(long parentCategoryId, String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByP_N_Last(parentCategoryId, name,
+				orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("parentCategoryId=");
+		msg.append(parentCategoryId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByP_N_Last(long parentCategoryId, String name)
+		throws SystemException {
+		return fetchByP_N_Last(parentCategoryId, name, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByP_N_Last(long parentCategoryId, String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByP_N(parentCategoryId, name);
+
+		List<AssetCategory> list = findByP_N(parentCategoryId, name, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset categories where parentCategoryId = &#63; and name = &#63; from the database.
 	 *
 	 * @param parentCategoryId the parent category ID
@@ -4550,7 +4867,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public void removeByP_N(long parentCategoryId, String name)
 		throws SystemException {
-		for (AssetCategory assetCategory : findByP_N(parentCategoryId, name)) {
+		for (AssetCategory assetCategory : findByP_N(parentCategoryId, name,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(assetCategory);
 		}
 	}
@@ -4565,10 +4883,12 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public int countByP_N(long parentCategoryId, String name)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_P_N;
+
 		Object[] finderArgs = new Object[] { parentCategoryId, name };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_P_N,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -4607,18 +4927,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_P_N, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -4637,8 +4954,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_V = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED,
@@ -4646,7 +4963,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			"findByP_V",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			AssetCategoryModelImpl.PARENTCATEGORYID_COLUMN_BITMASK |
-			AssetCategoryModelImpl.VOCABULARYID_COLUMN_BITMASK);
+			AssetCategoryModelImpl.VOCABULARYID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_V = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_V",
@@ -4683,235 +5001,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public List<AssetCategory> findByP_V(long parentCategoryId,
 		long vocabularyId, int start, int end) throws SystemException {
 		return findByP_V(parentCategoryId, vocabularyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the asset categories where parentCategoryId = &#63; and vocabularyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param vocabularyId the vocabulary ID
-	 * @param start the lower bound of the range of asset categories
-	 * @param end the upper bound of the range of asset categories (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetCategory> findByP_V(long parentCategoryId,
-		long vocabularyId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_V;
-			finderArgs = new Object[] { parentCategoryId, vocabularyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_P_V;
-			finderArgs = new Object[] {
-					parentCategoryId, vocabularyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetCategory assetCategory : list) {
-				if ((parentCategoryId != assetCategory.getParentCategoryId()) ||
-						(vocabularyId != assetCategory.getVocabularyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
-
-			query.append(_FINDER_COLUMN_P_V_PARENTCATEGORYID_2);
-
-			query.append(_FINDER_COLUMN_P_V_VOCABULARYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(parentCategoryId);
-
-				qPos.add(vocabularyId);
-
-				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where parentCategoryId = &#63; and vocabularyId = &#63;.
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByP_V_First(long parentCategoryId,
-		long vocabularyId, OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByP_V_First(parentCategoryId,
-				vocabularyId, orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("parentCategoryId=");
-		msg.append(parentCategoryId);
-
-		msg.append(", vocabularyId=");
-		msg.append(vocabularyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where parentCategoryId = &#63; and vocabularyId = &#63;.
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByP_V_First(long parentCategoryId,
-		long vocabularyId, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<AssetCategory> list = findByP_V(parentCategoryId, vocabularyId, 0,
-				1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where parentCategoryId = &#63; and vocabularyId = &#63;.
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByP_V_Last(long parentCategoryId,
-		long vocabularyId, OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByP_V_Last(parentCategoryId,
-				vocabularyId, orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("parentCategoryId=");
-		msg.append(parentCategoryId);
-
-		msg.append(", vocabularyId=");
-		msg.append(vocabularyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where parentCategoryId = &#63; and vocabularyId = &#63;.
-	 *
-	 * @param parentCategoryId the parent category ID
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByP_V_Last(long parentCategoryId,
-		long vocabularyId, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByP_V(parentCategoryId, vocabularyId);
-
-		List<AssetCategory> list = findByP_V(parentCategoryId, vocabularyId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -5030,7 +5119,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 			}
 		}
-
 		else {
 			query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -5067,6 +5155,285 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	}
 
 	/**
+	 * Returns an ordered range of all the asset categories where parentCategoryId = &#63; and vocabularyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param vocabularyId the vocabulary ID
+	 * @param start the lower bound of the range of asset categories
+	 * @param end the upper bound of the range of asset categories (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetCategory> findByP_V(long parentCategoryId,
+		long vocabularyId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_V;
+			finderArgs = new Object[] { parentCategoryId, vocabularyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_P_V;
+			finderArgs = new Object[] {
+					parentCategoryId, vocabularyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if ((parentCategoryId != assetCategory.getParentCategoryId()) ||
+						(vocabularyId != assetCategory.getVocabularyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
+
+			query.append(_FINDER_COLUMN_P_V_PARENTCATEGORYID_2);
+
+			query.append(_FINDER_COLUMN_P_V_VOCABULARYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(parentCategoryId);
+
+				qPos.add(vocabularyId);
+
+				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param vocabularyId the vocabulary ID
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByP_V_First(long parentCategoryId,
+		long vocabularyId) throws NoSuchCategoryException, SystemException {
+		return findByP_V_First(parentCategoryId, vocabularyId, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where parentCategoryId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByP_V_First(long parentCategoryId,
+		long vocabularyId, OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByP_V_First(parentCategoryId,
+				vocabularyId, orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("parentCategoryId=");
+		msg.append(parentCategoryId);
+
+		msg.append(", vocabularyId=");
+		msg.append(vocabularyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param vocabularyId the vocabulary ID
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByP_V_First(long parentCategoryId,
+		long vocabularyId) throws SystemException {
+		return fetchByP_V_First(parentCategoryId, vocabularyId, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where parentCategoryId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByP_V_First(long parentCategoryId,
+		long vocabularyId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<AssetCategory> list = findByP_V(parentCategoryId, vocabularyId, 0,
+				1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param vocabularyId the vocabulary ID
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByP_V_Last(long parentCategoryId, long vocabularyId)
+		throws NoSuchCategoryException, SystemException {
+		return findByP_V_Last(parentCategoryId, vocabularyId, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where parentCategoryId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByP_V_Last(long parentCategoryId,
+		long vocabularyId, OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByP_V_Last(parentCategoryId,
+				vocabularyId, orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("parentCategoryId=");
+		msg.append(parentCategoryId);
+
+		msg.append(", vocabularyId=");
+		msg.append(vocabularyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param vocabularyId the vocabulary ID
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByP_V_Last(long parentCategoryId,
+		long vocabularyId) throws SystemException {
+		return fetchByP_V_Last(parentCategoryId, vocabularyId, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where parentCategoryId = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param parentCategoryId the parent category ID
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByP_V_Last(long parentCategoryId,
+		long vocabularyId, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByP_V(parentCategoryId, vocabularyId);
+
+		List<AssetCategory> list = findByP_V(parentCategoryId, vocabularyId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset categories where parentCategoryId = &#63; and vocabularyId = &#63; from the database.
 	 *
 	 * @param parentCategoryId the parent category ID
@@ -5076,7 +5443,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public void removeByP_V(long parentCategoryId, long vocabularyId)
 		throws SystemException {
 		for (AssetCategory assetCategory : findByP_V(parentCategoryId,
-				vocabularyId)) {
+				vocabularyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(assetCategory);
 		}
 	}
@@ -5091,10 +5458,12 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public int countByP_V(long parentCategoryId, long vocabularyId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_P_V;
+
 		Object[] finderArgs = new Object[] { parentCategoryId, vocabularyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_P_V,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -5121,18 +5490,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				qPos.add(vocabularyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_P_V, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -5149,8 +5515,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_V = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED,
@@ -5195,245 +5561,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public List<AssetCategory> findByN_V(String name, long vocabularyId,
 		int start, int end) throws SystemException {
 		return findByN_V(name, vocabularyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the asset categories where name = &#63; and vocabularyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param name the name
-	 * @param vocabularyId the vocabulary ID
-	 * @param start the lower bound of the range of asset categories
-	 * @param end the upper bound of the range of asset categories (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetCategory> findByN_V(String name, long vocabularyId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_V;
-			finderArgs = new Object[] { name, vocabularyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_V;
-			finderArgs = new Object[] {
-					name, vocabularyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetCategory assetCategory : list) {
-				if (!Validator.equals(name, assetCategory.getName()) ||
-						(vocabularyId != assetCategory.getVocabularyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_N_V_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_N_V_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_N_V_NAME_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_N_V_VOCABULARYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				qPos.add(vocabularyId);
-
-				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where name = &#63; and vocabularyId = &#63;.
-	 *
-	 * @param name the name
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByN_V_First(String name, long vocabularyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByN_V_First(name, vocabularyId,
-				orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("name=");
-		msg.append(name);
-
-		msg.append(", vocabularyId=");
-		msg.append(vocabularyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where name = &#63; and vocabularyId = &#63;.
-	 *
-	 * @param name the name
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByN_V_First(String name, long vocabularyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<AssetCategory> list = findByN_V(name, vocabularyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where name = &#63; and vocabularyId = &#63;.
-	 *
-	 * @param name the name
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByN_V_Last(String name, long vocabularyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByN_V_Last(name, vocabularyId,
-				orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("name=");
-		msg.append(name);
-
-		msg.append(", vocabularyId=");
-		msg.append(vocabularyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where name = &#63; and vocabularyId = &#63;.
-	 *
-	 * @param name the name
-	 * @param vocabularyId the vocabulary ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByN_V_Last(String name, long vocabularyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByN_V(name, vocabularyId);
-
-		List<AssetCategory> list = findByN_V(name, vocabularyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -5561,7 +5688,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 			}
 		}
-
 		else {
 			query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -5600,6 +5726,295 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	}
 
 	/**
+	 * Returns an ordered range of all the asset categories where name = &#63; and vocabularyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param name the name
+	 * @param vocabularyId the vocabulary ID
+	 * @param start the lower bound of the range of asset categories
+	 * @param end the upper bound of the range of asset categories (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetCategory> findByN_V(String name, long vocabularyId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_V;
+			finderArgs = new Object[] { name, vocabularyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_V;
+			finderArgs = new Object[] {
+					name, vocabularyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if (!Validator.equals(name, assetCategory.getName()) ||
+						(vocabularyId != assetCategory.getVocabularyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_N_V_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_N_V_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_N_V_NAME_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_N_V_VOCABULARYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				qPos.add(vocabularyId);
+
+				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where name = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param name the name
+	 * @param vocabularyId the vocabulary ID
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByN_V_First(String name, long vocabularyId)
+		throws NoSuchCategoryException, SystemException {
+		return findByN_V_First(name, vocabularyId, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where name = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param name the name
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByN_V_First(String name, long vocabularyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByN_V_First(name, vocabularyId,
+				orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("name=");
+		msg.append(name);
+
+		msg.append(", vocabularyId=");
+		msg.append(vocabularyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where name = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param name the name
+	 * @param vocabularyId the vocabulary ID
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByN_V_First(String name, long vocabularyId)
+		throws SystemException {
+		return fetchByN_V_First(name, vocabularyId, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where name = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param name the name
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByN_V_First(String name, long vocabularyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AssetCategory> list = findByN_V(name, vocabularyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where name = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param name the name
+	 * @param vocabularyId the vocabulary ID
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByN_V_Last(String name, long vocabularyId)
+		throws NoSuchCategoryException, SystemException {
+		return findByN_V_Last(name, vocabularyId, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where name = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param name the name
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByN_V_Last(String name, long vocabularyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByN_V_Last(name, vocabularyId,
+				orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("name=");
+		msg.append(name);
+
+		msg.append(", vocabularyId=");
+		msg.append(vocabularyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where name = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param name the name
+	 * @param vocabularyId the vocabulary ID
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByN_V_Last(String name, long vocabularyId)
+		throws SystemException {
+		return fetchByN_V_Last(name, vocabularyId, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where name = &#63; and vocabularyId = &#63;.
+	 *
+	 * @param name the name
+	 * @param vocabularyId the vocabulary ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByN_V_Last(String name, long vocabularyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByN_V(name, vocabularyId);
+
+		List<AssetCategory> list = findByN_V(name, vocabularyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset categories where name = &#63; and vocabularyId = &#63; from the database.
 	 *
 	 * @param name the name
@@ -5608,7 +6023,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public void removeByN_V(String name, long vocabularyId)
 		throws SystemException {
-		for (AssetCategory assetCategory : findByN_V(name, vocabularyId)) {
+		for (AssetCategory assetCategory : findByN_V(name, vocabularyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(assetCategory);
 		}
 	}
@@ -5623,10 +6039,12 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public int countByN_V(String name, long vocabularyId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_N_V;
+
 		Object[] finderArgs = new Object[] { name, vocabularyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_N_V,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -5665,18 +6083,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				qPos.add(vocabularyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_V, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -5696,8 +6111,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_N = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED,
@@ -5751,263 +6166,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public List<AssetCategory> findByG_P_N(long groupId, long parentCategoryId,
 		String name, int start, int end) throws SystemException {
 		return findByG_P_N(groupId, parentCategoryId, name, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the asset categories where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentCategoryId the parent category ID
-	 * @param name the name
-	 * @param start the lower bound of the range of asset categories
-	 * @param end the upper bound of the range of asset categories (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetCategory> findByG_P_N(long groupId, long parentCategoryId,
-		String name, int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_N;
-			finderArgs = new Object[] { groupId, parentCategoryId, name };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_N;
-			finderArgs = new Object[] {
-					groupId, parentCategoryId, name,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetCategory assetCategory : list) {
-				if ((groupId != assetCategory.getGroupId()) ||
-						(parentCategoryId != assetCategory.getParentCategoryId()) ||
-						!Validator.equals(name, assetCategory.getName())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
-
-			query.append(_FINDER_COLUMN_G_P_N_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_P_N_PARENTCATEGORYID_2);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_G_P_N_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_P_N_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_P_N_NAME_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(parentCategoryId);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentCategoryId the parent category ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByG_P_N_First(long groupId, long parentCategoryId,
-		String name, OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByG_P_N_First(groupId,
-				parentCategoryId, name, orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", parentCategoryId=");
-		msg.append(parentCategoryId);
-
-		msg.append(", name=");
-		msg.append(name);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentCategoryId the parent category ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByG_P_N_First(long groupId,
-		long parentCategoryId, String name, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<AssetCategory> list = findByG_P_N(groupId, parentCategoryId, name,
-				0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentCategoryId the parent category ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category
-	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory findByG_P_N_Last(long groupId, long parentCategoryId,
-		String name, OrderByComparator orderByComparator)
-		throws NoSuchCategoryException, SystemException {
-		AssetCategory assetCategory = fetchByG_P_N_Last(groupId,
-				parentCategoryId, name, orderByComparator);
-
-		if (assetCategory != null) {
-			return assetCategory;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", parentCategoryId=");
-		msg.append(parentCategoryId);
-
-		msg.append(", name=");
-		msg.append(name);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCategoryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentCategoryId the parent category ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetCategory fetchByG_P_N_Last(long groupId, long parentCategoryId,
-		String name, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByG_P_N(groupId, parentCategoryId, name);
-
-		List<AssetCategory> list = findByG_P_N(groupId, parentCategoryId, name,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -6139,7 +6297,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 			}
 		}
-
 		else {
 			query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -6287,7 +6444,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
@@ -6491,7 +6647,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
@@ -6546,6 +6701,317 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	}
 
 	/**
+	 * Returns an ordered range of all the asset categories where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @param start the lower bound of the range of asset categories
+	 * @param end the upper bound of the range of asset categories (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetCategory> findByG_P_N(long groupId, long parentCategoryId,
+		String name, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_N;
+			finderArgs = new Object[] { groupId, parentCategoryId, name };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_N;
+			finderArgs = new Object[] {
+					groupId, parentCategoryId, name,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if ((groupId != assetCategory.getGroupId()) ||
+						(parentCategoryId != assetCategory.getParentCategoryId()) ||
+						!Validator.equals(name, assetCategory.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_ASSETCATEGORY_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_N_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_P_N_PARENTCATEGORYID_2);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_G_P_N_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_P_N_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_P_N_NAME_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(parentCategoryId);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByG_P_N_First(long groupId, long parentCategoryId,
+		String name) throws NoSuchCategoryException, SystemException {
+		return findByG_P_N_First(groupId, parentCategoryId, name, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByG_P_N_First(long groupId, long parentCategoryId,
+		String name, OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByG_P_N_First(groupId,
+				parentCategoryId, name, orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", parentCategoryId=");
+		msg.append(parentCategoryId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByG_P_N_First(long groupId,
+		long parentCategoryId, String name) throws SystemException {
+		return fetchByG_P_N_First(groupId, parentCategoryId, name, null);
+	}
+
+	/**
+	 * Returns the first asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByG_P_N_First(long groupId,
+		long parentCategoryId, String name, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<AssetCategory> list = findByG_P_N(groupId, parentCategoryId, name,
+				0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByG_P_N_Last(long groupId, long parentCategoryId,
+		String name) throws NoSuchCategoryException, SystemException {
+		return findByG_P_N_Last(groupId, parentCategoryId, name, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category
+	 * @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory findByG_P_N_Last(long groupId, long parentCategoryId,
+		String name, OrderByComparator orderByComparator)
+		throws NoSuchCategoryException, SystemException {
+		AssetCategory assetCategory = fetchByG_P_N_Last(groupId,
+				parentCategoryId, name, orderByComparator);
+
+		if (assetCategory != null) {
+			return assetCategory;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", parentCategoryId=");
+		msg.append(parentCategoryId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCategoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByG_P_N_Last(long groupId, long parentCategoryId,
+		String name) throws SystemException {
+		return fetchByG_P_N_Last(groupId, parentCategoryId, name, null);
+	}
+
+	/**
+	 * Returns the last asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentCategoryId the parent category ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetCategory fetchByG_P_N_Last(long groupId, long parentCategoryId,
+		String name, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_P_N(groupId, parentCategoryId, name);
+
+		List<AssetCategory> list = findByG_P_N(groupId, parentCategoryId, name,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset categories where groupId = &#63; and parentCategoryId = &#63; and name = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -6556,7 +7022,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public void removeByG_P_N(long groupId, long parentCategoryId, String name)
 		throws SystemException {
 		for (AssetCategory assetCategory : findByG_P_N(groupId,
-				parentCategoryId, name)) {
+				parentCategoryId, name, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				null)) {
 			remove(assetCategory);
 		}
 	}
@@ -6572,10 +7039,12 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public int countByG_P_N(long groupId, long parentCategoryId, String name)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P_N;
+
 		Object[] finderArgs = new Object[] { groupId, parentCategoryId, name };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_P_N,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -6618,18 +7087,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_N,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -6838,8 +7304,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 			query.append(_FINDER_COLUMN_P_N_V_VOCABULARYID_2);
 
-			query.append(AssetCategoryModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -6861,16 +7325,14 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 				List<AssetCategory> list = q.list();
 
-				result = list;
-
-				AssetCategory assetCategory = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_P_N_V,
 						finderArgs, list);
 				}
 				else {
-					assetCategory = list.get(0);
+					AssetCategory assetCategory = list.get(0);
+
+					result = assetCategory;
 
 					cacheResult(assetCategory);
 
@@ -6882,28 +7344,23 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 							finderArgs, assetCategory);
 					}
 				}
-
-				return assetCategory;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_P_N_V,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_P_N_V,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (AssetCategory)result;
-			}
+			return (AssetCategory)result;
 		}
 	}
 
@@ -6935,10 +7392,12 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public int countByP_N_V(long parentCategoryId, String name,
 		long vocabularyId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_P_N_V;
+
 		Object[] finderArgs = new Object[] { parentCategoryId, name, vocabularyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_P_N_V,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -6981,18 +7440,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				qPos.add(vocabularyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_P_N_V,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -7666,28 +8122,27 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 		if (assetCategory == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				assetCategory = (AssetCategory)session.get(AssetCategoryImpl.class,
 						Long.valueOf(categoryId));
+
+				if (assetCategory != null) {
+					cacheResult(assetCategory);
+				}
+				else {
+					EntityCacheUtil.putResult(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
+						AssetCategoryImpl.class, categoryId, _nullAssetCategory);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
+					AssetCategoryImpl.class, categoryId);
 
 				throw processException(e);
 			}
 			finally {
-				if (assetCategory != null) {
-					cacheResult(assetCategory);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
-						AssetCategoryImpl.class, categoryId, _nullAssetCategory);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -7738,7 +8193,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public List<AssetCategory> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -7779,30 +8234,19 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<AssetCategory>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -7840,18 +8284,17 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				Query q = session.createQuery(_SQL_COUNT_ASSETCATEGORY);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -7895,8 +8338,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			AssetCategoryModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETCATEGORIES_NAME,
 			"getAssetEntries",
 			new String[] {
-				Long.class.getName(), "java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
 			});
 
 	static {
@@ -7920,7 +8363,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public List<com.liferay.portlet.asset.model.AssetEntry> getAssetEntries(
 		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		Object[] finderArgs = new Object[] { pk, start, end, orderByComparator };
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { pk };
+		}
+		else {
+			finderArgs = new Object[] { pk, start, end, orderByComparator };
+		}
 
 		List<com.liferay.portlet.asset.model.AssetEntry> list = (List<com.liferay.portlet.asset.model.AssetEntry>)FinderCacheUtil.getResult(FINDER_PATH_GET_ASSETENTRIES,
 				finderArgs, this);
@@ -7938,7 +8389,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 											  .concat(orderByComparator.getOrderBy());
 				}
 				else {
-					sql = _SQL_GETASSETENTRIES;
+					sql = _SQL_GETASSETENTRIES.concat(com.liferay.portlet.asset.model.impl.AssetEntryModelImpl.ORDER_BY_SQL);
 				}
 
 				SQLQuery q = session.createSQLQuery(sql);
@@ -7952,22 +8403,19 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 				list = (List<com.liferay.portlet.asset.model.AssetEntry>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				assetEntryPersistence.cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_GET_ASSETENTRIES,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_ASSETENTRIES,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_GET_ASSETENTRIES,
-						finderArgs);
-				}
-				else {
-					assetEntryPersistence.cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_GET_ASSETENTRIES,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -8014,18 +8462,17 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				qPos.add(pk);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_GET_ASSETENTRIES_SIZE,
 					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_ASSETENTRIES_SIZE,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -8059,17 +8506,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			try {
 				value = Boolean.valueOf(containsAssetEntry.contains(pk,
 							assetEntryPK));
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (value == null) {
-					value = Boolean.FALSE;
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_ASSETENTRY,
 					finderArgs, value);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_ASSETENTRY,
+					finderArgs);
+
+				throw processException(e);
 			}
 		}
 
@@ -8671,6 +9116,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public void destroy() {
 		EntityCacheUtil.removeCache(AssetCategoryImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

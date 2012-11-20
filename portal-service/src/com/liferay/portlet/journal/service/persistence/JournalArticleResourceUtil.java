@@ -145,6 +145,26 @@ public class JournalArticleResourceUtil {
 	}
 
 	/**
+	* Returns the journal article resources before and after the current journal article resource in the ordered set where uuid = &#63;.
+	*
+	* @param resourcePrimKey the primary key of the current journal article resource
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal article resource
+	* @throws com.liferay.portlet.journal.NoSuchArticleResourceException if a journal article resource with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticleResource[] findByUuid_PrevAndNext(
+		long resourcePrimKey, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleResourceException {
+		return getPersistence()
+				   .findByUuid_PrevAndNext(resourcePrimKey, uuid,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal article resources where uuid = &#63;.
 	*
 	* <p>
@@ -166,6 +186,21 @@ public class JournalArticleResourceUtil {
 	}
 
 	/**
+	* Returns the first journal article resource in the default ordered set defined by {@link JournalArticleResourceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching journal article resource
+	* @throws com.liferay.portlet.journal.NoSuchArticleResourceException if a matching journal article resource could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticleResource findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleResourceException {
+		return getPersistence().findByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first journal article resource in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -183,6 +218,19 @@ public class JournalArticleResourceUtil {
 	}
 
 	/**
+	* Returns the first journal article resource in the default ordered set defined by {@link JournalArticleResourceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching journal article resource, or <code>null</code> if a matching journal article resource could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticleResource fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first journal article resource in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -195,6 +243,21 @@ public class JournalArticleResourceUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_First(uuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article resource in the default ordered set defined by {@link JournalArticleResourceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching journal article resource
+	* @throws com.liferay.portlet.journal.NoSuchArticleResourceException if a matching journal article resource could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticleResource findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleResourceException {
+		return getPersistence().findByUuid_Last(uuid);
 	}
 
 	/**
@@ -215,6 +278,19 @@ public class JournalArticleResourceUtil {
 	}
 
 	/**
+	* Returns the last journal article resource in the default ordered set defined by {@link JournalArticleResourceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching journal article resource, or <code>null</code> if a matching journal article resource could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticleResource fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_Last(uuid);
+	}
+
+	/**
 	* Returns the last journal article resource in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -227,26 +303,6 @@ public class JournalArticleResourceUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_Last(uuid, orderByComparator);
-	}
-
-	/**
-	* Returns the journal article resources before and after the current journal article resource in the ordered set where uuid = &#63;.
-	*
-	* @param resourcePrimKey the primary key of the current journal article resource
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal article resource
-	* @throws com.liferay.portlet.journal.NoSuchArticleResourceException if a journal article resource with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticleResource[] findByUuid_PrevAndNext(
-		long resourcePrimKey, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleResourceException {
-		return getPersistence()
-				   .findByUuid_PrevAndNext(resourcePrimKey, uuid,
-			orderByComparator);
 	}
 
 	/**
@@ -378,6 +434,26 @@ public class JournalArticleResourceUtil {
 	}
 
 	/**
+	* Returns the journal article resources before and after the current journal article resource in the ordered set where groupId = &#63;.
+	*
+	* @param resourcePrimKey the primary key of the current journal article resource
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal article resource
+	* @throws com.liferay.portlet.journal.NoSuchArticleResourceException if a journal article resource with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticleResource[] findByGroupId_PrevAndNext(
+		long resourcePrimKey, long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleResourceException {
+		return getPersistence()
+				   .findByGroupId_PrevAndNext(resourcePrimKey, groupId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal article resources where groupId = &#63;.
 	*
 	* <p>
@@ -400,6 +476,21 @@ public class JournalArticleResourceUtil {
 	}
 
 	/**
+	* Returns the first journal article resource in the default ordered set defined by {@link JournalArticleResourceModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching journal article resource
+	* @throws com.liferay.portlet.journal.NoSuchArticleResourceException if a matching journal article resource could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticleResource findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleResourceException {
+		return getPersistence().findByGroupId_First(groupId);
+	}
+
+	/**
 	* Returns the first journal article resource in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -417,6 +508,19 @@ public class JournalArticleResourceUtil {
 	}
 
 	/**
+	* Returns the first journal article resource in the default ordered set defined by {@link JournalArticleResourceModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching journal article resource, or <code>null</code> if a matching journal article resource could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticleResource fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId);
+	}
+
+	/**
 	* Returns the first journal article resource in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -429,6 +533,21 @@ public class JournalArticleResourceUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal article resource in the default ordered set defined by {@link JournalArticleResourceModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching journal article resource
+	* @throws com.liferay.portlet.journal.NoSuchArticleResourceException if a matching journal article resource could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticleResource findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleResourceException {
+		return getPersistence().findByGroupId_Last(groupId);
 	}
 
 	/**
@@ -449,6 +568,19 @@ public class JournalArticleResourceUtil {
 	}
 
 	/**
+	* Returns the last journal article resource in the default ordered set defined by {@link JournalArticleResourceModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching journal article resource, or <code>null</code> if a matching journal article resource could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalArticleResource fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId);
+	}
+
+	/**
 	* Returns the last journal article resource in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -461,26 +593,6 @@ public class JournalArticleResourceUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the journal article resources before and after the current journal article resource in the ordered set where groupId = &#63;.
-	*
-	* @param resourcePrimKey the primary key of the current journal article resource
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal article resource
-	* @throws com.liferay.portlet.journal.NoSuchArticleResourceException if a journal article resource with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalArticleResource[] findByGroupId_PrevAndNext(
-		long resourcePrimKey, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleResourceException {
-		return getPersistence()
-				   .findByGroupId_PrevAndNext(resourcePrimKey, groupId,
-			orderByComparator);
 	}
 
 	/**

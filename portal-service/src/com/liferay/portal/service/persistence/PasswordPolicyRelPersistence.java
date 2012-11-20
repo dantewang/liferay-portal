@@ -64,6 +64,22 @@ public interface PasswordPolicyRelPersistence extends BasePersistence<PasswordPo
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the password policy rels before and after the current password policy rel in the ordered set where passwordPolicyId = &#63;.
+	*
+	* @param passwordPolicyRelId the primary key of the current password policy rel
+	* @param passwordPolicyId the password policy ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next password policy rel
+	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a password policy rel with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicyRel[] findByPasswordPolicyId_PrevAndNext(
+		long passwordPolicyRelId, long passwordPolicyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the password policy rels where passwordPolicyId = &#63;.
 	*
 	* <p>
@@ -83,6 +99,19 @@ public interface PasswordPolicyRelPersistence extends BasePersistence<PasswordPo
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first password policy rel in the default ordered set defined by {@link PasswordPolicyRelModelImpl#ORDER_BY_JPQL} where passwordPolicyId = &#63;.
+	*
+	* @param passwordPolicyId the password policy ID
+	* @return the first matching password policy rel
+	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a matching password policy rel could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicyRel findByPasswordPolicyId_First(
+		long passwordPolicyId)
+		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first password policy rel in the ordered set where passwordPolicyId = &#63;.
 	*
 	* @param passwordPolicyId the password policy ID
@@ -98,6 +127,17 @@ public interface PasswordPolicyRelPersistence extends BasePersistence<PasswordPo
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first password policy rel in the default ordered set defined by {@link PasswordPolicyRelModelImpl#ORDER_BY_JPQL} where passwordPolicyId = &#63;.
+	*
+	* @param passwordPolicyId the password policy ID
+	* @return the first matching password policy rel, or <code>null</code> if a matching password policy rel could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicyRel fetchByPasswordPolicyId_First(
+		long passwordPolicyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first password policy rel in the ordered set where passwordPolicyId = &#63;.
 	*
 	* @param passwordPolicyId the password policy ID
@@ -109,6 +149,19 @@ public interface PasswordPolicyRelPersistence extends BasePersistence<PasswordPo
 		long passwordPolicyId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last password policy rel in the default ordered set defined by {@link PasswordPolicyRelModelImpl#ORDER_BY_JPQL} where passwordPolicyId = &#63;.
+	*
+	* @param passwordPolicyId the password policy ID
+	* @return the last matching password policy rel
+	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a matching password policy rel could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicyRel findByPasswordPolicyId_Last(
+		long passwordPolicyId)
+		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last password policy rel in the ordered set where passwordPolicyId = &#63;.
@@ -126,6 +179,17 @@ public interface PasswordPolicyRelPersistence extends BasePersistence<PasswordPo
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last password policy rel in the default ordered set defined by {@link PasswordPolicyRelModelImpl#ORDER_BY_JPQL} where passwordPolicyId = &#63;.
+	*
+	* @param passwordPolicyId the password policy ID
+	* @return the last matching password policy rel, or <code>null</code> if a matching password policy rel could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicyRel fetchByPasswordPolicyId_Last(
+		long passwordPolicyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last password policy rel in the ordered set where passwordPolicyId = &#63;.
 	*
 	* @param passwordPolicyId the password policy ID
@@ -137,22 +201,6 @@ public interface PasswordPolicyRelPersistence extends BasePersistence<PasswordPo
 		long passwordPolicyId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the password policy rels before and after the current password policy rel in the ordered set where passwordPolicyId = &#63;.
-	*
-	* @param passwordPolicyRelId the primary key of the current password policy rel
-	* @param passwordPolicyId the password policy ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next password policy rel
-	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a password policy rel with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.PasswordPolicyRel[] findByPasswordPolicyId_PrevAndNext(
-		long passwordPolicyRelId, long passwordPolicyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the password policy rels where passwordPolicyId = &#63; from the database.
@@ -174,56 +222,126 @@ public interface PasswordPolicyRelPersistence extends BasePersistence<PasswordPo
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the password policy rel where classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portal.NoSuchPasswordPolicyRelException} if it could not be found.
+	* Returns the first password policy rel in the default ordered set defined by {@link PasswordPolicyRelModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
 	* @param classPK the class p k
-	* @return the matching password policy rel
+	* @return the first matching password policy rel
 	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a matching password policy rel could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.PasswordPolicyRel findByC_C(
+	public com.liferay.portal.model.PasswordPolicyRel findByC_C_First(
 		long classNameId, long classPK)
 		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the password policy rel where classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first password policy rel in the ordered set where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
 	* @param classPK the class p k
-	* @return the matching password policy rel, or <code>null</code> if a matching password policy rel could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching password policy rel
+	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a matching password policy rel could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.PasswordPolicyRel fetchByC_C(
+	public com.liferay.portal.model.PasswordPolicyRel findByC_C_First(
+		long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first password policy rel in the default ordered set defined by {@link PasswordPolicyRelModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the first matching password policy rel, or <code>null</code> if a matching password policy rel could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicyRel fetchByC_C_First(
 		long classNameId, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the password policy rel where classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first password policy rel in the ordered set where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
 	* @param classPK the class p k
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching password policy rel, or <code>null</code> if a matching password policy rel could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching password policy rel, or <code>null</code> if a matching password policy rel could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.PasswordPolicyRel fetchByC_C(
-		long classNameId, long classPK, boolean retrieveFromCache)
+	public com.liferay.portal.model.PasswordPolicyRel fetchByC_C_First(
+		long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes the password policy rel where classNameId = &#63; and classPK = &#63; from the database.
+	* Returns the last password policy rel in the default ordered set defined by {@link PasswordPolicyRelModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
 	* @param classPK the class p k
-	* @return the password policy rel that was removed
+	* @return the last matching password policy rel
+	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a matching password policy rel could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.PasswordPolicyRel removeByC_C(
+	public com.liferay.portal.model.PasswordPolicyRel findByC_C_Last(
 		long classNameId, long classPK)
 		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last password policy rel in the ordered set where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching password policy rel
+	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a matching password policy rel could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicyRel findByC_C_Last(
+		long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last password policy rel in the default ordered set defined by {@link PasswordPolicyRelModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the last matching password policy rel, or <code>null</code> if a matching password policy rel could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicyRel fetchByC_C_Last(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last password policy rel in the ordered set where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching password policy rel, or <code>null</code> if a matching password policy rel could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicyRel fetchByC_C_Last(
+		long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the password policy rels where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the number of password policy rels where classNameId = &#63; and classPK = &#63;.
@@ -237,61 +355,136 @@ public interface PasswordPolicyRelPersistence extends BasePersistence<PasswordPo
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the password policy rel where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portal.NoSuchPasswordPolicyRelException} if it could not be found.
+	* Returns the first password policy rel in the default ordered set defined by {@link PasswordPolicyRelModelImpl#ORDER_BY_JPQL} where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63;.
 	*
 	* @param passwordPolicyId the password policy ID
 	* @param classNameId the class name ID
 	* @param classPK the class p k
-	* @return the matching password policy rel
+	* @return the first matching password policy rel
 	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a matching password policy rel could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.PasswordPolicyRel findByP_C_C(
+	public com.liferay.portal.model.PasswordPolicyRel findByP_C_C_First(
 		long passwordPolicyId, long classNameId, long classPK)
 		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the password policy rel where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first password policy rel in the ordered set where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63;.
 	*
 	* @param passwordPolicyId the password policy ID
 	* @param classNameId the class name ID
 	* @param classPK the class p k
-	* @return the matching password policy rel, or <code>null</code> if a matching password policy rel could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching password policy rel
+	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a matching password policy rel could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.PasswordPolicyRel fetchByP_C_C(
-		long passwordPolicyId, long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the password policy rel where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param passwordPolicyId the password policy ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching password policy rel, or <code>null</code> if a matching password policy rel could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.PasswordPolicyRel fetchByP_C_C(
+	public com.liferay.portal.model.PasswordPolicyRel findByP_C_C_First(
 		long passwordPolicyId, long classNameId, long classPK,
-		boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException;
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes the password policy rel where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	* Returns the first password policy rel in the default ordered set defined by {@link PasswordPolicyRelModelImpl#ORDER_BY_JPQL} where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63;.
 	*
 	* @param passwordPolicyId the password policy ID
 	* @param classNameId the class name ID
 	* @param classPK the class p k
-	* @return the password policy rel that was removed
+	* @return the first matching password policy rel, or <code>null</code> if a matching password policy rel could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.PasswordPolicyRel removeByP_C_C(
+	public com.liferay.portal.model.PasswordPolicyRel fetchByP_C_C_First(
+		long passwordPolicyId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first password policy rel in the ordered set where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param passwordPolicyId the password policy ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching password policy rel, or <code>null</code> if a matching password policy rel could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicyRel fetchByP_C_C_First(
+		long passwordPolicyId, long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last password policy rel in the default ordered set defined by {@link PasswordPolicyRelModelImpl#ORDER_BY_JPQL} where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param passwordPolicyId the password policy ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the last matching password policy rel
+	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a matching password policy rel could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicyRel findByP_C_C_Last(
 		long passwordPolicyId, long classNameId, long classPK)
 		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last password policy rel in the ordered set where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param passwordPolicyId the password policy ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching password policy rel
+	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a matching password policy rel could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicyRel findByP_C_C_Last(
+		long passwordPolicyId, long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last password policy rel in the default ordered set defined by {@link PasswordPolicyRelModelImpl#ORDER_BY_JPQL} where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param passwordPolicyId the password policy ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the last matching password policy rel, or <code>null</code> if a matching password policy rel could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicyRel fetchByP_C_C_Last(
+		long passwordPolicyId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last password policy rel in the ordered set where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param passwordPolicyId the password policy ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching password policy rel, or <code>null</code> if a matching password policy rel could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicyRel fetchByP_C_C_Last(
+		long passwordPolicyId, long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the password policy rels where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param passwordPolicyId the password policy ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByP_C_C(long passwordPolicyId, long classNameId,
+		long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the number of password policy rels where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63;.

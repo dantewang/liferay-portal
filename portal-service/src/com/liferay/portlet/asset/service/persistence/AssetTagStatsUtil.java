@@ -142,6 +142,25 @@ public class AssetTagStatsUtil {
 	}
 
 	/**
+	* Returns the asset tag statses before and after the current asset tag stats in the ordered set where tagId = &#63;.
+	*
+	* @param tagStatsId the primary key of the current asset tag stats
+	* @param tagId the tag ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next asset tag stats
+	* @throws com.liferay.portlet.asset.NoSuchTagStatsException if a asset tag stats with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats[] findByTagId_PrevAndNext(
+		long tagStatsId, long tagId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagStatsException {
+		return getPersistence()
+				   .findByTagId_PrevAndNext(tagStatsId, tagId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the asset tag statses where tagId = &#63;.
 	*
 	* <p>
@@ -163,6 +182,21 @@ public class AssetTagStatsUtil {
 	}
 
 	/**
+	* Returns the first asset tag stats in the default ordered set defined by {@link AssetTagStatsModelImpl#ORDER_BY_JPQL} where tagId = &#63;.
+	*
+	* @param tagId the tag ID
+	* @return the first matching asset tag stats
+	* @throws com.liferay.portlet.asset.NoSuchTagStatsException if a matching asset tag stats could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats findByTagId_First(
+		long tagId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagStatsException {
+		return getPersistence().findByTagId_First(tagId);
+	}
+
+	/**
 	* Returns the first asset tag stats in the ordered set where tagId = &#63;.
 	*
 	* @param tagId the tag ID
@@ -180,6 +214,18 @@ public class AssetTagStatsUtil {
 	}
 
 	/**
+	* Returns the first asset tag stats in the default ordered set defined by {@link AssetTagStatsModelImpl#ORDER_BY_JPQL} where tagId = &#63;.
+	*
+	* @param tagId the tag ID
+	* @return the first matching asset tag stats, or <code>null</code> if a matching asset tag stats could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats fetchByTagId_First(
+		long tagId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByTagId_First(tagId);
+	}
+
+	/**
 	* Returns the first asset tag stats in the ordered set where tagId = &#63;.
 	*
 	* @param tagId the tag ID
@@ -192,6 +238,21 @@ public class AssetTagStatsUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByTagId_First(tagId, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset tag stats in the default ordered set defined by {@link AssetTagStatsModelImpl#ORDER_BY_JPQL} where tagId = &#63;.
+	*
+	* @param tagId the tag ID
+	* @return the last matching asset tag stats
+	* @throws com.liferay.portlet.asset.NoSuchTagStatsException if a matching asset tag stats could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats findByTagId_Last(
+		long tagId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagStatsException {
+		return getPersistence().findByTagId_Last(tagId);
 	}
 
 	/**
@@ -212,6 +273,18 @@ public class AssetTagStatsUtil {
 	}
 
 	/**
+	* Returns the last asset tag stats in the default ordered set defined by {@link AssetTagStatsModelImpl#ORDER_BY_JPQL} where tagId = &#63;.
+	*
+	* @param tagId the tag ID
+	* @return the last matching asset tag stats, or <code>null</code> if a matching asset tag stats could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats fetchByTagId_Last(
+		long tagId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByTagId_Last(tagId);
+	}
+
+	/**
 	* Returns the last asset tag stats in the ordered set where tagId = &#63;.
 	*
 	* @param tagId the tag ID
@@ -224,25 +297,6 @@ public class AssetTagStatsUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByTagId_Last(tagId, orderByComparator);
-	}
-
-	/**
-	* Returns the asset tag statses before and after the current asset tag stats in the ordered set where tagId = &#63;.
-	*
-	* @param tagStatsId the primary key of the current asset tag stats
-	* @param tagId the tag ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next asset tag stats
-	* @throws com.liferay.portlet.asset.NoSuchTagStatsException if a asset tag stats with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTagStats[] findByTagId_PrevAndNext(
-		long tagStatsId, long tagId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagStatsException {
-		return getPersistence()
-				   .findByTagId_PrevAndNext(tagStatsId, tagId, orderByComparator);
 	}
 
 	/**
@@ -301,6 +355,26 @@ public class AssetTagStatsUtil {
 	}
 
 	/**
+	* Returns the asset tag statses before and after the current asset tag stats in the ordered set where classNameId = &#63;.
+	*
+	* @param tagStatsId the primary key of the current asset tag stats
+	* @param classNameId the class name ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next asset tag stats
+	* @throws com.liferay.portlet.asset.NoSuchTagStatsException if a asset tag stats with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats[] findByClassNameId_PrevAndNext(
+		long tagStatsId, long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagStatsException {
+		return getPersistence()
+				   .findByClassNameId_PrevAndNext(tagStatsId, classNameId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the asset tag statses where classNameId = &#63;.
 	*
 	* <p>
@@ -323,6 +397,21 @@ public class AssetTagStatsUtil {
 	}
 
 	/**
+	* Returns the first asset tag stats in the default ordered set defined by {@link AssetTagStatsModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @return the first matching asset tag stats
+	* @throws com.liferay.portlet.asset.NoSuchTagStatsException if a matching asset tag stats could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats findByClassNameId_First(
+		long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagStatsException {
+		return getPersistence().findByClassNameId_First(classNameId);
+	}
+
+	/**
 	* Returns the first asset tag stats in the ordered set where classNameId = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -341,6 +430,19 @@ public class AssetTagStatsUtil {
 	}
 
 	/**
+	* Returns the first asset tag stats in the default ordered set defined by {@link AssetTagStatsModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @return the first matching asset tag stats, or <code>null</code> if a matching asset tag stats could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats fetchByClassNameId_First(
+		long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByClassNameId_First(classNameId);
+	}
+
+	/**
 	* Returns the first asset tag stats in the ordered set where classNameId = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -354,6 +456,21 @@ public class AssetTagStatsUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByClassNameId_First(classNameId, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset tag stats in the default ordered set defined by {@link AssetTagStatsModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @return the last matching asset tag stats
+	* @throws com.liferay.portlet.asset.NoSuchTagStatsException if a matching asset tag stats could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats findByClassNameId_Last(
+		long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagStatsException {
+		return getPersistence().findByClassNameId_Last(classNameId);
 	}
 
 	/**
@@ -375,6 +492,19 @@ public class AssetTagStatsUtil {
 	}
 
 	/**
+	* Returns the last asset tag stats in the default ordered set defined by {@link AssetTagStatsModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @return the last matching asset tag stats, or <code>null</code> if a matching asset tag stats could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats fetchByClassNameId_Last(
+		long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByClassNameId_Last(classNameId);
+	}
+
+	/**
 	* Returns the last asset tag stats in the ordered set where classNameId = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -388,26 +518,6 @@ public class AssetTagStatsUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByClassNameId_Last(classNameId, orderByComparator);
-	}
-
-	/**
-	* Returns the asset tag statses before and after the current asset tag stats in the ordered set where classNameId = &#63;.
-	*
-	* @param tagStatsId the primary key of the current asset tag stats
-	* @param classNameId the class name ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next asset tag stats
-	* @throws com.liferay.portlet.asset.NoSuchTagStatsException if a asset tag stats with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTagStats[] findByClassNameId_PrevAndNext(
-		long tagStatsId, long classNameId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagStatsException {
-		return getPersistence()
-				   .findByClassNameId_PrevAndNext(tagStatsId, classNameId,
-			orderByComparator);
 	}
 
 	/**

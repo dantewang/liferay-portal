@@ -47,7 +47,6 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -90,14 +89,15 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, LockImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
 			new String[] { String.class.getName() },
-			LockModelImpl.UUID_COLUMN_BITMASK);
+			LockModelImpl.UUID_COLUMN_BITMASK |
+			LockModelImpl.LOCKID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
@@ -130,214 +130,6 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	public List<Lock> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the locks where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of locks
-	 * @param end the upper bound of the range of locks (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching locks
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Lock> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Lock lock : list) {
-				if (!Validator.equals(uuid, lock.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_LOCK_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<Lock>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first lock in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching lock
-	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Lock findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchLockException, SystemException {
-		Lock lock = fetchByUuid_First(uuid, orderByComparator);
-
-		if (lock != null) {
-			return lock;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLockException(msg.toString());
-	}
-
-	/**
-	 * Returns the first lock in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching lock, or <code>null</code> if a matching lock could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Lock fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Lock> list = findByUuid(uuid, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last lock in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching lock
-	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Lock findByUuid_Last(String uuid, OrderByComparator orderByComparator)
-		throws NoSuchLockException, SystemException {
-		Lock lock = fetchByUuid_Last(uuid, orderByComparator);
-
-		if (lock != null) {
-			return lock;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLockException(msg.toString());
-	}
-
-	/**
-	 * Returns the last lock in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching lock, or <code>null</code> if a matching lock could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Lock fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<Lock> list = findByUuid(uuid, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -461,6 +253,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				}
 			}
 		}
+		else {
+			query.append(LockModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -494,13 +289,270 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	}
 
 	/**
+	 * Returns an ordered range of all the locks where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of locks
+	 * @param end the upper bound of the range of locks (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching locks
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Lock> findByUuid(String uuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Lock lock : list) {
+				if (!Validator.equals(uuid, lock.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_LOCK_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(LockModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<Lock>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByUuid_First(String uuid)
+		throws NoSuchLockException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first lock in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchLockException, SystemException {
+		Lock lock = fetchByUuid_First(uuid, orderByComparator);
+
+		if (lock != null) {
+			return lock;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLockException(msg.toString());
+	}
+
+	/**
+	 * Returns the first lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByUuid_First(String uuid) throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first lock in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Lock> list = findByUuid(uuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByUuid_Last(String uuid)
+		throws NoSuchLockException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last lock in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByUuid_Last(String uuid, OrderByComparator orderByComparator)
+		throws NoSuchLockException, SystemException {
+		Lock lock = fetchByUuid_Last(uuid, orderByComparator);
+
+		if (lock != null) {
+			return lock;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLockException(msg.toString());
+	}
+
+	/**
+	 * Returns the last lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByUuid_Last(String uuid) throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last lock in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<Lock> list = findByUuid(uuid, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the locks where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (Lock lock : findByUuid(uuid)) {
+		for (Lock lock : findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				null)) {
 			remove(lock);
 		}
 	}
@@ -513,10 +565,12 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByUuid(String uuid) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+
 		Object[] finderArgs = new Object[] { uuid };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -551,18 +605,15 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -579,8 +630,8 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
 		new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
@@ -588,7 +639,8 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
 			new String[] { String.class.getName(), Long.class.getName() },
 			LockModelImpl.UUID_COLUMN_BITMASK |
-			LockModelImpl.COMPANYID_COLUMN_BITMASK);
+			LockModelImpl.COMPANYID_COLUMN_BITMASK |
+			LockModelImpl.LOCKID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
@@ -625,236 +677,6 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	public List<Lock> findByUuid_C(String uuid, long companyId, int start,
 		int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the locks where uuid = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of locks
-	 * @param end the upper bound of the range of locks (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching locks
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Lock> findByUuid_C(String uuid, long companyId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Lock lock : list) {
-				if (!Validator.equals(uuid, lock.getUuid()) ||
-						(companyId != lock.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_LOCK_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				list = (List<Lock>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first lock in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching lock
-	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Lock findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchLockException, SystemException {
-		Lock lock = fetchByUuid_C_First(uuid, companyId, orderByComparator);
-
-		if (lock != null) {
-			return lock;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLockException(msg.toString());
-	}
-
-	/**
-	 * Returns the first lock in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching lock, or <code>null</code> if a matching lock could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Lock fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Lock> list = findByUuid_C(uuid, companyId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last lock in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching lock
-	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Lock findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchLockException, SystemException {
-		Lock lock = fetchByUuid_C_Last(uuid, companyId, orderByComparator);
-
-		if (lock != null) {
-			return lock;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLockException(msg.toString());
-	}
-
-	/**
-	 * Returns the last lock in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching lock, or <code>null</code> if a matching lock could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Lock fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid_C(uuid, companyId);
-
-		List<Lock> list = findByUuid_C(uuid, companyId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -982,6 +804,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				}
 			}
 		}
+		else {
+			query.append(LockModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1017,6 +842,290 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	}
 
 	/**
+	 * Returns an ordered range of all the locks where uuid = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of locks
+	 * @param end the upper bound of the range of locks (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching locks
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Lock> findByUuid_C(String uuid, long companyId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] { uuid, companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] {
+					uuid, companyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Lock lock : list) {
+				if (!Validator.equals(uuid, lock.getUuid()) ||
+						(companyId != lock.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_LOCK_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(LockModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				list = (List<Lock>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByUuid_C_First(String uuid, long companyId)
+		throws NoSuchLockException, SystemException {
+		return findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first lock in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchLockException, SystemException {
+		Lock lock = fetchByUuid_C_First(uuid, companyId, orderByComparator);
+
+		if (lock != null) {
+			return lock;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLockException(msg.toString());
+	}
+
+	/**
+	 * Returns the first lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByUuid_C_First(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first lock in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Lock> list = findByUuid_C(uuid, companyId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByUuid_C_Last(String uuid, long companyId)
+		throws NoSuchLockException, SystemException {
+		return findByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last lock in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchLockException, SystemException {
+		Lock lock = fetchByUuid_C_Last(uuid, companyId, orderByComparator);
+
+		if (lock != null) {
+			return lock;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLockException(msg.toString());
+	}
+
+	/**
+	 * Returns the last lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByUuid_C_Last(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last lock in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid_C(uuid, companyId);
+
+		List<Lock> list = findByUuid_C(uuid, companyId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the locks where uuid = &#63; and companyId = &#63; from the database.
 	 *
 	 * @param uuid the uuid
@@ -1025,7 +1134,8 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
-		for (Lock lock : findByUuid_C(uuid, companyId)) {
+		for (Lock lock : findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(lock);
 		}
 	}
@@ -1040,10 +1150,12 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
+
 		Object[] finderArgs = new Object[] { uuid, companyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1082,18 +1194,15 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1112,8 +1221,8 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			new String[] {
 				Date.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTEXPIRATIONDATE =
 		new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
@@ -1150,207 +1259,6 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	public List<Lock> findByLtExpirationDate(Date expirationDate, int start,
 		int end) throws SystemException {
 		return findByLtExpirationDate(expirationDate, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the locks where expirationDate &lt; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param expirationDate the expiration date
-	 * @param start the lower bound of the range of locks
-	 * @param end the upper bound of the range of locks (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching locks
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Lock> findByLtExpirationDate(Date expirationDate, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LTEXPIRATIONDATE;
-		finderArgs = new Object[] { expirationDate, start, end, orderByComparator };
-
-		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Lock lock : list) {
-				if (!Validator.equals(expirationDate, lock.getExpirationDate())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_LOCK_WHERE);
-
-			if (expirationDate == null) {
-				query.append(_FINDER_COLUMN_LTEXPIRATIONDATE_EXPIRATIONDATE_1);
-			}
-			else {
-				query.append(_FINDER_COLUMN_LTEXPIRATIONDATE_EXPIRATIONDATE_2);
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (expirationDate != null) {
-					qPos.add(CalendarUtil.getTimestamp(expirationDate));
-				}
-
-				list = (List<Lock>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first lock in the ordered set where expirationDate &lt; &#63;.
-	 *
-	 * @param expirationDate the expiration date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching lock
-	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Lock findByLtExpirationDate_First(Date expirationDate,
-		OrderByComparator orderByComparator)
-		throws NoSuchLockException, SystemException {
-		Lock lock = fetchByLtExpirationDate_First(expirationDate,
-				orderByComparator);
-
-		if (lock != null) {
-			return lock;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("expirationDate=");
-		msg.append(expirationDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLockException(msg.toString());
-	}
-
-	/**
-	 * Returns the first lock in the ordered set where expirationDate &lt; &#63;.
-	 *
-	 * @param expirationDate the expiration date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching lock, or <code>null</code> if a matching lock could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Lock fetchByLtExpirationDate_First(Date expirationDate,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Lock> list = findByLtExpirationDate(expirationDate, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last lock in the ordered set where expirationDate &lt; &#63;.
-	 *
-	 * @param expirationDate the expiration date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching lock
-	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Lock findByLtExpirationDate_Last(Date expirationDate,
-		OrderByComparator orderByComparator)
-		throws NoSuchLockException, SystemException {
-		Lock lock = fetchByLtExpirationDate_Last(expirationDate,
-				orderByComparator);
-
-		if (lock != null) {
-			return lock;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("expirationDate=");
-		msg.append(expirationDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLockException(msg.toString());
-	}
-
-	/**
-	 * Returns the last lock in the ordered set where expirationDate &lt; &#63;.
-	 *
-	 * @param expirationDate the expiration date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching lock, or <code>null</code> if a matching lock could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Lock fetchByLtExpirationDate_Last(Date expirationDate,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByLtExpirationDate(expirationDate);
-
-		List<Lock> list = findByLtExpirationDate(expirationDate, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1470,6 +1378,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				}
 			}
 		}
+		else {
+			query.append(LockModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1503,6 +1414,257 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	}
 
 	/**
+	 * Returns an ordered range of all the locks where expirationDate &lt; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param expirationDate the expiration date
+	 * @param start the lower bound of the range of locks
+	 * @param end the upper bound of the range of locks (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching locks
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Lock> findByLtExpirationDate(Date expirationDate, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LTEXPIRATIONDATE;
+		finderArgs = new Object[] { expirationDate, start, end, orderByComparator };
+
+		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Lock lock : list) {
+				if (!Validator.equals(expirationDate, lock.getExpirationDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_LOCK_WHERE);
+
+			if (expirationDate == null) {
+				query.append(_FINDER_COLUMN_LTEXPIRATIONDATE_EXPIRATIONDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_LTEXPIRATIONDATE_EXPIRATIONDATE_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(LockModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (expirationDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(expirationDate));
+				}
+
+				list = (List<Lock>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where expirationDate &lt; &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @return the first matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByLtExpirationDate_First(Date expirationDate)
+		throws NoSuchLockException, SystemException {
+		return findByLtExpirationDate_First(expirationDate, null);
+	}
+
+	/**
+	 * Returns the first lock in the ordered set where expirationDate &lt; &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByLtExpirationDate_First(Date expirationDate,
+		OrderByComparator orderByComparator)
+		throws NoSuchLockException, SystemException {
+		Lock lock = fetchByLtExpirationDate_First(expirationDate,
+				orderByComparator);
+
+		if (lock != null) {
+			return lock;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("expirationDate=");
+		msg.append(expirationDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLockException(msg.toString());
+	}
+
+	/**
+	 * Returns the first lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where expirationDate &lt; &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @return the first matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByLtExpirationDate_First(Date expirationDate)
+		throws SystemException {
+		return fetchByLtExpirationDate_First(expirationDate, null);
+	}
+
+	/**
+	 * Returns the first lock in the ordered set where expirationDate &lt; &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByLtExpirationDate_First(Date expirationDate,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Lock> list = findByLtExpirationDate(expirationDate, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where expirationDate &lt; &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @return the last matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByLtExpirationDate_Last(Date expirationDate)
+		throws NoSuchLockException, SystemException {
+		return findByLtExpirationDate_Last(expirationDate, null);
+	}
+
+	/**
+	 * Returns the last lock in the ordered set where expirationDate &lt; &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByLtExpirationDate_Last(Date expirationDate,
+		OrderByComparator orderByComparator)
+		throws NoSuchLockException, SystemException {
+		Lock lock = fetchByLtExpirationDate_Last(expirationDate,
+				orderByComparator);
+
+		if (lock != null) {
+			return lock;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("expirationDate=");
+		msg.append(expirationDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLockException(msg.toString());
+	}
+
+	/**
+	 * Returns the last lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where expirationDate &lt; &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @return the last matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByLtExpirationDate_Last(Date expirationDate)
+		throws SystemException {
+		return fetchByLtExpirationDate_Last(expirationDate, null);
+	}
+
+	/**
+	 * Returns the last lock in the ordered set where expirationDate &lt; &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByLtExpirationDate_Last(Date expirationDate,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByLtExpirationDate(expirationDate);
+
+		List<Lock> list = findByLtExpirationDate(expirationDate, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the locks where expirationDate &lt; &#63; from the database.
 	 *
 	 * @param expirationDate the expiration date
@@ -1510,7 +1672,8 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	public void removeByLtExpirationDate(Date expirationDate)
 		throws SystemException {
-		for (Lock lock : findByLtExpirationDate(expirationDate)) {
+		for (Lock lock : findByLtExpirationDate(expirationDate,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(lock);
 		}
 	}
@@ -1524,10 +1687,12 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	public int countByLtExpirationDate(Date expirationDate)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTEXPIRATIONDATE;
+
 		Object[] finderArgs = new Object[] { expirationDate };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTEXPIRATIONDATE,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -1557,18 +1722,15 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTEXPIRATIONDATE,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1580,97 +1742,85 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 		"lock.expirationDate < NULL";
 	private static final String _FINDER_COLUMN_LTEXPIRATIONDATE_EXPIRATIONDATE_2 =
 		"lock.expirationDate < ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_C_K = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_K = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, LockImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByC_K",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_K",
+			new String[] {
+				String.class.getName(), String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_K = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
+			LockModelImpl.FINDER_CACHE_ENABLED, LockImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_K",
 			new String[] { String.class.getName(), String.class.getName() },
 			LockModelImpl.CLASSNAME_COLUMN_BITMASK |
-			LockModelImpl.KEY_COLUMN_BITMASK);
+			LockModelImpl.KEY_COLUMN_BITMASK |
+			LockModelImpl.LOCKID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_K = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_K",
 			new String[] { String.class.getName(), String.class.getName() });
 
 	/**
-	 * Returns the lock where className = &#63; and key = &#63; or throws a {@link com.liferay.portal.NoSuchLockException} if it could not be found.
+	 * Returns an ordered range of all the locks where className = &#63; and key = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param className the class name
 	 * @param key the key
-	 * @return the matching lock
-	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @param start the lower bound of the range of locks
+	 * @param end the upper bound of the range of locks (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching locks
 	 * @throws SystemException if a system exception occurred
 	 */
-	public Lock findByC_K(String className, String key)
-		throws NoSuchLockException, SystemException {
-		Lock lock = fetchByC_K(className, key);
+	protected List<Lock> findByC_K(String className, String key, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (lock == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("className=");
-			msg.append(className);
-
-			msg.append(", key=");
-			msg.append(key);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchLockException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_K;
+			finderArgs = new Object[] { className, key };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_K;
+			finderArgs = new Object[] {
+					className, key,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		return lock;
-	}
+		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the lock where className = &#63; and key = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param className the class name
-	 * @param key the key
-	 * @return the matching lock, or <code>null</code> if a matching lock could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Lock fetchByC_K(String className, String key)
-		throws SystemException {
-		return fetchByC_K(className, key, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (Lock lock : list) {
+				if (!Validator.equals(className, lock.getClassName()) ||
+						!Validator.equals(key, lock.getKey())) {
+					list = null;
 
-	/**
-	 * Returns the lock where className = &#63; and key = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param className the class name
-	 * @param key the key
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching lock, or <code>null</code> if a matching lock could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Lock fetchByC_K(String className, String key,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { className, key };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_K,
-					finderArgs, this);
-		}
-
-		if (result instanceof Lock) {
-			Lock lock = (Lock)result;
-
-			if (!Validator.equals(className, lock.getClassName()) ||
-					!Validator.equals(key, lock.getKey())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
 
 			query.append(_SQL_SELECT_LOCK_WHERE);
 
@@ -1698,6 +1848,14 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				}
 			}
 
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(LockModelImpl.ORDER_BY_JPQL);
+			}
+
 			String sql = query.toString();
 
 			Session session = null;
@@ -1717,67 +1875,203 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 					qPos.add(key);
 				}
 
-				List<Lock> list = q.list();
+				list = (List<Lock>)QueryUtil.list(q, getDialect(), start, end);
 
-				result = list;
+				cacheResult(list);
 
-				Lock lock = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_K,
-						finderArgs, list);
-				}
-				else {
-					lock = list.get(0);
-
-					cacheResult(lock);
-
-					if ((lock.getClassName() == null) ||
-							!lock.getClassName().equals(className) ||
-							(lock.getKey() == null) ||
-							!lock.getKey().equals(key)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_K,
-							finderArgs, lock);
-					}
-				}
-
-				return lock;
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_K,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Lock)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the lock where className = &#63; and key = &#63; from the database.
+	 * Returns the first lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where className = &#63; and key = &#63;.
 	 *
 	 * @param className the class name
 	 * @param key the key
-	 * @return the lock that was removed
+	 * @return the first matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public Lock removeByC_K(String className, String key)
+	public Lock findByC_K_First(String className, String key)
 		throws NoSuchLockException, SystemException {
-		Lock lock = findByC_K(className, key);
+		return findByC_K_First(className, key, null);
+	}
 
-		return remove(lock);
+	/**
+	 * Returns the first lock in the ordered set where className = &#63; and key = &#63;.
+	 *
+	 * @param className the class name
+	 * @param key the key
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByC_K_First(String className, String key,
+		OrderByComparator orderByComparator)
+		throws NoSuchLockException, SystemException {
+		Lock lock = fetchByC_K_First(className, key, orderByComparator);
+
+		if (lock != null) {
+			return lock;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("className=");
+		msg.append(className);
+
+		msg.append(", key=");
+		msg.append(key);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLockException(msg.toString());
+	}
+
+	/**
+	 * Returns the first lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where className = &#63; and key = &#63;.
+	 *
+	 * @param className the class name
+	 * @param key the key
+	 * @return the first matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByC_K_First(String className, String key)
+		throws SystemException {
+		return fetchByC_K_First(className, key, null);
+	}
+
+	/**
+	 * Returns the first lock in the ordered set where className = &#63; and key = &#63;.
+	 *
+	 * @param className the class name
+	 * @param key the key
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByC_K_First(String className, String key,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Lock> list = findByC_K(className, key, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where className = &#63; and key = &#63;.
+	 *
+	 * @param className the class name
+	 * @param key the key
+	 * @return the last matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByC_K_Last(String className, String key)
+		throws NoSuchLockException, SystemException {
+		return findByC_K_Last(className, key, null);
+	}
+
+	/**
+	 * Returns the last lock in the ordered set where className = &#63; and key = &#63;.
+	 *
+	 * @param className the class name
+	 * @param key the key
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching lock
+	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock findByC_K_Last(String className, String key,
+		OrderByComparator orderByComparator)
+		throws NoSuchLockException, SystemException {
+		Lock lock = fetchByC_K_Last(className, key, orderByComparator);
+
+		if (lock != null) {
+			return lock;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("className=");
+		msg.append(className);
+
+		msg.append(", key=");
+		msg.append(key);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLockException(msg.toString());
+	}
+
+	/**
+	 * Returns the last lock in the default ordered set defined by {@link LockModelImpl#ORDER_BY_JPQL} where className = &#63; and key = &#63;.
+	 *
+	 * @param className the class name
+	 * @param key the key
+	 * @return the last matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByC_K_Last(String className, String key)
+		throws SystemException {
+		return fetchByC_K_Last(className, key, null);
+	}
+
+	/**
+	 * Returns the last lock in the ordered set where className = &#63; and key = &#63;.
+	 *
+	 * @param className the class name
+	 * @param key the key
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching lock, or <code>null</code> if a matching lock could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Lock fetchByC_K_Last(String className, String key,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_K(className, key);
+
+		List<Lock> list = findByC_K(className, key, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the locks where className = &#63; and key = &#63; from the database.
+	 *
+	 * @param className the class name
+	 * @param key the key
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_K(String className, String key)
+		throws SystemException {
+		for (Lock lock : findByC_K(className, key, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(lock);
+		}
 	}
 
 	/**
@@ -1790,10 +2084,12 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	public int countByC_K(String className, String key)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_K;
+
 		Object[] finderArgs = new Object[] { className, key };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_K,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1844,18 +2140,15 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_K, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -1973,7 +2266,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(4);
+			StringBundler query = new StringBundler(5);
 
 			query.append(_SQL_SELECT_LOCK_WHERE);
 
@@ -2038,16 +2331,14 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 
 				List<Lock> list = q.list();
 
-				result = list;
-
-				Lock lock = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_K_O,
 						finderArgs, list);
 				}
 				else {
-					lock = list.get(0);
+					Lock lock = list.get(0);
+
+					result = lock;
 
 					cacheResult(lock);
 
@@ -2061,28 +2352,23 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 							finderArgs, lock);
 					}
 				}
-
-				return lock;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_K_O,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_K_O,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Lock)result;
-			}
+			return (Lock)result;
 		}
 	}
 
@@ -2113,10 +2399,12 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	public int countByC_K_O(String className, String key, String owner)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_K_O;
+
 		Object[] finderArgs = new Object[] { className, key, owner };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_K_O,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -2183,18 +2471,15 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_K_O,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2220,9 +2505,6 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	public void cacheResult(Lock lock) {
 		EntityCacheUtil.putResult(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockImpl.class, lock.getPrimaryKey(), lock);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_K,
-			new Object[] { lock.getClassName(), lock.getKey() }, lock);
 
 		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_K_O,
 			new Object[] { lock.getClassName(), lock.getKey(), lock.getOwner() },
@@ -2300,9 +2582,6 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	}
 
 	protected void clearUniqueFindersCache(Lock lock) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_K,
-			new Object[] { lock.getClassName(), lock.getKey() });
-
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_K_O,
 			new Object[] { lock.getClassName(), lock.getKey(), lock.getOwner() });
 	}
@@ -2493,30 +2772,11 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			LockImpl.class, lock.getPrimaryKey(), lock);
 
 		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_K,
-				new Object[] { lock.getClassName(), lock.getKey() }, lock);
-
 			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_K_O,
 				new Object[] { lock.getClassName(), lock.getKey(), lock.getOwner() },
 				lock);
 		}
 		else {
-			if ((lockModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_C_K.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						lockModelImpl.getOriginalClassName(),
-						
-						lockModelImpl.getOriginalKey()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_K, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_K, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_K,
-					new Object[] { lock.getClassName(), lock.getKey() }, lock);
-			}
-
 			if ((lockModelImpl.getColumnBitmask() &
 					FINDER_PATH_FETCH_BY_C_K_O.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
@@ -2639,27 +2899,26 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 		if (lock == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				lock = (Lock)session.get(LockImpl.class, Long.valueOf(lockId));
+
+				if (lock != null) {
+					cacheResult(lock);
+				}
+				else {
+					EntityCacheUtil.putResult(LockModelImpl.ENTITY_CACHE_ENABLED,
+						LockImpl.class, lockId, _nullLock);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(LockModelImpl.ENTITY_CACHE_ENABLED,
+					LockImpl.class, lockId);
 
 				throw processException(e);
 			}
 			finally {
-				if (lock != null) {
-					cacheResult(lock);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(LockModelImpl.ENTITY_CACHE_ENABLED,
-						LockImpl.class, lockId, _nullLock);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2709,7 +2968,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	public List<Lock> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -2740,7 +2999,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_LOCK;
+				sql = _SQL_SELECT_LOCK.concat(LockModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
@@ -2750,30 +3009,18 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<Lock>)QueryUtil.list(q, getDialect(), start,
-							end, false);
+				list = (List<Lock>)QueryUtil.list(q, getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<Lock>)QueryUtil.list(q, getDialect(), start,
-							end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2811,18 +3058,17 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				Query q = session.createQuery(_SQL_COUNT_LOCK);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -2858,6 +3104,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	public void destroy() {
 		EntityCacheUtil.removeCache(LockImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

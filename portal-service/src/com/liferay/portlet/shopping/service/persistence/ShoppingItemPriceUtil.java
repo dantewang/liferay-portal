@@ -143,6 +143,26 @@ public class ShoppingItemPriceUtil {
 	}
 
 	/**
+	* Returns the shopping item prices before and after the current shopping item price in the ordered set where itemId = &#63;.
+	*
+	* @param itemPriceId the primary key of the current shopping item price
+	* @param itemId the item ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next shopping item price
+	* @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItemPrice[] findByItemId_PrevAndNext(
+		long itemPriceId, long itemId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemPriceException {
+		return getPersistence()
+				   .findByItemId_PrevAndNext(itemPriceId, itemId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the shopping item prices where itemId = &#63;.
 	*
 	* <p>
@@ -165,6 +185,21 @@ public class ShoppingItemPriceUtil {
 	}
 
 	/**
+	* Returns the first shopping item price in the default ordered set defined by {@link ShoppingItemPriceModelImpl#ORDER_BY_JPQL} where itemId = &#63;.
+	*
+	* @param itemId the item ID
+	* @return the first matching shopping item price
+	* @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a matching shopping item price could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItemPrice findByItemId_First(
+		long itemId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemPriceException {
+		return getPersistence().findByItemId_First(itemId);
+	}
+
+	/**
 	* Returns the first shopping item price in the ordered set where itemId = &#63;.
 	*
 	* @param itemId the item ID
@@ -182,6 +217,18 @@ public class ShoppingItemPriceUtil {
 	}
 
 	/**
+	* Returns the first shopping item price in the default ordered set defined by {@link ShoppingItemPriceModelImpl#ORDER_BY_JPQL} where itemId = &#63;.
+	*
+	* @param itemId the item ID
+	* @return the first matching shopping item price, or <code>null</code> if a matching shopping item price could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItemPrice fetchByItemId_First(
+		long itemId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByItemId_First(itemId);
+	}
+
+	/**
 	* Returns the first shopping item price in the ordered set where itemId = &#63;.
 	*
 	* @param itemId the item ID
@@ -194,6 +241,21 @@ public class ShoppingItemPriceUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByItemId_First(itemId, orderByComparator);
+	}
+
+	/**
+	* Returns the last shopping item price in the default ordered set defined by {@link ShoppingItemPriceModelImpl#ORDER_BY_JPQL} where itemId = &#63;.
+	*
+	* @param itemId the item ID
+	* @return the last matching shopping item price
+	* @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a matching shopping item price could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItemPrice findByItemId_Last(
+		long itemId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemPriceException {
+		return getPersistence().findByItemId_Last(itemId);
 	}
 
 	/**
@@ -214,6 +276,18 @@ public class ShoppingItemPriceUtil {
 	}
 
 	/**
+	* Returns the last shopping item price in the default ordered set defined by {@link ShoppingItemPriceModelImpl#ORDER_BY_JPQL} where itemId = &#63;.
+	*
+	* @param itemId the item ID
+	* @return the last matching shopping item price, or <code>null</code> if a matching shopping item price could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItemPrice fetchByItemId_Last(
+		long itemId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByItemId_Last(itemId);
+	}
+
+	/**
 	* Returns the last shopping item price in the ordered set where itemId = &#63;.
 	*
 	* @param itemId the item ID
@@ -226,26 +300,6 @@ public class ShoppingItemPriceUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByItemId_Last(itemId, orderByComparator);
-	}
-
-	/**
-	* Returns the shopping item prices before and after the current shopping item price in the ordered set where itemId = &#63;.
-	*
-	* @param itemPriceId the primary key of the current shopping item price
-	* @param itemId the item ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next shopping item price
-	* @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItemPrice[] findByItemId_PrevAndNext(
-		long itemPriceId, long itemId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchItemPriceException {
-		return getPersistence()
-				   .findByItemId_PrevAndNext(itemPriceId, itemId,
-			orderByComparator);
 	}
 
 	/**

@@ -142,6 +142,26 @@ public class PluginSettingUtil {
 	}
 
 	/**
+	* Returns the plugin settings before and after the current plugin setting in the ordered set where companyId = &#63;.
+	*
+	* @param pluginSettingId the primary key of the current plugin setting
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next plugin setting
+	* @throws com.liferay.portal.NoSuchPluginSettingException if a plugin setting with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PluginSetting[] findByCompanyId_PrevAndNext(
+		long pluginSettingId, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPluginSettingException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByCompanyId_PrevAndNext(pluginSettingId, companyId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the plugin settings where companyId = &#63;.
 	*
 	* <p>
@@ -164,6 +184,21 @@ public class PluginSettingUtil {
 	}
 
 	/**
+	* Returns the first plugin setting in the default ordered set defined by {@link PluginSettingModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching plugin setting
+	* @throws com.liferay.portal.NoSuchPluginSettingException if a matching plugin setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PluginSetting findByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.NoSuchPluginSettingException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first plugin setting in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -182,6 +217,19 @@ public class PluginSettingUtil {
 	}
 
 	/**
+	* Returns the first plugin setting in the default ordered set defined by {@link PluginSettingModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching plugin setting, or <code>null</code> if a matching plugin setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PluginSetting fetchByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first plugin setting in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -195,6 +243,21 @@ public class PluginSettingUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_First(companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last plugin setting in the default ordered set defined by {@link PluginSettingModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching plugin setting
+	* @throws com.liferay.portal.NoSuchPluginSettingException if a matching plugin setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PluginSetting findByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.NoSuchPluginSettingException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByCompanyId_Last(companyId);
 	}
 
 	/**
@@ -216,6 +279,19 @@ public class PluginSettingUtil {
 	}
 
 	/**
+	* Returns the last plugin setting in the default ordered set defined by {@link PluginSettingModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching plugin setting, or <code>null</code> if a matching plugin setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PluginSetting fetchByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_Last(companyId);
+	}
+
+	/**
 	* Returns the last plugin setting in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -229,26 +305,6 @@ public class PluginSettingUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_Last(companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the plugin settings before and after the current plugin setting in the ordered set where companyId = &#63;.
-	*
-	* @param pluginSettingId the primary key of the current plugin setting
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next plugin setting
-	* @throws com.liferay.portal.NoSuchPluginSettingException if a plugin setting with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PluginSetting[] findByCompanyId_PrevAndNext(
-		long pluginSettingId, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchPluginSettingException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByCompanyId_PrevAndNext(pluginSettingId, companyId,
-			orderByComparator);
 	}
 
 	/**

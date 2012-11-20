@@ -141,6 +141,25 @@ public class MBBanUtil {
 	}
 
 	/**
+	* Returns the message boards bans before and after the current message boards ban in the ordered set where groupId = &#63;.
+	*
+	* @param banId the primary key of the current message boards ban
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next message boards ban
+	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a message boards ban with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan[] findByGroupId_PrevAndNext(
+		long banId, long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchBanException {
+		return getPersistence()
+				   .findByGroupId_PrevAndNext(banId, groupId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the message boards bans where groupId = &#63;.
 	*
 	* <p>
@@ -163,6 +182,21 @@ public class MBBanUtil {
 	}
 
 	/**
+	* Returns the first message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching message boards ban
+	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchBanException {
+		return getPersistence().findByGroupId_First(groupId);
+	}
+
+	/**
 	* Returns the first message boards ban in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -180,6 +214,19 @@ public class MBBanUtil {
 	}
 
 	/**
+	* Returns the first message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId);
+	}
+
+	/**
 	* Returns the first message boards ban in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -192,6 +239,21 @@ public class MBBanUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching message boards ban
+	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchBanException {
+		return getPersistence().findByGroupId_Last(groupId);
 	}
 
 	/**
@@ -212,6 +274,19 @@ public class MBBanUtil {
 	}
 
 	/**
+	* Returns the last message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId);
+	}
+
+	/**
 	* Returns the last message boards ban in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -224,25 +299,6 @@ public class MBBanUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the message boards bans before and after the current message boards ban in the ordered set where groupId = &#63;.
-	*
-	* @param banId the primary key of the current message boards ban
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next message boards ban
-	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a message boards ban with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBBan[] findByGroupId_PrevAndNext(
-		long banId, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchBanException {
-		return getPersistence()
-				   .findByGroupId_PrevAndNext(banId, groupId, orderByComparator);
 	}
 
 	/**
@@ -300,6 +356,25 @@ public class MBBanUtil {
 	}
 
 	/**
+	* Returns the message boards bans before and after the current message boards ban in the ordered set where userId = &#63;.
+	*
+	* @param banId the primary key of the current message boards ban
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next message boards ban
+	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a message boards ban with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan[] findByUserId_PrevAndNext(
+		long banId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchBanException {
+		return getPersistence()
+				   .findByUserId_PrevAndNext(banId, userId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the message boards bans where userId = &#63;.
 	*
 	* <p>
@@ -322,6 +397,21 @@ public class MBBanUtil {
 	}
 
 	/**
+	* Returns the first message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching message boards ban
+	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan findByUserId_First(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchBanException {
+		return getPersistence().findByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first message boards ban in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -339,6 +429,18 @@ public class MBBanUtil {
 	}
 
 	/**
+	* Returns the first message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan fetchByUserId_First(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first message boards ban in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -351,6 +453,21 @@ public class MBBanUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_First(userId, orderByComparator);
+	}
+
+	/**
+	* Returns the last message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching message boards ban
+	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan findByUserId_Last(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchBanException {
+		return getPersistence().findByUserId_Last(userId);
 	}
 
 	/**
@@ -371,6 +488,18 @@ public class MBBanUtil {
 	}
 
 	/**
+	* Returns the last message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan fetchByUserId_Last(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_Last(userId);
+	}
+
+	/**
 	* Returns the last message boards ban in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -383,25 +512,6 @@ public class MBBanUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_Last(userId, orderByComparator);
-	}
-
-	/**
-	* Returns the message boards bans before and after the current message boards ban in the ordered set where userId = &#63;.
-	*
-	* @param banId the primary key of the current message boards ban
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next message boards ban
-	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a message boards ban with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBBan[] findByUserId_PrevAndNext(
-		long banId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchBanException {
-		return getPersistence()
-				   .findByUserId_PrevAndNext(banId, userId, orderByComparator);
 	}
 
 	/**
@@ -460,6 +570,26 @@ public class MBBanUtil {
 	}
 
 	/**
+	* Returns the message boards bans before and after the current message boards ban in the ordered set where banUserId = &#63;.
+	*
+	* @param banId the primary key of the current message boards ban
+	* @param banUserId the ban user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next message boards ban
+	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a message boards ban with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan[] findByBanUserId_PrevAndNext(
+		long banId, long banUserId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchBanException {
+		return getPersistence()
+				   .findByBanUserId_PrevAndNext(banId, banUserId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the message boards bans where banUserId = &#63;.
 	*
 	* <p>
@@ -482,6 +612,21 @@ public class MBBanUtil {
 	}
 
 	/**
+	* Returns the first message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where banUserId = &#63;.
+	*
+	* @param banUserId the ban user ID
+	* @return the first matching message boards ban
+	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan findByBanUserId_First(
+		long banUserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchBanException {
+		return getPersistence().findByBanUserId_First(banUserId);
+	}
+
+	/**
 	* Returns the first message boards ban in the ordered set where banUserId = &#63;.
 	*
 	* @param banUserId the ban user ID
@@ -500,6 +645,19 @@ public class MBBanUtil {
 	}
 
 	/**
+	* Returns the first message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where banUserId = &#63;.
+	*
+	* @param banUserId the ban user ID
+	* @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan fetchByBanUserId_First(
+		long banUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByBanUserId_First(banUserId);
+	}
+
+	/**
 	* Returns the first message boards ban in the ordered set where banUserId = &#63;.
 	*
 	* @param banUserId the ban user ID
@@ -513,6 +671,21 @@ public class MBBanUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByBanUserId_First(banUserId, orderByComparator);
+	}
+
+	/**
+	* Returns the last message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where banUserId = &#63;.
+	*
+	* @param banUserId the ban user ID
+	* @return the last matching message boards ban
+	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan findByBanUserId_Last(
+		long banUserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchBanException {
+		return getPersistence().findByBanUserId_Last(banUserId);
 	}
 
 	/**
@@ -534,6 +707,19 @@ public class MBBanUtil {
 	}
 
 	/**
+	* Returns the last message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where banUserId = &#63;.
+	*
+	* @param banUserId the ban user ID
+	* @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan fetchByBanUserId_Last(
+		long banUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByBanUserId_Last(banUserId);
+	}
+
+	/**
 	* Returns the last message boards ban in the ordered set where banUserId = &#63;.
 	*
 	* @param banUserId the ban user ID
@@ -547,26 +733,6 @@ public class MBBanUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByBanUserId_Last(banUserId, orderByComparator);
-	}
-
-	/**
-	* Returns the message boards bans before and after the current message boards ban in the ordered set where banUserId = &#63;.
-	*
-	* @param banId the primary key of the current message boards ban
-	* @param banUserId the ban user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next message boards ban
-	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a message boards ban with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBBan[] findByBanUserId_PrevAndNext(
-		long banId, long banUserId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchBanException {
-		return getPersistence()
-				   .findByBanUserId_PrevAndNext(banId, banUserId,
-			orderByComparator);
 	}
 
 	/**

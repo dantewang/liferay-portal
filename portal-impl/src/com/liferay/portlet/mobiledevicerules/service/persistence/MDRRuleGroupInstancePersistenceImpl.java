@@ -52,7 +52,6 @@ import com.liferay.portlet.mobiledevicerules.model.impl.MDRRuleGroupInstanceMode
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -97,15 +96,16 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED,
 			MDRRuleGroupInstanceImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
 			new String[] { String.class.getName() },
-			MDRRuleGroupInstanceModelImpl.UUID_COLUMN_BITMASK);
+			MDRRuleGroupInstanceModelImpl.UUID_COLUMN_BITMASK |
+			MDRRuleGroupInstanceModelImpl.RULEGROUPINSTANCEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
@@ -139,220 +139,6 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public List<MDRRuleGroupInstance> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the m d r rule group instances where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of m d r rule group instances
-	 * @param end the upper bound of the range of m d r rule group instances (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching m d r rule group instances
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MDRRuleGroupInstance> findByUuid(String uuid, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (MDRRuleGroupInstance mdrRuleGroupInstance : list) {
-				if (!Validator.equals(uuid, mdrRuleGroupInstance.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_MDRRULEGROUPINSTANCE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first m d r rule group instance in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r rule group instance
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchRuleGroupInstanceException, SystemException {
-		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByUuid_First(uuid,
-				orderByComparator);
-
-		if (mdrRuleGroupInstance != null) {
-			return mdrRuleGroupInstance;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRuleGroupInstanceException(msg.toString());
-	}
-
-	/**
-	 * Returns the first m d r rule group instance in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<MDRRuleGroupInstance> list = findByUuid(uuid, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last m d r rule group instance in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r rule group instance
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchRuleGroupInstanceException, SystemException {
-		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByUuid_Last(uuid,
-				orderByComparator);
-
-		if (mdrRuleGroupInstance != null) {
-			return mdrRuleGroupInstance;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRuleGroupInstanceException(msg.toString());
-	}
-
-	/**
-	 * Returns the last m d r rule group instance in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<MDRRuleGroupInstance> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -478,6 +264,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				}
 			}
 		}
+		else {
+			query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -511,13 +300,278 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	}
 
 	/**
+	 * Returns an ordered range of all the m d r rule group instances where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of m d r rule group instances
+	 * @param end the upper bound of the range of m d r rule group instances (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching m d r rule group instances
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MDRRuleGroupInstance> findByUuid(String uuid, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MDRRuleGroupInstance mdrRuleGroupInstance : list) {
+				if (!Validator.equals(uuid, mdrRuleGroupInstance.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_MDRRULEGROUPINSTANCE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByUuid_First(String uuid)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByUuid_First(uuid,
+				orderByComparator);
+
+		if (mdrRuleGroupInstance != null) {
+			return mdrRuleGroupInstance;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRuleGroupInstanceException(msg.toString());
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByUuid_First(String uuid)
+		throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<MDRRuleGroupInstance> list = findByUuid(uuid, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByUuid_Last(String uuid)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByUuid_Last(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByUuid_Last(uuid,
+				orderByComparator);
+
+		if (mdrRuleGroupInstance != null) {
+			return mdrRuleGroupInstance;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRuleGroupInstanceException(msg.toString());
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByUuid_Last(String uuid)
+		throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<MDRRuleGroupInstance> list = findByUuid(uuid, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the m d r rule group instances where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (MDRRuleGroupInstance mdrRuleGroupInstance : findByUuid(uuid)) {
+		for (MDRRuleGroupInstance mdrRuleGroupInstance : findByUuid(uuid,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(mdrRuleGroupInstance);
 		}
 	}
@@ -530,10 +584,12 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByUuid(String uuid) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+
 		Object[] finderArgs = new Object[] { uuid };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -568,18 +624,15 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -681,7 +734,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_MDRRULEGROUPINSTANCE_WHERE);
 
@@ -718,16 +771,14 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 				List<MDRRuleGroupInstance> list = q.list();
 
-				result = list;
-
-				MDRRuleGroupInstance mdrRuleGroupInstance = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
 						finderArgs, list);
 				}
 				else {
-					mdrRuleGroupInstance = list.get(0);
+					MDRRuleGroupInstance mdrRuleGroupInstance = list.get(0);
+
+					result = mdrRuleGroupInstance;
 
 					cacheResult(mdrRuleGroupInstance);
 
@@ -738,28 +789,23 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 							finderArgs, mdrRuleGroupInstance);
 					}
 				}
-
-				return mdrRuleGroupInstance;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (MDRRuleGroupInstance)result;
-			}
+			return (MDRRuleGroupInstance)result;
 		}
 	}
 
@@ -788,10 +834,12 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
+
 		Object[] finderArgs = new Object[] { uuid, groupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -830,18 +878,15 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -860,8 +905,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
 		new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
@@ -870,7 +915,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
 			new String[] { String.class.getName(), Long.class.getName() },
 			MDRRuleGroupInstanceModelImpl.UUID_COLUMN_BITMASK |
-			MDRRuleGroupInstanceModelImpl.COMPANYID_COLUMN_BITMASK);
+			MDRRuleGroupInstanceModelImpl.COMPANYID_COLUMN_BITMASK |
+			MDRRuleGroupInstanceModelImpl.RULEGROUPINSTANCEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
@@ -907,242 +953,6 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public List<MDRRuleGroupInstance> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the m d r rule group instances where uuid = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of m d r rule group instances
-	 * @param end the upper bound of the range of m d r rule group instances (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching m d r rule group instances
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MDRRuleGroupInstance> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (MDRRuleGroupInstance mdrRuleGroupInstance : list) {
-				if (!Validator.equals(uuid, mdrRuleGroupInstance.getUuid()) ||
-						(companyId != mdrRuleGroupInstance.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_MDRRULEGROUPINSTANCE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first m d r rule group instance in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r rule group instance
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRuleGroupInstanceException, SystemException {
-		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByUuid_C_First(uuid,
-				companyId, orderByComparator);
-
-		if (mdrRuleGroupInstance != null) {
-			return mdrRuleGroupInstance;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRuleGroupInstanceException(msg.toString());
-	}
-
-	/**
-	 * Returns the first m d r rule group instance in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance fetchByUuid_C_First(String uuid,
-		long companyId, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<MDRRuleGroupInstance> list = findByUuid_C(uuid, companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last m d r rule group instance in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r rule group instance
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRuleGroupInstanceException, SystemException {
-		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByUuid_C_Last(uuid,
-				companyId, orderByComparator);
-
-		if (mdrRuleGroupInstance != null) {
-			return mdrRuleGroupInstance;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRuleGroupInstanceException(msg.toString());
-	}
-
-	/**
-	 * Returns the last m d r rule group instance in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid_C(uuid, companyId);
-
-		List<MDRRuleGroupInstance> list = findByUuid_C(uuid, companyId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1271,6 +1081,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				}
 			}
 		}
+		else {
+			query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1306,6 +1119,296 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	}
 
 	/**
+	 * Returns an ordered range of all the m d r rule group instances where uuid = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of m d r rule group instances
+	 * @param end the upper bound of the range of m d r rule group instances (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching m d r rule group instances
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MDRRuleGroupInstance> findByUuid_C(String uuid, long companyId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] { uuid, companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] {
+					uuid, companyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MDRRuleGroupInstance mdrRuleGroupInstance : list) {
+				if (!Validator.equals(uuid, mdrRuleGroupInstance.getUuid()) ||
+						(companyId != mdrRuleGroupInstance.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_MDRRULEGROUPINSTANCE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByUuid_C_First(String uuid, long companyId)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		return findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByUuid_C_First(uuid,
+				companyId, orderByComparator);
+
+		if (mdrRuleGroupInstance != null) {
+			return mdrRuleGroupInstance;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRuleGroupInstanceException(msg.toString());
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByUuid_C_First(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByUuid_C_First(String uuid,
+		long companyId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<MDRRuleGroupInstance> list = findByUuid_C(uuid, companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByUuid_C_Last(String uuid, long companyId)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		return findByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByUuid_C_Last(uuid,
+				companyId, orderByComparator);
+
+		if (mdrRuleGroupInstance != null) {
+			return mdrRuleGroupInstance;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRuleGroupInstanceException(msg.toString());
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByUuid_C_Last(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid_C(uuid, companyId);
+
+		List<MDRRuleGroupInstance> list = findByUuid_C(uuid, companyId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the m d r rule group instances where uuid = &#63; and companyId = &#63; from the database.
 	 *
 	 * @param uuid the uuid
@@ -1315,7 +1418,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
 		for (MDRRuleGroupInstance mdrRuleGroupInstance : findByUuid_C(uuid,
-				companyId)) {
+				companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(mdrRuleGroupInstance);
 		}
 	}
@@ -1330,10 +1433,12 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
+
 		Object[] finderArgs = new Object[] { uuid, companyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1372,18 +1477,15 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1402,8 +1504,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
 		new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
@@ -1411,7 +1513,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			MDRRuleGroupInstanceImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
 			new String[] { Long.class.getName() },
-			MDRRuleGroupInstanceModelImpl.GROUPID_COLUMN_BITMASK);
+			MDRRuleGroupInstanceModelImpl.GROUPID_COLUMN_BITMASK |
+			MDRRuleGroupInstanceModelImpl.RULEGROUPINSTANCEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
@@ -1445,208 +1548,6 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public List<MDRRuleGroupInstance> findByGroupId(long groupId, int start,
 		int end) throws SystemException {
 		return findByGroupId(groupId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the m d r rule group instances where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of m d r rule group instances
-	 * @param end the upper bound of the range of m d r rule group instances (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching m d r rule group instances
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MDRRuleGroupInstance> findByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (MDRRuleGroupInstance mdrRuleGroupInstance : list) {
-				if ((groupId != mdrRuleGroupInstance.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_MDRRULEGROUPINSTANCE_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first m d r rule group instance in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r rule group instance
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRuleGroupInstanceException, SystemException {
-		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByGroupId_First(groupId,
-				orderByComparator);
-
-		if (mdrRuleGroupInstance != null) {
-			return mdrRuleGroupInstance;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRuleGroupInstanceException(msg.toString());
-	}
-
-	/**
-	 * Returns the first m d r rule group instance in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<MDRRuleGroupInstance> list = findByGroupId(groupId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last m d r rule group instance in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r rule group instance
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRuleGroupInstanceException, SystemException {
-		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByGroupId_Last(groupId,
-				orderByComparator);
-
-		if (mdrRuleGroupInstance != null) {
-			return mdrRuleGroupInstance;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRuleGroupInstanceException(msg.toString());
-	}
-
-	/**
-	 * Returns the last m d r rule group instance in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
-
-		List<MDRRuleGroupInstance> list = findByGroupId(groupId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1762,6 +1663,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				}
 			}
 		}
+		else {
+			query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1851,7 +1755,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(2);
+			query = new StringBundler(3);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -1875,6 +1779,14 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -2050,6 +1962,14 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				MDRRuleGroupInstance.class.getName(),
@@ -2090,13 +2010,266 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	}
 
 	/**
+	 * Returns an ordered range of all the m d r rule group instances where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of m d r rule group instances
+	 * @param end the upper bound of the range of m d r rule group instances (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching m d r rule group instances
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MDRRuleGroupInstance> findByGroupId(long groupId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
+
+		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MDRRuleGroupInstance mdrRuleGroupInstance : list) {
+				if ((groupId != mdrRuleGroupInstance.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_MDRRULEGROUPINSTANCE_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByGroupId_First(long groupId)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		return findByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByGroupId_First(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByGroupId_First(groupId,
+				orderByComparator);
+
+		if (mdrRuleGroupInstance != null) {
+			return mdrRuleGroupInstance;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRuleGroupInstanceException(msg.toString());
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByGroupId_First(long groupId)
+		throws SystemException {
+		return fetchByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<MDRRuleGroupInstance> list = findByGroupId(groupId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByGroupId_Last(long groupId)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		return findByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByGroupId_Last(groupId,
+				orderByComparator);
+
+		if (mdrRuleGroupInstance != null) {
+			return mdrRuleGroupInstance;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRuleGroupInstanceException(msg.toString());
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByGroupId_Last(long groupId)
+		throws SystemException {
+		return fetchByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByGroupId(groupId);
+
+		List<MDRRuleGroupInstance> list = findByGroupId(groupId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the m d r rule group instances where groupId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByGroupId(long groupId) throws SystemException {
-		for (MDRRuleGroupInstance mdrRuleGroupInstance : findByGroupId(groupId)) {
+		for (MDRRuleGroupInstance mdrRuleGroupInstance : findByGroupId(
+				groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(mdrRuleGroupInstance);
 		}
 	}
@@ -2109,10 +2282,12 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByGroupId(long groupId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
+
 		Object[] finderArgs = new Object[] { groupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -2135,18 +2310,15 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2211,8 +2383,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RULEGROUPID =
 		new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
@@ -2220,7 +2392,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			MDRRuleGroupInstanceImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByRuleGroupId",
 			new String[] { Long.class.getName() },
-			MDRRuleGroupInstanceModelImpl.RULEGROUPID_COLUMN_BITMASK);
+			MDRRuleGroupInstanceModelImpl.RULEGROUPID_COLUMN_BITMASK |
+			MDRRuleGroupInstanceModelImpl.RULEGROUPINSTANCEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_RULEGROUPID = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByRuleGroupId",
@@ -2255,209 +2428,6 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public List<MDRRuleGroupInstance> findByRuleGroupId(long ruleGroupId,
 		int start, int end) throws SystemException {
 		return findByRuleGroupId(ruleGroupId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the m d r rule group instances where ruleGroupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param ruleGroupId the rule group ID
-	 * @param start the lower bound of the range of m d r rule group instances
-	 * @param end the upper bound of the range of m d r rule group instances (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching m d r rule group instances
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MDRRuleGroupInstance> findByRuleGroupId(long ruleGroupId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RULEGROUPID;
-			finderArgs = new Object[] { ruleGroupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_RULEGROUPID;
-			finderArgs = new Object[] { ruleGroupId, start, end, orderByComparator };
-		}
-
-		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (MDRRuleGroupInstance mdrRuleGroupInstance : list) {
-				if ((ruleGroupId != mdrRuleGroupInstance.getRuleGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_MDRRULEGROUPINSTANCE_WHERE);
-
-			query.append(_FINDER_COLUMN_RULEGROUPID_RULEGROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(ruleGroupId);
-
-				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first m d r rule group instance in the ordered set where ruleGroupId = &#63;.
-	 *
-	 * @param ruleGroupId the rule group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r rule group instance
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance findByRuleGroupId_First(long ruleGroupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRuleGroupInstanceException, SystemException {
-		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByRuleGroupId_First(ruleGroupId,
-				orderByComparator);
-
-		if (mdrRuleGroupInstance != null) {
-			return mdrRuleGroupInstance;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("ruleGroupId=");
-		msg.append(ruleGroupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRuleGroupInstanceException(msg.toString());
-	}
-
-	/**
-	 * Returns the first m d r rule group instance in the ordered set where ruleGroupId = &#63;.
-	 *
-	 * @param ruleGroupId the rule group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance fetchByRuleGroupId_First(long ruleGroupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<MDRRuleGroupInstance> list = findByRuleGroupId(ruleGroupId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last m d r rule group instance in the ordered set where ruleGroupId = &#63;.
-	 *
-	 * @param ruleGroupId the rule group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r rule group instance
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance findByRuleGroupId_Last(long ruleGroupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRuleGroupInstanceException, SystemException {
-		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByRuleGroupId_Last(ruleGroupId,
-				orderByComparator);
-
-		if (mdrRuleGroupInstance != null) {
-			return mdrRuleGroupInstance;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("ruleGroupId=");
-		msg.append(ruleGroupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRuleGroupInstanceException(msg.toString());
-	}
-
-	/**
-	 * Returns the last m d r rule group instance in the ordered set where ruleGroupId = &#63;.
-	 *
-	 * @param ruleGroupId the rule group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance fetchByRuleGroupId_Last(long ruleGroupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByRuleGroupId(ruleGroupId);
-
-		List<MDRRuleGroupInstance> list = findByRuleGroupId(ruleGroupId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2573,6 +2543,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				}
 			}
 		}
+		else {
+			query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2604,6 +2577,259 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	}
 
 	/**
+	 * Returns an ordered range of all the m d r rule group instances where ruleGroupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param ruleGroupId the rule group ID
+	 * @param start the lower bound of the range of m d r rule group instances
+	 * @param end the upper bound of the range of m d r rule group instances (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching m d r rule group instances
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MDRRuleGroupInstance> findByRuleGroupId(long ruleGroupId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RULEGROUPID;
+			finderArgs = new Object[] { ruleGroupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_RULEGROUPID;
+			finderArgs = new Object[] { ruleGroupId, start, end, orderByComparator };
+		}
+
+		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MDRRuleGroupInstance mdrRuleGroupInstance : list) {
+				if ((ruleGroupId != mdrRuleGroupInstance.getRuleGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_MDRRULEGROUPINSTANCE_WHERE);
+
+			query.append(_FINDER_COLUMN_RULEGROUPID_RULEGROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(ruleGroupId);
+
+				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where ruleGroupId = &#63;.
+	 *
+	 * @param ruleGroupId the rule group ID
+	 * @return the first matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByRuleGroupId_First(long ruleGroupId)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		return findByRuleGroupId_First(ruleGroupId, null);
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the ordered set where ruleGroupId = &#63;.
+	 *
+	 * @param ruleGroupId the rule group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByRuleGroupId_First(long ruleGroupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByRuleGroupId_First(ruleGroupId,
+				orderByComparator);
+
+		if (mdrRuleGroupInstance != null) {
+			return mdrRuleGroupInstance;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("ruleGroupId=");
+		msg.append(ruleGroupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRuleGroupInstanceException(msg.toString());
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where ruleGroupId = &#63;.
+	 *
+	 * @param ruleGroupId the rule group ID
+	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByRuleGroupId_First(long ruleGroupId)
+		throws SystemException {
+		return fetchByRuleGroupId_First(ruleGroupId, null);
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the ordered set where ruleGroupId = &#63;.
+	 *
+	 * @param ruleGroupId the rule group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByRuleGroupId_First(long ruleGroupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<MDRRuleGroupInstance> list = findByRuleGroupId(ruleGroupId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where ruleGroupId = &#63;.
+	 *
+	 * @param ruleGroupId the rule group ID
+	 * @return the last matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByRuleGroupId_Last(long ruleGroupId)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		return findByRuleGroupId_Last(ruleGroupId, null);
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the ordered set where ruleGroupId = &#63;.
+	 *
+	 * @param ruleGroupId the rule group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByRuleGroupId_Last(long ruleGroupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByRuleGroupId_Last(ruleGroupId,
+				orderByComparator);
+
+		if (mdrRuleGroupInstance != null) {
+			return mdrRuleGroupInstance;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("ruleGroupId=");
+		msg.append(ruleGroupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRuleGroupInstanceException(msg.toString());
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where ruleGroupId = &#63;.
+	 *
+	 * @param ruleGroupId the rule group ID
+	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByRuleGroupId_Last(long ruleGroupId)
+		throws SystemException {
+		return fetchByRuleGroupId_Last(ruleGroupId, null);
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the ordered set where ruleGroupId = &#63;.
+	 *
+	 * @param ruleGroupId the rule group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByRuleGroupId_Last(long ruleGroupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByRuleGroupId(ruleGroupId);
+
+		List<MDRRuleGroupInstance> list = findByRuleGroupId(ruleGroupId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the m d r rule group instances where ruleGroupId = &#63; from the database.
 	 *
 	 * @param ruleGroupId the rule group ID
@@ -2611,7 +2837,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	public void removeByRuleGroupId(long ruleGroupId) throws SystemException {
 		for (MDRRuleGroupInstance mdrRuleGroupInstance : findByRuleGroupId(
-				ruleGroupId)) {
+				ruleGroupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(mdrRuleGroupInstance);
 		}
 	}
@@ -2624,10 +2850,12 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByRuleGroupId(long ruleGroupId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_RULEGROUPID;
+
 		Object[] finderArgs = new Object[] { ruleGroupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_RULEGROUPID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -2650,18 +2878,15 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				qPos.add(ruleGroupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RULEGROUPID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2677,8 +2902,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED,
@@ -2686,7 +2911,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			MDRRuleGroupInstanceModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			MDRRuleGroupInstanceModelImpl.CLASSPK_COLUMN_BITMASK);
+			MDRRuleGroupInstanceModelImpl.CLASSPK_COLUMN_BITMASK |
+			MDRRuleGroupInstanceModelImpl.RULEGROUPINSTANCEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
@@ -2723,230 +2949,6 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public List<MDRRuleGroupInstance> findByC_C(long classNameId, long classPK,
 		int start, int end) throws SystemException {
 		return findByC_C(classNameId, classPK, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the m d r rule group instances where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param start the lower bound of the range of m d r rule group instances
-	 * @param end the upper bound of the range of m d r rule group instances (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching m d r rule group instances
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MDRRuleGroupInstance> findByC_C(long classNameId, long classPK,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
-			finderArgs = new Object[] { classNameId, classPK };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
-			finderArgs = new Object[] {
-					classNameId, classPK,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (MDRRuleGroupInstance mdrRuleGroupInstance : list) {
-				if ((classNameId != mdrRuleGroupInstance.getClassNameId()) ||
-						(classPK != mdrRuleGroupInstance.getClassPK())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_MDRRULEGROUPINSTANCE_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first m d r rule group instance in the ordered set where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r rule group instance
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance findByC_C_First(long classNameId, long classPK,
-		OrderByComparator orderByComparator)
-		throws NoSuchRuleGroupInstanceException, SystemException {
-		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByC_C_First(classNameId,
-				classPK, orderByComparator);
-
-		if (mdrRuleGroupInstance != null) {
-			return mdrRuleGroupInstance;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRuleGroupInstanceException(msg.toString());
-	}
-
-	/**
-	 * Returns the first m d r rule group instance in the ordered set where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance fetchByC_C_First(long classNameId,
-		long classPK, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<MDRRuleGroupInstance> list = findByC_C(classNameId, classPK, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last m d r rule group instance in the ordered set where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r rule group instance
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance findByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator)
-		throws NoSuchRuleGroupInstanceException, SystemException {
-		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByC_C_Last(classNameId,
-				classPK, orderByComparator);
-
-		if (mdrRuleGroupInstance != null) {
-			return mdrRuleGroupInstance;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRuleGroupInstanceException(msg.toString());
-	}
-
-	/**
-	 * Returns the last m d r rule group instance in the ordered set where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance fetchByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByC_C(classNameId, classPK);
-
-		List<MDRRuleGroupInstance> list = findByC_C(classNameId, classPK,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3065,6 +3067,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				}
 			}
 		}
+		else {
+			query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -3098,6 +3103,284 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	}
 
 	/**
+	 * Returns an ordered range of all the m d r rule group instances where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param start the lower bound of the range of m d r rule group instances
+	 * @param end the upper bound of the range of m d r rule group instances (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching m d r rule group instances
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MDRRuleGroupInstance> findByC_C(long classNameId, long classPK,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
+			finderArgs = new Object[] { classNameId, classPK };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
+			finderArgs = new Object[] {
+					classNameId, classPK,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MDRRuleGroupInstance mdrRuleGroupInstance : list) {
+				if ((classNameId != mdrRuleGroupInstance.getClassNameId()) ||
+						(classPK != mdrRuleGroupInstance.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_MDRRULEGROUPINSTANCE_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the first matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByC_C_First(long classNameId, long classPK)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		return findByC_C_First(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByC_C_First(long classNameId, long classPK,
+		OrderByComparator orderByComparator)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByC_C_First(classNameId,
+				classPK, orderByComparator);
+
+		if (mdrRuleGroupInstance != null) {
+			return mdrRuleGroupInstance;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRuleGroupInstanceException(msg.toString());
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByC_C_First(long classNameId, long classPK)
+		throws SystemException {
+		return fetchByC_C_First(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByC_C_First(long classNameId,
+		long classPK, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<MDRRuleGroupInstance> list = findByC_C(classNameId, classPK, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the last matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByC_C_Last(long classNameId, long classPK)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		return findByC_C_Last(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByC_C_Last(long classNameId, long classPK,
+		OrderByComparator orderByComparator)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByC_C_Last(classNameId,
+				classPK, orderByComparator);
+
+		if (mdrRuleGroupInstance != null) {
+			return mdrRuleGroupInstance;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRuleGroupInstanceException(msg.toString());
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByC_C_Last(long classNameId, long classPK)
+		throws SystemException {
+		return fetchByC_C_Last(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByC_C_Last(long classNameId, long classPK,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_C(classNameId, classPK);
+
+		List<MDRRuleGroupInstance> list = findByC_C(classNameId, classPK,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the m d r rule group instances where classNameId = &#63; and classPK = &#63; from the database.
 	 *
 	 * @param classNameId the class name ID
@@ -3107,7 +3390,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public void removeByC_C(long classNameId, long classPK)
 		throws SystemException {
 		for (MDRRuleGroupInstance mdrRuleGroupInstance : findByC_C(
-				classNameId, classPK)) {
+				classNameId, classPK, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(mdrRuleGroupInstance);
 		}
 	}
@@ -3122,10 +3405,12 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	public int countByC_C(long classNameId, long classPK)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C;
+
 		Object[] finderArgs = new Object[] { classNameId, classPK };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -3152,18 +3437,15 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				qPos.add(classPK);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -3180,8 +3462,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED,
@@ -3192,7 +3474,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			},
 			MDRRuleGroupInstanceModelImpl.GROUPID_COLUMN_BITMASK |
 			MDRRuleGroupInstanceModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			MDRRuleGroupInstanceModelImpl.CLASSPK_COLUMN_BITMASK);
+			MDRRuleGroupInstanceModelImpl.CLASSPK_COLUMN_BITMASK |
+			MDRRuleGroupInstanceModelImpl.RULEGROUPINSTANCEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_C_C = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_C_C",
@@ -3234,247 +3517,6 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 		long classNameId, long classPK, int start, int end)
 		throws SystemException {
 		return findByG_C_C(groupId, classNameId, classPK, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the m d r rule group instances where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param start the lower bound of the range of m d r rule group instances
-	 * @param end the upper bound of the range of m d r rule group instances (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching m d r rule group instances
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MDRRuleGroupInstance> findByG_C_C(long groupId,
-		long classNameId, long classPK, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C;
-			finderArgs = new Object[] { groupId, classNameId, classPK };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_C;
-			finderArgs = new Object[] {
-					groupId, classNameId, classPK,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (MDRRuleGroupInstance mdrRuleGroupInstance : list) {
-				if ((groupId != mdrRuleGroupInstance.getGroupId()) ||
-						(classNameId != mdrRuleGroupInstance.getClassNameId()) ||
-						(classPK != mdrRuleGroupInstance.getClassPK())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_MDRRULEGROUPINSTANCE_WHERE);
-
-			query.append(_FINDER_COLUMN_G_C_C_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_C_C_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_G_C_C_CLASSPK_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first m d r rule group instance in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r rule group instance
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance findByG_C_C_First(long groupId,
-		long classNameId, long classPK, OrderByComparator orderByComparator)
-		throws NoSuchRuleGroupInstanceException, SystemException {
-		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByG_C_C_First(groupId,
-				classNameId, classPK, orderByComparator);
-
-		if (mdrRuleGroupInstance != null) {
-			return mdrRuleGroupInstance;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRuleGroupInstanceException(msg.toString());
-	}
-
-	/**
-	 * Returns the first m d r rule group instance in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance fetchByG_C_C_First(long groupId,
-		long classNameId, long classPK, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<MDRRuleGroupInstance> list = findByG_C_C(groupId, classNameId,
-				classPK, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last m d r rule group instance in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r rule group instance
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance findByG_C_C_Last(long groupId,
-		long classNameId, long classPK, OrderByComparator orderByComparator)
-		throws NoSuchRuleGroupInstanceException, SystemException {
-		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByG_C_C_Last(groupId,
-				classNameId, classPK, orderByComparator);
-
-		if (mdrRuleGroupInstance != null) {
-			return mdrRuleGroupInstance;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRuleGroupInstanceException(msg.toString());
-	}
-
-	/**
-	 * Returns the last m d r rule group instance in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroupInstance fetchByG_C_C_Last(long groupId,
-		long classNameId, long classPK, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByG_C_C(groupId, classNameId, classPK);
-
-		List<MDRRuleGroupInstance> list = findByG_C_C(groupId, classNameId,
-				classPK, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3597,6 +3639,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				}
 			}
 		}
+		else {
+			query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -3698,7 +3743,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(4);
+			query = new StringBundler(5);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -3726,6 +3771,14 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -3914,6 +3967,14 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				MDRRuleGroupInstance.class.getName(),
@@ -3958,6 +4019,307 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	}
 
 	/**
+	 * Returns an ordered range of all the m d r rule group instances where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param start the lower bound of the range of m d r rule group instances
+	 * @param end the upper bound of the range of m d r rule group instances (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching m d r rule group instances
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MDRRuleGroupInstance> findByG_C_C(long groupId,
+		long classNameId, long classPK, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C;
+			finderArgs = new Object[] { groupId, classNameId, classPK };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_C;
+			finderArgs = new Object[] {
+					groupId, classNameId, classPK,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MDRRuleGroupInstance mdrRuleGroupInstance : list) {
+				if ((groupId != mdrRuleGroupInstance.getGroupId()) ||
+						(classNameId != mdrRuleGroupInstance.getClassNameId()) ||
+						(classPK != mdrRuleGroupInstance.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_MDRRULEGROUPINSTANCE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_C_C_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_C_C_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_G_C_C_CLASSPK_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the first matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByG_C_C_First(long groupId,
+		long classNameId, long classPK)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		return findByG_C_C_First(groupId, classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByG_C_C_First(long groupId,
+		long classNameId, long classPK, OrderByComparator orderByComparator)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByG_C_C_First(groupId,
+				classNameId, classPK, orderByComparator);
+
+		if (mdrRuleGroupInstance != null) {
+			return mdrRuleGroupInstance;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRuleGroupInstanceException(msg.toString());
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByG_C_C_First(long groupId,
+		long classNameId, long classPK) throws SystemException {
+		return fetchByG_C_C_First(groupId, classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the first m d r rule group instance in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByG_C_C_First(long groupId,
+		long classNameId, long classPK, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<MDRRuleGroupInstance> list = findByG_C_C(groupId, classNameId,
+				classPK, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the last matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByG_C_C_Last(long groupId,
+		long classNameId, long classPK)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		return findByG_C_C_Last(groupId, classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r rule group instance
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance findByG_C_C_Last(long groupId,
+		long classNameId, long classPK, OrderByComparator orderByComparator)
+		throws NoSuchRuleGroupInstanceException, SystemException {
+		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByG_C_C_Last(groupId,
+				classNameId, classPK, orderByComparator);
+
+		if (mdrRuleGroupInstance != null) {
+			return mdrRuleGroupInstance;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRuleGroupInstanceException(msg.toString());
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the default ordered set defined by {@link MDRRuleGroupInstanceModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByG_C_C_Last(long groupId,
+		long classNameId, long classPK) throws SystemException {
+		return fetchByG_C_C_Last(groupId, classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the last m d r rule group instance in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroupInstance fetchByG_C_C_Last(long groupId,
+		long classNameId, long classPK, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_C_C(groupId, classNameId, classPK);
+
+		List<MDRRuleGroupInstance> list = findByG_C_C(groupId, classNameId,
+				classPK, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the m d r rule group instances where groupId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -3968,7 +4330,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public void removeByG_C_C(long groupId, long classNameId, long classPK)
 		throws SystemException {
 		for (MDRRuleGroupInstance mdrRuleGroupInstance : findByG_C_C(groupId,
-				classNameId, classPK)) {
+				classNameId, classPK, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(mdrRuleGroupInstance);
 		}
 	}
@@ -3984,10 +4346,12 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	public int countByG_C_C(long groupId, long classNameId, long classPK)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_C_C;
+
 		Object[] finderArgs = new Object[] { groupId, classNameId, classPK };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_C_C,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -4018,18 +4382,15 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				qPos.add(classPK);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_C_C,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -4204,7 +4565,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(4);
+			StringBundler query = new StringBundler(5);
 
 			query.append(_SQL_SELECT_MDRRULEGROUPINSTANCE_WHERE);
 
@@ -4233,16 +4594,14 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 				List<MDRRuleGroupInstance> list = q.list();
 
-				result = list;
-
-				MDRRuleGroupInstance mdrRuleGroupInstance = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C_R,
 						finderArgs, list);
 				}
 				else {
-					mdrRuleGroupInstance = list.get(0);
+					MDRRuleGroupInstance mdrRuleGroupInstance = list.get(0);
+
+					result = mdrRuleGroupInstance;
 
 					cacheResult(mdrRuleGroupInstance);
 
@@ -4253,28 +4612,23 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 							finderArgs, mdrRuleGroupInstance);
 					}
 				}
-
-				return mdrRuleGroupInstance;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C_R,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C_R,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (MDRRuleGroupInstance)result;
-			}
+			return (MDRRuleGroupInstance)result;
 		}
 	}
 
@@ -4307,10 +4661,12 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	public int countByC_C_R(long classNameId, long classPK, long ruleGroupId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C_R;
+
 		Object[] finderArgs = new Object[] { classNameId, classPK, ruleGroupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C_R,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -4341,18 +4697,15 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				qPos.add(ruleGroupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C_R,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -4909,29 +5262,28 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 		if (mdrRuleGroupInstance == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mdrRuleGroupInstance = (MDRRuleGroupInstance)session.get(MDRRuleGroupInstanceImpl.class,
 						Long.valueOf(ruleGroupInstanceId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (mdrRuleGroupInstance != null) {
 					cacheResult(mdrRuleGroupInstance);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 						MDRRuleGroupInstanceImpl.class, ruleGroupInstanceId,
 						_nullMDRRuleGroupInstance);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
+					MDRRuleGroupInstanceImpl.class, ruleGroupInstanceId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -4982,7 +5334,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public List<MDRRuleGroupInstance> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -5013,7 +5365,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_MDRRULEGROUPINSTANCE;
+				sql = _SQL_SELECT_MDRRULEGROUPINSTANCE.concat(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
@@ -5023,30 +5375,19 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+						getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -5084,18 +5425,17 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				Query q = session.createQuery(_SQL_COUNT_MDRRULEGROUPINSTANCE);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -5131,6 +5471,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public void destroy() {
 		EntityCacheUtil.removeCache(MDRRuleGroupInstanceImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

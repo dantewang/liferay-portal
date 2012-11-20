@@ -63,6 +63,22 @@ public interface ImagePersistence extends BasePersistence<Image> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the images before and after the current image in the ordered set where size &lt; &#63;.
+	*
+	* @param imageId the primary key of the current image
+	* @param size the size
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next image
+	* @throws com.liferay.portal.NoSuchImageException if a image with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Image[] findByLtSize_PrevAndNext(
+		long imageId, int size,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchImageException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the images where size &lt; &#63;.
 	*
 	* <p>
@@ -82,6 +98,18 @@ public interface ImagePersistence extends BasePersistence<Image> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first image in the default ordered set defined by {@link ImageModelImpl#ORDER_BY_JPQL} where size &lt; &#63;.
+	*
+	* @param size the size
+	* @return the first matching image
+	* @throws com.liferay.portal.NoSuchImageException if a matching image could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Image findByLtSize_First(int size)
+		throws com.liferay.portal.NoSuchImageException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first image in the ordered set where size &lt; &#63;.
 	*
 	* @param size the size
@@ -96,6 +124,16 @@ public interface ImagePersistence extends BasePersistence<Image> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first image in the default ordered set defined by {@link ImageModelImpl#ORDER_BY_JPQL} where size &lt; &#63;.
+	*
+	* @param size the size
+	* @return the first matching image, or <code>null</code> if a matching image could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Image fetchByLtSize_First(int size)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first image in the ordered set where size &lt; &#63;.
 	*
 	* @param size the size
@@ -106,6 +144,18 @@ public interface ImagePersistence extends BasePersistence<Image> {
 	public com.liferay.portal.model.Image fetchByLtSize_First(int size,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last image in the default ordered set defined by {@link ImageModelImpl#ORDER_BY_JPQL} where size &lt; &#63;.
+	*
+	* @param size the size
+	* @return the last matching image
+	* @throws com.liferay.portal.NoSuchImageException if a matching image could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Image findByLtSize_Last(int size)
+		throws com.liferay.portal.NoSuchImageException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last image in the ordered set where size &lt; &#63;.
@@ -122,6 +172,16 @@ public interface ImagePersistence extends BasePersistence<Image> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last image in the default ordered set defined by {@link ImageModelImpl#ORDER_BY_JPQL} where size &lt; &#63;.
+	*
+	* @param size the size
+	* @return the last matching image, or <code>null</code> if a matching image could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Image fetchByLtSize_Last(int size)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last image in the ordered set where size &lt; &#63;.
 	*
 	* @param size the size
@@ -132,22 +192,6 @@ public interface ImagePersistence extends BasePersistence<Image> {
 	public com.liferay.portal.model.Image fetchByLtSize_Last(int size,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the images before and after the current image in the ordered set where size &lt; &#63;.
-	*
-	* @param imageId the primary key of the current image
-	* @param size the size
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next image
-	* @throws com.liferay.portal.NoSuchImageException if a image with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Image[] findByLtSize_PrevAndNext(
-		long imageId, int size,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchImageException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the images where size &lt; &#63; from the database.

@@ -53,7 +53,6 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -97,15 +96,16 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
 		new FinderPath(RoleModelImpl.ENTITY_CACHE_ENABLED,
 			RoleModelImpl.FINDER_CACHE_ENABLED, RoleImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
 			new String[] { Long.class.getName() },
-			RoleModelImpl.COMPANYID_COLUMN_BITMASK);
+			RoleModelImpl.COMPANYID_COLUMN_BITMASK |
+			RoleModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(RoleModelImpl.ENTITY_CACHE_ENABLED,
 			RoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
@@ -139,208 +139,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	public List<Role> findByCompanyId(long companyId, int start, int end)
 		throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the roles where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of roles
-	 * @param end the upper bound of the range of roles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching roles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Role> findByCompanyId(long companyId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<Role> list = (List<Role>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Role role : list) {
-				if ((companyId != role.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_ROLE_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(RoleModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				list = (List<Role>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first role in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching role
-	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRoleException, SystemException {
-		Role role = fetchByCompanyId_First(companyId, orderByComparator);
-
-		if (role != null) {
-			return role;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the first role in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching role, or <code>null</code> if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Role> list = findByCompanyId(companyId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last role in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching role
-	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRoleException, SystemException {
-		Role role = fetchByCompanyId_Last(companyId, orderByComparator);
-
-		if (role != null) {
-			return role;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the last role in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching role, or <code>null</code> if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByCompanyId(companyId);
-
-		List<Role> list = findByCompanyId(companyId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -454,7 +252,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			query.append(RoleModelImpl.ORDER_BY_JPQL);
 		}
@@ -572,7 +369,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -750,7 +546,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -798,13 +593,261 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	}
 
 	/**
+	 * Returns an ordered range of all the roles where companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of roles
+	 * @param end the upper bound of the range of roles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching roles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Role> findByCompanyId(long companyId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId, start, end, orderByComparator };
+		}
+
+		List<Role> list = (List<Role>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Role role : list) {
+				if ((companyId != role.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_ROLE_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(RoleModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				list = (List<Role>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findByCompanyId_First(long companyId)
+		throws NoSuchRoleException, SystemException {
+		return findByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first role in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRoleException, SystemException {
+		Role role = fetchByCompanyId_First(companyId, orderByComparator);
+
+		if (role != null) {
+			return role;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchByCompanyId_First(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first role in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Role> list = findByCompanyId(companyId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findByCompanyId_Last(long companyId)
+		throws NoSuchRoleException, SystemException {
+		return findByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last role in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRoleException, SystemException {
+		Role role = fetchByCompanyId_Last(companyId, orderByComparator);
+
+		if (role != null) {
+			return role;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchByCompanyId_Last(long companyId) throws SystemException {
+		return fetchByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last role in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByCompanyId(companyId);
+
+		List<Role> list = findByCompanyId(companyId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the roles where companyId = &#63; from the database.
 	 *
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByCompanyId(long companyId) throws SystemException {
-		for (Role role : findByCompanyId(companyId)) {
+		for (Role role : findByCompanyId(companyId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(role);
 		}
 	}
@@ -817,10 +860,12 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByCompanyId(long companyId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
+
 		Object[] finderArgs = new Object[] { companyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -843,18 +888,15 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -916,8 +958,8 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME = new FinderPath(RoleModelImpl.ENTITY_CACHE_ENABLED,
 			RoleModelImpl.FINDER_CACHE_ENABLED, RoleImpl.class,
@@ -956,218 +998,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	public List<Role> findByName(String name, int start, int end)
 		throws SystemException {
 		return findByName(name, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the roles where name = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param name the name
-	 * @param start the lower bound of the range of roles
-	 * @param end the upper bound of the range of roles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching roles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Role> findByName(String name, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME;
-			finderArgs = new Object[] { name };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_NAME;
-			finderArgs = new Object[] { name, start, end, orderByComparator };
-		}
-
-		List<Role> list = (List<Role>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Role role : list) {
-				if (!Validator.equals(name, role.getName())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_ROLE_WHERE);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_NAME_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_NAME_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_NAME_NAME_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(RoleModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				list = (List<Role>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first role in the ordered set where name = &#63;.
-	 *
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching role
-	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role findByName_First(String name,
-		OrderByComparator orderByComparator)
-		throws NoSuchRoleException, SystemException {
-		Role role = fetchByName_First(name, orderByComparator);
-
-		if (role != null) {
-			return role;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("name=");
-		msg.append(name);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the first role in the ordered set where name = &#63;.
-	 *
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching role, or <code>null</code> if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role fetchByName_First(String name,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Role> list = findByName(name, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last role in the ordered set where name = &#63;.
-	 *
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching role
-	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role findByName_Last(String name, OrderByComparator orderByComparator)
-		throws NoSuchRoleException, SystemException {
-		Role role = fetchByName_Last(name, orderByComparator);
-
-		if (role != null) {
-			return role;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("name=");
-		msg.append(name);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the last role in the ordered set where name = &#63;.
-	 *
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching role, or <code>null</code> if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role fetchByName_Last(String name,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByName(name);
-
-		List<Role> list = findByName(name, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1291,7 +1121,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			query.append(RoleModelImpl.ORDER_BY_JPQL);
 		}
@@ -1419,7 +1248,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -1608,7 +1436,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -1658,13 +1485,270 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	}
 
 	/**
+	 * Returns an ordered range of all the roles where name = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param name the name
+	 * @param start the lower bound of the range of roles
+	 * @param end the upper bound of the range of roles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching roles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Role> findByName(String name, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME;
+			finderArgs = new Object[] { name };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_NAME;
+			finderArgs = new Object[] { name, start, end, orderByComparator };
+		}
+
+		List<Role> list = (List<Role>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Role role : list) {
+				if (!Validator.equals(name, role.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_ROLE_WHERE);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_NAME_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_NAME_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_NAME_NAME_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(RoleModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				list = (List<Role>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	 *
+	 * @param name the name
+	 * @return the first matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findByName_First(String name)
+		throws NoSuchRoleException, SystemException {
+		return findByName_First(name, null);
+	}
+
+	/**
+	 * Returns the first role in the ordered set where name = &#63;.
+	 *
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findByName_First(String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchRoleException, SystemException {
+		Role role = fetchByName_First(name, orderByComparator);
+
+		if (role != null) {
+			return role;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	 *
+	 * @param name the name
+	 * @return the first matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchByName_First(String name) throws SystemException {
+		return fetchByName_First(name, null);
+	}
+
+	/**
+	 * Returns the first role in the ordered set where name = &#63;.
+	 *
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchByName_First(String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Role> list = findByName(name, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	 *
+	 * @param name the name
+	 * @return the last matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findByName_Last(String name)
+		throws NoSuchRoleException, SystemException {
+		return findByName_Last(name, null);
+	}
+
+	/**
+	 * Returns the last role in the ordered set where name = &#63;.
+	 *
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findByName_Last(String name, OrderByComparator orderByComparator)
+		throws NoSuchRoleException, SystemException {
+		Role role = fetchByName_Last(name, orderByComparator);
+
+		if (role != null) {
+			return role;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	 *
+	 * @param name the name
+	 * @return the last matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchByName_Last(String name) throws SystemException {
+		return fetchByName_Last(name, null);
+	}
+
+	/**
+	 * Returns the last role in the ordered set where name = &#63;.
+	 *
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchByName_Last(String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByName(name);
+
+		List<Role> list = findByName(name, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the roles where name = &#63; from the database.
 	 *
 	 * @param name the name
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByName(String name) throws SystemException {
-		for (Role role : findByName(name)) {
+		for (Role role : findByName(name, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				null)) {
 			remove(role);
 		}
 	}
@@ -1677,10 +1761,12 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByName(String name) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_NAME;
+
 		Object[] finderArgs = new Object[] { name };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_NAME,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -1715,18 +1801,15 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NAME,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1802,15 +1885,16 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SUBTYPE =
 		new FinderPath(RoleModelImpl.ENTITY_CACHE_ENABLED,
 			RoleModelImpl.FINDER_CACHE_ENABLED, RoleImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findBySubtype",
 			new String[] { String.class.getName() },
-			RoleModelImpl.SUBTYPE_COLUMN_BITMASK);
+			RoleModelImpl.SUBTYPE_COLUMN_BITMASK |
+			RoleModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_SUBTYPE = new FinderPath(RoleModelImpl.ENTITY_CACHE_ENABLED,
 			RoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countBySubtype",
@@ -1843,220 +1927,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	public List<Role> findBySubtype(String subtype, int start, int end)
 		throws SystemException {
 		return findBySubtype(subtype, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the roles where subtype = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param subtype the subtype
-	 * @param start the lower bound of the range of roles
-	 * @param end the upper bound of the range of roles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching roles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Role> findBySubtype(String subtype, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SUBTYPE;
-			finderArgs = new Object[] { subtype };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_SUBTYPE;
-			finderArgs = new Object[] { subtype, start, end, orderByComparator };
-		}
-
-		List<Role> list = (List<Role>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Role role : list) {
-				if (!Validator.equals(subtype, role.getSubtype())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_ROLE_WHERE);
-
-			if (subtype == null) {
-				query.append(_FINDER_COLUMN_SUBTYPE_SUBTYPE_1);
-			}
-			else {
-				if (subtype.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_SUBTYPE_SUBTYPE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_SUBTYPE_SUBTYPE_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(RoleModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (subtype != null) {
-					qPos.add(subtype);
-				}
-
-				list = (List<Role>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first role in the ordered set where subtype = &#63;.
-	 *
-	 * @param subtype the subtype
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching role
-	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role findBySubtype_First(String subtype,
-		OrderByComparator orderByComparator)
-		throws NoSuchRoleException, SystemException {
-		Role role = fetchBySubtype_First(subtype, orderByComparator);
-
-		if (role != null) {
-			return role;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("subtype=");
-		msg.append(subtype);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the first role in the ordered set where subtype = &#63;.
-	 *
-	 * @param subtype the subtype
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching role, or <code>null</code> if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role fetchBySubtype_First(String subtype,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Role> list = findBySubtype(subtype, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last role in the ordered set where subtype = &#63;.
-	 *
-	 * @param subtype the subtype
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching role
-	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role findBySubtype_Last(String subtype,
-		OrderByComparator orderByComparator)
-		throws NoSuchRoleException, SystemException {
-		Role role = fetchBySubtype_Last(subtype, orderByComparator);
-
-		if (role != null) {
-			return role;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("subtype=");
-		msg.append(subtype);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the last role in the ordered set where subtype = &#63;.
-	 *
-	 * @param subtype the subtype
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching role, or <code>null</code> if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role fetchBySubtype_Last(String subtype,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countBySubtype(subtype);
-
-		List<Role> list = findBySubtype(subtype, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2180,7 +2050,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			query.append(RoleModelImpl.ORDER_BY_JPQL);
 		}
@@ -2310,7 +2179,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -2499,7 +2367,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -2549,13 +2416,272 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	}
 
 	/**
+	 * Returns an ordered range of all the roles where subtype = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param subtype the subtype
+	 * @param start the lower bound of the range of roles
+	 * @param end the upper bound of the range of roles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching roles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Role> findBySubtype(String subtype, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SUBTYPE;
+			finderArgs = new Object[] { subtype };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_SUBTYPE;
+			finderArgs = new Object[] { subtype, start, end, orderByComparator };
+		}
+
+		List<Role> list = (List<Role>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Role role : list) {
+				if (!Validator.equals(subtype, role.getSubtype())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_ROLE_WHERE);
+
+			if (subtype == null) {
+				query.append(_FINDER_COLUMN_SUBTYPE_SUBTYPE_1);
+			}
+			else {
+				if (subtype.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_SUBTYPE_SUBTYPE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_SUBTYPE_SUBTYPE_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(RoleModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (subtype != null) {
+					qPos.add(subtype);
+				}
+
+				list = (List<Role>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where subtype = &#63;.
+	 *
+	 * @param subtype the subtype
+	 * @return the first matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findBySubtype_First(String subtype)
+		throws NoSuchRoleException, SystemException {
+		return findBySubtype_First(subtype, null);
+	}
+
+	/**
+	 * Returns the first role in the ordered set where subtype = &#63;.
+	 *
+	 * @param subtype the subtype
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findBySubtype_First(String subtype,
+		OrderByComparator orderByComparator)
+		throws NoSuchRoleException, SystemException {
+		Role role = fetchBySubtype_First(subtype, orderByComparator);
+
+		if (role != null) {
+			return role;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("subtype=");
+		msg.append(subtype);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where subtype = &#63;.
+	 *
+	 * @param subtype the subtype
+	 * @return the first matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchBySubtype_First(String subtype) throws SystemException {
+		return fetchBySubtype_First(subtype, null);
+	}
+
+	/**
+	 * Returns the first role in the ordered set where subtype = &#63;.
+	 *
+	 * @param subtype the subtype
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchBySubtype_First(String subtype,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Role> list = findBySubtype(subtype, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where subtype = &#63;.
+	 *
+	 * @param subtype the subtype
+	 * @return the last matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findBySubtype_Last(String subtype)
+		throws NoSuchRoleException, SystemException {
+		return findBySubtype_Last(subtype, null);
+	}
+
+	/**
+	 * Returns the last role in the ordered set where subtype = &#63;.
+	 *
+	 * @param subtype the subtype
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findBySubtype_Last(String subtype,
+		OrderByComparator orderByComparator)
+		throws NoSuchRoleException, SystemException {
+		Role role = fetchBySubtype_Last(subtype, orderByComparator);
+
+		if (role != null) {
+			return role;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("subtype=");
+		msg.append(subtype);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where subtype = &#63;.
+	 *
+	 * @param subtype the subtype
+	 * @return the last matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchBySubtype_Last(String subtype) throws SystemException {
+		return fetchBySubtype_Last(subtype, null);
+	}
+
+	/**
+	 * Returns the last role in the ordered set where subtype = &#63;.
+	 *
+	 * @param subtype the subtype
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchBySubtype_Last(String subtype,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countBySubtype(subtype);
+
+		List<Role> list = findBySubtype(subtype, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the roles where subtype = &#63; from the database.
 	 *
 	 * @param subtype the subtype
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeBySubtype(String subtype) throws SystemException {
-		for (Role role : findBySubtype(subtype)) {
+		for (Role role : findBySubtype(subtype, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(role);
 		}
 	}
@@ -2568,10 +2694,12 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countBySubtype(String subtype) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_SUBTYPE;
+
 		Object[] finderArgs = new Object[] { subtype };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_SUBTYPE,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -2606,18 +2734,15 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_SUBTYPE,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2795,8 +2920,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 
-			query.append(RoleModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -2816,16 +2939,14 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 
 				List<Role> list = q.list();
 
-				result = list;
-
-				Role role = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
 						finderArgs, list);
 				}
 				else {
-					role = list.get(0);
+					Role role = list.get(0);
+
+					result = role;
 
 					cacheResult(role);
 
@@ -2836,28 +2957,23 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 							finderArgs, role);
 					}
 				}
-
-				return role;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Role)result;
-			}
+			return (Role)result;
 		}
 	}
 
@@ -2886,10 +3002,12 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	 */
 	public int countByC_N(long companyId, String name)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_N;
+
 		Object[] finderArgs = new Object[] { companyId, name };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_N,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -2928,18 +3046,15 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_N, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -2957,15 +3072,16 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 			new String[] {
 				Integer.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_S = new FinderPath(RoleModelImpl.ENTITY_CACHE_ENABLED,
 			RoleModelImpl.FINDER_CACHE_ENABLED, RoleImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByT_S",
 			new String[] { Integer.class.getName(), String.class.getName() },
 			RoleModelImpl.TYPE_COLUMN_BITMASK |
-			RoleModelImpl.SUBTYPE_COLUMN_BITMASK);
+			RoleModelImpl.SUBTYPE_COLUMN_BITMASK |
+			RoleModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_S = new FinderPath(RoleModelImpl.ENTITY_CACHE_ENABLED,
 			RoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByT_S",
@@ -3002,240 +3118,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	public List<Role> findByT_S(int type, String subtype, int start, int end)
 		throws SystemException {
 		return findByT_S(type, subtype, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the roles where type = &#63; and subtype = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param type the type
-	 * @param subtype the subtype
-	 * @param start the lower bound of the range of roles
-	 * @param end the upper bound of the range of roles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching roles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Role> findByT_S(int type, String subtype, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_S;
-			finderArgs = new Object[] { type, subtype };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_T_S;
-			finderArgs = new Object[] {
-					type, subtype,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Role> list = (List<Role>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Role role : list) {
-				if ((type != role.getType()) ||
-						!Validator.equals(subtype, role.getSubtype())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_ROLE_WHERE);
-
-			query.append(_FINDER_COLUMN_T_S_TYPE_2);
-
-			if (subtype == null) {
-				query.append(_FINDER_COLUMN_T_S_SUBTYPE_1);
-			}
-			else {
-				if (subtype.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_T_S_SUBTYPE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_T_S_SUBTYPE_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(RoleModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(type);
-
-				if (subtype != null) {
-					qPos.add(subtype);
-				}
-
-				list = (List<Role>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first role in the ordered set where type = &#63; and subtype = &#63;.
-	 *
-	 * @param type the type
-	 * @param subtype the subtype
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching role
-	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role findByT_S_First(int type, String subtype,
-		OrderByComparator orderByComparator)
-		throws NoSuchRoleException, SystemException {
-		Role role = fetchByT_S_First(type, subtype, orderByComparator);
-
-		if (role != null) {
-			return role;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("type=");
-		msg.append(type);
-
-		msg.append(", subtype=");
-		msg.append(subtype);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the first role in the ordered set where type = &#63; and subtype = &#63;.
-	 *
-	 * @param type the type
-	 * @param subtype the subtype
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching role, or <code>null</code> if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role fetchByT_S_First(int type, String subtype,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Role> list = findByT_S(type, subtype, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last role in the ordered set where type = &#63; and subtype = &#63;.
-	 *
-	 * @param type the type
-	 * @param subtype the subtype
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching role
-	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role findByT_S_Last(int type, String subtype,
-		OrderByComparator orderByComparator)
-		throws NoSuchRoleException, SystemException {
-		Role role = fetchByT_S_Last(type, subtype, orderByComparator);
-
-		if (role != null) {
-			return role;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("type=");
-		msg.append(type);
-
-		msg.append(", subtype=");
-		msg.append(subtype);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the last role in the ordered set where type = &#63; and subtype = &#63;.
-	 *
-	 * @param type the type
-	 * @param subtype the subtype
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching role, or <code>null</code> if a matching role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Role fetchByT_S_Last(int type, String subtype,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByT_S(type, subtype);
-
-		List<Role> list = findByT_S(type, subtype, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3362,7 +3244,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			query.append(RoleModelImpl.ORDER_BY_JPQL);
 		}
@@ -3499,7 +3380,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -3695,7 +3575,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -3747,6 +3626,290 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	}
 
 	/**
+	 * Returns an ordered range of all the roles where type = &#63; and subtype = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param type the type
+	 * @param subtype the subtype
+	 * @param start the lower bound of the range of roles
+	 * @param end the upper bound of the range of roles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching roles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Role> findByT_S(int type, String subtype, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_S;
+			finderArgs = new Object[] { type, subtype };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_T_S;
+			finderArgs = new Object[] {
+					type, subtype,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Role> list = (List<Role>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Role role : list) {
+				if ((type != role.getType()) ||
+						!Validator.equals(subtype, role.getSubtype())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_ROLE_WHERE);
+
+			query.append(_FINDER_COLUMN_T_S_TYPE_2);
+
+			if (subtype == null) {
+				query.append(_FINDER_COLUMN_T_S_SUBTYPE_1);
+			}
+			else {
+				if (subtype.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_T_S_SUBTYPE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_T_S_SUBTYPE_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(RoleModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(type);
+
+				if (subtype != null) {
+					qPos.add(subtype);
+				}
+
+				list = (List<Role>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where type = &#63; and subtype = &#63;.
+	 *
+	 * @param type the type
+	 * @param subtype the subtype
+	 * @return the first matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findByT_S_First(int type, String subtype)
+		throws NoSuchRoleException, SystemException {
+		return findByT_S_First(type, subtype, null);
+	}
+
+	/**
+	 * Returns the first role in the ordered set where type = &#63; and subtype = &#63;.
+	 *
+	 * @param type the type
+	 * @param subtype the subtype
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findByT_S_First(int type, String subtype,
+		OrderByComparator orderByComparator)
+		throws NoSuchRoleException, SystemException {
+		Role role = fetchByT_S_First(type, subtype, orderByComparator);
+
+		if (role != null) {
+			return role;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("type=");
+		msg.append(type);
+
+		msg.append(", subtype=");
+		msg.append(subtype);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the first role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where type = &#63; and subtype = &#63;.
+	 *
+	 * @param type the type
+	 * @param subtype the subtype
+	 * @return the first matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchByT_S_First(int type, String subtype)
+		throws SystemException {
+		return fetchByT_S_First(type, subtype, null);
+	}
+
+	/**
+	 * Returns the first role in the ordered set where type = &#63; and subtype = &#63;.
+	 *
+	 * @param type the type
+	 * @param subtype the subtype
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchByT_S_First(int type, String subtype,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Role> list = findByT_S(type, subtype, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where type = &#63; and subtype = &#63;.
+	 *
+	 * @param type the type
+	 * @param subtype the subtype
+	 * @return the last matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findByT_S_Last(int type, String subtype)
+		throws NoSuchRoleException, SystemException {
+		return findByT_S_Last(type, subtype, null);
+	}
+
+	/**
+	 * Returns the last role in the ordered set where type = &#63; and subtype = &#63;.
+	 *
+	 * @param type the type
+	 * @param subtype the subtype
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching role
+	 * @throws com.liferay.portal.NoSuchRoleException if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role findByT_S_Last(int type, String subtype,
+		OrderByComparator orderByComparator)
+		throws NoSuchRoleException, SystemException {
+		Role role = fetchByT_S_Last(type, subtype, orderByComparator);
+
+		if (role != null) {
+			return role;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("type=");
+		msg.append(type);
+
+		msg.append(", subtype=");
+		msg.append(subtype);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the last role in the default ordered set defined by {@link RoleModelImpl#ORDER_BY_JPQL} where type = &#63; and subtype = &#63;.
+	 *
+	 * @param type the type
+	 * @param subtype the subtype
+	 * @return the last matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchByT_S_Last(int type, String subtype)
+		throws SystemException {
+		return fetchByT_S_Last(type, subtype, null);
+	}
+
+	/**
+	 * Returns the last role in the ordered set where type = &#63; and subtype = &#63;.
+	 *
+	 * @param type the type
+	 * @param subtype the subtype
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching role, or <code>null</code> if a matching role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Role fetchByT_S_Last(int type, String subtype,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByT_S(type, subtype);
+
+		List<Role> list = findByT_S(type, subtype, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the roles where type = &#63; and subtype = &#63; from the database.
 	 *
 	 * @param type the type
@@ -3754,7 +3917,8 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByT_S(int type, String subtype) throws SystemException {
-		for (Role role : findByT_S(type, subtype)) {
+		for (Role role : findByT_S(type, subtype, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(role);
 		}
 	}
@@ -3768,10 +3932,12 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByT_S(int type, String subtype) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_T_S;
+
 		Object[] finderArgs = new Object[] { type, subtype };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_T_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -3810,18 +3976,15 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_S, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -4010,8 +4173,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 
 			query.append(_FINDER_COLUMN_C_C_C_CLASSPK_2);
 
-			query.append(RoleModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -4031,16 +4192,14 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 
 				List<Role> list = q.list();
 
-				result = list;
-
-				Role role = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C_C,
 						finderArgs, list);
 				}
 				else {
-					role = list.get(0);
+					Role role = list.get(0);
+
+					result = role;
 
 					cacheResult(role);
 
@@ -4051,28 +4210,23 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 							finderArgs, role);
 					}
 				}
-
-				return role;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C_C,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C_C,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Role)result;
-			}
+			return (Role)result;
 		}
 	}
 
@@ -4103,10 +4257,12 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	 */
 	public int countByC_C_C(long companyId, long classNameId, long classPK)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C_C;
+
 		Object[] finderArgs = new Object[] { companyId, classNameId, classPK };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C_C,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -4137,18 +4293,15 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				qPos.add(classPK);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C_C,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -4643,27 +4796,26 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 		if (role == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				role = (Role)session.get(RoleImpl.class, Long.valueOf(roleId));
+
+				if (role != null) {
+					cacheResult(role);
+				}
+				else {
+					EntityCacheUtil.putResult(RoleModelImpl.ENTITY_CACHE_ENABLED,
+						RoleImpl.class, roleId, _nullRole);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(RoleModelImpl.ENTITY_CACHE_ENABLED,
+					RoleImpl.class, roleId);
 
 				throw processException(e);
 			}
 			finally {
-				if (role != null) {
-					cacheResult(role);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(RoleModelImpl.ENTITY_CACHE_ENABLED,
-						RoleImpl.class, roleId, _nullRole);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -4713,7 +4865,7 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	public List<Role> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -4754,30 +4906,18 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<Role>)QueryUtil.list(q, getDialect(), start,
-							end, false);
+				list = (List<Role>)QueryUtil.list(q, getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<Role>)QueryUtil.list(q, getDialect(), start,
-							end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -4815,18 +4955,17 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				Query q = session.createQuery(_SQL_COUNT_ROLE);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -4869,8 +5008,8 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 			com.liferay.portal.model.impl.GroupImpl.class,
 			RoleModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME, "getGroups",
 			new String[] {
-				Long.class.getName(), "java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
 			});
 
 	static {
@@ -4893,7 +5032,15 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	 */
 	public List<com.liferay.portal.model.Group> getGroups(long pk, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] { pk, start, end, orderByComparator };
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { pk };
+		}
+		else {
+			finderArgs = new Object[] { pk, start, end, orderByComparator };
+		}
 
 		List<com.liferay.portal.model.Group> list = (List<com.liferay.portal.model.Group>)FinderCacheUtil.getResult(FINDER_PATH_GET_GROUPS,
 				finderArgs, this);
@@ -4925,22 +5072,18 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 
 				list = (List<com.liferay.portal.model.Group>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				groupPersistence.cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_GET_GROUPS, finderArgs,
+					list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_GROUPS, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_GET_GROUPS,
-						finderArgs);
-				}
-				else {
-					groupPersistence.cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_GET_GROUPS,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -4986,18 +5129,17 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				qPos.add(pk);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_GET_GROUPS_SIZE,
 					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_GROUPS_SIZE,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -5028,17 +5170,15 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 		if (value == null) {
 			try {
 				value = Boolean.valueOf(containsGroup.contains(pk, groupPK));
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (value == null) {
-					value = Boolean.FALSE;
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_GROUP,
 					finderArgs, value);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_GROUP,
+					finderArgs);
+
+				throw processException(e);
 			}
 		}
 
@@ -5338,8 +5478,8 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 			com.liferay.portal.model.impl.UserImpl.class,
 			RoleModelImpl.MAPPING_TABLE_USERS_ROLES_NAME, "getUsers",
 			new String[] {
-				Long.class.getName(), "java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
 			});
 
 	static {
@@ -5362,7 +5502,15 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	 */
 	public List<com.liferay.portal.model.User> getUsers(long pk, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] { pk, start, end, orderByComparator };
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { pk };
+		}
+		else {
+			finderArgs = new Object[] { pk, start, end, orderByComparator };
+		}
 
 		List<com.liferay.portal.model.User> list = (List<com.liferay.portal.model.User>)FinderCacheUtil.getResult(FINDER_PATH_GET_USERS,
 				finderArgs, this);
@@ -5380,7 +5528,7 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 									   .concat(orderByComparator.getOrderBy());
 				}
 				else {
-					sql = _SQL_GETUSERS;
+					sql = _SQL_GETUSERS.concat(com.liferay.portal.model.impl.UserModelImpl.ORDER_BY_SQL);
 				}
 
 				SQLQuery q = session.createSQLQuery(sql);
@@ -5394,22 +5542,18 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 
 				list = (List<com.liferay.portal.model.User>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				userPersistence.cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_GET_USERS, finderArgs,
+					list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_USERS, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_GET_USERS,
-						finderArgs);
-				}
-				else {
-					userPersistence.cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_GET_USERS,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -5455,18 +5599,17 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				qPos.add(pk);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_GET_USERS_SIZE,
 					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_USERS_SIZE,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -5496,17 +5639,15 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 		if (value == null) {
 			try {
 				value = Boolean.valueOf(containsUser.contains(pk, userPK));
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (value == null) {
-					value = Boolean.FALSE;
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_USER,
 					finderArgs, value);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_USER,
+					finderArgs);
+
+				throw processException(e);
 			}
 		}
 
@@ -5810,6 +5951,7 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	public void destroy() {
 		EntityCacheUtil.removeCache(RoleImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

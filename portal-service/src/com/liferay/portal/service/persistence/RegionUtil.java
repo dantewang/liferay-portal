@@ -140,6 +140,26 @@ public class RegionUtil {
 	}
 
 	/**
+	* Returns the regions before and after the current region in the ordered set where countryId = &#63;.
+	*
+	* @param regionId the primary key of the current region
+	* @param countryId the country ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next region
+	* @throws com.liferay.portal.NoSuchRegionException if a region with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region[] findByCountryId_PrevAndNext(
+		long regionId, long countryId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchRegionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByCountryId_PrevAndNext(regionId, countryId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the regions where countryId = &#63;.
 	*
 	* <p>
@@ -162,6 +182,21 @@ public class RegionUtil {
 	}
 
 	/**
+	* Returns the first region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63;.
+	*
+	* @param countryId the country ID
+	* @return the first matching region
+	* @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region findByCountryId_First(
+		long countryId)
+		throws com.liferay.portal.NoSuchRegionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByCountryId_First(countryId);
+	}
+
+	/**
 	* Returns the first region in the ordered set where countryId = &#63;.
 	*
 	* @param countryId the country ID
@@ -180,6 +215,19 @@ public class RegionUtil {
 	}
 
 	/**
+	* Returns the first region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63;.
+	*
+	* @param countryId the country ID
+	* @return the first matching region, or <code>null</code> if a matching region could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region fetchByCountryId_First(
+		long countryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCountryId_First(countryId);
+	}
+
+	/**
 	* Returns the first region in the ordered set where countryId = &#63;.
 	*
 	* @param countryId the country ID
@@ -193,6 +241,21 @@ public class RegionUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCountryId_First(countryId, orderByComparator);
+	}
+
+	/**
+	* Returns the last region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63;.
+	*
+	* @param countryId the country ID
+	* @return the last matching region
+	* @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region findByCountryId_Last(
+		long countryId)
+		throws com.liferay.portal.NoSuchRegionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByCountryId_Last(countryId);
 	}
 
 	/**
@@ -214,6 +277,19 @@ public class RegionUtil {
 	}
 
 	/**
+	* Returns the last region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63;.
+	*
+	* @param countryId the country ID
+	* @return the last matching region, or <code>null</code> if a matching region could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region fetchByCountryId_Last(
+		long countryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCountryId_Last(countryId);
+	}
+
+	/**
 	* Returns the last region in the ordered set where countryId = &#63;.
 	*
 	* @param countryId the country ID
@@ -227,26 +303,6 @@ public class RegionUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCountryId_Last(countryId, orderByComparator);
-	}
-
-	/**
-	* Returns the regions before and after the current region in the ordered set where countryId = &#63;.
-	*
-	* @param regionId the primary key of the current region
-	* @param countryId the country ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next region
-	* @throws com.liferay.portal.NoSuchRegionException if a region with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Region[] findByCountryId_PrevAndNext(
-		long regionId, long countryId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchRegionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByCountryId_PrevAndNext(regionId, countryId,
-			orderByComparator);
 	}
 
 	/**
@@ -305,6 +361,25 @@ public class RegionUtil {
 	}
 
 	/**
+	* Returns the regions before and after the current region in the ordered set where active = &#63;.
+	*
+	* @param regionId the primary key of the current region
+	* @param active the active
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next region
+	* @throws com.liferay.portal.NoSuchRegionException if a region with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region[] findByActive_PrevAndNext(
+		long regionId, boolean active,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchRegionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByActive_PrevAndNext(regionId, active, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the regions where active = &#63;.
 	*
 	* <p>
@@ -327,6 +402,21 @@ public class RegionUtil {
 	}
 
 	/**
+	* Returns the first region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	*
+	* @param active the active
+	* @return the first matching region
+	* @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region findByActive_First(
+		boolean active)
+		throws com.liferay.portal.NoSuchRegionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByActive_First(active);
+	}
+
+	/**
 	* Returns the first region in the ordered set where active = &#63;.
 	*
 	* @param active the active
@@ -344,6 +434,19 @@ public class RegionUtil {
 	}
 
 	/**
+	* Returns the first region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	*
+	* @param active the active
+	* @return the first matching region, or <code>null</code> if a matching region could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region fetchByActive_First(
+		boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByActive_First(active);
+	}
+
+	/**
 	* Returns the first region in the ordered set where active = &#63;.
 	*
 	* @param active the active
@@ -356,6 +459,21 @@ public class RegionUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByActive_First(active, orderByComparator);
+	}
+
+	/**
+	* Returns the last region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	*
+	* @param active the active
+	* @return the last matching region
+	* @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region findByActive_Last(
+		boolean active)
+		throws com.liferay.portal.NoSuchRegionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByActive_Last(active);
 	}
 
 	/**
@@ -376,6 +494,19 @@ public class RegionUtil {
 	}
 
 	/**
+	* Returns the last region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	*
+	* @param active the active
+	* @return the last matching region, or <code>null</code> if a matching region could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region fetchByActive_Last(
+		boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByActive_Last(active);
+	}
+
+	/**
 	* Returns the last region in the ordered set where active = &#63;.
 	*
 	* @param active the active
@@ -388,25 +519,6 @@ public class RegionUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByActive_Last(active, orderByComparator);
-	}
-
-	/**
-	* Returns the regions before and after the current region in the ordered set where active = &#63;.
-	*
-	* @param regionId the primary key of the current region
-	* @param active the active
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next region
-	* @throws com.liferay.portal.NoSuchRegionException if a region with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Region[] findByActive_PrevAndNext(
-		long regionId, boolean active,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchRegionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByActive_PrevAndNext(regionId, active, orderByComparator);
 	}
 
 	/**
@@ -541,6 +653,27 @@ public class RegionUtil {
 	}
 
 	/**
+	* Returns the regions before and after the current region in the ordered set where countryId = &#63; and active = &#63;.
+	*
+	* @param regionId the primary key of the current region
+	* @param countryId the country ID
+	* @param active the active
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next region
+	* @throws com.liferay.portal.NoSuchRegionException if a region with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region[] findByC_A_PrevAndNext(
+		long regionId, long countryId, boolean active,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchRegionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByC_A_PrevAndNext(regionId, countryId, active,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the regions where countryId = &#63; and active = &#63;.
 	*
 	* <p>
@@ -564,6 +697,22 @@ public class RegionUtil {
 	}
 
 	/**
+	* Returns the first region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63; and active = &#63;.
+	*
+	* @param countryId the country ID
+	* @param active the active
+	* @return the first matching region
+	* @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region findByC_A_First(
+		long countryId, boolean active)
+		throws com.liferay.portal.NoSuchRegionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByC_A_First(countryId, active);
+	}
+
+	/**
 	* Returns the first region in the ordered set where countryId = &#63; and active = &#63;.
 	*
 	* @param countryId the country ID
@@ -583,6 +732,20 @@ public class RegionUtil {
 	}
 
 	/**
+	* Returns the first region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63; and active = &#63;.
+	*
+	* @param countryId the country ID
+	* @param active the active
+	* @return the first matching region, or <code>null</code> if a matching region could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region fetchByC_A_First(
+		long countryId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_A_First(countryId, active);
+	}
+
+	/**
 	* Returns the first region in the ordered set where countryId = &#63; and active = &#63;.
 	*
 	* @param countryId the country ID
@@ -597,6 +760,22 @@ public class RegionUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_A_First(countryId, active, orderByComparator);
+	}
+
+	/**
+	* Returns the last region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63; and active = &#63;.
+	*
+	* @param countryId the country ID
+	* @param active the active
+	* @return the last matching region
+	* @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region findByC_A_Last(
+		long countryId, boolean active)
+		throws com.liferay.portal.NoSuchRegionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByC_A_Last(countryId, active);
 	}
 
 	/**
@@ -619,6 +798,20 @@ public class RegionUtil {
 	}
 
 	/**
+	* Returns the last region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63; and active = &#63;.
+	*
+	* @param countryId the country ID
+	* @param active the active
+	* @return the last matching region, or <code>null</code> if a matching region could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Region fetchByC_A_Last(
+		long countryId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_A_Last(countryId, active);
+	}
+
+	/**
 	* Returns the last region in the ordered set where countryId = &#63; and active = &#63;.
 	*
 	* @param countryId the country ID
@@ -633,27 +826,6 @@ public class RegionUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_A_Last(countryId, active, orderByComparator);
-	}
-
-	/**
-	* Returns the regions before and after the current region in the ordered set where countryId = &#63; and active = &#63;.
-	*
-	* @param regionId the primary key of the current region
-	* @param countryId the country ID
-	* @param active the active
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next region
-	* @throws com.liferay.portal.NoSuchRegionException if a region with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Region[] findByC_A_PrevAndNext(
-		long regionId, long countryId, boolean active,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchRegionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByC_A_PrevAndNext(regionId, countryId, active,
-			orderByComparator);
 	}
 
 	/**

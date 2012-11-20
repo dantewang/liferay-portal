@@ -54,7 +54,6 @@ import com.liferay.portlet.softwarecatalog.model.impl.SCLicenseModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -97,15 +96,16 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			new String[] {
 				Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE =
 		new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
 			SCLicenseModelImpl.FINDER_CACHE_ENABLED, SCLicenseImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByActive",
 			new String[] { Boolean.class.getName() },
-			SCLicenseModelImpl.ACTIVE_COLUMN_BITMASK);
+			SCLicenseModelImpl.ACTIVE_COLUMN_BITMASK |
+			SCLicenseModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_ACTIVE = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
 			SCLicenseModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByActive",
@@ -139,209 +139,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	public List<SCLicense> findByActive(boolean active, int start, int end)
 		throws SystemException {
 		return findByActive(active, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the s c licenses where active = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param active the active
-	 * @param start the lower bound of the range of s c licenses
-	 * @param end the upper bound of the range of s c licenses (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching s c licenses
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SCLicense> findByActive(boolean active, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE;
-			finderArgs = new Object[] { active };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVE;
-			finderArgs = new Object[] { active, start, end, orderByComparator };
-		}
-
-		List<SCLicense> list = (List<SCLicense>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SCLicense scLicense : list) {
-				if ((active != scLicense.getActive())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SCLICENSE_WHERE);
-
-			query.append(_FINDER_COLUMN_ACTIVE_ACTIVE_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(active);
-
-				list = (List<SCLicense>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first s c license in the ordered set where active = &#63;.
-	 *
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching s c license
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCLicense findByActive_First(boolean active,
-		OrderByComparator orderByComparator)
-		throws NoSuchLicenseException, SystemException {
-		SCLicense scLicense = fetchByActive_First(active, orderByComparator);
-
-		if (scLicense != null) {
-			return scLicense;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("active=");
-		msg.append(active);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLicenseException(msg.toString());
-	}
-
-	/**
-	 * Returns the first s c license in the ordered set where active = &#63;.
-	 *
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching s c license, or <code>null</code> if a matching s c license could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCLicense fetchByActive_First(boolean active,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SCLicense> list = findByActive(active, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last s c license in the ordered set where active = &#63;.
-	 *
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching s c license
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCLicense findByActive_Last(boolean active,
-		OrderByComparator orderByComparator)
-		throws NoSuchLicenseException, SystemException {
-		SCLicense scLicense = fetchByActive_Last(active, orderByComparator);
-
-		if (scLicense != null) {
-			return scLicense;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("active=");
-		msg.append(active);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLicenseException(msg.toString());
-	}
-
-	/**
-	 * Returns the last s c license in the ordered set where active = &#63;.
-	 *
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching s c license, or <code>null</code> if a matching s c license could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCLicense fetchByActive_Last(boolean active,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByActive(active);
-
-		List<SCLicense> list = findByActive(active, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -456,7 +253,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				}
 			}
 		}
-
 		else {
 			query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
 		}
@@ -574,7 +370,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
@@ -752,7 +547,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
@@ -800,13 +594,263 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	}
 
 	/**
+	 * Returns an ordered range of all the s c licenses where active = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param active the active
+	 * @param start the lower bound of the range of s c licenses
+	 * @param end the upper bound of the range of s c licenses (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching s c licenses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SCLicense> findByActive(boolean active, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE;
+			finderArgs = new Object[] { active };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVE;
+			finderArgs = new Object[] { active, start, end, orderByComparator };
+		}
+
+		List<SCLicense> list = (List<SCLicense>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SCLicense scLicense : list) {
+				if ((active != scLicense.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SCLICENSE_WHERE);
+
+			query.append(_FINDER_COLUMN_ACTIVE_ACTIVE_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(active);
+
+				list = (List<SCLicense>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	 *
+	 * @param active the active
+	 * @return the first matching s c license
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense findByActive_First(boolean active)
+		throws NoSuchLicenseException, SystemException {
+		return findByActive_First(active, null);
+	}
+
+	/**
+	 * Returns the first s c license in the ordered set where active = &#63;.
+	 *
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c license
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense findByActive_First(boolean active,
+		OrderByComparator orderByComparator)
+		throws NoSuchLicenseException, SystemException {
+		SCLicense scLicense = fetchByActive_First(active, orderByComparator);
+
+		if (scLicense != null) {
+			return scLicense;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("active=");
+		msg.append(active);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLicenseException(msg.toString());
+	}
+
+	/**
+	 * Returns the first s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	 *
+	 * @param active the active
+	 * @return the first matching s c license, or <code>null</code> if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense fetchByActive_First(boolean active)
+		throws SystemException {
+		return fetchByActive_First(active, null);
+	}
+
+	/**
+	 * Returns the first s c license in the ordered set where active = &#63;.
+	 *
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c license, or <code>null</code> if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense fetchByActive_First(boolean active,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SCLicense> list = findByActive(active, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	 *
+	 * @param active the active
+	 * @return the last matching s c license
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense findByActive_Last(boolean active)
+		throws NoSuchLicenseException, SystemException {
+		return findByActive_Last(active, null);
+	}
+
+	/**
+	 * Returns the last s c license in the ordered set where active = &#63;.
+	 *
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c license
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense findByActive_Last(boolean active,
+		OrderByComparator orderByComparator)
+		throws NoSuchLicenseException, SystemException {
+		SCLicense scLicense = fetchByActive_Last(active, orderByComparator);
+
+		if (scLicense != null) {
+			return scLicense;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("active=");
+		msg.append(active);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLicenseException(msg.toString());
+	}
+
+	/**
+	 * Returns the last s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	 *
+	 * @param active the active
+	 * @return the last matching s c license, or <code>null</code> if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense fetchByActive_Last(boolean active)
+		throws SystemException {
+		return fetchByActive_Last(active, null);
+	}
+
+	/**
+	 * Returns the last s c license in the ordered set where active = &#63;.
+	 *
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c license, or <code>null</code> if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense fetchByActive_Last(boolean active,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByActive(active);
+
+		List<SCLicense> list = findByActive(active, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the s c licenses where active = &#63; from the database.
 	 *
 	 * @param active the active
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByActive(boolean active) throws SystemException {
-		for (SCLicense scLicense : findByActive(active)) {
+		for (SCLicense scLicense : findByActive(active, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(scLicense);
 		}
 	}
@@ -819,10 +863,12 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByActive(boolean active) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_ACTIVE;
+
 		Object[] finderArgs = new Object[] { active };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_ACTIVE,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -845,18 +891,15 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				qPos.add(active);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ACTIVE,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -918,15 +961,16 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			new String[] {
 				Boolean.class.getName(), Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_A_R = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
 			SCLicenseModelImpl.FINDER_CACHE_ENABLED, SCLicenseImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByA_R",
 			new String[] { Boolean.class.getName(), Boolean.class.getName() },
 			SCLicenseModelImpl.ACTIVE_COLUMN_BITMASK |
-			SCLicenseModelImpl.RECOMMENDED_COLUMN_BITMASK);
+			SCLicenseModelImpl.RECOMMENDED_COLUMN_BITMASK |
+			SCLicenseModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_A_R = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
 			SCLicenseModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByA_R",
@@ -963,233 +1007,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	public List<SCLicense> findByA_R(boolean active, boolean recommended,
 		int start, int end) throws SystemException {
 		return findByA_R(active, recommended, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the s c licenses where active = &#63; and recommended = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param active the active
-	 * @param recommended the recommended
-	 * @param start the lower bound of the range of s c licenses
-	 * @param end the upper bound of the range of s c licenses (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching s c licenses
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SCLicense> findByA_R(boolean active, boolean recommended,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_A_R;
-			finderArgs = new Object[] { active, recommended };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_A_R;
-			finderArgs = new Object[] {
-					active, recommended,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SCLicense> list = (List<SCLicense>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SCLicense scLicense : list) {
-				if ((active != scLicense.getActive()) ||
-						(recommended != scLicense.getRecommended())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_SCLICENSE_WHERE);
-
-			query.append(_FINDER_COLUMN_A_R_ACTIVE_2);
-
-			query.append(_FINDER_COLUMN_A_R_RECOMMENDED_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(active);
-
-				qPos.add(recommended);
-
-				list = (List<SCLicense>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first s c license in the ordered set where active = &#63; and recommended = &#63;.
-	 *
-	 * @param active the active
-	 * @param recommended the recommended
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching s c license
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCLicense findByA_R_First(boolean active, boolean recommended,
-		OrderByComparator orderByComparator)
-		throws NoSuchLicenseException, SystemException {
-		SCLicense scLicense = fetchByA_R_First(active, recommended,
-				orderByComparator);
-
-		if (scLicense != null) {
-			return scLicense;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("active=");
-		msg.append(active);
-
-		msg.append(", recommended=");
-		msg.append(recommended);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLicenseException(msg.toString());
-	}
-
-	/**
-	 * Returns the first s c license in the ordered set where active = &#63; and recommended = &#63;.
-	 *
-	 * @param active the active
-	 * @param recommended the recommended
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching s c license, or <code>null</code> if a matching s c license could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCLicense fetchByA_R_First(boolean active, boolean recommended,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SCLicense> list = findByA_R(active, recommended, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last s c license in the ordered set where active = &#63; and recommended = &#63;.
-	 *
-	 * @param active the active
-	 * @param recommended the recommended
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching s c license
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCLicense findByA_R_Last(boolean active, boolean recommended,
-		OrderByComparator orderByComparator)
-		throws NoSuchLicenseException, SystemException {
-		SCLicense scLicense = fetchByA_R_Last(active, recommended,
-				orderByComparator);
-
-		if (scLicense != null) {
-			return scLicense;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("active=");
-		msg.append(active);
-
-		msg.append(", recommended=");
-		msg.append(recommended);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLicenseException(msg.toString());
-	}
-
-	/**
-	 * Returns the last s c license in the ordered set where active = &#63; and recommended = &#63;.
-	 *
-	 * @param active the active
-	 * @param recommended the recommended
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching s c license, or <code>null</code> if a matching s c license could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCLicense fetchByA_R_Last(boolean active, boolean recommended,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByA_R(active, recommended);
-
-		List<SCLicense> list = findByA_R(active, recommended, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1307,7 +1124,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				}
 			}
 		}
-
 		else {
 			query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
 		}
@@ -1433,7 +1249,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
@@ -1617,7 +1432,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
@@ -1667,6 +1481,283 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	}
 
 	/**
+	 * Returns an ordered range of all the s c licenses where active = &#63; and recommended = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param active the active
+	 * @param recommended the recommended
+	 * @param start the lower bound of the range of s c licenses
+	 * @param end the upper bound of the range of s c licenses (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching s c licenses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SCLicense> findByA_R(boolean active, boolean recommended,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_A_R;
+			finderArgs = new Object[] { active, recommended };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_A_R;
+			finderArgs = new Object[] {
+					active, recommended,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SCLicense> list = (List<SCLicense>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SCLicense scLicense : list) {
+				if ((active != scLicense.getActive()) ||
+						(recommended != scLicense.getRecommended())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_SCLICENSE_WHERE);
+
+			query.append(_FINDER_COLUMN_A_R_ACTIVE_2);
+
+			query.append(_FINDER_COLUMN_A_R_RECOMMENDED_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(active);
+
+				qPos.add(recommended);
+
+				list = (List<SCLicense>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63; and recommended = &#63;.
+	 *
+	 * @param active the active
+	 * @param recommended the recommended
+	 * @return the first matching s c license
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense findByA_R_First(boolean active, boolean recommended)
+		throws NoSuchLicenseException, SystemException {
+		return findByA_R_First(active, recommended, null);
+	}
+
+	/**
+	 * Returns the first s c license in the ordered set where active = &#63; and recommended = &#63;.
+	 *
+	 * @param active the active
+	 * @param recommended the recommended
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c license
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense findByA_R_First(boolean active, boolean recommended,
+		OrderByComparator orderByComparator)
+		throws NoSuchLicenseException, SystemException {
+		SCLicense scLicense = fetchByA_R_First(active, recommended,
+				orderByComparator);
+
+		if (scLicense != null) {
+			return scLicense;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("active=");
+		msg.append(active);
+
+		msg.append(", recommended=");
+		msg.append(recommended);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLicenseException(msg.toString());
+	}
+
+	/**
+	 * Returns the first s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63; and recommended = &#63;.
+	 *
+	 * @param active the active
+	 * @param recommended the recommended
+	 * @return the first matching s c license, or <code>null</code> if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense fetchByA_R_First(boolean active, boolean recommended)
+		throws SystemException {
+		return fetchByA_R_First(active, recommended, null);
+	}
+
+	/**
+	 * Returns the first s c license in the ordered set where active = &#63; and recommended = &#63;.
+	 *
+	 * @param active the active
+	 * @param recommended the recommended
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c license, or <code>null</code> if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense fetchByA_R_First(boolean active, boolean recommended,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SCLicense> list = findByA_R(active, recommended, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63; and recommended = &#63;.
+	 *
+	 * @param active the active
+	 * @param recommended the recommended
+	 * @return the last matching s c license
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense findByA_R_Last(boolean active, boolean recommended)
+		throws NoSuchLicenseException, SystemException {
+		return findByA_R_Last(active, recommended, null);
+	}
+
+	/**
+	 * Returns the last s c license in the ordered set where active = &#63; and recommended = &#63;.
+	 *
+	 * @param active the active
+	 * @param recommended the recommended
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c license
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense findByA_R_Last(boolean active, boolean recommended,
+		OrderByComparator orderByComparator)
+		throws NoSuchLicenseException, SystemException {
+		SCLicense scLicense = fetchByA_R_Last(active, recommended,
+				orderByComparator);
+
+		if (scLicense != null) {
+			return scLicense;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("active=");
+		msg.append(active);
+
+		msg.append(", recommended=");
+		msg.append(recommended);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLicenseException(msg.toString());
+	}
+
+	/**
+	 * Returns the last s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63; and recommended = &#63;.
+	 *
+	 * @param active the active
+	 * @param recommended the recommended
+	 * @return the last matching s c license, or <code>null</code> if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense fetchByA_R_Last(boolean active, boolean recommended)
+		throws SystemException {
+		return fetchByA_R_Last(active, recommended, null);
+	}
+
+	/**
+	 * Returns the last s c license in the ordered set where active = &#63; and recommended = &#63;.
+	 *
+	 * @param active the active
+	 * @param recommended the recommended
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c license, or <code>null</code> if a matching s c license could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense fetchByA_R_Last(boolean active, boolean recommended,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByA_R(active, recommended);
+
+		List<SCLicense> list = findByA_R(active, recommended, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the s c licenses where active = &#63; and recommended = &#63; from the database.
 	 *
 	 * @param active the active
@@ -1675,7 +1766,8 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	 */
 	public void removeByA_R(boolean active, boolean recommended)
 		throws SystemException {
-		for (SCLicense scLicense : findByA_R(active, recommended)) {
+		for (SCLicense scLicense : findByA_R(active, recommended,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(scLicense);
 		}
 	}
@@ -1690,10 +1782,12 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	 */
 	public int countByA_R(boolean active, boolean recommended)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_A_R;
+
 		Object[] finderArgs = new Object[] { active, recommended };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_A_R,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1720,18 +1814,15 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				qPos.add(recommended);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A_R, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -2159,28 +2250,27 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 		if (scLicense == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				scLicense = (SCLicense)session.get(SCLicenseImpl.class,
 						Long.valueOf(licenseId));
+
+				if (scLicense != null) {
+					cacheResult(scLicense);
+				}
+				else {
+					EntityCacheUtil.putResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+						SCLicenseImpl.class, licenseId, _nullSCLicense);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+					SCLicenseImpl.class, licenseId);
 
 				throw processException(e);
 			}
 			finally {
-				if (scLicense != null) {
-					cacheResult(scLicense);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-						SCLicenseImpl.class, licenseId, _nullSCLicense);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2231,7 +2321,7 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	public List<SCLicense> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -2272,30 +2362,19 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<SCLicense>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<SCLicense>)QueryUtil.list(q, getDialect(), start,
+						end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<SCLicense>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2333,18 +2412,17 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				Query q = session.createQuery(_SQL_COUNT_SCLICENSE);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -2388,8 +2466,8 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			SCLicenseModelImpl.MAPPING_TABLE_SCLICENSES_SCPRODUCTENTRIES_NAME,
 			"getSCProductEntries",
 			new String[] {
-				Long.class.getName(), "java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
 			});
 
 	static {
@@ -2413,7 +2491,15 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	public List<com.liferay.portlet.softwarecatalog.model.SCProductEntry> getSCProductEntries(
 		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		Object[] finderArgs = new Object[] { pk, start, end, orderByComparator };
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { pk };
+		}
+		else {
+			finderArgs = new Object[] { pk, start, end, orderByComparator };
+		}
 
 		List<com.liferay.portlet.softwarecatalog.model.SCProductEntry> list = (List<com.liferay.portlet.softwarecatalog.model.SCProductEntry>)FinderCacheUtil.getResult(FINDER_PATH_GET_SCPRODUCTENTRIES,
 				finderArgs, this);
@@ -2445,22 +2531,19 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 
 				list = (List<com.liferay.portlet.softwarecatalog.model.SCProductEntry>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				scProductEntryPersistence.cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_GET_SCPRODUCTENTRIES,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_SCPRODUCTENTRIES,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_GET_SCPRODUCTENTRIES,
-						finderArgs);
-				}
-				else {
-					scProductEntryPersistence.cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_GET_SCPRODUCTENTRIES,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2507,18 +2590,17 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				qPos.add(pk);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_GET_SCPRODUCTENTRIES_SIZE,
 					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_SCPRODUCTENTRIES_SIZE,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -2552,17 +2634,15 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			try {
 				value = Boolean.valueOf(containsSCProductEntry.contains(pk,
 							scProductEntryPK));
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (value == null) {
-					value = Boolean.FALSE;
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_SCPRODUCTENTRY,
 					finderArgs, value);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_SCPRODUCTENTRY,
+					finderArgs);
+
+				throw processException(e);
 			}
 		}
 
@@ -2873,6 +2953,7 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	public void destroy() {
 		EntityCacheUtil.removeCache(SCLicenseImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

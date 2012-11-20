@@ -46,7 +46,6 @@ import com.liferay.portlet.dynamicdatamapping.model.impl.DDMStructureLinkModelIm
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -92,8 +91,8 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID =
 		new FinderPath(DDMStructureLinkModelImpl.ENTITY_CACHE_ENABLED,
@@ -101,7 +100,8 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 			DDMStructureLinkImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByClassNameId",
 			new String[] { Long.class.getName() },
-			DDMStructureLinkModelImpl.CLASSNAMEID_COLUMN_BITMASK);
+			DDMStructureLinkModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			DDMStructureLinkModelImpl.STRUCTURELINKID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_CLASSNAMEID = new FinderPath(DDMStructureLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStructureLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByClassNameId",
@@ -136,209 +136,6 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	public List<DDMStructureLink> findByClassNameId(long classNameId,
 		int start, int end) throws SystemException {
 		return findByClassNameId(classNameId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the d d m structure links where classNameId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param classNameId the class name ID
-	 * @param start the lower bound of the range of d d m structure links
-	 * @param end the upper bound of the range of d d m structure links (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching d d m structure links
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<DDMStructureLink> findByClassNameId(long classNameId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID;
-			finderArgs = new Object[] { classNameId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_CLASSNAMEID;
-			finderArgs = new Object[] { classNameId, start, end, orderByComparator };
-		}
-
-		List<DDMStructureLink> list = (List<DDMStructureLink>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (DDMStructureLink ddmStructureLink : list) {
-				if ((classNameId != ddmStructureLink.getClassNameId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_DDMSTRUCTURELINK_WHERE);
-
-			query.append(_FINDER_COLUMN_CLASSNAMEID_CLASSNAMEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(classNameId);
-
-				list = (List<DDMStructureLink>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first d d m structure link in the ordered set where classNameId = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching d d m structure link
-	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureLinkException if a matching d d m structure link could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDMStructureLink findByClassNameId_First(long classNameId,
-		OrderByComparator orderByComparator)
-		throws NoSuchStructureLinkException, SystemException {
-		DDMStructureLink ddmStructureLink = fetchByClassNameId_First(classNameId,
-				orderByComparator);
-
-		if (ddmStructureLink != null) {
-			return ddmStructureLink;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("classNameId=");
-		msg.append(classNameId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureLinkException(msg.toString());
-	}
-
-	/**
-	 * Returns the first d d m structure link in the ordered set where classNameId = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching d d m structure link, or <code>null</code> if a matching d d m structure link could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDMStructureLink fetchByClassNameId_First(long classNameId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<DDMStructureLink> list = findByClassNameId(classNameId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last d d m structure link in the ordered set where classNameId = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching d d m structure link
-	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureLinkException if a matching d d m structure link could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDMStructureLink findByClassNameId_Last(long classNameId,
-		OrderByComparator orderByComparator)
-		throws NoSuchStructureLinkException, SystemException {
-		DDMStructureLink ddmStructureLink = fetchByClassNameId_Last(classNameId,
-				orderByComparator);
-
-		if (ddmStructureLink != null) {
-			return ddmStructureLink;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("classNameId=");
-		msg.append(classNameId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureLinkException(msg.toString());
-	}
-
-	/**
-	 * Returns the last d d m structure link in the ordered set where classNameId = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching d d m structure link, or <code>null</code> if a matching d d m structure link could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDMStructureLink fetchByClassNameId_Last(long classNameId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByClassNameId(classNameId);
-
-		List<DDMStructureLink> list = findByClassNameId(classNameId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -454,6 +251,9 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 				}
 			}
 		}
+		else {
+			query.append(DDMStructureLinkModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -485,13 +285,267 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	}
 
 	/**
+	 * Returns an ordered range of all the d d m structure links where classNameId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param classNameId the class name ID
+	 * @param start the lower bound of the range of d d m structure links
+	 * @param end the upper bound of the range of d d m structure links (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching d d m structure links
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<DDMStructureLink> findByClassNameId(long classNameId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID;
+			finderArgs = new Object[] { classNameId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_CLASSNAMEID;
+			finderArgs = new Object[] { classNameId, start, end, orderByComparator };
+		}
+
+		List<DDMStructureLink> list = (List<DDMStructureLink>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DDMStructureLink ddmStructureLink : list) {
+				if ((classNameId != ddmStructureLink.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_DDMSTRUCTURELINK_WHERE);
+
+			query.append(_FINDER_COLUMN_CLASSNAMEID_CLASSNAMEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(DDMStructureLinkModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(classNameId);
+
+				list = (List<DDMStructureLink>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first d d m structure link in the default ordered set defined by {@link DDMStructureLinkModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @return the first matching d d m structure link
+	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureLinkException if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink findByClassNameId_First(long classNameId)
+		throws NoSuchStructureLinkException, SystemException {
+		return findByClassNameId_First(classNameId, null);
+	}
+
+	/**
+	 * Returns the first d d m structure link in the ordered set where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching d d m structure link
+	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureLinkException if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink findByClassNameId_First(long classNameId,
+		OrderByComparator orderByComparator)
+		throws NoSuchStructureLinkException, SystemException {
+		DDMStructureLink ddmStructureLink = fetchByClassNameId_First(classNameId,
+				orderByComparator);
+
+		if (ddmStructureLink != null) {
+			return ddmStructureLink;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureLinkException(msg.toString());
+	}
+
+	/**
+	 * Returns the first d d m structure link in the default ordered set defined by {@link DDMStructureLinkModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @return the first matching d d m structure link, or <code>null</code> if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink fetchByClassNameId_First(long classNameId)
+		throws SystemException {
+		return fetchByClassNameId_First(classNameId, null);
+	}
+
+	/**
+	 * Returns the first d d m structure link in the ordered set where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching d d m structure link, or <code>null</code> if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink fetchByClassNameId_First(long classNameId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<DDMStructureLink> list = findByClassNameId(classNameId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last d d m structure link in the default ordered set defined by {@link DDMStructureLinkModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @return the last matching d d m structure link
+	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureLinkException if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink findByClassNameId_Last(long classNameId)
+		throws NoSuchStructureLinkException, SystemException {
+		return findByClassNameId_Last(classNameId, null);
+	}
+
+	/**
+	 * Returns the last d d m structure link in the ordered set where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching d d m structure link
+	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureLinkException if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink findByClassNameId_Last(long classNameId,
+		OrderByComparator orderByComparator)
+		throws NoSuchStructureLinkException, SystemException {
+		DDMStructureLink ddmStructureLink = fetchByClassNameId_Last(classNameId,
+				orderByComparator);
+
+		if (ddmStructureLink != null) {
+			return ddmStructureLink;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureLinkException(msg.toString());
+	}
+
+	/**
+	 * Returns the last d d m structure link in the default ordered set defined by {@link DDMStructureLinkModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @return the last matching d d m structure link, or <code>null</code> if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink fetchByClassNameId_Last(long classNameId)
+		throws SystemException {
+		return fetchByClassNameId_Last(classNameId, null);
+	}
+
+	/**
+	 * Returns the last d d m structure link in the ordered set where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching d d m structure link, or <code>null</code> if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink fetchByClassNameId_Last(long classNameId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByClassNameId(classNameId);
+
+		List<DDMStructureLink> list = findByClassNameId(classNameId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the d d m structure links where classNameId = &#63; from the database.
 	 *
 	 * @param classNameId the class name ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByClassNameId(long classNameId) throws SystemException {
-		for (DDMStructureLink ddmStructureLink : findByClassNameId(classNameId)) {
+		for (DDMStructureLink ddmStructureLink : findByClassNameId(
+				classNameId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(ddmStructureLink);
 		}
 	}
@@ -504,10 +558,12 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByClassNameId(long classNameId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_CLASSNAMEID;
+
 		Object[] finderArgs = new Object[] { classNameId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -530,18 +586,15 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 				qPos.add(classNameId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -632,7 +685,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(2);
+			StringBundler query = new StringBundler(3);
 
 			query.append(_SQL_SELECT_DDMSTRUCTURELINK_WHERE);
 
@@ -653,16 +706,14 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 
 				List<DDMStructureLink> list = q.list();
 
-				result = list;
-
-				DDMStructureLink ddmStructureLink = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSPK,
 						finderArgs, list);
 				}
 				else {
-					ddmStructureLink = list.get(0);
+					DDMStructureLink ddmStructureLink = list.get(0);
+
+					result = ddmStructureLink;
 
 					cacheResult(ddmStructureLink);
 
@@ -671,28 +722,23 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 							finderArgs, ddmStructureLink);
 					}
 				}
-
-				return ddmStructureLink;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CLASSPK,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CLASSPK,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (DDMStructureLink)result;
-			}
+			return (DDMStructureLink)result;
 		}
 	}
 
@@ -718,10 +764,12 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByClassPK(long classPK) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_CLASSPK;
+
 		Object[] finderArgs = new Object[] { classPK };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_CLASSPK,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -744,18 +792,15 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 				qPos.add(classPK);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CLASSPK,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -772,8 +817,8 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID =
 		new FinderPath(DDMStructureLinkModelImpl.ENTITY_CACHE_ENABLED,
@@ -781,7 +826,8 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 			DDMStructureLinkImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByStructureId",
 			new String[] { Long.class.getName() },
-			DDMStructureLinkModelImpl.STRUCTUREID_COLUMN_BITMASK);
+			DDMStructureLinkModelImpl.STRUCTUREID_COLUMN_BITMASK |
+			DDMStructureLinkModelImpl.STRUCTURELINKID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(DDMStructureLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStructureLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByStructureId",
@@ -816,209 +862,6 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	public List<DDMStructureLink> findByStructureId(long structureId,
 		int start, int end) throws SystemException {
 		return findByStructureId(structureId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the d d m structure links where structureId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param structureId the structure ID
-	 * @param start the lower bound of the range of d d m structure links
-	 * @param end the upper bound of the range of d d m structure links (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching d d m structure links
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<DDMStructureLink> findByStructureId(long structureId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID;
-			finderArgs = new Object[] { structureId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID;
-			finderArgs = new Object[] { structureId, start, end, orderByComparator };
-		}
-
-		List<DDMStructureLink> list = (List<DDMStructureLink>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (DDMStructureLink ddmStructureLink : list) {
-				if ((structureId != ddmStructureLink.getStructureId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_DDMSTRUCTURELINK_WHERE);
-
-			query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(structureId);
-
-				list = (List<DDMStructureLink>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first d d m structure link in the ordered set where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching d d m structure link
-	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureLinkException if a matching d d m structure link could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDMStructureLink findByStructureId_First(long structureId,
-		OrderByComparator orderByComparator)
-		throws NoSuchStructureLinkException, SystemException {
-		DDMStructureLink ddmStructureLink = fetchByStructureId_First(structureId,
-				orderByComparator);
-
-		if (ddmStructureLink != null) {
-			return ddmStructureLink;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("structureId=");
-		msg.append(structureId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureLinkException(msg.toString());
-	}
-
-	/**
-	 * Returns the first d d m structure link in the ordered set where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching d d m structure link, or <code>null</code> if a matching d d m structure link could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDMStructureLink fetchByStructureId_First(long structureId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<DDMStructureLink> list = findByStructureId(structureId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last d d m structure link in the ordered set where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching d d m structure link
-	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureLinkException if a matching d d m structure link could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDMStructureLink findByStructureId_Last(long structureId,
-		OrderByComparator orderByComparator)
-		throws NoSuchStructureLinkException, SystemException {
-		DDMStructureLink ddmStructureLink = fetchByStructureId_Last(structureId,
-				orderByComparator);
-
-		if (ddmStructureLink != null) {
-			return ddmStructureLink;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("structureId=");
-		msg.append(structureId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureLinkException(msg.toString());
-	}
-
-	/**
-	 * Returns the last d d m structure link in the ordered set where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching d d m structure link, or <code>null</code> if a matching d d m structure link could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDMStructureLink fetchByStructureId_Last(long structureId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByStructureId(structureId);
-
-		List<DDMStructureLink> list = findByStructureId(structureId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1134,6 +977,9 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 				}
 			}
 		}
+		else {
+			query.append(DDMStructureLinkModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1165,13 +1011,267 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	}
 
 	/**
+	 * Returns an ordered range of all the d d m structure links where structureId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param structureId the structure ID
+	 * @param start the lower bound of the range of d d m structure links
+	 * @param end the upper bound of the range of d d m structure links (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching d d m structure links
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<DDMStructureLink> findByStructureId(long structureId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID;
+			finderArgs = new Object[] { structureId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID;
+			finderArgs = new Object[] { structureId, start, end, orderByComparator };
+		}
+
+		List<DDMStructureLink> list = (List<DDMStructureLink>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DDMStructureLink ddmStructureLink : list) {
+				if ((structureId != ddmStructureLink.getStructureId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_DDMSTRUCTURELINK_WHERE);
+
+			query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(DDMStructureLinkModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(structureId);
+
+				list = (List<DDMStructureLink>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first d d m structure link in the default ordered set defined by {@link DDMStructureLinkModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the first matching d d m structure link
+	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureLinkException if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink findByStructureId_First(long structureId)
+		throws NoSuchStructureLinkException, SystemException {
+		return findByStructureId_First(structureId, null);
+	}
+
+	/**
+	 * Returns the first d d m structure link in the ordered set where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching d d m structure link
+	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureLinkException if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink findByStructureId_First(long structureId,
+		OrderByComparator orderByComparator)
+		throws NoSuchStructureLinkException, SystemException {
+		DDMStructureLink ddmStructureLink = fetchByStructureId_First(structureId,
+				orderByComparator);
+
+		if (ddmStructureLink != null) {
+			return ddmStructureLink;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("structureId=");
+		msg.append(structureId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureLinkException(msg.toString());
+	}
+
+	/**
+	 * Returns the first d d m structure link in the default ordered set defined by {@link DDMStructureLinkModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the first matching d d m structure link, or <code>null</code> if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink fetchByStructureId_First(long structureId)
+		throws SystemException {
+		return fetchByStructureId_First(structureId, null);
+	}
+
+	/**
+	 * Returns the first d d m structure link in the ordered set where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching d d m structure link, or <code>null</code> if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink fetchByStructureId_First(long structureId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<DDMStructureLink> list = findByStructureId(structureId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last d d m structure link in the default ordered set defined by {@link DDMStructureLinkModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the last matching d d m structure link
+	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureLinkException if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink findByStructureId_Last(long structureId)
+		throws NoSuchStructureLinkException, SystemException {
+		return findByStructureId_Last(structureId, null);
+	}
+
+	/**
+	 * Returns the last d d m structure link in the ordered set where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching d d m structure link
+	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureLinkException if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink findByStructureId_Last(long structureId,
+		OrderByComparator orderByComparator)
+		throws NoSuchStructureLinkException, SystemException {
+		DDMStructureLink ddmStructureLink = fetchByStructureId_Last(structureId,
+				orderByComparator);
+
+		if (ddmStructureLink != null) {
+			return ddmStructureLink;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("structureId=");
+		msg.append(structureId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureLinkException(msg.toString());
+	}
+
+	/**
+	 * Returns the last d d m structure link in the default ordered set defined by {@link DDMStructureLinkModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the last matching d d m structure link, or <code>null</code> if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink fetchByStructureId_Last(long structureId)
+		throws SystemException {
+		return fetchByStructureId_Last(structureId, null);
+	}
+
+	/**
+	 * Returns the last d d m structure link in the ordered set where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching d d m structure link, or <code>null</code> if a matching d d m structure link could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStructureLink fetchByStructureId_Last(long structureId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByStructureId(structureId);
+
+		List<DDMStructureLink> list = findByStructureId(structureId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the d d m structure links where structureId = &#63; from the database.
 	 *
 	 * @param structureId the structure ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByStructureId(long structureId) throws SystemException {
-		for (DDMStructureLink ddmStructureLink : findByStructureId(structureId)) {
+		for (DDMStructureLink ddmStructureLink : findByStructureId(
+				structureId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(ddmStructureLink);
 		}
 	}
@@ -1184,10 +1284,12 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByStructureId(long structureId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_STRUCTUREID;
+
 		Object[] finderArgs = new Object[] { structureId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -1210,18 +1312,15 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 				qPos.add(structureId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1624,29 +1723,28 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 		if (ddmStructureLink == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				ddmStructureLink = (DDMStructureLink)session.get(DDMStructureLinkImpl.class,
 						Long.valueOf(structureLinkId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (ddmStructureLink != null) {
 					cacheResult(ddmStructureLink);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(DDMStructureLinkModelImpl.ENTITY_CACHE_ENABLED,
 						DDMStructureLinkImpl.class, structureLinkId,
 						_nullDDMStructureLink);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(DDMStructureLinkModelImpl.ENTITY_CACHE_ENABLED,
+					DDMStructureLinkImpl.class, structureLinkId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1697,7 +1795,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	public List<DDMStructureLink> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -1728,7 +1826,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_DDMSTRUCTURELINK;
+				sql = _SQL_SELECT_DDMSTRUCTURELINK.concat(DDMStructureLinkModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
@@ -1738,30 +1836,19 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<DDMStructureLink>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+				list = (List<DDMStructureLink>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<DDMStructureLink>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1799,18 +1886,17 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 				Query q = session.createQuery(_SQL_COUNT_DDMSTRUCTURELINK);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1846,6 +1932,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	public void destroy() {
 		EntityCacheUtil.removeCache(DDMStructureLinkImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

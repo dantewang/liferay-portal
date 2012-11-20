@@ -143,6 +143,25 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the asset categories before and after the current asset category in the ordered set where uuid = &#63;.
+	*
+	* @param categoryId the primary key of the current asset category
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a asset category with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory[] findByUuid_PrevAndNext(
+		long categoryId, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .findByUuid_PrevAndNext(categoryId, uuid, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the asset categories where uuid = &#63;.
 	*
 	* <p>
@@ -164,6 +183,21 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first asset category in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -181,6 +215,19 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first asset category in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -193,6 +240,21 @@ public class AssetCategoryUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_First(uuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByUuid_Last(uuid);
 	}
 
 	/**
@@ -213,6 +275,19 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_Last(uuid);
+	}
+
+	/**
 	* Returns the last asset category in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -225,25 +300,6 @@ public class AssetCategoryUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_Last(uuid, orderByComparator);
-	}
-
-	/**
-	* Returns the asset categories before and after the current asset category in the ordered set where uuid = &#63;.
-	*
-	* @param categoryId the primary key of the current asset category
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next asset category
-	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a asset category with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory[] findByUuid_PrevAndNext(
-		long categoryId, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryException {
-		return getPersistence()
-				   .findByUuid_PrevAndNext(categoryId, uuid, orderByComparator);
 	}
 
 	/**
@@ -377,6 +433,27 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the asset categories before and after the current asset category in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param categoryId the primary key of the current asset category
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a asset category with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory[] findByUuid_C_PrevAndNext(
+		long categoryId, java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .findByUuid_C_PrevAndNext(categoryId, uuid, companyId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the asset categories where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
@@ -400,6 +477,22 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByUuid_C_First(uuid, companyId);
+	}
+
+	/**
 	* Returns the first asset category in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -419,6 +512,20 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_C_First(uuid, companyId);
+	}
+
+	/**
 	* Returns the first asset category in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -433,6 +540,22 @@ public class AssetCategoryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByUuid_C_First(uuid, companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByUuid_C_Last(uuid, companyId);
 	}
 
 	/**
@@ -455,6 +578,20 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_C_Last(uuid, companyId);
+	}
+
+	/**
 	* Returns the last asset category in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -469,27 +606,6 @@ public class AssetCategoryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByUuid_C_Last(uuid, companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the asset categories before and after the current asset category in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param categoryId the primary key of the current asset category
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next asset category
-	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a asset category with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory[] findByUuid_C_PrevAndNext(
-		long categoryId, java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryException {
-		return getPersistence()
-				   .findByUuid_C_PrevAndNext(categoryId, uuid, companyId,
-			orderByComparator);
 	}
 
 	/**
@@ -547,92 +663,6 @@ public class AssetCategoryUtil {
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByGroupId(groupId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the asset categories where groupId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param start the lower bound of the range of asset categories
-	* @param end the upper bound of the range of asset categories (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching asset categories
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.asset.model.AssetCategory> findByGroupId(
-		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByGroupId(groupId, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first asset category in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching asset category
-	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory findByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryException {
-		return getPersistence().findByGroupId_First(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the first asset category in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory fetchByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the last asset category in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching asset category
-	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory findByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryException {
-		return getPersistence().findByGroupId_Last(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the last asset category in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory fetchByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
 	}
 
 	/**
@@ -730,6 +760,148 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the asset categories where groupId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param start the lower bound of the range of asset categories
+	* @param end the upper bound of the range of asset categories (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching asset categories
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.asset.model.AssetCategory> findByGroupId(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByGroupId(groupId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByGroupId_First(groupId);
+	}
+
+	/**
+	* Returns the first asset category in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId);
+	}
+
+	/**
+	* Returns the first asset category in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByGroupId_Last(groupId);
+	}
+
+	/**
+	* Returns the last asset category in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByGroupId_Last(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId);
+	}
+
+	/**
+	* Returns the last asset category in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
+	}
+
+	/**
 	* Removes all the asset categories where groupId = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -798,6 +970,26 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the asset categories before and after the current asset category in the ordered set where parentCategoryId = &#63;.
+	*
+	* @param categoryId the primary key of the current asset category
+	* @param parentCategoryId the parent category ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a asset category with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory[] findByParentCategoryId_PrevAndNext(
+		long categoryId, long parentCategoryId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .findByParentCategoryId_PrevAndNext(categoryId,
+			parentCategoryId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the asset categories where parentCategoryId = &#63;.
 	*
 	* <p>
@@ -821,6 +1013,21 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63;.
+	*
+	* @param parentCategoryId the parent category ID
+	* @return the first matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByParentCategoryId_First(
+		long parentCategoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByParentCategoryId_First(parentCategoryId);
+	}
+
+	/**
 	* Returns the first asset category in the ordered set where parentCategoryId = &#63;.
 	*
 	* @param parentCategoryId the parent category ID
@@ -840,6 +1047,19 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63;.
+	*
+	* @param parentCategoryId the parent category ID
+	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByParentCategoryId_First(
+		long parentCategoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByParentCategoryId_First(parentCategoryId);
+	}
+
+	/**
 	* Returns the first asset category in the ordered set where parentCategoryId = &#63;.
 	*
 	* @param parentCategoryId the parent category ID
@@ -854,6 +1074,21 @@ public class AssetCategoryUtil {
 		return getPersistence()
 				   .fetchByParentCategoryId_First(parentCategoryId,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63;.
+	*
+	* @param parentCategoryId the parent category ID
+	* @return the last matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByParentCategoryId_Last(
+		long parentCategoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByParentCategoryId_Last(parentCategoryId);
 	}
 
 	/**
@@ -876,6 +1111,19 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63;.
+	*
+	* @param parentCategoryId the parent category ID
+	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByParentCategoryId_Last(
+		long parentCategoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByParentCategoryId_Last(parentCategoryId);
+	}
+
+	/**
 	* Returns the last asset category in the ordered set where parentCategoryId = &#63;.
 	*
 	* @param parentCategoryId the parent category ID
@@ -890,26 +1138,6 @@ public class AssetCategoryUtil {
 		return getPersistence()
 				   .fetchByParentCategoryId_Last(parentCategoryId,
 			orderByComparator);
-	}
-
-	/**
-	* Returns the asset categories before and after the current asset category in the ordered set where parentCategoryId = &#63;.
-	*
-	* @param categoryId the primary key of the current asset category
-	* @param parentCategoryId the parent category ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next asset category
-	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a asset category with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory[] findByParentCategoryId_PrevAndNext(
-		long categoryId, long parentCategoryId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryException {
-		return getPersistence()
-				   .findByParentCategoryId_PrevAndNext(categoryId,
-			parentCategoryId, orderByComparator);
 	}
 
 	/**
@@ -968,6 +1196,26 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the asset categories before and after the current asset category in the ordered set where vocabularyId = &#63;.
+	*
+	* @param categoryId the primary key of the current asset category
+	* @param vocabularyId the vocabulary ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a asset category with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory[] findByVocabularyId_PrevAndNext(
+		long categoryId, long vocabularyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .findByVocabularyId_PrevAndNext(categoryId, vocabularyId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the asset categories where vocabularyId = &#63;.
 	*
 	* <p>
@@ -991,6 +1239,21 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where vocabularyId = &#63;.
+	*
+	* @param vocabularyId the vocabulary ID
+	* @return the first matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByVocabularyId_First(
+		long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByVocabularyId_First(vocabularyId);
+	}
+
+	/**
 	* Returns the first asset category in the ordered set where vocabularyId = &#63;.
 	*
 	* @param vocabularyId the vocabulary ID
@@ -1009,6 +1272,19 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where vocabularyId = &#63;.
+	*
+	* @param vocabularyId the vocabulary ID
+	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByVocabularyId_First(
+		long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByVocabularyId_First(vocabularyId);
+	}
+
+	/**
 	* Returns the first asset category in the ordered set where vocabularyId = &#63;.
 	*
 	* @param vocabularyId the vocabulary ID
@@ -1022,6 +1298,21 @@ public class AssetCategoryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByVocabularyId_First(vocabularyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where vocabularyId = &#63;.
+	*
+	* @param vocabularyId the vocabulary ID
+	* @return the last matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByVocabularyId_Last(
+		long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByVocabularyId_Last(vocabularyId);
 	}
 
 	/**
@@ -1043,6 +1334,19 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where vocabularyId = &#63;.
+	*
+	* @param vocabularyId the vocabulary ID
+	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByVocabularyId_Last(
+		long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByVocabularyId_Last(vocabularyId);
+	}
+
+	/**
 	* Returns the last asset category in the ordered set where vocabularyId = &#63;.
 	*
 	* @param vocabularyId the vocabulary ID
@@ -1056,26 +1360,6 @@ public class AssetCategoryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByVocabularyId_Last(vocabularyId, orderByComparator);
-	}
-
-	/**
-	* Returns the asset categories before and after the current asset category in the ordered set where vocabularyId = &#63;.
-	*
-	* @param categoryId the primary key of the current asset category
-	* @param vocabularyId the vocabulary ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next asset category
-	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a asset category with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory[] findByVocabularyId_PrevAndNext(
-		long categoryId, long vocabularyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryException {
-		return getPersistence()
-				   .findByVocabularyId_PrevAndNext(categoryId, vocabularyId,
-			orderByComparator);
 	}
 
 	/**
@@ -1133,102 +1417,6 @@ public class AssetCategoryUtil {
 		long groupId, long vocabularyId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByG_V(groupId, vocabularyId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the asset categories where groupId = &#63; and vocabularyId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param vocabularyId the vocabulary ID
-	* @param start the lower bound of the range of asset categories
-	* @param end the upper bound of the range of asset categories (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching asset categories
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.asset.model.AssetCategory> findByG_V(
-		long groupId, long vocabularyId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_V(groupId, vocabularyId, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param vocabularyId the vocabulary ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching asset category
-	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory findByG_V_First(
-		long groupId, long vocabularyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryException {
-		return getPersistence()
-				   .findByG_V_First(groupId, vocabularyId, orderByComparator);
-	}
-
-	/**
-	* Returns the first asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param vocabularyId the vocabulary ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory fetchByG_V_First(
-		long groupId, long vocabularyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_V_First(groupId, vocabularyId, orderByComparator);
-	}
-
-	/**
-	* Returns the last asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param vocabularyId the vocabulary ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching asset category
-	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory findByG_V_Last(
-		long groupId, long vocabularyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryException {
-		return getPersistence()
-				   .findByG_V_Last(groupId, vocabularyId, orderByComparator);
-	}
-
-	/**
-	* Returns the last asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param vocabularyId the vocabulary ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory fetchByG_V_Last(
-		long groupId, long vocabularyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_V_Last(groupId, vocabularyId, orderByComparator);
 	}
 
 	/**
@@ -1333,6 +1521,162 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the asset categories where groupId = &#63; and vocabularyId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param vocabularyId the vocabulary ID
+	* @param start the lower bound of the range of asset categories
+	* @param end the upper bound of the range of asset categories (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching asset categories
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.asset.model.AssetCategory> findByG_V(
+		long groupId, long vocabularyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_V(groupId, vocabularyId, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and vocabularyId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param vocabularyId the vocabulary ID
+	* @return the first matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByG_V_First(
+		long groupId, long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByG_V_First(groupId, vocabularyId);
+	}
+
+	/**
+	* Returns the first asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param vocabularyId the vocabulary ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByG_V_First(
+		long groupId, long vocabularyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .findByG_V_First(groupId, vocabularyId, orderByComparator);
+	}
+
+	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and vocabularyId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param vocabularyId the vocabulary ID
+	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByG_V_First(
+		long groupId, long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_V_First(groupId, vocabularyId);
+	}
+
+	/**
+	* Returns the first asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param vocabularyId the vocabulary ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByG_V_First(
+		long groupId, long vocabularyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_V_First(groupId, vocabularyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and vocabularyId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param vocabularyId the vocabulary ID
+	* @return the last matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByG_V_Last(
+		long groupId, long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByG_V_Last(groupId, vocabularyId);
+	}
+
+	/**
+	* Returns the last asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param vocabularyId the vocabulary ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByG_V_Last(
+		long groupId, long vocabularyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .findByG_V_Last(groupId, vocabularyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and vocabularyId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param vocabularyId the vocabulary ID
+	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByG_V_Last(
+		long groupId, long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_V_Last(groupId, vocabularyId);
+	}
+
+	/**
+	* Returns the last asset category in the ordered set where groupId = &#63; and vocabularyId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param vocabularyId the vocabulary ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByG_V_Last(
+		long groupId, long vocabularyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_V_Last(groupId, vocabularyId, orderByComparator);
+	}
+
+	/**
 	* Removes all the asset categories where groupId = &#63; and vocabularyId = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -1405,6 +1749,27 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the asset categories before and after the current asset category in the ordered set where parentCategoryId = &#63; and name = &#63;.
+	*
+	* @param categoryId the primary key of the current asset category
+	* @param parentCategoryId the parent category ID
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a asset category with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory[] findByP_N_PrevAndNext(
+		long categoryId, long parentCategoryId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .findByP_N_PrevAndNext(categoryId, parentCategoryId, name,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the asset categories where parentCategoryId = &#63; and name = &#63;.
 	*
 	* <p>
@@ -1429,6 +1794,22 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and name = &#63;.
+	*
+	* @param parentCategoryId the parent category ID
+	* @param name the name
+	* @return the first matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByP_N_First(
+		long parentCategoryId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByP_N_First(parentCategoryId, name);
+	}
+
+	/**
 	* Returns the first asset category in the ordered set where parentCategoryId = &#63; and name = &#63;.
 	*
 	* @param parentCategoryId the parent category ID
@@ -1448,6 +1829,20 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and name = &#63;.
+	*
+	* @param parentCategoryId the parent category ID
+	* @param name the name
+	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByP_N_First(
+		long parentCategoryId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByP_N_First(parentCategoryId, name);
+	}
+
+	/**
 	* Returns the first asset category in the ordered set where parentCategoryId = &#63; and name = &#63;.
 	*
 	* @param parentCategoryId the parent category ID
@@ -1462,6 +1857,22 @@ public class AssetCategoryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByP_N_First(parentCategoryId, name, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and name = &#63;.
+	*
+	* @param parentCategoryId the parent category ID
+	* @param name the name
+	* @return the last matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByP_N_Last(
+		long parentCategoryId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByP_N_Last(parentCategoryId, name);
 	}
 
 	/**
@@ -1484,6 +1895,20 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and name = &#63;.
+	*
+	* @param parentCategoryId the parent category ID
+	* @param name the name
+	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByP_N_Last(
+		long parentCategoryId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByP_N_Last(parentCategoryId, name);
+	}
+
+	/**
 	* Returns the last asset category in the ordered set where parentCategoryId = &#63; and name = &#63;.
 	*
 	* @param parentCategoryId the parent category ID
@@ -1498,27 +1923,6 @@ public class AssetCategoryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByP_N_Last(parentCategoryId, name, orderByComparator);
-	}
-
-	/**
-	* Returns the asset categories before and after the current asset category in the ordered set where parentCategoryId = &#63; and name = &#63;.
-	*
-	* @param categoryId the primary key of the current asset category
-	* @param parentCategoryId the parent category ID
-	* @param name the name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next asset category
-	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a asset category with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory[] findByP_N_PrevAndNext(
-		long categoryId, long parentCategoryId, java.lang.String name,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryException {
-		return getPersistence()
-				   .findByP_N_PrevAndNext(categoryId, parentCategoryId, name,
-			orderByComparator);
 	}
 
 	/**
@@ -1582,6 +1986,27 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the asset categories before and after the current asset category in the ordered set where parentCategoryId = &#63; and vocabularyId = &#63;.
+	*
+	* @param categoryId the primary key of the current asset category
+	* @param parentCategoryId the parent category ID
+	* @param vocabularyId the vocabulary ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a asset category with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory[] findByP_V_PrevAndNext(
+		long categoryId, long parentCategoryId, long vocabularyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .findByP_V_PrevAndNext(categoryId, parentCategoryId,
+			vocabularyId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the asset categories where parentCategoryId = &#63; and vocabularyId = &#63;.
 	*
 	* <p>
@@ -1606,6 +2031,22 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and vocabularyId = &#63;.
+	*
+	* @param parentCategoryId the parent category ID
+	* @param vocabularyId the vocabulary ID
+	* @return the first matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByP_V_First(
+		long parentCategoryId, long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByP_V_First(parentCategoryId, vocabularyId);
+	}
+
+	/**
 	* Returns the first asset category in the ordered set where parentCategoryId = &#63; and vocabularyId = &#63;.
 	*
 	* @param parentCategoryId the parent category ID
@@ -1626,6 +2067,20 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and vocabularyId = &#63;.
+	*
+	* @param parentCategoryId the parent category ID
+	* @param vocabularyId the vocabulary ID
+	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByP_V_First(
+		long parentCategoryId, long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByP_V_First(parentCategoryId, vocabularyId);
+	}
+
+	/**
 	* Returns the first asset category in the ordered set where parentCategoryId = &#63; and vocabularyId = &#63;.
 	*
 	* @param parentCategoryId the parent category ID
@@ -1641,6 +2096,22 @@ public class AssetCategoryUtil {
 		return getPersistence()
 				   .fetchByP_V_First(parentCategoryId, vocabularyId,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and vocabularyId = &#63;.
+	*
+	* @param parentCategoryId the parent category ID
+	* @param vocabularyId the vocabulary ID
+	* @return the last matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByP_V_Last(
+		long parentCategoryId, long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByP_V_Last(parentCategoryId, vocabularyId);
 	}
 
 	/**
@@ -1664,6 +2135,20 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where parentCategoryId = &#63; and vocabularyId = &#63;.
+	*
+	* @param parentCategoryId the parent category ID
+	* @param vocabularyId the vocabulary ID
+	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByP_V_Last(
+		long parentCategoryId, long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByP_V_Last(parentCategoryId, vocabularyId);
+	}
+
+	/**
 	* Returns the last asset category in the ordered set where parentCategoryId = &#63; and vocabularyId = &#63;.
 	*
 	* @param parentCategoryId the parent category ID
@@ -1679,27 +2164,6 @@ public class AssetCategoryUtil {
 		return getPersistence()
 				   .fetchByP_V_Last(parentCategoryId, vocabularyId,
 			orderByComparator);
-	}
-
-	/**
-	* Returns the asset categories before and after the current asset category in the ordered set where parentCategoryId = &#63; and vocabularyId = &#63;.
-	*
-	* @param categoryId the primary key of the current asset category
-	* @param parentCategoryId the parent category ID
-	* @param vocabularyId the vocabulary ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next asset category
-	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a asset category with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory[] findByP_V_PrevAndNext(
-		long categoryId, long parentCategoryId, long vocabularyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryException {
-		return getPersistence()
-				   .findByP_V_PrevAndNext(categoryId, parentCategoryId,
-			vocabularyId, orderByComparator);
 	}
 
 	/**
@@ -1762,6 +2226,27 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the asset categories before and after the current asset category in the ordered set where name = &#63; and vocabularyId = &#63;.
+	*
+	* @param categoryId the primary key of the current asset category
+	* @param name the name
+	* @param vocabularyId the vocabulary ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a asset category with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory[] findByN_V_PrevAndNext(
+		long categoryId, java.lang.String name, long vocabularyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .findByN_V_PrevAndNext(categoryId, name, vocabularyId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the asset categories where name = &#63; and vocabularyId = &#63;.
 	*
 	* <p>
@@ -1785,6 +2270,22 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where name = &#63; and vocabularyId = &#63;.
+	*
+	* @param name the name
+	* @param vocabularyId the vocabulary ID
+	* @return the first matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByN_V_First(
+		java.lang.String name, long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByN_V_First(name, vocabularyId);
+	}
+
+	/**
 	* Returns the first asset category in the ordered set where name = &#63; and vocabularyId = &#63;.
 	*
 	* @param name the name
@@ -1804,6 +2305,20 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where name = &#63; and vocabularyId = &#63;.
+	*
+	* @param name the name
+	* @param vocabularyId the vocabulary ID
+	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByN_V_First(
+		java.lang.String name, long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByN_V_First(name, vocabularyId);
+	}
+
+	/**
 	* Returns the first asset category in the ordered set where name = &#63; and vocabularyId = &#63;.
 	*
 	* @param name the name
@@ -1818,6 +2333,22 @@ public class AssetCategoryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByN_V_First(name, vocabularyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where name = &#63; and vocabularyId = &#63;.
+	*
+	* @param name the name
+	* @param vocabularyId the vocabulary ID
+	* @return the last matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByN_V_Last(
+		java.lang.String name, long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByN_V_Last(name, vocabularyId);
 	}
 
 	/**
@@ -1840,6 +2371,20 @@ public class AssetCategoryUtil {
 	}
 
 	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where name = &#63; and vocabularyId = &#63;.
+	*
+	* @param name the name
+	* @param vocabularyId the vocabulary ID
+	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByN_V_Last(
+		java.lang.String name, long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByN_V_Last(name, vocabularyId);
+	}
+
+	/**
 	* Returns the last asset category in the ordered set where name = &#63; and vocabularyId = &#63;.
 	*
 	* @param name the name
@@ -1854,27 +2399,6 @@ public class AssetCategoryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByN_V_Last(name, vocabularyId, orderByComparator);
-	}
-
-	/**
-	* Returns the asset categories before and after the current asset category in the ordered set where name = &#63; and vocabularyId = &#63;.
-	*
-	* @param categoryId the primary key of the current asset category
-	* @param name the name
-	* @param vocabularyId the vocabulary ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next asset category
-	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a asset category with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory[] findByN_V_PrevAndNext(
-		long categoryId, java.lang.String name, long vocabularyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryException {
-		return getPersistence()
-				   .findByN_V_PrevAndNext(categoryId, name, vocabularyId,
-			orderByComparator);
 	}
 
 	/**
@@ -1937,112 +2461,6 @@ public class AssetCategoryUtil {
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .findByG_P_N(groupId, parentCategoryId, name, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the asset categories where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param parentCategoryId the parent category ID
-	* @param name the name
-	* @param start the lower bound of the range of asset categories
-	* @param end the upper bound of the range of asset categories (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching asset categories
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.asset.model.AssetCategory> findByG_P_N(
-		long groupId, long parentCategoryId, java.lang.String name, int start,
-		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_P_N(groupId, parentCategoryId, name, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentCategoryId the parent category ID
-	* @param name the name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching asset category
-	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory findByG_P_N_First(
-		long groupId, long parentCategoryId, java.lang.String name,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryException {
-		return getPersistence()
-				   .findByG_P_N_First(groupId, parentCategoryId, name,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentCategoryId the parent category ID
-	* @param name the name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory fetchByG_P_N_First(
-		long groupId, long parentCategoryId, java.lang.String name,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_P_N_First(groupId, parentCategoryId, name,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentCategoryId the parent category ID
-	* @param name the name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching asset category
-	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory findByG_P_N_Last(
-		long groupId, long parentCategoryId, java.lang.String name,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryException {
-		return getPersistence()
-				   .findByG_P_N_Last(groupId, parentCategoryId, name,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentCategoryId the parent category ID
-	* @param name the name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory fetchByG_P_N_Last(
-		long groupId, long parentCategoryId, java.lang.String name,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_P_N_Last(groupId, parentCategoryId, name,
-			orderByComparator);
 	}
 
 	/**
@@ -2154,6 +2572,179 @@ public class AssetCategoryUtil {
 		return getPersistence()
 				   .filterFindByG_P_N_PrevAndNext(categoryId, groupId,
 			parentCategoryId, name, orderByComparator);
+	}
+
+	/**
+	* Returns an ordered range of all the asset categories where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param parentCategoryId the parent category ID
+	* @param name the name
+	* @param start the lower bound of the range of asset categories
+	* @param end the upper bound of the range of asset categories (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching asset categories
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.asset.model.AssetCategory> findByG_P_N(
+		long groupId, long parentCategoryId, java.lang.String name, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_P_N(groupId, parentCategoryId, name, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentCategoryId the parent category ID
+	* @param name the name
+	* @return the first matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByG_P_N_First(
+		long groupId, long parentCategoryId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .findByG_P_N_First(groupId, parentCategoryId, name);
+	}
+
+	/**
+	* Returns the first asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentCategoryId the parent category ID
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByG_P_N_First(
+		long groupId, long parentCategoryId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .findByG_P_N_First(groupId, parentCategoryId, name,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentCategoryId the parent category ID
+	* @param name the name
+	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByG_P_N_First(
+		long groupId, long parentCategoryId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_P_N_First(groupId, parentCategoryId, name);
+	}
+
+	/**
+	* Returns the first asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentCategoryId the parent category ID
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByG_P_N_First(
+		long groupId, long parentCategoryId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_P_N_First(groupId, parentCategoryId, name,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentCategoryId the parent category ID
+	* @param name the name
+	* @return the last matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByG_P_N_Last(
+		long groupId, long parentCategoryId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence().findByG_P_N_Last(groupId, parentCategoryId, name);
+	}
+
+	/**
+	* Returns the last asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentCategoryId the parent category ID
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching asset category
+	* @throws com.liferay.portlet.asset.NoSuchCategoryException if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory findByG_P_N_Last(
+		long groupId, long parentCategoryId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryException {
+		return getPersistence()
+				   .findByG_P_N_Last(groupId, parentCategoryId, name,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last asset category in the default ordered set defined by {@link AssetCategoryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentCategoryId the parent category ID
+	* @param name the name
+	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByG_P_N_Last(
+		long groupId, long parentCategoryId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_P_N_Last(groupId, parentCategoryId, name);
+	}
+
+	/**
+	* Returns the last asset category in the ordered set where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentCategoryId the parent category ID
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching asset category, or <code>null</code> if a matching asset category could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategory fetchByG_P_N_Last(
+		long groupId, long parentCategoryId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_P_N_Last(groupId, parentCategoryId, name,
+			orderByComparator);
 	}
 
 	/**

@@ -44,7 +44,6 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -383,27 +382,26 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 		if (counter == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				counter = (Counter)session.get(CounterImpl.class, name);
+
+				if (counter != null) {
+					cacheResult(counter);
+				}
+				else {
+					EntityCacheUtil.putResult(CounterModelImpl.ENTITY_CACHE_ENABLED,
+						CounterImpl.class, name, _nullCounter);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(CounterModelImpl.ENTITY_CACHE_ENABLED,
+					CounterImpl.class, name);
 
 				throw processException(e);
 			}
 			finally {
-				if (counter != null) {
-					cacheResult(counter);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(CounterModelImpl.ENTITY_CACHE_ENABLED,
-						CounterImpl.class, name, _nullCounter);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -453,7 +451,7 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 	public List<Counter> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -484,7 +482,7 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_COUNTER;
+				sql = _SQL_SELECT_COUNTER.concat(CounterModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
@@ -494,30 +492,18 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<Counter>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<Counter>)QueryUtil.list(q, getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<Counter>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -555,18 +541,17 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 				Query q = session.createQuery(_SQL_COUNT_COUNTER);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -602,6 +587,7 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 	public void destroy() {
 		EntityCacheUtil.removeCache(CounterImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

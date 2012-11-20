@@ -64,6 +64,22 @@ public interface ResourceBlockPermissionPersistence extends BasePersistence<Reso
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the resource block permissions before and after the current resource block permission in the ordered set where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockPermissionId the primary key of the current resource block permission
+	* @param resourceBlockId the resource block ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next resource block permission
+	* @throws com.liferay.portal.NoSuchResourceBlockPermissionException if a resource block permission with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlockPermission[] findByResourceBlockId_PrevAndNext(
+		long resourceBlockPermissionId, long resourceBlockId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchResourceBlockPermissionException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the resource block permissions where resourceBlockId = &#63;.
 	*
 	* <p>
@@ -83,6 +99,19 @@ public interface ResourceBlockPermissionPersistence extends BasePersistence<Reso
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first resource block permission in the default ordered set defined by {@link ResourceBlockPermissionModelImpl#ORDER_BY_JPQL} where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @return the first matching resource block permission
+	* @throws com.liferay.portal.NoSuchResourceBlockPermissionException if a matching resource block permission could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlockPermission findByResourceBlockId_First(
+		long resourceBlockId)
+		throws com.liferay.portal.NoSuchResourceBlockPermissionException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first resource block permission in the ordered set where resourceBlockId = &#63;.
 	*
 	* @param resourceBlockId the resource block ID
@@ -98,6 +127,17 @@ public interface ResourceBlockPermissionPersistence extends BasePersistence<Reso
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first resource block permission in the default ordered set defined by {@link ResourceBlockPermissionModelImpl#ORDER_BY_JPQL} where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @return the first matching resource block permission, or <code>null</code> if a matching resource block permission could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlockPermission fetchByResourceBlockId_First(
+		long resourceBlockId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first resource block permission in the ordered set where resourceBlockId = &#63;.
 	*
 	* @param resourceBlockId the resource block ID
@@ -109,6 +149,19 @@ public interface ResourceBlockPermissionPersistence extends BasePersistence<Reso
 		long resourceBlockId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last resource block permission in the default ordered set defined by {@link ResourceBlockPermissionModelImpl#ORDER_BY_JPQL} where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @return the last matching resource block permission
+	* @throws com.liferay.portal.NoSuchResourceBlockPermissionException if a matching resource block permission could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlockPermission findByResourceBlockId_Last(
+		long resourceBlockId)
+		throws com.liferay.portal.NoSuchResourceBlockPermissionException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last resource block permission in the ordered set where resourceBlockId = &#63;.
@@ -126,6 +179,17 @@ public interface ResourceBlockPermissionPersistence extends BasePersistence<Reso
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last resource block permission in the default ordered set defined by {@link ResourceBlockPermissionModelImpl#ORDER_BY_JPQL} where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @return the last matching resource block permission, or <code>null</code> if a matching resource block permission could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlockPermission fetchByResourceBlockId_Last(
+		long resourceBlockId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last resource block permission in the ordered set where resourceBlockId = &#63;.
 	*
 	* @param resourceBlockId the resource block ID
@@ -137,22 +201,6 @@ public interface ResourceBlockPermissionPersistence extends BasePersistence<Reso
 		long resourceBlockId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the resource block permissions before and after the current resource block permission in the ordered set where resourceBlockId = &#63;.
-	*
-	* @param resourceBlockPermissionId the primary key of the current resource block permission
-	* @param resourceBlockId the resource block ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next resource block permission
-	* @throws com.liferay.portal.NoSuchResourceBlockPermissionException if a resource block permission with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.ResourceBlockPermission[] findByResourceBlockId_PrevAndNext(
-		long resourceBlockPermissionId, long resourceBlockId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchResourceBlockPermissionException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the resource block permissions where resourceBlockId = &#63; from the database.

@@ -68,6 +68,23 @@ public interface ExpandoTablePersistence extends BasePersistence<ExpandoTable> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the expando tables before and after the current expando table in the ordered set where companyId = &#63; and classNameId = &#63;.
+	*
+	* @param tableId the primary key of the current expando table
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next expando table
+	* @throws com.liferay.portlet.expando.NoSuchTableException if a expando table with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.expando.model.ExpandoTable[] findByC_C_PrevAndNext(
+		long tableId, long companyId, long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchTableException;
+
+	/**
 	* Returns an ordered range of all the expando tables where companyId = &#63; and classNameId = &#63;.
 	*
 	* <p>
@@ -88,6 +105,20 @@ public interface ExpandoTablePersistence extends BasePersistence<ExpandoTable> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first expando table in the default ordered set defined by {@link ExpandoTableModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @return the first matching expando table
+	* @throws com.liferay.portlet.expando.NoSuchTableException if a matching expando table could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.expando.model.ExpandoTable findByC_C_First(
+		long companyId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchTableException;
+
+	/**
 	* Returns the first expando table in the ordered set where companyId = &#63; and classNameId = &#63;.
 	*
 	* @param companyId the company ID
@@ -104,6 +135,18 @@ public interface ExpandoTablePersistence extends BasePersistence<ExpandoTable> {
 			com.liferay.portlet.expando.NoSuchTableException;
 
 	/**
+	* Returns the first expando table in the default ordered set defined by {@link ExpandoTableModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @return the first matching expando table, or <code>null</code> if a matching expando table could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.expando.model.ExpandoTable fetchByC_C_First(
+		long companyId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first expando table in the ordered set where companyId = &#63; and classNameId = &#63;.
 	*
 	* @param companyId the company ID
@@ -116,6 +159,20 @@ public interface ExpandoTablePersistence extends BasePersistence<ExpandoTable> {
 		long companyId, long classNameId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last expando table in the default ordered set defined by {@link ExpandoTableModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @return the last matching expando table
+	* @throws com.liferay.portlet.expando.NoSuchTableException if a matching expando table could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.expando.model.ExpandoTable findByC_C_Last(
+		long companyId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchTableException;
 
 	/**
 	* Returns the last expando table in the ordered set where companyId = &#63; and classNameId = &#63;.
@@ -134,6 +191,18 @@ public interface ExpandoTablePersistence extends BasePersistence<ExpandoTable> {
 			com.liferay.portlet.expando.NoSuchTableException;
 
 	/**
+	* Returns the last expando table in the default ordered set defined by {@link ExpandoTableModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @return the last matching expando table, or <code>null</code> if a matching expando table could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.expando.model.ExpandoTable fetchByC_C_Last(
+		long companyId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last expando table in the ordered set where companyId = &#63; and classNameId = &#63;.
 	*
 	* @param companyId the company ID
@@ -146,23 +215,6 @@ public interface ExpandoTablePersistence extends BasePersistence<ExpandoTable> {
 		long companyId, long classNameId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the expando tables before and after the current expando table in the ordered set where companyId = &#63; and classNameId = &#63;.
-	*
-	* @param tableId the primary key of the current expando table
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next expando table
-	* @throws com.liferay.portlet.expando.NoSuchTableException if a expando table with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.expando.model.ExpandoTable[] findByC_C_PrevAndNext(
-		long tableId, long companyId, long classNameId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.expando.NoSuchTableException;
 
 	/**
 	* Removes all the expando tables where companyId = &#63; and classNameId = &#63; from the database.

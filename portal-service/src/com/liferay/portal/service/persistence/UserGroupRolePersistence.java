@@ -63,6 +63,23 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the user group roles before and after the current user group role in the ordered set where userId = &#63;.
+	*
+	* @param userGroupRolePK the primary key of the current user group role
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a user group role with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole[] findByUserId_PrevAndNext(
+		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK,
+		long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the user group roles where userId = &#63;.
 	*
 	* <p>
@@ -82,6 +99,19 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole findByUserId_First(
+		long userId)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user group role in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -97,6 +127,16 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole fetchByUserId_First(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user group role in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -108,6 +148,18 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		long userId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole findByUserId_Last(long userId)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user group role in the ordered set where userId = &#63;.
@@ -125,6 +177,16 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole fetchByUserId_Last(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user group role in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -136,23 +198,6 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		long userId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user group roles before and after the current user group role in the ordered set where userId = &#63;.
-	*
-	* @param userGroupRolePK the primary key of the current user group role
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user group role
-	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a user group role with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserGroupRole[] findByUserId_PrevAndNext(
-		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK,
-		long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserGroupRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the user group roles where userId = &#63; from the database.
@@ -202,6 +247,23 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the user group roles before and after the current user group role in the ordered set where groupId = &#63;.
+	*
+	* @param userGroupRolePK the primary key of the current user group role
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a user group role with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole[] findByGroupId_PrevAndNext(
+		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK,
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the user group roles where groupId = &#63;.
 	*
 	* <p>
@@ -221,6 +283,19 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user group role in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -236,6 +311,17 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user group role in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -247,6 +333,19 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user group role in the ordered set where groupId = &#63;.
@@ -264,6 +363,17 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user group role in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -275,23 +385,6 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user group roles before and after the current user group role in the ordered set where groupId = &#63;.
-	*
-	* @param userGroupRolePK the primary key of the current user group role
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user group role
-	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a user group role with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserGroupRole[] findByGroupId_PrevAndNext(
-		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK,
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserGroupRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the user group roles where groupId = &#63; from the database.
@@ -340,6 +433,23 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the user group roles before and after the current user group role in the ordered set where roleId = &#63;.
+	*
+	* @param userGroupRolePK the primary key of the current user group role
+	* @param roleId the role ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a user group role with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole[] findByRoleId_PrevAndNext(
+		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK,
+		long roleId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the user group roles where roleId = &#63;.
 	*
 	* <p>
@@ -359,6 +469,19 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	*
+	* @param roleId the role ID
+	* @return the first matching user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole findByRoleId_First(
+		long roleId)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user group role in the ordered set where roleId = &#63;.
 	*
 	* @param roleId the role ID
@@ -374,6 +497,16 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	*
+	* @param roleId the role ID
+	* @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole fetchByRoleId_First(
+		long roleId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user group role in the ordered set where roleId = &#63;.
 	*
 	* @param roleId the role ID
@@ -385,6 +518,18 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		long roleId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	*
+	* @param roleId the role ID
+	* @return the last matching user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole findByRoleId_Last(long roleId)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user group role in the ordered set where roleId = &#63;.
@@ -402,6 +547,16 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	*
+	* @param roleId the role ID
+	* @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole fetchByRoleId_Last(
+		long roleId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user group role in the ordered set where roleId = &#63;.
 	*
 	* @param roleId the role ID
@@ -413,23 +568,6 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		long roleId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user group roles before and after the current user group role in the ordered set where roleId = &#63;.
-	*
-	* @param userGroupRolePK the primary key of the current user group role
-	* @param roleId the role ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user group role
-	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a user group role with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserGroupRole[] findByRoleId_PrevAndNext(
-		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK,
-		long roleId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserGroupRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the user group roles where roleId = &#63; from the database.
@@ -481,6 +619,24 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the user group roles before and after the current user group role in the ordered set where userId = &#63; and groupId = &#63;.
+	*
+	* @param userGroupRolePK the primary key of the current user group role
+	* @param userId the user ID
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a user group role with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole[] findByU_G_PrevAndNext(
+		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK,
+		long userId, long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the user group roles where userId = &#63; and groupId = &#63;.
 	*
 	* <p>
@@ -501,6 +657,20 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63; and groupId = &#63;.
+	*
+	* @param userId the user ID
+	* @param groupId the group ID
+	* @return the first matching user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole findByU_G_First(long userId,
+		long groupId)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user group role in the ordered set where userId = &#63; and groupId = &#63;.
 	*
 	* @param userId the user ID
@@ -517,6 +687,18 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63; and groupId = &#63;.
+	*
+	* @param userId the user ID
+	* @param groupId the group ID
+	* @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole fetchByU_G_First(
+		long userId, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user group role in the ordered set where userId = &#63; and groupId = &#63;.
 	*
 	* @param userId the user ID
@@ -529,6 +711,20 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		long userId, long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63; and groupId = &#63;.
+	*
+	* @param userId the user ID
+	* @param groupId the group ID
+	* @return the last matching user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole findByU_G_Last(long userId,
+		long groupId)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user group role in the ordered set where userId = &#63; and groupId = &#63;.
@@ -547,6 +743,18 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63; and groupId = &#63;.
+	*
+	* @param userId the user ID
+	* @param groupId the group ID
+	* @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole fetchByU_G_Last(long userId,
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user group role in the ordered set where userId = &#63; and groupId = &#63;.
 	*
 	* @param userId the user ID
@@ -559,24 +767,6 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user group roles before and after the current user group role in the ordered set where userId = &#63; and groupId = &#63;.
-	*
-	* @param userGroupRolePK the primary key of the current user group role
-	* @param userId the user ID
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user group role
-	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a user group role with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserGroupRole[] findByU_G_PrevAndNext(
-		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK,
-		long userId, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserGroupRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the user group roles where userId = &#63; and groupId = &#63; from the database.
@@ -630,6 +820,24 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the user group roles before and after the current user group role in the ordered set where groupId = &#63; and roleId = &#63;.
+	*
+	* @param userGroupRolePK the primary key of the current user group role
+	* @param groupId the group ID
+	* @param roleId the role ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a user group role with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole[] findByG_R_PrevAndNext(
+		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK,
+		long groupId, long roleId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the user group roles where groupId = &#63; and roleId = &#63;.
 	*
 	* <p>
@@ -650,6 +858,20 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and roleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param roleId the role ID
+	* @return the first matching user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole findByG_R_First(
+		long groupId, long roleId)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user group role in the ordered set where groupId = &#63; and roleId = &#63;.
 	*
 	* @param groupId the group ID
@@ -666,6 +888,18 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and roleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param roleId the role ID
+	* @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole fetchByG_R_First(
+		long groupId, long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user group role in the ordered set where groupId = &#63; and roleId = &#63;.
 	*
 	* @param groupId the group ID
@@ -678,6 +912,20 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		long groupId, long roleId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and roleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param roleId the role ID
+	* @return the last matching user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole findByG_R_Last(long groupId,
+		long roleId)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user group role in the ordered set where groupId = &#63; and roleId = &#63;.
@@ -696,6 +944,18 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and roleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param roleId the role ID
+	* @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroupRole fetchByG_R_Last(
+		long groupId, long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user group role in the ordered set where groupId = &#63; and roleId = &#63;.
 	*
 	* @param groupId the group ID
@@ -708,24 +968,6 @@ public interface UserGroupRolePersistence extends BasePersistence<UserGroupRole>
 		long groupId, long roleId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user group roles before and after the current user group role in the ordered set where groupId = &#63; and roleId = &#63;.
-	*
-	* @param userGroupRolePK the primary key of the current user group role
-	* @param groupId the group ID
-	* @param roleId the role ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user group role
-	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a user group role with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserGroupRole[] findByG_R_PrevAndNext(
-		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK,
-		long groupId, long roleId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserGroupRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the user group roles where groupId = &#63; and roleId = &#63; from the database.

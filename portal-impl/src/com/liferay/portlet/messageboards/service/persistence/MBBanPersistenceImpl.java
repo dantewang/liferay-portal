@@ -46,7 +46,6 @@ import com.liferay.portlet.messageboards.model.impl.MBBanModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -88,15 +87,16 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
 		new FinderPath(MBBanModelImpl.ENTITY_CACHE_ENABLED,
 			MBBanModelImpl.FINDER_CACHE_ENABLED, MBBanImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
 			new String[] { Long.class.getName() },
-			MBBanModelImpl.GROUPID_COLUMN_BITMASK);
+			MBBanModelImpl.GROUPID_COLUMN_BITMASK |
+			MBBanModelImpl.BANID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(MBBanModelImpl.ENTITY_CACHE_ENABLED,
 			MBBanModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
@@ -129,204 +129,6 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public List<MBBan> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the message boards bans where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of message boards bans
-	 * @param end the upper bound of the range of message boards bans (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching message boards bans
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MBBan> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<MBBan> list = (List<MBBan>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (MBBan mbBan : list) {
-				if ((groupId != mbBan.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_MBBAN_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				list = (List<MBBan>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first message boards ban in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching message boards ban
-	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBBan findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchBanException, SystemException {
-		MBBan mbBan = fetchByGroupId_First(groupId, orderByComparator);
-
-		if (mbBan != null) {
-			return mbBan;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchBanException(msg.toString());
-	}
-
-	/**
-	 * Returns the first message boards ban in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBBan fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<MBBan> list = findByGroupId(groupId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last message boards ban in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching message boards ban
-	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBBan findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchBanException, SystemException {
-		MBBan mbBan = fetchByGroupId_Last(groupId, orderByComparator);
-
-		if (mbBan != null) {
-			return mbBan;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchBanException(msg.toString());
-	}
-
-	/**
-	 * Returns the last message boards ban in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBBan fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
-
-		List<MBBan> list = findByGroupId(groupId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -440,6 +242,9 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 				}
 			}
 		}
+		else {
+			query.append(MBBanModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -471,13 +276,260 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	}
 
 	/**
+	 * Returns an ordered range of all the message boards bans where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of message boards bans
+	 * @param end the upper bound of the range of message boards bans (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching message boards bans
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MBBan> findByGroupId(long groupId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
+
+		List<MBBan> list = (List<MBBan>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBBan mbBan : list) {
+				if ((groupId != mbBan.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_MBBAN_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MBBanModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				list = (List<MBBan>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching message boards ban
+	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan findByGroupId_First(long groupId)
+		throws NoSuchBanException, SystemException {
+		return findByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first message boards ban in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards ban
+	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan findByGroupId_First(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchBanException, SystemException {
+		MBBan mbBan = fetchByGroupId_First(groupId, orderByComparator);
+
+		if (mbBan != null) {
+			return mbBan;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchBanException(msg.toString());
+	}
+
+	/**
+	 * Returns the first message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByGroupId_First(long groupId) throws SystemException {
+		return fetchByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first message boards ban in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<MBBan> list = findByGroupId(groupId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching message boards ban
+	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan findByGroupId_Last(long groupId)
+		throws NoSuchBanException, SystemException {
+		return findByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last message boards ban in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards ban
+	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan findByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchBanException, SystemException {
+		MBBan mbBan = fetchByGroupId_Last(groupId, orderByComparator);
+
+		if (mbBan != null) {
+			return mbBan;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchBanException(msg.toString());
+	}
+
+	/**
+	 * Returns the last message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByGroupId_Last(long groupId) throws SystemException {
+		return fetchByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last message boards ban in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByGroupId(groupId);
+
+		List<MBBan> list = findByGroupId(groupId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the message boards bans where groupId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByGroupId(long groupId) throws SystemException {
-		for (MBBan mbBan : findByGroupId(groupId)) {
+		for (MBBan mbBan : findByGroupId(groupId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(mbBan);
 		}
 	}
@@ -490,10 +542,12 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByGroupId(long groupId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
+
 		Object[] finderArgs = new Object[] { groupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -516,18 +570,15 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -542,15 +593,16 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
 		new FinderPath(MBBanModelImpl.ENTITY_CACHE_ENABLED,
 			MBBanModelImpl.FINDER_CACHE_ENABLED, MBBanImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
 			new String[] { Long.class.getName() },
-			MBBanModelImpl.USERID_COLUMN_BITMASK);
+			MBBanModelImpl.USERID_COLUMN_BITMASK |
+			MBBanModelImpl.BANID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(MBBanModelImpl.ENTITY_CACHE_ENABLED,
 			MBBanModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
@@ -583,204 +635,6 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public List<MBBan> findByUserId(long userId, int start, int end)
 		throws SystemException {
 		return findByUserId(userId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the message boards bans where userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId the user ID
-	 * @param start the lower bound of the range of message boards bans
-	 * @param end the upper bound of the range of message boards bans (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching message boards bans
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MBBan> findByUserId(long userId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId, start, end, orderByComparator };
-		}
-
-		List<MBBan> list = (List<MBBan>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (MBBan mbBan : list) {
-				if ((userId != mbBan.getUserId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_MBBAN_WHERE);
-
-			query.append(_FINDER_COLUMN_USERID_USERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				list = (List<MBBan>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first message boards ban in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching message boards ban
-	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBBan findByUserId_First(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchBanException, SystemException {
-		MBBan mbBan = fetchByUserId_First(userId, orderByComparator);
-
-		if (mbBan != null) {
-			return mbBan;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchBanException(msg.toString());
-	}
-
-	/**
-	 * Returns the first message boards ban in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBBan fetchByUserId_First(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<MBBan> list = findByUserId(userId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last message boards ban in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching message boards ban
-	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBBan findByUserId_Last(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchBanException, SystemException {
-		MBBan mbBan = fetchByUserId_Last(userId, orderByComparator);
-
-		if (mbBan != null) {
-			return mbBan;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchBanException(msg.toString());
-	}
-
-	/**
-	 * Returns the last message boards ban in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBBan fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUserId(userId);
-
-		List<MBBan> list = findByUserId(userId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -894,6 +748,9 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 				}
 			}
 		}
+		else {
+			query.append(MBBanModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -925,13 +782,260 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	}
 
 	/**
+	 * Returns an ordered range of all the message boards bans where userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of message boards bans
+	 * @param end the upper bound of the range of message boards bans (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching message boards bans
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MBBan> findByUserId(long userId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
+			finderArgs = new Object[] { userId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
+			finderArgs = new Object[] { userId, start, end, orderByComparator };
+		}
+
+		List<MBBan> list = (List<MBBan>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBBan mbBan : list) {
+				if ((userId != mbBan.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_MBBAN_WHERE);
+
+			query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MBBanModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				list = (List<MBBan>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the first matching message boards ban
+	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan findByUserId_First(long userId)
+		throws NoSuchBanException, SystemException {
+		return findByUserId_First(userId, null);
+	}
+
+	/**
+	 * Returns the first message boards ban in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards ban
+	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan findByUserId_First(long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchBanException, SystemException {
+		MBBan mbBan = fetchByUserId_First(userId, orderByComparator);
+
+		if (mbBan != null) {
+			return mbBan;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchBanException(msg.toString());
+	}
+
+	/**
+	 * Returns the first message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByUserId_First(long userId) throws SystemException {
+		return fetchByUserId_First(userId, null);
+	}
+
+	/**
+	 * Returns the first message boards ban in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByUserId_First(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<MBBan> list = findByUserId(userId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the last matching message boards ban
+	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan findByUserId_Last(long userId)
+		throws NoSuchBanException, SystemException {
+		return findByUserId_Last(userId, null);
+	}
+
+	/**
+	 * Returns the last message boards ban in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards ban
+	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan findByUserId_Last(long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchBanException, SystemException {
+		MBBan mbBan = fetchByUserId_Last(userId, orderByComparator);
+
+		if (mbBan != null) {
+			return mbBan;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchBanException(msg.toString());
+	}
+
+	/**
+	 * Returns the last message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByUserId_Last(long userId) throws SystemException {
+		return fetchByUserId_Last(userId, null);
+	}
+
+	/**
+	 * Returns the last message boards ban in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByUserId_Last(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUserId(userId);
+
+		List<MBBan> list = findByUserId(userId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the message boards bans where userId = &#63; from the database.
 	 *
 	 * @param userId the user ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUserId(long userId) throws SystemException {
-		for (MBBan mbBan : findByUserId(userId)) {
+		for (MBBan mbBan : findByUserId(userId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(mbBan);
 		}
 	}
@@ -944,10 +1048,12 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByUserId(long userId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_USERID;
+
 		Object[] finderArgs = new Object[] { userId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -970,18 +1076,15 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 				qPos.add(userId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -997,15 +1100,16 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BANUSERID =
 		new FinderPath(MBBanModelImpl.ENTITY_CACHE_ENABLED,
 			MBBanModelImpl.FINDER_CACHE_ENABLED, MBBanImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByBanUserId",
 			new String[] { Long.class.getName() },
-			MBBanModelImpl.BANUSERID_COLUMN_BITMASK);
+			MBBanModelImpl.BANUSERID_COLUMN_BITMASK |
+			MBBanModelImpl.BANID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_BANUSERID = new FinderPath(MBBanModelImpl.ENTITY_CACHE_ENABLED,
 			MBBanModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByBanUserId",
@@ -1040,204 +1144,6 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public List<MBBan> findByBanUserId(long banUserId, int start, int end)
 		throws SystemException {
 		return findByBanUserId(banUserId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the message boards bans where banUserId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param banUserId the ban user ID
-	 * @param start the lower bound of the range of message boards bans
-	 * @param end the upper bound of the range of message boards bans (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching message boards bans
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MBBan> findByBanUserId(long banUserId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BANUSERID;
-			finderArgs = new Object[] { banUserId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_BANUSERID;
-			finderArgs = new Object[] { banUserId, start, end, orderByComparator };
-		}
-
-		List<MBBan> list = (List<MBBan>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (MBBan mbBan : list) {
-				if ((banUserId != mbBan.getBanUserId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_MBBAN_WHERE);
-
-			query.append(_FINDER_COLUMN_BANUSERID_BANUSERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(banUserId);
-
-				list = (List<MBBan>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first message boards ban in the ordered set where banUserId = &#63;.
-	 *
-	 * @param banUserId the ban user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching message boards ban
-	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBBan findByBanUserId_First(long banUserId,
-		OrderByComparator orderByComparator)
-		throws NoSuchBanException, SystemException {
-		MBBan mbBan = fetchByBanUserId_First(banUserId, orderByComparator);
-
-		if (mbBan != null) {
-			return mbBan;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("banUserId=");
-		msg.append(banUserId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchBanException(msg.toString());
-	}
-
-	/**
-	 * Returns the first message boards ban in the ordered set where banUserId = &#63;.
-	 *
-	 * @param banUserId the ban user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBBan fetchByBanUserId_First(long banUserId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<MBBan> list = findByBanUserId(banUserId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last message boards ban in the ordered set where banUserId = &#63;.
-	 *
-	 * @param banUserId the ban user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching message boards ban
-	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBBan findByBanUserId_Last(long banUserId,
-		OrderByComparator orderByComparator)
-		throws NoSuchBanException, SystemException {
-		MBBan mbBan = fetchByBanUserId_Last(banUserId, orderByComparator);
-
-		if (mbBan != null) {
-			return mbBan;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("banUserId=");
-		msg.append(banUserId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchBanException(msg.toString());
-	}
-
-	/**
-	 * Returns the last message boards ban in the ordered set where banUserId = &#63;.
-	 *
-	 * @param banUserId the ban user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBBan fetchByBanUserId_Last(long banUserId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByBanUserId(banUserId);
-
-		List<MBBan> list = findByBanUserId(banUserId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1351,6 +1257,9 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 				}
 			}
 		}
+		else {
+			query.append(MBBanModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1382,13 +1291,262 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	}
 
 	/**
+	 * Returns an ordered range of all the message boards bans where banUserId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param banUserId the ban user ID
+	 * @param start the lower bound of the range of message boards bans
+	 * @param end the upper bound of the range of message boards bans (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching message boards bans
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MBBan> findByBanUserId(long banUserId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BANUSERID;
+			finderArgs = new Object[] { banUserId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_BANUSERID;
+			finderArgs = new Object[] { banUserId, start, end, orderByComparator };
+		}
+
+		List<MBBan> list = (List<MBBan>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBBan mbBan : list) {
+				if ((banUserId != mbBan.getBanUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_MBBAN_WHERE);
+
+			query.append(_FINDER_COLUMN_BANUSERID_BANUSERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MBBanModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(banUserId);
+
+				list = (List<MBBan>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where banUserId = &#63;.
+	 *
+	 * @param banUserId the ban user ID
+	 * @return the first matching message boards ban
+	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan findByBanUserId_First(long banUserId)
+		throws NoSuchBanException, SystemException {
+		return findByBanUserId_First(banUserId, null);
+	}
+
+	/**
+	 * Returns the first message boards ban in the ordered set where banUserId = &#63;.
+	 *
+	 * @param banUserId the ban user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards ban
+	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan findByBanUserId_First(long banUserId,
+		OrderByComparator orderByComparator)
+		throws NoSuchBanException, SystemException {
+		MBBan mbBan = fetchByBanUserId_First(banUserId, orderByComparator);
+
+		if (mbBan != null) {
+			return mbBan;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("banUserId=");
+		msg.append(banUserId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchBanException(msg.toString());
+	}
+
+	/**
+	 * Returns the first message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where banUserId = &#63;.
+	 *
+	 * @param banUserId the ban user ID
+	 * @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByBanUserId_First(long banUserId)
+		throws SystemException {
+		return fetchByBanUserId_First(banUserId, null);
+	}
+
+	/**
+	 * Returns the first message boards ban in the ordered set where banUserId = &#63;.
+	 *
+	 * @param banUserId the ban user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByBanUserId_First(long banUserId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<MBBan> list = findByBanUserId(banUserId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where banUserId = &#63;.
+	 *
+	 * @param banUserId the ban user ID
+	 * @return the last matching message boards ban
+	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan findByBanUserId_Last(long banUserId)
+		throws NoSuchBanException, SystemException {
+		return findByBanUserId_Last(banUserId, null);
+	}
+
+	/**
+	 * Returns the last message boards ban in the ordered set where banUserId = &#63;.
+	 *
+	 * @param banUserId the ban user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards ban
+	 * @throws com.liferay.portlet.messageboards.NoSuchBanException if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan findByBanUserId_Last(long banUserId,
+		OrderByComparator orderByComparator)
+		throws NoSuchBanException, SystemException {
+		MBBan mbBan = fetchByBanUserId_Last(banUserId, orderByComparator);
+
+		if (mbBan != null) {
+			return mbBan;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("banUserId=");
+		msg.append(banUserId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchBanException(msg.toString());
+	}
+
+	/**
+	 * Returns the last message boards ban in the default ordered set defined by {@link MBBanModelImpl#ORDER_BY_JPQL} where banUserId = &#63;.
+	 *
+	 * @param banUserId the ban user ID
+	 * @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByBanUserId_Last(long banUserId)
+		throws SystemException {
+		return fetchByBanUserId_Last(banUserId, null);
+	}
+
+	/**
+	 * Returns the last message boards ban in the ordered set where banUserId = &#63;.
+	 *
+	 * @param banUserId the ban user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByBanUserId_Last(long banUserId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByBanUserId(banUserId);
+
+		List<MBBan> list = findByBanUserId(banUserId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the message boards bans where banUserId = &#63; from the database.
 	 *
 	 * @param banUserId the ban user ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByBanUserId(long banUserId) throws SystemException {
-		for (MBBan mbBan : findByBanUserId(banUserId)) {
+		for (MBBan mbBan : findByBanUserId(banUserId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(mbBan);
 		}
 	}
@@ -1401,10 +1559,12 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByBanUserId(long banUserId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_BANUSERID;
+
 		Object[] finderArgs = new Object[] { banUserId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_BANUSERID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -1427,18 +1587,15 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 				qPos.add(banUserId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_BANUSERID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1537,7 +1694,7 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_MBBAN_WHERE);
 
@@ -1562,16 +1719,14 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 
 				List<MBBan> list = q.list();
 
-				result = list;
-
-				MBBan mbBan = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_B,
 						finderArgs, list);
 				}
 				else {
-					mbBan = list.get(0);
+					MBBan mbBan = list.get(0);
+
+					result = mbBan;
 
 					cacheResult(mbBan);
 
@@ -1581,28 +1736,23 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 							finderArgs, mbBan);
 					}
 				}
-
-				return mbBan;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_B,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_B,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (MBBan)result;
-			}
+			return (MBBan)result;
 		}
 	}
 
@@ -1631,10 +1781,12 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	 */
 	public int countByG_B(long groupId, long banUserId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_B;
+
 		Object[] finderArgs = new Object[] { groupId, banUserId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_B,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1661,18 +1813,15 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 				qPos.add(banUserId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_B, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -2091,27 +2240,26 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 		if (mbBan == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mbBan = (MBBan)session.get(MBBanImpl.class, Long.valueOf(banId));
+
+				if (mbBan != null) {
+					cacheResult(mbBan);
+				}
+				else {
+					EntityCacheUtil.putResult(MBBanModelImpl.ENTITY_CACHE_ENABLED,
+						MBBanImpl.class, banId, _nullMBBan);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(MBBanModelImpl.ENTITY_CACHE_ENABLED,
+					MBBanImpl.class, banId);
 
 				throw processException(e);
 			}
 			finally {
-				if (mbBan != null) {
-					cacheResult(mbBan);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MBBanModelImpl.ENTITY_CACHE_ENABLED,
-						MBBanImpl.class, banId, _nullMBBan);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2161,7 +2309,7 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public List<MBBan> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -2192,7 +2340,7 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_MBBAN;
+				sql = _SQL_SELECT_MBBAN.concat(MBBanModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
@@ -2202,30 +2350,18 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<MBBan>)QueryUtil.list(q, getDialect(), start,
-							end, false);
+				list = (List<MBBan>)QueryUtil.list(q, getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<MBBan>)QueryUtil.list(q, getDialect(), start,
-							end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2263,18 +2399,17 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 				Query q = session.createQuery(_SQL_COUNT_MBBAN);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -2310,6 +2445,7 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public void destroy() {
 		EntityCacheUtil.removeCache(MBBanImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

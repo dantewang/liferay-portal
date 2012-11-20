@@ -54,7 +54,6 @@ import com.liferay.portlet.journal.model.impl.JournalTemplateModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -99,15 +98,16 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
 			JournalTemplateImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
 			new String[] { String.class.getName() },
-			JournalTemplateModelImpl.UUID_COLUMN_BITMASK);
+			JournalTemplateModelImpl.UUID_COLUMN_BITMASK |
+			JournalTemplateModelImpl.TEMPLATEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
@@ -141,223 +141,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public List<JournalTemplate> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the journal templates where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of journal templates
-	 * @param end the upper bound of the range of journal templates (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalTemplate> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (JournalTemplate journalTemplate : list) {
-				if (!Validator.equals(uuid, journalTemplate.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_JOURNALTEMPLATE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<JournalTemplate>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first journal template in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal template
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = fetchByUuid_First(uuid,
-				orderByComparator);
-
-		if (journalTemplate != null) {
-			return journalTemplate;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTemplateException(msg.toString());
-	}
-
-	/**
-	 * Returns the first journal template in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<JournalTemplate> list = findByUuid(uuid, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last journal template in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal template
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = fetchByUuid_Last(uuid,
-				orderByComparator);
-
-		if (journalTemplate != null) {
-			return journalTemplate;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTemplateException(msg.toString());
-	}
-
-	/**
-	 * Returns the last journal template in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<JournalTemplate> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -482,7 +265,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				}
 			}
 		}
-
 		else {
 			query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
 		}
@@ -519,13 +301,277 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	}
 
 	/**
+	 * Returns an ordered range of all the journal templates where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of journal templates
+	 * @param end the upper bound of the range of journal templates (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalTemplate> findByUuid(String uuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalTemplate journalTemplate : list) {
+				if (!Validator.equals(uuid, journalTemplate.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_JOURNALTEMPLATE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<JournalTemplate>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByUuid_First(String uuid)
+		throws NoSuchTemplateException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first journal template in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchByUuid_First(uuid,
+				orderByComparator);
+
+		if (journalTemplate != null) {
+			return journalTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByUuid_First(String uuid)
+		throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first journal template in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<JournalTemplate> list = findByUuid(uuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByUuid_Last(String uuid)
+		throws NoSuchTemplateException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last journal template in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByUuid_Last(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchByUuid_Last(uuid,
+				orderByComparator);
+
+		if (journalTemplate != null) {
+			return journalTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByUuid_Last(String uuid)
+		throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last journal template in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<JournalTemplate> list = findByUuid(uuid, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the journal templates where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (JournalTemplate journalTemplate : findByUuid(uuid)) {
+		for (JournalTemplate journalTemplate : findByUuid(uuid,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(journalTemplate);
 		}
 	}
@@ -538,10 +584,12 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByUuid(String uuid) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+
 		Object[] finderArgs = new Object[] { uuid };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -576,18 +624,15 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -707,8 +752,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 
 			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
 
-			query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -728,16 +771,14 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 
 				List<JournalTemplate> list = q.list();
 
-				result = list;
-
-				JournalTemplate journalTemplate = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
 						finderArgs, list);
 				}
 				else {
-					journalTemplate = list.get(0);
+					JournalTemplate journalTemplate = list.get(0);
+
+					result = journalTemplate;
 
 					cacheResult(journalTemplate);
 
@@ -748,28 +789,23 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 							finderArgs, journalTemplate);
 					}
 				}
-
-				return journalTemplate;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (JournalTemplate)result;
-			}
+			return (JournalTemplate)result;
 		}
 	}
 
@@ -798,10 +834,12 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 */
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
+
 		Object[] finderArgs = new Object[] { uuid, groupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -840,18 +878,15 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -870,8 +905,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
 		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
@@ -880,7 +915,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
 			new String[] { String.class.getName(), Long.class.getName() },
 			JournalTemplateModelImpl.UUID_COLUMN_BITMASK |
-			JournalTemplateModelImpl.COMPANYID_COLUMN_BITMASK);
+			JournalTemplateModelImpl.COMPANYID_COLUMN_BITMASK |
+			JournalTemplateModelImpl.TEMPLATEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
@@ -917,245 +953,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public List<JournalTemplate> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the journal templates where uuid = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of journal templates
-	 * @param end the upper bound of the range of journal templates (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalTemplate> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (JournalTemplate journalTemplate : list) {
-				if (!Validator.equals(uuid, journalTemplate.getUuid()) ||
-						(companyId != journalTemplate.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_JOURNALTEMPLATE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				list = (List<JournalTemplate>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first journal template in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal template
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = fetchByUuid_C_First(uuid, companyId,
-				orderByComparator);
-
-		if (journalTemplate != null) {
-			return journalTemplate;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTemplateException(msg.toString());
-	}
-
-	/**
-	 * Returns the first journal template in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<JournalTemplate> list = findByUuid_C(uuid, companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last journal template in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal template
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = fetchByUuid_C_Last(uuid, companyId,
-				orderByComparator);
-
-		if (journalTemplate != null) {
-			return journalTemplate;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTemplateException(msg.toString());
-	}
-
-	/**
-	 * Returns the last journal template in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid_C(uuid, companyId);
-
-		List<JournalTemplate> list = findByUuid_C(uuid, companyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1283,7 +1080,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				}
 			}
 		}
-
 		else {
 			query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
 		}
@@ -1322,6 +1118,295 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	}
 
 	/**
+	 * Returns an ordered range of all the journal templates where uuid = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of journal templates
+	 * @param end the upper bound of the range of journal templates (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalTemplate> findByUuid_C(String uuid, long companyId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] { uuid, companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] {
+					uuid, companyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalTemplate journalTemplate : list) {
+				if (!Validator.equals(uuid, journalTemplate.getUuid()) ||
+						(companyId != journalTemplate.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_JOURNALTEMPLATE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				list = (List<JournalTemplate>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByUuid_C_First(String uuid, long companyId)
+		throws NoSuchTemplateException, SystemException {
+		return findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first journal template in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchByUuid_C_First(uuid, companyId,
+				orderByComparator);
+
+		if (journalTemplate != null) {
+			return journalTemplate;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByUuid_C_First(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first journal template in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<JournalTemplate> list = findByUuid_C(uuid, companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByUuid_C_Last(String uuid, long companyId)
+		throws NoSuchTemplateException, SystemException {
+		return findByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last journal template in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchByUuid_C_Last(uuid, companyId,
+				orderByComparator);
+
+		if (journalTemplate != null) {
+			return journalTemplate;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByUuid_C_Last(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last journal template in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid_C(uuid, companyId);
+
+		List<JournalTemplate> list = findByUuid_C(uuid, companyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the journal templates where uuid = &#63; and companyId = &#63; from the database.
 	 *
 	 * @param uuid the uuid
@@ -1330,7 +1415,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 */
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
-		for (JournalTemplate journalTemplate : findByUuid_C(uuid, companyId)) {
+		for (JournalTemplate journalTemplate : findByUuid_C(uuid, companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(journalTemplate);
 		}
 	}
@@ -1345,10 +1431,12 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 */
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
+
 		Object[] finderArgs = new Object[] { uuid, companyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1387,18 +1475,15 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1417,8 +1502,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
 		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
@@ -1426,7 +1511,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			JournalTemplateImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
 			new String[] { Long.class.getName() },
-			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK);
+			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalTemplateModelImpl.TEMPLATEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
@@ -1460,212 +1546,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public List<JournalTemplate> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the journal templates where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of journal templates
-	 * @param end the upper bound of the range of journal templates (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalTemplate> findByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (JournalTemplate journalTemplate : list) {
-				if ((groupId != journalTemplate.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_JOURNALTEMPLATE_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				list = (List<JournalTemplate>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first journal template in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal template
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = fetchByGroupId_First(groupId,
-				orderByComparator);
-
-		if (journalTemplate != null) {
-			return journalTemplate;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTemplateException(msg.toString());
-	}
-
-	/**
-	 * Returns the first journal template in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<JournalTemplate> list = findByGroupId(groupId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last journal template in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal template
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = fetchByGroupId_Last(groupId,
-				orderByComparator);
-
-		if (journalTemplate != null) {
-			return journalTemplate;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTemplateException(msg.toString());
-	}
-
-	/**
-	 * Returns the last journal template in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
-
-		List<JournalTemplate> list = findByGroupId(groupId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1780,7 +1660,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				}
 			}
 		}
-
 		else {
 			query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
 		}
@@ -1898,7 +1777,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
@@ -2078,7 +1956,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
@@ -2127,13 +2004,266 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	}
 
 	/**
+	 * Returns an ordered range of all the journal templates where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of journal templates
+	 * @param end the upper bound of the range of journal templates (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalTemplate> findByGroupId(long groupId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
+
+		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalTemplate journalTemplate : list) {
+				if ((groupId != journalTemplate.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_JOURNALTEMPLATE_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				list = (List<JournalTemplate>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByGroupId_First(long groupId)
+		throws NoSuchTemplateException, SystemException {
+		return findByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first journal template in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByGroupId_First(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchByGroupId_First(groupId,
+				orderByComparator);
+
+		if (journalTemplate != null) {
+			return journalTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByGroupId_First(long groupId)
+		throws SystemException {
+		return fetchByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first journal template in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<JournalTemplate> list = findByGroupId(groupId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByGroupId_Last(long groupId)
+		throws NoSuchTemplateException, SystemException {
+		return findByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last journal template in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchByGroupId_Last(groupId,
+				orderByComparator);
+
+		if (journalTemplate != null) {
+			return journalTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByGroupId_Last(long groupId)
+		throws SystemException {
+		return fetchByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last journal template in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByGroupId(groupId);
+
+		List<JournalTemplate> list = findByGroupId(groupId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the journal templates where groupId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByGroupId(long groupId) throws SystemException {
-		for (JournalTemplate journalTemplate : findByGroupId(groupId)) {
+		for (JournalTemplate journalTemplate : findByGroupId(groupId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(journalTemplate);
 		}
 	}
@@ -2146,10 +2276,12 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByGroupId(long groupId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
+
 		Object[] finderArgs = new Object[] { groupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -2172,18 +2304,15 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2248,8 +2377,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TEMPLATEID =
 		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
@@ -2292,225 +2421,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public List<JournalTemplate> findByTemplateId(String templateId, int start,
 		int end) throws SystemException {
 		return findByTemplateId(templateId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the journal templates where templateId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param templateId the template ID
-	 * @param start the lower bound of the range of journal templates
-	 * @param end the upper bound of the range of journal templates (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalTemplate> findByTemplateId(String templateId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TEMPLATEID;
-			finderArgs = new Object[] { templateId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TEMPLATEID;
-			finderArgs = new Object[] { templateId, start, end, orderByComparator };
-		}
-
-		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (JournalTemplate journalTemplate : list) {
-				if (!Validator.equals(templateId,
-							journalTemplate.getTemplateId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_JOURNALTEMPLATE_WHERE);
-
-			if (templateId == null) {
-				query.append(_FINDER_COLUMN_TEMPLATEID_TEMPLATEID_1);
-			}
-			else {
-				if (templateId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_TEMPLATEID_TEMPLATEID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_TEMPLATEID_TEMPLATEID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (templateId != null) {
-					qPos.add(templateId);
-				}
-
-				list = (List<JournalTemplate>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first journal template in the ordered set where templateId = &#63;.
-	 *
-	 * @param templateId the template ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal template
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate findByTemplateId_First(String templateId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = fetchByTemplateId_First(templateId,
-				orderByComparator);
-
-		if (journalTemplate != null) {
-			return journalTemplate;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("templateId=");
-		msg.append(templateId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTemplateException(msg.toString());
-	}
-
-	/**
-	 * Returns the first journal template in the ordered set where templateId = &#63;.
-	 *
-	 * @param templateId the template ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchByTemplateId_First(String templateId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<JournalTemplate> list = findByTemplateId(templateId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last journal template in the ordered set where templateId = &#63;.
-	 *
-	 * @param templateId the template ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal template
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate findByTemplateId_Last(String templateId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = fetchByTemplateId_Last(templateId,
-				orderByComparator);
-
-		if (journalTemplate != null) {
-			return journalTemplate;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("templateId=");
-		msg.append(templateId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTemplateException(msg.toString());
-	}
-
-	/**
-	 * Returns the last journal template in the ordered set where templateId = &#63;.
-	 *
-	 * @param templateId the template ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchByTemplateId_Last(String templateId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByTemplateId(templateId);
-
-		List<JournalTemplate> list = findByTemplateId(templateId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2635,7 +2545,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				}
 			}
 		}
-
 		else {
 			query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
 		}
@@ -2672,13 +2581,279 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	}
 
 	/**
+	 * Returns an ordered range of all the journal templates where templateId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param templateId the template ID
+	 * @param start the lower bound of the range of journal templates
+	 * @param end the upper bound of the range of journal templates (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalTemplate> findByTemplateId(String templateId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TEMPLATEID;
+			finderArgs = new Object[] { templateId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TEMPLATEID;
+			finderArgs = new Object[] { templateId, start, end, orderByComparator };
+		}
+
+		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalTemplate journalTemplate : list) {
+				if (!Validator.equals(templateId,
+							journalTemplate.getTemplateId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_JOURNALTEMPLATE_WHERE);
+
+			if (templateId == null) {
+				query.append(_FINDER_COLUMN_TEMPLATEID_TEMPLATEID_1);
+			}
+			else {
+				if (templateId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_TEMPLATEID_TEMPLATEID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_TEMPLATEID_TEMPLATEID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (templateId != null) {
+					qPos.add(templateId);
+				}
+
+				list = (List<JournalTemplate>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where templateId = &#63;.
+	 *
+	 * @param templateId the template ID
+	 * @return the first matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByTemplateId_First(String templateId)
+		throws NoSuchTemplateException, SystemException {
+		return findByTemplateId_First(templateId, null);
+	}
+
+	/**
+	 * Returns the first journal template in the ordered set where templateId = &#63;.
+	 *
+	 * @param templateId the template ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByTemplateId_First(String templateId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchByTemplateId_First(templateId,
+				orderByComparator);
+
+		if (journalTemplate != null) {
+			return journalTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("templateId=");
+		msg.append(templateId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where templateId = &#63;.
+	 *
+	 * @param templateId the template ID
+	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByTemplateId_First(String templateId)
+		throws SystemException {
+		return fetchByTemplateId_First(templateId, null);
+	}
+
+	/**
+	 * Returns the first journal template in the ordered set where templateId = &#63;.
+	 *
+	 * @param templateId the template ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByTemplateId_First(String templateId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<JournalTemplate> list = findByTemplateId(templateId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where templateId = &#63;.
+	 *
+	 * @param templateId the template ID
+	 * @return the last matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByTemplateId_Last(String templateId)
+		throws NoSuchTemplateException, SystemException {
+		return findByTemplateId_Last(templateId, null);
+	}
+
+	/**
+	 * Returns the last journal template in the ordered set where templateId = &#63;.
+	 *
+	 * @param templateId the template ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByTemplateId_Last(String templateId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchByTemplateId_Last(templateId,
+				orderByComparator);
+
+		if (journalTemplate != null) {
+			return journalTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("templateId=");
+		msg.append(templateId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where templateId = &#63;.
+	 *
+	 * @param templateId the template ID
+	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByTemplateId_Last(String templateId)
+		throws SystemException {
+		return fetchByTemplateId_Last(templateId, null);
+	}
+
+	/**
+	 * Returns the last journal template in the ordered set where templateId = &#63;.
+	 *
+	 * @param templateId the template ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByTemplateId_Last(String templateId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByTemplateId(templateId);
+
+		List<JournalTemplate> list = findByTemplateId(templateId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the journal templates where templateId = &#63; from the database.
 	 *
 	 * @param templateId the template ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByTemplateId(String templateId) throws SystemException {
-		for (JournalTemplate journalTemplate : findByTemplateId(templateId)) {
+		for (JournalTemplate journalTemplate : findByTemplateId(templateId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(journalTemplate);
 		}
 	}
@@ -2691,10 +2866,12 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByTemplateId(String templateId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_TEMPLATEID;
+
 		Object[] finderArgs = new Object[] { templateId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_TEMPLATEID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -2729,18 +2906,15 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_TEMPLATEID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2759,8 +2933,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID =
 		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
@@ -2768,7 +2942,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			JournalTemplateImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByStructureId",
 			new String[] { String.class.getName() },
-			JournalTemplateModelImpl.STRUCTUREID_COLUMN_BITMASK);
+			JournalTemplateModelImpl.STRUCTUREID_COLUMN_BITMASK |
+			JournalTemplateModelImpl.TEMPLATEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByStructureId",
@@ -2803,226 +2978,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public List<JournalTemplate> findByStructureId(String structureId,
 		int start, int end) throws SystemException {
 		return findByStructureId(structureId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the journal templates where structureId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param structureId the structure ID
-	 * @param start the lower bound of the range of journal templates
-	 * @param end the upper bound of the range of journal templates (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalTemplate> findByStructureId(String structureId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID;
-			finderArgs = new Object[] { structureId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID;
-			finderArgs = new Object[] { structureId, start, end, orderByComparator };
-		}
-
-		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (JournalTemplate journalTemplate : list) {
-				if (!Validator.equals(structureId,
-							journalTemplate.getStructureId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_JOURNALTEMPLATE_WHERE);
-
-			if (structureId == null) {
-				query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_1);
-			}
-			else {
-				if (structureId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (structureId != null) {
-					qPos.add(structureId);
-				}
-
-				list = (List<JournalTemplate>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first journal template in the ordered set where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal template
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate findByStructureId_First(String structureId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = fetchByStructureId_First(structureId,
-				orderByComparator);
-
-		if (journalTemplate != null) {
-			return journalTemplate;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("structureId=");
-		msg.append(structureId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTemplateException(msg.toString());
-	}
-
-	/**
-	 * Returns the first journal template in the ordered set where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchByStructureId_First(String structureId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<JournalTemplate> list = findByStructureId(structureId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last journal template in the ordered set where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal template
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate findByStructureId_Last(String structureId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = fetchByStructureId_Last(structureId,
-				orderByComparator);
-
-		if (journalTemplate != null) {
-			return journalTemplate;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("structureId=");
-		msg.append(structureId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTemplateException(msg.toString());
-	}
-
-	/**
-	 * Returns the last journal template in the ordered set where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchByStructureId_Last(String structureId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByStructureId(structureId);
-
-		List<JournalTemplate> list = findByStructureId(structureId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3147,7 +3102,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				}
 			}
 		}
-
 		else {
 			query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
 		}
@@ -3184,6 +3138,272 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	}
 
 	/**
+	 * Returns an ordered range of all the journal templates where structureId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param structureId the structure ID
+	 * @param start the lower bound of the range of journal templates
+	 * @param end the upper bound of the range of journal templates (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalTemplate> findByStructureId(String structureId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID;
+			finderArgs = new Object[] { structureId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID;
+			finderArgs = new Object[] { structureId, start, end, orderByComparator };
+		}
+
+		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalTemplate journalTemplate : list) {
+				if (!Validator.equals(structureId,
+							journalTemplate.getStructureId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_JOURNALTEMPLATE_WHERE);
+
+			if (structureId == null) {
+				query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_1);
+			}
+			else {
+				if (structureId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (structureId != null) {
+					qPos.add(structureId);
+				}
+
+				list = (List<JournalTemplate>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the first matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByStructureId_First(String structureId)
+		throws NoSuchTemplateException, SystemException {
+		return findByStructureId_First(structureId, null);
+	}
+
+	/**
+	 * Returns the first journal template in the ordered set where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByStructureId_First(String structureId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchByStructureId_First(structureId,
+				orderByComparator);
+
+		if (journalTemplate != null) {
+			return journalTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("structureId=");
+		msg.append(structureId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByStructureId_First(String structureId)
+		throws SystemException {
+		return fetchByStructureId_First(structureId, null);
+	}
+
+	/**
+	 * Returns the first journal template in the ordered set where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByStructureId_First(String structureId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<JournalTemplate> list = findByStructureId(structureId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the last matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByStructureId_Last(String structureId)
+		throws NoSuchTemplateException, SystemException {
+		return findByStructureId_Last(structureId, null);
+	}
+
+	/**
+	 * Returns the last journal template in the ordered set where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByStructureId_Last(String structureId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchByStructureId_Last(structureId,
+				orderByComparator);
+
+		if (journalTemplate != null) {
+			return journalTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("structureId=");
+		msg.append(structureId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByStructureId_Last(String structureId)
+		throws SystemException {
+		return fetchByStructureId_Last(structureId, null);
+	}
+
+	/**
+	 * Returns the last journal template in the ordered set where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByStructureId_Last(String structureId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByStructureId(structureId);
+
+		List<JournalTemplate> list = findByStructureId(structureId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the journal templates where structureId = &#63; from the database.
 	 *
 	 * @param structureId the structure ID
@@ -3191,7 +3411,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 */
 	public void removeByStructureId(String structureId)
 		throws SystemException {
-		for (JournalTemplate journalTemplate : findByStructureId(structureId)) {
+		for (JournalTemplate journalTemplate : findByStructureId(structureId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(journalTemplate);
 		}
 	}
@@ -3204,10 +3425,12 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByStructureId(String structureId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_STRUCTUREID;
+
 		Object[] finderArgs = new Object[] { structureId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -3242,18 +3465,15 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -3264,95 +3484,99 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_1 = "journalTemplate.structureId IS NULL";
 	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2 = "journalTemplate.structureId = ?";
 	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_3 = "(journalTemplate.structureId IS NULL OR journalTemplate.structureId = ?)";
-	public static final FinderPath FINDER_PATH_FETCH_BY_SMALLIMAGEID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_SMALLIMAGEID =
+		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchBySmallImageId", new String[] { Long.class.getName() },
-			JournalTemplateModelImpl.SMALLIMAGEID_COLUMN_BITMASK);
+			JournalTemplateImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findBySmallImageId",
+			new String[] {
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SMALLIMAGEID =
+		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findBySmallImageId",
+			new String[] { Long.class.getName() },
+			JournalTemplateModelImpl.SMALLIMAGEID_COLUMN_BITMASK |
+			JournalTemplateModelImpl.TEMPLATEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_SMALLIMAGEID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countBySmallImageId",
 			new String[] { Long.class.getName() });
 
 	/**
-	 * Returns the journal template where smallImageId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchTemplateException} if it could not be found.
+	 * Returns an ordered range of all the journal templates where smallImageId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param smallImageId the small image ID
-	 * @return the matching journal template
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @param start the lower bound of the range of journal templates
+	 * @param end the upper bound of the range of journal templates (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal templates
 	 * @throws SystemException if a system exception occurred
 	 */
-	public JournalTemplate findBySmallImageId(long smallImageId)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = fetchBySmallImageId(smallImageId);
-
-		if (journalTemplate == null) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("smallImageId=");
-			msg.append(smallImageId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-
-		return journalTemplate;
-	}
-
-	/**
-	 * Returns the journal template where smallImageId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param smallImageId the small image ID
-	 * @return the matching journal template, or <code>null</code> if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchBySmallImageId(long smallImageId)
+	protected List<JournalTemplate> findBySmallImageId(long smallImageId,
+		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		return fetchBySmallImageId(smallImageId, true);
-	}
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-	/**
-	 * Returns the journal template where smallImageId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param smallImageId the small image ID
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching journal template, or <code>null</code> if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchBySmallImageId(long smallImageId,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { smallImageId };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
-					finderArgs, this);
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SMALLIMAGEID;
+			finderArgs = new Object[] { smallImageId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_SMALLIMAGEID;
+			finderArgs = new Object[] {
+					smallImageId,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		if (result instanceof JournalTemplate) {
-			JournalTemplate journalTemplate = (JournalTemplate)result;
+		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-			if ((smallImageId != journalTemplate.getSmallImageId())) {
-				result = null;
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalTemplate journalTemplate : list) {
+				if ((smallImageId != journalTemplate.getSmallImageId())) {
+					list = null;
+
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
 
 			query.append(_SQL_SELECT_JOURNALTEMPLATE_WHERE);
 
 			query.append(_FINDER_COLUMN_SMALLIMAGEID_SMALLIMAGEID_2);
 
-			query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = query.toString();
 
@@ -3367,63 +3591,192 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 
 				qPos.add(smallImageId);
 
-				List<JournalTemplate> list = q.list();
+				list = (List<JournalTemplate>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-				result = list;
+				cacheResult(list);
 
-				JournalTemplate journalTemplate = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
-						finderArgs, list);
-				}
-				else {
-					journalTemplate = list.get(0);
-
-					cacheResult(journalTemplate);
-
-					if ((journalTemplate.getSmallImageId() != smallImageId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
-							finderArgs, journalTemplate);
-					}
-				}
-
-				return journalTemplate;
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (JournalTemplate)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the journal template where smallImageId = &#63; from the database.
+	 * Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
 	 *
 	 * @param smallImageId the small image ID
-	 * @return the journal template that was removed
+	 * @return the first matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public JournalTemplate removeBySmallImageId(long smallImageId)
+	public JournalTemplate findBySmallImageId_First(long smallImageId)
 		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = findBySmallImageId(smallImageId);
+		return findBySmallImageId_First(smallImageId, null);
+	}
 
-		return remove(journalTemplate);
+	/**
+	 * Returns the first journal template in the ordered set where smallImageId = &#63;.
+	 *
+	 * @param smallImageId the small image ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findBySmallImageId_First(long smallImageId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchBySmallImageId_First(smallImageId,
+				orderByComparator);
+
+		if (journalTemplate != null) {
+			return journalTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("smallImageId=");
+		msg.append(smallImageId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
+	 *
+	 * @param smallImageId the small image ID
+	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchBySmallImageId_First(long smallImageId)
+		throws SystemException {
+		return fetchBySmallImageId_First(smallImageId, null);
+	}
+
+	/**
+	 * Returns the first journal template in the ordered set where smallImageId = &#63;.
+	 *
+	 * @param smallImageId the small image ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchBySmallImageId_First(long smallImageId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<JournalTemplate> list = findBySmallImageId(smallImageId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
+	 *
+	 * @param smallImageId the small image ID
+	 * @return the last matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findBySmallImageId_Last(long smallImageId)
+		throws NoSuchTemplateException, SystemException {
+		return findBySmallImageId_Last(smallImageId, null);
+	}
+
+	/**
+	 * Returns the last journal template in the ordered set where smallImageId = &#63;.
+	 *
+	 * @param smallImageId the small image ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findBySmallImageId_Last(long smallImageId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchBySmallImageId_Last(smallImageId,
+				orderByComparator);
+
+		if (journalTemplate != null) {
+			return journalTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("smallImageId=");
+		msg.append(smallImageId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
+	 *
+	 * @param smallImageId the small image ID
+	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchBySmallImageId_Last(long smallImageId)
+		throws SystemException {
+		return fetchBySmallImageId_Last(smallImageId, null);
+	}
+
+	/**
+	 * Returns the last journal template in the ordered set where smallImageId = &#63;.
+	 *
+	 * @param smallImageId the small image ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchBySmallImageId_Last(long smallImageId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countBySmallImageId(smallImageId);
+
+		List<JournalTemplate> list = findBySmallImageId(smallImageId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the journal templates where smallImageId = &#63; from the database.
+	 *
+	 * @param smallImageId the small image ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeBySmallImageId(long smallImageId)
+		throws SystemException {
+		for (JournalTemplate journalTemplate : findBySmallImageId(
+				smallImageId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(journalTemplate);
+		}
 	}
 
 	/**
@@ -3434,10 +3787,12 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countBySmallImageId(long smallImageId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_SMALLIMAGEID;
+
 		Object[] finderArgs = new Object[] { smallImageId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_SMALLIMAGEID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -3460,18 +3815,15 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				qPos.add(smallImageId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_SMALLIMAGEID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -3589,8 +3941,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				}
 			}
 
-			query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -3610,16 +3960,14 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 
 				List<JournalTemplate> list = q.list();
 
-				result = list;
-
-				JournalTemplate journalTemplate = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_T,
 						finderArgs, list);
 				}
 				else {
-					journalTemplate = list.get(0);
+					JournalTemplate journalTemplate = list.get(0);
+
+					result = journalTemplate;
 
 					cacheResult(journalTemplate);
 
@@ -3630,28 +3978,23 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 							finderArgs, journalTemplate);
 					}
 				}
-
-				return journalTemplate;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_T,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_T,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (JournalTemplate)result;
-			}
+			return (JournalTemplate)result;
 		}
 	}
 
@@ -3680,10 +4023,12 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 */
 	public int countByG_T(long groupId, String templateId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_T;
+
 		Object[] finderArgs = new Object[] { groupId, templateId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_T,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -3722,18 +4067,15 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_T, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -3752,8 +4094,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
@@ -3761,7 +4103,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_S",
 			new String[] { Long.class.getName(), String.class.getName() },
 			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK |
-			JournalTemplateModelImpl.STRUCTUREID_COLUMN_BITMASK);
+			JournalTemplateModelImpl.STRUCTUREID_COLUMN_BITMASK |
+			JournalTemplateModelImpl.TEMPLATEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_S",
@@ -3798,246 +4141,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public List<JournalTemplate> findByG_S(long groupId, String structureId,
 		int start, int end) throws SystemException {
 		return findByG_S(groupId, structureId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the journal templates where groupId = &#63; and structureId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param structureId the structure ID
-	 * @param start the lower bound of the range of journal templates
-	 * @param end the upper bound of the range of journal templates (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalTemplate> findByG_S(long groupId, String structureId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S;
-			finderArgs = new Object[] { groupId, structureId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S;
-			finderArgs = new Object[] {
-					groupId, structureId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (JournalTemplate journalTemplate : list) {
-				if ((groupId != journalTemplate.getGroupId()) ||
-						!Validator.equals(structureId,
-							journalTemplate.getStructureId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_JOURNALTEMPLATE_WHERE);
-
-			query.append(_FINDER_COLUMN_G_S_GROUPID_2);
-
-			if (structureId == null) {
-				query.append(_FINDER_COLUMN_G_S_STRUCTUREID_1);
-			}
-			else {
-				if (structureId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_S_STRUCTUREID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_S_STRUCTUREID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (structureId != null) {
-					qPos.add(structureId);
-				}
-
-				list = (List<JournalTemplate>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first journal template in the ordered set where groupId = &#63; and structureId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal template
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate findByG_S_First(long groupId, String structureId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = fetchByG_S_First(groupId,
-				structureId, orderByComparator);
-
-		if (journalTemplate != null) {
-			return journalTemplate;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", structureId=");
-		msg.append(structureId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTemplateException(msg.toString());
-	}
-
-	/**
-	 * Returns the first journal template in the ordered set where groupId = &#63; and structureId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchByG_S_First(long groupId, String structureId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<JournalTemplate> list = findByG_S(groupId, structureId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last journal template in the ordered set where groupId = &#63; and structureId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal template
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate findByG_S_Last(long groupId, String structureId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = fetchByG_S_Last(groupId, structureId,
-				orderByComparator);
-
-		if (journalTemplate != null) {
-			return journalTemplate;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", structureId=");
-		msg.append(structureId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTemplateException(msg.toString());
-	}
-
-	/**
-	 * Returns the last journal template in the ordered set where groupId = &#63; and structureId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchByG_S_Last(long groupId, String structureId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByG_S(groupId, structureId);
-
-		List<JournalTemplate> list = findByG_S(groupId, structureId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -4165,7 +4268,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				}
 			}
 		}
-
 		else {
 			query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
 		}
@@ -4303,7 +4405,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
@@ -4501,7 +4602,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
@@ -4554,6 +4654,296 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	}
 
 	/**
+	 * Returns an ordered range of all the journal templates where groupId = &#63; and structureId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param structureId the structure ID
+	 * @param start the lower bound of the range of journal templates
+	 * @param end the upper bound of the range of journal templates (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalTemplate> findByG_S(long groupId, String structureId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S;
+			finderArgs = new Object[] { groupId, structureId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S;
+			finderArgs = new Object[] {
+					groupId, structureId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalTemplate journalTemplate : list) {
+				if ((groupId != journalTemplate.getGroupId()) ||
+						!Validator.equals(structureId,
+							journalTemplate.getStructureId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_JOURNALTEMPLATE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_S_GROUPID_2);
+
+			if (structureId == null) {
+				query.append(_FINDER_COLUMN_G_S_STRUCTUREID_1);
+			}
+			else {
+				if (structureId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_S_STRUCTUREID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_S_STRUCTUREID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(JournalTemplateModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (structureId != null) {
+					qPos.add(structureId);
+				}
+
+				list = (List<JournalTemplate>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63; and structureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param structureId the structure ID
+	 * @return the first matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByG_S_First(long groupId, String structureId)
+		throws NoSuchTemplateException, SystemException {
+		return findByG_S_First(groupId, structureId, null);
+	}
+
+	/**
+	 * Returns the first journal template in the ordered set where groupId = &#63; and structureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByG_S_First(long groupId, String structureId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchByG_S_First(groupId,
+				structureId, orderByComparator);
+
+		if (journalTemplate != null) {
+			return journalTemplate;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", structureId=");
+		msg.append(structureId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63; and structureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param structureId the structure ID
+	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByG_S_First(long groupId, String structureId)
+		throws SystemException {
+		return fetchByG_S_First(groupId, structureId, null);
+	}
+
+	/**
+	 * Returns the first journal template in the ordered set where groupId = &#63; and structureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByG_S_First(long groupId, String structureId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<JournalTemplate> list = findByG_S(groupId, structureId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63; and structureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param structureId the structure ID
+	 * @return the last matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByG_S_Last(long groupId, String structureId)
+		throws NoSuchTemplateException, SystemException {
+		return findByG_S_Last(groupId, structureId, null);
+	}
+
+	/**
+	 * Returns the last journal template in the ordered set where groupId = &#63; and structureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByG_S_Last(long groupId, String structureId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchByG_S_Last(groupId, structureId,
+				orderByComparator);
+
+		if (journalTemplate != null) {
+			return journalTemplate;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", structureId=");
+		msg.append(structureId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63; and structureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param structureId the structure ID
+	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByG_S_Last(long groupId, String structureId)
+		throws SystemException {
+		return fetchByG_S_Last(groupId, structureId, null);
+	}
+
+	/**
+	 * Returns the last journal template in the ordered set where groupId = &#63; and structureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByG_S_Last(long groupId, String structureId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_S(groupId, structureId);
+
+		List<JournalTemplate> list = findByG_S(groupId, structureId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the journal templates where groupId = &#63; and structureId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -4562,7 +4952,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 */
 	public void removeByG_S(long groupId, String structureId)
 		throws SystemException {
-		for (JournalTemplate journalTemplate : findByG_S(groupId, structureId)) {
+		for (JournalTemplate journalTemplate : findByG_S(groupId, structureId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(journalTemplate);
 		}
 	}
@@ -4577,10 +4968,12 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 */
 	public int countByG_S(long groupId, String structureId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_S;
+
 		Object[] finderArgs = new Object[] { groupId, structureId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -4619,18 +5012,15 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_S, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -4725,10 +5115,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				Long.valueOf(journalTemplate.getGroupId())
 			}, journalTemplate);
 
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
-			new Object[] { Long.valueOf(journalTemplate.getSmallImageId()) },
-			journalTemplate);
-
 		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_T,
 			new Object[] {
 				Long.valueOf(journalTemplate.getGroupId()),
@@ -4815,9 +5201,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				journalTemplate.getUuid(),
 				Long.valueOf(journalTemplate.getGroupId())
 			});
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
-			new Object[] { Long.valueOf(journalTemplate.getSmallImageId()) });
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_T,
 			new Object[] {
@@ -5107,10 +5490,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 					Long.valueOf(journalTemplate.getGroupId())
 				}, journalTemplate);
 
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
-				new Object[] { Long.valueOf(journalTemplate.getSmallImageId()) },
-				journalTemplate);
-
 			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_T,
 				new Object[] {
 					Long.valueOf(journalTemplate.getGroupId()),
@@ -5135,24 +5514,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 						journalTemplate.getUuid(),
 						Long.valueOf(journalTemplate.getGroupId())
 					}, journalTemplate);
-			}
-
-			if ((journalTemplateModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_SMALLIMAGEID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(journalTemplateModelImpl.getOriginalSmallImageId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SMALLIMAGEID,
-					args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
-					args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
-					new Object[] { Long.valueOf(
-							journalTemplate.getSmallImageId()) },
-					journalTemplate);
 			}
 
 			if ((journalTemplateModelImpl.getColumnBitmask() &
@@ -5280,28 +5641,27 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 		if (journalTemplate == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				journalTemplate = (JournalTemplate)session.get(JournalTemplateImpl.class,
 						Long.valueOf(id));
+
+				if (journalTemplate != null) {
+					cacheResult(journalTemplate);
+				}
+				else {
+					EntityCacheUtil.putResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+						JournalTemplateImpl.class, id, _nullJournalTemplate);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+					JournalTemplateImpl.class, id);
 
 				throw processException(e);
 			}
 			finally {
-				if (journalTemplate != null) {
-					cacheResult(journalTemplate);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-						JournalTemplateImpl.class, id, _nullJournalTemplate);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -5352,7 +5712,7 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public List<JournalTemplate> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -5393,30 +5753,19 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<JournalTemplate>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+				list = (List<JournalTemplate>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<JournalTemplate>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -5454,18 +5803,17 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 				Query q = session.createQuery(_SQL_COUNT_JOURNALTEMPLATE);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -5501,6 +5849,7 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public void destroy() {
 		EntityCacheUtil.removeCache(JournalTemplateImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

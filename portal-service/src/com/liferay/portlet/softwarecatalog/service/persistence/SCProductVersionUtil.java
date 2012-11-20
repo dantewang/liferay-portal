@@ -143,6 +143,26 @@ public class SCProductVersionUtil {
 	}
 
 	/**
+	* Returns the s c product versions before and after the current s c product version in the ordered set where productEntryId = &#63;.
+	*
+	* @param productVersionId the primary key of the current s c product version
+	* @param productEntryId the product entry ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next s c product version
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a s c product version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion[] findByProductEntryId_PrevAndNext(
+		long productVersionId, long productEntryId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException {
+		return getPersistence()
+				   .findByProductEntryId_PrevAndNext(productVersionId,
+			productEntryId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the s c product versions where productEntryId = &#63;.
 	*
 	* <p>
@@ -166,6 +186,21 @@ public class SCProductVersionUtil {
 	}
 
 	/**
+	* Returns the first s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where productEntryId = &#63;.
+	*
+	* @param productEntryId the product entry ID
+	* @return the first matching s c product version
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion findByProductEntryId_First(
+		long productEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException {
+		return getPersistence().findByProductEntryId_First(productEntryId);
+	}
+
+	/**
 	* Returns the first s c product version in the ordered set where productEntryId = &#63;.
 	*
 	* @param productEntryId the product entry ID
@@ -184,6 +219,19 @@ public class SCProductVersionUtil {
 	}
 
 	/**
+	* Returns the first s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where productEntryId = &#63;.
+	*
+	* @param productEntryId the product entry ID
+	* @return the first matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion fetchByProductEntryId_First(
+		long productEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByProductEntryId_First(productEntryId);
+	}
+
+	/**
 	* Returns the first s c product version in the ordered set where productEntryId = &#63;.
 	*
 	* @param productEntryId the product entry ID
@@ -198,6 +246,21 @@ public class SCProductVersionUtil {
 		return getPersistence()
 				   .fetchByProductEntryId_First(productEntryId,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where productEntryId = &#63;.
+	*
+	* @param productEntryId the product entry ID
+	* @return the last matching s c product version
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion findByProductEntryId_Last(
+		long productEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException {
+		return getPersistence().findByProductEntryId_Last(productEntryId);
 	}
 
 	/**
@@ -219,6 +282,19 @@ public class SCProductVersionUtil {
 	}
 
 	/**
+	* Returns the last s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where productEntryId = &#63;.
+	*
+	* @param productEntryId the product entry ID
+	* @return the last matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion fetchByProductEntryId_Last(
+		long productEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByProductEntryId_Last(productEntryId);
+	}
+
+	/**
 	* Returns the last s c product version in the ordered set where productEntryId = &#63;.
 	*
 	* @param productEntryId the product entry ID
@@ -232,26 +308,6 @@ public class SCProductVersionUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByProductEntryId_Last(productEntryId, orderByComparator);
-	}
-
-	/**
-	* Returns the s c product versions before and after the current s c product version in the ordered set where productEntryId = &#63;.
-	*
-	* @param productVersionId the primary key of the current s c product version
-	* @param productEntryId the product entry ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next s c product version
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a s c product version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion[] findByProductEntryId_PrevAndNext(
-		long productVersionId, long productEntryId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException {
-		return getPersistence()
-				   .findByProductEntryId_PrevAndNext(productVersionId,
-			productEntryId, orderByComparator);
 	}
 
 	/**
@@ -278,61 +334,143 @@ public class SCProductVersionUtil {
 	}
 
 	/**
-	* Returns the s c product version where directDownloadURL = &#63; or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchProductVersionException} if it could not be found.
+	* Returns the first s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where directDownloadURL = &#63;.
 	*
 	* @param directDownloadURL the direct download u r l
-	* @return the matching s c product version
+	* @return the first matching s c product version
 	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion findByDirectDownloadURL(
+	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion findByDirectDownloadURL_First(
 		java.lang.String directDownloadURL)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException {
-		return getPersistence().findByDirectDownloadURL(directDownloadURL);
+		return getPersistence().findByDirectDownloadURL_First(directDownloadURL);
 	}
 
 	/**
-	* Returns the s c product version where directDownloadURL = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first s c product version in the ordered set where directDownloadURL = &#63;.
 	*
 	* @param directDownloadURL the direct download u r l
-	* @return the matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching s c product version
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion fetchByDirectDownloadURL(
+	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion findByDirectDownloadURL_First(
+		java.lang.String directDownloadURL,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException {
+		return getPersistence()
+				   .findByDirectDownloadURL_First(directDownloadURL,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where directDownloadURL = &#63;.
+	*
+	* @param directDownloadURL the direct download u r l
+	* @return the first matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion fetchByDirectDownloadURL_First(
 		java.lang.String directDownloadURL)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByDirectDownloadURL(directDownloadURL);
+		return getPersistence().fetchByDirectDownloadURL_First(directDownloadURL);
 	}
 
 	/**
-	* Returns the s c product version where directDownloadURL = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first s c product version in the ordered set where directDownloadURL = &#63;.
 	*
 	* @param directDownloadURL the direct download u r l
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching s c product version, or <code>null</code> if a matching s c product version could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion fetchByDirectDownloadURL(
-		java.lang.String directDownloadURL, boolean retrieveFromCache)
+	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion fetchByDirectDownloadURL_First(
+		java.lang.String directDownloadURL,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .fetchByDirectDownloadURL(directDownloadURL,
-			retrieveFromCache);
+				   .fetchByDirectDownloadURL_First(directDownloadURL,
+			orderByComparator);
 	}
 
 	/**
-	* Removes the s c product version where directDownloadURL = &#63; from the database.
+	* Returns the last s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where directDownloadURL = &#63;.
 	*
 	* @param directDownloadURL the direct download u r l
-	* @return the s c product version that was removed
+	* @return the last matching s c product version
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion removeByDirectDownloadURL(
+	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion findByDirectDownloadURL_Last(
 		java.lang.String directDownloadURL)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException {
-		return getPersistence().removeByDirectDownloadURL(directDownloadURL);
+		return getPersistence().findByDirectDownloadURL_Last(directDownloadURL);
+	}
+
+	/**
+	* Returns the last s c product version in the ordered set where directDownloadURL = &#63;.
+	*
+	* @param directDownloadURL the direct download u r l
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching s c product version
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion findByDirectDownloadURL_Last(
+		java.lang.String directDownloadURL,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException {
+		return getPersistence()
+				   .findByDirectDownloadURL_Last(directDownloadURL,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where directDownloadURL = &#63;.
+	*
+	* @param directDownloadURL the direct download u r l
+	* @return the last matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion fetchByDirectDownloadURL_Last(
+		java.lang.String directDownloadURL)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByDirectDownloadURL_Last(directDownloadURL);
+	}
+
+	/**
+	* Returns the last s c product version in the ordered set where directDownloadURL = &#63;.
+	*
+	* @param directDownloadURL the direct download u r l
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion fetchByDirectDownloadURL_Last(
+		java.lang.String directDownloadURL,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByDirectDownloadURL_Last(directDownloadURL,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the s c product versions where directDownloadURL = &#63; from the database.
+	*
+	* @param directDownloadURL the direct download u r l
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByDirectDownloadURL(
+		java.lang.String directDownloadURL)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByDirectDownloadURL(directDownloadURL);
 	}
 
 	/**

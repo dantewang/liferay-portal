@@ -64,6 +64,22 @@ public interface OrgLaborPersistence extends BasePersistence<OrgLabor> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the org labors before and after the current org labor in the ordered set where organizationId = &#63;.
+	*
+	* @param orgLaborId the primary key of the current org labor
+	* @param organizationId the organization ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next org labor
+	* @throws com.liferay.portal.NoSuchOrgLaborException if a org labor with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.OrgLabor[] findByOrganizationId_PrevAndNext(
+		long orgLaborId, long organizationId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchOrgLaborException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the org labors where organizationId = &#63;.
 	*
 	* <p>
@@ -83,6 +99,19 @@ public interface OrgLaborPersistence extends BasePersistence<OrgLabor> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first org labor in the default ordered set defined by {@link OrgLaborModelImpl#ORDER_BY_JPQL} where organizationId = &#63;.
+	*
+	* @param organizationId the organization ID
+	* @return the first matching org labor
+	* @throws com.liferay.portal.NoSuchOrgLaborException if a matching org labor could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.OrgLabor findByOrganizationId_First(
+		long organizationId)
+		throws com.liferay.portal.NoSuchOrgLaborException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first org labor in the ordered set where organizationId = &#63;.
 	*
 	* @param organizationId the organization ID
@@ -98,6 +127,17 @@ public interface OrgLaborPersistence extends BasePersistence<OrgLabor> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first org labor in the default ordered set defined by {@link OrgLaborModelImpl#ORDER_BY_JPQL} where organizationId = &#63;.
+	*
+	* @param organizationId the organization ID
+	* @return the first matching org labor, or <code>null</code> if a matching org labor could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.OrgLabor fetchByOrganizationId_First(
+		long organizationId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first org labor in the ordered set where organizationId = &#63;.
 	*
 	* @param organizationId the organization ID
@@ -109,6 +149,19 @@ public interface OrgLaborPersistence extends BasePersistence<OrgLabor> {
 		long organizationId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last org labor in the default ordered set defined by {@link OrgLaborModelImpl#ORDER_BY_JPQL} where organizationId = &#63;.
+	*
+	* @param organizationId the organization ID
+	* @return the last matching org labor
+	* @throws com.liferay.portal.NoSuchOrgLaborException if a matching org labor could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.OrgLabor findByOrganizationId_Last(
+		long organizationId)
+		throws com.liferay.portal.NoSuchOrgLaborException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last org labor in the ordered set where organizationId = &#63;.
@@ -126,6 +179,17 @@ public interface OrgLaborPersistence extends BasePersistence<OrgLabor> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last org labor in the default ordered set defined by {@link OrgLaborModelImpl#ORDER_BY_JPQL} where organizationId = &#63;.
+	*
+	* @param organizationId the organization ID
+	* @return the last matching org labor, or <code>null</code> if a matching org labor could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.OrgLabor fetchByOrganizationId_Last(
+		long organizationId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last org labor in the ordered set where organizationId = &#63;.
 	*
 	* @param organizationId the organization ID
@@ -137,22 +201,6 @@ public interface OrgLaborPersistence extends BasePersistence<OrgLabor> {
 		long organizationId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the org labors before and after the current org labor in the ordered set where organizationId = &#63;.
-	*
-	* @param orgLaborId the primary key of the current org labor
-	* @param organizationId the organization ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next org labor
-	* @throws com.liferay.portal.NoSuchOrgLaborException if a org labor with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.OrgLabor[] findByOrganizationId_PrevAndNext(
-		long orgLaborId, long organizationId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchOrgLaborException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the org labors where organizationId = &#63; from the database.

@@ -45,7 +45,6 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -83,103 +82,102 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FETCH_BY_C_DP = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_DP = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED,
-			PasswordPolicyImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByC_DP",
+			PasswordPolicyImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByC_DP",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_DP = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
+			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED,
+			PasswordPolicyImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_DP",
 			new String[] { Long.class.getName(), Boolean.class.getName() },
 			PasswordPolicyModelImpl.COMPANYID_COLUMN_BITMASK |
-			PasswordPolicyModelImpl.DEFAULTPOLICY_COLUMN_BITMASK);
+			PasswordPolicyModelImpl.DEFAULTPOLICY_COLUMN_BITMASK |
+			PasswordPolicyModelImpl.PASSWORDPOLICYID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_DP = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_DP",
 			new String[] { Long.class.getName(), Boolean.class.getName() });
 
 	/**
-	 * Returns the password policy where companyId = &#63; and defaultPolicy = &#63; or throws a {@link com.liferay.portal.NoSuchPasswordPolicyException} if it could not be found.
+	 * Returns an ordered range of all the password policies where companyId = &#63; and defaultPolicy = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param companyId the company ID
 	 * @param defaultPolicy the default policy
-	 * @return the matching password policy
-	 * @throws com.liferay.portal.NoSuchPasswordPolicyException if a matching password policy could not be found
+	 * @param start the lower bound of the range of password policies
+	 * @param end the upper bound of the range of password policies (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching password policies
 	 * @throws SystemException if a system exception occurred
 	 */
-	public PasswordPolicy findByC_DP(long companyId, boolean defaultPolicy)
-		throws NoSuchPasswordPolicyException, SystemException {
-		PasswordPolicy passwordPolicy = fetchByC_DP(companyId, defaultPolicy);
+	protected List<PasswordPolicy> findByC_DP(long companyId,
+		boolean defaultPolicy, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (passwordPolicy == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("companyId=");
-			msg.append(companyId);
-
-			msg.append(", defaultPolicy=");
-			msg.append(defaultPolicy);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchPasswordPolicyException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_DP;
+			finderArgs = new Object[] { companyId, defaultPolicy };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_DP;
+			finderArgs = new Object[] {
+					companyId, defaultPolicy,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		return passwordPolicy;
-	}
+		List<PasswordPolicy> list = (List<PasswordPolicy>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the password policy where companyId = &#63; and defaultPolicy = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param companyId the company ID
-	 * @param defaultPolicy the default policy
-	 * @return the matching password policy, or <code>null</code> if a matching password policy could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PasswordPolicy fetchByC_DP(long companyId, boolean defaultPolicy)
-		throws SystemException {
-		return fetchByC_DP(companyId, defaultPolicy, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (PasswordPolicy passwordPolicy : list) {
+				if ((companyId != passwordPolicy.getCompanyId()) ||
+						(defaultPolicy != passwordPolicy.getDefaultPolicy())) {
+					list = null;
 
-	/**
-	 * Returns the password policy where companyId = &#63; and defaultPolicy = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param companyId the company ID
-	 * @param defaultPolicy the default policy
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching password policy, or <code>null</code> if a matching password policy could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PasswordPolicy fetchByC_DP(long companyId, boolean defaultPolicy,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, defaultPolicy };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_DP,
-					finderArgs, this);
-		}
-
-		if (result instanceof PasswordPolicy) {
-			PasswordPolicy passwordPolicy = (PasswordPolicy)result;
-
-			if ((companyId != passwordPolicy.getCompanyId()) ||
-					(defaultPolicy != passwordPolicy.getDefaultPolicy())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
 
 			query.append(_SQL_SELECT_PASSWORDPOLICY_WHERE);
 
 			query.append(_FINDER_COLUMN_C_DP_COMPANYID_2);
 
 			query.append(_FINDER_COLUMN_C_DP_DEFAULTPOLICY_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(PasswordPolicyModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = query.toString();
 
@@ -196,65 +194,209 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 
 				qPos.add(defaultPolicy);
 
-				List<PasswordPolicy> list = q.list();
+				list = (List<PasswordPolicy>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-				result = list;
+				cacheResult(list);
 
-				PasswordPolicy passwordPolicy = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_DP,
-						finderArgs, list);
-				}
-				else {
-					passwordPolicy = list.get(0);
-
-					cacheResult(passwordPolicy);
-
-					if ((passwordPolicy.getCompanyId() != companyId) ||
-							(passwordPolicy.getDefaultPolicy() != defaultPolicy)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_DP,
-							finderArgs, passwordPolicy);
-					}
-				}
-
-				return passwordPolicy;
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_DP,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (PasswordPolicy)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the password policy where companyId = &#63; and defaultPolicy = &#63; from the database.
+	 * Returns the first password policy in the default ordered set defined by {@link PasswordPolicyModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultPolicy = &#63;.
 	 *
 	 * @param companyId the company ID
 	 * @param defaultPolicy the default policy
-	 * @return the password policy that was removed
+	 * @return the first matching password policy
+	 * @throws com.liferay.portal.NoSuchPasswordPolicyException if a matching password policy could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public PasswordPolicy removeByC_DP(long companyId, boolean defaultPolicy)
+	public PasswordPolicy findByC_DP_First(long companyId, boolean defaultPolicy)
 		throws NoSuchPasswordPolicyException, SystemException {
-		PasswordPolicy passwordPolicy = findByC_DP(companyId, defaultPolicy);
+		return findByC_DP_First(companyId, defaultPolicy, null);
+	}
 
-		return remove(passwordPolicy);
+	/**
+	 * Returns the first password policy in the ordered set where companyId = &#63; and defaultPolicy = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultPolicy the default policy
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching password policy
+	 * @throws com.liferay.portal.NoSuchPasswordPolicyException if a matching password policy could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PasswordPolicy findByC_DP_First(long companyId,
+		boolean defaultPolicy, OrderByComparator orderByComparator)
+		throws NoSuchPasswordPolicyException, SystemException {
+		PasswordPolicy passwordPolicy = fetchByC_DP_First(companyId,
+				defaultPolicy, orderByComparator);
+
+		if (passwordPolicy != null) {
+			return passwordPolicy;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", defaultPolicy=");
+		msg.append(defaultPolicy);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPasswordPolicyException(msg.toString());
+	}
+
+	/**
+	 * Returns the first password policy in the default ordered set defined by {@link PasswordPolicyModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultPolicy = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultPolicy the default policy
+	 * @return the first matching password policy, or <code>null</code> if a matching password policy could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PasswordPolicy fetchByC_DP_First(long companyId,
+		boolean defaultPolicy) throws SystemException {
+		return fetchByC_DP_First(companyId, defaultPolicy, null);
+	}
+
+	/**
+	 * Returns the first password policy in the ordered set where companyId = &#63; and defaultPolicy = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultPolicy the default policy
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching password policy, or <code>null</code> if a matching password policy could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PasswordPolicy fetchByC_DP_First(long companyId,
+		boolean defaultPolicy, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<PasswordPolicy> list = findByC_DP(companyId, defaultPolicy, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last password policy in the default ordered set defined by {@link PasswordPolicyModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultPolicy = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultPolicy the default policy
+	 * @return the last matching password policy
+	 * @throws com.liferay.portal.NoSuchPasswordPolicyException if a matching password policy could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PasswordPolicy findByC_DP_Last(long companyId, boolean defaultPolicy)
+		throws NoSuchPasswordPolicyException, SystemException {
+		return findByC_DP_Last(companyId, defaultPolicy, null);
+	}
+
+	/**
+	 * Returns the last password policy in the ordered set where companyId = &#63; and defaultPolicy = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultPolicy the default policy
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching password policy
+	 * @throws com.liferay.portal.NoSuchPasswordPolicyException if a matching password policy could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PasswordPolicy findByC_DP_Last(long companyId,
+		boolean defaultPolicy, OrderByComparator orderByComparator)
+		throws NoSuchPasswordPolicyException, SystemException {
+		PasswordPolicy passwordPolicy = fetchByC_DP_Last(companyId,
+				defaultPolicy, orderByComparator);
+
+		if (passwordPolicy != null) {
+			return passwordPolicy;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", defaultPolicy=");
+		msg.append(defaultPolicy);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPasswordPolicyException(msg.toString());
+	}
+
+	/**
+	 * Returns the last password policy in the default ordered set defined by {@link PasswordPolicyModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultPolicy = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultPolicy the default policy
+	 * @return the last matching password policy, or <code>null</code> if a matching password policy could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PasswordPolicy fetchByC_DP_Last(long companyId, boolean defaultPolicy)
+		throws SystemException {
+		return fetchByC_DP_Last(companyId, defaultPolicy, null);
+	}
+
+	/**
+	 * Returns the last password policy in the ordered set where companyId = &#63; and defaultPolicy = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultPolicy the default policy
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching password policy, or <code>null</code> if a matching password policy could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PasswordPolicy fetchByC_DP_Last(long companyId,
+		boolean defaultPolicy, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByC_DP(companyId, defaultPolicy);
+
+		List<PasswordPolicy> list = findByC_DP(companyId, defaultPolicy,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the password policies where companyId = &#63; and defaultPolicy = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultPolicy the default policy
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_DP(long companyId, boolean defaultPolicy)
+		throws SystemException {
+		for (PasswordPolicy passwordPolicy : findByC_DP(companyId,
+				defaultPolicy, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(passwordPolicy);
+		}
 	}
 
 	/**
@@ -267,10 +409,12 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 	 */
 	public int countByC_DP(long companyId, boolean defaultPolicy)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_DP;
+
 		Object[] finderArgs = new Object[] { companyId, defaultPolicy };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_DP,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -297,18 +441,15 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 				qPos.add(defaultPolicy);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_DP,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -408,7 +549,7 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_PASSWORDPOLICY_WHERE);
 
@@ -445,16 +586,14 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 
 				List<PasswordPolicy> list = q.list();
 
-				result = list;
-
-				PasswordPolicy passwordPolicy = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
 						finderArgs, list);
 				}
 				else {
-					passwordPolicy = list.get(0);
+					PasswordPolicy passwordPolicy = list.get(0);
+
+					result = passwordPolicy;
 
 					cacheResult(passwordPolicy);
 
@@ -465,28 +604,23 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 							finderArgs, passwordPolicy);
 					}
 				}
-
-				return passwordPolicy;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (PasswordPolicy)result;
-			}
+			return (PasswordPolicy)result;
 		}
 	}
 
@@ -515,10 +649,12 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 	 */
 	public int countByC_N(long companyId, String name)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_N;
+
 		Object[] finderArgs = new Object[] { companyId, name };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_N,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -557,18 +693,15 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_N, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -590,12 +723,6 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 		EntityCacheUtil.putResult(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyImpl.class, passwordPolicy.getPrimaryKey(),
 			passwordPolicy);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_DP,
-			new Object[] {
-				Long.valueOf(passwordPolicy.getCompanyId()),
-				Boolean.valueOf(passwordPolicy.getDefaultPolicy())
-			}, passwordPolicy);
 
 		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
 			new Object[] {
@@ -677,12 +804,6 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 	}
 
 	protected void clearUniqueFindersCache(PasswordPolicy passwordPolicy) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_DP,
-			new Object[] {
-				Long.valueOf(passwordPolicy.getCompanyId()),
-				Boolean.valueOf(passwordPolicy.getDefaultPolicy())
-			});
-
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
 			new Object[] {
 				Long.valueOf(passwordPolicy.getCompanyId()),
@@ -835,12 +956,6 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 			passwordPolicy);
 
 		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_DP,
-				new Object[] {
-					Long.valueOf(passwordPolicy.getCompanyId()),
-					Boolean.valueOf(passwordPolicy.getDefaultPolicy())
-				}, passwordPolicy);
-
 			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
 				new Object[] {
 					Long.valueOf(passwordPolicy.getCompanyId()),
@@ -849,24 +964,6 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 				}, passwordPolicy);
 		}
 		else {
-			if ((passwordPolicyModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_C_DP.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(passwordPolicyModelImpl.getOriginalCompanyId()),
-						Boolean.valueOf(passwordPolicyModelImpl.getOriginalDefaultPolicy())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_DP, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_DP, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_DP,
-					new Object[] {
-						Long.valueOf(passwordPolicy.getCompanyId()),
-						Boolean.valueOf(passwordPolicy.getDefaultPolicy())
-					}, passwordPolicy);
-			}
-
 			if ((passwordPolicyModelImpl.getColumnBitmask() &
 					FINDER_PATH_FETCH_BY_C_N.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
@@ -1007,29 +1104,28 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 		if (passwordPolicy == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				passwordPolicy = (PasswordPolicy)session.get(PasswordPolicyImpl.class,
 						Long.valueOf(passwordPolicyId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (passwordPolicy != null) {
 					cacheResult(passwordPolicy);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 						PasswordPolicyImpl.class, passwordPolicyId,
 						_nullPasswordPolicy);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
+					PasswordPolicyImpl.class, passwordPolicyId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1080,7 +1176,7 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 	public List<PasswordPolicy> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -1111,7 +1207,7 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_PASSWORDPOLICY;
+				sql = _SQL_SELECT_PASSWORDPOLICY.concat(PasswordPolicyModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
@@ -1121,30 +1217,19 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<PasswordPolicy>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+				list = (List<PasswordPolicy>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<PasswordPolicy>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1182,18 +1267,17 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 				Query q = session.createQuery(_SQL_COUNT_PASSWORDPOLICY);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1229,6 +1313,7 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 	public void destroy() {
 		EntityCacheUtil.removeCache(PasswordPolicyImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
