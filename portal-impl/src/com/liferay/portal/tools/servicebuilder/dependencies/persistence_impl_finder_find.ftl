@@ -1641,6 +1641,60 @@
 		</#list>
 
 		int start, int end, OrderByComparator orderByComparator) throws SystemException {
+			if (
+			<#assign firstCol = true>
+			<#list finderColsList as finderCol>
+				<#if finderCol.hasArrayableOperator()>
+					<#if firstCol>
+						<#assign firstCol = false>
+					<#else>
+						&&
+					</#if>
+
+					(${finderCol.names} != null) && (${finderCol.names}.length == 1)
+				</#if>
+			</#list>
+			) {
+				<#if finder.isUnique()>
+					${entity.name} ${entity.varName} = fetchBy${finder.name}(
+
+						<#list finderColsList as finderCol>
+							<#if finderCol.hasArrayableOperator()>
+								${finderCol.names}[0]
+							<#else>
+								${finderCol.name}
+							</#if>
+
+							<#if finderCol_has_next>
+								,
+							</#if>
+						</#list>);
+
+					if (${entity.varName} == null) {
+						return Collections.emptyList();
+					}
+					else {
+						List<${entity.name}> list = new ArrayList<${entity.name}>(1);
+
+						list.add(${entity.varName});
+
+						return list;
+					}
+				<#else>
+					return findBy${finder.name}(
+
+						<#list finderColsList as finderCol>
+							<#if finderCol.hasArrayableOperator()>
+								${finderCol.names}[0],
+							<#else>
+								${finderCol.name},
+							</#if>
+						</#list>
+
+						start, end, orderByComparator);
+				</#if>
+			}
+
 			Object[] finderArgs = null;
 
 			if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
