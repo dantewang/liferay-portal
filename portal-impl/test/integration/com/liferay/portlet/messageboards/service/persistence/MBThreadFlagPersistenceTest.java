@@ -28,9 +28,11 @@ import com.liferay.portal.service.persistence.BasePersistence;
 import com.liferay.portal.service.persistence.PersistenceExecutionTestListener;
 import com.liferay.portal.test.LiferayPersistenceIntegrationJUnitTestRunner;
 import com.liferay.portal.test.persistence.TransactionalPersistenceAdvice;
+import com.liferay.portal.util.PropsValues;
 
 import com.liferay.portlet.messageboards.NoSuchThreadFlagException;
 import com.liferay.portlet.messageboards.model.MBThreadFlag;
+import com.liferay.portlet.messageboards.model.impl.MBThreadFlagModelImpl;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -241,6 +243,24 @@ public class MBThreadFlagPersistenceTest {
 		List<Object> result = _persistence.findWithDynamicQuery(dynamicQuery);
 
 		Assert.assertEquals(0, result.size());
+	}
+
+	@Test
+	public void testResetOriginalValues() throws Exception {
+		if (!PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			return;
+		}
+
+		MBThreadFlag newMBThreadFlag = addMBThreadFlag();
+
+		_persistence.clearCache();
+
+		MBThreadFlagModelImpl existingMBThreadFlagModelImpl = (MBThreadFlagModelImpl)_persistence.findByPrimaryKey(newMBThreadFlag.getPrimaryKey());
+
+		Assert.assertEquals(existingMBThreadFlagModelImpl.getUserId(),
+			existingMBThreadFlagModelImpl.getOriginalUserId());
+		Assert.assertEquals(existingMBThreadFlagModelImpl.getThreadId(),
+			existingMBThreadFlagModelImpl.getOriginalThreadId());
 	}
 
 	protected MBThreadFlag addMBThreadFlag() throws Exception {
