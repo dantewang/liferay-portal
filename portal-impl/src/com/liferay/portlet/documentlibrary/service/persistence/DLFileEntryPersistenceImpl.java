@@ -5975,6 +5975,11 @@ public class DLFileEntryPersistenceImpl extends BasePersistenceImpl<DLFileEntry>
 	public List<DLFileEntry> findByG_F(long groupId, long[] folderIds,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		if ((folderIds != null) && (folderIds.length == 1)) {
+			return findByG_F(groupId, folderIds[0], start, end,
+				orderByComparator);
+		}
+
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
@@ -7470,6 +7475,11 @@ public class DLFileEntryPersistenceImpl extends BasePersistenceImpl<DLFileEntry>
 	public List<DLFileEntry> findByG_U_F(long groupId, long userId,
 		long[] folderIds, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		if ((folderIds != null) && (folderIds.length == 1)) {
+			return findByG_U_F(groupId, userId, folderIds[0], start, end,
+				orderByComparator);
+		}
+
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
@@ -9580,6 +9590,11 @@ public class DLFileEntryPersistenceImpl extends BasePersistenceImpl<DLFileEntry>
 	public List<DLFileEntry> findByG_F_F(long groupId, long[] folderIds,
 		long fileEntryTypeId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		if ((folderIds != null) && (folderIds.length == 1)) {
+			return findByG_F_F(groupId, folderIds[0], fileEntryTypeId, start,
+				end, orderByComparator);
+		}
+
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&

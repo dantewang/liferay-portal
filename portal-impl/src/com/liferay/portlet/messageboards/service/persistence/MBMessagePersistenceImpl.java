@@ -8313,6 +8313,11 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public List<MBMessage> findByU_C(long userId, long[] classNameIds,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		if ((classNameIds != null) && (classNameIds.length == 1)) {
+			return findByU_C(userId, classNameIds[0], start, end,
+				orderByComparator);
+		}
+
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
@@ -15538,6 +15543,11 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public List<MBMessage> findByU_C_S(long userId, long[] classNameIds,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		if ((classNameIds != null) && (classNameIds.length == 1)) {
+			return findByU_C_S(userId, classNameIds[0], status, start, end,
+				orderByComparator);
+		}
+
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&

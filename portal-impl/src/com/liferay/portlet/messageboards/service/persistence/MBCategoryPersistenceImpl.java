@@ -3891,6 +3891,11 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	public List<MBCategory> findByG_P(long groupId, long[] parentCategoryIds,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		if ((parentCategoryIds != null) && (parentCategoryIds.length == 1)) {
+			return findByG_P(groupId, parentCategoryIds[0], start, end,
+				orderByComparator);
+		}
+
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&

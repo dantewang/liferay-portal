@@ -50,6 +50,7 @@ import com.liferay.portlet.expando.model.impl.ExpandoColumnModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -1202,6 +1203,21 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	public List<ExpandoColumn> findByT_N(long tableId, String[] names,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		if ((names != null) && (names.length == 1)) {
+			ExpandoColumn expandoColumn = fetchByT_N(tableId, names[0]);
+
+			if (expandoColumn == null) {
+				return Collections.emptyList();
+			}
+			else {
+				List<ExpandoColumn> list = new ArrayList<ExpandoColumn>(1);
+
+				list.add(expandoColumn);
+
+				return list;
+			}
+		}
+
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&

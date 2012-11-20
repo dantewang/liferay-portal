@@ -8140,6 +8140,11 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_F(long groupId, long[] folderIds,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		if ((folderIds != null) && (folderIds.length == 1)) {
+			return findByG_F(groupId, folderIds[0], start, end,
+				orderByComparator);
+		}
+
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
@@ -16754,6 +16759,11 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_F_ST(long groupId, long folderId,
 		int[] statuses, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		if ((statuses != null) && (statuses.length == 1)) {
+			return findByG_F_ST(groupId, folderId, statuses[0], start, end,
+				orderByComparator);
+		}
+
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
@@ -23240,6 +23250,11 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_A_ST(long groupId, String articleId,
 		int[] statuses, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		if ((statuses != null) && (statuses.length == 1)) {
+			return findByG_A_ST(groupId, articleId, statuses[0], start, end,
+				orderByComparator);
+		}
+
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
