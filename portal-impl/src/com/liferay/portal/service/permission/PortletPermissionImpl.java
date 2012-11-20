@@ -19,7 +19,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.staging.permission.StagingPermissionUtil;
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutTypePortlet;
@@ -208,6 +208,15 @@ public class PortletPermissionImpl implements PortletPermission {
 
 		if (portlet.isSystem() && actionId.equals(ActionKeys.VIEW)) {
 			return true;
+		}
+
+		if ((layout != null) && layout.isTypeControlPanel()) {
+			String category = GetterUtil.getString(
+				portlet.getControlPanelEntryCategory());
+
+			if (category.equals(PortletCategoryKeys.CONTENT)) {
+				layout = null;
+			}
 		}
 
 		return contains(
@@ -409,14 +418,6 @@ public class PortletPermissionImpl implements PortletPermission {
 			PermissionChecker permissionChecker, long scopeGroupId,
 			Layout layout, Portlet portlet, PortletMode portletMode)
 		throws PortalException, SystemException {
-
-		if ((layout != null) && layout.isTypeControlPanel()) {
-			String category = portlet.getControlPanelEntryCategory();
-
-			if (Validator.equals(category, PortletCategoryKeys.CONTENT)) {
-				layout = null;
-			}
-		}
 
 		boolean access = contains(
 			permissionChecker, scopeGroupId, layout, portlet, ActionKeys.VIEW);

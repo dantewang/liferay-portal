@@ -225,6 +225,12 @@ public class AssetCategoryLocalServiceImpl
 		return assetCategoryPersistence.findByPrimaryKey(categoryId);
 	}
 
+	public AssetCategory getCategory(String uuid, long groupId)
+		throws PortalException, SystemException {
+
+		return assetCategoryPersistence.findByUUID_G(uuid, groupId);
+	}
+
 	public long[] getCategoryIds(String className, long classPK)
 		throws SystemException {
 

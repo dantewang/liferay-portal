@@ -110,83 +110,6 @@ public class AssetTagUtil {
 	}
 
 	/**
-	* Caches the asset tag in the entity cache if it is enabled.
-	*
-	* @param assetTag the asset tag
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.asset.model.AssetTag assetTag) {
-		getPersistence().cacheResult(assetTag);
-	}
-
-	/**
-	* Caches the asset tags in the entity cache if it is enabled.
-	*
-	* @param assetTags the asset tags
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.asset.model.AssetTag> assetTags) {
-		getPersistence().cacheResult(assetTags);
-	}
-
-	/**
-	* Creates a new asset tag with the primary key. Does not add the asset tag to the database.
-	*
-	* @param tagId the primary key for the new asset tag
-	* @return the new asset tag
-	*/
-	public static com.liferay.portlet.asset.model.AssetTag create(long tagId) {
-		return getPersistence().create(tagId);
-	}
-
-	/**
-	* Removes the asset tag with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param tagId the primary key of the asset tag
-	* @return the asset tag that was removed
-	* @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTag remove(long tagId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagException {
-		return getPersistence().remove(tagId);
-	}
-
-	public static com.liferay.portlet.asset.model.AssetTag updateImpl(
-		com.liferay.portlet.asset.model.AssetTag assetTag)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(assetTag);
-	}
-
-	/**
-	* Returns the asset tag with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchTagException} if it could not be found.
-	*
-	* @param tagId the primary key of the asset tag
-	* @return the asset tag
-	* @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTag findByPrimaryKey(
-		long tagId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagException {
-		return getPersistence().findByPrimaryKey(tagId);
-	}
-
-	/**
-	* Returns the asset tag with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param tagId the primary key of the asset tag
-	* @return the asset tag, or <code>null</code> if a asset tag with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTag fetchByPrimaryKey(
-		long tagId) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(tagId);
-	}
-
-	/**
 	* Returns all the asset tags where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -216,92 +139,6 @@ public class AssetTagUtil {
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByGroupId(groupId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the asset tags where groupId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param start the lower bound of the range of asset tags
-	* @param end the upper bound of the range of asset tags (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching asset tags
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.asset.model.AssetTag> findByGroupId(
-		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByGroupId(groupId, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first asset tag in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching asset tag
-	* @throws com.liferay.portlet.asset.NoSuchTagException if a matching asset tag could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTag findByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagException {
-		return getPersistence().findByGroupId_First(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the first asset tag in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching asset tag, or <code>null</code> if a matching asset tag could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTag fetchByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the last asset tag in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching asset tag
-	* @throws com.liferay.portlet.asset.NoSuchTagException if a matching asset tag could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTag findByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagException {
-		return getPersistence().findByGroupId_Last(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the last asset tag in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching asset tag, or <code>null</code> if a matching asset tag could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTag fetchByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
 	}
 
 	/**
@@ -398,48 +235,411 @@ public class AssetTagUtil {
 	}
 
 	/**
-	* Returns the asset tag where groupId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchTagException} if it could not be found.
+	* Returns an ordered range of all the asset tags where groupId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
 	*
 	* @param groupId the group ID
-	* @param name the name
-	* @return the matching asset tag
+	* @param start the lower bound of the range of asset tags
+	* @param end the upper bound of the range of asset tags (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching asset tags
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.asset.model.AssetTag> findByGroupId(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByGroupId(groupId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first asset tag in the default ordered set defined by {@link AssetTagModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching asset tag
 	* @throws com.liferay.portlet.asset.NoSuchTagException if a matching asset tag could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.asset.model.AssetTag findByG_N(
+	public static com.liferay.portlet.asset.model.AssetTag findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagException {
+		return getPersistence().findByGroupId_First(groupId);
+	}
+
+	/**
+	* Returns the first asset tag in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching asset tag
+	* @throws com.liferay.portlet.asset.NoSuchTagException if a matching asset tag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag findByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagException {
+		return getPersistence().findByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the first asset tag in the default ordered set defined by {@link AssetTagModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching asset tag, or <code>null</code> if a matching asset tag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId);
+	}
+
+	/**
+	* Returns the first asset tag in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching asset tag, or <code>null</code> if a matching asset tag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag fetchByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset tag in the default ordered set defined by {@link AssetTagModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching asset tag
+	* @throws com.liferay.portlet.asset.NoSuchTagException if a matching asset tag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagException {
+		return getPersistence().findByGroupId_Last(groupId);
+	}
+
+	/**
+	* Returns the last asset tag in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching asset tag
+	* @throws com.liferay.portlet.asset.NoSuchTagException if a matching asset tag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag findByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagException {
+		return getPersistence().findByGroupId_Last(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset tag in the default ordered set defined by {@link AssetTagModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching asset tag, or <code>null</code> if a matching asset tag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId);
+	}
+
+	/**
+	* Returns the last asset tag in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching asset tag, or <code>null</code> if a matching asset tag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag fetchByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
+	}
+
+	/**
+	* Removes all the asset tags where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of asset tags where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching asset tags
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of asset tags that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching asset tags that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByGroupId(groupId);
+	}
+
+	/**
+	* Returns the first asset tag in the default ordered set defined by {@link AssetTagModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the first matching asset tag
+	* @throws com.liferay.portlet.asset.NoSuchTagException if a matching asset tag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag findByG_N_First(
 		long groupId, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.asset.NoSuchTagException {
-		return getPersistence().findByG_N(groupId, name);
+		return getPersistence().findByG_N_First(groupId, name);
 	}
 
 	/**
-	* Returns the asset tag where groupId = &#63; and name = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first asset tag in the ordered set where groupId = &#63; and name = &#63;.
 	*
 	* @param groupId the group ID
 	* @param name the name
-	* @return the matching asset tag, or <code>null</code> if a matching asset tag could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching asset tag
+	* @throws com.liferay.portlet.asset.NoSuchTagException if a matching asset tag could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.asset.model.AssetTag fetchByG_N(
+	public static com.liferay.portlet.asset.model.AssetTag findByG_N_First(
+		long groupId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagException {
+		return getPersistence().findByG_N_First(groupId, name, orderByComparator);
+	}
+
+	/**
+	* Returns the first asset tag in the default ordered set defined by {@link AssetTagModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the first matching asset tag, or <code>null</code> if a matching asset tag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag fetchByG_N_First(
 		long groupId, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByG_N(groupId, name);
+		return getPersistence().fetchByG_N_First(groupId, name);
 	}
 
 	/**
-	* Returns the asset tag where groupId = &#63; and name = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first asset tag in the ordered set where groupId = &#63; and name = &#63;.
 	*
 	* @param groupId the group ID
 	* @param name the name
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching asset tag, or <code>null</code> if a matching asset tag could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching asset tag, or <code>null</code> if a matching asset tag could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.asset.model.AssetTag fetchByG_N(
-		long groupId, java.lang.String name, boolean retrieveFromCache)
+	public static com.liferay.portlet.asset.model.AssetTag fetchByG_N_First(
+		long groupId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByG_N(groupId, name, retrieveFromCache);
+		return getPersistence()
+				   .fetchByG_N_First(groupId, name, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset tag in the default ordered set defined by {@link AssetTagModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the last matching asset tag
+	* @throws com.liferay.portlet.asset.NoSuchTagException if a matching asset tag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag findByG_N_Last(
+		long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagException {
+		return getPersistence().findByG_N_Last(groupId, name);
+	}
+
+	/**
+	* Returns the last asset tag in the ordered set where groupId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching asset tag
+	* @throws com.liferay.portlet.asset.NoSuchTagException if a matching asset tag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag findByG_N_Last(
+		long groupId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagException {
+		return getPersistence().findByG_N_Last(groupId, name, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset tag in the default ordered set defined by {@link AssetTagModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the last matching asset tag, or <code>null</code> if a matching asset tag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag fetchByG_N_Last(
+		long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_N_Last(groupId, name);
+	}
+
+	/**
+	* Returns the last asset tag in the ordered set where groupId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching asset tag, or <code>null</code> if a matching asset tag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag fetchByG_N_Last(
+		long groupId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_N_Last(groupId, name, orderByComparator);
+	}
+
+	/**
+	* Removes all the asset tags where groupId = &#63; and name = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_N(long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_N(groupId, name);
+	}
+
+	/**
+	* Returns the number of asset tags where groupId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the number of matching asset tags
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_N(long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_N(groupId, name);
+	}
+
+	/**
+	* Caches the asset tag in the entity cache if it is enabled.
+	*
+	* @param assetTag the asset tag
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.asset.model.AssetTag assetTag) {
+		getPersistence().cacheResult(assetTag);
+	}
+
+	/**
+	* Caches the asset tags in the entity cache if it is enabled.
+	*
+	* @param assetTags the asset tags
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.asset.model.AssetTag> assetTags) {
+		getPersistence().cacheResult(assetTags);
+	}
+
+	/**
+	* Creates a new asset tag with the primary key. Does not add the asset tag to the database.
+	*
+	* @param tagId the primary key for the new asset tag
+	* @return the new asset tag
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag create(long tagId) {
+		return getPersistence().create(tagId);
+	}
+
+	/**
+	* Removes the asset tag with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param tagId the primary key of the asset tag
+	* @return the asset tag that was removed
+	* @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag remove(long tagId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagException {
+		return getPersistence().remove(tagId);
+	}
+
+	public static com.liferay.portlet.asset.model.AssetTag updateImpl(
+		com.liferay.portlet.asset.model.AssetTag assetTag)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(assetTag);
+	}
+
+	/**
+	* Returns the asset tag with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchTagException} if it could not be found.
+	*
+	* @param tagId the primary key of the asset tag
+	* @return the asset tag
+	* @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag findByPrimaryKey(
+		long tagId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagException {
+		return getPersistence().findByPrimaryKey(tagId);
+	}
+
+	/**
+	* Returns the asset tag with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param tagId the primary key of the asset tag
+	* @return the asset tag, or <code>null</code> if a asset tag with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag fetchByPrimaryKey(
+		long tagId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(tagId);
 	}
 
 	/**
@@ -492,32 +692,6 @@ public class AssetTagUtil {
 	}
 
 	/**
-	* Removes all the asset tags where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes the asset tag where groupId = &#63; and name = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the asset tag that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTag removeByG_N(
-		long groupId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagException {
-		return getPersistence().removeByG_N(groupId, name);
-	}
-
-	/**
 	* Removes all the asset tags from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -525,43 +699,6 @@ public class AssetTagUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of asset tags where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching asset tags
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of asset tags that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching asset tags that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of asset tags where groupId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the number of matching asset tags
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_N(long groupId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_N(groupId, name);
 	}
 
 	/**

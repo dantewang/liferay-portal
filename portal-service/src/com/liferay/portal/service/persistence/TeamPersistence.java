@@ -36,66 +36,6 @@ public interface TeamPersistence extends BasePersistence<Team> {
 	 */
 
 	/**
-	* Caches the team in the entity cache if it is enabled.
-	*
-	* @param team the team
-	*/
-	public void cacheResult(com.liferay.portal.model.Team team);
-
-	/**
-	* Caches the teams in the entity cache if it is enabled.
-	*
-	* @param teams the teams
-	*/
-	public void cacheResult(java.util.List<com.liferay.portal.model.Team> teams);
-
-	/**
-	* Creates a new team with the primary key. Does not add the team to the database.
-	*
-	* @param teamId the primary key for the new team
-	* @return the new team
-	*/
-	public com.liferay.portal.model.Team create(long teamId);
-
-	/**
-	* Removes the team with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param teamId the primary key of the team
-	* @return the team that was removed
-	* @throws com.liferay.portal.NoSuchTeamException if a team with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Team remove(long teamId)
-		throws com.liferay.portal.NoSuchTeamException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.Team updateImpl(
-		com.liferay.portal.model.Team team)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the team with the primary key or throws a {@link com.liferay.portal.NoSuchTeamException} if it could not be found.
-	*
-	* @param teamId the primary key of the team
-	* @return the team
-	* @throws com.liferay.portal.NoSuchTeamException if a team with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Team findByPrimaryKey(long teamId)
-		throws com.liferay.portal.NoSuchTeamException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the team with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param teamId the primary key of the team
-	* @return the team, or <code>null</code> if a team with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Team fetchByPrimaryKey(long teamId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the teams where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -121,77 +61,6 @@ public interface TeamPersistence extends BasePersistence<Team> {
 	*/
 	public java.util.List<com.liferay.portal.model.Team> findByGroupId(
 		long groupId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the teams where groupId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param start the lower bound of the range of teams
-	* @param end the upper bound of the range of teams (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching teams
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.model.Team> findByGroupId(
-		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first team in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching team
-	* @throws com.liferay.portal.NoSuchTeamException if a matching team could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Team findByGroupId_First(long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchTeamException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first team in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching team, or <code>null</code> if a matching team could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Team fetchByGroupId_First(long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last team in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching team
-	* @throws com.liferay.portal.NoSuchTeamException if a matching team could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Team findByGroupId_Last(long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchTeamException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last team in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching team, or <code>null</code> if a matching team could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Team fetchByGroupId_Last(long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -274,6 +143,150 @@ public interface TeamPersistence extends BasePersistence<Team> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns an ordered range of all the teams where groupId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param start the lower bound of the range of teams
+	* @param end the upper bound of the range of teams (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching teams
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.model.Team> findByGroupId(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first team in the default ordered set defined by {@link TeamModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching team
+	* @throws com.liferay.portal.NoSuchTeamException if a matching team could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Team findByGroupId_First(long groupId)
+		throws com.liferay.portal.NoSuchTeamException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first team in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching team
+	* @throws com.liferay.portal.NoSuchTeamException if a matching team could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Team findByGroupId_First(long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchTeamException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first team in the default ordered set defined by {@link TeamModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching team, or <code>null</code> if a matching team could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Team fetchByGroupId_First(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first team in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching team, or <code>null</code> if a matching team could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Team fetchByGroupId_First(long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last team in the default ordered set defined by {@link TeamModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching team
+	* @throws com.liferay.portal.NoSuchTeamException if a matching team could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Team findByGroupId_Last(long groupId)
+		throws com.liferay.portal.NoSuchTeamException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last team in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching team
+	* @throws com.liferay.portal.NoSuchTeamException if a matching team could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Team findByGroupId_Last(long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchTeamException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last team in the default ordered set defined by {@link TeamModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching team, or <code>null</code> if a matching team could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Team fetchByGroupId_Last(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last team in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching team, or <code>null</code> if a matching team could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Team fetchByGroupId_Last(long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the teams where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of teams where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching teams
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of teams that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching teams that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the team where groupId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchTeamException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -310,6 +323,90 @@ public interface TeamPersistence extends BasePersistence<Team> {
 	*/
 	public com.liferay.portal.model.Team fetchByG_N(long groupId,
 		java.lang.String name, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the team where groupId = &#63; and name = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the team that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Team removeByG_N(long groupId,
+		java.lang.String name)
+		throws com.liferay.portal.NoSuchTeamException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of teams where groupId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the number of matching teams
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_N(long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the team in the entity cache if it is enabled.
+	*
+	* @param team the team
+	*/
+	public void cacheResult(com.liferay.portal.model.Team team);
+
+	/**
+	* Caches the teams in the entity cache if it is enabled.
+	*
+	* @param teams the teams
+	*/
+	public void cacheResult(java.util.List<com.liferay.portal.model.Team> teams);
+
+	/**
+	* Creates a new team with the primary key. Does not add the team to the database.
+	*
+	* @param teamId the primary key for the new team
+	* @return the new team
+	*/
+	public com.liferay.portal.model.Team create(long teamId);
+
+	/**
+	* Removes the team with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param teamId the primary key of the team
+	* @return the team that was removed
+	* @throws com.liferay.portal.NoSuchTeamException if a team with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Team remove(long teamId)
+		throws com.liferay.portal.NoSuchTeamException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.Team updateImpl(
+		com.liferay.portal.model.Team team)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the team with the primary key or throws a {@link com.liferay.portal.NoSuchTeamException} if it could not be found.
+	*
+	* @param teamId the primary key of the team
+	* @return the team
+	* @throws com.liferay.portal.NoSuchTeamException if a team with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Team findByPrimaryKey(long teamId)
+		throws com.liferay.portal.NoSuchTeamException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the team with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param teamId the primary key of the team
+	* @return the team, or <code>null</code> if a team with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Team fetchByPrimaryKey(long teamId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -355,64 +452,11 @@ public interface TeamPersistence extends BasePersistence<Team> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the teams where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the team where groupId = &#63; and name = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the team that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Team removeByG_N(long groupId,
-		java.lang.String name)
-		throws com.liferay.portal.NoSuchTeamException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the teams from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of teams where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching teams
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of teams that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching teams that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of teams where groupId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the number of matching teams
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_N(long groupId, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

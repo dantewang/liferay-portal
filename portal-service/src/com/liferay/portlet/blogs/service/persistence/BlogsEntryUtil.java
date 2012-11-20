@@ -111,86 +111,6 @@ public class BlogsEntryUtil {
 	}
 
 	/**
-	* Caches the blogs entry in the entity cache if it is enabled.
-	*
-	* @param blogsEntry the blogs entry
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.blogs.model.BlogsEntry blogsEntry) {
-		getPersistence().cacheResult(blogsEntry);
-	}
-
-	/**
-	* Caches the blogs entries in the entity cache if it is enabled.
-	*
-	* @param blogsEntries the blogs entries
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> blogsEntries) {
-		getPersistence().cacheResult(blogsEntries);
-	}
-
-	/**
-	* Creates a new blogs entry with the primary key. Does not add the blogs entry to the database.
-	*
-	* @param entryId the primary key for the new blogs entry
-	* @return the new blogs entry
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry create(
-		long entryId) {
-		return getPersistence().create(entryId);
-	}
-
-	/**
-	* Removes the blogs entry with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param entryId the primary key of the blogs entry
-	* @return the blogs entry that was removed
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry remove(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence().remove(entryId);
-	}
-
-	public static com.liferay.portlet.blogs.model.BlogsEntry updateImpl(
-		com.liferay.portlet.blogs.model.BlogsEntry blogsEntry)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(blogsEntry);
-	}
-
-	/**
-	* Returns the blogs entry with the primary key or throws a {@link com.liferay.portlet.blogs.NoSuchEntryException} if it could not be found.
-	*
-	* @param entryId the primary key of the blogs entry
-	* @return the blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByPrimaryKey(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence().findByPrimaryKey(entryId);
-	}
-
-	/**
-	* Returns the blogs entry with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param entryId the primary key of the blogs entry
-	* @return the blogs entry, or <code>null</code> if a blogs entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByPrimaryKey(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(entryId);
-	}
-
-	/**
 	* Returns all the blogs entries where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -223,6 +143,25 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the blogs entries before and after the current blogs entry in the ordered set where uuid = &#63;.
+	*
+	* @param entryId the primary key of the current blogs entry
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByUuid_PrevAndNext(
+		long entryId, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByUuid_PrevAndNext(entryId, uuid, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the blogs entries where uuid = &#63;.
 	*
 	* <p>
@@ -244,6 +183,21 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -261,6 +215,19 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -273,6 +240,21 @@ public class BlogsEntryUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_First(uuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByUuid_Last(uuid);
 	}
 
 	/**
@@ -293,6 +275,19 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_Last(uuid);
+	}
+
+	/**
 	* Returns the last blogs entry in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -308,22 +303,26 @@ public class BlogsEntryUtil {
 	}
 
 	/**
-	* Returns the blogs entries before and after the current blogs entry in the ordered set where uuid = &#63;.
+	* Removes all the blogs entries where uuid = &#63; from the database.
 	*
-	* @param entryId the primary key of the current blogs entry
 	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByUuid_PrevAndNext(
-		long entryId, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByUuid_PrevAndNext(entryId, uuid, orderByComparator);
+	public static void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid(uuid);
+	}
+
+	/**
+	* Returns the number of blogs entries where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid(uuid);
 	}
 
 	/**
@@ -372,6 +371,34 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Removes the blogs entry where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the blogs entry that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().removeByUUID_G(uuid, groupId);
+	}
+
+	/**
+	* Returns the number of blogs entries where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUUID_G(java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUUID_G(uuid, groupId);
+	}
+
+	/**
 	* Returns all the blogs entries where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -406,6 +433,27 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the blogs entries before and after the current blogs entry in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param entryId the primary key of the current blogs entry
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByUuid_C_PrevAndNext(
+		long entryId, java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByUuid_C_PrevAndNext(entryId, uuid, companyId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the blogs entries where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
@@ -429,6 +477,22 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByUuid_C_First(uuid, companyId);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -448,6 +512,20 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_C_First(uuid, companyId);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -462,6 +540,22 @@ public class BlogsEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByUuid_C_First(uuid, companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByUuid_C_Last(uuid, companyId);
 	}
 
 	/**
@@ -484,6 +578,20 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_C_Last(uuid, companyId);
+	}
+
+	/**
 	* Returns the last blogs entry in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -501,24 +609,28 @@ public class BlogsEntryUtil {
 	}
 
 	/**
-	* Returns the blogs entries before and after the current blogs entry in the ordered set where uuid = &#63; and companyId = &#63;.
+	* Removes all the blogs entries where uuid = &#63; and companyId = &#63; from the database.
 	*
-	* @param entryId the primary key of the current blogs entry
 	* @param uuid the uuid
 	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByUuid_C_PrevAndNext(
-		long entryId, java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByUuid_C_PrevAndNext(entryId, uuid, companyId,
-			orderByComparator);
+	public static void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid_C(uuid, companyId);
+	}
+
+	/**
+	* Returns the number of blogs entries where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid_C(uuid, companyId);
 	}
 
 	/**
@@ -551,92 +663,6 @@ public class BlogsEntryUtil {
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByGroupId(groupId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the blogs entries where groupId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param start the lower bound of the range of blogs entries
-	* @param end the upper bound of the range of blogs entries (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByGroupId(
-		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByGroupId(groupId, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence().findByGroupId_First(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence().findByGroupId_Last(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
 	}
 
 	/**
@@ -734,6 +760,183 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the blogs entries where groupId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param start the lower bound of the range of blogs entries
+	* @param end the upper bound of the range of blogs entries (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByGroupId(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByGroupId(groupId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByGroupId_First(groupId);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByGroupId_Last(groupId);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByGroupId_Last(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
+	}
+
+	/**
+	* Removes all the blogs entries where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByGroupId(groupId);
+	}
+
+	/**
 	* Returns all the blogs entries where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -766,6 +969,26 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63;.
+	*
+	* @param entryId the primary key of the current blogs entry
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByCompanyId_PrevAndNext(
+		long entryId, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByCompanyId_PrevAndNext(entryId, companyId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the blogs entries where companyId = &#63;.
 	*
 	* <p>
@@ -788,6 +1011,21 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -806,6 +1044,19 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -819,6 +1070,21 @@ public class BlogsEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_First(companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByCompanyId_Last(companyId);
 	}
 
 	/**
@@ -840,6 +1106,19 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_Last(companyId);
+	}
+
+	/**
 	* Returns the last blogs entry in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -856,23 +1135,26 @@ public class BlogsEntryUtil {
 	}
 
 	/**
-	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63;.
+	* Removes all the blogs entries where companyId = &#63; from the database.
 	*
-	* @param entryId the primary key of the current blogs entry
 	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByCompanyId_PrevAndNext(
-		long entryId, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByCompanyId_PrevAndNext(entryId, companyId,
-			orderByComparator);
+	public static void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByCompanyId(companyId);
+	}
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByCompanyId(companyId);
 	}
 
 	/**
@@ -910,6 +1192,27 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
+	*
+	* @param entryId the primary key of the current blogs entry
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_U_PrevAndNext(
+		long entryId, long companyId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByC_U_PrevAndNext(entryId, companyId, userId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the blogs entries where companyId = &#63; and userId = &#63;.
 	*
 	* <p>
@@ -933,6 +1236,22 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and userId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_U_First(
+		long companyId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByC_U_First(companyId, userId);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
 	*
 	* @param companyId the company ID
@@ -952,6 +1271,20 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and userId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_U_First(
+		long companyId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_U_First(companyId, userId);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
 	*
 	* @param companyId the company ID
@@ -966,6 +1299,22 @@ public class BlogsEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_U_First(companyId, userId, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and userId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_U_Last(
+		long companyId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByC_U_Last(companyId, userId);
 	}
 
 	/**
@@ -988,6 +1337,20 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and userId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_U_Last(
+		long companyId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_U_Last(companyId, userId);
+	}
+
+	/**
 	* Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
 	*
 	* @param companyId the company ID
@@ -1005,24 +1368,28 @@ public class BlogsEntryUtil {
 	}
 
 	/**
-	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
+	* Removes all the blogs entries where companyId = &#63; and userId = &#63; from the database.
 	*
-	* @param entryId the primary key of the current blogs entry
 	* @param companyId the company ID
 	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_U_PrevAndNext(
-		long entryId, long companyId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByC_U_PrevAndNext(entryId, companyId, userId,
-			orderByComparator);
+	public static void removeByC_U(long companyId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_U(companyId, userId);
+	}
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and userId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_U(long companyId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_U(companyId, userId);
 	}
 
 	/**
@@ -1060,6 +1427,27 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param entryId the primary key of the current blogs entry
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_LtD_PrevAndNext(
+		long entryId, long companyId, java.util.Date displayDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByC_LtD_PrevAndNext(entryId, companyId, displayDate,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63;.
 	*
 	* <p>
@@ -1084,6 +1472,22 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_LtD_First(
+		long companyId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByC_LtD_First(companyId, displayDate);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
 	*
 	* @param companyId the company ID
@@ -1103,6 +1507,20 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_LtD_First(
+		long companyId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_LtD_First(companyId, displayDate);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
 	*
 	* @param companyId the company ID
@@ -1117,6 +1535,22 @@ public class BlogsEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_LtD_First(companyId, displayDate, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_LtD_Last(
+		long companyId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByC_LtD_Last(companyId, displayDate);
 	}
 
 	/**
@@ -1139,6 +1573,20 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_LtD_Last(
+		long companyId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_LtD_Last(companyId, displayDate);
+	}
+
+	/**
 	* Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
 	*
 	* @param companyId the company ID
@@ -1156,24 +1604,28 @@ public class BlogsEntryUtil {
 	}
 
 	/**
-	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
+	* Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; from the database.
 	*
-	* @param entryId the primary key of the current blogs entry
 	* @param companyId the company ID
 	* @param displayDate the display date
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_LtD_PrevAndNext(
-		long entryId, long companyId, java.util.Date displayDate,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByC_LtD_PrevAndNext(entryId, companyId, displayDate,
-			orderByComparator);
+	public static void removeByC_LtD(long companyId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_LtD(companyId, displayDate);
+	}
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_LtD(long companyId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_LtD(companyId, displayDate);
 	}
 
 	/**
@@ -1211,6 +1663,27 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
+	*
+	* @param entryId the primary key of the current blogs entry
+	* @param companyId the company ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_NotS_PrevAndNext(
+		long entryId, long companyId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByC_NotS_PrevAndNext(entryId, companyId, status,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the blogs entries where companyId = &#63; and status &ne; &#63;.
 	*
 	* <p>
@@ -1235,6 +1708,22 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_NotS_First(
+		long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByC_NotS_First(companyId, status);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
 	*
 	* @param companyId the company ID
@@ -1254,6 +1743,20 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_NotS_First(
+		long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_NotS_First(companyId, status);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
 	*
 	* @param companyId the company ID
@@ -1268,6 +1771,22 @@ public class BlogsEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_NotS_First(companyId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_NotS_Last(
+		long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByC_NotS_Last(companyId, status);
 	}
 
 	/**
@@ -1290,6 +1809,20 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_NotS_Last(
+		long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_NotS_Last(companyId, status);
+	}
+
+	/**
 	* Returns the last blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
 	*
 	* @param companyId the company ID
@@ -1307,24 +1840,28 @@ public class BlogsEntryUtil {
 	}
 
 	/**
-	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
+	* Removes all the blogs entries where companyId = &#63; and status &ne; &#63; from the database.
 	*
-	* @param entryId the primary key of the current blogs entry
 	* @param companyId the company ID
 	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_NotS_PrevAndNext(
-		long entryId, long companyId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByC_NotS_PrevAndNext(entryId, companyId, status,
-			orderByComparator);
+	public static void removeByC_NotS(long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_NotS(companyId, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_NotS(long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_NotS(companyId, status);
 	}
 
 	/**
@@ -1362,6 +1899,27 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and status = &#63;.
+	*
+	* @param entryId the primary key of the current blogs entry
+	* @param companyId the company ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_S_PrevAndNext(
+		long entryId, long companyId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByC_S_PrevAndNext(entryId, companyId, status,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the blogs entries where companyId = &#63; and status = &#63;.
 	*
 	* <p>
@@ -1385,6 +1943,22 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_S_First(
+		long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByC_S_First(companyId, status);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -1404,6 +1978,20 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_S_First(
+		long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_S_First(companyId, status);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -1418,6 +2006,22 @@ public class BlogsEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_S_First(companyId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_S_Last(
+		long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByC_S_Last(companyId, status);
 	}
 
 	/**
@@ -1440,6 +2044,20 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_S_Last(
+		long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_S_Last(companyId, status);
+	}
+
+	/**
 	* Returns the last blogs entry in the ordered set where companyId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -1457,24 +2075,28 @@ public class BlogsEntryUtil {
 	}
 
 	/**
-	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and status = &#63;.
+	* Removes all the blogs entries where companyId = &#63; and status = &#63; from the database.
 	*
-	* @param entryId the primary key of the current blogs entry
 	* @param companyId the company ID
 	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_S_PrevAndNext(
-		long entryId, long companyId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByC_S_PrevAndNext(entryId, companyId, status,
-			orderByComparator);
+	public static void removeByC_S(long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_S(companyId, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_S(long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_S(companyId, status);
 	}
 
 	/**
@@ -1523,6 +2145,34 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Removes the blogs entry where groupId = &#63; and urlTitle = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @return the blogs entry that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry removeByG_UT(
+		long groupId, java.lang.String urlTitle)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().removeByG_UT(groupId, urlTitle);
+	}
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and urlTitle = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_UT(long groupId, java.lang.String urlTitle)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_UT(groupId, urlTitle);
+	}
+
+	/**
 	* Returns all the blogs entries where groupId = &#63; and displayDate &lt; &#63;.
 	*
 	* @param groupId the group ID
@@ -1554,102 +2204,6 @@ public class BlogsEntryUtil {
 		long groupId, java.util.Date displayDate, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByG_LtD(groupId, displayDate, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the blogs entries where groupId = &#63; and displayDate &lt; &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param start the lower bound of the range of blogs entries
-	* @param end the upper bound of the range of blogs entries (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_LtD(
-		long groupId, java.util.Date displayDate, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_LtD(groupId, displayDate, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_First(
-		long groupId, java.util.Date displayDate,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_LtD_First(groupId, displayDate, orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_First(
-		long groupId, java.util.Date displayDate,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_LtD_First(groupId, displayDate, orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_Last(
-		long groupId, java.util.Date displayDate,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_LtD_Last(groupId, displayDate, orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_Last(
-		long groupId, java.util.Date displayDate,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_LtD_Last(groupId, displayDate, orderByComparator);
 	}
 
 	/**
@@ -1754,6 +2308,201 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the blogs entries where groupId = &#63; and displayDate &lt; &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param start the lower bound of the range of blogs entries
+	* @param end the upper bound of the range of blogs entries (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_LtD(
+		long groupId, java.util.Date displayDate, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_LtD(groupId, displayDate, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_First(
+		long groupId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByG_LtD_First(groupId, displayDate);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_First(
+		long groupId, java.util.Date displayDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_LtD_First(groupId, displayDate, orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_First(
+		long groupId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_LtD_First(groupId, displayDate);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_First(
+		long groupId, java.util.Date displayDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_LtD_First(groupId, displayDate, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_Last(
+		long groupId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByG_LtD_Last(groupId, displayDate);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_Last(
+		long groupId, java.util.Date displayDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_LtD_Last(groupId, displayDate, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_Last(
+		long groupId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_LtD_Last(groupId, displayDate);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_Last(
+		long groupId, java.util.Date displayDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_LtD_Last(groupId, displayDate, orderByComparator);
+	}
+
+	/**
+	* Removes all the blogs entries where groupId = &#63; and displayDate &lt; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_LtD(long groupId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_LtD(groupId, displayDate);
+	}
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_LtD(long groupId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_LtD(groupId, displayDate);
+	}
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_LtD(long groupId,
+		java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_LtD(groupId, displayDate);
+	}
+
+	/**
 	* Returns all the blogs entries where groupId = &#63; and status &ne; &#63;.
 	*
 	* @param groupId the group ID
@@ -1785,101 +2534,6 @@ public class BlogsEntryUtil {
 		long groupId, int status, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByG_NotS(groupId, status, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the blogs entries where groupId = &#63; and status &ne; &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param start the lower bound of the range of blogs entries
-	* @param end the upper bound of the range of blogs entries (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_NotS(
-		long groupId, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_NotS(groupId, status, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_NotS_First(
-		long groupId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_NotS_First(groupId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_NotS_First(
-		long groupId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_NotS_First(groupId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_NotS_Last(
-		long groupId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_NotS_Last(groupId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_NotS_Last(
-		long groupId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_NotS_Last(groupId, status, orderByComparator);
 	}
 
 	/**
@@ -1983,6 +2637,199 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the blogs entries where groupId = &#63; and status &ne; &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param start the lower bound of the range of blogs entries
+	* @param end the upper bound of the range of blogs entries (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_NotS(
+		long groupId, int status, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_NotS(groupId, status, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_NotS_First(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByG_NotS_First(groupId, status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_NotS_First(
+		long groupId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_NotS_First(groupId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_NotS_First(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_NotS_First(groupId, status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_NotS_First(
+		long groupId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_NotS_First(groupId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_NotS_Last(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByG_NotS_Last(groupId, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_NotS_Last(
+		long groupId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_NotS_Last(groupId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_NotS_Last(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_NotS_Last(groupId, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_NotS_Last(
+		long groupId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_NotS_Last(groupId, status, orderByComparator);
+	}
+
+	/**
+	* Removes all the blogs entries where groupId = &#63; and status &ne; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_NotS(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_NotS(groupId, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_NotS(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_NotS(groupId, status);
+	}
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_NotS(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_NotS(groupId, status);
+	}
+
+	/**
 	* Returns all the blogs entries where groupId = &#63; and status = &#63;.
 	*
 	* @param groupId the group ID
@@ -2014,101 +2861,6 @@ public class BlogsEntryUtil {
 		long groupId, int status, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByG_S(groupId, status, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the blogs entries where groupId = &#63; and status = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param start the lower bound of the range of blogs entries
-	* @param end the upper bound of the range of blogs entries (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_S(
-		long groupId, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_S(groupId, status, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_S_First(
-		long groupId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_S_First(groupId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_S_First(
-		long groupId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_S_First(groupId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_S_Last(
-		long groupId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_S_Last(groupId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_S_Last(
-		long groupId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_S_Last(groupId, status, orderByComparator);
 	}
 
 	/**
@@ -2212,6 +2964,199 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the blogs entries where groupId = &#63; and status = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param start the lower bound of the range of blogs entries
+	* @param end the upper bound of the range of blogs entries (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_S(
+		long groupId, int status, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_S(groupId, status, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_S_First(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByG_S_First(groupId, status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_S_First(
+		long groupId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_S_First(groupId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_S_First(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_S_First(groupId, status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_S_First(
+		long groupId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_S_First(groupId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_S_Last(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByG_S_Last(groupId, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_S_Last(
+		long groupId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_S_Last(groupId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_S_Last(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_S_Last(groupId, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_S_Last(
+		long groupId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_S_Last(groupId, status, orderByComparator);
+	}
+
+	/**
+	* Removes all the blogs entries where groupId = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_S(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_S(groupId, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_S(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_S(groupId, status);
+	}
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_S(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_S(groupId, status);
+	}
+
+	/**
 	* Returns all the blogs entries where displayDate &lt; &#63; and status = &#63;.
 	*
 	* @param displayDate the display date
@@ -2246,6 +3191,27 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the blogs entries before and after the current blogs entry in the ordered set where displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param entryId the primary key of the current blogs entry
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByLtD_S_PrevAndNext(
+		long entryId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByLtD_S_PrevAndNext(entryId, displayDate, status,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the blogs entries where displayDate &lt; &#63; and status = &#63;.
 	*
 	* <p>
@@ -2270,6 +3236,22 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param displayDate the display date
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByLtD_S_First(
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByLtD_S_First(displayDate, status);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where displayDate &lt; &#63; and status = &#63;.
 	*
 	* @param displayDate the display date
@@ -2289,6 +3271,20 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param displayDate the display date
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByLtD_S_First(
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByLtD_S_First(displayDate, status);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where displayDate &lt; &#63; and status = &#63;.
 	*
 	* @param displayDate the display date
@@ -2303,6 +3299,22 @@ public class BlogsEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByLtD_S_First(displayDate, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param displayDate the display date
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByLtD_S_Last(
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByLtD_S_Last(displayDate, status);
 	}
 
 	/**
@@ -2325,6 +3337,20 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param displayDate the display date
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByLtD_S_Last(
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByLtD_S_Last(displayDate, status);
+	}
+
+	/**
 	* Returns the last blogs entry in the ordered set where displayDate &lt; &#63; and status = &#63;.
 	*
 	* @param displayDate the display date
@@ -2342,24 +3368,28 @@ public class BlogsEntryUtil {
 	}
 
 	/**
-	* Returns the blogs entries before and after the current blogs entry in the ordered set where displayDate &lt; &#63; and status = &#63;.
+	* Removes all the blogs entries where displayDate &lt; &#63; and status = &#63; from the database.
 	*
-	* @param entryId the primary key of the current blogs entry
 	* @param displayDate the display date
 	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByLtD_S_PrevAndNext(
-		long entryId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByLtD_S_PrevAndNext(entryId, displayDate, status,
-			orderByComparator);
+	public static void removeByLtD_S(java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByLtD_S(displayDate, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByLtD_S(java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByLtD_S(displayDate, status);
 	}
 
 	/**
@@ -2400,6 +3430,28 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param entryId the primary key of the current blogs entry
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_U_NotS_PrevAndNext(
+		long entryId, long companyId, long userId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByC_U_NotS_PrevAndNext(entryId, companyId, userId,
+			status, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
 	*
 	* <p>
@@ -2425,6 +3477,23 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_U_NotS_First(
+		long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByC_U_NotS_First(companyId, userId, status);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
 	*
 	* @param companyId the company ID
@@ -2446,6 +3515,21 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_U_NotS_First(
+		long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_U_NotS_First(companyId, userId, status);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
 	*
 	* @param companyId the company ID
@@ -2462,6 +3546,23 @@ public class BlogsEntryUtil {
 		return getPersistence()
 				   .fetchByC_U_NotS_First(companyId, userId, status,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_U_NotS_Last(
+		long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByC_U_NotS_Last(companyId, userId, status);
 	}
 
 	/**
@@ -2486,6 +3587,21 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_U_NotS_Last(
+		long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_U_NotS_Last(companyId, userId, status);
+	}
+
+	/**
 	* Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
 	*
 	* @param companyId the company ID
@@ -2505,25 +3621,30 @@ public class BlogsEntryUtil {
 	}
 
 	/**
-	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	* Removes all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63; from the database.
 	*
-	* @param entryId the primary key of the current blogs entry
 	* @param companyId the company ID
 	* @param userId the user ID
 	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_U_NotS_PrevAndNext(
-		long entryId, long companyId, long userId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByC_U_NotS_PrevAndNext(entryId, companyId, userId,
-			status, orderByComparator);
+	public static void removeByC_U_NotS(long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_U_NotS(companyId, userId, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_U_NotS(long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_U_NotS(companyId, userId, status);
 	}
 
 	/**
@@ -2564,6 +3685,28 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param entryId the primary key of the current blogs entry
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_U_S_PrevAndNext(
+		long entryId, long companyId, long userId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByC_U_S_PrevAndNext(entryId, companyId, userId, status,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
 	*
 	* <p>
@@ -2589,6 +3732,23 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_U_S_First(
+		long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByC_U_S_First(companyId, userId, status);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -2610,6 +3770,21 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_U_S_First(
+		long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_U_S_First(companyId, userId, status);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -2626,6 +3801,23 @@ public class BlogsEntryUtil {
 		return getPersistence()
 				   .fetchByC_U_S_First(companyId, userId, status,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_U_S_Last(
+		long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByC_U_S_Last(companyId, userId, status);
 	}
 
 	/**
@@ -2650,6 +3842,21 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_U_S_Last(
+		long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_U_S_Last(companyId, userId, status);
+	}
+
+	/**
 	* Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -2669,25 +3876,30 @@ public class BlogsEntryUtil {
 	}
 
 	/**
-	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
+	* Removes all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63; from the database.
 	*
-	* @param entryId the primary key of the current blogs entry
 	* @param companyId the company ID
 	* @param userId the user ID
 	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_U_S_PrevAndNext(
-		long entryId, long companyId, long userId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByC_U_S_PrevAndNext(entryId, companyId, userId, status,
-			orderByComparator);
+	public static void removeByC_U_S(long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_U_S(companyId, userId, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_U_S(long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_U_S(companyId, userId, status);
 	}
 
 	/**
@@ -2728,6 +3940,28 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param entryId the primary key of the current blogs entry
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_LtD_NotS_PrevAndNext(
+		long entryId, long companyId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByC_LtD_NotS_PrevAndNext(entryId, companyId,
+			displayDate, status, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	*
 	* <p>
@@ -2754,6 +3988,24 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_LtD_NotS_First(
+		long companyId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByC_LtD_NotS_First(companyId, displayDate, status);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	*
 	* @param companyId the company ID
@@ -2775,6 +4027,22 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_LtD_NotS_First(
+		long companyId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_LtD_NotS_First(companyId, displayDate, status);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	*
 	* @param companyId the company ID
@@ -2791,6 +4059,24 @@ public class BlogsEntryUtil {
 		return getPersistence()
 				   .fetchByC_LtD_NotS_First(companyId, displayDate, status,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_LtD_NotS_Last(
+		long companyId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByC_LtD_NotS_Last(companyId, displayDate, status);
 	}
 
 	/**
@@ -2815,6 +4101,22 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_LtD_NotS_Last(
+		long companyId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_LtD_NotS_Last(companyId, displayDate, status);
+	}
+
+	/**
 	* Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	*
 	* @param companyId the company ID
@@ -2834,25 +4136,32 @@ public class BlogsEntryUtil {
 	}
 
 	/**
-	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	* Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
 	*
-	* @param entryId the primary key of the current blogs entry
 	* @param companyId the company ID
 	* @param displayDate the display date
 	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_LtD_NotS_PrevAndNext(
-		long entryId, long companyId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByC_LtD_NotS_PrevAndNext(entryId, companyId,
-			displayDate, status, orderByComparator);
+	public static void removeByC_LtD_NotS(long companyId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_LtD_NotS(companyId, displayDate, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_LtD_NotS(long companyId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_LtD_NotS(companyId, displayDate, status);
 	}
 
 	/**
@@ -2893,6 +4202,28 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param entryId the primary key of the current blogs entry
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_LtD_S_PrevAndNext(
+		long entryId, long companyId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByC_LtD_S_PrevAndNext(entryId, companyId, displayDate,
+			status, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	*
 	* <p>
@@ -2919,6 +4250,24 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_LtD_S_First(
+		long companyId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByC_LtD_S_First(companyId, displayDate, status);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -2940,6 +4289,22 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_LtD_S_First(
+		long companyId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_LtD_S_First(companyId, displayDate, status);
+	}
+
+	/**
 	* Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -2956,6 +4321,24 @@ public class BlogsEntryUtil {
 		return getPersistence()
 				   .fetchByC_LtD_S_First(companyId, displayDate, status,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByC_LtD_S_Last(
+		long companyId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByC_LtD_S_Last(companyId, displayDate, status);
 	}
 
 	/**
@@ -2980,6 +4363,22 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByC_LtD_S_Last(
+		long companyId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_LtD_S_Last(companyId, displayDate, status);
+	}
+
+	/**
 	* Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -2999,25 +4398,32 @@ public class BlogsEntryUtil {
 	}
 
 	/**
-	* Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	* Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
 	*
-	* @param entryId the primary key of the current blogs entry
 	* @param companyId the company ID
 	* @param displayDate the display date
 	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry[] findByC_LtD_S_PrevAndNext(
-		long entryId, long companyId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByC_LtD_S_PrevAndNext(entryId, companyId, displayDate,
-			status, orderByComparator);
+	public static void removeByC_LtD_S(long companyId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_LtD_S(companyId, displayDate, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_LtD_S(long companyId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_LtD_S(companyId, displayDate, status);
 	}
 
 	/**
@@ -3055,112 +4461,6 @@ public class BlogsEntryUtil {
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .findByG_U_LtD(groupId, userId, displayDate, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param start the lower bound of the range of blogs entries
-	* @param end the upper bound of the range of blogs entries (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_U_LtD(
-		long groupId, long userId, java.util.Date displayDate, int start,
-		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_U_LtD(groupId, userId, displayDate, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_First(
-		long groupId, long userId, java.util.Date displayDate,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_U_LtD_First(groupId, userId, displayDate,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_First(
-		long groupId, long userId, java.util.Date displayDate,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_U_LtD_First(groupId, userId, displayDate,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_Last(
-		long groupId, long userId, java.util.Date displayDate,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_U_LtD_Last(groupId, userId, displayDate,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_Last(
-		long groupId, long userId, java.util.Date displayDate,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_U_LtD_Last(groupId, userId, displayDate,
-			orderByComparator);
 	}
 
 	/**
@@ -3271,6 +4571,222 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param start the lower bound of the range of blogs entries
+	* @param end the upper bound of the range of blogs entries (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_U_LtD(
+		long groupId, long userId, java.util.Date displayDate, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_U_LtD(groupId, userId, displayDate, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_First(
+		long groupId, long userId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByG_U_LtD_First(groupId, userId, displayDate);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_First(
+		long groupId, long userId, java.util.Date displayDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_U_LtD_First(groupId, userId, displayDate,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_First(
+		long groupId, long userId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_LtD_First(groupId, userId, displayDate);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_First(
+		long groupId, long userId, java.util.Date displayDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_LtD_First(groupId, userId, displayDate,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_Last(
+		long groupId, long userId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByG_U_LtD_Last(groupId, userId, displayDate);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_Last(
+		long groupId, long userId, java.util.Date displayDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_U_LtD_Last(groupId, userId, displayDate,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_Last(
+		long groupId, long userId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_LtD_Last(groupId, userId, displayDate);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_Last(
+		long groupId, long userId, java.util.Date displayDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_LtD_Last(groupId, userId, displayDate,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_U_LtD(long groupId, long userId,
+		java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_U_LtD(groupId, userId, displayDate);
+	}
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_U_LtD(long groupId, long userId,
+		java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_U_LtD(groupId, userId, displayDate);
+	}
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_U_LtD(long groupId, long userId,
+		java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterCountByG_U_LtD(groupId, userId, displayDate);
+	}
+
+	/**
 	* Returns all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
 	*
 	* @param groupId the group ID
@@ -3305,111 +4821,6 @@ public class BlogsEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .findByG_U_NotS(groupId, userId, status, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @param start the lower bound of the range of blogs entries
-	* @param end the upper bound of the range of blogs entries (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_U_NotS(
-		long groupId, long userId, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_U_NotS(groupId, userId, status, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_NotS_First(
-		long groupId, long userId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_U_NotS_First(groupId, userId, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_NotS_First(
-		long groupId, long userId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_U_NotS_First(groupId, userId, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_NotS_Last(
-		long groupId, long userId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_U_NotS_Last(groupId, userId, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_NotS_Last(
-		long groupId, long userId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_U_NotS_Last(groupId, userId, status,
-			orderByComparator);
 	}
 
 	/**
@@ -3519,6 +4930,216 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @param start the lower bound of the range of blogs entries
+	* @param end the upper bound of the range of blogs entries (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_U_NotS(
+		long groupId, long userId, int status, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_U_NotS(groupId, userId, status, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_NotS_First(
+		long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByG_U_NotS_First(groupId, userId, status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_NotS_First(
+		long groupId, long userId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_U_NotS_First(groupId, userId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_NotS_First(
+		long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_NotS_First(groupId, userId, status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_NotS_First(
+		long groupId, long userId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_NotS_First(groupId, userId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_NotS_Last(
+		long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByG_U_NotS_Last(groupId, userId, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_NotS_Last(
+		long groupId, long userId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_U_NotS_Last(groupId, userId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_NotS_Last(
+		long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_NotS_Last(groupId, userId, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_NotS_Last(
+		long groupId, long userId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_NotS_Last(groupId, userId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_U_NotS(long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_U_NotS(groupId, userId, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_U_NotS(long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_U_NotS(groupId, userId, status);
+	}
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_U_NotS(long groupId, long userId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_U_NotS(groupId, userId, status);
+	}
+
+	/**
 	* Returns all the blogs entries where groupId = &#63; and userId = &#63; and status = &#63;.
 	*
 	* @param groupId the group ID
@@ -3552,108 +5173,6 @@ public class BlogsEntryUtil {
 		long groupId, long userId, int status, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByG_U_S(groupId, userId, status, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the blogs entries where groupId = &#63; and userId = &#63; and status = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @param start the lower bound of the range of blogs entries
-	* @param end the upper bound of the range of blogs entries (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_U_S(
-		long groupId, long userId, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_U_S(groupId, userId, status, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_S_First(
-		long groupId, long userId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_U_S_First(groupId, userId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_S_First(
-		long groupId, long userId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_U_S_First(groupId, userId, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_S_Last(
-		long groupId, long userId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_U_S_Last(groupId, userId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_S_Last(
-		long groupId, long userId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_U_S_Last(groupId, userId, status, orderByComparator);
 	}
 
 	/**
@@ -3763,6 +5282,213 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the blogs entries where groupId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @param start the lower bound of the range of blogs entries
+	* @param end the upper bound of the range of blogs entries (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_U_S(
+		long groupId, long userId, int status, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_U_S(groupId, userId, status, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_S_First(
+		long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByG_U_S_First(groupId, userId, status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_S_First(
+		long groupId, long userId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_U_S_First(groupId, userId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_S_First(
+		long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_S_First(groupId, userId, status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_S_First(
+		long groupId, long userId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_S_First(groupId, userId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_S_Last(
+		long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByG_U_S_Last(groupId, userId, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_S_Last(
+		long groupId, long userId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_U_S_Last(groupId, userId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_S_Last(
+		long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_S_Last(groupId, userId, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_S_Last(
+		long groupId, long userId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_S_Last(groupId, userId, status, orderByComparator);
+	}
+
+	/**
+	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_U_S(long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_U_S(groupId, userId, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_U_S(long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_U_S(groupId, userId, status);
+	}
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_U_S(long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_U_S(groupId, userId, status);
+	}
+
+	/**
 	* Returns all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	*
 	* @param groupId the group ID
@@ -3797,112 +5523,6 @@ public class BlogsEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .findByG_LtD_NotS(groupId, displayDate, status, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param start the lower bound of the range of blogs entries
-	* @param end the upper bound of the range of blogs entries (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_LtD_NotS(
-		long groupId, java.util.Date displayDate, int status, int start,
-		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_LtD_NotS(groupId, displayDate, status, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_NotS_First(
-		long groupId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_LtD_NotS_First(groupId, displayDate, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_NotS_First(
-		long groupId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_LtD_NotS_First(groupId, displayDate, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_NotS_Last(
-		long groupId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_LtD_NotS_Last(groupId, displayDate, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_NotS_Last(
-		long groupId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_LtD_NotS_Last(groupId, displayDate, status,
-			orderByComparator);
 	}
 
 	/**
@@ -4015,6 +5635,225 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param start the lower bound of the range of blogs entries
+	* @param end the upper bound of the range of blogs entries (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_LtD_NotS(
+		long groupId, java.util.Date displayDate, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_LtD_NotS(groupId, displayDate, status, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_NotS_First(
+		long groupId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_LtD_NotS_First(groupId, displayDate, status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_NotS_First(
+		long groupId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_LtD_NotS_First(groupId, displayDate, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_NotS_First(
+		long groupId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_LtD_NotS_First(groupId, displayDate, status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_NotS_First(
+		long groupId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_LtD_NotS_First(groupId, displayDate, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_NotS_Last(
+		long groupId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_LtD_NotS_Last(groupId, displayDate, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_NotS_Last(
+		long groupId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_LtD_NotS_Last(groupId, displayDate, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_NotS_Last(
+		long groupId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_LtD_NotS_Last(groupId, displayDate, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_NotS_Last(
+		long groupId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_LtD_NotS_Last(groupId, displayDate, status,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_LtD_NotS(long groupId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_LtD_NotS(groupId, displayDate, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_LtD_NotS(long groupId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_LtD_NotS(groupId, displayDate, status);
+	}
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_LtD_NotS(long groupId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterCountByG_LtD_NotS(groupId, displayDate, status);
+	}
+
+	/**
 	* Returns all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	*
 	* @param groupId the group ID
@@ -4049,112 +5888,6 @@ public class BlogsEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .findByG_LtD_S(groupId, displayDate, status, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param start the lower bound of the range of blogs entries
-	* @param end the upper bound of the range of blogs entries (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_LtD_S(
-		long groupId, java.util.Date displayDate, int status, int start,
-		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_LtD_S(groupId, displayDate, status, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_S_First(
-		long groupId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_LtD_S_First(groupId, displayDate, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_S_First(
-		long groupId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_LtD_S_First(groupId, displayDate, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_S_Last(
-		long groupId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_LtD_S_Last(groupId, displayDate, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_S_Last(
-		long groupId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_LtD_S_Last(groupId, displayDate, status,
-			orderByComparator);
 	}
 
 	/**
@@ -4265,6 +5998,221 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param start the lower bound of the range of blogs entries
+	* @param end the upper bound of the range of blogs entries (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_LtD_S(
+		long groupId, java.util.Date displayDate, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_LtD_S(groupId, displayDate, status, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_S_First(
+		long groupId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByG_LtD_S_First(groupId, displayDate, status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_S_First(
+		long groupId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_LtD_S_First(groupId, displayDate, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_S_First(
+		long groupId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_LtD_S_First(groupId, displayDate, status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_S_First(
+		long groupId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_LtD_S_First(groupId, displayDate, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_S_Last(
+		long groupId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByG_LtD_S_Last(groupId, displayDate, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_LtD_S_Last(
+		long groupId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_LtD_S_Last(groupId, displayDate, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_S_Last(
+		long groupId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_LtD_S_Last(groupId, displayDate, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_LtD_S_Last(
+		long groupId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_LtD_S_Last(groupId, displayDate, status,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_LtD_S(long groupId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_LtD_S(groupId, displayDate, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_LtD_S(long groupId, java.util.Date displayDate,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_LtD_S(groupId, displayDate, status);
+	}
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_LtD_S(long groupId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterCountByG_LtD_S(groupId, displayDate, status);
+	}
+
+	/**
 	* Returns all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	*
 	* @param groupId the group ID
@@ -4304,117 +6252,6 @@ public class BlogsEntryUtil {
 		return getPersistence()
 				   .findByG_U_LtD_NotS(groupId, userId, displayDate, status,
 			start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param start the lower bound of the range of blogs entries
-	* @param end the upper bound of the range of blogs entries (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_U_LtD_NotS(
-		long groupId, long userId, java.util.Date displayDate, int status,
-		int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_U_LtD_NotS(groupId, userId, displayDate, status,
-			start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_NotS_First(
-		long groupId, long userId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_U_LtD_NotS_First(groupId, userId, displayDate,
-			status, orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_NotS_First(
-		long groupId, long userId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_U_LtD_NotS_First(groupId, userId, displayDate,
-			status, orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_NotS_Last(
-		long groupId, long userId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_U_LtD_NotS_Last(groupId, userId, displayDate,
-			status, orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_NotS_Last(
-		long groupId, long userId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_U_LtD_NotS_Last(groupId, userId, displayDate,
-			status, orderByComparator);
 	}
 
 	/**
@@ -4536,6 +6373,243 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param start the lower bound of the range of blogs entries
+	* @param end the upper bound of the range of blogs entries (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_U_LtD_NotS(
+		long groupId, long userId, java.util.Date displayDate, int status,
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_U_LtD_NotS(groupId, userId, displayDate, status,
+			start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_NotS_First(
+		long groupId, long userId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_U_LtD_NotS_First(groupId, userId, displayDate,
+			status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_NotS_First(
+		long groupId, long userId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_U_LtD_NotS_First(groupId, userId, displayDate,
+			status, orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_NotS_First(
+		long groupId, long userId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_LtD_NotS_First(groupId, userId, displayDate,
+			status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_NotS_First(
+		long groupId, long userId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_LtD_NotS_First(groupId, userId, displayDate,
+			status, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_NotS_Last(
+		long groupId, long userId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_U_LtD_NotS_Last(groupId, userId, displayDate, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_NotS_Last(
+		long groupId, long userId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_U_LtD_NotS_Last(groupId, userId, displayDate,
+			status, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_NotS_Last(
+		long groupId, long userId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_LtD_NotS_Last(groupId, userId, displayDate,
+			status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_NotS_Last(
+		long groupId, long userId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_LtD_NotS_Last(groupId, userId, displayDate,
+			status, orderByComparator);
+	}
+
+	/**
+	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_U_LtD_NotS(long groupId, long userId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeByG_U_LtD_NotS(groupId, userId, displayDate, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_U_LtD_NotS(long groupId, long userId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByG_U_LtD_NotS(groupId, userId, displayDate, status);
+	}
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_U_LtD_NotS(long groupId, long userId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterCountByG_U_LtD_NotS(groupId, userId, displayDate,
+			status);
+	}
+
+	/**
 	* Returns all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	*
 	* @param groupId the group ID
@@ -4575,117 +6649,6 @@ public class BlogsEntryUtil {
 		return getPersistence()
 				   .findByG_U_LtD_S(groupId, userId, displayDate, status,
 			start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param start the lower bound of the range of blogs entries
-	* @param end the upper bound of the range of blogs entries (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_U_LtD_S(
-		long groupId, long userId, java.util.Date displayDate, int status,
-		int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_U_LtD_S(groupId, userId, displayDate, status,
-			start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_S_First(
-		long groupId, long userId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_U_LtD_S_First(groupId, userId, displayDate, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_S_First(
-		long groupId, long userId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_U_LtD_S_First(groupId, userId, displayDate,
-			status, orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_S_Last(
-		long groupId, long userId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_U_LtD_S_Last(groupId, userId, displayDate, status,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_S_Last(
-		long groupId, long userId, java.util.Date displayDate, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_U_LtD_S_Last(groupId, userId, displayDate, status,
-			orderByComparator);
 	}
 
 	/**
@@ -4806,6 +6769,318 @@ public class BlogsEntryUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param start the lower bound of the range of blogs entries
+	* @param end the upper bound of the range of blogs entries (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> findByG_U_LtD_S(
+		long groupId, long userId, java.util.Date displayDate, int status,
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_U_LtD_S(groupId, userId, displayDate, status,
+			start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_S_First(
+		long groupId, long userId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_U_LtD_S_First(groupId, userId, displayDate, status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_S_First(
+		long groupId, long userId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_U_LtD_S_First(groupId, userId, displayDate, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_S_First(
+		long groupId, long userId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_LtD_S_First(groupId, userId, displayDate, status);
+	}
+
+	/**
+	* Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_S_First(
+		long groupId, long userId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_LtD_S_First(groupId, userId, displayDate,
+			status, orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_S_Last(
+		long groupId, long userId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_U_LtD_S_Last(groupId, userId, displayDate, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByG_U_LtD_S_Last(
+		long groupId, long userId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_U_LtD_S_Last(groupId, userId, displayDate, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last blogs entry in the default ordered set defined by {@link BlogsEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_S_Last(
+		long groupId, long userId, java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_LtD_S_Last(groupId, userId, displayDate, status);
+	}
+
+	/**
+	* Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByG_U_LtD_S_Last(
+		long groupId, long userId, java.util.Date displayDate, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_U_LtD_S_Last(groupId, userId, displayDate, status,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_U_LtD_S(long groupId, long userId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_U_LtD_S(groupId, userId, displayDate, status);
+	}
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_U_LtD_S(long groupId, long userId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByG_U_LtD_S(groupId, userId, displayDate, status);
+	}
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_U_LtD_S(long groupId, long userId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterCountByG_U_LtD_S(groupId, userId, displayDate, status);
+	}
+
+	/**
+	* Caches the blogs entry in the entity cache if it is enabled.
+	*
+	* @param blogsEntry the blogs entry
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.blogs.model.BlogsEntry blogsEntry) {
+		getPersistence().cacheResult(blogsEntry);
+	}
+
+	/**
+	* Caches the blogs entries in the entity cache if it is enabled.
+	*
+	* @param blogsEntries the blogs entries
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> blogsEntries) {
+		getPersistence().cacheResult(blogsEntries);
+	}
+
+	/**
+	* Creates a new blogs entry with the primary key. Does not add the blogs entry to the database.
+	*
+	* @param entryId the primary key for the new blogs entry
+	* @return the new blogs entry
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry create(
+		long entryId) {
+		return getPersistence().create(entryId);
+	}
+
+	/**
+	* Removes the blogs entry with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param entryId the primary key of the blogs entry
+	* @return the blogs entry that was removed
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry remove(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().remove(entryId);
+	}
+
+	public static com.liferay.portlet.blogs.model.BlogsEntry updateImpl(
+		com.liferay.portlet.blogs.model.BlogsEntry blogsEntry)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(blogsEntry);
+	}
+
+	/**
+	* Returns the blogs entry with the primary key or throws a {@link com.liferay.portlet.blogs.NoSuchEntryException} if it could not be found.
+	*
+	* @param entryId the primary key of the blogs entry
+	* @return the blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry findByPrimaryKey(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException {
+		return getPersistence().findByPrimaryKey(entryId);
+	}
+
+	/**
+	* Returns the blogs entry with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param entryId the primary key of the blogs entry
+	* @return the blogs entry, or <code>null</code> if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.blogs.model.BlogsEntry fetchByPrimaryKey(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(entryId);
+	}
+
+	/**
 	* Returns all the blogs entries.
 	*
 	* @return the blogs entries
@@ -4855,330 +7130,6 @@ public class BlogsEntryUtil {
 	}
 
 	/**
-	* Removes all the blogs entries where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid(uuid);
-	}
-
-	/**
-	* Removes the blogs entry where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the blogs entry that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence().removeByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Removes all the blogs entries where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByCompanyId(companyId);
-	}
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and userId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_U(long companyId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_U(companyId, userId);
-	}
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param displayDate the display date
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_LtD(long companyId, java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_LtD(companyId, displayDate);
-	}
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and status &ne; &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_NotS(long companyId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_NotS(companyId, status);
-	}
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and status = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_S(long companyId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_S(companyId, status);
-	}
-
-	/**
-	* Removes the blogs entry where groupId = &#63; and urlTitle = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @return the blogs entry that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.blogs.model.BlogsEntry removeByG_UT(
-		long groupId, java.lang.String urlTitle)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException {
-		return getPersistence().removeByG_UT(groupId, urlTitle);
-	}
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and displayDate &lt; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_LtD(long groupId, java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_LtD(groupId, displayDate);
-	}
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and status &ne; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_NotS(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_NotS(groupId, status);
-	}
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_S(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_S(groupId, status);
-	}
-
-	/**
-	* Removes all the blogs entries where displayDate &lt; &#63; and status = &#63; from the database.
-	*
-	* @param displayDate the display date
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByLtD_S(java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByLtD_S(displayDate, status);
-	}
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_U_NotS(long companyId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_U_NotS(companyId, userId, status);
-	}
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_U_S(long companyId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_U_S(companyId, userId, status);
-	}
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param displayDate the display date
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_LtD_NotS(long companyId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_LtD_NotS(companyId, displayDate, status);
-	}
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param displayDate the display date
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_LtD_S(long companyId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_LtD_S(companyId, displayDate, status);
-	}
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_U_LtD(long groupId, long userId,
-		java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_U_LtD(groupId, userId, displayDate);
-	}
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_U_NotS(long groupId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_U_NotS(groupId, userId, status);
-	}
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_U_S(long groupId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_U_S(groupId, userId, status);
-	}
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_LtD_NotS(long groupId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_LtD_NotS(groupId, displayDate, status);
-	}
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_LtD_S(long groupId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_LtD_S(groupId, displayDate, status);
-	}
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_U_LtD_NotS(long groupId, long userId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence()
-			.removeByG_U_LtD_NotS(groupId, userId, displayDate, status);
-	}
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_U_LtD_S(long groupId, long userId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_U_LtD_S(groupId, userId, displayDate, status);
-	}
-
-	/**
 	* Removes all the blogs entries from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -5186,512 +7137,6 @@ public class BlogsEntryUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of blogs entries where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid(uuid);
-	}
-
-	/**
-	* Returns the number of blogs entries where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Returns the number of blogs entries where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByCompanyId(companyId);
-	}
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and userId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_U(long companyId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_U(companyId, userId);
-	}
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param companyId the company ID
-	* @param displayDate the display date
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_LtD(long companyId, java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_LtD(companyId, displayDate);
-	}
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and status &ne; &#63;.
-	*
-	* @param companyId the company ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_NotS(long companyId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_NotS(companyId, status);
-	}
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and status = &#63;.
-	*
-	* @param companyId the company ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_S(long companyId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_S(companyId, status);
-	}
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and urlTitle = &#63;.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_UT(long groupId, java.lang.String urlTitle)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_UT(groupId, urlTitle);
-	}
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_LtD(long groupId, java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_LtD(groupId, displayDate);
-	}
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_LtD(long groupId,
-		java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_LtD(groupId, displayDate);
-	}
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_NotS(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_NotS(groupId, status);
-	}
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_NotS(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_NotS(groupId, status);
-	}
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_S(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_S(groupId, status);
-	}
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_S(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_S(groupId, status);
-	}
-
-	/**
-	* Returns the number of blogs entries where displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByLtD_S(java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByLtD_S(displayDate, status);
-	}
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_U_NotS(long companyId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_U_NotS(companyId, userId, status);
-	}
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_U_S(long companyId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_U_S(companyId, userId, status);
-	}
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param companyId the company ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_LtD_NotS(long companyId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_LtD_NotS(companyId, displayDate, status);
-	}
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param companyId the company ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_LtD_S(long companyId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_LtD_S(companyId, displayDate, status);
-	}
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_U_LtD(long groupId, long userId,
-		java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_U_LtD(groupId, userId, displayDate);
-	}
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_U_LtD(long groupId, long userId,
-		java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterCountByG_U_LtD(groupId, userId, displayDate);
-	}
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_U_NotS(long groupId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_U_NotS(groupId, userId, status);
-	}
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_U_NotS(long groupId, long userId,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_U_NotS(groupId, userId, status);
-	}
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_U_S(long groupId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_U_S(groupId, userId, status);
-	}
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_U_S(long groupId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_U_S(groupId, userId, status);
-	}
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_LtD_NotS(long groupId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_LtD_NotS(groupId, displayDate, status);
-	}
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_LtD_NotS(long groupId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterCountByG_LtD_NotS(groupId, displayDate, status);
-	}
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_LtD_S(long groupId, java.util.Date displayDate,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_LtD_S(groupId, displayDate, status);
-	}
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_LtD_S(long groupId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterCountByG_LtD_S(groupId, displayDate, status);
-	}
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_U_LtD_NotS(long groupId, long userId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByG_U_LtD_NotS(groupId, userId, displayDate, status);
-	}
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_U_LtD_NotS(long groupId, long userId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterCountByG_U_LtD_NotS(groupId, userId, displayDate,
-			status);
-	}
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_U_LtD_S(long groupId, long userId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByG_U_LtD_S(groupId, userId, displayDate, status);
-	}
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_U_LtD_S(long groupId, long userId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterCountByG_U_LtD_S(groupId, userId, displayDate, status);
 	}
 
 	/**
