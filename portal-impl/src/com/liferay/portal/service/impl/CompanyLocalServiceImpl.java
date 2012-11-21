@@ -546,7 +546,7 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 	public Company getCompanyByLogoId(long logoId)
 		throws PortalException, SystemException {
 
-		return companyPersistence.findByLogoId(logoId);
+		return companyPersistence.findByLogoId_First(logoId);
 	}
 
 	/**
@@ -561,7 +561,7 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 	public Company getCompanyByMx(String mx)
 		throws PortalException, SystemException {
 
-		return companyPersistence.findByMx(mx);
+		return companyPersistence.findByMx_First(mx);
 	}
 
 	/**
@@ -1158,26 +1158,27 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 		throws CompanyVirtualHostException, SystemException {
 
 		if (Validator.isNotNull(virtualHostname)) {
-			try {
-				VirtualHost virtualHost = virtualHostPersistence.findByHostname(
-					virtualHostname);
+			VirtualHost virtualHost = virtualHostPersistence.fetchByHostname(
+				virtualHostname);
 
+			if (virtualHost == null) {
+				virtualHostLocalService.updateVirtualHost(
+					companyId, 0, virtualHostname);
+			}
+			else {
 				if ((virtualHost.getCompanyId() != companyId) ||
 					(virtualHost.getLayoutSetId() != 0)) {
 
 					throw new CompanyVirtualHostException();
 				}
 			}
-			catch (NoSuchVirtualHostException nsvhe) {
-				virtualHostLocalService.updateVirtualHost(
-					companyId, 0, virtualHostname);
-			}
 		}
 		else {
-			try {
-				virtualHostPersistence.removeByC_L(companyId, 0);
-			}
-			catch (NoSuchVirtualHostException nsvhe) {
+			VirtualHost virtualHost = virtualHostPersistence.fetchByC_L(
+				companyId, 0);
+
+			if (virtualHost != null) {
+				virtualHostPersistence.remove(virtualHost);
 			}
 		}
 	}

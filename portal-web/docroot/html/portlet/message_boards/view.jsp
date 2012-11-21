@@ -485,4 +485,7 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 
 <%!
 private static Log _log = LogFactoryUtil.getLog("portal-web.docroot.html.portlet.message_boards.view_jsp");
+private static final java.util.Random _RANDOM = new java.util.Random();
+private static final int _THREAD_NUMBER_PER_PAGE = 20;
+private static final int _PAGE_NUMBER = 10;
 %>

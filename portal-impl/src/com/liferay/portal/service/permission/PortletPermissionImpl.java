@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.staging.permission.StagingPermissionUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
@@ -30,9 +31,11 @@ import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.ResourceActionsUtil;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.util.PortletCategoryKeys;
+import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.sites.util.SitesUtil;
 
@@ -210,7 +213,16 @@ public class PortletPermissionImpl implements PortletPermission {
 			return true;
 		}
 
-		return contains(
+		if ((layout != null) && layout.isTypeControlPanel()) {
+			String category = GetterUtil.getString(
+				portlet.getControlPanelEntryCategory());
+
+			if (category.equals(PortletCategoryKeys.CONTENT)) {
+				layout = null;
+			}
+		}
+
+		return doContains(
 			permissionChecker, groupId, layout, portlet.getPortletId(),
 			actionId, strict);
 	}
@@ -230,60 +242,15 @@ public class PortletPermissionImpl implements PortletPermission {
 			String portletId, String actionId, boolean strict)
 		throws PortalException, SystemException {
 
-		String name = null;
-		String primKey = null;
+		Portlet portlet = PortletLocalServiceUtil.getPortletById(portletId);
 
-		if (layout == null) {
-			name = portletId;
-			primKey = portletId;
-
-			return permissionChecker.hasPermission(
-				groupId, name, primKey, actionId);
+		if (portlet != null) {
+			return contains(
+				permissionChecker, groupId, layout, portlet, actionId, strict);
 		}
 
-		Group group = layout.getGroup();
-
-		groupId = group.getGroupId();
-
-		name = PortletConstants.getRootPortletId(portletId);
-		primKey = getPrimaryKey(layout.getPlid(), portletId);
-
-		if (!actionId.equals(ActionKeys.VIEW) &&
-			(layout instanceof VirtualLayout)) {
-
-			return hasCustomizePermission(
-				permissionChecker, layout, portletId, actionId);
-		}
-
-		if (!group.isLayoutSetPrototype() &&
-			!SitesUtil.isLayoutUpdateable(layout) &&
-			actionId.equals(ActionKeys.CONFIGURATION)) {
-
-			return false;
-		}
-
-		Boolean hasPermission = StagingPermissionUtil.hasPermission(
-			permissionChecker, groupId, name, groupId, name, actionId);
-
-		if (hasPermission != null) {
-			return hasPermission.booleanValue();
-		}
-
-		if (strict) {
-			return permissionChecker.hasPermission(
-				groupId, name, primKey, actionId);
-		}
-
-		if (hasConfigurePermission(
-				permissionChecker, layout, portletId, actionId) ||
-			hasCustomizePermission(
-				permissionChecker, layout, portletId, actionId)) {
-
-			return true;
-		}
-
-		return permissionChecker.hasPermission(
-			groupId, name, primKey, actionId);
+		return doContains(
+			permissionChecker, groupId, layout, portletId, actionId, strict);
 	}
 
 	public boolean contains(
@@ -410,14 +377,6 @@ public class PortletPermissionImpl implements PortletPermission {
 			Layout layout, Portlet portlet, PortletMode portletMode)
 		throws PortalException, SystemException {
 
-		if ((layout != null) && layout.isTypeControlPanel()) {
-			String category = portlet.getControlPanelEntryCategory();
-
-			if (Validator.equals(category, PortletCategoryKeys.CONTENT)) {
-				layout = null;
-			}
-		}
-
 		boolean access = contains(
 			permissionChecker, scopeGroupId, layout, portlet, ActionKeys.VIEW);
 
@@ -449,6 +408,74 @@ public class PortletPermissionImpl implements PortletPermission {
 
 			return false;
 		}
+	}
+
+	protected boolean doContains(
+			PermissionChecker permissionChecker, long groupId, Layout layout,
+			String portletId, String actionId, boolean strict)
+		throws PortalException, SystemException {
+
+		String name = null;
+		String primKey = null;
+
+		if (layout == null) {
+			name = portletId;
+			primKey = portletId;
+		}
+		else {
+			Group group = null;
+
+			if ((groupId > 0) && layout.isTypeControlPanel() &&
+				Validator.equals(portletId, PortletKeys.SITES_ADMIN)) {
+
+				group = GroupLocalServiceUtil.getGroup(groupId);
+			}
+			else {
+				group = layout.getGroup();
+
+				groupId = group.getGroupId();
+			}
+
+			name = PortletConstants.getRootPortletId(portletId);
+			primKey = getPrimaryKey(layout.getPlid(), portletId);
+
+			if (!actionId.equals(ActionKeys.VIEW) &&
+				(layout instanceof VirtualLayout)) {
+
+				return hasCustomizePermission(
+					permissionChecker, layout, portletId, actionId);
+			}
+
+			if (!group.isLayoutSetPrototype() &&
+				!SitesUtil.isLayoutUpdateable(layout) &&
+				actionId.equals(ActionKeys.CONFIGURATION)) {
+
+				return false;
+			}
+
+			Boolean hasPermission = StagingPermissionUtil.hasPermission(
+				permissionChecker, groupId, name, groupId, name, actionId);
+
+			if (hasPermission != null) {
+				return hasPermission.booleanValue();
+			}
+
+			if (strict) {
+				return permissionChecker.hasPermission(
+					groupId, name, primKey, actionId);
+			}
+
+			if (hasConfigurePermission(
+					permissionChecker, layout, portletId, actionId) ||
+				hasCustomizePermission(
+					permissionChecker, layout, portletId, actionId)) {
+
+				return true;
+			}
+		}
+
+		return permissionChecker.hasPermission(
+			groupId, name, primKey, actionId);
 	}
 
 	protected boolean hasConfigurePermission(

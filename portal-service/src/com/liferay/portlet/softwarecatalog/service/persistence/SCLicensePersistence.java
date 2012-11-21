@@ -38,72 +38,6 @@ public interface SCLicensePersistence extends BasePersistence<SCLicense> {
 	 */
 
 	/**
-	* Caches the s c license in the entity cache if it is enabled.
-	*
-	* @param scLicense the s c license
-	*/
-	public void cacheResult(
-		com.liferay.portlet.softwarecatalog.model.SCLicense scLicense);
-
-	/**
-	* Caches the s c licenses in the entity cache if it is enabled.
-	*
-	* @param scLicenses the s c licenses
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.softwarecatalog.model.SCLicense> scLicenses);
-
-	/**
-	* Creates a new s c license with the primary key. Does not add the s c license to the database.
-	*
-	* @param licenseId the primary key for the new s c license
-	* @return the new s c license
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCLicense create(
-		long licenseId);
-
-	/**
-	* Removes the s c license with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param licenseId the primary key of the s c license
-	* @return the s c license that was removed
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a s c license with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCLicense remove(
-		long licenseId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
-
-	public com.liferay.portlet.softwarecatalog.model.SCLicense updateImpl(
-		com.liferay.portlet.softwarecatalog.model.SCLicense scLicense)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the s c license with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchLicenseException} if it could not be found.
-	*
-	* @param licenseId the primary key of the s c license
-	* @return the s c license
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a s c license with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCLicense findByPrimaryKey(
-		long licenseId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
-
-	/**
-	* Returns the s c license with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param licenseId the primary key of the s c license
-	* @return the s c license, or <code>null</code> if a s c license with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCLicense fetchByPrimaryKey(
-		long licenseId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the s c licenses where active = &#63;.
 	*
 	* @param active the active
@@ -129,81 +63,6 @@ public interface SCLicensePersistence extends BasePersistence<SCLicense> {
 	*/
 	public java.util.List<com.liferay.portlet.softwarecatalog.model.SCLicense> findByActive(
 		boolean active, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the s c licenses where active = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param active the active
-	* @param start the lower bound of the range of s c licenses
-	* @param end the upper bound of the range of s c licenses (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching s c licenses
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portlet.softwarecatalog.model.SCLicense> findByActive(
-		boolean active, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first s c license in the ordered set where active = &#63;.
-	*
-	* @param active the active
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching s c license
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCLicense findByActive_First(
-		boolean active,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
-
-	/**
-	* Returns the first s c license in the ordered set where active = &#63;.
-	*
-	* @param active the active
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching s c license, or <code>null</code> if a matching s c license could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCLicense fetchByActive_First(
-		boolean active,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last s c license in the ordered set where active = &#63;.
-	*
-	* @param active the active
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching s c license
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCLicense findByActive_Last(
-		boolean active,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
-
-	/**
-	* Returns the last s c license in the ordered set where active = &#63;.
-	*
-	* @param active the active
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching s c license, or <code>null</code> if a matching s c license could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCLicense fetchByActive_Last(
-		boolean active,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -286,6 +145,158 @@ public interface SCLicensePersistence extends BasePersistence<SCLicense> {
 			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
 
 	/**
+	* Returns an ordered range of all the s c licenses where active = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param active the active
+	* @param start the lower bound of the range of s c licenses
+	* @param end the upper bound of the range of s c licenses (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching s c licenses
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portlet.softwarecatalog.model.SCLicense> findByActive(
+		boolean active, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	*
+	* @param active the active
+	* @return the first matching s c license
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense findByActive_First(
+		boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
+
+	/**
+	* Returns the first s c license in the ordered set where active = &#63;.
+	*
+	* @param active the active
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching s c license
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense findByActive_First(
+		boolean active,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
+
+	/**
+	* Returns the first s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	*
+	* @param active the active
+	* @return the first matching s c license, or <code>null</code> if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense fetchByActive_First(
+		boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first s c license in the ordered set where active = &#63;.
+	*
+	* @param active the active
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching s c license, or <code>null</code> if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense fetchByActive_First(
+		boolean active,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	*
+	* @param active the active
+	* @return the last matching s c license
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense findByActive_Last(
+		boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
+
+	/**
+	* Returns the last s c license in the ordered set where active = &#63;.
+	*
+	* @param active the active
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching s c license
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense findByActive_Last(
+		boolean active,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
+
+	/**
+	* Returns the last s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	*
+	* @param active the active
+	* @return the last matching s c license, or <code>null</code> if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense fetchByActive_Last(
+		boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last s c license in the ordered set where active = &#63;.
+	*
+	* @param active the active
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching s c license, or <code>null</code> if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense fetchByActive_Last(
+		boolean active,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the s c licenses where active = &#63; from the database.
+	*
+	* @param active the active
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByActive(boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of s c licenses where active = &#63;.
+	*
+	* @param active the active
+	* @return the number of matching s c licenses
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByActive(boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of s c licenses that the user has permission to view where active = &#63;.
+	*
+	* @param active the active
+	* @return the number of matching s c licenses that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByActive(boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the s c licenses where active = &#63; and recommended = &#63;.
 	*
 	* @param active the active
@@ -313,86 +324,6 @@ public interface SCLicensePersistence extends BasePersistence<SCLicense> {
 	*/
 	public java.util.List<com.liferay.portlet.softwarecatalog.model.SCLicense> findByA_R(
 		boolean active, boolean recommended, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the s c licenses where active = &#63; and recommended = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param active the active
-	* @param recommended the recommended
-	* @param start the lower bound of the range of s c licenses
-	* @param end the upper bound of the range of s c licenses (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching s c licenses
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portlet.softwarecatalog.model.SCLicense> findByA_R(
-		boolean active, boolean recommended, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first s c license in the ordered set where active = &#63; and recommended = &#63;.
-	*
-	* @param active the active
-	* @param recommended the recommended
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching s c license
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCLicense findByA_R_First(
-		boolean active, boolean recommended,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
-
-	/**
-	* Returns the first s c license in the ordered set where active = &#63; and recommended = &#63;.
-	*
-	* @param active the active
-	* @param recommended the recommended
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching s c license, or <code>null</code> if a matching s c license could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCLicense fetchByA_R_First(
-		boolean active, boolean recommended,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last s c license in the ordered set where active = &#63; and recommended = &#63;.
-	*
-	* @param active the active
-	* @param recommended the recommended
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching s c license
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCLicense findByA_R_Last(
-		boolean active, boolean recommended,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
-
-	/**
-	* Returns the last s c license in the ordered set where active = &#63; and recommended = &#63;.
-	*
-	* @param active the active
-	* @param recommended the recommended
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching s c license, or <code>null</code> if a matching s c license could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCLicense fetchByA_R_Last(
-		boolean active, boolean recommended,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -480,6 +411,236 @@ public interface SCLicensePersistence extends BasePersistence<SCLicense> {
 			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
 
 	/**
+	* Returns an ordered range of all the s c licenses where active = &#63; and recommended = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @param start the lower bound of the range of s c licenses
+	* @param end the upper bound of the range of s c licenses (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching s c licenses
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portlet.softwarecatalog.model.SCLicense> findByA_R(
+		boolean active, boolean recommended, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63; and recommended = &#63;.
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @return the first matching s c license
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense findByA_R_First(
+		boolean active, boolean recommended)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
+
+	/**
+	* Returns the first s c license in the ordered set where active = &#63; and recommended = &#63;.
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching s c license
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense findByA_R_First(
+		boolean active, boolean recommended,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
+
+	/**
+	* Returns the first s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63; and recommended = &#63;.
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @return the first matching s c license, or <code>null</code> if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense fetchByA_R_First(
+		boolean active, boolean recommended)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first s c license in the ordered set where active = &#63; and recommended = &#63;.
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching s c license, or <code>null</code> if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense fetchByA_R_First(
+		boolean active, boolean recommended,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63; and recommended = &#63;.
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @return the last matching s c license
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense findByA_R_Last(
+		boolean active, boolean recommended)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
+
+	/**
+	* Returns the last s c license in the ordered set where active = &#63; and recommended = &#63;.
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching s c license
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense findByA_R_Last(
+		boolean active, boolean recommended,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
+
+	/**
+	* Returns the last s c license in the default ordered set defined by {@link SCLicenseModelImpl#ORDER_BY_JPQL} where active = &#63; and recommended = &#63;.
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @return the last matching s c license, or <code>null</code> if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense fetchByA_R_Last(
+		boolean active, boolean recommended)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last s c license in the ordered set where active = &#63; and recommended = &#63;.
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching s c license, or <code>null</code> if a matching s c license could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense fetchByA_R_Last(
+		boolean active, boolean recommended,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the s c licenses where active = &#63; and recommended = &#63; from the database.
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByA_R(boolean active, boolean recommended)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of s c licenses where active = &#63; and recommended = &#63;.
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @return the number of matching s c licenses
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByA_R(boolean active, boolean recommended)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of s c licenses that the user has permission to view where active = &#63; and recommended = &#63;.
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @return the number of matching s c licenses that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByA_R(boolean active, boolean recommended)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the s c license in the entity cache if it is enabled.
+	*
+	* @param scLicense the s c license
+	*/
+	public void cacheResult(
+		com.liferay.portlet.softwarecatalog.model.SCLicense scLicense);
+
+	/**
+	* Caches the s c licenses in the entity cache if it is enabled.
+	*
+	* @param scLicenses the s c licenses
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.softwarecatalog.model.SCLicense> scLicenses);
+
+	/**
+	* Creates a new s c license with the primary key. Does not add the s c license to the database.
+	*
+	* @param licenseId the primary key for the new s c license
+	* @return the new s c license
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense create(
+		long licenseId);
+
+	/**
+	* Removes the s c license with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param licenseId the primary key of the s c license
+	* @return the s c license that was removed
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a s c license with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense remove(
+		long licenseId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
+
+	public com.liferay.portlet.softwarecatalog.model.SCLicense updateImpl(
+		com.liferay.portlet.softwarecatalog.model.SCLicense scLicense)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the s c license with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchLicenseException} if it could not be found.
+	*
+	* @param licenseId the primary key of the s c license
+	* @return the s c license
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a s c license with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense findByPrimaryKey(
+		long licenseId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchLicenseException;
+
+	/**
+	* Returns the s c license with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param licenseId the primary key of the s c license
+	* @return the s c license, or <code>null</code> if a s c license with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCLicense fetchByPrimaryKey(
+		long licenseId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the s c licenses.
 	*
 	* @return the s c licenses
@@ -523,72 +684,11 @@ public interface SCLicensePersistence extends BasePersistence<SCLicense> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the s c licenses where active = &#63; from the database.
-	*
-	* @param active the active
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByActive(boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the s c licenses where active = &#63; and recommended = &#63; from the database.
-	*
-	* @param active the active
-	* @param recommended the recommended
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByA_R(boolean active, boolean recommended)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the s c licenses from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of s c licenses where active = &#63;.
-	*
-	* @param active the active
-	* @return the number of matching s c licenses
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByActive(boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of s c licenses that the user has permission to view where active = &#63;.
-	*
-	* @param active the active
-	* @return the number of matching s c licenses that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByActive(boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of s c licenses where active = &#63; and recommended = &#63;.
-	*
-	* @param active the active
-	* @param recommended the recommended
-	* @return the number of matching s c licenses
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByA_R(boolean active, boolean recommended)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of s c licenses that the user has permission to view where active = &#63; and recommended = &#63;.
-	*
-	* @param active the active
-	* @param recommended the recommended
-	* @return the number of matching s c licenses that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByA_R(boolean active, boolean recommended)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

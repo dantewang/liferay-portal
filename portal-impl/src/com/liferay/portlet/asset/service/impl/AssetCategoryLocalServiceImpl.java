@@ -225,6 +225,12 @@ public class AssetCategoryLocalServiceImpl
 		return assetCategoryPersistence.findByPrimaryKey(categoryId);
 	}
 
+	public AssetCategory getCategory(String uuid, long groupId)
+		throws PortalException, SystemException {
+
+		return assetCategoryPersistence.findByUUID_G(uuid, groupId);
+	}
+
 	public long[] getCategoryIds(String className, long classPK)
 		throws SystemException {
 
@@ -504,7 +510,7 @@ public class AssetCategoryLocalServiceImpl
 				category.getCategoryId());
 
 		for (AssetCategory curCategory : categories) {
-			deleteCategory(curCategory, false);
+			deleteCategory(curCategory, true);
 		}
 
 		if (!categories.isEmpty() && !childCategory) {
@@ -514,7 +520,7 @@ public class AssetCategoryLocalServiceImpl
 				new Callable<Void>() {
 
 					public Void call() throws Exception {
-						assetCategoryLocalService.rebuildTree(groupId, false);
+						assetCategoryLocalService.rebuildTree(groupId, true);
 
 						return null;
 					}
