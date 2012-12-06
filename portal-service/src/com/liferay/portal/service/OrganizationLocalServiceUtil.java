@@ -468,6 +468,13 @@ public class OrganizationLocalServiceUtil {
 		return getService().getOrganizations(organizationIds);
 	}
 
+	public static java.util.List<com.liferay.portal.model.Organization> getOrganizations(
+		long companyId, long userId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getOrganizations(companyId, userId, start, end, obc);
+	}
+
 	/**
 	* Returns the number of organizations belonging to the parent organization.
 	*
