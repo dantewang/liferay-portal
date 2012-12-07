@@ -535,7 +535,7 @@ public class OrganizationLocalServiceImpl
 	public List<Organization> getOrganizations(
 			long companyId, long userId, int start, int end,
 			OrderByComparator obc)
-		throws SystemException {
+		throws PortalException, SystemException {
 
 		List<Organization> organizations = userPersistence.getOrganizations(
 			userId);
@@ -546,7 +546,8 @@ public class OrganizationLocalServiceImpl
 			Organization organization = iterator.next();
 
 			if ((organization.getCompanyId() != companyId) ||
-					(organization.getParentOrganization() == -1)) {
+					(organization.getParentOrganization().getOrganizationId() ==
+						-1)) {
 
 				iterator.remove();
 			}
