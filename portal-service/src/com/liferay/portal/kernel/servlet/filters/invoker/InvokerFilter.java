@@ -19,7 +19,7 @@ import com.liferay.portal.kernel.cache.key.CacheKeyGeneratorUtil;
 import com.liferay.portal.kernel.concurrent.ConcurrentLFUCache;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.servlet.NonSerializableObjectRequestWrapper;
+import com.liferay.portal.kernel.servlet.TransientValueRequestWrapper;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
 import com.liferay.portal.kernel.util.ContextPathUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -235,9 +235,9 @@ public class InvokerFilter extends BasePortalLifecycle implements Filter {
 		HttpServletRequest request) {
 
 		if (ServerDetector.isWebLogic() &&
-			!(request instanceof NonSerializableObjectRequestWrapper)) {
+			!(request instanceof TransientValueRequestWrapper)) {
 
-			request = new NonSerializableObjectRequestWrapper(request);
+			request = new TransientValueRequestWrapper(request);
 		}
 
 		return request;
