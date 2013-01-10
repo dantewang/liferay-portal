@@ -1007,16 +1007,18 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 			query.append(_SQL_SELECT_SHOPPINGORDER_WHERE);
 
+			boolean bindNumber = false;
+
 			if (number == null) {
 				query.append(_FINDER_COLUMN_NUMBER_NUMBER_1);
 			}
+			else if (number.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_NUMBER_NUMBER_3);
+			}
 			else {
-				if (number.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_NUMBER_NUMBER_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_NUMBER_NUMBER_2);
-				}
+				bindNumber = true;
+
+				query.append(_FINDER_COLUMN_NUMBER_NUMBER_2);
 			}
 
 			String sql = query.toString();
@@ -1030,7 +1032,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (number != null) {
+				if (bindNumber) {
 					qPos.add(number);
 				}
 
@@ -1107,16 +1109,18 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 			query.append(_SQL_COUNT_SHOPPINGORDER_WHERE);
 
+			boolean bindNumber = false;
+
 			if (number == null) {
 				query.append(_FINDER_COLUMN_NUMBER_NUMBER_1);
 			}
+			else if (number.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_NUMBER_NUMBER_3);
+			}
 			else {
-				if (number.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_NUMBER_NUMBER_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_NUMBER_NUMBER_2);
-				}
+				bindNumber = true;
+
+				query.append(_FINDER_COLUMN_NUMBER_NUMBER_2);
 			}
 
 			String sql = query.toString();
@@ -1130,7 +1134,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (number != null) {
+				if (bindNumber) {
 					qPos.add(number);
 				}
 
@@ -1153,7 +1157,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 	private static final String _FINDER_COLUMN_NUMBER_NUMBER_1 = "shoppingOrder.number IS NULL";
 	private static final String _FINDER_COLUMN_NUMBER_NUMBER_2 = "shoppingOrder.number = ?";
-	private static final String _FINDER_COLUMN_NUMBER_NUMBER_3 = "(shoppingOrder.number IS NULL OR shoppingOrder.number = ?)";
+	private static final String _FINDER_COLUMN_NUMBER_NUMBER_3 = "(shoppingOrder.number IS NULL OR shoppingOrder.number = '')";
 	public static final FinderPath FINDER_PATH_FETCH_BY_PPTXNID = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
 			ShoppingOrderImpl.class, FINDER_CLASS_NAME_ENTITY,
@@ -1240,16 +1244,18 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 			query.append(_SQL_SELECT_SHOPPINGORDER_WHERE);
 
+			boolean bindPpTxnId = false;
+
 			if (ppTxnId == null) {
 				query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_1);
 			}
+			else if (ppTxnId.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_3);
+			}
 			else {
-				if (ppTxnId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_2);
-				}
+				bindPpTxnId = true;
+
+				query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_2);
 			}
 
 			String sql = query.toString();
@@ -1263,7 +1269,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (ppTxnId != null) {
+				if (bindPpTxnId) {
 					qPos.add(ppTxnId);
 				}
 
@@ -1347,16 +1353,18 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 			query.append(_SQL_COUNT_SHOPPINGORDER_WHERE);
 
+			boolean bindPpTxnId = false;
+
 			if (ppTxnId == null) {
 				query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_1);
 			}
+			else if (ppTxnId.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_3);
+			}
 			else {
-				if (ppTxnId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_2);
-				}
+				bindPpTxnId = true;
+
+				query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_2);
 			}
 
 			String sql = query.toString();
@@ -1370,7 +1378,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (ppTxnId != null) {
+				if (bindPpTxnId) {
 					qPos.add(ppTxnId);
 				}
 
@@ -1393,7 +1401,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 	private static final String _FINDER_COLUMN_PPTXNID_PPTXNID_1 = "shoppingOrder.ppTxnId IS NULL";
 	private static final String _FINDER_COLUMN_PPTXNID_PPTXNID_2 = "shoppingOrder.ppTxnId = ?";
-	private static final String _FINDER_COLUMN_PPTXNID_PPTXNID_3 = "(shoppingOrder.ppTxnId IS NULL OR shoppingOrder.ppTxnId = ?)";
+	private static final String _FINDER_COLUMN_PPTXNID_PPTXNID_3 = "(shoppingOrder.ppTxnId IS NULL OR shoppingOrder.ppTxnId = '')";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_PPPS = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
 			ShoppingOrderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -1532,16 +1540,18 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 			query.append(_FINDER_COLUMN_G_U_PPPS_USERID_2);
 
+			boolean bindPpPaymentStatus = false;
+
 			if (ppPaymentStatus == null) {
 				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_1);
 			}
+			else if (ppPaymentStatus.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3);
+			}
 			else {
-				if (ppPaymentStatus.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2);
-				}
+				bindPpPaymentStatus = true;
+
+				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2);
 			}
 
 			if (orderByComparator != null) {
@@ -1568,7 +1578,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 				qPos.add(userId);
 
-				if (ppPaymentStatus != null) {
+				if (bindPpPaymentStatus) {
 					qPos.add(ppPaymentStatus);
 				}
 
@@ -1791,16 +1801,18 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 		query.append(_FINDER_COLUMN_G_U_PPPS_USERID_2);
 
+		boolean bindPpPaymentStatus = false;
+
 		if (ppPaymentStatus == null) {
 			query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_1);
 		}
+		else if (ppPaymentStatus.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3);
+		}
 		else {
-			if (ppPaymentStatus.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2);
-			}
+			bindPpPaymentStatus = true;
+
+			query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2);
 		}
 
 		if (orderByComparator != null) {
@@ -1875,7 +1887,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 		qPos.add(userId);
 
-		if (ppPaymentStatus != null) {
+		if (bindPpPaymentStatus) {
 			qPos.add(ppPaymentStatus);
 		}
 
@@ -1978,16 +1990,18 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 		query.append(_FINDER_COLUMN_G_U_PPPS_USERID_2);
 
+		boolean bindPpPaymentStatus = false;
+
 		if (ppPaymentStatus == null) {
 			query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_1);
 		}
+		else if (ppPaymentStatus.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3);
+		}
 		else {
-			if (ppPaymentStatus.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2);
-			}
+			bindPpPaymentStatus = true;
+
+			query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2);
 		}
 
 		if (!getDB().isSupportsInlineDistinct()) {
@@ -2037,7 +2051,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 			qPos.add(userId);
 
-			if (ppPaymentStatus != null) {
+			if (bindPpPaymentStatus) {
 				qPos.add(ppPaymentStatus);
 			}
 
@@ -2125,16 +2139,18 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 		query.append(_FINDER_COLUMN_G_U_PPPS_USERID_2);
 
+		boolean bindPpPaymentStatus = false;
+
 		if (ppPaymentStatus == null) {
 			query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_1);
 		}
+		else if (ppPaymentStatus.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3);
+		}
 		else {
-			if (ppPaymentStatus.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2);
-			}
+			bindPpPaymentStatus = true;
+
+			query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2);
 		}
 
 		if (!getDB().isSupportsInlineDistinct()) {
@@ -2239,7 +2255,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 		qPos.add(userId);
 
-		if (ppPaymentStatus != null) {
+		if (bindPpPaymentStatus) {
 			qPos.add(ppPaymentStatus);
 		}
 
@@ -2304,16 +2320,18 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 			query.append(_FINDER_COLUMN_G_U_PPPS_USERID_2);
 
+			boolean bindPpPaymentStatus = false;
+
 			if (ppPaymentStatus == null) {
 				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_1);
 			}
+			else if (ppPaymentStatus.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3);
+			}
 			else {
-				if (ppPaymentStatus.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2);
-				}
+				bindPpPaymentStatus = true;
+
+				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2);
 			}
 
 			String sql = query.toString();
@@ -2331,7 +2349,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 				qPos.add(userId);
 
-				if (ppPaymentStatus != null) {
+				if (bindPpPaymentStatus) {
 					qPos.add(ppPaymentStatus);
 				}
 
@@ -2375,16 +2393,18 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 		query.append(_FINDER_COLUMN_G_U_PPPS_USERID_2);
 
+		boolean bindPpPaymentStatus = false;
+
 		if (ppPaymentStatus == null) {
 			query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_1);
 		}
+		else if (ppPaymentStatus.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3);
+		}
 		else {
-			if (ppPaymentStatus.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2);
-			}
+			bindPpPaymentStatus = true;
+
+			query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2);
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
@@ -2407,7 +2427,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 			qPos.add(userId);
 
-			if (ppPaymentStatus != null) {
+			if (bindPpPaymentStatus) {
 				qPos.add(ppPaymentStatus);
 			}
 
@@ -2427,7 +2447,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	private static final String _FINDER_COLUMN_G_U_PPPS_USERID_2 = "shoppingOrder.userId = ? AND ";
 	private static final String _FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_1 = "shoppingOrder.ppPaymentStatus IS NULL";
 	private static final String _FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2 = "shoppingOrder.ppPaymentStatus = ?";
-	private static final String _FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3 = "(shoppingOrder.ppPaymentStatus IS NULL OR shoppingOrder.ppPaymentStatus = ?)";
+	private static final String _FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3 = "(shoppingOrder.ppPaymentStatus IS NULL OR shoppingOrder.ppPaymentStatus = '')";
 
 	/**
 	 * Caches the shopping order in the entity cache if it is enabled.

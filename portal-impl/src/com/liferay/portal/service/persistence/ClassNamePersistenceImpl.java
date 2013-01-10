@@ -166,16 +166,18 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 
 			query.append(_SQL_SELECT_CLASSNAME_WHERE);
 
+			boolean bindValue = false;
+
 			if (value == null) {
 				query.append(_FINDER_COLUMN_VALUE_VALUE_1);
 			}
+			else if (value.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_VALUE_VALUE_3);
+			}
 			else {
-				if (value.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_VALUE_VALUE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_VALUE_VALUE_2);
-				}
+				bindValue = true;
+
+				query.append(_FINDER_COLUMN_VALUE_VALUE_2);
 			}
 
 			String sql = query.toString();
@@ -189,7 +191,7 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (value != null) {
+				if (bindValue) {
 					qPos.add(value);
 				}
 
@@ -266,16 +268,18 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 
 			query.append(_SQL_COUNT_CLASSNAME_WHERE);
 
+			boolean bindValue = false;
+
 			if (value == null) {
 				query.append(_FINDER_COLUMN_VALUE_VALUE_1);
 			}
+			else if (value.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_VALUE_VALUE_3);
+			}
 			else {
-				if (value.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_VALUE_VALUE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_VALUE_VALUE_2);
-				}
+				bindValue = true;
+
+				query.append(_FINDER_COLUMN_VALUE_VALUE_2);
 			}
 
 			String sql = query.toString();
@@ -289,7 +293,7 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (value != null) {
+				if (bindValue) {
 					qPos.add(value);
 				}
 
@@ -312,7 +316,7 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 
 	private static final String _FINDER_COLUMN_VALUE_VALUE_1 = "className.value IS NULL";
 	private static final String _FINDER_COLUMN_VALUE_VALUE_2 = "className.value = ?";
-	private static final String _FINDER_COLUMN_VALUE_VALUE_3 = "(className.value IS NULL OR className.value = ?)";
+	private static final String _FINDER_COLUMN_VALUE_VALUE_3 = "(className.value IS NULL OR className.value = '')";
 
 	/**
 	 * Caches the class name in the entity cache if it is enabled.

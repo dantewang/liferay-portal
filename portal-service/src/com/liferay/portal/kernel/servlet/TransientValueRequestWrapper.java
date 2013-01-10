@@ -14,15 +14,19 @@
 
 package com.liferay.portal.kernel.servlet;
 
+import com.liferay.portal.kernel.util.TransientValue;
+
+import java.io.Serializable;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author Igor Spasic
+ * @author Shuyang Zhou
  */
-public class NonSerializableObjectRequestWrapper extends
+public class TransientValueRequestWrapper extends
 	PersistentHttpServletRequestWrapper {
 
-	public NonSerializableObjectRequestWrapper(HttpServletRequest request) {
+	public TransientValueRequestWrapper(HttpServletRequest request) {
 		super(request);
 	}
 
@@ -30,14 +34,20 @@ public class NonSerializableObjectRequestWrapper extends
 	public Object getAttribute(String name) {
 		Object object = super.getAttribute(name);
 
-		object = NonSerializableObjectHandler.getValue(object);
+		if (object instanceof TransientValue) {
+			TransientValue<?> transientValue = (TransientValue<?>)object;
+
+			object = transientValue.getValue();
+		}
 
 		return object;
 	}
 
 	@Override
 	public void setAttribute(String name, Object object) {
-		object = new NonSerializableObjectHandler(object);
+		if (!(object instanceof Serializable)) {
+			object = new TransientValue(object);
+		}
 
 		super.setAttribute(name, object);
 	}

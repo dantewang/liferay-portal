@@ -187,16 +187,18 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 
 			query.append(_SQL_SELECT_LISTTYPE_WHERE);
 
+			boolean bindType = false;
+
 			if (type == null) {
 				query.append(_FINDER_COLUMN_TYPE_TYPE_1);
 			}
+			else if (type.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_TYPE_TYPE_3);
+			}
 			else {
-				if (type.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_TYPE_TYPE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_TYPE_TYPE_2);
-				}
+				bindType = true;
+
+				query.append(_FINDER_COLUMN_TYPE_TYPE_2);
 			}
 
 			if (orderByComparator != null) {
@@ -219,7 +221,7 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (type != null) {
+				if (bindType) {
 					qPos.add(type);
 				}
 
@@ -409,16 +411,18 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 
 		query.append(_SQL_SELECT_LISTTYPE_WHERE);
 
+		boolean bindType = false;
+
 		if (type == null) {
 			query.append(_FINDER_COLUMN_TYPE_TYPE_1);
 		}
+		else if (type.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_TYPE_TYPE_3);
+		}
 		else {
-			if (type.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_TYPE_TYPE_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_TYPE_TYPE_2);
-			}
+			bindType = true;
+
+			query.append(_FINDER_COLUMN_TYPE_TYPE_2);
 		}
 
 		if (orderByComparator != null) {
@@ -489,7 +493,7 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		if (type != null) {
+		if (bindType) {
 			qPos.add(type);
 		}
 
@@ -544,16 +548,18 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 
 			query.append(_SQL_COUNT_LISTTYPE_WHERE);
 
+			boolean bindType = false;
+
 			if (type == null) {
 				query.append(_FINDER_COLUMN_TYPE_TYPE_1);
 			}
+			else if (type.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_TYPE_TYPE_3);
+			}
 			else {
-				if (type.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_TYPE_TYPE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_TYPE_TYPE_2);
-				}
+				bindType = true;
+
+				query.append(_FINDER_COLUMN_TYPE_TYPE_2);
 			}
 
 			String sql = query.toString();
@@ -567,7 +573,7 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (type != null) {
+				if (bindType) {
 					qPos.add(type);
 				}
 
@@ -590,7 +596,7 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 
 	private static final String _FINDER_COLUMN_TYPE_TYPE_1 = "listType.type IS NULL";
 	private static final String _FINDER_COLUMN_TYPE_TYPE_2 = "listType.type = ?";
-	private static final String _FINDER_COLUMN_TYPE_TYPE_3 = "(listType.type IS NULL OR listType.type = ?)";
+	private static final String _FINDER_COLUMN_TYPE_TYPE_3 = "(listType.type IS NULL OR listType.type = '')";
 
 	/**
 	 * Caches the list type in the entity cache if it is enabled.

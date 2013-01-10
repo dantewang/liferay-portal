@@ -168,16 +168,18 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 
 			query.append(_SQL_SELECT_RELEASE_WHERE);
 
+			boolean bindServletContextName = false;
+
 			if (servletContextName == null) {
 				query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_1);
 			}
+			else if (servletContextName.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_3);
+			}
 			else {
-				if (servletContextName.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_2);
-				}
+				bindServletContextName = true;
+
+				query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_2);
 			}
 
 			String sql = query.toString();
@@ -191,7 +193,7 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (servletContextName != null) {
+				if (bindServletContextName) {
 					qPos.add(servletContextName);
 				}
 
@@ -270,16 +272,18 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 
 			query.append(_SQL_COUNT_RELEASE_WHERE);
 
+			boolean bindServletContextName = false;
+
 			if (servletContextName == null) {
 				query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_1);
 			}
+			else if (servletContextName.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_3);
+			}
 			else {
-				if (servletContextName.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_2);
-				}
+				bindServletContextName = true;
+
+				query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_2);
 			}
 
 			String sql = query.toString();
@@ -293,7 +297,7 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (servletContextName != null) {
+				if (bindServletContextName) {
 					qPos.add(servletContextName);
 				}
 
@@ -319,7 +323,7 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 	private static final String _FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_2 =
 		"lower(release.servletContextName) = lower(CAST_TEXT(?))";
 	private static final String _FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_3 =
-		"(release.servletContextName IS NULL OR lower(release.servletContextName) = lower(CAST_TEXT(?)))";
+		"(release.servletContextName IS NULL OR release.servletContextName = '')";
 
 	/**
 	 * Caches the release in the entity cache if it is enabled.

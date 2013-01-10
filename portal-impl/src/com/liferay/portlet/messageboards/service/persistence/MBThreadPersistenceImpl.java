@@ -4936,10 +4936,14 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 			query.append(_SQL_SELECT_MBTHREAD_WHERE);
 
+			boolean bindLastPostDate = false;
+
 			if (lastPostDate == null) {
 				query.append(_FINDER_COLUMN_L_P_LASTPOSTDATE_1);
 			}
 			else {
+				bindLastPostDate = true;
+
 				query.append(_FINDER_COLUMN_L_P_LASTPOSTDATE_2);
 			}
 
@@ -4965,7 +4969,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (lastPostDate != null) {
+				if (bindLastPostDate) {
 					qPos.add(CalendarUtil.getTimestamp(lastPostDate));
 				}
 
@@ -5171,10 +5175,14 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		query.append(_SQL_SELECT_MBTHREAD_WHERE);
 
+		boolean bindLastPostDate = false;
+
 		if (lastPostDate == null) {
 			query.append(_FINDER_COLUMN_L_P_LASTPOSTDATE_1);
 		}
 		else {
+			bindLastPostDate = true;
+
 			query.append(_FINDER_COLUMN_L_P_LASTPOSTDATE_2);
 		}
 
@@ -5248,7 +5256,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		if (lastPostDate != null) {
+		if (bindLastPostDate) {
 			qPos.add(CalendarUtil.getTimestamp(lastPostDate));
 		}
 
@@ -5309,10 +5317,14 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 			query.append(_SQL_COUNT_MBTHREAD_WHERE);
 
+			boolean bindLastPostDate = false;
+
 			if (lastPostDate == null) {
 				query.append(_FINDER_COLUMN_L_P_LASTPOSTDATE_1);
 			}
 			else {
+				bindLastPostDate = true;
+
 				query.append(_FINDER_COLUMN_L_P_LASTPOSTDATE_2);
 			}
 
@@ -5329,7 +5341,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (lastPostDate != null) {
+				if (bindLastPostDate) {
 					qPos.add(CalendarUtil.getTimestamp(lastPostDate));
 				}
 
@@ -5487,10 +5499,14 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 			query.append(_FINDER_COLUMN_G_C_L_CATEGORYID_2);
 
+			boolean bindLastPostDate = false;
+
 			if (lastPostDate == null) {
 				query.append(_FINDER_COLUMN_G_C_L_LASTPOSTDATE_1);
 			}
 			else {
+				bindLastPostDate = true;
+
 				query.append(_FINDER_COLUMN_G_C_L_LASTPOSTDATE_2);
 			}
 
@@ -5518,7 +5534,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(categoryId);
 
-				if (lastPostDate != null) {
+				if (bindLastPostDate) {
 					qPos.add(CalendarUtil.getTimestamp(lastPostDate));
 				}
 
@@ -5739,10 +5755,14 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		query.append(_FINDER_COLUMN_G_C_L_CATEGORYID_2);
 
+		boolean bindLastPostDate = false;
+
 		if (lastPostDate == null) {
 			query.append(_FINDER_COLUMN_G_C_L_LASTPOSTDATE_1);
 		}
 		else {
+			bindLastPostDate = true;
+
 			query.append(_FINDER_COLUMN_G_C_L_LASTPOSTDATE_2);
 		}
 
@@ -5818,7 +5838,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		qPos.add(categoryId);
 
-		if (lastPostDate != null) {
+		if (bindLastPostDate) {
 			qPos.add(CalendarUtil.getTimestamp(lastPostDate));
 		}
 
@@ -5921,10 +5941,14 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		query.append(_FINDER_COLUMN_G_C_L_CATEGORYID_2);
 
+		boolean bindLastPostDate = false;
+
 		if (lastPostDate == null) {
 			query.append(_FINDER_COLUMN_G_C_L_LASTPOSTDATE_1);
 		}
 		else {
+			bindLastPostDate = true;
+
 			query.append(_FINDER_COLUMN_G_C_L_LASTPOSTDATE_2);
 		}
 
@@ -5975,7 +5999,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 			qPos.add(categoryId);
 
-			if (lastPostDate != null) {
+			if (bindLastPostDate) {
 				qPos.add(CalendarUtil.getTimestamp(lastPostDate));
 			}
 
@@ -6061,10 +6085,14 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		query.append(_FINDER_COLUMN_G_C_L_CATEGORYID_2);
 
+		boolean bindLastPostDate = false;
+
 		if (lastPostDate == null) {
 			query.append(_FINDER_COLUMN_G_C_L_LASTPOSTDATE_1);
 		}
 		else {
+			bindLastPostDate = true;
+
 			query.append(_FINDER_COLUMN_G_C_L_LASTPOSTDATE_2);
 		}
 
@@ -6170,7 +6198,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		qPos.add(categoryId);
 
-		if (lastPostDate != null) {
+		if (bindLastPostDate) {
 			qPos.add(CalendarUtil.getTimestamp(lastPostDate));
 		}
 
@@ -6235,10 +6263,14 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 			query.append(_FINDER_COLUMN_G_C_L_CATEGORYID_2);
 
+			boolean bindLastPostDate = false;
+
 			if (lastPostDate == null) {
 				query.append(_FINDER_COLUMN_G_C_L_LASTPOSTDATE_1);
 			}
 			else {
+				bindLastPostDate = true;
+
 				query.append(_FINDER_COLUMN_G_C_L_LASTPOSTDATE_2);
 			}
 
@@ -6257,7 +6289,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(categoryId);
 
-				if (lastPostDate != null) {
+				if (bindLastPostDate) {
 					qPos.add(CalendarUtil.getTimestamp(lastPostDate));
 				}
 
@@ -6301,10 +6333,14 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		query.append(_FINDER_COLUMN_G_C_L_CATEGORYID_2);
 
+		boolean bindLastPostDate = false;
+
 		if (lastPostDate == null) {
 			query.append(_FINDER_COLUMN_G_C_L_LASTPOSTDATE_1);
 		}
 		else {
+			bindLastPostDate = true;
+
 			query.append(_FINDER_COLUMN_G_C_L_LASTPOSTDATE_2);
 		}
 
@@ -6328,7 +6364,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 			qPos.add(categoryId);
 
-			if (lastPostDate != null) {
+			if (bindLastPostDate) {
 				qPos.add(CalendarUtil.getTimestamp(lastPostDate));
 			}
 

@@ -77,10 +77,6 @@ public class DLFolderTrashHandlerTest extends BaseTrashHandlerTestCase {
 		name += ServiceTestUtil.randomString(
 			_FOLDER_NAME_MAX_LENGTH - name.length());
 
-		serviceContext = (ServiceContext)serviceContext.clone();
-
-		serviceContext.setWorkflowAction(WorkflowConstants.ACTION_PUBLISH);
-
 		DLFolder dlFolder = DLFolderLocalServiceUtil.addFolder(
 			TestPropsValues.getUserId(), parentDLFolder.getGroupId(),
 			parentDLFolder.getGroupId(), false, parentDLFolder.getFolderId(),

@@ -695,16 +695,18 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 
 			query.append(_FINDER_COLUMN_C_N_R_COMPANYID_2);
 
+			boolean bindName = false;
+
 			if (name == null) {
 				query.append(_FINDER_COLUMN_C_N_R_NAME_1);
 			}
+			else if (name.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_C_N_R_NAME_3);
+			}
 			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_N_R_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_N_R_NAME_2);
-				}
+				bindName = true;
+
+				query.append(_FINDER_COLUMN_C_N_R_NAME_2);
 			}
 
 			query.append(_FINDER_COLUMN_C_N_R_ROLEID_2);
@@ -731,7 +733,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 
 				qPos.add(companyId);
 
-				if (name != null) {
+				if (bindName) {
 					qPos.add(name);
 				}
 
@@ -954,16 +956,18 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 
 		query.append(_FINDER_COLUMN_C_N_R_COMPANYID_2);
 
+		boolean bindName = false;
+
 		if (name == null) {
 			query.append(_FINDER_COLUMN_C_N_R_NAME_1);
 		}
+		else if (name.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_C_N_R_NAME_3);
+		}
 		else {
-			if (name.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_C_N_R_NAME_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_C_N_R_NAME_2);
-			}
+			bindName = true;
+
+			query.append(_FINDER_COLUMN_C_N_R_NAME_2);
 		}
 
 		query.append(_FINDER_COLUMN_C_N_R_ROLEID_2);
@@ -1038,7 +1042,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 
 		qPos.add(companyId);
 
-		if (name != null) {
+		if (bindName) {
 			qPos.add(name);
 		}
 
@@ -1104,16 +1108,18 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 
 			query.append(_FINDER_COLUMN_C_N_R_COMPANYID_2);
 
+			boolean bindName = false;
+
 			if (name == null) {
 				query.append(_FINDER_COLUMN_C_N_R_NAME_1);
 			}
+			else if (name.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_C_N_R_NAME_3);
+			}
 			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_N_R_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_N_R_NAME_2);
-				}
+				bindName = true;
+
+				query.append(_FINDER_COLUMN_C_N_R_NAME_2);
 			}
 
 			query.append(_FINDER_COLUMN_C_N_R_ROLEID_2);
@@ -1131,7 +1137,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 
 				qPos.add(companyId);
 
-				if (name != null) {
+				if (bindName) {
 					qPos.add(name);
 				}
 
@@ -1157,7 +1163,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	private static final String _FINDER_COLUMN_C_N_R_COMPANYID_2 = "resourceTypePermission.companyId = ? AND ";
 	private static final String _FINDER_COLUMN_C_N_R_NAME_1 = "resourceTypePermission.name IS NULL AND ";
 	private static final String _FINDER_COLUMN_C_N_R_NAME_2 = "resourceTypePermission.name = ? AND ";
-	private static final String _FINDER_COLUMN_C_N_R_NAME_3 = "(resourceTypePermission.name IS NULL OR resourceTypePermission.name = ?) AND ";
+	private static final String _FINDER_COLUMN_C_N_R_NAME_3 = "(resourceTypePermission.name IS NULL OR resourceTypePermission.name = '') AND ";
 	private static final String _FINDER_COLUMN_C_N_R_ROLEID_2 = "resourceTypePermission.roleId = ?";
 	public static final FinderPath FINDER_PATH_FETCH_BY_C_G_N_R = new FinderPath(ResourceTypePermissionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceTypePermissionModelImpl.FINDER_CACHE_ENABLED,
@@ -1283,16 +1289,18 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 
 			query.append(_FINDER_COLUMN_C_G_N_R_GROUPID_2);
 
+			boolean bindName = false;
+
 			if (name == null) {
 				query.append(_FINDER_COLUMN_C_G_N_R_NAME_1);
 			}
+			else if (name.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_C_G_N_R_NAME_3);
+			}
 			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_G_N_R_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_G_N_R_NAME_2);
-				}
+				bindName = true;
+
+				query.append(_FINDER_COLUMN_C_G_N_R_NAME_2);
 			}
 
 			query.append(_FINDER_COLUMN_C_G_N_R_ROLEID_2);
@@ -1312,7 +1320,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 
 				qPos.add(groupId);
 
-				if (name != null) {
+				if (bindName) {
 					qPos.add(name);
 				}
 
@@ -1407,16 +1415,18 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 
 			query.append(_FINDER_COLUMN_C_G_N_R_GROUPID_2);
 
+			boolean bindName = false;
+
 			if (name == null) {
 				query.append(_FINDER_COLUMN_C_G_N_R_NAME_1);
 			}
+			else if (name.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_C_G_N_R_NAME_3);
+			}
 			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_G_N_R_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_G_N_R_NAME_2);
-				}
+				bindName = true;
+
+				query.append(_FINDER_COLUMN_C_G_N_R_NAME_2);
 			}
 
 			query.append(_FINDER_COLUMN_C_G_N_R_ROLEID_2);
@@ -1436,7 +1446,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 
 				qPos.add(groupId);
 
-				if (name != null) {
+				if (bindName) {
 					qPos.add(name);
 				}
 
@@ -1463,7 +1473,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	private static final String _FINDER_COLUMN_C_G_N_R_GROUPID_2 = "resourceTypePermission.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_C_G_N_R_NAME_1 = "resourceTypePermission.name IS NULL AND ";
 	private static final String _FINDER_COLUMN_C_G_N_R_NAME_2 = "resourceTypePermission.name = ? AND ";
-	private static final String _FINDER_COLUMN_C_G_N_R_NAME_3 = "(resourceTypePermission.name IS NULL OR resourceTypePermission.name = ?) AND ";
+	private static final String _FINDER_COLUMN_C_G_N_R_NAME_3 = "(resourceTypePermission.name IS NULL OR resourceTypePermission.name = '') AND ";
 	private static final String _FINDER_COLUMN_C_G_N_R_ROLEID_2 = "resourceTypePermission.roleId = ?";
 
 	/**

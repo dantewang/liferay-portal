@@ -166,16 +166,18 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 			query.append(_SQL_SELECT_COMPANY_WHERE);
 
+			boolean bindWebId = false;
+
 			if (webId == null) {
 				query.append(_FINDER_COLUMN_WEBID_WEBID_1);
 			}
+			else if (webId.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_WEBID_WEBID_3);
+			}
 			else {
-				if (webId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_WEBID_WEBID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_WEBID_WEBID_2);
-				}
+				bindWebId = true;
+
+				query.append(_FINDER_COLUMN_WEBID_WEBID_2);
 			}
 
 			String sql = query.toString();
@@ -189,7 +191,7 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (webId != null) {
+				if (bindWebId) {
 					qPos.add(webId);
 				}
 
@@ -266,16 +268,18 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 			query.append(_SQL_COUNT_COMPANY_WHERE);
 
+			boolean bindWebId = false;
+
 			if (webId == null) {
 				query.append(_FINDER_COLUMN_WEBID_WEBID_1);
 			}
+			else if (webId.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_WEBID_WEBID_3);
+			}
 			else {
-				if (webId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_WEBID_WEBID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_WEBID_WEBID_2);
-				}
+				bindWebId = true;
+
+				query.append(_FINDER_COLUMN_WEBID_WEBID_2);
 			}
 
 			String sql = query.toString();
@@ -289,7 +293,7 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (webId != null) {
+				if (bindWebId) {
 					qPos.add(webId);
 				}
 
@@ -312,7 +316,7 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 	private static final String _FINDER_COLUMN_WEBID_WEBID_1 = "company.webId IS NULL";
 	private static final String _FINDER_COLUMN_WEBID_WEBID_2 = "company.webId = ?";
-	private static final String _FINDER_COLUMN_WEBID_WEBID_3 = "(company.webId IS NULL OR company.webId = ?)";
+	private static final String _FINDER_COLUMN_WEBID_WEBID_3 = "(company.webId IS NULL OR company.webId = '')";
 	public static final FinderPath FINDER_PATH_FETCH_BY_MX = new FinderPath(CompanyModelImpl.ENTITY_CACHE_ENABLED,
 			CompanyModelImpl.FINDER_CACHE_ENABLED, CompanyImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByMx",
@@ -398,16 +402,18 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 			query.append(_SQL_SELECT_COMPANY_WHERE);
 
+			boolean bindMx = false;
+
 			if (mx == null) {
 				query.append(_FINDER_COLUMN_MX_MX_1);
 			}
+			else if (mx.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_MX_MX_3);
+			}
 			else {
-				if (mx.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_MX_MX_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_MX_MX_2);
-				}
+				bindMx = true;
+
+				query.append(_FINDER_COLUMN_MX_MX_2);
 			}
 
 			String sql = query.toString();
@@ -421,7 +427,7 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (mx != null) {
+				if (bindMx) {
 					qPos.add(mx);
 				}
 
@@ -504,16 +510,18 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 			query.append(_SQL_COUNT_COMPANY_WHERE);
 
+			boolean bindMx = false;
+
 			if (mx == null) {
 				query.append(_FINDER_COLUMN_MX_MX_1);
 			}
+			else if (mx.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_MX_MX_3);
+			}
 			else {
-				if (mx.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_MX_MX_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_MX_MX_2);
-				}
+				bindMx = true;
+
+				query.append(_FINDER_COLUMN_MX_MX_2);
 			}
 
 			String sql = query.toString();
@@ -527,7 +535,7 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (mx != null) {
+				if (bindMx) {
 					qPos.add(mx);
 				}
 
@@ -550,7 +558,7 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 	private static final String _FINDER_COLUMN_MX_MX_1 = "company.mx IS NULL";
 	private static final String _FINDER_COLUMN_MX_MX_2 = "company.mx = ?";
-	private static final String _FINDER_COLUMN_MX_MX_3 = "(company.mx IS NULL OR company.mx = ?)";
+	private static final String _FINDER_COLUMN_MX_MX_3 = "(company.mx IS NULL OR company.mx = '')";
 	public static final FinderPath FINDER_PATH_FETCH_BY_LOGOID = new FinderPath(CompanyModelImpl.ENTITY_CACHE_ENABLED,
 			CompanyModelImpl.FINDER_CACHE_ENABLED, CompanyImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByLogoId",

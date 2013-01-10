@@ -731,16 +731,18 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 			query.append(_FINDER_COLUMN_C_R_P_REPOSITORYID_2);
 
+			boolean bindPath = false;
+
 			if (path == null) {
 				query.append(_FINDER_COLUMN_C_R_P_PATH_1);
 			}
+			else if (path.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_C_R_P_PATH_3);
+			}
 			else {
-				if (path.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_R_P_PATH_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_R_P_PATH_2);
-				}
+				bindPath = true;
+
+				query.append(_FINDER_COLUMN_C_R_P_PATH_2);
 			}
 
 			if (orderByComparator != null) {
@@ -767,7 +769,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 				qPos.add(repositoryId);
 
-				if (path != null) {
+				if (bindPath) {
 					qPos.add(path);
 				}
 
@@ -988,16 +990,18 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 		query.append(_FINDER_COLUMN_C_R_P_REPOSITORYID_2);
 
+		boolean bindPath = false;
+
 		if (path == null) {
 			query.append(_FINDER_COLUMN_C_R_P_PATH_1);
 		}
+		else if (path.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_C_R_P_PATH_3);
+		}
 		else {
-			if (path.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_C_R_P_PATH_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_C_R_P_PATH_2);
-			}
+			bindPath = true;
+
+			query.append(_FINDER_COLUMN_C_R_P_PATH_2);
 		}
 
 		if (orderByComparator != null) {
@@ -1072,7 +1076,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 		qPos.add(repositoryId);
 
-		if (path != null) {
+		if (bindPath) {
 			qPos.add(path);
 		}
 
@@ -1137,16 +1141,18 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 			query.append(_FINDER_COLUMN_C_R_P_REPOSITORYID_2);
 
+			boolean bindPath = false;
+
 			if (path == null) {
 				query.append(_FINDER_COLUMN_C_R_P_PATH_1);
 			}
+			else if (path.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_C_R_P_PATH_3);
+			}
 			else {
-				if (path.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_R_P_PATH_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_R_P_PATH_2);
-				}
+				bindPath = true;
+
+				query.append(_FINDER_COLUMN_C_R_P_PATH_2);
 			}
 
 			String sql = query.toString();
@@ -1164,7 +1170,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 				qPos.add(repositoryId);
 
-				if (path != null) {
+				if (bindPath) {
 					qPos.add(path);
 				}
 
@@ -1189,7 +1195,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	private static final String _FINDER_COLUMN_C_R_P_REPOSITORYID_2 = "dlContent.repositoryId = ? AND ";
 	private static final String _FINDER_COLUMN_C_R_P_PATH_1 = "dlContent.path IS NULL";
 	private static final String _FINDER_COLUMN_C_R_P_PATH_2 = "dlContent.path = ?";
-	private static final String _FINDER_COLUMN_C_R_P_PATH_3 = "(dlContent.path IS NULL OR dlContent.path = ?)";
+	private static final String _FINDER_COLUMN_C_R_P_PATH_3 = "(dlContent.path IS NULL OR dlContent.path = '')";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_R_LIKEP =
 		new FinderPath(DLContentModelImpl.ENTITY_CACHE_ENABLED,
 			DLContentModelImpl.FINDER_CACHE_ENABLED, DLContentImpl.class,
@@ -1307,16 +1313,18 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 			query.append(_FINDER_COLUMN_C_R_LIKEP_REPOSITORYID_2);
 
+			boolean bindPath = false;
+
 			if (path == null) {
 				query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_1);
 			}
+			else if (path.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_3);
+			}
 			else {
-				if (path.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_2);
-				}
+				bindPath = true;
+
+				query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_2);
 			}
 
 			if (orderByComparator != null) {
@@ -1343,7 +1351,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 				qPos.add(repositoryId);
 
-				if (path != null) {
+				if (bindPath) {
 					qPos.add(path);
 				}
 
@@ -1565,16 +1573,18 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 		query.append(_FINDER_COLUMN_C_R_LIKEP_REPOSITORYID_2);
 
+		boolean bindPath = false;
+
 		if (path == null) {
 			query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_1);
 		}
+		else if (path.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_3);
+		}
 		else {
-			if (path.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_2);
-			}
+			bindPath = true;
+
+			query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_2);
 		}
 
 		if (orderByComparator != null) {
@@ -1649,7 +1659,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 		qPos.add(repositoryId);
 
-		if (path != null) {
+		if (bindPath) {
 			qPos.add(path);
 		}
 
@@ -1714,16 +1724,18 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 			query.append(_FINDER_COLUMN_C_R_LIKEP_REPOSITORYID_2);
 
+			boolean bindPath = false;
+
 			if (path == null) {
 				query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_1);
 			}
+			else if (path.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_3);
+			}
 			else {
-				if (path.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_2);
-				}
+				bindPath = true;
+
+				query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_2);
 			}
 
 			String sql = query.toString();
@@ -1741,7 +1753,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 				qPos.add(repositoryId);
 
-				if (path != null) {
+				if (bindPath) {
 					qPos.add(path);
 				}
 
@@ -1766,7 +1778,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	private static final String _FINDER_COLUMN_C_R_LIKEP_REPOSITORYID_2 = "dlContent.repositoryId = ? AND ";
 	private static final String _FINDER_COLUMN_C_R_LIKEP_PATH_1 = "dlContent.path LIKE NULL";
 	private static final String _FINDER_COLUMN_C_R_LIKEP_PATH_2 = "dlContent.path LIKE ?";
-	private static final String _FINDER_COLUMN_C_R_LIKEP_PATH_3 = "(dlContent.path IS NULL OR dlContent.path LIKE ?)";
+	private static final String _FINDER_COLUMN_C_R_LIKEP_PATH_3 = "(dlContent.path IS NULL OR dlContent.path LIKE '')";
 	public static final FinderPath FINDER_PATH_FETCH_BY_C_R_P_V = new FinderPath(DLContentModelImpl.ENTITY_CACHE_ENABLED,
 			DLContentModelImpl.FINDER_CACHE_ENABLED, DLContentImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_R_P_V",
@@ -1892,28 +1904,32 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 			query.append(_FINDER_COLUMN_C_R_P_V_REPOSITORYID_2);
 
+			boolean bindPath = false;
+
 			if (path == null) {
 				query.append(_FINDER_COLUMN_C_R_P_V_PATH_1);
 			}
-			else {
-				if (path.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_R_P_V_PATH_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_R_P_V_PATH_2);
-				}
+			else if (path.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_C_R_P_V_PATH_3);
 			}
+			else {
+				bindPath = true;
+
+				query.append(_FINDER_COLUMN_C_R_P_V_PATH_2);
+			}
+
+			boolean bindVersion = false;
 
 			if (version == null) {
 				query.append(_FINDER_COLUMN_C_R_P_V_VERSION_1);
 			}
+			else if (version.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_C_R_P_V_VERSION_3);
+			}
 			else {
-				if (version.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_R_P_V_VERSION_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_R_P_V_VERSION_2);
-				}
+				bindVersion = true;
+
+				query.append(_FINDER_COLUMN_C_R_P_V_VERSION_2);
 			}
 
 			String sql = query.toString();
@@ -1931,11 +1947,11 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 				qPos.add(repositoryId);
 
-				if (path != null) {
+				if (bindPath) {
 					qPos.add(path);
 				}
 
-				if (version != null) {
+				if (bindVersion) {
 					qPos.add(version);
 				}
 
@@ -2031,28 +2047,32 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 			query.append(_FINDER_COLUMN_C_R_P_V_REPOSITORYID_2);
 
+			boolean bindPath = false;
+
 			if (path == null) {
 				query.append(_FINDER_COLUMN_C_R_P_V_PATH_1);
 			}
-			else {
-				if (path.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_R_P_V_PATH_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_R_P_V_PATH_2);
-				}
+			else if (path.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_C_R_P_V_PATH_3);
 			}
+			else {
+				bindPath = true;
+
+				query.append(_FINDER_COLUMN_C_R_P_V_PATH_2);
+			}
+
+			boolean bindVersion = false;
 
 			if (version == null) {
 				query.append(_FINDER_COLUMN_C_R_P_V_VERSION_1);
 			}
+			else if (version.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_C_R_P_V_VERSION_3);
+			}
 			else {
-				if (version.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_R_P_V_VERSION_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_R_P_V_VERSION_2);
-				}
+				bindVersion = true;
+
+				query.append(_FINDER_COLUMN_C_R_P_V_VERSION_2);
 			}
 
 			String sql = query.toString();
@@ -2070,11 +2090,11 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 				qPos.add(repositoryId);
 
-				if (path != null) {
+				if (bindPath) {
 					qPos.add(path);
 				}
 
-				if (version != null) {
+				if (bindVersion) {
 					qPos.add(version);
 				}
 
@@ -2099,10 +2119,10 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	private static final String _FINDER_COLUMN_C_R_P_V_REPOSITORYID_2 = "dlContent.repositoryId = ? AND ";
 	private static final String _FINDER_COLUMN_C_R_P_V_PATH_1 = "dlContent.path IS NULL AND ";
 	private static final String _FINDER_COLUMN_C_R_P_V_PATH_2 = "dlContent.path = ? AND ";
-	private static final String _FINDER_COLUMN_C_R_P_V_PATH_3 = "(dlContent.path IS NULL OR dlContent.path = ?) AND ";
+	private static final String _FINDER_COLUMN_C_R_P_V_PATH_3 = "(dlContent.path IS NULL OR dlContent.path = '') AND ";
 	private static final String _FINDER_COLUMN_C_R_P_V_VERSION_1 = "dlContent.version IS NULL";
 	private static final String _FINDER_COLUMN_C_R_P_V_VERSION_2 = "dlContent.version = ?";
-	private static final String _FINDER_COLUMN_C_R_P_V_VERSION_3 = "(dlContent.version IS NULL OR dlContent.version = ?)";
+	private static final String _FINDER_COLUMN_C_R_P_V_VERSION_3 = "(dlContent.version IS NULL OR dlContent.version = '')";
 
 	/**
 	 * Caches the document library content in the entity cache if it is enabled.
