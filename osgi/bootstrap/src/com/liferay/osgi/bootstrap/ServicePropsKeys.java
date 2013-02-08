@@ -12,15 +12,18 @@
  * details.
  */
 
-package com.liferay.portal.model;
+package com.liferay.osgi.bootstrap;
 
 /**
- * @author Michael C. Han
+ * @author Raymond Augé
+ * @author Miguel Pastor
  */
-public interface StagedModel extends GroupedModel {
+public interface ServicePropsKeys {
 
-	public Object clone();
+	public static final String BEAN_ID = "bean.id";
 
-	public String getUuid();
+	public static final String ORIGINAL_BEAN = "original.bean";
+
+	public static final String VENDOR = "service.vendor";
 
 }
