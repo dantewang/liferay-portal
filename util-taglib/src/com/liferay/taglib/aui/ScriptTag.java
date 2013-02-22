@@ -84,7 +84,16 @@ public class ScriptTag extends BaseScriptTag {
 		HttpServletRequest request =
 			(HttpServletRequest)pageContext.getRequest();
 
-		AUIUtil.outputScriptData(request, pageContext.getOut());
+		ScriptData scriptData = (ScriptData)request.getAttribute(
+			WebKeys.AUI_SCRIPT_DATA);
+
+		if (scriptData == null) {
+			return;
+		}
+
+		request.removeAttribute(WebKeys.AUI_SCRIPT_DATA);
+
+		scriptData.writeTo(request, pageContext.getOut());
 	}
 
 	@Override
@@ -111,8 +120,6 @@ public class ScriptTag extends BaseScriptTag {
 			if (positionInline) {
 				ScriptData scriptData = new ScriptData();
 
-				request.setAttribute(ScriptTag.class.getName(), scriptData);
-
 				scriptData.append(portletId, bodyContentSB, use);
 
 				String page = getPage();
@@ -123,7 +130,7 @@ public class ScriptTag extends BaseScriptTag {
 					PortalIncludeUtil.include(pageContext, page);
 				}
 				else {
-					AUIUtil.outputScriptData(request, pageContext.getOut());
+					scriptData.writeTo(request, pageContext.getOut());
 				}
 			}
 			else {
@@ -145,10 +152,6 @@ public class ScriptTag extends BaseScriptTag {
 			throw new JspException(e);
 		}
 		finally {
-			if (positionInline) {
-				request.removeAttribute(ScriptTag.class.getName());
-			}
-
 			if (!ServerDetector.isResin()) {
 				cleanUp();
 			}
