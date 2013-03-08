@@ -38,7 +38,7 @@ int trashEntriesMaxAge = PropertiesParamUtil.getInteger(groupTypeSettings, reque
 
 	<div class="trash-entries-max-age">
 		<aui:input disabled="<%= !groupTrashEnabled %>" label="number-of-minutes-that-files-will-be-kept-in-the-recycle-bin" name="trashEntriesMaxAge" type="text" value="<%= trashEntriesMaxAge %>">
-			<aui:validator name="min">1</aui:validator>
+			<aui:validator name="min"><%= PropsValues.TRASH_ENTRY_CHECK_INTERVAL %></aui:validator>
 		</aui:input>
 	</div>
 

@@ -26,13 +26,16 @@ import java.util.Map;
 public class BaseConverter {
 
 	public BaseConverter(SeleniumBuilderContext seleniumBuilderContext) {
-		_seleniumBuilderContext = seleniumBuilderContext;
+		this.seleniumBuilderContext = seleniumBuilderContext;
+
+		this.seleniumBuilderFileUtil = new SeleniumBuilderFileUtil(
+			seleniumBuilderContext.getBaseDir());
 	}
 
 	protected Map<String, Object> getContext() {
 		Map<String, Object> context = new HashMap<String, Object>();
 
-		context.put("seleniumBuilderContext", _seleniumBuilderContext);
+		context.put("seleniumBuilderContext", seleniumBuilderContext);
 
 		return context;
 	}
@@ -48,9 +51,10 @@ public class BaseConverter {
 			FreeMarkerUtil.process(_TPL_ROOT + name, context), '\r');
 	}
 
+	protected SeleniumBuilderContext seleniumBuilderContext;
+	protected SeleniumBuilderFileUtil seleniumBuilderFileUtil;
+
 	private static final String _TPL_ROOT =
 		"com/liferay/portal/tools/seleniumbuilder/dependencies/";
-
-	private SeleniumBuilderContext _seleniumBuilderContext;
 
 }

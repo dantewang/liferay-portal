@@ -149,7 +149,7 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 			long groupId, String name, long[] vocabularyIds, int start, int end)
 		throws PortalException, SystemException {
 
-		return search(new long[]{groupId}, name, vocabularyIds, start, end);
+		return search(new long[] {groupId}, name, vocabularyIds, start, end);
 	}
 
 	/**
@@ -322,7 +322,7 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 	public List<AssetCategory> getVocabularyRootCategories(
 			long groupId, long vocabularyId, int start, int end,
 			OrderByComparator obc)
-		throws PortalException, SystemException {
+		throws SystemException {
 
 		return assetCategoryPersistence.filterFindByG_P_V(
 			groupId, AssetCategoryConstants.DEFAULT_PARENT_CATEGORY_ID,

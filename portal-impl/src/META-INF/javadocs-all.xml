@@ -309342,6 +309342,71 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 		</method>
 		<method>
 			<name>search</name>
+			<comment><![CDATA[Returns an ordered range of all the user groups that match the name and description.
+
+<p>
+Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+</p>]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<required>true</required>
+				<comment><![CDATA[the primary key of the user group's company]]></comment>
+			</param>
+			<param>
+				<name>name</name>
+				<type>java.lang.String</type>
+				<required>true</required>
+				<comment><![CDATA[the user group's name (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>description</name>
+				<type>java.lang.String</type>
+				<required>true</required>
+				<comment><![CDATA[the user group's description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<required>true</required>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). For more information see {@link com.liferay.portal.service.persistence.UserGroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>andOperator</name>
+				<type>boolean</type>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<required>true</required>
+				<comment><![CDATA[the lower bound of the range of user groups to return]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<required>true</required>
+				<comment><![CDATA[the upper bound of the range of user groups to return (not inclusive)]]></comment>
+			</param>
+			<param>
+				<name>obc</name>
+				<type>com.liferay.portal.kernel.util.OrderByComparator</type>
+				<required>true</required>
+				<comment><![CDATA[the comparator to order the user groups (optionally <code>null</code>)]]></comment>
+			</param>
+			<return>
+				<required>true</required>
+				<comment><![CDATA[the matching user groups ordered by comparator <code>obc</code>]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<required>true</required>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+			<see><![CDATA[com.liferay.portal.service.persistence.UserGroupFinder]]></see>
+		</method>
+		<method>
+			<name>search</name>
 			<comment><![CDATA[Returns an ordered range of all the user groups that match the name and description. It is preferable to use this method instead of the non-indexed version whenever possible for performance reasons.
 
 <p>
@@ -309409,7 +309474,7 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 		</method>
 		<method>
 			<name>searchCount</name>
-			<comment><![CDATA[Returns the number of user groups that match the keywords]]></comment>
+			<comment><![CDATA[Returns the number of user groups that match the keywords.]]></comment>
 			<param>
 				<name>companyId</name>
 				<type>long</type>
@@ -309439,6 +309504,50 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 				<comment><![CDATA[if a system exception occurred]]></comment>
 			</throws>
 			<see><![CDATA[com.liferay.portal.service.persistence.UserGroupFinder]]></see>
+		</method>
+		<method>
+			<name>searchCount</name>
+			<comment><![CDATA[Returns the number of user groups that match the name and description.]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<required>true</required>
+				<comment><![CDATA[the primary key of the user group's company]]></comment>
+			</param>
+			<param>
+				<name>name</name>
+				<type>java.lang.String</type>
+				<required>true</required>
+				<comment><![CDATA[the user group's name (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>description</name>
+				<type>java.lang.String</type>
+				<required>true</required>
+				<comment><![CDATA[the user group's description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<required>true</required>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). For more information see {@link com.liferay.portal.service.persistence.UserGroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>andOperator</name>
+				<type>boolean</type>
+				<required>true</required>
+				<comment><![CDATA[whether every field must match its keywords, or just one field.]]></comment>
+			</param>
+			<return>
+				<required>true</required>
+				<comment><![CDATA[the number of matching user groups]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<required>true</required>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
 		</method>
 		<method>
 			<name>setUserUserGroups</name>
