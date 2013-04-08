@@ -49,9 +49,9 @@
 
 		insert into PortletPreferences values (${portletPreferences.portletPreferencesId}, ${portletPreferences.ownerId}, ${portletPreferences.ownerType}, ${portletPreferences.plid}, '${portletPreferences.portletId}', '${portletPreferences.preferences}');
 
-		${sampleSQLBuilder.insertResourcePermission("145", ddlDisplayLayout.plid + "_LAYOUT_145")}
-		${sampleSQLBuilder.insertResourcePermission("86", ddlDisplayLayout.plid + "_LAYOUT_86")}
-		${sampleSQLBuilder.insertResourcePermission("87", ddlDisplayLayout.plid + "_LAYOUT_87")}
-		${sampleSQLBuilder.insertResourcePermission("169", ddlDisplayLayout.plid + "_LAYOUT_" + ddlPortletId)}
+		${sampleSQLBuilder.insertResourcePermission("145", ddlDisplayLayout.plid + "_LAYOUT_145", 0)}
+		${sampleSQLBuilder.insertResourcePermission("86", ddlDisplayLayout.plid + "_LAYOUT_86", 0)}
+		${sampleSQLBuilder.insertResourcePermission("87", ddlDisplayLayout.plid + "_LAYOUT_87", 0)}
+		${sampleSQLBuilder.insertResourcePermission("169", ddlDisplayLayout.plid + "_LAYOUT_" + ddlPortletId, 0)}
 	</#list>
 </#if>

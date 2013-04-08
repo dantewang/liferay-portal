@@ -21,7 +21,7 @@
 		</#if>
 	</#list>
 
-	${sampleSQLBuilder.insertResourcePermission("com.liferay.portlet.journal.model.JournalArticle", stringUtil.valueOf(journalArticleResource.resourcePrimKey))}
+	${sampleSQLBuilder.insertResourcePermission("com.liferay.portlet.journal.model.JournalArticle", stringUtil.valueOf(journalArticleResource.resourcePrimKey), -1)}
 
 	${sampleSQLBuilder.insertMBDiscussion(groupId, dataFactory.journalArticleClassNameId, journalArticleResource.resourcePrimKey, counter.get(), counter.get(), 0)}
 
@@ -47,9 +47,9 @@
 
 	insert into PortletPreferences values (${portletPreferences.portletPreferencesId}, ${portletPreferences.ownerId}, ${portletPreferences.ownerType}, ${portletPreferences.plid}, '${portletPreferences.portletId}', '${portletPreferences.preferences}');
 
-	${sampleSQLBuilder.insertResourcePermission("145", layout.plid + "_LAYOUT_145")}
-	${sampleSQLBuilder.insertResourcePermission("86", layout.plid + "_LAYOUT_86")}
-	${sampleSQLBuilder.insertResourcePermission("56", layout.plid + "_LAYOUT_56")}
+	${sampleSQLBuilder.insertResourcePermission("145", layout.plid + "_LAYOUT_145", 0)}
+	${sampleSQLBuilder.insertResourcePermission("86", layout.plid + "_LAYOUT_86", 0)}
+	${sampleSQLBuilder.insertResourcePermission("56", layout.plid + "_LAYOUT_56", 0)}
 
 	insert into JournalContentSearch values (${counter.get()}, ${groupId}, ${companyId}, 0, ${layout.layoutId}, '56', '${journalArticleResource.articleId}');
 </#list>

@@ -1148,7 +1148,11 @@ public class DataFactory {
 	}
 
 	public List<ResourcePermission> newResourcePermission(
-		long companyId, String name, String primKey) {
+		long companyId, String name, String primKey, long ownerId) {
+		
+		if (ownerId == -1) {
+			ownerId = _sampleUserId;
+		}
 
 		List<ResourcePermission> resourcePermissions =
 			new ArrayList<ResourcePermission>(2);
@@ -1162,7 +1166,7 @@ public class DataFactory {
 		resourcePermission.setScope(ResourceConstants.SCOPE_INDIVIDUAL);
 		resourcePermission.setPrimKey(primKey);
 		resourcePermission.setRoleId(_ownerRole.getRoleId());
-		resourcePermission.setOwnerId(0);
+		resourcePermission.setOwnerId(ownerId);
 		resourcePermission.setActionIds(1);
 
 		resourcePermissions.add(resourcePermission);

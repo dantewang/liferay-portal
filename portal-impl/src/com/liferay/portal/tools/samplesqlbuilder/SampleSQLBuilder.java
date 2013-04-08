@@ -313,13 +313,14 @@ public class SampleSQLBuilder {
 		processTemplate(_tplMBMessage, context);
 	}
 
-	public void insertResourcePermission(String name, String primKey)
+	public void insertResourcePermission(String name, String primKey, long ownerId)
 		throws Exception {
 
 		Map<String, Object> context = getContext();
 
 		put(context, "resourceName", name);
 		put(context, "resourcePrimkey", primKey);
+		put(context, "ownerId", ownerId);
 
 		processTemplate(_tplResourcePermission, context);
 	}
