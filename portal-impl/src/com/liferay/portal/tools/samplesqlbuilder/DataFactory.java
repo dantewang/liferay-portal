@@ -1185,20 +1185,6 @@ public class DataFactory {
 
 		resourcePermissions.add(resourcePermission);
 
-		resourcePermission = new ResourcePermissionImpl();
-
-		resourcePermission.setResourcePermissionId(
-			_resourcePermissionCounter.get());
-		resourcePermission.setCompanyId(companyId);
-		resourcePermission.setName(name);
-		resourcePermission.setScope(ResourceConstants.SCOPE_INDIVIDUAL);
-		resourcePermission.setPrimKey(primKey);
-		resourcePermission.setRoleId(_siteMemberRole.getRoleId());
-		resourcePermission.setOwnerId(0);
-		resourcePermission.setActionIds(1);
-
-		resourcePermissions.add(resourcePermission);
-
 		return resourcePermissions;
 	}
 
