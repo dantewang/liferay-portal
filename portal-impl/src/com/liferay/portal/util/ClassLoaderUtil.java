@@ -15,67 +15,143 @@
 package com.liferay.portal.util;
 
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.portal.security.lang.SecurityManagerUtil;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 /**
  * @author Raymond Augé
+ * @author Shuyang Zhou
  */
 public class ClassLoaderUtil {
 
-	public static ClassLoader getClassLoader(final Class<?> clazz) {
-		return AccessController.doPrivileged(
-			new PrivilegedAction<ClassLoader>() {
-
-				public ClassLoader run() {
-					return clazz.getClassLoader();
-				}
-
-			}
-		);
+	public static ClassLoader getClassLoader(Class<?> clazz) {
+		return _classLoaderUtilProvider.getClassLoader(clazz);
 	}
 
 	public static ClassLoader getContextClassLoader() {
-		return AccessController.doPrivileged(
-			new PrivilegedAction<ClassLoader>() {
-
-				public ClassLoader run() {
-					Thread thread = Thread.currentThread();
-
-					return thread.getContextClassLoader();
-				}
-
-			}
-		);
+		return _classLoaderUtilProvider.getContextClassLoader();
 	}
 
 	public static ClassLoader getPortalClassLoader() {
-		return AccessController.doPrivileged(
-			new PrivilegedAction<ClassLoader>() {
-
-				public ClassLoader run() {
-					return PortalClassLoaderUtil.getClassLoader();
-				}
-
-			}
-		);
+		return _classLoaderUtilProvider.getPortalClassLoader();
 	}
 
-	public static void setContextClassLoader(final ClassLoader classLoader) {
-		AccessController.doPrivileged(
-			new PrivilegedAction<Void>() {
+	public static void setContextClassLoader(ClassLoader classLoader) {
+		_classLoaderUtilProvider.setContextClassLoader(classLoader);
+	}
 
-				public Void run() {
-					Thread thread = Thread.currentThread();
+	private static final ClassLoaderUtilProvider _classLoaderUtilProvider;
 
-					thread.setContextClassLoader(classLoader);
+	static {
+		if (SecurityManagerUtil.isNone()) {
+			_classLoaderUtilProvider = new ClassLoaderUtilProvider();
+		}
+		else {
+			_classLoaderUtilProvider = new PACLClassLoaderUtilProvider();
+		}
+	}
 
-					return null;
-				}
+	private static class ClassLoaderUtilProvider {
 
+		public ClassLoader getClassLoader(Class<?> clazz) {
+			return clazz.getClassLoader();
+		}
+
+		public ClassLoader getContextClassLoader() {
+			Thread thread = Thread.currentThread();
+
+			return thread.getContextClassLoader();
+		}
+
+		public ClassLoader getPortalClassLoader() {
+			return PortalClassLoaderUtil.getClassLoader();
+		}
+
+		public void setContextClassLoader(ClassLoader classLoader) {
+			Thread thread = Thread.currentThread();
+
+			thread.setContextClassLoader(classLoader);
+		}
+
+	}
+
+	private static class PACLClassLoaderUtilProvider
+		extends ClassLoaderUtilProvider {
+
+		@Override
+		public ClassLoader getClassLoader(final Class<?> clazz) {
+			if (!SecurityManagerUtil.isPACLDisabled()) {
+				return super.getClassLoader(clazz);
 			}
-		);
+
+			return AccessController.doPrivileged(
+				new PrivilegedAction<ClassLoader>() {
+
+					public ClassLoader run() {
+						return PACLClassLoaderUtilProvider.super.getClassLoader(
+							clazz);
+					}
+
+				}
+			);
+		}
+
+		@Override
+		public ClassLoader getContextClassLoader() {
+			if (!SecurityManagerUtil.isPACLDisabled()) {
+				return super.getContextClassLoader();
+			}
+
+			return AccessController.doPrivileged(
+				new PrivilegedAction<ClassLoader>() {
+
+					public ClassLoader run() {
+						return PACLClassLoaderUtilProvider.super.getContextClassLoader();
+					}
+
+				}
+			);
+		}
+
+		@Override
+		public ClassLoader getPortalClassLoader() {
+			if (!SecurityManagerUtil.isPACLDisabled()) {
+				return super.getPortalClassLoader();
+			}
+
+			return AccessController.doPrivileged(
+				new PrivilegedAction<ClassLoader>() {
+
+					public ClassLoader run() {
+						return PACLClassLoaderUtilProvider.super.getPortalClassLoader();
+					}
+
+				}
+			);
+		}
+
+		@Override
+		public void setContextClassLoader(final ClassLoader classLoader) {
+			if (!SecurityManagerUtil.isPACLDisabled()) {
+				super.setContextClassLoader(classLoader);
+			}
+
+			AccessController.doPrivileged(
+				new PrivilegedAction<Void>() {
+
+					public Void run() {
+						PACLClassLoaderUtilProvider.super.setContextClassLoader(
+							classLoader);
+
+						return null;
+					}
+
+				}
+			);
+		}
+
 	}
 
 }
