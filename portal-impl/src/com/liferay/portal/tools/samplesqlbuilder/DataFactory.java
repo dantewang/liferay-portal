@@ -659,6 +659,15 @@ public class DataFactory {
 			ContentTypes.TEXT_HTML, blogsEntry.getTitle());
 	}
 
+	public AssetEntry newAssetEntry(DDLRecord ddlRecord) {
+		return newAssetEntry(
+			ddlRecord.getGroupId(), ddlRecord.getCreateDate(),
+			ddlRecord.getModifiedDate(),
+			_classNamesMap.get(DDLRecord.class.getName()),
+			ddlRecord.getRecordId(), ddlRecord.getUuid(), 0, false,
+			ContentTypes.TEXT_HTML, "New List: " + ddlRecord.getRecordSetId());
+	}
+
 	public AssetEntry newAssetEntry(DLFileEntry dlFileEntry) {
 		return newAssetEntry(
 			dlFileEntry.getGroupId(), dlFileEntry.getCreateDate(),

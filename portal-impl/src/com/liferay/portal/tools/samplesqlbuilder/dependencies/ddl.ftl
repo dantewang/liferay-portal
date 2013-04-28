@@ -46,6 +46,10 @@
 					_entry = ddlRecord
 				/>
 
+				<@insertAssetEntry
+					_entry = ddlRecord
+				/>
+
 				${writerDynamicDataListsCSV.write(layoutName + "," + portletId + "," + ddlRecordSet.recordSetId + "," + ddlRecord.recordId + "\n")}
 			</#list>
 		</#if>
