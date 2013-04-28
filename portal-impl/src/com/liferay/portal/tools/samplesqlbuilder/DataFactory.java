@@ -76,6 +76,7 @@ import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.blogs.model.BlogsStatsUser;
 import com.liferay.portlet.blogs.model.impl.BlogsEntryImpl;
 import com.liferay.portlet.blogs.model.impl.BlogsStatsUserImpl;
+import com.liferay.portlet.blogs.social.BlogsActivityKeys;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata;
@@ -177,6 +178,7 @@ public class DataFactory {
 		_maxUserToGroupCount = maxUserToGroupCount;
 
 		_counter = new SimpleCounter(_maxGroupsCount + 1);
+		_dateCounter = new SimpleCounter();
 		_futureDateCounter = new SimpleCounter();
 		_resourcePermissionCounter = new SimpleCounter();
 		_socialActivityCounter = new SimpleCounter();
@@ -1410,6 +1412,14 @@ public class DataFactory {
 	}
 
 	public List<ResourcePermission> newResourcePermissions(
+		BlogsEntry blogsEntry) {
+
+		return newResourcePermissions(
+			BlogsEntry.class.getName(),
+			StringUtil.valueOf(blogsEntry.getEntryId()), _sampleUserId);
+	}
+
+	public List<ResourcePermission> newResourcePermissions(
 		JournalArticleResource journalArticleResource) {
 
 		return newResourcePermissions(
@@ -1441,6 +1451,14 @@ public class DataFactory {
 			portletPreferences.getPlid(), portletId);
 
 		return newResourcePermissions(name, primKey, 0);
+	}
+
+	public SocialActivity newSocialActivity(BlogsEntry blogsEntry) {
+		return newSocialActivity(
+			blogsEntry.getGroupId(),
+			_classNamesMap.get(BlogsEntry.class.getName()),
+			blogsEntry.getEntryId(), BlogsActivityKeys.ADD_ENTRY,
+			blogsEntry.getTitle());
 	}
 
 	public SocialActivity newSocialActivity(DLFileEntry dlFileEntry) {
@@ -1845,7 +1863,7 @@ public class DataFactory {
 		socialActivity.setGroupId(groupId);
 		socialActivity.setCompanyId(_companyId);
 		socialActivity.setUserId(_sampleUserId);
-		socialActivity.setCreateDate(System.currentTimeMillis());
+		socialActivity.setCreateDate(_CURRENT_TIME + _dateCounter.get());
 		socialActivity.setClassNameId(classNameId);
 		socialActivity.setClassPK(classPK);
 		socialActivity.setType(type);
@@ -1896,6 +1914,8 @@ public class DataFactory {
 			_FUTURE_TIME + (_futureDateCounter.get() * Time.SECOND));
 	}
 
+	private static final long _CURRENT_TIME = System.currentTimeMillis();
+
 	private static final String _DEPENDENCIES_DIR=
 		"../portal-impl/src/com/liferay/portal/tools/samplesqlbuilder/" +
 			"dependencies/";
@@ -1916,6 +1936,7 @@ public class DataFactory {
 	private Company _company;
 	private long _companyId;
 	private SimpleCounter _counter;
+	private SimpleCounter _dateCounter;
 	private String _ddlDDMStructureContent;
 	private DDMStructure _defaultDLDDMStructure;
 	private DLFileEntryType _defaultDLFileEntryType;
