@@ -19,7 +19,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>ADD_ENTRY</td>
+	<td>ADD_ENTRY_BUTTON</td>
 	<td>//input[@value='Add Blog Entry']</td>
 	<td></td>
 </tr>
@@ -29,7 +29,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>SUCCESS_MESSAGE_UNDO</td>
+	<td>SUCCESS_MESSAGE_RECYCLE_BIN</td>
 	<td>//form[@id='_33_undoForm']</td>
 	<td></td>
 </tr>
@@ -85,17 +85,17 @@
 	<td></td>
 </tr>
 <tr>
-	<td>ENTRY_MOVE_RECYCLE_BIN_1</td>
+	<td>ENTRY_RECYCLE_BIN_1</td>
 	<td>xpath=(//div[contains(@class,'edit-actions')]//span/a/span[.='Move to the Recycle Bin'])[1]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>ENTRY_MOVE_RECYCLE_BIN_2</td>
+	<td>ENTRY_RECYCLE_BIN_2</td>
 	<td>xpath=(//div[contains(@class,'edit-actions')]//span/a/span[.='Move to the Recycle Bin'])[2]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>ENTRY_MOVE_RECYCLE_BIN_3</td>
+	<td>ENTRY_RECYCLE_BIN_3</td>
 	<td>xpath=(//div[contains(@class,'edit-actions')]//span/a/span[.='Move to the Recycle Bin'])[3]</td>
 	<td></td>
 </tr>

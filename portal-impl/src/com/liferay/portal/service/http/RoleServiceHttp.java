@@ -57,7 +57,7 @@ public class RoleServiceHttp {
 		java.lang.String name,
 		java.util.Map<java.util.Locale, java.lang.String> titleMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
-		int type, java.lang.String subType,
+		int type, java.lang.String subtype,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -67,7 +67,7 @@ public class RoleServiceHttp {
 
 			MethodHandler methodHandler = new MethodHandler(methodKey,
 					className, classPK, name, titleMap, descriptionMap, type,
-					subType, serviceContext);
+					subtype, serviceContext);
 
 			Object returnObj = null;
 

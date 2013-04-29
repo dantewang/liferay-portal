@@ -80,6 +80,7 @@ public class ResourceLocalServiceWrapper implements ResourceLocalService,
 	* com.liferay.portal.service.ServiceContext#setGuesPermissions(String[])}.
 	* </li>
 	* </ol>
+	*
 	* </li>
 	* </ol>
 	*

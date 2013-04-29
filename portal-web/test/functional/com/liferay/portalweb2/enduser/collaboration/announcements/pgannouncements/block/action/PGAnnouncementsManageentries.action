@@ -1,12 +1,12 @@
 <definition>
 	<command name="click">
-		<case locator-key1="ADD_ENTRY">
+		<case locator-key1="ADD_ENTRY_BUTTON">
 			<execute function="Click#valueClickAtAndWait" value1="Add Entry" />
 		</case>
 	</command>
 
 	<command name="select">
-		<case locator-key1="DISTRIBUTION_SCOPE">
+		<case locator-key1="DISTRIBUTION_SCOPE_SELECT">
 			<execute function="Select#selectAndWait" />
 		</case>
 	</command>

@@ -72,7 +72,7 @@ public interface RoleService extends BaseService {
 	* @param descriptionMap the role's localized descriptions (optionally
 	<code>null</code>)
 	* @param type the role's type (optionally <code>0</code>)
-	* @param subType the role's subtype (optionally <code>null</code>)
+	* @param subtype the role's subtype (optionally <code>null</code>)
 	* @param serviceContext the service context to be applied (optionally
 	<code>null</code>). Can set the expando bridge attributes for the
 	role.
@@ -87,7 +87,7 @@ public interface RoleService extends BaseService {
 		long classPK, java.lang.String name,
 		java.util.Map<java.util.Locale, java.lang.String> titleMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
-		int type, java.lang.String subType,
+		int type, java.lang.String subtype,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;

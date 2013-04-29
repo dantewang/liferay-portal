@@ -120,40 +120,6 @@ public class PluginsEnvironmentBuilder {
 		sb.append("\t\t</attributes>\n\t</classpathentry>\n");
 	}
 
-	protected void addOsgiClasspathEntries(StringBundler sb, String projectDir)
-		throws Exception {
-
-		String content = _fileUtil.read(projectDir + "/build.xml");
-
-		int index = content.indexOf("plugin-lib.classpath");
-
-		if (index == -1) {
-			return;
-		}
-
-		int x = content.indexOf("includes=\"", index);
-
-		x = content.indexOf("\"", x);
-
-		int y = content.indexOf("\"", x + 1);
-
-		if ((x == -1) || (y == -1)) {
-			return;
-		}
-
-		DirectoryScanner directoryScanner = new DirectoryScanner();
-
-		directoryScanner.setBasedir(projectDir + "/../../lib/");
-		directoryScanner.setIncludes(
-			StringUtil.split(content.substring(x + 1, y)));
-
-		directoryScanner.scan();
-
-		for (String file : directoryScanner.getIncludedFiles()) {
-			addClasspathEntry(sb, "../../lib/" + file);
-		}
-	}
-
 	protected List<String> getCommonJars() {
 		List<String> jars = new ArrayList<String>();
 
@@ -504,8 +470,6 @@ public class PluginsEnvironmentBuilder {
 				addClasspathEntry(sb, "lib/" + jar);
 			}
 		}
-
-		addOsgiClasspathEntries(sb, projectDirName);
 
 		sb.append("\t<classpathentry kind=\"output\" path=\"bin\" />\n");
 		sb.append("</classpath>");

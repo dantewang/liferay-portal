@@ -4,29 +4,14 @@
 	</set-up>
 
 	<command name="AddBlogsEntry">
-		<execute macro="Page#pgAdd">
-			<var name="pageName" value="Blogs Page" />
-		</execute>
+		<var name="entryContent" value="Blogs Entry Content" />
+		<var name="entryTitle" value="Blogs Entry Title" />
 
-		<execute macro="Portlet#pgAdd">
-			<var name="pageName" value="Blogs Page" />
-			<var name="portletName" value="Blogs" />
-		</execute>
-	</command>
-
-	<command name="DeleteBlogsEntry">
-		<execute macro="Page#pgAdd">
-			<var name="pageName" value="Blogs Page" />
-		</execute>
-
-		<execute macro="Portlet#pgAdd">
-			<var name="pageName" value="Blogs Page" />
-			<var name="portletName" value="Blogs" />
-		</execute>
+		<execute macro="BlogsEntry#cpAdd" />
 	</command>
 
 	<tear-down>
-		<execute macro="Page#pgTearDown" />
+		<execute macro="BlogsEntry#cpTearDown" />
 
 		<execute macro="User#pgLogout" />
 	</tear-down>

@@ -19,7 +19,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>RECYCLE_BIN_SUCCESS_MESSAGE</td>
+	<td>SUCCESS_MESSAGE_RECYCLE_BIN</td>
 	<td>//div[@class='portlet-msg-success taglib-trash-undo']</td>
 	<td></td>
 </tr>
@@ -44,35 +44,35 @@
 	<td></td>
 	<td></td>
 </tr>
-<!--WIKI_PAGE_ACTIONS-->
+<!--WIKI_PAGE_MENULIST-->
 <tr>
-	<td>WIKI_PAGE_ACTIONS_EDIT</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Edit')]</td>
+	<td>WIKI_PAGE_MENULIST_EDIT</td>
+	<td>//a[@role='menuitem' and contains(.,'Edit')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>WIKI_PAGE_ACTIONS_PERMISSIONS</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Permissions')]</td>
+	<td>WIKI_PAGE_MENULIST_PERMISSIONS</td>
+	<td>//a[@role='menuitem' and contains(.,'Permissions')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>WIKI_PAGE_ACTIONS_COPY</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Copy')]</td>
+	<td>WIKI_PAGE_MENULIST_COPY</td>
+	<td>//a[@role='menuitem' and contains(.,'Copy')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>WIKI_PAGE_ACTIONS_MOVE</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Move')]</td>
+	<td>WIKI_PAGE_MENULIST_MOVE</td>
+	<td>//a[@role='menuitem' and contains(.,'Move')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>WIKI_PAGE_ACTIONS_SUBSCRIBE</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Subscribe')]</td>
+	<td>WIKI_PAGE_MENULIST_SUBSCRIBE</td>
+	<td>//a[@role='menuitem' and contains(.,'Subscribe')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>WIKI_PAGE_ACTIONS_RECYCLE_BIN</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Move to the Recycle Bin')]</td>
+	<td>WIKI_PAGE_MENULIST_RECYCLE_BIN</td>
+	<td>//a[@role='menuitem' and contains(.,'Move to the Recycle Bin')]</td>
 	<td></td>
 </tr>
 </tbody>

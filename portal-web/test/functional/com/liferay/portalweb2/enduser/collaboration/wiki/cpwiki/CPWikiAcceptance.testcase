@@ -33,6 +33,8 @@
 	<tear-down>
 		<execute macro="WikiNode#cpTearDown" />
 
+		<execute macro="WikiPage#cpTearDown" />
+
 		<execute macro="User#pgLogout" />
 	</tear-down>
 </definition>

@@ -199,7 +199,7 @@ public class PermissionExporter {
 			roleElement.addAttribute("title", role.getTitle());
 			roleElement.addAttribute("description", role.getDescription());
 			roleElement.addAttribute("type", String.valueOf(role.getType()));
-			roleElement.addAttribute("subType", role.getSubtype());
+			roleElement.addAttribute("subtype", role.getSubtype());
 
 			if ((availableActionIds == null) || availableActionIds.isEmpty()) {
 				continue;

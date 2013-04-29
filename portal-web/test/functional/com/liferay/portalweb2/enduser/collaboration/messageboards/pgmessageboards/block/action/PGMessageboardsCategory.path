@@ -19,7 +19,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>NAME</td>
+	<td>NAME_HEADER</td>
 	<td>//h1[@class='header-title']/span</td>
 	<td></td>
 </tr>

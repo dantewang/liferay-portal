@@ -51,8 +51,8 @@ public class SelectAndWait3Test extends BaseTestCase {
 		selenium.clickAt("link=Define Permissions",
 			RuntimeVariables.replace("Define Permissions"));
 		selenium.waitForPageToLoad("30000");
-		selenium.select("//select[@id='Catherine']",
-			RuntimeVariables.replace("Sites"));
+		selenium.select("//select[@id='_128_add-permissions']",
+			RuntimeVariables.replace("Catherine"));
 		selenium.waitForPageToLoad("30000");
 	}
 }

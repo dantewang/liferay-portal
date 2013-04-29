@@ -87,6 +87,7 @@ public class ResourceLocalServiceUtil {
 	* com.liferay.portal.service.ServiceContext#setGuesPermissions(String[])}.
 	* </li>
 	* </ol>
+	*
 	* </li>
 	* </ol>
 	*

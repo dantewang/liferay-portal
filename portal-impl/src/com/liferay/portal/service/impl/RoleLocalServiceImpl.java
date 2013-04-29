@@ -157,7 +157,7 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 	 * @param  descriptionMap the role's localized descriptions (optionally
 	 *         <code>null</code>)
 	 * @param  type the role's type (optionally <code>0</code>)
-	 * @param  subType the role's subtype (optionally <code>null</code>)
+	 * @param  subtype the role's subtype (optionally <code>null</code>)
 	 * @param  serviceContext the service context to be applied (optionally
 	 *         <code>null</code>). Can set expando bridge attributes for the
 	 *         role.
@@ -170,7 +170,7 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 	public Role addRole(
 			long userId, String className, long classPK, String name,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
-			int type, String subType, ServiceContext serviceContext)
+			int type, String subtype, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// Role
@@ -215,7 +215,7 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 		role.setTitleMap(titleMap);
 		role.setDescriptionMap(descriptionMap);
 		role.setType(type);
-		role.setSubtype(subType);
+		role.setSubtype(subtype);
 		role.setExpandoBridgeAttributes(serviceContext);
 
 		rolePersistence.update(role);

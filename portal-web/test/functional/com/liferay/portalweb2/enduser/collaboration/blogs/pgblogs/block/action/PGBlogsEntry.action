@@ -3,7 +3,7 @@
 		<case locator-key1="COMMENTS_ADD">
 			<execute function="Click#textClickAt" value1="Be the first." />
 		</case>
-		<case locator-key1="COMMENTS_REPLY">
+		<case locator-key1="COMMENTS_REPLY_BUTTON">
 			<execute function="Click#valueClickAt" value1="Reply" />
 		</case>
 	</command>

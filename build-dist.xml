@@ -763,6 +763,12 @@ release was successful.</echo>
 				<exec dir="${app.server.tomcat.bin.dir}" executable="shutdown.bat" resolveexecutable="true" />
 			</sequential>
 		</parallel>
+
+		<script classpathref="project.classpath" language="beanshell">
+			project.setProperty("prepare-generated-files.tstamp", String.valueOf(System.currentTimeMillis()));
+		</script>
+
+		<echo file="prepare-generated-files.tstamp">${prepare-generated-files.tstamp}</echo>
 	</target>
 
 	<target name="unzip-geronimo">

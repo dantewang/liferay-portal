@@ -11,7 +11,7 @@
 <tr>
 	<td>PAGE_NAME</td>
 	<td></td>
-	<td>CPBlogsEntry</td>
+	<td>PGBlogsEntry</td>
 </tr>
 <tr>
 	<td></td>
@@ -30,13 +30,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>COMMENTS_REPLY</td>
-	<td>//input[@value='Reply']</td>
-	<td>Reply</td>
+	<td>COMMENTS_BODY_FIELD</td>
+	<td>//textarea[@name='_33_postReplyBody0']</td>
+	<td></td>
 </tr>
 <tr>
-	<td>COMMENTS_BODY</td>
-	<td>//textarea[@name='_33_postReplyBody0']</td>
+	<td>COMMENTS_REPLY_BUTTON</td>
+	<td>//input[@value='Reply']</td>
 	<td></td>
 </tr>
 <tr>

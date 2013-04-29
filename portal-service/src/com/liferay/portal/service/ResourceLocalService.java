@@ -88,6 +88,7 @@ public interface ResourceLocalService extends BaseLocalService {
 	* com.liferay.portal.service.ServiceContext#setGuesPermissions(String[])}.
 	* </li>
 	* </ol>
+	*
 	* </li>
 	* </ol>
 	*

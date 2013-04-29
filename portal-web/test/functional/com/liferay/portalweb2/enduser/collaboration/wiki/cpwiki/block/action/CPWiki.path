@@ -19,7 +19,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>ADD_WIKI</td>
+	<td>ADD_WIKI_BUTTON</td>
 	<td>//input[@value='Add Wiki']</td>
 	<td></td>
 </tr>
@@ -29,7 +29,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>RECYCLE_BIN_SUCCESS_MESSAGE</td>
+	<td>SUCCESS_MESSAGE_RECYCLE_BIN</td>
 	<td>//div[@class='portlet-msg-success taglib-trash-undo']</td>
 	<td></td>
 </tr>
@@ -74,40 +74,40 @@
 	<td></td>
 	<td></td>
 </tr>
-<!--WIKI_NODE_ACTIONS-->
+<!--WIKI_NODE_MENULIST-->
 <tr>
-	<td>WIKI_NODE_ACTIONS_EDIT</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Edit')]</td>
+	<td>WIKI_NODE_MENULIST_EDIT</td>
+	<td>//a[@role='menuitem' and contains(.,'Edit')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>WIKI_NODE_ACTIONS_PERMISSIONS</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Permissions')]</td>
+	<td>WIKI_NODE_MENULIST_PERMISSIONS</td>
+	<td>//a[@role='menuitem' and contains(.,'Permissions')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>WIKI_NODE_ACTIONS_IMPORT_PAGES</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Import Pages')]</td>
+	<td>WIKI_NODE_MENULIST_IMPORT_PAGES</td>
+	<td>//a[@role='menuitem' and contains(.,'Import Pages')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>WIKI_NODE_ACTIONS_RSS</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'RSS')]</td>
+	<td>WIKI_NODE_MENULIST_RSS</td>
+	<td>//a[@role='menuitem' and contains(.,'RSS')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>WIKI_NODE_ACTIONS_SUBSCRIBE</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Subscribe')]</td>
+	<td>WIKI_NODE_MENULIST_SUBSCRIBE</td>
+	<td>//a[@role='menuitem' and contains(.,'Subscribe')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>WIKI_NODE_ACTIONS_RECYCLE_BIN</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Move to the Recycle Bin')]</td>
+	<td>WIKI_NODE_MENULIST_RECYCLE_BIN</td>
+	<td>//a[@role='menuitem' and contains(.,'Move to the Recycle Bin')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>WIKI_NODE_ACTIONS_VIEW_REMOVED_ATTACHMENTS</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'View Removed Attachments')]</td>
+	<td>WIKI_NODE_MENULIST_VIEW_REMOVED_ATTACHMENTS</td>
+	<td>//a[@role='menuitem' and contains(.,'View Removed Attachments')]</td>
 	<td></td>
 </tr>
 </tbody>

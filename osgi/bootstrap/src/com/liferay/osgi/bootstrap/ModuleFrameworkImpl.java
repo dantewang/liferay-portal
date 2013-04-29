@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -38,6 +39,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UniqueList;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.module.framework.ModuleFramework;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
@@ -651,6 +653,20 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 	}
 
 	private String _getSystemPackagesExtra() {
+		File coreDir = new File(
+			PropsValues.LIFERAY_WEB_PORTAL_CONTEXT_TEMPDIR, "osgi");
+
+		File cacheFile = new File(coreDir, "system-packages.txt");
+
+		if (cacheFile.exists()) {
+			try {
+				return FileUtil.read(cacheFile);
+			}
+			catch (IOException ioe) {
+				_log.error(ioe, ioe);
+			}
+		}
+
 		_extraPackageMap = new TreeMap<String, List<URL>>();
 
 		StringBundler sb = new StringBundler();
@@ -698,6 +714,13 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			_log.trace(
 				"The portal's system bundle is exporting the following " +
 					"packages:\n" +s);
+		}
+
+		try {
+			FileUtil.write(cacheFile, sb.toString());
+		}
+		catch (IOException ioe) {
+			_log.error(ioe, ioe);
 		}
 
 		return sb.toString();
@@ -983,7 +1006,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 	}
 
 	private void _setupInitialBundles() throws Exception {
-		FrameworkWiring frameworkWiring = getFramework().adapt(
+		FrameworkWiring frameworkWiring = _framework.adapt(
 			FrameworkWiring.class);
 
 		List<Bundle> lazyActivationBundles = new ArrayList<Bundle>();
@@ -1019,7 +1042,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		public boolean isLoad(URL url) {
 			String path = url.getPath();
 
-			return path.contains(PropsValues.MODULE_FRAMEWORK_CORE_DIR);
+			return path.contains(
+				PropsValues.LIFERAY_WEB_PORTAL_CONTEXT_TEMPDIR);
 		}
 
 	}

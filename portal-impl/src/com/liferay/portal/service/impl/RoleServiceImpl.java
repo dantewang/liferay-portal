@@ -58,7 +58,7 @@ public class RoleServiceImpl extends RoleServiceBaseImpl {
 	 * @param  descriptionMap the role's localized descriptions (optionally
 	 *         <code>null</code>)
 	 * @param  type the role's type (optionally <code>0</code>)
-	 * @param  subType the role's subtype (optionally <code>null</code>)
+	 * @param  subtype the role's subtype (optionally <code>null</code>)
 	 * @param  serviceContext the service context to be applied (optionally
 	 *         <code>null</code>). Can set the expando bridge attributes for the
 	 *         role.
@@ -72,7 +72,7 @@ public class RoleServiceImpl extends RoleServiceBaseImpl {
 	public Role addRole(
 			String className, long classPK, String name,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
-			int type, String subType, ServiceContext serviceContext)
+			int type, String subtype, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		PortalPermissionUtil.check(getPermissionChecker(), ActionKeys.ADD_ROLE);
@@ -81,7 +81,7 @@ public class RoleServiceImpl extends RoleServiceBaseImpl {
 
 		Role role = roleLocalService.addRole(
 			user.getUserId(), className, classPK, name, titleMap,
-			descriptionMap, type, subType, serviceContext);
+			descriptionMap, type, subtype, serviceContext);
 
 		if (type == RoleConstants.TYPE_ORGANIZATION) {
 			OrganizationMembershipPolicyUtil.verifyPolicy(role);

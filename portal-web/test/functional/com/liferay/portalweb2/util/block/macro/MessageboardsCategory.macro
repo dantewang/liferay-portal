@@ -5,12 +5,10 @@
 		</execute>
 
 		<while>
-			<condition action="CPMessageboards#isElementPresent" locator-key1="CATEGORY_TABLE_ALL_ROWS" />
+			<condition action="CPMessageboards#isElementPresent" locator-key1="CATEGORY_TABLE_ALL_CHECKBOX" />
 			<then>
-				<execute action="CPMessageboards#click" locator-key1="CATEGORY_TABLE_ALL_ROWS" />
-
-				<execute action="CPMessageboards#click" locator-key1="CATEGORIES_RECYCLE_BIN" />
-
+				<execute action="CPMessageboards#click" locator-key1="CATEGORY_TABLE_ALL_CHECKBOX" />
+				<execute action="CPMessageboards#click" locator-key1="CATEGORIES_RECYCLE_BIN_BUTTON" />
 				<execute action="CPMessageboards#confirm" locator-key1="CONFIRMATION" value1="Are you sure you want to move the selected entries to the Recycle Bin?" />
 			</then>
 		</while>
@@ -23,11 +21,10 @@
 			<var name="pageName" value="${pageName}" />
 		</execute>
 
-		<execute action="PGMessageboards#click" locator-key1="ADD_CATEGORY" />
+		<execute action="PGMessageboards#click" locator-key1="ADD_CATEGORY_BUTTON" />
 
-		<execute action="PGMessageboardsAddcategory#type" locator-key1="NAME" value1="${categoryName}" />
-
-		<execute action="PGMessageboardsAddcategory#click" locator-key1="SAVE" />
+		<execute action="PGMessageboardsAddcategory#type" locator-key1="NAME_FIELD" value1="${categoryName}" />
+		<execute action="PGMessageboardsAddcategory#click" locator-key1="SAVE_BUTTON" />
 
 		<execute action="PGMessageboards#assertTextEquals" locator-key1="SUCCESS_MESSAGE" />
 
@@ -36,16 +33,12 @@
 		</execute>
 
 		<execute action="PGMessageboards#assertTextEquals" locator-key1="CATEGORY_TABLE_CATEGORY_1" value1="${categoryName}" />
-
 		<execute action="PGMessageboards#assertTextEquals" locator-key1="CATEGORY_TABLE_CATEGORIES_1" value1="0" />
-
 		<execute action="PGMessageboards#assertTextEquals" locator-key1="CATEGORY_TABLE_THREADS_1" value1="0" />
-
 		<execute action="PGMessageboards#assertTextEquals" locator-key1="CATEGORY_TABLE_POSTS_1" value1="0" />
-
 		<execute action="PGMessageboards#click" locator-key1="CATEGORY_TABLE_CATEGORY_1" value1="${categoryName}" />
 
-		<execute action="PGMessageboardsCategory#assertTextEquals" locator-key1="NAME" value1="${categoryName}" />
+		<execute action="PGMessageboardsCategory#assertTextEquals" locator-key1="NAME_HEADER" value1="${categoryName}" />
 	</command>
 
 	<command name="pgDelete">
@@ -54,13 +47,9 @@
 		</execute>
 
 		<execute action="PGMessageboards#assertTextEquals" locator-key1="CATEGORY_TABLE_CATEGORY_1" value1="${categoryName}" />
-
 		<execute action="PGMessageboards#click" locator-key1="CATEGORY_TABLE_ACTIONS_1" />
-
-		<execute action="PGMessageboards#click" locator-key1="CATEGORY_ACTIONS_RECYCLE_BIN" />
-
-		<execute action="PGMessageboards#assertTextEquals" locator-key1="RECYCLE_BIN_SUCCESS_MESSAGE" />
-
+		<execute action="PGMessageboards#click" locator-key1="CATEGORY_MENULIST_RECYCLE_BIN" />
+		<execute action="PGMessageboards#assertTextEquals" locator-key1="SUCCESS_MESSAGE_RECYCLE_BIN" />
 		<execute action="PGMessageboards#assertTextNotPresent" value1="${categoryName}" />
 
 		<execute macro="RecycleBin#cpEmptyRecycleBin" />
@@ -73,17 +62,13 @@
 		</execute>
 
 		<execute action="PGMessageboards#assertTextEquals" locator-key1="CATEGORY_TABLE_CATEGORY_1" value1="${categoryName}" />
-
 		<execute action="PGMessageboards#click" locator-key1="CATEGORY_TABLE_ACTIONS_1" />
+		<execute action="PGMessageboards#click" locator-key1="CATEGORY_MENULIST_EDIT" />
 
-		<execute action="PGMessageboards#click" locator-key1="CATEGORY_ACTIONS_EDIT" />
-
-		<execute action="PGMessageboardsAddcategory#type" locator-key1="NAME" value1="${categoryNameNew}" />
-
-		<execute action="PGMessageboardsAddcategory#click" locator-key1="SAVE" value1="Save" />
+		<execute action="PGMessageboardsAddcategory#type" locator-key1="NAME_FIELD" value1="${categoryNameNew}" />
+		<execute action="PGMessageboardsAddcategory#click" locator-key1="SAVE_BUTTON" value1="Save" />
 
 		<execute action="PGMessageboards#assertTextEquals" locator-key1="SUCCESS_MESSAGE" />
-
 		<execute action="PGMessageboards#assertTextEquals" locator-key1="CATEGORY_TABLE_CATEGORY_1" value1="${categoryNameNew}" />
 	</command>
 </definition>

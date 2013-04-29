@@ -38,6 +38,8 @@
 	<tear-down>
 		<execute macro="WikiNode#cpTearDown" />
 
+		<execute macro="WikiPage#cpTearDown" />
+
 		<execute macro="Page#pgTearDown" />
 
 		<execute macro="User#pgLogout" />

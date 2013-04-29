@@ -19,7 +19,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>TITLE</td>
+	<td>TITLE_HEADER</td>
 	<td>//h1[@class='header-title']</td>
 	<td></td>
 </tr>
@@ -37,32 +37,32 @@
 <!--THREAD_TABLE-->
 <tr>
 	<td>THREAD_TABLE_SUBJECT_1</td>
-	<td>//div[@id='toggle_id_message_boards_view_message_thread']/table/tbody/tr[1]/td[1]/a</td>
+	<td>xpath=(//div[@id='toggle_id_message_boards_view_message_thread']/table/tbody/tr/td[1]/a)[1]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>THREAD_TABLE_SUBJECT_2</td>
-	<td>//div[@id='toggle_id_message_boards_view_message_thread']/table/tbody/tr[2]/td[1]/a</td>
+	<td>xpath=(//div[@id='toggle_id_message_boards_view_message_thread']/table/tbody/tr/td[1]/a)[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>THREAD_TABLE_SUBJECT_3</td>
-	<td>//div[@id='toggle_id_message_boards_view_message_thread']/table/tbody/tr[3]/td[1]/a</td>
+	<td>xpath=(//div[@id='toggle_id_message_boards_view_message_thread']/table/tbody/tr/td[1]/a)[3]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>THREAD_TABLE_AUTHOR_1</td>
-	<td>//div[@id='toggle_id_message_boards_view_message_thread']/table/tbody/tr[1]/td[2]/a</td>
+	<td>xpath=(//div[@id='toggle_id_message_boards_view_message_thread']/table/tbody/tr/td[2]/a)[1]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>THREAD_TABLE_AUTHOR_2</td>
-	<td>//div[@id='toggle_id_message_boards_view_message_thread']/table/tbody/tr[2]/td[2]/a</td>
+	<td>xpath=(//div[@id='toggle_id_message_boards_view_message_thread']/table/tbody/tr/td[2]/a)[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>THREAD_TABLE_AUTHOR_3</td>
-	<td>//div[@id='toggle_id_message_boards_view_message_thread']/table/tbody/tr[3]/td[2]/a</td>
+	<td>xpath=(//div[@id='toggle_id_message_boards_view_message_thread']/table/tbody/tr/td[2]/a)[3]</td>
 	<td></td>
 </tr>
 <tr>

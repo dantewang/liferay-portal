@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.security.lang.DoPrivilegedUtil;
 import com.liferay.portal.util.ClassLoaderUtil;
 import com.liferay.portal.util.FileImpl;
 import com.liferay.portal.util.PropsValues;
@@ -30,6 +31,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 
 import java.net.URL;
+import java.net.URLConnection;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,21 +48,22 @@ public class ModuleFrameworkAdapterHelper {
 		}
 
 		try {
+			File coreDir = new File(
+				PropsValues.LIFERAY_WEB_PORTAL_CONTEXT_TEMPDIR, "osgi");
+
 			_initDir(
 				"com/liferay/portal/deploy/dependencies/osgi/core",
-				PropsValues.MODULE_FRAMEWORK_CORE_DIR);
+				coreDir.getAbsolutePath());
 			_initDir(
 				"com/liferay/portal/deploy/dependencies/osgi/portal",
 				PropsValues.MODULE_FRAMEWORK_PORTAL_DIR);
-
-			File coreDir = new File(PropsValues.MODULE_FRAMEWORK_CORE_DIR);
 
 			File[] files = coreDir.listFiles();
 
 			URL[] urls = new URL[files.length];
 
 			for (int i = 0; i < urls.length; i++) {
-				urls[i] = new URL("file:" + files[i].getAbsolutePath());
+				urls[i] = new URL("file", null, files[i].getAbsolutePath());
 			}
 
 			_classLoader = new ModuleFrameworkClassLoader(
@@ -135,26 +138,34 @@ public class ModuleFrameworkAdapterHelper {
 		if (FileUtil.getFile() == null) {
 			FileUtil fileUtil = new FileUtil();
 
-			fileUtil.setFile(new FileImpl());
+			fileUtil.setFile(DoPrivilegedUtil.wrap(new FileImpl()));
 		}
 
-		if (FileUtil.exists(destinationPath)) {
-			return;
+		if (!FileUtil.exists(destinationPath)) {
+			FileUtil.mkdirs(destinationPath);
 		}
-
-		FileUtil.mkdirs(destinationPath);
 
 		ClassLoader classLoader = ClassLoaderUtil.getPortalClassLoader();
 
+		URL url = classLoader.getResource(sourcePath + "/jars.txt");
+
+		URLConnection urlConnection = url.openConnection();
+
 		String[] jarFileNames = StringUtil.split(
-			StringUtil.read(classLoader, sourcePath + "/jars.txt"));
+			StringUtil.read(urlConnection.getInputStream()));
 
 		for (String jarFileName : jarFileNames) {
-			byte[] bytes = FileUtil.getBytes(
-				classLoader.getResourceAsStream(
-					sourcePath + "/" + jarFileName));
+			File distinationFile = new File(destinationPath, jarFileName);
 
-			FileUtil.write(new File(destinationPath, jarFileName), bytes);
+			if (distinationFile.lastModified() <
+					urlConnection.getLastModified()) {
+
+				byte[] bytes = FileUtil.getBytes(
+					classLoader.getResourceAsStream(
+						sourcePath + "/" + jarFileName));
+
+				FileUtil.write(distinationFile, bytes);
+			}
 		}
 	}
 

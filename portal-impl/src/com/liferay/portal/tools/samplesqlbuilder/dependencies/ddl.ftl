@@ -3,6 +3,10 @@
 
 	insert into DDMStructure values ('${ddmStructure.uuid}', ${ddmStructure.structureId}, ${ddmStructure.groupId}, ${ddmStructure.companyId}, ${ddmStructure.userId}, '${ddmStructure.userName}', '${dataFactory.getDateString(ddmStructure.createDate)}', '${dataFactory.getDateString(ddmStructure.modifiedDate)}', ${ddmStructure.parentStructureId}, ${ddmStructure.classNameId}, '${ddmStructure.structureKey}', '${ddmStructure.name}', '${ddmStructure.description}', '${ddmStructure.xsd}', '${ddmStructure.storageType}', ${ddmStructure.type});
 
+	<@insertResourcePermissions
+		_entry = ddmStructure
+	/>
+
 	<#list 1..maxDDLRecordSetCount as ddlRecordSetCount>
 		<#assign layoutName = "dynamic_data_list_display_" + ddlRecordSetCount>
 		<#assign portletId = "169_INSTANCE_TEST" + ddlRecordSetCount>
@@ -21,6 +25,10 @@
 			_entry = ddlRecordSet
 		/>
 
+		<@insertResourcePermissions
+			_entry = ddlRecordSet
+		/>
+
 		<#if (maxDDLRecordCount > 0)>
 			<#list 1..maxDDLRecordCount as ddlRecordCount>
 				<#assign ddlRecord = dataFactory.newDDLRecord(ddlRecordSet)>
@@ -35,6 +43,10 @@
 					_currentIndex = ddlRecordCount
 					_ddmStorageLinkId = counter.get()
 					_ddmStructureId = ddmStructure.structureId
+					_entry = ddlRecord
+				/>
+
+				<@insertAssetEntry
 					_entry = ddlRecord
 				/>
 

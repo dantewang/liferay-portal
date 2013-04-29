@@ -79,7 +79,7 @@ public class RoleServiceSoap {
 	* @param descriptionMap the role's localized descriptions (optionally
 	<code>null</code>)
 	* @param type the role's type (optionally <code>0</code>)
-	* @param subType the role's subtype (optionally <code>null</code>)
+	* @param subtype the role's subtype (optionally <code>null</code>)
 	* @param serviceContext the service context to be applied (optionally
 	<code>null</code>). Can set the expando bridge attributes for the
 	role.
@@ -96,7 +96,7 @@ public class RoleServiceSoap {
 		java.lang.String[] titleMapValues,
 		java.lang.String[] descriptionMapLanguageIds,
 		java.lang.String[] descriptionMapValues, int type,
-		java.lang.String subType,
+		java.lang.String subtype,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws RemoteException {
 		try {
@@ -106,7 +106,7 @@ public class RoleServiceSoap {
 					descriptionMapValues);
 
 			com.liferay.portal.model.Role returnValue = RoleServiceUtil.addRole(className,
-					classPK, name, titleMap, descriptionMap, type, subType,
+					classPK, name, titleMap, descriptionMap, type, subtype,
 					serviceContext);
 
 			return com.liferay.portal.model.RoleSoap.toSoapModel(returnValue);
