@@ -14,6 +14,11 @@
 	_publicPageCount = 1
 />
 
+<@insertGroup
+	_group = dataFactory.globalGroup
+	_publicPageCount = 1
+/>
+
 <#list dataFactory.groups as group>
 	<#assign groupId = group.groupId>
 
