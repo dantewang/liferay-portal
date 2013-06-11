@@ -70,9 +70,10 @@ public class SystemEventModelImpl extends BaseModelImpl<SystemEvent>
 			{ "classNameId", Types.BIGINT },
 			{ "classPK", Types.BIGINT },
 			{ "classUuid", Types.VARCHAR },
-			{ "type_", Types.INTEGER }
+			{ "type_", Types.INTEGER },
+			{ "extraData", Types.CLOB }
 		};
-	public static final String TABLE_SQL_CREATE = "create table SystemEvent (systemEventId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,classNameId LONG,classPK LONG,classUuid VARCHAR(75) null,type_ INTEGER)";
+	public static final String TABLE_SQL_CREATE = "create table SystemEvent (systemEventId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,classNameId LONG,classPK LONG,classUuid VARCHAR(75) null,type_ INTEGER,extraData TEXT null)";
 	public static final String TABLE_SQL_DROP = "drop table SystemEvent";
 	public static final String ORDER_BY_JPQL = " ORDER BY systemEvent.createDate DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY SystemEvent.createDate DESC";
@@ -143,6 +144,7 @@ public class SystemEventModelImpl extends BaseModelImpl<SystemEvent>
 		attributes.put("classPK", getClassPK());
 		attributes.put("classUuid", getClassUuid());
 		attributes.put("type", getType());
+		attributes.put("extraData", getExtraData());
 
 		return attributes;
 	}
@@ -207,6 +209,12 @@ public class SystemEventModelImpl extends BaseModelImpl<SystemEvent>
 
 		if (type != null) {
 			setType(type);
+		}
+
+		String extraData = (String)attributes.get("extraData");
+
+		if (extraData != null) {
+			setExtraData(extraData);
 		}
 	}
 
@@ -400,6 +408,21 @@ public class SystemEventModelImpl extends BaseModelImpl<SystemEvent>
 		return _originalType;
 	}
 
+	@Override
+	public String getExtraData() {
+		if (_extraData == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _extraData;
+		}
+	}
+
+	@Override
+	public void setExtraData(String extraData) {
+		_extraData = extraData;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -441,6 +464,7 @@ public class SystemEventModelImpl extends BaseModelImpl<SystemEvent>
 		systemEventImpl.setClassPK(getClassPK());
 		systemEventImpl.setClassUuid(getClassUuid());
 		systemEventImpl.setType(getType());
+		systemEventImpl.setExtraData(getExtraData());
 
 		systemEventImpl.resetOriginalValues();
 
@@ -555,12 +579,20 @@ public class SystemEventModelImpl extends BaseModelImpl<SystemEvent>
 
 		systemEventCacheModel.type = getType();
 
+		systemEventCacheModel.extraData = getExtraData();
+
+		String extraData = systemEventCacheModel.extraData;
+
+		if ((extraData != null) && (extraData.length() == 0)) {
+			systemEventCacheModel.extraData = null;
+		}
+
 		return systemEventCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(21);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{systemEventId=");
 		sb.append(getSystemEventId());
@@ -582,6 +614,8 @@ public class SystemEventModelImpl extends BaseModelImpl<SystemEvent>
 		sb.append(getClassUuid());
 		sb.append(", type=");
 		sb.append(getType());
+		sb.append(", extraData=");
+		sb.append(getExtraData());
 		sb.append("}");
 
 		return sb.toString();
@@ -589,7 +623,7 @@ public class SystemEventModelImpl extends BaseModelImpl<SystemEvent>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(34);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.SystemEvent");
@@ -635,6 +669,10 @@ public class SystemEventModelImpl extends BaseModelImpl<SystemEvent>
 			"<column><column-name>type</column-name><column-value><![CDATA[");
 		sb.append(getType());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>extraData</column-name><column-value><![CDATA[");
+		sb.append(getExtraData());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -664,6 +702,7 @@ public class SystemEventModelImpl extends BaseModelImpl<SystemEvent>
 	private int _type;
 	private int _originalType;
 	private boolean _setOriginalType;
+	private String _extraData;
 	private long _columnBitmask;
 	private SystemEvent _escapedModel;
 }

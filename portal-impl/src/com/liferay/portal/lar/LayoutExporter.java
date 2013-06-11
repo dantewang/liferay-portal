@@ -578,9 +578,10 @@ public class LayoutExporter {
 		_portletExporter.exportAssetLinks(portletDataContext);
 		_portletExporter.exportAssetTags(portletDataContext);
 		_portletExporter.exportComments(portletDataContext);
-		_portletExporter.exportDeletions(portletDataContext);
 		_portletExporter.exportExpandoTables(portletDataContext);
 		_portletExporter.exportLocks(portletDataContext);
+
+		_deletionSystemEventExporter.export(portletDataContext);
 
 		if (exportPermissions) {
 			_permissionExporter.exportPortletDataPermissions(
@@ -979,6 +980,8 @@ public class LayoutExporter {
 
 	private static Log _log = LogFactoryUtil.getLog(LayoutExporter.class);
 
+	private DeletionSystemEventExporter _deletionSystemEventExporter =
+		new DeletionSystemEventExporter();
 	private PermissionExporter _permissionExporter = new PermissionExporter();
 	private PortletExporter _portletExporter = new PortletExporter();
 

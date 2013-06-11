@@ -62,7 +62,7 @@ public class QueryConfig implements Serializable {
 		return locale;
 	}
 
-	public float getQuerySuggestionScoringThreshold() {
+	public float getQuerySuggestionScoresThreshold() {
 		return GetterUtil.getFloat(
 			_attributes.get(
 				PropsKeys.INDEX_SEARCH_QUERY_SUGGESTION_SCORING_THRESHOLD),

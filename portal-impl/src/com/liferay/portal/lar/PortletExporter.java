@@ -98,7 +98,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang.time.StopWatch;
 
@@ -449,6 +448,8 @@ public class PortletExporter {
 		exportComments(portletDataContext);
 		exportExpandoTables(portletDataContext);
 		exportLocks(portletDataContext);
+
+		_deletionSystemEventExporter.export(portletDataContext);
 
 		if (exportPermissions) {
 			_permissionExporter.exportPortletDataPermissions(
@@ -833,22 +834,6 @@ public class PortletExporter {
 		portletDataContext.addZipEntry(
 			ExportImportPathUtil.getRootPath(portletDataContext) +
 				"/comments.xml",
-			document.formattedString());
-	}
-
-	protected void exportDeletions(PortletDataContext portletDataContext)
-		throws Exception {
-
-		Document document = SAXReaderUtil.createDocument();
-
-		Element rootElement = document.addElement("deletions");
-
-		Set<Long> deletionEventClassNameIds =
-			portletDataContext.getDeletionEventClassNameIds();
-
-		portletDataContext.addZipEntry(
-			ExportImportPathUtil.getRootPath(portletDataContext) +
-				"/deletions.xml",
 			document.formattedString());
 	}
 
@@ -1752,6 +1737,8 @@ public class PortletExporter {
 
 	private static Log _log = LogFactoryUtil.getLog(PortletExporter.class);
 
+	private DeletionSystemEventExporter _deletionSystemEventExporter =
+		new DeletionSystemEventExporter();
 	private PermissionExporter _permissionExporter = new PermissionExporter();
 
 }

@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
+import com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants;
 import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMTemplateExportActionableDynamicQuery;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class PortletDisplayTemplatePortletDataHandler
 	public static final String NAMESPACE = "portlet_display_templates";
 
 	public PortletDisplayTemplatePortletDataHandler() {
-		setDeletionEventClassNames(DDMTemplate.class.getName());
+		setDeletionSystemEventClassNames(DDMTemplate.class.getName());
 	}
 
 	@Override
@@ -141,6 +142,17 @@ public class PortletDisplayTemplatePortletDataHandler
 					"classNameId");
 
 				dynamicQuery.add(classNameIdProperty.in(classNameIds));
+
+				Property classPKProperty = PropertyFactoryUtil.forName(
+					"classPK");
+
+				dynamicQuery.add(classPKProperty.eq(0L));
+
+				Property typeProperty = PropertyFactoryUtil.forName("type");
+
+				dynamicQuery.add(
+					typeProperty.eq(
+						DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY));
 			}
 
 			@Override

@@ -57,6 +57,7 @@ public class SystemEventWrapper implements SystemEvent,
 		attributes.put("classPK", getClassPK());
 		attributes.put("classUuid", getClassUuid());
 		attributes.put("type", getType());
+		attributes.put("extraData", getExtraData());
 
 		return attributes;
 	}
@@ -121,6 +122,12 @@ public class SystemEventWrapper implements SystemEvent,
 
 		if (type != null) {
 			setType(type);
+		}
+
+		String extraData = (String)attributes.get("extraData");
+
+		if (extraData != null) {
+			setExtraData(extraData);
 		}
 	}
 
@@ -379,6 +386,26 @@ public class SystemEventWrapper implements SystemEvent,
 	@Override
 	public void setType(int type) {
 		_systemEvent.setType(type);
+	}
+
+	/**
+	* Returns the extra data of this system event.
+	*
+	* @return the extra data of this system event
+	*/
+	@Override
+	public java.lang.String getExtraData() {
+		return _systemEvent.getExtraData();
+	}
+
+	/**
+	* Sets the extra data of this system event.
+	*
+	* @param extraData the extra data of this system event
+	*/
+	@Override
+	public void setExtraData(java.lang.String extraData) {
+		_systemEvent.setExtraData(extraData);
 	}
 
 	@Override

@@ -535,7 +535,8 @@ create table SystemEvent (
 	classNameId LONG,
 	classPK LONG,
 	classUuid VARCHAR(75) null,
-	type_ INTEGER
+	type_ INTEGER,
+	extraData TEXT null
 );
 
 create table TrashEntry (

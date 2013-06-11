@@ -123,11 +123,21 @@
 		<column name="completionDate" type="Date" />
 		<column name="status" type="int" />
 
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="createDate" />
+		</order>
+
 		<!-- Finder methods -->
 
 		<finder name="G_T" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="taskExecutorClassName" />
+		</finder>
+		<finder name="T_S" return-type="Collection">
+			<finder-column name="taskExecutorClassName" />
+			<finder-column name="status" />
 		</finder>
 		<finder name="G_T_S" return-type="Collection">
 			<finder-column name="groupId" />
@@ -706,6 +716,10 @@
 		</finder>
 		<finder name="Plid" return-type="Collection">
 			<finder-column name="plid" />
+		</finder>
+		<finder name="P_F" return-type="Collection">
+			<finder-column name="plid" />
+			<finder-column name="friendlyURL" />
 		</finder>
 		<finder name="P_L" return-type="LayoutFriendlyURL" unique="true">
 			<finder-column name="plid" />
@@ -2039,6 +2053,7 @@
 		<column name="classPK" type="long" />
 		<column name="classUuid" type="String" />
 		<column name="type" type="int" />
+		<column name="extraData" type="String" />
 
 		<!-- Order -->
 

@@ -168,7 +168,8 @@ public class JournalArticleStagedModelDataHandler
 			}
 			else if (smallImage != null) {
 				String smallImagePath = ExportImportPathUtil.getModelPath(
-					article, smallImage.getImageId() + StringPool.PERIOD +
+					article,
+					smallImage.getImageId() + StringPool.PERIOD +
 						smallImage.getType());
 
 				articleElement.addAttribute("small-image-path", smallImagePath);

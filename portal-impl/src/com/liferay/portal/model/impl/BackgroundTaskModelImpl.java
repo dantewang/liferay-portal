@@ -16,6 +16,7 @@ package com.liferay.portal.model.impl;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -76,8 +77,8 @@ public class BackgroundTaskModelImpl extends BaseModelImpl<BackgroundTask>
 		};
 	public static final String TABLE_SQL_CREATE = "create table BackgroundTask (backgroundTaskId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,servletContextNames VARCHAR(255) null,taskExecutorClassName VARCHAR(200) null,taskContext TEXT null,completed BOOLEAN,completionDate DATE null,status INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table BackgroundTask";
-	public static final String ORDER_BY_JPQL = " ORDER BY backgroundTask.backgroundTaskId ASC";
-	public static final String ORDER_BY_SQL = " ORDER BY BackgroundTask.backgroundTaskId ASC";
+	public static final String ORDER_BY_JPQL = " ORDER BY backgroundTask.createDate ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY BackgroundTask.createDate ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -93,7 +94,7 @@ public class BackgroundTaskModelImpl extends BaseModelImpl<BackgroundTask>
 	public static long GROUPID_COLUMN_BITMASK = 1L;
 	public static long STATUS_COLUMN_BITMASK = 2L;
 	public static long TASKEXECUTORCLASSNAME_COLUMN_BITMASK = 4L;
-	public static long BACKGROUNDTASKID_COLUMN_BITMASK = 8L;
+	public static long CREATEDATE_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.BackgroundTask"));
 
@@ -325,6 +326,8 @@ public class BackgroundTaskModelImpl extends BaseModelImpl<BackgroundTask>
 
 	@Override
 	public void setCreateDate(Date createDate) {
+		_columnBitmask = -1L;
+
 		_createDate = createDate;
 	}
 
@@ -508,17 +511,16 @@ public class BackgroundTaskModelImpl extends BaseModelImpl<BackgroundTask>
 
 	@Override
 	public int compareTo(BackgroundTask backgroundTask) {
-		long primaryKey = backgroundTask.getPrimaryKey();
+		int value = 0;
 
-		if (getPrimaryKey() < primaryKey) {
-			return -1;
+		value = DateUtil.compareTo(getCreateDate(),
+				backgroundTask.getCreateDate());
+
+		if (value != 0) {
+			return value;
 		}
-		else if (getPrimaryKey() > primaryKey) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
+
+		return 0;
 	}
 
 	@Override

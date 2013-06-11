@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.transaction.TransactionCommitCallbackRegistryUtil;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.BackgroundTask;
 import com.liferay.portal.model.BackgroundTaskConstants;
@@ -157,6 +158,24 @@ public class BackgroundTaskLocalServiceImpl
 	}
 
 	@Override
+	public BackgroundTask fetchFirstBackgroundTask(
+			String taskExecutorClassName, int status)
+		throws SystemException {
+
+		return fetchFirstBackgroundTask(taskExecutorClassName, status, null);
+	}
+
+	@Override
+	public BackgroundTask fetchFirstBackgroundTask(
+			String taskExecutorClassName, int status,
+			OrderByComparator orderByComparator)
+		throws SystemException {
+
+		return backgroundTaskPersistence.fetchByT_S_First(
+			taskExecutorClassName, status, orderByComparator);
+	}
+
+	@Override
 	public BackgroundTask getBackgroundTask(long backgroundTaskId)
 		throws PortalException, SystemException {
 
@@ -179,6 +198,46 @@ public class BackgroundTaskLocalServiceImpl
 
 		return backgroundTaskPersistence.findByG_T_S(
 			groupId, taskExecutorClassName, status);
+	}
+
+	@Override
+	public List<BackgroundTask> getBackgroundTasks(
+			String taskExecutorClassName, int status)
+		throws SystemException {
+
+		return backgroundTaskPersistence.findByT_S(
+			taskExecutorClassName, status);
+	}
+
+	@Override
+	public List<BackgroundTask> getBackgroundTasks(
+			String taskExecutorClassName, int status, int start, int end,
+			OrderByComparator orderByComparator)
+		throws SystemException {
+
+		return backgroundTaskPersistence.findByT_S(
+			taskExecutorClassName, status, start, end, orderByComparator);
+	}
+
+	@Override
+	public void resumeBackgroundTask(long backgroundTaskId)
+		throws SystemException {
+
+		BackgroundTask backgroundTask =
+			backgroundTaskPersistence.fetchByPrimaryKey(backgroundTaskId);
+
+		if ((backgroundTask == null) ||
+			(backgroundTask.getStatus() !=
+				BackgroundTaskConstants.STATUS_QUEUED)) {
+
+			return;
+		}
+
+		Message message = new Message();
+
+		message.put("backgroundTaskId", backgroundTaskId);
+
+		MessageBusUtil.sendMessage(DestinationNames.BACKGROUND_TASK, message);
 	}
 
 	@Override

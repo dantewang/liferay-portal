@@ -63,7 +63,7 @@ public class DLPortletDataHandler extends BasePortletDataHandler {
 	public static final String NAMESPACE = "document_library";
 
 	public DLPortletDataHandler() {
-		setDeletionEventClassNames(
+		setDeletionSystemEventClassNames(
 			DLFileEntry.class.getName(), DLFileRank.class.getName(),
 			DLFileShortcut.class.getName(), DLFolder.class.getName());
 		setDataLocalized(true);

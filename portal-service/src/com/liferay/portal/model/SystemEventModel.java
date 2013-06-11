@@ -229,6 +229,21 @@ public interface SystemEventModel extends AttachedModel, BaseModel<SystemEvent> 
 	 */
 	public void setType(int type);
 
+	/**
+	 * Returns the extra data of this system event.
+	 *
+	 * @return the extra data of this system event
+	 */
+	@AutoEscape
+	public String getExtraData();
+
+	/**
+	 * Sets the extra data of this system event.
+	 *
+	 * @param extraData the extra data of this system event
+	 */
+	public void setExtraData(String extraData);
+
 	@Override
 	public boolean isNew();
 

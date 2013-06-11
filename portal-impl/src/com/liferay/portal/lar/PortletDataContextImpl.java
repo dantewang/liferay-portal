@@ -92,7 +92,6 @@ import com.liferay.portlet.expando.model.ExpandoColumn;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
 import com.liferay.portlet.journal.model.impl.JournalArticleImpl;
 import com.liferay.portlet.journal.model.impl.JournalFeedImpl;
-import com.liferay.portlet.journal.model.impl.JournalStructureImpl;
 import com.liferay.portlet.journal.model.impl.JournalTemplateImpl;
 import com.liferay.portlet.messageboards.model.MBDiscussion;
 import com.liferay.portlet.messageboards.model.MBMessage;
@@ -364,14 +363,18 @@ public class PortletDataContextImpl implements PortletDataContext {
 			modifiedDatePropertyName);
 
 		dynamicQuery.add(modifiedDateProperty.ge(_startDate));
-		dynamicQuery.add(modifiedDateProperty.lt(_endDate));
+		dynamicQuery.add(modifiedDateProperty.le(_endDate));
 	}
 
 	@Override
-	public void addDeletionEventClassNames(String... deletionEventClassNames) {
-		for (String deletionEventClassName : deletionEventClassNames) {
-			_deletionEventClassNameIds.add(
-				PortalUtil.getClassNameId(deletionEventClassName));
+	public void addDeletionSystemEventClassNames(
+		String... deletionSystemEventClassNames) {
+
+		for (String deletionSystemEventClassName :
+				deletionSystemEventClassNames) {
+
+			_deletionSystemEventClassNameIds.add(
+				PortalUtil.getClassNameId(deletionSystemEventClassName));
 		}
 	}
 
@@ -845,8 +848,8 @@ public class PortletDataContextImpl implements PortletDataContext {
 	}
 
 	@Override
-	public Set<Long> getDeletionEventClassNameIds() {
-		return _deletionEventClassNameIds;
+	public Set<Long> getDeletionSystemEventClassNameIds() {
+		return _deletionSystemEventClassNameIds;
 	}
 
 	@Override
@@ -2220,7 +2223,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 		_xStream.alias("DLFileShortcut", DLFileShortcutImpl.class);
 		_xStream.alias("JournalArticle", JournalArticleImpl.class);
 		_xStream.alias("JournalFeed", JournalFeedImpl.class);
-		_xStream.alias("JournalStructure", JournalStructureImpl.class);
 		_xStream.alias("JournalTemplate", JournalTemplateImpl.class);
 		_xStream.alias("Lock", LockImpl.class);
 		_xStream.alias("MBBan", MBBanImpl.class);
@@ -2263,7 +2265,7 @@ public class PortletDataContextImpl implements PortletDataContext {
 	private long _companyGroupId;
 	private long _companyId;
 	private String _dataStrategy;
-	private Set<Long> _deletionEventClassNameIds = new HashSet<Long>();
+	private Set<Long> _deletionSystemEventClassNameIds = new HashSet<Long>();
 	private Date _endDate;
 	private Map<String, List<ExpandoColumn>> _expandoColumnsMap =
 		new HashMap<String, List<ExpandoColumn>>();
