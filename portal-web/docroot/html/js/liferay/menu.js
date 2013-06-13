@@ -137,7 +137,7 @@ AUI.add(
 					var defaultHorizontalAlign = STR_LEFT;
 
 					var mapAlignHorizontalOverlay = MAP_ALIGN_HORIZONTAL_OVERLAY;
-					
+
 					var mapAlignHorizontalTrigger = MAP_ALIGN_HORIZONTAL_TRIGGER;
 
 					var langDir = Liferay.Language.direction[themeDisplay.getLanguageId()] || STR_LTR;

@@ -250,7 +250,7 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 	 * @throws PortalException if a matching group could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-    @Override
+	@Override
 	public Group getCompanyGroup(long companyId)
 		throws PortalException, SystemException {
 
