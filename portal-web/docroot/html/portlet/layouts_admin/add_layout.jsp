@@ -20,6 +20,8 @@
 Layout selLayout = null;
 
 boolean privateLayout = false;
+long parentPlid = LayoutConstants.DEFAULT_PLID;
+long parentLayoutId = LayoutConstants.DEFAULT_PARENT_LAYOUT_ID;
 
 if (layout.isTypeControlPanel()) {
 	long selPlid = ParamUtil.getLong(liferayPortletRequest, "selPlid");
@@ -28,6 +30,8 @@ if (layout.isTypeControlPanel()) {
 		selLayout = LayoutLocalServiceUtil.getLayout(selPlid);
 
 		privateLayout = selLayout.isPrivateLayout();
+		parentPlid = selLayout.getPlid();
+		parentLayoutId = selLayout.getLayoutId();
 	}
 	else {
 		String tabs1 = ParamUtil.getString(request, "tabs1", "public-pages");
@@ -39,6 +43,8 @@ else {
 	selLayout = layout;
 
 	privateLayout = selLayout.isPrivateLayout();
+	parentPlid = layout.getParentPlid();
+	parentLayoutId = layout.getParentLayoutId();
 }
 %>
 
@@ -57,8 +63,8 @@ else {
 	<aui:input id="addLayoutRedirect" name="redirect" type="hidden" value="<%= layout.isTypeControlPanel() ? currentURL : editLayoutRenderURL.toString() %>" />
 	<aui:input id="addLayoutGroupId" name="groupId" type="hidden" value="<%= scopeGroupId %>" />
 	<aui:input id="addLayoutPrivateLayout" name="privateLayout" type="hidden" value="<%= privateLayout %>" />
-	<aui:input id="addLayoutParentPlid" name="parentPlid" type="hidden" value="<%= (selLayout != null) ? selLayout.getPlid() : LayoutConstants.DEFAULT_PLID %>" />
-	<aui:input id="addLayoutParentLayoutId" name="parentLayoutId" type="hidden" value="<%= (selLayout != null) ? selLayout.getLayoutId() : LayoutConstants.DEFAULT_PARENT_LAYOUT_ID %>" />
+	<aui:input id="addLayoutParentPlid" name="parentPlid" type="hidden" value="<%= parentPlid %>" />
+	<aui:input id="addLayoutParentLayoutId" name="parentLayoutId" type="hidden" value="<%= parentLayoutId %>" />
 	<aui:input id="addLayoutType" name="type" type="hidden" value="portlet" />
 	<aui:input id="addLayoutPrototypeId" name="layoutPrototypeId" type="hidden" value="" />
 	<aui:input id="addLayoutExplicitCreation" name="explicitCreation" type="hidden" value="<%= true %>" />
@@ -224,7 +230,7 @@ else {
 			namespace: '<portlet:namespace />',
 			nodeList: A.one('#<portlet:namespace />templateList'),
 			nodeSelector: '.lfr-page-template',
-			parentLayoutId: <%= selLayout != null ? selLayout.getLayoutId() : LayoutConstants.DEFAULT_PARENT_LAYOUT_ID %>,
+			parentLayoutId: <%= parentLayoutId %>,
 			refresh: <%= layout.isTypeControlPanel() %>,
 			selected: !A.one('#<portlet:namespace />addPageFm').ancestor().hasClass('hide'),
 			toggleOnCancel: <%= portletName.equals(PortletKeys.DOCKBAR) %>

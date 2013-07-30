@@ -134,6 +134,7 @@ public class EditArticleAction extends PortletAction {
 				return;
 			}
 			else if (cmd.equals(Constants.ADD) ||
+					 cmd.equals(Constants.PREVIEW) ||
 					 cmd.equals(Constants.TRANSLATE) ||
 					 cmd.equals(Constants.UPDATE)) {
 
@@ -415,6 +416,8 @@ public class EditArticleAction extends PortletAction {
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
+		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
+
 		String referringPortletResource = ParamUtil.getString(
 			actionRequest, "referringPortletResource");
 
@@ -425,7 +428,7 @@ public class EditArticleAction extends PortletAction {
 			themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 
 		portletURL.setParameter("struts_action", "/journal/edit_article");
-		portletURL.setParameter(Constants.CMD, Constants.UPDATE, false);
+		portletURL.setParameter(Constants.CMD, cmd, false);
 		portletURL.setParameter("redirect", redirect, false);
 		portletURL.setParameter(
 			"referringPortletResource", referringPortletResource, false);
@@ -805,7 +808,7 @@ public class EditArticleAction extends PortletAction {
 
 			String tempOldUrlTitle = article.getUrlTitle();
 
-			if (cmd.equals(Constants.UPDATE)) {
+			if (cmd.equals(Constants.PREVIEW) || cmd.equals(Constants.UPDATE)) {
 				titleMap.put(defaultLocale, title);
 				descriptionMap.put(defaultLocale, description);
 

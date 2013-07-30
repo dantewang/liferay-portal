@@ -296,4 +296,135 @@ public class StringUtilTest {
 		Assert.assertEquals("abcd", StringUtil.strip(" a b  c   d", ' '));
 	}
 
+	@Test
+	public void testWildcardMatches() {
+
+		// Exact match in a case sensitive manner
+
+		String s = "abc";
+		String wildcard = "abc";
+
+		Assert.assertTrue(
+			s,
+			StringUtil.wildcardMatches(
+				s, wildcard, CharPool.UNDERLINE, CharPool.PERCENT,
+				CharPool.BACK_SLASH, true));
+
+		// Exact match in a case insensitive manner
+
+		s = "aBc";
+		wildcard = "abc";
+
+		Assert.assertTrue(
+			s,
+			StringUtil.wildcardMatches(
+				s, wildcard, CharPool.UNDERLINE, CharPool.PERCENT,
+				CharPool.BACK_SLASH, false));
+
+		// Head match with a wildcard multiple character
+
+		s = "abc";
+		wildcard = "%c";
+
+		Assert.assertTrue(
+			s,
+			StringUtil.wildcardMatches(
+				s, wildcard, CharPool.UNDERLINE, CharPool.PERCENT,
+				CharPool.BACK_SLASH, true));
+
+		// Head match with a wildcard single character
+
+		s = "abc";
+		wildcard = "__c";
+
+		Assert.assertTrue(
+			s,
+			StringUtil.wildcardMatches(
+				s, wildcard, CharPool.UNDERLINE, CharPool.PERCENT,
+				CharPool.BACK_SLASH, true));
+
+		// Head mismatch with a single wildcard character
+
+		s = "abc";
+		wildcard = "a_Z";
+
+		Assert.assertFalse(
+			s,
+			StringUtil.wildcardMatches(
+				s, wildcard, CharPool.UNDERLINE, CharPool.PERCENT,
+				CharPool.BACK_SLASH, true));
+
+		// Head mismatch with a multiple wildcard character (this is not
+		// logically possible because a head mismatch with a multipe wildcard
+		// character is a tail mismatch)
+
+		// Body match with a multiple wildcard character
+
+		s = "abc";
+		wildcard = "a%";
+
+		Assert.assertTrue(
+			s,
+			StringUtil.wildcardMatches(
+				s, wildcard, CharPool.UNDERLINE, CharPool.PERCENT,
+				CharPool.BACK_SLASH, true));
+
+		// Body match with a single wildcard character
+
+		s = "abcd";
+		wildcard = "a%__d";
+
+		Assert.assertTrue(
+			s,
+			StringUtil.wildcardMatches(
+				s, wildcard, CharPool.UNDERLINE, CharPool.PERCENT,
+				CharPool.BACK_SLASH, true));
+
+		// Tail match
+
+		s = "abc";
+		wildcard = "abc%";
+
+		Assert.assertTrue(
+			s,
+			StringUtil.wildcardMatches(
+				s, wildcard, CharPool.UNDERLINE, CharPool.PERCENT,
+				CharPool.BACK_SLASH, true));
+
+		// Tail mismatch
+
+		s = "abc";
+		wildcard = "abc%z";
+
+		Assert.assertFalse(
+			s,
+			StringUtil.wildcardMatches(
+				s, wildcard, CharPool.UNDERLINE, CharPool.PERCENT,
+				CharPool.BACK_SLASH, true));
+
+		// Match without a conflicting escape wildcard character
+
+		s = "a_b%c";
+		wildcard = "a\\_b\\%c";
+
+		Assert.assertTrue(
+			s,
+			StringUtil.wildcardMatches(
+				s, wildcard, CharPool.UNDERLINE, CharPool.PERCENT,
+				CharPool.BACK_SLASH, true));
+
+		// Match with a conflicting escape wildcard character
+
+		s = new String(
+			new char[] {(char)0, '_', 'a', (char)2, '%', 'c', 'd', 'e'});
+		wildcard = new String(
+			new char[] {(char)0, '\\', '_', '_', (char)2, '\\', '%', 'c', '%'});
+
+		Assert.assertTrue(
+			s,
+			StringUtil.wildcardMatches(
+				s, wildcard, CharPool.UNDERLINE, CharPool.PERCENT,
+				CharPool.BACK_SLASH, true));
+	}
+
 }

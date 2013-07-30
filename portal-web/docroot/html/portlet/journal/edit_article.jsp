@@ -17,6 +17,8 @@
 <%@ include file="/html/portlet/journal/init.jsp" %>
 
 <%
+String cmd = ParamUtil.getString(request, Constants.CMD);
+
 String tabs2 = ParamUtil.getString(request, "tabs2");
 
 String redirect = ParamUtil.getString(request, "redirect");
@@ -323,6 +325,25 @@ request.setAttribute("edit_article.jsp-toLanguageId", toLanguageId);
 		</div>
 	</div>
 </aui:form>
+
+<c:if test="<%= (article != null) && Validator.equals(cmd, Constants.PREVIEW) %>">
+	<aui:script use="liferay-journal-preview">
+		<liferay-portlet:renderURL plid="<%= JournalUtil.getPreviewPlid(article, themeDisplay) %>" var="previewArticleContentURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+			<portlet:param name="struts_action" value="/journal/preview_article_content" />
+			<portlet:param name="groupId" value="<%= String.valueOf(article.getGroupId()) %>" />
+			<portlet:param name="articleId" value="<%= article.getArticleId() %>" />
+			<portlet:param name="version" value="<%= String.valueOf(article.getVersion()) %>" />
+		</liferay-portlet:renderURL>
+
+		Liferay.fire(
+			'previewArticle',
+			{
+				title: '<%= article.getTitle(locale) %>',
+				uri: '<%= previewArticleContentURL.toString() %>'
+			}
+		);
+	</aui:script>
+</c:if>
 
 <aui:script>
 	var <portlet:namespace />documentLibraryInput = null;

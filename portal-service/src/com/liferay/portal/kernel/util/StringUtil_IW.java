@@ -602,6 +602,14 @@ public class StringUtil_IW {
 		return StringUtil.valueOf(obj);
 	}
 
+	public boolean wildcardMatches(java.lang.String s,
+		java.lang.String wildcard, char singleWildcardCharacter,
+		char multipleWildcardCharacter, char escapeWildcardCharacter,
+		boolean caseSensitive) {
+		return StringUtil.wildcardMatches(s, wildcard, singleWildcardCharacter,
+			multipleWildcardCharacter, escapeWildcardCharacter, caseSensitive);
+	}
+
 	public java.lang.String wrap(java.lang.String text) {
 		return StringUtil.wrap(text);
 	}

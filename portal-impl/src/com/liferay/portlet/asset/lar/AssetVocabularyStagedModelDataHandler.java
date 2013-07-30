@@ -28,6 +28,7 @@ public class AssetVocabularyStagedModelDataHandler
 	public static final String[] CLASS_NAMES =
 		{AssetVocabulary.class.getName()};
 
+	@Override
 	public void deleteStagedModel(
 		String uuid, long groupId, String className, String extraData) {
 	}

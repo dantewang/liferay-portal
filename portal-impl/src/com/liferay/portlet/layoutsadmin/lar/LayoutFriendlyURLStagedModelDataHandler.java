@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.layoutsadmin.lar;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.lar.BaseStagedModelDataHandler;
 import com.liferay.portal.kernel.lar.ExportImportPathUtil;
 import com.liferay.portal.kernel.lar.PortletDataContext;
@@ -34,6 +36,19 @@ public class LayoutFriendlyURLStagedModelDataHandler
 
 	public static final String[] CLASS_NAMES =
 		{LayoutFriendlyURL.class.getName()};
+
+	@Override
+	public void deleteStagedModel(
+			String uuid, long groupId, String className, String extraData)
+		throws PortalException, SystemException {
+
+		LayoutFriendlyURL layoutFriendlyURL =
+			LayoutFriendlyURLLocalServiceUtil.
+				getLayoutFriendlyURLByUuidAndGroupId(uuid, groupId);
+
+		LayoutFriendlyURLLocalServiceUtil.deleteLayoutFriendlyURL(
+			layoutFriendlyURL);
+	}
 
 	@Override
 	public String[] getClassNames() {
@@ -81,7 +96,7 @@ public class LayoutFriendlyURLStagedModelDataHandler
 				getExistingLayoutFriendlyURL(
 					portletDataContext, layoutFriendlyURL, plid);
 
-			layoutFriendlyURL= getLayoutFriendlyURL(
+			layoutFriendlyURL= getUniqueLayoutFriendlyURL(
 				portletDataContext, layoutFriendlyURL,
 				existingLayoutFriendlyURL);
 
@@ -107,7 +122,7 @@ public class LayoutFriendlyURLStagedModelDataHandler
 			}
 		}
 		else {
-			layoutFriendlyURL = getLayoutFriendlyURL(
+			layoutFriendlyURL = getUniqueLayoutFriendlyURL(
 				portletDataContext, layoutFriendlyURL, null);
 
 			importedLayoutFriendlyURL =
@@ -144,7 +159,7 @@ public class LayoutFriendlyURLStagedModelDataHandler
 		return existingLayoutFriendlyURL;
 	}
 
-	protected LayoutFriendlyURL getLayoutFriendlyURL(
+	protected LayoutFriendlyURL getUniqueLayoutFriendlyURL(
 			PortletDataContext portletDataContext,
 			LayoutFriendlyURL layoutFriendlyURL,
 			LayoutFriendlyURL existingLayoutFriendlyURL)
@@ -163,7 +178,7 @@ public class LayoutFriendlyURLStagedModelDataHandler
 			if ((duplicateLayoutFriendlyURL == null) ||
 				((existingLayoutFriendlyURL != null) &&
 				 (existingLayoutFriendlyURL.getLayoutFriendlyURLId() ==
-						duplicateLayoutFriendlyURL.getLayoutFriendlyURLId()))) {
+					duplicateLayoutFriendlyURL.getLayoutFriendlyURLId()))) {
 
 				break;
 			}
