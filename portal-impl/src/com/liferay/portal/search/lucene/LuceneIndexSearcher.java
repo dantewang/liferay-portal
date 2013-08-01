@@ -104,13 +104,18 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 		BrowseRequest browseRequest = null;
 
 		try {
-			indexSearcher = LuceneHelperUtil.getSearcher(
-				searchContext.getCompanyId(), true);
+			facets = searchContext.getFacets();
+
+			if (facets.isEmpty()) {
+				return search(
+					searchContext.getSearchEngineId(),
+					searchContext.getCompanyId(), query,
+					searchContext.getSorts(), searchContext.getStart(),
+					searchContext.getEnd());
+			}
 
 			List<FacetHandler<?>> facetHandlers =
 				new ArrayList<FacetHandler<?>>();
-
-			facets = searchContext.getFacets();
 
 			for (Facet facet : facets.values()) {
 				if (facet.isStatic()) {
@@ -169,6 +174,9 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 					facetHandlers.add(simpleFacetHandler);
 				}
 			}
+
+			indexSearcher = LuceneHelperUtil.getSearcher(
+				searchContext.getCompanyId(), true);
 
 			BoboIndexReader boboIndexReader = BoboIndexReader.getInstance(
 				indexSearcher.getIndexReader(), facetHandlers);
