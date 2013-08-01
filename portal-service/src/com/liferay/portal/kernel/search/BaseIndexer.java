@@ -772,7 +772,7 @@ public abstract class BaseIndexer implements Indexer {
 		multiValueFacet.setStatic(true);
 		multiValueFacet.setValues(searchContext.getAssetCategoryIds());
 
-		searchContext.addFacet(multiValueFacet);
+		addFilterClause(multiValueFacet.getFacetClause(), searchContext);
 	}
 
 	protected void addSearchAssetCategoryTitles(
@@ -834,7 +834,7 @@ public abstract class BaseIndexer implements Indexer {
 		multiValueFacet.setStatic(true);
 		multiValueFacet.setValues(searchContext.getAssetTagNames());
 
-		searchContext.addFacet(multiValueFacet);
+		addFilterClause(multiValueFacet.getFacetClause(), searchContext);
 	}
 
 	protected void addSearchClassTypeIds(
@@ -881,7 +881,7 @@ public abstract class BaseIndexer implements Indexer {
 
 		facet.setStatic(true);
 
-		searchContext.addFacet(facet);
+		addFilterClause(facet.getFacetClause(), searchContext);
 	}
 
 	protected void addSearchExpando(
@@ -928,7 +928,7 @@ public abstract class BaseIndexer implements Indexer {
 		multiValueFacet.setStatic(true);
 		multiValueFacet.setValues(searchContext.getFolderIds());
 
-		searchContext.addFacet(multiValueFacet);
+		addFilterClause(multiValueFacet.getFacetClause(), searchContext);
 	}
 
 	protected void addSearchGroupId(
@@ -939,7 +939,7 @@ public abstract class BaseIndexer implements Indexer {
 
 		facet.setStatic(true);
 
-		searchContext.addFacet(facet);
+		addFilterClause(facet.getFacetClause(), searchContext);
 	}
 
 	protected void addSearchKeywords(
@@ -966,7 +966,7 @@ public abstract class BaseIndexer implements Indexer {
 		multiValueFacet.setFieldName(Field.LAYOUT_UUID);
 		multiValueFacet.setStatic(true);
 
-		searchContext.addFacet(multiValueFacet);
+		addFilterClause(multiValueFacet.getFacetClause(), searchContext);
 	}
 
 	protected void addSearchLocalizedDDMStructure(
@@ -1061,7 +1061,7 @@ public abstract class BaseIndexer implements Indexer {
 			multiValueFacet.setValues(new long[] {userId});
 		}
 
-		searchContext.addFacet(multiValueFacet);
+		addFilterClause(multiValueFacet.getFacetClause(), searchContext);
 	}
 
 	protected void addStagingGroupKeyword(Document document, long groupId)
