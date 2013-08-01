@@ -527,6 +527,27 @@ public abstract class BaseIndexer implements Indexer {
 			new IndexerPostProcessor[indexerPostProcessorsList.size()]);
 	}
 
+	protected void addFilterClause(
+		BooleanClause booleanClause, SearchContext searchContext) {
+
+		if (booleanClause == null) {
+			return;
+		}
+
+		BooleanClause[] booleanClauses = searchContext.getBooleanClauses();
+
+		if (booleanClauses == null) {
+			booleanClauses = new BooleanClause[1];
+
+			booleanClauses[0] = booleanClause;
+		}
+		else {
+			booleanClauses = ArrayUtil.append(booleanClauses, booleanClause);
+		}
+
+		searchContext.setBooleanClauses(booleanClauses);
+	}
+
 	protected void addAssetFields(
 			Document document, String className, long classPK)
 		throws SystemException {
