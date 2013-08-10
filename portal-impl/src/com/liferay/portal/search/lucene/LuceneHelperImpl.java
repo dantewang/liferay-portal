@@ -115,7 +115,7 @@ public class LuceneHelperImpl implements LuceneHelper {
 
 		indexAccessor.addDocument(document);
 
-		_indexSearchers.remove(companyId);
+		_cleanUp(_indexSearchers.remove(companyId));
 	}
 
 	@Override
@@ -276,24 +276,11 @@ public class LuceneHelperImpl implements LuceneHelper {
 		}
 	}
 
+	/**
+	 * @deprecated as of 6.2.0. No replacement.
+	 */
 	@Override
 	public void cleanUp(IndexSearcher indexSearcher) {
-		if (indexSearcher == null) {
-			return;
-		}
-
-		try {
-			indexSearcher.close();
-
-			IndexReader indexReader = indexSearcher.getIndexReader();
-
-			if (indexReader != null) {
-				indexReader.close();
-			}
-		}
-		catch (IOException ioe) {
-			_log.error(ioe, ioe);
-		}
 	}
 
 	@Override
@@ -324,7 +311,7 @@ public class LuceneHelperImpl implements LuceneHelper {
 
 		indexAccessor.delete();
 
-		_indexSearchers.remove(companyId);
+		_cleanUp(_indexSearchers.remove(companyId));
 	}
 
 	@Override
@@ -337,7 +324,7 @@ public class LuceneHelperImpl implements LuceneHelper {
 
 		indexAccessor.deleteDocuments(term);
 
-		_indexSearchers.remove(companyId);
+		_cleanUp(_indexSearchers.remove(companyId));
 	}
 
 	@Override
@@ -415,7 +402,7 @@ public class LuceneHelperImpl implements LuceneHelper {
 
 				_indexAccessors.put(companyId, indexAccessor);
 
-				_indexSearchers.remove(companyId);
+				_cleanUp(_indexSearchers.remove(companyId));
 			}
 		}
 
@@ -653,7 +640,7 @@ public class LuceneHelperImpl implements LuceneHelper {
 
 		indexAccessor.loadIndex(inputStream);
 
-		_indexSearchers.remove(companyId);
+		_cleanUp(_indexSearchers.remove(companyId));
 
 		if (_log.isInfoEnabled()) {
 			_log.info(
@@ -678,7 +665,7 @@ public class LuceneHelperImpl implements LuceneHelper {
 
 		_loadIndexFromCluster(indexAccessor, localLastGeneration);
 
-		_indexSearchers.remove(companyId);
+		_cleanUp(_indexSearchers.remove(companyId));
 	}
 
 	public void setAnalyzer(Analyzer analyzer) {
@@ -712,7 +699,9 @@ public class LuceneHelperImpl implements LuceneHelper {
 			indexAccessor.close();
 		}
 
-		_indexSearchers.clear();
+		for (Long key : _indexSearchers.keySet()) {
+			_cleanUp(_indexSearchers.remove(key));
+		}
 	}
 
 	@Override
@@ -723,7 +712,7 @@ public class LuceneHelperImpl implements LuceneHelper {
 
 		indexAccessor.close();
 
-		_indexSearchers.remove(companyId);
+		_cleanUp(_indexSearchers.remove(companyId));
 	}
 
 	@Override
@@ -784,6 +773,35 @@ public class LuceneHelperImpl implements LuceneHelper {
 		}
 
 		BooleanQuery.setMaxClauseCount(_LUCENE_BOOLEAN_QUERY_CLAUSE_MAX_SIZE);
+	}
+
+	private void _cleanUp(IndexSearcher indexSearcher) {
+		if (indexSearcher == null) {
+			return;
+		}
+
+		try {
+			indexSearcher.close();
+
+			IndexReader indexReader = indexSearcher.getIndexReader();
+
+			if (indexReader != null) {
+				indexReader.close();
+			}
+		}
+		catch (IOException ioe) {
+			_log.error(ioe, ioe);
+		}
+	}
+
+	private void _cleanUp(IndexSearcher[] indexSearchers) {
+		if (indexSearchers == null) {
+			return;
+		}
+
+		for (IndexSearcher indexSearcher : indexSearchers) {
+			_cleanUp(indexSearcher);
+		}
 	}
 
 	private ObjectValuePair<String, URL>
