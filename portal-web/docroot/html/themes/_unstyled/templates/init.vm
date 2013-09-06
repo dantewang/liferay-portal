@@ -25,15 +25,13 @@
 	#end
 #end
 
-#set ($liferay_dockbar_pinned = $getterUtil.getBoolean($sessionClicks.get($request, "liferay_dockbar_pinned", ""), false))
-
 #if ($liferay_toggle_controls == "visible")
 	#set ($css_class = $css_class + " controls-visible")
 #else
 	#set ($css_class = $css_class + " controls-hidden")
 #end
 
-#if ($liferay_dockbar_pinned)
+#if ($getterUtil.getBoolean($sessionClicks.get($request, "liferay_dockbar_pinned", ""), false))
 	#set ($css_class = $css_class + " lfr-dockbar-pinned")
 #end
 
@@ -51,9 +49,6 @@
 #set ($js_main_file = $htmlUtil.escape($portalUtil.getStaticResourceURL($request, "$javascript_folder/main.js")))
 
 #set ($company_name = $company.getName())
-#set ($company_logo = $htmlUtil.escape($theme_display.getCompanyLogo()))
-#set ($company_logo_height = $theme_display.getCompanyLogoHeight())
-#set ($company_logo_width = $theme_display.getCompanyLogoWidth())
 
 #set ($w3c_language_id = $localeUtil.toW3cLanguageId($theme_display.getLanguageId()))
 
@@ -61,15 +56,11 @@
 
 ## ---------- URLs ---------- ##
 
-#set ($show_control_panel = $theme_display.isShowControlPanelIcon())
-
-#if ($show_control_panel)
+#if ($theme_display.isShowControlPanelIcon())
 	#set ($control_panel_url = $htmlUtil.escape($theme_display.getURLControlPanel()))
 #end
 
-#set ($show_sign_in = $theme_display.isShowSignInIcon())
-
-#if ($show_sign_in)
+#if ($theme_display.isShowSignInIcon())
 	#set ($sign_in_text = $languageUtil.get($locale, "sign-in"))
 	#set ($sign_in_url = $htmlUtil.escape($theme_display.getURLSignIn()))
 #end
@@ -131,28 +122,21 @@
 
 	$my_sites_portlet_url.setParameter("struts_action", "/my_sites/view")
 	$my_sites_portlet_url.setParameter("groupId", "$page.getGroupId()")
-	$my_sites_portlet_url.setParameter("privateLayout", "false")
-
-	#set ($site_default_public_url = $htmlUtil.escape($my_sites_portlet_url.toString()))
-
-	$my_sites_portlet_url.setParameter("privateLayout", "true")
-
-	#set ($site_default_private_url = $htmlUtil.escape($my_sites_portlet_url.toString()))
-
-	#set ($site_default_url = $site_default_public_url)
 
 	#if ($layout.isPrivateLayout())
-		#set ($site_default_url = $site_default_private_url)
+		$my_sites_portlet_url.setParameter("privateLayout", "true")
+
+		#set ($site_default_url = $htmlUtil.escape($my_sites_portlet_url.toString()))
+	#else
+		$my_sites_portlet_url.setParameter("privateLayout", "false")
+
+		#set ($site_default_url = $htmlUtil.escape($my_sites_portlet_url.toString()))
 	#end
 #end
 
-#if ($layout.getHTMLTitle($locale))
-	#set ($the_title = $layout.getHTMLTitle($locale))
-#end
+#set ($the_title = $layout.getHTMLTitle($locale))
 
-#if ($pageTitle)
-	#set ($the_title = $pageTitle)
-#end
+#set ($the_title = $pageTitle)
 
 #if ($pageSubtitle)
 	#set ($the_title = $pageSubtitle + " - " + $the_title)
@@ -172,15 +156,13 @@
 
 ## ---------- Logo ---------- ##
 
-#set($logo_css_class = "logo")
-#set ($use_company_logo = !$layout.layoutSet.isLogo())
-#set ($site_logo_height = $company_logo_height)
-#set ($site_logo_width = $company_logo_width)
+#set ($site_logo_height = $theme_display.getCompanyLogoHeight())
+#set ($site_logo_width = $theme_display.getCompanyLogoWidth())
 
-#if (($company.getLogoId() == 0) && $use_company_logo)
-	#set($logo_css_class = "$logo_css_class default-logo")
+#if (($company.getLogoId() == 0) && !$layout.layoutSet.isLogo())
+	#set($logo_css_class = "logo default-logo")
 #else
-	#set($logo_css_class = "$logo_css_class custom-logo")
+	#set($logo_css_class = "logo custom-logo")
 #end
 
 #if ($is_guest_group)
@@ -193,7 +175,7 @@
 	#set ($show_site_name = $getterUtil.getBoolean($layout.layoutSet.getSettingsProperty("showSiteName"), $show_site_name_default))
 #end
 
-#set($site_logo = $company_logo)
+#set($site_logo = $htmlUtil.escape($theme_display.getCompanyLogo()))
 #set ($logo_description = $htmlUtil.escape($site_name))
 
 ## ---------- Navigation ---------- ##
