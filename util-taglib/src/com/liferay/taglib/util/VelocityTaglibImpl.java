@@ -70,6 +70,7 @@ import com.liferay.taglib.ui.ToggleTag;
 
 import java.io.Writer;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -679,6 +680,13 @@ public class VelocityTaglibImpl implements VelocityTaglib {
 		journalContentSearchTag.setType(type);
 
 		journalContentSearchTag.runTag();
+	}
+
+	@Override
+	public String lang(String langKey) {
+		Locale locale = (Locale)_template.get("locale");
+
+		return LanguageUtil.get(locale, langKey);
 	}
 
 	@Override

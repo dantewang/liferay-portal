@@ -623,4 +623,9 @@ public class DummyVelocityTaglib implements VelocityTaglib {
 		return StringPool.BLANK;
 	}
 
+	@Override
+	public String lang(String langKey) {
+		return StringPool.BLANK;
+	}
+
 }

@@ -248,6 +248,8 @@ public interface VelocityTaglib {
 			boolean showListed, String targetPortletId, String type)
 		throws Exception;
 
+	public String lang(String langKey);
+
 	public void language() throws Exception;
 
 	public void language(
