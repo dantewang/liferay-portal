@@ -6,7 +6,7 @@
 #set ($theme_timestamp = $themeDisplay.getTheme().getTimestamp())
 #set ($theme_settings = $themeDisplay.getThemeSettings())
 
-#set ($root_css_class = "aui " + $languageUtil.get($locale, "lang.dir"))
+#set ($root_css_class = "aui " + $theme.lang("lang.dir"))
 #set ($css_class = $theme_display.getColorScheme().getCssClass() + " yui3-skin-sam")
 
 #set ($liferay_toggle_controls = $sessionClicks.get($request, "liferay_toggle_controls", "visible"))
@@ -93,24 +93,24 @@
 #set ($show_add_content = $theme_display.isShowAddContentIcon())
 
 #if ($show_add_content)
-	#set ($add_content_text = $languageUtil.get($locale, "add-application"))
+	#set ($add_content_text = $theme.lang("add-application"))
 	#set ($add_content_url = $theme_display.getURLAddContent())
 
-	#set ($layout_text = $languageUtil.get($locale, "layout-template"))
+	#set ($layout_text = $theme.lang("layout-template"))
 	#set ($layout_url = $theme_display.getURLLayoutTemplates())
 #end
 
 #set ($show_control_panel = $theme_display.isShowControlPanelIcon())
 
 #if ($show_control_panel)
-	#set ($control_panel_text = $languageUtil.get($locale, "control-panel"))
+	#set ($control_panel_text = $theme.lang("control-panel"))
 	#set ($control_panel_url = $htmlUtil.escape($theme_display.getURLControlPanel()))
 #end
 
 #set ($show_home = $theme_display.isShowHomeIcon())
 
 #if ($show_home)
-	#set ($home_text = $languageUtil.get($locale, "home"))
+	#set ($home_text = $theme.lang("home"))
 	#set ($home_url = $htmlUtil.escape($theme_display.getURLHome()))
 
 	#if (!$request.isRequestedSessionIdFromCookie())
@@ -121,7 +121,7 @@
 #set ($show_my_account = $theme_display.isShowMyAccountIcon())
 
 #if ($show_my_account)
-	#set ($my_account_text = $languageUtil.get($locale, "my-account"))
+	#set ($my_account_text = $theme.lang("my-account"))
 	#set ($my_account_url = $htmlUtil.escape($theme_display.getURLMyAccount().toString()))
 #end
 
@@ -129,28 +129,28 @@
 #set ($show_site_settings = $theme_display.isShowSiteSettingsIcon())
 
 #if ($show_page_settings)
-	#set ($page_settings_text = $languageUtil.get($locale, "manage-pages"))
+	#set ($page_settings_text = $theme.lang("manage-pages"))
 	#set ($page_settings_url = $htmlUtil.escape($theme_display.getURLPageSettings().toString()))
 #end
 
 #set ($show_sign_in = $theme_display.isShowSignInIcon())
 
 #if ($show_sign_in)
-	#set ($sign_in_text = $languageUtil.get($locale, "sign-in"))
+	#set ($sign_in_text = $theme.lang("sign-in"))
 	#set ($sign_in_url = $htmlUtil.escape($theme_display.getURLSignIn()))
 #end
 
 #set ($show_sign_out = $theme_display.isShowSignOutIcon())
 
 #if ($show_sign_out)
-	#set ($sign_out_text = $languageUtil.get($locale, "sign-out"))
+	#set ($sign_out_text = $theme.lang("sign-out"))
 	#set ($sign_out_url = $htmlUtil.escape($theme_display.getURLSignOut()))
 #end
 
 #set ($show_toggle_controls = $theme_display.isSignedIn())
 
 #if ($show_toggle_controls)
-	#set ($toggle_controls_text = $languageUtil.get($locale, "toggle-edit-controls"))
+	#set ($toggle_controls_text = $theme.lang("toggle-edit-controls"))
 	#set ($toggle_controls_url = "javascript:;")
 #end
 
@@ -285,7 +285,7 @@
 #end
 
 #if ($tilesTitle != "")
-	#set ($the_title = $languageUtil.get($locale, $tilesTitle))
+	#set ($the_title = $theme.lang($tilesTitle))
 #end
 
 #if ($page_group.isLayoutPrototype())
@@ -346,7 +346,7 @@
 #set ($show_staging = $theme_display.isShowStagingIcon())
 
 #if ($show_staging)
-	#set ($staging_text = $languageUtil.get($locale, "staging"))
+	#set ($staging_text = $theme.lang("staging"))
 #end
 
 ## ---------- My sites ---------- ##
@@ -356,7 +356,7 @@
 #set ($show_my_places = $show_my_sites)
 
 #if ($show_my_sites)
-	#set ($my_sites_text = $languageUtil.get($locale, "my-sites"))
+	#set ($my_sites_text = $theme.lang("my-sites"))
 
 	#set ($my_places_text = $my_sites_text)
 #end
