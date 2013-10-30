@@ -75,7 +75,6 @@ import org.apache.commons.lang.time.StopWatch;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
@@ -83,6 +82,7 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.search.WildcardQuery;
@@ -276,19 +276,17 @@ public class LuceneHelperImpl implements LuceneHelper {
 	}
 
 	@Override
-	public void cleanUp(IndexSearcher indexSearcher) {
+	public void cleanUp(long companyId, IndexSearcher indexSearcher) {
 		if (indexSearcher == null) {
 			return;
 		}
 
+		IndexAccessor indexAccessor = getIndexAccessor(companyId);
+
+		SearcherManager searcherManager = indexAccessor.getSearcherManager();
+
 		try {
-			indexSearcher.close();
-
-			IndexReader indexReader = indexSearcher.getIndexReader();
-
-			if (indexReader != null) {
-				indexReader.close();
-			}
+			searcherManager.release(indexSearcher);
 		}
 		catch (IOException ioe) {
 			_log.error(ioe, ioe);
@@ -512,20 +510,12 @@ public class LuceneHelperImpl implements LuceneHelper {
 	}
 
 	@Override
-	public IndexSearcher getSearcher(long companyId, boolean readOnly)
-		throws IOException {
-
+	public IndexSearcher getSearcher(long companyId) throws IOException {
 		IndexAccessor indexAccessor = getIndexAccessor(companyId);
 
-		IndexReader indexReader = IndexReader.open(
-			indexAccessor.getLuceneDir(), readOnly);
+		SearcherManager searcherManager = indexAccessor.getSearcherManager();
 
-		IndexSearcher indexSearcher = new IndexSearcher(indexReader);
-
-		indexSearcher.setDefaultFieldSortScoring(true, true);
-		indexSearcher.setSimilarity(new FieldWeightSimilarity());
-
-		return indexSearcher;
+		return searcherManager.acquire();
 	}
 
 	@Override

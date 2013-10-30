@@ -82,7 +82,7 @@ public interface LuceneHelper {
 	public void addTerm(
 		BooleanQuery booleanQuery, String field, String[] values, boolean like);
 
-	public void cleanUp(IndexSearcher indexSearcher);
+	public void cleanUp(long companyId, IndexSearcher indexSearcher);
 
 	public int countScoredFieldNames(Query query, String[] fieldNames);
 
@@ -105,7 +105,7 @@ public interface LuceneHelper {
 
 	public Set<String> getQueryTerms(Query query);
 
-	public IndexSearcher getSearcher(long companyId, boolean readOnly)
+	public IndexSearcher getSearcher(long companyId)
 		throws IOException;
 
 	public String getSnippet(
