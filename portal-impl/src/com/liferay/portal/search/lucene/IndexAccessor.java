@@ -22,6 +22,7 @@ import java.util.Collection;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.store.Directory;
 
 /**
@@ -49,6 +50,8 @@ public interface IndexAccessor {
 	public long getLastGeneration();
 
 	public Directory getLuceneDir();
+
+	public SearcherManager getSearcherManager();
 
 	public void loadIndex(InputStream inputStream) throws IOException;
 
