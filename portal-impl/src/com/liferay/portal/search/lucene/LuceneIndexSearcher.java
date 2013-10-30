@@ -239,7 +239,8 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 			hits = toHits(
 				indexSearcher, new HitDocs(browseHits), query, startTime,
-				searchTime, searchContext.getStart(), searchContext.getEnd());
+				searchTime, searchContext.getStart(), searchContext.getEnd(),
+				searchContext.getTargetFieldNames());
 
 			Map<String, FacetAccessible> facetMap = browseResult.getFacetMap();
 
@@ -275,7 +276,8 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 				hits = toHits(
 					indexSearcher, new HitDocs(browseHits), query, startTime,
 					searchTime, searchContext.getStart(),
-					searchContext.getEnd());
+					searchContext.getEnd(),
+					searchContext.getTargetFieldNames());
 
 				Map<String, FacetAccessible> facetMap =
 					browseResult.getFacetMap();
@@ -370,7 +372,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 			hits = toHits(
 				indexSearcher, new HitDocs(topFieldDocs), query, startTime,
-				searchTime, start, end);
+				searchTime, start, end, null);
 		}
 		catch (BooleanQuery.TooManyClauses tmc) {
 			int maxClauseCount = BooleanQuery.getMaxClauseCount();
@@ -391,7 +393,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 				hits = toHits(
 					indexSearcher, new HitDocs(topFieldDocs), query, startTime,
-					searchTime, start, end);
+					searchTime, start, end, null);
 			}
 			catch (Exception e) {
 				throw new SearchException(e);
@@ -478,7 +480,8 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 	}
 
 	protected DocumentImpl getDocument(
-		org.apache.lucene.document.Document oldDocument) {
+		org.apache.lucene.document.Document oldDocument,
+		Set<String> targetFieldNames) {
 
 		DocumentImpl newDocument = new DocumentImpl();
 
@@ -487,6 +490,12 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 		for (org.apache.lucene.document.Fieldable oldFieldable :
 				oldFieldables) {
+
+			if ((targetFieldNames != null) &&
+				!targetFieldNames.contains(oldFieldable.name())) {
+
+				continue;
+			}
 
 			Field newField = null;
 
@@ -581,7 +590,8 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 	protected Hits toHits(
 			IndexSearcher indexSearcher, HitDocs hitDocs, Query query,
-			long startTime, float searchTime, int start, int end)
+			long startTime, float searchTime, int start, int end,
+			Set<String> targetFieldNames)
 		throws IOException, ParseException {
 
 		int total = hitDocs.getTotalHits();
@@ -634,7 +644,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 			org.apache.lucene.document.Document document = indexSearcher.doc(
 				docId);
 
-			Document subsetDocument = getDocument(document);
+			Document subsetDocument = getDocument(document, targetFieldNames);
 
 			if (queryConfig.isHighlightEnabled()) {
 				Locale locale = queryConfig.getLocale();
