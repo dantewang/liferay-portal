@@ -51,13 +51,13 @@ if (!portletName.equals(PortletKeys.RELATED_ASSETS) || (assetEntryQuery.getLinke
 			int groupTotal = 0;
 
 			if (PropsValues.ASSET_PUBLISHER_SEARCH_WITH_INDEX && (assetEntryQuery.getLinkedAssetEntryId() == 0) && !portletName.equals(PortletKeys.HIGHEST_RATED_ASSETS) && !portletName.equals(PortletKeys.MOST_VIEWED_ASSETS)) {
-				Hits hits = AssetUtil.search(request, assetEntryQuery, start, end);
+				ObjectValuePair<Integer, List<AssetEntry>> searchResult = AssetUtil.search(request, assetEntryQuery, start, end);
 
-				groupTotal = hits.getLength();
+				groupTotal = searchResult.getKey();
 
 				total += groupTotal;
 
-				results = AssetUtil.getAssetEntries(hits);
+				results = searchResult.getValue();
 			}
 			else {
 				groupTotal = AssetEntryServiceUtil.getEntriesCount(assetEntryQuery);
@@ -117,13 +117,13 @@ if (!portletName.equals(PortletKeys.RELATED_ASSETS) || (assetEntryQuery.getLinke
 		assetEntryQuery.setClassNameIds(classNameIds);
 
 		if (PropsValues.ASSET_PUBLISHER_SEARCH_WITH_INDEX && (assetEntryQuery.getLinkedAssetEntryId() == 0) && !portletName.equals(PortletKeys.HIGHEST_RATED_ASSETS) && !portletName.equals(PortletKeys.MOST_VIEWED_ASSETS)) {
-			Hits hits = AssetUtil.search(request, assetEntryQuery, start, end);
+			ObjectValuePair<Integer, List<AssetEntry>> searchResult = AssetUtil.search(request, assetEntryQuery, start, end);
 
-			total = hits.getLength();
+			total = searchResult.getKey();
 
 			searchContainer.setTotal(total);
 
-			results = AssetUtil.getAssetEntries(hits);
+			results = searchResult.getValue();
 		}
 		else {
 			total = AssetEntryServiceUtil.getEntriesCount(assetEntryQuery);
@@ -167,13 +167,13 @@ if (!portletName.equals(PortletKeys.RELATED_ASSETS) || (assetEntryQuery.getLinke
 			int groupTotal = 0;
 
 			if (PropsValues.ASSET_PUBLISHER_SEARCH_WITH_INDEX && (assetEntryQuery.getLinkedAssetEntryId() == 0) && !portletName.equals(PortletKeys.HIGHEST_RATED_ASSETS) && !portletName.equals(PortletKeys.MOST_VIEWED_ASSETS)) {
-				Hits hits = AssetUtil.search(request, assetEntryQuery, start, end);
+				ObjectValuePair<Integer, List<AssetEntry>> searchResult = AssetUtil.search(request, assetEntryQuery, start, end);
 
-				groupTotal = hits.getLength();
+				groupTotal = searchResult.getKey();
 
 				total += groupTotal;
 
-				results = AssetUtil.getAssetEntries(hits);
+				results = searchResult.getValue();
 			}
 			else {
 				groupTotal = AssetEntryServiceUtil.getEntriesCount(assetEntryQuery);

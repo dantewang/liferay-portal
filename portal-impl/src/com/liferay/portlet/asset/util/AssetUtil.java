@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -525,7 +526,7 @@ public class AssetUtil {
 		return true;
 	}
 
-	public static Hits search(
+	public static ObjectValuePair<Integer, List<AssetEntry>> search(
 			HttpServletRequest request, AssetEntryQuery assetEntryQuery,
 			int start, int end)
 		throws Exception {
@@ -535,7 +536,7 @@ public class AssetUtil {
 		return search(searchContext, assetEntryQuery, start, end);
 	}
 
-	public static Hits search(
+	public static ObjectValuePair<Integer, List<AssetEntry>> search(
 			SearchContext searchContext, AssetEntryQuery assetEntryQuery,
 			int start, int end)
 		throws Exception {
@@ -587,7 +588,35 @@ public class AssetUtil {
 			getSorts(assetEntryQuery, searchContext.getLocale()));
 		searchContext.setStart(start);
 
-		return assetSearcher.search(searchContext);
+		Set<String> targetFieldNames = new HashSet<String>(2);
+
+		targetFieldNames.add(Field.ENTRY_CLASS_NAME);
+		targetFieldNames.add(Field.ENTRY_CLASS_PK);
+
+		searchContext.setTargetFieldNames(targetFieldNames);
+
+		Hits hits = assetSearcher.search(searchContext);
+
+		List<AssetEntry> assetEntries = new ArrayList<AssetEntry>();
+
+		for (Document document : hits.getDocs()) {
+			String className = GetterUtil.getString(
+				document.get(Field.ENTRY_CLASS_NAME));
+			long classPK = GetterUtil.getLong(
+				document.get(Field.ENTRY_CLASS_PK));
+
+			try {
+				AssetEntry assetEntry = AssetEntryLocalServiceUtil.getEntry(
+					className, classPK);
+
+				assetEntries.add(assetEntry);
+			}
+			catch (Exception e) {
+			}
+		}
+
+		return new ObjectValuePair<Integer, List<AssetEntry>>(
+			hits.getLength(), assetEntries);
 	}
 
 	public static String substituteCategoryPropertyVariables(
