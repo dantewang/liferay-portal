@@ -630,9 +630,17 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 		}
 
 		List<Document> subsetDocs = new ArrayList<Document>(subsetTotal);
-		List<Float> subsetScores = new ArrayList<Float>(subsetTotal);
+		List<Float> subsetScores = null;
 
 		QueryConfig queryConfig = query.getQueryConfig();
+		Locale locale = queryConfig.getLocale();
+
+		if (queryConfig.isScoreEnabled()) {
+			subsetScores = new ArrayList<Float>(subsetTotal);
+		}
+		else {
+			subsetScores = Collections.EMPTY_LIST;
+		}
 
 		FieldSelector fieldSelector = null;
 
@@ -656,8 +664,6 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 			Document subsetDocument = getDocument(document);
 
 			if (queryConfig.isHighlightEnabled()) {
-				Locale locale = queryConfig.getLocale();
-
 				getSnippet(
 					document, query, Field.CONTENT, locale, subsetDocument,
 					queryTerms);
@@ -671,13 +677,15 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 			subsetDocs.add(subsetDocument);
 
-			Float subsetScore = hitDocs.getScore(i);
+			if (queryConfig.isScoreEnabled()) {
+				Float subsetScore = hitDocs.getScore(i);
 
-			if (scoredFieldNamesCount > 0) {
-				subsetScore = subsetScore / scoredFieldNamesCount;
+				if (scoredFieldNamesCount > 0) {
+					subsetScore = subsetScore / scoredFieldNamesCount;
+				}
+
+				subsetScores.add(subsetScore);
 			}
-
-			subsetScores.add(subsetScore);
 
 			if (_log.isDebugEnabled()) {
 				try {
