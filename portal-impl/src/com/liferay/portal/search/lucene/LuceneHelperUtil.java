@@ -283,8 +283,8 @@ public class LuceneHelperUtil {
 		getLuceneHelper().addTerm(booleanQuery, field, values, like);
 	}
 
-	public static void cleanUp(IndexSearcher indexSearcher) {
-		getLuceneHelper().cleanUp(indexSearcher);
+	public static void cleanUp(long companyId, IndexSearcher indexSearcher) {
+		getLuceneHelper().cleanUp(companyId, indexSearcher);
 	}
 
 	public static int countScoredFieldNames(Query query, String[] fieldNames) {
@@ -335,10 +335,8 @@ public class LuceneHelperUtil {
 		return getLuceneHelper().getQueryTerms(query);
 	}
 
-	public static IndexSearcher getSearcher(long companyId, boolean readOnly)
-		throws IOException {
-
-		return getLuceneHelper().getSearcher(companyId, readOnly);
+	public static IndexSearcher getSearcher(long companyId) throws IOException {
+		return getLuceneHelper().getSearcher(companyId);
 	}
 
 	public static String getSnippet(Query query, String field, String s)

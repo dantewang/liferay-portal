@@ -67,13 +67,16 @@ import com.liferay.portal.util.PropsValues;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.lucene.document.FieldSelector;
 import org.apache.lucene.document.NumericField;
+import org.apache.lucene.document.SetBasedFieldSelector;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Explanation;
@@ -104,9 +107,10 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 		BoboBrowser boboBrowser = null;
 		BrowseRequest browseRequest = null;
 
+		long companyId = searchContext.getCompanyId();
+
 		try {
-			indexSearcher = LuceneHelperUtil.getSearcher(
-				searchContext.getCompanyId(), true);
+			indexSearcher = LuceneHelperUtil.getSearcher(companyId);
 
 			List<FacetHandler<?>> facetHandlers =
 				new ArrayList<FacetHandler<?>>();
@@ -217,8 +221,8 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 				browseRequest.setFacetSpec(facet.getFieldName(), facetSpec);
 			}
 
-			browseRequest.setCount(PropsValues.INDEX_SEARCH_LIMIT);
-			browseRequest.setOffset(0);
+			browseRequest.setCount(searchContext.getEnd());
+			browseRequest.setOffset(searchContext.getStart());
 			browseRequest.setQuery(
 				(org.apache.lucene.search.Query)QueryTranslatorUtil.translate(
 					query));
@@ -238,7 +242,8 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 			hits = toHits(
 				indexSearcher, new HitDocs(browseHits), query, startTime,
-				searchTime, searchContext.getStart(), searchContext.getEnd());
+				searchTime, searchContext.getStart(), searchContext.getEnd(),
+				searchContext.getSelectedFieldNames());
 
 			Map<String, FacetAccessible> facetMap = browseResult.getFacetMap();
 
@@ -274,7 +279,8 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 				hits = toHits(
 					indexSearcher, new HitDocs(browseHits), query, startTime,
 					searchTime, searchContext.getStart(),
-					searchContext.getEnd());
+					searchContext.getEnd(),
+					searchContext.getSelectedFieldNames());
 
 				Map<String, FacetAccessible> facetMap =
 					browseResult.getFacetMap();
@@ -310,7 +316,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 		finally {
 			cleanUp(boboBrowser);
 
-			LuceneHelperUtil.cleanUp(indexSearcher);
+			LuceneHelperUtil.cleanUp(companyId, indexSearcher);
 		}
 
 		if (_log.isDebugEnabled()) {
@@ -338,7 +344,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 		org.apache.lucene.search.Sort luceneSort = null;
 
 		try {
-			indexSearcher = LuceneHelperUtil.getSearcher(companyId, true);
+			indexSearcher = LuceneHelperUtil.getSearcher(companyId);
 
 			if (sorts != null) {
 				SortField[] sortFields = new SortField[sorts.length];
@@ -369,7 +375,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 			hits = toHits(
 				indexSearcher, new HitDocs(topFieldDocs), query, startTime,
-				searchTime, start, end);
+				searchTime, start, end, null);
 		}
 		catch (BooleanQuery.TooManyClauses tmc) {
 			int maxClauseCount = BooleanQuery.getMaxClauseCount();
@@ -390,7 +396,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 				hits = toHits(
 					indexSearcher, new HitDocs(topFieldDocs), query, startTime,
-					searchTime, start, end);
+					searchTime, start, end, null);
 			}
 			catch (Exception e) {
 				throw new SearchException(e);
@@ -408,7 +414,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 			throw new SearchException(e);
 		}
 		finally {
-			LuceneHelperUtil.cleanUp(indexSearcher);
+			LuceneHelperUtil.cleanUp(companyId, indexSearcher);
 		}
 
 		if (_log.isDebugEnabled()) {
@@ -580,7 +586,8 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 	protected Hits toHits(
 			IndexSearcher indexSearcher, HitDocs hitDocs, Query query,
-			long startTime, float searchTime, int start, int end)
+			long startTime, float searchTime, int start, int end,
+			Set<String> selectedFieldNames)
 		throws IOException, ParseException {
 
 		int total = hitDocs.getTotalHits();
@@ -623,21 +630,40 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 		}
 
 		List<Document> subsetDocs = new ArrayList<Document>(subsetTotal);
-		List<Float> subsetScores = new ArrayList<Float>(subsetTotal);
+		List<Float> subsetScores = null;
 
 		QueryConfig queryConfig = query.getQueryConfig();
+		Locale locale = queryConfig.getLocale();
+
+		if (queryConfig.isScoreEnabled()) {
+			subsetScores = new ArrayList<Float>(subsetTotal);
+		}
+		else {
+			subsetScores = Collections.EMPTY_LIST;
+		}
+
+		FieldSelector fieldSelector = null;
+
+		if (selectedFieldNames != null) {
+			fieldSelector = new SetBasedFieldSelector(
+				selectedFieldNames, Collections.EMPTY_SET);
+		}
 
 		for (int i = start; i < start + subsetTotal; i++) {
 			int docId = hitDocs.getDocId(i);
 
-			org.apache.lucene.document.Document document = indexSearcher.doc(
-				docId);
+			org.apache.lucene.document.Document document = null;
+
+			if (fieldSelector != null) {
+				document = indexSearcher.doc(docId, fieldSelector);
+			}
+			else {
+				document = indexSearcher.doc(docId);
+			}
 
 			Document subsetDocument = getDocument(document);
 
 			if (queryConfig.isHighlightEnabled()) {
-				Locale locale = queryConfig.getLocale();
-
 				getSnippet(
 					document, query, Field.CONTENT, locale, subsetDocument,
 					queryTerms);
@@ -651,13 +677,15 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 			subsetDocs.add(subsetDocument);
 
-			Float subsetScore = hitDocs.getScore(i);
+			if (queryConfig.isScoreEnabled()) {
+				Float subsetScore = hitDocs.getScore(i);
 
-			if (scoredFieldNamesCount > 0) {
-				subsetScore = subsetScore / scoredFieldNamesCount;
+				if (scoredFieldNamesCount > 0) {
+					subsetScore = subsetScore / scoredFieldNamesCount;
+				}
+
+				subsetScores.add(subsetScore);
 			}
-
-			subsetScores.add(subsetScore);
 
 			if (_log.isDebugEnabled()) {
 				try {
