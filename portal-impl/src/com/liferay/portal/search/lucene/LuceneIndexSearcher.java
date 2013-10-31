@@ -221,8 +221,8 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 				browseRequest.setFacetSpec(facet.getFieldName(), facetSpec);
 			}
 
-			browseRequest.setCount(PropsValues.INDEX_SEARCH_LIMIT);
-			browseRequest.setOffset(0);
+			browseRequest.setCount(searchContext.getEnd());
+			browseRequest.setOffset(searchContext.getStart());
 			browseRequest.setQuery(
 				(org.apache.lucene.search.Query)QueryTranslatorUtil.translate(
 					query));
