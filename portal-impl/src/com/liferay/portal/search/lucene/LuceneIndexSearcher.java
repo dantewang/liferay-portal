@@ -104,9 +104,10 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 		BoboBrowser boboBrowser = null;
 		BrowseRequest browseRequest = null;
 
+		long companyId = searchContext.getCompanyId();
+
 		try {
-			indexSearcher = LuceneHelperUtil.getSearcher(
-				searchContext.getCompanyId(), true);
+			indexSearcher = LuceneHelperUtil.getSearcher(companyId);
 
 			List<FacetHandler<?>> facetHandlers =
 				new ArrayList<FacetHandler<?>>();
@@ -310,7 +311,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 		finally {
 			cleanUp(boboBrowser);
 
-			LuceneHelperUtil.cleanUp(indexSearcher);
+			LuceneHelperUtil.cleanUp(companyId, indexSearcher);
 		}
 
 		if (_log.isDebugEnabled()) {
@@ -338,7 +339,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 		org.apache.lucene.search.Sort luceneSort = null;
 
 		try {
-			indexSearcher = LuceneHelperUtil.getSearcher(companyId, true);
+			indexSearcher = LuceneHelperUtil.getSearcher(companyId);
 
 			if (sorts != null) {
 				SortField[] sortFields = new SortField[sorts.length];
@@ -408,7 +409,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 			throw new SearchException(e);
 		}
 		finally {
-			LuceneHelperUtil.cleanUp(indexSearcher);
+			LuceneHelperUtil.cleanUp(companyId, indexSearcher);
 		}
 
 		if (_log.isDebugEnabled()) {
