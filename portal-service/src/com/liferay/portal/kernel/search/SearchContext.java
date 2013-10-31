@@ -23,10 +23,12 @@ import com.liferay.portal.model.Layout;
 
 import java.io.Serializable;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -158,6 +160,10 @@ public class SearchContext implements Serializable {
 		}
 
 		return _searchEngineId;
+	}
+
+	public Set<String> getSelectedFieldNames() {
+		return Collections.unmodifiableSet(_selectedFieldNames);
 	}
 
 	public Sort[] getSorts() {
@@ -345,6 +351,10 @@ public class SearchContext implements Serializable {
 		}
 	}
 
+	public void setSelectedFieldNames(Set<String> selectedFieldNames) {
+		_selectedFieldNames = selectedFieldNames;
+	}
+
 	public void setSorts(Sort... sorts) {
 		_sorts = sorts;
 	}
@@ -390,6 +400,7 @@ public class SearchContext implements Serializable {
 	private boolean _scopeStrict = true;
 	private float _scoresThreshold;
 	private String _searchEngineId;
+	private Set<String> _selectedFieldNames;
 	private Sort[] _sorts;
 	private int _start = QueryUtil.ALL_POS;
 	private TimeZone _timeZone;

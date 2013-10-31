@@ -32,9 +32,13 @@ import com.liferay.portal.kernel.io.unsync.UnsyncPrintWriter;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.Destination;
+import com.liferay.portal.kernel.messaging.MessageBus;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.proxy.MessageValuesThreadLocal;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MethodHandler;
@@ -75,7 +79,6 @@ import org.apache.commons.lang.time.StopWatch;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
@@ -83,6 +86,7 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.search.WildcardQuery;
@@ -276,19 +280,17 @@ public class LuceneHelperImpl implements LuceneHelper {
 	}
 
 	@Override
-	public void cleanUp(IndexSearcher indexSearcher) {
+	public void cleanUp(long companyId, IndexSearcher indexSearcher) {
 		if (indexSearcher == null) {
 			return;
 		}
 
+		IndexAccessor indexAccessor = getIndexAccessor(companyId);
+
+		SearcherManager searcherManager = indexAccessor.getSearcherManager();
+
 		try {
-			indexSearcher.close();
-
-			IndexReader indexReader = indexSearcher.getIndexReader();
-
-			if (indexReader != null) {
-				indexReader.close();
-			}
+			searcherManager.release(indexSearcher);
 		}
 		catch (IOException ioe) {
 			_log.error(ioe, ioe);
@@ -512,20 +514,12 @@ public class LuceneHelperImpl implements LuceneHelper {
 	}
 
 	@Override
-	public IndexSearcher getSearcher(long companyId, boolean readOnly)
-		throws IOException {
-
+	public IndexSearcher getSearcher(long companyId) throws IOException {
 		IndexAccessor indexAccessor = getIndexAccessor(companyId);
 
-		IndexReader indexReader = IndexReader.open(
-			indexAccessor.getLuceneDir(), readOnly);
+		SearcherManager searcherManager = indexAccessor.getSearcherManager();
 
-		IndexSearcher indexSearcher = new IndexSearcher(indexReader);
-
-		indexSearcher.setDefaultFieldSortScoring(true, true);
-		indexSearcher.setSimilarity(new FieldWeightSimilarity());
-
-		return indexSearcher;
+		return searcherManager.acquire();
 	}
 
 	@Override
@@ -663,6 +657,20 @@ public class LuceneHelperImpl implements LuceneHelper {
 		if (isLoadIndexFromClusterEnabled()) {
 			ClusterExecutorUtil.removeClusterEventListener(
 				_loadIndexClusterEventListener);
+		}
+
+		MessageBus messageBus = MessageBusUtil.getMessageBus();
+
+		for (String searchEngineId : SearchEngineUtil.getSearchEngineIds()) {
+			String searchReaderDestinationName =
+				SearchEngineUtil.getSearchWriterDestinationName(searchEngineId);
+
+			Destination searchReaderDestination = messageBus.getDestination(
+				searchReaderDestinationName);
+
+			if (searchReaderDestination != null) {
+				searchReaderDestination.close(true);
+			}
 		}
 
 		for (IndexAccessor indexAccessor : _indexAccessors.values()) {

@@ -52,9 +52,15 @@
 					<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
 				</tstamp>
 
-				<get dest="${tstamp.value}.zip" src="${sql.legacy.url}" />
+				<get
+					dest="${tstamp.value}.zip"
+					src="${sql.legacy.url}"
+				/>
 
-				<unzip src="${tstamp.value}.zip" dest="sql" />
+				<unzip
+					dest="sql"
+					src="${tstamp.value}.zip"
+				/>
 
 				<delete file="${tstamp.value}.zip" />
 			</then>
@@ -840,7 +846,6 @@
 			</not>
 			<then>
 				<delete dir="${liferay.home}/data" />
-				<delete dir="${liferay.home}/deploy" />
 				<delete dir="${liferay.home}/logs" />
 			</then>
 		</if>
@@ -2013,7 +2018,10 @@ svn --username ${svn.username} --password ${svn.password} update -r ${svn.info.r
 					<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
 				</tstamp>
 
-				<get dest="${tstamp.value}.zip" src="${test.build.bundle.glassfish.zip.url}" />
+				<get
+					dest="${tstamp.value}.zip"
+					src="${test.build.bundle.glassfish.zip.url}"
+				/>
 
 				<unzip
 					dest="${app.server.parent.dir}"
@@ -2048,7 +2056,10 @@ svn --username ${svn.username} --password ${svn.password} update -r ${svn.info.r
 					<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
 				</tstamp>
 
-				<get dest="${tstamp.value}.zip" src="${test.build.bundle.jboss.zip.url}" />
+				<get
+					dest="${tstamp.value}.zip"
+					src="${test.build.bundle.jboss.zip.url}"
+				/>
 
 				<unzip
 					dest="${app.server.parent.dir}"
@@ -2083,7 +2094,10 @@ svn --username ${svn.username} --password ${svn.password} update -r ${svn.info.r
 					<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
 				</tstamp>
 
-				<get dest="${tstamp.value}.zip" src="${test.build.bundle.jetty.zip.url}" />
+				<get
+					dest="${tstamp.value}.zip"
+					src="${test.build.bundle.jetty.zip.url}"
+				/>
 
 				<unzip
 					dest="${app.server.parent.dir}"
@@ -2118,7 +2132,10 @@ svn --username ${svn.username} --password ${svn.password} update -r ${svn.info.r
 					<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
 				</tstamp>
 
-				<get dest="${tstamp.value}.zip" src="${test.build.bundle.tomcat.zip.url}" />
+				<get
+					dest="${tstamp.value}.zip"
+					src="${test.build.bundle.tomcat.zip.url}"
+				/>
 
 				<unzip
 					dest="${app.server.parent.dir}"
@@ -2150,18 +2167,61 @@ svn --username ${svn.username} --password ${svn.password} update -r ${svn.info.r
 		</if>
 
 		<if>
+			<equals arg1="${test.build.bundle.weblogic}" arg2="true" />
+			<then>
+				<ant antfile="build-dist.xml" target="unzip-weblogic" inheritAll="false" />
+
+				<get
+					dest="liferay-portal.war"
+					src="${test.build.portal.war.url}"
+				/>
+
+				<unzip
+					dest="${app.server.weblogic.portal.dir}"
+					src="liferay-portal.war"
+				/>
+
+				<delete file="liferay-portal.war" />
+
+				<get
+					dest="liferay-portal-dependencies.zip"
+					src="${test.build.portal.dependencies.zip.url}"
+				/>
+
+				<unzip
+					dest="${app.server.weblogic.lib.global.dir}"
+					src="liferay-portal-dependencies.zip"
+				>
+					<mapper
+						from="[^/]+/(.*)"
+						to="\1"
+						type="regexp"
+					/>
+				</unzip>
+
+				<delete file="liferay-portal-dependencies.zip" />
+			</then>
+		</if>
+
+		<if>
 			<matches pattern="http" string="${test.build.license.xml.zip.url}" />
 			<then>
 				<mkdir dir="${liferay.home}/deploy" />
 
-				<get dest="${liferay.home}/deploy/license.xml" src="${test.build.license.xml.zip.url}" />
+				<get
+					dest="${liferay.home}/deploy/license.xml"
+					src="${test.build.license.xml.zip.url}"
+				/>
 			</then>
 		</if>
 
 		<if>
 			<matches pattern="http" string="${test.build.plugins.war.zip.url}" />
 			<then>
-				<get dest="plugins.war.zip" src="${test.build.plugins.war.zip.url}" />
+				<get
+					dest="plugins.war.zip"
+					src="${test.build.plugins.war.zip.url}"
+				/>
 
 				<unzip
 					dest="."
@@ -2496,7 +2556,6 @@ custom.sql.function.isnotnull=CONVERT(VARCHAR,?) IS NOT NULL</echo>
 					</not>
 					<then>
 						<delete dir="${liferay.home}/data" />
-						<delete dir="${liferay.home}/deploy" />
 						<delete dir="${liferay.home}/logs" />
 					</then>
 				</if>

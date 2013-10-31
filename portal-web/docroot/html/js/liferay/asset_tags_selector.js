@@ -61,7 +61,7 @@ AUI.add(
 			'</fieldset>'
 		);
 
-		var TPL_SEARCH_FORM = '<form class="form-search lfr-tag-selector-search row-fluid">' +
+		var TPL_SEARCH_FORM = '<form action="javascript:;" class="form-search lfr-tag-selector-search row-fluid">' +
 			'<input class="lfr-tag-selector-input search-query span12" placeholder="{0}" type="text" />' +
 		'</form>';
 
@@ -548,7 +548,7 @@ AUI.add(
 
 								if (results) {
 									data = AArray.map(
-										A.Array(results.Result),
+										AArray(results.Result),
 										function(item, index, collection) {
 											return {
 												name: item

@@ -33,10 +33,10 @@
 						ResourceBlockPermission resourceBlockPermission
 					WHERE
 						(resourceBlockPermission.roleId IN ([$ROLE_ID$]))
-				)
-				AND (resourceBlock.companyId = [$COMPANY_ID$])
-				AND (resourceBlock.groupId = [$GROUP_ID$])
-				AND (resourceBlock.name = '[$RESOURCE_BLOCK_NAME$]')
+				) AND
+				(resourceBlock.companyId = [$COMPANY_ID$]) AND
+				(resourceBlock.groupId = [$GROUP_ID$]) AND
+				(resourceBlock.name = '[$RESOURCE_BLOCK_NAME$]')
 		]]>
 	</sql>
 	<sql id="com.liferay.portal.security.permission.InlineSQLHelper.joinResourcePermission">

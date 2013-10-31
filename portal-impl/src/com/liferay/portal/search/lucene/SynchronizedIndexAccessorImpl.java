@@ -25,6 +25,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.store.Directory;
 
 /**
@@ -128,6 +129,11 @@ public class SynchronizedIndexAccessorImpl implements IndexAccessor {
 	@Override
 	public Directory getLuceneDir() {
 		return _indexAccessor.getLuceneDir();
+	}
+
+	@Override
+	public SearcherManager getSearcherManager() {
+		return _indexAccessor.getSearcherManager();
 	}
 
 	@Override

@@ -1844,6 +1844,25 @@ release was successful.</echo>
 
 	<target name="unzip-weblogic-original">
 		<if>
+			<matches pattern="http://mirrors" string="${app.server.weblogic.zip.url}" />
+			<then>
+				<if>
+					<not>
+						<available file="${app.server.parent.dir}/${app.server.weblogic.zip.name}" />
+					</not>
+					<then>
+						<mkdir dir="${app.server.parent.dir}" />
+
+						<get
+							dest="${app.server.parent.dir}"
+							src="${app.server.weblogic.zip.url}"
+						/>
+					</then>
+				</if>
+			</then>
+		</if>
+
+		<if>
 			<not>
 				<available file="${app.server.parent.dir}/${app.server.weblogic.zip.name}" />
 			</not>
