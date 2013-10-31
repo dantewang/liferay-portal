@@ -67,13 +67,16 @@ import com.liferay.portal.util.PropsValues;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.lucene.document.FieldSelector;
 import org.apache.lucene.document.NumericField;
+import org.apache.lucene.document.SetBasedFieldSelector;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Explanation;
@@ -239,7 +242,8 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 			hits = toHits(
 				indexSearcher, new HitDocs(browseHits), query, startTime,
-				searchTime, searchContext.getStart(), searchContext.getEnd());
+				searchTime, searchContext.getStart(), searchContext.getEnd(),
+				searchContext.getSelectedFieldNames());
 
 			Map<String, FacetAccessible> facetMap = browseResult.getFacetMap();
 
@@ -275,7 +279,8 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 				hits = toHits(
 					indexSearcher, new HitDocs(browseHits), query, startTime,
 					searchTime, searchContext.getStart(),
-					searchContext.getEnd());
+					searchContext.getEnd(),
+					searchContext.getSelectedFieldNames());
 
 				Map<String, FacetAccessible> facetMap =
 					browseResult.getFacetMap();
@@ -370,7 +375,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 			hits = toHits(
 				indexSearcher, new HitDocs(topFieldDocs), query, startTime,
-				searchTime, start, end);
+				searchTime, start, end, null);
 		}
 		catch (BooleanQuery.TooManyClauses tmc) {
 			int maxClauseCount = BooleanQuery.getMaxClauseCount();
@@ -391,7 +396,7 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 				hits = toHits(
 					indexSearcher, new HitDocs(topFieldDocs), query, startTime,
-					searchTime, start, end);
+					searchTime, start, end, null);
 			}
 			catch (Exception e) {
 				throw new SearchException(e);
@@ -581,7 +586,8 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 	protected Hits toHits(
 			IndexSearcher indexSearcher, HitDocs hitDocs, Query query,
-			long startTime, float searchTime, int start, int end)
+			long startTime, float searchTime, int start, int end,
+			Set<String> selectedFieldNames)
 		throws IOException, ParseException {
 
 		int total = hitDocs.getTotalHits();
@@ -628,11 +634,24 @@ public class LuceneIndexSearcher extends BaseIndexSearcher {
 
 		QueryConfig queryConfig = query.getQueryConfig();
 
+		FieldSelector fieldSelector = null;
+
+		if (selectedFieldNames != null) {
+			fieldSelector = new SetBasedFieldSelector(
+				selectedFieldNames, Collections.EMPTY_SET);
+		}
+
 		for (int i = start; i < start + subsetTotal; i++) {
 			int docId = hitDocs.getDocId(i);
 
-			org.apache.lucene.document.Document document = indexSearcher.doc(
-				docId);
+			org.apache.lucene.document.Document document = null;
+
+			if (fieldSelector != null) {
+				document = indexSearcher.doc(docId, fieldSelector);
+			}
+			else {
+				document = indexSearcher.doc(docId);
+			}
 
 			Document subsetDocument = getDocument(document);
 
