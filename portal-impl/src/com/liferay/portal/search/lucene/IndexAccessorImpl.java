@@ -14,6 +14,7 @@
 
 package com.liferay.portal.search.lucene;
 
+import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.resiliency.spi.SPIUtil;
@@ -34,6 +35,7 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -55,6 +57,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -76,6 +79,7 @@ public class IndexAccessorImpl implements IndexAccessor {
 		if (!SPIUtil.isSPI()) {
 			_checkLuceneDir();
 			_initIndexWriter();
+			_initSearcherManager();
 			_initCommitScheduler();
 		}
 	}
@@ -111,8 +115,12 @@ public class IndexAccessorImpl implements IndexAccessor {
 			return;
 		}
 
+		PortalExecutorManagerUtil.shutdown(
+			LUCENE_SEARCHER_MANAGER_THREAD_POOL, true);
+
 		try {
 			_indexWriter.close();
+			_searcherManager.close();
 		}
 		catch (Exception e) {
 			_log.error("Closing Lucene writer failed for " + _companyId, e);
@@ -181,6 +189,11 @@ public class IndexAccessorImpl implements IndexAccessor {
 			throw new RuntimeException(
 				"Invalid store type " + PropsValues.LUCENE_STORE_TYPE);
 		}
+	}
+
+	@Override
+	public SearcherManager getSearcherManager() {
+		return _searcherManager;
 	}
 
 	@Override
@@ -273,6 +286,8 @@ public class IndexAccessorImpl implements IndexAccessor {
 			_indexWriter.deleteAll();
 
 			_indexWriter.commit();
+
+			_searcherManager.maybeReopen();
 		}
 		catch (Exception e) {
 			if (_log.isWarnEnabled()) {
@@ -309,6 +324,8 @@ public class IndexAccessorImpl implements IndexAccessor {
 
 			try {
 				_indexWriter.commit();
+
+				_searcherManager.maybeReopen();
 			}
 			finally {
 				_commitLock.unlock();
@@ -466,6 +483,30 @@ public class IndexAccessorImpl implements IndexAccessor {
 		}
 	}
 
+	private void _initSearcherManager() {
+		if (_indexWriter == null) {
+			_log.error(
+				"Initializing Lucene searcher manager failed for " +
+					_companyId + " caused by indexWriter is null");
+
+			return;
+		}
+
+		ExecutorService executorService =
+			PortalExecutorManagerUtil.getPortalExecutor(
+				LUCENE_SEARCHER_MANAGER_THREAD_POOL);
+
+		try {
+			_searcherManager = new SearcherManager(
+				_indexWriter, true, null, executorService);
+		}
+		catch (Exception e) {
+			_log.error(
+				"Initializing Lucene searcher manager failed for " + _companyId,
+				e);
+		}
+	}
+
 	private void _write(Term term, Document document) throws IOException {
 		try {
 			if (term != null) {
@@ -488,6 +529,9 @@ public class IndexAccessorImpl implements IndexAccessor {
 
 	private static final String _LUCENE_STORE_TYPE_RAM = "ram";
 
+	private static final String LUCENE_SEARCHER_MANAGER_THREAD_POOL =
+		"LUCENE_SEARCHER_MANAGER_THREAD_POOL";
+
 	private static Log _log = LogFactoryUtil.getLog(IndexAccessorImpl.class);
 
 	private volatile int _batchCount;
@@ -498,5 +542,6 @@ public class IndexAccessorImpl implements IndexAccessor {
 	private IndexWriter _indexWriter;
 	private Map<String, Directory> _ramDirectories =
 		new ConcurrentHashMap<String, Directory>();
+	private SearcherManager _searcherManager;
 
 }
