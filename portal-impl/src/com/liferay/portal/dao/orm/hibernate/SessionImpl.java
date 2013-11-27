@@ -105,10 +105,17 @@ public class SessionImpl implements Session {
 		try {
 			queryString = SQLTransformer.transformFromJpqlToHql(queryString);
 
-			return DoPrivilegedUtil.wrapWhenActive(
+			SQLQuery sqlQuery = DoPrivilegedUtil.wrapWhenActive(
 				new SQLQueryImpl(
 					_session.createSQLQuery(queryString), strictName)
 			);
+
+			String[] tableNames = SQLQueryTableNamesUtil.getTableNames(
+				queryString);
+
+			sqlQuery.addSynchronizedQuerySpaces(tableNames);
+
+			return sqlQuery;
 		}
 		catch (Exception e) {
 			throw ExceptionTranslator.translate(e);
