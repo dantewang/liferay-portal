@@ -25,7 +25,9 @@ import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.util.PortletKeys;
 
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.portlet.PortletPreferences;
 
@@ -49,7 +51,7 @@ public class PortletSettingsFactoryImpl implements PortletSettingsFactory {
 		CompanyPortletSettings companyPortletSettings =
 			new CompanyPortletSettings(companyPortletPreferences);
 
-		Properties portalProperties = PropsUtil.getProperties(portletId, false);
+		Properties portalProperties = getPortalProperties(portletId);
 
 		companyPortletSettings.setPortalProperties(portalProperties);
 
@@ -80,7 +82,7 @@ public class PortletSettingsFactoryImpl implements PortletSettingsFactory {
 		groupPortletSettings.setCompanyPortletPreferences(
 			companyPortletPreferences);
 
-		Properties portalProperties = PropsUtil.getProperties(portletId, false);
+		Properties portalProperties = getPortalProperties(portletId);
 
 		groupPortletSettings.setPortalProperties(portalProperties);
 
@@ -127,11 +129,28 @@ public class PortletSettingsFactoryImpl implements PortletSettingsFactory {
 		portletInstancePortletSettings.setGroupPortletPreferences(
 			groupPortletPreferences);
 
-		Properties portalProperties = PropsUtil.getProperties(portletId, false);
+		Properties portalProperties = getPortalProperties(portletId);
 
 		portletInstancePortletSettings.setPortalProperties(portalProperties);
 
 		return portletInstancePortletSettings;
 	}
+
+	protected Properties getPortalProperties(String portletId) {
+		Properties portalProperties = _portalPropertiesCache.get(portletId);
+
+		if (portalProperties != null) {
+			return portalProperties;
+		}
+
+		portalProperties = PropsUtil.getProperties(portletId, false);
+
+		_portalPropertiesCache.put(portletId, portalProperties);
+
+		return portalProperties;
+	}
+
+	private Map<String, Properties> _portalPropertiesCache =
+		new ConcurrentHashMap<String, Properties>();
 
 }
