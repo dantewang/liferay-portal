@@ -14,9 +14,11 @@
 
 package com.liferay.portal.search.lucene;
 
-import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
+import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
 
 import java.io.IOException;
+
+import java.util.concurrent.ExecutorService;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -88,9 +90,6 @@ public class IndexSearcherManager {
 		_indexSearcher = null;
 
 		release(indexSearcher);
-
-		PortalExecutorManagerUtil.shutdown(
-			IndexSearcherManager.class.getName());
 	}
 
 	public synchronized void invalidate() {
@@ -105,13 +104,21 @@ public class IndexSearcherManager {
 		IndexReader indexReader = indexSearcher.getIndexReader();
 
 		indexReader.decRef();
+
+		if (indexReader.getRefCount() == 0) {
+			LiferayIndexSearcher liferayIndexSearcher =
+				(LiferayIndexSearcher)indexSearcher;
+
+			ExecutorService executor =
+				liferayIndexSearcher.getExecutorService();
+
+			executor.shutdown();
+		}
 	}
 
 	private IndexSearcher _createIndexSearcher(IndexReader indexReader) {
-		IndexSearcher indexSearcher = new IndexSearcher(
-			indexReader,
-			PortalExecutorManagerUtil.getPortalExecutor(
-				IndexSearcherManager.class.getName()));
+		IndexSearcher indexSearcher = new LiferayIndexSearcher(
+			indexReader, new ThreadPoolExecutor(1, 10));
 
 		indexSearcher.setDefaultFieldSortScoring(true, false);
 		indexSearcher.setSimilarity(new FieldWeightSimilarity());
@@ -121,5 +128,23 @@ public class IndexSearcherManager {
 
 	private volatile IndexSearcher _indexSearcher;
 	private volatile boolean _invalid;
+
+	private class LiferayIndexSearcher extends IndexSearcher {
+
+		public LiferayIndexSearcher(
+			IndexReader indexReader, ExecutorService executor) {
+
+			super(indexReader, executor);
+
+			_executor = executor;
+		}
+
+		public ExecutorService getExecutorService() {
+			return _executor;
+		}
+
+		private ExecutorService _executor;
+
+	}
 
 }
