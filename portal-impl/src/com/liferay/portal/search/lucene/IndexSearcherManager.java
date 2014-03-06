@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -38,6 +41,9 @@ import org.apache.lucene.store.Directory;
 public class IndexSearcherManager {
 
 	public IndexSearcherManager(Directory directory) throws IOException {
+		_executorService = new ThreadPoolExecutor(
+			2, 10, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+
 		_indexSearcher = _createIndexSearcher(
 			IndexReader.open(directory, true));
 	}
@@ -115,12 +121,8 @@ public class IndexSearcherManager {
 	}
 
 	private IndexSearcher _createIndexSearcher(IndexReader indexReader) {
-		final ExecutorService executorService =
-			PortalExecutorManagerUtil.getPortalExecutor(
-				IndexSearcherManager.class.getName());
-
 		IndexSearcher indexSearcher = new IndexSearcher(
-			indexReader, executorService) {
+			indexReader, _executorService) {
 
 				@Override
 				public int docFreq(final Term term) throws IOException {
@@ -144,7 +146,7 @@ public class IndexSearcherManager {
 						int docFreq = 0;
 
 						for (Future<Integer> future :
-								executorService.invokeAll(callables)) {
+								_executorService.invokeAll(callables)) {
 
 							docFreq += future.get();
 						}
@@ -163,6 +165,8 @@ public class IndexSearcherManager {
 
 		return indexSearcher;
 	}
+
+	private static ExecutorService _executorService;
 
 	private volatile IndexSearcher _indexSearcher;
 	private volatile boolean _invalid;
