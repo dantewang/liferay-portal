@@ -18,8 +18,15 @@ import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
@@ -108,10 +115,48 @@ public class IndexSearcherManager {
 	}
 
 	private IndexSearcher _createIndexSearcher(IndexReader indexReader) {
-		IndexSearcher indexSearcher = new IndexSearcher(
-			indexReader,
+		final ExecutorService executorService =
 			PortalExecutorManagerUtil.getPortalExecutor(
-				IndexSearcherManager.class.getName()));
+				IndexSearcherManager.class.getName());
+
+		IndexSearcher indexSearcher = new IndexSearcher(
+			indexReader, executorService) {
+
+				@Override
+				public int docFreq(final Term term) throws IOException {
+					List<Callable<Integer>> callables =
+						new ArrayList<Callable<Integer>>();
+
+					for (int i = 0; i < subReaders.length; i++) {
+						final IndexSearcher indexSearcher = subSearchers[i];
+
+						callables.add(new Callable<Integer>() {
+
+							@Override
+							public Integer call() throws Exception {
+								return indexSearcher.docFreq(term);
+							}
+
+						});
+					}
+
+					try {
+						int docFreq = 0;
+
+						for (Future<Integer> future :
+								executorService.invokeAll(callables)) {
+
+							docFreq += future.get();
+						}
+
+						return docFreq;
+					}
+					catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				}
+
+			};
 
 		indexSearcher.setDefaultFieldSortScoring(true, false);
 		indexSearcher.setSimilarity(new FieldWeightSimilarity());
