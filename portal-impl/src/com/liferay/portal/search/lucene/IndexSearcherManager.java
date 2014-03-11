@@ -88,9 +88,9 @@ public class IndexSearcherManager {
 		_indexSearcher = null;
 
 		release(indexSearcher);
-
-		PortalExecutorManagerUtil.shutdown(
-			IndexSearcherManager.class.getName());
+//
+//		PortalExecutorManagerUtil.shutdown(
+//			IndexSearcherManager.class.getName());
 	}
 
 	public synchronized void invalidate() {
@@ -108,10 +108,11 @@ public class IndexSearcherManager {
 	}
 
 	private IndexSearcher _createIndexSearcher(IndexReader indexReader) {
-		IndexSearcher indexSearcher = new IndexSearcher(
-			indexReader,
-			PortalExecutorManagerUtil.getPortalExecutor(
-				IndexSearcherManager.class.getName()));
+		IndexSearcher indexSearcher = new IndexSearcher(indexReader);
+//		IndexSearcher indexSearcher = new IndexSearcher(
+//			indexReader,
+//			PortalExecutorManagerUtil.getPortalExecutor(
+//				IndexSearcherManager.class.getName()));
 
 		indexSearcher.setDefaultFieldSortScoring(true, false);
 		indexSearcher.setSimilarity(new FieldWeightSimilarity());
