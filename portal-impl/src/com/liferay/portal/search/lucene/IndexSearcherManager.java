@@ -14,12 +14,19 @@
 
 package com.liferay.portal.search.lucene;
 
-import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
+import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
@@ -88,9 +95,6 @@ public class IndexSearcherManager {
 		_indexSearcher = null;
 
 		release(indexSearcher);
-
-		PortalExecutorManagerUtil.shutdown(
-			IndexSearcherManager.class.getName());
 	}
 
 	public synchronized void invalidate() {
@@ -105,13 +109,21 @@ public class IndexSearcherManager {
 		IndexReader indexReader = indexSearcher.getIndexReader();
 
 		indexReader.decRef();
+
+		if (indexReader.getRefCount() == 0) {
+			LiferayIndexSearcher liferayIndexSearcher =
+				(LiferayIndexSearcher)indexSearcher;
+
+			ExecutorService executorService =
+				liferayIndexSearcher.getExecutorService();
+
+			executorService.shutdown();
+		}
 	}
 
 	private IndexSearcher _createIndexSearcher(IndexReader indexReader) {
-		IndexSearcher indexSearcher = new IndexSearcher(
-			indexReader,
-			PortalExecutorManagerUtil.getPortalExecutor(
-				IndexSearcherManager.class.getName()));
+		IndexSearcher indexSearcher = new LiferayIndexSearcher(
+			indexReader, new ThreadPoolExecutor(1, 10));
 
 		indexSearcher.setDefaultFieldSortScoring(true, false);
 		indexSearcher.setSimilarity(new FieldWeightSimilarity());
@@ -121,5 +133,57 @@ public class IndexSearcherManager {
 
 	private volatile IndexSearcher _indexSearcher;
 	private volatile boolean _invalid;
+
+	private class LiferayIndexSearcher extends IndexSearcher {
+
+		public LiferayIndexSearcher(
+			IndexReader indexReader, ExecutorService executorService) {
+
+			super(indexReader, executorService);
+
+			_executorService = executorService;
+		}
+
+		@Override
+		public int docFreq(final Term term) throws IOException {
+			List<Callable<Integer>> callables =
+				new ArrayList<Callable<Integer>>();
+
+			for (int i = 0; i < subReaders.length; i++) {
+				final IndexSearcher indexSearcher = subSearchers[i];
+
+				callables.add(new Callable<Integer>() {
+
+					@Override
+					public Integer call() throws Exception {
+						return indexSearcher.docFreq(term);
+					}
+
+				});
+			}
+
+			try {
+				int docFreq = 0;
+
+				for (Future<Integer> future :
+						_executorService.invokeAll(callables)) {
+
+					docFreq += future.get();
+				}
+
+				return docFreq;
+			}
+			catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		public ExecutorService getExecutorService() {
+			return _executorService;
+		}
+
+		private ExecutorService _executorService;
+
+	}
 
 }
