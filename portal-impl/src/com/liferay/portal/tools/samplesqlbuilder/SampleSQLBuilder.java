@@ -55,7 +55,7 @@ import java.util.Properties;
 public class SampleSQLBuilder {
 
 	public static void main(String[] args) {
-		InitUtil.initWithSpring();
+		InitUtil.initWithSpringAndModuleFramework();
 
 		Reader reader = null;
 

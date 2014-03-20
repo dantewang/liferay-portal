@@ -342,14 +342,14 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			_checkPermission();
 		}
 
-		try {
-			bundle.start(options);
-		}
-		catch (BundleException be) {
-			_log.error(be, be);
-
-			throw new PortalException(be);
-		}
+//		try {
+//			bundle.start(options);
+//		}
+//		catch (BundleException be) {
+//			_log.error(be, be);
+//
+//			throw new PortalException(be);
+//		}
 	}
 
 	@Override
