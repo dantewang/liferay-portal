@@ -72,13 +72,17 @@ public class LanguageResources {
 	}
 
 	public static Set<String> getKeys(Locale locale) {
-		Map<String, String> languageMap = _languageMaps.get(locale);
-
-		if (languageMap != null) {
-			return languageMap.keySet();
+		if (locale == null) {
+			return null;
 		}
 
-		return null;
+		Map<String, String> languageMap = _languageMaps.get(locale);
+
+		if (languageMap == null) {
+			languageMap = _loadLocale(locale);
+		}
+
+		return languageMap.keySet();
 	}
 
 	public static String getMessage(Locale locale, String key) {
@@ -163,6 +167,8 @@ public class LanguageResources {
 		newLanguageMap.putAll(languageMap);
 
 		_languageMaps.put(locale, newLanguageMap);
+
+		_resourceBundles.remove(locale);
 
 		return oldLanguageMap;
 	}
@@ -268,6 +274,16 @@ public class LanguageResources {
 			_locale = locale;
 
 			_languageMap = _languageMaps.get(locale);
+
+			if (_languageMap == null) {
+				_languageMap = _loadLocale(locale);
+			}
+
+			Locale superLocale = getSuperLocale(locale);
+
+			if (superLocale != null) {
+				setParent(getResourceBundle(locale));
+			}
 		}
 
 		@Override
@@ -282,10 +298,14 @@ public class LanguageResources {
 
 		@Override
 		protected Set<String> handleKeySet() {
-			return _languageMap.keySet();
+			if (parent == null) {
+				return _languageMap.keySet();
+			}
+
+			return super.handleKeySet();
 		}
 
-		private final Map<String, String> _languageMap;
+		private Map<String, String> _languageMap;
 
 		private final Locale _locale;
 	}

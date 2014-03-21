@@ -15,6 +15,7 @@
 package com.liferay.portal.language;
 
 import com.liferay.portal.kernel.util.EnumerationUtil;
+import com.liferay.portal.kernel.util.ResourceBundleUtil;
 
 import java.util.Enumeration;
 import java.util.MissingResourceException;
@@ -47,6 +48,9 @@ public class AggregateResourceBundle extends ResourceBundle {
 		for (ResourceBundle resourceBundle : _resourceBundles) {
 			Object object = null;
 
+			if (!resourceBundle.containsKey(key)) {
+				continue;
+			}
 			try {
 				object = resourceBundle.getObject(key);
 			}
@@ -54,7 +58,9 @@ public class AggregateResourceBundle extends ResourceBundle {
 				continue;
 			}
 
-			if (object != null) {
+			if ((object != null) && !object.equals(
+				ResourceBundleUtil.NULL_VALUE)) {
+
 				return object;
 			}
 		}
