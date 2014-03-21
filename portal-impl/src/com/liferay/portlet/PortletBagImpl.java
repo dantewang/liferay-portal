@@ -24,7 +24,6 @@ import com.liferay.portal.kernel.portlet.ConfigurationAction;
 import com.liferay.portal.kernel.portlet.FriendlyURLMapper;
 import com.liferay.portal.kernel.portlet.PortletBag;
 import com.liferay.portal.kernel.portlet.PortletLayoutListener;
-import com.liferay.portal.kernel.portlet.ResourceBundleTracker;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.OpenSearch;
 import com.liferay.portal.kernel.servlet.URLEncoder;
@@ -46,6 +45,7 @@ import java.io.Closeable;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.portlet.Portlet;
@@ -61,7 +61,7 @@ public class PortletBagImpl implements PortletBag {
 
 	public PortletBagImpl(
 		String portletName, ServletContext servletContext,
-		Portlet portletInstance, ResourceBundleTracker resourceBundleTracker,
+		Portlet portletInstance,
 		List<ConfigurationAction> configurationActionInstances,
 		List<Indexer> indexerInstances, List<OpenSearch> openSearchInstances,
 		List<FriendlyURLMapper> friendlyURLMapperInstances,
@@ -85,12 +85,12 @@ public class PortletBagImpl implements PortletBag {
 		List<PermissionPropagator> permissionPropagatorInstances,
 		List<TrashHandler> trashHandlerInstances,
 		List<WorkflowHandler> workflowHandlerInstances,
-		List<PreferencesValidator> preferencesValidatorInstances) {
+		List<PreferencesValidator> preferencesValidatorInstances,
+		Map<String, ResourceBundle> resourceBundles) {
 
 		_portletName = portletName;
 		_servletContext = servletContext;
 		_portletInstance = portletInstance;
-		_resourceBundleTracker = resourceBundleTracker;
 		_configurationActionInstances = configurationActionInstances;
 		_indexerInstances = indexerInstances;
 		_openSearchInstances = openSearchInstances;
@@ -112,21 +112,21 @@ public class PortletBagImpl implements PortletBag {
 		_assetRendererFactoryInstances = assetRendererFactoryInstances;
 		_atomCollectionAdapterInstances = atomCollectionAdapters;
 		_customAttributesDisplayInstances = customAttributesDisplayInstances;
-		_ddmDisplayInstances = ddmDisplayInstances;
 		_permissionPropagatorInstances = permissionPropagatorInstances;
 		_trashHandlerInstances = trashHandlerInstances;
 		_workflowHandlerInstances = workflowHandlerInstances;
 		_preferencesValidatorInstances = preferencesValidatorInstances;
+		_resourceBundles = resourceBundles;
+		_ddmDisplayInstances = ddmDisplayInstances;
 	}
 
 	@Override
 	public Object clone() {
 		return new PortletBagImpl(
 			getPortletName(), getServletContext(), getPortletInstance(),
-			getResourceBundleTracker(), getConfigurationActionInstances(),
-			getIndexerInstances(), getOpenSearchInstances(),
-			getFriendlyURLMapperInstances(), getURLEncoderInstances(),
-			getPortletDataHandlerInstances(),
+			getConfigurationActionInstances(), getIndexerInstances(),
+			getOpenSearchInstances(), getFriendlyURLMapperInstances(),
+			getURLEncoderInstances(), getPortletDataHandlerInstances(),
 			getStagedModelDataHandlerInstances(), getTemplateHandlerInstances(),
 			getPortletLayoutListenerInstances(), getPollerProcessorInstances(),
 			getPopMessageListenerInstances(),
@@ -136,9 +136,10 @@ public class PortletBagImpl implements PortletBag {
 			getXmlRpcMethodInstances(), getControlPanelEntryInstances(),
 			getAssetRendererFactoryInstances(),
 			getAtomCollectionAdapterInstances(),
-			getCustomAttributesDisplayInstances(), getDdmDisplayInstances(),
-			getPermissionPropagatorInstances(), getTrashHandlerInstances(),
-			getWorkflowHandlerInstances(), getPreferencesValidatorInstances());
+			getCustomAttributesDisplayInstances(),
+			getDdmDisplayInstances(), getPermissionPropagatorInstances(),
+			getTrashHandlerInstances(), getWorkflowHandlerInstances(),
+			getPreferencesValidatorInstances(), getResourceBundles());
 	}
 
 	@Override
@@ -158,7 +159,6 @@ public class PortletBagImpl implements PortletBag {
 		close(_portletDataHandlerInstances);
 		close(_portletLayoutListenerInstances);
 		close(_preferencesValidatorInstances);
-		close(_resourceBundleTracker);
 		close(_socialActivityInterpreterInstances);
 		close(_socialRequestInterpreterInstances);
 		close(_templateHandlerInstances);
@@ -257,15 +257,14 @@ public class PortletBagImpl implements PortletBag {
 
 	@Override
 	public ResourceBundle getResourceBundle(Locale locale) {
-		ResourceBundle resourceBundle = _resourceBundleTracker.getResouceBundle(
+		ResourceBundle resourceBundle = _resourceBundles.get(
 			LocaleUtil.toLanguageId(locale));
 
 		if (resourceBundle == null) {
-			resourceBundle = _resourceBundleTracker.getResouceBundle(
-				locale.getLanguage());
+			resourceBundle = _resourceBundles.get(locale.getLanguage());
 
 			if (resourceBundle == null) {
-				resourceBundle = _resourceBundleTracker.getResouceBundle(
+				resourceBundle = _resourceBundles.get(
 					LocaleUtil.toLanguageId(LocaleUtil.getDefault()));
 			}
 		}
@@ -274,8 +273,8 @@ public class PortletBagImpl implements PortletBag {
 	}
 
 	@Override
-	public ResourceBundleTracker getResourceBundleTracker() {
-		return _resourceBundleTracker;
+	public Map<String, ResourceBundle> getResourceBundles() {
+		return _resourceBundles;
 	}
 
 	@Override
@@ -380,7 +379,7 @@ public class PortletBagImpl implements PortletBag {
 	private List<PortletLayoutListener> _portletLayoutListenerInstances;
 	private String _portletName;
 	private List<PreferencesValidator> _preferencesValidatorInstances;
-	private ResourceBundleTracker _resourceBundleTracker;
+	private Map<String, ResourceBundle> _resourceBundles;
 	private ServletContext _servletContext;
 	private List<SocialActivityInterpreter> _socialActivityInterpreterInstances;
 	private List<SocialRequestInterpreter> _socialRequestInterpreterInstances;
