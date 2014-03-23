@@ -25,8 +25,6 @@ import java.util.ResourceBundle;
  */
 public class ResourceBundleUtil {
 
-	public static final String NULL_VALUE = "NULL_VALUE";
-
 	public static String getString(
 		ResourceBundle resourceBundle, Locale locale, String key,
 		Object[] arguments) {
@@ -51,22 +49,14 @@ public class ResourceBundleUtil {
 	}
 
 	public static String getString(ResourceBundle resourceBundle, String key) {
-		ResourceBundleThreadLocal.setReplace(true);
-
 		String value = null;
 
 		try {
 			value = resourceBundle.getString(key);
 		}
 		finally {
-			ResourceBundleThreadLocal.setReplace(false);
+			return value;
 		}
-
-		if (NULL_VALUE.equals(value)) {
-			value = null;
-		}
-
-		return value;
 	}
 
 }

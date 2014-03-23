@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.util.EnumerationUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ResourceBundleThreadLocal;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
+import com.liferay.portal.language.FastMissingResourceException;
 import com.liferay.portal.model.PortletInfo;
 
 import java.util.Arrays;
@@ -83,12 +84,12 @@ public class PortletResourceBundle extends ResourceBundle {
 			}
 		}
 
-		if ((value == null) || value.equals(ResourceBundleUtil.NULL_VALUE)) {
+		if (value == null) {
 			value = _getJavaxPortletString(key);
 		}
 
-		if ((value == null) && ResourceBundleThreadLocal.isReplace()) {
-			value = ResourceBundleUtil.NULL_VALUE;
+		if (value == null) {
+			throw FastMissingResourceException.BLANK_MISSING_RESOURCE_EXCEPTION;
 		}
 
 		return value;

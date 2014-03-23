@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ResourceBundleThreadLocal;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.language.FastMissingResourceException;
 
 import java.util.Collections;
 import java.util.Enumeration;
@@ -63,8 +64,8 @@ public class StrutsResourceBundle extends ResourceBundle {
 
 		String value = LanguageUtil.get(_locale, key);
 
-		if ((value == null) && ResourceBundleThreadLocal.isReplace()) {
-			value = ResourceBundleUtil.NULL_VALUE;
+		if (value == null) {
+			throw FastMissingResourceException.BLANK_MISSING_RESOURCE_EXCEPTION;
 		}
 
 		return value;

@@ -282,7 +282,7 @@ public class LanguageResources {
 			Locale superLocale = getSuperLocale(locale);
 
 			if (superLocale != null) {
-				setParent(getResourceBundle(locale));
+				setParent(getResourceBundle(superLocale));
 			}
 		}
 

@@ -137,7 +137,8 @@ public class LiferayResourceBundle extends ResourceBundle {
 			}
 
 			if (value == null) {
-				value = ResourceBundleUtil.NULL_VALUE;
+				throw FastMissingResourceException.
+					BLANK_MISSING_RESOURCE_EXCEPTION;
 			}
 		}
 

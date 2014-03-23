@@ -48,9 +48,6 @@ public class AggregateResourceBundle extends ResourceBundle {
 		for (ResourceBundle resourceBundle : _resourceBundles) {
 			Object object = null;
 
-			if (!resourceBundle.containsKey(key)) {
-				continue;
-			}
 			try {
 				object = resourceBundle.getObject(key);
 			}
@@ -58,16 +55,13 @@ public class AggregateResourceBundle extends ResourceBundle {
 				continue;
 			}
 
-			if ((object != null) && !object.equals(
-				ResourceBundleUtil.NULL_VALUE)) {
+			if (object != null) {
 
 				return object;
 			}
 		}
 
-		throw new MissingResourceException(
-			"Unable to find resource", AggregateResourceBundle.class.getName(),
-			key);
+		throw FastMissingResourceException.BLANK_MISSING_RESOURCE_EXCEPTION;
 	}
 
 	private Enumeration<String>[] _enumerations;
