@@ -46,7 +46,7 @@ public class PortletResourceBundle extends ResourceBundle {
 
 	@Override
 	public boolean containsKey(String key) {
-		if (_keys.contains(key)) {
+		if (_keys.contains(key) && _getJavaxPortletString(key) != null) {
 			return true;
 		}
 		if (parent != null) {

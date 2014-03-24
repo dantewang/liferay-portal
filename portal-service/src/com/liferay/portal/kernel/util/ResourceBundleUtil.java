@@ -50,6 +50,9 @@ public class ResourceBundleUtil {
 	}
 
 	public static String getString(ResourceBundle resourceBundle, String key) {
+		if (!resourceBundle.containsKey(key)) {
+			return null;
+		}
 		try {
 			return resourceBundle.getString(key);
 		}

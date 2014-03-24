@@ -275,7 +275,7 @@ public class LanguageResources {
 		private LanguageResourcesBundle(Locale locale) {
 			_locale = locale;
 
-			_languageMap = _languageMaps.get(locale);
+			Map<String, String> _languageMap = _languageMaps.get(locale);
 
 			if (_languageMap == null) {
 				_languageMap = _loadLocale(locale);
@@ -292,13 +292,13 @@ public class LanguageResources {
 
 		@Override
 		protected Object handleGetObject(String key) {
-			return _languageMap.get(key);
+			return getLanguageMap().get(key);
 		}
 
 		@Override
 		public Enumeration<String> getKeys() {
 			Enumeration<String> enumeration = Collections.enumeration(
-				_languageMap.keySet());
+				getLanguageMap().keySet());
 
 			if (parent == null) {
 				return enumeration;
@@ -313,7 +313,7 @@ public class LanguageResources {
 				throw new NullPointerException();
 			}
 
-			if (_languageMap.containsKey(key)) {
+			if (getLanguageMap().containsKey(key)) {
 				return true;
 			}
 
@@ -326,12 +326,14 @@ public class LanguageResources {
 
 		@Override
 		protected Set<String> handleKeySet() {
-			return _languageMap.keySet();
+			return getLanguageMap().keySet();
 		}
 
-		private Map<String, String> _languageMap;
+		private Map<String, String> getLanguageMap() {
+			return _languageMaps.get(_locale);
+		}
+
 		private final Locale _locale;
-		private Set<String> _keySet;
 	}
 
 }
