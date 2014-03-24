@@ -53,6 +53,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -379,18 +380,32 @@ public class LanguageImpl implements Language {
 	public String get(
 		PageContext pageContext, String key, String defaultValue) {
 
-		try {
-			ResourceBundle resourceBundle = _getResourceBundle(pageContext);
+		String value = null;
 
-			return _get(resourceBundle, key, defaultValue);
-		}
-		catch (Exception e) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(e, e);
+		ResourceBundle resourceBundle = _getResourceBundle(pageContext);
+
+		if (resourceBundle != null) {
+			try {
+				value = _get(resourceBundle, key);
 			}
-
-			return defaultValue;
+			catch (MissingResourceException e) {
+			}
 		}
+
+		if (value == null) {
+			HttpServletRequest request =
+				(HttpServletRequest)pageContext.getRequest();
+
+			Locale locale = _getLocale(request);
+
+			value = _get(LanguageResources.getResourceBundle(locale), key);
+		}
+
+		if (value == null) {
+			value = defaultValue;
+		}
+
+		return value;
 	}
 
 	@Override
@@ -817,13 +832,7 @@ public class LanguageImpl implements Language {
 			return null;
 		}
 
-		String value = ResourceBundleUtil.getString(resourceBundle, key);
-
-		if (value != null) {
-			return LanguageResources.fixValue(value);
-		}
-
-		if (value == null) {
+		if (!resourceBundle.containsKey(key)) {
 			if ((key.length() > 0) &&
 				(key.charAt(key.length() - 1) == CharPool.CLOSE_BRACKET)) {
 
@@ -835,6 +844,14 @@ public class LanguageImpl implements Language {
 					return _get(resourceBundle, key);
 				}
 			}
+
+			return null;
+		}
+
+		String value = ResourceBundleUtil.getString(resourceBundle, key);
+
+		if (value != null) {
+			return LanguageResources.fixValue(value);
 		}
 
 		return value;
@@ -894,13 +911,11 @@ public class LanguageImpl implements Language {
 
 		Locale locale = _getLocale(request);
 
-		if (portletConfig == null) {
-			return LanguageResources.getResourceBundle(locale);
+		if (portletConfig != null) {
+			return portletConfig.getResourceBundle(locale);
 		}
 
-		return new AggregateResourceBundle(
-			portletConfig.getResourceBundle(locale),
-			LanguageResources.getResourceBundle(locale));
+		return null;
 	}
 
 	private void _initGroupLocales(long groupId) {

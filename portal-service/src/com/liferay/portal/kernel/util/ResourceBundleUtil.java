@@ -17,6 +17,7 @@ package com.liferay.portal.kernel.util;
 import java.text.MessageFormat;
 
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
@@ -49,13 +50,11 @@ public class ResourceBundleUtil {
 	}
 
 	public static String getString(ResourceBundle resourceBundle, String key) {
-		String value = null;
-
 		try {
-			value = resourceBundle.getString(key);
+			return resourceBundle.getString(key);
 		}
-		finally {
-			return value;
+		catch (MissingResourceException mre) {
+			return null;
 		}
 	}
 

@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.EnumerationUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -32,6 +33,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -282,32 +284,54 @@ public class LanguageResources {
 			Locale superLocale = getSuperLocale(locale);
 
 			if (superLocale != null) {
-				setParent(getResourceBundle(superLocale));
+				ResourceBundle parentBundle = getResourceBundle(superLocale);
+
+				setParent(parentBundle);
 			}
 		}
 
 		@Override
 		protected Object handleGetObject(String key) {
-			return getMessage(_locale, key);
+			return _languageMap.get(key);
 		}
 
 		@Override
 		public Enumeration<String> getKeys() {
-			return Collections.enumeration(_languageMap.keySet());
+			Enumeration<String> enumeration = Collections.enumeration(
+				_languageMap.keySet());
+
+			if (parent == null) {
+				return enumeration;
+			}
+
+			return EnumerationUtil.compose(enumeration, parent.getKeys());
+		}
+
+		@Override
+		public boolean containsKey(String key) {
+			if (key == null) {
+				throw new NullPointerException();
+			}
+
+			if (_languageMap.containsKey(key)) {
+				return true;
+			}
+
+			if (parent != null) {
+				return parent.containsKey(key);
+			}
+
+			return false;
 		}
 
 		@Override
 		protected Set<String> handleKeySet() {
-			if (parent == null) {
-				return _languageMap.keySet();
-			}
-
-			return super.handleKeySet();
+			return _languageMap.keySet();
 		}
 
 		private Map<String, String> _languageMap;
-
 		private final Locale _locale;
+		private Set<String> _keySet;
 	}
 
 }

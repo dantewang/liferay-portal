@@ -31,40 +31,51 @@ public class AggregateResourceBundle extends ResourceBundle {
 	}
 
 	@Override
-	public Enumeration<String> getKeys() {
-		if (_enumerations == null) {
-			_enumerations = new Enumeration[_resourceBundles.length];
-
-			for (int i = 0; i < _resourceBundles.length; i++) {
-				_enumerations[i] = _resourceBundles[i].getKeys();
+	public boolean containsKey(String key) {
+		for (ResourceBundle resourceBundle : _resourceBundles) {
+			if (resourceBundle.containsKey(key)) {
+				return true;
 			}
 		}
 
-		return EnumerationUtil.<String>compose(_enumerations);
+		return false;
+	}
+
+	@Override
+	public Enumeration<String> getKeys() {
+		Enumeration<String>[] enumerations =
+			new Enumeration[_resourceBundles.length];
+
+		for (int i = 0; i < _resourceBundles.length; i++) {
+			enumerations[i] = _resourceBundles[i].getKeys();
+		}
+
+		return EnumerationUtil.<String>compose(enumerations);
 	}
 
 	@Override
 	protected Object handleGetObject(String key) {
-		for (ResourceBundle resourceBundle : _resourceBundles) {
-			Object object = null;
+		Object object = null;
 
+		for (ResourceBundle resourceBundle : _resourceBundles) {
+
+			if (!resourceBundle.containsKey(key)) {
+				continue;
+			}
 			try {
 				object = resourceBundle.getObject(key);
 			}
 			catch (MissingResourceException mre) {
 				continue;
 			}
-
 			if (object != null) {
-
 				return object;
 			}
 		}
 
-		throw FastMissingResourceException.BLANK_MISSING_RESOURCE_EXCEPTION;
+		return object;
 	}
 
-	private Enumeration<String>[] _enumerations;
 	private ResourceBundle[] _resourceBundles;
 
 }
