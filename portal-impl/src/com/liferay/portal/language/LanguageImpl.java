@@ -385,11 +385,7 @@ public class LanguageImpl implements Language {
 		ResourceBundle resourceBundle = _getResourceBundle(pageContext);
 
 		if (resourceBundle != null) {
-			try {
-				value = _get(resourceBundle, key);
-			}
-			catch (MissingResourceException e) {
-			}
+			value = _get(resourceBundle, key);
 		}
 
 		if (value == null) {
