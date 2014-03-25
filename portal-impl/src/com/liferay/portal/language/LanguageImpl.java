@@ -771,7 +771,7 @@ public class LanguageImpl implements Language {
 		if (instance == null) {
 			instance = new LanguageImpl(companyId);
 
-			_instances.put(companyId, instance);
+			_instances.putQuiet(companyId, instance);
 		}
 
 		return instance;
