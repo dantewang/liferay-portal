@@ -31,8 +31,7 @@ public class AggregateResourceBundle extends ResourceBundle {
 
 	@Override
 	public Enumeration<String> getKeys() {
-		Enumeration<String>[] enumerations =
-			new Enumeration[_resourceBundles.length];
+		Enumeration[] enumerations = new Enumeration[_resourceBundles.length];
 
 		for (int i = 0; i < _resourceBundles.length; i++) {
 			enumerations[i] = _resourceBundles[i].getKeys();
