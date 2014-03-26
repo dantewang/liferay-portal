@@ -353,11 +353,13 @@ public class LanguageImpl implements Language {
 		return value;
 	}
 
+	@Deprecated
 	@Override
 	public String get(Locale locale, String key) {
 		return get(locale, key, key);
 	}
 
+	@Deprecated
 	@Override
 	public String get(Locale locale, String key, String defaultValue) {
 		ResourceBundle resourceBundle = LanguageResources.getResourceBundle(
@@ -371,11 +373,13 @@ public class LanguageImpl implements Language {
 		}
 	}
 
+	@Deprecated
 	@Override
 	public String get(PageContext pageContext, String key) {
 		return get(pageContext, key, key);
 	}
 
+	@Deprecated
 	@Override
 	public String get(
 		PageContext pageContext, String key, String defaultValue) {
