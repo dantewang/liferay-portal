@@ -170,9 +170,21 @@ public class LanguageResources {
 
 		_languageMaps.put(locale, newLanguageMap);
 
-		_resourceBundles.remove(locale);
+		_removeResourceBundle(locale);
 
 		return oldLanguageMap;
+	}
+
+	private static void _removeResourceBundle(Locale locale) {
+		_resourceBundles.remove(locale);
+
+		Set<Locale> parentLocaleChildren = _parentChildrenMap.get(locale);
+
+		if (parentLocaleChildren != null) {
+			for (Locale childLocale : parentLocaleChildren) {
+				_removeResourceBundle(childLocale);
+			}
+		}
 	}
 
 	public void setConfig(String config) {
@@ -269,13 +281,13 @@ public class LanguageResources {
 		new ConcurrentHashMap<Locale, Map<String, String>>(64);
 	private static Map<Locale, ResourceBundle> _resourceBundles =
 		new ConcurrentHashMap<Locale, ResourceBundle>(64);
+	private static ConcurrentHashMap<Locale, Set<Locale>> _parentChildrenMap;
+
 
 	private static class LanguageResourcesBundle extends ResourceBundle {
 
 		private LanguageResourcesBundle(Locale locale) {
-			_locale = locale;
-
-			Map<String, String> _languageMap = _languageMaps.get(locale);
+			_languageMap = _languageMaps.get(locale);
 
 			if (_languageMap == null) {
 				_languageMap = _loadLocale(locale);
@@ -287,18 +299,26 @@ public class LanguageResources {
 				ResourceBundle parentBundle = getResourceBundle(superLocale);
 
 				setParent(parentBundle);
+
+				_parentChildrenMap.putIfAbsent(superLocale,
+					new HashSet<Locale>());
+
+				Set<Locale> parentLocaleChildren = _parentChildrenMap.get(
+					superLocale);
+
+				parentLocaleChildren.add(locale);
 			}
 		}
 
 		@Override
 		protected Object handleGetObject(String key) {
-			return getLanguageMap().get(key);
+			return _languageMap.get(key);
 		}
 
 		@Override
 		public Enumeration<String> getKeys() {
 			Enumeration<String> enumeration = Collections.enumeration(
-				getLanguageMap().keySet());
+				_languageMap.keySet());
 
 			if (parent == null) {
 				return enumeration;
@@ -313,7 +333,7 @@ public class LanguageResources {
 				throw new NullPointerException();
 			}
 
-			if (getLanguageMap().containsKey(key)) {
+			if (_languageMap.containsKey(key)) {
 				return true;
 			}
 
@@ -326,14 +346,10 @@ public class LanguageResources {
 
 		@Override
 		protected Set<String> handleKeySet() {
-			return getLanguageMap().keySet();
+			return _languageMap.keySet();
 		}
 
-		private Map<String, String> getLanguageMap() {
-			return _languageMaps.get(_locale);
-		}
-
-		private final Locale _locale;
+		private Map<String, String> _languageMap;
 	}
 
 }
