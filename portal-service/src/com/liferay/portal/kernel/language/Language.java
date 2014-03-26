@@ -89,12 +89,16 @@ public interface Language {
 		ResourceBundle resourceBundle, String pattern, Object[] arguments,
 		boolean translateArguments);
 
+	@Deprecated
 	public String get(Locale locale, String key);
 
+	@Deprecated
 	public String get(Locale locale, String key, String defaultValue);
 
+	@Deprecated
 	public String get(PageContext pageContext, String key);
 
+	@Deprecated
 	public String get(PageContext pageContext, String key, String defaultValue);
 
 	public String get(ResourceBundle resourceBundle, String key);
