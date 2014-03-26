@@ -40,6 +40,7 @@ import com.liferay.portlet.social.model.SocialRequestInterpreter;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.portlet.Portlet;
@@ -93,7 +94,7 @@ public interface PortletBag extends Cloneable {
 
 	public ResourceBundle getResourceBundle(Locale locale);
 
-	public ResourceBundleTracker getResourceBundleTracker();
+	public Map<String, ResourceBundle> getResourceBundles();
 
 	public ServletContext getServletContext();
 

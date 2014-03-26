@@ -32,7 +32,6 @@ import com.liferay.portal.kernel.portlet.FriendlyURLMapper;
 import com.liferay.portal.kernel.portlet.PortletBag;
 import com.liferay.portal.kernel.portlet.PortletBagPool;
 import com.liferay.portal.kernel.portlet.PortletLayoutListener;
-import com.liferay.portal.kernel.portlet.ResourceBundleTracker;
 import com.liferay.portal.kernel.portlet.Route;
 import com.liferay.portal.kernel.portlet.Router;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelperUtil;
@@ -183,17 +182,18 @@ public class PortletBagFactory {
 		List<PreferencesValidator> preferencesValidatorInstances =
 			newPreferencesValidatorInstances(portlet);
 
-		ResourceBundleTracker resourceBundleTracker = new ResourceBundleTracker(
-			portlet.getPortletId());
+		Map<String, ResourceBundle> resourceBundles = null;
 
 		String resourceBundle = portlet.getResourceBundle();
 
 		if (Validator.isNotNull(resourceBundle) &&
 			!resourceBundle.equals(StrutsResourceBundle.class.getName())) {
 
-			initResourceBundle(resourceBundleTracker, portlet, null);
+			resourceBundles = new HashMap<String, ResourceBundle>();
+
+			initResourceBundle(resourceBundles, portlet, null);
 			initResourceBundle(
-				resourceBundleTracker, portlet, LocaleUtil.getDefault());
+				resourceBundles, portlet, LocaleUtil.getDefault());
 
 			Set<String> supportedLanguageIds = portlet.getSupportedLocales();
 
@@ -204,25 +204,25 @@ public class PortletBagFactory {
 			for (String supportedLanguageId : supportedLanguageIds) {
 				Locale locale = LocaleUtil.fromLanguageId(supportedLanguageId);
 
-				initResourceBundle(resourceBundleTracker, portlet, locale);
+				initResourceBundle(resourceBundles, portlet, locale);
 			}
 		}
 
 		PortletBag portletBag = new PortletBagImpl(
 			portlet.getPortletId(), _servletContext, portletInstance,
-			resourceBundleTracker, configurationActionInstances,
-			indexerInstances, openSearchInstances, friendlyURLMapperInstances,
-			urlEncoderInstances, portletDataHandlerInstances,
-			stagedModelDataHandlerInstances, templateHandlerInstances,
-			portletLayoutListenerInstances, pollerProcessorInstances,
-			popMessageListenerInstances, socialActivityInterpreterInstances,
+			configurationActionInstances, indexerInstances, openSearchInstances,
+			friendlyURLMapperInstances, urlEncoderInstances,
+			portletDataHandlerInstances, stagedModelDataHandlerInstances,
+			templateHandlerInstances, portletLayoutListenerInstances,
+			pollerProcessorInstances, popMessageListenerInstances,
+			socialActivityInterpreterInstances,
 			socialRequestInterpreterInstances, userNotificationHandlerInstances,
 			webDAVStorageInstances, xmlRpcMethodInstances,
 			controlPanelEntryInstances, assetRendererFactoryInstances,
 			atomCollectionAdapterInstances, customAttributesDisplayInstances,
 			ddmDisplayInstances, permissionPropagatorInstances,
 			trashHandlerInstances, workflowHandlerInstances,
-			preferencesValidatorInstances);
+			preferencesValidatorInstances, resourceBundles);
 
 		PortletBagPool.put(portlet.getRootPortletId(), portletBag);
 
@@ -383,7 +383,7 @@ public class PortletBagFactory {
 	}
 
 	protected void initResourceBundle(
-		ResourceBundleTracker resourceBundleTracker, Portlet portlet,
+		Map<String, ResourceBundle> resourceBundles, Portlet portlet,
 		Locale locale) {
 
 		try {
@@ -394,9 +394,7 @@ public class PortletBagFactory {
 				ResourceBundle parentResourceBundle = null;
 
 				if (locale != null) {
-					parentResourceBundle =
-						resourceBundleTracker.getResouceBundle(
-							StringPool.BLANK);
+					parentResourceBundle = resourceBundles.get(null);
 				}
 
 				ResourceBundle resourceBundle = new LiferayResourceBundle(
@@ -408,7 +406,7 @@ public class PortletBagFactory {
 					languageId = LocaleUtil.toLanguageId(locale);
 				}
 
-				resourceBundleTracker.register(languageId, resourceBundle);
+				resourceBundles.put(languageId, resourceBundle);
 			}
 		}
 		catch (Exception e) {

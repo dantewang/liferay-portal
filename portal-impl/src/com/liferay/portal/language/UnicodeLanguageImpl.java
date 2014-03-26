@@ -170,22 +170,26 @@ public class UnicodeLanguageImpl implements UnicodeLanguage {
 				resourceBundle, pattern, arguments, translateArguments));
 	}
 
+	@Deprecated
 	@Override
 	public String get(Locale locale, String key) {
 		return UnicodeFormatter.toString(LanguageUtil.get(locale, key));
 	}
 
+	@Deprecated
 	@Override
 	public String get(Locale locale, String key, String defaultValue) {
 		return UnicodeFormatter.toString(
 			LanguageUtil.get(locale, key, defaultValue));
 	}
 
+	@Deprecated
 	@Override
 	public String get(PageContext pageContext, String key) {
 		return UnicodeFormatter.toString(LanguageUtil.get(pageContext, key));
 	}
 
+	@Deprecated
 	@Override
 	public String get(
 		PageContext pageContext, String key, String defaultValue) {

@@ -2976,7 +2976,7 @@ public class JournalArticleLocalServiceImpl
 
 	@Override
 	public JournalArticle getPreviousApprovedArticle(JournalArticle article)
-		throws PortalException, SystemException {
+		throws SystemException {
 
 		List<JournalArticle> approvedArticles =
 			journalArticlePersistence.findByG_A_ST(

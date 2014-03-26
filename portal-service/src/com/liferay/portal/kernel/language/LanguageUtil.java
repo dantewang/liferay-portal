@@ -154,18 +154,22 @@ public class LanguageUtil {
 			resourceBundle, pattern, arguments, translateArguments);
 	}
 
+	@Deprecated
 	public static String get(Locale locale, String key) {
 		return getLanguage().get(locale, key);
 	}
 
+	@Deprecated
 	public static String get(Locale locale, String key, String defaultValue) {
 		return getLanguage().get(locale, key, defaultValue);
 	}
 
+	@Deprecated
 	public static String get(PageContext pageContext, String key) {
 		return getLanguage().get(pageContext, key);
 	}
 
+	@Deprecated
 	public static String get(
 		PageContext pageContext, String key, String defaultValue) {
 

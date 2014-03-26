@@ -15,6 +15,7 @@
 package com.liferay.portal.language;
 
 import com.liferay.portal.kernel.util.EnumerationUtil;
+import com.liferay.portal.kernel.util.ResourceBundleUtil;
 
 import java.util.Enumeration;
 import java.util.MissingResourceException;
@@ -27,6 +28,17 @@ public class AggregateResourceBundle extends ResourceBundle {
 
 	public AggregateResourceBundle(ResourceBundle... resourceBundles) {
 		_resourceBundles = resourceBundles;
+	}
+
+	@Override
+	public boolean containsKey(String key) {
+		for (ResourceBundle resourceBundle : _resourceBundles) {
+			if (resourceBundle.containsKey(key)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override
@@ -43,22 +55,25 @@ public class AggregateResourceBundle extends ResourceBundle {
 
 	@Override
 	protected Object handleGetObject(String key) {
-		for (ResourceBundle resourceBundle : _resourceBundles) {
-			Object object = null;
+		Object object = null;
 
+		for (ResourceBundle resourceBundle : _resourceBundles) {
+
+			if (!resourceBundle.containsKey(key)) {
+				continue;
+			}
 			try {
 				object = resourceBundle.getObject(key);
 			}
 			catch (MissingResourceException mre) {
 				continue;
 			}
-
 			if (object != null) {
 				return object;
 			}
 		}
 
-		return null;
+		return object;
 	}
 
 	private ResourceBundle[] _resourceBundles;

@@ -138,18 +138,22 @@ public class UnicodeLanguageUtil {
 			resourceBundle, pattern, arguments, translateArguments);
 	}
 
+	@Deprecated
 	public static String get(Locale locale, String key) {
 		return getUnicodeLanguage().get(locale, key);
 	}
 
+	@Deprecated
 	public static String get(Locale locale, String key, String defaultValue) {
 		return getUnicodeLanguage().get(locale, key, defaultValue);
 	}
 
+	@Deprecated
 	public static String get(PageContext pageContext, String key) {
 		return getUnicodeLanguage().get(pageContext, key);
 	}
 
+	@Deprecated
 	public static String get(
 		PageContext pageContext, String key, String defaultValue) {
 
