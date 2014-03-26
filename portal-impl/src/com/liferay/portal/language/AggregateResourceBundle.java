@@ -31,13 +31,15 @@ public class AggregateResourceBundle extends ResourceBundle {
 
 	@Override
 	public Enumeration<String> getKeys() {
-		Enumeration[] enumerations = new Enumeration[_resourceBundles.length];
+		if (_enumerations == null) {
+			_enumerations = new Enumeration[_resourceBundles.length];
 
-		for (int i = 0; i < _resourceBundles.length; i++) {
-			enumerations[i] = _resourceBundles[i].getKeys();
+			for (int i = 0; i < _resourceBundles.length; i++) {
+				_enumerations[i] = _resourceBundles[i].getKeys();
+			}
 		}
 
-		return EnumerationUtil.<String>compose(enumerations);
+		return EnumerationUtil.<String>compose(_enumerations);
 	}
 
 	@Override
@@ -57,9 +59,12 @@ public class AggregateResourceBundle extends ResourceBundle {
 			}
 		}
 
-		return null;
+		throw new MissingResourceException(
+			"Unable to find resource", AggregateResourceBundle.class.getName(),
+			key);
 	}
 
+	private Enumeration<String>[] _enumerations;
 	private ResourceBundle[] _resourceBundles;
 
 }
