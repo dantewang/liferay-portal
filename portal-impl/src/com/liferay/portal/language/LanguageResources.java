@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.tools.LangBuilder;
+import org.apache.ecs.xhtml.sup;
 
 import java.io.InputStream;
 
@@ -281,12 +282,17 @@ public class LanguageResources {
 		new ConcurrentHashMap<Locale, Map<String, String>>(64);
 	private static Map<Locale, ResourceBundle> _resourceBundles =
 		new ConcurrentHashMap<Locale, ResourceBundle>(64);
-	private static ConcurrentHashMap<Locale, Set<Locale>> _parentChildrenMap;
+	private static ConcurrentHashMap<Locale, Set<Locale>> _parentChildrenMap =
+		new ConcurrentHashMap<Locale, Set<Locale>>();
 
 
 	private static class LanguageResourcesBundle extends ResourceBundle {
 
+		private Locale _locale;
+
 		private LanguageResourcesBundle(Locale locale) {
+			_locale = locale;
+
 			_languageMap = _languageMaps.get(locale);
 
 			if (_languageMap == null) {
@@ -347,6 +353,11 @@ public class LanguageResources {
 		@Override
 		protected Set<String> handleKeySet() {
 			return _languageMap.keySet();
+		}
+
+		@Override
+		public Locale getLocale() {
+			return _locale;
 		}
 
 		private Map<String, String> _languageMap;
