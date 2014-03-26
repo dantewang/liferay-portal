@@ -380,6 +380,10 @@ public class LanguageImpl implements Language {
 	public String get(
 		PageContext pageContext, String key, String defaultValue) {
 
+		if ((pageContext == null) || (key == null)) {
+			return defaultValue;
+		}
+
 		String value = null;
 
 		ResourceBundle resourceBundle = _getResourceBundle(pageContext);
