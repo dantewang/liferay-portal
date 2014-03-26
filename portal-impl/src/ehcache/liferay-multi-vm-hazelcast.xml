@@ -74,7 +74,7 @@
 			Any integer between 0 and Integer.MAX_VALUE. 0 means infinite. Default is 0.
 		-->
 
-		<max-idle-seconds>600</max-idle-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
 
 		<!--
 			Valid values are:
@@ -93,7 +93,7 @@
 			Integer.MAX_VALUE. Default is 0.
 		-->
 
-		<max-size policy="PER_NODE">10000</max-size>
+		<max-size policy="PER_NODE">100000</max-size>
 
 		<!--
 			When max. size is reached, specified percentage of
@@ -120,6 +120,360 @@
 			com.hazelcast.map.merge.LatestUpdateMapMergePolicy ; entry with the latest update wins.
 		-->
 
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+
+
+	<map name="com.liferay.portal.security.permission.PermissionCacheUtil_PERMISSION">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">400000</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.EntityCache.com.liferay.portal.model.impl.CompanyImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">1</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.CompanyImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">1</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.CompanyImpl.List">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">1</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.GroupImpl.List">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">1</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.LayoutPrototypeImpl.List">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">1</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.EntityCache.com.liferay.portal.model.impl.PasswordPolicyImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">1</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.PasswordPolicyImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">2</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.PermissionImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">0</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.PermissionImpl.List">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">7</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.EntityCache.com.liferay.portal.model.impl.ResourceCodeImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">1</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.ResourceImpl.List">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">0</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.EntityCache.com.liferay.portal.model.impl.RoleImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">11</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.RoleImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">22</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.RoleImpl.List">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">1</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portlet.asset.model.impl.AssetEntryImpl.List">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">0</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.EntityCache.com.liferay.portlet.asset.model.impl.AssetVocabularyImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">1</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portlet.asset.model.impl.AssetVocabularyImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">0</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portlet.asset.model.impl.AssetVocabularyImpl.List">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">1</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.Roles_Permissions">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">6</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.servlet.ImageServletToken">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">1</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.model.Portlet">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">2</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.velocity.LiferayResourceCacheUtil">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">10000</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portlet.social.service.impl.SocialEquitySettingLocalServiceImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">1</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.UserImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">400000</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.Users_Orgs">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">1</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.Users_Roles">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">200000</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.GroupImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">800000</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.LayoutFriendlyURLImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">400000</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.LayoutImpl.List2">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">400000</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.EntityCache.com.liferay.portal.model.impl.LayoutSetImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">200000</max-size>
+		<eviction-percentage>25</eviction-percentage>
+		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
+	</map>
+	<map name="com.liferay.portal.kernel.dao.orm.FinderCache.com.liferay.portal.model.impl.LayoutSetImpl">
+		<in-memory-format>OBJECT</in-memory-format>
+		<backup-count>0</backup-count>
+		<async-backup-count>1</async-backup-count>
+		<time-to-live-seconds>0</time-to-live-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
+		<eviction-policy>LRU</eviction-policy>
+		<max-size policy="PER_NODE">200000</max-size>
+		<eviction-percentage>25</eviction-percentage>
 		<merge-policy>com.hazelcast.map.merge.PassThroughMergePolicy</merge-policy>
 	</map>
 
