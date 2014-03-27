@@ -25,6 +25,10 @@ import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.xml.Document;
+import com.liferay.portal.kernel.xml.DocumentException;
+import com.liferay.portal.kernel.xml.SAXReaderUtil;
+import com.liferay.portal.model.CacheField;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.service.ImageLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -145,6 +149,16 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 	}
 
 	@Override
+	public Document getContentAsXMLDocument() throws DocumentException {
+
+		if (_document == null) {
+			_document = SAXReaderUtil.read(getContent());
+		}
+
+		return _document;
+	}
+
+	@Override
 	public String getContentByLocale(String languageId) {
 		return getContentByLocale(getContent(), languageId);
 	}
@@ -251,9 +265,19 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 	}
 
 	@Override
+	public void setContent(String content) {
+		super.setContent(content);
+
+		_document = null;
+	}
+
+	@Override
 	public void setSmallImageType(String smallImageType) {
 		_smallImageType = smallImageType;
 	}
+
+	@CacheField
+	private Document _document;
 
 	private String _smallImageType;
 
