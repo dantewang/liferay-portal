@@ -18,6 +18,8 @@ import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.lar.StagedModelType;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.templateparser.TransformerListener;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -128,11 +130,19 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 		Set<String> availableLanguageIds = SetUtil.fromArray(
 			super.getAvailableLanguageIds());
 
-		String[] contentAvailableLanguageIds =
-			LocalizationUtil.getAvailableLanguageIds(getContent());
+		try {
+			Document document = getContentAsXMLDocument();
 
-		for (String availableLanguageId : contentAvailableLanguageIds) {
-			availableLanguageIds.add(availableLanguageId);
+			for (String availableLanguageId :
+					LocalizationUtil.getAvailableLanguageIds(document)) {
+
+				availableLanguageIds.add(availableLanguageId);
+			}
+		}
+		catch (DocumentException de) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(de, de);
+			}
 		}
 
 		return availableLanguageIds.toArray(
@@ -275,6 +285,8 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 	public void setSmallImageType(String smallImageType) {
 		_smallImageType = smallImageType;
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(JournalArticleImpl.class);
 
 	@CacheField
 	private Document _document;
