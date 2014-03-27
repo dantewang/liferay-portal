@@ -1840,6 +1840,9 @@ public class JournalArticleLocalServiceImpl
 					paginate = true;
 				}
 			}
+			else {
+				rootElement = rootElement.createCopy();
+			}
 
 			JournalUtil.addAllReservedEls(
 				rootElement, tokens, article, languageId, themeDisplay);
