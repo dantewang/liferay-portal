@@ -1793,15 +1793,17 @@ public class JournalArticleLocalServiceImpl
 			if (!pages.isEmpty()) {
 				pageFlow = true;
 
+				String targetPage = null;
+
 				Map<String, String[]> parameters =
 					portletRequestModel.getParameters();
 
-				String[] values = parameters.get("targetPage");
+				if (parameters != null) {
+					String[] values = parameters.get("targetPage");
 
-				String targetPage = null;
-
-				if ((values != null) && (values.length > 0)) {
-					targetPage = values[0];
+					if ((values != null) && (values.length > 0)) {
+						targetPage = values[0];
+					}
 				}
 
 				Element pageElement = null;
