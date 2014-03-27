@@ -74,7 +74,7 @@
 			Any integer between 0 and Integer.MAX_VALUE. 0 means infinite. Default is 0.
 		-->
 
-		<max-idle-seconds>600</max-idle-seconds>
+		<max-idle-seconds>0</max-idle-seconds>
 
 		<!--
 			Valid values are:
@@ -93,7 +93,7 @@
 			Integer.MAX_VALUE. Default is 0.
 		-->
 
-		<max-size policy="PER_NODE">10000</max-size>
+		<max-size policy="PER_NODE">1000000</max-size>
 
 		<!--
 			When max. size is reached, specified percentage of
