@@ -1781,10 +1781,10 @@ public class JournalArticleLocalServiceImpl
 		tokens.put("structure_id", article.getStructureId());
 		tokens.put("template_id", ddmTemplateKey);
 
-		String xml = article.getContent();
+		String xml = null;
 
 		try {
-			Document document = SAXReaderUtil.read(xml);
+			Document document = article.getContentAsXMLDocument();
 
 			Element rootElement = document.getRootElement();
 
@@ -2014,10 +2014,10 @@ public class JournalArticleLocalServiceImpl
 		tokens.put("structure_id", article.getStructureId());
 		tokens.put("template_id", ddmTemplateKey);
 
-		String xml = article.getContent();
+		String xml = null;
 
 		try {
-			Document document = SAXReaderUtil.read(xml);
+			Document document = article.getContentAsXMLDocument();
 
 			Element rootElement = document.getRootElement();
 
@@ -3836,9 +3836,15 @@ public class JournalArticleLocalServiceImpl
 
 		String content = article.getContent();
 
-		content = JournalUtil.removeArticleLocale(content, languageId);
+		try {
+			content = JournalUtil.removeArticleLocale(
+				article.getContentAsXMLDocument(), content, languageId);
 
-		article.setContent(content);
+			article.setContent(content);
+		}
+		catch (DocumentException de) {
+			_log.error(de, de);
+		}
 
 		journalArticlePersistence.update(article);
 
@@ -6086,13 +6092,12 @@ public class JournalArticleLocalServiceImpl
 				article.getStructureId());
 		}
 
-		String content = GetterUtil.getString(article.getContent());
-
 		try {
-			Document contentDocument = SAXReaderUtil.read(content);
 			Document xsdDocument = SAXReaderUtil.read(structure.getXsd());
 
-			checkStructure(contentDocument, xsdDocument.getRootElement());
+			checkStructure(
+				article.getContentAsXMLDocument(),
+				xsdDocument.getRootElement());
 		}
 		catch (DocumentException de) {
 			throw new SystemException(de);
@@ -6167,7 +6172,9 @@ public class JournalArticleLocalServiceImpl
 			JournalArticle oldArticle, JournalArticle newArticle)
 		throws Exception {
 
-		Document contentDoc = SAXReaderUtil.read(oldArticle.getContent());
+		Document contentDoc = oldArticle.getContentAsXMLDocument();
+
+		contentDoc = contentDoc.clone();
 
 		XPath xPathSelector = SAXReaderUtil.createXPath(
 			"//dynamic-element[@type='image']");
