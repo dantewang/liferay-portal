@@ -194,6 +194,22 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 	}
 
 	@Override
+	public Document getDocument() {
+		if (_document == null) {
+			try {
+				_document = SAXReaderUtil.read(getContent());
+			}
+			catch (DocumentException de) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(de, de);
+				}
+			}
+		}
+
+		return _document;
+	}
+
+	@Override
 	public JournalFolder getFolder() throws PortalException, SystemException {
 		if (getFolderId() <= 0) {
 			return new JournalFolderImpl();
