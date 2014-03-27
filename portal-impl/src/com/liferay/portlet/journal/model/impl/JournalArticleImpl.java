@@ -160,7 +160,6 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 
 	@Override
 	public Document getContentAsXMLDocument() throws DocumentException {
-
 		if (_document == null) {
 			_document = SAXReaderUtil.read(getContent());
 		}
@@ -279,6 +278,11 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 		super.setContent(content);
 
 		_document = null;
+	}
+
+	@Override
+	public void setDocument(Document document) {
+		_document = document;
 	}
 
 	@Override
