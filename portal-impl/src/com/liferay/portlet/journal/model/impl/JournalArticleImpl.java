@@ -18,6 +18,8 @@ import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.lar.StagedModelType;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.templateparser.TransformerListener;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -25,6 +27,10 @@ import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.xml.Document;
+import com.liferay.portal.kernel.xml.DocumentException;
+import com.liferay.portal.kernel.xml.SAXReaderUtil;
+import com.liferay.portal.model.CacheField;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.service.ImageLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -124,11 +130,19 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 		Set<String> availableLanguageIds = SetUtil.fromArray(
 			super.getAvailableLanguageIds());
 
-		String[] contentAvailableLanguageIds =
-			LocalizationUtil.getAvailableLanguageIds(getContent());
+		try {
+			Document document = getContentAsXMLDocument();
 
-		for (String availableLanguageId : contentAvailableLanguageIds) {
-			availableLanguageIds.add(availableLanguageId);
+			for (String availableLanguageId :
+					LocalizationUtil.getAvailableLanguageIds(document)) {
+
+				availableLanguageIds.add(availableLanguageId);
+			}
+		}
+		catch (DocumentException de) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(de, de);
+			}
 		}
 
 		return availableLanguageIds.toArray(
@@ -142,6 +156,15 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 	@Override
 	public String[] getAvailableLocales() {
 		return getAvailableLanguageIds();
+	}
+
+	@Override
+	public Document getContentAsXMLDocument() throws DocumentException {
+		if (_document == null) {
+			_document = SAXReaderUtil.read(getContent());
+		}
+
+		return _document;
 	}
 
 	@Override
@@ -168,6 +191,22 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 	@Override
 	public String getDefaultLocale() {
 		return getDefaultLanguageId();
+	}
+
+	@Override
+	public Document getDocument() {
+		if (_document == null) {
+			try {
+				_document = SAXReaderUtil.read(getContent());
+			}
+			catch (DocumentException de) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(de, de);
+				}
+			}
+		}
+
+		return _document;
 	}
 
 	@Override
@@ -251,9 +290,26 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 	}
 
 	@Override
+	public void setContent(String content) {
+		super.setContent(content);
+
+		_document = null;
+	}
+
+	@Override
+	public void setDocument(Document document) {
+		_document = document;
+	}
+
+	@Override
 	public void setSmallImageType(String smallImageType) {
 		_smallImageType = smallImageType;
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(JournalArticleImpl.class);
+
+	@CacheField
+	private Document _document;
 
 	private String _smallImageType;
 

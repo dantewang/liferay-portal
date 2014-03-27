@@ -1653,6 +1653,12 @@ public class JournalArticleWrapper implements JournalArticle,
 	}
 
 	@Override
+	public com.liferay.portal.kernel.xml.Document getContentAsXMLDocument()
+		throws com.liferay.portal.kernel.xml.DocumentException {
+		return _journalArticle.getContentAsXMLDocument();
+	}
+
+	@Override
 	public java.lang.String getContentByLocale(java.lang.String languageId) {
 		return _journalArticle.getContentByLocale(languageId);
 	}

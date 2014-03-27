@@ -70,6 +70,9 @@ public interface JournalArticle extends JournalArticleModel, PersistedModel,
 	@java.lang.Deprecated()
 	public java.lang.String[] getAvailableLocales();
 
+	public com.liferay.portal.kernel.xml.Document getContentAsXMLDocument()
+		throws com.liferay.portal.kernel.xml.DocumentException;
+
 	public java.lang.String getContentByLocale(java.lang.String languageId);
 
 	/**
