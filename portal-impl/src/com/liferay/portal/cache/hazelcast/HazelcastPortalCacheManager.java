@@ -64,7 +64,7 @@ public class HazelcastPortalCacheManager <K extends Serializable, V>
 		try {
 			Config config = new XmlConfigBuilder(inputStream).build();
 
-			config.setClassLoader(PortalClassLoaderUtil.getClassLoader());
+//			config.setClassLoader(PortalClassLoaderUtil.getClassLoader());
 
 			config.setProperty("hazelcast.shutdownhook.enabled", "false");
 
