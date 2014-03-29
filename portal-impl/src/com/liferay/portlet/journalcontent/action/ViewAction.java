@@ -77,14 +77,14 @@ public class ViewAction extends WebContentAction {
 				renderRequest, "ddmTemplateKey");
 		}
 
-		String viewMode = ParamUtil.getString(renderRequest, "viewMode");
-		String languageId = LanguageUtil.getLanguageId(renderRequest);
-		int page = ParamUtil.getInteger(renderRequest, "page", 1);
-
 		JournalArticle article = null;
 		JournalArticleDisplay articleDisplay = null;
 
 		if ((articleGroupId > 0) && Validator.isNotNull(articleId)) {
+			String viewMode = ParamUtil.getString(renderRequest, "viewMode");
+			String languageId = LanguageUtil.getLanguageId(renderRequest);
+			int page = ParamUtil.getInteger(renderRequest, "page", 1);
+
 			PortletRequestModel portletRequestModel = new PortletRequestModel(
 				renderRequest, renderResponse);
 
