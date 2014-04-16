@@ -448,6 +448,10 @@
 		<priority value="ERROR" />
 	</category>
 
+	<category name="com.liferay.portal.search.lucene.LuceneIndexer">
+		<priority value="INFO" />
+	</category>
+
 	<category name="com.liferay.portal.search.lucene.LuceneFileExtractor">
 		<priority value="ERROR" />
 	</category>
