@@ -271,6 +271,10 @@ public class AutoDeployDir {
 				(fileName.endsWith(".jar") || fileName.endsWith(".lpkg") ||
 				 fileName.endsWith(".war") || fileName.endsWith(".xml") ||
 				 fileName.endsWith(".zip"))) {
+				
+				if (fileName.contains("marketplace")) {
+					continue;
+				}
 
 				processFile(file);
 			}
