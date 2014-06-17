@@ -12,34 +12,15 @@
  * details.
  */
 
-package com.liferay.portal.model;
+package com.liferay.portal.kernel.cache;
 
-import com.liferay.portal.servlet.filters.cache.CacheUtil;
+import java.util.Map;
 
 /**
- * @author Alexander Chow
- * @author Raymond Augé
+ * @author Tina Tian
  */
-public class LayoutSetListener extends BaseModelListener<LayoutSet> {
+public interface IndexedFieldExtractor<K, V> {
 
-	@Override
-	public void onAfterRemove(LayoutSet layoutSet) {
-		clearCache(layoutSet);
-	}
-
-	@Override
-	public void onAfterUpdate(LayoutSet layoutSet) {
-		clearCache(layoutSet);
-	}
-
-	protected void clearCache(LayoutSet layoutSet) {
-		if (layoutSet == null) {
-			return;
-		}
-
-		if (!layoutSet.isPrivateLayout()) {
-			CacheUtil.clearCache(layoutSet.getCompanyId());
-		}
-	}
+	Map<String, String> getIndexedFields(K key, V value);
 
 }
