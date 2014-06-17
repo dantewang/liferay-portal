@@ -12,6 +12,9 @@ http.enabled: true
 index.number_of_shards: 1
 index.number_of_replicas: 0
 
+index.merge.policy.type: org.elasticsearch.index.merge.policy.LogDocMergePolicyProvider
+index.merge.policy.merge_factor: 10
+
 index.search.slowlog.threshold.query.debug: 2s
 index.search.slowlog.threshold.query.info: 5s
 index.search.slowlog.threshold.query.trace: 500ms
