@@ -16,7 +16,10 @@ package com.liferay.portal.cache.ehcache;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,18 +27,32 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
+import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FieldSelector;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.MultiReader;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.index.TermDocs;
+import org.apache.lucene.index.TermEnum;
+import org.apache.lucene.index.TermFreqVector;
+import org.apache.lucene.index.TermPositions;
+import org.apache.lucene.index.TermVectorMapper;
 import org.apache.lucene.index.memory.MemoryIndex;
 import org.apache.lucene.search.Collector;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Scorer;
+import org.apache.lucene.store.AlreadyClosedException;
 
 /**
  * @author Tina Tian
  */
 public class CacheIndexAccessor {
+
+	public CacheIndexAccessor() throws IOException {
+		_memoryIndexSearcherManager = new MemoryIndexSearcherManager();
+	}
 
 	public void addDocument(String key, Field ... fields) throws IOException {
 		MemoryIndex memoryIndex = new MemoryIndex();
@@ -45,37 +62,73 @@ public class CacheIndexAccessor {
 				field.name(), _keywordTokenStream(field.stringValue()));
 		}
 
-		_indexes.put(key, memoryIndex.createSearcher());
+		IndexSearcher indexSearcher = memoryIndex.createSearcher();
+
+		_indexes.put(
+			key,
+			new LiferayMemoryIndexReader(indexSearcher.getIndexReader(), key));
+
+		_memoryIndexSearcherManager.invalidate();
 	}
 
 	public void clear() throws IOException {
 		_indexes.clear();
+
+		_memoryIndexSearcherManager.invalidate();
 	}
 
 	public void close() throws IOException {
 		_indexes.clear();
+
+		_memoryIndexSearcherManager.invalidate();
 	}
 
 	public void removeDocument(String key) throws IOException {
 		_indexes.remove(key);
+
+		_memoryIndexSearcherManager.invalidate();
 	}
 
-	public Set<String> search(Query query) {
+	public Set<String> search(Query query) throws IOException {
 		if (query == null) {
 			throw new IllegalArgumentException("query must not be null");
 		}
 
-		Set<String> result = new HashSet<String>();
+		IndexSearcher indexSearcher = _memoryIndexSearcherManager.acquire();
 
-		for (Map.Entry<String, IndexSearcher> entry : _indexes.entrySet()) {
-			IndexSearcher indexSearcher = entry.getValue();
+		final Set<String> results = new HashSet<String>();
 
-			if (search(indexSearcher, query) > 0.0f) {
-				result.add(entry.getKey());
-			}
-		}
+		indexSearcher.search(
+			query,
+			new Collector() {
 
-		return result;
+				private IndexReader _indexReader;
+
+				@Override
+				public void collect(int doc) throws IOException {
+					LiferayMemoryIndexReader liferayIndexReader =
+						(LiferayMemoryIndexReader)_indexReader;
+
+					results.add(liferayIndexReader.getKey());
+				}
+
+				@Override
+				public void setScorer(Scorer scorer) {
+				}
+
+				@Override
+				public boolean acceptsDocsOutOfOrder() {
+					return false;
+				}
+
+				@Override
+				public void setNextReader(IndexReader reader, int i) {
+					_indexReader = reader;
+				}
+
+			});
+
+		return results;
 	}
 
 	private <T> TokenStream _keywordTokenStream(final T keyword) {
@@ -108,63 +161,183 @@ public class CacheIndexAccessor {
 		};
 	}
 
-	private float search(IndexSearcher searcher, Query query) {
-		try {
-			final float[] scores = new float[1]; // inits to 0.0f (no match)
+	private Map<String, LiferayMemoryIndexReader> _indexes =
+		new ConcurrentHashMap<String, LiferayMemoryIndexReader>();
+	private MemoryIndexSearcherManager _memoryIndexSearcherManager;
 
-			searcher.search(
-				query,
-				new Collector() {
+	private class LiferayMemoryIndexReader extends IndexReader {
 
-					private Scorer scorer;
-
-					@Override
-					public void collect(int doc) throws IOException {
-						scores[0] = scorer.score();
-					}
-
-					@Override
-					public void setScorer(Scorer scorer) {
-						this.scorer = scorer;
-					}
-
-					@Override
-					public boolean acceptsDocsOutOfOrder() {
-						return true;
-					}
-
-					@Override
-					public void setNextReader(IndexReader reader, int i) {
-					}
-
-				});
-
-			return scores[0];
+		public LiferayMemoryIndexReader(IndexReader indexReader, String key) {
+			_indexReader = indexReader;
+			_key = key;
 		}
-		catch (IOException e) { // can never happen (RAMDirectory)
-			throw new RuntimeException(e);
-		}
-		finally {
 
-		  // searcher.close();
-
-		/*
-		   * Note that it is harmless and important for good performance to
-		   * NOT close the index reader!!! This avoids all sorts of
-		   * unnecessary baggage and locking in the Lucene IndexReader
-		   * superclass, all of which is completely unnecessary for this main
-		   * memory index data structure without thread-safety claims.
-		   *
-		   * Wishing IndexReader would be an interface...
-		   *
-		   * Actually with the new tight createSearcher() API auto-closing is now
-		   * made impossible, hence searcher.close() would be harmless and also
-		   * would not degrade performance...
-		   */
+		public String getKey() {
+			return _key;
 		}
+
+		public int docFreq(Term term) throws IOException {
+			return _indexReader.docFreq(term);
+		}
+
+		public TermEnum terms() throws IOException {
+			return _indexReader.terms();
+		}
+
+		public TermEnum terms(Term term) throws IOException {
+			return _indexReader.terms(term);
+		}
+
+		public TermPositions termPositions() throws IOException {
+			return _indexReader.termPositions();
+		}
+
+		public TermDocs termDocs() throws IOException {
+			return _indexReader.termDocs();
+		}
+
+		public TermFreqVector[] getTermFreqVectors(int docNumber)
+			throws IOException {
+
+			return _indexReader.getTermFreqVectors(docNumber);
+		}
+
+		public void getTermFreqVector(int docNumber, TermVectorMapper mapper)
+			throws IOException {
+
+			_indexReader.getTermFreqVector(docNumber, mapper);
+		}
+
+		public void getTermFreqVector(
+				int docNumber, String field, TermVectorMapper mapper)
+			throws IOException {
+
+			_indexReader.getTermFreqVector(docNumber, field, mapper);
+		}
+
+		public TermFreqVector getTermFreqVector(int docNumber, String fieldName)
+			throws IOException {
+
+			return _indexReader.getTermFreqVector(docNumber, fieldName);
+		}
+
+		public byte[] norms(String fieldName) throws IOException {
+			return _indexReader.norms(fieldName);
+		}
+
+		public void norms(String fieldName, byte[] bytes, int offset)
+			throws IOException {
+
+			_indexReader.norms(fieldName, bytes, offset);
+		}
+
+		protected void doSetNorm(int doc, String fieldName, byte value)
+			throws IOException {
+
+			throw new UnsupportedOperationException();
+		}
+
+		public int numDocs() {
+			return _indexReader.numDocs();
+		}
+
+		public int maxDoc() {
+			return _indexReader.maxDoc();
+		}
+
+		public Document document(int n) throws IOException {
+			return _indexReader.document(n);
+		}
+
+		public Document document(int n, FieldSelector fieldSelector)
+			throws IOException {
+
+			return _indexReader.document(n, fieldSelector);
+		}
+
+		public boolean isDeleted(int n) {
+			return _indexReader.isDeleted(n);
+		}
+
+		public boolean hasDeletions() {
+			return _indexReader.hasDeletions();
+		}
+
+		protected void doDelete(int docNum) {
+			throw new UnsupportedOperationException();
+		}
+
+		protected void doUndeleteAll() {
+			throw new UnsupportedOperationException();
+		}
+
+		protected void doCommit(Map<String, String> commitUserData) {
+			throw new UnsupportedOperationException();
+		}
+
+		protected void doClose() {
+			throw new UnsupportedOperationException();
+		}
+
+		public Collection<String> getFieldNames(
+			IndexReader.FieldOption fieldOption) {
+
+			return _indexReader.getFieldNames(fieldOption);
+		}
+
+		private String _key;
+		private IndexReader _indexReader;
+
 	}
 
-	private Map<String, IndexSearcher> _indexes =
-		new ConcurrentHashMap<String, IndexSearcher>();
+	private class MemoryIndexSearcherManager {
+
+		public MemoryIndexSearcherManager() throws IOException {
+			_indexSearcher = _createIndexSearcher();
+		}
+
+		public IndexSearcher acquire() throws IOException {
+			if (_invalid) {
+				synchronized (this) {
+					if (_invalid) {
+						IndexSearcher indexSearcher = _indexSearcher;
+
+						if (indexSearcher == null) {
+							throw new AlreadyClosedException(
+								"Index searcher manager is closed");
+						}
+
+						_indexSearcher = _createIndexSearcher();
+
+						_invalid = false;
+					}
+				}
+			}
+
+			return _indexSearcher;
+		}
+
+		public synchronized void close() throws IOException {
+			_indexSearcher = null;
+		}
+
+		public synchronized void invalidate() {
+			_invalid = true;
+		}
+
+		private IndexSearcher _createIndexSearcher() {
+			List<LiferayMemoryIndexReader> indexReaders =
+				new ArrayList<LiferayMemoryIndexReader>(_indexes.values());
+
+			IndexReader indexReader = new MultiReader(
+				indexReaders.toArray(new IndexReader[0]));
+
+			return new IndexSearcher(indexReader);
+		}
+
+		private volatile IndexSearcher _indexSearcher;
+		private volatile boolean _invalid;
+
+	}
 
 }
