@@ -237,20 +237,6 @@ public abstract class JournalFolderLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the journal folder with the matching UUID and company.
-	 *
-	 * @param uuid the journal folder's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching journal folder, or <code>null</code> if a matching journal folder could not be found
-	 */
-	@Override
-	public JournalFolder fetchJournalFolderByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return journalFolderPersistence.fetchByUuid_C_First(uuid, companyId,
-			null);
-	}
-
-	/**
 	 * Returns the journal folder matching the UUID and group.
 	 *
 	 * @param uuid the journal folder's UUID
@@ -376,18 +362,18 @@ public abstract class JournalFolderLocalServiceBaseImpl
 		return journalFolderPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the journal folder with the matching UUID and company.
-	 *
-	 * @param uuid the journal folder's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching journal folder
-	 * @throws PortalException if a matching journal folder could not be found
-	 */
 	@Override
-	public JournalFolder getJournalFolderByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return journalFolderPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<JournalFolder> getJournalFoldersByUuidAndCompanyId(
+		String uuid, long companyId) {
+		return journalFolderPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<JournalFolder> getJournalFoldersByUuidAndCompanyId(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator orderByComparator) {
+		return journalFolderPersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

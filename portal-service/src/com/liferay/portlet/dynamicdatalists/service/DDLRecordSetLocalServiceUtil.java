@@ -232,18 +232,6 @@ public class DDLRecordSetLocalServiceUtil {
 	}
 
 	/**
-	* Returns the d d l record set with the matching UUID and company.
-	*
-	* @param uuid the d d l record set's UUID
-	* @param companyId the primary key of the company
-	* @return the matching d d l record set, or <code>null</code> if a matching d d l record set could not be found
-	*/
-	public static com.liferay.portlet.dynamicdatalists.model.DDLRecordSet fetchDDLRecordSetByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService().fetchDDLRecordSetByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the d d l record set matching the UUID and group.
 	*
 	* @param uuid the d d l record set's UUID
@@ -292,20 +280,6 @@ public class DDLRecordSetLocalServiceUtil {
 	}
 
 	/**
-	* Returns the d d l record set with the matching UUID and company.
-	*
-	* @param uuid the d d l record set's UUID
-	* @param companyId the primary key of the company
-	* @return the matching d d l record set
-	* @throws PortalException if a matching d d l record set could not be found
-	*/
-	public static com.liferay.portlet.dynamicdatalists.model.DDLRecordSet getDDLRecordSetByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getDDLRecordSetByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the d d l record set matching the UUID and group.
 	*
 	* @param uuid the d d l record set's UUID
@@ -333,6 +307,19 @@ public class DDLRecordSetLocalServiceUtil {
 	public static java.util.List<com.liferay.portlet.dynamicdatalists.model.DDLRecordSet> getDDLRecordSets(
 		int start, int end) {
 		return getService().getDDLRecordSets(start, end);
+	}
+
+	public static java.util.List<com.liferay.portlet.dynamicdatalists.model.DDLRecordSet> getDDLRecordSetsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService().getDDLRecordSetsByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portlet.dynamicdatalists.model.DDLRecordSet> getDDLRecordSetsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getDDLRecordSetsByUuidAndCompanyId(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

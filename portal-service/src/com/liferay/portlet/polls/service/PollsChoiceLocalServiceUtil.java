@@ -189,18 +189,6 @@ public class PollsChoiceLocalServiceUtil {
 	}
 
 	/**
-	* Returns the polls choice with the matching UUID and company.
-	*
-	* @param uuid the polls choice's UUID
-	* @param companyId the primary key of the company
-	* @return the matching polls choice, or <code>null</code> if a matching polls choice could not be found
-	*/
-	public static com.liferay.portlet.polls.model.PollsChoice fetchPollsChoiceByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService().fetchPollsChoiceByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the polls choice matching the UUID and group.
 	*
 	* @param uuid the polls choice's UUID
@@ -265,20 +253,6 @@ public class PollsChoiceLocalServiceUtil {
 	}
 
 	/**
-	* Returns the polls choice with the matching UUID and company.
-	*
-	* @param uuid the polls choice's UUID
-	* @param companyId the primary key of the company
-	* @return the matching polls choice
-	* @throws PortalException if a matching polls choice could not be found
-	*/
-	public static com.liferay.portlet.polls.model.PollsChoice getPollsChoiceByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getPollsChoiceByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the polls choice matching the UUID and group.
 	*
 	* @param uuid the polls choice's UUID
@@ -306,6 +280,19 @@ public class PollsChoiceLocalServiceUtil {
 	public static java.util.List<com.liferay.portlet.polls.model.PollsChoice> getPollsChoices(
 		int start, int end) {
 		return getService().getPollsChoices(start, end);
+	}
+
+	public static java.util.List<com.liferay.portlet.polls.model.PollsChoice> getPollsChoicesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService().getPollsChoicesByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portlet.polls.model.PollsChoice> getPollsChoicesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getPollsChoicesByUuidAndCompanyId(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

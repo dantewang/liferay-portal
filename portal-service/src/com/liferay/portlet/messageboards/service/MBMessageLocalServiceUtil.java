@@ -319,18 +319,6 @@ public class MBMessageLocalServiceUtil {
 	}
 
 	/**
-	* Returns the message-boards message with the matching UUID and company.
-	*
-	* @param uuid the message-boards message's UUID
-	* @param companyId the primary key of the company
-	* @return the matching message-boards message, or <code>null</code> if a matching message-boards message could not be found
-	*/
-	public static com.liferay.portlet.messageboards.model.MBMessage fetchMBMessageByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService().fetchMBMessageByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the message-boards message matching the UUID and group.
 	*
 	* @param uuid the message-boards message's UUID
@@ -475,20 +463,6 @@ public class MBMessageLocalServiceUtil {
 	}
 
 	/**
-	* Returns the message-boards message with the matching UUID and company.
-	*
-	* @param uuid the message-boards message's UUID
-	* @param companyId the primary key of the company
-	* @return the matching message-boards message
-	* @throws PortalException if a matching message-boards message could not be found
-	*/
-	public static com.liferay.portlet.messageboards.model.MBMessage getMBMessageByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getMBMessageByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the message-boards message matching the UUID and group.
 	*
 	* @param uuid the message-boards message's UUID
@@ -516,6 +490,19 @@ public class MBMessageLocalServiceUtil {
 	public static java.util.List<com.liferay.portlet.messageboards.model.MBMessage> getMBMessages(
 		int start, int end) {
 		return getService().getMBMessages(start, end);
+	}
+
+	public static java.util.List<com.liferay.portlet.messageboards.model.MBMessage> getMBMessagesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService().getMBMessagesByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portlet.messageboards.model.MBMessage> getMBMessagesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getMBMessagesByUuidAndCompanyId(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

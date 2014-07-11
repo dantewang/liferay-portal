@@ -226,18 +226,6 @@ public abstract class WikiNodeLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
-	 * Returns the wiki node with the matching UUID and company.
-	 *
-	 * @param uuid the wiki node's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching wiki node, or <code>null</code> if a matching wiki node could not be found
-	 */
-	@Override
-	public WikiNode fetchWikiNodeByUuidAndCompanyId(String uuid, long companyId) {
-		return wikiNodePersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the wiki node matching the UUID and group.
 	 *
 	 * @param uuid the wiki node's UUID
@@ -361,18 +349,17 @@ public abstract class WikiNodeLocalServiceBaseImpl extends BaseLocalServiceImpl
 		return wikiNodePersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the wiki node with the matching UUID and company.
-	 *
-	 * @param uuid the wiki node's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching wiki node
-	 * @throws PortalException if a matching wiki node could not be found
-	 */
 	@Override
-	public WikiNode getWikiNodeByUuidAndCompanyId(String uuid, long companyId)
-		throws PortalException {
-		return wikiNodePersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<WikiNode> getWikiNodesByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return wikiNodePersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<WikiNode> getWikiNodesByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		return wikiNodePersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

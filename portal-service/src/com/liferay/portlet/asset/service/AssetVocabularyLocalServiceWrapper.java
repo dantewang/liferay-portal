@@ -268,20 +268,6 @@ public class AssetVocabularyLocalServiceWrapper
 	}
 
 	/**
-	* Returns the asset vocabulary with the matching UUID and company.
-	*
-	* @param uuid the asset vocabulary's UUID
-	* @param companyId the primary key of the company
-	* @return the matching asset vocabulary, or <code>null</code> if a matching asset vocabulary could not be found
-	*/
-	@Override
-	public com.liferay.portlet.asset.model.AssetVocabulary fetchAssetVocabularyByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return _assetVocabularyLocalService.fetchAssetVocabularyByUuidAndCompanyId(uuid,
-			companyId);
-	}
-
-	/**
 	* Returns the asset vocabulary matching the UUID and group.
 	*
 	* @param uuid the asset vocabulary's UUID
@@ -317,6 +303,21 @@ public class AssetVocabularyLocalServiceWrapper
 		return _assetVocabularyLocalService.getAssetVocabularies(start, end);
 	}
 
+	@Override
+	public java.util.List<com.liferay.portlet.asset.model.AssetVocabulary> getAssetVocabulariesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return _assetVocabularyLocalService.getAssetVocabulariesByUuidAndCompanyId(uuid,
+			companyId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.asset.model.AssetVocabulary> getAssetVocabulariesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return _assetVocabularyLocalService.getAssetVocabulariesByUuidAndCompanyId(uuid,
+			companyId, start, end, orderByComparator);
+	}
+
 	/**
 	* Returns the number of asset vocabularies.
 	*
@@ -339,22 +340,6 @@ public class AssetVocabularyLocalServiceWrapper
 		long vocabularyId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _assetVocabularyLocalService.getAssetVocabulary(vocabularyId);
-	}
-
-	/**
-	* Returns the asset vocabulary with the matching UUID and company.
-	*
-	* @param uuid the asset vocabulary's UUID
-	* @param companyId the primary key of the company
-	* @return the matching asset vocabulary
-	* @throws PortalException if a matching asset vocabulary could not be found
-	*/
-	@Override
-	public com.liferay.portlet.asset.model.AssetVocabulary getAssetVocabularyByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _assetVocabularyLocalService.getAssetVocabularyByUuidAndCompanyId(uuid,
-			companyId);
 	}
 
 	/**

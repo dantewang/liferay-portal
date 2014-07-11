@@ -221,20 +221,6 @@ public abstract class AssetVocabularyLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the asset vocabulary with the matching UUID and company.
-	 *
-	 * @param uuid the asset vocabulary's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching asset vocabulary, or <code>null</code> if a matching asset vocabulary could not be found
-	 */
-	@Override
-	public AssetVocabulary fetchAssetVocabularyByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return assetVocabularyPersistence.fetchByUuid_C_First(uuid, companyId,
-			null);
-	}
-
-	/**
 	 * Returns the asset vocabulary matching the UUID and group.
 	 *
 	 * @param uuid the asset vocabulary's UUID
@@ -352,19 +338,18 @@ public abstract class AssetVocabularyLocalServiceBaseImpl
 		return assetVocabularyPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the asset vocabulary with the matching UUID and company.
-	 *
-	 * @param uuid the asset vocabulary's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching asset vocabulary
-	 * @throws PortalException if a matching asset vocabulary could not be found
-	 */
 	@Override
-	public AssetVocabulary getAssetVocabularyByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return assetVocabularyPersistence.findByUuid_C_First(uuid, companyId,
-			null);
+	public List<AssetVocabulary> getAssetVocabulariesByUuidAndCompanyId(
+		String uuid, long companyId) {
+		return assetVocabularyPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<AssetVocabulary> getAssetVocabulariesByUuidAndCompanyId(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator orderByComparator) {
+		return assetVocabularyPersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

@@ -286,7 +286,7 @@ import ${packagePath}.service.${entity.name}${sessionTypeName}Service;
 			return ${entity.varName}Persistence.fetchByPrimaryKey(${entity.PKVarName});
 		}
 
-		<#if entity.hasUuid() && entity.hasColumn("companyId")>
+		<#if entity.hasUuid() && entity.hasColumn("companyId") && (!entity.hasColumn("groupId") || (entity.name == "Group"))>
 			/**
 			 * Returns the ${entity.humanName} with the matching UUID and company.
 			 *
@@ -506,24 +506,36 @@ import ${packagePath}.service.${entity.name}${sessionTypeName}Service;
 		}
 
 		<#if entity.hasUuid() && entity.hasColumn("companyId")>
-			/**
-			 * Returns the ${entity.humanName} with the matching UUID and company.
-			 *
-			 * @param uuid the ${entity.humanName}'s UUID
-			 * @param  companyId the primary key of the company
-			 * @return the matching ${entity.humanName}
-			<#list serviceBaseExceptions as exception>
-			<#if exception == "PortalException">
-			 * @throws PortalException if a matching ${entity.humanName} could not be found
+			<#if entity.hasColumn("groupId") && (entity.name != "Group")>
+				@Override
+				public List<${entity.name}> get${entity.names}ByUuidAndCompanyId(String uuid, long companyId) {
+					return ${entity.varName}Persistence.findByUuid_C(uuid, companyId);
+				}
+
+				@Override
+				public List<${entity.name}> get${entity.names}ByUuidAndCompanyId(String uuid, long companyId, int start, int end, OrderByComparator orderByComparator) {
+					return ${entity.varName}Persistence.findByUuid_C(uuid, companyId, start, end, orderByComparator);
+				}
 			<#else>
-			 * @throws ${exception}
+				/**
+				 * Returns the ${entity.humanName} with the matching UUID and company.
+				 *
+				 * @param uuid the ${entity.humanName}'s UUID
+				 * @param  companyId the primary key of the company
+				 * @return the matching ${entity.humanName}
+				<#list serviceBaseExceptions as exception>
+				<#if exception == "PortalException">
+				 * @throws PortalException if a matching ${entity.humanName} could not be found
+				<#else>
+				 * @throws ${exception}
+				</#if>
+				</#list>
+				 */
+				@Override
+				public ${entity.name} get${entity.name}ByUuidAndCompanyId(String uuid, long companyId) <#if (serviceBaseExceptions?size gt 0)>throws ${stringUtil.merge(serviceBaseExceptions)} </#if>{
+					return ${entity.varName}Persistence.findByUuid_C_First(uuid, companyId, null);
+				}
 			</#if>
-			</#list>
-			 */
-			@Override
-			public ${entity.name} get${entity.name}ByUuidAndCompanyId(String uuid, long companyId) <#if (serviceBaseExceptions?size gt 0)>throws ${stringUtil.merge(serviceBaseExceptions)} </#if>{
-				return ${entity.varName}Persistence.findByUuid_C_First(uuid, companyId, null);
-			}
 		</#if>
 
 		<#if entity.hasUuid() && entity.hasColumn("groupId") && (entity.name != "Group")>

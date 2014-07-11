@@ -714,20 +714,6 @@ public class JournalArticleLocalServiceWrapper
 	}
 
 	/**
-	* Returns the journal article with the matching UUID and company.
-	*
-	* @param uuid the journal article's UUID
-	* @param companyId the primary key of the company
-	* @return the matching journal article, or <code>null</code> if a matching journal article could not be found
-	*/
-	@Override
-	public com.liferay.portlet.journal.model.JournalArticle fetchJournalArticleByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return _journalArticleLocalService.fetchJournalArticleByUuidAndCompanyId(uuid,
-			companyId);
-	}
-
-	/**
 	* Returns the journal article matching the UUID and group.
 	*
 	* @param uuid the journal article's UUID
@@ -1660,22 +1646,6 @@ public class JournalArticleLocalServiceWrapper
 	}
 
 	/**
-	* Returns the journal article with the matching UUID and company.
-	*
-	* @param uuid the journal article's UUID
-	* @param companyId the primary key of the company
-	* @return the matching journal article
-	* @throws PortalException if a matching journal article could not be found
-	*/
-	@Override
-	public com.liferay.portlet.journal.model.JournalArticle getJournalArticleByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _journalArticleLocalService.getJournalArticleByUuidAndCompanyId(uuid,
-			companyId);
-	}
-
-	/**
 	* Returns the journal article matching the UUID and group.
 	*
 	* @param uuid the journal article's UUID
@@ -1706,6 +1676,21 @@ public class JournalArticleLocalServiceWrapper
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getJournalArticles(
 		int start, int end) {
 		return _journalArticleLocalService.getJournalArticles(start, end);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getJournalArticlesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return _journalArticleLocalService.getJournalArticlesByUuidAndCompanyId(uuid,
+			companyId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getJournalArticlesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return _journalArticleLocalService.getJournalArticlesByUuidAndCompanyId(uuid,
+			companyId, start, end, orderByComparator);
 	}
 
 	/**

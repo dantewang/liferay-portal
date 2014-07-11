@@ -228,19 +228,6 @@ public abstract class DDMStructureLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the d d m structure with the matching UUID and company.
-	 *
-	 * @param uuid the d d m structure's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching d d m structure, or <code>null</code> if a matching d d m structure could not be found
-	 */
-	@Override
-	public DDMStructure fetchDDMStructureByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return ddmStructurePersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the d d m structure matching the UUID and group.
 	 *
 	 * @param uuid the d d m structure's UUID
@@ -368,18 +355,17 @@ public abstract class DDMStructureLocalServiceBaseImpl
 		return ddmStructurePersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the d d m structure with the matching UUID and company.
-	 *
-	 * @param uuid the d d m structure's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching d d m structure
-	 * @throws PortalException if a matching d d m structure could not be found
-	 */
 	@Override
-	public DDMStructure getDDMStructureByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return ddmStructurePersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<DDMStructure> getDDMStructuresByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return ddmStructurePersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<DDMStructure> getDDMStructuresByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		return ddmStructurePersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

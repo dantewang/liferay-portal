@@ -255,19 +255,6 @@ public class AssetVocabularyLocalServiceUtil {
 	}
 
 	/**
-	* Returns the asset vocabulary with the matching UUID and company.
-	*
-	* @param uuid the asset vocabulary's UUID
-	* @param companyId the primary key of the company
-	* @return the matching asset vocabulary, or <code>null</code> if a matching asset vocabulary could not be found
-	*/
-	public static com.liferay.portlet.asset.model.AssetVocabulary fetchAssetVocabularyByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService()
-				   .fetchAssetVocabularyByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the asset vocabulary matching the UUID and group.
 	*
 	* @param uuid the asset vocabulary's UUID
@@ -299,6 +286,20 @@ public class AssetVocabularyLocalServiceUtil {
 		return getService().getAssetVocabularies(start, end);
 	}
 
+	public static java.util.List<com.liferay.portlet.asset.model.AssetVocabulary> getAssetVocabulariesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService()
+				   .getAssetVocabulariesByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portlet.asset.model.AssetVocabulary> getAssetVocabulariesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getAssetVocabulariesByUuidAndCompanyId(uuid, companyId,
+			start, end, orderByComparator);
+	}
+
 	/**
 	* Returns the number of asset vocabularies.
 	*
@@ -319,20 +320,6 @@ public class AssetVocabularyLocalServiceUtil {
 		long vocabularyId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getAssetVocabulary(vocabularyId);
-	}
-
-	/**
-	* Returns the asset vocabulary with the matching UUID and company.
-	*
-	* @param uuid the asset vocabulary's UUID
-	* @param companyId the primary key of the company
-	* @return the matching asset vocabulary
-	* @throws PortalException if a matching asset vocabulary could not be found
-	*/
-	public static com.liferay.portlet.asset.model.AssetVocabulary getAssetVocabularyByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getAssetVocabularyByUuidAndCompanyId(uuid, companyId);
 	}
 
 	/**

@@ -232,17 +232,6 @@ public interface AssetCategoryLocalService extends BaseLocalService,
 		long categoryId);
 
 	/**
-	* Returns the asset category with the matching UUID and company.
-	*
-	* @param uuid the asset category's UUID
-	* @param companyId the primary key of the company
-	* @return the matching asset category, or <code>null</code> if a matching asset category could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portlet.asset.model.AssetCategory fetchAssetCategoryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId);
-
-	/**
 	* Returns the asset category matching the UUID and group.
 	*
 	* @param uuid the asset category's UUID
@@ -275,6 +264,15 @@ public interface AssetCategoryLocalService extends BaseLocalService,
 	public java.util.List<com.liferay.portlet.asset.model.AssetCategory> getAssetCategories(
 		int start, int end);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.asset.model.AssetCategory> getAssetCategoriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.asset.model.AssetCategory> getAssetCategoriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator);
+
 	/**
 	* Returns the number of asset categories.
 	*
@@ -293,19 +291,6 @@ public interface AssetCategoryLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portlet.asset.model.AssetCategory getAssetCategory(
 		long categoryId)
-		throws com.liferay.portal.kernel.exception.PortalException;
-
-	/**
-	* Returns the asset category with the matching UUID and company.
-	*
-	* @param uuid the asset category's UUID
-	* @param companyId the primary key of the company
-	* @return the matching asset category
-	* @throws PortalException if a matching asset category could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portlet.asset.model.AssetCategory getAssetCategoryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**

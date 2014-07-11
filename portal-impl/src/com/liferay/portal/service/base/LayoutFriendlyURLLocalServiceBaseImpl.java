@@ -215,20 +215,6 @@ public abstract class LayoutFriendlyURLLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the layout friendly u r l with the matching UUID and company.
-	 *
-	 * @param uuid the layout friendly u r l's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching layout friendly u r l, or <code>null</code> if a matching layout friendly u r l could not be found
-	 */
-	@Override
-	public LayoutFriendlyURL fetchLayoutFriendlyURLByUuidAndCompanyId(
-		String uuid, long companyId) {
-		return layoutFriendlyURLPersistence.fetchByUuid_C_First(uuid,
-			companyId, null);
-	}
-
-	/**
 	 * Returns the layout friendly u r l matching the UUID and group.
 	 *
 	 * @param uuid the layout friendly u r l's UUID
@@ -346,19 +332,18 @@ public abstract class LayoutFriendlyURLLocalServiceBaseImpl
 		return layoutFriendlyURLPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the layout friendly u r l with the matching UUID and company.
-	 *
-	 * @param uuid the layout friendly u r l's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching layout friendly u r l
-	 * @throws PortalException if a matching layout friendly u r l could not be found
-	 */
 	@Override
-	public LayoutFriendlyURL getLayoutFriendlyURLByUuidAndCompanyId(
-		String uuid, long companyId) throws PortalException {
-		return layoutFriendlyURLPersistence.findByUuid_C_First(uuid, companyId,
-			null);
+	public List<LayoutFriendlyURL> getLayoutFriendlyURLsByUuidAndCompanyId(
+		String uuid, long companyId) {
+		return layoutFriendlyURLPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<LayoutFriendlyURL> getLayoutFriendlyURLsByUuidAndCompanyId(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator orderByComparator) {
+		return layoutFriendlyURLPersistence.findByUuid_C(uuid, companyId,
+			start, end, orderByComparator);
 	}
 
 	/**

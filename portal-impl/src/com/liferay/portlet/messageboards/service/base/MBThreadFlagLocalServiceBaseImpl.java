@@ -214,19 +214,6 @@ public abstract class MBThreadFlagLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the message boards thread flag with the matching UUID and company.
-	 *
-	 * @param uuid the message boards thread flag's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
-	 */
-	@Override
-	public MBThreadFlag fetchMBThreadFlagByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return mbThreadFlagPersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the message boards thread flag matching the UUID and group.
 	 *
 	 * @param uuid the message boards thread flag's UUID
@@ -344,18 +331,17 @@ public abstract class MBThreadFlagLocalServiceBaseImpl
 		return mbThreadFlagPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the message boards thread flag with the matching UUID and company.
-	 *
-	 * @param uuid the message boards thread flag's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching message boards thread flag
-	 * @throws PortalException if a matching message boards thread flag could not be found
-	 */
 	@Override
-	public MBThreadFlag getMBThreadFlagByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return mbThreadFlagPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<MBThreadFlag> getMBThreadFlagsByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return mbThreadFlagPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<MBThreadFlag> getMBThreadFlagsByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		return mbThreadFlagPersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

@@ -239,19 +239,6 @@ public abstract class BlogsEntryLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the blogs entry with the matching UUID and company.
-	 *
-	 * @param uuid the blogs entry's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchBlogsEntryByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return blogsEntryPersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the blogs entry matching the UUID and group.
 	 *
 	 * @param uuid the blogs entry's UUID
@@ -375,18 +362,17 @@ public abstract class BlogsEntryLocalServiceBaseImpl
 		return blogsEntryPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the blogs entry with the matching UUID and company.
-	 *
-	 * @param uuid the blogs entry's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching blogs entry
-	 * @throws PortalException if a matching blogs entry could not be found
-	 */
 	@Override
-	public BlogsEntry getBlogsEntryByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return blogsEntryPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<BlogsEntry> getBlogsEntriesByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return blogsEntryPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<BlogsEntry> getBlogsEntriesByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		return blogsEntryPersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

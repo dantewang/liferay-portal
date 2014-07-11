@@ -222,19 +222,6 @@ public abstract class DDLRecordSetLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the d d l record set with the matching UUID and company.
-	 *
-	 * @param uuid the d d l record set's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching d d l record set, or <code>null</code> if a matching d d l record set could not be found
-	 */
-	@Override
-	public DDLRecordSet fetchDDLRecordSetByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return ddlRecordSetPersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the d d l record set matching the UUID and group.
 	 *
 	 * @param uuid the d d l record set's UUID
@@ -352,18 +339,17 @@ public abstract class DDLRecordSetLocalServiceBaseImpl
 		return ddlRecordSetPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the d d l record set with the matching UUID and company.
-	 *
-	 * @param uuid the d d l record set's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching d d l record set
-	 * @throws PortalException if a matching d d l record set could not be found
-	 */
 	@Override
-	public DDLRecordSet getDDLRecordSetByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return ddlRecordSetPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<DDLRecordSet> getDDLRecordSetsByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return ddlRecordSetPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<DDLRecordSet> getDDLRecordSetsByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		return ddlRecordSetPersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

@@ -16,6 +16,8 @@ package com.liferay.portal.xml;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.memory.PoolAction;
+import com.liferay.portal.kernel.memory.SoftReferencePool;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.xml.Attribute;
 import com.liferay.portal.kernel.xml.Document;
@@ -341,12 +343,15 @@ public class SAXReaderImpl implements SAXReader {
 		ClassLoader contextClassLoader =
 			ClassLoaderUtil.getContextClassLoader();
 
-		try {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(classLoader);
-			}
+		if (contextClassLoader != classLoader) {
+			ClassLoaderUtil.setContextClassLoader(classLoader);
+		}
 
-			org.dom4j.io.SAXReader saxReader = getSAXReader(validate);
+		SAXParser saxParser = _saxParserSoftReferencePool.borrowObject(null);
+
+		try {
+			org.dom4j.io.SAXReader saxReader = getSAXReader(
+				saxParser, validate);
 
 			return new DocumentImpl(saxReader.read(file));
 		}
@@ -354,6 +359,8 @@ public class SAXReaderImpl implements SAXReader {
 			throw new DocumentException(de.getMessage(), de);
 		}
 		finally {
+			_saxParserSoftReferencePool.returnObject(saxParser);
+
 			if (contextClassLoader != classLoader) {
 				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
 			}
@@ -374,12 +381,15 @@ public class SAXReaderImpl implements SAXReader {
 		ClassLoader contextClassLoader =
 			ClassLoaderUtil.getContextClassLoader();
 
-		try {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(classLoader);
-			}
+		if (contextClassLoader != classLoader) {
+			ClassLoaderUtil.setContextClassLoader(classLoader);
+		}
 
-			org.dom4j.io.SAXReader saxReader = getSAXReader(validate);
+		SAXParser saxParser = _saxParserSoftReferencePool.borrowObject(null);
+
+		try {
+			org.dom4j.io.SAXReader saxReader = getSAXReader(
+				saxParser, validate);
 
 			return new DocumentImpl(saxReader.read(is));
 		}
@@ -387,6 +397,8 @@ public class SAXReaderImpl implements SAXReader {
 			throw new DocumentException(de.getMessage(), de);
 		}
 		finally {
+			_saxParserSoftReferencePool.returnObject(saxParser);
+
 			if (contextClassLoader != classLoader) {
 				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
 			}
@@ -407,12 +419,15 @@ public class SAXReaderImpl implements SAXReader {
 		ClassLoader contextClassLoader =
 			ClassLoaderUtil.getContextClassLoader();
 
-		try {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(classLoader);
-			}
+		if (contextClassLoader != classLoader) {
+			ClassLoaderUtil.setContextClassLoader(classLoader);
+		}
 
-			org.dom4j.io.SAXReader saxReader = getSAXReader(validate);
+		SAXParser saxParser = _saxParserSoftReferencePool.borrowObject(null);
+
+		try {
+			org.dom4j.io.SAXReader saxReader = getSAXReader(
+				saxParser, validate);
 
 			return new DocumentImpl(saxReader.read(reader));
 		}
@@ -420,6 +435,8 @@ public class SAXReaderImpl implements SAXReader {
 			throw new DocumentException(de.getMessage(), de);
 		}
 		finally {
+			_saxParserSoftReferencePool.returnObject(saxParser);
+
 			if (contextClassLoader != classLoader) {
 				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
 			}
@@ -447,12 +464,15 @@ public class SAXReaderImpl implements SAXReader {
 		ClassLoader contextClassLoader =
 			ClassLoaderUtil.getContextClassLoader();
 
-		try {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(classLoader);
-			}
+		if (contextClassLoader != classLoader) {
+			ClassLoaderUtil.setContextClassLoader(classLoader);
+		}
 
-			org.dom4j.io.SAXReader saxReader = getSAXReader(xmlSchema);
+		SAXParser saxParser = _saxParserSoftReferencePool.borrowObject(null);
+
+		try {
+			org.dom4j.io.SAXReader saxReader = getSAXReader(
+				saxParser, xmlSchema);
 
 			Reader reader = new XMLSafeReader(xml);
 
@@ -462,6 +482,8 @@ public class SAXReaderImpl implements SAXReader {
 			throw new DocumentException(de.getMessage(), de);
 		}
 		finally {
+			_saxParserSoftReferencePool.returnObject(saxParser);
+
 			if (contextClassLoader != classLoader) {
 				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
 			}
@@ -480,12 +502,15 @@ public class SAXReaderImpl implements SAXReader {
 		ClassLoader contextClassLoader =
 			ClassLoaderUtil.getContextClassLoader();
 
-		try {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(classLoader);
-			}
+		if (contextClassLoader != classLoader) {
+			ClassLoaderUtil.setContextClassLoader(classLoader);
+		}
 
-			org.dom4j.io.SAXReader saxReader = getSAXReader(validate);
+		SAXParser saxParser = _saxParserSoftReferencePool.borrowObject(null);
+
+		try {
+			org.dom4j.io.SAXReader saxReader = getSAXReader(
+				saxParser, validate);
 
 			return new DocumentImpl(saxReader.read(url));
 		}
@@ -493,6 +518,8 @@ public class SAXReaderImpl implements SAXReader {
 			throw new DocumentException(de.getMessage(), de);
 		}
 		finally {
+			_saxParserSoftReferencePool.returnObject(saxParser);
+
 			if (contextClassLoader != classLoader) {
 				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
 			}
@@ -549,7 +576,9 @@ public class SAXReaderImpl implements SAXReader {
 		xPath.sort(toOldNodes(nodes), distinct);
 	}
 
-	protected org.dom4j.io.SAXReader getSAXReader(boolean validate) {
+	protected org.dom4j.io.SAXReader getSAXReader(
+		SAXParser saxParser, boolean validate) {
+
 		org.dom4j.io.SAXReader reader = null;
 
 		if (!PropsValues.XML_VALIDATION_ENABLED) {
@@ -557,7 +586,7 @@ public class SAXReaderImpl implements SAXReader {
 		}
 
 		try {
-			reader = new org.dom4j.io.SAXReader(new SAXParser(), validate);
+			reader = new org.dom4j.io.SAXReader(saxParser, validate);
 
 			reader.setEntityResolver(new EntityResolver());
 
@@ -584,14 +613,16 @@ public class SAXReaderImpl implements SAXReader {
 		return reader;
 	}
 
-	protected org.dom4j.io.SAXReader getSAXReader(XMLSchema xmlSchema) {
+	protected org.dom4j.io.SAXReader getSAXReader(
+		SAXParser saxParser, XMLSchema xmlSchema) {
+
 		boolean validate = true;
 
 		if (!PropsValues.XML_VALIDATION_ENABLED) {
 			validate = false;
 		}
 
-		org.dom4j.io.SAXReader saxReader = getSAXReader(validate);
+		org.dom4j.io.SAXReader saxReader = getSAXReader(saxParser, validate);
 
 		if ((xmlSchema == null) || (validate == false)) {
 			return saxReader;
@@ -644,6 +675,31 @@ public class SAXReaderImpl implements SAXReader {
 
 	private static SAXReaderImpl _instance = new SAXReaderImpl();
 
+	private static SoftReferencePool<SAXParser, Object>
+		_saxParserSoftReferencePool =
+			new SoftReferencePool<SAXParser, Object>(
+				new SAXParserPoolAction(), 32);
+
 	private DocumentFactory _documentFactory = DocumentFactory.getInstance();
+
+	private static class SAXParserPoolAction
+		implements PoolAction<SAXParser, Object> {
+
+		@Override
+		public SAXParser onBorrow(SAXParser saxParser, Object input) {
+			return saxParser;
+		}
+
+		@Override
+		public SAXParser onCreate(Object input) {
+			return new SAXParser();
+		}
+
+		@Override
+		public void onReturn(SAXParser saxParser) {
+			saxParser.reset();
+		}
+
+	}
 
 }

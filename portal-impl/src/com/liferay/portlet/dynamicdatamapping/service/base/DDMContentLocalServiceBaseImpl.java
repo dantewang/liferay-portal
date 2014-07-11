@@ -214,19 +214,6 @@ public abstract class DDMContentLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the d d m content with the matching UUID and company.
-	 *
-	 * @param uuid the d d m content's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching d d m content, or <code>null</code> if a matching d d m content could not be found
-	 */
-	@Override
-	public DDMContent fetchDDMContentByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return ddmContentPersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the d d m content matching the UUID and group.
 	 *
 	 * @param uuid the d d m content's UUID
@@ -342,18 +329,17 @@ public abstract class DDMContentLocalServiceBaseImpl
 		return ddmContentPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the d d m content with the matching UUID and company.
-	 *
-	 * @param uuid the d d m content's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching d d m content
-	 * @throws PortalException if a matching d d m content could not be found
-	 */
 	@Override
-	public DDMContent getDDMContentByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return ddmContentPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<DDMContent> getDDMContentsByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return ddmContentPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<DDMContent> getDDMContentsByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		return ddmContentPersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

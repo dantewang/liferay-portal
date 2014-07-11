@@ -693,18 +693,6 @@ public class LayoutLocalServiceUtil {
 	}
 
 	/**
-	* Returns the layout with the matching UUID and company.
-	*
-	* @param uuid the layout's UUID
-	* @param companyId the primary key of the company
-	* @return the matching layout, or <code>null</code> if a matching layout could not be found
-	*/
-	public static com.liferay.portal.model.Layout fetchLayoutByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService().fetchLayoutByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the layout matching the UUID, group, and privacy.
 	*
 	* @param uuid the layout's UUID
@@ -835,20 +823,6 @@ public class LayoutLocalServiceUtil {
 		long iconImageId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getLayoutByIconImageId(iconImageId);
-	}
-
-	/**
-	* Returns the layout with the matching UUID and company.
-	*
-	* @param uuid the layout's UUID
-	* @param companyId the primary key of the company
-	* @return the matching layout
-	* @throws PortalException if a matching layout could not be found
-	*/
-	public static com.liferay.portal.model.Layout getLayoutByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getLayoutByUuidAndCompanyId(uuid, companyId);
 	}
 
 	/**
@@ -1001,6 +975,19 @@ public class LayoutLocalServiceUtil {
 		java.lang.String layoutPrototypeUuid) {
 		return getService()
 				   .getLayoutsByLayoutPrototypeUuidCount(layoutPrototypeUuid);
+	}
+
+	public static java.util.List<com.liferay.portal.model.Layout> getLayoutsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService().getLayoutsByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portal.model.Layout> getLayoutsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getLayoutsByUuidAndCompanyId(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

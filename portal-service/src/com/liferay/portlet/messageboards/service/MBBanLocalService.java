@@ -187,17 +187,6 @@ public interface MBBanLocalService extends BaseLocalService,
 	public com.liferay.portlet.messageboards.model.MBBan fetchMBBan(long banId);
 
 	/**
-	* Returns the message boards ban with the matching UUID and company.
-	*
-	* @param uuid the message boards ban's UUID
-	* @param companyId the primary key of the company
-	* @return the matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portlet.messageboards.model.MBBan fetchMBBanByUuidAndCompanyId(
-		java.lang.String uuid, long companyId);
-
-	/**
 	* Returns the message boards ban matching the UUID and group.
 	*
 	* @param uuid the message boards ban's UUID
@@ -241,19 +230,6 @@ public interface MBBanLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
-	* Returns the message boards ban with the matching UUID and company.
-	*
-	* @param uuid the message boards ban's UUID
-	* @param companyId the primary key of the company
-	* @return the matching message boards ban
-	* @throws PortalException if a matching message boards ban could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portlet.messageboards.model.MBBan getMBBanByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException;
-
-	/**
 	* Returns the message boards ban matching the UUID and group.
 	*
 	* @param uuid the message boards ban's UUID
@@ -280,6 +256,15 @@ public interface MBBanLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.messageboards.model.MBBan> getMBBans(
 		int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.messageboards.model.MBBan> getMBBansByUuidAndCompanyId(
+		java.lang.String uuid, long companyId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.messageboards.model.MBBan> getMBBansByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator);
 
 	/**
 	* Returns the number of message boards bans.

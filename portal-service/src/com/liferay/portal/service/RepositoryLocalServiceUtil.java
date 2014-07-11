@@ -230,18 +230,6 @@ public class RepositoryLocalServiceUtil {
 	}
 
 	/**
-	* Returns the repository with the matching UUID and company.
-	*
-	* @param uuid the repository's UUID
-	* @param companyId the primary key of the company
-	* @return the matching repository, or <code>null</code> if a matching repository could not be found
-	*/
-	public static com.liferay.portal.model.Repository fetchRepositoryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService().fetchRepositoryByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the repository matching the UUID and group.
 	*
 	* @param uuid the repository's UUID
@@ -316,6 +304,19 @@ public class RepositoryLocalServiceUtil {
 		return getService().getRepositories(start, end);
 	}
 
+	public static java.util.List<com.liferay.portal.model.Repository> getRepositoriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService().getRepositoriesByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portal.model.Repository> getRepositoriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getRepositoriesByUuidAndCompanyId(uuid, companyId, start,
+			end, orderByComparator);
+	}
+
 	/**
 	* Returns the number of repositories.
 	*
@@ -348,20 +349,6 @@ public class RepositoryLocalServiceUtil {
 		long repositoryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getRepository(repositoryId);
-	}
-
-	/**
-	* Returns the repository with the matching UUID and company.
-	*
-	* @param uuid the repository's UUID
-	* @param companyId the primary key of the company
-	* @return the matching repository
-	* @throws PortalException if a matching repository could not be found
-	*/
-	public static com.liferay.portal.model.Repository getRepositoryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getRepositoryByUuidAndCompanyId(uuid, companyId);
 	}
 
 	/**

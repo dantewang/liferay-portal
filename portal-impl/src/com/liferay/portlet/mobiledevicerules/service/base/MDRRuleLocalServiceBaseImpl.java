@@ -213,18 +213,6 @@ public abstract class MDRRuleLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
-	 * Returns the m d r rule with the matching UUID and company.
-	 *
-	 * @param uuid the m d r rule's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching m d r rule, or <code>null</code> if a matching m d r rule could not be found
-	 */
-	@Override
-	public MDRRule fetchMDRRuleByUuidAndCompanyId(String uuid, long companyId) {
-		return mdrRulePersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the m d r rule matching the UUID and group.
 	 *
 	 * @param uuid the m d r rule's UUID
@@ -340,18 +328,17 @@ public abstract class MDRRuleLocalServiceBaseImpl extends BaseLocalServiceImpl
 		return mdrRulePersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the m d r rule with the matching UUID and company.
-	 *
-	 * @param uuid the m d r rule's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching m d r rule
-	 * @throws PortalException if a matching m d r rule could not be found
-	 */
 	@Override
-	public MDRRule getMDRRuleByUuidAndCompanyId(String uuid, long companyId)
-		throws PortalException {
-		return mdrRulePersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<MDRRule> getMDRRulesByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return mdrRulePersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<MDRRule> getMDRRulesByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		return mdrRulePersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

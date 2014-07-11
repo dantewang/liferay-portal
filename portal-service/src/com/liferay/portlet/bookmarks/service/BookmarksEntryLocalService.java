@@ -193,17 +193,6 @@ public interface BookmarksEntryLocalService extends BaseLocalService,
 		long entryId);
 
 	/**
-	* Returns the bookmarks entry with the matching UUID and company.
-	*
-	* @param uuid the bookmarks entry's UUID
-	* @param companyId the primary key of the company
-	* @return the matching bookmarks entry, or <code>null</code> if a matching bookmarks entry could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portlet.bookmarks.model.BookmarksEntry fetchBookmarksEntryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId);
-
-	/**
 	* Returns the bookmarks entry matching the UUID and group.
 	*
 	* @param uuid the bookmarks entry's UUID
@@ -239,6 +228,15 @@ public interface BookmarksEntryLocalService extends BaseLocalService,
 	public java.util.List<com.liferay.portlet.bookmarks.model.BookmarksEntry> getBookmarksEntries(
 		int start, int end);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.bookmarks.model.BookmarksEntry> getBookmarksEntriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.bookmarks.model.BookmarksEntry> getBookmarksEntriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator);
+
 	/**
 	* Returns the number of bookmarks entries.
 	*
@@ -257,19 +255,6 @@ public interface BookmarksEntryLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portlet.bookmarks.model.BookmarksEntry getBookmarksEntry(
 		long entryId)
-		throws com.liferay.portal.kernel.exception.PortalException;
-
-	/**
-	* Returns the bookmarks entry with the matching UUID and company.
-	*
-	* @param uuid the bookmarks entry's UUID
-	* @param companyId the primary key of the company
-	* @return the matching bookmarks entry
-	* @throws PortalException if a matching bookmarks entry could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portlet.bookmarks.model.BookmarksEntry getBookmarksEntryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**

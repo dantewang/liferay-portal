@@ -237,20 +237,6 @@ public abstract class BookmarksEntryLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the bookmarks entry with the matching UUID and company.
-	 *
-	 * @param uuid the bookmarks entry's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching bookmarks entry, or <code>null</code> if a matching bookmarks entry could not be found
-	 */
-	@Override
-	public BookmarksEntry fetchBookmarksEntryByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return bookmarksEntryPersistence.fetchByUuid_C_First(uuid, companyId,
-			null);
-	}
-
-	/**
 	 * Returns the bookmarks entry matching the UUID and group.
 	 *
 	 * @param uuid the bookmarks entry's UUID
@@ -376,19 +362,18 @@ public abstract class BookmarksEntryLocalServiceBaseImpl
 		return bookmarksEntryPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the bookmarks entry with the matching UUID and company.
-	 *
-	 * @param uuid the bookmarks entry's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching bookmarks entry
-	 * @throws PortalException if a matching bookmarks entry could not be found
-	 */
 	@Override
-	public BookmarksEntry getBookmarksEntryByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return bookmarksEntryPersistence.findByUuid_C_First(uuid, companyId,
-			null);
+	public List<BookmarksEntry> getBookmarksEntriesByUuidAndCompanyId(
+		String uuid, long companyId) {
+		return bookmarksEntryPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<BookmarksEntry> getBookmarksEntriesByUuidAndCompanyId(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator orderByComparator) {
+		return bookmarksEntryPersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

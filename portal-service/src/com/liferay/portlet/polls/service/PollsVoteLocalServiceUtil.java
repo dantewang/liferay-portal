@@ -186,18 +186,6 @@ public class PollsVoteLocalServiceUtil {
 	}
 
 	/**
-	* Returns the polls vote with the matching UUID and company.
-	*
-	* @param uuid the polls vote's UUID
-	* @param companyId the primary key of the company
-	* @return the matching polls vote, or <code>null</code> if a matching polls vote could not be found
-	*/
-	public static com.liferay.portlet.polls.model.PollsVote fetchPollsVoteByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService().fetchPollsVoteByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the polls vote matching the UUID and group.
 	*
 	* @param uuid the polls vote's UUID
@@ -255,20 +243,6 @@ public class PollsVoteLocalServiceUtil {
 	}
 
 	/**
-	* Returns the polls vote with the matching UUID and company.
-	*
-	* @param uuid the polls vote's UUID
-	* @param companyId the primary key of the company
-	* @return the matching polls vote
-	* @throws PortalException if a matching polls vote could not be found
-	*/
-	public static com.liferay.portlet.polls.model.PollsVote getPollsVoteByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getPollsVoteByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the polls vote matching the UUID and group.
 	*
 	* @param uuid the polls vote's UUID
@@ -296,6 +270,19 @@ public class PollsVoteLocalServiceUtil {
 	public static java.util.List<com.liferay.portlet.polls.model.PollsVote> getPollsVotes(
 		int start, int end) {
 		return getService().getPollsVotes(start, end);
+	}
+
+	public static java.util.List<com.liferay.portlet.polls.model.PollsVote> getPollsVotesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService().getPollsVotesByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portlet.polls.model.PollsVote> getPollsVotesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getPollsVotesByUuidAndCompanyId(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

@@ -219,19 +219,6 @@ public abstract class JournalFeedLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the journal feed with the matching UUID and company.
-	 *
-	 * @param uuid the journal feed's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching journal feed, or <code>null</code> if a matching journal feed could not be found
-	 */
-	@Override
-	public JournalFeed fetchJournalFeedByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return journalFeedPersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the journal feed matching the UUID and group.
 	 *
 	 * @param uuid the journal feed's UUID
@@ -348,18 +335,17 @@ public abstract class JournalFeedLocalServiceBaseImpl
 		return journalFeedPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the journal feed with the matching UUID and company.
-	 *
-	 * @param uuid the journal feed's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching journal feed
-	 * @throws PortalException if a matching journal feed could not be found
-	 */
 	@Override
-	public JournalFeed getJournalFeedByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return journalFeedPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<JournalFeed> getJournalFeedsByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return journalFeedPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<JournalFeed> getJournalFeedsByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		return journalFeedPersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

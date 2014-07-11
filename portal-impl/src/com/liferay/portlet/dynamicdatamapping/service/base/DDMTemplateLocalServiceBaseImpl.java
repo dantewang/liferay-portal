@@ -224,19 +224,6 @@ public abstract class DDMTemplateLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the d d m template with the matching UUID and company.
-	 *
-	 * @param uuid the d d m template's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching d d m template, or <code>null</code> if a matching d d m template could not be found
-	 */
-	@Override
-	public DDMTemplate fetchDDMTemplateByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return ddmTemplatePersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the d d m template matching the UUID and group.
 	 *
 	 * @param uuid the d d m template's UUID
@@ -364,18 +351,17 @@ public abstract class DDMTemplateLocalServiceBaseImpl
 		return ddmTemplatePersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the d d m template with the matching UUID and company.
-	 *
-	 * @param uuid the d d m template's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching d d m template
-	 * @throws PortalException if a matching d d m template could not be found
-	 */
 	@Override
-	public DDMTemplate getDDMTemplateByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return ddmTemplatePersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<DDMTemplate> getDDMTemplatesByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return ddmTemplatePersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<DDMTemplate> getDDMTemplatesByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		return ddmTemplatePersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

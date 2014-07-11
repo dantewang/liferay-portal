@@ -180,18 +180,6 @@ public class DLFileVersionLocalServiceUtil {
 	}
 
 	/**
-	* Returns the document library file version with the matching UUID and company.
-	*
-	* @param uuid the document library file version's UUID
-	* @param companyId the primary key of the company
-	* @return the matching document library file version, or <code>null</code> if a matching document library file version could not be found
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileVersion fetchDLFileVersionByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService().fetchDLFileVersionByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the document library file version matching the UUID and group.
 	*
 	* @param uuid the document library file version's UUID
@@ -230,20 +218,6 @@ public class DLFileVersionLocalServiceUtil {
 	}
 
 	/**
-	* Returns the document library file version with the matching UUID and company.
-	*
-	* @param uuid the document library file version's UUID
-	* @param companyId the primary key of the company
-	* @return the matching document library file version
-	* @throws PortalException if a matching document library file version could not be found
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileVersion getDLFileVersionByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getDLFileVersionByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the document library file version matching the UUID and group.
 	*
 	* @param uuid the document library file version's UUID
@@ -271,6 +245,19 @@ public class DLFileVersionLocalServiceUtil {
 	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileVersion> getDLFileVersions(
 		int start, int end) {
 		return getService().getDLFileVersions(start, end);
+	}
+
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileVersion> getDLFileVersionsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService().getDLFileVersionsByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileVersion> getDLFileVersionsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getDLFileVersionsByUuidAndCompanyId(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

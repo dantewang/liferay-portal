@@ -279,18 +279,6 @@ public class JournalFolderLocalServiceUtil {
 	}
 
 	/**
-	* Returns the journal folder with the matching UUID and company.
-	*
-	* @param uuid the journal folder's UUID
-	* @param companyId the primary key of the company
-	* @return the matching journal folder, or <code>null</code> if a matching journal folder could not be found
-	*/
-	public static com.liferay.portlet.journal.model.JournalFolder fetchJournalFolderByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService().fetchJournalFolderByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the journal folder matching the UUID and group.
 	*
 	* @param uuid the journal folder's UUID
@@ -454,20 +442,6 @@ public class JournalFolderLocalServiceUtil {
 	}
 
 	/**
-	* Returns the journal folder with the matching UUID and company.
-	*
-	* @param uuid the journal folder's UUID
-	* @param companyId the primary key of the company
-	* @return the matching journal folder
-	* @throws PortalException if a matching journal folder could not be found
-	*/
-	public static com.liferay.portlet.journal.model.JournalFolder getJournalFolderByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getJournalFolderByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the journal folder matching the UUID and group.
 	*
 	* @param uuid the journal folder's UUID
@@ -495,6 +469,19 @@ public class JournalFolderLocalServiceUtil {
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> getJournalFolders(
 		int start, int end) {
 		return getService().getJournalFolders(start, end);
+	}
+
+	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> getJournalFoldersByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService().getJournalFoldersByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> getJournalFoldersByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getJournalFoldersByUuidAndCompanyId(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

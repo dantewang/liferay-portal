@@ -229,18 +229,6 @@ public abstract class CalEventLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
-	 * Returns the cal event with the matching UUID and company.
-	 *
-	 * @param uuid the cal event's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching cal event, or <code>null</code> if a matching cal event could not be found
-	 */
-	@Override
-	public CalEvent fetchCalEventByUuidAndCompanyId(String uuid, long companyId) {
-		return calEventPersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the cal event matching the UUID and group.
 	 *
 	 * @param uuid the cal event's UUID
@@ -356,18 +344,17 @@ public abstract class CalEventLocalServiceBaseImpl extends BaseLocalServiceImpl
 		return calEventPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the cal event with the matching UUID and company.
-	 *
-	 * @param uuid the cal event's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching cal event
-	 * @throws PortalException if a matching cal event could not be found
-	 */
 	@Override
-	public CalEvent getCalEventByUuidAndCompanyId(String uuid, long companyId)
-		throws PortalException {
-		return calEventPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<CalEvent> getCalEventsByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return calEventPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<CalEvent> getCalEventsByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		return calEventPersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

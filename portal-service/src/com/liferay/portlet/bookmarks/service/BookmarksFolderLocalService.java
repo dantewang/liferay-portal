@@ -200,17 +200,6 @@ public interface BookmarksFolderLocalService extends BaseLocalService,
 		long folderId);
 
 	/**
-	* Returns the bookmarks folder with the matching UUID and company.
-	*
-	* @param uuid the bookmarks folder's UUID
-	* @param companyId the primary key of the company
-	* @return the matching bookmarks folder, or <code>null</code> if a matching bookmarks folder could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portlet.bookmarks.model.BookmarksFolder fetchBookmarksFolderByUuidAndCompanyId(
-		java.lang.String uuid, long companyId);
-
-	/**
 	* Returns the bookmarks folder matching the UUID and group.
 	*
 	* @param uuid the bookmarks folder's UUID
@@ -244,19 +233,6 @@ public interface BookmarksFolderLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
-	* Returns the bookmarks folder with the matching UUID and company.
-	*
-	* @param uuid the bookmarks folder's UUID
-	* @param companyId the primary key of the company
-	* @return the matching bookmarks folder
-	* @throws PortalException if a matching bookmarks folder could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portlet.bookmarks.model.BookmarksFolder getBookmarksFolderByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException;
-
-	/**
 	* Returns the bookmarks folder matching the UUID and group.
 	*
 	* @param uuid the bookmarks folder's UUID
@@ -283,6 +259,15 @@ public interface BookmarksFolderLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.bookmarks.model.BookmarksFolder> getBookmarksFolders(
 		int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.bookmarks.model.BookmarksFolder> getBookmarksFoldersByUuidAndCompanyId(
+		java.lang.String uuid, long companyId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.bookmarks.model.BookmarksFolder> getBookmarksFoldersByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator);
 
 	/**
 	* Returns the number of bookmarks folders.

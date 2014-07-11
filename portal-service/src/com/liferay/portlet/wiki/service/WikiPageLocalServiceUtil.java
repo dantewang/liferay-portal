@@ -364,18 +364,6 @@ public class WikiPageLocalServiceUtil {
 	}
 
 	/**
-	* Returns the wiki page with the matching UUID and company.
-	*
-	* @param uuid the wiki page's UUID
-	* @param companyId the primary key of the company
-	* @return the matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	*/
-	public static com.liferay.portlet.wiki.model.WikiPage fetchWikiPageByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService().fetchWikiPageByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the wiki page matching the UUID and group.
 	*
 	* @param uuid the wiki page's UUID
@@ -674,20 +662,6 @@ public class WikiPageLocalServiceUtil {
 	}
 
 	/**
-	* Returns the wiki page with the matching UUID and company.
-	*
-	* @param uuid the wiki page's UUID
-	* @param companyId the primary key of the company
-	* @return the matching wiki page
-	* @throws PortalException if a matching wiki page could not be found
-	*/
-	public static com.liferay.portlet.wiki.model.WikiPage getWikiPageByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getWikiPageByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the wiki page matching the UUID and group.
 	*
 	* @param uuid the wiki page's UUID
@@ -715,6 +689,19 @@ public class WikiPageLocalServiceUtil {
 	public static java.util.List<com.liferay.portlet.wiki.model.WikiPage> getWikiPages(
 		int start, int end) {
 		return getService().getWikiPages(start, end);
+	}
+
+	public static java.util.List<com.liferay.portlet.wiki.model.WikiPage> getWikiPagesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService().getWikiPagesByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portlet.wiki.model.WikiPage> getWikiPagesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getWikiPagesByUuidAndCompanyId(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

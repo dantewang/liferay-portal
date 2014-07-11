@@ -202,17 +202,6 @@ public interface RepositoryLocalService extends BaseLocalService,
 		long repositoryId);
 
 	/**
-	* Returns the repository with the matching UUID and company.
-	*
-	* @param uuid the repository's UUID
-	* @param companyId the primary key of the company
-	* @return the matching repository, or <code>null</code> if a matching repository could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portal.model.Repository fetchRepositoryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId);
-
-	/**
 	* Returns the repository matching the UUID and group.
 	*
 	* @param uuid the repository's UUID
@@ -276,6 +265,15 @@ public interface RepositoryLocalService extends BaseLocalService,
 	public java.util.List<com.liferay.portal.model.Repository> getRepositories(
 		int start, int end);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portal.model.Repository> getRepositoriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portal.model.Repository> getRepositoriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator);
+
 	/**
 	* Returns the number of repositories.
 	*
@@ -303,19 +301,6 @@ public interface RepositoryLocalService extends BaseLocalService,
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portal.model.Repository getRepository(long repositoryId)
-		throws com.liferay.portal.kernel.exception.PortalException;
-
-	/**
-	* Returns the repository with the matching UUID and company.
-	*
-	* @param uuid the repository's UUID
-	* @param companyId the primary key of the company
-	* @return the matching repository
-	* @throws PortalException if a matching repository could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portal.model.Repository getRepositoryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**

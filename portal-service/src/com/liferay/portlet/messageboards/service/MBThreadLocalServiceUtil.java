@@ -210,18 +210,6 @@ public class MBThreadLocalServiceUtil {
 	}
 
 	/**
-	* Returns the message boards thread with the matching UUID and company.
-	*
-	* @param uuid the message boards thread's UUID
-	* @param companyId the primary key of the company
-	* @return the matching message boards thread, or <code>null</code> if a matching message boards thread could not be found
-	*/
-	public static com.liferay.portlet.messageboards.model.MBThread fetchMBThreadByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService().fetchMBThreadByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the message boards thread matching the UUID and group.
 	*
 	* @param uuid the message boards thread's UUID
@@ -417,20 +405,6 @@ public class MBThreadLocalServiceUtil {
 	}
 
 	/**
-	* Returns the message boards thread with the matching UUID and company.
-	*
-	* @param uuid the message boards thread's UUID
-	* @param companyId the primary key of the company
-	* @return the matching message boards thread
-	* @throws PortalException if a matching message boards thread could not be found
-	*/
-	public static com.liferay.portlet.messageboards.model.MBThread getMBThreadByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getMBThreadByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the message boards thread matching the UUID and group.
 	*
 	* @param uuid the message boards thread's UUID
@@ -458,6 +432,19 @@ public class MBThreadLocalServiceUtil {
 	public static java.util.List<com.liferay.portlet.messageboards.model.MBThread> getMBThreads(
 		int start, int end) {
 		return getService().getMBThreads(start, end);
+	}
+
+	public static java.util.List<com.liferay.portlet.messageboards.model.MBThread> getMBThreadsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService().getMBThreadsByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portlet.messageboards.model.MBThread> getMBThreadsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getMBThreadsByUuidAndCompanyId(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

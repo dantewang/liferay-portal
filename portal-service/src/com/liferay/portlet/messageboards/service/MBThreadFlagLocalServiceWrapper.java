@@ -215,20 +215,6 @@ public class MBThreadFlagLocalServiceWrapper implements MBThreadFlagLocalService
 	}
 
 	/**
-	* Returns the message boards thread flag with the matching UUID and company.
-	*
-	* @param uuid the message boards thread flag's UUID
-	* @param companyId the primary key of the company
-	* @return the matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
-	*/
-	@Override
-	public com.liferay.portlet.messageboards.model.MBThreadFlag fetchMBThreadFlagByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return _mbThreadFlagLocalService.fetchMBThreadFlagByUuidAndCompanyId(uuid,
-			companyId);
-	}
-
-	/**
 	* Returns the message boards thread flag matching the UUID and group.
 	*
 	* @param uuid the message boards thread flag's UUID
@@ -278,22 +264,6 @@ public class MBThreadFlagLocalServiceWrapper implements MBThreadFlagLocalService
 	}
 
 	/**
-	* Returns the message boards thread flag with the matching UUID and company.
-	*
-	* @param uuid the message boards thread flag's UUID
-	* @param companyId the primary key of the company
-	* @return the matching message boards thread flag
-	* @throws PortalException if a matching message boards thread flag could not be found
-	*/
-	@Override
-	public com.liferay.portlet.messageboards.model.MBThreadFlag getMBThreadFlagByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _mbThreadFlagLocalService.getMBThreadFlagByUuidAndCompanyId(uuid,
-			companyId);
-	}
-
-	/**
 	* Returns the message boards thread flag matching the UUID and group.
 	*
 	* @param uuid the message boards thread flag's UUID
@@ -324,6 +294,21 @@ public class MBThreadFlagLocalServiceWrapper implements MBThreadFlagLocalService
 	public java.util.List<com.liferay.portlet.messageboards.model.MBThreadFlag> getMBThreadFlags(
 		int start, int end) {
 		return _mbThreadFlagLocalService.getMBThreadFlags(start, end);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.messageboards.model.MBThreadFlag> getMBThreadFlagsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return _mbThreadFlagLocalService.getMBThreadFlagsByUuidAndCompanyId(uuid,
+			companyId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.messageboards.model.MBThreadFlag> getMBThreadFlagsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return _mbThreadFlagLocalService.getMBThreadFlagsByUuidAndCompanyId(uuid,
+			companyId, start, end, orderByComparator);
 	}
 
 	/**

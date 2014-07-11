@@ -240,20 +240,6 @@ public class MDRRuleLocalServiceWrapper implements MDRRuleLocalService,
 	}
 
 	/**
-	* Returns the m d r rule with the matching UUID and company.
-	*
-	* @param uuid the m d r rule's UUID
-	* @param companyId the primary key of the company
-	* @return the matching m d r rule, or <code>null</code> if a matching m d r rule could not be found
-	*/
-	@Override
-	public com.liferay.portlet.mobiledevicerules.model.MDRRule fetchMDRRuleByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return _mdrRuleLocalService.fetchMDRRuleByUuidAndCompanyId(uuid,
-			companyId);
-	}
-
-	/**
 	* Returns the m d r rule matching the UUID and group.
 	*
 	* @param uuid the m d r rule's UUID
@@ -307,21 +293,6 @@ public class MDRRuleLocalServiceWrapper implements MDRRuleLocalService,
 	}
 
 	/**
-	* Returns the m d r rule with the matching UUID and company.
-	*
-	* @param uuid the m d r rule's UUID
-	* @param companyId the primary key of the company
-	* @return the matching m d r rule
-	* @throws PortalException if a matching m d r rule could not be found
-	*/
-	@Override
-	public com.liferay.portlet.mobiledevicerules.model.MDRRule getMDRRuleByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _mdrRuleLocalService.getMDRRuleByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the m d r rule matching the UUID and group.
 	*
 	* @param uuid the m d r rule's UUID
@@ -351,6 +322,21 @@ public class MDRRuleLocalServiceWrapper implements MDRRuleLocalService,
 	public java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRule> getMDRRules(
 		int start, int end) {
 		return _mdrRuleLocalService.getMDRRules(start, end);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRule> getMDRRulesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return _mdrRuleLocalService.getMDRRulesByUuidAndCompanyId(uuid,
+			companyId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRule> getMDRRulesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return _mdrRuleLocalService.getMDRRulesByUuidAndCompanyId(uuid,
+			companyId, start, end, orderByComparator);
 	}
 
 	/**

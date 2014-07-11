@@ -216,19 +216,6 @@ public abstract class MDRActionLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
-	 * Returns the m d r action with the matching UUID and company.
-	 *
-	 * @param uuid the m d r action's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching m d r action, or <code>null</code> if a matching m d r action could not be found
-	 */
-	@Override
-	public MDRAction fetchMDRActionByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return mdrActionPersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the m d r action matching the UUID and group.
 	 *
 	 * @param uuid the m d r action's UUID
@@ -354,18 +341,17 @@ public abstract class MDRActionLocalServiceBaseImpl extends BaseLocalServiceImpl
 		return mdrActionPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the m d r action with the matching UUID and company.
-	 *
-	 * @param uuid the m d r action's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching m d r action
-	 * @throws PortalException if a matching m d r action could not be found
-	 */
 	@Override
-	public MDRAction getMDRActionByUuidAndCompanyId(String uuid, long companyId)
-		throws PortalException {
-		return mdrActionPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<MDRAction> getMDRActionsByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return mdrActionPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<MDRAction> getMDRActionsByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		return mdrActionPersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

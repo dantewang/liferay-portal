@@ -190,19 +190,6 @@ public class RepositoryEntryLocalServiceUtil {
 	}
 
 	/**
-	* Returns the repository entry with the matching UUID and company.
-	*
-	* @param uuid the repository entry's UUID
-	* @param companyId the primary key of the company
-	* @return the matching repository entry, or <code>null</code> if a matching repository entry could not be found
-	*/
-	public static com.liferay.portal.model.RepositoryEntry fetchRepositoryEntryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService()
-				   .fetchRepositoryEntryByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the repository entry matching the UUID and group.
 	*
 	* @param uuid the repository entry's UUID
@@ -259,6 +246,20 @@ public class RepositoryEntryLocalServiceUtil {
 		return getService().getRepositoryEntries(start, end);
 	}
 
+	public static java.util.List<com.liferay.portal.model.RepositoryEntry> getRepositoryEntriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService()
+				   .getRepositoryEntriesByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portal.model.RepositoryEntry> getRepositoryEntriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getRepositoryEntriesByUuidAndCompanyId(uuid, companyId,
+			start, end, orderByComparator);
+	}
+
 	/**
 	* Returns the number of repository entries.
 	*
@@ -279,20 +280,6 @@ public class RepositoryEntryLocalServiceUtil {
 		long repositoryEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getRepositoryEntry(repositoryEntryId);
-	}
-
-	/**
-	* Returns the repository entry with the matching UUID and company.
-	*
-	* @param uuid the repository entry's UUID
-	* @param companyId the primary key of the company
-	* @return the matching repository entry
-	* @throws PortalException if a matching repository entry could not be found
-	*/
-	public static com.liferay.portal.model.RepositoryEntry getRepositoryEntryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getRepositoryEntryByUuidAndCompanyId(uuid, companyId);
 	}
 
 	/**

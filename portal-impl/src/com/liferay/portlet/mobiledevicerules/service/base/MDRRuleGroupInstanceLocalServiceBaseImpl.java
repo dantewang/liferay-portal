@@ -228,20 +228,6 @@ public abstract class MDRRuleGroupInstanceLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the m d r rule group instance with the matching UUID and company.
-	 *
-	 * @param uuid the m d r rule group instance's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
-	 */
-	@Override
-	public MDRRuleGroupInstance fetchMDRRuleGroupInstanceByUuidAndCompanyId(
-		String uuid, long companyId) {
-		return mdrRuleGroupInstancePersistence.fetchByUuid_C_First(uuid,
-			companyId, null);
-	}
-
-	/**
 	 * Returns the m d r rule group instance matching the UUID and group.
 	 *
 	 * @param uuid the m d r rule group instance's UUID
@@ -369,19 +355,18 @@ public abstract class MDRRuleGroupInstanceLocalServiceBaseImpl
 		return mdrRuleGroupInstancePersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the m d r rule group instance with the matching UUID and company.
-	 *
-	 * @param uuid the m d r rule group instance's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching m d r rule group instance
-	 * @throws PortalException if a matching m d r rule group instance could not be found
-	 */
 	@Override
-	public MDRRuleGroupInstance getMDRRuleGroupInstanceByUuidAndCompanyId(
-		String uuid, long companyId) throws PortalException {
-		return mdrRuleGroupInstancePersistence.findByUuid_C_First(uuid,
-			companyId, null);
+	public List<MDRRuleGroupInstance> getMDRRuleGroupInstancesByUuidAndCompanyId(
+		String uuid, long companyId) {
+		return mdrRuleGroupInstancePersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<MDRRuleGroupInstance> getMDRRuleGroupInstancesByUuidAndCompanyId(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator orderByComparator) {
+		return mdrRuleGroupInstancePersistence.findByUuid_C(uuid, companyId,
+			start, end, orderByComparator);
 	}
 
 	/**

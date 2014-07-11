@@ -247,19 +247,6 @@ public abstract class MBMessageLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
-	 * Returns the message-boards message with the matching UUID and company.
-	 *
-	 * @param uuid the message-boards message's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching message-boards message, or <code>null</code> if a matching message-boards message could not be found
-	 */
-	@Override
-	public MBMessage fetchMBMessageByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return mbMessagePersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the message-boards message matching the UUID and group.
 	 *
 	 * @param uuid the message-boards message's UUID
@@ -393,18 +380,17 @@ public abstract class MBMessageLocalServiceBaseImpl extends BaseLocalServiceImpl
 		return mbMessagePersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the message-boards message with the matching UUID and company.
-	 *
-	 * @param uuid the message-boards message's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching message-boards message
-	 * @throws PortalException if a matching message-boards message could not be found
-	 */
 	@Override
-	public MBMessage getMBMessageByUuidAndCompanyId(String uuid, long companyId)
-		throws PortalException {
-		return mbMessagePersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<MBMessage> getMBMessagesByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return mbMessagePersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<MBMessage> getMBMessagesByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		return mbMessagePersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

@@ -284,18 +284,6 @@ public class AssetCategoryLocalServiceUtil {
 	}
 
 	/**
-	* Returns the asset category with the matching UUID and company.
-	*
-	* @param uuid the asset category's UUID
-	* @param companyId the primary key of the company
-	* @return the matching asset category, or <code>null</code> if a matching asset category could not be found
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory fetchAssetCategoryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService().fetchAssetCategoryByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the asset category matching the UUID and group.
 	*
 	* @param uuid the asset category's UUID
@@ -332,6 +320,19 @@ public class AssetCategoryLocalServiceUtil {
 		return getService().getAssetCategories(start, end);
 	}
 
+	public static java.util.List<com.liferay.portlet.asset.model.AssetCategory> getAssetCategoriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService().getAssetCategoriesByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portlet.asset.model.AssetCategory> getAssetCategoriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getAssetCategoriesByUuidAndCompanyId(uuid, companyId,
+			start, end, orderByComparator);
+	}
+
 	/**
 	* Returns the number of asset categories.
 	*
@@ -352,20 +353,6 @@ public class AssetCategoryLocalServiceUtil {
 		long categoryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getAssetCategory(categoryId);
-	}
-
-	/**
-	* Returns the asset category with the matching UUID and company.
-	*
-	* @param uuid the asset category's UUID
-	* @param companyId the primary key of the company
-	* @return the matching asset category
-	* @throws PortalException if a matching asset category could not be found
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategory getAssetCategoryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getAssetCategoryByUuidAndCompanyId(uuid, companyId);
 	}
 
 	/**

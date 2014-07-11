@@ -189,17 +189,6 @@ public interface MBMailingListLocalService extends BaseLocalService,
 		long mailingListId);
 
 	/**
-	* Returns the message boards mailing list with the matching UUID and company.
-	*
-	* @param uuid the message boards mailing list's UUID
-	* @param companyId the primary key of the company
-	* @return the matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portlet.messageboards.model.MBMailingList fetchMBMailingListByUuidAndCompanyId(
-		java.lang.String uuid, long companyId);
-
-	/**
 	* Returns the message boards mailing list matching the UUID and group.
 	*
 	* @param uuid the message boards mailing list's UUID
@@ -242,19 +231,6 @@ public interface MBMailingListLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
-	* Returns the message boards mailing list with the matching UUID and company.
-	*
-	* @param uuid the message boards mailing list's UUID
-	* @param companyId the primary key of the company
-	* @return the matching message boards mailing list
-	* @throws PortalException if a matching message boards mailing list could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portlet.messageboards.model.MBMailingList getMBMailingListByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException;
-
-	/**
 	* Returns the message boards mailing list matching the UUID and group.
 	*
 	* @param uuid the message boards mailing list's UUID
@@ -281,6 +257,15 @@ public interface MBMailingListLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.messageboards.model.MBMailingList> getMBMailingLists(
 		int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.messageboards.model.MBMailingList> getMBMailingListsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.messageboards.model.MBMailingList> getMBMailingListsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator);
 
 	/**
 	* Returns the number of message boards mailing lists.

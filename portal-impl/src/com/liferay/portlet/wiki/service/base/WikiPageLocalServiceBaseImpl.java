@@ -243,18 +243,6 @@ public abstract class WikiPageLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
-	 * Returns the wiki page with the matching UUID and company.
-	 *
-	 * @param uuid the wiki page's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 */
-	@Override
-	public WikiPage fetchWikiPageByUuidAndCompanyId(String uuid, long companyId) {
-		return wikiPagePersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the wiki page matching the UUID and group.
 	 *
 	 * @param uuid the wiki page's UUID
@@ -384,18 +372,17 @@ public abstract class WikiPageLocalServiceBaseImpl extends BaseLocalServiceImpl
 		return wikiPagePersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the wiki page with the matching UUID and company.
-	 *
-	 * @param uuid the wiki page's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching wiki page
-	 * @throws PortalException if a matching wiki page could not be found
-	 */
 	@Override
-	public WikiPage getWikiPageByUuidAndCompanyId(String uuid, long companyId)
-		throws PortalException {
-		return wikiPagePersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<WikiPage> getWikiPagesByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return wikiPagePersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<WikiPage> getWikiPagesByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		return wikiPagePersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

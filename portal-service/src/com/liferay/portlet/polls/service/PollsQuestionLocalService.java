@@ -207,17 +207,6 @@ public interface PollsQuestionLocalService extends BaseLocalService,
 		long questionId);
 
 	/**
-	* Returns the polls question with the matching UUID and company.
-	*
-	* @param uuid the polls question's UUID
-	* @param companyId the primary key of the company
-	* @return the matching polls question, or <code>null</code> if a matching polls question could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portlet.polls.model.PollsQuestion fetchPollsQuestionByUuidAndCompanyId(
-		java.lang.String uuid, long companyId);
-
-	/**
 	* Returns the polls question matching the UUID and group.
 	*
 	* @param uuid the polls question's UUID
@@ -261,19 +250,6 @@ public interface PollsQuestionLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
-	* Returns the polls question with the matching UUID and company.
-	*
-	* @param uuid the polls question's UUID
-	* @param companyId the primary key of the company
-	* @return the matching polls question
-	* @throws PortalException if a matching polls question could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portlet.polls.model.PollsQuestion getPollsQuestionByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException;
-
-	/**
 	* Returns the polls question matching the UUID and group.
 	*
 	* @param uuid the polls question's UUID
@@ -300,6 +276,15 @@ public interface PollsQuestionLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.polls.model.PollsQuestion> getPollsQuestions(
 		int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.polls.model.PollsQuestion> getPollsQuestionsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.polls.model.PollsQuestion> getPollsQuestionsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator);
 
 	/**
 	* Returns the number of polls questions.

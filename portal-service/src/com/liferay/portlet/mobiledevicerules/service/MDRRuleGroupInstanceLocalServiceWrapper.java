@@ -228,20 +228,6 @@ public class MDRRuleGroupInstanceLocalServiceWrapper
 	}
 
 	/**
-	* Returns the m d r rule group instance with the matching UUID and company.
-	*
-	* @param uuid the m d r rule group instance's UUID
-	* @param companyId the primary key of the company
-	* @return the matching m d r rule group instance, or <code>null</code> if a matching m d r rule group instance could not be found
-	*/
-	@Override
-	public com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance fetchMDRRuleGroupInstanceByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return _mdrRuleGroupInstanceLocalService.fetchMDRRuleGroupInstanceByUuidAndCompanyId(uuid,
-			companyId);
-	}
-
-	/**
 	* Returns the m d r rule group instance matching the UUID and group.
 	*
 	* @param uuid the m d r rule group instance's UUID
@@ -304,22 +290,6 @@ public class MDRRuleGroupInstanceLocalServiceWrapper
 	}
 
 	/**
-	* Returns the m d r rule group instance with the matching UUID and company.
-	*
-	* @param uuid the m d r rule group instance's UUID
-	* @param companyId the primary key of the company
-	* @return the matching m d r rule group instance
-	* @throws PortalException if a matching m d r rule group instance could not be found
-	*/
-	@Override
-	public com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance getMDRRuleGroupInstanceByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _mdrRuleGroupInstanceLocalService.getMDRRuleGroupInstanceByUuidAndCompanyId(uuid,
-			companyId);
-	}
-
-	/**
 	* Returns the m d r rule group instance matching the UUID and group.
 	*
 	* @param uuid the m d r rule group instance's UUID
@@ -351,6 +321,21 @@ public class MDRRuleGroupInstanceLocalServiceWrapper
 		int start, int end) {
 		return _mdrRuleGroupInstanceLocalService.getMDRRuleGroupInstances(start,
 			end);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance> getMDRRuleGroupInstancesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return _mdrRuleGroupInstanceLocalService.getMDRRuleGroupInstancesByUuidAndCompanyId(uuid,
+			companyId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance> getMDRRuleGroupInstancesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return _mdrRuleGroupInstanceLocalService.getMDRRuleGroupInstancesByUuidAndCompanyId(uuid,
+			companyId, start, end, orderByComparator);
 	}
 
 	/**

@@ -217,20 +217,6 @@ public abstract class PollsQuestionLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the polls question with the matching UUID and company.
-	 *
-	 * @param uuid the polls question's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching polls question, or <code>null</code> if a matching polls question could not be found
-	 */
-	@Override
-	public PollsQuestion fetchPollsQuestionByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return pollsQuestionPersistence.fetchByUuid_C_First(uuid, companyId,
-			null);
-	}
-
-	/**
 	 * Returns the polls question matching the UUID and group.
 	 *
 	 * @param uuid the polls question's UUID
@@ -348,18 +334,18 @@ public abstract class PollsQuestionLocalServiceBaseImpl
 		return pollsQuestionPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the polls question with the matching UUID and company.
-	 *
-	 * @param uuid the polls question's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching polls question
-	 * @throws PortalException if a matching polls question could not be found
-	 */
 	@Override
-	public PollsQuestion getPollsQuestionByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return pollsQuestionPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<PollsQuestion> getPollsQuestionsByUuidAndCompanyId(
+		String uuid, long companyId) {
+		return pollsQuestionPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<PollsQuestion> getPollsQuestionsByUuidAndCompanyId(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator orderByComparator) {
+		return pollsQuestionPersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

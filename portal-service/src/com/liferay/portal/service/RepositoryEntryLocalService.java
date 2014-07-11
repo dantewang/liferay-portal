@@ -171,17 +171,6 @@ public interface RepositoryEntryLocalService extends BaseLocalService,
 		long repositoryEntryId);
 
 	/**
-	* Returns the repository entry with the matching UUID and company.
-	*
-	* @param uuid the repository entry's UUID
-	* @param companyId the primary key of the company
-	* @return the matching repository entry, or <code>null</code> if a matching repository entry could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portal.model.RepositoryEntry fetchRepositoryEntryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId);
-
-	/**
 	* Returns the repository entry matching the UUID and group.
 	*
 	* @param uuid the repository entry's UUID
@@ -231,6 +220,15 @@ public interface RepositoryEntryLocalService extends BaseLocalService,
 	public java.util.List<com.liferay.portal.model.RepositoryEntry> getRepositoryEntries(
 		int start, int end);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portal.model.RepositoryEntry> getRepositoryEntriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portal.model.RepositoryEntry> getRepositoryEntriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator);
+
 	/**
 	* Returns the number of repository entries.
 	*
@@ -249,19 +247,6 @@ public interface RepositoryEntryLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portal.model.RepositoryEntry getRepositoryEntry(
 		long repositoryEntryId)
-		throws com.liferay.portal.kernel.exception.PortalException;
-
-	/**
-	* Returns the repository entry with the matching UUID and company.
-	*
-	* @param uuid the repository entry's UUID
-	* @param companyId the primary key of the company
-	* @return the matching repository entry
-	* @throws PortalException if a matching repository entry could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portal.model.RepositoryEntry getRepositoryEntryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**

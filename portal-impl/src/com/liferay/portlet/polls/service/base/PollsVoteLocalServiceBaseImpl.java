@@ -214,19 +214,6 @@ public abstract class PollsVoteLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
-	 * Returns the polls vote with the matching UUID and company.
-	 *
-	 * @param uuid the polls vote's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching polls vote, or <code>null</code> if a matching polls vote could not be found
-	 */
-	@Override
-	public PollsVote fetchPollsVoteByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return pollsVotePersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the polls vote matching the UUID and group.
 	 *
 	 * @param uuid the polls vote's UUID
@@ -342,18 +329,17 @@ public abstract class PollsVoteLocalServiceBaseImpl extends BaseLocalServiceImpl
 		return pollsVotePersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the polls vote with the matching UUID and company.
-	 *
-	 * @param uuid the polls vote's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching polls vote
-	 * @throws PortalException if a matching polls vote could not be found
-	 */
 	@Override
-	public PollsVote getPollsVoteByUuidAndCompanyId(String uuid, long companyId)
-		throws PortalException {
-		return pollsVotePersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<PollsVote> getPollsVotesByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return pollsVotePersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<PollsVote> getPollsVotesByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		return pollsVotePersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

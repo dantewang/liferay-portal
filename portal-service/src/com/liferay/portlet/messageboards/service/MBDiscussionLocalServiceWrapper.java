@@ -220,20 +220,6 @@ public class MBDiscussionLocalServiceWrapper implements MBDiscussionLocalService
 	}
 
 	/**
-	* Returns the message boards discussion with the matching UUID and company.
-	*
-	* @param uuid the message boards discussion's UUID
-	* @param companyId the primary key of the company
-	* @return the matching message boards discussion, or <code>null</code> if a matching message boards discussion could not be found
-	*/
-	@Override
-	public com.liferay.portlet.messageboards.model.MBDiscussion fetchMBDiscussionByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return _mbDiscussionLocalService.fetchMBDiscussionByUuidAndCompanyId(uuid,
-			companyId);
-	}
-
-	/**
 	* Returns the message boards discussion matching the UUID and group.
 	*
 	* @param uuid the message boards discussion's UUID
@@ -297,22 +283,6 @@ public class MBDiscussionLocalServiceWrapper implements MBDiscussionLocalService
 	}
 
 	/**
-	* Returns the message boards discussion with the matching UUID and company.
-	*
-	* @param uuid the message boards discussion's UUID
-	* @param companyId the primary key of the company
-	* @return the matching message boards discussion
-	* @throws PortalException if a matching message boards discussion could not be found
-	*/
-	@Override
-	public com.liferay.portlet.messageboards.model.MBDiscussion getMBDiscussionByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _mbDiscussionLocalService.getMBDiscussionByUuidAndCompanyId(uuid,
-			companyId);
-	}
-
-	/**
 	* Returns the message boards discussion matching the UUID and group.
 	*
 	* @param uuid the message boards discussion's UUID
@@ -343,6 +313,21 @@ public class MBDiscussionLocalServiceWrapper implements MBDiscussionLocalService
 	public java.util.List<com.liferay.portlet.messageboards.model.MBDiscussion> getMBDiscussions(
 		int start, int end) {
 		return _mbDiscussionLocalService.getMBDiscussions(start, end);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.messageboards.model.MBDiscussion> getMBDiscussionsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return _mbDiscussionLocalService.getMBDiscussionsByUuidAndCompanyId(uuid,
+			companyId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.messageboards.model.MBDiscussion> getMBDiscussionsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return _mbDiscussionLocalService.getMBDiscussionsByUuidAndCompanyId(uuid,
+			companyId, start, end, orderByComparator);
 	}
 
 	/**

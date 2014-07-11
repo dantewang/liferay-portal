@@ -529,18 +529,6 @@ public class DDMStructureLocalServiceUtil {
 	}
 
 	/**
-	* Returns the d d m structure with the matching UUID and company.
-	*
-	* @param uuid the d d m structure's UUID
-	* @param companyId the primary key of the company
-	* @return the matching d d m structure, or <code>null</code> if a matching d d m structure could not be found
-	*/
-	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure fetchDDMStructureByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService().fetchDDMStructureByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the d d m structure matching the UUID and group.
 	*
 	* @param uuid the d d m structure's UUID
@@ -725,20 +713,6 @@ public class DDMStructureLocalServiceUtil {
 	}
 
 	/**
-	* Returns the d d m structure with the matching UUID and company.
-	*
-	* @param uuid the d d m structure's UUID
-	* @param companyId the primary key of the company
-	* @return the matching d d m structure
-	* @throws PortalException if a matching d d m structure could not be found
-	*/
-	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure getDDMStructureByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getDDMStructureByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the d d m structure matching the UUID and group.
 	*
 	* @param uuid the d d m structure's UUID
@@ -766,6 +740,19 @@ public class DDMStructureLocalServiceUtil {
 	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getDDMStructures(
 		int start, int end) {
 		return getService().getDDMStructures(start, end);
+	}
+
+	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getDDMStructuresByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService().getDDMStructuresByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getDDMStructuresByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getDDMStructuresByUuidAndCompanyId(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

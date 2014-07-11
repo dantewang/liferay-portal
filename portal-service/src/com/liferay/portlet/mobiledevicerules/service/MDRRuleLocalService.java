@@ -203,17 +203,6 @@ public interface MDRRuleLocalService extends BaseLocalService,
 		long ruleId);
 
 	/**
-	* Returns the m d r rule with the matching UUID and company.
-	*
-	* @param uuid the m d r rule's UUID
-	* @param companyId the primary key of the company
-	* @return the matching m d r rule, or <code>null</code> if a matching m d r rule could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portlet.mobiledevicerules.model.MDRRule fetchMDRRuleByUuidAndCompanyId(
-		java.lang.String uuid, long companyId);
-
-	/**
 	* Returns the m d r rule matching the UUID and group.
 	*
 	* @param uuid the m d r rule's UUID
@@ -254,19 +243,6 @@ public interface MDRRuleLocalService extends BaseLocalService,
 		long ruleId) throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
-	* Returns the m d r rule with the matching UUID and company.
-	*
-	* @param uuid the m d r rule's UUID
-	* @param companyId the primary key of the company
-	* @return the matching m d r rule
-	* @throws PortalException if a matching m d r rule could not be found
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portlet.mobiledevicerules.model.MDRRule getMDRRuleByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException;
-
-	/**
 	* Returns the m d r rule matching the UUID and group.
 	*
 	* @param uuid the m d r rule's UUID
@@ -293,6 +269,15 @@ public interface MDRRuleLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRule> getMDRRules(
 		int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRule> getMDRRulesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRule> getMDRRulesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator);
 
 	/**
 	* Returns the number of m d r rules.

@@ -265,18 +265,6 @@ public class MBCategoryLocalServiceUtil {
 	}
 
 	/**
-	* Returns the message boards category with the matching UUID and company.
-	*
-	* @param uuid the message boards category's UUID
-	* @param companyId the primary key of the company
-	* @return the matching message boards category, or <code>null</code> if a matching message boards category could not be found
-	*/
-	public static com.liferay.portlet.messageboards.model.MBCategory fetchMBCategoryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService().fetchMBCategoryByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the message boards category matching the UUID and group.
 	*
 	* @param uuid the message boards category's UUID
@@ -431,6 +419,19 @@ public class MBCategoryLocalServiceUtil {
 		return getService().getMBCategories(start, end);
 	}
 
+	public static java.util.List<com.liferay.portlet.messageboards.model.MBCategory> getMBCategoriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService().getMBCategoriesByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portlet.messageboards.model.MBCategory> getMBCategoriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getMBCategoriesByUuidAndCompanyId(uuid, companyId, start,
+			end, orderByComparator);
+	}
+
 	/**
 	* Returns the number of message boards categories.
 	*
@@ -451,20 +452,6 @@ public class MBCategoryLocalServiceUtil {
 		long categoryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getMBCategory(categoryId);
-	}
-
-	/**
-	* Returns the message boards category with the matching UUID and company.
-	*
-	* @param uuid the message boards category's UUID
-	* @param companyId the primary key of the company
-	* @return the matching message boards category
-	* @throws PortalException if a matching message boards category could not be found
-	*/
-	public static com.liferay.portlet.messageboards.model.MBCategory getMBCategoryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getMBCategoryByUuidAndCompanyId(uuid, companyId);
 	}
 
 	/**

@@ -220,19 +220,6 @@ public class BookmarksFolderLocalServiceUtil {
 	}
 
 	/**
-	* Returns the bookmarks folder with the matching UUID and company.
-	*
-	* @param uuid the bookmarks folder's UUID
-	* @param companyId the primary key of the company
-	* @return the matching bookmarks folder, or <code>null</code> if a matching bookmarks folder could not be found
-	*/
-	public static com.liferay.portlet.bookmarks.model.BookmarksFolder fetchBookmarksFolderByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return getService()
-				   .fetchBookmarksFolderByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the bookmarks folder matching the UUID and group.
 	*
 	* @param uuid the bookmarks folder's UUID
@@ -271,20 +258,6 @@ public class BookmarksFolderLocalServiceUtil {
 	}
 
 	/**
-	* Returns the bookmarks folder with the matching UUID and company.
-	*
-	* @param uuid the bookmarks folder's UUID
-	* @param companyId the primary key of the company
-	* @return the matching bookmarks folder
-	* @throws PortalException if a matching bookmarks folder could not be found
-	*/
-	public static com.liferay.portlet.bookmarks.model.BookmarksFolder getBookmarksFolderByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getBookmarksFolderByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
 	* Returns the bookmarks folder matching the UUID and group.
 	*
 	* @param uuid the bookmarks folder's UUID
@@ -312,6 +285,20 @@ public class BookmarksFolderLocalServiceUtil {
 	public static java.util.List<com.liferay.portlet.bookmarks.model.BookmarksFolder> getBookmarksFolders(
 		int start, int end) {
 		return getService().getBookmarksFolders(start, end);
+	}
+
+	public static java.util.List<com.liferay.portlet.bookmarks.model.BookmarksFolder> getBookmarksFoldersByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return getService()
+				   .getBookmarksFoldersByUuidAndCompanyId(uuid, companyId);
+	}
+
+	public static java.util.List<com.liferay.portlet.bookmarks.model.BookmarksFolder> getBookmarksFoldersByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return getService()
+				   .getBookmarksFoldersByUuidAndCompanyId(uuid, companyId,
+			start, end, orderByComparator);
 	}
 
 	/**

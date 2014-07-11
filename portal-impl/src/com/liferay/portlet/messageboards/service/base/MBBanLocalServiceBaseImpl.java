@@ -211,18 +211,6 @@ public abstract class MBBanLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
-	 * Returns the message boards ban with the matching UUID and company.
-	 *
-	 * @param uuid the message boards ban's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
-	 */
-	@Override
-	public MBBan fetchMBBanByUuidAndCompanyId(String uuid, long companyId) {
-		return mbBanPersistence.fetchByUuid_C_First(uuid, companyId, null);
-	}
-
-	/**
 	 * Returns the message boards ban matching the UUID and group.
 	 *
 	 * @param uuid the message boards ban's UUID
@@ -338,18 +326,16 @@ public abstract class MBBanLocalServiceBaseImpl extends BaseLocalServiceImpl
 		return mbBanPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the message boards ban with the matching UUID and company.
-	 *
-	 * @param uuid the message boards ban's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching message boards ban
-	 * @throws PortalException if a matching message boards ban could not be found
-	 */
 	@Override
-	public MBBan getMBBanByUuidAndCompanyId(String uuid, long companyId)
-		throws PortalException {
-		return mbBanPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<MBBan> getMBBansByUuidAndCompanyId(String uuid, long companyId) {
+		return mbBanPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<MBBan> getMBBansByUuidAndCompanyId(String uuid, long companyId,
+		int start, int end, OrderByComparator orderByComparator) {
+		return mbBanPersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

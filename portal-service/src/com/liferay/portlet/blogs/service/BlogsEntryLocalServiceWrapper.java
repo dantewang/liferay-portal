@@ -289,20 +289,6 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService,
 	}
 
 	/**
-	* Returns the blogs entry with the matching UUID and company.
-	*
-	* @param uuid the blogs entry's UUID
-	* @param companyId the primary key of the company
-	* @return the matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	*/
-	@Override
-	public com.liferay.portlet.blogs.model.BlogsEntry fetchBlogsEntryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return _blogsEntryLocalService.fetchBlogsEntryByUuidAndCompanyId(uuid,
-			companyId);
-	}
-
-	/**
 	* Returns the blogs entry matching the UUID and group.
 	*
 	* @param uuid the blogs entry's UUID
@@ -348,6 +334,21 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService,
 		return _blogsEntryLocalService.getBlogsEntries(start, end);
 	}
 
+	@Override
+	public java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> getBlogsEntriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return _blogsEntryLocalService.getBlogsEntriesByUuidAndCompanyId(uuid,
+			companyId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> getBlogsEntriesByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		return _blogsEntryLocalService.getBlogsEntriesByUuidAndCompanyId(uuid,
+			companyId, start, end, orderByComparator);
+	}
+
 	/**
 	* Returns the number of blogs entries.
 	*
@@ -370,22 +371,6 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService,
 		long entryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _blogsEntryLocalService.getBlogsEntry(entryId);
-	}
-
-	/**
-	* Returns the blogs entry with the matching UUID and company.
-	*
-	* @param uuid the blogs entry's UUID
-	* @param companyId the primary key of the company
-	* @return the matching blogs entry
-	* @throws PortalException if a matching blogs entry could not be found
-	*/
-	@Override
-	public com.liferay.portlet.blogs.model.BlogsEntry getBlogsEntryByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _blogsEntryLocalService.getBlogsEntryByUuidAndCompanyId(uuid,
-			companyId);
 	}
 
 	/**

@@ -256,20 +256,6 @@ public abstract class JournalArticleLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the journal article with the matching UUID and company.
-	 *
-	 * @param uuid the journal article's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching journal article, or <code>null</code> if a matching journal article could not be found
-	 */
-	@Override
-	public JournalArticle fetchJournalArticleByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return journalArticlePersistence.fetchByUuid_C_First(uuid, companyId,
-			null);
-	}
-
-	/**
 	 * Returns the journal article matching the UUID and group.
 	 *
 	 * @param uuid the journal article's UUID
@@ -410,19 +396,18 @@ public abstract class JournalArticleLocalServiceBaseImpl
 		return journalArticlePersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the journal article with the matching UUID and company.
-	 *
-	 * @param uuid the journal article's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching journal article
-	 * @throws PortalException if a matching journal article could not be found
-	 */
 	@Override
-	public JournalArticle getJournalArticleByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return journalArticlePersistence.findByUuid_C_First(uuid, companyId,
-			null);
+	public List<JournalArticle> getJournalArticlesByUuidAndCompanyId(
+		String uuid, long companyId) {
+		return journalArticlePersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<JournalArticle> getJournalArticlesByUuidAndCompanyId(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator orderByComparator) {
+		return journalArticlePersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**
