@@ -15,6 +15,8 @@
 package com.liferay.portal.spring.transaction;
 
 import com.liferay.portal.cache.transactional.TransactionalPortalCacheHelper;
+import com.liferay.portal.kernel.cache.Lifecycle;
+import com.liferay.portal.kernel.cache.ThreadLocalCacheManager;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -50,6 +52,10 @@ public class DefaultTransactionExecutor extends BaseTransactionExecutor {
 			TransactionalPortalCacheHelper.begin();
 
 			TransactionCommitCallbackUtil.pushCallbackList();
+
+			if (!transactionAttribute.isReadOnly()) {
+				ThreadLocalCacheManager.clearAll(Lifecycle.REQUEST);
+			}
 		}
 
 		Object returnValue = null;
