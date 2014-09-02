@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -26,7 +27,11 @@ import com.liferay.portal.kernel.util.Tuple;
 import com.liferay.portal.kernel.util.Validator;
 
 import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.model.ClassLibrary;
+import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.parser.ParseException;
 
 import java.io.File;
 import java.io.IOException;
@@ -318,6 +323,86 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 		return ifClause;
 	}
 
+	protected String checkImmutableAndStaticableFieldTypes(
+		String fileName, String packagePath, String className,
+		String content) {
+
+		ClassLibrary classLibrary = new ClassLibrary();
+
+		classLibrary.addClassLoader(JavaSourceProcessor.class.getClassLoader());
+
+		JavaDocBuilder javaDocBuilder = new JavaDocBuilder(classLibrary);
+
+		try {
+			javaDocBuilder.addSource(
+				new UnsyncStringReader(sanitizeContent(content)));
+		}
+		catch (ParseException pe) {
+			System.err.println(
+				"Unable to parse " + fileName + StringPool.COMMA_AND_SPACE +
+					pe.getMessage());
+
+			return content;
+		}
+
+		com.thoughtworks.qdox.model.JavaClass javaClass =
+			javaDocBuilder.getClassByName(
+				packagePath.concat(StringPool.PERIOD).concat(className));
+
+		String[] lines = null;
+
+		for (JavaField javaField : javaClass.getFields()) {
+			Type type = javaField.getType();
+
+			String fieldTypeName = type.getFullyQualifiedName();
+
+			if (!javaField.isPrivate() || !javaField.isFinal() ||
+				!_immutableFieldTypes.contains(fieldTypeName)) {
+
+				continue;
+			}
+
+			String oldName = javaField.getName();
+
+			if (!type.isArray() && javaField.isStatic() &&
+				!oldName.equals("serialVersionUID")) {
+
+				Matcher matcher = _camelCasePattern.matcher(oldName);
+
+				String newName = matcher.replaceAll("$1_$2");
+
+				newName = StringUtil.toUpperCase(newName);
+
+				if (newName.charAt(0) != CharPool.UNDERLINE) {
+					newName = StringPool.UNDERLINE.concat(newName);
+				}
+
+				content = content.replaceAll(
+					"(?<=[\\W&&[^.\"]])(" + oldName + ")\\b", newName);
+			}
+
+			String initializationExpression = StringUtil.trim(
+				javaField.getInitializationExpression());
+
+			if (javaField.isStatic() || initializationExpression.isEmpty()) {
+				continue;
+			}
+
+			if (lines == null) {
+				lines = StringUtil.splitLines(content);
+			}
+
+			String line = lines[javaField.getLineNumber() - 1];
+
+			String newLine = StringUtil.replace(
+				line, "private final", "private static final");
+
+			content = StringUtil.replace(content, line, newLine);
+		}
+
+		return content;
+	}
+
 	protected void checkLogLevel(
 		String content, String fileName, String logLevel) {
 
@@ -595,6 +680,11 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 		String packagePath = fileName;
 
 		int packagePathX = packagePath.indexOf("/src/");
+
+		if (packagePathX == -1) {
+			packagePathX = packagePath.indexOf("/integration/") + 8;
+		}
+
 		int packagePathY = packagePath.lastIndexOf(StringPool.SLASH);
 
 		if ((packagePathX + 5) >= packagePathY) {
@@ -878,6 +968,11 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 
 		//newContent = applyDiamondOperator(newContent);
 
+		// LPS-49294
+
+		newContent = checkImmutableAndStaticableFieldTypes(
+			fileName, packagePath, className, newContent);
+
 		newContent = fixIncorrectEmptyLineBeforeCloseCurlyBrace(
 			newContent, fileName);
 
@@ -1068,18 +1163,31 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 			fileNames = getPluginJavaFiles();
 		}
 
-		_fitOnSingleLineExclusions = getExclusions(
+		_fitOnSingleLineExclusions = getPropertyList(
 			"fit.on.single.line.exludes");
-		_hibernateSQLQueryExclusions = getExclusions(
+		_hibernateSQLQueryExclusions = getPropertyList(
 			"hibernate.sql.query.excludes");
-		_javaTermSortExclusions = getExclusions("javaterm.sort.excludes");
-		_lineLengthExclusions = getExclusions("line.length.excludes");
-		_proxyExclusions = getExclusions("proxy.excludes");
-		_secureRandomExclusions = getExclusions("secure.random.excludes");
-		_staticLogVariableExclusions = getExclusions("static.log.excludes");
-		_testAnnotationsExclusions = getExclusions("test.annotations.excludes");
-		_upgradeServiceUtilExclusions = getExclusions(
+		_javaTermSortExclusions = getPropertyList("javaterm.sort.excludes");
+		_lineLengthExclusions = getPropertyList("line.length.excludes");
+		_proxyExclusions = getPropertyList("proxy.excludes");
+		_secureRandomExclusions = getPropertyList("secure.random.excludes");
+		_staticLogVariableExclusions = getPropertyList("static.log.excludes");
+		_testAnnotationsExclusions = getPropertyList(
+			"test.annotations.excludes");
+		_upgradeServiceUtilExclusions = getPropertyList(
 			"upgrade.service.util.excludes");
+
+		_immutableFieldTypes = SetUtil.fromArray(
+			new String[] {
+				"boolean", "byte", "char", "double", "float", "int", "long",
+				"short", "java.lang.Boolean", "java.lang.Byte",
+				"java.lang.Character", "java.lang.Class", "java.lang.Double",
+				"java.lang.Float", "java.lang.Int", "java.lang.Long",
+				"java.lang.Number", "java.lang.Short", "java.lang.String",
+				"java.lang.reflect.Field", "java.lang.reflect.Method"
+			});
+
+		_immutableFieldTypes.addAll(getPropertyList("immutable.field.types"));
 
 		for (String fileName : fileNames) {
 			format(fileName);
@@ -2169,8 +2277,7 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 			"**\\service\\persistence\\*FinderImpl.java",
 			"**\\service\\persistence\\*Query.java",
 			"**\\service\\persistence\\impl\\*.java",
-			"**\\portal-impl\\test\\**\\*.java",
-			"**\\util-bridges\\**\\*.java"
+			"**\\portal-impl\\test\\**\\*.java", "**\\util-bridges\\**\\*.java"
 		};
 
 		fileNames.addAll(getFileNames(excludes, includes));
@@ -2179,7 +2286,7 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 	}
 
 	protected boolean isAnnotationParameter(String content, String line) {
-		if (!line.contains(" = ") && (!line.startsWith(StringPool.QUOTE))) {
+		if (!line.contains(" = ") && !line.startsWith(StringPool.QUOTE)) {
 			return false;
 		}
 
@@ -2237,6 +2344,20 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 		return false;
 	}
 
+	protected String sanitizeContent(String content) {
+		Matcher componentPropertyMatcher = _componentPropertyPattern.matcher(
+			content);
+
+		if (!componentPropertyMatcher.find()) {
+			return content;
+		}
+
+		String prefix = content.substring(0, componentPropertyMatcher.start(1));
+		String postfix = content.substring(componentPropertyMatcher.end(1));
+
+		return prefix.concat(postfix);
+	}
+
 	protected String sortExceptions(String line) {
 		if (!line.endsWith(StringPool.OPEN_CURLY_BRACE) &&
 			!line.endsWith(StringPool.SEMICOLON)) {
@@ -2289,14 +2410,19 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 
 	private Pattern _annotationPattern = Pattern.compile(
 		"\n(\t*)@(.+)\\(\n([\\s\\S]*?)\n(\t*)\\)");
+	private final Pattern _camelCasePattern = Pattern.compile(
+		"([a-z])([A-Z0-9])");
 	private Pattern _catchExceptionPattern = Pattern.compile(
 		"\n(\t+)catch \\((.+Exception) (.+)\\) \\{\n");
 	private boolean _checkUnprocessedExceptions;
+	private final Pattern _componentPropertyPattern = Pattern.compile(
+		"(?s)@Component\\(.*?\\sproperty = \\{(.*?)\\}");
 	private Pattern _diamondOperatorPattern = Pattern.compile(
 		"(return|=)\n?(\t+| )new ([A-Za-z]+)(Map|Set|List)<(.+)>" +
 			"\\(\n*\t*(.*)\\);\n");
 	private List<String> _fitOnSingleLineExclusions;
 	private List<String> _hibernateSQLQueryExclusions;
+	private Set<String> _immutableFieldTypes;
 	private Pattern _incorrectCloseCurlyBracePattern = Pattern.compile(
 		"\n(.+)\n\n(\t+)}\n");
 	private Pattern _incorrectLineBreakPattern = Pattern.compile(

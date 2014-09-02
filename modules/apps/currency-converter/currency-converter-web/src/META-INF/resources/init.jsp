@@ -22,7 +22,8 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<%@ page import="com.liferay.currency.converter.portlet.validator.CurrencyUtil" %><%@
+<%@ page import="com.liferay.currency.converter.web.model.CurrencyConverter" %><%@
+page import="com.liferay.currency.converter.web.util.CurrencyConverterUtil" %><%@
 page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
 page import="com.liferay.portal.kernel.util.Constants" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
@@ -38,7 +39,8 @@ page import="java.util.Arrays" %><%@
 page import="java.util.List" %><%@
 page import="java.util.Map" %>
 
-<%@ page import="javax.portlet.PortletURL" %><%@
+<%@ page import="javax.portlet.PortletMode" %><%@
+page import="javax.portlet.PortletURL" %><%@
 page import="javax.portlet.WindowState" %>
 
 <liferay-theme:defineObjects />
@@ -49,7 +51,7 @@ WindowState windowState = liferayPortletRequest.getWindowState();
 
 String[] symbols = portletPreferences.getValues("symbols", new String[0]);
 
-Map<String, String> allSymbols = CurrencyUtil.getAllSymbols(request);
+Map<String, String> allSymbols = CurrencyConverterUtil.getAllSymbols(request);
 %>
 
 <%@ include file="/init-ext.jsp" %>

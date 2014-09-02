@@ -212,30 +212,40 @@ public class ElasticsearchIndexSearcher extends BaseIndexSearcher {
 	}
 
 	protected void addHighlightedField(
+		SearchRequestBuilder searchRequestBuilder, int fragmentSize,
+		int snippetSize, Locale locale, String fieldName) {
+
+		searchRequestBuilder.addHighlightedField(
+			fieldName, fragmentSize, snippetSize);
+
+		String localizedFieldName = DocumentImpl.getLocalizedName(
+			locale, fieldName);
+
+		searchRequestBuilder.addHighlightedField(
+			localizedFieldName, fragmentSize, snippetSize);
+	}
+
+	protected void addHighlightedField(
 		SearchRequestBuilder searchRequestBuilder, QueryConfig queryConfig,
 		String fieldName) {
 
-		searchRequestBuilder.addHighlightedField(
-			fieldName, queryConfig.getHighlightFragmentSize(),
-			queryConfig.getHighlightSnippetSize());
-
-		String localizedFieldName = DocumentImpl.getLocalizedName(
-			queryConfig.getLocale(), fieldName);
-
-		searchRequestBuilder.addHighlightedField(
-			localizedFieldName, queryConfig.getHighlightFragmentSize(),
-			queryConfig.getHighlightSnippetSize());
+		addHighlightedField(
+			searchRequestBuilder, queryConfig.getHighlightFragmentSize(),
+			queryConfig.getHighlightSnippetSize(), queryConfig.getLocale(),
+			fieldName);
 	}
 
 	protected void addHighlights(
 		SearchRequestBuilder searchRequestBuilder, QueryConfig queryConfig) {
 
+		addHighlightedField(
+			searchRequestBuilder, 1, 1, queryConfig.getLocale(),
+			Field.ASSET_CATEGORY_TITLES);
+
 		if (!queryConfig.isHighlightEnabled()) {
 			return;
 		}
 
-		addHighlightedField(
-			searchRequestBuilder, queryConfig, Field.ASSET_CATEGORY_TITLES);
 		addHighlightedField(searchRequestBuilder, queryConfig, Field.CONTENT);
 		addHighlightedField(
 			searchRequestBuilder, queryConfig, Field.DESCRIPTION);

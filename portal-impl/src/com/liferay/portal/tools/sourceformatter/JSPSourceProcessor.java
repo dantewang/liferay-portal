@@ -40,9 +40,7 @@ import java.util.regex.Pattern;
 public class JSPSourceProcessor extends BaseSourceProcessor {
 
 	protected void addImportCounts(String content) {
-		Pattern pattern = Pattern.compile("page import=\"(.+)\"");
-
-		Matcher matcher = pattern.matcher(content);
+		Matcher matcher = _importsPattern.matcher(content);
 
 		while (matcher.find()) {
 			String importName = matcher.group(1);
@@ -430,12 +428,16 @@ public class JSPSourceProcessor extends BaseSourceProcessor {
 				null);
 		}
 
+		if (!content.equals(newContent)) {
+			_jspContents.put(fileName, newContent);
+		}
+
 		return newContent;
 	}
 
 	@Override
 	protected void format() throws Exception {
-		_unusedVariablesExclusions = getExclusions(
+		_unusedVariablesExclusions = getPropertyList(
 			"jsp.unused.variables.excludes");
 
 		String[] excludes = new String[] {"**\\null.jsp", "**\\tools\\**"};
@@ -575,8 +577,7 @@ public class JSPSourceProcessor extends BaseSourceProcessor {
 				!_jspContents.isEmpty() &&
 				hasUnusedVariable(fileName, trimmedLine)) {
 
-				processErrorMessage(
-					fileName, "Unused variable: " + fileName + " " + lineCount);
+				continue;
 			}
 
 			// LPS-47179
@@ -1214,31 +1215,27 @@ public class JSPSourceProcessor extends BaseSourceProcessor {
 			imports, new String[] {"%><%@\r\n", "%><%@\n"},
 			new String[] {"%>\r\n<%@ ", "%>\n<%@ "});
 
-		if (!fileName.endsWith("html/common/init.jsp") &&
-			!fileName.endsWith("html/portal/init.jsp")) {
+		List<String> importLines = new ArrayList<String>();
 
-			List<String> importLines = new ArrayList<String>();
+		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
+			new UnsyncStringReader(imports));
 
-			UnsyncBufferedReader unsyncBufferedReader =
-				new UnsyncBufferedReader(new UnsyncStringReader(imports));
+		String line = null;
 
-			String line = null;
-
-			while ((line = unsyncBufferedReader.readLine()) != null) {
-				if (line.contains("import=")) {
-					importLines.add(line);
-				}
+		while ((line = unsyncBufferedReader.readLine()) != null) {
+			if (line.contains("import=")) {
+				importLines.add(line);
 			}
+		}
 
-			List<String> unneededImports = getJSPDuplicateImports(
-				fileName, content, importLines);
+		List<String> unneededImports = getJSPDuplicateImports(
+			fileName, content, importLines);
 
-			addJSPUnusedImports(fileName, importLines, unneededImports);
+		addJSPUnusedImports(fileName, importLines, unneededImports);
 
-			for (String unneededImport : unneededImports) {
-				imports = StringUtil.replace(
-					imports, unneededImport, StringPool.BLANK);
-			}
+		for (String unneededImport : unneededImports) {
+			imports = StringUtil.replace(
+				imports, unneededImport, StringPool.BLANK);
 		}
 
 		ImportsFormatter importsFormatter = new JSPImportsFormatter();
@@ -1273,11 +1270,12 @@ public class JSPSourceProcessor extends BaseSourceProcessor {
 		"tiles"
 	};
 
-	private Set<String> _checkedForIncludesFileNames = new HashSet<String>(); 
+	private Set<String> _checkedForIncludesFileNames = new HashSet<String>();
 	private List<String> _duplicateImportClassNames = new ArrayList<String>();
 	private List<String> _importClassNames = new ArrayList<String>();
 	private Map<String, Integer> _importCountMap =
 		new HashMap<String, Integer>();
+	private Pattern _importsPattern = Pattern.compile("page import=\"(.+)\"");
 	private Set<String> _includeFileNames = new HashSet<String>();
 	private Pattern _javaClassPattern = Pattern.compile(
 		"\n(private|protected|public).* class ([\\s\\S]*?)\n\\}\n");
