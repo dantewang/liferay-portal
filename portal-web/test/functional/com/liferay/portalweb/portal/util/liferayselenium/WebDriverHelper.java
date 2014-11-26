@@ -19,7 +19,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portalweb.portal.BaseTestCase;
-import com.liferay.portalweb.portal.util.TestPropsValues;
+import com.liferay.portalweb.util.TestPropsValues;
 
 import java.util.List;
 import java.util.Set;
@@ -120,7 +120,11 @@ public class WebDriverHelper {
 					continue;
 				}
 
-				throw new Exception(javaScriptErrorValue);
+				Exception exception = new Exception(javaScriptErrorValue);
+
+				LiferaySeleniumHelper.addToJavaScriptExceptions(exception);
+
+				throw exception;
 			}
 		}
 	}
