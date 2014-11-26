@@ -17,8 +17,14 @@ package com.liferay.portal.test.runners;
 import com.liferay.portal.deploy.hot.IndexerPostProcessorRegistry;
 import com.liferay.portal.deploy.hot.SchedulerEntryRegistry;
 import com.liferay.portal.deploy.hot.ServiceWrapperRegistry;
+import com.liferay.portal.kernel.test.DescriptionComparator;
+import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.ServiceTestUtil;
+import com.liferay.portal.test.jdbc.ResetDatabaseUtilDataSource;
+import com.liferay.portal.util.InitUtil;
+import com.liferay.portal.util.PropsUtil;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -27,56 +33,70 @@ import java.net.URLClassLoader;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.naming.Context;
 
+import org.junit.runner.manipulation.Sorter;
+import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
+import org.junit.runners.model.TestClass;
 
 /**
  * @author Raymond Augé
  */
-public class PACLIntegrationJUnitTestRunner
-	extends LiferayIntegrationJUnitTestRunner {
+public class PACLIntegrationJUnitTestRunner extends BlockJUnit4ClassRunner {
 
 	public static final String RESOURCE_PATH =
 		"com/liferay/portal/security/pacl/test/dependencies";
+
+	public static Class<?> getCurrentTestClass() {
+		return _testClass;
+	}
 
 	public PACLIntegrationJUnitTestRunner(Class<?> clazz)
 		throws InitializationError {
 
 		super(_wrapTestClass(clazz));
-	}
 
-	@Override
-	public void initApplicationContext() {
-		if (_initialized) {
-			return;
+		if (!_initialized) {
+			URL resource = PACLIntegrationJUnitTestRunner.class.getResource(
+				"pacl-test.properties");
+
+			if (resource != null) {
+				System.setProperty("external-properties", resource.getPath());
+			}
+
+			System.setProperty(
+				Context.INITIAL_CONTEXT_FACTORY,
+				"org.apache.naming.java.javaURLContextFactory");
+
+			System.setProperty("catalina.base", ".");
+
+			ResetDatabaseUtilDataSource.initialize();
+
+			List<String> configLocations = ListUtil.fromArray(
+				PropsUtil.getArray(PropsKeys.SPRING_CONFIGS));
+
+			InitUtil.initWithSpring(configLocations, true);
+
+			ServiceTestUtil.initServices();
+			ServiceTestUtil.initPermissions();
+
+			new IndexerPostProcessorRegistry();
+			new SchedulerEntryRegistry();
+			new ServiceWrapperRegistry();
+
+			_initialized = true;
 		}
 
-		Class<?> clazz = getClass();
+		sort(new Sorter(new DescriptionComparator()));
 
-		URL resource = clazz.getResource("pacl-test.properties");
+		TestClass testClass = getTestClass();
 
-		if (resource != null) {
-			System.setProperty("external-properties", resource.getPath());
-		}
-
-		System.setProperty(
-			Context.INITIAL_CONTEXT_FACTORY,
-			"org.apache.naming.java.javaURLContextFactory");
-
-		super.initApplicationContext();
-
-		ServiceTestUtil.initServices();
-		ServiceTestUtil.initPermissions();
-
-		new IndexerPostProcessorRegistry();
-		new SchedulerEntryRegistry();
-		new ServiceWrapperRegistry();
-
-		_initialized = true;
+		_testClass = testClass.getJavaClass();
 	}
 
 	private static Class<?> _wrapTestClass(Class<?> clazz)
@@ -101,6 +121,7 @@ public class PACLIntegrationJUnitTestRunner
 		"com.liferay.portal.security.pacl.test.";
 
 	private static boolean _initialized;
+	private static Class<?> _testClass;
 
 	private static class PACLClassLoader extends URLClassLoader {
 

@@ -22,13 +22,15 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
-import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
+import com.liferay.portal.test.LiferayIntegrationTestRule;
+import com.liferay.portal.util.test.RandomTestUtil;
 import com.liferay.portlet.PortletPreferencesImpl;
 
 import java.lang.reflect.Field;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -36,11 +38,13 @@ import javax.portlet.PortletPreferences;
 
 import org.apache.commons.collections.map.ReferenceMap;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.springframework.mock.web.portlet.MockPortletRequest;
 
@@ -48,8 +52,12 @@ import org.springframework.mock.web.portlet.MockPortletRequest;
  * @author Connor McKay
  * @author Peter Borkuti
  */
-@RunWith(LiferayIntegrationJUnitTestRunner.class)
 public class LocalizationImplTest {
+
+	@ClassRule
+	@Rule
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -57,7 +65,15 @@ public class LocalizationImplTest {
 
 		_cache.setAccessible(true);
 
+		_defaultLocale = LocaleUtil.getDefault();
 		_localization = LocalizationUtil.getLocalization();
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		LocaleUtil.setDefault(
+			_defaultLocale.getLanguage(), _defaultLocale.getCountry(),
+			_defaultLocale.getVariant());
 	}
 
 	@Before
@@ -131,6 +147,84 @@ public class LocalizationImplTest {
 		Assert.assertEquals(
 			"The default language ids from Document and XML don't match",
 			languageIdsFromDoc, languageIdsFromXml);
+	}
+
+	@Test
+	public void testGetModifiedLocales() throws Exception {
+		String key = RandomTestUtil.randomString();
+
+		String defaultLanguageId = LocaleUtil.toLanguageId(
+			LocaleUtil.getDefault());
+
+		PortletPreferences preferences = new PortletPreferencesImpl();
+
+		LocalizationUtil.setPreferencesValue(
+			preferences, key, defaultLanguageId, "A0");
+		LocalizationUtil.setPreferencesValue(
+			preferences, key, _germanLanguageId, "B0");
+
+		Map<Locale, String> oldLocalizationMap =
+			LocalizationUtil.getLocalizationMap(preferences, key);
+
+		LocalizationUtil.setPreferencesValue(
+			preferences, key, defaultLanguageId, "A1");
+		LocalizationUtil.setPreferencesValue(
+			preferences, key, _germanLanguageId, "B1");
+
+		Map<Locale, String> newLocalizationMap =
+			LocalizationUtil.getLocalizationMap(preferences, key);
+
+		List<Locale> modifiedLocales = LocalizationUtil.getModifiedLocales(
+			oldLocalizationMap, newLocalizationMap);
+
+		Assert.assertTrue(modifiedLocales.contains(LocaleUtil.getDefault()));
+		Assert.assertTrue(modifiedLocales.contains(LocaleUtil.GERMANY));
+	}
+
+	@Test
+	public void testGetPreferencesValue() throws Exception {
+		String key = RandomTestUtil.randomString();
+
+		LocaleUtil.setDefault(
+			LocaleUtil.US.getLanguage(), LocaleUtil.US.getCountry(),
+			LocaleUtil.US.getVariant());
+
+		PortletPreferences preferences = new PortletPreferencesImpl();
+
+		LocalizationUtil.setPreferencesValue(
+			preferences, key, _englishLanguageId, "A");
+		LocalizationUtil.setPreferencesValue(
+			preferences, key, _germanLanguageId, "B");
+
+		Assert.assertEquals(
+			"A",
+			LocalizationUtil.getPreferencesValue(
+				preferences, key, _englishLanguageId));
+		Assert.assertEquals(
+			"B",
+			LocalizationUtil.getPreferencesValue(
+				preferences, key, _germanLanguageId));
+		Assert.assertEquals(
+			"A",
+			LocalizationUtil.getPreferencesValue(
+				preferences, key, _spanishLanguageId));
+
+		LocaleUtil.setDefault(
+			LocaleUtil.GERMANY.getLanguage(), LocaleUtil.GERMANY.getCountry(),
+			LocaleUtil.GERMANY.getVariant());
+
+		Assert.assertEquals(
+			"A",
+			LocalizationUtil.getPreferencesValue(
+				preferences, key, _englishLanguageId));
+		Assert.assertEquals(
+			"B",
+			LocalizationUtil.getPreferencesValue(
+				preferences, key, _germanLanguageId));
+		Assert.assertEquals(
+			"B",
+			LocalizationUtil.getPreferencesValue(
+				preferences, key, _spanishLanguageId));
 	}
 
 	@Test
@@ -304,6 +398,7 @@ public class LocalizationImplTest {
 	}
 
 	private static Field _cache;
+	private static Locale _defaultLocale;
 	private static Localization _localization;
 
 	private String _englishHello = "Hello World";

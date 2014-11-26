@@ -14,7 +14,7 @@
 
 package com.liferay.portal.service;
 
-import com.liferay.portal.kernel.test.ExecutionTestListeners;
+import com.liferay.portal.kernel.test.AggregateTestRule;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Resource;
 import com.liferay.portal.model.ResourceConstants;
@@ -23,8 +23,8 @@ import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.impl.ResourceImpl;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.test.DeleteAfterTestRun;
-import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
-import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
+import com.liferay.portal.test.LiferayIntegrationTestRule;
+import com.liferay.portal.test.MainServletTestRule;
 import com.liferay.portal.util.test.GroupTestUtil;
 
 import java.util.ArrayList;
@@ -32,6 +32,8 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -42,12 +44,13 @@ import org.junit.runner.RunWith;
 @RunWith(Enclosed.class)
 public class ResourcePermissionLocalServiceTest {
 
-	@ExecutionTestListeners(
-		listeners = {
-			MainServletExecutionTestListener.class
-		})
-	@RunWith(LiferayIntegrationJUnitTestRunner.class)
 	public static final class WhenCheckingIfRoleHasResourcePermissions {
+
+		@ClassRule
+		@Rule
+		public static final AggregateTestRule aggregateTestRule =
+			new AggregateTestRule(
+				new LiferayIntegrationTestRule(), MainServletTestRule.INSTANCE);
 
 		@Before
 		public void setUp() throws Exception {
