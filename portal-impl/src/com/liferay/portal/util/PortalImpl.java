@@ -1027,8 +1027,9 @@ public class PortalImpl implements Portal {
 			Layout layout)
 		throws PortalException {
 
-		String virtualHostname = getVirtualHostname(
-			themeDisplay.getLayoutSet());
+		LayoutSet layoutSet = themeDisplay.getLayoutSet();
+
+		String virtualHostname = layoutSet.getVirtualHostname();
 
 		if (Validator.isNull(virtualHostname)) {
 			Company company = themeDisplay.getCompany();
@@ -3047,7 +3048,7 @@ public class PortalImpl implements Portal {
 			LayoutSet layoutSet, ThemeDisplay themeDisplay)
 		throws PortalException {
 
-		String virtualHostname = getVirtualHostname(layoutSet);
+		String virtualHostname = layoutSet.getVirtualHostname();
 
 		if (Validator.isNotNull(virtualHostname) &&
 			!StringUtil.equalsIgnoreCase(virtualHostname, _LOCALHOST)) {
@@ -5783,34 +5784,6 @@ public class PortalImpl implements Portal {
 	}
 
 	@Override
-	public String getVirtualHostname(LayoutSet layoutSet) {
-		String virtualHostname = layoutSet.getVirtualHostname();
-
-		if (Validator.isNull(virtualHostname) &&
-			Validator.isNotNull(PropsValues.VIRTUAL_HOSTS_DEFAULT_SITE_NAME) &&
-			!layoutSet.isPrivateLayout()) {
-
-			try {
-				Group group = GroupLocalServiceUtil.getGroup(
-					layoutSet.getCompanyId(),
-					PropsValues.VIRTUAL_HOSTS_DEFAULT_SITE_NAME);
-
-				if (layoutSet.getGroupId() == group.getGroupId()) {
-					Company company = CompanyLocalServiceUtil.getCompany(
-						layoutSet.getCompanyId());
-
-					virtualHostname = company.getVirtualHostname();
-				}
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
-		}
-
-		return virtualHostname;
-	}
-
-	@Override
 	public String getVirtualLayoutActualURL(
 			long groupId, boolean privateLayout, String mainPath,
 			String friendlyURL, Map<String, String[]> params,
@@ -7759,7 +7732,7 @@ public class PortalImpl implements Portal {
 		}
 
 		if (useGroupVirtualHostName) {
-			String virtualHostname = getVirtualHostname(layoutSet);
+			String virtualHostname = layoutSet.getVirtualHostname();
 
 			String portalDomain = HttpUtil.getDomain(portalURL);
 
