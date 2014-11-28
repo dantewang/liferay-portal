@@ -14,38 +14,54 @@
 
 package com.liferay.portal.model.impl;
 
-import com.liferay.portal.kernel.test.ExecutionTestListeners;
+import com.liferay.portal.kernel.test.AggregateTestRule;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.test.DeleteAfterTestRun;
-import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
-import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
+import com.liferay.portal.test.LiferayIntegrationTestRule;
+import com.liferay.portal.test.MainServletTestRule;
 import com.liferay.portal.util.test.OrganizationTestUtil;
 import com.liferay.portal.util.test.RandomTestUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * @author Shinn Lok
  */
-@ExecutionTestListeners(listeners = {MainServletExecutionTestListener.class})
-@RunWith(LiferayIntegrationJUnitTestRunner.class)
 public class OrganizationImplTest {
+
+	@ClassRule
+	@Rule
+	public static final AggregateTestRule aggregateTestRule =
+		new AggregateTestRule(
+			new LiferayIntegrationTestRule(), MainServletTestRule.INSTANCE);
 
 	@Before
 	public void setUp() throws Exception {
 		_organization1 = OrganizationTestUtil.addOrganization();
+
 		_organization2 = OrganizationTestUtil.addOrganization(
 			_organization1.getOrganizationId(), RandomTestUtil.randomString(),
 			false);
+
 		_organization3 = OrganizationTestUtil.addOrganization(
 			_organization2.getOrganizationId(), RandomTestUtil.randomString(),
 			false);
+
 		_organization4 = OrganizationTestUtil.addOrganization(
 			_organization3.getOrganizationId(), RandomTestUtil.randomString(),
 			false);
+
+		_organizations.add(_organization4);
+		_organizations.add(_organization3);
+		_organizations.add(_organization2);
+		_organizations.add(_organization1);
 	}
 
 	@Test
@@ -74,16 +90,13 @@ public class OrganizationImplTest {
 			_organization4.getAncestorOrganizationIds());
 	}
 
-	@DeleteAfterTestRun
 	private Organization _organization1;
-
-	@DeleteAfterTestRun
 	private Organization _organization2;
-
-	@DeleteAfterTestRun
 	private Organization _organization3;
+	private Organization _organization4;
 
 	@DeleteAfterTestRun
-	private Organization _organization4;
+	private final List<Organization> _organizations =
+		new ArrayList<Organization>();
 
 }

@@ -63,8 +63,7 @@
 							'dd-drop',
 							'dd-proxy',
 							'liferay-history-manager',
-							'liferay-portlet-base',
-							'liferay-util-list-fields'
+							'liferay-portlet-base'
 						]
 					},
 					'liferay-app-view-move-touch': {
@@ -78,8 +77,7 @@
 						requires: [
 							'liferay-app-view-move',
 							'liferay-history-manager',
-							'liferay-portlet-base',
-							'liferay-util-list-fields'
+							'liferay-portlet-base'
 						]
 					},
 					'liferay-asset-categories-selector': {
@@ -211,6 +209,7 @@
 							'aui-datatype',
 							'aui-io-request',
 							'aui-parse-content',
+							'liferay-map-base',
 							'liferay-translation-manager'
 						]
 					},
@@ -875,12 +874,6 @@
 							'liferay-portlet-base',
 							'liferay-storage-formatter',
 							'uploader'
-						]
-					},
-					'liferay-util-list-fields': {
-						path: 'util_list_fields.js',
-						requires: [
-							'aui-base'
 						]
 					},
 					'liferay-util-window': {

@@ -17,9 +17,7 @@ package com.liferay.portal.security.pacl.test;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBFactoryUtil;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
-import com.liferay.portal.kernel.test.ExecutionTestListeners;
-import com.liferay.portal.test.listeners.PACLExecutionTestListener;
-import com.liferay.portal.test.runners.PACLIntegrationJUnitTestRunner;
+import com.liferay.portal.test.PACLTestRule;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,15 +25,18 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * @author Raymond Augé
  */
-@ExecutionTestListeners(listeners = {PACLExecutionTestListener.class})
-@RunWith(PACLIntegrationJUnitTestRunner.class)
 public class SQLTest {
+
+	@ClassRule
+	@Rule
+	public static final PACLTestRule paclTestRule = new PACLTestRule();
 
 	@Test
 	public void testCreate1() throws Exception {

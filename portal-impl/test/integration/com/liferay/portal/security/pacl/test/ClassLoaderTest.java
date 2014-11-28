@@ -16,13 +16,11 @@ package com.liferay.portal.security.pacl.test;
 
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
-import com.liferay.portal.kernel.test.ExecutionTestListeners;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalService;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.test.listeners.PACLExecutionTestListener;
-import com.liferay.portal.test.runners.PACLIntegrationJUnitTestRunner;
+import com.liferay.portal.test.PACLTestRule;
 import com.liferay.portal.util.Portal;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.test.TestPropsValues;
@@ -33,15 +31,18 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * @author Raymond Augé
  */
-@ExecutionTestListeners(listeners = {PACLExecutionTestListener.class})
-@RunWith(PACLIntegrationJUnitTestRunner.class)
 public class ClassLoaderTest {
+
+	@ClassRule
+	@Rule
+	public static final PACLTestRule paclTestRule = new PACLTestRule();
 
 	@Test
 	public void testCreate1() throws Exception {

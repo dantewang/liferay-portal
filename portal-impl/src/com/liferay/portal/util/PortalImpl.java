@@ -1388,10 +1388,8 @@ public class PortalImpl implements Portal {
 			canonicalLayoutFriendlyURL = defaultLayoutFriendlyURL;
 		}
 
-		Group group = layout.getGroup();
-
 		groupFriendlyURL = getGroupFriendlyURL(
-			group, layout.isPrivateLayout(), themeDisplay, true);
+			layout.getLayoutSet(), themeDisplay, true);
 
 		return groupFriendlyURL.concat(canonicalLayoutFriendlyURL).concat(
 			parametersURL);
@@ -2454,8 +2452,10 @@ public class PortalImpl implements Portal {
 			Group group, boolean privateLayoutSet, ThemeDisplay themeDisplay)
 		throws PortalException {
 
-		return getGroupFriendlyURL(
-			group, privateLayoutSet, themeDisplay, false);
+		LayoutSet layoutSet = LayoutSetLocalServiceUtil.getLayoutSet(
+			group.getGroupId(), privateLayoutSet);
+
+		return getGroupFriendlyURL(layoutSet, themeDisplay, false);
 	}
 
 	@Override
@@ -2516,7 +2516,14 @@ public class PortalImpl implements Portal {
 	public String[] getGroupPermissions(
 		HttpServletRequest request, String className) {
 
-		return request.getParameterValues("groupPermissions_" + className);
+		String[] groupPermissions = request.getParameterValues(
+			"groupPermissions_" + className);
+
+		String inputPermissionsShowOptions = request.getParameter(
+			"inputPermissionsShowOptions");
+
+		return getGroupPermissions(
+			groupPermissions, className, inputPermissionsShowOptions);
 	}
 
 	@Override
@@ -2528,8 +2535,14 @@ public class PortalImpl implements Portal {
 	public String[] getGroupPermissions(
 		PortletRequest portletRequest, String className) {
 
-		return portletRequest.getParameterValues(
+		String[] groupPermissions = portletRequest.getParameterValues(
 			"groupPermissions_" + className);
+
+		String inputPermissionsShowOptions = portletRequest.getParameter(
+			"inputPermissionsShowOptions");
+
+		return getGroupPermissions(
+			groupPermissions, className, inputPermissionsShowOptions);
 	}
 
 	@Override
@@ -2541,7 +2554,14 @@ public class PortalImpl implements Portal {
 	public String[] getGuestPermissions(
 		HttpServletRequest request, String className) {
 
-		return request.getParameterValues("guestPermissions_" + className);
+		String[] guestPermissions = request.getParameterValues(
+			"guestPermissions_" + className);
+
+		String inputPermissionsShowOptions = request.getParameter(
+			"inputPermissionsShowOptions");
+
+		return getGuestPermissions(
+			guestPermissions, className, inputPermissionsShowOptions);
 	}
 
 	@Override
@@ -2553,8 +2573,14 @@ public class PortalImpl implements Portal {
 	public String[] getGuestPermissions(
 		PortletRequest portletRequest, String className) {
 
-		return portletRequest.getParameterValues(
+		String[] guestPermissions = portletRequest.getParameterValues(
 			"guestPermissions_" + className);
+
+		String inputPermissionsShowOptions = portletRequest.getParameter(
+			"inputPermissionsShowOptions");
+
+		return getGuestPermissions(
+			guestPermissions, className, inputPermissionsShowOptions);
 	}
 
 	@Override
@@ -2850,7 +2876,7 @@ public class PortalImpl implements Portal {
 		}
 
 		String groupFriendlyURL = getGroupFriendlyURL(
-			layout.getGroup(), layout.isPrivateLayout(), themeDisplay);
+			layout.getLayoutSet(), themeDisplay, false);
 
 		return groupFriendlyURL.concat(
 			layout.getFriendlyURL(themeDisplay.getLocale()));
@@ -7726,12 +7752,13 @@ public class PortalImpl implements Portal {
 	}
 
 	protected String getGroupFriendlyURL(
-			Group group, boolean privateLayoutSet, ThemeDisplay themeDisplay,
+			LayoutSet layoutSet, ThemeDisplay themeDisplay,
 			boolean canonicalURL)
 		throws PortalException {
 
-		LayoutSet layoutSet = LayoutSetLocalServiceUtil.getLayoutSet(
-			group.getGroupId(), privateLayoutSet);
+		Group group = layoutSet.getGroup();
+
+		boolean privateLayoutSet = layoutSet.getPrivateLayout();
 
 		String portalURL = themeDisplay.getPortalURL();
 
@@ -7863,6 +7890,40 @@ public class PortalImpl implements Portal {
 		sb.append(group.getFriendlyURL());
 
 		return sb.toString();
+	}
+
+	protected String[] getGroupPermissions(
+		String[] groupPermissions, String className,
+		String inputPermissionsShowOptions) {
+
+		if ((groupPermissions != null) ||
+			(inputPermissionsShowOptions != null)) {
+
+			return groupPermissions;
+		}
+
+		List<String> groupDefaultActions =
+			ResourceActionsUtil.getModelResourceGroupDefaultActions(className);
+
+		return groupDefaultActions.toArray(
+			new String[groupDefaultActions.size()]);
+	}
+
+	protected String[] getGuestPermissions(
+		String[] guestPermissions, String className,
+		String inputPermissionsShowOptions) {
+
+		if ((guestPermissions != null) ||
+			(inputPermissionsShowOptions != null)) {
+
+			return guestPermissions;
+		}
+
+		List<String> guestDefaultActions =
+			ResourceActionsUtil.getModelResourceGuestDefaultActions(className);
+
+		return guestDefaultActions.toArray(
+			new String[guestDefaultActions.size()]);
 	}
 
 	protected String getPortletParam(HttpServletRequest request, String name) {

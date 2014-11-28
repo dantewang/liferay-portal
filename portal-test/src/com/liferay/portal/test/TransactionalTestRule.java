@@ -16,9 +16,11 @@ package com.liferay.portal.test;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.test.BaseTestRule.StatementWrapper;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.TransactionAttribute;
 import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
+import com.liferay.portal.kernel.util.ReflectionUtil;
 
 import java.util.concurrent.Callable;
 
@@ -30,6 +32,9 @@ import org.junit.runners.model.Statement;
  * @author Shuyang Zhou
  */
 public class TransactionalTestRule implements TestRule {
+
+	public static final TransactionalTestRule INSTANCE =
+		new TransactionalTestRule();
 
 	public TransactionalTestRule() {
 		this(Propagation.SUPPORTS);
@@ -47,8 +52,14 @@ public class TransactionalTestRule implements TestRule {
 	}
 
 	@Override
-	public Statement apply(final Statement statement, Description description) {
-		return new Statement() {
+	public Statement apply(Statement statement, Description description) {
+		String methodName = description.getMethodName();
+
+		if (methodName == null) {
+			return statement;
+		}
+
+		return new StatementWrapper(statement) {
 
 			@Override
 			public void evaluate() throws Throwable {
@@ -61,7 +72,7 @@ public class TransactionalTestRule implements TestRule {
 							statement.evaluate();
 						}
 						catch (Throwable t) {
-							throw new Exception(t);
+							ReflectionUtil.throwException(t);
 						}
 
 						return null;
