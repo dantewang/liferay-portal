@@ -602,6 +602,12 @@ public class GroupLocalServiceUtil {
 		return getService().fetchGroupByUuidAndCompanyId(uuid, companyId);
 	}
 
+	public static com.liferay.portal.model.Group fetchStagingGroup(
+		long liveGroupId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().fetchStagingGroup(liveGroupId);
+	}
+
 	/**
 	* Returns the default user's personal site group.
 	*
