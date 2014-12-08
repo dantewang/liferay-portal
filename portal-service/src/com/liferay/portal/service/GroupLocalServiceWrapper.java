@@ -644,6 +644,12 @@ public class GroupLocalServiceWrapper implements GroupLocalService,
 		return _groupLocalService.fetchGroupByUuidAndCompanyId(uuid, companyId);
 	}
 
+	@Override
+	public com.liferay.portal.model.Group fetchStagingGroup(long liveGroupId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _groupLocalService.fetchStagingGroup(liveGroupId);
+	}
+
 	/**
 	* Returns the default user's personal site group.
 	*

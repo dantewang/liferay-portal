@@ -615,35 +615,7 @@ public class GroupImpl extends GroupBaseImpl {
 			return null;
 		}
 
-		try {
-			if (_stagingGroup == null) {
-				_stagingGroup = GroupLocalServiceUtil.getStagingGroup(
-					getGroupId());
-
-				if (_stagingGroup instanceof GroupImpl) {
-					GroupImpl groupImpl = (GroupImpl)_stagingGroup;
-
-					groupImpl._liveGroup = this;
-				}
-				else {
-					_stagingGroup = new GroupWrapper(_stagingGroup) {
-
-						@Override
-						public Group getLiveGroup() {
-							return GroupImpl.this;
-						}
-
-					};
-				}
-			}
-
-			return _stagingGroup;
-		}
-		catch (Exception e) {
-			_log.error("Error getting staging group for " + getGroupId(), e);
-
-			return null;
-		}
+		return fetchStagingGroup();
 	}
 
 	@Override
@@ -764,20 +736,11 @@ public class GroupImpl extends GroupBaseImpl {
 
 	@Override
 	public boolean hasStagingGroup() {
-		if (isStagingGroup()) {
+		if (isStagingGroup() || (fetchStagingGroup() == null)) {
 			return false;
 		}
 
-		if (_stagingGroup != null) {
-			return true;
-		}
-
-		try {
-			return GroupLocalServiceUtil.hasStagingGroup(getGroupId());
-		}
-		catch (Exception e) {
-			return false;
-		}
+		return true;
 	}
 
 	/**
@@ -1076,6 +1039,39 @@ public class GroupImpl extends GroupBaseImpl {
 		_typeSettingsProperties = typeSettingsProperties;
 
 		super.setTypeSettings(_typeSettingsProperties.toString());
+	}
+
+	protected Group fetchStagingGroup() {
+		if (_stagingGroup == null) {
+			try {
+				Group group = GroupLocalServiceUtil.fetchStagingGroup(
+					getGroupId());
+
+				if (group instanceof GroupImpl) {
+					GroupImpl groupImpl = (GroupImpl)group;
+
+					groupImpl._liveGroup = this;
+
+					_stagingGroup = group;
+				}
+				else if (group != null) {
+					_stagingGroup = new GroupWrapper(group) {
+
+						@Override
+						public Group getLiveGroup() {
+							return GroupImpl.this;
+						}
+
+					};
+				}
+			}
+			catch (PortalException pe) {
+				_log.error(
+					"Error fetching staging group for " + getGroupId(), pe);
+			}
+		}
+
+		return _stagingGroup;
 	}
 
 	protected long getDefaultPlid(boolean privateLayout) {
