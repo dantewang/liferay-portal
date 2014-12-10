@@ -149,6 +149,12 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 
 	@Override
 	protected void initPortalCacheManager() {
+		String licencePath = PropsUtil.get("ehcache.licence.path");
+		
+		URL url = EhcacheConfigurationHelperUtil.class.getResource(licencePath);
+		
+		System.setProperty("com.tc.productkey.path", url.getPath());
+
 		String configurationPath = PropsUtil.get(_configPropertyKey);
 
 		if (Validator.isNull(configurationPath)) {
