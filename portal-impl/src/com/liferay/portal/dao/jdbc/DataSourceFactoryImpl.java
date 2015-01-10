@@ -265,7 +265,7 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 	}
 
 	protected DataSource initDataSourceHikariCP(Properties properties) {
-		HikariConfig config = new HikariConfig();
+		HikariConfig hikariConfig = new HikariConfig();
 
 		for (Map.Entry<Object, Object> entry : properties.entrySet()) {
 			String key = (String)entry.getKey();
@@ -307,7 +307,7 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 			}
 
 			try {
-				BeanUtil.setProperty(config, key, value);
+				BeanUtil.setProperty(hikariConfig, key, value);
 			}
 			catch (Exception e) {
 				if (_log.isWarnEnabled()) {
@@ -318,7 +318,7 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 			}
 		}
 
-		return new HikariDataSource(config);
+		return new HikariDataSource(hikariConfig);
 	}
 
 	protected DataSource initDataSourceTomcat(Properties properties)
