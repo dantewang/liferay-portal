@@ -60,10 +60,12 @@ public class DBBuilder {
 		_databaseName = databaseName;
 		_databaseTypes = databaseTypes;
 
-		try {
+		try {             if(!sqlDir.endsWith("/osgi-sql")){
 			if (!sqlDir.endsWith("/WEB-INF/sql")) {
 				_buildSQLFile(sqlDir, "portal");
 				_buildSQLFile(sqlDir, "portal-tables");
+                                                                                     _buildSQLFile(sqlDir, "osgi-tables");
+		                                           _buildSQLFile(sqlDir, "osgi-indexes");
 			}
 			else {
 				_buildSQLFile(sqlDir, "tables");
@@ -91,7 +93,11 @@ public class DBBuilder {
 			_buildSQLFile(sqlDir, "update-6.1.1-6.2.0");
 
 			_buildCreateFile(sqlDir);
-		}
+		}else{
+                                                                  _buildSQLFile(sqlDir, "osgi-tables");
+		                        _buildSQLFile(sqlDir, "osgi-indexes");
+                }
+        }
 		catch (Exception e) {
 			e.printStackTrace();
 		}
