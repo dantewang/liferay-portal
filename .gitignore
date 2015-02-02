@@ -57,6 +57,7 @@ cobertura.ser
 /lib/development/ojdbc14.jar
 /lib/development/ojdbc5.jar
 /lib/development/ojdbc6.jar
+/modules/osgi-sql
 
 /nbproject/private
 
