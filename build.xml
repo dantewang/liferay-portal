@@ -89,10 +89,10 @@
 			<ant dir="portal-test-internal" target="clean" inheritAll="false" />
 
 			<ant dir="sql" target="clean" inheritAll="false" />
-                                                           <!--
+                                                           
 			<delete dir="tools/sdk" />
-                                                            -->
-
+                                                           
+                                                     
 			<delete dir="${doc.dir}" />
 
 			<delete>
