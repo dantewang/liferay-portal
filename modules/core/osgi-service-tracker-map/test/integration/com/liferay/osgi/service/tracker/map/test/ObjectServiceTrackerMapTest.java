@@ -137,6 +137,71 @@ public class ObjectServiceTrackerMapTest {
 	}
 
 	@Test
+	public void testGetServiceInvokesCustomizerOnlyOnce()
+		throws InvalidSyntaxException {
+
+		final AtomicInteger atomicInteger = new AtomicInteger(0);
+
+		ServiceTrackerMap<String, TrackedOne> serviceTrackerMap =
+			ServiceTrackerMapFactory.singleValueMap(
+				_bundleContext, TrackedOne.class, "(target=*)",
+				new ServiceReferenceMapper<String, TrackedOne>() {
+
+					@Override
+					public void map(
+						ServiceReference<TrackedOne> serviceReference,
+						Emitter<String> emitter) {
+
+						emitter.emit("one");
+						emitter.emit("two");
+					}
+
+				},
+				new ServiceTrackerCustomizer<TrackedOne, TrackedOne>() {
+
+					@Override
+					public TrackedOne addingService(
+						ServiceReference<TrackedOne> serviceReference) {
+
+						atomicInteger.incrementAndGet();
+
+						return _bundleContext.getService(serviceReference);
+					}
+
+					@Override
+					public void modifiedService(
+						ServiceReference<TrackedOne> serviceReference,
+						TrackedOne trackedTwo) {
+					}
+
+					@Override
+					public void removedService(
+						ServiceReference<TrackedOne> serviceReference,
+						TrackedOne trackedTwo) {
+
+						_bundleContext.ungetService(serviceReference);
+					}
+
+				});
+
+		serviceTrackerMap.open();
+
+		TrackedOne trackedOne = new TrackedOne("1");
+
+		ServiceRegistration<TrackedOne> serviceRegistration = registerService(
+			trackedOne, "one");
+
+		Assert.assertEquals(serviceTrackerMap.getService("one"), trackedOne);
+		Assert.assertEquals(serviceTrackerMap.getService("two"), trackedOne);
+
+		Assert.assertEquals(1, atomicInteger.get());
+
+		serviceRegistration.unregister();
+
+		serviceTrackerMap.close();
+	}
+
+	@Test
 	public void testGetServiceIsNullAfterDeregistration() {
 		ServiceTrackerMap<String, TrackedOne> serviceTrackerMap =
 			createServiceTrackerMap(_bundleContext);
@@ -254,6 +319,56 @@ public class ObjectServiceTrackerMapTest {
 		registerService(new TrackedOne(), "anotherTarget");
 
 		Assert.assertNull(serviceTrackerMap.getService("aTarget"));
+	}
+
+	@Test
+	public void testGetServiceWithModifiedService() {
+		ServiceTrackerMap<String, TrackedOne> serviceTrackerMap =
+			createServiceTrackerMap(_bundleContext);
+
+		Hashtable<String, Object> properties = new Hashtable<>();
+
+		properties.put("target", new String[] {"one", "two"});
+
+		ServiceRegistration<TrackedOne> serviceRegistration =
+			_bundleContext.registerService(
+				TrackedOne.class, new TrackedOne(), properties);
+
+		Assert.assertTrue(serviceTrackerMap.containsKey("one"));
+		Assert.assertTrue(serviceTrackerMap.containsKey("two"));
+
+		properties.put("target", new String[] {"two", "three"});
+
+		serviceRegistration.setProperties(properties);
+
+		Assert.assertTrue(serviceTrackerMap.containsKey("two"));
+		Assert.assertTrue(serviceTrackerMap.containsKey("three"));
+		Assert.assertFalse(serviceTrackerMap.containsKey("one"));
+
+		serviceRegistration.unregister();
+
+		serviceTrackerMap.close();
+	}
+
+	@Test
+	public void testGetServiceWithMultiPropertyRegistration() {
+		try (ServiceTrackerMap<String, TrackedOne> serviceTrackerMap =
+				createServiceTrackerMap(_bundleContext)) {
+
+			Dictionary<String, Object> properties = new Hashtable<>();
+
+			properties.put("service.ranking", 1);
+			properties.put("target", new String[] {"aTarget1", "aTarget2"});
+
+			ServiceRegistration<TrackedOne> serviceRegistration =
+				_bundleContext.registerService(
+					TrackedOne.class, new TrackedOne(), properties);
+
+			Assert.assertNotNull(serviceTrackerMap.getService("aTarget1"));
+			Assert.assertNotNull(serviceTrackerMap.getService("aTarget2"));
+
+			serviceRegistration.unregister();
+		}
 	}
 
 	@Test
@@ -382,6 +497,50 @@ public class ObjectServiceTrackerMapTest {
 		TrackedTwo trackedTwo2 = serviceTrackerMap.getService("two-2");
 
 		Assert.assertEquals(trackedOne2, trackedTwo2.getTrackedOne());
+
+		serviceTrackerMap.close();
+	}
+
+	@Test
+	public void testGetServiceWithServiceTrackerCustomizerReturningNull()
+		throws InvalidSyntaxException {
+
+		ServiceTrackerMap<String, TrackedTwo> serviceTrackerMap =
+			ServiceTrackerMapFactory.singleValueMap(
+				_bundleContext, TrackedOne.class, "target",
+				new ServiceTrackerCustomizer<TrackedOne, TrackedTwo>() {
+
+					@Override
+					public TrackedTwo addingService(
+						ServiceReference<TrackedOne> serviceReference) {
+
+						return null;
+					}
+
+					@Override
+					public void modifiedService(
+						ServiceReference<TrackedOne> serviceReference,
+						TrackedTwo trackedTwo) {
+					}
+
+					@Override
+					public void removedService(
+						ServiceReference<TrackedOne> serviceReference,
+						TrackedTwo trackedTwo) {
+					}
+
+				});
+
+		serviceTrackerMap.open();
+
+		TrackedOne trackedOne = new TrackedOne("1");
+
+		ServiceRegistration<TrackedOne> serviceRegistration = registerService(
+			trackedOne, "one");
+
+		Assert.assertFalse(serviceTrackerMap.containsKey("one"));
+
+		serviceRegistration.unregister();
 
 		serviceTrackerMap.close();
 	}

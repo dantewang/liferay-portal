@@ -15,9 +15,7 @@
 package com.liferay.portal.template.soy;
 
 import com.google.template.soy.SoyFileSet;
-import com.google.template.soy.SoyFileSet.Builder;
 
-import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateManager;
@@ -35,13 +33,10 @@ import org.osgi.service.component.annotations.Reference;
  * @author Bruno Basto
  */
 @Component(immediate = true, service = TemplateManager.class)
-@DoPrivileged
 public class SoyManager extends BaseTemplateManager {
 
 	@Override
 	public void destroy() {
-		_builder = null;
-
 		templateContextHelper.removeAllHelperUtilities();
 
 		templateContextHelper = null;
@@ -59,11 +54,6 @@ public class SoyManager extends BaseTemplateManager {
 
 	@Override
 	public void init() {
-		if (_builder != null) {
-			return;
-		}
-
-		_builder = new SoyFileSet.Builder();
 	}
 
 	@Override
@@ -81,8 +71,8 @@ public class SoyManager extends BaseTemplateManager {
 		Map<String, Object> helperUtilities, boolean privileged) {
 
 		Template template = new SoyTemplate(
-			templateResource, errorTemplateResource, helperUtilities, _builder,
-			templateContextHelper, privileged);
+			templateResource, errorTemplateResource, helperUtilities,
+			new SoyFileSet.Builder(), templateContextHelper, privileged);
 
 		if (restricted) {
 			template = new RestrictedTemplate(
@@ -91,7 +81,5 @@ public class SoyManager extends BaseTemplateManager {
 
 		return template;
 	}
-
-	private Builder _builder;
 
 }

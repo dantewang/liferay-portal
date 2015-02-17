@@ -20,7 +20,7 @@
 		</operation>
 		<operation xmlns:operNS="urn:http.service.portal.liferay.com" name="deleteMembershipRequests" qname="operNS:deleteMembershipRequests" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>
-			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="statusId" type="tns:int"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="statusId" type="tns:long"></parameter>
 		</operation>
 		<operation xmlns:operNS="urn:http.service.portal.liferay.com" xmlns:rtns="http://model.portal.liferay.com" name="getMembershipRequest" qname="operNS:getMembershipRequest" returnQName="getMembershipRequestReturn" returnType="rtns:MembershipRequestSoap" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="membershipRequestId" type="tns:long"></parameter>
@@ -28,7 +28,7 @@
 		<operation xmlns:operNS="urn:http.service.portal.liferay.com" name="updateStatus" qname="operNS:updateStatus" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="membershipRequestId" type="tns:long"></parameter>
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="reviewComments" type="tns:string"></parameter>
-			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="statusId" type="tns:int"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="statusId" type="tns:long"></parameter>
 			<parameter xmlns:tns="http://service.portal.liferay.com" qname="serviceContext" type="tns:ServiceContext"></parameter>
 		</operation>
 		<parameter name="allowedMethods" value="addMembershipRequest deleteMembershipRequests getMembershipRequest updateStatus" />

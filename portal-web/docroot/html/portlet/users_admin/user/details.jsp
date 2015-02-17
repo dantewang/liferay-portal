@@ -18,6 +18,11 @@
 
 <%
 User selUser = (User)request.getAttribute("user.selUser");
+
+if (selUser == null) {
+	selUser = PortalUtil.getSelectedUser(request);
+}
+
 Contact selContact = (Contact)request.getAttribute("user.selContact");
 
 Calendar birthday = CalendarFactoryUtil.getCalendar();
@@ -28,6 +33,24 @@ birthday.set(Calendar.YEAR, 1970);
 
 if (selContact != null) {
 	birthday.setTime(selContact.getBirthday());
+}
+
+Locale userLocale = null;
+
+String languageId = request.getParameter("languageId");
+
+if (Validator.isNotNull(languageId)) {
+	userLocale = LocaleUtil.fromLanguageId(languageId);
+}
+else {
+	if (selUser != null) {
+		userLocale = selUser.getLocale();
+	}
+	else {
+		User defaultUser = company.getDefaultUser();
+
+		userLocale = LocaleUtil.fromLanguageId(defaultUser.getLanguageId());
+	}
 }
 %>
 
@@ -81,7 +104,7 @@ if (selContact != null) {
 			UserScreenNameException.MustBeAlphaNumeric usn = (UserScreenNameException.MustBeAlphaNumeric)errorException;
 			%>
 
-			<liferay-ui:message arguments="<%= StringUtil.merge(usn.validSpecialChars, StringPool.SPACE) %>" key="please-enter-a-valid-alphanumeric-screen-name" translateArguments="<%= false %>" />
+			<liferay-ui:message arguments="<%= usn.getValidSpecialCharsAsString() %>" key="please-enter-a-valid-alphanumeric-screen-name" translateArguments="<%= false %>" />
 		</liferay-ui:error>
 
 		<liferay-ui:error exception="<%= UserScreenNameException.MustNotBeDuplicate.class %>" focusField="screenName" message="the-screen-name-you-requested-is-already-taken" />
@@ -106,9 +129,11 @@ if (selContact != null) {
 			</c:choose>
 		</c:if>
 
-		<liferay-ui:error exception="<%= ReservedUserEmailAddressException.class %>" focusField="emailAddress" message="the-email-address-you-requested-is-reserved" />
-		<liferay-ui:error exception="<%= UserEmailAddressException.class %>" focusField="emailAddress" message="please-enter-a-valid-email-address" />
 		<liferay-ui:error exception="<%= UserEmailAddressException.MustNotBeDuplicate.class %>" focusField="emailAddress" message="the-email-address-you-requested-is-already-taken" />
+		<liferay-ui:error exception="<%= UserEmailAddressException.MustNotBeNull.class %>" focusField="emailAddress" message="please-enter-an-email-address" />
+		<liferay-ui:error exception="<%= UserEmailAddressException.MustNotBePOP3User.class %>" focusField="emailAddress" message="the-email-address-you-requested-is-reserved" />
+		<liferay-ui:error exception="<%= UserEmailAddressException.MustNotBeReserved.class %>" focusField="emailAddress" message="the-email-address-you-requested-is-reserved" />
+		<liferay-ui:error exception="<%= UserEmailAddressException.MustNotUseCompanyMx.class %>" focusField="emailAddress" message="the-email-address-you-requested-is-not-valid-because-its-domain-is-reserved" />
 		<liferay-ui:error exception="<%= UserEmailAddressException.MustValidate.class %>" focusField="emailAddress" message="please-enter-a-valid-email-address" />
 
 		<c:choose>
@@ -135,6 +160,12 @@ if (selContact != null) {
 			</c:otherwise>
 		</c:choose>
 
+		<%
+		String detailsLanguageStrutsAction = "/users_admin/edit_user_details";
+		%>
+
+		<%@ include file="/html/portlet/users_admin/user/details_language.jspf" %>
+
 		<%@ include file="/html/portlet/users_admin/user/details_user_name.jspf" %>
 	</aui:fieldset>
 
@@ -160,8 +191,8 @@ if (selContact != null) {
 		</div>
 
 		<c:if test="<%= selUser != null %>">
-			<liferay-ui:error exception="<%= ReservedUserIdException.class %>" message="the-user-id-you-requested-is-reserved" />
-			<liferay-ui:error exception="<%= UserIdException.class %>" message="please-enter-a-valid-user-id" />
+			<liferay-ui:error exception="<%= UserIdException.MustNotBeNull.class %>" message="please-enter-a-user-id" />
+			<liferay-ui:error exception="<%= UserIdException.MustNotBeReserved.class %>" message="the-user-id-you-requested-is-reserved" />
 
 			<aui:input name="userId" type="resource" value="<%= String.valueOf(selUser.getUserId()) %>" />
 		</c:if>
