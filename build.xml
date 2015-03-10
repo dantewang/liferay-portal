@@ -64,11 +64,13 @@
 		</sequential>
 	</macrodef>
 
-	<target name="all">
+	<!--<target name="all">
 		<antcall target="clean" />
 		<antcall target="compile" />
 		<antcall target="deploy" />
 	</target>
+
+	-->
 
 	<target name="clean">
 		<parallel failonany="true" threadcount="${parallel.thread.count}">
