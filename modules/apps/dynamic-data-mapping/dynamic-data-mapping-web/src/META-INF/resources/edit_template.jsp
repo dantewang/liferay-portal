@@ -64,6 +64,12 @@ if (Validator.isNull(script) && type.equals(DDMTemplateConstants.TEMPLATE_TYPE_D
 	}
 }
 
+DDMTemplateVersion templateVersion = null;
+
+if (template != null) {
+	templateVersion = template.getTemplateVersion();
+}
+
 String structureAvailableFields = ParamUtil.getString(request, "structureAvailableFields");
 
 if (Validator.isNotNull(structureAvailableFields)) {
@@ -73,11 +79,15 @@ if (Validator.isNotNull(structureAvailableFields)) {
 boolean showCacheableInput = ParamUtil.getBoolean(request, "showCacheableInput");
 %>
 
-<portlet:actionURL name="addTemplate" var="addTemplateURL" />
+<portlet:actionURL name="addTemplate" var="addTemplateURL">
+	<portlet:param name="mvcPath" value="/edit_template.jsp" />
+</portlet:actionURL>
 
-<portlet:actionURL name="updateTemplate" var="updateTemplateURL" />
+<portlet:actionURL name="updateTemplate" var="updateTemplateURL">
+	<portlet:param name="mvcPath" value="/edit_template.jsp" />
+</portlet:actionURL>
 
-<aui:form action="<%= (template == null) ? addTemplateURL : updateTemplateURL %>" enctype="multipart/form-data" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveTemplate();" %>'>
+<aui:form action="<%= (template == null) ? addTemplateURL : updateTemplateURL %>" enctype="multipart/form-data" method="post" name="fm" onSubmit='<%="event.preventDefault();" %>'>
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="closeRedirect" type="hidden" value="<%= closeRedirect %>" />
 	<aui:input name="portletResource" type="hidden" value="<%= portletResource %>" />
@@ -88,6 +98,7 @@ boolean showCacheableInput = ParamUtil.getBoolean(request, "showCacheableInput")
 	<aui:input name="classPK" type="hidden" value="<%= classPK %>" />
 	<aui:input name="resourceClassNameId" type="hidden" value="<%= resourceClassNameId %>" />
 	<aui:input name="type" type="hidden" value="<%= type %>" />
+	<aui:input name="status" type="hidden" value="<%= String.valueOf(WorkflowConstants.STATUS_APPROVED) %>" />
 	<aui:input name="structureAvailableFields" type="hidden" value="<%= structureAvailableFields %>" />
 	<aui:input name="saveAndContinue" type="hidden" value="<%= false %>" />
 
@@ -133,6 +144,42 @@ boolean showCacheableInput = ParamUtil.getBoolean(request, "showCacheableInput")
 	</c:if>
 
 	<aui:model-context bean="<%= template %>" model="<%= DDMTemplate.class %>" />
+
+	<c:if test="<%= templateVersion != null %>">
+		<aui:workflow-status model="<%= DDMTemplate.class %>" status="<%= templateVersion.getStatus() %>" version="<%= templateVersion.getVersion() %>" />
+
+		<div class="template-history-toolbar" id="<portlet:namespace />templateHistoryToolbar"></div>
+
+		<aui:script use="aui-toolbar,aui-dialog-iframe-deprecated,liferay-util-window">
+			var toolbarChildren = [
+				<portlet:renderURL var="viewHistoryURL">
+					<portlet:param name="mvcPath" value="/view_template_history.jsp" />
+					<portlet:param name="redirect" value="<%= redirect %>" />
+					<portlet:param name="templateId" value="<%= String.valueOf(template.getTemplateId()) %>" />
+				</portlet:renderURL>
+
+				{
+					icon: 'icon-time',
+					label: '<%= UnicodeLanguageUtil.get(request, "view-history") %>',
+					on: {
+						click: function(event) {
+							event.domEvent.preventDefault();
+
+							window.location.href = '<%= viewHistoryURL %>';
+						}
+					}
+				}
+			];
+
+			new A.Toolbar(
+				{
+					boundingBox: '#<portlet:namespace />templateHistoryToolbar',
+					children: toolbarChildren
+				}
+			).render();
+		</aui:script>
+
+	</c:if>
 
 	<aui:fieldset>
 		<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) || windowState.equals(LiferayWindowState.POP_UP) %>" name="name" />
@@ -353,6 +400,14 @@ boolean showCacheableInput = ParamUtil.getBoolean(request, "showCacheableInput")
 			}
 		);
 
+		function <portlet:namespace />saveDraftTemplate() {
+			var form = AUI.$('#<portlet:namespace />fm');
+
+			form.fm('status').val(<%= String.valueOf(WorkflowConstants.STATUS_DRAFT) %>);
+
+			Liferay.fire('<%= renderResponse.getNamespace() + "saveTemplate" %>');
+		}
+
 		function <portlet:namespace />saveAndContinueTemplate() {
 			document.<portlet:namespace />fm.<portlet:namespace />saveAndContinue.value = '1';
 
@@ -367,6 +422,8 @@ boolean showCacheableInput = ParamUtil.getBoolean(request, "showCacheableInput")
 	<aui:button onClick="<%= taglibOnClick %>" primary="<%= true %>" value='<%= LanguageUtil.get(request, "save") %>' />
 
 	<aui:button onClick='<%= renderResponse.getNamespace() + "saveAndContinueTemplate();" %>' value='<%= LanguageUtil.get(request, "save-and-continue") %>' />
+
+	<aui:button onClick='<%= renderResponse.getNamespace() + "saveDraftTemplate();" %>' value='<%= LanguageUtil.get(request, "save-draft") %>' />
 
 	<aui:button href="<%= redirect %>" type="cancel" />
 </aui:button-row>
