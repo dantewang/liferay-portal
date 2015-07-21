@@ -17,6 +17,7 @@ package com.liferay.portal.cache.ehcache.internal;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.cache.PortalCacheManagerTypes;
+import com.liferay.portal.kernel.cache.PortalCachePreConfigurator;
 import com.liferay.portal.kernel.cache.configurator.PortalCacheConfiguratorSettings;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -108,6 +109,14 @@ public class MultiVMEhcachePortalCacheManager
 		PortalCacheConfiguratorSettings portalCacheConfiguratorSettings) {
 
 		reconfigure(portalCacheConfiguratorSettings);
+	}
+
+	@Reference(
+		cardinality = ReferenceCardinality.OPTIONAL,
+		unbind = "-"
+	)
+	protected void setPortalCachePreConfigurator(
+		PortalCachePreConfigurator portalCachePreConfigurator) {
 	}
 
 	@Reference(unbind = "-")
