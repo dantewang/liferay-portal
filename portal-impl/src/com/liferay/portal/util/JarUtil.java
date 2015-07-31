@@ -44,29 +44,29 @@ public class JarUtil {
 			URL url, String libPath, String name, URLClassLoader urlClassLoader)
 		throws Exception {
 
-		if (PortalRunMode.isTestMode()) {
-			try {
-				InetAddress.getAllByName("mirrors");
-
-				String urlString = url.toExternalForm();
-
-				String newURLString = StringUtil.replace(
-					urlString, "://", "://mirrors/");
-
-				url = new URL(newURLString);
-
-				if (_log.isDebugEnabled()) {
-					_log.debug(
-						"Swapping URL from " + urlString + " to " +
-							newURLString);
-				}
-			}
-			catch (UnknownHostException uhe) {
-				if (_log.isDebugEnabled()) {
-					_log.debug("Unable to resolve \"mirrors\"");
-				}
-			}
-		}
+//		if (PortalRunMode.isTestMode()) {
+//			try {
+//				InetAddress.getAllByName("mirrors");
+//
+//				String urlString = url.toExternalForm();
+//
+//				String newURLString = StringUtil.replace(
+//					urlString, "://", "://mirrors/");
+//
+//				url = new URL(newURLString);
+//
+//				if (_log.isDebugEnabled()) {
+//					_log.debug(
+//						"Swapping URL from " + urlString + " to " +
+//							newURLString);
+//				}
+//			}
+//			catch (UnknownHostException uhe) {
+//				if (_log.isDebugEnabled()) {
+//					_log.debug("Unable to resolve \"mirrors\"");
+//				}
+//			}
+//		}
 
 		Path path = Paths.get(libPath, name);
 
