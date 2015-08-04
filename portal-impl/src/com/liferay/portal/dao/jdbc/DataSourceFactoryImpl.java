@@ -430,8 +430,10 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 
 	protected boolean isPropertyHikariCP(String key) {
 		if (StringUtil.equalsIgnoreCase(key, "autoCommit") ||
+			StringUtil.equalsIgnoreCase(key, "connectionTestQuery") ||
 			StringUtil.equalsIgnoreCase(key, "connectionTimeout") ||
 			StringUtil.equalsIgnoreCase(key, "idleTimeout") ||
+			StringUtil.equalsIgnoreCase(key, "initializationFailFast") ||
 			StringUtil.equalsIgnoreCase(key, "maximumPoolSize") ||
 			StringUtil.equalsIgnoreCase(key, "maxLifetime") ||
 			StringUtil.equalsIgnoreCase(key, "minimumIdle") ||
