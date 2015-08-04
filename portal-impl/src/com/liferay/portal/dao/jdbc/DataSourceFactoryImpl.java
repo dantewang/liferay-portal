@@ -526,7 +526,10 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 				throw cnfe;
 			}
 
-			ClassLoader classLoader = ClassLoaderUtil.getPortalClassLoader();
+			Thread currentThread = Thread.currentThread();
+
+			ClassLoader classLoader =
+				currentThread.getContextClassLoader();
 
 			if (!(classLoader instanceof URLClassLoader)) {
 				_log.error(
