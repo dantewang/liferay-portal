@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.jndi.JNDIUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
-import com.liferay.portal.kernel.util.ClassLoaderUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ServerDetector;
@@ -277,11 +276,14 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 
 		testLiferayPoolProviderClass(_HIKARICP_DATASOURCE_CLASS_NAME);
 
-		Thread currentThread = Thread.currentThread();
+//		Thread currentThread = Thread.currentThread();
+//
+//		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+//
+//		Class<?> hikariDataSourceClazz = contextClassLoader.loadClass(
+//			_HIKARICP_DATASOURCE_CLASS_NAME);
 
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
-
-		Class<?> hikariDataSourceClazz = contextClassLoader.loadClass(
+		Class<?> hikariDataSourceClazz = Class.forName(
 			_HIKARICP_DATASOURCE_CLASS_NAME);
 
 		Object hikariDataSource = hikariDataSourceClazz.newInstance();
@@ -294,11 +296,6 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 
 			if (StringUtil.equalsIgnoreCase(key, "url")) {
 				key = "jdbcUrl";
-			}
-			else if (StringUtil.equalsIgnoreCase(
-						key, "hikariConnectionCustomizerClassName")) {
-
-				key = "connectionCustomizerClassName";
 			}
 
 			// Ignore Liferay property
@@ -435,10 +432,10 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 
 	protected boolean isPropertyHikariCP(String key) {
 		if (StringUtil.equalsIgnoreCase(key, "autoCommit") ||
+			StringUtil.equalsIgnoreCase(key, "connectionTestQuery") ||
 			StringUtil.equalsIgnoreCase(key, "connectionTimeout") ||
-			StringUtil.equalsIgnoreCase(
-				key, "hikariConnectionCustomizerClassName") ||
 			StringUtil.equalsIgnoreCase(key, "idleTimeout") ||
+			StringUtil.equalsIgnoreCase(key, "initializationFailFast") ||
 			StringUtil.equalsIgnoreCase(key, "maximumPoolSize") ||
 			StringUtil.equalsIgnoreCase(key, "maxLifetime") ||
 			StringUtil.equalsIgnoreCase(key, "minimumIdle") ||
@@ -531,7 +528,9 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 				throw cnfe;
 			}
 
-			ClassLoader classLoader = ClassLoaderUtil.getPortalClassLoader();
+			Thread currentThread = Thread.currentThread();
+
+			ClassLoader classLoader = currentThread.getContextClassLoader();
 
 			if (!(classLoader instanceof URLClassLoader)) {
 				_log.error(
