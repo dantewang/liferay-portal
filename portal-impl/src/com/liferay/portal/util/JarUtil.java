@@ -41,13 +41,27 @@ public class JarUtil {
 		throws Exception {
 
 		Path path = Paths.get(libPath, name);
+		Path lockPath = Paths.get(libPath, name + ".lock");
 
 		if (_log.isInfoEnabled()) {
 			_log.info("Downloading " + url + " to " + path);
 		}
 
-		try (InputStream inputStream = url.openStream()) {
-			Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+		if (!Files.exists(lockPath)) {
+			Files.createFile(lockPath);
+
+			try (InputStream inputStream = url.openStream()) {				
+				Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+				Files.delete(lockPath);
+			}
+		}
+		else {
+			while (true) {
+				Thread.sleep(500);
+				if (!Files.exists(lockPath)) {
+					break;
+				}
+			}
 		}
 
 		if (_log.isInfoEnabled()) {
