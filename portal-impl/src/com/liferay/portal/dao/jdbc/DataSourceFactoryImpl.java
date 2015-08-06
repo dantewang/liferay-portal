@@ -40,6 +40,8 @@ import com.liferay.registry.ServiceTrackerCustomizer;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
+import com.zaxxer.hikari.HikariDataSource;
+
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -275,16 +277,18 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 	protected DataSource initDataSourceHikariCP(Properties properties)
 		throws Exception {
 
-		testLiferayPoolProviderClass(_HIKARICP_DATASOURCE_CLASS_NAME);
+//		testLiferayPoolProviderClass(_HIKARICP_DATASOURCE_CLASS_NAME);
+//
+//		Thread currentThread = Thread.currentThread();
+//
+//		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+//
+//		Class<?> hikariDataSourceClazz = contextClassLoader.loadClass(
+//			_HIKARICP_DATASOURCE_CLASS_NAME);
+//
+//		Object hikariDataSource = hikariDataSourceClazz.newInstance();
 
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
-
-		Class<?> hikariDataSourceClazz = contextClassLoader.loadClass(
-			_HIKARICP_DATASOURCE_CLASS_NAME);
-
-		Object hikariDataSource = hikariDataSourceClazz.newInstance();
+		HikariDataSource hikariDataSource = new HikariDataSource();
 
 		for (Map.Entry<Object, Object> entry : properties.entrySet()) {
 			String key = (String)entry.getKey();
@@ -294,11 +298,6 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 
 			if (StringUtil.equalsIgnoreCase(key, "url")) {
 				key = "jdbcUrl";
-			}
-			else if (StringUtil.equalsIgnoreCase(
-						key, "hikariConnectionCustomizerClassName")) {
-
-				key = "connectionCustomizerClassName";
 			}
 
 			// Ignore Liferay property
@@ -435,10 +434,10 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 
 	protected boolean isPropertyHikariCP(String key) {
 		if (StringUtil.equalsIgnoreCase(key, "autoCommit") ||
+			StringUtil.equalsIgnoreCase(key, "connectionTestQuery") ||
 			StringUtil.equalsIgnoreCase(key, "connectionTimeout") ||
-			StringUtil.equalsIgnoreCase(
-				key, "hikariConnectionCustomizerClassName") ||
 			StringUtil.equalsIgnoreCase(key, "idleTimeout") ||
+			StringUtil.equalsIgnoreCase(key, "initializationFailFast") ||
 			StringUtil.equalsIgnoreCase(key, "maximumPoolSize") ||
 			StringUtil.equalsIgnoreCase(key, "maxLifetime") ||
 			StringUtil.equalsIgnoreCase(key, "minimumIdle") ||

@@ -152,6 +152,8 @@ public class CounterLocalServiceTest {
 			System.setProperty("external-properties", "portal-test.properties");
 			System.setProperty("portal:jdbc.default.maxPoolSize", "3");
 			System.setProperty("portal:jdbc.default.minPoolSize", "1");
+			System.setProperty("portal:jdbc.default.maximumPoolSize", "3");
+			System.setProperty("portal:jdbc.default.minimumIdle", "1");
 
 			CacheKeyGeneratorUtil cacheKeyGeneratorUtil =
 				new CacheKeyGeneratorUtil();
