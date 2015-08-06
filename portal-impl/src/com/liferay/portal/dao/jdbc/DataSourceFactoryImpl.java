@@ -277,9 +277,11 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 
 		testLiferayPoolProviderClass(_HIKARICP_DATASOURCE_CLASS_NAME);
 
-		ClassLoader classLoader = ClassLoaderUtil.getPortalClassLoader();
+		Thread currentThread = Thread.currentThread();
 
-		Class<?> hikariDataSourceClazz = classLoader.loadClass(
+		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+
+		Class<?> hikariDataSourceClazz = contextClassLoader.loadClass(
 			_HIKARICP_DATASOURCE_CLASS_NAME);
 
 		Object hikariDataSource = hikariDataSourceClazz.newInstance();
