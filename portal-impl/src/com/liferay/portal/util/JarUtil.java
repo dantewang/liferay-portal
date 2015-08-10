@@ -16,19 +16,15 @@ package com.liferay.portal.util;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.PortalRunMode;
 import com.liferay.portal.kernel.util.ReflectionUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 
 import java.io.InputStream;
 
 import java.lang.reflect.Method;
 
-import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.UnknownHostException;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,38 +40,28 @@ public class JarUtil {
 			URL url, String libPath, String name, URLClassLoader urlClassLoader)
 		throws Exception {
 
-		if (PortalRunMode.isTestMode()) {
-			try {
-				InetAddress.getAllByName("mirrors");
-
-				String urlString = url.toExternalForm();
-
-				String newURLString = StringUtil.replace(
-					urlString, "://", "://mirrors/");
-
-				url = new URL(newURLString);
-
-				if (_log.isDebugEnabled()) {
-					_log.debug(
-						"Swapping URL from " + urlString + " to " +
-							newURLString);
-				}
-			}
-			catch (UnknownHostException uhe) {
-				if (_log.isDebugEnabled()) {
-					_log.debug("Unable to resolve \"mirrors\"");
-				}
-			}
-		}
-
 		Path path = Paths.get(libPath, name);
+		Path lockPath = Paths.get(libPath, name + ".lock");
 
 		if (_log.isInfoEnabled()) {
 			_log.info("Downloading " + url + " to " + path);
 		}
 
-		try (InputStream inputStream = url.openStream()) {
-			Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+		if (!Files.exists(lockPath)) {
+			Files.createFile(lockPath);
+
+			try (InputStream inputStream = url.openStream()) {				
+				Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+				Files.delete(lockPath);
+			}
+		}
+		else {
+			while (true) {
+				Thread.sleep(500);
+				if (!Files.exists(lockPath)) {
+					break;
+				}
+			}
 		}
 
 		if (_log.isInfoEnabled()) {
