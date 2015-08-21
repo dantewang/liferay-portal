@@ -777,12 +777,7 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 		PermissionChecker permissionChecker = getPermissionChecker();
 
 		if (permissionChecker.getUserId() != userId) {
-			try {
-				permissionChecker = PermissionCheckerFactoryUtil.create(user);
-			}
-			catch (Exception e) {
-				throw new PrincipalException(e);
-			}
+			permissionChecker = PermissionCheckerFactoryUtil.create(user);
 		}
 
 		if (includeControlPanel &&
