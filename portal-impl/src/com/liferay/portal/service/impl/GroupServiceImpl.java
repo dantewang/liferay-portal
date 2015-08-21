@@ -737,26 +737,26 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 					userId, start, end, null);
 
 			for (Organization organization : userOrgs) {
-				if (!organization.hasPrivateLayouts() &&
-					!organization.hasPublicLayouts()) {
+				Group group = organization.getGroup();
 
-					userSiteGroups.remove(organization.getGroup());
-				}
-				else {
-					userSiteGroups.add(0, organization.getGroup());
+				if (group.isActive() &&
+					(group.hasPrivateLayouts() || group.hasPublicLayouts())) {
+
+					userSiteGroups.add(0, group);
 				}
 
 				if (!PropsValues.ORGANIZATIONS_MEMBERSHIP_STRICT) {
 					for (Organization ancestorOrganization :
 							organization.getAncestors()) {
 
-						if (!ancestorOrganization.hasPrivateLayouts() &&
-							!ancestorOrganization.hasPublicLayouts()) {
+						Group ancestorGroup = ancestorOrganization.getGroup();
 
-							continue;
+						if (ancestorGroup.isActive() &&
+							(ancestorGroup.hasPrivateLayouts() ||
+							 ancestorGroup.hasPublicLayouts())) {
+
+							userSiteGroups.add(0, ancestorGroup);
 						}
-
-						userSiteGroups.add(0, ancestorOrganization.getGroup());
 					}
 				}
 			}
