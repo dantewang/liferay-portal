@@ -699,6 +699,72 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 			end = max;
 		}
 
+		PermissionChecker permissionChecker = getPermissionChecker();
+
+		if (permissionChecker.getUserId() != userId) {
+			permissionChecker = PermissionCheckerFactoryUtil.create(user);
+		}
+
+		if (includeControlPanel &&
+			PortalPermissionUtil.contains(
+				permissionChecker, ActionKeys.VIEW_CONTROL_PANEL)) {
+
+			Group controlPanelGroup = groupLocalService.getGroup(
+				user.getCompanyId(), GroupConstants.CONTROL_PANEL);
+
+			userSiteGroups.add(controlPanelGroup);
+		}
+
+		if ((classNames == null) ||
+			ArrayUtil.contains(classNames, User.class.getName())) {
+
+			if (PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED ||
+				PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED) {
+
+				Group userGroup = user.getGroup();
+
+				userSiteGroups.add(userGroup);
+			}
+		}
+
+		if ((classNames == null) ||
+			ArrayUtil.contains(classNames, Organization.class.getName())) {
+
+			List<Organization> userOrgs =
+				organizationLocalService.getOrganizations(
+					userId, start, end, null);
+
+			for (Organization organization : userOrgs) {
+				if (!PropsValues.ORGANIZATIONS_MEMBERSHIP_STRICT) {
+					List<Organization> ancestorOrganizations =
+						organization.getAncestors();
+
+					Collections.reverse(ancestorOrganizations);
+
+					for (Organization ancestorOrganization :
+							ancestorOrganizations) {
+
+						Group ancestorGroup = ancestorOrganization.getGroup();
+
+						if (ancestorGroup.isActive() &&
+							(ancestorGroup.hasPrivateLayouts() ||
+							 ancestorGroup.hasPublicLayouts())) {
+
+							userSiteGroups.add(ancestorGroup);
+						}
+					}
+				}
+
+				Group group = organization.getGroup();
+
+				if (group.isActive() &&
+					(group.hasPrivateLayouts() || group.hasPublicLayouts())) {
+
+					userSiteGroups.add(group);
+				}
+			}
+		}
+
 		if ((classNames == null) ||
 			ArrayUtil.contains(classNames, Company.class.getName())) {
 
@@ -722,67 +788,6 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 					userSiteGroups.add(group);
 				}
 			}
-		}
-
-		if ((classNames == null) ||
-			ArrayUtil.contains(classNames, Organization.class.getName())) {
-
-			List<Organization> userOrgs =
-				organizationLocalService.getOrganizations(
-					userId, start, end, null);
-
-			for (Organization organization : userOrgs) {
-				Group group = organization.getGroup();
-
-				if (group.isActive() &&
-					(group.hasPrivateLayouts() || group.hasPublicLayouts())) {
-
-					userSiteGroups.add(0, group);
-				}
-
-				if (!PropsValues.ORGANIZATIONS_MEMBERSHIP_STRICT) {
-					for (Organization ancestorOrganization :
-							organization.getAncestors()) {
-
-						Group ancestorGroup = ancestorOrganization.getGroup();
-
-						if (ancestorGroup.isActive() &&
-							(ancestorGroup.hasPrivateLayouts() ||
-							 ancestorGroup.hasPublicLayouts())) {
-
-							userSiteGroups.add(0, ancestorGroup);
-						}
-					}
-				}
-			}
-		}
-
-		if ((classNames == null) ||
-			ArrayUtil.contains(classNames, User.class.getName())) {
-
-			if (PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED ||
-				PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED) {
-
-				Group userGroup = user.getGroup();
-
-				userSiteGroups.add(0, userGroup);
-			}
-		}
-
-		PermissionChecker permissionChecker = getPermissionChecker();
-
-		if (permissionChecker.getUserId() != userId) {
-			permissionChecker = PermissionCheckerFactoryUtil.create(user);
-		}
-
-		if (includeControlPanel &&
-			PortalPermissionUtil.contains(
-				permissionChecker, ActionKeys.VIEW_CONTROL_PANEL)) {
-
-			Group controlPanelGroup = groupLocalService.getGroup(
-				user.getCompanyId(), GroupConstants.CONTROL_PANEL);
-
-			userSiteGroups.add(0, controlPanelGroup);
 		}
 
 		return Collections.unmodifiableList(
