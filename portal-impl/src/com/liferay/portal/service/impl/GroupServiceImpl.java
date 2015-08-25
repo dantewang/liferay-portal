@@ -719,9 +719,14 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 			groupParams.put("active", true);
 			groupParams.put("usersGroups", userId);
 
-			userSiteGroups.addAll(
-				groupLocalService.search(
-					user.getCompanyId(), null, groupParams, start, end));
+			List<Group> groups = groupLocalService.search(
+				user.getCompanyId(), null, groupParams, start, end);
+
+			for (Group group : groups) {
+				if (group.hasPrivateLayouts() || group.hasPublicLayouts()) {
+					userSiteGroups.add(group);
+				}
+			}
 		}
 
 		if ((classNames == null) ||
