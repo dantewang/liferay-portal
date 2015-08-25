@@ -49,7 +49,7 @@ import org.junit.Test;
 /**
  * @author Preston Crary
  */
-public class PermissionCheckerBagTest {
+public class UserBagFactoryTest {
 
 	@ClassRule
 	@Rule
@@ -370,12 +370,11 @@ public class PermissionCheckerBagTest {
 	}
 
 	protected UserPermissionCheckerBag getUserBag() throws Exception {
-		return _advancedPermissionChecker.getUserBag();
+		return UserBagFactoryUtil.create(_user.getUserId());
 	}
 
 	protected PermissionCheckerBag getUserBag(Group group) throws Exception {
-		return _advancedPermissionChecker.getUserBag(
-			_user.getUserId(), group.getGroupId());
+		return UserBagFactoryUtil.create(_user.getUserId(), group.getGroupId());
 	}
 
 	protected Set<Group> getUserGroups() throws Exception {
