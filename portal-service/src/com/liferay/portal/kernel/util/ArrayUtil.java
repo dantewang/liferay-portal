@@ -2235,12 +2235,12 @@ public class ArrayUtil {
 	private static boolean _emptyOrContains(
 		Object[] array, Object value, boolean trueIfEmpty) {
 
-		if (isEmpty(array) || (value == null)) {
+		if (isEmpty(array)) {
 			return trueIfEmpty;
 		}
 
 		for (int i = 0; i < array.length; i++) {
-			if (value.equals(array[i])) {
+			if (Validator.equals(array[i], value)) {
 				return true;
 			}
 		}
@@ -2273,12 +2273,12 @@ public class ArrayUtil {
 
 		for (int i = 0; i < array.length; i++) {
 			if (ignoreCase) {
-				if (StringUtil.equalsIgnoreCase(array[i], value )) {
+				if (StringUtil.equalsIgnoreCase(array[i], value)) {
 					return true;
 				}
 			}
 			else {
-				if (array[i].equals(value)) {
+				if (Validator.equals(array[i], value)) {
 					return true;
 				}
 			}
