@@ -33,6 +33,7 @@ import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -255,12 +256,8 @@ public class UserBagFactoryImpl implements UserBagFactory {
 		}
 
 		try {
-			List<Group> groups = new ArrayList<>();
-
-			groups.add(guestGroup);
-
 			List<Role> roles = RoleLocalServiceUtil.getUserRelatedRoles(
-				guestUser.getUserId(), groups);
+				guestUser.getUserId(), Collections.singletonList(guestGroup));
 
 			// Only use the guest group for deriving the roles for
 			// unauthenticated users. Do not add the group to the permission bag
@@ -304,14 +301,8 @@ public class UserBagFactoryImpl implements UserBagFactory {
 		Set<Organization> organizations = new LinkedHashSet<>();
 
 		for (Organization organization : userOrgs) {
-			if (!organizations.contains(organization)) {
-				organizations.add(organization);
-
-				List<Organization> ancestorOrganizations =
-					OrganizationLocalServiceUtil.getParentOrganizations(
-						organization.getOrganizationId());
-
-				organizations.addAll(ancestorOrganizations);
+			if (organizations.add(organization)) {
+				organizations.addAll(organization.getAncestors());
 			}
 		}
 

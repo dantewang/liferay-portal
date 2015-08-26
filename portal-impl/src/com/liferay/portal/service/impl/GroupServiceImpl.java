@@ -695,14 +695,6 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 		BoundedLinkedHashSet<Group> userSiteGroups = new BoundedLinkedHashSet<>(
 			max);
 
-		int start = QueryUtil.ALL_POS;
-		int end = QueryUtil.ALL_POS;
-
-		if (max != QueryUtil.ALL_POS) {
-			start = 0;
-			end = max;
-		}
-
 		PermissionChecker permissionChecker = getPermissionChecker();
 
 		if (permissionChecker.getUserId() != userId) {
@@ -745,7 +737,7 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 			if (PropsValues.ORGANIZATIONS_MEMBERSHIP_STRICT) {
 				List<Organization> userOrgs =
 					organizationLocalService.getOrganizations(
-						userId, start, end, null);
+						userId, 0, userSiteGroups.getUpperBound(), null);
 
 				for (Organization organization : userOrgs) {
 					Group group = organization.getGroup();
