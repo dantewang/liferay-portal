@@ -18,6 +18,7 @@ import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.BoundedLinkedHashSet;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MapUtil;
@@ -691,7 +692,8 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 			return Collections.emptyList();
 		}
 
-		List<Group> userSiteGroups = new ArrayList<>();
+		BoundedLinkedHashSet<Group> userSiteGroups = new BoundedLinkedHashSet<>(
+			max);
 
 		int start = QueryUtil.ALL_POS;
 		int end = QueryUtil.ALL_POS;
@@ -714,7 +716,12 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 			Group controlPanelGroup = groupLocalService.getGroup(
 				user.getCompanyId(), GroupConstants.CONTROL_PANEL);
 
-			userSiteGroups.add(controlPanelGroup);
+			if (userSiteGroups.add(controlPanelGroup) &&
+				userSiteGroups.isFull()) {
+
+				return Collections.unmodifiableList(
+					new ArrayList<>(userSiteGroups));
+			}
 		}
 
 		if (ArrayUtil.emptyOrContains(classNames, User.class.getName())) {
@@ -723,7 +730,10 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 
 				Group userGroup = user.getGroup();
 
-				userSiteGroups.add(userGroup);
+				if (userSiteGroups.add(userGroup) && userSiteGroups.isFull()) {
+					return Collections.unmodifiableList(
+						new ArrayList<>(userSiteGroups));
+				}
 			}
 		}
 
@@ -744,7 +754,12 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 						(group.hasPrivateLayouts() ||
 						 group.hasPublicLayouts())) {
 
-						userSiteGroups.add(group);
+						if (userSiteGroups.add(group) &&
+							userSiteGroups.isFull()) {
+
+							return Collections.unmodifiableList(
+								new ArrayList<>(userSiteGroups));
+						}
 					}
 				}
 			}
@@ -756,15 +771,25 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 						(group.hasPrivateLayouts() ||
 						 group.hasPublicLayouts())) {
 
-						userSiteGroups.add(group);
+						if (userSiteGroups.add(group) &&
+							userSiteGroups.isFull()) {
+
+							return Collections.unmodifiableList(
+								new ArrayList<>(userSiteGroups));
+						}
 					}
 				}
 			}
 		}
 
 		if (ArrayUtil.emptyOrContains(classNames, Company.class.getName())) {
-			userSiteGroups.add(
-				groupLocalService.getCompanyGroup(user.getCompanyId()));
+			Group companyGroup = groupLocalService.getCompanyGroup(
+				user.getCompanyId());
+
+			if (userSiteGroups.add(companyGroup) && userSiteGroups.isFull()) {
+				return Collections.unmodifiableList(
+					new ArrayList<>(userSiteGroups));
+			}
 		}
 
 		if (ArrayUtil.emptyOrContains(classNames, Group.class.getName())) {
@@ -776,13 +801,15 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 				if (group.isActive() &&
 					(group.hasPrivateLayouts() || group.hasPublicLayouts())) {
 
-					userSiteGroups.add(group);
+					if (userSiteGroups.add(group) && userSiteGroups.isFull()) {
+						return Collections.unmodifiableList(
+							new ArrayList<>(userSiteGroups));
+					}
 				}
 			}
 		}
 
-		return Collections.unmodifiableList(
-			ListUtil.subList(ListUtil.unique(userSiteGroups), start, end));
+		return Collections.unmodifiableList(new ArrayList<>(userSiteGroups));
 	}
 
 	/**
