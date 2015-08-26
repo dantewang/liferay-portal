@@ -322,6 +322,10 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 			return userPermissionCheckerBag;
 		}
 
+		if (user.isDefaultUser()) {
+			return getGuestUserBag();
+		}
+
 		try {
 			List<Group> userGroups = GroupLocalServiceUtil.getUserGroups(
 				user.getUserId(), true);
@@ -386,6 +390,12 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 
 		if (bag != null) {
 			return bag;
+		}
+
+		User user = UserLocalServiceUtil.getUser(userId);
+
+		if (user.isDefaultUser()) {
+			return getGuestUserBag();
 		}
 
 		try {
