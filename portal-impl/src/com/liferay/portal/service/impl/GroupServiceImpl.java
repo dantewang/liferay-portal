@@ -688,7 +688,7 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 
 		User user = userPersistence.fetchByPrimaryKey(userId);
 
-		if (user.isDefaultUser()) {
+		if ((user == null) || user.isDefaultUser()) {
 			return Collections.emptyList();
 		}
 
