@@ -24,7 +24,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -33,8 +32,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
-
-import java.net.URL;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -50,7 +47,6 @@ import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.CacheConfiguration.BootstrapCacheLoaderFactoryConfiguration;
 import net.sf.ehcache.config.CacheConfiguration.CacheEventListenerFactoryConfiguration;
 import net.sf.ehcache.config.Configuration;
-import net.sf.ehcache.config.ConfigurationFactory;
 import net.sf.ehcache.config.FactoryConfiguration;
 import net.sf.ehcache.config.PersistenceConfiguration;
 import net.sf.ehcache.event.NotificationScope;
@@ -60,20 +56,10 @@ import net.sf.ehcache.event.NotificationScope;
  */
 public class EhcacheConfigurationHelperUtil {
 
-	public static ObjectValuePair
-		<Configuration, PortalCacheManagerConfiguration>
-			getConfigurationObjectValuePair(
-				String portalCacheManagerName, URL configurationURL,
-				boolean clusterAware, boolean usingDefault, Props props) {
-
-		if (configurationURL == null) {
-			throw new NullPointerException("Configuration path is null");
-		}
-
-		Configuration ehcacheConfiguration =
-			ConfigurationFactory.parseConfiguration(configurationURL);
-
-		ehcacheConfiguration.setName(portalCacheManagerName);
+	public static PortalCacheManagerConfiguration
+		processEhcacheConfiguration(
+			Configuration ehcacheConfiguration, boolean clusterAware,
+			boolean usingDefault, Props props) {
 
 		boolean clusterEnabled = GetterUtil.getBoolean(
 			props.get(PropsKeys.CLUSTER_LINK_ENABLED));
@@ -114,13 +100,9 @@ public class EhcacheConfigurationHelperUtil {
 					clusterEnabled, clusterLinkReplicationEnabled, props));
 		}
 
-		PortalCacheManagerConfiguration portalCacheManagerConfiguration =
-			new PortalCacheManagerConfiguration(
-				cacheManagerListenerPropertiesSet,
-				defaultPortalCacheConfiguration, portalCacheConfigurations);
-
-		return new ObjectValuePair<>(
-			ehcacheConfiguration, portalCacheManagerConfiguration);
+		return new PortalCacheManagerConfiguration(
+			cacheManagerListenerPropertiesSet, defaultPortalCacheConfiguration,
+			portalCacheConfigurations);
 	}
 
 	protected static Set<Properties>

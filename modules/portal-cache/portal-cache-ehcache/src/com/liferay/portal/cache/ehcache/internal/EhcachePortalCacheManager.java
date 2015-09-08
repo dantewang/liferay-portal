@@ -48,6 +48,7 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.Configuration;
+import net.sf.ehcache.config.ConfigurationFactory;
 import net.sf.ehcache.event.CacheManagerEventListenerRegistry;
 import net.sf.ehcache.management.ManagementService;
 import net.sf.ehcache.util.FailSafeTimer;
@@ -62,6 +63,29 @@ import net.sf.ehcache.util.FailSafeTimer;
 public class EhcachePortalCacheManager<K extends Serializable, V>
 	extends AbstractPortalCacheManager<K, V> {
 
+	public ObjectValuePair
+		<Configuration, PortalCacheManagerConfiguration>
+			getConfigurationObjectValuePair(
+				String portalCacheManagerName, URL configurationURL,
+				boolean clusterAware, boolean usingDefault, Props props) {
+
+		if (configurationURL == null) {
+			throw new NullPointerException("Configuration path is null");
+		}
+
+		Configuration ehcacheConfiguration =
+			ConfigurationFactory.parseConfiguration(configurationURL);
+
+		ehcacheConfiguration.setName(portalCacheManagerName);
+
+		PortalCacheManagerConfiguration portalCacheManagerConfiguration =
+			EhcacheConfigurationHelperUtil.processEhcacheConfiguration(
+				ehcacheConfiguration, clusterAware, usingDefault, props);
+
+		return new ObjectValuePair<>(
+			ehcacheConfiguration, portalCacheManagerConfiguration);
+	}
+
 	public CacheManager getEhcacheManager() {
 		return _cacheManager;
 	}
@@ -69,10 +93,9 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 	@Override
 	public void reconfigurePortalCaches(URL configurationURL) {
 		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
-			configurationObjectValuePair =
-				EhcacheConfigurationHelperUtil.getConfigurationObjectValuePair(
-					getPortalCacheManagerName(), configurationURL,
-					isClusterAware(), _usingDefault, props);
+			configurationObjectValuePair = getConfigurationObjectValuePair(
+				getPortalCacheManagerName(), configurationURL, isClusterAware(),
+				_usingDefault, props);
 
 		reconfigEhcache(configurationObjectValuePair.getKey());
 
@@ -213,10 +236,9 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 		_usingDefault = _configFile.equals(_defaultConfigFile);
 
 		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
-			configurationObjectValuePair =
-				EhcacheConfigurationHelperUtil.getConfigurationObjectValuePair(
-					getPortalCacheManagerName(), configFileURL,
-					isClusterAware(), _usingDefault, props);
+			configurationObjectValuePair = getConfigurationObjectValuePair(
+				getPortalCacheManagerName(), configFileURL, isClusterAware(),
+				_usingDefault, props);
 
 		_cacheManager = new CacheManager(configurationObjectValuePair.getKey());
 
