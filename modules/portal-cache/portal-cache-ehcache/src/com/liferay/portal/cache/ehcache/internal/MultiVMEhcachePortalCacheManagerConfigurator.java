@@ -1,10 +1,19 @@
 package com.liferay.portal.cache.ehcache.internal;
 
+import java.net.URL;
+
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import com.liferay.portal.kernel.cache.PortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
+import com.liferay.portal.kernel.util.ObjectValuePair;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.portal.kernel.util.Props;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.Validator;
 
 import net.sf.ehcache.config.Configuration;
 
@@ -18,8 +27,33 @@ import net.sf.ehcache.config.Configuration;
 public class MultiVMEhcachePortalCacheManagerConfigurator
 	implements PortalCacheManagerConfigurator<Configuration> {
 
+	@Activate
+	protected void activate() {
+		String configFile = props.get(PropsKeys.EHCACHE_MULTI_VM_CONFIG_LOCATION);
+
+		if (Validator.isNull(configFile)) {
+			configFile = _DEFAULT_CONFIG_FILE_NAME;
+			_usingDefault = true;
+		}
+
+		URL configFileURL = EhcacheConfigurationHelperUtil.class.getResource(
+			configFile);
+
+		if (configFileURL == null) {
+			ClassLoader classLoader = PortalClassLoaderUtil.getClassLoader();
+
+			configFileURL = classLoader.getResource(configFile);
+		}
+
+		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
+			configurationObjectValuePair =
+				EhcacheConfigurationHelperUtil.getConfigurationObjectValuePair(
+					PortalCacheManagerNames.MULTI_VM, configFileURL,
+					true, _usingDefault, props);
+	}
+
 	@Override
-	public Configuration getEhcacheManagerConfiguration() {
+	public Configuration getCacheManagerConfiguration() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -29,5 +63,21 @@ public class MultiVMEhcachePortalCacheManagerConfigurator
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean usingDefault() {
+		return _usingDefault;
+	}
+
+	@Reference(unbind = "-")
+	protected void setProps(Props props) {
+		this.props = props;
+	}
+
+	private boolean _usingDefault = false;
+	private static final String _DEFAULT_CONFIG_FILE_NAME =
+		"/ehcache/liferay-multi-vm-clustered.xml";
+
+	protected Props props;
 
 }

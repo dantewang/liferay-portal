@@ -26,8 +26,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.AggregateClassLoader;
 import com.liferay.portal.kernel.util.ClassLoaderUtil;
 import com.liferay.portal.kernel.util.Props;
-import com.liferay.portal.kernel.util.PropsKeys;
-
 import net.sf.ehcache.config.Configuration;
 
 import java.io.Serializable;
@@ -64,8 +62,6 @@ public class MultiVMEhcachePortalCacheManager
 	@Modified
 	protected void activate(Map<String, Object> properties) {
 		setClusterAware(true);
-		setConfigFile(props.get(PropsKeys.EHCACHE_MULTI_VM_CONFIG_LOCATION));
-		setDefaultConfigFile(_DEFAULT_CONFIG_FILE_NAME);
 		setMpiOnly(true);
 		setPortalCacheManagerName(PortalCacheManagerNames.MULTI_VM);
 
@@ -161,9 +157,6 @@ public class MultiVMEhcachePortalCacheManager
 	protected void unsetPortalCacheConfiguratorSettings(
 		PortalCacheConfiguratorSettings portalCacheConfiguratorSettings) {
 	}
-
-	private static final String _DEFAULT_CONFIG_FILE_NAME =
-		"/ehcache/liferay-multi-vm-clustered.xml";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		MultiVMEhcachePortalCacheManager.class);
