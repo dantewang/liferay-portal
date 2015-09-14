@@ -338,6 +338,8 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 	}
 
 	protected MBeanServer mBeanServer;
+	protected PortalCacheManagerConfigurator<Configuration>
+		portalCacheManagerConfigurator;
 	protected volatile Props props;
 
 	private EhcachePortalCache<K, V> _getEhcachePortalCache(

@@ -28,6 +28,8 @@ import com.liferay.portal.kernel.util.ClassLoaderUtil;
 import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 
+import net.sf.ehcache.config.Configuration;
+
 import java.io.Serializable;
 
 import java.util.Map;
@@ -107,6 +109,20 @@ public class MultiVMEhcachePortalCacheManager
 
 		this.portalCacheBootstrapLoaderFactory =
 			portalCacheBootstrapLoaderFactory;
+	}
+
+	@Reference(
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY,
+		target = "(" + PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.MULTI_VM + ")"
+	)
+	protected void setEhcachePortalCacheManagerConfigurator(
+		PortalCacheManagerConfigurator<Configuration>
+			ehcachePortalCacheManagerConfigurator) {
+
+		this.portalCacheManagerConfigurator =
+			ehcachePortalCacheManagerConfigurator;
 	}
 
 	@Reference(
