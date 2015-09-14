@@ -4,8 +4,10 @@ import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfigura
 
 public interface PortalCacheManagerConfigurator<T> {
 
-	public T getEhcacheManagerConfiguration();
+	public T getCacheManagerConfiguration();
 
 	public PortalCacheManagerConfiguration getPortalCacheManagerConfiguration();
+
+	public boolean usingDefault();
 
 }
