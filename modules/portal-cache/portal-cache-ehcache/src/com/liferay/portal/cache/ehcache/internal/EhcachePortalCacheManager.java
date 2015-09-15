@@ -75,7 +75,7 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 				EhcacheConfigurationHelperUtil.getConfigurationObjectValuePair(
 					getPortalCacheManagerName(), configurationURL,
 					isClusterAware(), 
-					portalCacheManagerConfigurator.usingDefault(), props);
+					portalCacheManagerConfigurator.getCacheManagerConfigurator().usingDefault(), props);
 
 		reconfigEhcache(configurationObjectValuePair.getKey());
 
