@@ -8,6 +8,4 @@ public interface PortalCacheManagerConfigurator<T extends CacheManagerConfigurat
 
 	public PortalCacheManagerConfiguration getPortalCacheManagerConfiguration();
 
-	public boolean usingDefault();
-
 }
