@@ -14,6 +14,7 @@
 
 package com.liferay.portal.cache.ehcache.internal;
 
+import com.liferay.portal.cache.ehcache.configuration.CacheManagerConfigurator;
 import com.liferay.portal.cache.ehcache.configuration.PortalCacheManagerConfigurator;
 import com.liferay.portal.kernel.cache.PortalCacheBootstrapLoaderFactory;
 import com.liferay.portal.kernel.cache.PortalCacheListenerFactory;
@@ -109,17 +110,17 @@ public class MultiVMEhcachePortalCacheManager
 	}
 
 	@Reference(
-		cardinality = ReferenceCardinality.MULTIPLE,
+		cardinality = ReferenceCardinality.AT_LEAST_ONE,
 		policy = ReferencePolicy.DYNAMIC,
 		policyOption = ReferencePolicyOption.GREEDY,
 		target = "(" + PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.MULTI_VM + ")"
 	)
 	protected void setEhcachePortalCacheManagerConfigurator(
-		PortalCacheManagerConfigurator<Configuration>
-			ehcachePortalCacheManagerConfigurator) {
+		PortalCacheManagerConfigurator<CacheManagerConfigurator<Configuration>>
+			portalCacheManagerConfigurator) {
 
 		this.portalCacheManagerConfigurator =
-			ehcachePortalCacheManagerConfigurator;
+			portalCacheManagerConfigurator;
 	}
 
 	@Reference(

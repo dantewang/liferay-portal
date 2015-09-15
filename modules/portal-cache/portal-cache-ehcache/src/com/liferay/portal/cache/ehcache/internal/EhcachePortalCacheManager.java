@@ -14,6 +14,7 @@
 
 package com.liferay.portal.cache.ehcache.internal;
 
+import com.liferay.portal.cache.ehcache.configuration.CacheManagerConfigurator;
 import com.liferay.portal.cache.ehcache.configuration.PortalCacheManagerConfigurator;
 import com.liferay.portal.cache.ehcache.internal.event.PortalCacheManagerEventListener;
 import com.liferay.portal.kernel.cache.AbstractPortalCacheManager;
@@ -192,7 +193,7 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 				props.getArray(PropsKeys.TRANSACTIONAL_CACHE_NAMES)));
 
 		_cacheManager = new CacheManager(
-			portalCacheManagerConfigurator.getCacheManagerConfiguration());
+			portalCacheManagerConfigurator.getCacheManagerConfigurator().getCacheManagerConfiguration());
 
 		_portalCacheManagerConfiguration =
 			portalCacheManagerConfigurator.getPortalCacheManagerConfiguration();
@@ -312,8 +313,9 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 	}
 
 	protected MBeanServer mBeanServer;
-	protected PortalCacheManagerConfigurator<Configuration>
-		portalCacheManagerConfigurator;
+	protected PortalCacheManagerConfigurator<
+		CacheManagerConfigurator<Configuration>>
+			portalCacheManagerConfigurator;
 	protected volatile Props props;
 
 	private EhcachePortalCache<K, V> _getEhcachePortalCache(

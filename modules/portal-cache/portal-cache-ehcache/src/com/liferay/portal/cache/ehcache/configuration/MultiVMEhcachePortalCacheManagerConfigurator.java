@@ -26,7 +26,7 @@ import net.sf.ehcache.config.Configuration;
 	service = PortalCacheManagerConfigurator.class
 )
 public class MultiVMEhcachePortalCacheManagerConfigurator
-	implements PortalCacheManagerConfigurator<Configuration> {
+	implements PortalCacheManagerConfigurator<CacheManagerConfigurator<Configuration>> {
 
 	@Activate
 	protected void activate() {
@@ -53,16 +53,19 @@ public class MultiVMEhcachePortalCacheManagerConfigurator
 					true, _usingDefault, props);
 	}
 
+	@Reference
+	public void setCacheManagerConfigurator(CacheManagerConfigurator<Configuration> c) {
+		_cacheManagerConfigurator = c;
+	}
+
 	@Override
-	public Configuration getCacheManagerConfiguration() {
-		// TODO Auto-generated method stub
-		return null;
+	public CacheManagerConfigurator<Configuration> getCacheManagerConfigurator() {
+		return _cacheManagerConfigurator;
 	}
 
 	@Override
 	public PortalCacheManagerConfiguration getPortalCacheManagerConfiguration() {
-		// TODO Auto-generated method stub
-		return null;
+		return _pcmc;
 	}
 
 	@Override
@@ -75,6 +78,8 @@ public class MultiVMEhcachePortalCacheManagerConfigurator
 		this.props = props;
 	}
 
+	private PortalCacheManagerConfiguration _pcmc;
+	private CacheManagerConfigurator<Configuration> _cacheManagerConfigurator;
 	private boolean _usingDefault = false;
 	private static final String _DEFAULT_CONFIG_FILE_NAME =
 		"/ehcache/liferay-multi-vm-clustered.xml";
