@@ -1,4 +1,4 @@
-package com.liferay.portal.cache.ehcache.internal;
+package com.liferay.portal.cache.ehcache.configuration;
 
 import java.net.URL;
 
@@ -6,6 +6,7 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import com.liferay.portal.cache.ehcache.internal.EhcacheConfigurationHelperUtil;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;

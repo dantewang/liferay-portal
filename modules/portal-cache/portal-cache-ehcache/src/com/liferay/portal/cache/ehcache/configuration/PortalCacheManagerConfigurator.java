@@ -1,4 +1,4 @@
-package com.liferay.portal.cache.ehcache.internal;
+package com.liferay.portal.cache.ehcache.configuration;
 
 import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
 
