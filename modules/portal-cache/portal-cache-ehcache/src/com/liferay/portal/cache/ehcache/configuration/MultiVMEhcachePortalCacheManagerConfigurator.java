@@ -19,8 +19,7 @@ import net.sf.ehcache.config.Configuration;
 	service = PortalCacheManagerConfigurator.class
 )
 public class MultiVMEhcachePortalCacheManagerConfigurator
-	implements PortalCacheManagerConfigurator<
-		CacheManagerConfigurator<Configuration>> {
+	extends AbstractEhcachePortalCacheManagerConfigurator {
 
 	@Activate
 	protected void activate() {
