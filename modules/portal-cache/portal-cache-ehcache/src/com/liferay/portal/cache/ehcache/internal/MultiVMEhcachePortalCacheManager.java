@@ -28,13 +28,14 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.AggregateClassLoader;
 import com.liferay.portal.kernel.util.ClassLoaderUtil;
 import com.liferay.portal.kernel.util.Props;
-import net.sf.ehcache.config.Configuration;
 
 import java.io.Serializable;
 
 import java.util.Map;
 
 import javax.management.MBeanServer;
+
+import net.sf.ehcache.config.Configuration;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -96,6 +97,19 @@ public class MultiVMEhcachePortalCacheManager
 		destroy();
 	}
 
+	@Reference(
+		cardinality = ReferenceCardinality.AT_LEAST_ONE,
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY,
+		target = "(" + PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.MULTI_VM + ")"
+	)
+	protected void setEhcachePortalCacheManagerConfigurator(
+		PortalCacheManagerConfigurator<CacheManagerConfigurator<Configuration>>
+			portalCacheManagerConfigurator) {
+
+		this.portalCacheManagerConfigurator = portalCacheManagerConfigurator;
+	}
+
 	@Reference(unbind = "-")
 	protected void setMBeanServer(MBeanServer mBeanServer) {
 		this.mBeanServer = mBeanServer;
@@ -107,20 +121,6 @@ public class MultiVMEhcachePortalCacheManager
 
 		this.portalCacheBootstrapLoaderFactory =
 			portalCacheBootstrapLoaderFactory;
-	}
-
-	@Reference(
-		cardinality = ReferenceCardinality.AT_LEAST_ONE,
-		policy = ReferencePolicy.DYNAMIC,
-		policyOption = ReferencePolicyOption.GREEDY,
-		target = "(" + PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.MULTI_VM + ")"
-	)
-	protected void setEhcachePortalCacheManagerConfigurator(
-		PortalCacheManagerConfigurator<CacheManagerConfigurator<Configuration>>
-			portalCacheManagerConfigurator) {
-
-		this.portalCacheManagerConfigurator =
-			portalCacheManagerConfigurator;
 	}
 
 	@Reference(

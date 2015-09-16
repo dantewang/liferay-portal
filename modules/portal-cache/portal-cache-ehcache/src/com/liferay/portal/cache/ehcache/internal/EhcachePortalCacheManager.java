@@ -70,12 +70,15 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 
 	@Override
 	public void reconfigurePortalCaches(URL configurationURL) {
+		CacheManagerConfigurator<Configuration> cacheManagerConfigurator =
+			portalCacheManagerConfigurator.getCacheManagerConfigurator();
+
 		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
 			configurationObjectValuePair =
 				EhcacheConfigurationHelperUtil.getConfigurationObjectValuePair(
 					getPortalCacheManagerName(), configurationURL,
-					isClusterAware(), 
-					portalCacheManagerConfigurator.getCacheManagerConfigurator().usingDefault(), props);
+					isClusterAware(), cacheManagerConfigurator.usingDefault(),
+					props);
 
 		reconfigEhcache(configurationObjectValuePair.getKey());
 
@@ -192,8 +195,11 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 			GetterUtil.getStringValues(
 				props.getArray(PropsKeys.TRANSACTIONAL_CACHE_NAMES)));
 
+		CacheManagerConfigurator<Configuration> cacheManagerConfigurator =
+			portalCacheManagerConfigurator.getCacheManagerConfigurator();
+
 		_cacheManager = new CacheManager(
-			portalCacheManagerConfigurator.getCacheManagerConfigurator().getCacheManagerConfiguration());
+			cacheManagerConfigurator.getCacheManagerConfiguration());
 
 		_portalCacheManagerConfiguration =
 			portalCacheManagerConfigurator.getPortalCacheManagerConfiguration();
@@ -313,8 +319,8 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 	}
 
 	protected MBeanServer mBeanServer;
-	protected PortalCacheManagerConfigurator<
-		CacheManagerConfigurator<Configuration>>
+	protected PortalCacheManagerConfigurator
+		<CacheManagerConfigurator<Configuration>>
 			portalCacheManagerConfigurator;
 	protected volatile Props props;
 

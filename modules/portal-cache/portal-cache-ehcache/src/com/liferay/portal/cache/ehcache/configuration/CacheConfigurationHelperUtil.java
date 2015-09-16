@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
+ * @author Dante Wang
  * @author Tina Tian
  */
 public class CacheConfigurationHelperUtil {
@@ -145,6 +146,7 @@ public class CacheConfigurationHelperUtil {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		CacheConfigurationHelperUtil.class);
+
 	private static final Map<String, String> _unescapeMap = new HashMap<>();
 
 	static {

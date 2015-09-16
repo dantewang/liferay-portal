@@ -1,8 +1,18 @@
-package com.liferay.portal.cache.ehcache.configuration;
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
+package com.liferay.portal.cache.ehcache.configuration;
 
 import com.liferay.portal.kernel.cache.PortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
@@ -11,6 +21,13 @@ import com.liferay.portal.kernel.util.Props;
 
 import net.sf.ehcache.config.Configuration;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+/**
+ * @author Dante Wang
+ */
 @Component(
 	immediate = true,
 	property = {
@@ -20,21 +37,6 @@ import net.sf.ehcache.config.Configuration;
 )
 public class MultiVMEhcachePortalCacheManagerConfigurator
 	extends AbstractEhcachePortalCacheManagerConfigurator {
-
-	@Activate
-	protected void activate() {
-		Configuration configuration =
-			_cacheManagerConfigurator.getCacheManagerConfiguration();
-
-		
-	}
-
-	@Reference
-	public void setCacheManagerConfigurator(
-		CacheManagerConfigurator<Configuration> cacheManagerConfigurator) {
-
-		_cacheManagerConfigurator = cacheManagerConfigurator;
-	}
 
 	@Override
 	public CacheManagerConfigurator<Configuration>
@@ -50,6 +52,19 @@ public class MultiVMEhcachePortalCacheManagerConfigurator
 		return _portalCacheManagerConfiguration;
 	}
 
+	@Reference
+	public void setCacheManagerConfigurator(
+		CacheManagerConfigurator<Configuration> cacheManagerConfigurator) {
+
+		_cacheManagerConfigurator = cacheManagerConfigurator;
+	}
+
+	@Activate
+	protected void activate() {
+		Configuration configuration =
+			_cacheManagerConfigurator.getCacheManagerConfiguration();
+	}
+
 	@Reference(unbind = "-")
 	protected void setProps(Props props) {
 		this.props = props;
@@ -57,7 +72,8 @@ public class MultiVMEhcachePortalCacheManagerConfigurator
 
 	protected Props props;
 
-	private PortalCacheManagerConfiguration _portalCacheManagerConfiguration;
 	private CacheManagerConfigurator<Configuration> _cacheManagerConfigurator;
+	private PortalCacheManagerConfiguration
+		_portalCacheManagerConfiguration;
 
 }
