@@ -25,15 +25,14 @@ import com.liferay.portal.kernel.cache.configurator.PortalCacheConfiguratorSetti
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Props;
-import com.liferay.portal.kernel.util.PropsKeys;
-
-import net.sf.ehcache.config.Configuration;
 
 import java.io.Serializable;
 
 import java.util.Map;
 
 import javax.management.MBeanServer;
+
+import net.sf.ehcache.config.Configuration;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;

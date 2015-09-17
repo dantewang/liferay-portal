@@ -52,6 +52,6 @@ public class SingleVMEhcacheManagerConfigurator
 	protected Props props;
 
 	private static final String _DEFAULT_CONFIG_FILE_NAME =
-			"/ehcache/liferay-single-vm.xml";
+		"/ehcache/liferay-single-vm.xml";
 
 }

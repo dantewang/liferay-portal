@@ -17,11 +17,9 @@ package com.liferay.portal.cache.ehcache.configuration;
 import com.liferay.portal.cache.ehcache.EhcacheConstants;
 import com.liferay.portal.cache.ehcache.internal.EhcachePortalCacheConfiguration;
 import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
-import com.liferay.portal.kernel.cache.PortalCacheReplicator;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
 import com.liferay.portal.kernel.util.Props;
-import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Collections;
@@ -73,9 +71,32 @@ public abstract class AbstractEhcachePortalCacheManagerConfigurator
 		return Collections.singleton(properties);
 	}
 
+	protected abstract void handleBootstrapCacheLoader(
+		Properties portalCacheBootstrapLoaderProperties,
+		BootstrapCacheLoaderFactoryConfiguration
+			bootstrapCacheLoaderFactoryConfiguration);
+
+	protected void handleCacheEventListener(
+		Set<Properties> portalCacheListenerPropertiesSet,
+		String factoryClassName,
+		PortalCacheListenerScope portalCacheListenerScope,
+		Properties properties, boolean usingDefault, Props props) {
+
+		if (!usingDefault) {
+			properties.put(
+				EhcacheConstants.CACHE_EVENT_LISTENER_FACTORY_CLASS_NAME,
+				factoryClassName);
+			properties.put(
+				PortalCacheConfiguration.PORTAL_CACHE_LISTENER_SCOPE,
+				portalCacheListenerScope);
+
+			portalCacheListenerPropertiesSet.add(properties);
+		}
+	}
+
 	@SuppressWarnings("rawtypes")
 	protected void handlePeerFactoryConfigurations(
-		List<FactoryConfiguration> factoryConfigurations, 
+		List<FactoryConfiguration> factoryConfigurations,
 		Properties additionalProperties, Props props) {
 
 		if (factoryConfigurations.isEmpty()) {
@@ -134,24 +155,6 @@ public abstract class AbstractEhcachePortalCacheManagerConfigurator
 		}
 
 		return false;
-	}
-
-	protected void handleCacheEventListener(
-		Set<Properties> portalCacheListenerPropertiesSet,
-		String factoryClassName,
-		PortalCacheListenerScope portalCacheListenerScope,
-		Properties properties, boolean usingDefault, Props props) {
-
-		if (!usingDefault) {
-			properties.put(
-				EhcacheConstants.CACHE_EVENT_LISTENER_FACTORY_CLASS_NAME,
-				factoryClassName);
-			properties.put(
-				PortalCacheConfiguration.PORTAL_CACHE_LISTENER_SCOPE,
-				portalCacheListenerScope);
-
-			portalCacheListenerPropertiesSet.add(properties);
-		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -232,11 +235,6 @@ public abstract class AbstractEhcachePortalCacheManagerConfigurator
 			portalCacheName, portalCacheListenerPropertiesSet,
 			portalCacheBootstrapLoaderProperties, requireSerialization);
 	}
-
-	protected abstract void handleBootstrapCacheLoader(
-		Properties portalCacheBootstrapLoaderProperties,
-		BootstrapCacheLoaderFactoryConfiguration
-			bootstrapCacheLoaderFactoryConfiguration);
 
 	protected CacheManagerConfigurator<Configuration> cacheManagerConfigurator;
 	protected PortalCacheManagerConfiguration portalCacheManagerConfiguration;

@@ -14,25 +14,23 @@
 
 package com.liferay.portal.cache.ehcache.configuration;
 
+import com.liferay.portal.kernel.cache.configuration.PortalCacheConfiguration;
+import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
+import com.liferay.portal.kernel.util.Props;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Reference;
-
-import com.liferay.portal.kernel.cache.configuration.PortalCacheConfiguration;
-import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.Props;
-import com.liferay.portal.kernel.util.PropsKeys;
-
-import net.sf.ehcache.config.CacheConfiguration.BootstrapCacheLoaderFactoryConfiguration;
 import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.CacheConfiguration.BootstrapCacheLoaderFactoryConfiguration;
 import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.FactoryConfiguration;
+
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Dante Wang
@@ -54,8 +52,8 @@ public class SingleVMEhcachePortalCacheManagerConfigurator
 		return portalCacheManagerConfiguration;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Activate
+	@SuppressWarnings("rawtypes")
 	protected void activate() {
 		Configuration ehcacheConfiguration =
 			cacheManagerConfigurator.getCacheManagerConfiguration();
@@ -63,13 +61,15 @@ public class SingleVMEhcachePortalCacheManagerConfigurator
 		Set<Properties> cacheManagerListenerPropertiesSet =
 			getCacheManagerListenerPropertiesSet(ehcacheConfiguration, props);
 
-		List<FactoryConfiguration> factoryConfigurations = ehcacheConfiguration.
-			getCacheManagerPeerProviderFactoryConfiguration();
+		List<FactoryConfiguration> factoryConfigurations =
+			ehcacheConfiguration.
+				getCacheManagerPeerProviderFactoryConfiguration();
 
 		factoryConfigurations.clear();
 
-		factoryConfigurations = ehcacheConfiguration.
-			getCacheManagerPeerListenerFactoryConfigurations();
+		factoryConfigurations =
+			ehcacheConfiguration.
+				getCacheManagerPeerListenerFactoryConfigurations();
 
 		factoryConfigurations.clear();
 
@@ -93,10 +93,9 @@ public class SingleVMEhcachePortalCacheManagerConfigurator
 					props));
 		}
 
-		portalCacheManagerConfiguration =
-			new PortalCacheManagerConfiguration(
-				cacheManagerListenerPropertiesSet,
-				defaultPortalCacheConfiguration, portalCacheConfigurations);
+		portalCacheManagerConfiguration = new PortalCacheManagerConfiguration(
+			cacheManagerListenerPropertiesSet, defaultPortalCacheConfiguration,
+			portalCacheConfigurations);
 	}
 
 	@Override

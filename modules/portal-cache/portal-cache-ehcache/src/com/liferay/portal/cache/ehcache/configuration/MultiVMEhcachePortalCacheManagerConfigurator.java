@@ -25,16 +25,16 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 
-import net.sf.ehcache.config.CacheConfiguration;
-import net.sf.ehcache.config.CacheConfiguration.BootstrapCacheLoaderFactoryConfiguration;
-import net.sf.ehcache.config.Configuration;
-import net.sf.ehcache.config.FactoryConfiguration;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.CacheConfiguration.BootstrapCacheLoaderFactoryConfiguration;
+import net.sf.ehcache.config.Configuration;
+import net.sf.ehcache.config.FactoryConfiguration;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -118,30 +118,35 @@ public class MultiVMEhcachePortalCacheManagerConfigurator
 					props));
 		}
 
-		portalCacheManagerConfiguration =
-			new PortalCacheManagerConfiguration(
-				cacheManagerListenerPropertiesSet,
-				defaultPortalCacheConfiguration, portalCacheConfigurations);
+		portalCacheManagerConfiguration = new PortalCacheManagerConfiguration(
+			cacheManagerListenerPropertiesSet, defaultPortalCacheConfiguration,
+			portalCacheConfigurations);
 	}
 
-	@Reference
-	protected void setCacheManagerConfigurator(
-		CacheManagerConfigurator<Configuration> cacheManagerConfigurator) {
+	@Override
+	protected void handleBootstrapCacheLoader(
+		Properties portalCacheBootstrapLoaderProperties,
+		BootstrapCacheLoaderFactoryConfiguration
+			bootstrapCacheLoaderFactoryConfiguration) {
 
-		this.cacheManagerConfigurator = cacheManagerConfigurator;
-	}
-
-	@Reference(unbind = "-")
-	protected void setProps(Props props) {
-		this.props = props;
+		if (_clusterEnabled) {
+			if (!_clusterLinkReplicationEnabled) {
+				portalCacheBootstrapLoaderProperties.put(
+					EhcacheConstants.
+						BOOTSTRAP_CACHE_LOADER_FACTORY_CLASS_NAME,
+					CacheConfigurationHelperUtil.parseFactoryClassName(
+						bootstrapCacheLoaderFactoryConfiguration.
+							getFullyQualifiedClassPath(), props));
+			}
+		}
 	}
 
 	@Override
 	protected void handleCacheEventListener(
-			Set<Properties> portalCacheListenerPropertiesSet,
-			String factoryClassName,
-			PortalCacheListenerScope portalCacheListenerScope,
-			Properties properties, boolean usingDefault, Props props) {
+		Set<Properties> portalCacheListenerPropertiesSet,
+		String factoryClassName,
+		PortalCacheListenerScope portalCacheListenerScope,
+		Properties properties, boolean usingDefault, Props props) {
 
 		if (factoryClassName.equals(
 				props.get(
@@ -178,24 +183,17 @@ public class MultiVMEhcachePortalCacheManagerConfigurator
 			super.isRequireSerialization(cacheConfiguration));
 	}
 
-	@Override
-	protected void handleBootstrapCacheLoader(
-		Properties portalCacheBootstrapLoaderProperties,
-		BootstrapCacheLoaderFactoryConfiguration
-			bootstrapCacheLoaderFactoryConfiguration) {
+	@Reference
+	protected void setCacheManagerConfigurator(
+		CacheManagerConfigurator<Configuration> cacheManagerConfigurator) {
 
-		if (_clusterEnabled) {
-			if (!_clusterLinkReplicationEnabled) {
-				portalCacheBootstrapLoaderProperties.put(
-					EhcacheConstants.
-						BOOTSTRAP_CACHE_LOADER_FACTORY_CLASS_NAME,
-					CacheConfigurationHelperUtil.parseFactoryClassName(
-						bootstrapCacheLoaderFactoryConfiguration.
-							getFullyQualifiedClassPath(), props));
-			}
-		}
+		this.cacheManagerConfigurator = cacheManagerConfigurator;
 	}
 
+	@Reference(unbind = "-")
+	protected void setProps(Props props) {
+		this.props = props;
+	}
 
 	@SuppressWarnings("rawtypes")
 	private void _processPeerFactoryConfigurations(
