@@ -39,15 +39,16 @@ import net.sf.ehcache.config.FactoryConfiguration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * @author Dante Wang
  */
 @Component(
 	immediate = true,
-	property = {
-		PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.MULTI_VM
-	},
+	property = PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.MULTI_VM,
 	service = PortalCacheManagerConfigurator.class
 )
 public class MultiVMEhcachePortalCacheManagerConfigurator
@@ -183,7 +184,12 @@ public class MultiVMEhcachePortalCacheManagerConfigurator
 			super.isRequireSerialization(cacheConfiguration));
 	}
 
-	@Reference
+	@Reference(
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC,
+		policyOption = ReferencePolicyOption.RELUCTANT,
+		target = "(" + PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.MULTI_VM + ")"
+	)
 	protected void setCacheManagerConfigurator(
 		CacheManagerConfigurator<Configuration> cacheManagerConfigurator) {
 
