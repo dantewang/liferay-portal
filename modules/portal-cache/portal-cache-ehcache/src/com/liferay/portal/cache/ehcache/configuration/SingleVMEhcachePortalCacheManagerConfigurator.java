@@ -14,6 +14,8 @@
 
 package com.liferay.portal.cache.ehcache.configuration;
 
+import com.liferay.portal.kernel.cache.PortalCacheManager;
+import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
 import com.liferay.portal.kernel.util.Props;
@@ -30,11 +32,20 @@ import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.FactoryConfiguration;
 
 import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * @author Dante Wang
  */
+@Component(
+	immediate = true,
+	property = PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.SINGLE_VM,
+	service = PortalCacheManagerConfigurator.class
+)
 public class SingleVMEhcachePortalCacheManagerConfigurator
 	extends AbstractEhcachePortalCacheManagerConfigurator {
 
@@ -105,7 +116,12 @@ public class SingleVMEhcachePortalCacheManagerConfigurator
 			bootstrapCacheLoaderFactoryConfiguration) {
 	}
 
-	@Reference
+	@Reference(
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC,
+		policyOption = ReferencePolicyOption.RELUCTANT,
+		target = "(" + PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.SINGLE_VM + ")"
+	)
 	protected void setCacheManagerConfigurator(
 		CacheManagerConfigurator<Configuration> cacheManagerConfigurator) {
 
