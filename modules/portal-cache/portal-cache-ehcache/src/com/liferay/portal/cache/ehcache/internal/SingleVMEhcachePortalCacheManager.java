@@ -14,6 +14,8 @@
 
 package com.liferay.portal.cache.ehcache.internal;
 
+import com.liferay.portal.cache.ehcache.configuration.CacheManagerConfigurator;
+import com.liferay.portal.cache.ehcache.configuration.PortalCacheManagerConfigurator;
 import com.liferay.portal.kernel.cache.PortalCacheListenerFactory;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCacheManagerListenerFactory;
@@ -23,13 +25,14 @@ import com.liferay.portal.kernel.cache.configurator.PortalCacheConfiguratorSetti
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Props;
-import com.liferay.portal.kernel.util.PropsKeys;
 
 import java.io.Serializable;
 
 import java.util.Map;
 
 import javax.management.MBeanServer;
+
+import net.sf.ehcache.config.Configuration;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -57,8 +60,6 @@ public class SingleVMEhcachePortalCacheManager<K extends Serializable, V>
 	@Activate
 	@Modified
 	protected void activate(Map<String, Object> properties) {
-		setConfigFile(props.get(PropsKeys.EHCACHE_SINGLE_VM_CONFIG_LOCATION));
-		setDefaultConfigFile(_DEFAULT_CONFIG_FILE_NAME);
 		setPortalCacheManagerName(PortalCacheManagerNames.SINGLE_VM);
 
 		initialize();
@@ -73,6 +74,19 @@ public class SingleVMEhcachePortalCacheManager<K extends Serializable, V>
 	@Deactivate
 	protected void deactivate() {
 		destroy();
+	}
+
+	@Reference(
+		cardinality = ReferenceCardinality.AT_LEAST_ONE,
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY,
+		target = "(" + PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.SINGLE_VM + ")"
+	)
+	protected void setEhcachePortalCacheManagerConfigurator(
+		PortalCacheManagerConfigurator<CacheManagerConfigurator<Configuration>>
+			portalCacheManagerConfigurator) {
+
+		this.portalCacheManagerConfigurator = portalCacheManagerConfigurator;
 	}
 
 	@Reference(unbind = "-")
@@ -116,9 +130,6 @@ public class SingleVMEhcachePortalCacheManager<K extends Serializable, V>
 	protected void unsetPortalCacheConfiguratorSettings(
 		PortalCacheConfiguratorSettings portalCacheConfiguratorSettings) {
 	}
-
-	private static final String _DEFAULT_CONFIG_FILE_NAME =
-		"/ehcache/liferay-single-vm.xml";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		SingleVMEhcachePortalCacheManager.class);
