@@ -12,15 +12,18 @@
  * details.
  */
 
-package com.liferay.portal.cache.ehcache.configuration;
+package com.liferay.portal.kernel.cache.configurator;
+
+import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
 
 /**
  * @author Dante Wang
  */
-public interface CacheManagerConfigurator<T> {
+public interface PortalCacheManagerConfigurator
+	<T extends CacheManagerConfigurator<?>> {
 
-	public T getCacheManagerConfiguration();
+	public T getCacheManagerConfigurator();
 
-	public boolean usingDefault();
+	public PortalCacheManagerConfiguration getPortalCacheManagerConfiguration();
 
 }

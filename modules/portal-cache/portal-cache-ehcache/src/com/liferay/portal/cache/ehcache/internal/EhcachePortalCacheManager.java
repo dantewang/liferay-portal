@@ -14,8 +14,6 @@
 
 package com.liferay.portal.cache.ehcache.internal;
 
-import com.liferay.portal.cache.ehcache.configuration.CacheManagerConfigurator;
-import com.liferay.portal.cache.ehcache.configuration.PortalCacheManagerConfigurator;
 import com.liferay.portal.cache.ehcache.internal.event.PortalCacheManagerEventListener;
 import com.liferay.portal.kernel.cache.AbstractPortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCache;
@@ -23,7 +21,9 @@ import com.liferay.portal.kernel.cache.PortalCacheManagerTypes;
 import com.liferay.portal.kernel.cache.PortalCacheWrapper;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
+import com.liferay.portal.kernel.cache.configurator.CacheManagerConfigurator;
 import com.liferay.portal.kernel.cache.configurator.PortalCacheConfiguratorSettings;
+import com.liferay.portal.kernel.cache.configurator.PortalCacheManagerConfigurator;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.AggregateClassLoader;

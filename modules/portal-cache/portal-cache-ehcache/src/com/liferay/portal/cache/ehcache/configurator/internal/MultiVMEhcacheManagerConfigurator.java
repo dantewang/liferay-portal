@@ -12,10 +12,12 @@
  * details.
  */
 
-package com.liferay.portal.cache.ehcache.configuration;
+package com.liferay.portal.cache.ehcache.configurator.internal;
 
+import com.liferay.portal.cache.ehcache.configurator.AbstractEhcacheManagerConfigurator;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
+import com.liferay.portal.kernel.cache.configurator.CacheManagerConfigurator;
 import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 
@@ -28,20 +30,20 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	property = PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.SINGLE_VM,
+	property = PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.MULTI_VM,
 	service = CacheManagerConfigurator.class
 )
-public class SingleVMEhcacheManagerConfigurator
+public class MultiVMEhcacheManagerConfigurator
 	extends AbstractEhcacheManagerConfigurator {
 
 	@Activate
 	protected void activate() {
 		String configFile = props.get(
-			PropsKeys.EHCACHE_SINGLE_VM_CONFIG_LOCATION);
+			PropsKeys.EHCACHE_MULTI_VM_CONFIG_LOCATION);
 
 		processConfigFile(
 			configFile, _DEFAULT_CONFIG_FILE_NAME,
-			PortalCacheManagerNames.SINGLE_VM);
+			PortalCacheManagerNames.MULTI_VM);
 	}
 
 	@Reference(unbind = "-")
@@ -52,6 +54,6 @@ public class SingleVMEhcacheManagerConfigurator
 	protected Props props;
 
 	private static final String _DEFAULT_CONFIG_FILE_NAME =
-		"/ehcache/liferay-single-vm.xml";
+		"/ehcache/liferay-multi-vm-clustered.xml";
 
 }

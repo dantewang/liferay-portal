@@ -12,12 +12,15 @@
  * details.
  */
 
-package com.liferay.portal.cache.ehcache.configuration;
+package com.liferay.portal.cache.ehcache.configurator.internal;
 
+import com.liferay.portal.cache.ehcache.configurator.AbstractEhcachePortalCacheManagerConfigurator;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
+import com.liferay.portal.kernel.cache.configurator.CacheManagerConfigurator;
+import com.liferay.portal.kernel.cache.configurator.PortalCacheManagerConfigurator;
 import com.liferay.portal.kernel.util.Props;
 
 import java.util.HashSet;
