@@ -14,6 +14,7 @@
 
 package com.liferay.portal.cache.ehcache.internal;
 
+import com.liferay.portal.cache.ehcache.configurator.SingleVMEhcachePortalCacheManagerConfigurator;
 import com.liferay.portal.kernel.cache.PortalCacheListenerFactory;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCacheManagerListenerFactory;
@@ -22,7 +23,6 @@ import com.liferay.portal.kernel.cache.configurator.PortalCacheConfiguratorSetti
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Props;
-import com.liferay.portal.kernel.util.PropsKeys;
 
 import java.io.Serializable;
 
@@ -55,8 +55,6 @@ public class SingleVMEhcachePortalCacheManager<K extends Serializable, V>
 	@Activate
 	@Modified
 	protected void activate(Map<String, Object> properties) {
-		setConfigFile(props.get(PropsKeys.EHCACHE_SINGLE_VM_CONFIG_LOCATION));
-		setDefaultConfigFile(_DEFAULT_CONFIG_FILE_NAME);
 		setPortalCacheManagerName(PortalCacheManagerNames.SINGLE_VM);
 
 		initialize();
@@ -69,6 +67,19 @@ public class SingleVMEhcachePortalCacheManager<K extends Serializable, V>
 	@Deactivate
 	protected void deactivate() {
 		destroy();
+	}
+
+	@Reference(
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC,
+		policyOption = ReferencePolicyOption.RELUCTANT
+	)
+	protected void setEhcachePortalCacheManagerConfigurator(
+		SingleVMEhcachePortalCacheManagerConfigurator
+			portalCacheManagerConfigurator) {
+
+		this.ehcachePortalCacheManagerConfigurator =
+			portalCacheManagerConfigurator;
 	}
 
 	@Reference(unbind = "-")
@@ -112,9 +123,6 @@ public class SingleVMEhcachePortalCacheManager<K extends Serializable, V>
 	protected void unsetPortalCacheConfiguratorSettings(
 		PortalCacheConfiguratorSettings portalCacheConfiguratorSettings) {
 	}
-
-	private static final String _DEFAULT_CONFIG_FILE_NAME =
-		"/ehcache/liferay-single-vm.xml";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		SingleVMEhcachePortalCacheManager.class);
