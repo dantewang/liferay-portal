@@ -19,27 +19,16 @@ import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
 import com.liferay.portal.kernel.cache.PortalCacheReplicator;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
-import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-
-import java.io.IOException;
 
 import java.net.URL;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -135,41 +124,18 @@ public class EhcacheConfigurationHelperUtil {
 			return Collections.emptySet();
 		}
 
-		Properties properties = _parseProperties(
+		Properties properties = EhcachePropertyHelperUtil.parseProperties(
 			factoryConfiguration.getProperties(),
 			factoryConfiguration.getPropertySeparator(), props);
 
 		properties.put(
 			EhcacheConstants.CACHE_MANAGER_LISTENER_FACTORY_CLASS_NAME,
-			_parseFactoryClassName(
+			EhcachePropertyHelperUtil.parseFactoryClassName(
 				factoryConfiguration.getFullyQualifiedClassPath(), props));
 
 		factoryConfiguration.setClass(null);
 
 		return Collections.singleton(properties);
-	}
-
-	private static String _getPropertiesString(
-		Properties properties, String propertySeparator) {
-
-		if (propertySeparator == null) {
-			propertySeparator = StringPool.COMMA;
-		}
-
-		StringBundler sb = new StringBundler(properties.size() * 4);
-
-		for (Map.Entry<Object, Object> entry : properties.entrySet()) {
-			sb.append(entry.getKey());
-			sb.append(StringPool.EQUAL);
-			sb.append(entry.getValue());
-			sb.append(propertySeparator);
-		}
-
-		if (!properties.isEmpty()) {
-			sb.setIndex(sb.index() - 1);
-		}
-
-		return sb.toString();
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -194,7 +160,7 @@ public class EhcacheConfigurationHelperUtil {
 			Properties properties = null;
 
 			factoryConfiguration.setClass(
-				_parseFactoryClassName(
+				EhcachePropertyHelperUtil.parseFactoryClassName(
 					factoryConfiguration.getFullyQualifiedClassPath(), props));
 
 			String propertiesString = factoryConfiguration.getProperties();
@@ -203,7 +169,7 @@ public class EhcacheConfigurationHelperUtil {
 				properties = new Properties();
 			}
 			else {
-				properties = _parseProperties(
+				properties = EhcachePropertyHelperUtil.parseProperties(
 					propertiesString,
 					factoryConfiguration.getPropertySeparator(), props);
 			}
@@ -214,7 +180,7 @@ public class EhcacheConfigurationHelperUtil {
 				clusterLinkReplicationEnabled);
 
 			factoryConfiguration.setProperties(
-				_getPropertiesString(
+				EhcachePropertyHelperUtil.getPropertiesString(
 					properties, factoryConfiguration.getPropertySeparator()));
 		}
 	}
@@ -276,11 +242,12 @@ public class EhcacheConfigurationHelperUtil {
 				cacheEventListenerFactoryConfiguration :
 					cacheEventListenerConfigurations) {
 
-			String factoryClassName = _parseFactoryClassName(
-				cacheEventListenerFactoryConfiguration.
-					getFullyQualifiedClassPath(), props);
+			String factoryClassName =
+				EhcachePropertyHelperUtil.parseFactoryClassName(
+					cacheEventListenerFactoryConfiguration.
+						getFullyQualifiedClassPath(), props);
 
-			Properties properties = _parseProperties(
+			Properties properties = EhcachePropertyHelperUtil.parseProperties(
 				cacheEventListenerFactoryConfiguration.getProperties(),
 				cacheEventListenerFactoryConfiguration. getPropertySeparator(),
 				props);
@@ -331,17 +298,18 @@ public class EhcacheConfigurationHelperUtil {
 					getBootstrapCacheLoaderFactoryConfiguration();
 
 		if (bootstrapCacheLoaderFactoryConfiguration != null) {
-			portalCacheBootstrapLoaderProperties = _parseProperties(
-				bootstrapCacheLoaderFactoryConfiguration.getProperties(),
-				bootstrapCacheLoaderFactoryConfiguration.
-					getPropertySeparator(), props);
+			portalCacheBootstrapLoaderProperties =
+				EhcachePropertyHelperUtil.parseProperties(
+					bootstrapCacheLoaderFactoryConfiguration.getProperties(),
+					bootstrapCacheLoaderFactoryConfiguration.
+						getPropertySeparator(), props);
 
 			if (clusterAware && clusterEnabled) {
 				if (!clusterLinkReplicationEnabled) {
 					portalCacheBootstrapLoaderProperties.put(
 						EhcacheConstants.
 							BOOTSTRAP_CACHE_LOADER_FACTORY_CLASS_NAME,
-						_parseFactoryClassName(
+						EhcachePropertyHelperUtil.parseFactoryClassName(
 							bootstrapCacheLoaderFactoryConfiguration.
 								getFullyQualifiedClassPath(), props));
 				}
@@ -358,96 +326,8 @@ public class EhcacheConfigurationHelperUtil {
 			portalCacheBootstrapLoaderProperties, requireSerialization);
 	}
 
-	private static String _parseFactoryClassName(
-		String factoryClassName, Props props) {
-
-		if (factoryClassName.indexOf(CharPool.EQUAL) == -1) {
-			return factoryClassName;
-		}
-
-		String[] factoryClassNameParts = StringUtil.split(
-			factoryClassName, CharPool.EQUAL);
-
-		if (factoryClassNameParts[0].equals(_PORTAL_PROPERTY_KEY)) {
-			return props.get(factoryClassNameParts[1]);
-		}
-
-		if (_log.isWarnEnabled()) {
-			_log.warn("Unable to parse factory class name " + factoryClassName);
-		}
-
-		return factoryClassName;
-	}
-
-	private static Properties _parseProperties(
-		String propertiesString, String propertySeparator, Props props) {
-
-		Properties properties = new Properties();
-
-		if (propertiesString == null) {
-			return properties;
-		}
-
-		if (propertySeparator == null) {
-			propertySeparator = StringPool.COMMA;
-		}
-
-		String propertyLines = propertiesString.trim();
-
-		propertyLines = StringUtil.replace(
-			propertyLines, propertySeparator, StringPool.NEW_LINE);
-
-		try {
-			properties.load(new UnsyncStringReader(propertyLines));
-		}
-		catch (IOException ioe) {
-			throw new RuntimeException(ioe);
-		}
-
-		String portalPropertyKey = (String)properties.remove(
-			_PORTAL_PROPERTY_KEY);
-
-		if (Validator.isNull(portalPropertyKey)) {
-			return properties;
-		}
-
-		String[] values = props.getArray(portalPropertyKey);
-
-		if (_log.isInfoEnabled()) {
-			_log.info(
-				"portalPropertyKey " + portalPropertyKey + " has value " +
-					Arrays.toString(values));
-		}
-
-		for (String value : values) {
-			String[] valueParts = StringUtil.split(value, CharPool.EQUAL);
-
-			if (valueParts.length != 2) {
-				if (_log.isWarnEnabled()) {
-					_log.warn("Ignore malformed value " + value);
-				}
-
-				continue;
-			}
-
-			properties.put(valueParts[0], _unescape(valueParts[1]));
-		}
-
-		return properties;
-	}
-
-	private static String _unescape(String text) {
-		return StringUtil.replace(text, "&", ";", _unescapeMap);
-	}
-
-	private static final String _PORTAL_PROPERTY_KEY = "portalPropertyKey";
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		EhcacheConfigurationHelperUtil.class);
-
 	private static final Map<NotificationScope, PortalCacheListenerScope>
 		_portalCacheListenerScopes = new EnumMap<>(NotificationScope.class);
-	private static final Map<String, String> _unescapeMap = new HashMap<>();
 
 	static {
 		_portalCacheListenerScopes.put(
@@ -456,22 +336,6 @@ public class EhcacheConfigurationHelperUtil {
 			NotificationScope.LOCAL, PortalCacheListenerScope.LOCAL);
 		_portalCacheListenerScopes.put(
 			NotificationScope.REMOTE, PortalCacheListenerScope.REMOTE);
-
-		_unescapeMap.put("amp", "&");
-		_unescapeMap.put("gt", ">");
-		_unescapeMap.put("lt", "<");
-		_unescapeMap.put("rsquo", "\u2019");
-		_unescapeMap.put("#034", "\"");
-		_unescapeMap.put("#039", "'");
-		_unescapeMap.put("#040", "(");
-		_unescapeMap.put("#041", ")");
-		_unescapeMap.put("#044", ",");
-		_unescapeMap.put("#035", "#");
-		_unescapeMap.put("#037", "%");
-		_unescapeMap.put("#059", ";");
-		_unescapeMap.put("#061", "=");
-		_unescapeMap.put("#043", "+");
-		_unescapeMap.put("#045", "-");
 	}
 
 }
