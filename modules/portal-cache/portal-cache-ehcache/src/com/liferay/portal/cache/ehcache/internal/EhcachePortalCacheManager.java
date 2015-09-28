@@ -14,10 +14,10 @@
 
 package com.liferay.portal.cache.ehcache.internal;
 
+import com.liferay.portal.cache.ehcache.EhcacheUnwrapUtil;
 import com.liferay.portal.cache.ehcache.internal.event.PortalCacheManagerEventListener;
 import com.liferay.portal.kernel.cache.AbstractPortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCache;
-import com.liferay.portal.kernel.cache.PortalCacheWrapper;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
 import com.liferay.portal.kernel.cache.configurator.PortalCacheConfiguratorSettings;
@@ -271,7 +271,7 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 
 				if (portalCache != null) {
 					EhcachePortalCache<K, V> ehcachePortalCache =
-						_getEhcachePortalCache(portalCache);
+						EhcacheUnwrapUtil.getEhcachePortalCache(portalCache);
 
 					if (ehcachePortalCache != null) {
 						ehcachePortalCache.reconfigEhcache(ehcache);
@@ -333,23 +333,6 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 
 	protected MBeanServer mBeanServer;
 	protected volatile Props props;
-
-	private EhcachePortalCache<K, V> _getEhcachePortalCache(
-		PortalCache<K, V> portalCache) {
-
-		while (portalCache instanceof PortalCacheWrapper) {
-			PortalCacheWrapper<K, V> portalCacheWrapper =
-				(PortalCacheWrapper<K, V>)portalCache;
-
-			portalCache = portalCacheWrapper.getWrappedPortalCache();
-		}
-
-		if (portalCache instanceof EhcachePortalCache) {
-			return (EhcachePortalCache<K, V>)portalCache;
-		}
-
-		return null;
-	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		EhcachePortalCacheManager.class);
