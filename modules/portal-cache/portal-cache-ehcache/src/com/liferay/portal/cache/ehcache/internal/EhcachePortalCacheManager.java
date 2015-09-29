@@ -195,14 +195,8 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 			_configFile = _defaultConfigFile;
 		}
 
-		URL configFileURL = EhcacheConfigurationHelperUtil.class.getResource(
-			_configFile);
-
-		if (configFileURL == null) {
-			ClassLoader classLoader = PortalClassLoaderUtil.getClassLoader();
-
-			configFileURL = classLoader.getResource(_configFile);
-		}
+		URL configFileURL = EhcacheConfigurationHelperUtil.getConfigFileURL(
+			_configFile, null);
 
 		_usingDefault = _configFile.equals(_defaultConfigFile);
 
@@ -289,18 +283,10 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 	protected boolean reconfigure(
 		PortalCacheConfiguratorSettings portalCacheConfiguratorSettings) {
 
-		String portalCacheConfigurationLocation =
+		URL url = EhcacheConfigurationHelperUtil.getConfigFileURL(
 			portalCacheConfiguratorSettings.
-				getPortalCacheConfigrationLocation();
-
-		if (Validator.isNull(portalCacheConfigurationLocation)) {
-			return false;
-		}
-
-		ClassLoader classLoader =
-			portalCacheConfiguratorSettings.getClassLoader();
-
-		URL url = classLoader.getResource(portalCacheConfigurationLocation);
+				getPortalCacheConfigrationLocation(),
+			portalCacheConfiguratorSettings.getClassLoader());
 
 		if (url == null) {
 			return false;

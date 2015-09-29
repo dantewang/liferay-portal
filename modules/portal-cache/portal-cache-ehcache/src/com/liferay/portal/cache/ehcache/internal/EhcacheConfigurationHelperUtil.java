@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;
@@ -48,6 +49,30 @@ import net.sf.ehcache.event.NotificationScope;
  * @author Tina Tian
  */
 public class EhcacheConfigurationHelperUtil {
+
+	public static URL getConfigFileURL(
+		String configFile, ClassLoader classLoader) {
+
+		if (classLoader != null) {
+			if (Validator.isNull(configFile)) {
+				return null;
+			}
+
+			return classLoader.getResource(configFile);
+		}
+
+		URL configFileURL = EhcacheConfigurationHelperUtil.class.getResource(
+			configFile);
+
+		if (configFileURL == null) {
+			ClassLoader portalClassLoader =
+				PortalClassLoaderUtil.getClassLoader();
+
+			configFileURL = portalClassLoader.getResource(configFile);
+		}
+
+		return configFileURL;
+	}
 
 	public static ObjectValuePair
 		<Configuration, PortalCacheManagerConfiguration>
