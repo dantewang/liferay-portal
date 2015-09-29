@@ -16,6 +16,8 @@ package com.liferay.portal.cache.ehcache.internal;
 
 import com.liferay.portal.cache.ehcache.EhcacheConstants;
 import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
+import com.liferay.portal.kernel.cache.PortalCacheManager;
+import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.cache.PortalCacheReplicator;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
@@ -36,6 +38,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.osgi.service.component.annotations.Component;
+
 import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.CacheConfiguration.BootstrapCacheLoaderFactoryConfiguration;
 import net.sf.ehcache.config.CacheConfiguration.CacheEventListenerFactoryConfiguration;
@@ -48,9 +52,13 @@ import net.sf.ehcache.event.NotificationScope;
 /**
  * @author Tina Tian
  */
+@Component(
+	immediate = true,
+	service = EhcachePortalCacheManagerConfigurator.class
+)
 public class EhcachePortalCacheManagerConfigurator {
 
-	public static URL getConfigFileURL(
+	public URL getConfigFileURL(
 		String configFile, ClassLoader classLoader) {
 
 		if (classLoader != null) {
@@ -74,7 +82,7 @@ public class EhcachePortalCacheManagerConfigurator {
 		return configFileURL;
 	}
 
-	public static ObjectValuePair
+	public ObjectValuePair
 		<Configuration, PortalCacheManagerConfiguration>
 			getConfigurationObjectValuePair(
 				String portalCacheManagerName, URL configurationURL,
@@ -95,7 +103,7 @@ public class EhcachePortalCacheManagerConfigurator {
 			ehcacheConfiguration, portalCacheManagerConfiguration);
 	}
 
-	public static Configuration getEhcacheConfiguration(
+	public Configuration getEhcacheConfiguration(
 		String portalCacheManagerName, URL configurationURL) {
 
 		Configuration ehcacheConfiguration =
@@ -106,7 +114,7 @@ public class EhcachePortalCacheManagerConfigurator {
 		return ehcacheConfiguration;
 	}
 
-	public static PortalCacheManagerConfiguration
+	public PortalCacheManagerConfiguration
 		getPortalCacheManagerConfiguration(
 			Configuration ehcacheConfiguration, boolean clusterAware,
 			boolean usingDefault, Props props) {
@@ -156,7 +164,7 @@ public class EhcachePortalCacheManagerConfigurator {
 			portalCacheConfigurations);
 	}
 
-	private static PortalCacheConfiguration _getPortalCacheConfiguration(
+	private PortalCacheConfiguration _getPortalCacheConfiguration(
 		CacheConfiguration cacheConfiguration, boolean clusterAware,
 		boolean usingDefault, boolean clusterEnabled,
 		boolean clusterLinkReplicationEnabled, Props props) {
@@ -191,7 +199,7 @@ public class EhcachePortalCacheManagerConfigurator {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static void _handleCacheManagerPeerFactoryConfigurations(
+	private void _handleCacheManagerPeerFactoryConfigurations(
 		List<FactoryConfiguration> factoryConfigurations, boolean clusterAware,
 		boolean clusterEnabled, boolean clusterLinkReplicationEnabled,
 		Props props) {
@@ -238,7 +246,7 @@ public class EhcachePortalCacheManagerConfigurator {
 	}
 
 	@SuppressWarnings("deprecation")
-	private static boolean _isRequireSerialization(
+	private boolean _isRequireSerialization(
 		CacheConfiguration cacheConfiguration, boolean clusterAware,
 		boolean clusterEnabled) {
 
@@ -268,7 +276,7 @@ public class EhcachePortalCacheManagerConfigurator {
 		return false;
 	}
 
-	private static Properties _parseCacheBootstrapLoaderFactoryConfiguration(
+	private Properties _parseCacheBootstrapLoaderFactoryConfiguration(
 		CacheConfiguration cacheConfiguration, boolean clusterAware,
 		boolean clusterEnabled, boolean clusterLinkReplicationEnabled,
 		Props props) {
@@ -304,7 +312,7 @@ public class EhcachePortalCacheManagerConfigurator {
 		return portalCacheBootstrapLoaderProperties;
 	}
 
-	private static Set<Properties> _parseCacheEventListenerFactoryConfiguration(
+	private Set<Properties> _parseCacheEventListenerFactoryConfiguration(
 		CacheConfiguration cacheConfiguration, boolean clusterAware,
 		boolean usingDefault, boolean clusterEnabled,
 		boolean clusterLinkReplicationEnabled, Props props) {
@@ -370,7 +378,7 @@ public class EhcachePortalCacheManagerConfigurator {
 		return portalCacheListenerPropertiesSet;
 	}
 
-	private static Set<Properties>
+	private Set<Properties>
 		_parseCacheManagerListenerPropertiesSet(
 			Configuration ehcacheConfiguration, Props props) {
 
