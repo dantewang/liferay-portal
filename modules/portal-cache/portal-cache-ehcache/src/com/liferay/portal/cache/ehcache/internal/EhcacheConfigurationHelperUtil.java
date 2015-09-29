@@ -94,21 +94,22 @@ public class EhcacheConfigurationHelperUtil {
 		boolean clusterLinkReplicationEnabled = GetterUtil.getBoolean(
 			props.get(PropsKeys.EHCACHE_CLUSTER_LINK_REPLICATION_ENABLED));
 
-		_handlePeerFactoryConfigurations(
+		_handleCacheManagerPeerFactoryConfigurations(
 			ehcacheConfiguration.
 				getCacheManagerPeerProviderFactoryConfiguration(),
 			clusterAware, clusterEnabled, clusterLinkReplicationEnabled, props);
 
-		_handlePeerFactoryConfigurations(
+		_handleCacheManagerPeerFactoryConfigurations(
 			ehcacheConfiguration.
 				getCacheManagerPeerListenerFactoryConfigurations(),
 			clusterAware, clusterEnabled, clusterLinkReplicationEnabled, props);
 
 		Set<Properties> cacheManagerListenerPropertiesSet =
-			_getCacheManagerListenerPropertiesSet(ehcacheConfiguration, props);
+			_parseCacheManagerListenerPropertiesSet(
+				ehcacheConfiguration, props);
 
 		PortalCacheConfiguration defaultPortalCacheConfiguration =
-			_parseCacheConfiguration(
+			_getPortalCacheConfiguration(
 				ehcacheConfiguration.getDefaultCacheConfiguration(),
 				clusterAware, usingDefault, clusterEnabled,
 				clusterLinkReplicationEnabled, props);
@@ -123,7 +124,7 @@ public class EhcacheConfigurationHelperUtil {
 				cacheConfigurations.entrySet()) {
 
 			portalCacheConfigurations.add(
-				_parseCacheConfiguration(
+				_getPortalCacheConfiguration(
 					entry.getValue(), clusterAware, usingDefault,
 					clusterEnabled, clusterLinkReplicationEnabled, props));
 		}
@@ -137,111 +138,7 @@ public class EhcacheConfigurationHelperUtil {
 			ehcacheConfiguration, portalCacheManagerConfiguration);
 	}
 
-	private static Set<Properties>
-		_getCacheManagerListenerPropertiesSet(
-			Configuration ehcacheConfiguration, Props props) {
-
-		FactoryConfiguration<?> factoryConfiguration =
-			ehcacheConfiguration.
-				getCacheManagerEventListenerFactoryConfiguration();
-
-		if (factoryConfiguration == null) {
-			return Collections.emptySet();
-		}
-
-		Properties properties = EhcachePropertyHelperUtil.parseProperties(
-			factoryConfiguration.getProperties(),
-			factoryConfiguration.getPropertySeparator(), props);
-
-		properties.put(
-			EhcacheConstants.CACHE_MANAGER_LISTENER_FACTORY_CLASS_NAME,
-			EhcachePropertyHelperUtil.parseFactoryClassName(
-				factoryConfiguration.getFullyQualifiedClassPath(), props));
-
-		factoryConfiguration.setClass(null);
-
-		return Collections.singleton(properties);
-	}
-
-	@SuppressWarnings("rawtypes")
-	private static void _handlePeerFactoryConfigurations(
-		List<FactoryConfiguration> factoryConfigurations, boolean clusterAware,
-		boolean clusterEnabled, boolean clusterLinkReplicationEnabled,
-		Props props) {
-
-		if (factoryConfigurations.isEmpty()) {
-			return;
-		}
-
-		if (!clusterAware || !clusterEnabled || clusterLinkReplicationEnabled) {
-			factoryConfigurations.clear();
-
-			return;
-		}
-
-		for (FactoryConfiguration factoryConfiguration :
-				factoryConfigurations) {
-
-			Properties properties = null;
-
-			factoryConfiguration.setClass(
-				EhcachePropertyHelperUtil.parseFactoryClassName(
-					factoryConfiguration.getFullyQualifiedClassPath(), props));
-
-			String propertiesString = factoryConfiguration.getProperties();
-
-			if (Validator.isNull(propertiesString)) {
-				properties = new Properties();
-			}
-			else {
-				properties = EhcachePropertyHelperUtil.parseProperties(
-					propertiesString,
-					factoryConfiguration.getPropertySeparator(), props);
-			}
-
-			properties.put(PropsKeys.CLUSTER_LINK_ENABLED, clusterEnabled);
-			properties.put(
-				PropsKeys.EHCACHE_CLUSTER_LINK_REPLICATION_ENABLED,
-				clusterLinkReplicationEnabled);
-
-			factoryConfiguration.setProperties(
-				EhcachePropertyHelperUtil.getPropertiesString(
-					properties, factoryConfiguration.getPropertySeparator()));
-		}
-	}
-
-	@SuppressWarnings("deprecation")
-	private static boolean _isRequireSerialization(
-		CacheConfiguration cacheConfiguration, boolean clusterAware,
-		boolean clusterEnabled) {
-
-		if (clusterAware && clusterEnabled) {
-			return true;
-		}
-
-		if (cacheConfiguration.isOverflowToDisk() ||
-			cacheConfiguration.isOverflowToOffHeap() ||
-			cacheConfiguration.isDiskPersistent()) {
-
-			return true;
-		}
-
-		PersistenceConfiguration persistenceConfiguration =
-			cacheConfiguration.getPersistenceConfiguration();
-
-		if (persistenceConfiguration != null) {
-			PersistenceConfiguration.Strategy strategy =
-				persistenceConfiguration.getStrategy();
-
-			if (!strategy.equals(PersistenceConfiguration.Strategy.NONE)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private static PortalCacheConfiguration _parseCacheConfiguration(
+	private static PortalCacheConfiguration _getPortalCacheConfiguration(
 		CacheConfiguration cacheConfiguration, boolean clusterAware,
 		boolean usingDefault, boolean clusterEnabled,
 		boolean clusterLinkReplicationEnabled, Props props) {
@@ -349,6 +246,110 @@ public class EhcacheConfigurationHelperUtil {
 		return new EhcachePortalCacheConfiguration(
 			portalCacheName, portalCacheListenerPropertiesSet,
 			portalCacheBootstrapLoaderProperties, requireSerialization);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private static void _handleCacheManagerPeerFactoryConfigurations(
+		List<FactoryConfiguration> factoryConfigurations, boolean clusterAware,
+		boolean clusterEnabled, boolean clusterLinkReplicationEnabled,
+		Props props) {
+
+		if (factoryConfigurations.isEmpty()) {
+			return;
+		}
+
+		if (!clusterAware || !clusterEnabled || clusterLinkReplicationEnabled) {
+			factoryConfigurations.clear();
+
+			return;
+		}
+
+		for (FactoryConfiguration factoryConfiguration :
+				factoryConfigurations) {
+
+			Properties properties = null;
+
+			factoryConfiguration.setClass(
+				EhcachePropertyHelperUtil.parseFactoryClassName(
+					factoryConfiguration.getFullyQualifiedClassPath(), props));
+
+			String propertiesString = factoryConfiguration.getProperties();
+
+			if (Validator.isNull(propertiesString)) {
+				properties = new Properties();
+			}
+			else {
+				properties = EhcachePropertyHelperUtil.parseProperties(
+					propertiesString,
+					factoryConfiguration.getPropertySeparator(), props);
+			}
+
+			properties.put(PropsKeys.CLUSTER_LINK_ENABLED, clusterEnabled);
+			properties.put(
+				PropsKeys.EHCACHE_CLUSTER_LINK_REPLICATION_ENABLED,
+				clusterLinkReplicationEnabled);
+
+			factoryConfiguration.setProperties(
+				EhcachePropertyHelperUtil.getPropertiesString(
+					properties, factoryConfiguration.getPropertySeparator()));
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	private static boolean _isRequireSerialization(
+		CacheConfiguration cacheConfiguration, boolean clusterAware,
+		boolean clusterEnabled) {
+
+		if (clusterAware && clusterEnabled) {
+			return true;
+		}
+
+		if (cacheConfiguration.isOverflowToDisk() ||
+			cacheConfiguration.isOverflowToOffHeap() ||
+			cacheConfiguration.isDiskPersistent()) {
+
+			return true;
+		}
+
+		PersistenceConfiguration persistenceConfiguration =
+			cacheConfiguration.getPersistenceConfiguration();
+
+		if (persistenceConfiguration != null) {
+			PersistenceConfiguration.Strategy strategy =
+				persistenceConfiguration.getStrategy();
+
+			if (!strategy.equals(PersistenceConfiguration.Strategy.NONE)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static Set<Properties>
+		_parseCacheManagerListenerPropertiesSet(
+			Configuration ehcacheConfiguration, Props props) {
+
+		FactoryConfiguration<?> factoryConfiguration =
+			ehcacheConfiguration.
+				getCacheManagerEventListenerFactoryConfiguration();
+
+		if (factoryConfiguration == null) {
+			return Collections.emptySet();
+		}
+
+		Properties properties = EhcachePropertyHelperUtil.parseProperties(
+			factoryConfiguration.getProperties(),
+			factoryConfiguration.getPropertySeparator(), props);
+
+		properties.put(
+			EhcacheConstants.CACHE_MANAGER_LISTENER_FACTORY_CLASS_NAME,
+			EhcachePropertyHelperUtil.parseFactoryClassName(
+				factoryConfiguration.getFullyQualifiedClassPath(), props));
+
+		factoryConfiguration.setClass(null);
+
+		return Collections.singleton(properties);
 	}
 
 	private static final Map<NotificationScope, PortalCacheListenerScope>
