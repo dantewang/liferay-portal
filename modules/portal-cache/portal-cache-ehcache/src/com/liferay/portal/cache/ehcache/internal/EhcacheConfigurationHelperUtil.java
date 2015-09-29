@@ -84,10 +84,32 @@ public class EhcacheConfigurationHelperUtil {
 			throw new NullPointerException("Configuration path is null");
 		}
 
+		Configuration ehcacheConfiguration = getEhcacheConfiguration(
+			portalCacheManagerName, configurationURL);
+
+		PortalCacheManagerConfiguration portalCacheManagerConfiguration =
+			getPortalCacheManagerConfiguration(
+				ehcacheConfiguration, clusterAware, usingDefault, props);
+
+		return new ObjectValuePair<>(
+			ehcacheConfiguration, portalCacheManagerConfiguration);
+	}
+
+	public static Configuration getEhcacheConfiguration(
+		String portalCacheManagerName, URL configurationURL) {
+
 		Configuration ehcacheConfiguration =
 			ConfigurationFactory.parseConfiguration(configurationURL);
 
 		ehcacheConfiguration.setName(portalCacheManagerName);
+
+		return ehcacheConfiguration;
+	}
+
+	public static PortalCacheManagerConfiguration
+		getPortalCacheManagerConfiguration(
+			Configuration ehcacheConfiguration, boolean clusterAware,
+			boolean usingDefault, Props props) {
 
 		boolean clusterEnabled = GetterUtil.getBoolean(
 			props.get(PropsKeys.CLUSTER_LINK_ENABLED));
@@ -128,13 +150,9 @@ public class EhcacheConfigurationHelperUtil {
 					clusterEnabled, clusterLinkReplicationEnabled, props));
 		}
 
-		PortalCacheManagerConfiguration portalCacheManagerConfiguration =
-			new PortalCacheManagerConfiguration(
-				cacheManagerListenerPropertiesSet,
-				defaultPortalCacheConfiguration, portalCacheConfigurations);
-
-		return new ObjectValuePair<>(
-			ehcacheConfiguration, portalCacheManagerConfiguration);
+		return new PortalCacheManagerConfiguration(
+			cacheManagerListenerPropertiesSet, defaultPortalCacheConfiguration,
+			portalCacheConfigurations);
 	}
 
 	private static Set<Properties>
