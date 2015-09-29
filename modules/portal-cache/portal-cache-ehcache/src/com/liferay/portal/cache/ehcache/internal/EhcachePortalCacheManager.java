@@ -69,9 +69,10 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 	public void reconfigurePortalCaches(URL configurationURL) {
 		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
 			configurationObjectValuePair =
-				EhcacheConfigurationHelperUtil.getConfigurationObjectValuePair(
-					getPortalCacheManagerName(), configurationURL,
-					isClusterAware(), _usingDefault, props);
+				EhcachePortalCacheManagerConfigurator.
+					getConfigurationObjectValuePair(
+						getPortalCacheManagerName(), configurationURL,
+						isClusterAware(), _usingDefault, props);
 
 		reconfigEhcache(configurationObjectValuePair.getKey());
 
@@ -195,16 +196,18 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 			_configFile = _defaultConfigFile;
 		}
 
-		URL configFileURL = EhcacheConfigurationHelperUtil.getConfigFileURL(
-			_configFile, null);
+		URL configFileURL =
+			EhcachePortalCacheManagerConfigurator.getConfigFileURL(
+				_configFile, null);
 
 		_usingDefault = _configFile.equals(_defaultConfigFile);
 
 		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
 			configurationObjectValuePair =
-				EhcacheConfigurationHelperUtil.getConfigurationObjectValuePair(
-					getPortalCacheManagerName(), configFileURL,
-					isClusterAware(), _usingDefault, props);
+				EhcachePortalCacheManagerConfigurator.
+					getConfigurationObjectValuePair(
+						getPortalCacheManagerName(), configFileURL,
+						isClusterAware(), _usingDefault, props);
 
 		_cacheManager = new CacheManager(configurationObjectValuePair.getKey());
 
@@ -283,7 +286,7 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 	protected boolean reconfigure(
 		PortalCacheConfiguratorSettings portalCacheConfiguratorSettings) {
 
-		URL url = EhcacheConfigurationHelperUtil.getConfigFileURL(
+		URL url = EhcachePortalCacheManagerConfigurator.getConfigFileURL(
 			portalCacheConfiguratorSettings.
 				getPortalCacheConfigrationLocation(),
 			portalCacheConfiguratorSettings.getClassLoader());
