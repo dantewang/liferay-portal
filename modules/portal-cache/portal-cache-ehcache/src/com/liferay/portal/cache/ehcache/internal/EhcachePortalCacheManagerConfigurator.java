@@ -143,13 +143,6 @@ public class EhcachePortalCacheManagerConfigurator {
 			props.get(PropsKeys.EHCACHE_CLUSTER_LINK_REPLICATION_ENABLED));
 	}
 
-	@Reference(unbind = "-")
-	protected void setProps(Props props) {
-		this.props = props;
-	}
-
-	protected volatile Props props;
-
 	protected PortalCacheConfiguration getPortalCacheConfiguration(
 		CacheConfiguration cacheConfiguration, boolean clusterAware,
 		boolean usingDefault) {
@@ -383,6 +376,13 @@ public class EhcachePortalCacheManagerConfigurator {
 
 		return Collections.singleton(properties);
 	}
+
+	@Reference(unbind = "-")
+	protected void setProps(Props props) {
+		this.props = props;
+	}
+
+	protected volatile Props props;
 
 	private static final Map<NotificationScope, PortalCacheListenerScope>
 		_portalCacheListenerScopes = new EnumMap<>(NotificationScope.class);
