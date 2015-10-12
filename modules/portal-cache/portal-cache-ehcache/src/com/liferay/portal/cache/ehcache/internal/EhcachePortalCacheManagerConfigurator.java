@@ -45,14 +45,17 @@ import net.sf.ehcache.config.FactoryConfiguration;
 import net.sf.ehcache.config.PersistenceConfiguration;
 import net.sf.ehcache.event.NotificationScope;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Tina Tian
  */
+@Component(
+	immediate = true, service = EhcachePortalCacheManagerConfigurator.class
+)
 public class EhcachePortalCacheManagerConfigurator {
 
-	public static URL getConfigFileURL(
-		String configFile, ClassLoader classLoader) {
-
+	public URL getConfigFileURL(String configFile, ClassLoader classLoader) {
 		if (classLoader != null) {
 			if (Validator.isNull(configFile)) {
 				return null;
@@ -74,7 +77,7 @@ public class EhcachePortalCacheManagerConfigurator {
 		return configFileURL;
 	}
 
-	public static ObjectValuePair
+	public ObjectValuePair
 		<Configuration, PortalCacheManagerConfiguration>
 			getConfigurationObjectValuePair(
 				String portalCacheManagerName, URL configurationURL,
@@ -138,7 +141,7 @@ public class EhcachePortalCacheManagerConfigurator {
 			ehcacheConfiguration, portalCacheManagerConfiguration);
 	}
 
-	private static PortalCacheConfiguration _getPortalCacheConfiguration(
+	private PortalCacheConfiguration _getPortalCacheConfiguration(
 		CacheConfiguration cacheConfiguration, boolean clusterAware,
 		boolean usingDefault, boolean clusterEnabled,
 		boolean clusterLinkReplicationEnabled, Props props) {
@@ -173,7 +176,7 @@ public class EhcachePortalCacheManagerConfigurator {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static void _handleCacheManagerPeerFactoryConfigurations(
+	private void _handleCacheManagerPeerFactoryConfigurations(
 		List<FactoryConfiguration> factoryConfigurations, boolean clusterAware,
 		boolean clusterEnabled, boolean clusterLinkReplicationEnabled,
 		Props props) {
@@ -220,7 +223,7 @@ public class EhcachePortalCacheManagerConfigurator {
 	}
 
 	@SuppressWarnings("deprecation")
-	private static boolean _isRequireSerialization(
+	private boolean _isRequireSerialization(
 		CacheConfiguration cacheConfiguration, boolean clusterAware,
 		boolean clusterEnabled) {
 
@@ -250,7 +253,7 @@ public class EhcachePortalCacheManagerConfigurator {
 		return false;
 	}
 
-	private static Properties _parseCacheBootstrapLoaderFactoryConfiguration(
+	private Properties _parseCacheBootstrapLoaderFactoryConfiguration(
 		CacheConfiguration cacheConfiguration, boolean clusterAware,
 		boolean clusterEnabled, boolean clusterLinkReplicationEnabled,
 		Props props) {
@@ -286,7 +289,7 @@ public class EhcachePortalCacheManagerConfigurator {
 		return portalCacheBootstrapLoaderProperties;
 	}
 
-	private static Set<Properties> _parseCacheEventListenerFactoryConfiguration(
+	private Set<Properties> _parseCacheEventListenerFactoryConfiguration(
 		CacheConfiguration cacheConfiguration, boolean clusterAware,
 		boolean usingDefault, boolean clusterEnabled,
 		boolean clusterLinkReplicationEnabled, Props props) {
@@ -352,7 +355,7 @@ public class EhcachePortalCacheManagerConfigurator {
 		return portalCacheListenerPropertiesSet;
 	}
 
-	private static Set<Properties>
+	private Set<Properties>
 		_parseCacheManagerListenerPropertiesSet(
 			Configuration ehcacheConfiguration, Props props) {
 
