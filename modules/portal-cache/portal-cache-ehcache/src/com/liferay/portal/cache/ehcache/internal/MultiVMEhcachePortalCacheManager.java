@@ -92,7 +92,10 @@ public class MultiVMEhcachePortalCacheManager
 		destroy();
 	}
 
-	@Reference(unbind = "-")
+	@Reference(
+		target = "(" + PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.MULTI_VM + ")",
+		unbind = "-"
+	)
 	protected void setEhcachePortalCacheManagerConfigurator(
 		EhcachePortalCacheManagerConfigurator
 			ehcachePortalCacheManagerConfigurator) {

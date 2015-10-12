@@ -45,16 +45,9 @@ import net.sf.ehcache.config.FactoryConfiguration;
 import net.sf.ehcache.config.PersistenceConfiguration;
 import net.sf.ehcache.event.NotificationScope;
 
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-
 /**
  * @author Tina Tian
  */
-@Component(
-	immediate = true, service = EhcachePortalCacheManagerConfigurator.class
-)
 public class EhcachePortalCacheManagerConfigurator {
 
 	public URL getConfigFileURL(String configFile, ClassLoader classLoader) {
@@ -135,7 +128,6 @@ public class EhcachePortalCacheManagerConfigurator {
 			ehcacheConfiguration, portalCacheManagerConfiguration);
 	}
 
-	@Activate
 	protected void activate() {
 		_clusterEnabled = GetterUtil.getBoolean(
 			props.get(PropsKeys.CLUSTER_LINK_ENABLED));
@@ -375,11 +367,6 @@ public class EhcachePortalCacheManagerConfigurator {
 		factoryConfiguration.setClass(null);
 
 		return Collections.singleton(properties);
-	}
-
-	@Reference(unbind = "-")
-	protected void setProps(Props props) {
-		this.props = props;
 	}
 
 	protected volatile Props props;
