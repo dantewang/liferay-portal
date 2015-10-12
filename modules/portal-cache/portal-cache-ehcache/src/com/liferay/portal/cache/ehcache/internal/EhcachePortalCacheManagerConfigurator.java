@@ -94,21 +94,21 @@ public class EhcachePortalCacheManagerConfigurator {
 
 		ehcacheConfiguration.setName(portalCacheManagerName);
 
-		_handleCacheManagerPeerFactoryConfigurations(
+		handleCacheManagerPeerFactoryConfigurations(
 			ehcacheConfiguration.
 				getCacheManagerPeerProviderFactoryConfiguration(),
 			clusterAware);
 
-		_handleCacheManagerPeerFactoryConfigurations(
+		handleCacheManagerPeerFactoryConfigurations(
 			ehcacheConfiguration.
 				getCacheManagerPeerListenerFactoryConfigurations(),
 			clusterAware);
 
 		Set<Properties> cacheManagerListenerPropertiesSet =
-			_parseCacheManagerListenerPropertiesSet(ehcacheConfiguration);
+			parseCacheManagerListenerPropertiesSet(ehcacheConfiguration);
 
 		PortalCacheConfiguration defaultPortalCacheConfiguration =
-			_getPortalCacheConfiguration(
+			getPortalCacheConfiguration(
 				ehcacheConfiguration.getDefaultCacheConfiguration(),
 				clusterAware, usingDefault);
 
@@ -122,7 +122,7 @@ public class EhcachePortalCacheManagerConfigurator {
 				cacheConfigurations.entrySet()) {
 
 			portalCacheConfigurations.add(
-				_getPortalCacheConfiguration(
+				getPortalCacheConfiguration(
 					entry.getValue(), clusterAware, usingDefault));
 		}
 
@@ -150,7 +150,7 @@ public class EhcachePortalCacheManagerConfigurator {
 
 	protected volatile Props props;
 
-	private PortalCacheConfiguration _getPortalCacheConfiguration(
+	protected PortalCacheConfiguration getPortalCacheConfiguration(
 		CacheConfiguration cacheConfiguration, boolean clusterAware,
 		boolean usingDefault) {
 
@@ -166,14 +166,14 @@ public class EhcachePortalCacheManagerConfigurator {
 		}
 
 		Set<Properties> portalCacheListenerPropertiesSet =
-			_parseCacheEventListenerFactoryConfiguration(
+			parseCacheEventListenerFactoryConfiguration(
 				cacheConfiguration, clusterAware, usingDefault);
 
 		Properties portalCacheBootstrapLoaderProperties =
-			_parseCacheBootstrapLoaderFactoryConfiguration(
+			parseCacheBootstrapLoaderFactoryConfiguration(
 				cacheConfiguration, clusterAware);
 
-		boolean requireSerialization = _isRequireSerialization(
+		boolean requireSerialization = isRequireSerialization(
 			cacheConfiguration, clusterAware);
 
 		return new EhcachePortalCacheConfiguration(
@@ -182,7 +182,7 @@ public class EhcachePortalCacheManagerConfigurator {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void _handleCacheManagerPeerFactoryConfigurations(
+	protected void handleCacheManagerPeerFactoryConfigurations(
 		List<FactoryConfiguration> factoryConfigurations,
 		boolean clusterAware) {
 
@@ -230,7 +230,7 @@ public class EhcachePortalCacheManagerConfigurator {
 	}
 
 	@SuppressWarnings("deprecation")
-	private boolean _isRequireSerialization(
+	protected boolean isRequireSerialization(
 		CacheConfiguration cacheConfiguration, boolean clusterAware) {
 
 		if (clusterAware && _clusterEnabled) {
@@ -259,7 +259,7 @@ public class EhcachePortalCacheManagerConfigurator {
 		return false;
 	}
 
-	private Properties _parseCacheBootstrapLoaderFactoryConfiguration(
+	protected Properties parseCacheBootstrapLoaderFactoryConfiguration(
 		CacheConfiguration cacheConfiguration, boolean clusterAware) {
 
 		Properties portalCacheBootstrapLoaderProperties = null;
@@ -293,7 +293,7 @@ public class EhcachePortalCacheManagerConfigurator {
 		return portalCacheBootstrapLoaderProperties;
 	}
 
-	private Set<Properties> _parseCacheEventListenerFactoryConfiguration(
+	protected Set<Properties> parseCacheEventListenerFactoryConfiguration(
 		CacheConfiguration cacheConfiguration, boolean clusterAware,
 		boolean usingDefault) {
 
@@ -358,8 +358,8 @@ public class EhcachePortalCacheManagerConfigurator {
 		return portalCacheListenerPropertiesSet;
 	}
 
-	private Set<Properties>
-		_parseCacheManagerListenerPropertiesSet(
+	protected Set<Properties>
+		parseCacheManagerListenerPropertiesSet(
 			Configuration ehcacheConfiguration) {
 
 		FactoryConfiguration<?> factoryConfiguration =
