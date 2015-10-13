@@ -320,7 +320,7 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 		return true;
 	}
 
-	protected EhcachePortalCacheManagerConfigurator
+	protected AbstractEhcachePortalCacheManagerConfigurator
 		ehcachePortalCacheManagerConfigurator;
 	protected MBeanServer mBeanServer;
 	protected volatile Props props;

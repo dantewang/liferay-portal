@@ -97,7 +97,7 @@ public class MultiVMEhcachePortalCacheManager
 		unbind = "-"
 	)
 	protected void setEhcachePortalCacheManagerConfigurator(
-		EhcachePortalCacheManagerConfigurator
+		AbstractEhcachePortalCacheManagerConfigurator
 			ehcachePortalCacheManagerConfigurator) {
 
 		this.ehcachePortalCacheManagerConfigurator =
