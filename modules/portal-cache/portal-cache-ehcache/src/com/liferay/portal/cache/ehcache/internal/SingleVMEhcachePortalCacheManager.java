@@ -76,7 +76,7 @@ public class SingleVMEhcachePortalCacheManager<K extends Serializable, V>
 		unbind = "-"
 	)
 	protected void setEhcachePortalCacheManagerConfigurator(
-		EhcachePortalCacheManagerConfigurator
+		AbstractEhcachePortalCacheManagerConfigurator
 			ehcachePortalCacheManagerConfigurator) {
 
 		this.ehcachePortalCacheManagerConfigurator =

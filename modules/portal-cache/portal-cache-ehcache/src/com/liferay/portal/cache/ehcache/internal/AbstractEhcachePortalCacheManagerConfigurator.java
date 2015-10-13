@@ -48,7 +48,7 @@ import net.sf.ehcache.event.NotificationScope;
 /**
  * @author Tina Tian
  */
-public class EhcachePortalCacheManagerConfigurator {
+public abstract class AbstractEhcachePortalCacheManagerConfigurator {
 
 	public URL getConfigFileURL(String configFile, ClassLoader classLoader) {
 		if (classLoader != null) {
@@ -60,7 +60,8 @@ public class EhcachePortalCacheManagerConfigurator {
 		}
 
 		URL configFileURL =
-			EhcachePortalCacheManagerConfigurator.class.getResource(configFile);
+			AbstractEhcachePortalCacheManagerConfigurator.class.getResource(
+				configFile);
 
 		if (configFileURL == null) {
 			ClassLoader portalClassLoader =
