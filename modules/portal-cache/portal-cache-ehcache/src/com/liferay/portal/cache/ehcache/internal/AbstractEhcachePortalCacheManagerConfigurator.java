@@ -318,6 +318,32 @@ public abstract class AbstractEhcachePortalCacheManagerConfigurator {
 		return portalCacheListenerPropertiesSet;
 	}
 
+	protected Set<Properties>
+		parseCacheManagerListenerPropertiesSet(
+			Configuration ehcacheConfiguration) {
+
+		FactoryConfiguration<?> factoryConfiguration =
+			ehcacheConfiguration.
+				getCacheManagerEventListenerFactoryConfiguration();
+
+		if (factoryConfiguration == null) {
+			return Collections.emptySet();
+		}
+
+		Properties properties = EhcachePropertyHelperUtil.parseProperties(
+			factoryConfiguration.getProperties(),
+			factoryConfiguration.getPropertySeparator(), props);
+
+		properties.put(
+			EhcacheConstants.CACHE_MANAGER_LISTENER_FACTORY_CLASS_NAME,
+			EhcachePropertyHelperUtil.parseFactoryClassName(
+				factoryConfiguration.getFullyQualifiedClassPath(), props));
+
+		factoryConfiguration.setClass(null);
+
+		return Collections.singleton(properties);
+	}
+
 	protected void processCacheEventListenerFactoryProperties(
 		boolean clusterAware, String factoryClassName,
 		Set<Properties> portalCacheListenerPropertiesSet,
@@ -354,32 +380,6 @@ public abstract class AbstractEhcachePortalCacheManagerConfigurator {
 
 			portalCacheListenerPropertiesSet.add(properties);
 		}
-	}
-
-	protected Set<Properties>
-		parseCacheManagerListenerPropertiesSet(
-			Configuration ehcacheConfiguration) {
-
-		FactoryConfiguration<?> factoryConfiguration =
-			ehcacheConfiguration.
-				getCacheManagerEventListenerFactoryConfiguration();
-
-		if (factoryConfiguration == null) {
-			return Collections.emptySet();
-		}
-
-		Properties properties = EhcachePropertyHelperUtil.parseProperties(
-			factoryConfiguration.getProperties(),
-			factoryConfiguration.getPropertySeparator(), props);
-
-		properties.put(
-			EhcacheConstants.CACHE_MANAGER_LISTENER_FACTORY_CLASS_NAME,
-			EhcachePropertyHelperUtil.parseFactoryClassName(
-				factoryConfiguration.getFullyQualifiedClassPath(), props));
-
-		factoryConfiguration.setClass(null);
-
-		return Collections.singleton(properties);
 	}
 
 	protected volatile Props props;
