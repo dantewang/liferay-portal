@@ -18,7 +18,12 @@ import com.liferay.portal.kernel.cache.PortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.util.Props;
 
-import org.osgi.service.component.annotations.Activate;
+import java.util.List;
+import java.util.Properties;
+
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.FactoryConfiguration;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -28,14 +33,30 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.SINGLE_VM,
-	service = EhcachePortalCacheManagerConfigurator.class
+	service = AbstractEhcachePortalCacheManagerConfigurator.class
 )
 public class SingleVMEhcachePortalCacheManagerConfigurator
-	extends EhcachePortalCacheManagerConfigurator {
+	extends AbstractEhcachePortalCacheManagerConfigurator {
 
-	@Activate
-	protected void activate() {
-		super.activate();
+	@Override
+	@SuppressWarnings("rawtypes")
+	protected void handleCacheManagerPeerFactoryConfigurations(
+		List<FactoryConfiguration> factoryConfigurations) {
+
+		if (factoryConfigurations.isEmpty()) {
+			factoryConfigurations.clear();
+
+			return;
+		}
+	}
+
+	@Override
+	protected Properties parseCacheBootstrapLoaderFactoryConfiguration(
+		CacheConfiguration cacheConfiguration) {
+
+		cacheConfiguration.addBootstrapCacheLoaderFactory(null);
+
+		return null;
 	}
 
 	@Reference(unbind = "-")
