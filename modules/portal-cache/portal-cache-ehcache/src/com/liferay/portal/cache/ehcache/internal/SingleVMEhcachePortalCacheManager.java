@@ -71,6 +71,18 @@ public class SingleVMEhcachePortalCacheManager<K extends Serializable, V>
 		destroy();
 	}
 
+	@Reference(
+		target = "(" + PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.SINGLE_VM + ")",
+		unbind = "-"
+	)
+	protected void setEhcachePortalCacheManagerConfigurator(
+		AbstractEhcachePortalCacheManagerConfigurator
+			ehcachePortalCacheManagerConfigurator) {
+
+		this.ehcachePortalCacheManagerConfigurator =
+			ehcachePortalCacheManagerConfigurator;
+	}
+
 	@Reference(unbind = "-")
 	protected void setMBeanServer(MBeanServer mBeanServer) {
 		this.mBeanServer = mBeanServer;
