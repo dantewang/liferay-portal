@@ -93,6 +93,15 @@ public class MultiVMEhcachePortalCacheManager
 	}
 
 	@Reference(unbind = "-")
+	protected void setEhcachePortalCacheManagerConfigurator(
+		EhcachePortalCacheManagerConfigurator
+			ehcachePortalCacheManagerConfigurator) {
+
+		this.ehcachePortalCacheManagerConfigurator =
+			ehcachePortalCacheManagerConfigurator;
+	}
+
+	@Reference(unbind = "-")
 	protected void setMBeanServer(MBeanServer mBeanServer) {
 		this.mBeanServer = mBeanServer;
 	}

@@ -14,10 +14,10 @@
 
 package com.liferay.portal.cache.ehcache.internal;
 
+import com.liferay.portal.cache.ehcache.EhcacheUnwrapUtil;
 import com.liferay.portal.cache.ehcache.internal.event.PortalCacheManagerEventListener;
 import com.liferay.portal.kernel.cache.AbstractPortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCache;
-import com.liferay.portal.kernel.cache.PortalCacheWrapper;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
 import com.liferay.portal.kernel.cache.configurator.PortalCacheConfiguratorSettings;
@@ -69,9 +69,10 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 	public void reconfigurePortalCaches(URL configurationURL) {
 		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
 			configurationObjectValuePair =
-				EhcacheConfigurationHelperUtil.getConfigurationObjectValuePair(
-					getPortalCacheManagerName(), configurationURL,
-					isClusterAware(), _usingDefault, props);
+				ehcachePortalCacheManagerConfigurator.
+					getConfigurationObjectValuePair(
+						getPortalCacheManagerName(), configurationURL,
+						isClusterAware(), _usingDefault);
 
 		reconfigEhcache(configurationObjectValuePair.getKey());
 
@@ -195,22 +196,18 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 			_configFile = _defaultConfigFile;
 		}
 
-		URL configFileURL = EhcacheConfigurationHelperUtil.class.getResource(
-			_configFile);
-
-		if (configFileURL == null) {
-			ClassLoader classLoader = PortalClassLoaderUtil.getClassLoader();
-
-			configFileURL = classLoader.getResource(_configFile);
-		}
+		URL configFileURL =
+			ehcachePortalCacheManagerConfigurator.getConfigFileURL(
+				_configFile, null);
 
 		_usingDefault = _configFile.equals(_defaultConfigFile);
 
 		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
 			configurationObjectValuePair =
-				EhcacheConfigurationHelperUtil.getConfigurationObjectValuePair(
-					getPortalCacheManagerName(), configFileURL,
-					isClusterAware(), _usingDefault, props);
+				ehcachePortalCacheManagerConfigurator.
+					getConfigurationObjectValuePair(
+						getPortalCacheManagerName(), configFileURL,
+						isClusterAware(), _usingDefault);
 
 		_cacheManager = new CacheManager(configurationObjectValuePair.getKey());
 
@@ -271,7 +268,7 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 
 				if (portalCache != null) {
 					EhcachePortalCache<K, V> ehcachePortalCache =
-						_getEhcachePortalCache(portalCache);
+						EhcacheUnwrapUtil.getEhcachePortalCache(portalCache);
 
 					if (ehcachePortalCache != null) {
 						ehcachePortalCache.reconfigEhcache(ehcache);
@@ -289,18 +286,10 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 	protected boolean reconfigure(
 		PortalCacheConfiguratorSettings portalCacheConfiguratorSettings) {
 
-		String portalCacheConfigurationLocation =
+		URL url = ehcachePortalCacheManagerConfigurator.getConfigFileURL(
 			portalCacheConfiguratorSettings.
-				getPortalCacheConfigrationLocation();
-
-		if (Validator.isNull(portalCacheConfigurationLocation)) {
-			return false;
-		}
-
-		ClassLoader classLoader =
-			portalCacheConfiguratorSettings.getClassLoader();
-
-		URL url = classLoader.getResource(portalCacheConfigurationLocation);
+				getPortalCacheConfigrationLocation(),
+			portalCacheConfiguratorSettings.getClassLoader());
 
 		if (url == null) {
 			return false;
@@ -331,25 +320,10 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 		return true;
 	}
 
+	protected EhcachePortalCacheManagerConfigurator
+		ehcachePortalCacheManagerConfigurator;
 	protected MBeanServer mBeanServer;
 	protected volatile Props props;
-
-	private EhcachePortalCache<K, V> _getEhcachePortalCache(
-		PortalCache<K, V> portalCache) {
-
-		while (portalCache instanceof PortalCacheWrapper) {
-			PortalCacheWrapper<K, V> portalCacheWrapper =
-				(PortalCacheWrapper<K, V>)portalCache;
-
-			portalCache = portalCacheWrapper.getWrappedPortalCache();
-		}
-
-		if (portalCache instanceof EhcachePortalCache) {
-			return (EhcachePortalCache<K, V>)portalCache;
-		}
-
-		return null;
-	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		EhcachePortalCacheManager.class);
