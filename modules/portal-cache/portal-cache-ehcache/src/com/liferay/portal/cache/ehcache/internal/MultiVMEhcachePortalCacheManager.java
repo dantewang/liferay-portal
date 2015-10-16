@@ -14,6 +14,7 @@
 
 package com.liferay.portal.cache.ehcache.internal;
 
+import com.liferay.portal.cache.ehcache.internal.configurator.AbstractEhcachePortalCacheManagerConfigurator;
 import com.liferay.portal.kernel.cache.PortalCacheBootstrapLoaderFactory;
 import com.liferay.portal.kernel.cache.PortalCacheListenerFactory;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
@@ -90,6 +91,18 @@ public class MultiVMEhcachePortalCacheManager
 	@Deactivate
 	protected void deactivate() {
 		destroy();
+	}
+
+	@Reference(
+		target = "(" + PortalCacheManager.PORTAL_CACHE_MANAGER_NAME + "=" + PortalCacheManagerNames.MULTI_VM + ")",
+		unbind = "-"
+	)
+	protected void setEhcachePortalCacheManagerConfigurator(
+		AbstractEhcachePortalCacheManagerConfigurator
+			ehcachePortalCacheManagerConfigurator) {
+
+		this.ehcachePortalCacheManagerConfigurator =
+			ehcachePortalCacheManagerConfigurator;
 	}
 
 	@Reference(unbind = "-")
