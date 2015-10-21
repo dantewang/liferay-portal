@@ -197,7 +197,7 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 		}
 
 		URL configFileURL =
-			EhcachePortalCacheManagerConfigurator.class.getResource(
+			AbstractEhcachePortalCacheManagerConfigurator.class.getResource(
 				_configFile);
 
 		if (configFileURL == null) {
@@ -334,7 +334,7 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 		return true;
 	}
 
-	protected EhcachePortalCacheManagerConfigurator
+	protected AbstractEhcachePortalCacheManagerConfigurator
 		ehcachePortalCacheManagerConfigurator;
 	protected MBeanServer mBeanServer;
 	protected volatile Props props;
