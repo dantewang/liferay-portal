@@ -94,9 +94,11 @@ public class MultiVMEhcachePortalCacheManager
 
 	@Reference(unbind = "-")
 	protected void setEhcacheConfigurationHelperUtil(
-		EhcacheConfigurationHelperUtil ehcacheConfigurationHelperUtil) {
+		EhcachePortalCacheManagerConfigurator
+			ehcachePortalCacheManagerConfigurator) {
 
-		this.ehcacheConfigurationHelperUtil = ehcacheConfigurationHelperUtil;
+		this.ehcachePortalCacheManagerConfigurator =
+			ehcachePortalCacheManagerConfigurator;
 	}
 
 	@Reference(unbind = "-")
