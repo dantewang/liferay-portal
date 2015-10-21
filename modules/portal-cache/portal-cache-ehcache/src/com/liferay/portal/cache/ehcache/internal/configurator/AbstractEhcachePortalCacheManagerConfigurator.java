@@ -12,9 +12,10 @@
  * details.
  */
 
-package com.liferay.portal.cache.ehcache.internal;
+package com.liferay.portal.cache.ehcache.internal.configurator;
 
 import com.liferay.portal.cache.ehcache.EhcacheConstants;
+import com.liferay.portal.cache.ehcache.internal.EhcachePortalCacheConfiguration;
 import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.kernel.cache.configuration.PortalCacheManagerConfiguration;
