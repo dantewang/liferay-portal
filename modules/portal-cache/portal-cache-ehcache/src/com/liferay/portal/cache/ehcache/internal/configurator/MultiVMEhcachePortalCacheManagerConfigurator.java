@@ -114,29 +114,25 @@ public class MultiVMEhcachePortalCacheManagerConfigurator
 	protected Properties parsePortalCacheBootstrapLoaderProperties(
 		CacheConfiguration cacheConfiguration) {
 
-		Properties portalCacheBootstrapLoaderProperties = null;
-
 		BootstrapCacheLoaderFactoryConfiguration
 			bootstrapCacheLoaderFactoryConfiguration =
 				cacheConfiguration.
 					getBootstrapCacheLoaderFactoryConfiguration();
 
-		if (bootstrapCacheLoaderFactoryConfiguration != null) {
-			portalCacheBootstrapLoaderProperties = parseProperties(
-				bootstrapCacheLoaderFactoryConfiguration.getProperties(),
-				bootstrapCacheLoaderFactoryConfiguration.
-					getPropertySeparator());
+		if (bootstrapCacheLoaderFactoryConfiguration == null) {
+			return null;
+		}
 
-			if (_clusterEnabled) {
-				if (!_clusterLinkReplicationEnabled) {
-					portalCacheBootstrapLoaderProperties.put(
-						EhcacheConstants.
-							BOOTSTRAP_CACHE_LOADER_FACTORY_CLASS_NAME,
-						parseFactoryClassName(
-							bootstrapCacheLoaderFactoryConfiguration.
-								getFullyQualifiedClassPath()));
-				}
-			}
+		Properties portalCacheBootstrapLoaderProperties = parseProperties(
+			bootstrapCacheLoaderFactoryConfiguration.getProperties(),
+			bootstrapCacheLoaderFactoryConfiguration.getPropertySeparator());
+
+		if (_clusterEnabled && !_clusterLinkReplicationEnabled) {
+			portalCacheBootstrapLoaderProperties.put(
+				EhcacheConstants.BOOTSTRAP_CACHE_LOADER_FACTORY_CLASS_NAME,
+				parseFactoryClassName(
+					bootstrapCacheLoaderFactoryConfiguration.
+						getFullyQualifiedClassPath()));
 		}
 
 		cacheConfiguration.addBootstrapCacheLoaderFactory(null);
@@ -144,37 +140,39 @@ public class MultiVMEhcachePortalCacheManagerConfigurator
 		return portalCacheBootstrapLoaderProperties;
 	}
 
+	@Override
 	protected void processCacheEventListenerFactoryProperties(
 		String factoryClassName,
 		Set<Properties> portalCacheListenerPropertiesSet,
 		PortalCacheListenerScope portalCacheListenerScope,
 		Properties properties, boolean usingDefault) {
 
-		if (factoryClassName.equals(
-				props.get(
-					PropsKeys.EHCACHE_CACHE_EVENT_LISTENER_FACTORY))) {
+		if (!factoryClassName.equals(
+				props.get(PropsKeys.EHCACHE_CACHE_EVENT_LISTENER_FACTORY))) {
 
-			if (_clusterEnabled) {
-				if (!_clusterLinkReplicationEnabled) {
-					properties.put(
-						EhcacheConstants.
-							CACHE_EVENT_LISTENER_FACTORY_CLASS_NAME,
-						factoryClassName);
-				}
-
-				properties.put(
-					PortalCacheConfiguration.PORTAL_CACHE_LISTENER_SCOPE,
-					portalCacheListenerScope);
-				properties.put(PortalCacheReplicator.REPLICATOR, true);
-
-				portalCacheListenerPropertiesSet.add(properties);
-			}
-		}
-		else {
 			super.processCacheEventListenerFactoryProperties(
 				factoryClassName, portalCacheListenerPropertiesSet,
 				portalCacheListenerScope, properties, usingDefault);
+
+			return;
 		}
+
+		if (!_clusterEnabled) {
+			return;
+		}
+
+		properties.put(
+			PortalCacheConfiguration.PORTAL_CACHE_LISTENER_SCOPE,
+			portalCacheListenerScope);
+		properties.put(PortalCacheReplicator.REPLICATOR, true);
+
+		if (_clusterLinkReplicationEnabled) {
+			properties.put(
+				EhcacheConstants.CACHE_EVENT_LISTENER_FACTORY_CLASS_NAME,
+				factoryClassName);
+		}
+
+		portalCacheListenerPropertiesSet.add(properties);
 	}
 
 	@Reference(unbind = "-")
