@@ -16,6 +16,7 @@ package com.liferay.portal.cache.ehcache.internal.configurator;
 
 import com.liferay.portal.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.cache.ehcache.EhcacheConstants;
+import com.liferay.portal.cache.ehcache.internal.EhcachePortalCacheConfiguration;
 import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
 import com.liferay.portal.kernel.util.Props;
 
@@ -39,6 +40,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -48,9 +50,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class SingleVMEhcachePortalCacheManagerConfiguratorTest extends Mockito {
 
-	@Rule
-	public final ExpectedException exception = ExpectedException.none();
-
 	@Before
 	public void setUp() {
 		_props = mock(Props.class);
@@ -59,16 +58,6 @@ public class SingleVMEhcachePortalCacheManagerConfiguratorTest extends Mockito {
 			new SingleVMEhcachePortalCacheManagerConfigurator();
 
 		_singleVMEhcachePortalCacheManagerConfigurator.setProps(_props);
-	}
-
-	@Test
-	public void testGetConfigurationObjectValuePair() {
-		exception.expect(NullPointerException.class);
-
-		exception.expectMessage("Configuration path is null");
-
-		_singleVMEhcachePortalCacheManagerConfigurator.
-			getConfigurationObjectValuePair("Name", null, true);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -133,6 +122,16 @@ public class SingleVMEhcachePortalCacheManagerConfiguratorTest extends Mockito {
 	}
 
 	@Test
+	public void testGetConfigurationObjectValuePair() {
+		exception.expect(NullPointerException.class);
+
+		exception.expectMessage("Configuration path is null");
+
+		_singleVMEhcachePortalCacheManagerConfigurator.
+			getConfigurationObjectValuePair("Name", null, true);
+	}
+
+	@Test
 	public void testGetPortalPropertyKey() {
 		Assert.assertNull(
 			_singleVMEhcachePortalCacheManagerConfigurator.getPortalPropertyKey(
@@ -147,17 +146,15 @@ public class SingleVMEhcachePortalCacheManagerConfiguratorTest extends Mockito {
 
 		Assert.assertEquals(
 			"portal.property.key",
-			_singleVMEhcachePortalCacheManagerConfigurator.
-				getPortalPropertyKey(
-					_PORTAL_PROPERTY_KEY + "=portal.property.key"));
+			_singleVMEhcachePortalCacheManagerConfigurator.getPortalPropertyKey(
+				_PORTAL_PROPERTY_KEY + "=portal.property.key"));
 	}
 
 	@Test
 	public void testIsClearCacheManagerPeerConfigurations() {
-		boolean result = _singleVMEhcachePortalCacheManagerConfigurator.
-			isClearCacheManagerPeerConfigurations();
-
-		Assert.assertTrue(result);
+		Assert.assertTrue(
+			_singleVMEhcachePortalCacheManagerConfigurator.
+				isClearCacheManagerPeerConfigurations());
 	}
 
 	@SuppressWarnings("deprecation")
@@ -246,7 +243,7 @@ public class SingleVMEhcachePortalCacheManagerConfiguratorTest extends Mockito {
 	public void testParseCacheEventListenerConfigurations() {
 		CacheEventListenerFactoryConfiguration
 			cacheEventListenerFactoryConfiguration =
-			new CacheEventListenerFactoryConfiguration();
+				new CacheEventListenerFactoryConfiguration();
 
 		cacheEventListenerFactoryConfiguration.setClass(
 			"com.liferay.factory.ClassName");
@@ -275,28 +272,69 @@ public class SingleVMEhcachePortalCacheManagerConfiguratorTest extends Mockito {
 				EhcacheConstants.CACHE_EVENT_LISTENER_FACTORY_CLASS_NAME));
 
 		Assert.assertEquals(
-			PortalCacheListenerScope.ALL, properties.get(
+			PortalCacheListenerScope.ALL,
+			properties.get(
 				PortalCacheConfiguration.PORTAL_CACHE_LISTENER_SCOPE));
 	}
 
 	@Test
 	public void testParseCacheListenerConfigurations() {
-		
+		Assert.assertNull(
+			_singleVMEhcachePortalCacheManagerConfigurator.
+				parseCacheListenerConfigurations(null, false));
+
+		EhcachePortalCacheConfiguration ehcachePortalCacheConfiguration =
+			(EhcachePortalCacheConfiguration)
+				_singleVMEhcachePortalCacheManagerConfigurator.
+					parseCacheListenerConfigurations(
+						new CacheConfiguration(), false);
+
+		Assert.assertEquals(
+			PortalCacheConfiguration.DEFAULT_PORTAL_CACHE_NAME,
+			ehcachePortalCacheConfiguration.getPortalCacheName());
+
+		Set<Properties> portalCacheListenerPropertiesSet =
+			ehcachePortalCacheConfiguration.
+				getPortalCacheListenerPropertiesSet();
+
+		Assert.assertTrue(portalCacheListenerPropertiesSet.isEmpty());
+
+		Assert.assertNull(
+			ehcachePortalCacheConfiguration.
+				getPortalCacheBootstrapLoaderProperties());
+
+		Assert.assertFalse(
+			ehcachePortalCacheConfiguration.isRequireSerialization());
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testParseCacheManagerEventListenerConfigurations() {
-		
-	}
+		Set<Properties> cacheManagerEventListenerConfigurations =
+			_singleVMEhcachePortalCacheManagerConfigurator.
+				parseCacheManagerEventListenerConfigurations(null);
 
-	@Test
-	public void testParseListenerConfigurations() {
-		
-	}
+		Assert.assertTrue(cacheManagerEventListenerConfigurations.isEmpty());
 
-	@Test
-	public void testResolvePortalProperty() {
-		
+		FactoryConfiguration factoryConfiguration = new FactoryConfiguration();
+
+		factoryConfiguration.setClass("com.liferay.factory.ClassName");
+
+		cacheManagerEventListenerConfigurations =
+			_singleVMEhcachePortalCacheManagerConfigurator.
+				parseCacheManagerEventListenerConfigurations(
+					factoryConfiguration);
+
+		Assert.assertTrue(cacheManagerEventListenerConfigurations.size() == 1);
+
+		Iterator<Properties> itr =
+			cacheManagerEventListenerConfigurations.iterator();
+
+		Properties properties = itr.next();
+
+		Assert.assertEquals(
+			"com.liferay.factory.ClassName", properties.getProperty(
+				EhcacheConstants.CACHE_MANAGER_LISTENER_FACTORY_CLASS_NAME));
 	}
 
 	@Test
@@ -314,6 +352,24 @@ public class SingleVMEhcachePortalCacheManagerConfiguratorTest extends Mockito {
 		Assert.assertTrue("value1".equals(properties.getProperty("key1")));
 		Assert.assertTrue("value2".equals(properties.getProperty("key2")));
 	}
+
+	@Test
+	public void testResolvePortalPropertyForFactoryConfiguration() {
+		FactoryConfiguration<?> factoryConfiguration = null;
+
+		try {
+			_singleVMEhcachePortalCacheManagerConfigurator.
+				resolvePortalProperty(factoryConfiguration);
+		}
+		catch (NullPointerException npe) {
+			Assert.fail();
+		}
+
+		
+	}
+
+	@Rule
+	public final ExpectedException exception = ExpectedException.none();
 
 	private static final String _PORTAL_PROPERTY_KEY = "portalPropertyKey";
 
