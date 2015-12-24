@@ -21,7 +21,11 @@ String productMenuState = SessionClicks.get(request, "com.liferay.control.menu.w
 %>
 
 <li class="<%= Validator.equals(productMenuState, "open") ? "active" : StringPool.BLANK %>">
-	<a class="control-menu-icon sidenav-toggler" data-content="body" data-qa-id="productMenu" data-target="#sidenavSliderId,#wrapper" data-title="<%= HtmlUtil.escape(LanguageUtil.get(request, "menu")) %>" data-toggle="sidenav" data-type="fixed-push" data-type-mobile="fixed" href="#sidenavSliderId" id="sidenavToggleId">
+	<liferay-portlet:renderURL portletName="<%= ProductNavigationProductMenuPortletKeys.PRODUCT_NAVIGATION_PRODUCT_MENU %>" var="portletURL" windowState="exclusive">
+		<portlet:param name="mvcPath" value="/portlet/view.jsp" />
+	</liferay-portlet:renderURL>
+
+	<a class="control-menu-icon sidenav-toggler" data-content="body" data-panelurl="<%= portletURL.toString() %>" data-qa-id="productMenu" data-target="#sidenavSliderId,#wrapper" data-title="<%= HtmlUtil.escape(LanguageUtil.get(request, "menu")) %>" data-toggle="sidenav" data-type="fixed-push" data-type-mobile="fixed" href="#sidenavSliderId" id="sidenavToggleId">
 		<div class="toast-animation">
 			<div class="pm"></div>
 
@@ -44,3 +48,67 @@ String controlMenuPortletId = PortletProviderUtil.getPortletId(PortalControlMenu
 		);
 	</aui:script>
 </c:if>
+
+<aui:script use="liferay-store">
+	AUI.$('#sidenavToggleId').sideNavigation();
+
+	var sidenavSlider = AUI.$('#sidenavSliderId');
+
+	sidenavSlider.off('closed.lexicon.sidenav');
+	sidenavSlider.off('open.lexicon.sidenav');
+
+	sidenavSlider.on(
+		'closed.lexicon.sidenav',
+		function(event) {
+			Liferay.Store('com.liferay.control.menu.web_productMenuState', 'closed');
+		}
+	);
+
+	sidenavSlider.on(
+		'open.lexicon.sidenav',
+		function(event) {
+		   	var productMenuSidebar = A.one('#productMenuSidebar');
+
+	 		if (productMenuSidebar && !productMenuSidebar.hasClass('has-content')) {
+	 			<portlet:namespace />getProductMenuSidebar();
+	 		}
+
+			Liferay.Store('com.liferay.control.menu.web_productMenuState', 'open');
+		}
+	);
+</aui:script>
+
+<aui:script>
+	Liferay.provide(
+		window,
+		'<portlet:namespace />getProductMenuSidebar',
+		function() {
+			var A = AUI();
+
+			var sidenavToggle = A.one('#sidenavToggleId');
+
+			if (sidenavToggle) {
+				var uri = sidenavToggle.attr('data-panelurl');
+
+				A.io.request(
+					uri,
+					{
+						after: {
+							success: function(event, id, obj) {
+								var response = this.get('responseData');
+
+								var productMenuSidebar = A.one('#productMenuSidebar');
+
+								productMenuSidebar.plug(A.Plugin.ParseContent);
+
+								productMenuSidebar.setContent(response);
+								productMenuSidebar.addClass('has-content');
+							}
+						}
+					}
+				);
+			}
+		},
+		['aui-io-request', 'aui-parse-content', 'event-outside']
+	);
+</aui:script>
