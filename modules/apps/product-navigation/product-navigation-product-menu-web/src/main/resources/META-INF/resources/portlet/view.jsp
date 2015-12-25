@@ -69,27 +69,4 @@
 
 		</div>
 	</div>
-
-	<aui:script use="liferay-store">
-		AUI.$('#sidenavToggleId').sideNavigation();
-
-		var sidenavSlider = AUI.$('#sidenavSliderId');
-
-		sidenavSlider.off('closed.lexicon.sidenav');
-		sidenavSlider.off('open.lexicon.sidenav');
-
-		sidenavSlider.on(
-			'closed.lexicon.sidenav',
-			function(event) {
-				Liferay.Store('com.liferay.control.menu.web_productMenuState', 'closed');
-			}
-		);
-
-		sidenavSlider.on(
-			'open.lexicon.sidenav',
-			function(event) {
-				Liferay.Store('com.liferay.control.menu.web_productMenuState', 'open');
-			}
-		);
-	</aui:script>
 </c:if>
