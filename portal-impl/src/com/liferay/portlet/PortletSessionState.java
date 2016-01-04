@@ -14,32 +14,16 @@
 
 package com.liferay.portlet;
 
-import com.liferay.portal.kernel.servlet.HttpSessionWrapper;
+public class PortletSessionState {
 
-import javax.servlet.http.HttpSession;
-
-/**
- * @author Brian Wing Shun Chan
- */
-public class PortletServletSession extends HttpSessionWrapper {
-
-	public PortletServletSession(
-		HttpSession session, PortletRequestImpl portletRequestImpl) {
-
-		super(session);
-
-		_portletSessionState = new PortletSessionState();
-
-		portletRequestImpl.setPortletSessionState(_portletSessionState);
+	public void invalidateSession() {
+		_invalidSession = true;
 	}
 
-	@Override
-	public void invalidate() {
-		super.invalidate();
-
-		_portletSessionState.invalidateSession();
+	public boolean isValidSession() {
+		return _invalidSession;
 	}
 
-	private final PortletSessionState _portletSessionState;
+	private boolean _invalidSession = false;
 
 }
