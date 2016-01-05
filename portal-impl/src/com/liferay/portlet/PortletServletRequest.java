@@ -414,8 +414,6 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 			return null;
 		}
 
-		session = new PortletServletSession(session, _portletRequestImpl);
-
 		if (ServerDetector.isJetty()) {
 			try {
 				session = wrapJettySession(session);
