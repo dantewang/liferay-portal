@@ -411,13 +411,10 @@ public class CalendarResourceFinderImpl
 
 		for (int i = 0; i < classNameIds.length; i++) {
 			sb.append("classNameId = ?");
-
-			if ((i + 1) < classNameIds.length) {
-				sb.append(" OR ");
-			}
+			sb.append(" OR ");
 		}
 
-		sb.append(") AND");
+		sb.setStringAt(") AND", sb.index());
 
 		return sb.toString();
 	}
@@ -433,13 +430,10 @@ public class CalendarResourceFinderImpl
 
 		for (int i = 0; i < groupIds.length; i++) {
 			sb.append("groupId = ?");
-
-			if ((i + 1) < groupIds.length) {
-				sb.append(" OR ");
-			}
+			sb.append(" OR ");
 		}
 
-		sb.append(") AND");
+		sb.setStringAt(") AND", sb.index());
 
 		return sb.toString();
 	}

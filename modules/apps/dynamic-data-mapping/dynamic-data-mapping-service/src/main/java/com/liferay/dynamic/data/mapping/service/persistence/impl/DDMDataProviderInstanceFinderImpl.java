@@ -315,13 +315,10 @@ public class DDMDataProviderInstanceFinderImpl
 
 		for (int i = 0; i < groupIds.length; i++) {
 			sb.append("DDMDataProviderInstance.groupId = ?");
-
-			if ((i + 1) < groupIds.length) {
-				sb.append(" OR ");
-			}
+			sb.append(" OR ");
 		}
 
-		sb.append(") AND");
+		sb.setStringAt(") AND", sb.index());
 
 		return sb.toString();
 	}
