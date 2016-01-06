@@ -47,7 +47,7 @@ public abstract class BaseListDDMFormFieldValueRenderer
 
 				JSONArray jsonArray = createJSONArray(value.getString(locale));
 
-				if (jsonArray.length() > 0) {
+				if (jsonArray.length() == 0) {
 					return StringPool.BLANK;
 				}
 
