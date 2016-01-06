@@ -464,7 +464,6 @@ public class DDMStructureFinderImpl
 
 		for (int i = 0; i < groupIds.length - 1; i++) {
 			sb.append("DDMStructure.groupId = ? OR ");
-
 		}
 
 		sb.append("DDMStructure.groupId = ?) AND");
