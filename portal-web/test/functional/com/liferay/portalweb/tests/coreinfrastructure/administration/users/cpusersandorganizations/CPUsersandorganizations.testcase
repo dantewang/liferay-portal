@@ -748,7 +748,7 @@
 
 		<execute macro="User#addCP">
 			<var name="userEmailAddress" value="" />
-			<var name="userEmailAddressVariation" value="Invalid" />
+			<var name="userEmailAddressVariation" value="Null" />
 			<var name="userFirstName" value="userfn" />
 			<var name="userLastName" value="userln" />
 			<var name="userScreenName" value="usersn" />

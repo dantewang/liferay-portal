@@ -1092,6 +1092,10 @@
 		<priority value="ERROR" />
 	</category>
 
+	<category name="freemarker.beans">
+		<priority value="ERROR" />
+	</category>
+
 	<category name="httpclient.wire">
 		<priority value="ERROR" />
 	</category>
