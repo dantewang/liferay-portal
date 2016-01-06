@@ -457,15 +457,15 @@
 
 		<var name="key_pageName" value="Welcome" />
 
-		<execute function="AssertElementPresent" locator1="Home#PAGE_TEMPLATE_1" value1="Welcome" />
-		<execute function="AssertElementPresent" locator1="Home#PAGE_TEMPLATE_2" value1="Home" />
-		<execute function="AssertElementPresent" locator1="Home#PAGE_TEMPLATE_3" value1="Wiki" />
+		<execute function="AssertTextPresent" locator1="Home#PAGE_1" value1="Welcome" />
+		<execute function="AssertTextPresent" locator1="Home#PAGE_2" value1="Home" />
+		<execute function="AssertTextPresent" locator1="Home#PAGE_3" value1="Wiki" />
 
 		<execute macro="UserBar#gotoDashboard" />
 
-		<execute function="AssertElementPresent" locator1="Home#PAGE_TEMPLATE_1" value1="Welcome" />
-		<execute function="AssertElementNotPresent" locator1="Home#PAGE_TEMPLATE_2" value1="Home" />
-		<execute function="AssertElementNotPresent" locator1="Home#PAGE_TEMPLATE_3" value1="Wiki" />
+		<execute function="AssertTextPresent" locator1="Home#PAGE_1" value1="Welcome" />
+		<execute function="AssertTextNotPresent" locator1="Home#PAGE_2" value1="Home" />
+		<execute function="AssertTextNotPresent" locator1="Home#PAGE_3" value1="Wiki" />
 
 		<execute macro="User#logoutPG" />
 
@@ -478,15 +478,15 @@
 
 		<var name="key_pageName" value="Welcome" />
 
-		<execute function="AssertElementPresent" locator1="Home#PAGE_TEMPLATE_1" value1="Welcome" />
-		<execute function="AssertElementNotPresent" locator1="Home#PAGE_TEMPLATE_2" value1="Home" />
-		<execute function="AssertElementNotPresent" locator1="Home#PAGE_TEMPLATE_3" value1="Wiki" />
+		<execute function="AssertTextPresent" locator1="Home#PAGE_1" value1="Welcome" />
+		<execute function="AssertTextNotPresent" locator1="Home#PAGE_2" value1="Home" />
+		<execute function="AssertTextNotPresent" locator1="Home#PAGE_3" value1="Wiki" />
 
 		<execute macro="UserBar#gotoDashboard" />
 
-		<execute function="AssertElementPresent" locator1="Home#PAGE_TEMPLATE_1" value1="Welcome" />
-		<execute function="AssertElementNotPresent" locator1="Home#PAGE_TEMPLATE_2" value1="Home" />
-		<execute function="AssertElementNotPresent" locator1="Home#PAGE_TEMPLATE_3" value1="Wiki" />
+		<execute function="AssertTextPresent" locator1="Home#PAGE_1" value1="Welcome" />
+		<execute function="AssertTextNotPresent" locator1="Home#PAGE_2" value1="Home" />
+		<execute function="AssertTextNotPresent" locator1="Home#PAGE_3" value1="Wiki" />
 
 		<execute macro="User#logoutPG" />
 
@@ -515,15 +515,15 @@
 
 		<var name="key_pageName" value="Welcome" />
 
-		<execute function="AssertElementPresent" locator1="Home#PAGE_TEMPLATE_1" value1="Welcome" />
-		<execute function="AssertElementPresent" locator1="Home#PAGE_TEMPLATE_2" value1="Home" />
-		<execute function="AssertElementPresent" locator1="Home#PAGE_TEMPLATE_3" value1="Wiki" />
+		<execute function="AssertTextPresent" locator1="Home#PAGE_1" value1="Welcome" />
+		<execute function="AssertTextPresent" locator1="Home#PAGE_2" value1="Home" />
+		<execute function="AssertTextPresent" locator1="Home#PAGE_3" value1="Wiki" />
 
 		<execute macro="UserBar#gotoDashboard" />
 
-		<execute function="AssertElementPresent" locator1="Home#PAGE_TEMPLATE_1" value1="Welcome" />
-		<execute function="AssertElementNotPresent" locator1="Home#PAGE_TEMPLATE_2" value1="Home" />
-		<execute function="AssertElementNotPresent" locator1="Home#PAGE_TEMPLATE_3" value1="Wiki" />
+		<execute function="AssertTextPresent" locator1="Home#PAGE_1" value1="Welcome" />
+		<execute function="AssertTextNotPresent" locator1="Home#PAGE_2" value1="Home" />
+		<execute function="AssertTextNotPresent" locator1="Home#PAGE_3" value1="Wiki" />
 
 		<execute macro="User#logoutPG" />
 
