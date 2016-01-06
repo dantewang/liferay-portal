@@ -323,16 +323,15 @@ public class KaleoTaskInstanceTokenFinderImpl
 			return StringPool.BLANK;
 		}
 
-		StringBundler sb = new StringBundler(assetPrimaryKeys.length * 2 + 1);
+		StringBundler sb = new StringBundler(assetPrimaryKeys.length + 1);
 
 		sb.append("(");
 
 		for (int i = 0; i < assetPrimaryKeys.length; i++) {
-			sb.append("(KaleoTaskInstanceToken.classPK = ?)");
-			sb.append(" OR ");
+			sb.append("(KaleoTaskInstanceToken.classPK = ?) OR ");
 		}
 
-		sb.setStringAt(")", sb.index());
+		sb.append("(KaleoTaskInstanceToken.classPK = ?))");
 
 		return sb.toString();
 	}
@@ -348,7 +347,7 @@ public class KaleoTaskInstanceTokenFinderImpl
 			return StringPool.BLANK;
 		}
 
-		StringBundler sb = new StringBundler(assetTypes.length * 2 + 1);
+		StringBundler sb = new StringBundler(assetTypes.length + 1);
 
 		if (!firstCriteria) {
 			sb.append(" AND (");
@@ -358,11 +357,10 @@ public class KaleoTaskInstanceTokenFinderImpl
 		}
 
 		for (int i = 0; i < assetTypes.length; i++) {
-			sb.append("(lower(KaleoTaskInstanceToken.className) LIKE ?)");
-			sb.append(" OR ");
+			sb.append("(lower(KaleoTaskInstanceToken.className) LIKE ?) OR ");
 		}
 
-		sb.setStringAt(")", sb.index());
+		sb.append("(lower(KaleoTaskInstanceToken.className) LIKE ?))");
 
 		return sb.toString();
 	}
@@ -480,16 +478,15 @@ public class KaleoTaskInstanceTokenFinderImpl
 			return StringPool.BLANK;
 		}
 
-		StringBundler sb = new StringBundler(roleIds.size() * 2 + 1);
+		StringBundler sb = new StringBundler(roleIds.size() + 1);
 
 		sb.append("AND (");
 
 		for (int i = 0; i < roleIds.size(); i++) {
-			sb.append("(KaleoTaskAssignmentInstance.assigneeClassPK = ?)");
-			sb.append(" OR ");
+			sb.append("(KaleoTaskAssignmentInstance.assigneeClassPK = ?) OR ");
 		}
 
-		sb.setStringAt(")", sb.index());
+		sb.append("(KaleoTaskAssignmentInstance.assigneeClassPK = ?))");
 
 		return sb.toString();
 	}
@@ -589,10 +586,9 @@ public class KaleoTaskInstanceTokenFinderImpl
 			return sb.toString();
 		}
 
-		StringBundler sb = new StringBundler(3);
+		StringBundler sb = new StringBundler(2);
 
-		sb.append("AND ((");
-		sb.append("KaleoTaskAssignmentInstance.assigneeClassName = ?) ");
+		sb.append("AND ((KaleoTaskAssignmentInstance.assigneeClassName = ?) ");
 		sb.append("AND (KaleoTaskAssignmentInstance.assigneeClassPK = ?))");
 
 		return sb.toString();
