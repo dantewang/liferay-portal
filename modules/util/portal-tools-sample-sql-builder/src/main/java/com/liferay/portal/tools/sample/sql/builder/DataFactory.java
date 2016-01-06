@@ -2733,15 +2733,7 @@ public class DataFactory {
 		ddmTemplateModel.setVersion(DDMTemplateConstants.VERSION_DEFAULT);
 		ddmTemplateModel.setVersionUserId(userId);
 		ddmTemplateModel.setVersionUserName(_SAMPLE_USER_NAME);
-
-		StringBundler sb = new StringBundler(3);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append("Basic Web Content</name></root>");
-
-		ddmTemplateModel.setName(sb.toString());
-
+		ddmTemplateModel.setName(_DDM_TEMPLATE_MODEL_NAME);
 		ddmTemplateModel.setType(DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY);
 		ddmTemplateModel.setMode(DDMTemplateConstants.TEMPLATE_MODE_CREATE);
 		ddmTemplateModel.setLanguage(TemplateConstants.LANG_TYPE_FTL);
@@ -3149,6 +3141,11 @@ public class DataFactory {
 	}
 
 	private static final long _CURRENT_TIME = System.currentTimeMillis();
+
+	private static final String _DDM_TEMPLATE_MODEL_NAME =
+		"<?xml version=\"1.0\"?><root available-locales=\"en_US\" " +
+			"default-locale=\"en_US\"><name language-id=\"en_US\">" +
+				"Basic Web Content</name></root>";
 
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
