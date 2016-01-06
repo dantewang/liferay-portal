@@ -97,11 +97,7 @@ public class JavaClass {
 
 		JavaTerm previousJavaTerm = null;
 
-		Iterator<JavaTerm> itr = _javaTerms.iterator();
-
-		while (itr.hasNext()) {
-			JavaTerm javaTerm = itr.next();
-
+		for (JavaTerm javaTerm : _javaTerms) {
 			if (javaTerm.isConstructor()) {
 				checkConstructor(javaTerm);
 			}
@@ -179,11 +175,7 @@ public class JavaClass {
 
 		Set<JavaTerm> newJavaTerms = new TreeSet<>(new JavaTermComparator());
 
-		Iterator<JavaTerm> javaTermsIterator = javaTerms.iterator();
-
-		while (javaTermsIterator.hasNext()) {
-			JavaTerm javaTerm = javaTermsIterator.next();
-
+		for (JavaTerm javaTerm : javaTerms) {
 			if (!javaTerm.isStatic() || !javaTerm.isVariable()) {
 				newJavaTerms.add(javaTerm);
 
@@ -560,11 +552,7 @@ public class JavaClass {
 
 		JavaTerm previousJavaTerm = null;
 
-		Iterator<JavaTerm> itr = javaTerms.iterator();
-
-		while (itr.hasNext()) {
-			JavaTerm javaTerm = itr.next();
-
+		for (JavaTerm javaTerm : javaTerms) {
 			if (previousJavaTerm == null) {
 				previousJavaTerm = javaTerm;
 
