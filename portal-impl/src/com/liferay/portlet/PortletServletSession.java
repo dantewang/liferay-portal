@@ -28,9 +28,7 @@ public class PortletServletSession extends HttpSessionWrapper {
 
 		super(session);
 
-		_sessionInvalidateState = new SessionInvalidateState();
-
-		portletRequestImpl.setPortletSessionState(_sessionInvalidateState);
+		_sessionInvalidateState = portletRequestImpl.getPortletSessionState();
 	}
 
 	@Override

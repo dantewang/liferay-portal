@@ -339,13 +339,15 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 				_req.getSession(), _portletContext, _portletName, _plid);
 		}*/
 
-		if (!create && (_sessionInvalidateState != null) &&
-			_sessionInvalidateState.isValidSession()) {
-
+		if (!create && _sessionInvalidateState.isValidSession()) {
 			return null;
 		}
 
 		return _session;
+	}
+
+	public SessionInvalidateState getPortletSessionState() {
+		return _sessionInvalidateState;
 	}
 
 	@Override
@@ -649,12 +651,6 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 
 	public void setPortletRequestDispatcherRequest(HttpServletRequest request) {
 		_portletRequestDispatcherRequest = request;
-	}
-
-	public void setPortletSessionState(
-		SessionInvalidateState portletSessionState) {
-
-		_sessionInvalidateState = portletSessionState;
 	}
 
 	public void setWindowState(WindowState windowState) {
@@ -988,7 +984,8 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 	private long _remoteUserId;
 	private HttpServletRequest _request;
 	private PortletSessionImpl _session;
-	private SessionInvalidateState _sessionInvalidateState;
+	private final SessionInvalidateState _sessionInvalidateState =
+		new SessionInvalidateState();
 	private boolean _strutsPortlet;
 	private boolean _triggeredByActionURL;
 	private Principal _userPrincipal;
