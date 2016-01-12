@@ -47,7 +47,6 @@ import freemarker.ext.servlet.HttpRequestHashModel;
 import freemarker.ext.servlet.ServletContextHashModel;
 
 import freemarker.template.Configuration;
-import freemarker.template.ObjectWrapper;
 import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
@@ -104,7 +103,7 @@ public class FreeMarkerManager extends BaseSingleTemplateManager {
 		Class<?> variableClass) {
 
 		try {
-			BeansWrapper beansWrapper = BeansWrapper.getDefaultInstance();
+			BeansWrapper beansWrapper = FreemarkerWrapperUtil.getBeansWrapper();
 
 			TemplateHashModel templateHashModel =
 				beansWrapper.getStaticModels();
@@ -147,7 +146,7 @@ public class FreeMarkerManager extends BaseSingleTemplateManager {
 		contextObjects.put(
 			applicationName,
 			new HttpRequestHashModel(
-				request, response, ObjectWrapper.DEFAULT_WRAPPER));
+				request, response, FreemarkerWrapperUtil.getObjectWrapper()));
 	}
 
 	@Override
@@ -207,7 +206,7 @@ public class FreeMarkerManager extends BaseSingleTemplateManager {
 			return;
 		}
 
-		_configuration = new Configuration();
+		_configuration = new Configuration(Configuration.VERSION_2_3_23);
 
 		try {
 			Field field = ReflectionUtil.getDeclaredField(
@@ -312,7 +311,7 @@ public class FreeMarkerManager extends BaseSingleTemplateManager {
 		GenericServlet genericServlet = new JSPSupportServlet(servletContext);
 
 		return new ServletContextHashModel(
-			genericServlet, ObjectWrapper.DEFAULT_WRAPPER);
+			genericServlet, FreemarkerWrapperUtil.getObjectWrapper());
 	}
 
 	protected ServletContext getServletContextWrapper(
@@ -471,6 +470,9 @@ public class FreeMarkerManager extends BaseSingleTemplateManager {
 		public TaglibFactoryWrapper(ServletContext servletContext) {
 			_taglibFactory = new TaglibFactory(
 				getServletContextWrapper(servletContext));
+
+			_taglibFactory.setObjectWrapper(
+				FreemarkerWrapperUtil.getBeansWrapper());
 		}
 
 		@Override

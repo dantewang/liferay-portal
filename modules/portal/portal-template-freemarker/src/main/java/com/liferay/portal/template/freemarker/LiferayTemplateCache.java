@@ -25,6 +25,7 @@ import com.liferay.portal.template.freemarker.configuration.FreeMarkerEngineConf
 
 import freemarker.cache.TemplateCache;
 import freemarker.cache.TemplateCache.MaybeMissingTemplate;
+import freemarker.cache.TemplateLoader;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -48,6 +49,8 @@ public class LiferayTemplateCache extends TemplateCache {
 		Configuration configuration,
 		FreeMarkerEngineConfiguration freemarkerEngineConfiguration,
 		TemplateResourceLoader templateResourceLoader) throws Exception {
+
+		super((TemplateLoader)null, configuration);
 
 		_configuration = configuration;
 		_freemarkerEngineConfiguration = freemarkerEngineConfiguration;
@@ -110,16 +113,6 @@ public class LiferayTemplateCache extends TemplateCache {
 		}
 	}
 
-	@Override
-	public Template getTemplate(
-			String templateId, Locale locale, String encoding, boolean parse)
-		throws IOException {
-
-		return
-			getTemplate(
-				templateId, locale, null, encoding, parse).getTemplate();
-	}
-
 	private Template doGetTemplate(
 			String templateId, Locale locale, String encoding)
 		throws IOException {
@@ -167,7 +160,7 @@ public class LiferayTemplateCache extends TemplateCache {
 
 		Template template = new Template(
 			templateResource.getTemplateId(), templateResource.getReader(),
-			_configuration, TemplateConstants.DEFAUT_ENCODING);
+			_configuration);
 
 		if (_freemarkerEngineConfiguration.resourceModificationCheck()
 				!= 0) {
