@@ -60,152 +60,12 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 
 	/**
 	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
-	String, String, long, float[])}
-	*/
-	@java.lang.Deprecated
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, float data)
-		throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
-	String, String, long, float[])}
-	*/
-	@java.lang.Deprecated
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, float[] data)
-		throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
-	String, String, long, boolean[])}
-	*/
-	@java.lang.Deprecated
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, boolean[] data)
-		throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
-	String, String, long, double[])}
-	*/
-	@java.lang.Deprecated
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, double[] data)
-		throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
 	String, String, long, int[])}
 	*/
 	@java.lang.Deprecated
 	public com.liferay.portlet.expando.model.ExpandoValue addValue(
 		java.lang.String className, java.lang.String tableName,
 		java.lang.String columnName, long classPK, int data)
-		throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
-	String, String, long, short[])}
-	*/
-	@java.lang.Deprecated
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, short data)
-		throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
-	String, String, long, long[])}
-	*/
-	@java.lang.Deprecated
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, long data)
-		throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
-	String, String, long, Date[])}
-	*/
-	@java.lang.Deprecated
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, java.util.Date[] data)
-		throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
-	String, String, long, boolean[])}
-	*/
-	@java.lang.Deprecated
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, boolean data)
-		throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
-	String, String, long, long[])}
-	*/
-	@java.lang.Deprecated
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, long[] data)
-		throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
-	String, String, long, int[])}
-	*/
-	@java.lang.Deprecated
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, int[] data)
-		throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
-	String, String, long, String[])}
-	*/
-	@java.lang.Deprecated
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, java.lang.String data)
-		throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
-	String, String, long, short[])}
-	*/
-	@java.lang.Deprecated
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, short[] data)
-		throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
-	String, String, long, double[])}
-	*/
-	@java.lang.Deprecated
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, double data)
-		throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
-	String, String, long, String[])}
-	*/
-	@java.lang.Deprecated
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, java.lang.String[] data)
 		throws PortalException;
 
 	/**
@@ -220,6 +80,106 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 
 	/**
 	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
+	String, String, long, float[])}
+	*/
+	@java.lang.Deprecated
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, float data)
+		throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
+	String, String, long, short[])}
+	*/
+	@java.lang.Deprecated
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, short data)
+		throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
+	String, String, long, double[])}
+	*/
+	@java.lang.Deprecated
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, double data)
+		throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
+	String, String, long, boolean[])}
+	*/
+	@java.lang.Deprecated
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, boolean[] data)
+		throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
+	String, String, long, String[])}
+	*/
+	@java.lang.Deprecated
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, java.lang.String[] data)
+		throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
+	String, String, long, long[])}
+	*/
+	@java.lang.Deprecated
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, long[] data)
+		throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
+	String, String, long, String[])}
+	*/
+	@java.lang.Deprecated
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, java.lang.String data)
+		throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
+	String, String, long, float[])}
+	*/
+	@java.lang.Deprecated
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, float[] data)
+		throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
+	String, String, long, long[])}
+	*/
+	@java.lang.Deprecated
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, long data)
+		throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
+	String, String, long, double[])}
+	*/
+	@java.lang.Deprecated
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, double[] data)
+		throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
 	String, String, long, Date[])}
 	*/
 	@java.lang.Deprecated
@@ -228,9 +188,69 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 		java.lang.String columnName, long classPK, java.util.Date data)
 		throws PortalException;
 
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
+	String, String, long, short[])}
+	*/
+	@java.lang.Deprecated
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, short[] data)
+		throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
+	String, String, long, Date[])}
+	*/
+	@java.lang.Deprecated
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, java.util.Date[] data)
+		throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
+	String, String, long, int[])}
+	*/
+	@java.lang.Deprecated
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, int[] data)
+		throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #addValue(long, String,
+	String, String, long, boolean[])}
+	*/
+	@java.lang.Deprecated
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, boolean data)
+		throws PortalException;
+
 	public com.liferay.portlet.expando.model.ExpandoValue addValue(
 		long classNameId, long tableId, long columnId, long classPK,
 		java.lang.String data) throws PortalException;
+
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		long companyId, java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, boolean[] data)
+		throws PortalException;
+
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		long companyId, java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, java.lang.String[] data)
+		throws PortalException;
+
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		long companyId, java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, long[] data)
+		throws PortalException;
+
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		long companyId, java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, java.util.Date data)
+		throws PortalException;
 
 	public com.liferay.portlet.expando.model.ExpandoValue addValue(
 		long companyId, java.lang.String className, java.lang.String tableName,
@@ -239,12 +259,7 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 
 	public com.liferay.portlet.expando.model.ExpandoValue addValue(
 		long companyId, java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, int data)
-		throws PortalException;
-
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		long companyId, java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, java.util.Date[] data)
+		java.lang.String columnName, long classPK, boolean data)
 		throws PortalException;
 
 	public com.liferay.portlet.expando.model.ExpandoValue addValue(
@@ -259,51 +274,6 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 
 	public com.liferay.portlet.expando.model.ExpandoValue addValue(
 		long companyId, java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, double[] data)
-		throws PortalException;
-
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		long companyId, java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, long[] data)
-		throws PortalException;
-
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		long companyId, java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, float[] data)
-		throws PortalException;
-
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		long companyId, java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, boolean data)
-		throws PortalException;
-
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		long companyId, java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, boolean[] data)
-		throws PortalException;
-
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		long companyId, java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, java.util.Date data)
-		throws PortalException;
-
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		long companyId, java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, java.lang.String data)
-		throws PortalException;
-
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		long companyId, java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, long data)
-		throws PortalException;
-
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		long companyId, java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, java.lang.Object data)
-		throws PortalException;
-
-	public com.liferay.portlet.expando.model.ExpandoValue addValue(
-		long companyId, java.lang.String className, java.lang.String tableName,
 		java.lang.String columnName, long classPK, int[] data)
 		throws PortalException;
 
@@ -314,17 +284,47 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 
 	public com.liferay.portlet.expando.model.ExpandoValue addValue(
 		long companyId, java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, float data)
+		java.lang.String columnName, long classPK, int data)
 		throws PortalException;
 
 	public com.liferay.portlet.expando.model.ExpandoValue addValue(
 		long companyId, java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK, java.lang.String[] data)
+		java.lang.String columnName, long classPK, java.lang.String data)
+		throws PortalException;
+
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		long companyId, java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, double[] data)
+		throws PortalException;
+
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		long companyId, java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, java.util.Date[] data)
+		throws PortalException;
+
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		long companyId, java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, long data)
+		throws PortalException;
+
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		long companyId, java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, float[] data)
 		throws PortalException;
 
 	public com.liferay.portlet.expando.model.ExpandoValue addValue(
 		long companyId, java.lang.String className, java.lang.String tableName,
 		java.lang.String columnName, long classPK, short[] data)
+		throws PortalException;
+
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		long companyId, java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, float data)
+		throws PortalException;
+
+	public com.liferay.portlet.expando.model.ExpandoValue addValue(
+		long companyId, java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK, java.lang.Object data)
 		throws PortalException;
 
 	public com.liferay.portlet.expando.model.ExpandoValue addValue(
@@ -561,13 +561,23 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 
 	/**
 	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
-	String, String, long, float[])}
+	String, String, long, Date[])}
 	*/
 	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public float[] getData(java.lang.String className,
+	public java.util.Date[] getData(java.lang.String className,
 		java.lang.String tableName, java.lang.String columnName, long classPK,
-		float[] defaultData) throws PortalException;
+		java.util.Date[] defaultData) throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
+	String, String, long, short[])}
+	*/
+	@java.lang.Deprecated
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public short[] getData(java.lang.String className,
+		java.lang.String tableName, java.lang.String columnName, long classPK,
+		short[] defaultData) throws PortalException;
 
 	/**
 	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
@@ -591,43 +601,13 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 
 	/**
 	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
-	String, String, long, short[])}
+	String, String, long, String[])}
 	*/
 	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public short[] getData(java.lang.String className,
+	public java.lang.String[] getData(java.lang.String className,
 		java.lang.String tableName, java.lang.String columnName, long classPK,
-		short[] defaultData) throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
-	String, String, long, double[])}
-	*/
-	@java.lang.Deprecated
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public double[] getData(java.lang.String className,
-		java.lang.String tableName, java.lang.String columnName, long classPK,
-		double[] defaultData) throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
-	String, String, long, boolean[])}
-	*/
-	@java.lang.Deprecated
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public boolean getData(java.lang.String className,
-		java.lang.String tableName, java.lang.String columnName, long classPK,
-		boolean defaultData) throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
-	String, String, long, float[])}
-	*/
-	@java.lang.Deprecated
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public float getData(java.lang.String className,
-		java.lang.String tableName, java.lang.String columnName, long classPK,
-		float defaultData) throws PortalException;
+		java.lang.String[] defaultData) throws PortalException;
 
 	/**
 	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
@@ -641,23 +621,13 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 
 	/**
 	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
-	String, String, long, String[])}
+	String, String, long, boolean[])}
 	*/
 	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.lang.String[] getData(java.lang.String className,
+	public boolean getData(java.lang.String className,
 		java.lang.String tableName, java.lang.String columnName, long classPK,
-		java.lang.String[] defaultData) throws PortalException;
-
-	/**
-	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
-	String, String, long, double[])}
-	*/
-	@java.lang.Deprecated
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public double getData(java.lang.String className,
-		java.lang.String tableName, java.lang.String columnName, long classPK,
-		double defaultData) throws PortalException;
+		boolean defaultData) throws PortalException;
 
 	/**
 	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
@@ -671,13 +641,23 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 
 	/**
 	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
-	String, String, long, short[])}
+	String, String, long, float[])}
 	*/
 	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public short getData(java.lang.String className,
+	public float[] getData(java.lang.String className,
 		java.lang.String tableName, java.lang.String columnName, long classPK,
-		short defaultData) throws PortalException;
+		float[] defaultData) throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
+	String, String, long, double[])}
+	*/
+	@java.lang.Deprecated
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public double getData(java.lang.String className,
+		java.lang.String tableName, java.lang.String columnName, long classPK,
+		double defaultData) throws PortalException;
 
 	/**
 	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
@@ -685,9 +665,9 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 	*/
 	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.Date[] getData(java.lang.String className,
+	public java.util.Date getData(java.lang.String className,
 		java.lang.String tableName, java.lang.String columnName, long classPK,
-		java.util.Date[] defaultData) throws PortalException;
+		java.util.Date defaultData) throws PortalException;
 
 	/**
 	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
@@ -701,13 +681,33 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 
 	/**
 	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
-	String, String, long, Date[])}
+	String, String, long, short[])}
 	*/
 	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.Date getData(java.lang.String className,
+	public short getData(java.lang.String className,
 		java.lang.String tableName, java.lang.String columnName, long classPK,
-		java.util.Date defaultData) throws PortalException;
+		short defaultData) throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
+	String, String, long, double[])}
+	*/
+	@java.lang.Deprecated
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public double[] getData(java.lang.String className,
+		java.lang.String tableName, java.lang.String columnName, long classPK,
+		double[] defaultData) throws PortalException;
+
+	/**
+	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
+	String, String, long, float[])}
+	*/
+	@java.lang.Deprecated
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public float getData(java.lang.String className,
+		java.lang.String tableName, java.lang.String columnName, long classPK,
+		float defaultData) throws PortalException;
 
 	/**
 	* @deprecated As of 6.1.0, replaced by {@link #getData(long, String,
@@ -725,30 +725,19 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 		java.lang.String columnName, long classPK) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.lang.String getData(long companyId, java.lang.String className,
+	public boolean[] getData(long companyId, java.lang.String className,
 		java.lang.String tableName, java.lang.String columnName, long classPK,
-		java.lang.String defaultData) throws PortalException;
+		boolean[] defaultData) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public boolean getData(long companyId, java.lang.String className,
+	public short[] getData(long companyId, java.lang.String className,
 		java.lang.String tableName, java.lang.String columnName, long classPK,
-		boolean defaultData) throws PortalException;
+		short[] defaultData) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.Date[] getData(long companyId, java.lang.String className,
+	public long getData(long companyId, java.lang.String className,
 		java.lang.String tableName, java.lang.String columnName, long classPK,
-		java.util.Date[] defaultData) throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public double[] getData(long companyId, java.lang.String className,
-		java.lang.String tableName, java.lang.String columnName, long classPK,
-		double[] defaultData) throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.lang.Number[] getData(long companyId,
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK,
-		java.lang.Number[] defaultData) throws PortalException;
+		long defaultData) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public short getData(long companyId, java.lang.String className,
@@ -756,9 +745,50 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 		short defaultData) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.Number getData(long companyId, java.lang.String className,
+		java.lang.String tableName, java.lang.String columnName, long classPK,
+		java.lang.Number defaultData) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public boolean getData(long companyId, java.lang.String className,
+		java.lang.String tableName, java.lang.String columnName, long classPK,
+		boolean defaultData) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String[] getData(long companyId,
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK,
+		java.lang.String[] defaultData) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public long[] getData(long companyId, java.lang.String className,
+		java.lang.String tableName, java.lang.String columnName, long classPK,
+		long[] defaultData) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.Date getData(long companyId, java.lang.String className,
+		java.lang.String tableName, java.lang.String columnName, long classPK,
+		java.util.Date defaultData) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public double getData(long companyId, java.lang.String className,
+		java.lang.String tableName, java.lang.String columnName, long classPK,
+		double defaultData) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public double[] getData(long companyId, java.lang.String className,
+		java.lang.String tableName, java.lang.String columnName, long classPK,
+		double[] defaultData) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public float getData(long companyId, java.lang.String className,
 		java.lang.String tableName, java.lang.String columnName, long classPK,
 		float defaultData) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getData(long companyId, java.lang.String className,
+		java.lang.String tableName, java.lang.String columnName, long classPK,
+		int defaultData) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public float[] getData(long companyId, java.lang.String className,
@@ -772,35 +802,9 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 		java.util.Map<?, ?> defaultData) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.lang.String[] getData(long companyId,
-		java.lang.String className, java.lang.String tableName,
-		java.lang.String columnName, long classPK,
-		java.lang.String[] defaultData) throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public short[] getData(long companyId, java.lang.String className,
+	public java.lang.String getData(long companyId, java.lang.String className,
 		java.lang.String tableName, java.lang.String columnName, long classPK,
-		short[] defaultData) throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public long[] getData(long companyId, java.lang.String className,
-		java.lang.String tableName, java.lang.String columnName, long classPK,
-		long[] defaultData) throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public boolean[] getData(long companyId, java.lang.String className,
-		java.lang.String tableName, java.lang.String columnName, long classPK,
-		boolean[] defaultData) throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public double getData(long companyId, java.lang.String className,
-		java.lang.String tableName, java.lang.String columnName, long classPK,
-		double defaultData) throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public long getData(long companyId, java.lang.String className,
-		java.lang.String tableName, java.lang.String columnName, long classPK,
-		long defaultData) throws PortalException;
+		java.lang.String defaultData) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int[] getData(long companyId, java.lang.String className,
@@ -808,19 +812,15 @@ public interface ExpandoValueLocalService extends BaseLocalService,
 		int[] defaultData) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.Date getData(long companyId, java.lang.String className,
+	public java.util.Date[] getData(long companyId, java.lang.String className,
 		java.lang.String tableName, java.lang.String columnName, long classPK,
-		java.util.Date defaultData) throws PortalException;
+		java.util.Date[] defaultData) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int getData(long companyId, java.lang.String className,
-		java.lang.String tableName, java.lang.String columnName, long classPK,
-		int defaultData) throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.lang.Number getData(long companyId, java.lang.String className,
-		java.lang.String tableName, java.lang.String columnName, long classPK,
-		java.lang.Number defaultData) throws PortalException;
+	public java.lang.Number[] getData(long companyId,
+		java.lang.String className, java.lang.String tableName,
+		java.lang.String columnName, long classPK,
+		java.lang.Number[] defaultData) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.Map<java.lang.String, java.io.Serializable> getData(
