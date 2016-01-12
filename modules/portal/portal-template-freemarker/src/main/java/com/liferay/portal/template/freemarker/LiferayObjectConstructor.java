@@ -50,7 +50,7 @@ public class LiferayObjectConstructor implements TemplateMethodModelEx {
 			throw new TemplateModelException(e.getMessage());
 		}
 
-		BeansWrapper beansWrapper = BeansWrapper.getDefaultInstance();
+		BeansWrapper beansWrapper = FreemarkerWrapperUtil.getBeansWrapper();
 
 		Object object = beansWrapper.newInstance(
 			clazz, arguments.subList(1, arguments.size()));

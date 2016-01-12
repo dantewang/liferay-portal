@@ -14,29 +14,30 @@
 
 package com.liferay.portal.template.freemarker;
 
-import com.liferay.portal.kernel.templateparser.TemplateNode;
+import freemarker.ext.beans.BeansWrapper;
+import freemarker.ext.beans.BeansWrapperBuilder;
 
 import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
+import freemarker.template.DefaultObjectWrapperBuilder;
+import freemarker.template.ObjectWrapper;
 
 /**
- * @author Mika Koivisto
+ * @author Dante Wang
  */
-public class LiferayObjectWrapper extends DefaultObjectWrapper {
+public class FreemarkerWrapperUtil {
 
-	public LiferayObjectWrapper() {
-		super(Configuration.VERSION_2_3_23);
+	public static BeansWrapper getBeansWrapper() {
+		BeansWrapperBuilder beansWrapperBuilder = new BeansWrapperBuilder(
+			Configuration.VERSION_2_3_23);
+
+		return beansWrapperBuilder.build();
 	}
 
-	@Override
-	public TemplateModel wrap(Object object) throws TemplateModelException {
-		if (object instanceof TemplateNode) {
-			return new LiferayTemplateModel((TemplateNode)object, this);
-		}
+	public static ObjectWrapper getObjectWrapper() {
+		DefaultObjectWrapperBuilder defaultObjectWrapperBuilder =
+			new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_23);
 
-		return super.wrap(object);
+		return defaultObjectWrapperBuilder.build();
 	}
 
 }

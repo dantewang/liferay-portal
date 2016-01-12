@@ -27,8 +27,6 @@ import com.liferay.portal.template.TemplatePortletPreferences;
 import com.liferay.portal.template.freemarker.configuration.FreeMarkerEngineConfiguration;
 import com.liferay.portal.theme.ThemeDisplay;
 
-import freemarker.ext.beans.BeansWrapper;
-
 import java.util.Map;
 import java.util.Set;
 
@@ -125,7 +123,8 @@ public class FreeMarkerTemplateContextHelper extends TemplateContextHelper {
 		// Enum util
 
 		helperUtilities.put(
-			"enumUtil", BeansWrapper.getDefaultInstance().getEnumModels());
+			"enumUtil",
+			FreemarkerWrapperUtil.getBeansWrapper().getEnumModels());
 
 		// Object util
 
@@ -139,7 +138,8 @@ public class FreeMarkerTemplateContextHelper extends TemplateContextHelper {
 		// Static class util
 
 		helperUtilities.put(
-			"staticUtil", BeansWrapper.getDefaultInstance().getStaticModels());
+			"staticUtil",
+			FreemarkerWrapperUtil.getBeansWrapper().getStaticModels());
 	}
 
 	private volatile FreeMarkerEngineConfiguration
