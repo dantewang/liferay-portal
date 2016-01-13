@@ -290,11 +290,7 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 					"Enabled()";
 
 			if (!codeBlock.contains(s)) {
-				int lineCount = StringUtil.count(
-					content.substring(0, matcher.start(1)),
-					StringPool.NEW_LINE);
-
-				lineCount += 1;
+				int lineCount = getLineCount(content, matcher.start(1));
 
 				processErrorMessage(
 					fileName, "Use " + s + ": " + fileName + " " + lineCount);
@@ -684,9 +680,7 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 				match, StringPool.OPEN_PARENTHESIS);
 
 			if (closeParenthesesCount == openParenthesesCount) {
-				String beforeMatch = newContent.substring(0, matcher.start());
-
-				int lineCount = StringUtil.count(beforeMatch, "\n") + 1;
+				int lineCount = getLineCount(newContent, matcher.start());
 
 				processErrorMessage(
 					fileName, "line break: " + fileName + " " + lineCount);
@@ -984,10 +978,7 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 		if (pos != -1) {
 			String javaClassContent = newContent.substring(pos + 1);
 
-			String beforeJavaClass = newContent.substring(0, pos + 1);
-
-			int javaClassLineCount =
-				StringUtil.count(beforeJavaClass, "\n") + 1;
+			int javaClassLineCount = getLineCount(newContent, pos + 1);
 
 			newContent = formatJavaTerms(
 				className, packagePath, file, fileName, absolutePath,
@@ -998,6 +989,16 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 		}
 
 		newContent = formatJava(fileName, absolutePath, newContent);
+
+		if (_checkTabs &&
+			!isExcludedFile(_checkTabsExclusionFiles, absolutePath)) {
+
+			JavaSourceTabCalculator javaSourceTabCalculator =
+				new JavaSourceTabCalculator();
+
+			javaSourceTabCalculator.calculateTabs(
+				fileName, newContent, (JavaSourceProcessor)this);
+		}
 
 		return StringUtil.replace(newContent, "\n\n\n", "\n\n");
 	}
@@ -1026,6 +1027,9 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 			getProperty("allow.use.service.util.in.service.impl"));
 		_checkJavaFieldTypesExclusionFiles = getPropertyList(
 			"check.java.field.types.excludes.files");
+		_checkTabs = GetterUtil.getBoolean(
+			System.getProperty("source.formatter.check.tabs"));
+		_checkTabsExclusionFiles = getPropertyList("check.tabs.excludes.files");
 		_diamondOperatorExclusionFiles = getPropertyList(
 			"diamond.operator.excludes.files");
 		_diamondOperatorExclusionPaths = getPropertyList(
@@ -2455,7 +2459,7 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 
 			StringBundler sb = new StringBundler(5);
 
-			sb.append("private ");
+			sb.append("private volatile ");
 			sb.append(typeName);
 			sb.append("\\s+");
 			sb.append(variableName);
@@ -2469,7 +2473,7 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 				String match = privateVarMatcher.group();
 
 				String replacement = StringUtil.replace(
-					match, "private ", "private volatile ");
+					match, "private volatile ", "private ");
 
 				return StringUtil.replace(content, match, replacement);
 			}
@@ -3744,6 +3748,8 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 		"\n(\t+)catch \\((.+Exception) (.+)\\) \\{\n");
 	private List<String> _checkJavaFieldTypesExclusionFiles;
 	private boolean _checkModulesServiceUtil;
+	private boolean _checkTabs;
+	private List<String> _checkTabsExclusionFiles;
 	private boolean _checkUnprocessedExceptions;
 	private final Pattern _classPattern = Pattern.compile(
 		"(\n(\t*)(private|protected|public) ((abstract|static) )*" +

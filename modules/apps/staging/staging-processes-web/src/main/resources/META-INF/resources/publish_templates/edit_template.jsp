@@ -108,6 +108,10 @@ String openNodes = SessionTreeJSClicks.getOpenNodes(request, treeId + "SelectedN
 
 if (openNodes == null) {
 	selectedLayoutIds = ExportImportHelperUtil.getAllLayoutIds(stagingGroupId, privateLayout);
+
+	for (long selectedLayoutId : selectedLayoutIds) {
+		SessionTreeJSClicks.openLayoutNodes(request, treeId + "SelectedNode", privateLayout, selectedLayoutId, true);
+	}
 }
 else {
 	selectedLayoutIds = GetterUtil.getLongValues(StringUtil.split(openNodes, ','));
@@ -286,12 +290,6 @@ renderResponse.setTitle((exportImportConfiguration == null) ? LanguageUtil.get(r
 			userPreferencesNode: '#<%= PortletDataHandlerKeys.PORTLET_USER_PREFERENCES_ALL %>'
 		}
 	);
-
-	var clickHandler = function(event) {
-		var dataValue = event.target.ancestor('li').attr('data-value');
-
-		processDataValue(dataValue);
-	};
 
 	var processDataValue = function(dataValue) {
 		var customConfiguration = A.one('#<portlet:namespace />customConfiguration');

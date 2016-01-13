@@ -60,7 +60,7 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true,
 	property = {
 		"javax.portlet.name=" + WikiPortletKeys.WIKI,
-		"mvc.render.command.name=/wiki/view_all_pages"
+		"mvc.render.command.name=/wiki/view_pages"
 	},
 	service = {
 		WikiPortletToolbarContributor.class, PortletToolbarContributor.class
@@ -229,7 +229,7 @@ public class WikiPortletToolbarContributor
 	private static final Log _log = LogFactoryUtil.getLog(
 		WikiPortletToolbarContributor.class);
 
-	private volatile BaseModelPermissionChecker _baseModelPermissionChecker;
-	private volatile WikiNodeService _wikiNodeService;
+	private BaseModelPermissionChecker _baseModelPermissionChecker;
+	private WikiNodeService _wikiNodeService;
 
 }
