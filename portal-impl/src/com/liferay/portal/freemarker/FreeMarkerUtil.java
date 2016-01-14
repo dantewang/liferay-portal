@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import freemarker.cache.ClassTemplateLoader;
 
 import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.DefaultObjectWrapperBuilder;
 import freemarker.template.Template;
 
