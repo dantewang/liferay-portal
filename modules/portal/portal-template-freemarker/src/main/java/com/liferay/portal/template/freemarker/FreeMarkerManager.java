@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateManager;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.template.TemplateResourceLoader;
+import com.liferay.portal.kernel.util.ClassLoaderUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -272,6 +273,26 @@ public class FreeMarkerManager extends BaseSingleTemplateManager {
 		_configuration.setLocalizedLookup(
 			_freemarkerEngineConfiguration.localizedLookup());
 		_configuration.setNewBuiltinClassResolver(_templateClassResolver);
+
+		LiferayObjectWrapper liferayObjectWrapper = new LiferayObjectWrapper();
+
+		try {
+			Field field = ReflectionUtil.getDeclaredField(
+				BeansWrapper.class, "modelCache");
+
+			LiferayBeansModelCache beansModelCache = new LiferayBeansModelCache(
+				liferayObjectWrapper,
+				templateContextHelper.getHelperUtilities(
+					ClassLoaderUtil.getContextClassLoader(), false));
+
+			field.set(liferayObjectWrapper, beansModelCache);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new TemplateException(
+				"Unable to Initialize FreeMarker manager");
+		}
+
 		_configuration.setObjectWrapper(new LiferayObjectWrapper());
 
 		try {
