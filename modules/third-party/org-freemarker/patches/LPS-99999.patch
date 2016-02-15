@@ -1,0 +1,13 @@
+diff --git a/src/main/java/freemarker/ext/beans/ClassIntrospector.java b/src/main/java/freemarker/ext/beans/ClassIntrospector.java
+index 55e0635..323611f 100644
+--- a/freemarker/ext/beans/ClassIntrospector.java
++++ b/freemarker/ext/beans/ClassIntrospector.java
+@@ -667,7 +667,7 @@ class ClassIntrospector {
+                             "\". Assuming it was a class-reloading. Clearing class introspection " +
+                             "caches to release old data.");
+         }
+-        forcedClearCache();
++        //forcedClearCache();
+     }
+ 
+     // -----------------------------------------------------------------------------------------------------------------
