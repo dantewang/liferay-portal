@@ -71,8 +71,8 @@ public class AlloyTaglibDefaultsPlugin
 		super.addPortalToolDependencies(project);
 
 		GradleUtil.addDependency(
-			project, getPortalToolConfigurationName(), "org.freemarker",
-			"freemarker", "2.3.23");
+			project, getPortalToolConfigurationName(), "com.liferay",
+			"freemarker", "2.3.23.LIFERAY-PATCHED-1");
 	}
 
 	@Override
