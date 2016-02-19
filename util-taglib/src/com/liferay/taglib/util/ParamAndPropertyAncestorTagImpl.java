@@ -152,7 +152,6 @@ public class ParamAndPropertyAncestorTagImpl
 		super.release();
 
 		request = null;
-		response = null;
 		servletContext = null;
 
 		_allowEmptyParam = false;
@@ -176,7 +175,6 @@ public class ParamAndPropertyAncestorTagImpl
 		super.setPageContext(pageContext);
 
 		request = (HttpServletRequest)pageContext.getRequest();
-		response = (HttpServletResponse)pageContext.getResponse();
 
 		servletContext = (ServletContext)request.getAttribute(WebKeys.CTX);
 
@@ -190,7 +188,6 @@ public class ParamAndPropertyAncestorTagImpl
 	}
 
 	protected HttpServletRequest request;
-	protected HttpServletResponse response;
 	protected ServletContext servletContext;
 
 	private boolean _allowEmptyParam;
