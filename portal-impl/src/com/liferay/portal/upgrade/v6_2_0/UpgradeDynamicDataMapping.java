@@ -30,7 +30,6 @@ import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.tools.StopWatchLoggingHelper;
 import com.liferay.portal.upgrade.v6_2_0.util.DDMTemplateTable;
 import com.liferay.util.xml.XMLUtil;
-import org.apache.commons.lang.time.StopWatch;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,6 +37,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.List;
+
+import org.apache.commons.lang.time.StopWatch;
 
 /**
  * @author Juan Fernández

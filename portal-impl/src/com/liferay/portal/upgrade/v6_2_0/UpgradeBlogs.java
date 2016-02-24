@@ -25,9 +25,10 @@ import com.liferay.portal.kernel.util.RSSUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.tools.StopWatchLoggingHelper;
 import com.liferay.portal.upgrade.v6_2_0.util.BlogsEntryTable;
-import org.apache.commons.lang.time.StopWatch;
 
 import javax.portlet.PortletPreferences;
+
+import org.apache.commons.lang.time.StopWatch;
 
 /**
  * @author Sergio González

@@ -50,7 +50,6 @@ import com.liferay.portal.service.impl.GroupLocalServiceImpl;
 import com.liferay.portal.tools.StopWatchLoggingHelper;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.RobotsUtil;
-import org.apache.commons.lang.time.StopWatch;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -58,6 +57,8 @@ import java.sql.ResultSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.commons.lang.time.StopWatch;
 
 /**
  * @author Brian Wing Shun Chan

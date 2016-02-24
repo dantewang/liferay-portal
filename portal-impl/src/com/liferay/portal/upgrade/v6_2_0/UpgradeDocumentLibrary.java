@@ -30,7 +30,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.tools.StopWatchLoggingHelper;
 import com.liferay.portal.upgrade.v6_2_0.util.DLFileEntryTypeTable;
-import org.apache.commons.lang.time.StopWatch;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,6 +39,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import org.apache.commons.lang.time.StopWatch;
 
 /**
  * @author Dennis Ju

@@ -26,7 +26,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.tools.StopWatchLoggingHelper;
 import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
-import org.apache.commons.lang.time.StopWatch;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,6 +34,8 @@ import java.sql.Timestamp;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.commons.lang.time.StopWatch;
 
 /**
  * @author Sergio Sanchez

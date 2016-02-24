@@ -24,9 +24,10 @@ import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.tools.StopWatchLoggingHelper;
 import com.liferay.portal.util.PortalInstances;
-import org.apache.commons.lang.time.StopWatch;
 
 import java.util.List;
+
+import org.apache.commons.lang.time.StopWatch;
 
 /**
  * @author Brian Wing Shun Chan

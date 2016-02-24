@@ -26,9 +26,10 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.tools.StopWatchLoggingHelper;
-import org.apache.commons.lang.time.StopWatch;
 
 import java.util.List;
+
+import org.apache.commons.lang.time.StopWatch;
 
 /**
  * @author Brian Wing Shun Chan

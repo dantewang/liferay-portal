@@ -28,10 +28,11 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.tools.StopWatchLoggingHelper;
-import org.apache.commons.lang.time.StopWatch;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang.time.StopWatch;
 
 /**
  * @author Brian Wing Shun Chan
