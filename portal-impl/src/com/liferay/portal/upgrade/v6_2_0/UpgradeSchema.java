@@ -29,16 +29,20 @@ public class UpgradeSchema extends UpgradeProcess {
 	@Override
 	protected void doUpgrade() throws Exception {
 		StopWatch stopWatch = StopWatchLoggingHelper.startLogging(
-			_log, "UpgradeSchema.runSQL#6.1.1-6.2.0");
+			_log, "UpgradeSchema.runSQLTemplate");
+
 		runSQLTemplate("update-6.1.1-6.2.0.sql", false);
-		stopWatch = StopWatchLoggingHelper.startLogging(
-			_log, "UpgradeSchema.runSQL#6.1.1-6.2.0");
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "UpgradeSchema.runSQLTemplate");
 
 		stopWatch = StopWatchLoggingHelper.startLogging(
-			_log, "UpgradeSchema.upgrade#UpgradeMVCCVersion");
+			_log, "UpgradeSchema.upgrade(UpgradeMVCCVersion.class)");
+
 		upgrade(UpgradeMVCCVersion.class);
-		stopWatch = StopWatchLoggingHelper.startLogging(
-			_log, "UpgradeSchema.upgrade#UpgradeMVCCVersion");
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "UpgradeSchema.upgrade(UpgradeMVCCVersion.class)");
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(UpgradeSchema.class);
