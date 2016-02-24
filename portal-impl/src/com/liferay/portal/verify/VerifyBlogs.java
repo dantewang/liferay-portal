@@ -19,6 +19,8 @@ import com.liferay.blogs.kernel.service.BlogsEntryLocalServiceUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.tools.StopWatchLoggingHelper;
+import org.apache.commons.lang.time.StopWatch;
 
 import java.util.List;
 
@@ -29,8 +31,21 @@ public class VerifyBlogs extends VerifyProcess {
 
 	@Override
 	protected void doVerify() throws Exception {
+		StopWatch stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyBlogs.updateEntryAssets");
+
 		updateEntryAssets();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyBlogs.updateEntryAssets");
+
+		stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyBlogs.verifyStatus");
+
 		verifyStatus();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyBlogs.verifyStatus");
 	}
 
 	protected void updateEntryAssets() throws Exception {

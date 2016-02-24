@@ -22,7 +22,9 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.tools.StopWatchLoggingHelper;
 import com.liferay.portal.util.PortalInstances;
+import org.apache.commons.lang.time.StopWatch;
 
 import java.util.List;
 
@@ -34,11 +36,30 @@ public class VerifyOrganization extends VerifyProcess {
 
 	@Override
 	protected void doVerify() throws Exception {
+		StopWatch stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyOrganization.rebuildTree");
+
 		rebuildTree();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyOrganization.rebuildTree");
+
+		stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyOrganization.updateOrganizationAssets");
 
 		updateOrganizationAssets();
 
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyOrganization.updateOrganizationAssets");
+
+		stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyOrganization.updateOrganizationAssetEntries");
+
 		updateOrganizationAssetEntries();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log,
+			"VerifyOrganization.updateOrganizationAssetEntries");
 	}
 
 	protected void rebuildTree() throws Exception {

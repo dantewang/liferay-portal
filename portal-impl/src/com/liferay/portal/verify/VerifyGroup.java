@@ -47,8 +47,10 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.service.impl.GroupLocalServiceImpl;
+import com.liferay.portal.tools.StopWatchLoggingHelper;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.RobotsUtil;
+import org.apache.commons.lang.time.StopWatch;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -64,13 +66,61 @@ public class VerifyGroup extends VerifyProcess {
 
 	@Override
 	protected void doVerify() throws Exception {
+		StopWatch stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyGroup.verifyCompanyGroups");
+
 		verifyCompanyGroups();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyGroup.verifyCompanyGroups");
+
+		stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyGroup.verifyNullFriendlyURLGroups");
+
 		verifyNullFriendlyURLGroups();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyGroup.verifyNullFriendlyURLGroups");
+
+		stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyGroup.verifyOrganizationNames");
+
 		verifyOrganizationNames();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyGroup.verifyOrganizationNames");
+
+		stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyGroup.verifyRobots");
+
 		verifyRobots();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyGroup.verifyRobots");
+
+		stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyGroup.verifySites");
+
 		verifySites();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyGroup.verifySites");
+
+		stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyGroup.verifyStagedGroups");
+
 		verifyStagedGroups();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyGroup.verifyStagedGroups");
+
+		stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyGroup.verifyTree");
+
 		verifyTree();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyGroup.verifyTree");
 	}
 
 	protected String getRobots(LayoutSet layoutSet) {

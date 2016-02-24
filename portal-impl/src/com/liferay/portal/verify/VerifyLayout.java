@@ -27,6 +27,8 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.tools.StopWatchLoggingHelper;
+import org.apache.commons.lang.time.StopWatch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +49,45 @@ public class VerifyLayout extends VerifyProcess {
 
 	@Override
 	protected void doVerify() throws Exception {
+		StopWatch stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyLayout.deleteOrphanedLayouts");
+
 		deleteOrphanedLayouts();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyLayout.deleteOrphanedLayouts");
+
+		stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyLayout.verifyFriendlyURL");
+
 		verifyFriendlyURL();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyLayout.verifyFriendlyURL");
+
+		stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyLayout.verifyLayoutIdFriendlyURL");
+
 		verifyLayoutIdFriendlyURL();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyLayout.verifyLayoutIdFriendlyURL");
+
+		stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyLayout.verifyLayoutPrototypeLinkEnabled");
+
 		verifyLayoutPrototypeLinkEnabled();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyLayout.verifyLayoutPrototypeLinkEnabled");
+
+		stopWatch = StopWatchLoggingHelper.startLogging(
+			_log, "VerifyLayout.verifyUuid");
+
 		verifyUuid();
+
+		StopWatchLoggingHelper.endLogging(
+			stopWatch, _log, "VerifyLayout.verifyUuid");
 	}
 
 	protected List<Layout> getInvalidLayoutIdFriendlyURLLayouts()
