@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.verify.model.VerifiableGroupedModel;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -134,7 +133,7 @@ public class VerifyGroupedModel extends VerifyProcess {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
-		try (Connection con = DataAccess.getUpgradeOptimizedConnection()) {
+		try {
 			StringBundler sb = new StringBundler(7);
 
 			sb.append("select ");
@@ -145,7 +144,7 @@ public class VerifyGroupedModel extends VerifyProcess {
 			sb.append(verifiableGroupedModel.getTableName());
 			sb.append(" where groupId is null");
 
-			ps = con.prepareStatement(sb.toString());
+			ps = connection.prepareStatement(sb.toString());
 
 			rs = ps.executeQuery();
 
@@ -175,7 +174,7 @@ public class VerifyGroupedModel extends VerifyProcess {
 				sb.append(" = ");
 				sb.append(primKey);
 
-				runSQL(con, sb.toString());
+				runSQL(connection, sb.toString());
 			}
 		}
 		finally {
