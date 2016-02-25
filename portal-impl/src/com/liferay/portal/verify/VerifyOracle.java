@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringBundler;
 
@@ -36,7 +37,8 @@ public class VerifyOracle extends VerifyProcess {
 	protected void alterVarchar2Columns() throws Exception {
 		int buildNumber = getBuildNumber();
 
-		try (PreparedStatement ps = connection.prepareStatement(
+		try (LoggingTimer loggingTimer = new LoggingTimer();
+			PreparedStatement ps = connection.prepareStatement(
 				"select table_name, column_name, data_length from " +
 					"user_tab_columns where data_type = 'VARCHAR2' and " +
 						"char_used = 'B'");
