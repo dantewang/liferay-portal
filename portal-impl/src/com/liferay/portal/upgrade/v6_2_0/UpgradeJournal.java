@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.tools.StopWatchLoggingHelper;
 import com.liferay.portal.upgrade.AutoBatchPreparedStatementUtil;
 import com.liferay.portal.upgrade.v6_2_0.util.JournalFeedTable;
 
@@ -42,6 +43,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.PortletPreferences;
+
+import org.apache.commons.lang.time.StopWatch;
 
 /**
  * @author Brian Wing Shun Chan
@@ -217,12 +220,37 @@ public class UpgradeJournal extends BaseUpgradePortletPreferences {
 				JournalFeedTable.TABLE_SQL_ADD_INDEXES);
 		}
 
+		StopWatch stopWatch = StopWatchLoggingHelper.startLoging(
+			_log, "UpgradeJournal.updateStructures");
+
 		updateStructures();
+
+		StopWatchLoggingHelper.endLoging(
+			stopWatch, _log, "UpgradeJournal.updateStructures");
+
+		stopWatch = StopWatchLoggingHelper.startLoging(
+			_log, "UpgradeJournal.updateTemplates");
+
 		updateTemplates();
+
+		StopWatchLoggingHelper.endLoging(
+			stopWatch, _log, "UpgradeJournal.updateTemplates");
+
+		stopWatch = StopWatchLoggingHelper.startLoging(
+			_log, "UpgradeJournal.updateAssetEntryClassTypeId");
 
 		updateAssetEntryClassTypeId();
 
+		StopWatchLoggingHelper.endLoging(
+			stopWatch, _log, "UpgradeJournal.updateAssetEntryClassTypeId");
+
+		stopWatch = StopWatchLoggingHelper.startLoging(
+			_log, "UpgradeJournal.super.doUpgrade");
+
 		super.doUpgrade();
+
+		StopWatchLoggingHelper.endLoging(
+			stopWatch, _log, "UpgradeJournal.super.doUpgrade");
 	}
 
 	protected long getCompanyGroupId(long companyId) throws Exception {

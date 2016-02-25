@@ -49,10 +49,13 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.security.permission.PermissionCacheUtil;
 import com.liferay.portal.service.impl.ResourcePermissionLocalServiceImpl;
+import com.liferay.portal.tools.StopWatchLoggingHelper;
 import com.liferay.portal.util.PortalInstances;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang.time.StopWatch;
 
 /**
  * @author Tobias Kaefer
@@ -126,11 +129,38 @@ public class VerifyPermission extends VerifyProcess {
 
 	@Override
 	protected void doVerify() throws Exception {
+		StopWatch stopWatch = StopWatchLoggingHelper.startLoging(
+			_log, "VerifyPermission.deleteDefaultPrivateLayoutPermissions");
+
 		deleteDefaultPrivateLayoutPermissions();
 
+		StopWatchLoggingHelper.endLoging(
+			stopWatch, _log,
+			"VerifyPermission.deleteDefaultPrivateLayoutPermissions");
+
+		stopWatch = StopWatchLoggingHelper.startLoging(
+			_log, "VerifyPermission.checkPermissions");
+
 		checkPermissions();
+
+		StopWatchLoggingHelper.endLoging(
+			stopWatch, _log, "VerifyPermission.checkPermissions");
+
+		stopWatch = StopWatchLoggingHelper.startLoging(
+			_log, "VerifyPermission.fixOrganizationRolePermissions");
+
 		fixOrganizationRolePermissions();
+
+		StopWatchLoggingHelper.endLoging(
+			stopWatch, _log, "VerifyPermission.fixOrganizationRolePermissions");
+
+		stopWatch = StopWatchLoggingHelper.startLoging(
+			_log, "VerifyPermission.fixUserDefaultRolePermissions");
+
 		fixUserDefaultRolePermissions();
+
+		StopWatchLoggingHelper.endLoging(
+			stopWatch, _log, "VerifyPermission.fixUserDefaultRolePermissions");
 	}
 
 	protected void fixOrganizationRolePermissions() throws Exception {
