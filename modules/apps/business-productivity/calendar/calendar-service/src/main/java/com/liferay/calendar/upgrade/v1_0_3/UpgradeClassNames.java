@@ -15,6 +15,7 @@
 package com.liferay.calendar.upgrade.v1_0_3;
 
 import com.liferay.portal.kernel.upgrade.UpgradeException;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.upgrade.v7_0_0.UpgradeKernelPackage;
 
 import java.sql.PreparedStatement;
@@ -35,7 +36,7 @@ public class UpgradeClassNames extends UpgradeKernelPackage {
 	}
 
 	protected void deleteCalEventClassName() throws UpgradeException {
-		try {
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
 			runSQL(
 				"delete from Counter where name like '" +
 					_CAL_EVENT_CLASS_NAME + "%'");
@@ -69,7 +70,8 @@ public class UpgradeClassNames extends UpgradeKernelPackage {
 			"select actionId from ResourceAction where name = '" + newName +
 				"'";
 
-		try (PreparedStatement ps = connection.prepareStatement(selectSQL);
+		try (LoggingTimer loggingTimer = new LoggingTimer();
+			PreparedStatement ps = connection.prepareStatement(selectSQL);
 			ResultSet rs = ps.executeQuery()) {
 
 			while (rs.next()) {

@@ -77,6 +77,7 @@ import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.SetUtil;
@@ -643,11 +644,14 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 	}
 
 	protected void setUpClassNameIds() {
-		_ddmContentClassNameId = PortalUtil.getClassNameId(DDMContent.class);
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
+			_ddmContentClassNameId = PortalUtil.getClassNameId(
+				DDMContent.class);
 
-		_expandoStorageAdapterClassNameId = PortalUtil.getClassNameId(
-			"com.liferay.portlet.dynamicdatamapping.storage." +
-				"ExpandoStorageAdapter");
+			_expandoStorageAdapterClassNameId = PortalUtil.getClassNameId(
+				"com.liferay.portlet.dynamicdatamapping.storage." +
+					"ExpandoStorageAdapter");
+		}
 	}
 
 	protected String toJSON(DDMForm ddmForm) {
@@ -916,7 +920,8 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 		sb.append("DDMStorageLink.structureId = DDMStructure.structureId ");
 		sb.append("where DDMStructure.storageType = 'expando'");
 
-		try (PreparedStatement ps = connection.prepareStatement(sb.toString());
+		try (LoggingTimer loggingTimer = new LoggingTimer();
+			PreparedStatement ps = connection.prepareStatement(sb.toString());
 			ResultSet rs = ps.executeQuery()) {
 
 			Set<Long> expandoRowIds = new HashSet<>();
@@ -957,8 +962,10 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 	}
 
 	protected void upgradeFieldTypeReferences() throws Exception {
-		upgradeDDLFieldTypeReferences();
-		upgradeDLFieldTypeReferences();
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
+			upgradeDDLFieldTypeReferences();
+			upgradeDLFieldTypeReferences();
+		}
 	}
 
 	protected void upgradeStructureDefinition(
@@ -1012,7 +1019,8 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 	protected void upgradeStructuresAndAddStructureVersionsAndLayouts()
 		throws Exception {
 
-		try (PreparedStatement ps = connection.prepareStatement(
+		try (LoggingTimer loggingTimer = new LoggingTimer();
+			PreparedStatement ps = connection.prepareStatement(
 				"select * from DDMStructure");
 			ResultSet rs = ps.executeQuery()) {
 
@@ -1075,7 +1083,8 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 	}
 
 	protected void upgradeStructuresPermissions() throws Exception {
-		try (PreparedStatement ps = connection.prepareStatement(
+		try (LoggingTimer loggingTimer = new LoggingTimer();
+			PreparedStatement ps = connection.prepareStatement(
 				"select * from DDMStructure");
 			ResultSet rs = ps.executeQuery()) {
 
@@ -1130,7 +1139,8 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 	}
 
 	protected void upgradeTemplatesAndAddTemplateVersions() throws Exception {
-		try (PreparedStatement ps = connection.prepareStatement(
+		try (LoggingTimer loggingTimer = new LoggingTimer();
+			PreparedStatement ps = connection.prepareStatement(
 				"select * from DDMTemplate");
 			ResultSet rs = ps.executeQuery()) {
 
@@ -1215,7 +1225,8 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 	}
 
 	protected void upgradeTemplatesPermissions() throws Exception {
-		try (PreparedStatement ps = connection.prepareStatement(
+		try (LoggingTimer loggingTimer = new LoggingTimer();
+			PreparedStatement ps = connection.prepareStatement(
 				"select * from DDMTemplate");
 			ResultSet rs = ps.executeQuery()) {
 
@@ -1237,7 +1248,8 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 		sb.append("DDMStructure.structureId) where DDMStorageLink.");
 		sb.append("classNameId = ? and DDMStructure.storageType = ?");
 
-		try (PreparedStatement ps = connection.prepareStatement(
+		try (LoggingTimer loggingTimer = new LoggingTimer();
+			PreparedStatement ps = connection.prepareStatement(
 				sb.toString())) {
 
 			ps.setLong(1, _ddmContentClassNameId);

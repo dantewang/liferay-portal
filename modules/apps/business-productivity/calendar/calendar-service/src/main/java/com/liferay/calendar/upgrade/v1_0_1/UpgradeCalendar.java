@@ -16,6 +16,7 @@ package com.liferay.calendar.upgrade.v1_0_1;
 
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -61,7 +62,8 @@ public class UpgradeCalendar extends UpgradeProcess {
 		sb.append("calendarResourceId inner join User_ on ");
 		sb.append("CalendarResource.userId = User_.userId");
 
-		try (PreparedStatement ps = connection.prepareStatement(sb.toString());
+		try (LoggingTimer loggingTimer = new LoggingTimer();
+			PreparedStatement ps = connection.prepareStatement(sb.toString());
 			ResultSet rs = ps.executeQuery()) {
 
 			long userClassNameId = PortalUtil.getClassNameId(User.class);
