@@ -297,7 +297,7 @@ public class VerifyAuditedModel extends VerifyProcess {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
-		try (Connection con = DataAccess.getUpgradeOptimizedConnection()) {
+		try {
 			StringBundler sb = new StringBundler(8);
 
 			sb.append("select ");
@@ -313,7 +313,7 @@ public class VerifyAuditedModel extends VerifyProcess {
 			sb.append(verifiableAuditedModel.getTableName());
 			sb.append(" where userName is null order by companyId");
 
-			ps = con.prepareStatement(sb.toString());
+			ps = connection.prepareStatement(sb.toString());
 
 			rs = ps.executeQuery();
 
@@ -332,14 +332,16 @@ public class VerifyAuditedModel extends VerifyProcess {
 						verifiableAuditedModel.getJoinByTableName());
 
 					auditedModelArray = getAuditedModelArray(
-						con, verifiableAuditedModel.getRelatedModelName(),
+						connection,
+						verifiableAuditedModel.getRelatedModelName(),
 						verifiableAuditedModel.getRelatedPKColumnName(),
 						relatedPrimKey,
 						verifiableAuditedModel.isAnonymousUserAllowed(),
 						previousUserId);
 				}
 				else if (previousCompanyId != companyId) {
-					auditedModelArray = getDefaultUserArray(con, companyId);
+					auditedModelArray = getDefaultUserArray(
+						connection, companyId);
 
 					previousCompanyId = companyId;
 				}
@@ -349,7 +351,7 @@ public class VerifyAuditedModel extends VerifyProcess {
 				}
 
 				verifyAuditedModel(
-					con, verifiableAuditedModel.getTableName(),
+					connection, verifiableAuditedModel.getTableName(),
 					verifiableAuditedModel.getPrimaryKeyColumnName(), primKey,
 					auditedModelArray, verifiableAuditedModel.isUpdateDates());
 			}

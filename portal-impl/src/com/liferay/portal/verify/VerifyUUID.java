@@ -101,8 +101,8 @@ public class VerifyUUID extends VerifyProcess {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
-		try (Connection con = DataAccess.getUpgradeOptimizedConnection()) {
-			ps = con.prepareStatement(
+		try {
+			ps = connection.prepareStatement(
 				"select " + verifiableUUIDModel.getPrimaryKeyColumnName() +
 					" from " + verifiableUUIDModel.getTableName() +
 						" where uuid_ is null or uuid_ = ''");
@@ -113,7 +113,7 @@ public class VerifyUUID extends VerifyProcess {
 				long pk = rs.getLong(
 					verifiableUUIDModel.getPrimaryKeyColumnName());
 
-				updateUUID(con, verifiableUUIDModel, pk);
+				updateUUID(connection, verifiableUUIDModel, pk);
 			}
 		}
 		finally {
