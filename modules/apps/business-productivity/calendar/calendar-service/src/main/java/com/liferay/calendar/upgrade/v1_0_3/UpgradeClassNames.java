@@ -63,25 +63,26 @@ public class UpgradeClassNames extends UpgradeKernelPackage {
 	}
 
 	protected void deleteDuplicateResources() throws UpgradeException {
-		String oldName = _RESOURCE_NAMES[0][0];
-		String newName = _RESOURCE_NAMES[0][1];
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
+			String oldName = _RESOURCE_NAMES[0][0];
+			String newName = _RESOURCE_NAMES[0][1];
 
-		String selectSQL =
-			"select actionId from ResourceAction where name = '" + newName +
-				"'";
+			String selectSQL =
+				"select actionId from ResourceAction where name = '" + newName +
+					"'";
 
-		try (LoggingTimer loggingTimer = new LoggingTimer();
-			PreparedStatement ps = connection.prepareStatement(selectSQL);
-			ResultSet rs = ps.executeQuery()) {
+			try (PreparedStatement ps = connection.prepareStatement(selectSQL);
+				ResultSet rs = ps.executeQuery()) {
 
-			while (rs.next()) {
-				runSQL(
-					"delete from ResourceAction where actionId = '" +
-						rs.getString(1) + "' and name= '" + oldName + "'");
+				while (rs.next()) {
+					runSQL(
+						"delete from ResourceAction where actionId = '" +
+							rs.getString(1) + "' and name= '" + oldName + "'");
+				}
 			}
-		}
-		catch (Exception e) {
-			throw new UpgradeException(e);
+			catch (Exception e) {
+				throw new UpgradeException(e);
+			}
 		}
 	}
 

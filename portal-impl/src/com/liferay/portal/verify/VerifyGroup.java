@@ -148,7 +148,7 @@ public class VerifyGroup extends VerifyProcess {
 						if (_log.isWarnEnabled()) {
 							_log.warn(
 								"Updating user screen name " + screenName +
-									" to " + userId + " because it is" +
+									" to " + userId + " because it is " +
 									"generating an invalid friendly URL " +
 									friendlyURL);
 						}
@@ -167,40 +167,43 @@ public class VerifyGroup extends VerifyProcess {
 	}
 
 	protected void verifyOrganizationNames() throws Exception {
-		StringBundler sb = new StringBundler(5);
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
+			StringBundler sb = new StringBundler(5);
 
-		sb.append("select groupId, name from Group_ where name like '%");
-		sb.append(GroupLocalServiceImpl.ORGANIZATION_NAME_SUFFIX);
-		sb.append("%' and name not like '%");
-		sb.append(GroupLocalServiceImpl.ORGANIZATION_NAME_SUFFIX);
-		sb.append("'");
+			sb.append("select groupId, name from Group_ where name like '%");
+			sb.append(GroupLocalServiceImpl.ORGANIZATION_NAME_SUFFIX);
+			sb.append("%' and name not like '%");
+			sb.append(GroupLocalServiceImpl.ORGANIZATION_NAME_SUFFIX);
+			sb.append("'");
 
-		try (LoggingTimer loggingTimer = new LoggingTimer();
-			PreparedStatement ps = connection.prepareStatement(sb.toString());
-			ResultSet rs = ps.executeQuery()) {
+			try (PreparedStatement ps = connection.prepareStatement(
+					sb.toString());
+				ResultSet rs = ps.executeQuery()) {
 
-			while (rs.next()) {
-				long groupId = rs.getLong("groupId");
-				String name = rs.getString("name");
+				while (rs.next()) {
+					long groupId = rs.getLong("groupId");
+					String name = rs.getString("name");
 
-				if (name.endsWith(
-						GroupLocalServiceImpl.ORGANIZATION_NAME_SUFFIX) ||
-					name.endsWith(
-						GroupLocalServiceImpl.ORGANIZATION_STAGING_SUFFIX)) {
+					if (name.endsWith(
+							GroupLocalServiceImpl.ORGANIZATION_NAME_SUFFIX) ||
+						name.endsWith(
+							GroupLocalServiceImpl.
+								ORGANIZATION_STAGING_SUFFIX)) {
 
-					continue;
+						continue;
+					}
+
+					int pos = name.indexOf(
+						GroupLocalServiceImpl.ORGANIZATION_NAME_SUFFIX);
+
+					pos = name.indexOf(" ", pos + 1);
+
+					String newName =
+						name.substring(pos + 1) +
+							GroupLocalServiceImpl.ORGANIZATION_NAME_SUFFIX;
+
+					updateName(groupId, newName);
 				}
-
-				int pos = name.indexOf(
-					GroupLocalServiceImpl.ORGANIZATION_NAME_SUFFIX);
-
-				pos = name.indexOf(" ", pos + 1);
-
-				String newName =
-					name.substring(pos + 1) +
-						GroupLocalServiceImpl.ORGANIZATION_NAME_SUFFIX;
-
-				updateName(groupId, newName);
 			}
 		}
 	}

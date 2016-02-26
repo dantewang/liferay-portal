@@ -913,51 +913,53 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 	}
 
 	protected void upgradeExpandoStorageAdapter() throws Exception {
-		StringBundler sb = new StringBundler(4);
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
+			StringBundler sb = new StringBundler(4);
 
-		sb.append("select DDMStructure.*, DDMStorageLink.* from ");
-		sb.append("DDMStorageLink inner join DDMStructure on ");
-		sb.append("DDMStorageLink.structureId = DDMStructure.structureId ");
-		sb.append("where DDMStructure.storageType = 'expando'");
+			sb.append("select DDMStructure.*, DDMStorageLink.* from ");
+			sb.append("DDMStorageLink inner join DDMStructure on ");
+			sb.append("DDMStorageLink.structureId = DDMStructure.structureId ");
+			sb.append("where DDMStructure.storageType = 'expando'");
 
-		try (LoggingTimer loggingTimer = new LoggingTimer();
-			PreparedStatement ps = connection.prepareStatement(sb.toString());
-			ResultSet rs = ps.executeQuery()) {
+			try (PreparedStatement ps = connection.prepareStatement(
+					sb.toString());
+				ResultSet rs = ps.executeQuery()) {
 
-			Set<Long> expandoRowIds = new HashSet<>();
+				Set<Long> expandoRowIds = new HashSet<>();
 
-			while (rs.next()) {
-				long groupId = rs.getLong("groupId");
-				long companyId = rs.getLong("companyId");
-				long userId = rs.getLong("userId");
-				String userName = rs.getString("userName");
-				Timestamp createDate = rs.getTimestamp("createDate");
-				long expandoRowId = rs.getLong("classPK");
+				while (rs.next()) {
+					long groupId = rs.getLong("groupId");
+					long companyId = rs.getLong("companyId");
+					long userId = rs.getLong("userId");
+					String userName = rs.getString("userName");
+					Timestamp createDate = rs.getTimestamp("createDate");
+					long expandoRowId = rs.getLong("classPK");
 
-				Map<String, String> expandoValuesMap = getExpandoValuesMap(
-					expandoRowId);
+					Map<String, String> expandoValuesMap = getExpandoValuesMap(
+						expandoRowId);
 
-				String xml = toXML(expandoValuesMap);
+					String xml = toXML(expandoValuesMap);
 
-				addDDMContent(
-					PortalUUIDUtil.generate(), expandoRowId, groupId, companyId,
-					userId, userName, createDate, createDate,
-					DDMStorageLink.class.getName(), null, xml);
+					addDDMContent(
+						PortalUUIDUtil.generate(), expandoRowId, groupId,
+						companyId, userId, userName, createDate, createDate,
+						DDMStorageLink.class.getName(), null, xml);
 
-				updateDDMStorageLink(
-					_expandoStorageAdapterClassNameId, expandoRowId,
-					_ddmContentClassNameId);
+					updateDDMStorageLink(
+						_expandoStorageAdapterClassNameId, expandoRowId,
+						_ddmContentClassNameId);
 
-				expandoRowIds.add(expandoRowId);
+					expandoRowIds.add(expandoRowId);
+				}
+
+				if (expandoRowIds.isEmpty()) {
+					return;
+				}
+
+				updateDDMStructureStorageType();
+
+				deleteExpandoData(expandoRowIds);
 			}
-
-			if (expandoRowIds.isEmpty()) {
-				return;
-			}
-
-			updateDDMStructureStorageType();
-
-			deleteExpandoData(expandoRowIds);
 		}
 	}
 
@@ -1240,33 +1242,34 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 	}
 
 	protected void upgradeXMLStorageAdapter() throws Exception {
-		StringBundler sb = new StringBundler(5);
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
+			StringBundler sb = new StringBundler(5);
 
-		sb.append("select DDMStorageLink.classPK, DDMStorageLink.");
-		sb.append("structureId from DDMStorageLink inner join ");
-		sb.append("DDMStructure on (DDMStorageLink.structureId = ");
-		sb.append("DDMStructure.structureId) where DDMStorageLink.");
-		sb.append("classNameId = ? and DDMStructure.storageType = ?");
+			sb.append("select DDMStorageLink.classPK, DDMStorageLink.");
+			sb.append("structureId from DDMStorageLink inner join ");
+			sb.append("DDMStructure on (DDMStorageLink.structureId = ");
+			sb.append("DDMStructure.structureId) where DDMStorageLink.");
+			sb.append("classNameId = ? and DDMStructure.storageType = ?");
 
-		try (LoggingTimer loggingTimer = new LoggingTimer();
-			PreparedStatement ps = connection.prepareStatement(
-				sb.toString())) {
+			try (PreparedStatement ps = connection.prepareStatement(
+					sb.toString())) {
 
-			ps.setLong(1, _ddmContentClassNameId);
-			ps.setString(2, "xml");
+				ps.setLong(1, _ddmContentClassNameId);
+				ps.setString(2, "xml");
 
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					long structureId = rs.getLong("structureId");
-					long classPK = rs.getLong("classPK");
+				try (ResultSet rs = ps.executeQuery()) {
+					while (rs.next()) {
+						long structureId = rs.getLong("structureId");
+						long classPK = rs.getLong("classPK");
 
-					DDMForm ddmForm = getDDMForm(structureId);
+						DDMForm ddmForm = getDDMForm(structureId);
 
-					updateContent(structureId, classPK, ddmForm);
+						updateContent(structureId, classPK, ddmForm);
+					}
+
+					updateStructureStorageType();
+					updateStructureVersionStorageType();
 				}
-
-				updateStructureStorageType();
-				updateStructureVersionStorageType();
 			}
 		}
 	}

@@ -35,14 +35,14 @@ import java.sql.SQLException;
 public class VerifyOracle extends VerifyProcess {
 
 	protected void alterVarchar2Columns() throws Exception {
-		int buildNumber = getBuildNumber();
-
 		try (LoggingTimer loggingTimer = new LoggingTimer();
 			PreparedStatement ps = connection.prepareStatement(
 				"select table_name, column_name, data_length from " +
 					"user_tab_columns where data_type = 'VARCHAR2' and " +
 						"char_used = 'B'");
 			ResultSet rs = ps.executeQuery()) {
+
+			int buildNumber = getBuildNumber();
 
 			while (rs.next()) {
 				String tableName = rs.getString(1);
