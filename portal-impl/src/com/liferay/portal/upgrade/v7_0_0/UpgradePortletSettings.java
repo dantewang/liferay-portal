@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.settings.SettingsDescriptor;
 import com.liferay.portal.kernel.settings.SettingsFactory;
 import com.liferay.portal.kernel.settings.SettingsFactoryUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.upgrade.v7_0_0.util.PortletPreferencesRow;
@@ -213,22 +214,26 @@ public abstract class UpgradePortletSettings extends UpgradeProcess {
 			String portletId, String serviceName, int ownerType)
 		throws Exception {
 
-		if (_log.isDebugEnabled()) {
-			_log.debug("Upgrading display portlet " + portletId + " settings");
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Upgrading display portlet " + portletId + " settings");
+			}
+
+			if (_log.isDebugEnabled()) {
+				_log.debug("Delete service keys from portlet settings");
+			}
+
+			SettingsDescriptor settingsDescriptor =
+				_settingsFactory.getSettingsDescriptor(serviceName);
+
+			resetPortletPreferencesValues(
+				portletId, ownerType, settingsDescriptor);
+
+			resetPortletPreferencesValues(
+				portletId, PortletKeys.PREFS_OWNER_TYPE_ARCHIVED,
+				settingsDescriptor);
 		}
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("Delete service keys from portlet settings");
-		}
-
-		SettingsDescriptor settingsDescriptor =
-			_settingsFactory.getSettingsDescriptor(serviceName);
-
-		resetPortletPreferencesValues(portletId, ownerType, settingsDescriptor);
-
-		resetPortletPreferencesValues(
-			portletId, PortletKeys.PREFS_OWNER_TYPE_ARCHIVED,
-			settingsDescriptor);
 	}
 
 	protected void upgradeMainPortlet(
