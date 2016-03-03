@@ -17,6 +17,7 @@ package com.liferay.journal.upgrade.v1_0_0;
 import com.liferay.journal.upgrade.v1_0_0.util.JournalArticleTable;
 import com.liferay.journal.upgrade.v1_0_0.util.JournalFeedTable;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.upgrade.util.UpgradeMVCCVersion;
 
@@ -27,10 +28,15 @@ public class UpgradeSchema extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		String template = StringUtil.read(
-			UpgradeSchema.class.getResourceAsStream("dependencies/update.sql"));
+		try (LoggingTimer loggingTimer = new LoggingTimer(
+				"runSQLTemplateString")) {
 
-		runSQLTemplateString(template, false, false);
+			String template = StringUtil.read(
+				UpgradeSchema.class.getResourceAsStream(
+					"dependencies/update.sql"));
+
+			runSQLTemplateString(template, false, false);
+		}
 
 		upgrade(UpgradeMVCCVersion.class);
 
