@@ -1072,7 +1072,7 @@ public class UpgradeDynamicDataMappingTest {
 			long storageLinkId, long classPK, long structureId)
 		throws Exception {
 
-		StringBundler sb = new StringBundler(3)
+		StringBundler sb = new StringBundler(3);
 
 		sb.append("insert into DDMStorageLink (storageLinkId, companyId, ");
 		sb.append("classNameId, classPK, structureId) values (?, ?, ?, ");
@@ -1080,7 +1080,7 @@ public class UpgradeDynamicDataMappingTest {
 
 		String sql = sb.toString();
 
-		try (Connection con = DataAccess.getUpgradeOptimizedConnection()
+		try (Connection con = DataAccess.getUpgradeOptimizedConnection();
 			PreparedStatement ps = con.prepareStatement(sql)) {
 
 			ps.setLong(1, storageLinkId);
@@ -1110,7 +1110,7 @@ public class UpgradeDynamicDataMappingTest {
 
 		String sql = sb.toString();
 
-		try (Connection con = DataAccess.getUpgradeOptimizedConnection()
+		try (Connection con = DataAccess.getUpgradeOptimizedConnection();
 			PreparedStatement ps = con.prepareStatement(sql)) {
 
 			ps.setLong(1, structureId);
