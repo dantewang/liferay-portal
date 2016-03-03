@@ -15,6 +15,7 @@
 package com.liferay.portal.upgrade.v6_1_0;
 
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.upgrade.v6_1_0.util.BlogsEntryTable;
 
 /**
@@ -25,7 +26,7 @@ public class UpgradeBlogs extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		try {
+		try (LoggingTimer loggingTimer = new LoggingTimer("runSQL")) {
 			runSQL("drop index IX_E0D90212 on BlogsEntry");
 			runSQL("drop index IX_DA53AFD4 on BlogsEntry");
 			runSQL("drop index IX_B88E740E on BlogsEntry");
