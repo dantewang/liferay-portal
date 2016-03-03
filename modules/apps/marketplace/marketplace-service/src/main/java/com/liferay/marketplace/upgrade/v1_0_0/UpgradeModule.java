@@ -18,6 +18,7 @@ import com.liferay.marketplace.util.ContextUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.LoggingTimer;
 
 import java.io.IOException;
 
@@ -36,7 +37,8 @@ public class UpgradeModule extends UpgradeProcess {
 	}
 
 	protected void updateModules() {
-		try (PreparedStatement ps = connection.prepareStatement(
+		try (LoggingTimer loggingTimer = new LoggingTimer();
+			PreparedStatement ps = connection.prepareStatement(
 				"select moduleId, contextName from Marketplace_Module");
 			ResultSet rs = ps.executeQuery()) {
 
