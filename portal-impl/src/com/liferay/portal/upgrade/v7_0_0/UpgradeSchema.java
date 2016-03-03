@@ -15,6 +15,7 @@
 package com.liferay.portal.upgrade.v7_0_0;
 
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.upgrade.util.UpgradeMVCCVersion;
 
 /**
@@ -24,7 +25,11 @@ public class UpgradeSchema extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		runSQLTemplate("update-6.2.0-7.0.0.sql", false);
+		try (LoggingTimer loggingTimer = new LoggingTimer(
+				"runSQLTemplate(update-6.2.0-7.0.0.sql)")) {
+
+			runSQLTemplate("update-6.2.0-7.0.0.sql", false);
+		}
 
 		upgrade(UpgradeMVCCVersion.class);
 	}
