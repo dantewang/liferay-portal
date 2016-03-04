@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.upgrade.util.TempUpgradeColumnImpl;
 import com.liferay.portal.kernel.upgrade.util.UpgradeColumn;
 import com.liferay.portal.kernel.upgrade.util.UpgradeTable;
 import com.liferay.portal.kernel.upgrade.util.UpgradeTableFactoryUtil;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.upgrade.util.BlogsEntryUrlTitleUpgradeColumnImpl;
 import com.liferay.portal.upgrade.v6_0_0.util.BlogsEntryTable;
 
@@ -29,7 +30,7 @@ public class UpgradeBlogs extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		try {
+		try (LoggingTimer loggingTimer = new LoggingTimer("runSQL")) {
 			runSQL("drop index IX_E0D90212 on BlogsEntry");
 			runSQL("drop index IX_DA53AFD4 on BlogsEntry");
 			runSQL("drop index IX_B88E740E on BlogsEntry");
@@ -39,18 +40,23 @@ public class UpgradeBlogs extends UpgradeProcess {
 		catch (Exception e) {
 		}
 
-		UpgradeColumn entryIdColumn = new TempUpgradeColumnImpl("entryId");
+		try (LoggingTimer loggingTimer = new LoggingTimer(
+				"UpgradeTable.updateTable")) {
 
-		UpgradeColumn titleColumn = new TempUpgradeColumnImpl("title");
+			UpgradeColumn entryIdColumn = new TempUpgradeColumnImpl("entryId");
 
-		UpgradeColumn urlTitleColumn = new BlogsEntryUrlTitleUpgradeColumnImpl(
-			entryIdColumn, titleColumn);
+			UpgradeColumn titleColumn = new TempUpgradeColumnImpl("title");
 
-		UpgradeTable upgradeTable = UpgradeTableFactoryUtil.getUpgradeTable(
-			BlogsEntryTable.TABLE_NAME, BlogsEntryTable.TABLE_COLUMNS,
-			entryIdColumn, titleColumn, urlTitleColumn);
+			UpgradeColumn urlTitleColumn =
+				new BlogsEntryUrlTitleUpgradeColumnImpl(
+					entryIdColumn, titleColumn);
 
-		upgradeTable.updateTable();
+			UpgradeTable upgradeTable = UpgradeTableFactoryUtil.getUpgradeTable(
+				BlogsEntryTable.TABLE_NAME, BlogsEntryTable.TABLE_COLUMNS,
+				entryIdColumn, titleColumn, urlTitleColumn);
+
+			upgradeTable.updateTable();
+		}
 	}
 
 }
