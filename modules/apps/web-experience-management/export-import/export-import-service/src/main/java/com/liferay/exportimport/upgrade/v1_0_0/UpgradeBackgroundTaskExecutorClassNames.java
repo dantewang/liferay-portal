@@ -24,20 +24,20 @@ import com.liferay.portal.kernel.util.LoggingTimer;
 public class UpgradeBackgroundTaskExecutorClassNames
 	extends BaseUpgradeBackgroundTaskExecutorClassNames {
 
-	@Override
-	protected void doUpgrade() throws Exception {
-		try (LoggingTimer loggingTimer = new LoggingTimer("super.doUpgrade")) {
-			super.doUpgrade();
-		}
-
-		try (LoggingTimer loggingTimer = new LoggingTimer(
-				"runSQL(deleteBackgroundTask)")) {
-
+	protected void deleteBackgroundTask() {
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
 			runSQL(
 				"delete from BackgroundTask where taskExecutorClassName = '" +
 					"com.liferay.portal.lar.backgroundtask." +
 						"StagingIndexingBackgroundTaskExecutor'");
 		}
+	}
+
+	@Override
+	protected void doUpgrade() throws Exception {
+		super.doUpgrade();
+
+		deleteBackgroundTask();
 	}
 
 	@Override
