@@ -16,7 +16,6 @@ package com.liferay.portal.verify;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.concurrent.ThrowableAwareRunnable;
-import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Contact;
@@ -32,11 +31,11 @@ import com.liferay.portal.kernel.service.ResourceLocalServiceUtil;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.verify.model.VerifiableResourcedModel;
 import com.liferay.portal.util.PortalInstances;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -173,10 +172,12 @@ public class VerifyResourcePermissions extends VerifyProcess {
 			Role role, VerifiableResourcedModel verifiableResourcedModel)
 		throws Exception {
 
-		int total = 0;
+		try (LoggingTimer loggingTimer = new LoggingTimer(
+				verifiableResourcedModel.getTableName())) {
 
-		try (Connection con = DataAccess.getUpgradeOptimizedConnection()) {
-			try (PreparedStatement ps = con.prepareStatement(
+			int total = 0;
+
+			try (PreparedStatement ps = connection.prepareStatement(
 					"select count(*) from " +
 						verifiableResourcedModel.getTableName() +
 							" where companyId = " + role.getCompanyId());
@@ -198,7 +199,8 @@ public class VerifyResourcePermissions extends VerifyProcess {
 			sb.append(" where companyId = ");
 			sb.append(role.getCompanyId());
 
-			try (PreparedStatement ps = con.prepareStatement(sb.toString());
+			try (PreparedStatement ps = connection.prepareStatement(
+					sb.toString());
 				ResultSet rs = ps.executeQuery()) {
 
 				for (int i = 0; rs.next(); i++) {
