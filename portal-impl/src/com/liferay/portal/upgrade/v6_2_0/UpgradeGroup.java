@@ -30,9 +30,11 @@ public class UpgradeGroup extends UpgradeProcess {
 			GroupTable.class, new AlterColumnType("typeSettings", "TEXT null"),
 			new AlterColumnType("friendlyURL", "VARCHAR(255) null"));
 
-		try (LoggingTimer loggingTimer = new LoggingTimer(
-				"runSQL(updateGroup)")) {
+		upgradeCompanyGroup();
+	}
 
+	protected void upgradeCompanyGroup() {
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
 			long classNameId = PortalUtil.getClassNameId(
 				"com.liferay.portal.model.Company");
 

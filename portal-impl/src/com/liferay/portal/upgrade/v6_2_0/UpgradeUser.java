@@ -26,17 +26,15 @@ public class UpgradeUser extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		try (LoggingTimer loggingTimer = new LoggingTimer(
-				"runSQL(updateContact)")) {
+		upgradeContact();
+	}
 
+	protected void upgradeContact() {
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
 			long classNameId = PortalUtil.getClassNameId(
 				"com.liferay.portal.model.User");
 
 			runSQL("update Contact_ set classNameId = " + classNameId);
-		}
-
-		try (LoggingTimer loggingTimer = new LoggingTimer(
-				"runSQL(updateContact#2)")) {
 
 			StringBundler sb = new StringBundler(4);
 
