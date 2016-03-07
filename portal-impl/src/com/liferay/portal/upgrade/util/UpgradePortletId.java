@@ -39,47 +39,8 @@ public class UpgradePortletId extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-
-		// Rename instanceable portlet IDs. We expect the root form of the
-		// portlet ID because we will rename all instances of the portlet ID.
-
-		String[][] renamePortletIdsArray = getRenamePortletIdsArray();
-
-		for (String[] renamePortletIds : renamePortletIdsArray) {
-			String oldRootPortletId = renamePortletIds[0];
-			String newRootPortletId = renamePortletIds[1];
-
-			updatePortlet(oldRootPortletId, newRootPortletId);
-			updateLayouts(oldRootPortletId, newRootPortletId, false);
-		}
-
-		// Rename uninstanceable portlet IDs to instanceable portlet IDs
-
-		String[] uninstanceablePortletIds = getUninstanceablePortletIds();
-
-		for (String portletId : uninstanceablePortletIds) {
-			PortletInstance portletInstance =
-				PortletInstance.fromPortletInstanceKey(portletId);
-
-			if (portletInstance.hasInstanceId()) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(
-						"Portlet " + portletId + " is already instanceable");
-				}
-
-				continue;
-			}
-
-			PortletInstance newPortletInstance = new PortletInstance(portletId);
-
-			String newPortletInstanceKey =
-				newPortletInstance.getPortletInstanceKey();
-
-			updateResourcePermission(portletId, newPortletInstanceKey, false);
-			updateInstanceablePortletPreferences(
-				portletId, newPortletInstanceKey);
-			updateLayouts(portletId, newPortletInstanceKey, true);
-		}
+		upgradeInstanceablePortletIds();
+		upgradeUninstanceablePortletIds();
 	}
 
 	protected String getNewTypeSettings(
@@ -398,6 +359,53 @@ public class UpgradePortletId extends UpgradeProcess {
 			if (_log.isWarnEnabled()) {
 				_log.warn(sqle, sqle);
 			}
+		}
+	}
+
+	protected void upgradeInstanceablePortletIds() throws Exception {
+
+		// Rename instanceable portlet IDs. We expect the root form of the
+		// portlet ID because we will rename all instances of the portlet ID.
+
+		String[][] renamePortletIdsArray = getRenamePortletIdsArray();
+
+		for (String[] renamePortletIds : renamePortletIdsArray) {
+			String oldRootPortletId = renamePortletIds[0];
+			String newRootPortletId = renamePortletIds[1];
+
+			updatePortlet(oldRootPortletId, newRootPortletId);
+			updateLayouts(oldRootPortletId, newRootPortletId, false);
+		}
+	}
+
+	protected void upgradeUninstanceablePortletIds() throws Exception {
+
+		// Rename uninstanceable portlet IDs to instanceable portlet IDs
+
+		String[] uninstanceablePortletIds = getUninstanceablePortletIds();
+
+		for (String portletId : uninstanceablePortletIds) {
+			PortletInstance portletInstance =
+				PortletInstance.fromPortletInstanceKey(portletId);
+
+			if (portletInstance.hasInstanceId()) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						"Portlet " + portletId + " is already instanceable");
+				}
+
+				continue;
+			}
+
+			PortletInstance newPortletInstance = new PortletInstance(portletId);
+
+			String newPortletInstanceKey =
+				newPortletInstance.getPortletInstanceKey();
+
+			updateResourcePermission(portletId, newPortletInstanceKey, false);
+			updateInstanceablePortletPreferences(
+				portletId, newPortletInstanceKey);
+			updateLayouts(portletId, newPortletInstanceKey, true);
 		}
 	}
 
