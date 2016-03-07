@@ -40,9 +40,12 @@ public class VerifyUser extends VerifyProcess {
 
 	@Override
 	protected void doVerify() throws Exception {
-		try (LoggingTimer loggingTimer = new LoggingTimer(
-				"processUsersWithNoContacts")) {
+		verifyUsersWithNoContracts();
+		verifyUsersWithNoGroups();
+	}
 
+	protected void verifyUsersWithNoContracts() {
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
 			List<User> users = UserLocalServiceUtil.getNoContacts();
 
 			if (_log.isDebugEnabled()) {
@@ -87,10 +90,10 @@ public class VerifyUser extends VerifyProcess {
 				_log.debug("Contacts verified for users");
 			}
 		}
+	}
 
-		try (LoggingTimer loggingTimer = new LoggingTimer(
-				"processUsersWithNoGroups")) {
-
+	protected void verifyUsersWithNoGroups() {
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
 			List<User> users = UserLocalServiceUtil.getNoGroups();
 
 			if (_log.isDebugEnabled()) {
