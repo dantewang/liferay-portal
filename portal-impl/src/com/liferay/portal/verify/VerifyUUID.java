@@ -88,9 +88,9 @@ public class VerifyUUID extends VerifyProcess {
 			sb.append(" = ?");
 
 			try (PreparedStatement ps1 = connection.prepareStatement(
-				"select " + verifiableUUIDModel.getPrimaryKeyColumnName() +
-					" from " + verifiableUUIDModel.getTableName() +
-						" where uuid_ is null or uuid_ = ''");
+					"select " + verifiableUUIDModel.getPrimaryKeyColumnName() +
+						" from " + verifiableUUIDModel.getTableName() +
+							" where uuid_ is null or uuid_ = ''");
 				ResultSet rs = ps1.executeQuery();
 				PreparedStatement ps2 =
 					AutoBatchPreparedStatementUtil.autoBatch(
