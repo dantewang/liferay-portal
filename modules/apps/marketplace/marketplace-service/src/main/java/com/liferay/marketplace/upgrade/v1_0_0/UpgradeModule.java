@@ -15,10 +15,10 @@
 package com.liferay.marketplace.upgrade.v1_0_0;
 
 import com.liferay.marketplace.util.ContextUtil;
-import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.LoggingTimer;
 
 import java.io.IOException;
 
@@ -37,14 +37,10 @@ public class UpgradeModule extends UpgradeProcess {
 	}
 
 	protected void updateModules() {
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-
-		try {
-			ps = connection.prepareStatement(
+		try (LoggingTimer loggingTimer = new LoggingTimer();
+			PreparedStatement ps = connection.prepareStatement(
 				"select moduleId, contextName from Marketplace_Module");
-
-			rs = ps.executeQuery();
+			ResultSet rs = ps.executeQuery()) {
 
 			while (rs.next()) {
 				long moduleId = rs.getLong("moduleId");
@@ -69,9 +65,6 @@ public class UpgradeModule extends UpgradeProcess {
 		}
 		catch (SQLException sqle) {
 			_log.error("Unable to update modules", sqle);
-		}
-		finally {
-			DataAccess.cleanUp(ps, rs);
 		}
 	}
 

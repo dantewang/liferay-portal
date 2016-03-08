@@ -32,7 +32,9 @@ public class UpgradeClassNames extends UpgradeKernelPackage {
 
 		deleteDuplicateResources();
 
-		super.doUpgrade();
+		try (LoggingTimer loggingTimer = new LoggingTimer("super.doUpgrade")) {
+			super.doUpgrade();
+		}
 	}
 
 	protected void deleteCalEventClassName() throws UpgradeException {

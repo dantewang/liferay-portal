@@ -16,14 +16,12 @@ package com.liferay.portal.verify;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.concurrent.ThrowableAwareRunnable;
-import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.kernel.verify.model.VerifiableUUIDModel;
 import com.liferay.portal.upgrade.AutoBatchPreparedStatementUtil;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -77,16 +75,8 @@ public class VerifyUUID extends VerifyProcess {
 	protected void verifyUUID(VerifiableUUIDModel verifiableUUIDModel)
 		throws Exception {
 
-		PreparedStatement ps1 = null;
-		ResultSet rs = null;
-
-		try (Connection con = DataAccess.getUpgradeOptimizedConnection()) {
-			ps1 = con.prepareStatement(
-				"select " + verifiableUUIDModel.getPrimaryKeyColumnName() +
-					" from " + verifiableUUIDModel.getTableName() +
-						" where uuid_ is null or uuid_ = ''");
-
-			rs = ps1.executeQuery();
+		try (LoggingTimer loggingTimer = new LoggingTimer(
+				verifiableUUIDModel.getTableName());) {
 
 			StringBundler sb = new StringBundler(6);
 
@@ -97,9 +87,14 @@ public class VerifyUUID extends VerifyProcess {
 			sb.append(verifiableUUIDModel.getPrimaryKeyColumnName());
 			sb.append(" = ?");
 
-			try (PreparedStatement ps2 =
+			try (PreparedStatement ps1 = connection.prepareStatement(
+					"select " + verifiableUUIDModel.getPrimaryKeyColumnName() +
+						" from " + verifiableUUIDModel.getTableName() +
+							" where uuid_ is null or uuid_ = ''");
+				ResultSet rs = ps1.executeQuery();
+				PreparedStatement ps2 =
 					AutoBatchPreparedStatementUtil.autoBatch(
-						con.prepareStatement(sb.toString()))) {
+						connection.prepareStatement(sb.toString()))) {
 
 				while (rs.next()) {
 					long pk = rs.getLong(
@@ -114,9 +109,6 @@ public class VerifyUUID extends VerifyProcess {
 				ps2.executeBatch();
 			}
 		}
-		finally {
-			DataAccess.cleanUp(ps1, rs);
-		}
 	}
 
 	private class VerifyUUIDRunnable extends ThrowableAwareRunnable {
@@ -127,9 +119,7 @@ public class VerifyUUID extends VerifyProcess {
 
 		@Override
 		protected void doRun() throws Exception {
-			try (LoggingTimer loggingTimer = new LoggingTimer()) {
-				verifyUUID(_verifiableUUIDModel);
-			}
+			verifyUUID(_verifiableUUIDModel);
 		}
 
 		private final VerifiableUUIDModel _verifiableUUIDModel;

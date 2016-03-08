@@ -15,6 +15,7 @@
 package com.liferay.portal.background.task.upgrade;
 
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.kernel.util.StringBundler;
 
 /**
@@ -25,17 +26,21 @@ public class BaseUpgradeBackgroundTaskExecutorClassNames
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		String[][] renameTaskExecutorClassNamesArray =
-			getRenameTaskExecutorClassNames();
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
+			String[][] renameTaskExecutorClassNamesArray =
+				getRenameTaskExecutorClassNames();
 
-		for (String[] renameTaskExecutorClassName :
-				renameTaskExecutorClassNamesArray) {
+			for (String[] renameTaskExecutorClassName :
+					renameTaskExecutorClassNamesArray) {
 
-			String oldTaskExecutorClassName = renameTaskExecutorClassName[0];
-			String newTaskExecutorClassName = renameTaskExecutorClassName[1];
+				String oldTaskExecutorClassName =
+					renameTaskExecutorClassName[0];
+				String newTaskExecutorClassName =
+					renameTaskExecutorClassName[1];
 
-			updateTaskExecutorClassName(
-				oldTaskExecutorClassName, newTaskExecutorClassName);
+				updateTaskExecutorClassName(
+					oldTaskExecutorClassName, newTaskExecutorClassName);
+			}
 		}
 	}
 
