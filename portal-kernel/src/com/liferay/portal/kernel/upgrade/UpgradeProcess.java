@@ -24,10 +24,12 @@ import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.upgrade.util.UpgradeColumn;
 import com.liferay.portal.kernel.upgrade.util.UpgradeTable;
 import com.liferay.portal.kernel.upgrade.util.UpgradeTableFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ClassUtil;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -490,6 +492,24 @@ public abstract class UpgradeProcess
 	}
 
 	protected void upgradeTable(
+			String tableName, Object[][] tableColumns,
+			boolean allowUniqueIndexes, String createSQL, String[] indexesSQL,
+			UpgradeColumn... upgradeColumns)
+		throws Exception {
+
+		try (LoggingTimer loggingTimer = new LoggingTimer(tableName)) {
+			UpgradeTable upgradeTable = UpgradeTableFactoryUtil.getUpgradeTable(
+				tableName, tableColumns, upgradeColumns);
+
+			upgradeTable.setAllowUniqueIndexes(allowUniqueIndexes);
+			upgradeTable.setCreateSQL(createSQL);
+			upgradeTable.setIndexesSQL(indexesSQL);
+
+			upgradeTable.updateTable();
+		}
+	}
+
+	protected void upgradeTable(
 			String tableName, Object[][] tableColumns, String sqlCreate,
 			String[] sqlAddIndexes)
 		throws Exception {
@@ -501,6 +521,22 @@ public abstract class UpgradeProcess
 		upgradeTable.setIndexesSQL(sqlAddIndexes);
 
 		upgradeTable.updateTable();
+	}
+
+	protected void upgradeTable(
+			String tableName, Object[][] tableColumns, String createSQL,
+			String[] indexesSQL, UpgradeColumn... upgradeColumns)
+		throws Exception {
+
+		try (LoggingTimer loggingTimer = new LoggingTimer(tableName)) {
+			UpgradeTable upgradeTable = UpgradeTableFactoryUtil.getUpgradeTable(
+				tableName, tableColumns, upgradeColumns);
+
+			upgradeTable.setCreateSQL(createSQL);
+			upgradeTable.setIndexesSQL(indexesSQL);
+
+			upgradeTable.updateTable();
+		}
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(UpgradeProcess.class);
