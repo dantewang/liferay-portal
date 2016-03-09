@@ -212,6 +212,8 @@ public class JspServlet extends HttpServlet {
 
 		defaults.put(
 			TagHandlerPool.OPTION_TAGPOOL, JspTagHandlerPool.class.getName());
+		defaults.put(TagHandlerPool.OPTION_MAXSIZE, "1000");
+		System.out.println("################## Max size 1000.");
 
 		Enumeration<String> names = servletConfig.getInitParameterNames();
 		Set<String> nameSet = new HashSet<>(Collections.list(names));
