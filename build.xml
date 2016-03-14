@@ -493,7 +493,7 @@
 						<delete>
 							<fileset
 								dir="${app.server.lib.portal.dir}"
-								includes="tomcat-juli.jar"
+								includes="tomcat-juli.jar,tomcat-jdbc.jar"
 							/>
 						</delete>
 					</then>
