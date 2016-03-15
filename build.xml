@@ -487,7 +487,7 @@
 					/>
 				</copy>
 
-				<if>
+				<!--<if>
 					<equals arg1="${app.server.type}" arg2="tomcat" />
 					<then>
 						<delete>
@@ -497,7 +497,7 @@
 							/>
 						</delete>
 					</then>
-				</if>
+				</if>-->
 			</then>
 		</if>
 
