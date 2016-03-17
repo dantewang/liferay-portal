@@ -57,6 +57,8 @@ public class DefaultMBListDisplayContext implements MBListDisplayContext {
 		_request = request;
 
 		_categoryId = categoryId;
+
+		_listDisplayType = _initListDisplayType();
 	}
 
 	@Override
@@ -66,44 +68,17 @@ public class DefaultMBListDisplayContext implements MBListDisplayContext {
 
 	@Override
 	public boolean isShowMyPosts() {
-		String mvcRenderCommandName = ParamUtil.getString(
-			_request, "mvcRenderCommandName");
-
-		if (mvcRenderCommandName.equals("/message_boards/view_my_posts")) {
-			return true;
-		}
-
-		return false;
+		return _listDisplayType == ListDisplayType.MY_POSTS;
 	}
 
 	@Override
 	public boolean isShowRecentPosts() {
-		String mvcRenderCommandName = ParamUtil.getString(
-			_request, "mvcRenderCommandName");
-
-		if (mvcRenderCommandName.equals("/message_boards/view_recent_posts")) {
-			return true;
-		}
-
-		String entriesNavigation = ParamUtil.getString(
-			_request, "entriesNavigation");
-
-		if (entriesNavigation.equals("recent")) {
-			return true;
-		}
-
-		return false;
+		return _listDisplayType == ListDisplayType.RECENT_POSTS;
 	}
 
 	@Override
 	public boolean isShowSearch() {
-		String keywords = ParamUtil.getString(_request, "keywords");
-
-		if (Validator.isNotNull(keywords)) {
-			return true;
-		}
-
-		return false;
+		return _listDisplayType == ListDisplayType.SEARCH;
 	}
 
 	@Override
@@ -220,10 +195,39 @@ public class DefaultMBListDisplayContext implements MBListDisplayContext {
 		}
 	}
 
+	private ListDisplayType _initListDisplayType() {
+		String mvcRenderCommandName = ParamUtil.getString(
+			_request, "mvcRenderCommandName");
+
+		if (mvcRenderCommandName.equals("/message_boards/view_my_posts")) {
+			return ListDisplayType.MY_POSTS;
+		}
+
+		if (mvcRenderCommandName.equals("/message_boards/view_recent_posts")) {
+			return ListDisplayType.RECENT_POSTS;
+		}
+
+		String entriesNavigation = ParamUtil.getString(
+			_request, "entriesNavigation");
+
+		if (entriesNavigation.equals("recent")) {
+			return ListDisplayType.RECENT_POSTS;
+		}
+
+		String keywords = ParamUtil.getString(_request, "keywords");
+
+		if (Validator.isNotNull(keywords)) {
+			return ListDisplayType.SEARCH;
+		}
+
+		return ListDisplayType.OTHERS;
+	}
+
 	private static final UUID _UUID = UUID.fromString(
 		"c29b2669-a9ce-45e3-aa4e-9ec766a4ffad");
 
 	private final long _categoryId;
+	private final ListDisplayType _listDisplayType;
 	private final HttpServletRequest _request;
 
 }
