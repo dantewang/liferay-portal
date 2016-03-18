@@ -152,6 +152,7 @@ public class DefaultMBListDisplayContext implements MBListDisplayContext {
 					themeDisplay.getScopeGroupId(), groupThreadsUserId,
 					calendar.getTime(), WorkflowConstants.STATUS_APPROVED,
 					searchContainer.getStart(), searchContainer.getEnd()));
+			searchContainer.setEmptyResultsMessage("there-are-no-recent-posts");
 		}
 		else if (isShowMyPosts()) {
 			long groupThreadsUserId = ParamUtil.getLong(
@@ -171,6 +172,7 @@ public class DefaultMBListDisplayContext implements MBListDisplayContext {
 				MBThreadServiceUtil.getGroupThreads(
 					themeDisplay.getScopeGroupId(), groupThreadsUserId, status,
 					searchContainer.getStart(), searchContainer.getEnd()));
+			searchContainer.setEmptyResultsMessage("you-do-not-have-any-posts");
 		}
 		else {
 			int status = WorkflowConstants.STATUS_APPROVED;
