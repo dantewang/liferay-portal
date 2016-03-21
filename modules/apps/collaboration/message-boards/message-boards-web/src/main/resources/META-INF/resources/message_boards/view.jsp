@@ -163,54 +163,11 @@ MBListDisplayContext mbListDisplayContext = mbDisplayContextProvider.getMbListDi
 								<aui:button href="<%= permissionsURL %>" useDialog="<%= true %>" value="permissions" />
 							</c:if>
 						</aui:button-row>
-
-						<%@ include file="/message_boards/category_subscriptions.jspf" %>
 					</c:if>
 
+					<%@ include file="/message_boards/category_subscriptions.jspf" %>
+
 					<c:if test="<%= category != null %>">
-						<div class="category-subscription category-subscription-types">
-							<c:if test="<%= enableRSS %>">
-								<liferay-ui:rss
-									delta="<%= rssDelta %>"
-									displayStyle="<%= rssDisplayStyle %>"
-									feedType="<%= rssFeedType %>"
-									url="<%= MBUtil.getRSSURL(plid, category.getCategoryId(), 0, 0, themeDisplay) %>"
-								/>
-							</c:if>
-
-							<c:if test="<%= MBCategoryPermission.contains(permissionChecker, category, ActionKeys.SUBSCRIBE) && (mbGroupServiceSettings.isEmailMessageAddedEnabled() || mbGroupServiceSettings.isEmailMessageUpdatedEnabled()) %>">
-								<c:choose>
-									<c:when test="<%= (categorySubscriptionClassPKs != null) && categorySubscriptionClassPKs.contains(category.getCategoryId()) %>">
-										<portlet:actionURL name="/message_boards/edit_category" var="unsubscribeURL">
-											<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.UNSUBSCRIBE %>" />
-											<portlet:param name="redirect" value="<%= currentURL %>" />
-											<portlet:param name="mbCategoryId" value="<%= String.valueOf(category.getCategoryId()) %>" />
-										</portlet:actionURL>
-
-										<liferay-ui:icon
-											iconCssClass="icon-remove-sign"
-											label="<%= true %>"
-											message="unsubscribe"
-											url="<%= unsubscribeURL %>"
-										/>
-									</c:when>
-									<c:otherwise>
-										<portlet:actionURL name="/message_boards/edit_category" var="subscribeURL">
-											<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.SUBSCRIBE %>" />
-											<portlet:param name="redirect" value="<%= currentURL %>" />
-											<portlet:param name="mbCategoryId" value="<%= String.valueOf(category.getCategoryId()) %>" />
-										</portlet:actionURL>
-
-										<liferay-ui:icon
-											iconCssClass="icon-ok-sign"
-											label="<%= true %>"
-											message="subscribe"
-											url="<%= subscribeURL %>"
-										/>
-									</c:otherwise>
-								</c:choose>
-							</c:if>
-						</div>
 
 						<%
 						long parentCategoryId = category.getParentCategoryId();
