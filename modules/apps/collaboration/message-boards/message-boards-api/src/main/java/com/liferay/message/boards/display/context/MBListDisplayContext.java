@@ -22,10 +22,6 @@ import com.liferay.portal.kernel.exception.PortalException;
  */
 public interface MBListDisplayContext extends MBDisplayContext {
 
-	public enum ListDisplayType {
-		MY_POSTS, RECENT_POSTS, SEARCH, OTHERS
-	}
-
 	public boolean isShowMyPosts();
 
 	public boolean isShowRecentPosts();

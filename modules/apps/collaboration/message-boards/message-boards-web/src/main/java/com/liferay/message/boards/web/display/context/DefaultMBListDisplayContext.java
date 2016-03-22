@@ -232,4 +232,9 @@ public class DefaultMBListDisplayContext implements MBListDisplayContext {
 	private final ListDisplayType _listDisplayType;
 	private final HttpServletRequest _request;
 
+	private enum ListDisplayType {
+
+		MY_POSTS, RECENT_POSTS, SEARCH, OTHERS
+	}
+
 }
