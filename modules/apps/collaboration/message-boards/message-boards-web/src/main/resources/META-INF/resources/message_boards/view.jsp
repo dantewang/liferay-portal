@@ -60,6 +60,8 @@ request.setAttribute("view.jsp-threadSubscriptionClassPKs", threadSubscriptionCl
 request.setAttribute("view.jsp-categoryId", categoryId);
 request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 request.setAttribute("view.jsp-portletURL", portletURL);
+
+MBListDisplayContext mbListDisplayContext = mbDisplayContextProvider.getMbListDisplayContext(request, response, categoryId);
 %>
 
 <portlet:actionURL name="/message_boards/edit_category" var="restoreTrashEntriesURL">
@@ -85,8 +87,6 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 	<c:when test='<%= mbListDisplayContext.isShowSearch() || mvcRenderCommandName.equals("/message_boards/view") || mvcRenderCommandName.equals("/message_boards/view_category") || mbListDisplayContext.isShowMyPosts() || mbListDisplayContext.isShowRecentPosts() %>'>
 
 		<%
-		MBListDisplayContext mbListDisplayContext = mbDisplayContextProvider.getMbListDisplayContext(request, response, categoryId);
-
 		SearchContainer entriesSearchContainer = new SearchContainer(renderRequest, null, null, "cur1", 0, SearchContainer.DEFAULT_DELTA, portletURL, null, "there-are-no-threads-nor-categories");
 
 		entriesSearchContainer.setId("mbEntries");
