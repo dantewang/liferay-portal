@@ -82,60 +82,7 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 		<%@ include file="/message_boards/view_threads.jspf" %>
 
 	</c:when>
-	<c:when test='<%= mvcRenderCommandName.equals("/message_boards/view_my_subscriptions") %>'>
-
-		<%
-		if (themeDisplay.isSignedIn()) {
-			groupThreadsUserId = user.getUserId();
-		}
-
-		if (groupThreadsUserId > 0) {
-			portletURL.setParameter("groupThreadsUserId", String.valueOf(groupThreadsUserId));
-		}
-		%>
-
-		<div class="main-content-body">
-			<liferay-ui:search-container
-				curParam="cur1"
-				deltaConfigurable="<%= false %>"
-				emptyResultsMessage="you-are-not-subscribed-to-any-categories"
-				headerNames="category,categories,threads,posts"
-				iteratorURL="<%= portletURL %>"
-				total="<%= MBCategoryServiceUtil.getSubscribedCategoriesCount(scopeGroupId, user.getUserId()) %>"
-			>
-				<liferay-ui:search-container-results
-					results="<%= MBCategoryServiceUtil.getSubscribedCategories(scopeGroupId, user.getUserId(), searchContainer.getStart(), searchContainer.getEnd()) %>"
-				/>
-
-				<liferay-ui:search-container-row
-					className="com.liferay.message.boards.kernel.model.MBCategory"
-					escapedModel="<%= true %>"
-					keyProperty="categoryId"
-					modelVar="curCategory"
-				>
-					<liferay-ui:search-container-row-parameter name="categorySubscriptionClassPKs" value="<%= categorySubscriptionClassPKs %>" />
-
-					<liferay-portlet:renderURL varImpl="rowURL">
-						<portlet:param name="mvcRenderCommandName" value="/message_boards/view_category" />
-						<portlet:param name="mbCategoryId" value="<%= String.valueOf(curCategory.getCategoryId()) %>" />
-					</liferay-portlet:renderURL>
-
-					<%@ include file="/message_boards/subscribed_category_columns.jspf" %>
-				</liferay-ui:search-container-row>
-
-				<liferay-ui:search-iterator type="more" />
-			</liferay-ui:search-container>
-
-			<%@ include file="/message_boards/view_threads.jspf" %>
-
-			<%
-			PortalUtil.setPageSubtitle(LanguageUtil.get(request, StringUtil.replace("my-subscriptions", CharPool.UNDERLINE, CharPool.DASH)), request);
-			PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(request, TextFormatter.format("my-subscriptions", TextFormatter.O)), portletURL.toString());
-			%>
-
-		</div>
-	</c:when>
-	<c:otherwise>
+	<c:when test='<%= mbListDisplayContext.isShowSearch() || mvcRenderCommandName.equals("/message_boards/view") || mvcRenderCommandName.equals("/message_boards/view_category") || mbListDisplayContext.isShowMyPosts() || mbListDisplayContext.isShowRecentPosts() %>'>
 
 		<%
 		MBListDisplayContext mbListDisplayContext = mbDisplayContextProvider.getMbListDisplayContext(request, response, categoryId);
@@ -325,7 +272,60 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 				</div>
 			</c:when>
 		</c:choose>
-	</c:otherwise>
+	</c:when>
+	<c:when test='<%= mvcRenderCommandName.equals("/message_boards/view_my_subscriptions") %>'>
+
+		<%
+		if (themeDisplay.isSignedIn()) {
+			groupThreadsUserId = user.getUserId();
+		}
+
+		if (groupThreadsUserId > 0) {
+			portletURL.setParameter("groupThreadsUserId", String.valueOf(groupThreadsUserId));
+		}
+		%>
+
+		<div class="main-content-body">
+			<liferay-ui:search-container
+				curParam="cur1"
+				deltaConfigurable="<%= false %>"
+				emptyResultsMessage="you-are-not-subscribed-to-any-categories"
+				headerNames="category,categories,threads,posts"
+				iteratorURL="<%= portletURL %>"
+				total="<%= MBCategoryServiceUtil.getSubscribedCategoriesCount(scopeGroupId, user.getUserId()) %>"
+			>
+				<liferay-ui:search-container-results
+					results="<%= MBCategoryServiceUtil.getSubscribedCategories(scopeGroupId, user.getUserId(), searchContainer.getStart(), searchContainer.getEnd()) %>"
+				/>
+
+				<liferay-ui:search-container-row
+					className="com.liferay.message.boards.kernel.model.MBCategory"
+					escapedModel="<%= true %>"
+					keyProperty="categoryId"
+					modelVar="curCategory"
+				>
+					<liferay-ui:search-container-row-parameter name="categorySubscriptionClassPKs" value="<%= categorySubscriptionClassPKs %>" />
+
+					<liferay-portlet:renderURL varImpl="rowURL">
+						<portlet:param name="mvcRenderCommandName" value="/message_boards/view_category" />
+						<portlet:param name="mbCategoryId" value="<%= String.valueOf(curCategory.getCategoryId()) %>" />
+					</liferay-portlet:renderURL>
+
+					<%@ include file="/message_boards/subscribed_category_columns.jspf" %>
+				</liferay-ui:search-container-row>
+
+				<liferay-ui:search-iterator type="more" />
+			</liferay-ui:search-container>
+
+			<%@ include file="/message_boards/view_threads.jspf" %>
+
+			<%
+			PortalUtil.setPageSubtitle(LanguageUtil.get(request, StringUtil.replace("my-subscriptions", CharPool.UNDERLINE, CharPool.DASH)), request);
+			PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(request, TextFormatter.format("my-subscriptions", TextFormatter.O)), portletURL.toString());
+			%>
+
+		</div>
+	</c:when>
 </c:choose>
 
 <%!
