@@ -14,7 +14,8 @@
  */
 --%>
 
-<c:if test="<%= showAddCategoryButton || showAddMessageButton || showPermissionsButton || category != null %>">
+<c:if test="<%= showAddCategoryButton || showAddMessageButton || showPermissionsButton || (category != null) %>">
+
 	<%
 	long mbCategoryId = categoryId;
 
@@ -33,7 +34,7 @@
 	}
 	%>
 
-	<div class="category-subscriptions category-subscription-types">
+	<div class="category-subscription-types category-subscriptions">
 			<c:if test="<%= enableRSS %>">
 				<liferay-ui:rss
 					delta="<%= rssDelta %>"

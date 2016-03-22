@@ -164,6 +164,7 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 					<%@ include file="/message_boards/category_subscriptions.jspf" %>
 
 					<c:if test="<%= category != null %>">
+
 						<%
 						long parentCategoryId = category.getParentCategoryId();
 						String parentCategoryName = LanguageUtil.get(request, "message-boards-home");
