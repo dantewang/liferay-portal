@@ -33,7 +33,14 @@ public class DefaultMBHomeDisplayContext implements MBHomeDisplayContext {
 	public DefaultMBHomeDisplayContext(
 		HttpServletRequest request, HttpServletResponse response) {
 
-		_mbRequestHelper = new MBRequestHelper(request);
+		this(request, response, new MBRequestHelper(request));
+	}
+
+	public DefaultMBHomeDisplayContext(
+		HttpServletRequest request, HttpServletResponse response,
+		MBRequestHelper mbRequestHelper) {
+
+		_mbRequestHelper = mbRequestHelper;
 	}
 
 	@Override
