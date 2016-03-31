@@ -17,6 +17,7 @@ package com.liferay.message.boards.web.display.context;
 import com.liferay.message.boards.display.context.MBDisplayContextFactory;
 import com.liferay.message.boards.display.context.MBHomeDisplayContext;
 import com.liferay.message.boards.display.context.MBListDisplayContext;
+import com.liferay.message.boards.web.display.context.util.MBRequestHelper;
 
 import java.util.Collection;
 import java.util.Map;
@@ -43,11 +44,19 @@ public class MBDisplayContextProvider {
 	public MBHomeDisplayContext getMBHomeDisplayContext(
 		HttpServletRequest request, HttpServletResponse response) {
 
+		return getMBHomeDisplayContext(
+			request, response, new MBRequestHelper(request));
+	}
+
+	public MBHomeDisplayContext getMBHomeDisplayContext(
+		HttpServletRequest request, HttpServletResponse response,
+		MBRequestHelper mbRequestHelper) {
+
 		Collection<MBDisplayContextFactory> mbDisplayContextFactories =
 			_mbDisplayContextFactories.values();
 
 		MBHomeDisplayContext mbHomeDisplayContext =
-			new DefaultMBHomeDisplayContext(request, response);
+			new DefaultMBHomeDisplayContext(request, response, mbRequestHelper);
 
 		for (MBDisplayContextFactory mbDisplayContextFactory :
 				mbDisplayContextFactories) {
