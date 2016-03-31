@@ -207,13 +207,9 @@ boolean childrenMessagesTaggable = true;
 boolean includeFormTag = true;
 boolean showSearch = true;
 
-MBRequestHelper mbRequestHelper = new MBRequestHelper(request);
-
 MBWebComponentProvider mbWebComponentProvider = MBWebComponentProvider.getMBWebComponentProvider();
 
 MBDisplayContextProvider mbDisplayContextProvider = mbWebComponentProvider.getMBDisplayContextProvider();
-
-MBHomeDisplayContext mbHomeDisplayContext = mbDisplayContextProvider.getMBHomeDisplayContext(request, response, mbRequestHelper);
 
 PortalPreferences portalPreferences = PortletPreferencesFactoryUtil.getPortalPreferences(liferayPortletRequest);
 
