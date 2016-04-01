@@ -68,7 +68,13 @@ public class TagResourceBundleUtil {
 		HttpServletRequest request =
 			(HttpServletRequest)pageContext.getRequest();
 
-		Locale locale = PortalUtil.getLocale(request);
+		Locale locale = (Locale)request.getAttribute("resourceBundle.locale");
+
+		if (locale == null) {
+			locale = PortalUtil.getLocale(request);
+
+			request.setAttribute("resourceBundle.locale", locale);
+		}
 
 		if (resourceBundle != null) {
 			return new AggregateResourceBundle(
