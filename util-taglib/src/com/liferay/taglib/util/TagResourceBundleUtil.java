@@ -15,9 +15,11 @@
 package com.liferay.taglib.util;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.memory.SoftReferenceThreadLocal;
 import com.liferay.portal.kernel.util.AggregateResourceBundle;
 import com.liferay.portal.kernel.util.AggregateResourceBundleLoader;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.ResourceBundleLoader;
 import com.liferay.portal.kernel.util.ResourceBundleLoaderUtil;
@@ -68,7 +70,20 @@ public class TagResourceBundleUtil {
 		HttpServletRequest request =
 			(HttpServletRequest)pageContext.getRequest();
 
-		Locale locale = PortalUtil.getLocale(request);
+		ObjectValuePair requestLocalePair = _requestLocaleThreadLocal.get();
+
+		Locale locale = null;
+
+		if ((requestLocalePair != null) &&
+				(requestLocalePair.getKey() == request)) {
+
+			locale = (Locale)requestLocalePair.getValue();
+		}
+		else {
+			locale = PortalUtil.getLocale(request);
+
+			_requestLocaleThreadLocal.set(new ObjectValuePair(request, locale));
+		}
 
 		if (resourceBundle != null) {
 			return new AggregateResourceBundle(
@@ -123,6 +138,9 @@ public class TagResourceBundleUtil {
 		}
 	}
 
+	private static final SoftReferenceThreadLocal<
+		ObjectValuePair<HttpServletRequest, Locale>> _requestLocaleThreadLocal =
+			new SoftReferenceThreadLocal<>();
 	private static final ResourceBundle _emptyResourceBundle =
 		new EmptyResourceBundle();
 
