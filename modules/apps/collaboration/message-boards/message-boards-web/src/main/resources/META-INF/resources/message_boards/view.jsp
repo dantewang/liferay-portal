@@ -68,7 +68,7 @@ MBListDisplayContext mbListDisplayContext = mbDisplayContextProvider.getMbListDi
 	portletURL="<%= restoreTrashEntriesURL %>"
 />
 
-<liferay-util:include page="/message_boards/top_links.jsp" servletContext="<%= application %>" />
+<%@ include file="/message_boards/top_links.jspf" %>
 
 <c:choose>
 	<c:when test="<%= useAssetEntryQuery %>">
