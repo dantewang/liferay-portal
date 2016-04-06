@@ -14,25 +14,43 @@
  */
 --%>
 
-<c:if test="<%= category == null %>">
-	<div class="category-subscriptions">
-		<div class="category-subscription-types">
+<c:if test="<%= showAddCategoryButton || showAddMessageButton || showPermissionsButton || (category != null) %>">
+
+	<%
+	long mbCategoryId = categoryId;
+
+	boolean showSubscriptionLink = (mbGroupServiceSettings.isEmailMessageAddedEnabled() || mbGroupServiceSettings.isEmailMessageUpdatedEnabled());
+	boolean isSubscribed = false;
+
+	if (category != null) {
+		mbCategoryId = MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID;
+
+		showSubscriptionLink = MBCategoryPermission.contains(permissionChecker, category, ActionKeys.SUBSCRIBE) && showSubscriptionLink;
+		isSubscribed = (categorySubscriptionClassPKs != null) && categorySubscriptionClassPKs.contains(category.getCategoryId());
+	}
+	else {
+		showSubscriptionLink = MBPermission.contains(permissionChecker, scopeGroupId, ActionKeys.SUBSCRIBE) && showSubscriptionLink;
+		isSubscribed = SubscriptionLocalServiceUtil.isSubscribed(user.getCompanyId(), user.getUserId(), MBCategory.class.getName(), scopeGroupId);
+	}
+	%>
+
+	<div class="category-subscription-types category-subscriptions">
 			<c:if test="<%= enableRSS %>">
 				<liferay-ui:rss
 					delta="<%= rssDelta %>"
 					displayStyle="<%= rssDisplayStyle %>"
 					feedType="<%= rssFeedType %>"
-					url="<%= MBUtil.getRSSURL(plid, 0, 0, 0, themeDisplay) %>"
+					url="<%= MBUtil.getRSSURL(plid, categoryId, 0, 0, themeDisplay) %>"
 				/>
 			</c:if>
 
-			<c:if test="<%= MBPermission.contains(permissionChecker, scopeGroupId, ActionKeys.SUBSCRIBE) && (mbGroupServiceSettings.isEmailMessageAddedEnabled() || mbGroupServiceSettings.isEmailMessageUpdatedEnabled()) %>">
+			<c:if test="<%= showSubscriptionLink %>">
 				<c:choose>
-					<c:when test="<%= SubscriptionLocalServiceUtil.isSubscribed(user.getCompanyId(), user.getUserId(), MBCategory.class.getName(), scopeGroupId) %>">
+					<c:when test="<%= isSubscribed %>">
 						<portlet:actionURL name="/message_boards/edit_category" var="unsubscribeURL">
 							<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.UNSUBSCRIBE %>" />
 							<portlet:param name="redirect" value="<%= currentURL %>" />
-							<portlet:param name="mbCategoryId" value="<%= String.valueOf(MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID) %>" />
+							<portlet:param name="mbCategoryId" value="<%= String.valueOf(mbCategoryId) %>" />
 						</portlet:actionURL>
 
 						<liferay-ui:icon
@@ -46,7 +64,7 @@
 						<portlet:actionURL name="/message_boards/edit_category" var="subscribeURL">
 							<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.SUBSCRIBE %>" />
 							<portlet:param name="redirect" value="<%= currentURL %>" />
-							<portlet:param name="mbCategoryId" value="<%= String.valueOf(MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID) %>" />
+							<portlet:param name="mbCategoryId" value="<%= String.valueOf(mbCategoryId) %>" />
 						</portlet:actionURL>
 
 						<liferay-ui:icon
@@ -58,6 +76,5 @@
 					</c:otherwise>
 				</c:choose>
 			</c:if>
-		</div>
 	</div>
 </c:if>
