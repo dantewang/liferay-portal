@@ -32,8 +32,6 @@ if ((message != null) && layout.isTypeControlPanel()) {
 AssetEntryServiceUtil.incrementViewCounter(MBMessage.class.getName(), message.getMessageId());
 
 boolean portletTitleBasedNavigation = GetterUtil.getBoolean(portletConfig.getInitParameter("portlet-title-based-navigation"));
-
-MBBreadcrumbUtil.addPortletBreadcrumbEntries(message, request, renderResponse);
 %>
 
 <div <%= portletTitleBasedNavigation ? "class=\"container-fluid-1280\"" : StringPool.BLANK %>>
