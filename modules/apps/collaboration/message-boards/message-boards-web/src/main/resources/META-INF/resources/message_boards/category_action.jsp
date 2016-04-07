@@ -64,11 +64,9 @@ else {
 			url="<%= editURL %>"
 		/>
 
-		<portlet:renderURL var="moveURL">
-			<portlet:param name="mvcRenderCommandName" value="/message_boards/move_category" />
-			<portlet:param name="redirect" value="<%= currentURL %>" />
-			<portlet:param name="mbCategoryId" value="<%= String.valueOf(category.getCategoryId()) %>" />
-		</portlet:renderURL>
+		<%
+		String moveURL = StringUtil.replace(editURL, "edit_cateogry", "move_categroy");
+		%>
 
 		<liferay-ui:icon
 			message="move"
