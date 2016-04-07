@@ -195,7 +195,6 @@ boolean allowAnonymousPosting = mbGroupServiceSettings.isAllowAnonymousPosting()
 boolean enableFlags = mbGroupServiceSettings.isEnableFlags();
 boolean enableRatings = mbGroupServiceSettings.isEnableRatings();
 String messageFormat = mbGroupServiceSettings.getMessageFormat();
-String recentPostsDateOffset = mbGroupServiceSettings.getRecentPostsDateOffset();
 boolean subscribeByDefault = mbGroupServiceSettings.isSubscribeByDefault();
 boolean threadAsQuestionByDefault = mbGroupServiceSettings.isThreadAsQuestionByDefault();
 
