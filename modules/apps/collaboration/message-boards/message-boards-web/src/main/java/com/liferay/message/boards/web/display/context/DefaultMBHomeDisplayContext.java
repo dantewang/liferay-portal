@@ -31,9 +31,10 @@ import javax.servlet.http.HttpServletResponse;
 public class DefaultMBHomeDisplayContext implements MBHomeDisplayContext {
 
 	public DefaultMBHomeDisplayContext(
-		HttpServletRequest request, HttpServletResponse response) {
+		HttpServletRequest request, HttpServletResponse response,
+		MBRequestHelper mbRequestHelper) {
 
-		_mbRequestHelper = new MBRequestHelper(request);
+		_mbRequestHelper = mbRequestHelper;
 	}
 
 	@Override

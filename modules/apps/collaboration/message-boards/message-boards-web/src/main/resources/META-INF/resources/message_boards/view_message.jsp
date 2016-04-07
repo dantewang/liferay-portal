@@ -17,11 +17,15 @@
 <%@ include file="/message_boards/init.jsp" %>
 
 <%
+String mvcRenderCommandName = ParamUtil.getString(request, "mvcRenderCommandName", "/message_boards/view");
+
 MBMessageDisplay messageDisplay = (MBMessageDisplay)request.getAttribute(WebKeys.MESSAGE_BOARDS_MESSAGE_DISPLAY);
 
 MBMessage message = messageDisplay.getMessage();
 
 MBCategory category = messageDisplay.getCategory();
+
+long categoryId = MBUtil.getCategoryId(request, category);
 
 MBThread thread = messageDisplay.getThread();
 
@@ -32,13 +36,11 @@ if ((message != null) && layout.isTypeControlPanel()) {
 AssetEntryServiceUtil.incrementViewCounter(MBMessage.class.getName(), message.getMessageId());
 
 boolean portletTitleBasedNavigation = GetterUtil.getBoolean(portletConfig.getInitParameter("portlet-title-based-navigation"));
-
-MBBreadcrumbUtil.addPortletBreadcrumbEntries(message, request, renderResponse);
 %>
 
 <div <%= portletTitleBasedNavigation ? "class=\"container-fluid-1280\"" : StringPool.BLANK %>>
 	<c:if test="<%= !portletTitleBasedNavigation %>">
-		<liferay-util:include page="/message_boards/top_links.jsp" servletContext="<%= application %>" />
+		<%@ include file="/message_boards/top_links.jspf" %>
 	</c:if>
 
 	<c:choose>
