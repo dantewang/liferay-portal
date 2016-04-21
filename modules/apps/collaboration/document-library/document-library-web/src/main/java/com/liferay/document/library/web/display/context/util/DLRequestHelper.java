@@ -58,30 +58,39 @@ public class DLRequestHelper extends BaseRequestHelper {
 	}
 
 	public DLPortletInstanceSettings getDLPortletInstanceSettings() {
-		try {
+		if (_dlPortletInstanceSettings == null) {
+			HttpServletRequest request = getRequest();
+
+			_dlPortletInstanceSettings =
+				(DLPortletInstanceSettings)request.getAttribute(
+					"DL_PORTLET_INSTANCE_SETTINGS");
+
 			if (_dlPortletInstanceSettings == null) {
 				String portletResource = getPortletResource();
 
-				if (Validator.isNotNull(portletResource)) {
-					HttpServletRequest request = getRequest();
+				try {
+					if (Validator.isNotNull(portletResource)) {
+						_dlPortletInstanceSettings =
+							DLPortletInstanceSettings.getInstance(
+								getLayout(), getResourcePortletId(),
+								request.getParameterMap());
+					}
+					else {
+						_dlPortletInstanceSettings =
+							DLPortletInstanceSettings.getInstance(
+								getLayout(), getPortletId());
+					}
+				}
+				catch(PortalException pe){
+					throw new SystemException(pe);
+				}
 
-					_dlPortletInstanceSettings =
-						DLPortletInstanceSettings.getInstance(
-							getLayout(), getResourcePortletId(),
-							request.getParameterMap());
-				}
-				else {
-					_dlPortletInstanceSettings =
-						DLPortletInstanceSettings.getInstance(
-							getLayout(), getPortletId());
-				}
+				request.setAttribute(
+					"DL_PORTLET_INSTANCE_SETTINGS", _dlPortletInstanceSettings);
 			}
+		}
 
-			return _dlPortletInstanceSettings;
-		}
-		catch (PortalException pe) {
-			throw new SystemException(pe);
-		}
+		return _dlPortletInstanceSettings;
 	}
 
 	private DLGroupServiceSettings _dlGroupServiceSettings;
