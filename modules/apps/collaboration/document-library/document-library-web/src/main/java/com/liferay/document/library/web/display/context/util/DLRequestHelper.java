@@ -14,6 +14,7 @@
 
 package com.liferay.document.library.web.display.context.util;
 
+import com.liferay.document.library.web.constants.DLPortletKeys;
 import com.liferay.document.library.web.settings.internal.DLPortletInstanceSettings;
 import com.liferay.portal.kernel.display.context.util.BaseRequestHelper;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -38,7 +39,7 @@ public class DLRequestHelper extends BaseRequestHelper {
 
 			_dlGroupServiceSettings =
 				(DLGroupServiceSettings)request.getAttribute(
-					"DL_GROUP_SERVICE_SETTINGS");
+					DLPortletKeys.DL_PORTLET_INSTANCE_SETTINGS);
 
 			if (_dlGroupServiceSettings == null) {
 				String portletResource = getPortletResource();
@@ -60,7 +61,8 @@ public class DLRequestHelper extends BaseRequestHelper {
 				}
 
 				request.setAttribute(
-					"DL_GROUP_SERVICE_SETTINGS", _dlGroupServiceSettings);
+					DLPortletKeys.DL_GROUP_SERVICE_SETTINGS,
+					_dlGroupServiceSettings);
 			}
 		}
 
@@ -73,7 +75,7 @@ public class DLRequestHelper extends BaseRequestHelper {
 
 			_dlPortletInstanceSettings =
 				(DLPortletInstanceSettings)request.getAttribute(
-					"DL_PORTLET_INSTANCE_SETTINGS");
+					DLPortletKeys.DL_PORTLET_INSTANCE_SETTINGS);
 
 			if (_dlPortletInstanceSettings == null) {
 				String portletResource = getPortletResource();
@@ -96,7 +98,8 @@ public class DLRequestHelper extends BaseRequestHelper {
 				}
 
 				request.setAttribute(
-					"DL_PORTLET_INSTANCE_SETTINGS", _dlPortletInstanceSettings);
+					DLPortletKeys.DL_PORTLET_INSTANCE_SETTINGS,
+					_dlPortletInstanceSettings);
 			}
 		}
 

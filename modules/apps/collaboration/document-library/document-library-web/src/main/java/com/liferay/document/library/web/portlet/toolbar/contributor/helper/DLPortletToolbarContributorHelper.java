@@ -17,13 +17,14 @@ package com.liferay.document.library.web.portlet.toolbar.contributor.helper;
 import com.liferay.document.library.kernel.exception.NoSuchFolderException;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
+import com.liferay.document.library.web.display.context.util.DLRequestHelper;
 import com.liferay.document.library.web.settings.internal.DLPortletInstanceSettings;
 import com.liferay.portal.kernel.bean.BeanParamUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.Folder;
-import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -48,19 +49,19 @@ public class DLPortletToolbarContributorHelper {
 			return folder;
 		}
 
-		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
+		DLRequestHelper dlRequestHelper = new DLRequestHelper(
+			themeDisplay.getRequest());
 
 		long rootFolderId = DLFolderConstants.DEFAULT_PARENT_FOLDER_ID;
 
 		try {
 			DLPortletInstanceSettings dlPortletInstanceSettings =
-				DLPortletInstanceSettings.getInstance(
-					themeDisplay.getLayout(), portletDisplay.getId());
+				dlRequestHelper.getDLPortletInstanceSettings();
 
 			rootFolderId = dlPortletInstanceSettings.getRootFolderId();
 		}
-		catch (PortalException pe) {
-			_log.error(pe, pe);
+		catch (SystemException se) {
+			_log.error(se, se);
 		}
 
 		long folderId = BeanParamUtil.getLong(
