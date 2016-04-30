@@ -42,7 +42,7 @@ public class DefaultIGViewFileVersionDisplayContext
 			FileShortcut fileShortcut)
 		throws PortalException {
 
-		this(request, response, fileShortcut.getFileVersion(), fileShortcut);
+		this(request, response, null, fileShortcut);
 	}
 
 	public DefaultIGViewFileVersionDisplayContext(
