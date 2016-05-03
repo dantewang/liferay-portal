@@ -66,17 +66,17 @@ public class CommentSanitizerImpl extends BaseSanitizer {
 		Map<String, String[]> attributeNames =
 			_commentAllowedContent.getAttributeNames();
 
-		for (String elementName : attributeNames.keySet()) {
-			String[] attributesNames = attributeNames.get(elementName);
+		for (Map.Entry<String, String[]> entry : attributeNames.entrySet()) {
+			String[] attributesNames = entry.getValue();
 
 			if (attributesNames != null) {
 				HtmlPolicyBuilder.AttributeBuilder attributeBuilder =
 					htmlPolicyBuilder.allowAttributes(attributesNames);
 
-				attributeBuilder.onElements(elementName);
+				attributeBuilder.onElements(entry.getKey());
 			}
 
-			htmlPolicyBuilder.allowElements(elementName);
+			htmlPolicyBuilder.allowElements(entry.getKey());
 		}
 
 		PolicyFactory policyFactory = htmlPolicyBuilder.toFactory();
