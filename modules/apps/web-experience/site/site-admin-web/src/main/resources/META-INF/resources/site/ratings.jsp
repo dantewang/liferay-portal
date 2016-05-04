@@ -57,17 +57,17 @@ CompanyPortletRatingsDefinitionDisplayContext companyPortletRatingsDefinitionDis
 		<%
 		Map<String, RatingsType> ratingsTypeMap = entry.getValue();
 
-		Set<Map.Entry<String, RatingsType>> entries = ratingsTypeMap.entrySet();
+		Set<Map.Entry<String, RatingsType>> ratingsTypeMapEntries = ratingsTypeMap.entrySet();
 
-		for (Map.Entry<String, RatingsType>> entry : entries) {
-			String className = entry.getKey();
+		for (Map.Entry<String, RatingsType> ratingsTypeMapEntry : ratingsTypeMapEntries) {
+			String className = ratingsTypeMapEntry.getKey();
 
 			String propertyKey = RatingsDataTransformerUtil.getPropertyKey(className);
 
-			RatingsType ratingsType = entry.getValue();
+			RatingsType ratingsType = ratingsTypeMapEntry.getValue();
 		%>
 
-			<aui:select label="<%= (entries.size() > 1) ? ResourceActionsUtil.getModelResource(locale, className) : StringPool.BLANK %>" name='<%= "TypeSettingsProperties--" + propertyKey + "--" %>'>
+			<aui:select label="<%= (ratingsTypeMapEntries.size() > 1) ? ResourceActionsUtil.getModelResource(locale, className) : StringPool.BLANK %>" name='<%= "TypeSettingsProperties--" + propertyKey + "--" %>'>
 				<aui:option label='<%= LanguageUtil.format(request, "default-value-x", companyPortletRatingsDefinitionDisplayContext.getRatingsType(portletId, className)) %>' selected="<%= ratingsType == null %>" value="<%= StringPool.BLANK %>" />
 
 				<%

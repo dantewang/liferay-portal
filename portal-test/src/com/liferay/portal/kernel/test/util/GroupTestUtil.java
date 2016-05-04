@@ -179,8 +179,7 @@ public class GroupTestUtil {
 			new String[] {Boolean.FALSE.toString()});
 
 		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
-			serviceContext.setAttribute(
-				entry.getKey(), entry.getValue()[0]);
+			serviceContext.setAttribute(entry.getKey(), entry.getValue()[0]);
 		}
 
 		StagingLocalServiceUtil.enableLocalStaging(

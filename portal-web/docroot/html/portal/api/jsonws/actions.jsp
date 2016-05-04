@@ -72,7 +72,7 @@ Set<String> contextNames = JSONWebServiceActionsManagerUtil.getContextNames();
 		jsonWebServiceMappings.add(jsonWebServiceActionMapping);
 	}
 
-	for (Map.Entry<String, Set<JSONWebServiceActionMapping>> entry : jsonWebServiceClasses.entrySet()) {
+	for (Map.Entry<String, Set> entry : jsonWebServiceClasses.entrySet()) {
 		String jsonWebServiceClassName = entry.getKey();
 		Set<JSONWebServiceActionMapping> jsonWebServiceMappings = entry.getValue();
 

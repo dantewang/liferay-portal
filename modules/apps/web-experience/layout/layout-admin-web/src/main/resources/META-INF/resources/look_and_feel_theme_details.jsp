@@ -114,7 +114,7 @@ Map<String, ThemeSetting> configurableSettings = selTheme.getConfigurableSetting
 	<h4><liferay-ui:message key="settings" /></h4>
 
 	<%
-	for (Map.Entry<String, ThemeSetting>> entry : configurableSettings.entrySet()) {
+	for (Map.Entry<String, ThemeSetting> entry : configurableSettings.entrySet()) {
 		String name = entry.getKey();
 		ThemeSetting themeSetting = entry.getValue();
 
