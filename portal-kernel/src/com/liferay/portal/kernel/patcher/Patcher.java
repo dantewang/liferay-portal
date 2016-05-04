@@ -14,10 +14,11 @@
 
 package com.liferay.portal.kernel.patcher;
 
-import java.io.File;
-import java.util.Properties;
-
 import aQute.bnd.annotation.ProviderType;
+
+import java.io.File;
+
+import java.util.Properties;
 
 /**
  * @author Zsolt Balogh

@@ -151,8 +151,8 @@ public abstract class DoulosServlet extends HttpServlet {
 				doulosRequestProcessor.process(
 					request.getMethod(),
 					pathInfo.substring(doulosRequestProcessorKey.length()),
-					request.getParameterMap(),
-					payloadJSONObject, responseJSONObject);
+					request.getParameterMap(), payloadJSONObject,
+					responseJSONObject);
 
 				String json = responseJSONObject.toString();
 

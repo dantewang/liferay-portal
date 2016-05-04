@@ -137,7 +137,10 @@ public class AssetRendererFactoryRegistryUtil {
 		Map<String, AssetRendererFactory<?>> filteredAssetRendererFactories =
 			new ConcurrentHashMap<>();
 
-		for (String className : assetRendererFactories.keySet()) {
+		for (Map.Entry<String, AssetRendererFactory<?>> entry :
+				assetRendererFactories.entrySet()) {
+
+			String className = entry.getKey();
 			AssetRendererFactory<?> assetRendererFactory =
 				assetRendererFactories.get(className);
 
