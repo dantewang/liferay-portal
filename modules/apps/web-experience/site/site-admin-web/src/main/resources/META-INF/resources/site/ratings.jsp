@@ -44,7 +44,9 @@ CompanyPortletRatingsDefinitionDisplayContext companyPortletRatingsDefinitionDis
 	<%
 	Map<String, Map<String, RatingsType>> groupRatingsTypeMaps = groupPortletRatingsDefinitionDisplayContext.getGroupRatingsTypeMaps();
 
-	for (String portletId : groupRatingsTypeMaps.keySet()) {
+	for (Map.Entry<String, Map<String, RatingsType>> entry : groupRatingsTypeMaps.entrySet()) {
+		String portletId = entry.getKey();
+
 		Portlet portlet = PortletLocalServiceUtil.getPortletById(portletId);
 	%>
 
@@ -53,17 +55,19 @@ CompanyPortletRatingsDefinitionDisplayContext companyPortletRatingsDefinitionDis
 		</h4>
 
 		<%
-		Map<String, RatingsType> ratingsTypeMap = groupRatingsTypeMaps.get(portletId);
+		Map<String, RatingsType> ratingsTypeMap = entry.getValue();
 
-		Set<String> classNames = ratingsTypeMap.keySet();
+		Set<Map.Entry<String, RatingsType>> entries = ratingsTypeMap.entrySet();
 
-		for (String className : classNames) {
+		for (Map.Entry<String, RatingsType>> entry : entries) {
+			String className = entry.getKey();
+
 			String propertyKey = RatingsDataTransformerUtil.getPropertyKey(className);
 
-			RatingsType ratingsType = ratingsTypeMap.get(className);
+			RatingsType ratingsType = entry.getValue();
 		%>
 
-			<aui:select label="<%= (classNames.size() > 1) ? ResourceActionsUtil.getModelResource(locale, className) : StringPool.BLANK %>" name='<%= "TypeSettingsProperties--" + propertyKey + "--" %>'>
+			<aui:select label="<%= (entries.size() > 1) ? ResourceActionsUtil.getModelResource(locale, className) : StringPool.BLANK %>" name='<%= "TypeSettingsProperties--" + propertyKey + "--" %>'>
 				<aui:option label='<%= LanguageUtil.format(request, "default-value-x", companyPortletRatingsDefinitionDisplayContext.getRatingsType(portletId, className)) %>' selected="<%= ratingsType == null %>" value="<%= StringPool.BLANK %>" />
 
 				<%
