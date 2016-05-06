@@ -16,13 +16,13 @@ package com.liferay.document.library.web.util;
 
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.document.library.web.display.context.util.DLRequestHelper;
 import com.liferay.document.library.web.settings.internal.DLPortletInstanceSettings;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileShortcut;
 import com.liferay.portal.kernel.repository.model.Folder;
-import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -114,11 +114,10 @@ public class DLBreadcrumbUtil {
 
 		data.put("direction-right", Boolean.TRUE.toString());
 
-		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
+		DLRequestHelper dlRequestHelper = new DLRequestHelper(request);
 
 		DLPortletInstanceSettings dlPortletInstanceSettings =
-			DLPortletInstanceSettings.getInstance(
-				themeDisplay.getLayout(), portletDisplay.getId());
+			dlRequestHelper.getDLPortletInstanceSettings();
 
 		data.put("folder-id", dlPortletInstanceSettings.getRootFolderId());
 
@@ -136,20 +135,16 @@ public class DLBreadcrumbUtil {
 			Folder folder, HttpServletRequest request, PortletURL portletURL)
 		throws Exception {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
-
 		long rootFolderId = DLFolderConstants.DEFAULT_PARENT_FOLDER_ID;
 
 		boolean ignoreRootFolder = ParamUtil.getBoolean(
 			request, "ignoreRootFolder");
 
 		if (!ignoreRootFolder) {
+			DLRequestHelper dlRequestHelper = new DLRequestHelper(request);
+
 			DLPortletInstanceSettings dlPortletInstanceSettings =
-				DLPortletInstanceSettings.getInstance(
-					themeDisplay.getLayout(), portletDisplay.getId());
+				dlRequestHelper.getDLPortletInstanceSettings();
 
 			rootFolderId = dlPortletInstanceSettings.getRootFolderId();
 		}

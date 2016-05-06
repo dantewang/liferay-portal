@@ -19,6 +19,12 @@ package com.liferay.document.library.web.constants;
  */
 public class DLPortletKeys {
 
+	public static final String DL_PORTLET_INSTANCE_SETTINGS =
+		"DL_PORTLET_INSTANCE_SETTINGS";
+
+	public static final String DL_GROUP_SERVICE_SETTINGS =
+		"DL_GROUP_SERVICE_SETTINGS";
+
 	public static final String DOCUMENT_LIBRARY =
 		"com_liferay_document_library_web_portlet_DLPortlet";
 

@@ -35,6 +35,7 @@ import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.document.library.kernel.service.DLTrashService;
 import com.liferay.document.library.kernel.util.DLUtil;
 import com.liferay.document.library.web.constants.DLPortletKeys;
+import com.liferay.document.library.web.display.context.util.DLRequestHelper;
 import com.liferay.document.library.web.settings.internal.DLPortletInstanceSettings;
 import com.liferay.dynamic.data.mapping.kernel.StorageFieldRequiredException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -58,7 +59,6 @@ import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.ServletResponseConstants;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
-import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.LiferayFileItemException;
 import com.liferay.portal.kernel.upload.UploadException;
@@ -671,11 +671,11 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 				(ThemeDisplay)portletRequest.getAttribute(
 					WebKeys.THEME_DISPLAY);
 
-			PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
+			DLRequestHelper dlRequestHelper = new DLRequestHelper(
+				themeDisplay.getRequest());
 
 			DLPortletInstanceSettings dlPortletInstanceSettings =
-				DLPortletInstanceSettings.getInstance(
-					themeDisplay.getLayout(), portletDisplay.getId());
+				dlRequestHelper.getDLPortletInstanceSettings();
 
 			Set<String> extensions = new HashSet<>();
 
@@ -967,12 +967,11 @@ public class EditFileEntryMVCActionCommand extends BaseMVCActionCommand {
 				String portletName = portletConfig.getPortletName();
 
 				if (portletName.equals(DLPortletKeys.MEDIA_GALLERY_DISPLAY)) {
-					PortletDisplay portletDisplay =
-						themeDisplay.getPortletDisplay();
+					DLRequestHelper dlRequestHelper = new DLRequestHelper(
+						themeDisplay.getRequest());
 
 					DLPortletInstanceSettings dlPortletInstanceSettings =
-						DLPortletInstanceSettings.getInstance(
-							themeDisplay.getLayout(), portletDisplay.getId());
+						dlRequestHelper.getDLPortletInstanceSettings();
 
 					String[] mimeTypes =
 						dlPortletInstanceSettings.getMimeTypes();
