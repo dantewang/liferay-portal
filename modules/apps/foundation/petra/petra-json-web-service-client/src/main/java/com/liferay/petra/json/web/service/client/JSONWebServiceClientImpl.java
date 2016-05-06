@@ -203,6 +203,8 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 			httpDelete.addHeader(entry.getKey(), entry.getValue());
 		}
 
+		System.out.println("");
+
 		for (Map.Entry<String, String> entry : _headers.entrySet()) {
 			httpDelete.addHeader(entry.getKey(), entry.getValue());
 		}
