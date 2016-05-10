@@ -143,13 +143,15 @@ public class CustomizationSettingsProductNavigationControlMenuEntry
 			return false;
 		}
 
-		if (layout.isCustomizable() &&
+		boolean isLayoutCustomizable = layout.isCustomizable();
+
+		if (isLayoutCustomizable &&
 			hasUpdateLayoutPermission(themeDisplay)) {
 
 			return true;
 		}
 
-		if (!layoutTypePortlet.isCustomizable()) {
+		if (!isLayoutCustomizable) {
 			return false;
 		}
 
