@@ -123,8 +123,12 @@ public class MultiVMEhcachePortalCacheManager
 	)
 	protected void setPortalCacheConfiguratorSettings(
 		PortalCacheConfiguratorSettings portalCacheConfiguratorSettings) {
-
-		reconfigure(portalCacheConfiguratorSettings);
+		try {
+			reconfigure(portalCacheConfiguratorSettings);
+		}
+		catch (Exception e) {
+			System.out.println("Exception thrown in setPortalCacheConfiguratorSettings");
+		}
 	}
 
 	@Reference(unbind = "-")
