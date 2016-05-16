@@ -62,6 +62,8 @@ public class SingleVMEhcachePortalCacheManager<K extends Serializable, V>
 
 		initialize();
 
+		tryResumeFromRestart();
+
 		if (_log.isDebugEnabled()) {
 			_log.debug("Activated " + PortalCacheManagerNames.SINGLE_VM);
 		}
@@ -69,6 +71,7 @@ public class SingleVMEhcachePortalCacheManager<K extends Serializable, V>
 
 	@Deactivate
 	protected void deactivate() {
+		doDeactivate();
 		destroy();
 	}
 

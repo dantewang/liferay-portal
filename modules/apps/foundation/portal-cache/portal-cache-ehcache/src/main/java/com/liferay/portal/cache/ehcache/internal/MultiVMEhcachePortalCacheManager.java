@@ -83,6 +83,8 @@ public class MultiVMEhcachePortalCacheManager
 			ClassLoaderUtil.setContextClassLoader(contextClassLoader);
 		}
 
+		tryResumeFromRestart();
+
 		if (_log.isDebugEnabled()) {
 			_log.debug("Activated " + PortalCacheManagerNames.MULTI_VM);
 		}
@@ -90,6 +92,7 @@ public class MultiVMEhcachePortalCacheManager
 
 	@Deactivate
 	protected void deactivate() {
+		doDeactivate();
 		destroy();
 	}
 
