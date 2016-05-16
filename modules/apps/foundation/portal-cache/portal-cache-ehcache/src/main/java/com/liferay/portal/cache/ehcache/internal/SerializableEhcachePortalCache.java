@@ -40,6 +40,10 @@ public class SerializableEhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	public List<K> getKeys() {
+		if (isSwapping) {
+			return Collections.EMPTY_LIST;
+		}
+
 		List<?> rawKeys = ehcache.getKeys();
 
 		if (rawKeys.isEmpty()) {
@@ -67,6 +71,10 @@ public class SerializableEhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected V doGet(K key) {
+		if (isSwapping) {
+			return null;
+		}
+
 		Element element = ehcache.get(new SerializableObjectWrapper(key));
 
 		if (element == null) {
@@ -78,6 +86,10 @@ public class SerializableEhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected void doPut(K key, V value, int timeToLive) {
+		if (isSwapping) {
+			return;
+		}
+
 		Element element = createElement(key, value);
 
 		if (timeToLive != DEFAULT_TIME_TO_LIVE) {
@@ -89,6 +101,10 @@ public class SerializableEhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected V doPutIfAbsent(K key, V value, int timeToLive) {
+		if (isSwapping) {
+			return null;
+		}
+
 		Element element = createElement(key, value);
 
 		if (timeToLive != DEFAULT_TIME_TO_LIVE) {
@@ -106,16 +122,27 @@ public class SerializableEhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected void doRemove(K key) {
+		if (isSwapping) {
+			return;
+		}
+
 		ehcache.remove(new SerializableObjectWrapper(key));
 	}
 
 	@Override
 	protected boolean doRemove(K key, V value) {
+		if (isSwapping) {
+			return false;
+		}
+
 		return ehcache.removeElement(createElement(key, value));
 	}
 
 	@Override
 	protected V doReplace(K key, V value, int timeToLive) {
+		if (isSwapping) {
+			return null;
+		}
 		Element element = createElement(key, value);
 
 		if (timeToLive != DEFAULT_TIME_TO_LIVE) {
@@ -133,6 +160,9 @@ public class SerializableEhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected boolean doReplace(K key, V oldValue, V newValue, int timeToLive) {
+		if (isSwapping) {
+			return false;
+		}
 		Element newElement = createElement(key, newValue);
 
 		if (timeToLive != DEFAULT_TIME_TO_LIVE) {

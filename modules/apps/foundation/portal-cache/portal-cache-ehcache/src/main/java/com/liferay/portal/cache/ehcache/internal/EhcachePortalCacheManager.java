@@ -167,8 +167,14 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 		for (PortalCache portalCache : portalCaches.values()) {
 			String name = portalCache.getPortalCacheName();
 
+			EhcachePortalCache ehcachePortalCache =
+				(EhcachePortalCache)EhcacheUnwrapUtil.getWrappedPortalCache(
+					portalCache);
+
 			CacheRestartUtil.getTempPortalCaches().put(
 				_cacheManager.getName() + "=>" + name, portalCache);
+
+			ehcachePortalCache.startSwapping();
 		}
 
 		System.out.println("x" + CacheRestartUtil.getTempPortalCaches().isEmpty());
@@ -284,7 +290,7 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 				continue;
 			}
 
-			name = name.substring(name.indexOf("=>"));
+			name = name.substring(name.indexOf("=>") + "=>".length());
 
 			PortalCache portalCache = entry.getValue();
 
@@ -308,6 +314,8 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 			}
 
 			portalCaches.put(name, portalCache);
+
+			ehcachePortalCache.finishSwapping();
 
 			itr.remove();
 		}
