@@ -100,8 +100,8 @@ import com.liferay.wiki.model.impl.WikiPageDisplayImpl;
 import com.liferay.wiki.model.impl.WikiPageImpl;
 import com.liferay.wiki.service.base.WikiPageLocalServiceBaseImpl;
 import com.liferay.wiki.social.WikiActivityKeys;
+import com.liferay.wiki.util.WikiCacheHelper;
 import com.liferay.wiki.util.WikiCacheThreadLocal;
-import com.liferay.wiki.util.WikiCacheUtil;
 import com.liferay.wiki.util.WikiUtil;
 import com.liferay.wiki.util.comparator.PageCreateDateComparator;
 import com.liferay.wiki.util.comparator.PageVersionComparator;
@@ -1114,7 +1114,7 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 
 		Map<String, WikiPage> pages = new LinkedHashMap<>();
 
-		Map<String, Boolean> links = WikiCacheUtil.getOutgoingLinks(
+		Map<String, Boolean> links = wikiCacheHelper.getOutgoingLinks(
 			page, wikiEngineRenderer);
 
 		for (Map.Entry<String, Boolean> entry : links.entrySet()) {
@@ -2183,7 +2183,7 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 			return;
 		}
 
-		WikiCacheUtil.clearCache(page.getNodeId());
+		wikiCacheHelper.clearCache(page.getNodeId());
 	}
 
 	protected void deletePageAttachment(long fileEntryId)
@@ -2406,7 +2406,7 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 	protected boolean isLinkedTo(WikiPage page, String targetTitle)
 		throws PortalException {
 
-		Map<String, Boolean> links = WikiCacheUtil.getOutgoingLinks(
+		Map<String, Boolean> links = wikiCacheHelper.getOutgoingLinks(
 			page, wikiEngineRenderer);
 
 		Boolean link = links.get(StringUtil.toLowerCase(targetTitle));
@@ -2730,7 +2730,7 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 		// Cache
 
 		if (WikiCacheThreadLocal.isClearCache()) {
-			WikiCacheUtil.clearCache(page.getNodeId());
+			wikiCacheHelper.clearCache(page.getNodeId());
 		}
 
 		// Workflow
@@ -3220,6 +3220,9 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 
 	@ServiceReference(type = ConfigurationProvider.class)
 	protected ConfigurationProvider configurationProvider;
+
+	@ServiceReference(type = WikiCacheHelper.class)
+	protected WikiCacheHelper wikiCacheHelper;
 
 	@ServiceReference(type = WikiEngineRenderer.class)
 	protected WikiEngineRenderer wikiEngineRenderer;
