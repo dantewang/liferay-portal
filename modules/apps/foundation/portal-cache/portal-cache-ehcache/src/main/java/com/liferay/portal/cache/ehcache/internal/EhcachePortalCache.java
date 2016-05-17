@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.liferay.portal.kernel.util.StringPool;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.event.CacheEventListener;
@@ -65,21 +66,37 @@ public class EhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	public List<K> getKeys() {
+		if (isSwapping) {
+			return Collections.EMPTY_LIST;
+		}
+
 		return ehcache.getKeys();
 	}
 
 	@Override
 	public String getPortalCacheName() {
+		if (isSwapping) {
+			return "";
+		}
+
 		return ehcache.getName();
 	}
 
 	@Override
 	public void removeAll() {
+		if (isSwapping) {
+			return;
+		}
+
 		ehcache.removeAll();
 	}
 
 	@Override
 	protected V doGet(K key) {
+		if (isSwapping) {
+			return null;
+		}
+
 		Element element = ehcache.get(key);
 
 		if (element == null) {
@@ -91,6 +108,10 @@ public class EhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected void doPut(K key, V value, int timeToLive) {
+		if (isSwapping) {
+			return;
+		}
+
 		Element element = new Element(key, value);
 
 		if (timeToLive != DEFAULT_TIME_TO_LIVE) {
@@ -102,6 +123,10 @@ public class EhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected V doPutIfAbsent(K key, V value, int timeToLive) {
+		if (isSwapping) {
+			return null;
+		}
+
 		Element element = new Element(key, value);
 
 		if (timeToLive != DEFAULT_TIME_TO_LIVE) {
@@ -119,11 +144,19 @@ public class EhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected void doRemove(K key) {
+		if (isSwapping) {
+			return;
+		}
+
 		ehcache.remove(key);
 	}
 
 	@Override
 	protected boolean doRemove(K key, V value) {
+		if (isSwapping) {
+			return false;
+		}
+
 		Element element = new Element(key, value);
 
 		return ehcache.removeElement(element);
@@ -131,6 +164,10 @@ public class EhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected V doReplace(K key, V value, int timeToLive) {
+		if (isSwapping) {
+			return null;
+		}
+
 		Element element = new Element(key, value);
 
 		if (timeToLive != DEFAULT_TIME_TO_LIVE) {
@@ -148,6 +185,10 @@ public class EhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected boolean doReplace(K key, V oldValue, V newValue, int timeToLive) {
+		if (isSwapping) {
+			return false;
+		}
+
 		Element oldElement = new Element(key, oldValue);
 
 		Element newElement = new Element(key, newValue);
@@ -164,6 +205,14 @@ public class EhcachePortalCache<K extends Serializable, V>
 
 		return Collections.unmodifiableMap(
 			aggregatedPortalCacheListener.getPortalCacheListeners());
+	}
+
+	protected void startSwapping() {
+		isSwapping = true;
+	}
+
+	protected void finishSwapping() {
+		isSwapping = false;
 	}
 
 	protected void reconfigEhcache(Ehcache ehcache) {
@@ -191,5 +240,6 @@ public class EhcachePortalCache<K extends Serializable, V>
 	}
 
 	protected volatile Ehcache ehcache;
+	protected volatile boolean isSwapping = false;
 
 }

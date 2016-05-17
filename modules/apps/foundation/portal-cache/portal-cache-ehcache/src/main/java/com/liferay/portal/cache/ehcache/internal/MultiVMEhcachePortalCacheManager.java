@@ -83,6 +83,8 @@ public class MultiVMEhcachePortalCacheManager
 			ClassLoaderUtil.setContextClassLoader(contextClassLoader);
 		}
 
+		tryResumeFromRestart();
+
 		if (_log.isDebugEnabled()) {
 			_log.debug("Activated " + PortalCacheManagerNames.MULTI_VM);
 		}
@@ -90,6 +92,7 @@ public class MultiVMEhcachePortalCacheManager
 
 	@Deactivate
 	protected void deactivate() {
+		doDeactivate();
 		destroy();
 	}
 
@@ -123,8 +126,12 @@ public class MultiVMEhcachePortalCacheManager
 	)
 	protected void setPortalCacheConfiguratorSettings(
 		PortalCacheConfiguratorSettings portalCacheConfiguratorSettings) {
-
-		reconfigure(portalCacheConfiguratorSettings);
+		try {
+			reconfigure(portalCacheConfiguratorSettings);
+		}
+		catch (Exception e) {
+			System.out.println("Exception thrown in setPortalCacheConfiguratorSettings");
+		}
 	}
 
 	@Reference(unbind = "-")

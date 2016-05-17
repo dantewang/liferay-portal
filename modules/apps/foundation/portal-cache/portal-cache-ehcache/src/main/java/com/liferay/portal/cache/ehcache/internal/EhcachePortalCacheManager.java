@@ -15,6 +15,7 @@
 package com.liferay.portal.cache.ehcache.internal;
 
 import com.liferay.portal.cache.BasePortalCacheManager;
+import com.liferay.portal.cache.CacheRestartUtil;
 import com.liferay.portal.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.cache.configuration.PortalCacheManagerConfiguration;
 import com.liferay.portal.cache.ehcache.EhcacheUnwrapUtil;
@@ -22,6 +23,7 @@ import com.liferay.portal.cache.ehcache.internal.configurator.BaseEhcachePortalC
 import com.liferay.portal.cache.ehcache.internal.event.ConfigurableEhcachePortalCacheListener;
 import com.liferay.portal.cache.ehcache.internal.event.PortalCacheManagerEventListener;
 import com.liferay.portal.kernel.cache.PortalCache;
+import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
 import com.liferay.portal.kernel.cache.PortalCacheListener;
 import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
 import com.liferay.portal.kernel.cache.configurator.PortalCacheConfiguratorSettings;
@@ -42,6 +44,7 @@ import java.lang.reflect.Field;
 
 import java.net.URL;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.management.MBeanServer;
@@ -160,6 +163,23 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 		_cacheManager.clearAll();
 	}
 
+	protected void doDeactivate() {
+		for (PortalCache portalCache : portalCaches.values()) {
+			String name = portalCache.getPortalCacheName();
+
+			EhcachePortalCache ehcachePortalCache =
+				(EhcachePortalCache)EhcacheUnwrapUtil.getWrappedPortalCache(
+					portalCache);
+
+			CacheRestartUtil.getTempPortalCaches().put(
+				_cacheManager.getName() + "=>" + name, portalCache);
+
+			ehcachePortalCache.startSwapping();
+		}
+
+		System.out.println("x" + CacheRestartUtil.getTempPortalCaches().isEmpty());
+	}
+
 	@Override
 	protected void doDestroy() {
 		_cacheManager.shutdown();
@@ -254,6 +274,50 @@ public class EhcachePortalCacheManager<K extends Serializable, V>
 				_registerCacheStatistics);
 
 			_managementService.init();
+		}
+	}
+
+	protected void tryResumeFromRestart() {
+		Iterator<Map.Entry<String, PortalCache<?, ?>>> itr =
+			CacheRestartUtil.getTempPortalCaches().entrySet().iterator();
+
+		while (itr.hasNext()) {
+			Map.Entry<String, PortalCache<?, ?>> entry = itr.next();
+
+			String name = entry.getKey();
+
+			if (!name.contains(getPortalCacheManagerName())) {
+				continue;
+			}
+
+			name = name.substring(name.indexOf("=>") + "=>".length());
+
+			PortalCache portalCache = entry.getValue();
+
+			EhcachePortalCache ehcachePortalCache =
+				(EhcachePortalCache)EhcacheUnwrapUtil.getWrappedPortalCache(
+					portalCache);
+
+			PortalCache newPortalCache = getPortalCache(name);
+
+			EhcachePortalCache newEhcachePortalCache =
+				(EhcachePortalCache)EhcacheUnwrapUtil.getWrappedPortalCache(
+					newPortalCache);
+
+			ehcachePortalCache.ehcache = newEhcachePortalCache.ehcache;
+
+			try {
+				ehcachePortalCache.reconfigEhcache(
+					newEhcachePortalCache.ehcache);
+			}
+			catch (Exception e) {
+			}
+
+			portalCaches.put(name, portalCache);
+
+			ehcachePortalCache.finishSwapping();
+
+			itr.remove();
 		}
 	}
 
