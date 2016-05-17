@@ -43,7 +43,7 @@ boolean workflowAssetPreview = GetterUtil.getBoolean((Boolean)request.getAttribu
 WikiPageDisplay pageDisplay = null;
 
 if (!workflowAssetPreview && wikiPage.isApproved()) {
-	pageDisplay = WikiCacheUtil.getDisplay(wikiPage.getNodeId(), wikiPage.getTitle(), viewPageURL, editPageURL, attachmentURLPrefix);
+	pageDisplay = wikiCacheHelper.getDisplay(wikiPage.getNodeId(), wikiPage.getTitle(), viewPageURL, editPageURL, attachmentURLPrefix);
 }
 else {
 	pageDisplay = WikiPageLocalServiceUtil.getPageDisplay(wikiPage, viewPageURL, editPageURL, attachmentURLPrefix);
