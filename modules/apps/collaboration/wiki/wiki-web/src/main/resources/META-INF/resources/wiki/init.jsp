@@ -54,7 +54,7 @@ page import="com.liferay.wiki.service.permission.WikiNodePermissionChecker" %><%
 page import="com.liferay.wiki.service.permission.WikiPagePermissionChecker" %><%@
 page import="com.liferay.wiki.service.permission.WikiResourcePermissionChecker" %><%@
 page import="com.liferay.wiki.social.WikiActivityKeys" %><%@
-page import="com.liferay.wiki.util.WikiCacheUtil" %><%@
+page import="com.liferay.wiki.util.WikiCacheHelper" %><%@
 page import="com.liferay.wiki.util.WikiPageAttachmentsUtil" %><%@
 page import="com.liferay.wiki.util.WikiUtil" %><%@
 page import="com.liferay.wiki.util.comparator.PageVersionComparator" %><%@
@@ -85,6 +85,8 @@ WikiDisplayContextProvider wikiDisplayContextProvider = wikiWebComponentProvider
 WikiGroupServiceConfiguration wikiGroupServiceConfiguration = wikiWebComponentProvider.getWikiGroupServiceConfiguration();
 
 Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone);
+
+WikiCacheHelper wikiCacheHelper = WikiCacheHelper.getWikiCacheHelper();
 %>
 
 <%@ include file="/wiki/init-ext.jsp" %>
