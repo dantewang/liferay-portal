@@ -376,6 +376,8 @@ public class EditServerMVCActionCommand extends BaseMVCActionCommand {
 			public void receive(Message message)
 				throws MessageListenerException {
 
+				int status = message.getInteger("status");
+
 				try {
 					BackgroundTask backgroundTask =
 						_backgroundTaskManager.getBackgroundTask(
@@ -390,10 +392,10 @@ public class EditServerMVCActionCommand extends BaseMVCActionCommand {
 					}
 				}
 				catch (PortalException pe) {
-					throw new MessageListenerException(pe);
+					if (status != BackgroundTaskConstants.STATUS_SUCCESSFUL) {
+						throw new MessageListenerException(pe);
+					}
 				}
-
-				int status = message.getInteger("status");
 
 				if ((status == BackgroundTaskConstants.STATUS_CANCELLED) ||
 					(status == BackgroundTaskConstants.STATUS_FAILED) ||
