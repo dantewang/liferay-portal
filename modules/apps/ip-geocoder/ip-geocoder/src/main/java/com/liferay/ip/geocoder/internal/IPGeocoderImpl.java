@@ -32,7 +32,14 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
@@ -122,22 +129,41 @@ public class IPGeocoderImpl implements IPGeocoder {
 			return file;
 		}
 
+		ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
+			1, 1, 30, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>());
+
 		synchronized (this) {
 			if (_logger.isInfoEnabled()) {
 				_logger.info("Downloading " + fileURL);
 			}
 
-			URL url = new URL(fileURL);
+			final URL url = new URL(fileURL);
 
-			URLConnection urlConnection = url.openConnection();
+			Future<File> future = threadPoolExecutor.submit(
+				new Callable<File>() {
 
-			File xzFile = new File(
-				System.getProperty("java.io.tmpdir") +
-					"/liferay/geoip/GeoIPCity.dat.xz");
+				@Override
+				public File call() throws Exception {
+					URLConnection urlConnection = url.openConnection();
 
-			write(xzFile, urlConnection.getInputStream());
+					File xzFile = new File(
+						System.getProperty("java.io.tmpdir") +
+							"/liferay/geoip/GeoIPCity.dat.xz");
 
-			write(file, new XZInputStream(new FileInputStream(xzFile)));
+					write(xzFile, urlConnection.getInputStream());
+
+					return xzFile;
+				}
+			});
+
+			try {
+				File xzFile = future.get(1, TimeUnit.MINUTES);
+
+				write(file, new XZInputStream(new FileInputStream(xzFile)));
+			}
+			catch (Exception e) {
+				throw new IOException(e);
+			}
 		}
 
 		return file;
