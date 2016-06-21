@@ -69,6 +69,10 @@ public class IncludeTag extends AttributesTagSupport {
 
 			if (Validator.isNull(page)) {
 				page = getEndPage();
+
+				if (Validator.isNull(page)) {
+					return EVAL_PAGE;
+				}
 			}
 
 			callSetAttributes();
