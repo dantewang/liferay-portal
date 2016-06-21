@@ -102,6 +102,10 @@ public class IncludeTag extends AttributesTagSupport {
 		try {
 			String page = getStartPage();
 
+			if (Validator.isNull(page)) {
+				return EVAL_BODY_INCLUDE;
+			}
+
 			callSetAttributes();
 
 			if (themeResourceExists(page)) {
