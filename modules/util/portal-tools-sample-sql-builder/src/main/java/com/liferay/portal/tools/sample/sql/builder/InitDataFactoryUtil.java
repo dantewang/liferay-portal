@@ -4,6 +4,7 @@ import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -16,6 +17,7 @@ import com.liferay.util.SimpleCounter;
 import java.io.InputStream;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -119,6 +121,25 @@ public class InitDataFactoryUtil {
 		sb.append(new String(chars));
 
 		sb.append("]]></dynamic-content></dynamic-element></root>");
+
+		return sb.toString();
+	}
+	
+		public static String getResourcePermissionModelName(String... classNames) {
+		if (ArrayUtil.isEmpty(classNames)) {
+			return StringPool.BLANK;
+		}
+
+		Arrays.sort(classNames);
+
+		StringBundler sb = new StringBundler(classNames.length * 2);
+
+		for (String className : classNames) {
+			sb.append(className);
+			sb.append(StringPool.DASH);
+		}
+
+		sb.setIndex(sb.index() - 1);
 
 		return sb.toString();
 	}
