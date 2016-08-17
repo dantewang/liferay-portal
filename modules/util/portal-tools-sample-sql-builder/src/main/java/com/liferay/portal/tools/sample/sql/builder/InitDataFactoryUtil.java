@@ -144,6 +144,19 @@ public class InitDataFactoryUtil {
 
 		return sb.toString();
 	}
+
+	public static String nextDDLCustomFieldName(
+		long groupId, int customFieldIndex) {
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append("custom_field_text_");
+		sb.append(groupId);
+		sb.append("_");
+		sb.append(customFieldIndex);
+
+		return sb.toString();
+	}
 		
 	public static Date nextFutureDate(SimpleCounter futureDateCounter) {
 		return new Date(_FUTURE_TIME + (futureDateCounter.get() * Time.SECOND));

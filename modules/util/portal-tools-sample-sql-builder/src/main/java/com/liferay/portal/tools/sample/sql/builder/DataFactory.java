@@ -1225,7 +1225,7 @@ public class DataFactory {
 
 		for (int i = 0; i < _maxDDLCustomFieldCount; i++) {
 			sb.append("{\"columns\": [{\"fieldNames\": [\"");
-			sb.append(nextDDLCustomFieldName(groupId, i));
+			sb.append(InitDataFactoryUtil.nextDDLCustomFieldName(groupId, i));
 			sb.append("\"], \"size\": 12}]}");
 			sb.append(", ");
 		}
@@ -1254,7 +1254,7 @@ public class DataFactory {
 			sb.append("\"label\": {\"en_US\": \"Text");
 			sb.append(i);
 			sb.append("\"}, \"name\": \"");
-			sb.append(nextDDLCustomFieldName(groupId, i));
+			sb.append(InitDataFactoryUtil.nextDDLCustomFieldName(groupId, i));
 			sb.append("\", \"readOnly\": false, \"repeatable\": false,");
 			sb.append("\"required\": false, \"showLabel\": true, \"type\": ");
 			sb.append("\"text\"}");
@@ -1390,7 +1390,7 @@ public class DataFactory {
 			sb.append("{\"instanceId\": \"");
 			sb.append(StringUtil.randomId());
 			sb.append("\", \"name\": \"");
-			sb.append(nextDDLCustomFieldName(ddlRecordModel.getGroupId(), i));
+			sb.append(InitDataFactoryUtil.nextDDLCustomFieldName(ddlRecordModel.getGroupId(), i));
 			sb.append("\", \"value\": {\"en_US\": \"Test Record ");
 			sb.append(currentIndex);
 			sb.append("\"}},");
@@ -3206,19 +3206,6 @@ public class DataFactory {
 		wikiPageModel.setLastPublishDate(new Date());
 
 		return wikiPageModel;
-	}
-
-	protected String nextDDLCustomFieldName(
-		long groupId, int customFieldIndex) {
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("custom_field_text_");
-		sb.append(groupId);
-		sb.append("_");
-		sb.append(customFieldIndex);
-
-		return sb.toString();
 	}
 
 	private static final long _CURRENT_TIME = System.currentTimeMillis();
