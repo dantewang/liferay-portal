@@ -120,7 +120,6 @@ import com.liferay.portal.kernel.model.LayoutFriendlyURLModel;
 import com.liferay.portal.kernel.model.LayoutModel;
 import com.liferay.portal.kernel.model.LayoutSetModel;
 import com.liferay.portal.kernel.model.LayoutTypePortletConstants;
-import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.model.ResourceConstants;
@@ -156,7 +155,6 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.impl.AccountModelImpl;
-import com.liferay.portal.model.impl.ClassNameModelImpl;
 import com.liferay.portal.model.impl.CompanyModelImpl;
 import com.liferay.portal.model.impl.ContactModelImpl;
 import com.liferay.portal.model.impl.GroupModelImpl;
@@ -212,7 +210,6 @@ import com.liferay.wiki.model.impl.WikiPageResourceModelImpl;
 import com.liferay.wiki.social.WikiActivityKeys;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import java.text.Format;
@@ -244,66 +241,25 @@ public class DataFactory {
 		_resourcePermissionCounter = new SimpleCounter();
 		_socialActivityCounter = new SimpleCounter();
 		_userScreenNameCounter = new SimpleCounter();
-
-		List<String> models = ModelHintsUtil.getModels();
-
-		for (String model : models) {
-			ClassNameModel classNameModel = new ClassNameModelImpl();
-
-			long classNameId = _counter.get();
-
-			classNameModel.setClassNameId(classNameId);
-
-			classNameModel.setValue(model);
-
-			_classNameModels.put(model, classNameModel);
-		}
-
+		_classNameModels = InitDataFactoryUtil.initClassNameModels(_counter);
 		_accountId = _counter.get();
 		_companyId = _counter.get();
 		_defaultUserId = _counter.get();
 		_globalGroupId = _counter.get();
 		_guestGroupId = _counter.get();
 		_sampleUserId = _counter.get();
-
-		List<String> lines = new ArrayList<>();
-
-		StringUtil.readLines(
-			getResourceInputStream("ddm_structure_basic_document.json"), lines);
-
-		_dlDDMStructureContent = StringUtil.merge(lines, StringPool.SPACE);
-
-		lines.clear();
-
-		StringUtil.readLines(
-			getResourceInputStream("ddm_structure_layout_basic_document.json"),
-			lines);
-
-		_dlDDMStructureLayoutContent = StringUtil.merge(
-			lines, StringPool.SPACE);
-
-		lines.clear();
-
-		StringUtil.readLines(
-			getResourceInputStream("ddm_structure_basic_web_content.json"),
-			lines);
-
-		_journalDDMStructureContent = StringUtil.merge(lines, StringPool.SPACE);
-
-		lines.clear();
-
-		StringUtil.readLines(
-			getResourceInputStream(
-				"ddm_structure_layout_basic_web_content.json"),
-			lines);
-
-		_journalDDMStructureLayoutContent = StringUtil.merge(
-			lines, StringPool.SPACE);
-
-		lines.clear();
+		_dlDDMStructureContent = InitDataFactoryUtil.getResource(
+			_clazz, "ddm_structure_basic_document.json");
+		_dlDDMStructureLayoutContent = InitDataFactoryUtil.getResource(
+			_clazz, "ddm_structure_layout_basic_document.json");
+		_journalDDMStructureContent = InitDataFactoryUtil.getResource(
+			_clazz, "ddm_structure_basic_web_content.json");
+		_journalDDMStructureLayoutContent = InitDataFactoryUtil.getResource(
+			_clazz, "ddm_structure_layout_basic_web_content.json");
 
 		String defaultAssetPublisherPreference = StringUtil.read(
-			getResourceInputStream("default_asset_publisher_preference.xml"));
+			InitDataFactoryUtil.getResourceInputStream(
+				_clazz, "default_asset_publisher_preference.xml"));
 
 		_defaultAssetPublisherPortletPreference =
 			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
@@ -1066,7 +1022,9 @@ public class DataFactory {
 		_firstNames = new ArrayList<>();
 
 		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
-			new InputStreamReader(getResourceInputStream("first_names.txt")));
+			new InputStreamReader(
+				InitDataFactoryUtil.getResourceInputStream(
+					_clazz, "first_names.txt")));
 
 		String line = null;
 
@@ -1079,7 +1037,9 @@ public class DataFactory {
 		_lastNames = new ArrayList<>();
 
 		unsyncBufferedReader = new UnsyncBufferedReader(
-			new InputStreamReader(getResourceInputStream("last_names.txt")));
+			new InputStreamReader(
+				InitDataFactoryUtil.getResourceInputStream(
+					_clazz, "last_names.txt")));
 
 		while ((line = unsyncBufferedReader.readLine()) != null) {
 			_lastNames.add(line);
@@ -2627,15 +2587,6 @@ public class DataFactory {
 			"Unable to find class name for id " + classNameId);
 	}
 
-	protected InputStream getResourceInputStream(String resourceName) {
-		Class<?> clazz = getClass();
-
-		ClassLoader classLoader = clazz.getClassLoader();
-
-		return classLoader.getResourceAsStream(
-			_DEPENDENCIES_DIR + resourceName);
-	}
-
 	protected AssetCategoryModel newAssetCategoryModel(
 		long groupId, long lastRightCategoryId, String name,
 		long vocabularyId) {
@@ -3309,9 +3260,6 @@ public class DataFactory {
 
 	private static final long _CURRENT_TIME = System.currentTimeMillis();
 
-	private static final String _DEPENDENCIES_DIR =
-		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
-
 	private static final long _FUTURE_TIME =
 		System.currentTimeMillis() + Time.YEAR;
 
@@ -3333,8 +3281,8 @@ public class DataFactory {
 	private List<AssetTagModel>[] _assetTagModelsArray;
 	private List<AssetTagStatsModel>[] _assetTagStatsModelsArray;
 	private List<AssetVocabularyModel>[] _assetVocabularyModelsArray;
-	private final Map<String, ClassNameModel> _classNameModels =
-		new HashMap<>();
+	private final Map<String, ClassNameModel> _classNameModels;
+	private final Class<?> _clazz = getClass();
 	private final long _companyId;
 	private CompanyModel _companyModel;
 	private final SimpleCounter _counter;
