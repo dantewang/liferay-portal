@@ -1,15 +1,20 @@
 package com.liferay.portal.tools.sample.sql.builder;
 
+import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
+import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.impl.AccountModelImpl;
 import com.liferay.portal.model.impl.ClassNameModelImpl;
+import com.liferay.portal.model.impl.CompanyModelImpl;
 import com.liferay.util.SimpleCounter;
 
 import java.io.InputStream;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +64,35 @@ public class InitDataFactoryUtil {
 		}
 
 		return classNameModels;
+	}
+	
+	public static AccountModel initAccountModel(
+		long companyId, long accountId) {
+
+		AccountModel accountModel = new AccountModelImpl();
+
+		accountModel.setAccountId(accountId);
+		accountModel.setCompanyId(companyId);
+		accountModel.setCreateDate(new Date());
+		accountModel.setModifiedDate(new Date());
+		accountModel.setName("Liferay");
+		accountModel.setLegalName("Liferay, Inc.");
+
+		return accountModel;
+	}
+
+	public static CompanyModel initCompanyModel(
+		long companyId, long accountId) {
+
+		CompanyModel companyModel = new CompanyModelImpl();
+
+		companyModel.setCompanyId(companyId);
+		companyModel.setAccountId(accountId);
+		companyModel.setWebId("liferay.com");
+		companyModel.setMx("liferay.com");
+		companyModel.setActive(true);
+
+		return companyModel;
 	}
 
 	private static final String _DEPENDENCIES_DIR =

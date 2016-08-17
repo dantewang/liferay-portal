@@ -154,8 +154,6 @@ import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.model.impl.AccountModelImpl;
-import com.liferay.portal.model.impl.CompanyModelImpl;
 import com.liferay.portal.model.impl.ContactModelImpl;
 import com.liferay.portal.model.impl.GroupModelImpl;
 import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
@@ -264,10 +262,15 @@ public class DataFactory {
 		_defaultAssetPublisherPortletPreference =
 			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
 				defaultAssetPublisherPreference);
+		
+		_companyModel = InitDataFactoryUtil.initCompanyModel(
+			_companyId, _accountId);
+
+		_accountModel = InitDataFactoryUtil.initAccountModel(
+			_companyId, _accountId);
 
 		initAssetCategoryModels();
 		initAssetTagModels();
-		initCompanyModel();
 		initDLFileEntryTypeModel();
 		initGroupModels();
 
@@ -722,25 +725,6 @@ public class DataFactory {
 			_assetTagModelsArray[i - 1] = assetTagModels;
 			_assetTagStatsModelsArray[i - 1] = assetTagStatsModels;
 		}
-	}
-
-	public void initCompanyModel() {
-		_companyModel = new CompanyModelImpl();
-
-		_companyModel.setCompanyId(_companyId);
-		_companyModel.setAccountId(_accountId);
-		_companyModel.setWebId("liferay.com");
-		_companyModel.setMx("liferay.com");
-		_companyModel.setActive(true);
-
-		_accountModel = new AccountModelImpl();
-
-		_accountModel.setAccountId(_accountId);
-		_accountModel.setCompanyId(_companyId);
-		_accountModel.setCreateDate(new Date());
-		_accountModel.setModifiedDate(new Date());
-		_accountModel.setName("Liferay");
-		_accountModel.setLegalName("Liferay, Inc.");
 	}
 
 	public void initContext(Properties properties) {
