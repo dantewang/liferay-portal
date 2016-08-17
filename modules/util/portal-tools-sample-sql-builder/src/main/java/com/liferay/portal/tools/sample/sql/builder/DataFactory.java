@@ -276,8 +276,9 @@ public class DataFactory {
 
 		int maxJournalArticleSize = GetterUtil.getInteger(
 			properties.getProperty("sample.sql.max.journal.article.size"));
-
-		initJournalArticleContent(maxJournalArticleSize);
+		
+		_journalArticleContent = InitDataFactoryUtil.initJournalArticleContent(
+			maxJournalArticleSize);
 
 		initRoleModels();
 		initUserNames();
@@ -882,31 +883,6 @@ public class DataFactory {
 
 			_groupModels.add(groupModel);
 		}
-	}
-
-	public void initJournalArticleContent(int maxJournalArticleSize) {
-		StringBundler sb = new StringBundler(6);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><dynamic-element name=\"content");
-		sb.append("\" type=\"text_area\" index-type=\"keyword\" index=\"0\">");
-		sb.append("<dynamic-content language-id=\"en_US\"><![CDATA[");
-
-		if (maxJournalArticleSize <= 0) {
-			maxJournalArticleSize = 1;
-		}
-
-		char[] chars = new char[maxJournalArticleSize];
-
-		for (int i = 0; i < maxJournalArticleSize; i++) {
-			chars[i] = (char)(CharPool.LOWER_CASE_A + (i % 26));
-		}
-
-		sb.append(new String(chars));
-
-		sb.append("]]></dynamic-content></dynamic-element></root>");
-
-		_journalArticleContent = sb.toString();
 	}
 
 	public void initRoleModels() {

@@ -4,6 +4,8 @@ import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
+import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.AccountModelImpl;
@@ -93,6 +95,32 @@ public class InitDataFactoryUtil {
 		companyModel.setActive(true);
 
 		return companyModel;
+	}
+	
+	public static String initJournalArticleContent(int maxJournalArticleSize) 
+	{
+		StringBundler sb = new StringBundler(6);
+
+		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\"><dynamic-element name=\"content");
+		sb.append("\" type=\"text_area\" index-type=\"keyword\" index=\"0\">");
+		sb.append("<dynamic-content language-id=\"en_US\"><![CDATA[");
+
+		if (maxJournalArticleSize <= 0) {
+			maxJournalArticleSize = 1;
+		}
+
+		char[] chars = new char[maxJournalArticleSize];
+
+		for (int i = 0; i < maxJournalArticleSize; i++) {
+			chars[i] = (char)(CharPool.LOWER_CASE_A + (i % 26));
+		}
+
+		sb.append(new String(chars));
+
+		sb.append("]]></dynamic-content></dynamic-element></root>");
+
+		return sb.toString();
 	}
 
 	private static final String _DEPENDENCIES_DIR =
