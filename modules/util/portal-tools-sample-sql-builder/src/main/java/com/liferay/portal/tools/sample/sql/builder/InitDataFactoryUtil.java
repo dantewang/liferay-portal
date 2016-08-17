@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.model.impl.AccountModelImpl;
 import com.liferay.portal.model.impl.ClassNameModelImpl;
 import com.liferay.portal.model.impl.CompanyModelImpl;
@@ -143,8 +144,14 @@ public class InitDataFactoryUtil {
 
 		return sb.toString();
 	}
+		
+	public static Date nextFutureDate(SimpleCounter futureDateCounter) {
+		return new Date(_FUTURE_TIME + (futureDateCounter.get() * Time.SECOND));
+	}
 
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
-
+	
+	private static final long _FUTURE_TIME =
+		System.currentTimeMillis() + Time.YEAR;
 }

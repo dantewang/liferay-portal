@@ -149,7 +149,6 @@ import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -816,8 +815,10 @@ public class DataFactory {
 		_defaultDLFileEntryTypeModel.setUuid(SequentialUUID.generate());
 		_defaultDLFileEntryTypeModel.setFileEntryTypeId(
 			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
-		_defaultDLFileEntryTypeModel.setCreateDate(nextFutureDate());
-		_defaultDLFileEntryTypeModel.setModifiedDate(nextFutureDate());
+		_defaultDLFileEntryTypeModel.setCreateDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
+		_defaultDLFileEntryTypeModel.setModifiedDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 		_defaultDLFileEntryTypeModel.setFileEntryTypeKey(
 			StringUtil.toUpperCase(
 				DLFileEntryTypeConstants.NAME_BASIC_DOCUMENT));
@@ -830,7 +831,8 @@ public class DataFactory {
 		sb.append("</name></root>");
 
 		_defaultDLFileEntryTypeModel.setName(sb.toString());
-		_defaultDLFileEntryTypeModel.setLastPublishDate(nextFutureDate());
+		_defaultDLFileEntryTypeModel.setLastPublishDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 
 		_defaultDLDDMStructureModel = newDDMStructureModel(
 			_globalGroupId, _defaultUserId, getClassNameId(DLFileEntry.class),
@@ -1480,7 +1482,8 @@ public class DataFactory {
 		ddmStructureVersionModel.setCompanyId(_companyId);
 		ddmStructureVersionModel.setUserId(ddmStructureModel.getUserId());
 		ddmStructureVersionModel.setUserName(_SAMPLE_USER_NAME);
-		ddmStructureVersionModel.setCreateDate(nextFutureDate());
+		ddmStructureVersionModel.setCreateDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 		ddmStructureVersionModel.setStructureId(
 			ddmStructureModel.getStructureId());
 		ddmStructureVersionModel.setVersion(
@@ -1501,7 +1504,8 @@ public class DataFactory {
 		ddmStructureVersionModel.setStatusByUserId(
 			ddmStructureModel.getUserId());
 		ddmStructureVersionModel.setStatusByUserName(_SAMPLE_USER_NAME);
-		ddmStructureVersionModel.setStatusDate(nextFutureDate());
+		ddmStructureVersionModel.setStatusDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 
 		return ddmStructureVersionModel;
 	}
@@ -1565,8 +1569,10 @@ public class DataFactory {
 		dlFileVersionModel.setCompanyId(_companyId);
 		dlFileVersionModel.setUserId(_sampleUserId);
 		dlFileVersionModel.setUserName(_SAMPLE_USER_NAME);
-		dlFileVersionModel.setCreateDate(nextFutureDate());
-		dlFileVersionModel.setModifiedDate(nextFutureDate());
+		dlFileVersionModel.setCreateDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
+		dlFileVersionModel.setModifiedDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 		dlFileVersionModel.setRepositoryId(dlFileEntryModel.getRepositoryId());
 		dlFileVersionModel.setFolderId(dlFileEntryModel.getFolderId());
 		dlFileVersionModel.setFileEntryId(dlFileEntryModel.getFileEntryId());
@@ -1578,7 +1584,8 @@ public class DataFactory {
 			dlFileEntryModel.getFileEntryTypeId());
 		dlFileVersionModel.setVersion(dlFileEntryModel.getVersion());
 		dlFileVersionModel.setSize(dlFileEntryModel.getSize());
-		dlFileVersionModel.setLastPublishDate(nextFutureDate());
+		dlFileVersionModel.setLastPublishDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 
 		return dlFileVersionModel;
 	}
@@ -1674,7 +1681,8 @@ public class DataFactory {
 		journalArticleModel.setDDMTemplateKey(
 			_defaultJournalDDMTemplateModel.getTemplateKey());
 		journalArticleModel.setDisplayDate(new Date());
-		journalArticleModel.setExpirationDate(nextFutureDate());
+		journalArticleModel.setExpirationDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 		journalArticleModel.setReviewDate(new Date());
 		journalArticleModel.setIndexable(true);
 		journalArticleModel.setLastPublishDate(new Date());
@@ -2602,9 +2610,11 @@ public class DataFactory {
 		assetEntryModel.setListable(listable);
 		assetEntryModel.setVisible(visible);
 		assetEntryModel.setStartDate(createDate);
-		assetEntryModel.setEndDate(nextFutureDate());
+		assetEntryModel.setEndDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 		assetEntryModel.setPublishDate(createDate);
-		assetEntryModel.setExpirationDate(nextFutureDate());
+		assetEntryModel.setExpirationDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 		assetEntryModel.setMimeType(mimeType);
 		assetEntryModel.setTitle(title);
 
@@ -2688,8 +2698,10 @@ public class DataFactory {
 		ddmContentModel.setCompanyId(_companyId);
 		ddmContentModel.setUserId(_sampleUserId);
 		ddmContentModel.setUserName(_SAMPLE_USER_NAME);
-		ddmContentModel.setCreateDate(nextFutureDate());
-		ddmContentModel.setModifiedDate(nextFutureDate());
+		ddmContentModel.setCreateDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
+		ddmContentModel.setModifiedDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 		ddmContentModel.setName(DDMStorageLink.class.getName());
 		ddmContentModel.setData(data);
 
@@ -2708,8 +2720,10 @@ public class DataFactory {
 		ddmStructureLayoutModel.setCompanyId(_companyId);
 		ddmStructureLayoutModel.setUserId(userId);
 		ddmStructureLayoutModel.setUserName(_SAMPLE_USER_NAME);
-		ddmStructureLayoutModel.setCreateDate(nextFutureDate());
-		ddmStructureLayoutModel.setModifiedDate(nextFutureDate());
+		ddmStructureLayoutModel.setCreateDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
+		ddmStructureLayoutModel.setModifiedDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 		ddmStructureLayoutModel.setStructureVersionId(structureVersionId);
 		ddmStructureLayoutModel.setDefinition(definition);
 
@@ -2744,8 +2758,10 @@ public class DataFactory {
 		ddmStructureModel.setUserName(_SAMPLE_USER_NAME);
 		ddmStructureModel.setVersionUserId(userId);
 		ddmStructureModel.setVersionUserName(_SAMPLE_USER_NAME);
-		ddmStructureModel.setCreateDate(nextFutureDate());
-		ddmStructureModel.setModifiedDate(nextFutureDate());
+		ddmStructureModel.setCreateDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
+		ddmStructureModel.setModifiedDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 		ddmStructureModel.setClassNameId(classNameId);
 		ddmStructureModel.setStructureKey(structureKey);
 		ddmStructureModel.setVersion(DDMStructureConstants.VERSION_DEFAULT);
@@ -2761,7 +2777,8 @@ public class DataFactory {
 
 		ddmStructureModel.setDefinition(definition);
 		ddmStructureModel.setStorageType(StorageType.JSON.toString());
-		ddmStructureModel.setLastPublishDate(nextFutureDate());
+		ddmStructureModel.setLastPublishDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 
 		return ddmStructureModel;
 	}
@@ -2776,8 +2793,10 @@ public class DataFactory {
 		ddmTemplateModel.setGroupId(groupId);
 		ddmTemplateModel.setCompanyId(_companyId);
 		ddmTemplateModel.setUserId(userId);
-		ddmTemplateModel.setCreateDate(nextFutureDate());
-		ddmTemplateModel.setModifiedDate(nextFutureDate());
+		ddmTemplateModel.setCreateDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
+		ddmTemplateModel.setModifiedDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 		ddmTemplateModel.setClassNameId(getClassNameId(DDMStructure.class));
 		ddmTemplateModel.setClassPK(structureId);
 		ddmTemplateModel.setResourceClassNameId(sourceClassNameId);
@@ -2800,7 +2819,8 @@ public class DataFactory {
 		ddmTemplateModel.setScript("${content.getData()}");
 		ddmTemplateModel.setCacheable(true);
 		ddmTemplateModel.setSmallImage(false);
-		ddmTemplateModel.setLastPublishDate(nextFutureDate());
+		ddmTemplateModel.setLastPublishDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 
 		return ddmTemplateModel;
 	}
@@ -2816,8 +2836,10 @@ public class DataFactory {
 		dlFileEntryModel.setCompanyId(_companyId);
 		dlFileEntryModel.setUserId(_sampleUserId);
 		dlFileEntryModel.setUserName(_SAMPLE_USER_NAME);
-		dlFileEntryModel.setCreateDate(nextFutureDate());
-		dlFileEntryModel.setModifiedDate(nextFutureDate());
+		dlFileEntryModel.setCreateDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
+		dlFileEntryModel.setModifiedDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 		dlFileEntryModel.setRepositoryId(dlFolerModel.getRepositoryId());
 		dlFileEntryModel.setFolderId(dlFolerModel.getFolderId());
 		dlFileEntryModel.setName("TestFile" + index);
@@ -2829,7 +2851,8 @@ public class DataFactory {
 			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
 		dlFileEntryModel.setVersion(DLFileEntryConstants.VERSION_DEFAULT);
 		dlFileEntryModel.setSize(_maxDLFileEntrySize);
-		dlFileEntryModel.setLastPublishDate(nextFutureDate());
+		dlFileEntryModel.setLastPublishDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 
 		return dlFileEntryModel;
 	}
@@ -2845,16 +2868,21 @@ public class DataFactory {
 		dlFolderModel.setCompanyId(_companyId);
 		dlFolderModel.setUserId(_sampleUserId);
 		dlFolderModel.setUserName(_SAMPLE_USER_NAME);
-		dlFolderModel.setCreateDate(nextFutureDate());
-		dlFolderModel.setModifiedDate(nextFutureDate());
+		dlFolderModel.setCreateDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
+		dlFolderModel.setModifiedDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 		dlFolderModel.setRepositoryId(groupId);
 		dlFolderModel.setParentFolderId(parentFolderId);
 		dlFolderModel.setName("Test Folder " + index);
-		dlFolderModel.setLastPostDate(nextFutureDate());
+		dlFolderModel.setLastPostDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 		dlFolderModel.setDefaultFileEntryTypeId(
 			_defaultDLFileEntryTypeModel.getFileEntryTypeId());
-		dlFolderModel.setLastPublishDate(nextFutureDate());
-		dlFolderModel.setStatusDate(nextFutureDate());
+		dlFolderModel.setLastPublishDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
+		dlFolderModel.setStatusDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 
 		return dlFolderModel;
 	}
@@ -3193,15 +3221,7 @@ public class DataFactory {
 		return sb.toString();
 	}
 
-	protected Date nextFutureDate() {
-		return new Date(
-			_FUTURE_TIME + (_futureDateCounter.get() * Time.SECOND));
-	}
-
 	private static final long _CURRENT_TIME = System.currentTimeMillis();
-
-	private static final long _FUTURE_TIME =
-		System.currentTimeMillis() + Time.YEAR;
 
 	private static final String _SAMPLE_USER_NAME = "Sample";
 
