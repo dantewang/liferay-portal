@@ -103,7 +103,6 @@ import com.liferay.message.boards.kernel.model.MBThreadFlagModel;
 import com.liferay.message.boards.kernel.model.MBThreadModel;
 import com.liferay.message.boards.web.constants.MBPortletKeys;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.metadata.RawMetadataProcessor;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
@@ -202,7 +201,6 @@ import com.liferay.wiki.model.impl.WikiPageResourceModelImpl;
 import com.liferay.wiki.social.WikiActivityKeys;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import java.text.Format;
 
@@ -262,10 +260,6 @@ public class DataFactory {
 		_accountModel = InitDataFactoryUtil.initAccountModel(
 			_companyId, _accountId);
 
-		initAssetCategoryModels();
-		initAssetTagModels();
-		initDLFileEntryTypeModel();
-
 		_globalGroupModel = InitDataFactoryUtil.initGroupModel(
 			_globalGroupId, InitDataFactoryUtil.getClassNameId(
 					Company.class,_classNameModels), _companyId,
@@ -290,8 +284,14 @@ public class DataFactory {
 		_journalArticleContent = InitDataFactoryUtil.initJournalArticleContent(
 			maxJournalArticleSize);
 
+		_firstNames = InitDataFactoryUtil.initUserFirstNames(_clazz);
+
+		_lastNames = InitDataFactoryUtil.initUserLastNames(_clazz);
+
+		initAssetCategoryModels();
+		initAssetTagModels();
+		initDLFileEntryTypeModel();
 		initRoleModels();
-		initUserNames();
 		initUserModels();
 		initVirtualHostModel(
 			properties.getProperty("sample.sql.virtual.hostname"));
@@ -1000,36 +1000,6 @@ public class DataFactory {
 		_sampleUserModel = newUserModel(
 			_sampleUserId, _SAMPLE_USER_NAME, _SAMPLE_USER_NAME,
 			_SAMPLE_USER_NAME, false);
-	}
-
-	public void initUserNames() throws IOException {
-		_firstNames = new ArrayList<>();
-
-		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
-			new InputStreamReader(
-				InitDataFactoryUtil.getResourceInputStream(
-					_clazz, "first_names.txt")));
-
-		String line = null;
-
-		while ((line = unsyncBufferedReader.readLine()) != null) {
-			_firstNames.add(line);
-		}
-
-		unsyncBufferedReader.close();
-
-		_lastNames = new ArrayList<>();
-
-		unsyncBufferedReader = new UnsyncBufferedReader(
-			new InputStreamReader(
-				InitDataFactoryUtil.getResourceInputStream(
-					_clazz, "last_names.txt")));
-
-		while ((line = unsyncBufferedReader.readLine()) != null) {
-			_lastNames.add(line);
-		}
-
-		unsyncBufferedReader.close();
 	}
 
 	public void initVirtualHostModel(String hostname) {

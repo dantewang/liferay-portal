@@ -1,5 +1,6 @@
 package com.liferay.portal.tools.sample.sql.builder;
 
+import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.CompanyModel;
@@ -21,8 +22,10 @@ import com.liferay.portal.model.impl.CompanyModelImpl;
 import com.liferay.portal.model.impl.GroupModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.util.SimpleCounter;
+import java.io.IOException;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -232,6 +235,43 @@ public class InitDataFactoryUtil {
 		
 		ClassNameModel classNameModel = classNameModels.get(clazz.getName());
 		return classNameModel.getClassNameId();
+	}
+	
+	public static List<String> initUserFirstNames(Class<?> clazz) throws IOException {
+		List<String> firstNames = new ArrayList<>();
+
+		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
+			new InputStreamReader(getResourceInputStream(
+					clazz, "first_names.txt")));
+
+		String line = null;
+
+		while ((line = unsyncBufferedReader.readLine()) != null) {
+			firstNames.add(line);
+		}
+
+		unsyncBufferedReader.close();
+
+		return firstNames;
+	}
+
+	public static List<String> initUserLastNames(Class<?> clazz) throws IOException {
+
+		List<String> lastNames = new ArrayList<>();
+
+		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
+			new InputStreamReader(getResourceInputStream(
+					clazz, "last_names.txt")));
+
+		String line = null;
+
+		while ((line = unsyncBufferedReader.readLine()) != null) {
+			lastNames.add(line);
+		}
+
+		unsyncBufferedReader.close();
+
+		return lastNames;
 	}
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
