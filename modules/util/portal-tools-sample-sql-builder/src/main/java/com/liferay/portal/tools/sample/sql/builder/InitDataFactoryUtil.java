@@ -195,6 +195,15 @@ public class InitDataFactoryUtil {
 		return new Date(_FUTURE_TIME + (futureDateCounter.get() * Time.SECOND));
 	}
 
+	public static GroupModel initGroupModel(long groupId,
+			long classNameId, long classPK, String name,
+			boolean site,long companyId,long sampleUserId) throws Exception{
+
+		GroupModel globalGroupModel = newGroupModel(
+				groupId,classNameId,classPK,name,site,companyId,sampleUserId);
+		return globalGroupModel;
+	}
+
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
 

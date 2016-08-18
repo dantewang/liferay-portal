@@ -256,7 +256,7 @@ public class DataFactory {
 		_defaultAssetPublisherPortletPreference =
 			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
 				defaultAssetPublisherPreference);
-		
+
 		_companyModel = InitDataFactoryUtil.initCompanyModel(
 			_companyId, _accountId);
 
@@ -266,11 +266,27 @@ public class DataFactory {
 		initAssetCategoryModels();
 		initAssetTagModels();
 		initDLFileEntryTypeModel();
-		initGroupModels();
+
+		_globalGroupModel = InitDataFactoryUtil.initGroupModel(
+			_globalGroupId, getClassNameId(Company.class), _companyId,
+			GroupConstants.GLOBAL, false,_companyId,_sampleUserId);
+
+		_guestGroupModel = InitDataFactoryUtil.initGroupModel(
+			_guestGroupId, getGroupClassNameId(), _guestGroupId,
+			GroupConstants.GUEST, true,_companyId,_sampleUserId);
+
+		_groupModels = new ArrayList<>(_maxGroupsCount);
+
+		for (int i = 1; i <= _maxGroupsCount; i++) {
+			GroupModel groupModel = InitDataFactoryUtil.initGroupModel(
+				i, getGroupClassNameId(), i, 
+				"Site " + i, true,_companyId,_sampleUserId);
+				_groupModels.add(groupModel);
+		}
 
 		int maxJournalArticleSize = GetterUtil.getInteger(
 			properties.getProperty("sample.sql.max.journal.article.size"));
-		
+
 		_journalArticleContent = InitDataFactoryUtil.initJournalArticleContent(
 			maxJournalArticleSize);
 
@@ -859,28 +875,6 @@ public class DataFactory {
 			_globalGroupId, _defaultUserId,
 			_defaultJournalDDMStructureModel.getStructureId(),
 			getClassNameId(JournalArticle.class));
-	}
-
-	public void initGroupModels() throws Exception {
-		long groupClassNameId = getGroupClassNameId();
-
-		_globalGroupModel = InitDataFactoryUtil.newGroupModel(
-			_globalGroupId, getClassNameId(Company.class), _companyId,
-			GroupConstants.GLOBAL, false,_companyId,_sampleUserId);
-
-		_guestGroupModel = InitDataFactoryUtil.newGroupModel(
-			_guestGroupId, groupClassNameId, _guestGroupId,
-			GroupConstants.GUEST, true,_companyId,_sampleUserId);
-
-		_groupModels = new ArrayList<>(_maxGroupsCount);
-
-		for (int i = 1; i <= _maxGroupsCount; i++) {
-			GroupModel groupModel = InitDataFactoryUtil.newGroupModel(
-				i, groupClassNameId, i, 
-				"Site " + i, true,_companyId,_sampleUserId);
-
-			_groupModels.add(groupModel);
-		}
 	}
 
 	public void initRoleModels() {
