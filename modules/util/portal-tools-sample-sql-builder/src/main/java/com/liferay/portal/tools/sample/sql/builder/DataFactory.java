@@ -138,10 +138,8 @@ import com.liferay.portal.kernel.security.auth.FullNameGenerator;
 import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
 import com.liferay.portal.kernel.template.TemplateConstants;
-import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
-import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.ObjectValuePair;
@@ -153,7 +151,6 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.impl.ContactModelImpl;
-import com.liferay.portal.model.impl.GroupModelImpl;
 import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
 import com.liferay.portal.model.impl.LayoutModelImpl;
 import com.liferay.portal.model.impl.LayoutSetModelImpl;
@@ -211,7 +208,6 @@ import java.io.InputStreamReader;
 import java.text.Format;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -868,19 +864,20 @@ public class DataFactory {
 	public void initGroupModels() throws Exception {
 		long groupClassNameId = getGroupClassNameId();
 
-		_globalGroupModel = newGroupModel(
+		_globalGroupModel = InitDataFactoryUtil.newGroupModel(
 			_globalGroupId, getClassNameId(Company.class), _companyId,
-			GroupConstants.GLOBAL, false);
+			GroupConstants.GLOBAL, false,_companyId,_sampleUserId);
 
-		_guestGroupModel = newGroupModel(
+		_guestGroupModel = InitDataFactoryUtil.newGroupModel(
 			_guestGroupId, groupClassNameId, _guestGroupId,
-			GroupConstants.GUEST, true);
+			GroupConstants.GUEST, true,_companyId,_sampleUserId);
 
 		_groupModels = new ArrayList<>(_maxGroupsCount);
 
 		for (int i = 1; i <= _maxGroupsCount; i++) {
-			GroupModel groupModel = newGroupModel(
-				i, groupClassNameId, i, "Site " + i, true);
+			GroupModel groupModel = InitDataFactoryUtil.newGroupModel(
+				i, groupClassNameId, i, 
+				"Site " + i, true,_companyId,_sampleUserId);
 
 			_groupModels.add(groupModel);
 		}
@@ -1603,9 +1600,9 @@ public class DataFactory {
 	}
 
 	public GroupModel newGroupModel(UserModel userModel) throws Exception {
-		return newGroupModel(
+		return InitDataFactoryUtil.newGroupModel(
 			_counter.get(), getClassNameId(User.class), userModel.getUserId(),
-			userModel.getScreenName(), false);
+			userModel.getScreenName(), false,_companyId,_sampleUserId);
 	}
 
 	public IntegerWrapper newInteger() {
@@ -2885,35 +2882,6 @@ public class DataFactory {
 				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 
 		return dlFolderModel;
-	}
-
-	protected GroupModel newGroupModel(
-			long groupId, long classNameId, long classPK, String name,
-			boolean site)
-		throws Exception {
-
-		GroupModel groupModel = new GroupModelImpl();
-
-		groupModel.setUuid(SequentialUUID.generate());
-		groupModel.setGroupId(groupId);
-		groupModel.setCompanyId(_companyId);
-		groupModel.setCreatorUserId(_sampleUserId);
-		groupModel.setClassNameId(classNameId);
-		groupModel.setClassPK(classPK);
-		groupModel.setTreePath(
-			StringPool.SLASH + groupModel.getGroupId() + StringPool.SLASH);
-		groupModel.setGroupKey(name);
-		groupModel.setName(name);
-		groupModel.setManualMembership(true);
-		groupModel.setMembershipRestriction(
-			GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION);
-		groupModel.setFriendlyURL(
-			StringPool.FORWARD_SLASH +
-				FriendlyURLNormalizerUtil.normalize(name));
-		groupModel.setSite(site);
-		groupModel.setActive(true);
-
-		return groupModel;
 	}
 
 	protected LayoutSetModel newLayoutSetModel(

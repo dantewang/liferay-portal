@@ -3,9 +3,12 @@ package com.liferay.portal.tools.sample.sql.builder;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.CompanyModel;
+import com.liferay.portal.kernel.model.GroupConstants;
+import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -13,6 +16,7 @@ import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.model.impl.AccountModelImpl;
 import com.liferay.portal.model.impl.ClassNameModelImpl;
 import com.liferay.portal.model.impl.CompanyModelImpl;
+import com.liferay.portal.model.impl.GroupModelImpl;
 import com.liferay.util.SimpleCounter;
 
 import java.io.InputStream;
@@ -157,14 +161,43 @@ public class InitDataFactoryUtil {
 
 		return sb.toString();
 	}
-		
+
+	public static GroupModel newGroupModel(
+			long groupId, long classNameId, long classPK, String name,
+			boolean site,long companyId,long sampleUserId)
+		throws Exception {
+
+		GroupModel groupModel = new GroupModelImpl();
+
+		groupModel.setUuid(SequentialUUID.generate());
+		groupModel.setGroupId(groupId);
+		groupModel.setCompanyId(companyId);
+		groupModel.setCreatorUserId(sampleUserId);
+		groupModel.setClassNameId(classNameId);
+		groupModel.setClassPK(classPK);
+		groupModel.setTreePath(
+			StringPool.SLASH + groupModel.getGroupId() + StringPool.SLASH);
+		groupModel.setGroupKey(name);
+		groupModel.setName(name);
+		groupModel.setManualMembership(true);
+		groupModel.setMembershipRestriction(
+			GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION);
+		groupModel.setFriendlyURL(
+			StringPool.FORWARD_SLASH +
+				FriendlyURLNormalizerUtil.normalize(name));
+		groupModel.setSite(site);
+		groupModel.setActive(true);
+
+		return groupModel;
+	}
+
 	public static Date nextFutureDate(SimpleCounter futureDateCounter) {
 		return new Date(_FUTURE_TIME + (futureDateCounter.get() * Time.SECOND));
 	}
 
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
-	
+
 	private static final long _FUTURE_TIME =
 		System.currentTimeMillis() + Time.YEAR;
 }
