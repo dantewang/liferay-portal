@@ -6,6 +6,8 @@ import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
+import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
@@ -17,6 +19,7 @@ import com.liferay.portal.model.impl.AccountModelImpl;
 import com.liferay.portal.model.impl.ClassNameModelImpl;
 import com.liferay.portal.model.impl.CompanyModelImpl;
 import com.liferay.portal.model.impl.GroupModelImpl;
+import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.util.SimpleCounter;
 
 import java.io.InputStream;
@@ -204,6 +207,32 @@ public class InitDataFactoryUtil {
 		return globalGroupModel;
 	}
 
+	public static RoleModel newRoleModel(String name, int type,long roleId,
+			long companyId,long sampleUserId,String sampleUserName,
+			long classNameId) {
+		RoleModel roleModel = new RoleModelImpl();
+
+		roleModel.setUuid(SequentialUUID.generate());
+		roleModel.setRoleId(roleId);
+		roleModel.setCompanyId(companyId);
+		roleModel.setUserId(sampleUserId);
+		roleModel.setUserName(sampleUserName);
+		roleModel.setCreateDate(new Date());
+		roleModel.setModifiedDate(new Date());
+		roleModel.setClassNameId(classNameId);
+		roleModel.setClassPK(roleModel.getRoleId());
+		roleModel.setName(name);
+		roleModel.setType(type);
+
+		return roleModel;
+	}
+	
+	public static long getClassNameId(Class<?> clazz,
+			Map<String, ClassNameModel> classNameModels) {
+		
+		ClassNameModel classNameModel = classNameModels.get(clazz.getName());
+		return classNameModel.getClassNameId();
+	}
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
 
