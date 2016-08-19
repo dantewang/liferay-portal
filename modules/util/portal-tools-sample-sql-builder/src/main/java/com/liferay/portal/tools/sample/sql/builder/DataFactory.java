@@ -161,7 +161,6 @@ import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.asset.model.impl.AssetEntryModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetTagModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetTagStatsModelImpl;
-import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
 import com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl;
 import com.liferay.portlet.blogs.model.impl.BlogsStatsUserModelImpl;
 import com.liferay.portlet.blogs.social.BlogsActivityKeys;
@@ -642,9 +641,10 @@ public class DataFactory {
 			(List<AssetCategoryModel>[])new List<?>[_maxGroupsCount];
 		_assetVocabularyModelsArray =
 			(List<AssetVocabularyModel>[])new List<?>[_maxGroupsCount];
-		_defaultAssetVocabularyModel = newAssetVocabularyModel(
-			_globalGroupId, _defaultUserId, null,
-			PropsValues.ASSET_VOCABULARY_DEFAULT);
+		_defaultAssetVocabularyModel = 
+				InitDataFactoryUtil.newAssetVocabularyModel(_globalGroupId, 
+				_defaultUserId, null,PropsValues.ASSET_VOCABULARY_DEFAULT,
+				_counter.get(),_companyId);
 
 		StringBundler sb = new StringBundler(4);
 
@@ -665,8 +665,9 @@ public class DataFactory {
 				sb.append(j);
 
 				AssetVocabularyModel assetVocabularyModel =
-					newAssetVocabularyModel(
-						i, _sampleUserId, _SAMPLE_USER_NAME, sb.toString());
+					InitDataFactoryUtil.newAssetVocabularyModel(
+						i, _sampleUserId, _SAMPLE_USER_NAME, sb.toString(),
+						_counter.get(),_companyId);
 
 				assetVocabularyModels.add(assetVocabularyModel);
 
@@ -2555,38 +2556,6 @@ public class DataFactory {
 		assetTagStatsModel.setClassNameId(classNameId);
 
 		return assetTagStatsModel;
-	}
-
-	protected AssetVocabularyModel newAssetVocabularyModel(
-		long grouId, long userId, String userName, String name) {
-
-		AssetVocabularyModel assetVocabularyModel =
-			new AssetVocabularyModelImpl();
-
-		assetVocabularyModel.setUuid(SequentialUUID.generate());
-		assetVocabularyModel.setVocabularyId(_counter.get());
-		assetVocabularyModel.setGroupId(grouId);
-		assetVocabularyModel.setCompanyId(_companyId);
-		assetVocabularyModel.setUserId(userId);
-		assetVocabularyModel.setUserName(userName);
-		assetVocabularyModel.setCreateDate(new Date());
-		assetVocabularyModel.setModifiedDate(new Date());
-		assetVocabularyModel.setName(name);
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><Title language-id=\"en_US\">");
-		sb.append(name);
-		sb.append("</Title></root>");
-
-		assetVocabularyModel.setTitle(sb.toString());
-
-		assetVocabularyModel.setSettings(
-			"multiValued=true\\nselectedClassNameIds=0");
-		assetVocabularyModel.setLastPublishDate(new Date());
-
-		return assetVocabularyModel;
 	}
 
 	protected BlogsEntryModel newBlogsEntryModel(long groupId, int index) {

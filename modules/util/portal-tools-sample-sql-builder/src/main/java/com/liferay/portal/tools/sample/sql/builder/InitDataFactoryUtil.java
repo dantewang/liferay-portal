@@ -3,6 +3,7 @@ package com.liferay.portal.tools.sample.sql.builder;
 import com.liferay.asset.kernel.model.AssetCategoryConstants;
 import com.liferay.asset.kernel.model.AssetCategoryModel;
 import com.liferay.asset.kernel.model.AssetTagModel;
+import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
@@ -31,6 +32,7 @@ import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
 
 import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
+import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
 
 import com.liferay.util.SimpleCounter;
 
@@ -425,6 +427,39 @@ public class InitDataFactoryUtil {
 		assetCategoryModel.setLastPublishDate(new Date());
 
 		return assetCategoryModel;
+	}
+	
+	public static AssetVocabularyModel newAssetVocabularyModel(
+		long grouId, long userId, String userName, String name,
+			long vocabularyId,long companyId) {
+
+		AssetVocabularyModel assetVocabularyModel =
+			new AssetVocabularyModelImpl();
+
+		assetVocabularyModel.setUuid(SequentialUUID.generate());
+		assetVocabularyModel.setVocabularyId(vocabularyId);
+		assetVocabularyModel.setGroupId(grouId);
+		assetVocabularyModel.setCompanyId(companyId);
+		assetVocabularyModel.setUserId(userId);
+		assetVocabularyModel.setUserName(userName);
+		assetVocabularyModel.setCreateDate(new Date());
+		assetVocabularyModel.setModifiedDate(new Date());
+		assetVocabularyModel.setName(name);
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\"><Title language-id=\"en_US\">");
+		sb.append(name);
+		sb.append("</Title></root>");
+
+		assetVocabularyModel.setTitle(sb.toString());
+
+		assetVocabularyModel.setSettings(
+			"multiValued=true\\nselectedClassNameIds=0");
+		assetVocabularyModel.setLastPublishDate(new Date());
+
+		return assetVocabularyModel;
 	}
 
 	private static final String _DEPENDENCIES_DIR =
