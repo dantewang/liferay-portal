@@ -2032,8 +2032,9 @@ public class DataFactory {
 			}
 
 			assetPublisherQueryValues =
-				getAssetPublisherAssetCategoriesQueryValues(
-					assetCategoryModels, (int)counter.get());
+				InitDataFactoryUtil.getAssetPublisherAssetCategoriesQueryValues(
+					assetCategoryModels, (int)counter.get(),
+					_maxAssetEntryToAssetCategoryCount);
 		}
 		else {
 			List<AssetTagModel> assetTagModels =
@@ -2507,29 +2508,6 @@ public class DataFactory {
 		userName[1] = _lastNames.get((int)(index % _lastNames.size()));
 
 		return userName;
-	}
-
-	protected String[] getAssetPublisherAssetCategoriesQueryValues(
-		List<AssetCategoryModel> assetCategoryModels, int index) {
-
-		AssetCategoryModel assetCategoryModel0 = assetCategoryModels.get(
-			index % assetCategoryModels.size());
-		AssetCategoryModel assetCategoryModel1 = assetCategoryModels.get(
-			(index + _maxAssetEntryToAssetCategoryCount) %
-				assetCategoryModels.size());
-		AssetCategoryModel assetCategoryModel2 = assetCategoryModels.get(
-			(index + _maxAssetEntryToAssetCategoryCount * 2) %
-				assetCategoryModels.size());
-		AssetCategoryModel assetCategoryModel3 = assetCategoryModels.get(
-			(index + _maxAssetEntryToAssetCategoryCount * 3) %
-				assetCategoryModels.size());
-
-		return new String[] {
-			String.valueOf(assetCategoryModel0.getCategoryId()),
-			String.valueOf(assetCategoryModel1.getCategoryId()),
-			String.valueOf(assetCategoryModel2.getCategoryId()),
-			String.valueOf(assetCategoryModel3.getCategoryId())
-		};
 	}
 
 	protected String[] getAssetPublisherAssetTagsQueryValues(

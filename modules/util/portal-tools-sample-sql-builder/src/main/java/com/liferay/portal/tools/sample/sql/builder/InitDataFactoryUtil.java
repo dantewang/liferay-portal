@@ -2,6 +2,7 @@ package com.liferay.portal.tools.sample.sql.builder;
 
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.model.AccountModel;
+import com.liferay.asset.kernel.model.AssetCategoryModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.GroupConstants;
@@ -325,6 +326,30 @@ public class InitDataFactoryUtil {
 		virtualHostModel.setHostname(hostname);
 
 		return virtualHostModel;
+	}
+
+	public static String[] getAssetPublisherAssetCategoriesQueryValues(
+		List<AssetCategoryModel> assetCategoryModels, int index,
+		int maxAssetEntryToAssetCategoryCount) {
+
+		AssetCategoryModel assetCategoryModel0 = assetCategoryModels.get(
+			index % assetCategoryModels.size());
+		AssetCategoryModel assetCategoryModel1 = assetCategoryModels.get(
+			(index + maxAssetEntryToAssetCategoryCount) %
+				assetCategoryModels.size());
+		AssetCategoryModel assetCategoryModel2 = assetCategoryModels.get(
+			(index + maxAssetEntryToAssetCategoryCount * 2) %
+				assetCategoryModels.size());
+		AssetCategoryModel assetCategoryModel3 = assetCategoryModels.get(
+			(index + maxAssetEntryToAssetCategoryCount * 3) %
+				assetCategoryModels.size());
+
+		return new String[] {
+			String.valueOf(assetCategoryModel0.getCategoryId()),
+			String.valueOf(assetCategoryModel1.getCategoryId()),
+			String.valueOf(assetCategoryModel2.getCategoryId()),
+			String.valueOf(assetCategoryModel3.getCategoryId())
+		};
 	}
 
 	private static final String _DEPENDENCIES_DIR =
