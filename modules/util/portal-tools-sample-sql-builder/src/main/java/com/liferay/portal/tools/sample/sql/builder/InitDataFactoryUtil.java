@@ -374,6 +374,18 @@ public class InitDataFactoryUtil {
 		};
 	}
 
+	public static String getClassName(long classNameId,
+			Map<String, ClassNameModel> classNameModels) {
+		for (ClassNameModel classNameModel : classNameModels.values()) {
+			if (classNameModel.getClassNameId() == classNameId) {
+				return classNameModel.getValue();
+			}
+		}
+
+		throw new RuntimeException(
+			"Unable to find class name for id " + classNameId);
+	}
+
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
 

@@ -2189,7 +2189,8 @@ public class DataFactory {
 
 		String name = InitDataFactoryUtil.getResourcePermissionModelName(
 			DDMStructure.class.getName(),
-			getClassName(ddmStructureModel.getClassNameId()));
+			InitDataFactoryUtil.getClassName(ddmStructureModel.getClassNameId(),
+					_classNameModels));
 		String primKey = String.valueOf(ddmStructureModel.getStructureId());
 
 		resourcePermissionModels.add(
@@ -2214,7 +2215,8 @@ public class DataFactory {
 
 		String name = InitDataFactoryUtil.getResourcePermissionModelName(
 			DDMTemplate.class.getName(),
-			getClassName(ddmTemplateModel.getResourceClassNameId()));
+			InitDataFactoryUtil.getClassName(
+					ddmTemplateModel.getResourceClassNameId(),_classNameModels));
 		String primKey = String.valueOf(ddmTemplateModel.getTemplateId());
 
 		resourcePermissionModels.add(
@@ -2510,17 +2512,6 @@ public class DataFactory {
 		userName[1] = _lastNames.get((int)(index % _lastNames.size()));
 
 		return userName;
-	}
-
-	protected String getClassName(long classNameId) {
-		for (ClassNameModel classNameModel : _classNameModels.values()) {
-			if (classNameModel.getClassNameId() == classNameId) {
-				return classNameModel.getValue();
-			}
-		}
-
-		throw new RuntimeException(
-			"Unable to find class name for id " + classNameId);
 	}
 
 	protected AssetCategoryModel newAssetCategoryModel(
