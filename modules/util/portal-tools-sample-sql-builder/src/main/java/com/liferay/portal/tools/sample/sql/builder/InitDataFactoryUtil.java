@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleModel;
+import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
@@ -16,11 +17,13 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.impl.AccountModelImpl;
 import com.liferay.portal.model.impl.ClassNameModelImpl;
 import com.liferay.portal.model.impl.CompanyModelImpl;
 import com.liferay.portal.model.impl.GroupModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
+import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.util.SimpleCounter;
 import java.io.IOException;
 
@@ -273,6 +276,44 @@ public class InitDataFactoryUtil {
 
 		return lastNames;
 	}
+
+	public static UserModel newUserModel(
+		long userId, String firstName, String lastName, String screenName,
+		boolean defaultUser,long contactId,long companyId) {
+
+		if (Validator.isNull(screenName)) {
+			screenName = String.valueOf(userId);
+		}
+
+		UserModel userModel = new UserModelImpl();
+
+		userModel.setUuid(SequentialUUID.generate());
+		userModel.setUserId(userId);
+		userModel.setCompanyId(companyId);//_companyId
+		userModel.setCreateDate(new Date());
+		userModel.setModifiedDate(new Date());
+		userModel.setDefaultUser(defaultUser);
+		userModel.setContactId(contactId);//_counter.get()
+		userModel.setPassword("test");
+		userModel.setPasswordModifiedDate(new Date());
+		userModel.setReminderQueryQuestion("What is your screen name?");
+		userModel.setReminderQueryAnswer(screenName);
+		userModel.setEmailAddress(screenName + "@liferay.com");
+		userModel.setScreenName(screenName);
+		userModel.setLanguageId("en_US");
+		userModel.setGreeting("Welcome " + screenName + StringPool.EXCLAMATION);
+		userModel.setFirstName(firstName);
+		userModel.setLastName(lastName);
+		userModel.setLoginDate(new Date());
+		userModel.setLastLoginDate(new Date());
+		userModel.setLastFailedLoginDate(new Date());
+		userModel.setLockoutDate(new Date());
+		userModel.setAgreedToTermsOfUse(true);
+		userModel.setEmailAddressVerified(true);
+
+		return userModel;
+	}
+
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
 

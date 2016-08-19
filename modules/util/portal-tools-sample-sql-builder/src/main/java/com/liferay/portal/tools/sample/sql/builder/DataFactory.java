@@ -156,7 +156,6 @@ import com.liferay.portal.model.impl.LayoutSetModelImpl;
 import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
 import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portal.model.impl.SubscriptionModelImpl;
-import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
@@ -992,14 +991,15 @@ public class DataFactory {
 	}
 
 	public void initUserModels() {
-		_defaultUserModel = newUserModel(
+		_defaultUserModel = InitDataFactoryUtil.newUserModel(
 			_defaultUserId, StringPool.BLANK, StringPool.BLANK,
-			StringPool.BLANK, true);
-		_guestUserModel = newUserModel(
-			_counter.get(), "Test", "Test", "Test", false);
-		_sampleUserModel = newUserModel(
+			StringPool.BLANK, true,_counter.get(),_companyId);
+		_guestUserModel = InitDataFactoryUtil.newUserModel(
+			_counter.get(), "Test", "Test", "Test", false,_counter.get(),
+			_companyId);
+		_sampleUserModel = InitDataFactoryUtil.newUserModel(
 			_sampleUserId, _SAMPLE_USER_NAME, _SAMPLE_USER_NAME,
-			_SAMPLE_USER_NAME, false);
+			_SAMPLE_USER_NAME, false,_counter.get(),_companyId);
 	}
 
 	public void initVirtualHostModel(String hostname) {
@@ -2465,9 +2465,10 @@ public class DataFactory {
 		for (int i = 0; i < _maxUserCount; i++) {
 			String[] userName = nextUserName(i);
 			userModels.add(
-				newUserModel(
+				InitDataFactoryUtil.newUserModel(
 					_counter.get(), userName[0], userName[1],
-					"test" + _userScreenNameCounter.get(), false));
+					"test" + _userScreenNameCounter.get(), false,_counter.get(),
+					_companyId));
 		}
 
 		return userModels;
@@ -3097,43 +3098,6 @@ public class DataFactory {
 		subscriptionModel.setFrequency(SubscriptionConstants.FREQUENCY_INSTANT);
 
 		return subscriptionModel;
-	}
-
-	protected UserModel newUserModel(
-		long userId, String firstName, String lastName, String screenName,
-		boolean defaultUser) {
-
-		if (Validator.isNull(screenName)) {
-			screenName = String.valueOf(userId);
-		}
-
-		UserModel userModel = new UserModelImpl();
-
-		userModel.setUuid(SequentialUUID.generate());
-		userModel.setUserId(userId);
-		userModel.setCompanyId(_companyId);
-		userModel.setCreateDate(new Date());
-		userModel.setModifiedDate(new Date());
-		userModel.setDefaultUser(defaultUser);
-		userModel.setContactId(_counter.get());
-		userModel.setPassword("test");
-		userModel.setPasswordModifiedDate(new Date());
-		userModel.setReminderQueryQuestion("What is your screen name?");
-		userModel.setReminderQueryAnswer(screenName);
-		userModel.setEmailAddress(screenName + "@liferay.com");
-		userModel.setScreenName(screenName);
-		userModel.setLanguageId("en_US");
-		userModel.setGreeting("Welcome " + screenName + StringPool.EXCLAMATION);
-		userModel.setFirstName(firstName);
-		userModel.setLastName(lastName);
-		userModel.setLoginDate(new Date());
-		userModel.setLastLoginDate(new Date());
-		userModel.setLastFailedLoginDate(new Date());
-		userModel.setLockoutDate(new Date());
-		userModel.setAgreedToTermsOfUse(true);
-		userModel.setEmailAddressVerified(true);
-
-		return userModel;
 	}
 
 	protected WikiNodeModel newWikiNodeModel(long groupId, int index) {
