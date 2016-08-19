@@ -3,6 +3,7 @@ package com.liferay.portal.tools.sample.sql.builder;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.asset.kernel.model.AssetCategoryModel;
+import com.liferay.asset.kernel.model.AssetTagModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.GroupConstants;
@@ -349,6 +350,27 @@ public class InitDataFactoryUtil {
 			String.valueOf(assetCategoryModel1.getCategoryId()),
 			String.valueOf(assetCategoryModel2.getCategoryId()),
 			String.valueOf(assetCategoryModel3.getCategoryId())
+		};
+	}
+
+	public static String[] getAssetPublisherAssetTagsQueryValues(
+		List<AssetTagModel> assetTagModels, int index,
+		int maxAssetEntryToAssetTagCount) {
+
+		AssetTagModel assetTagModel0 = assetTagModels.get(
+			index % assetTagModels.size());
+		AssetTagModel assetTagModel1 = assetTagModels.get(
+			(index + maxAssetEntryToAssetTagCount) % assetTagModels.size());
+		AssetTagModel assetTagModel2 = assetTagModels.get(
+			(index + maxAssetEntryToAssetTagCount * 2) %
+				assetTagModels.size());
+		AssetTagModel assetTagModel3 = assetTagModels.get(
+			(index + maxAssetEntryToAssetTagCount * 3) %
+				assetTagModels.size());
+
+		return new String[] {
+			assetTagModel0.getName(), assetTagModel1.getName(),
+			assetTagModel2.getName(), assetTagModel3.getName()
 		};
 	}
 
