@@ -10,6 +10,7 @@ import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.model.UserModel;
+import com.liferay.portal.kernel.model.VirtualHostModel;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
@@ -24,6 +25,7 @@ import com.liferay.portal.model.impl.CompanyModelImpl;
 import com.liferay.portal.model.impl.GroupModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.portal.model.impl.UserModelImpl;
+import com.liferay.portal.model.impl.VirtualHostModelImpl;
 import com.liferay.util.SimpleCounter;
 import java.io.IOException;
 
@@ -289,11 +291,11 @@ public class InitDataFactoryUtil {
 
 		userModel.setUuid(SequentialUUID.generate());
 		userModel.setUserId(userId);
-		userModel.setCompanyId(companyId);//_companyId
+		userModel.setCompanyId(companyId);
 		userModel.setCreateDate(new Date());
 		userModel.setModifiedDate(new Date());
 		userModel.setDefaultUser(defaultUser);
-		userModel.setContactId(contactId);//_counter.get()
+		userModel.setContactId(contactId);
 		userModel.setPassword("test");
 		userModel.setPasswordModifiedDate(new Date());
 		userModel.setReminderQueryQuestion("What is your screen name?");
@@ -312,6 +314,17 @@ public class InitDataFactoryUtil {
 		userModel.setEmailAddressVerified(true);
 
 		return userModel;
+	}
+
+	public static VirtualHostModel initVirtualHostModel(String hostname,
+			long virtualHostId,long companyId) {
+		VirtualHostModel virtualHostModel = new VirtualHostModelImpl();
+
+		virtualHostModel.setVirtualHostId(virtualHostId);
+		virtualHostModel.setCompanyId(companyId);
+		virtualHostModel.setHostname(hostname);
+
+		return virtualHostModel;
 	}
 
 	private static final String _DEPENDENCIES_DIR =

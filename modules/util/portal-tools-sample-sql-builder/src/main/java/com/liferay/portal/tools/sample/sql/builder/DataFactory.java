@@ -156,7 +156,6 @@ import com.liferay.portal.model.impl.LayoutSetModelImpl;
 import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
 import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portal.model.impl.SubscriptionModelImpl;
-import com.liferay.portal.model.impl.VirtualHostModelImpl;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
@@ -297,12 +296,14 @@ public class DataFactory {
 			_sampleUserId, _SAMPLE_USER_NAME, _SAMPLE_USER_NAME,
 			_SAMPLE_USER_NAME, false,_counter.get(),_companyId);
 
+		_virtualHostModel = InitDataFactoryUtil.initVirtualHostModel(
+				properties.getProperty("sample.sql.virtual.hostname"),
+				_counter.get(),_companyId);
+
 		initAssetCategoryModels();
 		initAssetTagModels();
 		initDLFileEntryTypeModel();
 		initRoleModels();
-		initVirtualHostModel(
-			properties.getProperty("sample.sql.virtual.hostname"));
 	}
 
 	public AccountModel getAccountModel() {
@@ -997,14 +998,6 @@ public class DataFactory {
 			classNameId);
 
 		_roleModels.add(_userRoleModel);
-	}
-
-	public void initVirtualHostModel(String hostname) {
-		_virtualHostModel = new VirtualHostModelImpl();
-
-		_virtualHostModel.setVirtualHostId(_counter.get());
-		_virtualHostModel.setCompanyId(_companyId);
-		_virtualHostModel.setHostname(hostname);
 	}
 
 	public AssetEntryModel newAssetEntryModel(BlogsEntryModel blogsEntryModel) {
