@@ -1,9 +1,10 @@
 package com.liferay.portal.tools.sample.sql.builder;
 
-import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
-import com.liferay.portal.kernel.model.AccountModel;
+import com.liferay.asset.kernel.model.AssetCategoryConstants;
 import com.liferay.asset.kernel.model.AssetCategoryModel;
 import com.liferay.asset.kernel.model.AssetTagModel;
+import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
+import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.GroupConstants;
@@ -28,7 +29,11 @@ import com.liferay.portal.model.impl.GroupModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
+
+import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
+
 import com.liferay.util.SimpleCounter;
+
 import java.io.IOException;
 
 import java.io.InputStream;
@@ -384,6 +389,42 @@ public class InitDataFactoryUtil {
 
 		throw new RuntimeException(
 			"Unable to find class name for id " + classNameId);
+	}
+
+	public static AssetCategoryModel newAssetCategoryModel(
+		long groupId, long lastRightCategoryId, String name,
+		long vocabularyId,long categoryId,long companyId,
+		long userId,String userName) {
+
+		AssetCategoryModel assetCategoryModel = new AssetCategoryModelImpl();
+
+		assetCategoryModel.setUuid(SequentialUUID.generate());
+		assetCategoryModel.setCategoryId(categoryId);
+		assetCategoryModel.setGroupId(groupId);
+		assetCategoryModel.setCompanyId(companyId);
+		assetCategoryModel.setUserId(userId);
+		assetCategoryModel.setUserName(userName);
+		assetCategoryModel.setCreateDate(new Date());
+		assetCategoryModel.setModifiedDate(new Date());
+		assetCategoryModel.setParentCategoryId(
+			AssetCategoryConstants.DEFAULT_PARENT_CATEGORY_ID);
+		assetCategoryModel.setLeftCategoryId(lastRightCategoryId++);
+		assetCategoryModel.setRightCategoryId(lastRightCategoryId++);
+		assetCategoryModel.setName(name);
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\"><Title language-id=\"en_US\">");
+		sb.append(name);
+		sb.append("</Title></root>");
+
+		assetCategoryModel.setTitle(sb.toString());
+
+		assetCategoryModel.setVocabularyId(vocabularyId);
+		assetCategoryModel.setLastPublishDate(new Date());
+
+		return assetCategoryModel;
 	}
 
 	private static final String _DEPENDENCIES_DIR =
