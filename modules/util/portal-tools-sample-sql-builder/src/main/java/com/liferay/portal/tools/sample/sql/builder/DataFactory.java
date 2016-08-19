@@ -287,11 +287,20 @@ public class DataFactory {
 
 		_lastNames = InitDataFactoryUtil.initUserLastNames(_clazz);
 
+		_defaultUserModel = InitDataFactoryUtil.newUserModel(
+			_defaultUserId, StringPool.BLANK, StringPool.BLANK,
+			StringPool.BLANK, true,_counter.get(),_companyId);
+		_guestUserModel = InitDataFactoryUtil.newUserModel(
+			_counter.get(), "Test", "Test", "Test", false,_counter.get(),
+			_companyId);
+		_sampleUserModel = InitDataFactoryUtil.newUserModel(
+			_sampleUserId, _SAMPLE_USER_NAME, _SAMPLE_USER_NAME,
+			_SAMPLE_USER_NAME, false,_counter.get(),_companyId);
+
 		initAssetCategoryModels();
 		initAssetTagModels();
 		initDLFileEntryTypeModel();
 		initRoleModels();
-		initUserModels();
 		initVirtualHostModel(
 			properties.getProperty("sample.sql.virtual.hostname"));
 	}
@@ -988,18 +997,6 @@ public class DataFactory {
 			classNameId);
 
 		_roleModels.add(_userRoleModel);
-	}
-
-	public void initUserModels() {
-		_defaultUserModel = InitDataFactoryUtil.newUserModel(
-			_defaultUserId, StringPool.BLANK, StringPool.BLANK,
-			StringPool.BLANK, true,_counter.get(),_companyId);
-		_guestUserModel = InitDataFactoryUtil.newUserModel(
-			_counter.get(), "Test", "Test", "Test", false,_counter.get(),
-			_companyId);
-		_sampleUserModel = InitDataFactoryUtil.newUserModel(
-			_sampleUserId, _SAMPLE_USER_NAME, _SAMPLE_USER_NAME,
-			_SAMPLE_USER_NAME, false,_counter.get(),_companyId);
 	}
 
 	public void initVirtualHostModel(String hostname) {
