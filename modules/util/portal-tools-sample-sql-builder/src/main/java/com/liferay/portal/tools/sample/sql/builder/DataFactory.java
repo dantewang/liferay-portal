@@ -160,7 +160,6 @@ import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.asset.model.impl.AssetEntryModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetTagModelImpl;
-import com.liferay.portlet.asset.model.impl.AssetTagStatsModelImpl;
 import com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl;
 import com.liferay.portlet.blogs.model.impl.BlogsStatsUserModelImpl;
 import com.liferay.portlet.blogs.social.BlogsActivityKeys;
@@ -724,23 +723,25 @@ public class DataFactory {
 
 				assetTagModels.add(assetTagModel);
 
-				AssetTagStatsModel assetTagStatsModel = newAssetTagStatsModel(
-					assetTagModel.getTagId(), 
-					InitDataFactoryUtil.getClassNameId(
-					BlogsEntry.class,_classNameModels));
+				AssetTagStatsModel assetTagStatsModel = 
+						InitDataFactoryUtil.newAssetTagStatsModel(
+								assetTagModel.getTagId(), 
+								InitDataFactoryUtil.getClassNameId(
+										BlogsEntry.class,_classNameModels),
+								_counter.get());
 
 				assetTagStatsModels.add(assetTagStatsModel);
 
-				assetTagStatsModel = newAssetTagStatsModel(
+				assetTagStatsModel = InitDataFactoryUtil.newAssetTagStatsModel(
 					assetTagModel.getTagId(),
 					InitDataFactoryUtil.getClassNameId(
-							JournalArticle.class,_classNameModels));
+					JournalArticle.class,_classNameModels),_counter.get());
 
 				assetTagStatsModels.add(assetTagStatsModel);
 
-				assetTagStatsModel = newAssetTagStatsModel(
+				assetTagStatsModel = InitDataFactoryUtil.newAssetTagStatsModel(
 					assetTagModel.getTagId(), InitDataFactoryUtil.getClassNameId(
-							WikiPage.class,_classNameModels));
+							WikiPage.class,_classNameModels),_counter.get());
 
 				assetTagStatsModels.add(assetTagStatsModel);
 			}
@@ -2546,17 +2547,7 @@ public class DataFactory {
 		return assetEntryModel;
 	}
 
-	protected AssetTagStatsModel newAssetTagStatsModel(
-		long tagId, long classNameId) {
 
-		AssetTagStatsModel assetTagStatsModel = new AssetTagStatsModelImpl();
-
-		assetTagStatsModel.setTagStatsId(_counter.get());
-		assetTagStatsModel.setTagId(tagId);
-		assetTagStatsModel.setClassNameId(classNameId);
-
-		return assetTagStatsModel;
-	}
 
 	protected BlogsEntryModel newBlogsEntryModel(long groupId, int index) {
 		BlogsEntryModel blogsEntryModel = new BlogsEntryModelImpl();

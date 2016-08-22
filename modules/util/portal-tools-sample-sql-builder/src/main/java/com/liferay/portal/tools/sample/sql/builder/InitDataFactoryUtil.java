@@ -3,6 +3,7 @@ package com.liferay.portal.tools.sample.sql.builder;
 import com.liferay.asset.kernel.model.AssetCategoryConstants;
 import com.liferay.asset.kernel.model.AssetCategoryModel;
 import com.liferay.asset.kernel.model.AssetTagModel;
+import com.liferay.asset.kernel.model.AssetTagStatsModel;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.model.AccountModel;
@@ -32,6 +33,7 @@ import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
 
 import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
+import com.liferay.portlet.asset.model.impl.AssetTagStatsModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
 
 import com.liferay.util.SimpleCounter;
@@ -461,7 +463,18 @@ public class InitDataFactoryUtil {
 
 		return assetVocabularyModel;
 	}
+	
+	public static AssetTagStatsModel newAssetTagStatsModel(
+		long tagId, long classNameId, long tagStatsId) {
 
+		AssetTagStatsModel assetTagStatsModel = new AssetTagStatsModelImpl();
+
+		assetTagStatsModel.setTagStatsId(tagStatsId);
+		assetTagStatsModel.setTagId(tagId);
+		assetTagStatsModel.setClassNameId(classNameId);
+
+		return assetTagStatsModel;
+	}
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
 
