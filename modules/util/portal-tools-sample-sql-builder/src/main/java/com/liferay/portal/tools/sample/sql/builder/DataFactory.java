@@ -67,7 +67,6 @@ import com.liferay.dynamic.data.mapping.model.DDMTemplateLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
 import com.liferay.dynamic.data.mapping.model.impl.DDMContentModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLayoutModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureVersionModelImpl;
@@ -160,7 +159,6 @@ import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.asset.model.impl.AssetEntryModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetTagModelImpl;
-import com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl;
 import com.liferay.portlet.blogs.model.impl.BlogsStatsUserModelImpl;
 import com.liferay.portlet.blogs.social.BlogsActivityKeys;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelImpl;
@@ -867,10 +865,10 @@ public class DataFactory {
 		_defaultDLDDMStructureVersionModel = newDDMStructureVersionModel(
 			_defaultDLDDMStructureModel);
 
-		_defaultDLDDMStructureLayoutModel = newDDMStructureLayoutModel(
+		_defaultDLDDMStructureLayoutModel = InitDataFactoryUtil.newDDMStructureLayoutModel(
 			_globalGroupId, _defaultUserId,
 			_defaultDLDDMStructureVersionModel.getStructureVersionId(),
-			_dlDDMStructureLayoutContent);
+			_dlDDMStructureLayoutContent, _counter.get(),_companyId,_SAMPLE_USER_NAME,_futureDateCounter);
 
 		_defaultJournalDDMStructureModel = newDDMStructureModel(
 			_globalGroupId, _defaultUserId,
@@ -881,10 +879,10 @@ public class DataFactory {
 		_defaultJournalDDMStructureVersionModel = newDDMStructureVersionModel(
 			_defaultJournalDDMStructureModel);
 
-		_defaultJournalDDMStructureLayoutModel = newDDMStructureLayoutModel(
+		_defaultJournalDDMStructureLayoutModel = InitDataFactoryUtil.newDDMStructureLayoutModel(
 			_globalGroupId, _defaultUserId,
 			_defaultJournalDDMStructureVersionModel.getStructureVersionId(),
-			_journalDDMStructureLayoutContent);
+			_journalDDMStructureLayoutContent,_counter.get(),_companyId,_SAMPLE_USER_NAME,_futureDateCounter);
 
 		_defaultJournalDDMTemplateModel = newDDMTemplateModel(
 			_globalGroupId, _defaultUserId,
@@ -1124,7 +1122,10 @@ public class DataFactory {
 			_maxBlogsEntryCount);
 
 		for (int i = 1; i <= _maxBlogsEntryCount; i++) {
-			blogEntryModels.add(newBlogsEntryModel(groupId, i));
+			blogEntryModels.add(
+					InitDataFactoryUtil.newBlogsEntryModel(
+					groupId, i,_counter.get(),_companyId,_sampleUserId,
+					_SAMPLE_USER_NAME));
 		}
 
 		return blogEntryModels;
@@ -1230,9 +1231,10 @@ public class DataFactory {
 		sb.append("], \"title\": {\"en_US\": \"\"}}],\"paginationMode\": ");
 		sb.append("\"single-page\"}");
 
-		return newDDMStructureLayoutModel(
+		return InitDataFactoryUtil.newDDMStructureLayoutModel(
 			_globalGroupId, _defaultUserId,
-			ddmStructureVersionModel.getStructureVersionId(), sb.toString());
+			ddmStructureVersionModel.getStructureVersionId(), sb.toString(),
+			_counter.get(),_companyId,_SAMPLE_USER_NAME,_futureDateCounter);
 	}
 
 	public DDMStructureModel newDDLDDMStructureModel(long groupId) {
@@ -2547,30 +2549,6 @@ public class DataFactory {
 		return assetEntryModel;
 	}
 
-
-
-	protected BlogsEntryModel newBlogsEntryModel(long groupId, int index) {
-		BlogsEntryModel blogsEntryModel = new BlogsEntryModelImpl();
-
-		blogsEntryModel.setUuid(SequentialUUID.generate());
-		blogsEntryModel.setEntryId(_counter.get());
-		blogsEntryModel.setGroupId(groupId);
-		blogsEntryModel.setCompanyId(_companyId);
-		blogsEntryModel.setUserId(_sampleUserId);
-		blogsEntryModel.setUserName(_SAMPLE_USER_NAME);
-		blogsEntryModel.setCreateDate(new Date());
-		blogsEntryModel.setModifiedDate(new Date());
-		blogsEntryModel.setTitle("Test Blog " + index);
-		blogsEntryModel.setSubtitle("Subtitle of Test Blog " + index);
-		blogsEntryModel.setUrlTitle("testblog" + index);
-		blogsEntryModel.setContent("This is test blog " + index + ".");
-		blogsEntryModel.setDisplayDate(new Date());
-		blogsEntryModel.setLastPublishDate(new Date());
-		blogsEntryModel.setStatusDate(new Date());
-
-		return blogsEntryModel;
-	}
-
 	protected DDMContentModel newDDMContentModel(
 		long contentId, long groupId, String data) {
 
@@ -2590,28 +2568,6 @@ public class DataFactory {
 		ddmContentModel.setData(data);
 
 		return ddmContentModel;
-	}
-
-	protected DDMStructureLayoutModel newDDMStructureLayoutModel(
-		long groupId, long userId, long structureVersionId, String definition) {
-
-		DDMStructureLayoutModel ddmStructureLayoutModel =
-			new DDMStructureLayoutModelImpl();
-
-		ddmStructureLayoutModel.setUuid(SequentialUUID.generate());
-		ddmStructureLayoutModel.setStructureLayoutId(_counter.get());
-		ddmStructureLayoutModel.setGroupId(groupId);
-		ddmStructureLayoutModel.setCompanyId(_companyId);
-		ddmStructureLayoutModel.setUserId(userId);
-		ddmStructureLayoutModel.setUserName(_SAMPLE_USER_NAME);
-		ddmStructureLayoutModel.setCreateDate(
-				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
-		ddmStructureLayoutModel.setModifiedDate(
-				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
-		ddmStructureLayoutModel.setStructureVersionId(structureVersionId);
-		ddmStructureLayoutModel.setDefinition(definition);
-
-		return ddmStructureLayoutModel;
 	}
 
 	protected DDMStructureLinkModel newDDMStructureLinkModel(

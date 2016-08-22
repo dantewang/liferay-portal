@@ -5,6 +5,9 @@ import com.liferay.asset.kernel.model.AssetCategoryModel;
 import com.liferay.asset.kernel.model.AssetTagModel;
 import com.liferay.asset.kernel.model.AssetTagStatsModel;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
+import com.liferay.blogs.kernel.model.BlogsEntryModel;
+import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
+import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLayoutModelImpl;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
@@ -35,6 +38,7 @@ import com.liferay.portal.model.impl.VirtualHostModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetTagStatsModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
+import com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl;
 
 import com.liferay.util.SimpleCounter;
 
@@ -475,6 +479,53 @@ public class InitDataFactoryUtil {
 
 		return assetTagStatsModel;
 	}
+	
+	public static BlogsEntryModel newBlogsEntryModel(
+			long groupId, int index,long entryId,long companyId,
+			long sampleUserId, String userName) {
+		BlogsEntryModel blogsEntryModel = new BlogsEntryModelImpl();
+
+		blogsEntryModel.setUuid(SequentialUUID.generate());
+		blogsEntryModel.setEntryId(entryId);
+		blogsEntryModel.setGroupId(groupId);
+		blogsEntryModel.setCompanyId(companyId);
+		blogsEntryModel.setUserId(sampleUserId);
+		blogsEntryModel.setUserName(userName);
+		blogsEntryModel.setCreateDate(new Date());
+		blogsEntryModel.setModifiedDate(new Date());
+		blogsEntryModel.setTitle("Test Blog " + index);
+		blogsEntryModel.setSubtitle("Subtitle of Test Blog " + index);
+		blogsEntryModel.setUrlTitle("testblog" + index);
+		blogsEntryModel.setContent("This is test blog " + index + ".");
+		blogsEntryModel.setDisplayDate(new Date());
+		blogsEntryModel.setLastPublishDate(new Date());
+		blogsEntryModel.setStatusDate(new Date());
+
+		return blogsEntryModel;
+	}
+
+	public static DDMStructureLayoutModel newDDMStructureLayoutModel(
+		long groupId, long userId, long structureVersionId, String definition,
+			long structureLayoutId,long companyId,String userName,
+			SimpleCounter futureDateCounter) {
+
+		DDMStructureLayoutModel ddmStructureLayoutModel =
+			new DDMStructureLayoutModelImpl();
+
+		ddmStructureLayoutModel.setUuid(SequentialUUID.generate());
+		ddmStructureLayoutModel.setStructureLayoutId(structureLayoutId);
+		ddmStructureLayoutModel.setGroupId(groupId);
+		ddmStructureLayoutModel.setCompanyId(companyId);
+		ddmStructureLayoutModel.setUserId(userId);
+		ddmStructureLayoutModel.setUserName(userName);
+		ddmStructureLayoutModel.setCreateDate(nextFutureDate(futureDateCounter));
+		ddmStructureLayoutModel.setModifiedDate(nextFutureDate(futureDateCounter));
+		ddmStructureLayoutModel.setStructureVersionId(structureVersionId);
+		ddmStructureLayoutModel.setDefinition(definition);
+
+		return ddmStructureLayoutModel;
+	}
+
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
 
