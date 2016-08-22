@@ -115,7 +115,6 @@ import com.liferay.portal.kernel.model.LayoutSetModel;
 import com.liferay.portal.kernel.model.LayoutTypePortletConstants;
 import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
-import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.model.ResourcePermissionModel;
 import com.liferay.portal.kernel.model.Role;
@@ -146,7 +145,6 @@ import com.liferay.portal.model.impl.ContactModelImpl;
 import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
 import com.liferay.portal.model.impl.LayoutModelImpl;
 import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
-import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portal.model.impl.SubscriptionModelImpl;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
@@ -2159,10 +2157,11 @@ public class DataFactory {
 
 		if (assetVocabularyModel.getUserId() == _defaultUserId) {
 			return Collections.singletonList(
-				newResourcePermissionModel(
+				InitDataFactoryUtil.newResourcePermissionModel(
 					AssetVocabulary.class.getName(),
 					String.valueOf(assetVocabularyModel.getVocabularyId()),
-					_ownerRoleModel.getRoleId(), _defaultUserId));
+					_ownerRoleModel.getRoleId(), _defaultUserId,
+					_resourcePermissionCounter.get(),_companyId));
 		}
 
 		return newResourcePermissionModels(
@@ -2183,10 +2182,11 @@ public class DataFactory {
 		DDLRecordSetModel ddlRecordSetModel) {
 
 		return Collections.singletonList(
-			newResourcePermissionModel(
+			InitDataFactoryUtil.newResourcePermissionModel(
 				DDLRecordSet.class.getName(),
 				String.valueOf(ddlRecordSetModel.getRecordSetId()),
-				_ownerRoleModel.getRoleId(), _defaultUserId));
+				_ownerRoleModel.getRoleId(), _defaultUserId,
+				_resourcePermissionCounter.get(),_companyId));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -2202,15 +2202,18 @@ public class DataFactory {
 		String primKey = String.valueOf(ddmStructureModel.getStructureId());
 
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _guestRoleModel.getRoleId(), 0));
+			InitDataFactoryUtil.newResourcePermissionModel(
+				name, primKey, _guestRoleModel.getRoleId(), 0,
+					_resourcePermissionCounter.get(),_companyId));
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
+			InitDataFactoryUtil.newResourcePermissionModel(
 				name, primKey, _ownerRoleModel.getRoleId(),
-				ddmStructureModel.getUserId()));
+				ddmStructureModel.getUserId(),
+				_resourcePermissionCounter.get(),_companyId));
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _userRoleModel.getRoleId(), 0));
+			InitDataFactoryUtil.newResourcePermissionModel(
+				name, primKey, _userRoleModel.getRoleId(), 0,
+					_resourcePermissionCounter.get(),_companyId));
 
 		return resourcePermissionModels;
 	}
@@ -2228,15 +2231,18 @@ public class DataFactory {
 		String primKey = String.valueOf(ddmTemplateModel.getTemplateId());
 
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _guestRoleModel.getRoleId(), 0));
+			InitDataFactoryUtil.newResourcePermissionModel(
+				name, primKey, _guestRoleModel.getRoleId(), 0,
+					_resourcePermissionCounter.get(),_companyId));
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
+			InitDataFactoryUtil.newResourcePermissionModel(
 				name, primKey, _ownerRoleModel.getRoleId(),
-				ddmTemplateModel.getUserId()));
+				ddmTemplateModel.getUserId(),
+				_resourcePermissionCounter.get(),_companyId));
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _userRoleModel.getRoleId(), 0));
+			InitDataFactoryUtil.newResourcePermissionModel(
+				name, primKey, _userRoleModel.getRoleId(), 0,
+					_resourcePermissionCounter.get(),_companyId));
 
 		return resourcePermissionModels;
 	}
@@ -2261,9 +2267,10 @@ public class DataFactory {
 		GroupModel groupModel) {
 
 		return Collections.singletonList(
-			newResourcePermissionModel(
+			InitDataFactoryUtil.newResourcePermissionModel(
 				Group.class.getName(), String.valueOf(groupModel.getGroupId()),
-				_ownerRoleModel.getRoleId(), _sampleUserId));
+				_ownerRoleModel.getRoleId(), _sampleUserId,
+				_resourcePermissionCounter.get(),_companyId));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -2294,10 +2301,11 @@ public class DataFactory {
 		MBMessageModel mbMessageModel) {
 
 		return Collections.singletonList(
-			newResourcePermissionModel(
+			InitDataFactoryUtil.newResourcePermissionModel(
 				MBMessage.class.getName(),
 				String.valueOf(mbMessageModel.getMessageId()),
-				_ownerRoleModel.getRoleId(), _sampleUserId));
+				_ownerRoleModel.getRoleId(), _sampleUserId,
+				_resourcePermissionCounter.get(),_companyId));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -2323,9 +2331,10 @@ public class DataFactory {
 		RoleModel roleModel) {
 
 		return Collections.singletonList(
-			newResourcePermissionModel(
+			InitDataFactoryUtil.newResourcePermissionModel(
 				Role.class.getName(), String.valueOf(roleModel.getRoleId()),
-				_ownerRoleModel.getRoleId(), _sampleUserId));
+				_ownerRoleModel.getRoleId(), _sampleUserId,
+				_resourcePermissionCounter.get(),_companyId));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -2339,9 +2348,10 @@ public class DataFactory {
 		UserModel userModel) {
 
 		return Collections.singletonList(
-			newResourcePermissionModel(
+			InitDataFactoryUtil.newResourcePermissionModel(
 				User.class.getName(), String.valueOf(userModel.getUserId()),
-				_ownerRoleModel.getRoleId(), userModel.getUserId()));
+				_ownerRoleModel.getRoleId(), userModel.getUserId(),
+				_resourcePermissionCounter.get(),_companyId));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -2481,7 +2491,8 @@ public class DataFactory {
 		List<WikiNodeModel> wikiNodeModels = new ArrayList<>(_maxWikiNodeCount);
 
 		for (int i = 1; i <= _maxWikiNodeCount; i++) {
-			wikiNodeModels.add(newWikiNodeModel(groupId, i));
+			wikiNodeModels.add(InitDataFactoryUtil.newWikiNodeModel(groupId, i,
+					_counter.get(),_companyId,_sampleUserId,_SAMPLE_USER_NAME));
 		}
 
 		return wikiNodeModels;
@@ -2661,28 +2672,7 @@ public class DataFactory {
 
 		return portletPreferencesModel;
 	}
-
-	protected ResourcePermissionModel newResourcePermissionModel(
-		String name, String primKey, long roleId, long ownerId) {
-
-		ResourcePermissionModel resourcePermissionModel =
-			new ResourcePermissionModelImpl();
-
-		resourcePermissionModel.setResourcePermissionId(
-			_resourcePermissionCounter.get());
-		resourcePermissionModel.setCompanyId(_companyId);
-		resourcePermissionModel.setName(name);
-		resourcePermissionModel.setScope(ResourceConstants.SCOPE_INDIVIDUAL);
-		resourcePermissionModel.setPrimKey(primKey);
-		resourcePermissionModel.setPrimKeyId(GetterUtil.getLong(primKey));
-		resourcePermissionModel.setRoleId(roleId);
-		resourcePermissionModel.setOwnerId(ownerId);
-		resourcePermissionModel.setActionIds(1);
-		resourcePermissionModel.setViewActionId(true);
-
-		return resourcePermissionModel;
-	}
-
+	
 	protected List<ResourcePermissionModel> newResourcePermissionModels(
 		String name, String primKey, long ownerId) {
 
@@ -2690,14 +2680,17 @@ public class DataFactory {
 			new ArrayList<>(3);
 
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _guestRoleModel.getRoleId(), 0));
+			InitDataFactoryUtil.newResourcePermissionModel(
+				name, primKey, _guestRoleModel.getRoleId(), 0,
+					_resourcePermissionCounter.get(),_companyId));
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _ownerRoleModel.getRoleId(), ownerId));
+			InitDataFactoryUtil.newResourcePermissionModel(
+				name, primKey, _ownerRoleModel.getRoleId(), ownerId,
+					_resourcePermissionCounter.get(),_companyId));
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _siteMemberRoleModel.getRoleId(), 0));
+			InitDataFactoryUtil.newResourcePermissionModel(
+				name, primKey, _siteMemberRoleModel.getRoleId(), 0,
+					_resourcePermissionCounter.get(),_companyId));
 
 		return resourcePermissionModels;
 	}
@@ -2737,25 +2730,6 @@ public class DataFactory {
 		subscriptionModel.setFrequency(SubscriptionConstants.FREQUENCY_INSTANT);
 
 		return subscriptionModel;
-	}
-
-	protected WikiNodeModel newWikiNodeModel(long groupId, int index) {
-		WikiNodeModel wikiNodeModel = new WikiNodeModelImpl();
-
-		wikiNodeModel.setUuid(SequentialUUID.generate());
-		wikiNodeModel.setNodeId(_counter.get());
-		wikiNodeModel.setGroupId(groupId);
-		wikiNodeModel.setCompanyId(_companyId);
-		wikiNodeModel.setUserId(_sampleUserId);
-		wikiNodeModel.setUserName(_SAMPLE_USER_NAME);
-		wikiNodeModel.setCreateDate(new Date());
-		wikiNodeModel.setModifiedDate(new Date());
-		wikiNodeModel.setName("Test Node " + index);
-		wikiNodeModel.setLastPostDate(new Date());
-		wikiNodeModel.setLastPublishDate(new Date());
-		wikiNodeModel.setStatusDate(new Date());
-
-		return wikiNodeModel;
 	}
 
 	protected WikiPageModel newWikiPageModel(

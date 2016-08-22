@@ -31,6 +31,8 @@ import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.LayoutSetModel;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
+import com.liferay.portal.kernel.model.ResourceConstants;
+import com.liferay.portal.kernel.model.ResourcePermissionModel;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.model.UserModel;
@@ -40,6 +42,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -50,6 +53,7 @@ import com.liferay.portal.model.impl.ClassNameModelImpl;
 import com.liferay.portal.model.impl.CompanyModelImpl;
 import com.liferay.portal.model.impl.GroupModelImpl;
 import com.liferay.portal.model.impl.LayoutSetModelImpl;
+import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
@@ -63,6 +67,10 @@ import com.liferay.portlet.documentlibrary.model.impl.DLFolderModelImpl;
 import com.liferay.portlet.messageboards.model.impl.MBCategoryModelImpl;
 
 import com.liferay.util.SimpleCounter;
+
+import com.liferay.wiki.model.WikiNodeModel;
+import com.liferay.wiki.model.impl.WikiNodeModelImpl;
+
 
 import java.io.IOException;
 
@@ -737,8 +745,48 @@ public class InitDataFactoryUtil {
 
 		return layoutSetModel;
 	}
+	
+	public static ResourcePermissionModel newResourcePermissionModel(
+		String name, String primKey, long roleId, long ownerId,
+			long resourcePermissionId,long companyId) {
 
+		ResourcePermissionModel resourcePermissionModel =
+			new ResourcePermissionModelImpl();
 
+		resourcePermissionModel.setResourcePermissionId(resourcePermissionId);
+		resourcePermissionModel.setCompanyId(companyId);
+		resourcePermissionModel.setName(name);
+		resourcePermissionModel.setScope(ResourceConstants.SCOPE_INDIVIDUAL);
+		resourcePermissionModel.setPrimKey(primKey);
+		resourcePermissionModel.setPrimKeyId(GetterUtil.getLong(primKey));
+		resourcePermissionModel.setRoleId(roleId);
+		resourcePermissionModel.setOwnerId(ownerId);
+		resourcePermissionModel.setActionIds(1);
+		resourcePermissionModel.setViewActionId(true);
+
+		return resourcePermissionModel;
+	}
+
+	public static  WikiNodeModel newWikiNodeModel(
+			long groupId, int index,long nodeId,long companyId,long userId,
+			String userName) {
+		WikiNodeModel wikiNodeModel = new WikiNodeModelImpl();
+
+		wikiNodeModel.setUuid(SequentialUUID.generate());
+		wikiNodeModel.setNodeId(nodeId);
+		wikiNodeModel.setGroupId(groupId);
+		wikiNodeModel.setCompanyId(companyId);
+		wikiNodeModel.setUserId(userId);
+		wikiNodeModel.setUserName(userName);
+		wikiNodeModel.setCreateDate(new Date());
+		wikiNodeModel.setModifiedDate(new Date());
+		wikiNodeModel.setName("Test Node " + index);
+		wikiNodeModel.setLastPostDate(new Date());
+		wikiNodeModel.setLastPublishDate(new Date());
+		wikiNodeModel.setStatusDate(new Date());
+
+		return wikiNodeModel;
+	}
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
 
