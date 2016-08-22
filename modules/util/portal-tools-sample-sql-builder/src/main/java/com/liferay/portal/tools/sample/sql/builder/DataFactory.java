@@ -173,7 +173,6 @@ import com.liferay.wiki.constants.WikiPortletKeys;
 import com.liferay.wiki.model.WikiNode;
 import com.liferay.wiki.model.WikiNodeModel;
 import com.liferay.wiki.model.WikiPage;
-import com.liferay.wiki.model.WikiPageConstants;
 import com.liferay.wiki.model.WikiPageModel;
 import com.liferay.wiki.model.WikiPageResourceModel;
 import com.liferay.wiki.model.impl.WikiNodeModelImpl;
@@ -2502,7 +2501,9 @@ public class DataFactory {
 		List<WikiPageModel> wikiPageModels = new ArrayList<>(_maxWikiPageCount);
 
 		for (int i = 1; i <= _maxWikiPageCount; i++) {
-			wikiPageModels.add(newWikiPageModel(wikiNodeModel, i));
+			wikiPageModels.add(InitDataFactoryUtil.newWikiPageModel(
+					wikiNodeModel, i,_counter.get(),_counter.get(),_companyId,
+					_sampleUserId,_SAMPLE_USER_NAME));
 		}
 
 		return wikiPageModels;
@@ -2730,31 +2731,6 @@ public class DataFactory {
 		subscriptionModel.setFrequency(SubscriptionConstants.FREQUENCY_INSTANT);
 
 		return subscriptionModel;
-	}
-
-	protected WikiPageModel newWikiPageModel(
-		WikiNodeModel wikiNodeModel, int index) {
-
-		WikiPageModel wikiPageModel = new WikiPageModelImpl();
-
-		wikiPageModel.setUuid(SequentialUUID.generate());
-		wikiPageModel.setPageId(_counter.get());
-		wikiPageModel.setResourcePrimKey(_counter.get());
-		wikiPageModel.setGroupId(wikiNodeModel.getGroupId());
-		wikiPageModel.setCompanyId(_companyId);
-		wikiPageModel.setUserId(_sampleUserId);
-		wikiPageModel.setUserName(_SAMPLE_USER_NAME);
-		wikiPageModel.setCreateDate(new Date());
-		wikiPageModel.setModifiedDate(new Date());
-		wikiPageModel.setNodeId(wikiNodeModel.getNodeId());
-		wikiPageModel.setTitle("Test Page " + index);
-		wikiPageModel.setVersion(WikiPageConstants.VERSION_DEFAULT);
-		wikiPageModel.setContent("This is test page " + index + ".");
-		wikiPageModel.setFormat("creole");
-		wikiPageModel.setHead(true);
-		wikiPageModel.setLastPublishDate(new Date());
-
-		return wikiPageModel;
 	}
 
 	private static final long _CURRENT_TIME = System.currentTimeMillis();

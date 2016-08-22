@@ -69,8 +69,10 @@ import com.liferay.portlet.messageboards.model.impl.MBCategoryModelImpl;
 import com.liferay.util.SimpleCounter;
 
 import com.liferay.wiki.model.WikiNodeModel;
+import com.liferay.wiki.model.WikiPageConstants;
+import com.liferay.wiki.model.WikiPageModel;
 import com.liferay.wiki.model.impl.WikiNodeModelImpl;
-
+import com.liferay.wiki.model.impl.WikiPageModelImpl;
 
 import java.io.IOException;
 
@@ -786,6 +788,32 @@ public class InitDataFactoryUtil {
 		wikiNodeModel.setStatusDate(new Date());
 
 		return wikiNodeModel;
+	}
+	
+	public static WikiPageModel newWikiPageModel(
+		WikiNodeModel wikiNodeModel, int index,long pageId,long resourcePrimKey,
+			long companyId,long userId,String userName) {
+
+		WikiPageModel wikiPageModel = new WikiPageModelImpl();
+
+		wikiPageModel.setUuid(SequentialUUID.generate());
+		wikiPageModel.setPageId(pageId);
+		wikiPageModel.setResourcePrimKey(resourcePrimKey);
+		wikiPageModel.setGroupId(wikiNodeModel.getGroupId());
+		wikiPageModel.setCompanyId(companyId);
+		wikiPageModel.setUserId(userId);
+		wikiPageModel.setUserName(userName);
+		wikiPageModel.setCreateDate(new Date());
+		wikiPageModel.setModifiedDate(new Date());
+		wikiPageModel.setNodeId(wikiNodeModel.getNodeId());
+		wikiPageModel.setTitle("Test Page " + index);
+		wikiPageModel.setVersion(WikiPageConstants.VERSION_DEFAULT);
+		wikiPageModel.setContent("This is test page " + index + ".");
+		wikiPageModel.setFormat("creole");
+		wikiPageModel.setHead(true);
+		wikiPageModel.setLastPublishDate(new Date());
+
+		return wikiPageModel;
 	}
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
