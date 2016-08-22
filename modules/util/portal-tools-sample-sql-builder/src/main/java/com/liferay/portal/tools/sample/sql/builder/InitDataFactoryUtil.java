@@ -21,6 +21,8 @@ import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLayoutModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
 import com.liferay.dynamic.data.mapping.storage.StorageType;
+import com.liferay.message.boards.kernel.model.MBCategoryConstants;
+import com.liferay.message.boards.kernel.model.MBCategoryModel;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
@@ -56,6 +58,7 @@ import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
 import com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryModelImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFolderModelImpl;
+import com.liferay.portlet.messageboards.model.impl.MBCategoryModelImpl;
 
 import com.liferay.util.SimpleCounter;
 
@@ -686,6 +689,34 @@ public class InitDataFactoryUtil {
 
 		return dlFolderModel;
 	}
+	
+	public static MBCategoryModel newMBCategoryModel(
+			long groupId, int index,long categoryId,long companyId,
+			long userId,String userName,int threadCount, int messageCount) {
+		MBCategoryModel mbCategoryModel = new MBCategoryModelImpl();
+
+		mbCategoryModel.setUuid(SequentialUUID.generate());
+		mbCategoryModel.setCategoryId(categoryId);
+		mbCategoryModel.setGroupId(groupId);
+		mbCategoryModel.setCompanyId(companyId);
+		mbCategoryModel.setUserId(userId);
+		mbCategoryModel.setUserName(userName);
+		mbCategoryModel.setCreateDate(new Date());
+		mbCategoryModel.setModifiedDate(new Date());
+		mbCategoryModel.setParentCategoryId(
+			MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID);
+		mbCategoryModel.setName("Test Category " + index);
+		mbCategoryModel.setDisplayStyle(
+			MBCategoryConstants.DEFAULT_DISPLAY_STYLE);
+		mbCategoryModel.setThreadCount(threadCount);
+		mbCategoryModel.setMessageCount(threadCount * messageCount);
+		mbCategoryModel.setLastPostDate(new Date());
+		mbCategoryModel.setLastPublishDate(new Date());
+		mbCategoryModel.setStatusDate(new Date());
+
+		return mbCategoryModel;
+	}
+
 
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";

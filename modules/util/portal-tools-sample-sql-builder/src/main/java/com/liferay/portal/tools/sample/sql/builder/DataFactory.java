@@ -160,7 +160,6 @@ import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelIm
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeModelImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileVersionModelImpl;
 import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
-import com.liferay.portlet.messageboards.model.impl.MBCategoryModelImpl;
 import com.liferay.portlet.messageboards.model.impl.MBDiscussionModelImpl;
 import com.liferay.portlet.messageboards.model.impl.MBMailingListModelImpl;
 import com.liferay.portlet.messageboards.model.impl.MBMessageModelImpl;
@@ -1824,7 +1823,9 @@ public class DataFactory {
 			_maxMBCategoryCount);
 
 		for (int i = 1; i <= _maxMBCategoryCount; i++) {
-			mbCategoryModels.add(newMBCategoryModel(groupId, i));
+			mbCategoryModels.add(InitDataFactoryUtil.newMBCategoryModel(
+					groupId, i,_counter.get(),_companyId,_sampleUserId,
+					_SAMPLE_USER_NAME,_maxMBThreadCount,_maxMBMessageCount));
 		}
 
 		return mbCategoryModels;
@@ -2603,31 +2604,6 @@ public class DataFactory {
 		layoutSetModel.setPageCount(pageCount);
 
 		return layoutSetModel;
-	}
-
-	protected MBCategoryModel newMBCategoryModel(long groupId, int index) {
-		MBCategoryModel mbCategoryModel = new MBCategoryModelImpl();
-
-		mbCategoryModel.setUuid(SequentialUUID.generate());
-		mbCategoryModel.setCategoryId(_counter.get());
-		mbCategoryModel.setGroupId(groupId);
-		mbCategoryModel.setCompanyId(_companyId);
-		mbCategoryModel.setUserId(_sampleUserId);
-		mbCategoryModel.setUserName(_SAMPLE_USER_NAME);
-		mbCategoryModel.setCreateDate(new Date());
-		mbCategoryModel.setModifiedDate(new Date());
-		mbCategoryModel.setParentCategoryId(
-			MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID);
-		mbCategoryModel.setName("Test Category " + index);
-		mbCategoryModel.setDisplayStyle(
-			MBCategoryConstants.DEFAULT_DISPLAY_STYLE);
-		mbCategoryModel.setThreadCount(_maxMBThreadCount);
-		mbCategoryModel.setMessageCount(_maxMBThreadCount * _maxMBMessageCount);
-		mbCategoryModel.setLastPostDate(new Date());
-		mbCategoryModel.setLastPublishDate(new Date());
-		mbCategoryModel.setStatusDate(new Date());
-
-		return mbCategoryModel;
 	}
 
 	protected MBMessageModel newMBMessageModel(
