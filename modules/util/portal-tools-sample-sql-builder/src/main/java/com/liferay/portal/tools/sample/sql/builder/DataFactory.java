@@ -62,7 +62,6 @@ import com.liferay.dynamic.data.mapping.model.DDMStructureLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureVersionModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
-import com.liferay.dynamic.data.mapping.model.DDMTemplateConstants;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
 import com.liferay.dynamic.data.mapping.model.impl.DDMContentModelImpl;
@@ -70,7 +69,6 @@ import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureVersionModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateLinkModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
 import com.liferay.dynamic.data.mapping.storage.StorageType;
 import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
@@ -133,7 +131,6 @@ import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.security.auth.FullNameGenerator;
 import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
-import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -885,11 +882,13 @@ public class DataFactory {
 			_defaultJournalDDMStructureVersionModel.getStructureVersionId(),
 			_journalDDMStructureLayoutContent,_counter.get(),_companyId,_SAMPLE_USER_NAME,_futureDateCounter);
 
-		_defaultJournalDDMTemplateModel = newDDMTemplateModel(
+		_defaultJournalDDMTemplateModel = InitDataFactoryUtil.newDDMTemplateModel(
 			_globalGroupId, _defaultUserId,
 			_defaultJournalDDMStructureModel.getStructureId(),
 			InitDataFactoryUtil.getClassNameId(
-					JournalArticle.class,_classNameModels));
+			JournalArticle.class,_classNameModels),
+			_counter.get(),_companyId,_futureDateCounter,_classNameModels,
+			_counter.get(),_SAMPLE_USER_NAME);
 	}
 
 	public void initRoleModels() {
@@ -2584,49 +2583,6 @@ public class DataFactory {
 		ddmStructureLinkModel.setStructureId(structureId);
 
 		return ddmStructureLinkModel;
-	}
-
-	protected DDMTemplateModel newDDMTemplateModel(
-		long groupId, long userId, long structureId, long sourceClassNameId) {
-
-		DDMTemplateModel ddmTemplateModel = new DDMTemplateModelImpl();
-
-		ddmTemplateModel.setUuid(SequentialUUID.generate());
-		ddmTemplateModel.setTemplateId(_counter.get());
-		ddmTemplateModel.setGroupId(groupId);
-		ddmTemplateModel.setCompanyId(_companyId);
-		ddmTemplateModel.setUserId(userId);
-		ddmTemplateModel.setCreateDate(
-				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
-		ddmTemplateModel.setModifiedDate(
-				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
-		ddmTemplateModel.setClassNameId(InitDataFactoryUtil.getClassNameId(
-				DDMStructure.class,_classNameModels));
-		ddmTemplateModel.setClassPK(structureId);
-		ddmTemplateModel.setResourceClassNameId(sourceClassNameId);
-		ddmTemplateModel.setTemplateKey(String.valueOf(_counter.get()));
-		ddmTemplateModel.setVersion(DDMTemplateConstants.VERSION_DEFAULT);
-		ddmTemplateModel.setVersionUserId(userId);
-		ddmTemplateModel.setVersionUserName(_SAMPLE_USER_NAME);
-
-		StringBundler sb = new StringBundler(3);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append("Basic Web Content</name></root>");
-
-		ddmTemplateModel.setName(sb.toString());
-
-		ddmTemplateModel.setType(DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY);
-		ddmTemplateModel.setMode(DDMTemplateConstants.TEMPLATE_MODE_CREATE);
-		ddmTemplateModel.setLanguage(TemplateConstants.LANG_TYPE_FTL);
-		ddmTemplateModel.setScript("${content.getData()}");
-		ddmTemplateModel.setCacheable(true);
-		ddmTemplateModel.setSmallImage(false);
-		ddmTemplateModel.setLastPublishDate(
-				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
-
-		return ddmTemplateModel;
 	}
 
 	protected DLFileEntryModel newDlFileEntryModel(

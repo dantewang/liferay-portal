@@ -6,11 +6,15 @@ import com.liferay.asset.kernel.model.AssetTagModel;
 import com.liferay.asset.kernel.model.AssetTagStatsModel;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.blogs.kernel.model.BlogsEntryModel;
+import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureConstants;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
+import com.liferay.dynamic.data.mapping.model.DDMTemplateConstants;
+import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLayoutModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureModelImpl;
+import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
 import com.liferay.dynamic.data.mapping.storage.StorageType;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.model.AccountModel;
@@ -23,6 +27,7 @@ import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.model.VirtualHostModel;
+import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
@@ -568,6 +573,49 @@ public class InitDataFactoryUtil {
 				InitDataFactoryUtil.nextFutureDate(futureDateCounter));
 
 		return ddmStructureModel;
+	}
+	
+	public static DDMTemplateModel newDDMTemplateModel(
+		long groupId, long userId, long structureId, long sourceClassNameId,
+		long templateId,long companyId,SimpleCounter futureDateCounter,
+		Map<String, ClassNameModel> classNameModels,long templateKey,
+		String versionUserName) {
+
+		DDMTemplateModel ddmTemplateModel = new DDMTemplateModelImpl();
+
+		ddmTemplateModel.setUuid(SequentialUUID.generate());
+		ddmTemplateModel.setTemplateId(templateId);
+		ddmTemplateModel.setGroupId(groupId);
+		ddmTemplateModel.setCompanyId(companyId);
+		ddmTemplateModel.setUserId(userId);
+		ddmTemplateModel.setCreateDate(nextFutureDate(futureDateCounter));
+		ddmTemplateModel.setModifiedDate(nextFutureDate(futureDateCounter));
+		ddmTemplateModel.setClassNameId(getClassNameId(
+				DDMStructure.class,classNameModels));
+		ddmTemplateModel.setClassPK(structureId);
+		ddmTemplateModel.setResourceClassNameId(sourceClassNameId);
+		ddmTemplateModel.setTemplateKey(String.valueOf(templateKey));
+		ddmTemplateModel.setVersion(DDMTemplateConstants.VERSION_DEFAULT);
+		ddmTemplateModel.setVersionUserId(userId);
+		ddmTemplateModel.setVersionUserName(versionUserName);
+
+		StringBundler sb = new StringBundler(3);
+
+		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
+		sb.append("Basic Web Content</name></root>");
+
+		ddmTemplateModel.setName(sb.toString());
+
+		ddmTemplateModel.setType(DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY);
+		ddmTemplateModel.setMode(DDMTemplateConstants.TEMPLATE_MODE_CREATE);
+		ddmTemplateModel.setLanguage(TemplateConstants.LANG_TYPE_FTL);
+		ddmTemplateModel.setScript("${content.getData()}");
+		ddmTemplateModel.setCacheable(true);
+		ddmTemplateModel.setSmallImage(false);
+		ddmTemplateModel.setLastPublishDate(nextFutureDate(futureDateCounter));
+
+		return ddmTemplateModel;
 	}
 
 	private static final String _DEPENDENCIES_DIR =
