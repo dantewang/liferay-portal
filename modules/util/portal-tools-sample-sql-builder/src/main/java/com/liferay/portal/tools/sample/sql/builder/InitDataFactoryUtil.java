@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.GroupModel;
+import com.liferay.portal.kernel.model.LayoutSetModel;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleModel;
@@ -48,6 +49,7 @@ import com.liferay.portal.model.impl.AccountModelImpl;
 import com.liferay.portal.model.impl.ClassNameModelImpl;
 import com.liferay.portal.model.impl.CompanyModelImpl;
 import com.liferay.portal.model.impl.GroupModelImpl;
+import com.liferay.portal.model.impl.LayoutSetModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
@@ -715,6 +717,25 @@ public class InitDataFactoryUtil {
 		mbCategoryModel.setStatusDate(new Date());
 
 		return mbCategoryModel;
+	}
+	
+	public static LayoutSetModel newLayoutSetModel(
+		long groupId, boolean privateLayout, int pageCount,
+			long layoutSetId,long companyId) {
+
+		LayoutSetModel layoutSetModel = new LayoutSetModelImpl();
+
+		layoutSetModel.setLayoutSetId(layoutSetId);
+		layoutSetModel.setGroupId(groupId);
+		layoutSetModel.setCompanyId(companyId);
+		layoutSetModel.setCreateDate(new Date());
+		layoutSetModel.setModifiedDate(new Date());
+		layoutSetModel.setPrivateLayout(privateLayout);
+		layoutSetModel.setThemeId("classic_WAR_classictheme");
+		layoutSetModel.setColorSchemeId("01");
+		layoutSetModel.setPageCount(pageCount);
+
+		return layoutSetModel;
 	}
 
 

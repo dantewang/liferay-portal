@@ -145,7 +145,6 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.impl.ContactModelImpl;
 import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
 import com.liferay.portal.model.impl.LayoutModelImpl;
-import com.liferay.portal.model.impl.LayoutSetModelImpl;
 import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
 import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portal.model.impl.SubscriptionModelImpl;
@@ -1811,9 +1810,11 @@ public class DataFactory {
 
 		List<LayoutSetModel> layoutSetModels = new ArrayList<>(2);
 
-		layoutSetModels.add(newLayoutSetModel(groupId, true, 0));
+		layoutSetModels.add(InitDataFactoryUtil.newLayoutSetModel(
+				groupId, true, 0,_counter.get(),_companyId));
 		layoutSetModels.add(
-			newLayoutSetModel(groupId, false, publicLayoutSetPageCount));
+			InitDataFactoryUtil.newLayoutSetModel(groupId, false, publicLayoutSetPageCount,
+					_counter.get(),_companyId));
 
 		return layoutSetModels;
 	}
@@ -2586,24 +2587,6 @@ public class DataFactory {
 		ddmStructureLinkModel.setStructureId(structureId);
 
 		return ddmStructureLinkModel;
-	}
-
-	protected LayoutSetModel newLayoutSetModel(
-		long groupId, boolean privateLayout, int pageCount) {
-
-		LayoutSetModel layoutSetModel = new LayoutSetModelImpl();
-
-		layoutSetModel.setLayoutSetId(_counter.get());
-		layoutSetModel.setGroupId(groupId);
-		layoutSetModel.setCompanyId(_companyId);
-		layoutSetModel.setCreateDate(new Date());
-		layoutSetModel.setModifiedDate(new Date());
-		layoutSetModel.setPrivateLayout(privateLayout);
-		layoutSetModel.setThemeId("classic_WAR_classictheme");
-		layoutSetModel.setColorSchemeId("01");
-		layoutSetModel.setPageCount(pageCount);
-
-		return layoutSetModel;
 	}
 
 	protected MBMessageModel newMBMessageModel(
