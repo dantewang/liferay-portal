@@ -9,6 +9,7 @@ import com.liferay.blogs.kernel.model.BlogsEntryModel;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
 import com.liferay.document.library.kernel.model.DLFileEntryConstants;
 import com.liferay.document.library.kernel.model.DLFileEntryTypeConstants;
+import com.liferay.document.library.kernel.model.DLFileEntryTypeModel;
 import com.liferay.document.library.kernel.model.DLFolderModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureConstants;
@@ -54,7 +55,7 @@ import com.liferay.portlet.asset.model.impl.AssetTagStatsModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
 import com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryModelImpl;
-
+import com.liferay.portlet.documentlibrary.model.impl.DLFolderModelImpl;
 
 import com.liferay.util.SimpleCounter;
 
@@ -657,6 +658,33 @@ public class InitDataFactoryUtil {
 				InitDataFactoryUtil.nextFutureDate(futureDateCounter));
 
 		return dlFileEntryModel;
+	}
+	
+	public static DLFolderModel newDLFolderModel(
+		long groupId, long parentFolderId, int index,long folderId,long companyId,
+			long sampleUserId,String userName,SimpleCounter futureDateCounter,
+			DLFileEntryTypeModel defaultDLFileEntryTypeModel) {
+
+		DLFolderModel dlFolderModel = new DLFolderModelImpl();
+
+		dlFolderModel.setUuid(SequentialUUID.generate());
+		dlFolderModel.setFolderId(folderId);
+		dlFolderModel.setGroupId(groupId);
+		dlFolderModel.setCompanyId(companyId);
+		dlFolderModel.setUserId(sampleUserId);
+		dlFolderModel.setUserName(userName);
+		dlFolderModel.setCreateDate(nextFutureDate(futureDateCounter));
+		dlFolderModel.setModifiedDate(nextFutureDate(futureDateCounter));
+		dlFolderModel.setRepositoryId(groupId);
+		dlFolderModel.setParentFolderId(parentFolderId);
+		dlFolderModel.setName("Test Folder " + index);
+		dlFolderModel.setLastPostDate(nextFutureDate(futureDateCounter));
+		dlFolderModel.setDefaultFileEntryTypeId(
+			defaultDLFileEntryTypeModel.getFileEntryTypeId());
+		dlFolderModel.setLastPublishDate(nextFutureDate(futureDateCounter));
+		dlFolderModel.setStatusDate(nextFutureDate(futureDateCounter));
+
+		return dlFolderModel;
 	}
 
 	private static final String _DEPENDENCIES_DIR =

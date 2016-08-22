@@ -159,7 +159,6 @@ import com.liferay.portlet.blogs.social.BlogsActivityKeys;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeModelImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileVersionModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFolderModelImpl;
 import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
 import com.liferay.portlet.messageboards.model.impl.MBCategoryModelImpl;
 import com.liferay.portlet.messageboards.model.impl.MBDiscussionModelImpl;
@@ -1598,7 +1597,10 @@ public class DataFactory {
 		List<DLFolderModel> dlFolderModels = new ArrayList<>(_maxDLFolderCount);
 
 		for (int i = 1; i <= _maxDLFolderCount; i++) {
-			dlFolderModels.add(newDLFolderModel(groupId, parentFolderId, i));
+			dlFolderModels.add(InitDataFactoryUtil.newDLFolderModel(
+					groupId, parentFolderId, i,_counter.get(),_companyId,
+					_sampleUserId,_SAMPLE_USER_NAME,_futureDateCounter,
+					_defaultDLFileEntryTypeModel));
 		}
 
 		return dlFolderModels;
@@ -2583,36 +2585,6 @@ public class DataFactory {
 		ddmStructureLinkModel.setStructureId(structureId);
 
 		return ddmStructureLinkModel;
-	}
-
-	protected DLFolderModel newDLFolderModel(
-		long groupId, long parentFolderId, int index) {
-
-		DLFolderModel dlFolderModel = new DLFolderModelImpl();
-
-		dlFolderModel.setUuid(SequentialUUID.generate());
-		dlFolderModel.setFolderId(_counter.get());
-		dlFolderModel.setGroupId(groupId);
-		dlFolderModel.setCompanyId(_companyId);
-		dlFolderModel.setUserId(_sampleUserId);
-		dlFolderModel.setUserName(_SAMPLE_USER_NAME);
-		dlFolderModel.setCreateDate(
-				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
-		dlFolderModel.setModifiedDate(
-				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
-		dlFolderModel.setRepositoryId(groupId);
-		dlFolderModel.setParentFolderId(parentFolderId);
-		dlFolderModel.setName("Test Folder " + index);
-		dlFolderModel.setLastPostDate(
-				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
-		dlFolderModel.setDefaultFileEntryTypeId(
-			_defaultDLFileEntryTypeModel.getFileEntryTypeId());
-		dlFolderModel.setLastPublishDate(
-				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
-		dlFolderModel.setStatusDate(
-				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
-
-		return dlFolderModel;
 	}
 
 	protected LayoutSetModel newLayoutSetModel(
