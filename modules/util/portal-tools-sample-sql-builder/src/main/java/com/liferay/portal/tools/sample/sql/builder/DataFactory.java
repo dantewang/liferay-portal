@@ -68,7 +68,6 @@ import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
 import com.liferay.dynamic.data.mapping.model.impl.DDMContentModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLinkModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStructureModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureVersionModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
@@ -857,10 +856,11 @@ public class DataFactory {
 		_defaultDLFileEntryTypeModel.setLastPublishDate(
 				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 
-		_defaultDLDDMStructureModel = newDDMStructureModel(
+		_defaultDLDDMStructureModel = InitDataFactoryUtil.newDDMStructureModel(
 			_globalGroupId, _defaultUserId, InitDataFactoryUtil.getClassNameId(
 					DLFileEntry.class,_classNameModels),
-			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent);
+			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent,
+			_counter.get(),_companyId,_SAMPLE_USER_NAME,_futureDateCounter);
 
 		_defaultDLDDMStructureVersionModel = newDDMStructureVersionModel(
 			_defaultDLDDMStructureModel);
@@ -870,11 +870,12 @@ public class DataFactory {
 			_defaultDLDDMStructureVersionModel.getStructureVersionId(),
 			_dlDDMStructureLayoutContent, _counter.get(),_companyId,_SAMPLE_USER_NAME,_futureDateCounter);
 
-		_defaultJournalDDMStructureModel = newDDMStructureModel(
+		_defaultJournalDDMStructureModel = InitDataFactoryUtil.newDDMStructureModel(
 			_globalGroupId, _defaultUserId,
 			InitDataFactoryUtil.getClassNameId(
 			JournalArticle.class,_classNameModels), "BASIC-WEB-CONTENT",
-			_journalDDMStructureContent);
+			_journalDDMStructureContent,
+			_counter.get(),_companyId,_SAMPLE_USER_NAME,_futureDateCounter);
 
 		_defaultJournalDDMStructureVersionModel = newDDMStructureVersionModel(
 			_defaultJournalDDMStructureModel);
@@ -1262,10 +1263,11 @@ public class DataFactory {
 
 		sb.append("]}");
 
-		return newDDMStructureModel(
+		return InitDataFactoryUtil.newDDMStructureModel(
 			groupId, _sampleUserId, InitDataFactoryUtil.getClassNameId(
 			DDLRecordSet.class,_classNameModels),"Test DDM Structure", 
-			sb.toString());
+			sb.toString(),_counter.get(),_companyId,_SAMPLE_USER_NAME,
+			_futureDateCounter);
 	}
 
 	public List<PortletPreferencesModel>
@@ -2582,45 +2584,6 @@ public class DataFactory {
 		ddmStructureLinkModel.setStructureId(structureId);
 
 		return ddmStructureLinkModel;
-	}
-
-	protected DDMStructureModel newDDMStructureModel(
-		long groupId, long userId, long classNameId, String structureKey,
-		String definition) {
-
-		DDMStructureModel ddmStructureModel = new DDMStructureModelImpl();
-
-		ddmStructureModel.setUuid(SequentialUUID.generate());
-		ddmStructureModel.setStructureId(_counter.get());
-		ddmStructureModel.setGroupId(groupId);
-		ddmStructureModel.setCompanyId(_companyId);
-		ddmStructureModel.setUserId(userId);
-		ddmStructureModel.setUserName(_SAMPLE_USER_NAME);
-		ddmStructureModel.setVersionUserId(userId);
-		ddmStructureModel.setVersionUserName(_SAMPLE_USER_NAME);
-		ddmStructureModel.setCreateDate(
-				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
-		ddmStructureModel.setModifiedDate(
-				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
-		ddmStructureModel.setClassNameId(classNameId);
-		ddmStructureModel.setStructureKey(structureKey);
-		ddmStructureModel.setVersion(DDMStructureConstants.VERSION_DEFAULT);
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append(structureKey);
-		sb.append("</name></root>");
-
-		ddmStructureModel.setName(sb.toString());
-
-		ddmStructureModel.setDefinition(definition);
-		ddmStructureModel.setStorageType(StorageType.JSON.toString());
-		ddmStructureModel.setLastPublishDate(
-				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
-
-		return ddmStructureModel;
 	}
 
 	protected DDMTemplateModel newDDMTemplateModel(

@@ -6,8 +6,12 @@ import com.liferay.asset.kernel.model.AssetTagModel;
 import com.liferay.asset.kernel.model.AssetTagStatsModel;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.blogs.kernel.model.BlogsEntryModel;
+import com.liferay.dynamic.data.mapping.model.DDMStructureConstants;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
+import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLayoutModelImpl;
+import com.liferay.dynamic.data.mapping.model.impl.DDMStructureModelImpl;
+import com.liferay.dynamic.data.mapping.storage.StorageType;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
@@ -524,6 +528,46 @@ public class InitDataFactoryUtil {
 		ddmStructureLayoutModel.setDefinition(definition);
 
 		return ddmStructureLayoutModel;
+	}
+	
+	public static DDMStructureModel newDDMStructureModel(
+		long groupId, long userId, long classNameId, String structureKey,
+		String definition,long structureId,long companyId,String userName,
+		SimpleCounter futureDateCounter) {
+
+		DDMStructureModel ddmStructureModel = new DDMStructureModelImpl();
+
+		ddmStructureModel.setUuid(SequentialUUID.generate());
+		ddmStructureModel.setStructureId(structureId);
+		ddmStructureModel.setGroupId(groupId);
+		ddmStructureModel.setCompanyId(companyId);
+		ddmStructureModel.setUserId(userId);
+		ddmStructureModel.setUserName(userName);
+		ddmStructureModel.setVersionUserId(userId);
+		ddmStructureModel.setVersionUserName(userName);
+		ddmStructureModel.setCreateDate(
+				InitDataFactoryUtil.nextFutureDate(futureDateCounter));
+		ddmStructureModel.setModifiedDate(
+				InitDataFactoryUtil.nextFutureDate(futureDateCounter));
+		ddmStructureModel.setClassNameId(classNameId);
+		ddmStructureModel.setStructureKey(structureKey);
+		ddmStructureModel.setVersion(DDMStructureConstants.VERSION_DEFAULT);
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
+		sb.append(structureKey);
+		sb.append("</name></root>");
+
+		ddmStructureModel.setName(sb.toString());
+
+		ddmStructureModel.setDefinition(definition);
+		ddmStructureModel.setStorageType(StorageType.JSON.toString());
+		ddmStructureModel.setLastPublishDate(
+				InitDataFactoryUtil.nextFutureDate(futureDateCounter));
+
+		return ddmStructureModel;
 	}
 
 	private static final String _DEPENDENCIES_DIR =
