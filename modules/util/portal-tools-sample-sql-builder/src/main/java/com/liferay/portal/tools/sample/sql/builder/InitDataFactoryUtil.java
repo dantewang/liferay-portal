@@ -6,6 +6,10 @@ import com.liferay.asset.kernel.model.AssetTagModel;
 import com.liferay.asset.kernel.model.AssetTagStatsModel;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.blogs.kernel.model.BlogsEntryModel;
+import com.liferay.document.library.kernel.model.DLFileEntryModel;
+import com.liferay.document.library.kernel.model.DLFileEntryConstants;
+import com.liferay.document.library.kernel.model.DLFileEntryTypeConstants;
+import com.liferay.document.library.kernel.model.DLFolderModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureConstants;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
@@ -30,6 +34,7 @@ import com.liferay.portal.kernel.model.VirtualHostModel;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -48,6 +53,8 @@ import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetTagStatsModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
 import com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl;
+import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryModelImpl;
+
 
 import com.liferay.util.SimpleCounter;
 
@@ -616,6 +623,40 @@ public class InitDataFactoryUtil {
 		ddmTemplateModel.setLastPublishDate(nextFutureDate(futureDateCounter));
 
 		return ddmTemplateModel;
+	}
+
+	public static DLFileEntryModel newDlFileEntryModel(
+		DLFolderModel dlFolerModel, int index, long fileEntryId,long companyId,
+			long userId,String userName, SimpleCounter futureDateCounter,
+			int size) {
+
+		DLFileEntryModel dlFileEntryModel = new DLFileEntryModelImpl();
+
+		dlFileEntryModel.setUuid(SequentialUUID.generate());
+		dlFileEntryModel.setFileEntryId(fileEntryId);
+		dlFileEntryModel.setGroupId(dlFolerModel.getGroupId());
+		dlFileEntryModel.setCompanyId(companyId);
+		dlFileEntryModel.setUserId(userId);
+		dlFileEntryModel.setUserName(userName);
+		dlFileEntryModel.setCreateDate(
+				InitDataFactoryUtil.nextFutureDate(futureDateCounter));
+		dlFileEntryModel.setModifiedDate(
+				InitDataFactoryUtil.nextFutureDate(futureDateCounter));
+		dlFileEntryModel.setRepositoryId(dlFolerModel.getRepositoryId());
+		dlFileEntryModel.setFolderId(dlFolerModel.getFolderId());
+		dlFileEntryModel.setName("TestFile" + index);
+		dlFileEntryModel.setFileName("TestFile" + index + ".txt");
+		dlFileEntryModel.setExtension("txt");
+		dlFileEntryModel.setMimeType(ContentTypes.TEXT_PLAIN);
+		dlFileEntryModel.setTitle("TestFile" + index + ".txt");
+		dlFileEntryModel.setFileEntryTypeId(
+			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
+		dlFileEntryModel.setVersion(DLFileEntryConstants.VERSION_DEFAULT);
+		dlFileEntryModel.setSize(size);
+		dlFileEntryModel.setLastPublishDate(
+				InitDataFactoryUtil.nextFutureDate(futureDateCounter));
+
+		return dlFileEntryModel;
 	}
 
 	private static final String _DEPENDENCIES_DIR =
