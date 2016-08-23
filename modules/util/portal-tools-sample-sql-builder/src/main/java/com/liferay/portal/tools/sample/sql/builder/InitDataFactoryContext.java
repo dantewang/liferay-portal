@@ -1,11 +1,15 @@
 package com.liferay.portal.tools.sample.sql.builder;
 
+import com.liferay.portal.kernel.model.ClassNameModel;
+
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import com.liferay.util.SimpleCounter;
 
 import java.text.Format;
+import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
 
@@ -94,6 +98,25 @@ public class InitDataFactoryContext {
 			properties.getProperty("sample.sql.max.wiki.page.comment.count"));
 		_maxWikiPageCount = GetterUtil.getInteger(
 			properties.getProperty("sample.sql.max.wiki.page.count"));
+	}
+	
+	public static void initParameter(){
+		_classNameModels = InitDataFactoryUtil.initClassNameModels(_counter);
+		_accountId = _counter.get();
+		_companyId = _counter.get();
+		_defaultUserId = _counter.get();
+		_globalGroupId = _counter.get();
+		_guestGroupId = _counter.get();
+		_sampleUserId = _counter.get();
+	}
+	
+	static{
+		_counter = new SimpleCounter(InitDataFactoryContext.getMaxGroupsCount() + 1);
+		_timeCounter = new SimpleCounter();
+		_futureDateCounter = new SimpleCounter();
+		_resourcePermissionCounter = new SimpleCounter();
+		_socialActivityCounter = new SimpleCounter();
+		_userScreenNameCounter = new SimpleCounter();
 	}
 
 	public static String getAssetPublisherQueryName() {
@@ -211,8 +234,72 @@ public class InitDataFactoryContext {
 	public static Format getSimpleDateFormat() {
 		return _simpleDateFormat;
 	}
+
+	public static SimpleCounter getCounter() {
+		return _counter;
+	}
+
+	public static SimpleCounter getTimeCounter() {
+		return _timeCounter;
+	}
+
+	public static SimpleCounter getFutureDateCounter() {
+		return _futureDateCounter;
+	}
+
+	public static SimpleCounter getResourcePermissionCounter() {
+		return _resourcePermissionCounter;
+	}
+
+	public static SimpleCounter getSocialActivityCounter() {
+		return _socialActivityCounter;
+	}
+
+	public static SimpleCounter getUserScreenNameCounter() {
+		return _userScreenNameCounter;
+	}
+
+	public static Map<String, ClassNameModel> getClassNameModels() {
+		return _classNameModels;
+	}
+
+	public static long getAccountId() {
+		return _accountId;
+	}
+
+	public static long getCompanyId() {
+		return _companyId;
+	}
+
+	public static long getDefaultUserId() {
+		return _defaultUserId;
+	}
+
+	public static long getGlobalGroupId() {
+		return _globalGroupId;
+	}
+
+	public static long getGuestGroupId() {
+		return _guestGroupId;
+	}
+
+	public static long getSampleUserId() {
+		return _sampleUserId;
+	}
 	
-	
+	private static final SimpleCounter _counter;
+	private static final SimpleCounter _timeCounter;
+	private static final SimpleCounter _futureDateCounter;
+	private static final SimpleCounter _resourcePermissionCounter;
+	private static final SimpleCounter _socialActivityCounter;
+	private static final SimpleCounter _userScreenNameCounter;
+	private static Map<String, ClassNameModel> _classNameModels;
+	private static long _accountId;
+	private static long _companyId;
+	private static long _defaultUserId;
+	private static long _globalGroupId;
+	private static long _guestGroupId;
+	private static long _sampleUserId;
 	private static String _assetPublisherQueryName;
 	private static int _maxAssetCategoryCount;
 	private static int _maxAssetEntryToAssetCategoryCount;
