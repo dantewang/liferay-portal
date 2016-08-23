@@ -2,7 +2,7 @@
 
 <project basedir="." default="compile" name="portal" xmlns:antelope="antlib:ise.antelope.tasks" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 	<import file="build-common.xml" />
-
+<!-- a -->
 	<target name="all">
 		<antcall target="clean" />
 		<antcall target="compile" />
