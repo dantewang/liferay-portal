@@ -222,11 +222,6 @@ public class DataFactory {
 				_groupModels.add(groupModel);
 		}
 
-		int maxJournalArticleSize = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.journal.article.size"));
-
-		_journalArticleContent = InitDataFactoryUtil.initJournalArticleContent(
-			maxJournalArticleSize);
 
 		_firstNames = InitDataFactoryUtil.initUserFirstNames(_clazz);
 
@@ -1722,7 +1717,8 @@ public class DataFactory {
 
 		journalArticleModel.setUrlTitle(urlTitle);
 
-		journalArticleModel.setContent(_journalArticleContent);
+		journalArticleModel.setContent(
+				InitDataFactoryContext.getJournalArticleContent());
 		journalArticleModel.setDefaultLanguageId("en_US");
 		journalArticleModel.setDDMStructureKey(
 			_defaultJournalDDMStructureModel.getStructureKey());
@@ -2908,7 +2904,6 @@ public class DataFactory {
 	private final GroupModel _guestGroupModel;
 	private RoleModel _guestRoleModel;
 	private final UserModel _guestUserModel;
-	private final String _journalArticleContent;
 	private final Map<Long, String> _journalArticleResourceUUIDs =
 		new HashMap<>();
 	private final List<String> _lastNames;

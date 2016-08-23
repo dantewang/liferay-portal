@@ -220,6 +220,10 @@ public class InitDataFactoryContext {
 		return _companyModel;
 	}
 
+	public static String getJournalArticleContent() {
+		return _journalArticleContent;
+	}
+
 	public static void initContext(Properties properties) {
 		String timeZoneId = properties.getProperty("sample.sql.db.time.zone");
 
@@ -301,6 +305,12 @@ public class InitDataFactoryContext {
 			properties.getProperty("sample.sql.max.wiki.page.comment.count"));
 		_maxWikiPageCount = GetterUtil.getInteger(
 			properties.getProperty("sample.sql.max.wiki.page.count"));
+		
+		int maxJournalArticleSize = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.journal.article.size"));
+
+		_journalArticleContent = InitDataFactoryUtil.initJournalArticleContent(
+			maxJournalArticleSize);
 	}
 
 	public static void initParameter() {
@@ -390,6 +400,7 @@ public class InitDataFactoryContext {
 		_defaultAssetPublisherPortletPreference;
 	private static AccountModel _accountModel;
 	private static CompanyModel _companyModel;
+	private static String _journalArticleContent;
 
 	static {
 		_counter = new SimpleCounter(
