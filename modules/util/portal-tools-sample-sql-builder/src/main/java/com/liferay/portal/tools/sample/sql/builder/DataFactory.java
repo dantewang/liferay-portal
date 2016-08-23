@@ -33,7 +33,6 @@ import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFileEntryMetadata;
 import com.liferay.document.library.kernel.model.DLFileEntryMetadataModel;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
-import com.liferay.document.library.kernel.model.DLFileEntryTypeConstants;
 import com.liferay.document.library.kernel.model.DLFileEntryTypeModel;
 import com.liferay.document.library.kernel.model.DLFileVersionModel;
 import com.liferay.document.library.kernel.model.DLFolder;
@@ -55,7 +54,6 @@ import com.liferay.dynamic.data.mapping.model.DDMContentModel;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLink;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
-import com.liferay.dynamic.data.mapping.model.DDMStructureConstants;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
@@ -66,9 +64,7 @@ import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
 import com.liferay.dynamic.data.mapping.model.impl.DDMContentModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLinkModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStructureVersionModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateLinkModelImpl;
-import com.liferay.dynamic.data.mapping.storage.StorageType;
 import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleConstants;
@@ -97,15 +93,12 @@ import com.liferay.message.boards.kernel.model.MBThreadFlagModel;
 import com.liferay.message.boards.kernel.model.MBThreadModel;
 import com.liferay.message.boards.web.constants.MBPortletKeys;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.metadata.RawMetadataProcessor;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
-import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.ContactConstants;
 import com.liferay.portal.kernel.model.ContactModel;
 import com.liferay.portal.kernel.model.Group;
-import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutConstants;
@@ -118,7 +111,6 @@ import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.model.ResourcePermissionModel;
 import com.liferay.portal.kernel.model.Role;
-import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.model.SubscriptionConstants;
 import com.liferay.portal.kernel.model.SubscriptionModel;
@@ -130,7 +122,6 @@ import com.liferay.portal.kernel.security.auth.FullNameGenerator;
 import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.PortletKeys;
@@ -144,15 +135,12 @@ import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
 import com.liferay.portal.model.impl.LayoutModelImpl;
 import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
 import com.liferay.portal.model.impl.SubscriptionModelImpl;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.asset.model.impl.AssetEntryModelImpl;
-import com.liferay.portlet.asset.model.impl.AssetTagModelImpl;
 import com.liferay.portlet.blogs.model.impl.BlogsStatsUserModelImpl;
 import com.liferay.portlet.blogs.social.BlogsActivityKeys;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeModelImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileVersionModelImpl;
 import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
 import com.liferay.portlet.messageboards.model.impl.MBDiscussionModelImpl;
@@ -195,61 +183,15 @@ public class DataFactory {
 	public DataFactory(Properties properties) throws Exception {
 		InitDataFactoryContext.initContext(properties);
 		InitDataFactoryContext.initParameter();
-		InitDataFactoryContext.initResource(_clazz,_portletPreferencesFactory);
+		InitDataFactoryContext.initResource(_clazz, _portletPreferencesFactory);
 		InitDataFactoryContext.initCompanyModels();
-		_globalGroupModel = InitDataFactoryUtil.initGroupModel(
-			InitDataFactoryContext.getGlobalGroupId(),
-			InitDataFactoryUtil.getClassNameId(Company.class,
-					InitDataFactoryContext.getClassNameModels()),
-			InitDataFactoryContext.getCompanyId(), GroupConstants.GLOBAL, false,
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getSampleUserId());
-
-		_guestGroupModel = InitDataFactoryUtil.initGroupModel(
-			InitDataFactoryContext.getGuestGroupId(), getGroupClassNameId(),
-			InitDataFactoryContext.getGuestGroupId(), GroupConstants.GUEST,
-			true, InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getSampleUserId());
-
-		_groupModels = new ArrayList<>(
-			InitDataFactoryContext.getMaxGroupsCount());
-
-		for (int i = 1; i <= InitDataFactoryContext.getMaxGroupsCount(); i++) {
-			GroupModel groupModel = InitDataFactoryUtil.initGroupModel(
-				i, getGroupClassNameId(), i, "Site " + i, true,
-				InitDataFactoryContext.getCompanyId(),
-				InitDataFactoryContext.getSampleUserId());
-				_groupModels.add(groupModel);
-		}
-		
 		InitDataFactoryContext.initUserNames(_clazz);
-		
-		_defaultUserModel = InitDataFactoryUtil.newUserModel(
-			InitDataFactoryContext.getDefaultUserId(), StringPool.BLANK,
-			StringPool.BLANK, StringPool.BLANK, true,
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId());
-
-		_guestUserModel = InitDataFactoryUtil.newUserModel(
-			InitDataFactoryContext.getCounter().get(), "Test", "Test", "Test",
-			false, InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId());
-
-		_sampleUserModel = InitDataFactoryUtil.newUserModel(
-			InitDataFactoryContext.getSampleUserId(), _SAMPLE_USER_NAME,
-			_SAMPLE_USER_NAME, _SAMPLE_USER_NAME, false,
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId());
-
-		_virtualHostModel = InitDataFactoryUtil.initVirtualHostModel(
-				properties.getProperty("sample.sql.virtual.hostname"),
-				InitDataFactoryContext.getCounter().get(),
-				InitDataFactoryContext.getCompanyId());
-
-		initAssetCategoryModels();
-		initAssetTagModels();
-		initDLFileEntryTypeModel();
-		initRoleModels();
+		InitDataFactoryContext.initGroupModels();
+		InitDataFactoryContext.initUserModels(_SAMPLE_USER_NAME);
+		InitDataFactoryContext.initAssetCategoryModels(_SAMPLE_USER_NAME);
+		InitDataFactoryContext.initAssetTagModels(_SAMPLE_USER_NAME);
+		InitDataFactoryContext.initDLFileEntryTypeModel(_SAMPLE_USER_NAME);
+		InitDataFactoryContext.initRoleModels(_SAMPLE_USER_NAME);
 	}
 
 	public AccountModel getAccountModel() {
@@ -257,7 +199,7 @@ public class DataFactory {
 	}
 
 	public RoleModel getAdministratorRoleModel() {
-		return _administratorRoleModel;
+		return InitDataFactoryContext.getAdministratorRoleModel();
 	}
 
 	public List<Long> getAssetCategoryIds(long groupId) {
@@ -270,7 +212,7 @@ public class DataFactory {
 		}
 
 		List<AssetCategoryModel> assetCategoryModels =
-			_assetCategoryModelsArray[(int)groupId - 1];
+			InitDataFactoryContext.getAssetCategoryModelsArray()[(int)groupId - 1];
 
 		if ((assetCategoryModels == null) || assetCategoryModels.isEmpty()) {
 			return Collections.emptyList();
@@ -298,7 +240,7 @@ public class DataFactory {
 		List<AssetCategoryModel> allAssetCategoryModels = new ArrayList<>();
 
 		for (List<AssetCategoryModel> assetCategoryModels :
-				_assetCategoryModelsArray) {
+				InitDataFactoryContext.getAssetCategoryModelsArray()) {
 
 			allAssetCategoryModels.addAll(assetCategoryModels);
 		}
@@ -316,7 +258,7 @@ public class DataFactory {
 		}
 
 		List<AssetTagModel> assetTagModels =
-			_assetTagModelsArray[(int)groupId - 1];
+			InitDataFactoryContext.getAssetTagModelsArray()[(int)groupId - 1];
 
 		if ((assetTagModels == null) || assetTagModels.isEmpty()) {
 			return Collections.emptyList();
@@ -341,7 +283,9 @@ public class DataFactory {
 	public List<AssetTagModel> getAssetTagModels() {
 		List<AssetTagModel> allAssetTagModels = new ArrayList<>();
 
-		for (List<AssetTagModel> assetTagModels : _assetTagModelsArray) {
+		for (List<AssetTagModel> assetTagModels :
+				InitDataFactoryContext.getAssetTagModelsArray()) {
+
 			allAssetTagModels.addAll(assetTagModels);
 		}
 
@@ -352,7 +296,7 @@ public class DataFactory {
 		List<AssetTagStatsModel> allAssetTagStatsModels = new ArrayList<>();
 
 		for (List<AssetTagStatsModel> assetTagStatsModels :
-				_assetTagStatsModelsArray) {
+				InitDataFactoryContext.getAssetTagStatsModelsArray()) {
 
 			allAssetTagStatsModels.addAll(assetTagStatsModels);
 		}
@@ -363,10 +307,11 @@ public class DataFactory {
 	public List<AssetVocabularyModel> getAssetVocabularyModels() {
 		List<AssetVocabularyModel> allAssetVocabularyModels = new ArrayList<>();
 
-		allAssetVocabularyModels.add(_defaultAssetVocabularyModel);
+		allAssetVocabularyModels.add(
+			InitDataFactoryContext.getDefaultAssetVocabularyModel());
 
 		for (List<AssetVocabularyModel> assetVocabularyModels :
-				_assetVocabularyModelsArray) {
+				InitDataFactoryContext.getAssetVocabularyModelsArray()) {
 
 			allAssetVocabularyModels.addAll(assetVocabularyModels);
 		}
@@ -414,45 +359,45 @@ public class DataFactory {
 	}
 
 	public long getDefaultDLDDMStructureId() {
-		return _defaultDLDDMStructureModel.getStructureId();
+		return InitDataFactoryContext.getDefaultDLDDMStructureModel().getStructureId();
 	}
 
 	public DDMStructureLayoutModel getDefaultDLDDMStructureLayoutModel() {
-		return _defaultDLDDMStructureLayoutModel;
+		return InitDataFactoryContext.getDefaultDLDDMStructureLayoutModel();
 	}
 
 	public DDMStructureModel getDefaultDLDDMStructureModel() {
-		return _defaultDLDDMStructureModel;
+		return InitDataFactoryContext.getDefaultDLDDMStructureModel();
 	}
 
 	public DDMStructureVersionModel getDefaultDLDDMStructureVersionModel() {
-		return _defaultDLDDMStructureVersionModel;
+		return InitDataFactoryContext.getDefaultDLDDMStructureVersionModel();
 	}
 
 	public DLFileEntryTypeModel getDefaultDLFileEntryTypeModel() {
-		return _defaultDLFileEntryTypeModel;
+		return InitDataFactoryContext.getDefaultDLFileEntryTypeModel();
 	}
 
 	public DDMStructureLayoutModel getDefaultJournalDDMStructureLayoutModel() {
-		return _defaultJournalDDMStructureLayoutModel;
+		return InitDataFactoryContext.getDefaultJournalDDMStructureLayoutModel();
 	}
 
 	public DDMStructureModel getDefaultJournalDDMStructureModel() {
-		return _defaultJournalDDMStructureModel;
+		return InitDataFactoryContext.getDefaultJournalDDMStructureModel();
 	}
 
 	public DDMStructureVersionModel
 		getDefaultJournalDDMStructureVersionModel() {
 
-		return _defaultJournalDDMStructureVersionModel;
+		return InitDataFactoryContext.getDefaultJournalDDMStructureVersionModel();
 	}
 
 	public DDMTemplateModel getDefaultJournalDDMTemplateModel() {
-		return _defaultJournalDDMTemplateModel;
+		return InitDataFactoryContext.getDefaultJournalDDMTemplateModel();
 	}
 
 	public UserModel getDefaultUserModel() {
-		return _defaultUserModel;
+		return InitDataFactoryContext.getDefaultUserModel();
 	}
 
 	public long getDLFileEntryClassNameId() {
@@ -461,24 +406,19 @@ public class DataFactory {
 	}
 
 	public GroupModel getGlobalGroupModel() {
-		return _globalGroupModel;
-	}
-
-	public long getGroupClassNameId() {
-		return InitDataFactoryUtil.getClassNameId(
-			Group.class, InitDataFactoryContext.getClassNameModels());
+		return InitDataFactoryContext.getGlobalGroupModel();
 	}
 
 	public List<GroupModel> getGroupModels() {
-		return _groupModels;
+		return InitDataFactoryContext.getGroupModels();
 	}
 
 	public GroupModel getGuestGroupModel() {
-		return _guestGroupModel;
+		return InitDataFactoryContext.getGuestGroupModel();
 	}
 
 	public UserModel getGuestUserModel() {
-		return _guestUserModel;
+		return InitDataFactoryContext.getGuestUserModel();
 	}
 
 	public long getJournalArticleClassNameId() {
@@ -551,7 +491,7 @@ public class DataFactory {
 		List<Long> groupIds = new ArrayList<>(
 			InitDataFactoryContext.getMaxUserToGroupCount() + 1);
 
-		groupIds.add(_guestGroupModel.getGroupId());
+		groupIds.add(InitDataFactoryContext.getGuestGroupModel().getGroupId());
 
 		if ((groupId + InitDataFactoryContext.getMaxUserToGroupCount()) >
 				InitDataFactoryContext.getMaxGroupsCount()) {
@@ -570,15 +510,15 @@ public class DataFactory {
 	}
 
 	public RoleModel getPowerUserRoleModel() {
-		return _powerUserRoleModel;
+		return InitDataFactoryContext.getPowerUserRoleModel();
 	}
 
 	public List<RoleModel> getRoleModels() {
-		return _roleModels;
+		return InitDataFactoryContext.getRoleModels();
 	}
 
 	public UserModel getSampleUserModel() {
-		return _sampleUserModel;
+		return InitDataFactoryContext.getSampleUserModel();
 	}
 
 	public List<Integer> getSequence(int size) {
@@ -592,375 +532,16 @@ public class DataFactory {
 	}
 
 	public RoleModel getUserRoleModel() {
-		return _userRoleModel;
+		return InitDataFactoryContext.getUserRoleModel();
 	}
 
 	public VirtualHostModel getVirtualHostModel() {
-		return _virtualHostModel;
+		return InitDataFactoryContext.getVirtualHostModel();
 	}
 
 	public long getWikiPageClassNameId() {
 		return InitDataFactoryUtil.getClassNameId(
 			WikiPage.class, InitDataFactoryContext.getClassNameModels());
-	}
-
-	public void initAssetCategoryModels() {
-		_assetCategoryModelsArray =
-			(List<AssetCategoryModel>[])new List<?>[InitDataFactoryContext.getMaxGroupsCount()];
-		_assetVocabularyModelsArray =
-			(List<AssetVocabularyModel>[])new List<?>[InitDataFactoryContext.getMaxGroupsCount()];
-		_defaultAssetVocabularyModel =
-				InitDataFactoryUtil.newAssetVocabularyModel(
-				InitDataFactoryContext.getGlobalGroupId(),
-				InitDataFactoryContext.getDefaultUserId(), null,
-				PropsValues.ASSET_VOCABULARY_DEFAULT,
-				InitDataFactoryContext.getCounter().get(),
-				InitDataFactoryContext.getCompanyId());
-
-		StringBundler sb = new StringBundler(4);
-
-		for (int i = 1; i <= InitDataFactoryContext.getMaxGroupsCount(); i++) {
-			List<AssetVocabularyModel> assetVocabularyModels = new ArrayList<>(
-				InitDataFactoryContext.getMaxAssetVocabularyCount());
-			List<AssetCategoryModel> assetCategoryModels = new ArrayList<>(
-				InitDataFactoryContext.getMaxAssetVocabularyCount() * InitDataFactoryContext.getMaxAssetCategoryCount());
-
-			long lastRightCategoryId = 2;
-
-			for (int j =
-			 0; j < InitDataFactoryContext.getMaxAssetVocabularyCount(); j++) {
-
-				sb.setIndex(0);
-
-				sb.append("TestVocabulary_");
-				sb.append(i);
-				sb.append(StringPool.UNDERLINE);
-				sb.append(j);
-
-				AssetVocabularyModel assetVocabularyModel =
-					InitDataFactoryUtil.newAssetVocabularyModel(
-						i, InitDataFactoryContext.getSampleUserId(),
-						_SAMPLE_USER_NAME, sb.toString(),
-						InitDataFactoryContext.getCounter().get(),
-						InitDataFactoryContext.getCompanyId());
-
-				assetVocabularyModels.add(assetVocabularyModel);
-
-				for (int k =
-				 0; k <
-				 InitDataFactoryContext.getMaxAssetCategoryCount(); k++) {
-
-					sb.setIndex(0);
-
-					sb.append("TestCategory_");
-					sb.append(assetVocabularyModel.getVocabularyId());
-					sb.append(StringPool.UNDERLINE);
-					sb.append(k);
-
-					AssetCategoryModel assetCategoryModel =
-						InitDataFactoryUtil.newAssetCategoryModel(
-							i, lastRightCategoryId, sb.toString(),
-							assetVocabularyModel.getVocabularyId(),
-							InitDataFactoryContext.getCounter().get(),
-							InitDataFactoryContext.getCompanyId(),
-							InitDataFactoryContext.getSampleUserId(),
-							_SAMPLE_USER_NAME);
-
-					lastRightCategoryId += 2;
-
-					assetCategoryModels.add(assetCategoryModel);
-				}
-			}
-
-			_assetCategoryModelsArray[i - 1] = assetCategoryModels;
-			_assetVocabularyModelsArray[i - 1] = assetVocabularyModels;
-		}
-	}
-
-	public void initAssetTagModels() {
-		_assetTagModelsArray =
-			(List<AssetTagModel>[])new List<?>[InitDataFactoryContext.getMaxGroupsCount()];
-		_assetTagStatsModelsArray =
-			(List<AssetTagStatsModel>[])new List<?>[InitDataFactoryContext.getMaxGroupsCount()];
-
-		for (int i = 1; i <= InitDataFactoryContext.getMaxGroupsCount(); i++) {
-			List<AssetTagModel> assetTagModels = new ArrayList<>(
-				InitDataFactoryContext.getMaxAssetTagCount());
-			List<AssetTagStatsModel> assetTagStatsModels = new ArrayList<>(
-				InitDataFactoryContext.getMaxAssetTagCount() * 3);
-
-			for (int j =
-			 0; j < InitDataFactoryContext.getMaxAssetTagCount(); j++) {
-
-				AssetTagModel assetTagModel = new AssetTagModelImpl();
-
-				assetTagModel.setUuid(SequentialUUID.generate());
-				assetTagModel.setTagId(
-					InitDataFactoryContext.getCounter().get());
-				assetTagModel.setGroupId(i);
-				assetTagModel.setCompanyId(
-					InitDataFactoryContext.getCompanyId());
-				assetTagModel.setUserId(
-					InitDataFactoryContext.getSampleUserId());
-				assetTagModel.setUserName(_SAMPLE_USER_NAME);
-				assetTagModel.setCreateDate(new Date());
-				assetTagModel.setModifiedDate(new Date());
-				assetTagModel.setName("TestTag_" + i + "_" + j);
-				assetTagModel.setLastPublishDate(new Date());
-
-				assetTagModels.add(assetTagModel);
-
-				AssetTagStatsModel assetTagStatsModel =
-						InitDataFactoryUtil.newAssetTagStatsModel(
-								assetTagModel.getTagId(),
-								InitDataFactoryUtil.getClassNameId(
-								BlogsEntry.class,
-								InitDataFactoryContext.getClassNameModels()),
-								InitDataFactoryContext.getCounter().get());
-
-				assetTagStatsModels.add(assetTagStatsModel);
-
-				assetTagStatsModel = InitDataFactoryUtil.newAssetTagStatsModel(
-					assetTagModel.getTagId(),
-					InitDataFactoryUtil.getClassNameId(
-					JournalArticle.class,
-					InitDataFactoryContext.getClassNameModels()), InitDataFactoryContext.getCounter().get());
-
-				assetTagStatsModels.add(assetTagStatsModel);
-
-				assetTagStatsModel = InitDataFactoryUtil.newAssetTagStatsModel(
-					assetTagModel.getTagId(),
-						InitDataFactoryUtil.getClassNameId(
-							WikiPage.class,
-								InitDataFactoryContext.getClassNameModels()),
-						InitDataFactoryContext.getCounter().get());
-
-				assetTagStatsModels.add(assetTagStatsModel);
-			}
-
-			_assetTagModelsArray[i - 1] = assetTagModels;
-			_assetTagStatsModelsArray[i - 1] = assetTagStatsModels;
-		}
-	}
-
-	public void initDLFileEntryTypeModel() {
-		_defaultDLFileEntryTypeModel = new DLFileEntryTypeModelImpl();
-
-		_defaultDLFileEntryTypeModel.setUuid(SequentialUUID.generate());
-		_defaultDLFileEntryTypeModel.setFileEntryTypeId(
-			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
-		_defaultDLFileEntryTypeModel.setCreateDate(
-				InitDataFactoryUtil.nextFutureDate(
-					InitDataFactoryContext.getFutureDateCounter()));
-		_defaultDLFileEntryTypeModel.setModifiedDate(
-				InitDataFactoryUtil.nextFutureDate(
-					InitDataFactoryContext.getFutureDateCounter()));
-		_defaultDLFileEntryTypeModel.setFileEntryTypeKey(
-			StringUtil.toUpperCase(
-				DLFileEntryTypeConstants.NAME_BASIC_DOCUMENT));
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append(DLFileEntryTypeConstants.NAME_BASIC_DOCUMENT);
-		sb.append("</name></root>");
-
-		_defaultDLFileEntryTypeModel.setName(sb.toString());
-		_defaultDLFileEntryTypeModel.setLastPublishDate(
-				InitDataFactoryUtil.nextFutureDate(
-					InitDataFactoryContext.getFutureDateCounter()));
-
-		_defaultDLDDMStructureModel = InitDataFactoryUtil.newDDMStructureModel(
-			InitDataFactoryContext.getGlobalGroupId(), InitDataFactoryContext.getDefaultUserId(), InitDataFactoryUtil.getClassNameId(
-					DLFileEntry.class,
-					InitDataFactoryContext.getClassNameModels()),
-			RawMetadataProcessor.TIKA_RAW_METADATA, InitDataFactoryContext.getDlDDMStructureContent(),
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId(), _SAMPLE_USER_NAME,
-			InitDataFactoryContext.getFutureDateCounter());
-
-		_defaultDLDDMStructureVersionModel = newDDMStructureVersionModel(
-			_defaultDLDDMStructureModel);
-
-		_defaultDLDDMStructureLayoutModel =
-			InitDataFactoryUtil.newDDMStructureLayoutModel(
-				InitDataFactoryContext.getGlobalGroupId(),
-				InitDataFactoryContext.getDefaultUserId(),
-			_defaultDLDDMStructureVersionModel.getStructureVersionId(),
-			InitDataFactoryContext.getDlDDMStructureLayoutContent(),
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId(), _SAMPLE_USER_NAME,
-			InitDataFactoryContext.getFutureDateCounter());
-
-		_defaultJournalDDMStructureModel =
-			InitDataFactoryUtil.newDDMStructureModel(
-				InitDataFactoryContext.getGlobalGroupId(),
-				InitDataFactoryContext.getDefaultUserId(),
-			InitDataFactoryUtil.getClassNameId(
-			JournalArticle.class,
-			InitDataFactoryContext.getClassNameModels()), "BASIC-WEB-CONTENT",
-			InitDataFactoryContext.getJournalDDMStructureContent(),
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId(), _SAMPLE_USER_NAME,
-			InitDataFactoryContext.getFutureDateCounter());
-
-		_defaultJournalDDMStructureVersionModel = newDDMStructureVersionModel(
-			_defaultJournalDDMStructureModel);
-
-		_defaultJournalDDMStructureLayoutModel =
-			InitDataFactoryUtil.newDDMStructureLayoutModel(
-				InitDataFactoryContext.getGlobalGroupId(),
-				InitDataFactoryContext.getDefaultUserId(),
-			_defaultJournalDDMStructureVersionModel.getStructureVersionId(),
-			InitDataFactoryContext.getJournalDDMStructureLayoutContent(),
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId(), _SAMPLE_USER_NAME,
-			InitDataFactoryContext.getFutureDateCounter());
-
-		_defaultJournalDDMTemplateModel =
-			InitDataFactoryUtil.newDDMTemplateModel(
-				InitDataFactoryContext.getGlobalGroupId(),
-				InitDataFactoryContext.getDefaultUserId(),
-			_defaultJournalDDMStructureModel.getStructureId(),
-			InitDataFactoryUtil.getClassNameId(
-			JournalArticle.class, InitDataFactoryContext.getClassNameModels()),
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getFutureDateCounter(),
-			InitDataFactoryContext.getClassNameModels(),
-			InitDataFactoryContext.getCounter().get(), _SAMPLE_USER_NAME);
-	}
-
-	public void initRoleModels() {
-		long classNameId = InitDataFactoryUtil.getClassNameId(
-			Role.class, InitDataFactoryContext.getClassNameModels());
-
-		_roleModels = new ArrayList<>();
-
-		// Administrator
-
-		_administratorRoleModel = InitDataFactoryUtil.newRoleModel(
-			RoleConstants.ADMINISTRATOR, RoleConstants.TYPE_REGULAR,
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getSampleUserId(), _SAMPLE_USER_NAME,
-			classNameId);
-
-		_roleModels.add(_administratorRoleModel);
-
-		// Guest
-
-		_guestRoleModel = InitDataFactoryUtil.newRoleModel(
-			RoleConstants.GUEST,
-			RoleConstants.TYPE_REGULAR,
-				InitDataFactoryContext.getCounter().get(),
-				InitDataFactoryContext.getCompanyId(),
-				InitDataFactoryContext.getSampleUserId(), _SAMPLE_USER_NAME,
-				classNameId);
-
-		_roleModels.add(_guestRoleModel);
-
-		// Organization Administrator
-
-		RoleModel organizationAdministratorRoleModel =
-			InitDataFactoryUtil.newRoleModel(
-					RoleConstants.ORGANIZATION_ADMINISTRATOR,
-					RoleConstants.TYPE_ORGANIZATION,
-					InitDataFactoryContext.getCounter().get(),
-					InitDataFactoryContext.getCompanyId(),
-					InitDataFactoryContext.getSampleUserId(), _SAMPLE_USER_NAME,
-					classNameId);
-
-		_roleModels.add(organizationAdministratorRoleModel);
-
-		// Organization Owner
-
-		RoleModel organizationOwnerRoleModel = InitDataFactoryUtil.newRoleModel(
-			RoleConstants.ORGANIZATION_OWNER, RoleConstants.TYPE_ORGANIZATION,
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getSampleUserId(), _SAMPLE_USER_NAME,
-			classNameId);
-
-		_roleModels.add(organizationOwnerRoleModel);
-
-		// Organization User
-
-		RoleModel organizationUserRoleModel = InitDataFactoryUtil.newRoleModel(
-			RoleConstants.ORGANIZATION_USER, RoleConstants.TYPE_ORGANIZATION,
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getSampleUserId(), _SAMPLE_USER_NAME,
-			classNameId);
-
-		_roleModels.add(organizationUserRoleModel);
-
-		// Owner
-
-		_ownerRoleModel = InitDataFactoryUtil.newRoleModel(
-			RoleConstants.OWNER, RoleConstants.TYPE_REGULAR,
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getSampleUserId(), _SAMPLE_USER_NAME,
-			classNameId);
-
-		_roleModels.add(_ownerRoleModel);
-
-		// Power User
-
-		_powerUserRoleModel = InitDataFactoryUtil.newRoleModel(
-			RoleConstants.POWER_USER, RoleConstants.TYPE_REGULAR,
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getSampleUserId(), _SAMPLE_USER_NAME,
-			classNameId);
-
-		_roleModels.add(_powerUserRoleModel);
-
-		// Site Administrator
-
-		RoleModel siteAdministratorRoleModel = InitDataFactoryUtil.newRoleModel(
-			RoleConstants.SITE_ADMINISTRATOR, RoleConstants.TYPE_SITE,
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getSampleUserId(), _SAMPLE_USER_NAME,
-			classNameId);
-
-		_roleModels.add(siteAdministratorRoleModel);
-
-		// Site Member
-
-		_siteMemberRoleModel = InitDataFactoryUtil.newRoleModel(
-			RoleConstants.SITE_MEMBER, RoleConstants.TYPE_SITE,
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getSampleUserId(), _SAMPLE_USER_NAME,
-			classNameId);
-
-		_roleModels.add(_siteMemberRoleModel);
-
-		// Site Owner
-
-		RoleModel siteOwnerRoleModel = InitDataFactoryUtil.newRoleModel(
-			RoleConstants.SITE_OWNER, RoleConstants.TYPE_SITE,
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getSampleUserId(), _SAMPLE_USER_NAME,
-			classNameId);
-
-		_roleModels.add(siteOwnerRoleModel);
-
-		// User
-
-		_userRoleModel = InitDataFactoryUtil.newRoleModel(
-			RoleConstants.USER, RoleConstants.TYPE_REGULAR,
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getSampleUserId(), _SAMPLE_USER_NAME,
-			classNameId);
-
-		_roleModels.add(_userRoleModel);
 	}
 
 	public AssetEntryModel newAssetEntryModel(BlogsEntryModel blogsEntryModel) {
@@ -1050,7 +631,7 @@ public class DataFactory {
 			InitDataFactoryUtil.getClassNameId(
 			JournalArticle.class, InitDataFactoryContext.getClassNameModels()),
 			resourcePrimKey, resourceUUID,
-			_defaultJournalDDMStructureModel.getStructureId(),
+			InitDataFactoryContext.getDefaultJournalDDMStructureModel().getStructureId(),
 			journalArticleModel.isIndexable(), true, ContentTypes.TEXT_HTML,
 			journalArticleLocalizationModel.getTitle());
 	}
@@ -1481,44 +1062,8 @@ public class DataFactory {
 	public DDMStructureVersionModel newDDMStructureVersionModel(
 		DDMStructureModel ddmStructureModel) {
 
-		DDMStructureVersionModel ddmStructureVersionModel =
-			new DDMStructureVersionModelImpl();
-
-		ddmStructureVersionModel.setStructureVersionId(
-			InitDataFactoryContext.getCounter().get());
-		ddmStructureVersionModel.setGroupId(ddmStructureModel.getGroupId());
-		ddmStructureVersionModel.setCompanyId(
-			InitDataFactoryContext.getCompanyId());
-		ddmStructureVersionModel.setUserId(ddmStructureModel.getUserId());
-		ddmStructureVersionModel.setUserName(_SAMPLE_USER_NAME);
-		ddmStructureVersionModel.setCreateDate(
-				InitDataFactoryUtil.nextFutureDate(
-					InitDataFactoryContext.getFutureDateCounter()));
-		ddmStructureVersionModel.setStructureId(
-			ddmStructureModel.getStructureId());
-		ddmStructureVersionModel.setVersion(
-			DDMStructureConstants.VERSION_DEFAULT);
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append(ddmStructureModel.getStructureKey());
-		sb.append("</name></root>");
-
-		ddmStructureVersionModel.setName(sb.toString());
-
-		ddmStructureVersionModel.setDefinition(
-			ddmStructureModel.getDefinition());
-		ddmStructureVersionModel.setStorageType(StorageType.JSON.toString());
-		ddmStructureVersionModel.setStatusByUserId(
-			ddmStructureModel.getUserId());
-		ddmStructureVersionModel.setStatusByUserName(_SAMPLE_USER_NAME);
-		ddmStructureVersionModel.setStatusDate(
-				InitDataFactoryUtil.nextFutureDate(
-					InitDataFactoryContext.getFutureDateCounter()));
-
-		return ddmStructureVersionModel;
+		return InitDataFactoryUtil.newDDMStructureVersionModel(
+			ddmStructureModel, _SAMPLE_USER_NAME);
 	}
 
 	public DDMTemplateLinkModel newDDMTemplateLinkModel(
@@ -1632,7 +1177,7 @@ public class DataFactory {
 					InitDataFactoryContext.getCompanyId(),
 					InitDataFactoryContext.getSampleUserId(), _SAMPLE_USER_NAME,
 					InitDataFactoryContext.getFutureDateCounter(),
-					_defaultDLFileEntryTypeModel));
+					InitDataFactoryContext.getDefaultDLFileEntryTypeModel()));
 		}
 
 		return dlFolderModels;
@@ -1715,12 +1260,12 @@ public class DataFactory {
 		journalArticleModel.setUrlTitle(urlTitle);
 
 		journalArticleModel.setContent(
-				InitDataFactoryContext.getJournalArticleContent());
+			InitDataFactoryContext.getJournalArticleContent());
 		journalArticleModel.setDefaultLanguageId("en_US");
 		journalArticleModel.setDDMStructureKey(
-			_defaultJournalDDMStructureModel.getStructureKey());
+			InitDataFactoryContext.getDefaultJournalDDMStructureModel().getStructureKey());
 		journalArticleModel.setDDMTemplateKey(
-			_defaultJournalDDMTemplateModel.getTemplateKey());
+			InitDataFactoryContext.getDefaultJournalDDMTemplateModel().getTemplateKey());
 		journalArticleModel.setDisplayDate(new Date());
 		journalArticleModel.setExpirationDate(
 				InitDataFactoryUtil.nextFutureDate(
@@ -1923,8 +1468,10 @@ public class DataFactory {
 		mbMailingListModel.setCategoryId(mbCategoryModel.getCategoryId());
 		mbMailingListModel.setInProtocol("pop3");
 		mbMailingListModel.setInServerPort(110);
-		mbMailingListModel.setInUserName(_sampleUserModel.getEmailAddress());
-		mbMailingListModel.setInPassword(_sampleUserModel.getPassword());
+		mbMailingListModel.setInUserName(
+			InitDataFactoryContext.getSampleUserModel().getEmailAddress());
+		mbMailingListModel.setInPassword(
+			InitDataFactoryContext.getSampleUserModel().getPassword());
 		mbMailingListModel.setInReadInterval(5);
 		mbMailingListModel.setOutServerPort(25);
 
@@ -2094,7 +1641,7 @@ public class DataFactory {
 				"assetCategories")) {
 
 			List<AssetCategoryModel> assetCategoryModels =
-				_assetCategoryModelsArray[(int)groupId - 1];
+				InitDataFactoryContext.getAssetCategoryModelsArray()[(int)groupId - 1];
 
 			if ((assetCategoryModels == null) ||
 				assetCategoryModels.isEmpty()) {
@@ -2110,7 +1657,7 @@ public class DataFactory {
 		}
 		else {
 			List<AssetTagModel> assetTagModels =
-				_assetTagModelsArray[(int)groupId - 1];
+				InitDataFactoryContext.getAssetTagModelsArray()[(int)groupId - 1];
 
 			if ((assetTagModels == null) || assetTagModels.isEmpty()) {
 				return newPortletPreferencesModel(
@@ -2231,7 +1778,7 @@ public class DataFactory {
 				InitDataFactoryUtil.newResourcePermissionModel(
 					AssetVocabulary.class.getName(),
 					String.valueOf(assetVocabularyModel.getVocabularyId()),
-					_ownerRoleModel.getRoleId(),
+					InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
 					InitDataFactoryContext.getDefaultUserId(),
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
@@ -2259,7 +1806,7 @@ public class DataFactory {
 			InitDataFactoryUtil.newResourcePermissionModel(
 				DDLRecordSet.class.getName(),
 				String.valueOf(ddlRecordSetModel.getRecordSetId()),
-				_ownerRoleModel.getRoleId(),
+				InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
 				InitDataFactoryContext.getDefaultUserId(),
 				InitDataFactoryContext.getResourcePermissionCounter().get(),
 				InitDataFactoryContext.getCompanyId()));
@@ -2279,19 +1826,22 @@ public class DataFactory {
 
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, _guestRoleModel.getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getGuestRoleModel().getRoleId(),
 				0,
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, _ownerRoleModel.getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
 				ddmStructureModel.getUserId(),
 				InitDataFactoryContext.getResourcePermissionCounter().get(),
 				InitDataFactoryContext.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, _userRoleModel.getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getUserRoleModel().getRoleId(),
 				0,
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
@@ -2313,19 +1863,22 @@ public class DataFactory {
 
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, _guestRoleModel.getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getGuestRoleModel().getRoleId(),
 				0,
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, _ownerRoleModel.getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
 				ddmTemplateModel.getUserId(),
 				InitDataFactoryContext.getResourcePermissionCounter().get(),
 				InitDataFactoryContext.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, _userRoleModel.getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getUserRoleModel().getRoleId(),
 				0,
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
@@ -2357,7 +1910,7 @@ public class DataFactory {
 		return Collections.singletonList(
 			InitDataFactoryUtil.newResourcePermissionModel(
 				Group.class.getName(), String.valueOf(groupModel.getGroupId()),
-				_ownerRoleModel.getRoleId(),
+				InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
 				InitDataFactoryContext.getSampleUserId(),
 				InitDataFactoryContext.getResourcePermissionCounter().get(),
 				InitDataFactoryContext.getCompanyId()));
@@ -2395,7 +1948,7 @@ public class DataFactory {
 			InitDataFactoryUtil.newResourcePermissionModel(
 				MBMessage.class.getName(),
 				String.valueOf(mbMessageModel.getMessageId()),
-				_ownerRoleModel.getRoleId(),
+				InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
 				InitDataFactoryContext.getSampleUserId(),
 				InitDataFactoryContext.getResourcePermissionCounter().get(),
 				InitDataFactoryContext.getCompanyId()));
@@ -2426,7 +1979,7 @@ public class DataFactory {
 		return Collections.singletonList(
 			InitDataFactoryUtil.newResourcePermissionModel(
 				Role.class.getName(), String.valueOf(roleModel.getRoleId()),
-				_ownerRoleModel.getRoleId(),
+				InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
 				InitDataFactoryContext.getSampleUserId(),
 				InitDataFactoryContext.getResourcePermissionCounter().get(),
 				InitDataFactoryContext.getCompanyId()));
@@ -2446,7 +1999,8 @@ public class DataFactory {
 		return Collections.singletonList(
 			InitDataFactoryUtil.newResourcePermissionModel(
 				User.class.getName(), String.valueOf(userModel.getUserId()),
-				_ownerRoleModel.getRoleId(), userModel.getUserId(),
+				InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
+				userModel.getUserId(),
 				InitDataFactoryContext.getResourcePermissionCounter().get(),
 				InitDataFactoryContext.getCompanyId()));
 	}
@@ -2646,7 +2200,8 @@ public class DataFactory {
 
 		userName[0] = InitDataFactoryContext.getFirstNames().get(
 			(int)(index / InitDataFactoryContext.getLastNames().size()) % InitDataFactoryContext.getFirstNames().size());
-		userName[1] = InitDataFactoryContext.getLastNames().get((int)(index % InitDataFactoryContext.getLastNames().size()));
+		userName[1] =
+			InitDataFactoryContext.getLastNames().get((int)(index % InitDataFactoryContext.getLastNames().size()));
 
 		return userName;
 	}
@@ -2807,19 +2362,22 @@ public class DataFactory {
 
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, _guestRoleModel.getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getGuestRoleModel().getRoleId(),
 				0,
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, _ownerRoleModel.getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
 				ownerId,
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, _siteMemberRoleModel.getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getSiteMemberRoleModel().getRoleId(),
 				0,
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
@@ -2874,40 +2432,14 @@ public class DataFactory {
 	private static final PortletPreferencesFactory _portletPreferencesFactory =
 		new PortletPreferencesFactoryImpl();
 
-	private RoleModel _administratorRoleModel;
 	private final Map<Long, SimpleCounter> _assetCategoryCounters =
 		new HashMap<>();
-	private List<AssetCategoryModel>[] _assetCategoryModelsArray;
 	private final Map<Long, SimpleCounter> _assetPublisherQueryCounter =
 		new HashMap<>();
 	private final Map<Long, SimpleCounter> _assetTagCounters = new HashMap<>();
-	private List<AssetTagModel>[] _assetTagModelsArray;
-	private List<AssetTagStatsModel>[] _assetTagStatsModelsArray;
-	private List<AssetVocabularyModel>[] _assetVocabularyModelsArray;
 	private final Class<?> _clazz = getClass();
-	private AssetVocabularyModel _defaultAssetVocabularyModel;
-	private DDMStructureLayoutModel _defaultDLDDMStructureLayoutModel;
-	private DDMStructureModel _defaultDLDDMStructureModel;
-	private DDMStructureVersionModel _defaultDLDDMStructureVersionModel;
-	private DLFileEntryTypeModel _defaultDLFileEntryTypeModel;
-	private DDMStructureLayoutModel _defaultJournalDDMStructureLayoutModel;
-	private DDMStructureModel _defaultJournalDDMStructureModel;
-	private DDMStructureVersionModel _defaultJournalDDMStructureVersionModel;
-	private DDMTemplateModel _defaultJournalDDMTemplateModel;
-	private final UserModel _defaultUserModel;
-	private final GroupModel _globalGroupModel;
-	private final List<GroupModel> _groupModels;
-	private final GroupModel _guestGroupModel;
-	private RoleModel _guestRoleModel;
-	private final UserModel _guestUserModel;
 	private final Map<Long, String> _journalArticleResourceUUIDs =
 		new HashMap<>();
 	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
-	private RoleModel _ownerRoleModel;
-	private RoleModel _powerUserRoleModel;
-	private List<RoleModel> _roleModels;
-	private final UserModel _sampleUserModel;
-	private RoleModel _siteMemberRoleModel;
-	private RoleModel _userRoleModel;
-	private final VirtualHostModel _virtualHostModel;
+
 }
