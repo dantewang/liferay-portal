@@ -51,7 +51,10 @@ public class UploadServletRequestFilter
 			Object object)
 		throws Exception {
 
-		_uploadServletRequest.cleanUp();
+		UploadServletRequest uploadServletRequest =
+			(UploadServletRequest)object;
+
+		uploadServletRequest.cleanUp();
 	}
 
 	@Override
@@ -59,7 +62,7 @@ public class UploadServletRequestFilter
 			HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
-		return null;
+		return request;
 	}
 
 	@Override
@@ -98,9 +101,7 @@ public class UploadServletRequestFilter
 				}
 			}
 
-			_uploadServletRequest = PortalUtil.getUploadServletRequest(request);
-
-			return _uploadServletRequest;
+			return PortalUtil.getUploadServletRequest(request);
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
@@ -121,7 +122,5 @@ public class UploadServletRequestFilter
 
 		return false;
 	}
-
-	private UploadServletRequest _uploadServletRequest;
 
 }
