@@ -1,9 +1,14 @@
 package com.liferay.portal.tools.sample.sql.builder;
 
 import com.liferay.portal.kernel.model.ClassNameModel;
+import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+
+import com.liferay.portlet.PortletPreferencesImpl;
+
 import com.liferay.util.SimpleCounter;
 
 import java.text.Format;
@@ -185,6 +190,26 @@ public class InitDataFactoryContext {
 		return _userScreenNameCounter;
 	}
 
+	public static String getDlDDMStructureContent() {
+		return _dlDDMStructureContent;
+	}
+
+	public static String getDlDDMStructureLayoutContent() {
+		return _dlDDMStructureLayoutContent;
+	}
+
+	public static String getJournalDDMStructureContent() {
+		return _journalDDMStructureContent;
+	}
+
+	public static String getJournalDDMStructureLayoutContent() {
+		return _journalDDMStructureLayoutContent;
+	}
+
+	public static PortletPreferencesImpl getDefaultAssetPublisherPortletPreference() {
+		return _defaultAssetPublisherPortletPreference;
+	}
+
 	public static void initContext(Properties properties) {
 		String timeZoneId = properties.getProperty("sample.sql.db.time.zone");
 
@@ -277,6 +302,25 @@ public class InitDataFactoryContext {
 		_guestGroupId = _counter.get();
 		_sampleUserId = _counter.get();
 	}
+	
+	public static void initResource(Class<?> clazz,PortletPreferencesFactory portletPreferencesFactory) throws Exception{
+		_dlDDMStructureContent = InitDataFactoryUtil.getResource(
+			clazz, "ddm_structure_basic_document.json");
+		_dlDDMStructureLayoutContent = InitDataFactoryUtil.getResource(
+			clazz, "ddm_structure_layout_basic_document.json");
+		_journalDDMStructureContent = InitDataFactoryUtil.getResource(
+			clazz, "ddm_structure_basic_web_content.json");
+		_journalDDMStructureLayoutContent = InitDataFactoryUtil.getResource(
+			clazz, "ddm_structure_layout_basic_web_content.json");
+
+		String defaultAssetPublisherPreference = StringUtil.read(
+			InitDataFactoryUtil.getResourceInputStream(
+				clazz, "default_asset_publisher_preference.xml"));
+
+		_defaultAssetPublisherPortletPreference =
+			(PortletPreferencesImpl)portletPreferencesFactory.fromDefaultXML(
+				defaultAssetPublisherPreference);
+	}
 
 	private static long _accountId;
 	private static String _assetPublisherQueryName;
@@ -321,6 +365,12 @@ public class InitDataFactoryContext {
 	private static final SimpleCounter _socialActivityCounter;
 	private static final SimpleCounter _timeCounter;
 	private static final SimpleCounter _userScreenNameCounter;
+	private static String _dlDDMStructureContent;
+	private static String _dlDDMStructureLayoutContent;
+	private static String _journalDDMStructureContent;
+	private static String _journalDDMStructureLayoutContent;
+	private static PortletPreferencesImpl
+		_defaultAssetPublisherPortletPreference;
 
 	static {
 		_counter = new SimpleCounter(

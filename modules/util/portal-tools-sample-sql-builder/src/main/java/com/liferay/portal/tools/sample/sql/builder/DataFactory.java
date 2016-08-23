@@ -195,23 +195,8 @@ public class DataFactory {
 	public DataFactory(Properties properties) throws Exception {
 		InitDataFactoryContext.initContext(properties);
 		InitDataFactoryContext.initParameter();
-		_dlDDMStructureContent = InitDataFactoryUtil.getResource(
-			_clazz, "ddm_structure_basic_document.json");
-		_dlDDMStructureLayoutContent = InitDataFactoryUtil.getResource(
-			_clazz, "ddm_structure_layout_basic_document.json");
-		_journalDDMStructureContent = InitDataFactoryUtil.getResource(
-			_clazz, "ddm_structure_basic_web_content.json");
-		_journalDDMStructureLayoutContent = InitDataFactoryUtil.getResource(
-			_clazz, "ddm_structure_layout_basic_web_content.json");
-
-		String defaultAssetPublisherPreference = StringUtil.read(
-			InitDataFactoryUtil.getResourceInputStream(
-				_clazz, "default_asset_publisher_preference.xml"));
-
-		_defaultAssetPublisherPortletPreference =
-			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
-				defaultAssetPublisherPreference);
-
+		InitDataFactoryContext.initResource(_clazz,_portletPreferencesFactory);
+		
 		_companyModel = InitDataFactoryUtil.initCompanyModel(
 			InitDataFactoryContext.getCompanyId(),
 			InitDataFactoryContext.getAccountId());
@@ -806,7 +791,7 @@ public class DataFactory {
 			InitDataFactoryContext.getGlobalGroupId(), InitDataFactoryContext.getDefaultUserId(), InitDataFactoryUtil.getClassNameId(
 					DLFileEntry.class,
 					InitDataFactoryContext.getClassNameModels()),
-			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent,
+			RawMetadataProcessor.TIKA_RAW_METADATA, InitDataFactoryContext.getDlDDMStructureContent(),
 			InitDataFactoryContext.getCounter().get(),
 			InitDataFactoryContext.getCompanyId(), _SAMPLE_USER_NAME,
 			InitDataFactoryContext.getFutureDateCounter());
@@ -819,7 +804,7 @@ public class DataFactory {
 				InitDataFactoryContext.getGlobalGroupId(),
 				InitDataFactoryContext.getDefaultUserId(),
 			_defaultDLDDMStructureVersionModel.getStructureVersionId(),
-			_dlDDMStructureLayoutContent,
+			InitDataFactoryContext.getDlDDMStructureLayoutContent(),
 			InitDataFactoryContext.getCounter().get(),
 			InitDataFactoryContext.getCompanyId(), _SAMPLE_USER_NAME,
 			InitDataFactoryContext.getFutureDateCounter());
@@ -831,7 +816,7 @@ public class DataFactory {
 			InitDataFactoryUtil.getClassNameId(
 			JournalArticle.class,
 			InitDataFactoryContext.getClassNameModels()), "BASIC-WEB-CONTENT",
-			_journalDDMStructureContent,
+			InitDataFactoryContext.getJournalDDMStructureContent(),
 			InitDataFactoryContext.getCounter().get(),
 			InitDataFactoryContext.getCompanyId(), _SAMPLE_USER_NAME,
 			InitDataFactoryContext.getFutureDateCounter());
@@ -844,7 +829,7 @@ public class DataFactory {
 				InitDataFactoryContext.getGlobalGroupId(),
 				InitDataFactoryContext.getDefaultUserId(),
 			_defaultJournalDDMStructureVersionModel.getStructureVersionId(),
-			_journalDDMStructureLayoutContent,
+			InitDataFactoryContext.getJournalDDMStructureLayoutContent(),
 			InitDataFactoryContext.getCounter().get(),
 			InitDataFactoryContext.getCompanyId(), _SAMPLE_USER_NAME,
 			InitDataFactoryContext.getFutureDateCounter());
@@ -2154,7 +2139,7 @@ public class DataFactory {
 		}
 
 		PortletPreferences jxPortletPreferences =
-			(PortletPreferences)_defaultAssetPublisherPortletPreference.clone();
+			(PortletPreferences)InitDataFactoryContext.getDefaultAssetPublisherPortletPreference().clone();
 
 		jxPortletPreferences.setValue("queryAndOperator0", "false");
 		jxPortletPreferences.setValue("queryContains0", "true");
@@ -2917,8 +2902,6 @@ public class DataFactory {
 	private List<AssetVocabularyModel>[] _assetVocabularyModelsArray;
 	private final Class<?> _clazz = getClass();
 	private final CompanyModel _companyModel;
-	private final PortletPreferencesImpl
-		_defaultAssetPublisherPortletPreference;
 	private AssetVocabularyModel _defaultAssetVocabularyModel;
 	private DDMStructureLayoutModel _defaultDLDDMStructureLayoutModel;
 	private DDMStructureModel _defaultDLDDMStructureModel;
@@ -2929,8 +2912,6 @@ public class DataFactory {
 	private DDMStructureVersionModel _defaultJournalDDMStructureVersionModel;
 	private DDMTemplateModel _defaultJournalDDMTemplateModel;
 	private final UserModel _defaultUserModel;
-	private final String _dlDDMStructureContent;
-	private final String _dlDDMStructureLayoutContent;
 	private final List<String> _firstNames;
 	private final GroupModel _globalGroupModel;
 	private final List<GroupModel> _groupModels;
@@ -2940,8 +2921,6 @@ public class DataFactory {
 	private final String _journalArticleContent;
 	private final Map<Long, String> _journalArticleResourceUUIDs =
 		new HashMap<>();
-	private final String _journalDDMStructureContent;
-	private final String _journalDDMStructureLayoutContent;
 	private final List<String> _lastNames;
 	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
 	private RoleModel _ownerRoleModel;
@@ -2951,5 +2930,4 @@ public class DataFactory {
 	private RoleModel _siteMemberRoleModel;
 	private RoleModel _userRoleModel;
 	private final VirtualHostModel _virtualHostModel;
-
 }
