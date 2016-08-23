@@ -46,21 +46,6 @@ public class UploadServletRequestFilter
 			"#COPY_MULTIPART_STREAM_TO_FILE";
 
 	@Override
-	public boolean isFilterEnabled(
-		HttpServletRequest request, HttpServletResponse response) {
-
-		String contentType = request.getHeader(HttpHeaders.CONTENT_TYPE);
-
-		if ((contentType != null) &&
-			contentType.startsWith(ContentTypes.MULTIPART_FORM_DATA)) {
-
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
 	public void doFilterFinally(
 			HttpServletRequest request, HttpServletResponse response,
 			Object object)
@@ -79,7 +64,7 @@ public class UploadServletRequestFilter
 
 	@Override
 	public HttpServletRequest getWrappedHttpServletRequest(
-			HttpServletRequest request, HttpServletResponse response) {
+		HttpServletRequest request, HttpServletResponse response) {
 
 		try {
 			String portletId = ParamUtil.getString(request, "p_p_id");
@@ -120,6 +105,21 @@ public class UploadServletRequestFilter
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public boolean isFilterEnabled(
+		HttpServletRequest request, HttpServletResponse response) {
+
+		String contentType = request.getHeader(HttpHeaders.CONTENT_TYPE);
+
+		if ((contentType != null) &&
+			contentType.startsWith(ContentTypes.MULTIPART_FORM_DATA)) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	private UploadServletRequest _uploadServletRequest;
