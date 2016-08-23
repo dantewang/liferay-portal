@@ -77,12 +77,12 @@ public class NtlmPostFilter extends BaseFilter {
 
 				return true;
 			}
-
-			return false;
 		}
 		catch (ConfigurationException ce) {
-			return false;
+			_log.error(ce, ce);
 		}
+
+		return false;
 	}
 
 	@Override
