@@ -195,31 +195,8 @@ public class DataFactory {
 	public DataFactory(Properties properties) throws Exception {
 		InitDataFactoryContext.initContext(properties);
 		InitDataFactoryContext.initParameter();
-		_dlDDMStructureContent = InitDataFactoryUtil.getResource(
-			_clazz, "ddm_structure_basic_document.json");
-		_dlDDMStructureLayoutContent = InitDataFactoryUtil.getResource(
-			_clazz, "ddm_structure_layout_basic_document.json");
-		_journalDDMStructureContent = InitDataFactoryUtil.getResource(
-			_clazz, "ddm_structure_basic_web_content.json");
-		_journalDDMStructureLayoutContent = InitDataFactoryUtil.getResource(
-			_clazz, "ddm_structure_layout_basic_web_content.json");
-
-		String defaultAssetPublisherPreference = StringUtil.read(
-			InitDataFactoryUtil.getResourceInputStream(
-				_clazz, "default_asset_publisher_preference.xml"));
-
-		_defaultAssetPublisherPortletPreference =
-			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
-				defaultAssetPublisherPreference);
-
-		_companyModel = InitDataFactoryUtil.initCompanyModel(
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getAccountId());
-
-		_accountModel = InitDataFactoryUtil.initAccountModel(
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getAccountId());
-
+		InitDataFactoryContext.initResource(_clazz,_portletPreferencesFactory);
+		InitDataFactoryContext.initCompanyModels();
 		_globalGroupModel = InitDataFactoryUtil.initGroupModel(
 			InitDataFactoryContext.getGlobalGroupId(),
 			InitDataFactoryUtil.getClassNameId(Company.class,
@@ -244,17 +221,9 @@ public class DataFactory {
 				InitDataFactoryContext.getSampleUserId());
 				_groupModels.add(groupModel);
 		}
-
-		int maxJournalArticleSize = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.journal.article.size"));
-
-		_journalArticleContent = InitDataFactoryUtil.initJournalArticleContent(
-			maxJournalArticleSize);
-
-		_firstNames = InitDataFactoryUtil.initUserFirstNames(_clazz);
-
-		_lastNames = InitDataFactoryUtil.initUserLastNames(_clazz);
-
+		
+		InitDataFactoryContext.initUserNames(_clazz);
+		
 		_defaultUserModel = InitDataFactoryUtil.newUserModel(
 			InitDataFactoryContext.getDefaultUserId(), StringPool.BLANK,
 			StringPool.BLANK, StringPool.BLANK, true,
@@ -284,7 +253,7 @@ public class DataFactory {
 	}
 
 	public AccountModel getAccountModel() {
-		return _accountModel;
+		return InitDataFactoryContext.getAccountModel();
 	}
 
 	public RoleModel getAdministratorRoleModel() {
@@ -415,7 +384,7 @@ public class DataFactory {
 	}
 
 	public CompanyModel getCompanyModel() {
-		return _companyModel;
+		return InitDataFactoryContext.getCompanyModel();
 	}
 
 	public SimpleCounter getCounter() {
@@ -806,7 +775,7 @@ public class DataFactory {
 			InitDataFactoryContext.getGlobalGroupId(), InitDataFactoryContext.getDefaultUserId(), InitDataFactoryUtil.getClassNameId(
 					DLFileEntry.class,
 					InitDataFactoryContext.getClassNameModels()),
-			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent,
+			RawMetadataProcessor.TIKA_RAW_METADATA, InitDataFactoryContext.getDlDDMStructureContent(),
 			InitDataFactoryContext.getCounter().get(),
 			InitDataFactoryContext.getCompanyId(), _SAMPLE_USER_NAME,
 			InitDataFactoryContext.getFutureDateCounter());
@@ -819,7 +788,7 @@ public class DataFactory {
 				InitDataFactoryContext.getGlobalGroupId(),
 				InitDataFactoryContext.getDefaultUserId(),
 			_defaultDLDDMStructureVersionModel.getStructureVersionId(),
-			_dlDDMStructureLayoutContent,
+			InitDataFactoryContext.getDlDDMStructureLayoutContent(),
 			InitDataFactoryContext.getCounter().get(),
 			InitDataFactoryContext.getCompanyId(), _SAMPLE_USER_NAME,
 			InitDataFactoryContext.getFutureDateCounter());
@@ -831,7 +800,7 @@ public class DataFactory {
 			InitDataFactoryUtil.getClassNameId(
 			JournalArticle.class,
 			InitDataFactoryContext.getClassNameModels()), "BASIC-WEB-CONTENT",
-			_journalDDMStructureContent,
+			InitDataFactoryContext.getJournalDDMStructureContent(),
 			InitDataFactoryContext.getCounter().get(),
 			InitDataFactoryContext.getCompanyId(), _SAMPLE_USER_NAME,
 			InitDataFactoryContext.getFutureDateCounter());
@@ -844,7 +813,7 @@ public class DataFactory {
 				InitDataFactoryContext.getGlobalGroupId(),
 				InitDataFactoryContext.getDefaultUserId(),
 			_defaultJournalDDMStructureVersionModel.getStructureVersionId(),
-			_journalDDMStructureLayoutContent,
+			InitDataFactoryContext.getJournalDDMStructureLayoutContent(),
 			InitDataFactoryContext.getCounter().get(),
 			InitDataFactoryContext.getCompanyId(), _SAMPLE_USER_NAME,
 			InitDataFactoryContext.getFutureDateCounter());
@@ -1745,7 +1714,8 @@ public class DataFactory {
 
 		journalArticleModel.setUrlTitle(urlTitle);
 
-		journalArticleModel.setContent(_journalArticleContent);
+		journalArticleModel.setContent(
+				InitDataFactoryContext.getJournalArticleContent());
 		journalArticleModel.setDefaultLanguageId("en_US");
 		journalArticleModel.setDDMStructureKey(
 			_defaultJournalDDMStructureModel.getStructureKey());
@@ -2154,7 +2124,7 @@ public class DataFactory {
 		}
 
 		PortletPreferences jxPortletPreferences =
-			(PortletPreferences)_defaultAssetPublisherPortletPreference.clone();
+			(PortletPreferences)InitDataFactoryContext.getDefaultAssetPublisherPortletPreference().clone();
 
 		jxPortletPreferences.setValue("queryAndOperator0", "false");
 		jxPortletPreferences.setValue("queryContains0", "true");
@@ -2674,9 +2644,9 @@ public class DataFactory {
 	public String[] nextUserName(long index) {
 		String[] userName = new String[2];
 
-		userName[0] = _firstNames.get(
-			(int)(index / _lastNames.size()) % _firstNames.size());
-		userName[1] = _lastNames.get((int)(index % _lastNames.size()));
+		userName[0] = InitDataFactoryContext.getFirstNames().get(
+			(int)(index / InitDataFactoryContext.getLastNames().size()) % InitDataFactoryContext.getFirstNames().size());
+		userName[1] = InitDataFactoryContext.getLastNames().get((int)(index % InitDataFactoryContext.getLastNames().size()));
 
 		return userName;
 	}
@@ -2904,7 +2874,6 @@ public class DataFactory {
 	private static final PortletPreferencesFactory _portletPreferencesFactory =
 		new PortletPreferencesFactoryImpl();
 
-	private final AccountModel _accountModel;
 	private RoleModel _administratorRoleModel;
 	private final Map<Long, SimpleCounter> _assetCategoryCounters =
 		new HashMap<>();
@@ -2916,9 +2885,6 @@ public class DataFactory {
 	private List<AssetTagStatsModel>[] _assetTagStatsModelsArray;
 	private List<AssetVocabularyModel>[] _assetVocabularyModelsArray;
 	private final Class<?> _clazz = getClass();
-	private final CompanyModel _companyModel;
-	private final PortletPreferencesImpl
-		_defaultAssetPublisherPortletPreference;
 	private AssetVocabularyModel _defaultAssetVocabularyModel;
 	private DDMStructureLayoutModel _defaultDLDDMStructureLayoutModel;
 	private DDMStructureModel _defaultDLDDMStructureModel;
@@ -2929,20 +2895,13 @@ public class DataFactory {
 	private DDMStructureVersionModel _defaultJournalDDMStructureVersionModel;
 	private DDMTemplateModel _defaultJournalDDMTemplateModel;
 	private final UserModel _defaultUserModel;
-	private final String _dlDDMStructureContent;
-	private final String _dlDDMStructureLayoutContent;
-	private final List<String> _firstNames;
 	private final GroupModel _globalGroupModel;
 	private final List<GroupModel> _groupModels;
 	private final GroupModel _guestGroupModel;
 	private RoleModel _guestRoleModel;
 	private final UserModel _guestUserModel;
-	private final String _journalArticleContent;
 	private final Map<Long, String> _journalArticleResourceUUIDs =
 		new HashMap<>();
-	private final String _journalDDMStructureContent;
-	private final String _journalDDMStructureLayoutContent;
-	private final List<String> _lastNames;
 	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
 	private RoleModel _ownerRoleModel;
 	private RoleModel _powerUserRoleModel;
@@ -2951,5 +2910,4 @@ public class DataFactory {
 	private RoleModel _siteMemberRoleModel;
 	private RoleModel _userRoleModel;
 	private final VirtualHostModel _virtualHostModel;
-
 }
