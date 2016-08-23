@@ -6,8 +6,8 @@ import com.liferay.asset.kernel.model.AssetTagModel;
 import com.liferay.asset.kernel.model.AssetTagStatsModel;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.blogs.kernel.model.BlogsEntryModel;
-import com.liferay.document.library.kernel.model.DLFileEntryModel;
 import com.liferay.document.library.kernel.model.DLFileEntryConstants;
+import com.liferay.document.library.kernel.model.DLFileEntryModel;
 import com.liferay.document.library.kernel.model.DLFileEntryTypeConstants;
 import com.liferay.document.library.kernel.model.DLFileEntryTypeModel;
 import com.liferay.document.library.kernel.model.DLFolderModel;
@@ -33,7 +33,6 @@ import com.liferay.portal.kernel.model.LayoutSetModel;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.ResourcePermissionModel;
-import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.model.VirtualHostModel;
@@ -57,7 +56,6 @@ import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
-
 import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetTagStatsModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
@@ -65,9 +63,7 @@ import com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryModelImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFolderModelImpl;
 import com.liferay.portlet.messageboards.model.impl.MBCategoryModelImpl;
-
 import com.liferay.util.SimpleCounter;
-
 import com.liferay.wiki.model.WikiNodeModel;
 import com.liferay.wiki.model.WikiPageConstants;
 import com.liferay.wiki.model.WikiPageModel;
@@ -75,7 +71,6 @@ import com.liferay.wiki.model.impl.WikiNodeModelImpl;
 import com.liferay.wiki.model.impl.WikiPageModelImpl;
 
 import java.io.IOException;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -132,7 +127,7 @@ public class InitDataFactoryUtil {
 
 		return classNameModels;
 	}
-	
+
 	public static AccountModel initAccountModel(
 		long companyId, long accountId) {
 
@@ -161,8 +156,8 @@ public class InitDataFactoryUtil {
 
 		return companyModel;
 	}
-	
-	public static String initJournalArticleContent(int maxJournalArticleSize) 
+
+	public static String initJournalArticleContent(int maxJournalArticleSize)
 	{
 		StringBundler sb = new StringBundler(6);
 
@@ -187,8 +182,9 @@ public class InitDataFactoryUtil {
 
 		return sb.toString();
 	}
-	
-		public static String getResourcePermissionModelName(String... classNames) {
+
+		public static String getResourcePermissionModelName(
+			String... classNames) {
 		if (ArrayUtil.isEmpty(classNames)) {
 			return StringPool.BLANK;
 		}
@@ -281,15 +277,17 @@ public class InitDataFactoryUtil {
 
 		return roleModel;
 	}
-	
+
 	public static long getClassNameId(Class<?> clazz,
 			Map<String, ClassNameModel> classNameModels) {
-		
+
 		ClassNameModel classNameModel = classNameModels.get(clazz.getName());
+
 		return classNameModel.getClassNameId();
 	}
-	
-	public static List<String> initUserFirstNames(Class<?> clazz) throws IOException {
+
+	public static List<String> initUserFirstNames(Class<?> clazz)
+		throws IOException {
 		List<String> firstNames = new ArrayList<>();
 
 		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
@@ -307,7 +305,8 @@ public class InitDataFactoryUtil {
 		return firstNames;
 	}
 
-	public static List<String> initUserLastNames(Class<?> clazz) throws IOException {
+	public static List<String> initUserLastNames(Class<?> clazz)
+		throws IOException {
 
 		List<String> lastNames = new ArrayList<>();
 
@@ -407,11 +406,9 @@ public class InitDataFactoryUtil {
 		AssetTagModel assetTagModel1 = assetTagModels.get(
 			(index + maxAssetEntryToAssetTagCount) % assetTagModels.size());
 		AssetTagModel assetTagModel2 = assetTagModels.get(
-			(index + maxAssetEntryToAssetTagCount * 2) %
-				assetTagModels.size());
+			(index + maxAssetEntryToAssetTagCount * 2) % assetTagModels.size());
 		AssetTagModel assetTagModel3 = assetTagModels.get(
-			(index + maxAssetEntryToAssetTagCount * 3) %
-				assetTagModels.size());
+			(index + maxAssetEntryToAssetTagCount * 3) % assetTagModels.size());
 
 		return new String[] {
 			assetTagModel0.getName(), assetTagModel1.getName(),
@@ -466,9 +463,10 @@ public class InitDataFactoryUtil {
 
 		return assetCategoryModel;
 	}
-	
+
 	public static AssetVocabularyModel newAssetVocabularyModel(
-		long grouId, long userId, String userName, String name,
+		long grouId, long userId, String userName,
+		String name,
 			long vocabularyId,long companyId) {
 
 		AssetVocabularyModel assetVocabularyModel =
@@ -499,7 +497,7 @@ public class InitDataFactoryUtil {
 
 		return assetVocabularyModel;
 	}
-	
+
 	public static AssetTagStatsModel newAssetTagStatsModel(
 		long tagId, long classNameId, long tagStatsId) {
 
@@ -511,7 +509,7 @@ public class InitDataFactoryUtil {
 
 		return assetTagStatsModel;
 	}
-	
+
 	public static BlogsEntryModel newBlogsEntryModel(
 			long groupId, int index,long entryId,long companyId,
 			long sampleUserId, String userName) {
@@ -537,7 +535,8 @@ public class InitDataFactoryUtil {
 	}
 
 	public static DDMStructureLayoutModel newDDMStructureLayoutModel(
-		long groupId, long userId, long structureVersionId, String definition,
+		long groupId, long userId, long structureVersionId,
+		String definition,
 			long structureLayoutId,long companyId,String userName,
 			SimpleCounter futureDateCounter) {
 
@@ -550,14 +549,16 @@ public class InitDataFactoryUtil {
 		ddmStructureLayoutModel.setCompanyId(companyId);
 		ddmStructureLayoutModel.setUserId(userId);
 		ddmStructureLayoutModel.setUserName(userName);
-		ddmStructureLayoutModel.setCreateDate(nextFutureDate(futureDateCounter));
-		ddmStructureLayoutModel.setModifiedDate(nextFutureDate(futureDateCounter));
+		ddmStructureLayoutModel.setCreateDate(
+			nextFutureDate(futureDateCounter));
+		ddmStructureLayoutModel.setModifiedDate(
+			nextFutureDate(futureDateCounter));
 		ddmStructureLayoutModel.setStructureVersionId(structureVersionId);
 		ddmStructureLayoutModel.setDefinition(definition);
 
 		return ddmStructureLayoutModel;
 	}
-	
+
 	public static DDMStructureModel newDDMStructureModel(
 		long groupId, long userId, long classNameId, String structureKey,
 		String definition,long structureId,long companyId,String userName,
@@ -597,7 +598,7 @@ public class InitDataFactoryUtil {
 
 		return ddmStructureModel;
 	}
-	
+
 	public static DDMTemplateModel newDDMTemplateModel(
 		long groupId, long userId, long structureId, long sourceClassNameId,
 		long templateId,long companyId,SimpleCounter futureDateCounter,
@@ -674,7 +675,7 @@ public class InitDataFactoryUtil {
 
 		return dlFileEntryModel;
 	}
-	
+
 	public static DLFolderModel newDLFolderModel(
 		long groupId, long parentFolderId, int index,long folderId,long companyId,
 			long sampleUserId,String userName,SimpleCounter futureDateCounter,
@@ -701,7 +702,7 @@ public class InitDataFactoryUtil {
 
 		return dlFolderModel;
 	}
-	
+
 	public static MBCategoryModel newMBCategoryModel(
 			long groupId, int index,long categoryId,long companyId,
 			long userId,String userName,int threadCount, int messageCount) {
@@ -728,7 +729,7 @@ public class InitDataFactoryUtil {
 
 		return mbCategoryModel;
 	}
-	
+
 	public static LayoutSetModel newLayoutSetModel(
 		long groupId, boolean privateLayout, int pageCount,
 			long layoutSetId,long companyId) {
@@ -747,7 +748,7 @@ public class InitDataFactoryUtil {
 
 		return layoutSetModel;
 	}
-	
+
 	public static ResourcePermissionModel newResourcePermissionModel(
 		String name, String primKey, long roleId, long ownerId,
 			long resourcePermissionId,long companyId) {
@@ -789,7 +790,7 @@ public class InitDataFactoryUtil {
 
 		return wikiNodeModel;
 	}
-	
+
 	public static WikiPageModel newWikiPageModel(
 		WikiNodeModel wikiNodeModel, int index,long pageId,long resourcePrimKey,
 			long companyId,long userId,String userName) {
@@ -815,6 +816,7 @@ public class InitDataFactoryUtil {
 
 		return wikiPageModel;
 	}
+
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
 

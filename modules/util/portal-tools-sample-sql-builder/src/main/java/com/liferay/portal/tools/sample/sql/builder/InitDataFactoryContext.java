@@ -1,14 +1,13 @@
 package com.liferay.portal.tools.sample.sql.builder;
 
 import com.liferay.portal.kernel.model.ClassNameModel;
-
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
-
 import com.liferay.util.SimpleCounter;
 
 import java.text.Format;
+
 import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
@@ -17,110 +16,41 @@ import java.util.TimeZone;
  * @author Lily Chi
  */
 public class InitDataFactoryContext {
-	public static void initContext(Properties properties) {
-		String timeZoneId = properties.getProperty("sample.sql.db.time.zone");
 
-		if (Validator.isNotNull(timeZoneId)) {
-			TimeZone timeZone = TimeZone.getTimeZone(timeZoneId);
-
-			if (timeZone != null) {
-				TimeZone.setDefault(timeZone);
-
-				_simpleDateFormat =
-					FastDateFormatFactoryUtil.getSimpleDateFormat(
-						"yyyy-MM-dd HH:mm:ss", timeZone);
-			}
-		}
-
-		_assetPublisherQueryName = GetterUtil.getString(
-			properties.getProperty("sample.sql.asset.publisher.query.name"));
-
-		if (!_assetPublisherQueryName.equals("assetCategories")) {
-			_assetPublisherQueryName = "assetTags";
-		}
-
-		_maxAssetCategoryCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.asset.category.count"));
-		_maxAssetEntryToAssetCategoryCount = GetterUtil.getInteger(
-			properties.getProperty(
-				"sample.sql.max.asset.entry.to.asset.category.count"));
-		_maxAssetEntryToAssetTagCount = GetterUtil.getInteger(
-			properties.getProperty(
-				"sample.sql.max.asset.entry.to.asset.tag.count"));
-		_maxAssetPublisherPageCount = GetterUtil.getInteger(
-			properties.getProperty(
-				"sample.sql.max.asset.publisher.page.count"));
-		_maxAssetTagCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.asset.tag.count"));
-		_maxAssetVocabularyCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.asset.vocabulary.count"));
-		_maxBlogsEntryCommentCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.blogs.entry.comment.count"));
-		_maxBlogsEntryCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.blogs.entry.count"));
-		_maxDDLCustomFieldCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.ddl.custom.field.count"));
-		_maxDDLRecordCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.ddl.record.count"));
-		_maxDDLRecordSetCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.ddl.record.set.count"));
-		_maxDLFileEntryCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.dl.file.entry.count"));
-		_maxDLFileEntrySize = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.dl.file.entry.size"));
-		_maxDLFolderCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.dl.folder.count"));
-		_maxDLFolderDepth = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.dl.folder.depth"));
-		_maxGroupsCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.group.count"));
-		_maxJournalArticleCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.journal.article.count"));
-		_maxJournalArticlePageCount = GetterUtil.getInteger(
-			properties.getProperty(
-				"sample.sql.max.journal.article.page.count"));
-		_maxJournalArticleVersionCount = GetterUtil.getInteger(
-			properties.getProperty(
-				"sample.sql.max.journal.article.version.count"));
-		_maxMBCategoryCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.mb.category.count"));
-		_maxMBMessageCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.mb.message.count"));
-		_maxMBThreadCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.mb.thread.count"));
-		_maxUserCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.user.count"));
-		_maxUserToGroupCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.user.to.group.count"));
-		_maxWikiNodeCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.wiki.node.count"));
-		_maxWikiPageCommentCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.wiki.page.comment.count"));
-		_maxWikiPageCount = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.wiki.page.count"));
-	}
-	
-	public static void initParameter(){
-		_classNameModels = InitDataFactoryUtil.initClassNameModels(_counter);
-		_accountId = _counter.get();
-		_companyId = _counter.get();
-		_defaultUserId = _counter.get();
-		_globalGroupId = _counter.get();
-		_guestGroupId = _counter.get();
-		_sampleUserId = _counter.get();
-	}
-	
-	static{
-		_counter = new SimpleCounter(InitDataFactoryContext.getMaxGroupsCount() + 1);
-		_timeCounter = new SimpleCounter();
-		_futureDateCounter = new SimpleCounter();
-		_resourcePermissionCounter = new SimpleCounter();
-		_socialActivityCounter = new SimpleCounter();
-		_userScreenNameCounter = new SimpleCounter();
+	public static long getAccountId() {
+		return _accountId;
 	}
 
 	public static String getAssetPublisherQueryName() {
 		return _assetPublisherQueryName;
+	}
+
+	public static Map<String, ClassNameModel> getClassNameModels() {
+		return _classNameModels;
+	}
+
+	public static long getCompanyId() {
+		return _companyId;
+	}
+
+	public static SimpleCounter getCounter() {
+		return _counter;
+	}
+
+	public static long getDefaultUserId() {
+		return _defaultUserId;
+	}
+
+	public static SimpleCounter getFutureDateCounter() {
+		return _futureDateCounter;
+	}
+
+	public static long getGlobalGroupId() {
+		return _globalGroupId;
+	}
+
+	public static long getGuestGroupId() {
+		return _guestGroupId;
 	}
 
 	public static int getMaxAssetCategoryCount() {
@@ -231,76 +161,132 @@ public class InitDataFactoryContext {
 		return _maxWikiPageCount;
 	}
 
-	public static Format getSimpleDateFormat() {
-		return _simpleDateFormat;
-	}
-
-	public static SimpleCounter getCounter() {
-		return _counter;
-	}
-
-	public static SimpleCounter getTimeCounter() {
-		return _timeCounter;
-	}
-
-	public static SimpleCounter getFutureDateCounter() {
-		return _futureDateCounter;
-	}
-
 	public static SimpleCounter getResourcePermissionCounter() {
 		return _resourcePermissionCounter;
+	}
+
+	public static long getSampleUserId() {
+		return _sampleUserId;
+	}
+
+	public static Format getSimpleDateFormat() {
+		return _simpleDateFormat;
 	}
 
 	public static SimpleCounter getSocialActivityCounter() {
 		return _socialActivityCounter;
 	}
 
+	public static SimpleCounter getTimeCounter() {
+		return _timeCounter;
+	}
+
 	public static SimpleCounter getUserScreenNameCounter() {
 		return _userScreenNameCounter;
 	}
 
-	public static Map<String, ClassNameModel> getClassNameModels() {
-		return _classNameModels;
+	public static void initContext(Properties properties) {
+		String timeZoneId = properties.getProperty("sample.sql.db.time.zone");
+
+		if (Validator.isNotNull(timeZoneId)) {
+			TimeZone timeZone = TimeZone.getTimeZone(timeZoneId);
+
+			if (timeZone != null) {
+				TimeZone.setDefault(timeZone);
+
+				_simpleDateFormat =
+					FastDateFormatFactoryUtil.getSimpleDateFormat(
+						"yyyy-MM-dd HH:mm:ss", timeZone);
+			}
+		}
+
+		_assetPublisherQueryName = GetterUtil.getString(
+			properties.getProperty("sample.sql.asset.publisher.query.name"));
+
+		if (!_assetPublisherQueryName.equals("assetCategories")) {
+			_assetPublisherQueryName = "assetTags";
+		}
+
+		_maxAssetCategoryCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.asset.category.count"));
+		_maxAssetEntryToAssetCategoryCount = GetterUtil.getInteger(
+			properties.getProperty(
+				"sample.sql.max.asset.entry.to.asset.category.count"));
+		_maxAssetEntryToAssetTagCount = GetterUtil.getInteger(
+			properties.getProperty(
+				"sample.sql.max.asset.entry.to.asset.tag.count"));
+		_maxAssetPublisherPageCount = GetterUtil.getInteger(
+			properties.getProperty(
+				"sample.sql.max.asset.publisher.page.count"));
+		_maxAssetTagCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.asset.tag.count"));
+		_maxAssetVocabularyCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.asset.vocabulary.count"));
+		_maxBlogsEntryCommentCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.blogs.entry.comment.count"));
+		_maxBlogsEntryCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.blogs.entry.count"));
+		_maxDDLCustomFieldCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.ddl.custom.field.count"));
+		_maxDDLRecordCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.ddl.record.count"));
+		_maxDDLRecordSetCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.ddl.record.set.count"));
+		_maxDLFileEntryCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.dl.file.entry.count"));
+		_maxDLFileEntrySize = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.dl.file.entry.size"));
+		_maxDLFolderCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.dl.folder.count"));
+		_maxDLFolderDepth = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.dl.folder.depth"));
+		_maxGroupsCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.group.count"));
+		_maxJournalArticleCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.journal.article.count"));
+		_maxJournalArticlePageCount = GetterUtil.getInteger(
+			properties.getProperty(
+				"sample.sql.max.journal.article.page.count"));
+		_maxJournalArticleVersionCount = GetterUtil.getInteger(
+			properties.getProperty(
+				"sample.sql.max.journal.article.version.count"));
+		_maxMBCategoryCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.mb.category.count"));
+		_maxMBMessageCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.mb.message.count"));
+		_maxMBThreadCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.mb.thread.count"));
+		_maxUserCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.user.count"));
+		_maxUserToGroupCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.user.to.group.count"));
+		_maxWikiNodeCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.wiki.node.count"));
+		_maxWikiPageCommentCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.wiki.page.comment.count"));
+		_maxWikiPageCount = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.wiki.page.count"));
 	}
 
-	public static long getAccountId() {
-		return _accountId;
+	public static void initParameter() {
+		_classNameModels = InitDataFactoryUtil.initClassNameModels(_counter);
+		_accountId = _counter.get();
+		_companyId = _counter.get();
+		_defaultUserId = _counter.get();
+		_globalGroupId = _counter.get();
+		_guestGroupId = _counter.get();
+		_sampleUserId = _counter.get();
 	}
 
-	public static long getCompanyId() {
-		return _companyId;
-	}
-
-	public static long getDefaultUserId() {
-		return _defaultUserId;
-	}
-
-	public static long getGlobalGroupId() {
-		return _globalGroupId;
-	}
-
-	public static long getGuestGroupId() {
-		return _guestGroupId;
-	}
-
-	public static long getSampleUserId() {
-		return _sampleUserId;
-	}
-	
-	private static final SimpleCounter _counter;
-	private static final SimpleCounter _timeCounter;
-	private static final SimpleCounter _futureDateCounter;
-	private static final SimpleCounter _resourcePermissionCounter;
-	private static final SimpleCounter _socialActivityCounter;
-	private static final SimpleCounter _userScreenNameCounter;
-	private static Map<String, ClassNameModel> _classNameModels;
 	private static long _accountId;
+	private static String _assetPublisherQueryName;
+	private static Map<String, ClassNameModel> _classNameModels;
 	private static long _companyId;
+	private static final SimpleCounter _counter;
 	private static long _defaultUserId;
+	private static final SimpleCounter _futureDateCounter;
 	private static long _globalGroupId;
 	private static long _guestGroupId;
-	private static long _sampleUserId;
-	private static String _assetPublisherQueryName;
 	private static int _maxAssetCategoryCount;
 	private static int _maxAssetEntryToAssetCategoryCount;
 	private static int _maxAssetEntryToAssetTagCount;
@@ -328,6 +314,22 @@ public class InitDataFactoryContext {
 	private static int _maxWikiNodeCount;
 	private static int _maxWikiPageCommentCount;
 	private static int _maxWikiPageCount;
+	private static final SimpleCounter _resourcePermissionCounter;
+	private static long _sampleUserId;
 	private static Format _simpleDateFormat =
 		FastDateFormatFactoryUtil.getSimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static final SimpleCounter _socialActivityCounter;
+	private static final SimpleCounter _timeCounter;
+	private static final SimpleCounter _userScreenNameCounter;
+
+	static {
+		_counter = new SimpleCounter(
+			InitDataFactoryContext.getMaxGroupsCount() + 1);
+		_timeCounter = new SimpleCounter();
+		_futureDateCounter = new SimpleCounter();
+		_resourcePermissionCounter = new SimpleCounter();
+		_socialActivityCounter = new SimpleCounter();
+		_userScreenNameCounter = new SimpleCounter();
+	}
+
 }
