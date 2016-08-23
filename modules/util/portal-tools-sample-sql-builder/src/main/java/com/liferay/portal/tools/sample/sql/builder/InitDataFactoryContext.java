@@ -1,6 +1,8 @@
 package com.liferay.portal.tools.sample.sql.builder;
 
+import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
+import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -210,6 +212,14 @@ public class InitDataFactoryContext {
 		return _defaultAssetPublisherPortletPreference;
 	}
 
+	public static AccountModel getAccountModel() {
+		return _accountModel;
+	}
+
+	public static CompanyModel getCompanyModel() {
+		return _companyModel;
+	}
+
 	public static void initContext(Properties properties) {
 		String timeZoneId = properties.getProperty("sample.sql.db.time.zone");
 
@@ -321,6 +331,13 @@ public class InitDataFactoryContext {
 			(PortletPreferencesImpl)portletPreferencesFactory.fromDefaultXML(
 				defaultAssetPublisherPreference);
 	}
+	
+	public static void initCompanyModels(){
+		_companyModel = InitDataFactoryUtil.initCompanyModel(
+					_companyId,_accountId);
+		_accountModel = InitDataFactoryUtil.initAccountModel(
+			_companyId,_accountId);
+	}
 
 	private static long _accountId;
 	private static String _assetPublisherQueryName;
@@ -371,6 +388,8 @@ public class InitDataFactoryContext {
 	private static String _journalDDMStructureLayoutContent;
 	private static PortletPreferencesImpl
 		_defaultAssetPublisherPortletPreference;
+	private static AccountModel _accountModel;
+	private static CompanyModel _companyModel;
 
 	static {
 		_counter = new SimpleCounter(

@@ -196,15 +196,7 @@ public class DataFactory {
 		InitDataFactoryContext.initContext(properties);
 		InitDataFactoryContext.initParameter();
 		InitDataFactoryContext.initResource(_clazz,_portletPreferencesFactory);
-		
-		_companyModel = InitDataFactoryUtil.initCompanyModel(
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getAccountId());
-
-		_accountModel = InitDataFactoryUtil.initAccountModel(
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getAccountId());
-
+		InitDataFactoryContext.initCompanyModels();
 		_globalGroupModel = InitDataFactoryUtil.initGroupModel(
 			InitDataFactoryContext.getGlobalGroupId(),
 			InitDataFactoryUtil.getClassNameId(Company.class,
@@ -269,7 +261,7 @@ public class DataFactory {
 	}
 
 	public AccountModel getAccountModel() {
-		return _accountModel;
+		return InitDataFactoryContext.getAccountModel();
 	}
 
 	public RoleModel getAdministratorRoleModel() {
@@ -400,7 +392,7 @@ public class DataFactory {
 	}
 
 	public CompanyModel getCompanyModel() {
-		return _companyModel;
+		return InitDataFactoryContext.getCompanyModel();
 	}
 
 	public SimpleCounter getCounter() {
@@ -2889,7 +2881,6 @@ public class DataFactory {
 	private static final PortletPreferencesFactory _portletPreferencesFactory =
 		new PortletPreferencesFactoryImpl();
 
-	private final AccountModel _accountModel;
 	private RoleModel _administratorRoleModel;
 	private final Map<Long, SimpleCounter> _assetCategoryCounters =
 		new HashMap<>();
@@ -2901,7 +2892,6 @@ public class DataFactory {
 	private List<AssetTagStatsModel>[] _assetTagStatsModelsArray;
 	private List<AssetVocabularyModel>[] _assetVocabularyModelsArray;
 	private final Class<?> _clazz = getClass();
-	private final CompanyModel _companyModel;
 	private AssetVocabularyModel _defaultAssetVocabularyModel;
 	private DDMStructureLayoutModel _defaultDLDDMStructureLayoutModel;
 	private DDMStructureModel _defaultDLDDMStructureModel;
