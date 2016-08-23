@@ -12,8 +12,10 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.PortletPreferencesImpl;
 
 import com.liferay.util.SimpleCounter;
+import java.io.IOException;
 
 import java.text.Format;
+import java.util.List;
 
 import java.util.Map;
 import java.util.Properties;
@@ -224,6 +226,14 @@ public class InitDataFactoryContext {
 		return _journalArticleContent;
 	}
 
+	public static List<String> getFirstNames() {
+		return _firstNames;
+	}
+
+	public static List<String> getLastNames() {
+		return _lastNames;
+	}
+
 	public static void initContext(Properties properties) {
 		String timeZoneId = properties.getProperty("sample.sql.db.time.zone");
 
@@ -348,6 +358,12 @@ public class InitDataFactoryContext {
 		_accountModel = InitDataFactoryUtil.initAccountModel(
 			_companyId,_accountId);
 	}
+	
+	public static void initUserNames(Class<?> clazz) throws IOException{
+		_firstNames = InitDataFactoryUtil.initUserFirstNames(clazz);
+
+		_lastNames = InitDataFactoryUtil.initUserLastNames(clazz);
+	}
 
 	private static long _accountId;
 	private static String _assetPublisherQueryName;
@@ -401,6 +417,8 @@ public class InitDataFactoryContext {
 	private static AccountModel _accountModel;
 	private static CompanyModel _companyModel;
 	private static String _journalArticleContent;
+	private static List<String> _firstNames;
+	private static List<String> _lastNames;
 
 	static {
 		_counter = new SimpleCounter(

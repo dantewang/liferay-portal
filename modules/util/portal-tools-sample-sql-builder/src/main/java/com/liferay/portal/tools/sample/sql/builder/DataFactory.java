@@ -221,12 +221,9 @@ public class DataFactory {
 				InitDataFactoryContext.getSampleUserId());
 				_groupModels.add(groupModel);
 		}
-
-
-		_firstNames = InitDataFactoryUtil.initUserFirstNames(_clazz);
-
-		_lastNames = InitDataFactoryUtil.initUserLastNames(_clazz);
-
+		
+		InitDataFactoryContext.initUserNames(_clazz);
+		
 		_defaultUserModel = InitDataFactoryUtil.newUserModel(
 			InitDataFactoryContext.getDefaultUserId(), StringPool.BLANK,
 			StringPool.BLANK, StringPool.BLANK, true,
@@ -2647,9 +2644,9 @@ public class DataFactory {
 	public String[] nextUserName(long index) {
 		String[] userName = new String[2];
 
-		userName[0] = _firstNames.get(
-			(int)(index / _lastNames.size()) % _firstNames.size());
-		userName[1] = _lastNames.get((int)(index % _lastNames.size()));
+		userName[0] = InitDataFactoryContext.getFirstNames().get(
+			(int)(index / InitDataFactoryContext.getLastNames().size()) % InitDataFactoryContext.getFirstNames().size());
+		userName[1] = InitDataFactoryContext.getLastNames().get((int)(index % InitDataFactoryContext.getLastNames().size()));
 
 		return userName;
 	}
@@ -2898,7 +2895,6 @@ public class DataFactory {
 	private DDMStructureVersionModel _defaultJournalDDMStructureVersionModel;
 	private DDMTemplateModel _defaultJournalDDMTemplateModel;
 	private final UserModel _defaultUserModel;
-	private final List<String> _firstNames;
 	private final GroupModel _globalGroupModel;
 	private final List<GroupModel> _groupModels;
 	private final GroupModel _guestGroupModel;
@@ -2906,7 +2902,6 @@ public class DataFactory {
 	private final UserModel _guestUserModel;
 	private final Map<Long, String> _journalArticleResourceUUIDs =
 		new HashMap<>();
-	private final List<String> _lastNames;
 	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
 	private RoleModel _ownerRoleModel;
 	private RoleModel _powerUserRoleModel;
