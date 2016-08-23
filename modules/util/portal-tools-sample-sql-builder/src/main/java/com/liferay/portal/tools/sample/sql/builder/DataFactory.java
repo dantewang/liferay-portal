@@ -105,7 +105,6 @@ import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.ContactConstants;
 import com.liferay.portal.kernel.model.ContactModel;
 import com.liferay.portal.kernel.model.Group;
-import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutConstants;
@@ -197,33 +196,8 @@ public class DataFactory {
 		InitDataFactoryContext.initParameter();
 		InitDataFactoryContext.initResource(_clazz,_portletPreferencesFactory);
 		InitDataFactoryContext.initCompanyModels();
-		_globalGroupModel = InitDataFactoryUtil.initGroupModel(
-			InitDataFactoryContext.getGlobalGroupId(),
-			InitDataFactoryUtil.getClassNameId(Company.class,
-					InitDataFactoryContext.getClassNameModels()),
-			InitDataFactoryContext.getCompanyId(), GroupConstants.GLOBAL, false,
-			InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getSampleUserId());
-
-		_guestGroupModel = InitDataFactoryUtil.initGroupModel(
-			InitDataFactoryContext.getGuestGroupId(), getGroupClassNameId(),
-			InitDataFactoryContext.getGuestGroupId(), GroupConstants.GUEST,
-			true, InitDataFactoryContext.getCompanyId(),
-			InitDataFactoryContext.getSampleUserId());
-
-		_groupModels = new ArrayList<>(
-			InitDataFactoryContext.getMaxGroupsCount());
-
-		for (int i = 1; i <= InitDataFactoryContext.getMaxGroupsCount(); i++) {
-			GroupModel groupModel = InitDataFactoryUtil.initGroupModel(
-				i, getGroupClassNameId(), i, "Site " + i, true,
-				InitDataFactoryContext.getCompanyId(),
-				InitDataFactoryContext.getSampleUserId());
-				_groupModels.add(groupModel);
-		}
-		
 		InitDataFactoryContext.initUserNames(_clazz);
-		
+		InitDataFactoryContext.initGroupModels();
 		_defaultUserModel = InitDataFactoryUtil.newUserModel(
 			InitDataFactoryContext.getDefaultUserId(), StringPool.BLANK,
 			StringPool.BLANK, StringPool.BLANK, true,
@@ -461,20 +435,15 @@ public class DataFactory {
 	}
 
 	public GroupModel getGlobalGroupModel() {
-		return _globalGroupModel;
-	}
-
-	public long getGroupClassNameId() {
-		return InitDataFactoryUtil.getClassNameId(
-			Group.class, InitDataFactoryContext.getClassNameModels());
+		return InitDataFactoryContext.getGlobalGroupModel();
 	}
 
 	public List<GroupModel> getGroupModels() {
-		return _groupModels;
+		return InitDataFactoryContext.getGroupModels();
 	}
 
 	public GroupModel getGuestGroupModel() {
-		return _guestGroupModel;
+		return InitDataFactoryContext.getGuestGroupModel();
 	}
 
 	public UserModel getGuestUserModel() {
@@ -551,7 +520,7 @@ public class DataFactory {
 		List<Long> groupIds = new ArrayList<>(
 			InitDataFactoryContext.getMaxUserToGroupCount() + 1);
 
-		groupIds.add(_guestGroupModel.getGroupId());
+		groupIds.add(InitDataFactoryContext.getGuestGroupModel().getGroupId());
 
 		if ((groupId + InitDataFactoryContext.getMaxUserToGroupCount()) >
 				InitDataFactoryContext.getMaxGroupsCount()) {
@@ -2895,9 +2864,6 @@ public class DataFactory {
 	private DDMStructureVersionModel _defaultJournalDDMStructureVersionModel;
 	private DDMTemplateModel _defaultJournalDDMTemplateModel;
 	private final UserModel _defaultUserModel;
-	private final GroupModel _globalGroupModel;
-	private final List<GroupModel> _groupModels;
-	private final GroupModel _guestGroupModel;
 	private RoleModel _guestRoleModel;
 	private final UserModel _guestUserModel;
 	private final Map<Long, String> _journalArticleResourceUUIDs =

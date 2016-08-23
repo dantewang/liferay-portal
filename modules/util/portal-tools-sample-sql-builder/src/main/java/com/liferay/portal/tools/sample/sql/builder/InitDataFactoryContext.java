@@ -2,7 +2,10 @@ package com.liferay.portal.tools.sample.sql.builder;
 
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.CompanyModel;
+import com.liferay.portal.kernel.model.GroupConstants;
+import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -15,6 +18,7 @@ import com.liferay.util.SimpleCounter;
 import java.io.IOException;
 
 import java.text.Format;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Map;
@@ -234,6 +238,18 @@ public class InitDataFactoryContext {
 		return _lastNames;
 	}
 
+	public static GroupModel getGlobalGroupModel() {
+		return _globalGroupModel;
+	}
+
+	public static GroupModel getGuestGroupModel() {
+		return _guestGroupModel;
+	}
+
+	public static List<GroupModel> getGroupModels() {
+		return _groupModels;
+	}
+
 	public static void initContext(Properties properties) {
 		String timeZoneId = properties.getProperty("sample.sql.db.time.zone");
 
@@ -364,6 +380,29 @@ public class InitDataFactoryContext {
 
 		_lastNames = InitDataFactoryUtil.initUserLastNames(clazz);
 	}
+	
+	public static void initGroupModels() throws Exception {
+		_globalGroupModel = InitDataFactoryUtil.initGroupModel(
+				_globalGroupId,InitDataFactoryUtil.getClassNameId(
+						Company.class,_classNameModels),_companyId, 
+					GroupConstants.GLOBAL, false,_companyId,
+					_sampleUserId);
+
+		_guestGroupModel = InitDataFactoryUtil.initGroupModel(
+			_guestGroupId, InitDataFactoryUtil.getGroupClassNameId(),
+			_guestGroupId, GroupConstants.GUEST,
+			true, _companyId,_sampleUserId);
+
+		_groupModels = new ArrayList<>(
+			InitDataFactoryContext.getMaxGroupsCount());
+
+		for (int i = 1; i <= InitDataFactoryContext.getMaxGroupsCount(); i++) {
+			GroupModel groupModel = InitDataFactoryUtil.initGroupModel(
+				i, InitDataFactoryUtil.getGroupClassNameId(), i, "Site " + i, true,
+				_companyId, _sampleUserId);
+				_groupModels.add(groupModel);
+		}
+	}
 
 	private static long _accountId;
 	private static String _assetPublisherQueryName;
@@ -419,6 +458,9 @@ public class InitDataFactoryContext {
 	private static String _journalArticleContent;
 	private static List<String> _firstNames;
 	private static List<String> _lastNames;
+	private static GroupModel _globalGroupModel;
+	private static GroupModel _guestGroupModel;
+	private static List<GroupModel> _groupModels;
 
 	static {
 		_counter = new SimpleCounter(

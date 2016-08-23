@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.CompanyModel;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.LayoutSetModel;
@@ -815,6 +816,11 @@ public class InitDataFactoryUtil {
 		wikiPageModel.setLastPublishDate(new Date());
 
 		return wikiPageModel;
+	}
+	
+	public static long getGroupClassNameId() {
+		return getClassNameId(
+			Group.class, InitDataFactoryContext.getClassNameModels());
 	}
 
 	private static final String _DEPENDENCIES_DIR =
