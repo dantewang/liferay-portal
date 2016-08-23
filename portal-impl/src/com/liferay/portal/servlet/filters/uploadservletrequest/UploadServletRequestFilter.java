@@ -20,6 +20,8 @@ import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.PortletInstanceFactoryUtil;
 import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
+import com.liferay.portal.kernel.servlet.TryFinallyFilter;
+import com.liferay.portal.kernel.servlet.WrapHttpServletRequestFilter;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -28,7 +30,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.servlet.filters.BasePortalFilter;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,7 +37,9 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author Preston Crary
  */
-public class UploadServletRequestFilter extends BasePortalFilter {
+public class UploadServletRequestFilter
+	extends BasePortalFilter
+	implements TryFinallyFilter, WrapHttpServletRequestFilter {
 
 	public static final String COPY_MULTIPART_STREAM_TO_FILE =
 		UploadServletRequestFilter.class.getName() +
@@ -58,52 +61,67 @@ public class UploadServletRequestFilter extends BasePortalFilter {
 	}
 
 	@Override
-	public void processFilter(
+	public void doFilterFinally(
 			HttpServletRequest request, HttpServletResponse response,
-			FilterChain filterChain)
+			Object object)
 		throws Exception {
 
-		String portletId = ParamUtil.getString(request, "p_p_id");
+		_uploadServletRequest.cleanUp();
+	}
 
-		if (Validator.isNotNull(portletId)) {
-			long companyId = PortalUtil.getCompanyId(request);
+	@Override
+	public Object doFilterTry(
+			HttpServletRequest request, HttpServletResponse response)
+		throws Exception {
 
-			Portlet portlet = PortletLocalServiceUtil.getPortletById(
-				companyId, portletId);
+		return null;
+	}
 
-			if (portlet != null) {
-				ServletContext servletContext =
-					(ServletContext)request.getAttribute(WebKeys.CTX);
-
-				InvokerPortlet invokerPortlet =
-					PortletInstanceFactoryUtil.create(portlet, servletContext);
-
-				LiferayPortletConfig liferayPortletConfig =
-					(LiferayPortletConfig)invokerPortlet.getPortletConfig();
-
-				if (invokerPortlet.isStrutsPortlet() ||
-					liferayPortletConfig.isCopyRequestParameters() ||
-					!liferayPortletConfig.isWARFile()) {
-
-					request.setAttribute(
-						UploadServletRequestFilter.
-							COPY_MULTIPART_STREAM_TO_FILE,
-						Boolean.FALSE);
-				}
-			}
-		}
-
-		UploadServletRequest uploadServletRequest =
-			PortalUtil.getUploadServletRequest(request);
+	@Override
+	public HttpServletRequest getWrappedHttpServletRequest(
+			HttpServletRequest request, HttpServletResponse response) {
 
 		try {
-			processFilter(
-				UploadServletRequestFilter.class.getName(),
-				uploadServletRequest, response, filterChain);
+			String portletId = ParamUtil.getString(request, "p_p_id");
+
+			if (Validator.isNotNull(portletId)) {
+				long companyId = PortalUtil.getCompanyId(request);
+
+				Portlet portlet = PortletLocalServiceUtil.getPortletById(
+					companyId, portletId);
+
+				if (portlet != null) {
+					ServletContext servletContext =
+						(ServletContext)request.getAttribute(WebKeys.CTX);
+
+					InvokerPortlet invokerPortlet =
+						PortletInstanceFactoryUtil.create(
+							portlet, servletContext);
+
+					LiferayPortletConfig liferayPortletConfig =
+						(LiferayPortletConfig)invokerPortlet.getPortletConfig();
+
+					if (invokerPortlet.isStrutsPortlet() ||
+						liferayPortletConfig.isCopyRequestParameters() ||
+						!liferayPortletConfig.isWARFile()) {
+
+						request.setAttribute(
+							UploadServletRequestFilter.
+								COPY_MULTIPART_STREAM_TO_FILE,
+							Boolean.FALSE);
+					}
+				}
+			}
+
+			_uploadServletRequest = PortalUtil.getUploadServletRequest(request);
+
+			return _uploadServletRequest;
 		}
-		finally {
-			uploadServletRequest.cleanUp();
+		catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
+
+	private UploadServletRequest _uploadServletRequest;
 
 }
