@@ -138,6 +138,10 @@ public class InvokerFilterChain implements FilterChain {
 
 			request = wrapHttpServletRequestFilter.getWrappedHttpServletRequest(
 				request, response);
+
+			if (request == null) {
+				return;
+			}
 		}
 
 		if (filter instanceof WrapHttpServletResponseFilter) {
@@ -151,6 +155,10 @@ public class InvokerFilterChain implements FilterChain {
 			response =
 				wrapHttpServletResponseFilter.getWrappedHttpServletResponse(
 					request, response);
+
+			if (response == null) {
+				return;
+			}
 		}
 
 		if (filter instanceof TryFinallyFilter) {
@@ -164,6 +172,10 @@ public class InvokerFilterChain implements FilterChain {
 				}
 
 				object = tryFinallyFilter.doFilterTry(request, response);
+
+				if (object == TryFilter.CUT_CHAIN) {
+					return;
+				}
 
 				doFilter(request, response);
 			}
@@ -183,7 +195,11 @@ public class InvokerFilterChain implements FilterChain {
 				_log.debug("Invoke try for filter " + filter.getClass());
 			}
 
-			tryFilter.doFilterTry(request, response);
+			Object object = tryFilter.doFilterTry(request, response);
+
+			if (object == TryFilter.CUT_CHAIN) {
+				return;
+			}
 
 			doFilter(request, response);
 		}
