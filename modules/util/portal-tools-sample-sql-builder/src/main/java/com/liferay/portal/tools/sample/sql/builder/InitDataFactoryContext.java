@@ -20,6 +20,9 @@ import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.GroupModel;
+import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.model.RoleConstants;
+import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.model.VirtualHostModel;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
@@ -341,6 +344,34 @@ public class InitDataFactoryContext {
 
 	public static DDMTemplateModel getDefaultJournalDDMTemplateModel() {
 		return _defaultJournalDDMTemplateModel;
+	}
+
+	public static List<RoleModel> getRoleModels() {
+		return _roleModels;
+	}
+
+	public static RoleModel getAdministratorRoleModel() {
+		return _administratorRoleModel;
+	}
+
+	public static RoleModel getOwnerRoleModel() {
+		return _ownerRoleModel;
+	}
+
+	public static RoleModel getGuestRoleModel() {
+		return _guestRoleModel;
+	}
+
+	public static RoleModel getPowerUserRoleModel() {
+		return _powerUserRoleModel;
+	}
+
+	public static RoleModel getSiteMemberRoleModel() {
+		return _siteMemberRoleModel;
+	}
+
+	public static RoleModel getUserRoleModel() {
+		return _userRoleModel;
 	}
 
 	public static void initContext(Properties properties) {
@@ -700,7 +731,103 @@ public class InitDataFactoryContext {
 			_counter.get(),_companyId,_futureDateCounter,_classNameModels,
 			_counter.get(), userName);
 	}
+	
+	public static void initRoleModels(String userName) {
+		long classNameId = InitDataFactoryUtil.getClassNameId(
+				Role.class, _classNameModels);
 
+		_roleModels = new ArrayList<>();
+
+		// Administrator
+
+		_administratorRoleModel = InitDataFactoryUtil.newRoleModel(
+			RoleConstants.ADMINISTRATOR, RoleConstants.TYPE_REGULAR,
+			_counter.get(),	_companyId,	_sampleUserId, userName,classNameId);
+
+		_roleModels.add(_administratorRoleModel);
+
+		// Guest
+
+		_guestRoleModel = InitDataFactoryUtil.newRoleModel(
+			RoleConstants.GUEST, RoleConstants.TYPE_REGULAR,_counter.get(),
+			_companyId, _sampleUserId, userName, classNameId);
+
+		_roleModels.add(_guestRoleModel);
+
+		// Organization Administrator
+
+		RoleModel organizationAdministratorRoleModel =
+			InitDataFactoryUtil.newRoleModel(
+				RoleConstants.ORGANIZATION_ADMINISTRATOR, 
+				RoleConstants.TYPE_ORGANIZATION,
+				_counter.get(), _companyId, _sampleUserId, userName, classNameId);
+
+		_roleModels.add(organizationAdministratorRoleModel);
+
+		// Organization Owner
+
+		RoleModel organizationOwnerRoleModel = InitDataFactoryUtil.newRoleModel(
+			RoleConstants.ORGANIZATION_OWNER, RoleConstants.TYPE_ORGANIZATION,
+			_counter.get(), _companyId, _sampleUserId, userName, classNameId);
+
+		_roleModels.add(organizationOwnerRoleModel);
+
+		// Organization User
+
+		RoleModel organizationUserRoleModel = InitDataFactoryUtil.newRoleModel(
+			RoleConstants.ORGANIZATION_USER, RoleConstants.TYPE_ORGANIZATION,
+			_counter.get(), _companyId, _sampleUserId, userName, classNameId);
+
+		_roleModels.add(organizationUserRoleModel);
+
+		// Owner
+
+		_ownerRoleModel = InitDataFactoryUtil.newRoleModel(
+			RoleConstants.OWNER, RoleConstants.TYPE_REGULAR,
+			_counter.get(), _companyId,_sampleUserId, userName, classNameId);
+
+		_roleModels.add(_ownerRoleModel);
+
+		// Power User
+
+		_powerUserRoleModel = InitDataFactoryUtil.newRoleModel(
+			RoleConstants.POWER_USER, RoleConstants.TYPE_REGULAR,
+			_counter.get(), _companyId,_sampleUserId, userName, classNameId);
+
+		_roleModels.add(_powerUserRoleModel);
+
+		// Site Administrator
+
+		RoleModel siteAdministratorRoleModel = InitDataFactoryUtil.newRoleModel(
+			RoleConstants.SITE_ADMINISTRATOR, RoleConstants.TYPE_SITE,
+			_counter.get(),_companyId,_sampleUserId, userName,classNameId);
+
+		_roleModels.add(siteAdministratorRoleModel);
+
+		// Site Member
+
+		_siteMemberRoleModel = InitDataFactoryUtil.newRoleModel(
+			RoleConstants.SITE_MEMBER, RoleConstants.TYPE_SITE,
+			_counter.get(),_companyId,_sampleUserId, userName,classNameId);
+
+		_roleModels.add(_siteMemberRoleModel);
+
+		// Site Owner
+
+		RoleModel siteOwnerRoleModel = InitDataFactoryUtil.newRoleModel(
+			RoleConstants.SITE_OWNER, RoleConstants.TYPE_SITE,
+			_counter.get(),_companyId,_sampleUserId, userName,classNameId);
+
+		_roleModels.add(siteOwnerRoleModel);
+
+		// User
+
+		_userRoleModel = InitDataFactoryUtil.newRoleModel(
+			RoleConstants.USER, RoleConstants.TYPE_REGULAR,
+			_counter.get(),_companyId,_sampleUserId, userName,classNameId);
+
+		_roleModels.add(_userRoleModel);
+	}
 	private static long _accountId;
 	private static String _assetPublisherQueryName;
 	private static Map<String, ClassNameModel> _classNameModels;
@@ -775,6 +902,13 @@ public class InitDataFactoryContext {
 	private static DDMStructureVersionModel _defaultJournalDDMStructureVersionModel;
 	private static DDMStructureLayoutModel _defaultJournalDDMStructureLayoutModel;
 	private static DDMTemplateModel _defaultJournalDDMTemplateModel;
+	private static List<RoleModel> _roleModels;
+	private static RoleModel _administratorRoleModel;
+	private static RoleModel _ownerRoleModel;
+	private static RoleModel _guestRoleModel;
+	private static RoleModel _powerUserRoleModel;
+	private static RoleModel _siteMemberRoleModel;
+	private static RoleModel _userRoleModel;
 	static {
 		_counter = new SimpleCounter(_maxGroupsCount + 1);
 		_timeCounter = new SimpleCounter();
