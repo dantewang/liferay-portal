@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUti
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.ProtectedServletRequest;
+import com.liferay.portal.kernel.servlet.WrapHttpServletRequestFilter;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.HttpUtil;
@@ -43,7 +44,6 @@ import com.liferay.portal.util.PropsUtil;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,7 +54,105 @@ import javax.servlet.http.HttpSession;
  * @author Raymond Augé
  * @author Alexander Chow
  */
-public class SecureFilter extends BasePortalFilter {
+public class SecureFilter
+	extends BasePortalFilter implements WrapHttpServletRequestFilter {
+
+	@Override
+	public HttpServletRequest getWrappedHttpServletRequest(
+		HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+			if (AccessControlUtil.isAccessAllowed(request, _hostsAllowed)) {
+				if (_log.isDebugEnabled()) {
+					_log.debug("Access allowed for " + request.getRemoteAddr());
+				}
+			}
+			else {
+				if (_log.isWarnEnabled()) {
+					_log.warn("Access denied for " + request.getRemoteAddr());
+				}
+
+				response.sendError(
+					HttpServletResponse.SC_FORBIDDEN,
+					"Access denied for " + request.getRemoteAddr());
+
+				return null;
+			}
+
+			if (_log.isDebugEnabled()) {
+				if (_httpsRequired) {
+					_log.debug("https is required");
+				}
+				else {
+					_log.debug("https is not required");
+				}
+			}
+
+			if (_httpsRequired && !request.isSecure()) {
+				if (_log.isDebugEnabled()) {
+					String completeURL = HttpUtil.getCompleteURL(request);
+
+					_log.debug("Securing " + completeURL);
+				}
+
+				StringBundler redirectURL = new StringBundler(5);
+
+				redirectURL.append(Http.HTTPS_WITH_SLASH);
+				redirectURL.append(request.getServerName());
+				redirectURL.append(request.getServletPath());
+
+				String queryString = request.getQueryString();
+
+				if (Validator.isNotNull(queryString)) {
+					redirectURL.append(StringPool.QUESTION);
+					redirectURL.append(request.getQueryString());
+				}
+
+				if (_log.isDebugEnabled()) {
+					_log.debug("Redirect to " + redirectURL);
+				}
+
+				response.sendRedirect(redirectURL.toString());
+			}
+			else {
+				if (_log.isDebugEnabled()) {
+					_log.debug(
+						"Not securing " + HttpUtil.getCompleteURL(request));
+				}
+
+				User user = null;
+
+				try {
+					user = PortalUtil.initUser(request);
+				}
+				catch (NoSuchUserException nsue) {
+					response.sendRedirect(HttpUtil.getCompleteURL(request));
+
+					return null;
+				}
+
+				initThreadLocals(user);
+
+				if (!user.isDefaultUser()) {
+					request = setCredentials(
+						request, request.getSession(), user.getUserId(), null);
+				}
+				else {
+					if (_digestAuthEnabled) {
+						request = digestAuth(request, response);
+					}
+					else if (_basicAuthEnabled) {
+						request = basicAuth(request, response);
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+		return request;
+	}
 
 	@Override
 	public void init(FilterConfig filterConfig) {
@@ -206,103 +304,6 @@ public class SecureFilter extends BasePortalFilter {
 		permissionChecker = PermissionCheckerFactoryUtil.create(user);
 
 		PermissionThreadLocal.setPermissionChecker(permissionChecker);
-	}
-
-	@Override
-	protected void processFilter(
-			HttpServletRequest request, HttpServletResponse response,
-			FilterChain filterChain)
-		throws Exception {
-
-		if (AccessControlUtil.isAccessAllowed(request, _hostsAllowed)) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Access allowed for " + request.getRemoteAddr());
-			}
-		}
-		else {
-			if (_log.isWarnEnabled()) {
-				_log.warn("Access denied for " + request.getRemoteAddr());
-			}
-
-			response.sendError(
-				HttpServletResponse.SC_FORBIDDEN,
-				"Access denied for " + request.getRemoteAddr());
-
-			return;
-		}
-
-		if (_log.isDebugEnabled()) {
-			if (_httpsRequired) {
-				_log.debug("https is required");
-			}
-			else {
-				_log.debug("https is not required");
-			}
-		}
-
-		if (_httpsRequired && !request.isSecure()) {
-			if (_log.isDebugEnabled()) {
-				String completeURL = HttpUtil.getCompleteURL(request);
-
-				_log.debug("Securing " + completeURL);
-			}
-
-			StringBundler redirectURL = new StringBundler(5);
-
-			redirectURL.append(Http.HTTPS_WITH_SLASH);
-			redirectURL.append(request.getServerName());
-			redirectURL.append(request.getServletPath());
-
-			String queryString = request.getQueryString();
-
-			if (Validator.isNotNull(queryString)) {
-				redirectURL.append(StringPool.QUESTION);
-				redirectURL.append(request.getQueryString());
-			}
-
-			if (_log.isDebugEnabled()) {
-				_log.debug("Redirect to " + redirectURL);
-			}
-
-			response.sendRedirect(redirectURL.toString());
-		}
-		else {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Not securing " + HttpUtil.getCompleteURL(request));
-			}
-
-			User user = null;
-
-			try {
-				user = PortalUtil.initUser(request);
-			}
-			catch (NoSuchUserException nsue) {
-				response.sendRedirect(HttpUtil.getCompleteURL(request));
-
-				return;
-			}
-
-			initThreadLocals(user);
-
-			if (!user.isDefaultUser()) {
-				request = setCredentials(
-					request, request.getSession(), user.getUserId(), null);
-			}
-			else {
-				if (_digestAuthEnabled) {
-					request = digestAuth(request, response);
-				}
-				else if (_basicAuthEnabled) {
-					request = basicAuth(request, response);
-				}
-			}
-
-			if (request != null) {
-				Class<?> clazz = getClass();
-
-				processFilter(clazz.getName(), request, response, filterChain);
-			}
-		}
 	}
 
 	protected HttpServletRequest setCredentials(
