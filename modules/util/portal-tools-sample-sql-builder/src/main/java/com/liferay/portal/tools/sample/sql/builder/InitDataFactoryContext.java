@@ -5,8 +5,15 @@ import com.liferay.asset.kernel.model.AssetTagModel;
 import com.liferay.asset.kernel.model.AssetTagStatsModel;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.blogs.kernel.model.BlogsEntry;
+import com.liferay.document.library.kernel.model.DLFileEntry;
+import com.liferay.document.library.kernel.model.DLFileEntryTypeConstants;
+import com.liferay.document.library.kernel.model.DLFileEntryTypeModel;
+import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
+import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
+import com.liferay.dynamic.data.mapping.model.DDMStructureVersionModel;
+import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
 import com.liferay.journal.model.JournalArticle;
-
+import com.liferay.portal.kernel.metadata.RawMetadataProcessor;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.Company;
@@ -26,6 +33,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsValues;
 
 import com.liferay.portlet.asset.model.impl.AssetTagModelImpl;
+import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeModelImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 
 import com.liferay.util.SimpleCounter;
@@ -301,6 +309,38 @@ public class InitDataFactoryContext {
 
 	public static AssetVocabularyModel getDefaultAssetVocabularyModel() {
 		return _defaultAssetVocabularyModel;
+	}
+
+	public static DLFileEntryTypeModel getDefaultDLFileEntryTypeModel() {
+		return _defaultDLFileEntryTypeModel;
+	}
+
+	public static DDMStructureModel getDefaultDLDDMStructureModel() {
+		return _defaultDLDDMStructureModel;
+	}
+
+	public static DDMStructureVersionModel getDefaultDLDDMStructureVersionModel() {
+		return _defaultDLDDMStructureVersionModel;
+	}
+
+	public static DDMStructureLayoutModel getDefaultDLDDMStructureLayoutModel() {
+		return _defaultDLDDMStructureLayoutModel;
+	}
+
+	public static DDMStructureModel getDefaultJournalDDMStructureModel() {
+		return _defaultJournalDDMStructureModel;
+	}
+
+	public static DDMStructureVersionModel getDefaultJournalDDMStructureVersionModel() {
+		return _defaultJournalDDMStructureVersionModel;
+	}
+
+	public static DDMStructureLayoutModel getDefaultJournalDDMStructureLayoutModel() {
+		return _defaultJournalDDMStructureLayoutModel;
+	}
+
+	public static DDMTemplateModel getDefaultJournalDDMTemplateModel() {
+		return _defaultJournalDDMTemplateModel;
 	}
 
 	public static void initContext(Properties properties) {
@@ -593,6 +633,73 @@ public class InitDataFactoryContext {
 			_assetTagStatsModelsArray[i - 1] = assetTagStatsModels;
 		}
 	}
+	
+	public static void initDLFileEntryTypeModel(String userName) {
+		_defaultDLFileEntryTypeModel = new DLFileEntryTypeModelImpl();
+
+		_defaultDLFileEntryTypeModel.setUuid(SequentialUUID.generate());
+		_defaultDLFileEntryTypeModel.setFileEntryTypeId(
+			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
+		_defaultDLFileEntryTypeModel.setCreateDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
+		_defaultDLFileEntryTypeModel.setModifiedDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
+		_defaultDLFileEntryTypeModel.setFileEntryTypeKey(
+			StringUtil.toUpperCase(
+				DLFileEntryTypeConstants.NAME_BASIC_DOCUMENT));
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
+		sb.append(DLFileEntryTypeConstants.NAME_BASIC_DOCUMENT);
+		sb.append("</name></root>");
+
+		_defaultDLFileEntryTypeModel.setName(sb.toString());
+		_defaultDLFileEntryTypeModel.setLastPublishDate(
+				InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
+
+		_defaultDLDDMStructureModel = InitDataFactoryUtil.newDDMStructureModel(
+			_globalGroupId, _defaultUserId, InitDataFactoryUtil.getClassNameId(
+			DLFileEntry.class,_classNameModels),
+			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent,
+			_counter.get(),_companyId, userName,_futureDateCounter);
+
+		_defaultDLDDMStructureVersionModel = InitDataFactoryUtil.newDDMStructureVersionModel(
+			_defaultDLDDMStructureModel,userName);
+
+		_defaultDLDDMStructureLayoutModel =
+			InitDataFactoryUtil.newDDMStructureLayoutModel(
+				_globalGroupId,_defaultUserId,
+				_defaultDLDDMStructureVersionModel.getStructureVersionId(),
+				_dlDDMStructureLayoutContent,_counter.get(),_companyId, userName,
+			    _futureDateCounter);
+
+		_defaultJournalDDMStructureModel =
+			InitDataFactoryUtil.newDDMStructureModel(_globalGroupId,
+				_defaultUserId, InitDataFactoryUtil.getClassNameId(
+						JournalArticle.class,_classNameModels), 
+				"BASIC-WEB-CONTENT",_journalDDMStructureContent,_counter.get(),
+				_companyId, userName,_futureDateCounter);
+
+		_defaultJournalDDMStructureVersionModel = InitDataFactoryUtil.newDDMStructureVersionModel(
+			_defaultJournalDDMStructureModel,userName);
+
+		_defaultJournalDDMStructureLayoutModel =
+			InitDataFactoryUtil.newDDMStructureLayoutModel(
+				_globalGroupId,_defaultUserId,
+			_defaultJournalDDMStructureVersionModel.getStructureVersionId(),
+			_journalDDMStructureLayoutContent,_counter.get(),_companyId, userName,
+			_futureDateCounter);
+
+		_defaultJournalDDMTemplateModel =
+			InitDataFactoryUtil.newDDMTemplateModel(
+				_globalGroupId,_defaultUserId,
+			_defaultJournalDDMStructureModel.getStructureId(),
+			InitDataFactoryUtil.getClassNameId(JournalArticle.class, _classNameModels),
+			_counter.get(),_companyId,_futureDateCounter,_classNameModels,
+			_counter.get(), userName);
+	}
 
 	private static long _accountId;
 	private static String _assetPublisherQueryName;
@@ -660,6 +767,14 @@ public class InitDataFactoryContext {
 	private static AssetVocabularyModel _defaultAssetVocabularyModel;
 	private static List<AssetTagModel>[] _assetTagModelsArray;
 	private static List<AssetTagStatsModel>[] _assetTagStatsModelsArray;
+	private static DLFileEntryTypeModel _defaultDLFileEntryTypeModel;
+	private static DDMStructureModel _defaultDLDDMStructureModel;
+	private static DDMStructureVersionModel _defaultDLDDMStructureVersionModel;
+	private static DDMStructureLayoutModel _defaultDLDDMStructureLayoutModel;
+	private static DDMStructureModel _defaultJournalDDMStructureModel;
+	private static DDMStructureVersionModel _defaultJournalDDMStructureVersionModel;
+	private static DDMStructureLayoutModel _defaultJournalDDMStructureLayoutModel;
+	private static DDMTemplateModel _defaultJournalDDMTemplateModel;
 	static {
 		_counter = new SimpleCounter(_maxGroupsCount + 1);
 		_timeCounter = new SimpleCounter();
