@@ -15,33 +15,30 @@
 package com.liferay.portal.servlet.filters.jsoncontenttype;
 
 import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
+import com.liferay.portal.kernel.servlet.WrapHttpServletResponseFilter;
 import com.liferay.portal.servlet.filters.BasePortalFilter;
 
-import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Igor Spasic
  */
-public class JSONContentTypeFilter extends BasePortalFilter {
+public class JSONContentTypeFilter
+	extends BasePortalFilter implements WrapHttpServletResponseFilter {
+
+	@Override
+	public HttpServletResponse getWrappedHttpServletResponse(
+		HttpServletRequest request, HttpServletResponse response) {
+
+		return new JSONContentTypeResponse(response);
+	}
 
 	@Override
 	public boolean isFilterEnabled(
 		HttpServletRequest request, HttpServletResponse response) {
 
 		return BrowserSnifferUtil.isIe(request);
-	}
-
-	@Override
-	protected void processFilter(
-			HttpServletRequest request, HttpServletResponse response,
-			FilterChain filterChain)
-		throws Exception {
-
-		processFilter(
-			JSONContentTypeFilter.class.getName(), request,
-			new JSONContentTypeResponse(response), filterChain);
 	}
 
 }
