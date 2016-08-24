@@ -146,7 +146,6 @@ import com.liferay.portal.model.impl.SubscriptionModelImpl;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.asset.model.impl.AssetEntryModelImpl;
-import com.liferay.portlet.asset.model.impl.AssetTagModelImpl;
 import com.liferay.portlet.blogs.model.impl.BlogsStatsUserModelImpl;
 import com.liferay.portlet.blogs.social.BlogsActivityKeys;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelImpl;
@@ -199,7 +198,7 @@ public class DataFactory {
 		InitDataFactoryContext.initGroupModels();
 		InitDataFactoryContext.initUserModels(_SAMPLE_USER_NAME);
 		InitDataFactoryContext.initAssetCategoryModels(_SAMPLE_USER_NAME);
-		initAssetTagModels();
+		InitDataFactoryContext.initAssetTagModels(_SAMPLE_USER_NAME);
 		initDLFileEntryTypeModel();
 		initRoleModels();
 	}
@@ -268,7 +267,7 @@ public class DataFactory {
 		}
 
 		List<AssetTagModel> assetTagModels =
-			_assetTagModelsArray[(int)groupId - 1];
+			InitDataFactoryContext.getAssetTagModelsArray()[(int)groupId - 1];
 
 		if ((assetTagModels == null) || assetTagModels.isEmpty()) {
 			return Collections.emptyList();
@@ -293,7 +292,7 @@ public class DataFactory {
 	public List<AssetTagModel> getAssetTagModels() {
 		List<AssetTagModel> allAssetTagModels = new ArrayList<>();
 
-		for (List<AssetTagModel> assetTagModels : _assetTagModelsArray) {
+		for (List<AssetTagModel> assetTagModels : InitDataFactoryContext.getAssetTagModelsArray()) {
 			allAssetTagModels.addAll(assetTagModels);
 		}
 
@@ -304,7 +303,7 @@ public class DataFactory {
 		List<AssetTagStatsModel> allAssetTagStatsModels = new ArrayList<>();
 
 		for (List<AssetTagStatsModel> assetTagStatsModels :
-				_assetTagStatsModelsArray) {
+				InitDataFactoryContext.getAssetTagStatsModelsArray()) {
 
 			allAssetTagStatsModels.addAll(assetTagStatsModels);
 		}
@@ -549,72 +548,6 @@ public class DataFactory {
 	public long getWikiPageClassNameId() {
 		return InitDataFactoryUtil.getClassNameId(
 			WikiPage.class, InitDataFactoryContext.getClassNameModels());
-	}
-
-	public void initAssetTagModels() {
-		_assetTagModelsArray =
-			(List<AssetTagModel>[])new List<?>[InitDataFactoryContext.getMaxGroupsCount()];
-		_assetTagStatsModelsArray =
-			(List<AssetTagStatsModel>[])new List<?>[InitDataFactoryContext.getMaxGroupsCount()];
-
-		for (int i = 1; i <= InitDataFactoryContext.getMaxGroupsCount(); i++) {
-			List<AssetTagModel> assetTagModels = new ArrayList<>(
-				InitDataFactoryContext.getMaxAssetTagCount());
-			List<AssetTagStatsModel> assetTagStatsModels = new ArrayList<>(
-				InitDataFactoryContext.getMaxAssetTagCount() * 3);
-
-			for (int j =
-			 0; j < InitDataFactoryContext.getMaxAssetTagCount(); j++) {
-
-				AssetTagModel assetTagModel = new AssetTagModelImpl();
-
-				assetTagModel.setUuid(SequentialUUID.generate());
-				assetTagModel.setTagId(
-					InitDataFactoryContext.getCounter().get());
-				assetTagModel.setGroupId(i);
-				assetTagModel.setCompanyId(
-					InitDataFactoryContext.getCompanyId());
-				assetTagModel.setUserId(
-					InitDataFactoryContext.getSampleUserId());
-				assetTagModel.setUserName(_SAMPLE_USER_NAME);
-				assetTagModel.setCreateDate(new Date());
-				assetTagModel.setModifiedDate(new Date());
-				assetTagModel.setName("TestTag_" + i + "_" + j);
-				assetTagModel.setLastPublishDate(new Date());
-
-				assetTagModels.add(assetTagModel);
-
-				AssetTagStatsModel assetTagStatsModel =
-						InitDataFactoryUtil.newAssetTagStatsModel(
-								assetTagModel.getTagId(),
-								InitDataFactoryUtil.getClassNameId(
-								BlogsEntry.class,
-								InitDataFactoryContext.getClassNameModels()),
-								InitDataFactoryContext.getCounter().get());
-
-				assetTagStatsModels.add(assetTagStatsModel);
-
-				assetTagStatsModel = InitDataFactoryUtil.newAssetTagStatsModel(
-					assetTagModel.getTagId(),
-					InitDataFactoryUtil.getClassNameId(
-					JournalArticle.class,
-					InitDataFactoryContext.getClassNameModels()), InitDataFactoryContext.getCounter().get());
-
-				assetTagStatsModels.add(assetTagStatsModel);
-
-				assetTagStatsModel = InitDataFactoryUtil.newAssetTagStatsModel(
-					assetTagModel.getTagId(),
-						InitDataFactoryUtil.getClassNameId(
-							WikiPage.class,
-								InitDataFactoryContext.getClassNameModels()),
-						InitDataFactoryContext.getCounter().get());
-
-				assetTagStatsModels.add(assetTagStatsModel);
-			}
-
-			_assetTagModelsArray[i - 1] = assetTagModels;
-			_assetTagStatsModelsArray[i - 1] = assetTagStatsModels;
-		}
 	}
 
 	public void initDLFileEntryTypeModel() {
@@ -1986,7 +1919,7 @@ public class DataFactory {
 		}
 		else {
 			List<AssetTagModel> assetTagModels =
-				_assetTagModelsArray[(int)groupId - 1];
+				InitDataFactoryContext.getAssetTagModelsArray()[(int)groupId - 1];
 
 			if ((assetTagModels == null) || assetTagModels.isEmpty()) {
 				return newPortletPreferencesModel(
@@ -2756,8 +2689,6 @@ public class DataFactory {
 	private final Map<Long, SimpleCounter> _assetPublisherQueryCounter =
 		new HashMap<>();
 	private final Map<Long, SimpleCounter> _assetTagCounters = new HashMap<>();
-	private List<AssetTagModel>[] _assetTagModelsArray;
-	private List<AssetTagStatsModel>[] _assetTagStatsModelsArray;
 	private final Class<?> _clazz = getClass();
 	private DDMStructureLayoutModel _defaultDLDDMStructureLayoutModel;
 	private DDMStructureModel _defaultDLDDMStructureModel;

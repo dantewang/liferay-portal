@@ -1,7 +1,12 @@
 package com.liferay.portal.tools.sample.sql.builder;
 
 import com.liferay.asset.kernel.model.AssetCategoryModel;
+import com.liferay.asset.kernel.model.AssetTagModel;
+import com.liferay.asset.kernel.model.AssetTagStatsModel;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
+import com.liferay.blogs.kernel.model.BlogsEntry;
+import com.liferay.journal.model.JournalArticle;
+
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.Company;
@@ -20,13 +25,17 @@ import com.liferay.portal.kernel.util.Validator;
 
 import com.liferay.portal.util.PropsValues;
 
+import com.liferay.portlet.asset.model.impl.AssetTagModelImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 
 import com.liferay.util.SimpleCounter;
+import com.liferay.wiki.model.WikiPage;
+
 import java.io.IOException;
 
 import java.text.Format;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import java.util.Map;
@@ -274,6 +283,14 @@ public class InitDataFactoryContext {
 		return _virtualHostModel;
 	}
 
+	public static List<AssetTagModel>[] getAssetTagModelsArray() {
+		return _assetTagModelsArray;
+	}
+
+	public static List<AssetTagStatsModel>[] getAssetTagStatsModelsArray() {
+		return _assetTagStatsModelsArray;
+	}
+
 	public static List<AssetCategoryModel>[] getAssetCategoryModelsArray() {
 		return _assetCategoryModelsArray;
 	}
@@ -434,9 +451,9 @@ public class InitDataFactoryContext {
 			true, _companyId,_sampleUserId);
 
 		_groupModels = new ArrayList<>(
-			InitDataFactoryContext.getMaxGroupsCount());
+			_maxGroupsCount);
 
-		for (int i = 1; i <= InitDataFactoryContext.getMaxGroupsCount(); i++) {
+		for (int i = 1; i <= _maxGroupsCount; i++) {
 			GroupModel groupModel = InitDataFactoryUtil.initGroupModel(
 				i, InitDataFactoryUtil.getGroupClassNameId(), i, "Site " + i, true,
 				_companyId, _sampleUserId);
@@ -460,9 +477,9 @@ public class InitDataFactoryContext {
 	
 	public static void initAssetCategoryModels(String userName) {
 		_assetCategoryModelsArray =
-			(List<AssetCategoryModel>[])new List<?>[InitDataFactoryContext.getMaxGroupsCount()];
+			(List<AssetCategoryModel>[])new List<?>[_maxGroupsCount];
 		_assetVocabularyModelsArray =
-			(List<AssetVocabularyModel>[])new List<?>[InitDataFactoryContext.getMaxGroupsCount()];
+			(List<AssetVocabularyModel>[])new List<?>[_maxGroupsCount];
 		_defaultAssetVocabularyModel =
 				InitDataFactoryUtil.newAssetVocabularyModel(_globalGroupId,
 				_defaultUserId, null,PropsValues.ASSET_VOCABULARY_DEFAULT,
@@ -518,6 +535,62 @@ public class InitDataFactoryContext {
 
 			_assetCategoryModelsArray[i - 1] = assetCategoryModels;
 			_assetVocabularyModelsArray[i - 1] = assetVocabularyModels;
+		}
+	}
+	
+	public static void initAssetTagModels(String userName) {
+		_assetTagModelsArray =
+			(List<AssetTagModel>[])new List<?>[_maxGroupsCount];
+		_assetTagStatsModelsArray =
+			(List<AssetTagStatsModel>[])new List<?>[_maxGroupsCount];
+
+		for (int i = 1; i <= _maxGroupsCount; i++) {
+			List<AssetTagModel> assetTagModels = new ArrayList<>(
+					_maxAssetTagCount);
+			List<AssetTagStatsModel> assetTagStatsModels = new ArrayList<>(
+					_maxAssetTagCount * 3);
+
+			for (int j =
+			 0; j < _maxAssetTagCount; j++) {
+
+				AssetTagModel assetTagModel = new AssetTagModelImpl();
+
+				assetTagModel.setUuid(SequentialUUID.generate());
+				assetTagModel.setTagId(_counter.get());
+				assetTagModel.setGroupId(i);
+				assetTagModel.setCompanyId(_companyId);
+				assetTagModel.setUserId(_sampleUserId);
+				assetTagModel.setUserName(userName);
+				assetTagModel.setCreateDate(new Date());
+				assetTagModel.setModifiedDate(new Date());
+				assetTagModel.setName("TestTag_" + i + "_" + j);
+				assetTagModel.setLastPublishDate(new Date());
+
+				assetTagModels.add(assetTagModel);
+
+				AssetTagStatsModel assetTagStatsModel =
+						InitDataFactoryUtil.newAssetTagStatsModel(
+							assetTagModel.getTagId(),InitDataFactoryUtil.getClassNameId(
+							BlogsEntry.class,_classNameModels),_counter.get());
+
+				assetTagStatsModels.add(assetTagStatsModel);
+
+				assetTagStatsModel = InitDataFactoryUtil.newAssetTagStatsModel(
+					assetTagModel.getTagId(),InitDataFactoryUtil.getClassNameId(
+					JournalArticle.class,_classNameModels), _counter.get());
+
+				assetTagStatsModels.add(assetTagStatsModel);
+
+				assetTagStatsModel = InitDataFactoryUtil.newAssetTagStatsModel(
+					assetTagModel.getTagId(),
+						InitDataFactoryUtil.getClassNameId(WikiPage.class,_classNameModels),
+						_counter.get());
+
+				assetTagStatsModels.add(assetTagStatsModel);
+			}
+
+			_assetTagModelsArray[i - 1] = assetTagModels;
+			_assetTagStatsModelsArray[i - 1] = assetTagStatsModels;
 		}
 	}
 
@@ -585,9 +658,10 @@ public class InitDataFactoryContext {
 	private static List<AssetCategoryModel>[] _assetCategoryModelsArray;
 	private static List<AssetVocabularyModel>[] _assetVocabularyModelsArray;
 	private static AssetVocabularyModel _defaultAssetVocabularyModel;
+	private static List<AssetTagModel>[] _assetTagModelsArray;
+	private static List<AssetTagStatsModel>[] _assetTagStatsModelsArray;
 	static {
-		_counter = new SimpleCounter(
-			InitDataFactoryContext.getMaxGroupsCount() + 1);
+		_counter = new SimpleCounter(_maxGroupsCount + 1);
 		_timeCounter = new SimpleCounter();
 		_futureDateCounter = new SimpleCounter();
 		_resourcePermissionCounter = new SimpleCounter();
