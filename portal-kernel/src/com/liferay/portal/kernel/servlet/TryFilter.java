@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface TryFilter extends DirectCallFilter {
 
+	public static final Object CUT_CHAIN = new Object();
+
 	public Object doFilterTry(
 			HttpServletRequest request, HttpServletResponse response)
 		throws Exception;
