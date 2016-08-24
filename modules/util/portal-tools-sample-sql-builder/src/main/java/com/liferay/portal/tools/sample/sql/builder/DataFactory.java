@@ -198,28 +198,7 @@ public class DataFactory {
 		InitDataFactoryContext.initCompanyModels();
 		InitDataFactoryContext.initUserNames(_clazz);
 		InitDataFactoryContext.initGroupModels();
-		_defaultUserModel = InitDataFactoryUtil.newUserModel(
-			InitDataFactoryContext.getDefaultUserId(), StringPool.BLANK,
-			StringPool.BLANK, StringPool.BLANK, true,
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId());
-
-		_guestUserModel = InitDataFactoryUtil.newUserModel(
-			InitDataFactoryContext.getCounter().get(), "Test", "Test", "Test",
-			false, InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId());
-
-		_sampleUserModel = InitDataFactoryUtil.newUserModel(
-			InitDataFactoryContext.getSampleUserId(), _SAMPLE_USER_NAME,
-			_SAMPLE_USER_NAME, _SAMPLE_USER_NAME, false,
-			InitDataFactoryContext.getCounter().get(),
-			InitDataFactoryContext.getCompanyId());
-
-		_virtualHostModel = InitDataFactoryUtil.initVirtualHostModel(
-				properties.getProperty("sample.sql.virtual.hostname"),
-				InitDataFactoryContext.getCounter().get(),
-				InitDataFactoryContext.getCompanyId());
-
+		InitDataFactoryContext.initUserModels(_SAMPLE_USER_NAME);
 		initAssetCategoryModels();
 		initAssetTagModels();
 		initDLFileEntryTypeModel();
@@ -426,7 +405,7 @@ public class DataFactory {
 	}
 
 	public UserModel getDefaultUserModel() {
-		return _defaultUserModel;
+		return InitDataFactoryContext.getDefaultUserModel();
 	}
 
 	public long getDLFileEntryClassNameId() {
@@ -447,7 +426,7 @@ public class DataFactory {
 	}
 
 	public UserModel getGuestUserModel() {
-		return _guestUserModel;
+		return InitDataFactoryContext.getGuestUserModel();
 	}
 
 	public long getJournalArticleClassNameId() {
@@ -547,7 +526,7 @@ public class DataFactory {
 	}
 
 	public UserModel getSampleUserModel() {
-		return _sampleUserModel;
+		return InitDataFactoryContext.getSampleUserModel();
 	}
 
 	public List<Integer> getSequence(int size) {
@@ -565,7 +544,7 @@ public class DataFactory {
 	}
 
 	public VirtualHostModel getVirtualHostModel() {
-		return _virtualHostModel;
+		return InitDataFactoryContext.getVirtualHostModel();
 	}
 
 	public long getWikiPageClassNameId() {
@@ -1892,8 +1871,10 @@ public class DataFactory {
 		mbMailingListModel.setCategoryId(mbCategoryModel.getCategoryId());
 		mbMailingListModel.setInProtocol("pop3");
 		mbMailingListModel.setInServerPort(110);
-		mbMailingListModel.setInUserName(_sampleUserModel.getEmailAddress());
-		mbMailingListModel.setInPassword(_sampleUserModel.getPassword());
+		mbMailingListModel.setInUserName(
+				InitDataFactoryContext.getSampleUserModel().getEmailAddress());
+		mbMailingListModel.setInPassword(
+				InitDataFactoryContext.getSampleUserModel().getPassword());
 		mbMailingListModel.setInReadInterval(5);
 		mbMailingListModel.setOutServerPort(25);
 
@@ -2863,17 +2844,13 @@ public class DataFactory {
 	private DDMStructureModel _defaultJournalDDMStructureModel;
 	private DDMStructureVersionModel _defaultJournalDDMStructureVersionModel;
 	private DDMTemplateModel _defaultJournalDDMTemplateModel;
-	private final UserModel _defaultUserModel;
 	private RoleModel _guestRoleModel;
-	private final UserModel _guestUserModel;
 	private final Map<Long, String> _journalArticleResourceUUIDs =
 		new HashMap<>();
 	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
 	private RoleModel _ownerRoleModel;
 	private RoleModel _powerUserRoleModel;
 	private List<RoleModel> _roleModels;
-	private final UserModel _sampleUserModel;
 	private RoleModel _siteMemberRoleModel;
 	private RoleModel _userRoleModel;
-	private final VirtualHostModel _virtualHostModel;
 }

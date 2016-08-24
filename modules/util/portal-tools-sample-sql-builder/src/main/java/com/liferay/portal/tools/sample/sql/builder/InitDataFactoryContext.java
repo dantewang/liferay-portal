@@ -6,9 +6,12 @@ import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.GroupModel;
+import com.liferay.portal.kernel.model.UserModel;
+import com.liferay.portal.kernel.model.VirtualHostModel;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -250,6 +253,22 @@ public class InitDataFactoryContext {
 		return _groupModels;
 	}
 
+	public static UserModel getDefaultUserModel() {
+		return _defaultUserModel;
+	}
+
+	public static UserModel getGuestUserModel() {
+		return _guestUserModel;
+	}
+
+	public static UserModel getSampleUserModel() {
+		return _sampleUserModel;
+	}
+
+	public static VirtualHostModel getVirtualHostModel() {
+		return _virtualHostModel;
+	}
+
 	public static void initContext(Properties properties) {
 		String timeZoneId = properties.getProperty("sample.sql.db.time.zone");
 
@@ -337,6 +356,10 @@ public class InitDataFactoryContext {
 
 		_journalArticleContent = InitDataFactoryUtil.initJournalArticleContent(
 			maxJournalArticleSize);
+		
+		_virtualHostModel = InitDataFactoryUtil.initVirtualHostModel(
+				properties.getProperty("sample.sql.virtual.hostname"),
+				_counter.get(),_companyId);
 	}
 
 	public static void initParameter() {
@@ -403,6 +426,20 @@ public class InitDataFactoryContext {
 				_groupModels.add(groupModel);
 		}
 	}
+	
+	public static void initUserModels(String userName){
+				
+		_defaultUserModel = InitDataFactoryUtil.newUserModel(_defaultUserId, 
+				StringPool.BLANK,StringPool.BLANK, StringPool.BLANK, true,
+				_counter.get(),	_companyId);
+
+		_guestUserModel = InitDataFactoryUtil.newUserModel(_counter.get(),
+				"Test", "Test", "Test",false, _counter.get(),_companyId);
+
+		_sampleUserModel = InitDataFactoryUtil.newUserModel(_sampleUserId,  
+				userName, userName, userName, false,_counter.get(),_companyId);
+
+	}
 
 	private static long _accountId;
 	private static String _assetPublisherQueryName;
@@ -461,7 +498,10 @@ public class InitDataFactoryContext {
 	private static GroupModel _globalGroupModel;
 	private static GroupModel _guestGroupModel;
 	private static List<GroupModel> _groupModels;
-
+	private static UserModel _defaultUserModel;
+	private static UserModel _guestUserModel;
+	private static UserModel _sampleUserModel;
+	private static VirtualHostModel _virtualHostModel;
 	static {
 		_counter = new SimpleCounter(
 			InitDataFactoryContext.getMaxGroupsCount() + 1);
