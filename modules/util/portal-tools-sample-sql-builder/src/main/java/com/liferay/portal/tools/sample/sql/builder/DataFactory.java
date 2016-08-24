@@ -54,7 +54,6 @@ import com.liferay.dynamic.data.mapping.model.DDMContentModel;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLink;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
-import com.liferay.dynamic.data.mapping.model.DDMStructureConstants;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
@@ -66,7 +65,6 @@ import com.liferay.dynamic.data.mapping.model.impl.DDMContentModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateLinkModelImpl;
-import com.liferay.dynamic.data.mapping.storage.StorageType;
 import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleConstants;
@@ -97,7 +95,6 @@ import com.liferay.message.boards.web.constants.MBPortletKeys;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
-import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.ContactConstants;
 import com.liferay.portal.kernel.model.ContactModel;
@@ -125,7 +122,6 @@ import com.liferay.portal.kernel.security.auth.FullNameGenerator;
 import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.PortletKeys;
@@ -187,7 +183,7 @@ public class DataFactory {
 	public DataFactory(Properties properties) throws Exception {
 		InitDataFactoryContext.initContext(properties);
 		InitDataFactoryContext.initParameter();
-		InitDataFactoryContext.initResource(_clazz,_portletPreferencesFactory);
+		InitDataFactoryContext.initResource(_clazz, _portletPreferencesFactory);
 		InitDataFactoryContext.initCompanyModels();
 		InitDataFactoryContext.initUserNames(_clazz);
 		InitDataFactoryContext.initGroupModels();
@@ -287,7 +283,9 @@ public class DataFactory {
 	public List<AssetTagModel> getAssetTagModels() {
 		List<AssetTagModel> allAssetTagModels = new ArrayList<>();
 
-		for (List<AssetTagModel> assetTagModels : InitDataFactoryContext.getAssetTagModelsArray()) {
+		for (List<AssetTagModel> assetTagModels :
+				InitDataFactoryContext.getAssetTagModelsArray()) {
+
 			allAssetTagModels.addAll(assetTagModels);
 		}
 
@@ -309,7 +307,8 @@ public class DataFactory {
 	public List<AssetVocabularyModel> getAssetVocabularyModels() {
 		List<AssetVocabularyModel> allAssetVocabularyModels = new ArrayList<>();
 
-		allAssetVocabularyModels.add(InitDataFactoryContext.getDefaultAssetVocabularyModel());
+		allAssetVocabularyModels.add(
+			InitDataFactoryContext.getDefaultAssetVocabularyModel());
 
 		for (List<AssetVocabularyModel> assetVocabularyModels :
 				InitDataFactoryContext.getAssetVocabularyModelsArray()) {
@@ -1062,7 +1061,9 @@ public class DataFactory {
 
 	public DDMStructureVersionModel newDDMStructureVersionModel(
 		DDMStructureModel ddmStructureModel) {
-		return InitDataFactoryUtil.newDDMStructureVersionModel(ddmStructureModel,_SAMPLE_USER_NAME);
+
+		return InitDataFactoryUtil.newDDMStructureVersionModel(
+			ddmStructureModel, _SAMPLE_USER_NAME);
 	}
 
 	public DDMTemplateLinkModel newDDMTemplateLinkModel(
@@ -1259,7 +1260,7 @@ public class DataFactory {
 		journalArticleModel.setUrlTitle(urlTitle);
 
 		journalArticleModel.setContent(
-				InitDataFactoryContext.getJournalArticleContent());
+			InitDataFactoryContext.getJournalArticleContent());
 		journalArticleModel.setDefaultLanguageId("en_US");
 		journalArticleModel.setDDMStructureKey(
 			InitDataFactoryContext.getDefaultJournalDDMStructureModel().getStructureKey());
@@ -1468,9 +1469,9 @@ public class DataFactory {
 		mbMailingListModel.setInProtocol("pop3");
 		mbMailingListModel.setInServerPort(110);
 		mbMailingListModel.setInUserName(
-				InitDataFactoryContext.getSampleUserModel().getEmailAddress());
+			InitDataFactoryContext.getSampleUserModel().getEmailAddress());
 		mbMailingListModel.setInPassword(
-				InitDataFactoryContext.getSampleUserModel().getPassword());
+			InitDataFactoryContext.getSampleUserModel().getPassword());
 		mbMailingListModel.setInReadInterval(5);
 		mbMailingListModel.setOutServerPort(25);
 
@@ -1825,19 +1826,22 @@ public class DataFactory {
 
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitDataFactoryContext.getGuestRoleModel().getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getGuestRoleModel().getRoleId(),
 				0,
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
 				ddmStructureModel.getUserId(),
 				InitDataFactoryContext.getResourcePermissionCounter().get(),
 				InitDataFactoryContext.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitDataFactoryContext.getUserRoleModel().getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getUserRoleModel().getRoleId(),
 				0,
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
@@ -1859,19 +1863,22 @@ public class DataFactory {
 
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitDataFactoryContext.getGuestRoleModel().getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getGuestRoleModel().getRoleId(),
 				0,
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
 				ddmTemplateModel.getUserId(),
 				InitDataFactoryContext.getResourcePermissionCounter().get(),
 				InitDataFactoryContext.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitDataFactoryContext.getUserRoleModel().getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getUserRoleModel().getRoleId(),
 				0,
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
@@ -1992,7 +1999,8 @@ public class DataFactory {
 		return Collections.singletonList(
 			InitDataFactoryUtil.newResourcePermissionModel(
 				User.class.getName(), String.valueOf(userModel.getUserId()),
-				InitDataFactoryContext.getOwnerRoleModel().getRoleId(), userModel.getUserId(),
+				InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
+				userModel.getUserId(),
 				InitDataFactoryContext.getResourcePermissionCounter().get(),
 				InitDataFactoryContext.getCompanyId()));
 	}
@@ -2192,7 +2200,8 @@ public class DataFactory {
 
 		userName[0] = InitDataFactoryContext.getFirstNames().get(
 			(int)(index / InitDataFactoryContext.getLastNames().size()) % InitDataFactoryContext.getFirstNames().size());
-		userName[1] = InitDataFactoryContext.getLastNames().get((int)(index % InitDataFactoryContext.getLastNames().size()));
+		userName[1] =
+			InitDataFactoryContext.getLastNames().get((int)(index % InitDataFactoryContext.getLastNames().size()));
 
 		return userName;
 	}
@@ -2353,19 +2362,22 @@ public class DataFactory {
 
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitDataFactoryContext.getGuestRoleModel().getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getGuestRoleModel().getRoleId(),
 				0,
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getOwnerRoleModel().getRoleId(),
 				ownerId,
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitDataFactoryContext.getSiteMemberRoleModel().getRoleId(),
+				name, primKey,
+				InitDataFactoryContext.getSiteMemberRoleModel().getRoleId(),
 				0,
 					InitDataFactoryContext.getResourcePermissionCounter().get(),
 					InitDataFactoryContext.getCompanyId()));
@@ -2419,6 +2431,7 @@ public class DataFactory {
 
 	private static final PortletPreferencesFactory _portletPreferencesFactory =
 		new PortletPreferencesFactoryImpl();
+
 	private final Map<Long, SimpleCounter> _assetCategoryCounters =
 		new HashMap<>();
 	private final Map<Long, SimpleCounter> _assetPublisherQueryCounter =
@@ -2428,4 +2441,5 @@ public class DataFactory {
 	private final Map<Long, String> _journalArticleResourceUUIDs =
 		new HashMap<>();
 	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
+
 }

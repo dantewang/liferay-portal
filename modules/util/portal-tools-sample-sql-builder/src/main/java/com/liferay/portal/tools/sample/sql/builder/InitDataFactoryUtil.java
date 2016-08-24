@@ -819,7 +819,7 @@ public class InitDataFactoryUtil {
 
 		return wikiPageModel;
 	}
-	
+
 	public static DDMStructureVersionModel newDDMStructureVersionModel(
 		DDMStructureModel ddmStructureModel,String userName) {
 
@@ -862,7 +862,7 @@ public class InitDataFactoryUtil {
 
 		return ddmStructureVersionModel;
 	}
-	
+
 	public static long getGroupClassNameId() {
 		return getClassNameId(
 			Group.class, InitDataFactoryContext.getClassNameModels());
