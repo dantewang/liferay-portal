@@ -143,7 +143,6 @@ import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
 import com.liferay.portal.model.impl.LayoutModelImpl;
 import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
 import com.liferay.portal.model.impl.SubscriptionModelImpl;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.asset.model.impl.AssetEntryModelImpl;
@@ -199,7 +198,7 @@ public class DataFactory {
 		InitDataFactoryContext.initUserNames(_clazz);
 		InitDataFactoryContext.initGroupModels();
 		InitDataFactoryContext.initUserModels(_SAMPLE_USER_NAME);
-		initAssetCategoryModels();
+		InitDataFactoryContext.initAssetCategoryModels(_SAMPLE_USER_NAME);
 		initAssetTagModels();
 		initDLFileEntryTypeModel();
 		initRoleModels();
@@ -223,7 +222,7 @@ public class DataFactory {
 		}
 
 		List<AssetCategoryModel> assetCategoryModels =
-			_assetCategoryModelsArray[(int)groupId - 1];
+			InitDataFactoryContext.getAssetCategoryModelsArray()[(int)groupId - 1];
 
 		if ((assetCategoryModels == null) || assetCategoryModels.isEmpty()) {
 			return Collections.emptyList();
@@ -251,7 +250,7 @@ public class DataFactory {
 		List<AssetCategoryModel> allAssetCategoryModels = new ArrayList<>();
 
 		for (List<AssetCategoryModel> assetCategoryModels :
-				_assetCategoryModelsArray) {
+				InitDataFactoryContext.getAssetCategoryModelsArray()) {
 
 			allAssetCategoryModels.addAll(assetCategoryModels);
 		}
@@ -316,10 +315,10 @@ public class DataFactory {
 	public List<AssetVocabularyModel> getAssetVocabularyModels() {
 		List<AssetVocabularyModel> allAssetVocabularyModels = new ArrayList<>();
 
-		allAssetVocabularyModels.add(_defaultAssetVocabularyModel);
+		allAssetVocabularyModels.add(InitDataFactoryContext.getDefaultAssetVocabularyModel());
 
 		for (List<AssetVocabularyModel> assetVocabularyModels :
-				_assetVocabularyModelsArray) {
+				InitDataFactoryContext.getAssetVocabularyModelsArray()) {
 
 			allAssetVocabularyModels.addAll(assetVocabularyModels);
 		}
@@ -550,79 +549,6 @@ public class DataFactory {
 	public long getWikiPageClassNameId() {
 		return InitDataFactoryUtil.getClassNameId(
 			WikiPage.class, InitDataFactoryContext.getClassNameModels());
-	}
-
-	public void initAssetCategoryModels() {
-		_assetCategoryModelsArray =
-			(List<AssetCategoryModel>[])new List<?>[InitDataFactoryContext.getMaxGroupsCount()];
-		_assetVocabularyModelsArray =
-			(List<AssetVocabularyModel>[])new List<?>[InitDataFactoryContext.getMaxGroupsCount()];
-		_defaultAssetVocabularyModel =
-				InitDataFactoryUtil.newAssetVocabularyModel(
-				InitDataFactoryContext.getGlobalGroupId(),
-				InitDataFactoryContext.getDefaultUserId(), null,
-				PropsValues.ASSET_VOCABULARY_DEFAULT,
-				InitDataFactoryContext.getCounter().get(),
-				InitDataFactoryContext.getCompanyId());
-
-		StringBundler sb = new StringBundler(4);
-
-		for (int i = 1; i <= InitDataFactoryContext.getMaxGroupsCount(); i++) {
-			List<AssetVocabularyModel> assetVocabularyModels = new ArrayList<>(
-				InitDataFactoryContext.getMaxAssetVocabularyCount());
-			List<AssetCategoryModel> assetCategoryModels = new ArrayList<>(
-				InitDataFactoryContext.getMaxAssetVocabularyCount() * InitDataFactoryContext.getMaxAssetCategoryCount());
-
-			long lastRightCategoryId = 2;
-
-			for (int j =
-			 0; j < InitDataFactoryContext.getMaxAssetVocabularyCount(); j++) {
-
-				sb.setIndex(0);
-
-				sb.append("TestVocabulary_");
-				sb.append(i);
-				sb.append(StringPool.UNDERLINE);
-				sb.append(j);
-
-				AssetVocabularyModel assetVocabularyModel =
-					InitDataFactoryUtil.newAssetVocabularyModel(
-						i, InitDataFactoryContext.getSampleUserId(),
-						_SAMPLE_USER_NAME, sb.toString(),
-						InitDataFactoryContext.getCounter().get(),
-						InitDataFactoryContext.getCompanyId());
-
-				assetVocabularyModels.add(assetVocabularyModel);
-
-				for (int k =
-				 0; k <
-				 InitDataFactoryContext.getMaxAssetCategoryCount(); k++) {
-
-					sb.setIndex(0);
-
-					sb.append("TestCategory_");
-					sb.append(assetVocabularyModel.getVocabularyId());
-					sb.append(StringPool.UNDERLINE);
-					sb.append(k);
-
-					AssetCategoryModel assetCategoryModel =
-						InitDataFactoryUtil.newAssetCategoryModel(
-							i, lastRightCategoryId, sb.toString(),
-							assetVocabularyModel.getVocabularyId(),
-							InitDataFactoryContext.getCounter().get(),
-							InitDataFactoryContext.getCompanyId(),
-							InitDataFactoryContext.getSampleUserId(),
-							_SAMPLE_USER_NAME);
-
-					lastRightCategoryId += 2;
-
-					assetCategoryModels.add(assetCategoryModel);
-				}
-			}
-
-			_assetCategoryModelsArray[i - 1] = assetCategoryModels;
-			_assetVocabularyModelsArray[i - 1] = assetVocabularyModels;
-		}
 	}
 
 	public void initAssetTagModels() {
@@ -2044,7 +1970,7 @@ public class DataFactory {
 				"assetCategories")) {
 
 			List<AssetCategoryModel> assetCategoryModels =
-				_assetCategoryModelsArray[(int)groupId - 1];
+				InitDataFactoryContext.getAssetCategoryModelsArray()[(int)groupId - 1];
 
 			if ((assetCategoryModels == null) ||
 				assetCategoryModels.isEmpty()) {
@@ -2827,15 +2753,12 @@ public class DataFactory {
 	private RoleModel _administratorRoleModel;
 	private final Map<Long, SimpleCounter> _assetCategoryCounters =
 		new HashMap<>();
-	private List<AssetCategoryModel>[] _assetCategoryModelsArray;
 	private final Map<Long, SimpleCounter> _assetPublisherQueryCounter =
 		new HashMap<>();
 	private final Map<Long, SimpleCounter> _assetTagCounters = new HashMap<>();
 	private List<AssetTagModel>[] _assetTagModelsArray;
 	private List<AssetTagStatsModel>[] _assetTagStatsModelsArray;
-	private List<AssetVocabularyModel>[] _assetVocabularyModelsArray;
 	private final Class<?> _clazz = getClass();
-	private AssetVocabularyModel _defaultAssetVocabularyModel;
 	private DDMStructureLayoutModel _defaultDLDDMStructureLayoutModel;
 	private DDMStructureModel _defaultDLDDMStructureModel;
 	private DDMStructureVersionModel _defaultDLDDMStructureVersionModel;

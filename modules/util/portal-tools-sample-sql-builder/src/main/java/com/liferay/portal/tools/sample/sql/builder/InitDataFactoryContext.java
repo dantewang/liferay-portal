@@ -1,5 +1,7 @@
 package com.liferay.portal.tools.sample.sql.builder;
 
+import com.liferay.asset.kernel.model.AssetCategoryModel;
+import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.Company;
@@ -11,9 +13,12 @@ import com.liferay.portal.kernel.model.VirtualHostModel;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+
+import com.liferay.portal.util.PropsValues;
 
 import com.liferay.portlet.PortletPreferencesImpl;
 
@@ -269,6 +274,18 @@ public class InitDataFactoryContext {
 		return _virtualHostModel;
 	}
 
+	public static List<AssetCategoryModel>[] getAssetCategoryModelsArray() {
+		return _assetCategoryModelsArray;
+	}
+
+	public static List<AssetVocabularyModel>[] getAssetVocabularyModelsArray() {
+		return _assetVocabularyModelsArray;
+	}
+
+	public static AssetVocabularyModel getDefaultAssetVocabularyModel() {
+		return _defaultAssetVocabularyModel;
+	}
+
 	public static void initContext(Properties properties) {
 		String timeZoneId = properties.getProperty("sample.sql.db.time.zone");
 
@@ -440,6 +457,69 @@ public class InitDataFactoryContext {
 				userName, userName, userName, false,_counter.get(),_companyId);
 
 	}
+	
+	public static void initAssetCategoryModels(String userName) {
+		_assetCategoryModelsArray =
+			(List<AssetCategoryModel>[])new List<?>[InitDataFactoryContext.getMaxGroupsCount()];
+		_assetVocabularyModelsArray =
+			(List<AssetVocabularyModel>[])new List<?>[InitDataFactoryContext.getMaxGroupsCount()];
+		_defaultAssetVocabularyModel =
+				InitDataFactoryUtil.newAssetVocabularyModel(_globalGroupId,
+				_defaultUserId, null,PropsValues.ASSET_VOCABULARY_DEFAULT,
+				_counter.get(),_companyId);
+
+		StringBundler sb = new StringBundler(4);
+
+		for (int i = 1; i <= _maxGroupsCount; i++) {
+			List<AssetVocabularyModel> assetVocabularyModels = new ArrayList<>(
+				_maxAssetVocabularyCount);
+			List<AssetCategoryModel> assetCategoryModels = new ArrayList<>(
+				_maxAssetVocabularyCount * _maxAssetCategoryCount);
+
+			long lastRightCategoryId = 2;
+
+			for (int j =
+			 0; j < _maxAssetVocabularyCount; j++) {
+
+				sb.setIndex(0);
+
+				sb.append("TestVocabulary_");
+				sb.append(i);
+				sb.append(StringPool.UNDERLINE);
+				sb.append(j);
+
+				AssetVocabularyModel assetVocabularyModel =
+					InitDataFactoryUtil.newAssetVocabularyModel(i, _sampleUserId,
+						userName, sb.toString(),_counter.get(),_companyId);
+
+				assetVocabularyModels.add(assetVocabularyModel);
+
+				for (int k =0; k <_maxAssetCategoryCount; k++) {
+
+					sb.setIndex(0);
+
+					sb.append("TestCategory_");
+					sb.append(assetVocabularyModel.getVocabularyId());
+					sb.append(StringPool.UNDERLINE);
+					sb.append(k);
+
+					AssetCategoryModel assetCategoryModel =
+						InitDataFactoryUtil.newAssetCategoryModel(
+								i, lastRightCategoryId, sb.toString(),
+								assetVocabularyModel.getVocabularyId(),
+								_counter.get(),_companyId,_sampleUserId,
+								userName);
+
+					lastRightCategoryId += 2;
+
+					assetCategoryModels.add(assetCategoryModel);
+				}
+			}
+
+			_assetCategoryModelsArray[i - 1] = assetCategoryModels;
+			_assetVocabularyModelsArray[i - 1] = assetVocabularyModels;
+		}
+	}
 
 	private static long _accountId;
 	private static String _assetPublisherQueryName;
@@ -502,6 +582,9 @@ public class InitDataFactoryContext {
 	private static UserModel _guestUserModel;
 	private static UserModel _sampleUserModel;
 	private static VirtualHostModel _virtualHostModel;
+	private static List<AssetCategoryModel>[] _assetCategoryModelsArray;
+	private static List<AssetVocabularyModel>[] _assetVocabularyModelsArray;
+	private static AssetVocabularyModel _defaultAssetVocabularyModel;
 	static {
 		_counter = new SimpleCounter(
 			InitDataFactoryContext.getMaxGroupsCount() + 1);
