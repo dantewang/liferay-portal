@@ -19,7 +19,6 @@ import com.liferay.portal.kernel.servlet.HttpMethods;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.servlet.filters.secure.SecureFilter;
 
-import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +28,39 @@ import javax.servlet.http.HttpServletResponse;
  * @author Alexander Chow
  */
 public class SharepointFilter extends SecureFilter {
+
+	@Override
+	public HttpServletRequest getWrappedHttpServletRequest(
+		HttpServletRequest request, HttpServletResponse response) {
+
+		String method = request.getMethod();
+
+		String userAgent = GetterUtil.getString(
+			request.getHeader(HttpHeaders.USER_AGENT));
+
+		if ((userAgent.startsWith(
+				"Microsoft Data Access Internet Publishing") ||
+			 userAgent.startsWith("Microsoft Office Protocol Discovery")) &&
+			method.equals(HttpMethods.OPTIONS)) {
+
+			setOptionsHeaders(request, response);
+
+			return request;
+		}
+
+		if (!isSharepointRequest(request.getRequestURI())) {
+			return request;
+		}
+
+		if (method.equals(HttpMethods.GET) || method.equals(HttpMethods.HEAD)) {
+			setGetHeaders(response);
+		}
+		else if (method.equals(HttpMethods.POST)) {
+			setPostHeaders(response);
+		}
+
+		return super.getWrappedHttpServletRequest(request, response);
+	}
 
 	@Override
 	public void init(FilterConfig filterConfig) {
@@ -61,45 +93,6 @@ public class SharepointFilter extends SecureFilter {
 		}
 
 		return false;
-	}
-
-	@Override
-	protected void processFilter(
-			HttpServletRequest request, HttpServletResponse response,
-			FilterChain filterChain)
-		throws Exception {
-
-		String method = request.getMethod();
-
-		String userAgent = GetterUtil.getString(
-			request.getHeader(HttpHeaders.USER_AGENT));
-
-		if ((userAgent.startsWith(
-				"Microsoft Data Access Internet Publishing") ||
-			 userAgent.startsWith("Microsoft Office Protocol Discovery")) &&
-			method.equals(HttpMethods.OPTIONS)) {
-
-			setOptionsHeaders(request, response);
-
-			return;
-		}
-
-		if (!isSharepointRequest(request.getRequestURI())) {
-			processFilter(
-				SharepointFilter.class.getName(), request, response,
-				filterChain);
-
-			return;
-		}
-
-		if (method.equals(HttpMethods.GET) || method.equals(HttpMethods.HEAD)) {
-			setGetHeaders(response);
-		}
-		else if (method.equals(HttpMethods.POST)) {
-			setPostHeaders(response);
-		}
-
-		super.processFilter(request, response, filterChain);
 	}
 
 	protected void setGetHeaders(HttpServletResponse response) {

@@ -138,6 +138,10 @@ public class InvokerFilterChain implements FilterChain {
 
 			request = wrapHttpServletRequestFilter.getWrappedHttpServletRequest(
 				request, response);
+
+			if (request == null) {
+				return;
+			}
 		}
 
 		if (filter instanceof WrapHttpServletResponseFilter) {
