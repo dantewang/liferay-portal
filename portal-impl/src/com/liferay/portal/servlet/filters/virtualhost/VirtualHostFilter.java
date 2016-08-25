@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
+import com.liferay.portal.kernel.servlet.TryFilter;
 import com.liferay.portal.kernel.struts.LastPath;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.HttpUtil;
@@ -42,7 +43,6 @@ import com.liferay.portal.webserver.WebServerServlet;
 
 import java.util.Set;
 
-import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -59,104 +59,11 @@ import javax.servlet.http.HttpServletResponse;
  * @author Raymond Augé
  * @author Eduardo Lundgren
  */
-public class VirtualHostFilter extends BasePortalFilter {
+public class VirtualHostFilter extends BasePortalFilter implements TryFilter {
 
 	@Override
-	public void init(FilterConfig filterConfig) {
-		super.init(filterConfig);
-
-		_servletContext = filterConfig.getServletContext();
-	}
-
-	@Override
-	public boolean isFilterEnabled(
-		HttpServletRequest request, HttpServletResponse response) {
-
-		StringBuffer requestURL = request.getRequestURL();
-
-		if (isValidRequestURL(requestURL)) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	protected boolean isDocumentFriendlyURL(
-			HttpServletRequest request, long groupId, String friendlyURL)
-		throws PortalException {
-
-		if (friendlyURL.startsWith(_PATH_DOCUMENTS) &&
-			WebServerServlet.hasFiles(request)) {
-
-			String path = HttpUtil.fixPath(request.getPathInfo());
-
-			String[] pathArray = StringUtil.split(path, CharPool.SLASH);
-
-			if (pathArray.length == 2) {
-				try {
-					LayoutLocalServiceUtil.getFriendlyURLLayout(
-						groupId, false, friendlyURL);
-				}
-				catch (NoSuchLayoutException nsle) {
-					return true;
-				}
-			}
-			else {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	protected boolean isValidFriendlyURL(String friendlyURL) {
-		friendlyURL = StringUtil.toLowerCase(friendlyURL);
-
-		if (PortalInstances.isVirtualHostsIgnorePath(friendlyURL) ||
-			friendlyURL.startsWith(_PATH_MODULE_SLASH) ||
-			friendlyURL.startsWith(_PRIVATE_GROUP_SERVLET_MAPPING_SLASH) ||
-			friendlyURL.startsWith(_PRIVATE_USER_SERVLET_MAPPING_SLASH) ||
-			friendlyURL.startsWith(_PUBLIC_GROUP_SERVLET_MAPPING_SLASH)) {
-
-			return false;
-		}
-
-		if (LayoutImpl.hasFriendlyURLKeyword(friendlyURL)) {
-			return false;
-		}
-
-		int code = LayoutImpl.validateFriendlyURL(friendlyURL, false);
-
-		if ((code > -1) &&
-			(code != LayoutFriendlyURLException.ENDS_WITH_SLASH)) {
-
-			return false;
-		}
-
-		return true;
-	}
-
-	protected boolean isValidRequestURL(StringBuffer requestURL) {
-		if (requestURL == null) {
-			return false;
-		}
-
-		String url = requestURL.toString();
-
-		for (String extension : PropsValues.VIRTUAL_HOSTS_IGNORE_EXTENSIONS) {
-			if (url.endsWith(extension)) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	@Override
-	protected void processFilter(
-			HttpServletRequest request, HttpServletResponse response,
-			FilterChain filterChain)
+	public Object doFilterTry(
+			HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
 		long companyId = PortalInstances.getCompanyId(request);
@@ -254,14 +161,10 @@ public class VirtualHostFilter extends BasePortalFilter {
 
 				requestDispatcher.forward(request, response);
 
-				return;
+				return CUT_CHAIN;
 			}
 			else {
-				processFilter(
-					VirtualHostFilter.class.getName(), request, response,
-					filterChain);
-
-				return;
+				return null;
 			}
 		}
 
@@ -273,11 +176,7 @@ public class VirtualHostFilter extends BasePortalFilter {
 		}
 
 		if (layoutSet == null) {
-			processFilter(
-				VirtualHostFilter.class.getName(), request, response,
-				filterChain);
-
-			return;
+			return null;
 		}
 
 		try {
@@ -313,11 +212,7 @@ public class VirtualHostFilter extends BasePortalFilter {
 				if (isDocumentFriendlyURL(
 						request, group.getGroupId(), friendlyURL)) {
 
-					processFilter(
-						VirtualHostFilter.class.getName(), request, response,
-						filterChain);
-
-					return;
+					return null;
 				}
 
 				if (group.isGuest() && friendlyURL.equals(StringPool.SLASH) &&
@@ -356,14 +251,106 @@ public class VirtualHostFilter extends BasePortalFilter {
 				_servletContext.getRequestDispatcher(forwardURL.toString());
 
 			requestDispatcher.forward(request, response);
+
+			return CUT_CHAIN;
 		}
 		catch (Exception e) {
 			_log.error(e, e);
-
-			processFilter(
-				VirtualHostFilter.class.getName(), request, response,
-				filterChain);
 		}
+
+		return null;
+	}
+
+	@Override
+	public void init(FilterConfig filterConfig) {
+		super.init(filterConfig);
+
+		_servletContext = filterConfig.getServletContext();
+	}
+
+	@Override
+	public boolean isFilterEnabled(
+		HttpServletRequest request, HttpServletResponse response) {
+
+		StringBuffer requestURL = request.getRequestURL();
+
+		if (isValidRequestURL(requestURL)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	protected boolean isDocumentFriendlyURL(
+			HttpServletRequest request, long groupId, String friendlyURL)
+		throws PortalException {
+
+		if (friendlyURL.startsWith(_PATH_DOCUMENTS) &&
+			WebServerServlet.hasFiles(request)) {
+
+			String path = HttpUtil.fixPath(request.getPathInfo());
+
+			String[] pathArray = StringUtil.split(path, CharPool.SLASH);
+
+			if (pathArray.length == 2) {
+				try {
+					LayoutLocalServiceUtil.getFriendlyURLLayout(
+						groupId, false, friendlyURL);
+				}
+				catch (NoSuchLayoutException nsle) {
+					return true;
+				}
+			}
+			else {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	protected boolean isValidFriendlyURL(String friendlyURL) {
+		friendlyURL = StringUtil.toLowerCase(friendlyURL);
+
+		if (PortalInstances.isVirtualHostsIgnorePath(friendlyURL) ||
+			friendlyURL.startsWith(_PATH_MODULE_SLASH) ||
+			friendlyURL.startsWith(_PRIVATE_GROUP_SERVLET_MAPPING_SLASH) ||
+			friendlyURL.startsWith(_PRIVATE_USER_SERVLET_MAPPING_SLASH) ||
+			friendlyURL.startsWith(_PUBLIC_GROUP_SERVLET_MAPPING_SLASH)) {
+
+			return false;
+		}
+
+		if (LayoutImpl.hasFriendlyURLKeyword(friendlyURL)) {
+			return false;
+		}
+
+		int code = LayoutImpl.validateFriendlyURL(friendlyURL, false);
+
+		if ((code > -1) &&
+			(code != LayoutFriendlyURLException.ENDS_WITH_SLASH)) {
+
+			return false;
+		}
+
+		return true;
+	}
+
+	protected boolean isValidRequestURL(StringBuffer requestURL) {
+		if (requestURL == null) {
+			return false;
+		}
+
+		String url = requestURL.toString();
+
+		for (String extension : PropsValues.VIRTUAL_HOSTS_IGNORE_EXTENSIONS) {
+			if (url.endsWith(extension)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private static final String _PATH_DOCUMENTS = "/documents/";
