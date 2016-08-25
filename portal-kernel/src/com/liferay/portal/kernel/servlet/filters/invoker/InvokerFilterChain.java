@@ -20,6 +20,8 @@ import com.liferay.portal.kernel.servlet.DirectCallFilter;
 import com.liferay.portal.kernel.servlet.LiferayFilter;
 import com.liferay.portal.kernel.servlet.TryFilter;
 import com.liferay.portal.kernel.servlet.TryFinallyFilter;
+import com.liferay.portal.kernel.servlet.UnifiedDirectCallFilter;
+import com.liferay.portal.kernel.servlet.UnifiedDirectCallFilterResult;
 import com.liferay.portal.kernel.servlet.WrapHttpServletRequestFilter;
 import com.liferay.portal.kernel.servlet.WrapHttpServletResponseFilter;
 
@@ -127,6 +129,31 @@ public class InvokerFilterChain implements FilterChain {
 			Filter filter, HttpServletRequest request,
 			HttpServletResponse response)
 		throws Exception {
+
+		if (filter instanceof UnifiedDirectCallFilter) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Invoke doDirectCallBefore for filter " +
+						filter.getClass());
+			}
+
+			UnifiedDirectCallFilter unifiedDirectCallFilter =
+				(UnifiedDirectCallFilter)filter;
+
+			UnifiedDirectCallFilterResult unifiedDirectCallFilterResult =
+				unifiedDirectCallFilter.doDirectCallFilter(request, response);
+
+			if (!unifiedDirectCallFilterResult.isContinue()) {
+				return;
+			}
+
+			request = unifiedDirectCallFilterResult.getRequest();
+			response = unifiedDirectCallFilterResult.getResponse();
+
+			doFilter(request, response);
+
+			return;
+		}
 
 		if (filter instanceof WrapHttpServletRequestFilter) {
 			if (_log.isDebugEnabled()) {
