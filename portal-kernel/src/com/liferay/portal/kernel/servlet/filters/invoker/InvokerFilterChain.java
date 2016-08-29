@@ -93,25 +93,26 @@ public class InvokerFilterChain implements FilterChain {
 					}
 				}
 
-				if (filter instanceof DirectCallFilter) {
-					try {
-						processDirectCallFilter(filter, request, response);
-					}
-					catch (IOException ioe) {
-						throw ioe;
-					}
-					catch (RuntimeException re) {
-						throw re;
-					}
-					catch (ServletException se) {
-						throw se;
-					}
-					catch (Exception e) {
-						throw new ServletException(e);
-					}
-				}
-				else {
+				if (!(filter instanceof DirectCallFilter)) {
 					processDoFilter(filter, request, response);
+
+					return;
+				}
+
+				try {
+					processDirectCallFilter(filter, request, response);
+				}
+				catch (IOException ioe) {
+					throw ioe;
+				}
+				catch (RuntimeException re) {
+					throw re;
+				}
+				catch (ServletException se) {
+					throw se;
+				}
+				catch (Exception e) {
+					throw new ServletException(e);
 				}
 
 				return;
