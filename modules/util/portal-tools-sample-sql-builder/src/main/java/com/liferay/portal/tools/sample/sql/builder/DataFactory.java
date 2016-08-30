@@ -2132,7 +2132,7 @@ public class DataFactory {
 			InitDataFactoryContext.getMaxUserCount());
 
 		for (int i = 0; i < InitDataFactoryContext.getMaxUserCount(); i++) {
-			String[] userName = nextUserName(i);
+			String[] userName = InitDataFactoryUtil.nextUserName(i);
 			userModels.add(
 				InitDataFactoryUtil.newUserModel(
 					InitDataFactoryContext.getCounter().get(), userName[0],
@@ -2193,17 +2193,6 @@ public class DataFactory {
 		wikiPageResourceModel.setTitle(wikiPageModel.getTitle());
 
 		return wikiPageResourceModel;
-	}
-
-	public String[] nextUserName(long index) {
-		String[] userName = new String[2];
-
-		userName[0] = InitDataFactoryContext.getFirstNames().get(
-			(int)(index / InitDataFactoryContext.getLastNames().size()) % InitDataFactoryContext.getFirstNames().size());
-		userName[1] =
-			InitDataFactoryContext.getLastNames().get((int)(index % InitDataFactoryContext.getLastNames().size()));
-
-		return userName;
 	}
 
 	protected AssetEntryModel newAssetEntryModel(
