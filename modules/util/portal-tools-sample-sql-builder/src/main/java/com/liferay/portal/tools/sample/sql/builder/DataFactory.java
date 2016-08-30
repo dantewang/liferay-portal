@@ -81,7 +81,6 @@ import com.liferay.login.web.constants.LoginPortletKeys;
 import com.liferay.message.boards.kernel.model.MBCategory;
 import com.liferay.message.boards.kernel.model.MBCategoryConstants;
 import com.liferay.message.boards.kernel.model.MBCategoryModel;
-import com.liferay.message.boards.kernel.model.MBDiscussion;
 import com.liferay.message.boards.kernel.model.MBDiscussionModel;
 import com.liferay.message.boards.kernel.model.MBMailingListModel;
 import com.liferay.message.boards.kernel.model.MBMessage;
@@ -121,10 +120,8 @@ import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.security.auth.FullNameGenerator;
 import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
-import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.ObjectValuePair;
-import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -133,11 +130,9 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.impl.ContactModelImpl;
 import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
 import com.liferay.portal.model.impl.LayoutModelImpl;
-import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
 import com.liferay.portal.model.impl.SubscriptionModelImpl;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
-import com.liferay.portlet.asset.model.impl.AssetEntryModelImpl;
 import com.liferay.portlet.blogs.model.impl.BlogsStatsUserModelImpl;
 import com.liferay.portlet.blogs.social.BlogsActivityKeys;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelImpl;
@@ -237,86 +232,23 @@ public class DataFactory {
 	}
 
 	public List<AssetCategoryModel> getAssetCategoryModels() {
-		List<AssetCategoryModel> allAssetCategoryModels = new ArrayList<>();
-
-		for (List<AssetCategoryModel> assetCategoryModels :
-				InitDataFactoryContext.getAssetCategoryModelsArray()) {
-
-			allAssetCategoryModels.addAll(assetCategoryModels);
-		}
-
-		return allAssetCategoryModels;
+		return AssetDataFactory.getAssetCategoryModels();
 	}
 
 	public List<Long> getAssetTagIds(long groupId) {
-		SimpleCounter counter = _assetTagCounters.get(groupId);
-
-		if (counter == null) {
-			counter = new SimpleCounter(0);
-
-			_assetTagCounters.put(groupId, counter);
-		}
-
-		List<AssetTagModel> assetTagModels =
-			InitDataFactoryContext.getAssetTagModelsArray()[(int)groupId - 1];
-
-		if ((assetTagModels == null) || assetTagModels.isEmpty()) {
-			return Collections.emptyList();
-		}
-
-		List<Long> assetTagIds = new ArrayList<>(
-			InitDataFactoryContext.getMaxAssetEntryToAssetTagCount());
-
-		for (int i =
-		 0; i < InitDataFactoryContext.getMaxAssetEntryToAssetTagCount(); i++) {
-
-			int index = (int)counter.get() % assetTagModels.size();
-
-			AssetTagModel assetTagModel = assetTagModels.get(index);
-
-			assetTagIds.add(assetTagModel.getTagId());
-		}
-
-		return assetTagIds;
+		return AssetDataFactory.getAssetTagIds(groupId);
 	}
 
 	public List<AssetTagModel> getAssetTagModels() {
-		List<AssetTagModel> allAssetTagModels = new ArrayList<>();
-
-		for (List<AssetTagModel> assetTagModels :
-				InitDataFactoryContext.getAssetTagModelsArray()) {
-
-			allAssetTagModels.addAll(assetTagModels);
-		}
-
-		return allAssetTagModels;
+		return AssetDataFactory.getAssetTagModels();
 	}
 
 	public List<AssetTagStatsModel> getAssetTagStatsModels() {
-		List<AssetTagStatsModel> allAssetTagStatsModels = new ArrayList<>();
-
-		for (List<AssetTagStatsModel> assetTagStatsModels :
-				InitDataFactoryContext.getAssetTagStatsModelsArray()) {
-
-			allAssetTagStatsModels.addAll(assetTagStatsModels);
-		}
-
-		return allAssetTagStatsModels;
+		return AssetDataFactory.getAssetTagStatsModels();
 	}
 
 	public List<AssetVocabularyModel> getAssetVocabularyModels() {
-		List<AssetVocabularyModel> allAssetVocabularyModels = new ArrayList<>();
-
-		allAssetVocabularyModels.add(
-			InitDataFactoryContext.getDefaultAssetVocabularyModel());
-
-		for (List<AssetVocabularyModel> assetVocabularyModels :
-				InitDataFactoryContext.getAssetVocabularyModelsArray()) {
-
-			allAssetVocabularyModels.addAll(assetVocabularyModels);
-		}
-
-		return allAssetVocabularyModels;
+		return AssetDataFactory.getAssetVocabularyModels();
 	}
 
 	public long getBlogsEntryClassNameId() {
@@ -448,7 +380,7 @@ public class DataFactory {
 	}
 
 	public int getMaxAssetPublisherPageCount() {
-		return InitDataFactoryContext.getMaxAssetPublisherPageCount();
+		return AssetDataFactory.getMaxAssetPublisherPageCount();
 	}
 
 	public int getMaxBlogsEntryCommentCount() {
@@ -545,127 +477,43 @@ public class DataFactory {
 	}
 
 	public AssetEntryModel newAssetEntryModel(BlogsEntryModel blogsEntryModel) {
-		return newAssetEntryModel(
-			blogsEntryModel.getGroupId(), blogsEntryModel.getCreateDate(),
-			blogsEntryModel.getModifiedDate(), InitDataFactoryUtil.getClassNameId(
-			BlogsEntry.class,
-			InitDataFactoryContext.getClassNameModels()), blogsEntryModel.getEntryId(),
-			blogsEntryModel.getUuid(), 0, true, true, ContentTypes.TEXT_HTML,
-			blogsEntryModel.getTitle());
+		return AssetDataFactory.newAssetEntryModel(blogsEntryModel);
 	}
 
 	public AssetEntryModel newAssetEntryModel(
 		DLFileEntryModel dLFileEntryModel) {
 
-		return newAssetEntryModel(
-			dLFileEntryModel.getGroupId(), dLFileEntryModel.getCreateDate(),
-			dLFileEntryModel.getModifiedDate(),
-			InitDataFactoryUtil.getClassNameId(
-			DLFileEntry.class, InitDataFactoryContext.getClassNameModels()),
-			dLFileEntryModel.getFileEntryId(), dLFileEntryModel.getUuid(),
-			dLFileEntryModel.getFileEntryTypeId(), true, true,
-			dLFileEntryModel.getMimeType(), dLFileEntryModel.getTitle());
+		return AssetDataFactory.newAssetEntryModel(dLFileEntryModel);
 	}
 
 	public AssetEntryModel newAssetEntryModel(DLFolderModel dLFolderModel) {
-		return newAssetEntryModel(
-			dLFolderModel.getGroupId(), dLFolderModel.getCreateDate(),
-			dLFolderModel.getModifiedDate(), InitDataFactoryUtil.getClassNameId(
-			DLFolder.class,
-			InitDataFactoryContext.getClassNameModels()), dLFolderModel.getFolderId(),
-			dLFolderModel.getUuid(), 0, true, true, null,
-			dLFolderModel.getName());
+		return AssetDataFactory.newAssetEntryModel(dLFolderModel);
 	}
 
 	public AssetEntryModel newAssetEntryModel(MBMessageModel mbMessageModel) {
-		long classNameId = 0;
-		boolean visible = false;
-
-		if (mbMessageModel.getCategoryId() ==
-				MBCategoryConstants.DISCUSSION_CATEGORY_ID) {
-
-			classNameId = InitDataFactoryUtil.getClassNameId(
-					MBDiscussion.class,
-					InitDataFactoryContext.getClassNameModels());
-		}
-		else {
-			classNameId = InitDataFactoryUtil.getClassNameId(
-					MBMessage.class,
-					InitDataFactoryContext.getClassNameModels());
-			visible = true;
-		}
-
-		return newAssetEntryModel(
-			mbMessageModel.getGroupId(), mbMessageModel.getCreateDate(),
-			mbMessageModel.getModifiedDate(), classNameId,
-			mbMessageModel.getMessageId(), mbMessageModel.getUuid(), 0, true,
-			visible, ContentTypes.TEXT_HTML, mbMessageModel.getSubject());
+		return AssetDataFactory.newAssetEntryModel(mbMessageModel);
 	}
 
 	public AssetEntryModel newAssetEntryModel(MBThreadModel mbThreadModel) {
-		return newAssetEntryModel(
-			mbThreadModel.getGroupId(), mbThreadModel.getCreateDate(),
-			mbThreadModel.getModifiedDate(), InitDataFactoryUtil.getClassNameId(
-			MBThread.class,
-			InitDataFactoryContext.getClassNameModels()), mbThreadModel.getThreadId(),
-			mbThreadModel.getUuid(), 0, true, false, StringPool.BLANK,
-			String.valueOf(mbThreadModel.getRootMessageId()));
+		return AssetDataFactory.newAssetEntryModel(mbThreadModel);
 	}
 
 	public AssetEntryModel newAssetEntryModel(
 		ObjectValuePair<JournalArticleModel, JournalArticleLocalizationModel>
 			objectValuePair) {
 
-		JournalArticleModel journalArticleModel = objectValuePair.getKey();
-		JournalArticleLocalizationModel journalArticleLocalizationModel =
-			objectValuePair.getValue();
-
-		long resourcePrimKey = journalArticleModel.getResourcePrimKey();
-
-		String resourceUUID = _journalArticleResourceUUIDs.get(resourcePrimKey);
-
-		return newAssetEntryModel(
-			journalArticleModel.getGroupId(),
-			journalArticleModel.getCreateDate(),
-			journalArticleModel.getModifiedDate(),
-			InitDataFactoryUtil.getClassNameId(
-			JournalArticle.class, InitDataFactoryContext.getClassNameModels()),
-			resourcePrimKey, resourceUUID,
-			InitDataFactoryContext.getDefaultJournalDDMStructureModel().getStructureId(),
-			journalArticleModel.isIndexable(), true, ContentTypes.TEXT_HTML,
-			journalArticleLocalizationModel.getTitle());
+		return AssetDataFactory.newAssetEntryModel(
+			objectValuePair, _journalArticleResourceUUIDs);
 	}
 
 	public AssetEntryModel newAssetEntryModel(WikiPageModel wikiPageModel) {
-		return newAssetEntryModel(
-			wikiPageModel.getGroupId(), wikiPageModel.getCreateDate(),
-			wikiPageModel.getModifiedDate(), InitDataFactoryUtil.getClassNameId(
-			WikiPage.class,
-			InitDataFactoryContext.getClassNameModels()), wikiPageModel.getResourcePrimKey(),
-			wikiPageModel.getUuid(), 0, true, true, ContentTypes.TEXT_HTML,
-			wikiPageModel.getTitle());
+		return AssetDataFactory.newAssetEntryModel(wikiPageModel);
 	}
 
 	public List<PortletPreferencesModel>
 		newAssetPublisherPortletPreferencesModels(long plid) {
 
-		List<PortletPreferencesModel> portletPreferencesModels =
-			new ArrayList<>(3);
-
-		portletPreferencesModels.add(
-			newPortletPreferencesModel(
-				plid, BlogsPortletKeys.BLOGS,
-				PortletConstants.DEFAULT_PREFERENCES));
-		portletPreferencesModels.add(
-			newPortletPreferencesModel(
-				plid, JournalPortletKeys.JOURNAL,
-				PortletConstants.DEFAULT_PREFERENCES));
-		portletPreferencesModels.add(
-			newPortletPreferencesModel(
-				plid, WikiPortletKeys.WIKI,
-				PortletConstants.DEFAULT_PREFERENCES));
-
-		return portletPreferencesModels;
+		return AssetDataFactory.newAssetPublisherPortletPreferencesModels(plid);
 	}
 
 	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
@@ -846,15 +694,15 @@ public class DataFactory {
 			new ArrayList<>(3);
 
 		portletPreferencesModels.add(
-			newPortletPreferencesModel(
+			InitDataFactoryUtil.newPortletPreferencesModel(
 				plid, DDLPortletKeys.DYNAMIC_DATA_LISTS_DISPLAY,
 				PortletConstants.DEFAULT_PREFERENCES));
 		portletPreferencesModels.add(
-			newPortletPreferencesModel(
+			InitDataFactoryUtil.newPortletPreferencesModel(
 				plid, DDLPortletKeys.DYNAMIC_DATA_LISTS,
 				PortletConstants.DEFAULT_PREFERENCES));
 		portletPreferencesModels.add(
-			newPortletPreferencesModel(
+			InitDataFactoryUtil.newPortletPreferencesModel(
 				plid, DDMPortletKeys.DYNAMIC_DATA_MAPPING,
 				PortletConstants.DEFAULT_PREFERENCES));
 
@@ -1322,7 +1170,7 @@ public class DataFactory {
 		newJournalPortletPreferencesModels(long plid) {
 
 		return Collections.singletonList(
-			newPortletPreferencesModel(
+			InitDataFactoryUtil.newPortletPreferencesModel(
 				plid, JournalPortletKeys.JOURNAL,
 				PortletConstants.DEFAULT_PREFERENCES));
 	}
@@ -1623,7 +1471,7 @@ public class DataFactory {
 		throws Exception {
 
 		if (currentIndex == 1) {
-			return newPortletPreferencesModel(
+			return InitDataFactoryUtil.newPortletPreferencesModel(
 				plid, portletId, PortletConstants.DEFAULT_PREFERENCES);
 		}
 
@@ -1646,7 +1494,7 @@ public class DataFactory {
 			if ((assetCategoryModels == null) ||
 				assetCategoryModels.isEmpty()) {
 
-				return newPortletPreferencesModel(
+				return InitDataFactoryUtil.newPortletPreferencesModel(
 					plid, portletId, PortletConstants.DEFAULT_PREFERENCES);
 			}
 
@@ -1660,7 +1508,7 @@ public class DataFactory {
 				InitDataFactoryContext.getAssetTagModelsArray()[(int)groupId - 1];
 
 			if ((assetTagModels == null) || assetTagModels.isEmpty()) {
-				return newPortletPreferencesModel(
+				return InitDataFactoryUtil.newPortletPreferencesModel(
 					plid, portletId, PortletConstants.DEFAULT_PREFERENCES);
 			}
 
@@ -1690,7 +1538,7 @@ public class DataFactory {
 		jxPortletPreferences.setValue(
 			"queryValues1", assetPublisherQueryValues[3]);
 
-		return newPortletPreferencesModel(
+		return InitDataFactoryUtil.newPortletPreferencesModel(
 			plid, portletId,
 			_portletPreferencesFactory.toXML(jxPortletPreferences));
 	}
@@ -1706,7 +1554,7 @@ public class DataFactory {
 			"recordSetId", String.valueOf(ddlRecordSetModel.getRecordSetId()));
 		jxPortletPreferences.setValue("spreadsheet", "false");
 
-		return newPortletPreferencesModel(
+		return InitDataFactoryUtil.newPortletPreferencesModel(
 			plid, portletId,
 			_portletPreferencesFactory.toXML(jxPortletPreferences));
 	}
@@ -1724,7 +1572,7 @@ public class DataFactory {
 			"groupId",
 			String.valueOf(journalArticleResourceModel.getGroupId()));
 
-		return newPortletPreferencesModel(
+		return InitDataFactoryUtil.newPortletPreferencesModel(
 			plid, portletId,
 			_portletPreferencesFactory.toXML(jxPortletPreferences));
 	}
@@ -2195,40 +2043,6 @@ public class DataFactory {
 		return wikiPageResourceModel;
 	}
 
-	protected AssetEntryModel newAssetEntryModel(
-		long groupId, Date createDate, Date modifiedDate, long classNameId,
-		long classPK, String uuid, long classTypeId, boolean listable,
-		boolean visible, String mimeType, String title) {
-
-		AssetEntryModel assetEntryModel = new AssetEntryModelImpl();
-
-		assetEntryModel.setEntryId(InitDataFactoryContext.getCounter().get());
-		assetEntryModel.setGroupId(groupId);
-		assetEntryModel.setCompanyId(InitDataFactoryContext.getCompanyId());
-		assetEntryModel.setUserId(InitDataFactoryContext.getSampleUserId());
-		assetEntryModel.setUserName(_SAMPLE_USER_NAME);
-		assetEntryModel.setCreateDate(createDate);
-		assetEntryModel.setModifiedDate(modifiedDate);
-		assetEntryModel.setClassNameId(classNameId);
-		assetEntryModel.setClassPK(classPK);
-		assetEntryModel.setClassUuid(uuid);
-		assetEntryModel.setClassTypeId(classTypeId);
-		assetEntryModel.setListable(listable);
-		assetEntryModel.setVisible(visible);
-		assetEntryModel.setStartDate(createDate);
-		assetEntryModel.setEndDate(
-				InitDataFactoryUtil.nextFutureDate(
-					InitDataFactoryContext.getFutureDateCounter()));
-		assetEntryModel.setPublishDate(createDate);
-		assetEntryModel.setExpirationDate(
-				InitDataFactoryUtil.nextFutureDate(
-					InitDataFactoryContext.getFutureDateCounter()));
-		assetEntryModel.setMimeType(mimeType);
-		assetEntryModel.setTitle(title);
-
-		return assetEntryModel;
-	}
-
 	protected DDMContentModel newDDMContentModel(
 		long contentId, long groupId, String data) {
 
@@ -2325,24 +2139,6 @@ public class DataFactory {
 		return mbThreadModel;
 	}
 
-	protected PortletPreferencesModel newPortletPreferencesModel(
-		long plid, String portletId, String preferences) {
-
-		PortletPreferencesModel portletPreferencesModel =
-			new PortletPreferencesModelImpl();
-
-		portletPreferencesModel.setPortletPreferencesId(
-			InitDataFactoryContext.getCounter().get());
-		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
-		portletPreferencesModel.setOwnerType(
-			PortletKeys.PREFS_OWNER_TYPE_LAYOUT);
-		portletPreferencesModel.setPlid(plid);
-		portletPreferencesModel.setPortletId(portletId);
-		portletPreferencesModel.setPreferences(preferences);
-
-		return portletPreferencesModel;
-	}
-
 	protected List<ResourcePermissionModel> newResourcePermissionModels(
 		String name, String primKey, long ownerId) {
 
@@ -2425,7 +2221,6 @@ public class DataFactory {
 		new HashMap<>();
 	private final Map<Long, SimpleCounter> _assetPublisherQueryCounter =
 		new HashMap<>();
-	private final Map<Long, SimpleCounter> _assetTagCounters = new HashMap<>();
 	private final Class<?> _clazz = getClass();
 	private final Map<Long, String> _journalArticleResourceUUIDs =
 		new HashMap<>();
