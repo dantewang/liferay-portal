@@ -863,6 +863,18 @@ public class InitDataFactoryUtil {
 		return ddmStructureVersionModel;
 	}
 
+	public static String[] nextUserName(long index) {
+		String[] userName = new String[2];
+
+		userName[0] = InitDataFactoryContext.getFirstNames().get(
+			(int)(index / InitDataFactoryContext.getLastNames().size()) % InitDataFactoryContext.getFirstNames().size());
+		userName[1] =
+			InitDataFactoryContext.getLastNames().get(
+					(int)(index % InitDataFactoryContext.getLastNames().size()));
+
+		return userName;
+	}
+
 	public static long getGroupClassNameId() {
 		return getClassNameId(
 			Group.class, InitDataFactoryContext.getClassNameModels());
