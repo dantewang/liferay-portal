@@ -20,6 +20,8 @@ import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.PortletInstanceFactoryUtil;
 import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
+import com.liferay.portal.kernel.servlet.UnifiedDirectCallFilter;
+import com.liferay.portal.kernel.servlet.UnifiedDirectCallFilterResult;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -28,7 +30,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.servlet.filters.BasePortalFilter;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,31 +37,16 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author Preston Crary
  */
-public class UploadServletRequestFilter extends BasePortalFilter {
+public class UploadServletRequestFilter
+	extends BasePortalFilter implements UnifiedDirectCallFilter {
 
 	public static final String COPY_MULTIPART_STREAM_TO_FILE =
 		UploadServletRequestFilter.class.getName() +
 			"#COPY_MULTIPART_STREAM_TO_FILE";
 
 	@Override
-	public boolean isFilterEnabled(
-		HttpServletRequest request, HttpServletResponse response) {
-
-		String contentType = request.getHeader(HttpHeaders.CONTENT_TYPE);
-
-		if ((contentType != null) &&
-			contentType.startsWith(ContentTypes.MULTIPART_FORM_DATA)) {
-
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
-	public void processFilter(
-			HttpServletRequest request, HttpServletResponse response,
-			FilterChain filterChain)
+	public UnifiedDirectCallFilterResult doDirectCall(
+			HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
 		String portletId = ParamUtil.getString(request, "p_p_id");
@@ -93,17 +79,35 @@ public class UploadServletRequestFilter extends BasePortalFilter {
 			}
 		}
 
-		UploadServletRequest uploadServletRequest =
-			PortalUtil.getUploadServletRequest(request);
+		return new UnifiedDirectCallFilterResult(
+			PortalUtil.getUploadServletRequest(request), response, true);
+	}
 
-		try {
-			processFilter(
-				UploadServletRequestFilter.class.getName(),
-				uploadServletRequest, response, filterChain);
+	@Override
+	public void doDirectCallFinally(UnifiedDirectCallFilterResult result)
+		throws Exception {
+
+		HttpServletRequest request = result.getRequest();
+
+		UploadServletRequest uploadServletRequest =
+			(UploadServletRequest)request;
+
+		uploadServletRequest.cleanUp();
+	}
+
+	@Override
+	public boolean isFilterEnabled(
+		HttpServletRequest request, HttpServletResponse response) {
+
+		String contentType = request.getHeader(HttpHeaders.CONTENT_TYPE);
+
+		if ((contentType != null) &&
+			contentType.startsWith(ContentTypes.MULTIPART_FORM_DATA)) {
+
+			return true;
 		}
-		finally {
-			uploadServletRequest.cleanUp();
-		}
+
+		return false;
 	}
 
 }
