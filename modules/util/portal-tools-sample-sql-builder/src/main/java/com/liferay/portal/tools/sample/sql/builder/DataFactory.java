@@ -141,7 +141,6 @@ import com.liferay.wiki.model.WikiNodeModel;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.model.WikiPageModel;
 import com.liferay.wiki.model.WikiPageResourceModel;
-import com.liferay.wiki.model.impl.WikiPageResourceModelImpl;
 import com.liferay.wiki.social.WikiActivityKeys;
 
 import java.util.ArrayList;
@@ -393,7 +392,7 @@ public class DataFactory {
 	}
 
 	public int getMaxWikiPageCommentCount() {
-		return InitContextUtil.getMaxWikiPageCommentCount();
+		return WikiDataFactory.getMaxWikiPageCommentCount();
 	}
 
 	public List<Long> getNewUserGroupIds(long groupId) {
@@ -446,8 +445,7 @@ public class DataFactory {
 	}
 
 	public long getWikiPageClassNameId() {
-		return InitDataFactoryUtil.getClassNameId(
-			WikiPage.class, InitContextUtil.getClassNameModels());
+		return WikiDataFactory.getWikiPageClassNameId();
 	}
 
 	public AssetEntryModel newAssetEntryModel(BlogsEntryModel blogsEntryModel)
@@ -1676,54 +1674,20 @@ public class DataFactory {
 	}
 
 	public List<WikiNodeModel> newWikiNodeModels(long groupId) {
-		int maxWikiNodeCount = InitContextUtil.getMaxWikiNodeCount();
 
-		List<WikiNodeModel> wikiNodeModels = new ArrayList<>(maxWikiNodeCount);
-
-		for (int i = 1; i <= maxWikiNodeCount; i++) {
-			wikiNodeModels.add(
-				InitDataFactoryUtil.newWikiNodeModel(
-					groupId, i, InitContextUtil.getCounter().get(),
-					InitContextUtil.getCompanyId(),
-					InitContextUtil.getSampleUserId(),
-					DataFactoryConstants.SAMPLE_USER_NAME));
-		}
-
-		return wikiNodeModels;
+		return WikiDataFactory.newWikiNodeModels(groupId);
 	}
 
 	public List<WikiPageModel> newWikiPageModels(WikiNodeModel wikiNodeModel)
 	{
-		int maxWikiPageCount = InitContextUtil.getMaxWikiPageCount();
 
-		List<WikiPageModel> wikiPageModels = new ArrayList<>(maxWikiPageCount);
-
-		for (int i = 1; i <= maxWikiPageCount; i++) {
-			wikiPageModels.add(
-				InitDataFactoryUtil.newWikiPageModel(
-					wikiNodeModel, i, InitContextUtil.getCounter().get(),
-					InitContextUtil.getCounter().get(),
-					InitContextUtil.getCompanyId(),
-					InitContextUtil.getSampleUserId(),
-					DataFactoryConstants.SAMPLE_USER_NAME));
-		}
-
-		return wikiPageModels;
+		return WikiDataFactory.newWikiPageModels(wikiNodeModel);
 	}
 
 	public WikiPageResourceModel newWikiPageResourceModel(
 		WikiPageModel wikiPageModel) {
 
-		WikiPageResourceModel wikiPageResourceModel =
-			new WikiPageResourceModelImpl();
-
-		wikiPageResourceModel.setUuid(SequentialUUID.generate());
-		wikiPageResourceModel.setResourcePrimKey(
-			wikiPageModel.getResourcePrimKey());
-		wikiPageResourceModel.setNodeId(wikiPageModel.getNodeId());
-		wikiPageResourceModel.setTitle(wikiPageModel.getTitle());
-
-		return wikiPageResourceModel;
+		return WikiDataFactory.newWikiPageResourceModel(wikiPageModel);
 	}
 
 	protected DDMContentModel newDDMContentModel(
