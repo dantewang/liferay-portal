@@ -127,7 +127,6 @@ import com.liferay.portal.model.impl.LayoutModelImpl;
 import com.liferay.portal.model.impl.SubscriptionModelImpl;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
-import com.liferay.portlet.blogs.model.impl.BlogsStatsUserModelImpl;
 import com.liferay.portlet.blogs.social.BlogsActivityKeys;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileVersionModelImpl;
@@ -248,8 +247,7 @@ public class DataFactory {
 	}
 
 	public long getBlogsEntryClassNameId() {
-		return InitDataFactoryUtil.getClassNameId(
-			BlogsEntry.class, InitContextUtil.getClassNameModels());
+		return BlogDataFactory.getBlogsEntryClassNameId();
 	}
 
 	public Collection<ClassNameModel> getClassNameModels() {
@@ -369,7 +367,7 @@ public class DataFactory {
 	}
 
 	public int getMaxBlogsEntryCommentCount() {
-		return InitContextUtil.getMaxBlogsEntryCommentCount();
+		return BlogDataFactory.getMaxBlogsEntryCommentCount();
 	}
 
 	public int getMaxDDLRecordCount() {
@@ -501,36 +499,11 @@ public class DataFactory {
 	}
 
 	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
-		int maxBlogsEntryCount = InitContextUtil.getMaxBlogsEntryCount();
-
-		List<BlogsEntryModel> blogEntryModels = new ArrayList<>(
-			maxBlogsEntryCount);
-
-		for (int i = 1; i <= maxBlogsEntryCount; i++) {
-			blogEntryModels.add(
-				InitDataFactoryUtil.newBlogsEntryModel(
-					groupId, i, InitContextUtil.getCounter().get(),
-					InitContextUtil.getCompanyId(),
-					InitContextUtil.getSampleUserId(),
-					DataFactoryConstants.SAMPLE_USER_NAME));
-		}
-
-		return blogEntryModels;
+		return BlogDataFactory.newBlogsEntryModels(groupId);
 	}
 
 	public BlogsStatsUserModel newBlogsStatsUserModel(long groupId) {
-		BlogsStatsUserModel blogsStatsUserModel = new BlogsStatsUserModelImpl();
-
-		blogsStatsUserModel.setStatsUserId(
-			InitContextUtil.getCounter().get());
-		blogsStatsUserModel.setGroupId(groupId);
-		blogsStatsUserModel.setCompanyId(InitContextUtil.getCompanyId());
-		blogsStatsUserModel.setUserId(InitContextUtil.getSampleUserId());
-		blogsStatsUserModel.setEntryCount(
-			InitContextUtil.getMaxBlogsEntryCount());
-		blogsStatsUserModel.setLastPostDate(new Date());
-
-		return blogsStatsUserModel;
+		return BlogDataFactory.newBlogsStatsUserModel(groupId);
 	}
 
 	public ContactModel newContactModel(UserModel userModel) {
