@@ -849,15 +849,15 @@ public class InitDataFactoryUtil {
 			new DDMStructureVersionModelImpl();
 
 		ddmStructureVersionModel.setStructureVersionId(
-			InitDataFactoryContext.getCounter().get());
+			InitContextUtil.getCounter().get());
 		ddmStructureVersionModel.setGroupId(ddmStructureModel.getGroupId());
 		ddmStructureVersionModel.setCompanyId(
-			InitDataFactoryContext.getCompanyId());
+			InitContextUtil.getCompanyId());
 		ddmStructureVersionModel.setUserId(ddmStructureModel.getUserId());
 		ddmStructureVersionModel.setUserName(userName);
 		ddmStructureVersionModel.setCreateDate(
 			InitDataFactoryUtil.nextFutureDate(
-				InitDataFactoryContext.getFutureDateCounter()));
+				InitContextUtil.getFutureDateCounter()));
 		ddmStructureVersionModel.setStructureId(
 			ddmStructureModel.getStructureId());
 		ddmStructureVersionModel.setVersion(
@@ -880,7 +880,7 @@ public class InitDataFactoryUtil {
 		ddmStructureVersionModel.setStatusByUserName(userName);
 		ddmStructureVersionModel.setStatusDate(
 			InitDataFactoryUtil.nextFutureDate(
-				InitDataFactoryContext.getFutureDateCounter()));
+				InitContextUtil.getFutureDateCounter()));
 
 		return ddmStructureVersionModel;
 	}
@@ -892,7 +892,7 @@ public class InitDataFactoryUtil {
 			new PortletPreferencesModelImpl();
 
 		portletPreferencesModel.setPortletPreferencesId(
-			InitDataFactoryContext.getCounter().get());
+			InitContextUtil.getCounter().get());
 		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
 		portletPreferencesModel.setOwnerType(
 			PortletKeys.PREFS_OWNER_TYPE_LAYOUT);
@@ -905,12 +905,12 @@ public class InitDataFactoryUtil {
 
 	public static String[] nextUserName(long index) {
 		String[] userName = new String[2];
-		int firstNameSize = InitDataFactoryContext.getFirstNames().size();
-		int lastNameSize = InitDataFactoryContext.getLastNames().size();
+		int firstNameSize = InitContextUtil.getFirstNames().size();
+		int lastNameSize = InitContextUtil.getLastNames().size();
 
-		userName[0] = InitDataFactoryContext.getFirstNames().get(
+		userName[0] = InitContextUtil.getFirstNames().get(
 			(int)(index / lastNameSize) % firstNameSize);
-		userName[1] = InitDataFactoryContext.getLastNames().get(
+		userName[1] = InitContextUtil.getLastNames().get(
 			(int)(index % lastNameSize));
 
 		return userName;
@@ -918,7 +918,7 @@ public class InitDataFactoryUtil {
 
 	public static long getGroupClassNameId() {
 		return getClassNameId(
-			Group.class, InitDataFactoryContext.getClassNameModels());
+			Group.class, InitContextUtil.getClassNameModels());
 	}
 
 	private static final String _DEPENDENCIES_DIR =

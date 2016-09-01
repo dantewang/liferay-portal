@@ -56,33 +56,33 @@ public class JournalDataFactory {
 	public static DDMStructureLayoutModel
 		getDefaultJournalDDMStructureLayoutModel() {
 
-		return InitDataFactoryContext.
+		return InitContextUtil.
 			getDefaultJournalDDMStructureLayoutModel();
 	}
 
 	public static DDMStructureModel getDefaultJournalDDMStructureModel() {
-		return InitDataFactoryContext.getDefaultJournalDDMStructureModel();
+		return InitContextUtil.getDefaultJournalDDMStructureModel();
 	}
 
 	public static DDMStructureVersionModel
 		getDefaultJournalDDMStructureVersionModel() {
 
-		return InitDataFactoryContext.
+		return InitContextUtil.
 			getDefaultJournalDDMStructureVersionModel();
 	}
 
 	public static DDMTemplateModel getDefaultJournalDDMTemplateModel() {
-		return InitDataFactoryContext.getDefaultJournalDDMTemplateModel();
+		return InitContextUtil.getDefaultJournalDDMTemplateModel();
 	}
 
 	public static long getJournalArticleClassNameId() {
 		return InitDataFactoryUtil.getClassNameId(
-			JournalArticle.class, InitDataFactoryContext.getClassNameModels());
+			JournalArticle.class, InitContextUtil.getClassNameModels());
 	}
 
 	public static String getJournalArticleLayoutColumn(String portletPrefix) {
 		int maxJournalArticleCount =
-			InitDataFactoryContext.getMaxJournalArticleCount();
+			InitContextUtil.getMaxJournalArticleCount();
 
 		StringBundler sb = new StringBundler(3 * maxJournalArticleCount);
 
@@ -96,15 +96,15 @@ public class JournalDataFactory {
 	}
 
 	public static int getMaxJournalArticleCount() {
-		return InitDataFactoryContext.getMaxJournalArticleCount();
+		return InitContextUtil.getMaxJournalArticleCount();
 	}
 
 	public static int getMaxJournalArticlePageCount() {
-		return InitDataFactoryContext.getMaxJournalArticlePageCount();
+		return InitContextUtil.getMaxJournalArticlePageCount();
 	}
 
 	public static int getMaxJournalArticleVersionCount() {
-		return InitDataFactoryContext.getMaxJournalArticleVersionCount();
+		return InitContextUtil.getMaxJournalArticleVersionCount();
 	}
 
 	public static DDMStorageLinkModel newDDMStorageLinkModel(
@@ -114,11 +114,11 @@ public class JournalDataFactory {
 
 		ddmStorageLinkModel.setUuid(SequentialUUID.generate());
 		ddmStorageLinkModel.setStorageLinkId(
-			InitDataFactoryContext.getCounter().get());
+			InitContextUtil.getCounter().get());
 		ddmStorageLinkModel.setClassNameId(
 			InitDataFactoryUtil.getClassNameId(
 				JournalArticle.class,
-				InitDataFactoryContext.getClassNameModels()));
+				InitContextUtil.getClassNameModels()));
 		ddmStorageLinkModel.setClassPK(journalArticleModel.getId());
 		ddmStorageLinkModel.setStructureId(structureId);
 
@@ -132,13 +132,13 @@ public class JournalDataFactory {
 			new DDMTemplateLinkModelImpl();
 
 		ddmTemplateLinkModel.setCompanyId(
-			InitDataFactoryContext.getCompanyId());
+			InitContextUtil.getCompanyId());
 		ddmTemplateLinkModel.setTemplateLinkId(
-			InitDataFactoryContext.getCounter().get());
+			InitContextUtil.getCounter().get());
 		ddmTemplateLinkModel.setClassNameId(
 			InitDataFactoryUtil.getClassNameId(
 				JournalArticle.class,
-				InitDataFactoryContext.getClassNameModels()));
+				InitContextUtil.getClassNameModels()));
 		ddmTemplateLinkModel.setClassPK(journalArticleModel.getId());
 		ddmTemplateLinkModel.setTemplateId(templateId);
 
@@ -161,7 +161,7 @@ public class JournalDataFactory {
 		sb.append(versionIndex);
 
 		journalArticleLocalizationModel.setArticleLocalizationId(
-			InitDataFactoryContext.getCounter().get());
+			InitContextUtil.getCounter().get());
 		journalArticleLocalizationModel.setCompanyId(
 			journalArticleModel.getCompanyId());
 		journalArticleLocalizationModel.setArticlePK(
@@ -181,13 +181,13 @@ public class JournalDataFactory {
 		JournalArticleModel journalArticleModel = new JournalArticleModelImpl();
 
 		journalArticleModel.setUuid(SequentialUUID.generate());
-		journalArticleModel.setId(InitDataFactoryContext.getCounter().get());
+		journalArticleModel.setId(InitContextUtil.getCounter().get());
 		journalArticleModel.setResourcePrimKey(
 			journalArticleResourceModel.getResourcePrimKey());
 		journalArticleModel.setGroupId(
 			journalArticleResourceModel.getGroupId());
-		journalArticleModel.setCompanyId(InitDataFactoryContext.getCompanyId());
-		journalArticleModel.setUserId(InitDataFactoryContext.getSampleUserId());
+		journalArticleModel.setCompanyId(InitContextUtil.getCompanyId());
+		journalArticleModel.setUserId(InitContextUtil.getSampleUserId());
 		journalArticleModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		journalArticleModel.setCreateDate(new Date());
 		journalArticleModel.setModifiedDate(new Date());
@@ -209,18 +209,18 @@ public class JournalDataFactory {
 		journalArticleModel.setUrlTitle(urlTitle);
 
 		journalArticleModel.setContent(
-			InitDataFactoryContext.getJournalArticleContent());
+			InitContextUtil.getJournalArticleContent());
 		journalArticleModel.setDefaultLanguageId("en_US");
 		journalArticleModel.setDDMStructureKey(
-			InitDataFactoryContext.getDefaultJournalDDMStructureModel().
+			InitContextUtil.getDefaultJournalDDMStructureModel().
 				getStructureKey());
 		journalArticleModel.setDDMTemplateKey(
-			InitDataFactoryContext.getDefaultJournalDDMTemplateModel().
+			InitContextUtil.getDefaultJournalDDMTemplateModel().
 				getTemplateKey());
 		journalArticleModel.setDisplayDate(new Date());
 		journalArticleModel.setExpirationDate(
 			InitDataFactoryUtil.nextFutureDate(
-				InitDataFactoryContext.getFutureDateCounter()));
+				InitContextUtil.getFutureDateCounter()));
 		journalArticleModel.setReviewDate(new Date());
 		journalArticleModel.setIndexable(true);
 		journalArticleModel.setLastPublishDate(new Date());
@@ -237,10 +237,10 @@ public class JournalDataFactory {
 
 		journalArticleResourceModel.setUuid(SequentialUUID.generate());
 		journalArticleResourceModel.setResourcePrimKey(
-			InitDataFactoryContext.getCounter().get());
+			InitContextUtil.getCounter().get());
 		journalArticleResourceModel.setGroupId(groupId);
 		journalArticleResourceModel.setArticleId(
-			String.valueOf(InitDataFactoryContext.getCounter().get()));
+			String.valueOf(InitContextUtil.getCounter().get()));
 
 		journalArticleResourceUUIDs.put(
 			journalArticleResourceModel.getPrimaryKey(),
@@ -256,10 +256,10 @@ public class JournalDataFactory {
 			new JournalContentSearchModelImpl();
 
 		journalContentSearchModel.setContentSearchId(
-			InitDataFactoryContext.getCounter().get());
+			InitContextUtil.getCounter().get());
 		journalContentSearchModel.setGroupId(journalArticleModel.getGroupId());
 		journalContentSearchModel.setCompanyId(
-			InitDataFactoryContext.getCompanyId());
+			InitContextUtil.getCompanyId());
 		journalContentSearchModel.setLayoutId(layoutId);
 		journalContentSearchModel.setPortletId(
 			"com_liferay_journal_content_web_portlet_JournalContentPortlet");

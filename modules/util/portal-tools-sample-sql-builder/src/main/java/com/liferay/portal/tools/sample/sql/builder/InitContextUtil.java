@@ -67,7 +67,7 @@ import java.util.TimeZone;
 /**
  * @author Lily Chi
  */
-public class InitDataFactoryContext {
+public class InitContextUtil {
 
 	public static long getAccountId() {
 		return _accountId;

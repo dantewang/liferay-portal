@@ -63,7 +63,7 @@ public class AssetDataFactory {
 		List<AssetCategoryModel> allAssetCategoryModels = new ArrayList<>();
 
 		for (List<AssetCategoryModel> assetCategoryModels :
-				InitDataFactoryContext.getAssetCategoryModelsArray()) {
+				InitContextUtil.getAssetCategoryModelsArray()) {
 
 			allAssetCategoryModels.addAll(assetCategoryModels);
 		}
@@ -74,7 +74,7 @@ public class AssetDataFactory {
 	public static List<Long> getAssetTagIds(long groupId) {
 		SimpleCounter counter = _assetTagCounters.get(groupId);
 		int maxAssetEntryToAssetTagCount =
-			InitDataFactoryContext.getMaxAssetEntryToAssetTagCount();
+			InitContextUtil.getMaxAssetEntryToAssetTagCount();
 
 		if (counter == null) {
 			counter = new SimpleCounter(0);
@@ -83,7 +83,7 @@ public class AssetDataFactory {
 		}
 
 		List<AssetTagModel> assetTagModels =
-			InitDataFactoryContext.getAssetTagModelsArray()[(int)groupId - 1];
+			InitContextUtil.getAssetTagModelsArray()[(int)groupId - 1];
 
 		if ((assetTagModels == null) || assetTagModels.isEmpty()) {
 			return Collections.emptyList();
@@ -106,7 +106,7 @@ public class AssetDataFactory {
 		List<AssetTagModel> allAssetTagModels = new ArrayList<>();
 
 		for (List<AssetTagModel> assetTagModels :
-				InitDataFactoryContext.getAssetTagModelsArray()) {
+				InitContextUtil.getAssetTagModelsArray()) {
 
 			allAssetTagModels.addAll(assetTagModels);
 		}
@@ -118,7 +118,7 @@ public class AssetDataFactory {
 		List<AssetTagStatsModel> allAssetTagStatsModels = new ArrayList<>();
 
 		for (List<AssetTagStatsModel> assetTagStatsModels :
-				InitDataFactoryContext.getAssetTagStatsModelsArray()) {
+				InitContextUtil.getAssetTagStatsModelsArray()) {
 
 			allAssetTagStatsModels.addAll(assetTagStatsModels);
 		}
@@ -130,10 +130,10 @@ public class AssetDataFactory {
 		List<AssetVocabularyModel> allAssetVocabularyModels = new ArrayList<>();
 
 		allAssetVocabularyModels.add(
-			InitDataFactoryContext.getDefaultAssetVocabularyModel());
+			InitContextUtil.getDefaultAssetVocabularyModel());
 
 		for (List<AssetVocabularyModel> assetVocabularyModels :
-				InitDataFactoryContext.getAssetVocabularyModelsArray()) {
+				InitContextUtil.getAssetVocabularyModelsArray()) {
 
 			allAssetVocabularyModels.addAll(assetVocabularyModels);
 		}
@@ -142,7 +142,7 @@ public class AssetDataFactory {
 	}
 
 	public static int getMaxAssetPublisherPageCount() {
-		return InitDataFactoryContext.getMaxAssetPublisherPageCount();
+		return InitContextUtil.getMaxAssetPublisherPageCount();
 	}
 
 	public static AssetEntryModel newAssetEntryModel(
@@ -152,7 +152,7 @@ public class AssetDataFactory {
 			blogsEntryModel.getGroupId(), blogsEntryModel.getCreateDate(),
 			blogsEntryModel.getModifiedDate(),
 			InitDataFactoryUtil.getClassNameId(
-				BlogsEntry.class, InitDataFactoryContext.getClassNameModels()),
+				BlogsEntry.class, InitContextUtil.getClassNameModels()),
 			blogsEntryModel.getEntryId(), blogsEntryModel.getUuid(), 0, true,
 			true, ContentTypes.TEXT_HTML, blogsEntryModel.getTitle());
 	}
@@ -164,7 +164,7 @@ public class AssetDataFactory {
 			dLFileEntryModel.getGroupId(), dLFileEntryModel.getCreateDate(),
 			dLFileEntryModel.getModifiedDate(),
 			InitDataFactoryUtil.getClassNameId(
-				DLFileEntry.class, InitDataFactoryContext.getClassNameModels()),
+				DLFileEntry.class, InitContextUtil.getClassNameModels()),
 			dLFileEntryModel.getFileEntryId(), dLFileEntryModel.getUuid(),
 			dLFileEntryModel.getFileEntryTypeId(), true, true,
 			dLFileEntryModel.getMimeType(), dLFileEntryModel.getTitle());
@@ -176,7 +176,7 @@ public class AssetDataFactory {
 		return newAssetEntryModel(
 			dLFolderModel.getGroupId(), dLFolderModel.getCreateDate(),
 			dLFolderModel.getModifiedDate(), InitDataFactoryUtil.getClassNameId(
-				DLFolder.class, InitDataFactoryContext.getClassNameModels()),
+				DLFolder.class, InitContextUtil.getClassNameModels()),
 			dLFolderModel.getFolderId(), dLFolderModel.getUuid(), 0, true, true,
 			null, dLFolderModel.getName());
 	}
@@ -192,11 +192,11 @@ public class AssetDataFactory {
 
 			classNameId = InitDataFactoryUtil.getClassNameId(
 				MBDiscussion.class,
-				InitDataFactoryContext.getClassNameModels());
+				InitContextUtil.getClassNameModels());
 		}
 		else {
 			classNameId = InitDataFactoryUtil.getClassNameId(
-				MBMessage.class, InitDataFactoryContext.getClassNameModels());
+				MBMessage.class, InitContextUtil.getClassNameModels());
 			visible = true;
 		}
 
@@ -213,7 +213,7 @@ public class AssetDataFactory {
 		return newAssetEntryModel(
 			mbThreadModel.getGroupId(), mbThreadModel.getCreateDate(),
 			mbThreadModel.getModifiedDate(), InitDataFactoryUtil.getClassNameId(
-				MBThread.class, InitDataFactoryContext.getClassNameModels()),
+				MBThread.class, InitContextUtil.getClassNameModels()),
 			mbThreadModel.getThreadId(), mbThreadModel.getUuid(), 0, true,
 			false, StringPool.BLANK, String.valueOf(
 				mbThreadModel.getRootMessageId()));
@@ -237,9 +237,9 @@ public class AssetDataFactory {
 			journalArticleModel.getModifiedDate(),
 			InitDataFactoryUtil.getClassNameId(
 				JournalArticle.class,
-				InitDataFactoryContext.getClassNameModels()),
+				InitContextUtil.getClassNameModels()),
 			resourcePrimKey, resourceUUID,
-			InitDataFactoryContext.
+			InitContextUtil.
 				getDefaultJournalDDMStructureModel().getStructureId(),
 			journalArticleModel.isIndexable(), true, ContentTypes.TEXT_HTML,
 			journalArticleLocalizationModel.getTitle());
@@ -251,7 +251,7 @@ public class AssetDataFactory {
 		return newAssetEntryModel(
 			wikiPageModel.getGroupId(), wikiPageModel.getCreateDate(),
 			wikiPageModel.getModifiedDate(), InitDataFactoryUtil.getClassNameId(
-				WikiPage.class, InitDataFactoryContext.getClassNameModels()),
+				WikiPage.class, InitContextUtil.getClassNameModels()),
 			wikiPageModel.getResourcePrimKey(), wikiPageModel.getUuid(), 0,
 			true, true, ContentTypes.TEXT_HTML, wikiPageModel.getTitle());
 	}
@@ -285,10 +285,10 @@ public class AssetDataFactory {
 
 		AssetEntryModel assetEntryModel = new AssetEntryModelImpl();
 
-		assetEntryModel.setEntryId(InitDataFactoryContext.getCounter().get());
+		assetEntryModel.setEntryId(InitContextUtil.getCounter().get());
 		assetEntryModel.setGroupId(groupId);
-		assetEntryModel.setCompanyId(InitDataFactoryContext.getCompanyId());
-		assetEntryModel.setUserId(InitDataFactoryContext.getSampleUserId());
+		assetEntryModel.setCompanyId(InitContextUtil.getCompanyId());
+		assetEntryModel.setUserId(InitContextUtil.getSampleUserId());
 		assetEntryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		assetEntryModel.setCreateDate(createDate);
 		assetEntryModel.setModifiedDate(modifiedDate);
@@ -301,11 +301,11 @@ public class AssetDataFactory {
 		assetEntryModel.setStartDate(createDate);
 		assetEntryModel.setEndDate(
 			InitDataFactoryUtil.nextFutureDate(
-				InitDataFactoryContext.getFutureDateCounter()));
+				InitContextUtil.getFutureDateCounter()));
 		assetEntryModel.setPublishDate(createDate);
 		assetEntryModel.setExpirationDate(
 			InitDataFactoryUtil.nextFutureDate(
-				InitDataFactoryContext.getFutureDateCounter()));
+				InitContextUtil.getFutureDateCounter()));
 		assetEntryModel.setMimeType(mimeType);
 		assetEntryModel.setTitle(title);
 
