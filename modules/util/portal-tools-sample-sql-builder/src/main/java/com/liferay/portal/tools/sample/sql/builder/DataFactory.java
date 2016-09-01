@@ -969,8 +969,8 @@ public class DataFactory {
 		dlFileVersionModel.setVersion(dlFileEntryModel.getVersion());
 		dlFileVersionModel.setSize(dlFileEntryModel.getSize());
 		dlFileVersionModel.setLastPublishDate(
-				InitDataFactoryUtil.nextFutureDate(
-					InitDataFactoryContext.getFutureDateCounter()));
+			InitDataFactoryUtil.nextFutureDate(
+				InitDataFactoryContext.getFutureDateCounter()));
 
 		return dlFileVersionModel;
 	}
