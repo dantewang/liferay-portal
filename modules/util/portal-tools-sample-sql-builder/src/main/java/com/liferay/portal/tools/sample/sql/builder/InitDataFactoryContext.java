@@ -103,7 +103,9 @@ public class InitDataFactoryContext {
 		return _counter;
 	}
 
-	public static PortletPreferencesImpl getDefaultAssetPublisherPortletPreference() {
+	public static PortletPreferencesImpl
+		getDefaultAssetPublisherPortletPreference() {
+
 		return _defaultAssetPublisherPortletPreference;
 	}
 
@@ -111,7 +113,9 @@ public class InitDataFactoryContext {
 		return _defaultAssetVocabularyModel;
 	}
 
-	public static DDMStructureLayoutModel getDefaultDLDDMStructureLayoutModel() {
+	public static DDMStructureLayoutModel
+		getDefaultDLDDMStructureLayoutModel() {
+
 		return _defaultDLDDMStructureLayoutModel;
 	}
 
@@ -119,7 +123,9 @@ public class InitDataFactoryContext {
 		return _defaultDLDDMStructureModel;
 	}
 
-	public static DDMStructureVersionModel getDefaultDLDDMStructureVersionModel() {
+	public static DDMStructureVersionModel
+		getDefaultDLDDMStructureVersionModel() {
+
 		return _defaultDLDDMStructureVersionModel;
 	}
 
@@ -127,7 +133,9 @@ public class InitDataFactoryContext {
 		return _defaultDLFileEntryTypeModel;
 	}
 
-	public static DDMStructureLayoutModel getDefaultJournalDDMStructureLayoutModel() {
+	public static DDMStructureLayoutModel
+		getDefaultJournalDDMStructureLayoutModel() {
+
 		return _defaultJournalDDMStructureLayoutModel;
 	}
 
@@ -135,7 +143,9 @@ public class InitDataFactoryContext {
 		return _defaultJournalDDMStructureModel;
 	}
 
-	public static DDMStructureVersionModel getDefaultJournalDDMStructureVersionModel() {
+	public static DDMStructureVersionModel
+		getDefaultJournalDDMStructureVersionModel() {
+
 		return _defaultJournalDDMStructureVersionModel;
 	}
 
@@ -377,9 +387,10 @@ public class InitDataFactoryContext {
 		_assetVocabularyModelsArray =
 			(List<AssetVocabularyModel>[])new List<?>[_maxGroupsCount];
 		_defaultAssetVocabularyModel =
-				InitDataFactoryUtil.newAssetVocabularyModel(_globalGroupId,
-				_defaultUserId, null, PropsValues.ASSET_VOCABULARY_DEFAULT,
-				_counter.get(), _companyId);
+			InitDataFactoryUtil.newAssetVocabularyModel(
+				_globalGroupId, _defaultUserId, null,
+				PropsValues.ASSET_VOCABULARY_DEFAULT, _counter.get(),
+				_companyId);
 
 		StringBundler sb = new StringBundler(4);
 
@@ -391,9 +402,7 @@ public class InitDataFactoryContext {
 
 			long lastRightCategoryId = 2;
 
-			for (int j =
-			 0; j < _maxAssetVocabularyCount; j++) {
-
+			for (int j = 0; j < _maxAssetVocabularyCount; j++) {
 				sb.setIndex(0);
 
 				sb.append("TestVocabulary_");
@@ -402,12 +411,13 @@ public class InitDataFactoryContext {
 				sb.append(j);
 
 				AssetVocabularyModel assetVocabularyModel =
-					InitDataFactoryUtil.newAssetVocabularyModel(i, _sampleUserId,
-						userName, sb.toString(), _counter.get(), _companyId);
+					InitDataFactoryUtil.newAssetVocabularyModel(
+						i, _sampleUserId, userName, sb.toString(),
+						_counter.get(), _companyId);
 
 				assetVocabularyModels.add(assetVocabularyModel);
 
-				for (int k = 0; k <_maxAssetCategoryCount; k++) {
+				for (int k = 0; k < _maxAssetCategoryCount; k++) {
 					sb.setIndex(0);
 
 					sb.append("TestCategory_");
@@ -417,10 +427,10 @@ public class InitDataFactoryContext {
 
 					AssetCategoryModel assetCategoryModel =
 						InitDataFactoryUtil.newAssetCategoryModel(
-								i, lastRightCategoryId, sb.toString(),
-								assetVocabularyModel.getVocabularyId(),
-								_counter.get(), _companyId, _sampleUserId,
-								userName);
+							i, lastRightCategoryId, sb.toString(),
+							assetVocabularyModel.getVocabularyId(),
+							_counter.get(), _companyId, _sampleUserId,
+							userName);
 
 					lastRightCategoryId += 2;
 
@@ -445,9 +455,7 @@ public class InitDataFactoryContext {
 			List<AssetTagStatsModel> assetTagStatsModels = new ArrayList<>(
 				_maxAssetTagCount * 3);
 
-			for (int j =
-			 0; j < _maxAssetTagCount; j++) {
-
+			for (int j = 0; j < _maxAssetTagCount; j++) {
 				AssetTagModel assetTagModel = new AssetTagModelImpl();
 
 				assetTagModel.setUuid(SequentialUUID.generate());
@@ -464,23 +472,27 @@ public class InitDataFactoryContext {
 				assetTagModels.add(assetTagModel);
 
 				AssetTagStatsModel assetTagStatsModel =
-						InitDataFactoryUtil.newAssetTagStatsModel(
-							assetTagModel.getTagId(), InitDataFactoryUtil.getClassNameId(
-							BlogsEntry.class,
-							_classNameModels), _counter.get());
-
-				assetTagStatsModels.add(assetTagStatsModel);
-
-				assetTagStatsModel = InitDataFactoryUtil.newAssetTagStatsModel(
-					assetTagModel.getTagId(), InitDataFactoryUtil.getClassNameId(
-					JournalArticle.class, _classNameModels), _counter.get());
+					InitDataFactoryUtil.newAssetTagStatsModel(
+						assetTagModel.getTagId(),
+						InitDataFactoryUtil.getClassNameId(
+							BlogsEntry.class, _classNameModels),
+						_counter.get());
 
 				assetTagStatsModels.add(assetTagStatsModel);
 
 				assetTagStatsModel = InitDataFactoryUtil.newAssetTagStatsModel(
 					assetTagModel.getTagId(),
-						InitDataFactoryUtil.getClassNameId(WikiPage.class, _classNameModels),
-						_counter.get());
+					InitDataFactoryUtil.getClassNameId(
+						JournalArticle.class, _classNameModels),
+					_counter.get());
+
+				assetTagStatsModels.add(assetTagStatsModel);
+
+				assetTagStatsModel = InitDataFactoryUtil.newAssetTagStatsModel(
+					assetTagModel.getTagId(),
+					InitDataFactoryUtil.getClassNameId(
+						WikiPage.class, _classNameModels),
+					_counter.get());
 
 				assetTagStatsModels.add(assetTagStatsModel);
 			}
@@ -492,7 +504,7 @@ public class InitDataFactoryContext {
 
 	public static void initCompanyModels() {
 		_companyModel = InitDataFactoryUtil.initCompanyModel(
-					_companyId, _accountId);
+			_companyId, _accountId);
 		_accountModel = InitDataFactoryUtil.initAccountModel(
 			_companyId, _accountId);
 	}
@@ -586,8 +598,8 @@ public class InitDataFactoryContext {
 			maxJournalArticleSize);
 
 		_virtualHostModel = InitDataFactoryUtil.initVirtualHostModel(
-				properties.getProperty("sample.sql.virtual.hostname"),
-				_counter.get(), _companyId);
+			properties.getProperty("sample.sql.virtual.hostname"),
+			_counter.get(), _companyId);
 	}
 
 	public static void initDLFileEntryTypeModel(String userName) {
@@ -616,8 +628,9 @@ public class InitDataFactoryContext {
 			InitDataFactoryUtil.nextFutureDate(_futureDateCounter));
 
 		_defaultDLDDMStructureModel = InitDataFactoryUtil.newDDMStructureModel(
-			_globalGroupId, _defaultUserId, InitDataFactoryUtil.getClassNameId(
-			DLFileEntry.class, _classNameModels),
+			_globalGroupId, _defaultUserId,
+			InitDataFactoryUtil.getClassNameId(
+				DLFileEntry.class, _classNameModels),
 			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent,
 			_counter.get(), _companyId, userName, _futureDateCounter);
 
@@ -630,13 +643,13 @@ public class InitDataFactoryContext {
 				_globalGroupId, _defaultUserId,
 				_defaultDLDDMStructureVersionModel.getStructureVersionId(),
 				_dlDDMStructureLayoutContent, _counter.get(), _companyId,
-				userName,
-			_futureDateCounter);
+				userName, _futureDateCounter);
 
 		_defaultJournalDDMStructureModel =
-			InitDataFactoryUtil.newDDMStructureModel(_globalGroupId,
-				_defaultUserId, InitDataFactoryUtil.getClassNameId(
-						JournalArticle.class, _classNameModels),
+			InitDataFactoryUtil.newDDMStructureModel(
+				_globalGroupId, _defaultUserId,
+				InitDataFactoryUtil.getClassNameId(
+					JournalArticle.class, _classNameModels),
 				"BASIC-WEB-CONTENT", _journalDDMStructureContent,
 				_counter.get(), _companyId, userName, _futureDateCounter);
 
@@ -647,24 +660,26 @@ public class InitDataFactoryContext {
 		_defaultJournalDDMStructureLayoutModel =
 			InitDataFactoryUtil.newDDMStructureLayoutModel(
 				_globalGroupId, _defaultUserId,
-			_defaultJournalDDMStructureVersionModel.getStructureVersionId(),
-			_journalDDMStructureLayoutContent, _counter.get(), _companyId,
-			userName, _futureDateCounter);
+				_defaultJournalDDMStructureVersionModel.getStructureVersionId(),
+				_journalDDMStructureLayoutContent, _counter.get(), _companyId,
+				userName, _futureDateCounter);
 
 		_defaultJournalDDMTemplateModel =
 			InitDataFactoryUtil.newDDMTemplateModel(
 				_globalGroupId, _defaultUserId,
-			_defaultJournalDDMStructureModel.getStructureId(),
-			InitDataFactoryUtil.getClassNameId(JournalArticle.class, _classNameModels),
-			_counter.get(), _companyId, _futureDateCounter, _classNameModels,
-			_counter.get(), userName);
+				_defaultJournalDDMStructureModel.getStructureId(),
+				InitDataFactoryUtil.getClassNameId(
+					JournalArticle.class, _classNameModels),
+				_counter.get(), _companyId, _futureDateCounter,
+				_classNameModels, _counter.get(), userName);
 	}
 
 	public static void initGroupModels() throws Exception {
 		_globalGroupModel = InitDataFactoryUtil.initGroupModel(
-				_globalGroupId, InitDataFactoryUtil.getClassNameId(
-						Company.class, _classNameModels), _companyId,
-					GroupConstants.GLOBAL, false, _companyId, _sampleUserId);
+			_globalGroupId, InitDataFactoryUtil.getClassNameId(
+				Company.class, _classNameModels),
+			_companyId, GroupConstants.GLOBAL, false, _companyId,
+			_sampleUserId);
 
 		_guestGroupModel = InitDataFactoryUtil.initGroupModel(
 			_guestGroupId, InitDataFactoryUtil.getGroupClassNameId(),
@@ -677,7 +692,7 @@ public class InitDataFactoryContext {
 			GroupModel groupModel = InitDataFactoryUtil.initGroupModel(
 				i, InitDataFactoryUtil.getGroupClassNameId(), i, "Site " + i,
 				true, _companyId, _sampleUserId);
-				_groupModels.add(groupModel);
+			_groupModels.add(groupModel);
 		}
 	}
 
@@ -811,16 +826,17 @@ public class InitDataFactoryContext {
 	}
 
 	public static void initUserModels(String userName) {
-		_defaultUserModel = InitDataFactoryUtil.newUserModel(_defaultUserId,
-				StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, true,
-				_counter.get(), _companyId);
+		_defaultUserModel = InitDataFactoryUtil.newUserModel(
+			_defaultUserId, StringPool.BLANK, StringPool.BLANK,
+			StringPool.BLANK, true, _counter.get(), _companyId);
 
-		_guestUserModel = InitDataFactoryUtil.newUserModel(_counter.get(),
-			"Test", "Test", "Test", false, _counter.get(), _companyId);
+		_guestUserModel = InitDataFactoryUtil.newUserModel(
+			_counter.get(), "Test", "Test", "Test", false, _counter.get(),
+			_companyId);
 
-		_sampleUserModel = InitDataFactoryUtil.newUserModel(_sampleUserId,
-				userName, userName, userName, false, _counter.get(),
-				_companyId);
+		_sampleUserModel = InitDataFactoryUtil.newUserModel(
+			_sampleUserId, userName, userName, userName, false, _counter.get(),
+			_companyId);
 	}
 
 	public static void initUserNames(Class<?> clazz) throws IOException {
