@@ -223,8 +223,9 @@ public class InitDataFactoryUtil {
 	}
 
 	public static GroupModel newGroupModel(
-		long groupId, long classNameId, long classPK, String name, boolean site,
-		long companyId, long sampleUserId)throws Exception {
+			long groupId, long classNameId, long classPK, String name,
+			boolean site, long companyId, long sampleUserId)
+		throws Exception {
 
 		GroupModel groupModel = new GroupModelImpl();
 
@@ -255,8 +256,9 @@ public class InitDataFactoryUtil {
 	}
 
 	public static GroupModel initGroupModel(
-		long groupId, long classNameId, long classPK, String name, boolean site,
-		long companyId, long sampleUserId) throws Exception {
+			long groupId, long classNameId, long classPK, String name,
+			boolean site, long companyId, long sampleUserId)
+		throws Exception {
 
 		GroupModel globalGroupModel = newGroupModel(
 			groupId, classNameId, classPK, name, site, companyId, sampleUserId);
