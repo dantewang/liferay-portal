@@ -191,8 +191,7 @@ public class AssetDataFactory {
 				MBCategoryConstants.DISCUSSION_CATEGORY_ID) {
 
 			classNameId = InitDataFactoryUtil.getClassNameId(
-				MBDiscussion.class,
-				InitContextUtil.getClassNameModels());
+				MBDiscussion.class, InitContextUtil.getClassNameModels());
 		}
 		else {
 			classNameId = InitDataFactoryUtil.getClassNameId(
@@ -236,8 +235,7 @@ public class AssetDataFactory {
 			journalArticleModel.getCreateDate(),
 			journalArticleModel.getModifiedDate(),
 			InitDataFactoryUtil.getClassNameId(
-				JournalArticle.class,
-				InitContextUtil.getClassNameModels()),
+				JournalArticle.class, InitContextUtil.getClassNameModels()),
 			resourcePrimKey, resourceUUID,
 			InitContextUtil.
 				getDefaultJournalDDMStructureModel().getStructureId(),

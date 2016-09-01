@@ -56,8 +56,7 @@ public class JournalDataFactory {
 	public static DDMStructureLayoutModel
 		getDefaultJournalDDMStructureLayoutModel() {
 
-		return InitContextUtil.
-			getDefaultJournalDDMStructureLayoutModel();
+		return InitContextUtil.getDefaultJournalDDMStructureLayoutModel();
 	}
 
 	public static DDMStructureModel getDefaultJournalDDMStructureModel() {
@@ -67,8 +66,7 @@ public class JournalDataFactory {
 	public static DDMStructureVersionModel
 		getDefaultJournalDDMStructureVersionModel() {
 
-		return InitContextUtil.
-			getDefaultJournalDDMStructureVersionModel();
+		return InitContextUtil.getDefaultJournalDDMStructureVersionModel();
 	}
 
 	public static DDMTemplateModel getDefaultJournalDDMTemplateModel() {
@@ -117,8 +115,7 @@ public class JournalDataFactory {
 			InitContextUtil.getCounter().get());
 		ddmStorageLinkModel.setClassNameId(
 			InitDataFactoryUtil.getClassNameId(
-				JournalArticle.class,
-				InitContextUtil.getClassNameModels()));
+				JournalArticle.class, InitContextUtil.getClassNameModels()));
 		ddmStorageLinkModel.setClassPK(journalArticleModel.getId());
 		ddmStorageLinkModel.setStructureId(structureId);
 
@@ -131,14 +128,12 @@ public class JournalDataFactory {
 		DDMTemplateLinkModel ddmTemplateLinkModel =
 			new DDMTemplateLinkModelImpl();
 
-		ddmTemplateLinkModel.setCompanyId(
-			InitContextUtil.getCompanyId());
+		ddmTemplateLinkModel.setCompanyId(InitContextUtil.getCompanyId());
 		ddmTemplateLinkModel.setTemplateLinkId(
 			InitContextUtil.getCounter().get());
 		ddmTemplateLinkModel.setClassNameId(
 			InitDataFactoryUtil.getClassNameId(
-				JournalArticle.class,
-				InitContextUtil.getClassNameModels()));
+				JournalArticle.class, InitContextUtil.getClassNameModels()));
 		ddmTemplateLinkModel.setClassPK(journalArticleModel.getId());
 		ddmTemplateLinkModel.setTemplateId(templateId);
 
@@ -258,8 +253,7 @@ public class JournalDataFactory {
 		journalContentSearchModel.setContentSearchId(
 			InitContextUtil.getCounter().get());
 		journalContentSearchModel.setGroupId(journalArticleModel.getGroupId());
-		journalContentSearchModel.setCompanyId(
-			InitContextUtil.getCompanyId());
+		journalContentSearchModel.setCompanyId(InitContextUtil.getCompanyId());
 		journalContentSearchModel.setLayoutId(layoutId);
 		journalContentSearchModel.setPortletId(
 			"com_liferay_journal_content_web_portlet_JournalContentPortlet");

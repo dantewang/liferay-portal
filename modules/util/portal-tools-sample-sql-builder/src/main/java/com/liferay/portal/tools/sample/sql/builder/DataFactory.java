@@ -176,9 +176,12 @@ public class DataFactory {
 		InitContextUtil.initUserNames(_clazz);
 		InitContextUtil.initGroupModels();
 		InitContextUtil.initUserModels(DataFactoryConstants.SAMPLE_USER_NAME);
-		InitContextUtil.initAssetCategoryModels(DataFactoryConstants.SAMPLE_USER_NAME);
-		InitContextUtil.initAssetTagModels(DataFactoryConstants.SAMPLE_USER_NAME);
-		InitContextUtil.initDLFileEntryTypeModel(DataFactoryConstants.SAMPLE_USER_NAME);
+		InitContextUtil.initAssetCategoryModels(
+			DataFactoryConstants.SAMPLE_USER_NAME);
+		InitContextUtil.initAssetTagModels(
+			DataFactoryConstants.SAMPLE_USER_NAME);
+		InitContextUtil.initDLFileEntryTypeModel(
+			DataFactoryConstants.SAMPLE_USER_NAME);
 		InitContextUtil.initRoleModels(DataFactoryConstants.SAMPLE_USER_NAME);
 	}
 
@@ -284,8 +287,7 @@ public class DataFactory {
 	}
 
 	public long getDefaultDLDDMStructureId() {
-		return InitContextUtil.getDefaultDLDDMStructureModel().
-			getStructureId();
+		return InitContextUtil.getDefaultDLDDMStructureModel().getStructureId();
 	}
 
 	public DDMStructureLayoutModel getDefaultDLDDMStructureLayoutModel() {
@@ -403,8 +405,7 @@ public class DataFactory {
 	}
 
 	public List<Long> getNewUserGroupIds(long groupId) {
-		int maxUserToGroupCount =
-			InitContextUtil.getMaxUserToGroupCount();
+		int maxUserToGroupCount = InitContextUtil.getMaxUserToGroupCount();
 		int maxGroupsCount = InitContextUtil.getMaxGroupsCount();
 
 		List<Long> groupIds = new ArrayList<>(maxUserToGroupCount + 1);
@@ -602,8 +603,8 @@ public class DataFactory {
 			InitContextUtil.getGlobalGroupId(),
 			InitContextUtil.getDefaultUserId(),
 			ddmStructureVersionModel.getStructureVersionId(), sb.toString(),
-			InitContextUtil.getCounter().get(),
-			InitContextUtil.getCompanyId(), DataFactoryConstants.SAMPLE_USER_NAME,
+			InitContextUtil.getCounter().get(), InitContextUtil.getCompanyId(),
+			DataFactoryConstants.SAMPLE_USER_NAME,
 			InitContextUtil.getFutureDateCounter());
 	}
 
@@ -638,11 +639,10 @@ public class DataFactory {
 		return InitDataFactoryUtil.newDDMStructureModel(
 			groupId, InitContextUtil.getSampleUserId(),
 			InitDataFactoryUtil.getClassNameId(
-				DDLRecordSet.class,
-				InitContextUtil.getClassNameModels()),
+				DDLRecordSet.class, InitContextUtil.getClassNameModels()),
 			"Test DDM Structure", sb.toString(),
-			InitContextUtil.getCounter().get(),
-			InitContextUtil.getCompanyId(), DataFactoryConstants.SAMPLE_USER_NAME,
+			InitContextUtil.getCounter().get(), InitContextUtil.getCompanyId(),
+			DataFactoryConstants.SAMPLE_USER_NAME,
 			InitContextUtil.getFutureDateCounter());
 	}
 
@@ -679,13 +679,12 @@ public class DataFactory {
 		ddlRecordModel.setCompanyId(InitContextUtil.getCompanyId());
 		ddlRecordModel.setUserId(InitContextUtil.getSampleUserId());
 		ddlRecordModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		ddlRecordModel.setVersionUserId(
-			InitContextUtil.getSampleUserId());
-		ddlRecordModel.setVersionUserName(DataFactoryConstants.SAMPLE_USER_NAME);
+		ddlRecordModel.setVersionUserId(InitContextUtil.getSampleUserId());
+		ddlRecordModel.setVersionUserName(
+			DataFactoryConstants.SAMPLE_USER_NAME);
 		ddlRecordModel.setCreateDate(new Date());
 		ddlRecordModel.setModifiedDate(new Date());
-		ddlRecordModel.setDDMStorageId(
-			InitContextUtil.getCounter().get());
+		ddlRecordModel.setDDMStorageId(InitContextUtil.getCounter().get());
 		ddlRecordModel.setRecordSetId(dDLRecordSetModel.getRecordSetId());
 		ddlRecordModel.setVersion(DDLRecordConstants.VERSION_DEFAULT);
 		ddlRecordModel.setDisplayIndex(
@@ -701,8 +700,7 @@ public class DataFactory {
 		DDLRecordSetModel ddlRecordSetModel = new DDLRecordSetModelImpl();
 
 		ddlRecordSetModel.setUuid(SequentialUUID.generate());
-		ddlRecordSetModel.setRecordSetId(
-			InitContextUtil.getCounter().get());
+		ddlRecordSetModel.setRecordSetId(InitContextUtil.getCounter().get());
 		ddlRecordSetModel.setGroupId(ddmStructureModel.getGroupId());
 		ddlRecordSetModel.setCompanyId(InitContextUtil.getCompanyId());
 		ddlRecordSetModel.setUserId(InitContextUtil.getSampleUserId());
@@ -742,11 +740,10 @@ public class DataFactory {
 		ddlRecordVersionModel.setRecordVersionId(
 			InitContextUtil.getCounter().get());
 		ddlRecordVersionModel.setGroupId(dDLRecordModel.getGroupId());
-		ddlRecordVersionModel.setCompanyId(
-			InitContextUtil.getCompanyId());
-		ddlRecordVersionModel.setUserId(
-			InitContextUtil.getSampleUserId());
-		ddlRecordVersionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
+		ddlRecordVersionModel.setCompanyId(InitContextUtil.getCompanyId());
+		ddlRecordVersionModel.setUserId(InitContextUtil.getSampleUserId());
+		ddlRecordVersionModel.setUserName(
+			DataFactoryConstants.SAMPLE_USER_NAME);
 		ddlRecordVersionModel.setCreateDate(dDLRecordModel.getModifiedDate());
 		ddlRecordVersionModel.setDDMStorageId(dDLRecordModel.getDDMStorageId());
 		ddlRecordVersionModel.setRecordSetId(dDLRecordModel.getRecordSetId());
@@ -806,8 +803,8 @@ public class DataFactory {
 		sb.append("\"text/plain\"}}]}");
 
 		return newDDMContentModel(
-			InitContextUtil.getCounter().get(),
-			dlFileEntryModel.getGroupId(), sb.toString());
+			InitContextUtil.getCounter().get(), dlFileEntryModel.getGroupId(),
+			sb.toString());
 	}
 
 	public DDMStorageLinkModel newDDMStorageLinkModel(
@@ -839,8 +836,7 @@ public class DataFactory {
 
 		return newDDMStructureLinkModel(
 			InitDataFactoryUtil.getClassNameId(
-				DDLRecordSet.class,
-				InitContextUtil.getClassNameModels()),
+				DDLRecordSet.class, InitContextUtil.getClassNameModels()),
 			ddlRecordSetModel.getRecordSetId(),
 			ddlRecordSetModel.getDDMStructureId());
 	}
@@ -893,8 +889,7 @@ public class DataFactory {
 	public List<DLFileEntryModel> newDlFileEntryModels(
 		DLFolderModel dlFolerModel) {
 
-		int maxDLFileEntryCount =
-			InitContextUtil.getMaxDLFileEntryCount();
+		int maxDLFileEntryCount = InitContextUtil.getMaxDLFileEntryCount();
 
 		List<DLFileEntryModel> dlFileEntryModels = new ArrayList<>(
 			maxDLFileEntryCount);
@@ -904,7 +899,8 @@ public class DataFactory {
 				InitDataFactoryUtil.newDlFileEntryModel(
 					dlFolerModel, i, InitContextUtil.getCounter().get(),
 					InitContextUtil.getCompanyId(),
-					InitContextUtil.getSampleUserId(), DataFactoryConstants.SAMPLE_USER_NAME,
+					InitContextUtil.getSampleUserId(),
+					DataFactoryConstants.SAMPLE_USER_NAME,
 					InitContextUtil.getFutureDateCounter(),
 					InitContextUtil.getMaxDLFileEntrySize()));
 		}
@@ -918,8 +914,7 @@ public class DataFactory {
 		DLFileVersionModel dlFileVersionModel = new DLFileVersionModelImpl();
 
 		dlFileVersionModel.setUuid(SequentialUUID.generate());
-		dlFileVersionModel.setFileVersionId(
-			InitContextUtil.getCounter().get());
+		dlFileVersionModel.setFileVersionId(InitContextUtil.getCounter().get());
 		dlFileVersionModel.setGroupId(dlFileEntryModel.getGroupId());
 		dlFileVersionModel.setCompanyId(InitContextUtil.getCompanyId());
 		dlFileVersionModel.setUserId(InitContextUtil.getSampleUserId());
@@ -961,7 +956,8 @@ public class DataFactory {
 					groupId, parentFolderId, i,
 					InitContextUtil.getCounter().get(),
 					InitContextUtil.getCompanyId(),
-					InitContextUtil.getSampleUserId(), DataFactoryConstants.SAMPLE_USER_NAME,
+					InitContextUtil.getSampleUserId(),
+					DataFactoryConstants.SAMPLE_USER_NAME,
 					InitContextUtil.getFutureDateCounter(),
 					InitContextUtil.getDefaultDLFileEntryTypeModel()));
 		}
@@ -975,8 +971,7 @@ public class DataFactory {
 			InitDataFactoryUtil.getClassNameId(
 				User.class, InitContextUtil.getClassNameModels()),
 			userModel.getUserId(), userModel.getScreenName(), false,
-			InitContextUtil.getCompanyId(),
-			InitContextUtil.getSampleUserId());
+			InitContextUtil.getCompanyId(), InitContextUtil.getSampleUserId());
 	}
 
 	public IntegerWrapper newInteger() {
@@ -1030,11 +1025,10 @@ public class DataFactory {
 		layoutFriendlyURLModel.setLayoutFriendlyURLId(
 			InitContextUtil.getCounter().get());
 		layoutFriendlyURLModel.setGroupId(layoutModel.getGroupId());
-		layoutFriendlyURLModel.setCompanyId(
-			InitContextUtil.getCompanyId());
-		layoutFriendlyURLModel.setUserId(
-			InitContextUtil.getSampleUserId());
-		layoutFriendlyURLModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
+		layoutFriendlyURLModel.setCompanyId(InitContextUtil.getCompanyId());
+		layoutFriendlyURLModel.setUserId(InitContextUtil.getSampleUserId());
+		layoutFriendlyURLModel.setUserName(
+			DataFactoryConstants.SAMPLE_USER_NAME);
 		layoutFriendlyURLModel.setCreateDate(new Date());
 		layoutFriendlyURLModel.setModifiedDate(new Date());
 		layoutFriendlyURLModel.setPlid(layoutModel.getPlid());
@@ -1117,7 +1111,8 @@ public class DataFactory {
 				InitDataFactoryUtil.newMBCategoryModel(
 					groupId, i, InitContextUtil.getCounter().get(),
 					InitContextUtil.getCompanyId(),
-					InitContextUtil.getSampleUserId(), DataFactoryConstants.SAMPLE_USER_NAME,
+					InitContextUtil.getSampleUserId(),
+					DataFactoryConstants.SAMPLE_USER_NAME,
 					InitContextUtil.getMaxMBThreadCount(),
 					InitContextUtil.getMaxMBMessageCount()));
 		}
@@ -1131,8 +1126,7 @@ public class DataFactory {
 		MBDiscussionModel mbDiscussionModel = new MBDiscussionModelImpl();
 
 		mbDiscussionModel.setUuid(SequentialUUID.generate());
-		mbDiscussionModel.setDiscussionId(
-			InitContextUtil.getCounter().get());
+		mbDiscussionModel.setDiscussionId(InitContextUtil.getCounter().get());
 		mbDiscussionModel.setGroupId(groupId);
 		mbDiscussionModel.setCompanyId(InitContextUtil.getCompanyId());
 		mbDiscussionModel.setUserId(InitContextUtil.getSampleUserId());
@@ -1153,8 +1147,7 @@ public class DataFactory {
 		MBMailingListModel mbMailingListModel = new MBMailingListModelImpl();
 
 		mbMailingListModel.setUuid(SequentialUUID.generate());
-		mbMailingListModel.setMailingListId(
-			InitContextUtil.getCounter().get());
+		mbMailingListModel.setMailingListId(InitContextUtil.getCounter().get());
 		mbMailingListModel.setGroupId(mbCategoryModel.getGroupId());
 		mbMailingListModel.setCompanyId(InitContextUtil.getCompanyId());
 		mbMailingListModel.setUserId(InitContextUtil.getSampleUserId());
@@ -1254,8 +1247,7 @@ public class DataFactory {
 
 		MBStatsUserModel mbStatsUserModel = new MBStatsUserModelImpl();
 
-		mbStatsUserModel.setStatsUserId(
-			InitContextUtil.getCounter().get());
+		mbStatsUserModel.setStatsUserId(InitContextUtil.getCounter().get());
 		mbStatsUserModel.setGroupId(groupId);
 		mbStatsUserModel.setUserId(InitContextUtil.getSampleUserId());
 		mbStatsUserModel.setMessageCount(
@@ -1270,8 +1262,7 @@ public class DataFactory {
 		MBThreadFlagModel mbThreadFlagModel = new MBThreadFlagModelImpl();
 
 		mbThreadFlagModel.setUuid(SequentialUUID.generate());
-		mbThreadFlagModel.setThreadFlagId(
-			InitContextUtil.getCounter().get());
+		mbThreadFlagModel.setThreadFlagId(InitContextUtil.getCounter().get());
 		mbThreadFlagModel.setGroupId(mbThreadModel.getGroupId());
 		mbThreadFlagModel.setCompanyId(InitContextUtil.getCompanyId());
 		mbThreadFlagModel.setUserId(InitContextUtil.getSampleUserId());
@@ -1525,22 +1516,19 @@ public class DataFactory {
 
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey,
-				InitContextUtil.getGuestRoleModel().getRoleId(), 0,
-				InitContextUtil.getResourcePermissionCounter().get(),
+				name, primKey, InitContextUtil.getGuestRoleModel().getRoleId(),
+				0, InitContextUtil.getResourcePermissionCounter().get(),
 				InitContextUtil.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey,
-				InitContextUtil.getOwnerRoleModel().getRoleId(),
+				name, primKey, InitContextUtil.getOwnerRoleModel().getRoleId(),
 				ddmStructureModel.getUserId(),
 				InitContextUtil.getResourcePermissionCounter().get(),
 				InitContextUtil.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey,
-				InitContextUtil.getUserRoleModel().getRoleId(), 0,
-				InitContextUtil.getResourcePermissionCounter().get(),
+				name, primKey, InitContextUtil.getUserRoleModel().getRoleId(),
+				0, InitContextUtil.getResourcePermissionCounter().get(),
 				InitContextUtil.getCompanyId()));
 
 		return resourcePermissionModels;
@@ -1560,22 +1548,19 @@ public class DataFactory {
 
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey,
-				InitContextUtil.getGuestRoleModel().getRoleId(), 0,
-				InitContextUtil.getResourcePermissionCounter().get(),
+				name, primKey, InitContextUtil.getGuestRoleModel().getRoleId(),
+				0, InitContextUtil.getResourcePermissionCounter().get(),
 				InitContextUtil.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey,
-				InitContextUtil.getOwnerRoleModel().getRoleId(),
+				name, primKey, InitContextUtil.getOwnerRoleModel().getRoleId(),
 				ddmTemplateModel.getUserId(),
 				InitContextUtil.getResourcePermissionCounter().get(),
 				InitContextUtil.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey,
-				InitContextUtil.getUserRoleModel().getRoleId(), 0,
-				InitContextUtil.getResourcePermissionCounter().get(),
+				name, primKey, InitContextUtil.getUserRoleModel().getRoleId(),
+				0, InitContextUtil.getResourcePermissionCounter().get(),
 				InitContextUtil.getCompanyId()));
 
 		return resourcePermissionModels;
@@ -1684,8 +1669,7 @@ public class DataFactory {
 		String name, long primKey) {
 
 		return newResourcePermissionModels(
-			name, String.valueOf(primKey),
-			InitContextUtil.getSampleUserId());
+			name, String.valueOf(primKey), InitContextUtil.getSampleUserId());
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -1751,8 +1735,7 @@ public class DataFactory {
 		return newSocialActivityModel(
 			journalArticleModel.getGroupId(),
 			InitDataFactoryUtil.getClassNameId(
-				JournalArticle.class,
-				InitContextUtil.getClassNameModels()),
+				JournalArticle.class, InitContextUtil.getClassNameModels()),
 			journalArticleModel.getResourcePrimKey(), type,
 			"{\"title\":\"" + journalArticleModel.getUrlTitle() + "\"}");
 	}
@@ -1831,8 +1814,7 @@ public class DataFactory {
 		for (int i = 0; i < InitContextUtil.getMaxUserCount(); i++) {
 			String[] userName = InitDataFactoryUtil.nextUserName(i);
 			String lastName =
-				"test" + InitContextUtil.getUserScreenNameCounter().
-					get();
+				"test" + InitContextUtil.getUserScreenNameCounter().get();
 			userModels.add(
 				InitDataFactoryUtil.newUserModel(
 					InitContextUtil.getCounter().get(), userName[0],
@@ -1979,11 +1961,9 @@ public class DataFactory {
 		mbThreadModel.setModifiedDate(new Date());
 		mbThreadModel.setCategoryId(categoryId);
 		mbThreadModel.setRootMessageId(rootMessageId);
-		mbThreadModel.setRootMessageUserId(
-			InitContextUtil.getSampleUserId());
+		mbThreadModel.setRootMessageUserId(InitContextUtil.getSampleUserId());
 		mbThreadModel.setMessageCount(messageCount);
-		mbThreadModel.setLastPostByUserId(
-			InitContextUtil.getSampleUserId());
+		mbThreadModel.setLastPostByUserId(InitContextUtil.getSampleUserId());
 		mbThreadModel.setLastPostDate(new Date());
 		mbThreadModel.setLastPublishDate(new Date());
 		mbThreadModel.setStatusDate(new Date());
@@ -1999,15 +1979,13 @@ public class DataFactory {
 
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey,
-				InitContextUtil.getGuestRoleModel().getRoleId(), 0,
-				InitContextUtil.getResourcePermissionCounter().get(),
+				name, primKey, InitContextUtil.getGuestRoleModel().getRoleId(),
+				0, InitContextUtil.getResourcePermissionCounter().get(),
 				InitContextUtil.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey,
-				InitContextUtil.getOwnerRoleModel().getRoleId(), ownerId,
-				InitContextUtil.getResourcePermissionCounter().get(),
+				name, primKey, InitContextUtil.getOwnerRoleModel().getRoleId(),
+				ownerId, InitContextUtil.getResourcePermissionCounter().get(),
 				InitContextUtil.getCompanyId()));
 		resourcePermissionModels.add(
 			InitDataFactoryUtil.newResourcePermissionModel(
@@ -2045,8 +2023,7 @@ public class DataFactory {
 
 		SubscriptionModel subscriptionModel = new SubscriptionModelImpl();
 
-		subscriptionModel.setSubscriptionId(
-			InitContextUtil.getCounter().get());
+		subscriptionModel.setSubscriptionId(InitContextUtil.getCounter().get());
 		subscriptionModel.setCompanyId(InitContextUtil.getCompanyId());
 		subscriptionModel.setUserId(InitContextUtil.getSampleUserId());
 		subscriptionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);

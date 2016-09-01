@@ -851,8 +851,7 @@ public class InitDataFactoryUtil {
 		ddmStructureVersionModel.setStructureVersionId(
 			InitContextUtil.getCounter().get());
 		ddmStructureVersionModel.setGroupId(ddmStructureModel.getGroupId());
-		ddmStructureVersionModel.setCompanyId(
-			InitContextUtil.getCompanyId());
+		ddmStructureVersionModel.setCompanyId(InitContextUtil.getCompanyId());
 		ddmStructureVersionModel.setUserId(ddmStructureModel.getUserId());
 		ddmStructureVersionModel.setUserName(userName);
 		ddmStructureVersionModel.setCreateDate(

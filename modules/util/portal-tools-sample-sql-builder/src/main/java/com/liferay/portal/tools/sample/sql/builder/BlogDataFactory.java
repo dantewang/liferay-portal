@@ -27,7 +27,16 @@ import java.util.List;
  * @author Lily Chi
  */
 public class BlogDataFactory {
-	
+
+	public static long getBlogsEntryClassNameId() {
+		return InitDataFactoryUtil.getClassNameId(
+			BlogsEntry.class, InitContextUtil.getClassNameModels());
+	}
+
+	public static int getMaxBlogsEntryCommentCount() {
+		return InitContextUtil.getMaxBlogsEntryCommentCount();
+	}
+
 	public static List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
 		int maxBlogsEntryCount = InitContextUtil.getMaxBlogsEntryCount();
 
@@ -45,21 +54,11 @@ public class BlogDataFactory {
 
 		return blogEntryModels;
 	}
-	
-	public static long getBlogsEntryClassNameId() {
-		return InitDataFactoryUtil.getClassNameId(
-			BlogsEntry.class, InitContextUtil.getClassNameModels());
-	}
-	
-	public static int getMaxBlogsEntryCommentCount() {
-		return InitContextUtil.getMaxBlogsEntryCommentCount();
-	}
-	
+
 	public static BlogsStatsUserModel newBlogsStatsUserModel(long groupId) {
 		BlogsStatsUserModel blogsStatsUserModel = new BlogsStatsUserModelImpl();
 
-		blogsStatsUserModel.setStatsUserId(
-			InitContextUtil.getCounter().get());
+		blogsStatsUserModel.setStatsUserId(InitContextUtil.getCounter().get());
 		blogsStatsUserModel.setGroupId(groupId);
 		blogsStatsUserModel.setCompanyId(InitContextUtil.getCompanyId());
 		blogsStatsUserModel.setUserId(InitContextUtil.getSampleUserId());
@@ -69,4 +68,5 @@ public class BlogDataFactory {
 
 		return blogsStatsUserModel;
 	}
+
 }
