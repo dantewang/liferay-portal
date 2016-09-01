@@ -188,7 +188,7 @@ public class JournalDataFactory {
 			journalArticleResourceModel.getGroupId());
 		journalArticleModel.setCompanyId(InitDataFactoryContext.getCompanyId());
 		journalArticleModel.setUserId(InitDataFactoryContext.getSampleUserId());
-		journalArticleModel.setUserName(_SAMPLE_USER_NAME);
+		journalArticleModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		journalArticleModel.setCreateDate(new Date());
 		journalArticleModel.setModifiedDate(new Date());
 		journalArticleModel.setClassNameId(
@@ -296,7 +296,5 @@ public class JournalDataFactory {
 			plid, portletId,
 			portletPreferencesFactory.toXML(jxPortletPreferences));
 	}
-
-	private static final String _SAMPLE_USER_NAME = "Sample";
 
 }
