@@ -39,8 +39,11 @@ import javax.portlet.PortletPreferences;
  */
 public class JournalDataFactory {
 
-	public static DDMStructureLayoutModel getDefaultJournalDDMStructureLayoutModel() {
-		return InitDataFactoryContext.getDefaultJournalDDMStructureLayoutModel();
+	public static DDMStructureLayoutModel
+		getDefaultJournalDDMStructureLayoutModel() {
+
+		return InitDataFactoryContext.
+			getDefaultJournalDDMStructureLayoutModel();
 	}
 
 	public static DDMStructureModel getDefaultJournalDDMStructureModel() {
@@ -50,7 +53,8 @@ public class JournalDataFactory {
 	public static DDMStructureVersionModel
 		getDefaultJournalDDMStructureVersionModel() {
 
-		return InitDataFactoryContext.getDefaultJournalDDMStructureVersionModel();
+		return InitDataFactoryContext.
+			getDefaultJournalDDMStructureVersionModel();
 	}
 
 	public static DDMTemplateModel getDefaultJournalDDMTemplateModel() {
@@ -59,17 +63,16 @@ public class JournalDataFactory {
 
 	public static long getJournalArticleClassNameId() {
 		return InitDataFactoryUtil.getClassNameId(
-				JournalArticle.class,
-				InitDataFactoryContext.getClassNameModels());
+			JournalArticle.class, InitDataFactoryContext.getClassNameModels());
 	}
 
 	public static String getJournalArticleLayoutColumn(String portletPrefix) {
-		StringBundler sb = new StringBundler(
-			3 * InitDataFactoryContext.getMaxJournalArticleCount());
+		int maxJournalArticleCount =
+			InitDataFactoryContext.getMaxJournalArticleCount();
 
-		for (int i =
-		 1; i <= InitDataFactoryContext.getMaxJournalArticleCount(); i++) {
+		StringBundler sb = new StringBundler(3 * maxJournalArticleCount);
 
+		for (int i = 1; i <= maxJournalArticleCount; i++) {
 			sb.append(portletPrefix);
 			sb.append(i);
 			sb.append(StringPool.COMMA);
@@ -86,6 +89,10 @@ public class JournalDataFactory {
 		return InitDataFactoryContext.getMaxJournalArticlePageCount();
 	}
 
+	public static int getMaxJournalArticleVersionCount() {
+		return InitDataFactoryContext.getMaxJournalArticleVersionCount();
+	}
+
 	public static DDMStorageLinkModel newDDMStorageLinkModel(
 		JournalArticleModel journalArticleModel, long structureId) {
 
@@ -96,8 +103,8 @@ public class JournalDataFactory {
 			InitDataFactoryContext.getCounter().get());
 		ddmStorageLinkModel.setClassNameId(
 			InitDataFactoryUtil.getClassNameId(
-					JournalArticle.class,
-					InitDataFactoryContext.getClassNameModels()));
+				JournalArticle.class,
+				InitDataFactoryContext.getClassNameModels()));
 		ddmStorageLinkModel.setClassPK(journalArticleModel.getId());
 		ddmStorageLinkModel.setStructureId(structureId);
 
@@ -116,17 +123,18 @@ public class JournalDataFactory {
 			InitDataFactoryContext.getCounter().get());
 		ddmTemplateLinkModel.setClassNameId(
 			InitDataFactoryUtil.getClassNameId(
-					JournalArticle.class,
-					InitDataFactoryContext.getClassNameModels()));
+				JournalArticle.class,
+				InitDataFactoryContext.getClassNameModels()));
 		ddmTemplateLinkModel.setClassPK(journalArticleModel.getId());
 		ddmTemplateLinkModel.setTemplateId(templateId);
 
 		return ddmTemplateLinkModel;
 	}
 
-	public static JournalArticleLocalizationModel newJournalArticleLocalizationModel(
-		JournalArticleModel journalArticleModel, int articleIndex,
-		int versionIndex) {
+	public static JournalArticleLocalizationModel
+		newJournalArticleLocalizationModel(
+			JournalArticleModel journalArticleModel, int articleIndex,
+			int versionIndex) {
 
 		JournalArticleLocalizationModel journalArticleLocalizationModel =
 			new JournalArticleLocalizationModelImpl();
@@ -190,13 +198,15 @@ public class JournalDataFactory {
 			InitDataFactoryContext.getJournalArticleContent());
 		journalArticleModel.setDefaultLanguageId("en_US");
 		journalArticleModel.setDDMStructureKey(
-			InitDataFactoryContext.getDefaultJournalDDMStructureModel().getStructureKey());
+			InitDataFactoryContext.getDefaultJournalDDMStructureModel().
+				getStructureKey());
 		journalArticleModel.setDDMTemplateKey(
-			InitDataFactoryContext.getDefaultJournalDDMTemplateModel().getTemplateKey());
+			InitDataFactoryContext.getDefaultJournalDDMTemplateModel().
+				getTemplateKey());
 		journalArticleModel.setDisplayDate(new Date());
 		journalArticleModel.setExpirationDate(
-				InitDataFactoryUtil.nextFutureDate(
-					InitDataFactoryContext.getFutureDateCounter()));
+			InitDataFactoryUtil.nextFutureDate(
+				InitDataFactoryContext.getFutureDateCounter()));
 		journalArticleModel.setReviewDate(new Date());
 		journalArticleModel.setIndexable(true);
 		journalArticleModel.setLastPublishDate(new Date());
@@ -271,10 +281,6 @@ public class JournalDataFactory {
 		return InitDataFactoryUtil.newPortletPreferencesModel(
 			plid, portletId,
 			portletPreferencesFactory.toXML(jxPortletPreferences));
-	}
-
-	public static int getMaxJournalArticleVersionCount() {
-		return InitDataFactoryContext.getMaxJournalArticleVersionCount();
 	}
 
 	private static final String _SAMPLE_USER_NAME = "Sample";
