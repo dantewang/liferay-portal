@@ -126,8 +126,6 @@ import com.liferay.portal.model.impl.SubscriptionModelImpl;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.blogs.social.BlogsActivityKeys;
-import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFileVersionModelImpl;
 import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
 import com.liferay.portlet.messageboards.social.MBActivityKeys;
 import com.liferay.portlet.social.model.impl.SocialActivityModelImpl;
@@ -295,7 +293,7 @@ public class DataFactory {
 	}
 
 	public DLFileEntryTypeModel getDefaultDLFileEntryTypeModel() {
-		return InitContextUtil.getDefaultDLFileEntryTypeModel();
+		return DLDataFactory.getDefaultDLFileEntryTypeModel();
 	}
 
 	public DDMStructureLayoutModel getDefaultJournalDDMStructureLayoutModel()
@@ -322,8 +320,7 @@ public class DataFactory {
 	}
 
 	public long getDLFileEntryClassNameId() {
-		return InitDataFactoryUtil.getClassNameId(
-			DLFileEntry.class, InitContextUtil.getClassNameModels());
+		return DLDataFactory.getDLFileEntryClassNameId();
 	}
 
 	public GroupModel getGlobalGroupModel() {
@@ -372,7 +369,7 @@ public class DataFactory {
 	}
 
 	public int getMaxDLFolderDepth() {
-		return InitContextUtil.getMaxDLFolderDepth();
+		return DLDataFactory.getMaxDLFolderDepth();
 	}
 
 	public int getMaxGroupCount() {
@@ -783,18 +780,7 @@ public class DataFactory {
 	public DDMContentModel newDDMContentModel(
 		DLFileEntryModel dlFileEntryModel) {
 
-		StringBundler sb = new StringBundler(6);
-
-		sb.append("{\"availableLanguageIds\": [\"en_US\"],");
-		sb.append("\"defaultLanguageId\": \"en_US\", \"fieldValues\": [{");
-		sb.append("\"instanceId\": \"");
-		sb.append(StringUtil.randomId());
-		sb.append("\", \"name\": \"CONTENT_TYPE\", \"value\": {\"en_US\": ");
-		sb.append("\"text/plain\"}}]}");
-
-		return newDDMContentModel(
-			InitContextUtil.getCounter().get(), dlFileEntryModel.getGroupId(),
-			sb.toString());
+		return DLDataFactory.newDDMContentModel(dlFileEntryModel);
 	}
 
 	public DDMStorageLinkModel newDDMStorageLinkModel(
@@ -860,77 +846,20 @@ public class DataFactory {
 		long ddmStorageLinkId, long ddmStructureId,
 		DLFileVersionModel dlFileVersionModel) {
 
-		DLFileEntryMetadataModel dlFileEntryMetadataModel =
-			new DLFileEntryMetadataModelImpl();
-
-		dlFileEntryMetadataModel.setUuid(SequentialUUID.generate());
-		dlFileEntryMetadataModel.setFileEntryMetadataId(
-			InitContextUtil.getCounter().get());
-		dlFileEntryMetadataModel.setDDMStorageId(ddmStorageLinkId);
-		dlFileEntryMetadataModel.setDDMStructureId(ddmStructureId);
-		dlFileEntryMetadataModel.setFileEntryId(
-			dlFileVersionModel.getFileEntryId());
-		dlFileEntryMetadataModel.setFileVersionId(
-			dlFileVersionModel.getFileVersionId());
-
-		return dlFileEntryMetadataModel;
+		return DLDataFactory.newDLFileEntryMetadataModel(
+			ddmStorageLinkId, ddmStructureId, dlFileVersionModel);
 	}
 
 	public List<DLFileEntryModel> newDlFileEntryModels(
 		DLFolderModel dlFolerModel) {
 
-		int maxDLFileEntryCount = InitContextUtil.getMaxDLFileEntryCount();
-
-		List<DLFileEntryModel> dlFileEntryModels = new ArrayList<>(
-			maxDLFileEntryCount);
-
-		for (int i = 1; i <= maxDLFileEntryCount; i++) {
-			dlFileEntryModels.add(
-				InitDataFactoryUtil.newDlFileEntryModel(
-					dlFolerModel, i, InitContextUtil.getCounter().get(),
-					InitContextUtil.getCompanyId(),
-					InitContextUtil.getSampleUserId(),
-					DataFactoryConstants.SAMPLE_USER_NAME,
-					InitContextUtil.getFutureDateCounter(),
-					InitContextUtil.getMaxDLFileEntrySize()));
-		}
-
-		return dlFileEntryModels;
+		return DLDataFactory.newDlFileEntryModels(dlFolerModel);
 	}
 
 	public DLFileVersionModel newDLFileVersionModel(
 		DLFileEntryModel dlFileEntryModel) {
 
-		DLFileVersionModel dlFileVersionModel = new DLFileVersionModelImpl();
-
-		dlFileVersionModel.setUuid(SequentialUUID.generate());
-		dlFileVersionModel.setFileVersionId(InitContextUtil.getCounter().get());
-		dlFileVersionModel.setGroupId(dlFileEntryModel.getGroupId());
-		dlFileVersionModel.setCompanyId(InitContextUtil.getCompanyId());
-		dlFileVersionModel.setUserId(InitContextUtil.getSampleUserId());
-		dlFileVersionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		dlFileVersionModel.setCreateDate(
-			InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
-		dlFileVersionModel.setModifiedDate(
-			InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
-		dlFileVersionModel.setRepositoryId(dlFileEntryModel.getRepositoryId());
-		dlFileVersionModel.setFolderId(dlFileEntryModel.getFolderId());
-		dlFileVersionModel.setFileEntryId(dlFileEntryModel.getFileEntryId());
-		dlFileVersionModel.setFileName(dlFileEntryModel.getFileName());
-		dlFileVersionModel.setExtension(dlFileEntryModel.getExtension());
-		dlFileVersionModel.setMimeType(dlFileEntryModel.getMimeType());
-		dlFileVersionModel.setTitle(dlFileEntryModel.getTitle());
-		dlFileVersionModel.setFileEntryTypeId(
-			dlFileEntryModel.getFileEntryTypeId());
-		dlFileVersionModel.setVersion(dlFileEntryModel.getVersion());
-		dlFileVersionModel.setSize(dlFileEntryModel.getSize());
-		dlFileVersionModel.setLastPublishDate(
-			InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
-
-		return dlFileVersionModel;
+		return DLDataFactory.newDLFileVersionModel(dlFileEntryModel);
 	}
 
 	public List<DLFolderModel> newDLFolderModels(
