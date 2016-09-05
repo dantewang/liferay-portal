@@ -15,11 +15,14 @@
 package com.liferay.portal.tools.sample.sql.builder;
 
 import com.liferay.document.library.kernel.model.DLFileEntry;
+import com.liferay.document.library.kernel.model.DLFileEntryMetadata;
 import com.liferay.document.library.kernel.model.DLFileEntryMetadataModel;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
 import com.liferay.document.library.kernel.model.DLFileEntryTypeModel;
 import com.liferay.document.library.kernel.model.DLFileVersionModel;
 import com.liferay.document.library.kernel.model.DLFolderModel;
+import com.liferay.dynamic.data.mapping.model.DDMContentModel;
+import com.liferay.dynamic.data.mapping.model.DDMStructureLinkModel;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileVersionModelImpl;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -58,9 +61,20 @@ public class DLDataFactory {
 		sb.append("\", \"name\": \"CONTENT_TYPE\", \"value\": {\"en_US\": ");
 		sb.append("\"text/plain\"}}]}");
 
-		return newDDMContentModel(
+		return DDLDataFactory.newDDMContentModel(
 			InitContextUtil.getCounter().get(), dlFileEntryModel.getGroupId(),
 			sb.toString());
+	}
+	
+	public static DDMStructureLinkModel newDDMStructureLinkModel(
+		DLFileEntryMetadataModel dLFileEntryMetadataModel) {
+
+		return DDLDataFactory.newDDMStructureLinkModel(
+			InitDataFactoryUtil.getClassNameId(
+				DLFileEntryMetadata.class,
+				InitContextUtil.getClassNameModels()),
+			dLFileEntryMetadataModel.getFileEntryMetadataId(),
+			dLFileEntryMetadataModel.getDDMStructureId());
 	}
 
 	public static DLFileEntryMetadataModel newDLFileEntryMetadataModel(

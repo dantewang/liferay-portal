@@ -30,7 +30,6 @@ import com.liferay.counter.kernel.model.Counter;
 import com.liferay.counter.kernel.model.CounterModel;
 import com.liferay.counter.model.impl.CounterModelImpl;
 import com.liferay.document.library.kernel.model.DLFileEntry;
-import com.liferay.document.library.kernel.model.DLFileEntryMetadata;
 import com.liferay.document.library.kernel.model.DLFileEntryMetadataModel;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
 import com.liferay.document.library.kernel.model.DLFileEntryTypeModel;
@@ -39,19 +38,13 @@ import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLFolderModel;
 import com.liferay.document.library.web.constants.DLPortletKeys;
 import com.liferay.dynamic.data.lists.constants.DDLPortletKeys;
-import com.liferay.dynamic.data.lists.model.DDLRecordConstants;
 import com.liferay.dynamic.data.lists.model.DDLRecordModel;
 import com.liferay.dynamic.data.lists.model.DDLRecordSet;
-import com.liferay.dynamic.data.lists.model.DDLRecordSetConstants;
 import com.liferay.dynamic.data.lists.model.DDLRecordSetModel;
 import com.liferay.dynamic.data.lists.model.DDLRecordVersionModel;
-import com.liferay.dynamic.data.lists.model.impl.DDLRecordModelImpl;
-import com.liferay.dynamic.data.lists.model.impl.DDLRecordSetModelImpl;
-import com.liferay.dynamic.data.lists.model.impl.DDLRecordVersionModelImpl;
 import com.liferay.dynamic.data.mapping.constants.DDMPortletKeys;
 import com.liferay.dynamic.data.mapping.model.DDMContent;
 import com.liferay.dynamic.data.mapping.model.DDMContentModel;
-import com.liferay.dynamic.data.mapping.model.DDMStorageLink;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
@@ -61,9 +54,6 @@ import com.liferay.dynamic.data.mapping.model.DDMStructureVersionModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
-import com.liferay.dynamic.data.mapping.model.impl.DDMContentModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLinkModelImpl;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleConstants;
 import com.liferay.journal.model.JournalArticleLocalizationModel;
@@ -118,7 +108,6 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
-import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.impl.ContactModelImpl;
 import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
 import com.liferay.portal.model.impl.LayoutModelImpl;
@@ -280,16 +269,16 @@ public class DataFactory {
 	}
 
 	public DDMStructureLayoutModel getDefaultDLDDMStructureLayoutModel() {
-		return InitContextUtil.getDefaultDLDDMStructureLayoutModel();
+		return DDLDataFactory.getDefaultDLDDMStructureLayoutModel();
 	}
 
 	public DDMStructureModel getDefaultDLDDMStructureModel() {
-		return InitContextUtil.getDefaultDLDDMStructureModel();
+		return DDLDataFactory.getDefaultDLDDMStructureModel();
 	}
 
 	public DDMStructureVersionModel getDefaultDLDDMStructureVersionModel()
 	{
-		return InitContextUtil.getDefaultDLDDMStructureVersionModel();
+		return DDLDataFactory.getDefaultDLDDMStructureVersionModel();
 	}
 
 	public DLFileEntryTypeModel getDefaultDLFileEntryTypeModel() {
@@ -361,11 +350,11 @@ public class DataFactory {
 	}
 
 	public int getMaxDDLRecordCount() {
-		return InitContextUtil.getMaxDDLRecordCount();
+		return DDLDataFactory.getMaxDDLRecordCount();
 	}
 
 	public int getMaxDDLRecordSetCount() {
-		return InitContextUtil.getMaxDDLRecordSetCount();
+		return DDLDataFactory.getMaxDDLRecordSetCount();
 	}
 
 	public int getMaxDLFolderDepth() {
@@ -564,73 +553,14 @@ public class DataFactory {
 
 	public DDMStructureLayoutModel newDDLDDMStructureLayoutModel(
 		long groupId, DDMStructureVersionModel ddmStructureVersionModel) {
-
-		int maxDDLCustomFieldCount =
-			InitContextUtil.getMaxDDLCustomFieldCount();
-		StringBundler sb = new StringBundler(4 + maxDDLCustomFieldCount * 4);
-
-		sb.append("{\"defaultLanguageId\": \"en_US\", \"pages\": [{\"rows\": ");
-		sb.append("[");
-
-		for (int i = 0; i < maxDDLCustomFieldCount; i++) {
-			sb.append("{\"columns\": [{\"fieldNames\": [\"");
-			sb.append(InitDataFactoryUtil.nextDDLCustomFieldName(groupId, i));
-			sb.append("\"], \"size\": 12}]}");
-			sb.append(", ");
-		}
-
-		if (maxDDLCustomFieldCount > 0) {
-			sb.setIndex(sb.index() - 1);
-		}
-
-		sb.append("], \"title\": {\"en_US\": \"\"}}],\"paginationMode\": ");
-		sb.append("\"single-page\"}");
-
-		return InitDataFactoryUtil.newDDMStructureLayoutModel(
-			InitContextUtil.getGlobalGroupId(),
-			InitContextUtil.getDefaultUserId(),
-			ddmStructureVersionModel.getStructureVersionId(), sb.toString(),
-			InitContextUtil.getCounter().get(), InitContextUtil.getCompanyId(),
-			DataFactoryConstants.SAMPLE_USER_NAME,
-			InitContextUtil.getFutureDateCounter());
+		
+		return DDLDataFactory.newDDLDDMStructureLayoutModel(
+			groupId, ddmStructureVersionModel);
 	}
 
 	public DDMStructureModel newDDLDDMStructureModel(long groupId) {
-		int maxDDLCustomFieldCount =
-			InitContextUtil.getMaxDDLCustomFieldCount();
-
-		StringBundler sb = new StringBundler(3 + maxDDLCustomFieldCount * 9);
-
-		sb.append("{\"availableLanguageIds\": [\"en_US\"],");
-		sb.append("\"defaultLanguageId\": \"en_US\", \"fields\": [");
-
-		for (int i = 0; i < maxDDLCustomFieldCount; i++) {
-			sb.append(
-				"{\"dataType\": \"string\", \"indexType\": \"keyword\", ");
-			sb.append("\"label\": {\"en_US\": \"Text");
-			sb.append(i);
-			sb.append("\"}, \"name\": \"");
-			sb.append(InitDataFactoryUtil.nextDDLCustomFieldName(groupId, i));
-			sb.append("\", \"readOnly\": false, \"repeatable\": false,");
-			sb.append("\"required\": false, \"showLabel\": true, \"type\": ");
-			sb.append("\"text\"}");
-			sb.append(",");
-		}
-
-		if (maxDDLCustomFieldCount > 0) {
-			sb.setIndex(sb.index() - 1);
-		}
-
-		sb.append("]}");
-
-		return InitDataFactoryUtil.newDDMStructureModel(
-			groupId, InitContextUtil.getSampleUserId(),
-			InitDataFactoryUtil.getClassNameId(
-				DDLRecordSet.class, InitContextUtil.getClassNameModels()),
-			"Test DDM Structure", sb.toString(),
-			InitContextUtil.getCounter().get(), InitContextUtil.getCompanyId(),
-			DataFactoryConstants.SAMPLE_USER_NAME,
-			InitContextUtil.getFutureDateCounter());
+		
+		return DDLDataFactory.newDDLDDMStructureModel(groupId);
 	}
 
 	public List<PortletPreferencesModel>
@@ -658,128 +588,31 @@ public class DataFactory {
 	public DDLRecordModel newDDLRecordModel(
 		DDLRecordSetModel dDLRecordSetModel) {
 
-		DDLRecordModel ddlRecordModel = new DDLRecordModelImpl();
-
-		ddlRecordModel.setUuid(SequentialUUID.generate());
-		ddlRecordModel.setRecordId(InitContextUtil.getCounter().get());
-		ddlRecordModel.setGroupId(dDLRecordSetModel.getGroupId());
-		ddlRecordModel.setCompanyId(InitContextUtil.getCompanyId());
-		ddlRecordModel.setUserId(InitContextUtil.getSampleUserId());
-		ddlRecordModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		ddlRecordModel.setVersionUserId(InitContextUtil.getSampleUserId());
-		ddlRecordModel.setVersionUserName(
-			DataFactoryConstants.SAMPLE_USER_NAME);
-		ddlRecordModel.setCreateDate(new Date());
-		ddlRecordModel.setModifiedDate(new Date());
-		ddlRecordModel.setDDMStorageId(InitContextUtil.getCounter().get());
-		ddlRecordModel.setRecordSetId(dDLRecordSetModel.getRecordSetId());
-		ddlRecordModel.setVersion(DDLRecordConstants.VERSION_DEFAULT);
-		ddlRecordModel.setDisplayIndex(
-			DDLRecordConstants.DISPLAY_INDEX_DEFAULT);
-		ddlRecordModel.setLastPublishDate(new Date());
-
-		return ddlRecordModel;
+		return DDLDataFactory.newDDLRecordModel(dDLRecordSetModel);
 	}
 
 	public DDLRecordSetModel newDDLRecordSetModel(
 		DDMStructureModel ddmStructureModel, int currentIndex) {
 
-		DDLRecordSetModel ddlRecordSetModel = new DDLRecordSetModelImpl();
-
-		ddlRecordSetModel.setUuid(SequentialUUID.generate());
-		ddlRecordSetModel.setRecordSetId(InitContextUtil.getCounter().get());
-		ddlRecordSetModel.setGroupId(ddmStructureModel.getGroupId());
-		ddlRecordSetModel.setCompanyId(InitContextUtil.getCompanyId());
-		ddlRecordSetModel.setUserId(InitContextUtil.getSampleUserId());
-		ddlRecordSetModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		ddlRecordSetModel.setCreateDate(new Date());
-		ddlRecordSetModel.setModifiedDate(new Date());
-		ddlRecordSetModel.setDDMStructureId(ddmStructureModel.getStructureId());
-		ddlRecordSetModel.setRecordSetKey(
-			String.valueOf(InitContextUtil.getCounter().get()));
-
-		StringBundler sb = new StringBundler(5);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append("Test DDL Record Set ");
-		sb.append(currentIndex);
-		sb.append("</name></root>");
-
-		ddlRecordSetModel.setName(sb.toString());
-
-		ddlRecordSetModel.setMinDisplayRows(
-			DDLRecordSetConstants.MIN_DISPLAY_ROWS_DEFAULT);
-		ddlRecordSetModel.setScope(
-			DDLRecordSetConstants.SCOPE_DYNAMIC_DATA_LISTS);
-		ddlRecordSetModel.setSettings(StringPool.BLANK);
-		ddlRecordSetModel.setLastPublishDate(new Date());
-
-		return ddlRecordSetModel;
+		return DDLDataFactory.newDDLRecordSetModel(
+			ddmStructureModel, currentIndex);
 	}
 
 	public DDLRecordVersionModel newDDLRecordVersionModel(
 		DDLRecordModel dDLRecordModel) {
 
-		DDLRecordVersionModel ddlRecordVersionModel =
-			new DDLRecordVersionModelImpl();
-
-		ddlRecordVersionModel.setRecordVersionId(
-			InitContextUtil.getCounter().get());
-		ddlRecordVersionModel.setGroupId(dDLRecordModel.getGroupId());
-		ddlRecordVersionModel.setCompanyId(InitContextUtil.getCompanyId());
-		ddlRecordVersionModel.setUserId(InitContextUtil.getSampleUserId());
-		ddlRecordVersionModel.setUserName(
-			DataFactoryConstants.SAMPLE_USER_NAME);
-		ddlRecordVersionModel.setCreateDate(dDLRecordModel.getModifiedDate());
-		ddlRecordVersionModel.setDDMStorageId(dDLRecordModel.getDDMStorageId());
-		ddlRecordVersionModel.setRecordSetId(dDLRecordModel.getRecordSetId());
-		ddlRecordVersionModel.setRecordId(dDLRecordModel.getRecordId());
-		ddlRecordVersionModel.setVersion(dDLRecordModel.getVersion());
-		ddlRecordVersionModel.setDisplayIndex(dDLRecordModel.getDisplayIndex());
-		ddlRecordVersionModel.setStatus(WorkflowConstants.STATUS_APPROVED);
-		ddlRecordVersionModel.setStatusDate(dDLRecordModel.getModifiedDate());
-
-		return ddlRecordVersionModel;
+		return DDLDataFactory.newDDLRecordVersionModel(dDLRecordModel);
 	}
 
 	public DDMContentModel newDDMContentModel(
 		DDLRecordModel ddlRecordModel, int currentIndex) {
-
-		int maxDDLCustomFieldCount =
-			InitContextUtil.getMaxDDLCustomFieldCount();
-
-		StringBundler sb = new StringBundler(3 + maxDDLCustomFieldCount * 7);
-
-		sb.append("{\"availableLanguageIds\": [\"en_US\"],");
-		sb.append("\"defaultLanguageId\": \"en_US\", \"fieldValues\": [");
-
-		for (int i = 0; i < maxDDLCustomFieldCount; i++) {
-			sb.append("{\"instanceId\": \"");
-			sb.append(StringUtil.randomId());
-			sb.append("\", \"name\": \"");
-			sb.append(
-				InitDataFactoryUtil.nextDDLCustomFieldName(
-					ddlRecordModel.getGroupId(), i));
-			sb.append("\", \"value\": {\"en_US\": \"Test Record ");
-			sb.append(currentIndex);
-			sb.append("\"}},");
-		}
-
-		if (maxDDLCustomFieldCount > 0) {
-			sb.setIndex(sb.index() - 1);
-		}
-
-		sb.append("]}");
-
-		return newDDMContentModel(
-			ddlRecordModel.getDDMStorageId(), ddlRecordModel.getGroupId(),
-			sb.toString());
+		
+		return DDLDataFactory.newDDMContentModel(ddlRecordModel,currentIndex);
 	}
 
 	public DDMContentModel newDDMContentModel(
 		DLFileEntryModel dlFileEntryModel) {
-
+		
 		return DLDataFactory.newDDMContentModel(dlFileEntryModel);
 	}
 
@@ -794,38 +627,20 @@ public class DataFactory {
 		long ddmStorageLinkId, DDMContentModel ddmContentModel,
 		long structureId) {
 
-		DDMStorageLinkModel ddmStorageLinkModel = new DDMStorageLinkModelImpl();
-
-		ddmStorageLinkModel.setUuid(SequentialUUID.generate());
-		ddmStorageLinkModel.setStorageLinkId(ddmStorageLinkId);
-		ddmStorageLinkModel.setClassNameId(
-			InitDataFactoryUtil.getClassNameId(
-				DDMContent.class, InitContextUtil.getClassNameModels()));
-		ddmStorageLinkModel.setClassPK(ddmContentModel.getContentId());
-		ddmStorageLinkModel.setStructureId(structureId);
-
-		return ddmStorageLinkModel;
+		return DDLDataFactory.newDDMStorageLinkModel(
+			ddmStorageLinkId, ddmContentModel, structureId);
 	}
 
 	public DDMStructureLinkModel newDDMStructureLinkModel(
 		DDLRecordSetModel ddlRecordSetModel) {
 
-		return newDDMStructureLinkModel(
-			InitDataFactoryUtil.getClassNameId(
-				DDLRecordSet.class, InitContextUtil.getClassNameModels()),
-			ddlRecordSetModel.getRecordSetId(),
-			ddlRecordSetModel.getDDMStructureId());
+		return DDLDataFactory.newDDMStructureLinkModel(ddlRecordSetModel);
 	}
 
 	public DDMStructureLinkModel newDDMStructureLinkModel(
 		DLFileEntryMetadataModel dLFileEntryMetadataModel) {
 
-		return newDDMStructureLinkModel(
-			InitDataFactoryUtil.getClassNameId(
-				DLFileEntryMetadata.class,
-				InitContextUtil.getClassNameModels()),
-			dLFileEntryMetadataModel.getFileEntryMetadataId(),
-			dLFileEntryMetadataModel.getDDMStructureId());
+		return DLDataFactory.newDDMStructureLinkModel(dLFileEntryMetadataModel);
 	}
 
 	public DDMStructureVersionModel newDDMStructureVersionModel(
@@ -1617,44 +1432,6 @@ public class DataFactory {
 		WikiPageModel wikiPageModel) {
 
 		return WikiDataFactory.newWikiPageResourceModel(wikiPageModel);
-	}
-
-	protected DDMContentModel newDDMContentModel(
-		long contentId, long groupId, String data) {
-
-		DDMContentModel ddmContentModel = new DDMContentModelImpl();
-
-		ddmContentModel.setUuid(SequentialUUID.generate());
-		ddmContentModel.setContentId(contentId);
-		ddmContentModel.setGroupId(groupId);
-		ddmContentModel.setCompanyId(InitContextUtil.getCompanyId());
-		ddmContentModel.setUserId(InitContextUtil.getSampleUserId());
-		ddmContentModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		ddmContentModel.setCreateDate(
-			InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
-		ddmContentModel.setModifiedDate(
-			InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
-		ddmContentModel.setName(DDMStorageLink.class.getName());
-		ddmContentModel.setData(data);
-
-		return ddmContentModel;
-	}
-
-	protected DDMStructureLinkModel newDDMStructureLinkModel(
-		long classNameId, long classPK, long structureId) {
-
-		DDMStructureLinkModel ddmStructureLinkModel =
-			new DDMStructureLinkModelImpl();
-
-		ddmStructureLinkModel.setStructureLinkId(
-			InitContextUtil.getCounter().get());
-		ddmStructureLinkModel.setClassNameId(classNameId);
-		ddmStructureLinkModel.setClassPK(classPK);
-		ddmStructureLinkModel.setStructureId(structureId);
-
-		return ddmStructureLinkModel;
 	}
 
 	protected List<ResourcePermissionModel> newResourcePermissionModels(
