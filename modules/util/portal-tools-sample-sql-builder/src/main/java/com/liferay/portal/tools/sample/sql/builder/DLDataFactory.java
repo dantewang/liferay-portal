@@ -23,10 +23,10 @@ import com.liferay.document.library.kernel.model.DLFileVersionModel;
 import com.liferay.document.library.kernel.model.DLFolderModel;
 import com.liferay.dynamic.data.mapping.model.DDMContentModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLinkModel;
-import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFileVersionModelImpl;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelImpl;
+import com.liferay.portlet.documentlibrary.model.impl.DLFileVersionModelImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +65,7 @@ public class DLDataFactory {
 			InitContextUtil.getCounter().get(), dlFileEntryModel.getGroupId(),
 			sb.toString());
 	}
-	
+
 	public static DDMStructureLinkModel newDDMStructureLinkModel(
 		DLFileEntryMetadataModel dLFileEntryMetadataModel) {
 

@@ -43,7 +43,6 @@ import com.liferay.dynamic.data.lists.model.DDLRecordSet;
 import com.liferay.dynamic.data.lists.model.DDLRecordSetModel;
 import com.liferay.dynamic.data.lists.model.DDLRecordVersionModel;
 import com.liferay.dynamic.data.mapping.constants.DDMPortletKeys;
-import com.liferay.dynamic.data.mapping.model.DDMContent;
 import com.liferay.dynamic.data.mapping.model.DDMContentModel;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
@@ -553,13 +552,13 @@ public class DataFactory {
 
 	public DDMStructureLayoutModel newDDLDDMStructureLayoutModel(
 		long groupId, DDMStructureVersionModel ddmStructureVersionModel) {
-		
+
 		return DDLDataFactory.newDDLDDMStructureLayoutModel(
 			groupId, ddmStructureVersionModel);
 	}
 
 	public DDMStructureModel newDDLDDMStructureModel(long groupId) {
-		
+
 		return DDLDataFactory.newDDLDDMStructureModel(groupId);
 	}
 
@@ -606,13 +605,13 @@ public class DataFactory {
 
 	public DDMContentModel newDDMContentModel(
 		DDLRecordModel ddlRecordModel, int currentIndex) {
-		
-		return DDLDataFactory.newDDMContentModel(ddlRecordModel,currentIndex);
+
+		return DDLDataFactory.newDDMContentModel(ddlRecordModel, currentIndex);
 	}
 
 	public DDMContentModel newDDMContentModel(
 		DLFileEntryModel dlFileEntryModel) {
-		
+
 		return DLDataFactory.newDDMContentModel(dlFileEntryModel);
 	}
 

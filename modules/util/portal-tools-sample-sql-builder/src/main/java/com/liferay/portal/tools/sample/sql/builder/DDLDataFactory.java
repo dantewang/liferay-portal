@@ -14,24 +14,22 @@
 
 package com.liferay.portal.tools.sample.sql.builder;
 
-import com.liferay.document.library.kernel.model.DLFileEntryModel;
+import com.liferay.dynamic.data.lists.model.DDLRecordConstants;
 import com.liferay.dynamic.data.lists.model.DDLRecordModel;
 import com.liferay.dynamic.data.lists.model.DDLRecordSet;
-import com.liferay.dynamic.data.lists.model.DDLRecordSetModel;
 import com.liferay.dynamic.data.lists.model.DDLRecordSetConstants;
-import com.liferay.dynamic.data.lists.model.DDLRecordConstants;
+import com.liferay.dynamic.data.lists.model.DDLRecordSetModel;
 import com.liferay.dynamic.data.lists.model.DDLRecordVersionModel;
-import com.liferay.dynamic.data.lists.model.impl.DDLRecordVersionModelImpl;
-import com.liferay.dynamic.data.lists.model.impl.DDLRecordModelImpl;
 import com.liferay.dynamic.data.lists.model.impl.DDLRecordModelImpl;
 import com.liferay.dynamic.data.lists.model.impl.DDLRecordSetModelImpl;
+import com.liferay.dynamic.data.lists.model.impl.DDLRecordVersionModelImpl;
 import com.liferay.dynamic.data.mapping.model.DDMContent;
 import com.liferay.dynamic.data.mapping.model.DDMContentModel;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLink;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLinkModel;
-import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLinkModel;
+import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureVersionModel;
 import com.liferay.dynamic.data.mapping.model.impl.DDMContentModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
@@ -42,30 +40,34 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.util.Date;
+
 /**
  * @author Lily Chi
  */
 public class DDLDataFactory {
 
-	public static DDMStructureLayoutModel getDefaultDLDDMStructureLayoutModel() {
-		return InitContextUtil.getDefaultDLDDMStructureLayoutModel();
+	public static DDMStructureLayoutModel
+		getDefaultDLDDMStructureLayoutModel() {
+
+			return InitContextUtil.getDefaultDLDDMStructureLayoutModel();
 	}
 
 	public static DDMStructureModel getDefaultDLDDMStructureModel() {
 		return InitContextUtil.getDefaultDLDDMStructureModel();
 	}
 
-	public static DDMStructureVersionModel getDefaultDLDDMStructureVersionModel()
-	{
-		return InitContextUtil.getDefaultDLDDMStructureVersionModel();
-	}
+	public static DDMStructureVersionModel
+		getDefaultDLDDMStructureVersionModel() {
 
-	public static int getMaxDDLRecordSetCount() {
-		return InitContextUtil.getMaxDDLRecordSetCount();
+			return InitContextUtil.getDefaultDLDDMStructureVersionModel();
 	}
 
 	public static int getMaxDDLRecordCount() {
 		return InitContextUtil.getMaxDDLRecordCount();
+	}
+
+	public static int getMaxDDLRecordSetCount() {
+		return InitContextUtil.getMaxDDLRecordSetCount();
 	}
 
 	public static DDMStructureLayoutModel newDDLDDMStructureLayoutModel(
@@ -325,4 +327,5 @@ public class DDLDataFactory {
 
 		return ddmStructureLinkModel;
 	}
+
 }
