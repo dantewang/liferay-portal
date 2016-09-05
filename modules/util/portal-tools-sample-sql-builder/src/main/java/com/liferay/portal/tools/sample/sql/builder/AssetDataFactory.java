@@ -59,6 +59,44 @@ import java.util.Map;
  */
 public class AssetDataFactory {
 
+	public static List<Long> getAssetCategoryIds(long groupId) {
+		Map<Long, SimpleCounter> assetCategoryCounters = 
+			InitContextUtil.getAssetCategoryCounters();
+		int maxAssetEntryToAssetCategoryCount =
+			InitContextUtil.getMaxAssetEntryToAssetCategoryCount();
+
+		SimpleCounter counter = assetCategoryCounters.get(groupId);
+
+		int size = (int)groupId - 1;
+
+		if (counter == null) {
+			counter = new SimpleCounter(0);
+
+			assetCategoryCounters.put(groupId, counter);
+		}
+
+		List<AssetCategoryModel> assetCategoryModels =
+			InitContextUtil.getAssetCategoryModelsArray()[size];
+
+		if ((assetCategoryModels == null) || assetCategoryModels.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		List<Long> assetCategoryIds = new ArrayList<>(
+			maxAssetEntryToAssetCategoryCount);
+
+		for (int i = 0; i < maxAssetEntryToAssetCategoryCount; i++) {
+			int index = (int)counter.get() % assetCategoryModels.size();
+
+			AssetCategoryModel assetCategoryModel = assetCategoryModels.get(
+				index);
+
+			assetCategoryIds.add(assetCategoryModel.getCategoryId());
+		}
+
+		return assetCategoryIds;
+	}
+
 	public static List<AssetCategoryModel> getAssetCategoryModels() {
 		List<AssetCategoryModel> allAssetCategoryModels = new ArrayList<>();
 

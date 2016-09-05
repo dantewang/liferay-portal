@@ -59,6 +59,7 @@ import java.text.Format;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -79,6 +80,10 @@ public class InitContextUtil {
 
 	public static RoleModel getAdministratorRoleModel() {
 		return _administratorRoleModel;
+	}
+
+	public static Map<Long, SimpleCounter> getAssetCategoryCounters() {
+		return _assetCategoryCounters;
 	}
 
 	public static List<AssetCategoryModel>[] getAssetCategoryModelsArray() {
@@ -942,7 +947,8 @@ public class InitContextUtil {
 	private static RoleModel _userRoleModel;
 	private static final SimpleCounter _userScreenNameCounter;
 	private static VirtualHostModel _virtualHostModel;
-
+	private static final Map<Long, SimpleCounter> _assetCategoryCounters;
+		
 	static {
 		_counter = new SimpleCounter(_maxGroupsCount + 1);
 		_timeCounter = new SimpleCounter();
@@ -950,6 +956,7 @@ public class InitContextUtil {
 		_resourcePermissionCounter = new SimpleCounter();
 		_socialActivityCounter = new SimpleCounter();
 		_userScreenNameCounter = new SimpleCounter();
+		_assetCategoryCounters = new HashMap<>();
 	}
 
 }

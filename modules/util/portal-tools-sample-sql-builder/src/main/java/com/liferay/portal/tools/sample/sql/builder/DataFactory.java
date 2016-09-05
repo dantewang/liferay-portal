@@ -171,39 +171,8 @@ public class DataFactory {
 	}
 
 	public List<Long> getAssetCategoryIds(long groupId) {
-		int maxAssetEntryToAssetCategoryCount =
-			InitContextUtil.getMaxAssetEntryToAssetCategoryCount();
 
-		SimpleCounter counter = _assetCategoryCounters.get(groupId);
-
-		int size = (int)groupId - 1;
-
-		if (counter == null) {
-			counter = new SimpleCounter(0);
-
-			_assetCategoryCounters.put(groupId, counter);
-		}
-
-		List<AssetCategoryModel> assetCategoryModels =
-			InitContextUtil.getAssetCategoryModelsArray()[size];
-
-		if ((assetCategoryModels == null) || assetCategoryModels.isEmpty()) {
-			return Collections.emptyList();
-		}
-
-		List<Long> assetCategoryIds = new ArrayList<>(
-			maxAssetEntryToAssetCategoryCount);
-
-		for (int i = 0; i < maxAssetEntryToAssetCategoryCount; i++) {
-			int index = (int)counter.get() % assetCategoryModels.size();
-
-			AssetCategoryModel assetCategoryModel = assetCategoryModels.get(
-				index);
-
-			assetCategoryIds.add(assetCategoryModel.getCategoryId());
-		}
-
-		return assetCategoryIds;
+		return AssetDataFactory.getAssetCategoryIds(groupId);
 	}
 
 	public List<AssetCategoryModel> getAssetCategoryModels() {
@@ -1503,8 +1472,6 @@ public class DataFactory {
 	private static final PortletPreferencesFactory _portletPreferencesFactory =
 		new PortletPreferencesFactoryImpl();
 
-	private final Map<Long, SimpleCounter> _assetCategoryCounters =
-		new HashMap<>();
 	private final Map<Long, SimpleCounter> _assetPublisherQueryCounter =
 		new HashMap<>();
 	private final Class<?> _clazz = getClass();
