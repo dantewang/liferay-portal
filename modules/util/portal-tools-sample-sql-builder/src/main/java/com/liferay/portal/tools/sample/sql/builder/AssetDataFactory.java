@@ -60,7 +60,7 @@ import java.util.Map;
 public class AssetDataFactory {
 
 	public static List<Long> getAssetCategoryIds(long groupId) {
-		Map<Long, SimpleCounter> assetCategoryCounters = 
+		Map<Long, SimpleCounter> assetCategoryCounters =
 			InitContextUtil.getAssetCategoryCounters();
 		int maxAssetEntryToAssetCategoryCount =
 			InitContextUtil.getMaxAssetEntryToAssetCategoryCount();

@@ -132,7 +132,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -428,7 +427,7 @@ public class DataFactory {
 		ObjectValuePair<JournalArticleModel, JournalArticleLocalizationModel>
 			objectValuePair) {
 
-		Map<Long, String> journalArticleResourceUUIDs = 
+		Map<Long, String> journalArticleResourceUUIDs =
 			InitContextUtil.getJournalArticleResourceUUIDs();
 
 		return AssetDataFactory.newAssetEntryModel(
@@ -686,7 +685,7 @@ public class DataFactory {
 	public JournalArticleResourceModel newJournalArticleResourceModel(
 		long groupId) {
 
-		Map<Long, String> journalArticleResourceUUIDs = 
+		Map<Long, String> journalArticleResourceUUIDs =
 			InitContextUtil.getJournalArticleResourceUUIDs();
 
 		return JournalDataFactory.newJournalArticleResourceModel(
@@ -733,7 +732,7 @@ public class DataFactory {
 	public LayoutModel newLayoutModel(
 		long groupId, String name, String column1, String column2) {
 
-		Map<Long, SimpleCounter> layoutCounters = 
+		Map<Long, SimpleCounter> layoutCounters =
 			InitContextUtil.getLayoutCounters();
 
 		SimpleCounter simpleCounter = layoutCounters.get(groupId);
@@ -872,7 +871,7 @@ public class DataFactory {
 				plid, portletId, PortletConstants.DEFAULT_PREFERENCES);
 		}
 
-		Map<Long, SimpleCounter> assetPublisherQueryCounter = 
+		Map<Long, SimpleCounter> assetPublisherQueryCounter =
 			InitContextUtil.getAssetPublisherQueryCounter();
 
 		SimpleCounter counter = assetPublisherQueryCounter.get(groupId);
@@ -923,7 +922,7 @@ public class DataFactory {
 		PortletPreferences jxPortletPreferences =
 			(PortletPreferences)InitContextUtil.
 				getDefaultAssetPublisherPortletPreference().clone();
-		PortletPreferencesFactory portletPreferencesFactory = 
+		PortletPreferencesFactory portletPreferencesFactory =
 			InitContextUtil.getPortletPreferencesFactory();
 
 		jxPortletPreferences.setValue("queryAndOperator0", "false");
@@ -953,7 +952,7 @@ public class DataFactory {
 		throws Exception {
 
 		PortletPreferences jxPortletPreferences = new PortletPreferencesImpl();
-		PortletPreferencesFactory portletPreferencesFactory = 
+		PortletPreferencesFactory portletPreferencesFactory =
 			InitContextUtil.getPortletPreferencesFactory();
 
 		jxPortletPreferences.setValue("editable", "true");
@@ -971,7 +970,7 @@ public class DataFactory {
 			JournalArticleResourceModel journalArticleResourceModel)
 		throws Exception {
 
-		PortletPreferencesFactory portletPreferencesFactory = 
+		PortletPreferencesFactory portletPreferencesFactory =
 			InitContextUtil.getPortletPreferencesFactory();
 
 		return JournalDataFactory.newPortletPreferencesModel(

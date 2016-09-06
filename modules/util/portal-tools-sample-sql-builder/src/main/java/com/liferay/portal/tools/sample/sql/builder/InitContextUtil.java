@@ -91,6 +91,10 @@ public class InitContextUtil {
 		return _assetCategoryModelsArray;
 	}
 
+	public static Map<Long, SimpleCounter> getAssetPublisherQueryCounter() {
+		return _assetPublisherQueryCounter;
+	}
+
 	public static String getAssetPublisherQueryName() {
 		return _assetPublisherQueryName;
 	}
@@ -229,6 +233,10 @@ public class InitContextUtil {
 		return _journalArticleContent;
 	}
 
+	public static Map<Long, String> getJournalArticleResourceUUIDs() {
+		return _journalArticleResourceUUIDs;
+	}
+
 	public static String getJournalDDMStructureContent() {
 		return _journalDDMStructureContent;
 	}
@@ -239,6 +247,10 @@ public class InitContextUtil {
 
 	public static List<String> getLastNames() {
 		return _lastNames;
+	}
+
+	public static Map<Long, SimpleCounter> getLayoutCounters() {
+		return _layoutCounters;
 	}
 
 	public static int getMaxAssetCategoryCount() {
@@ -353,6 +365,10 @@ public class InitContextUtil {
 		return _ownerRoleModel;
 	}
 
+	public static PortletPreferencesFactory getPortletPreferencesFactory() {
+		return _portletPreferencesFactory;
+	}
+
 	public static RoleModel getPowerUserRoleModel() {
 		return _powerUserRoleModel;
 	}
@@ -399,22 +415,6 @@ public class InitContextUtil {
 
 	public static VirtualHostModel getVirtualHostModel() {
 		return _virtualHostModel;
-	}
-
-	public static PortletPreferencesFactory getPortletPreferencesFactory() {
-		return _portletPreferencesFactory;
-	}
-
-	public static Map<Long, String> getJournalArticleResourceUUIDs() {
-		return _journalArticleResourceUUIDs;
-	}
-
-	public static Map<Long, SimpleCounter> getLayoutCounters() {
-		return _layoutCounters;
-	}
-
-	public static Map<Long, SimpleCounter> getAssetPublisherQueryCounter() {
-		return _assetPublisherQueryCounter;
 	}
 
 	public static void initAssetCategoryModels(String userName) {
@@ -743,7 +743,6 @@ public class InitContextUtil {
 	}
 
 	public static void initResource(Class<?> clazz) throws Exception {
-
 		_dlDDMStructureContent = InitDataFactoryUtil.getResource(
 			clazz, "ddm_structure_basic_document.json");
 		_dlDDMStructureLayoutContent = InitDataFactoryUtil.getResource(
@@ -882,7 +881,9 @@ public class InitContextUtil {
 	private static long _accountId;
 	private static AccountModel _accountModel;
 	private static RoleModel _administratorRoleModel;
+	private static final Map<Long, SimpleCounter> _assetCategoryCounters;
 	private static List<AssetCategoryModel>[] _assetCategoryModelsArray;
+	private static final Map<Long, SimpleCounter> _assetPublisherQueryCounter;
 	private static String _assetPublisherQueryName;
 	private static List<AssetTagModel>[] _assetTagModelsArray;
 	private static List<AssetTagStatsModel>[] _assetTagStatsModelsArray;
@@ -918,9 +919,11 @@ public class InitContextUtil {
 	private static RoleModel _guestRoleModel;
 	private static UserModel _guestUserModel;
 	private static String _journalArticleContent;
+	private static final Map<Long, String> _journalArticleResourceUUIDs;
 	private static String _journalDDMStructureContent;
 	private static String _journalDDMStructureLayoutContent;
 	private static List<String> _lastNames;
+	private static final Map<Long, SimpleCounter> _layoutCounters;
 	private static int _maxAssetCategoryCount;
 	private static int _maxAssetEntryToAssetCategoryCount;
 	private static int _maxAssetEntryToAssetTagCount;
@@ -949,6 +952,7 @@ public class InitContextUtil {
 	private static int _maxWikiPageCommentCount;
 	private static int _maxWikiPageCount;
 	private static RoleModel _ownerRoleModel;
+	private static final PortletPreferencesFactory _portletPreferencesFactory;
 	private static RoleModel _powerUserRoleModel;
 	private static final SimpleCounter _resourcePermissionCounter;
 	private static List<RoleModel> _roleModels;
@@ -962,11 +966,6 @@ public class InitContextUtil {
 	private static RoleModel _userRoleModel;
 	private static final SimpleCounter _userScreenNameCounter;
 	private static VirtualHostModel _virtualHostModel;
-	private static final Map<Long, SimpleCounter> _assetCategoryCounters;
-	private static final PortletPreferencesFactory _portletPreferencesFactory;
-	private static final Map<Long, String> _journalArticleResourceUUIDs;
-	private static final Map<Long, SimpleCounter> _layoutCounters;
-	private static final Map<Long, SimpleCounter> _assetPublisherQueryCounter;
 
 	static {
 		_counter = new SimpleCounter(_maxGroupsCount + 1);
@@ -980,7 +979,6 @@ public class InitContextUtil {
 		_assetPublisherQueryCounter = new HashMap<>();
 		_journalArticleResourceUUIDs = new HashMap<>();
 		_layoutCounters = new HashMap<>();
-
 	}
 
 }
