@@ -154,4 +154,26 @@ public class DLDataFactory {
 		return dlFileVersionModel;
 	}
 
+	public static List<DLFolderModel> newDLFolderModels(
+		long groupId, long parentFolderId) {
+
+		int maxDLFolderCount = InitContextUtil.getMaxDLFolderCount();
+
+		List<DLFolderModel> dlFolderModels = new ArrayList<>(maxDLFolderCount);
+
+		for (int i = 1; i <= maxDLFolderCount; i++) {
+			dlFolderModels.add(
+				InitDataFactoryUtil.newDLFolderModel(
+					groupId, parentFolderId, i,
+					InitContextUtil.getCounter().get(),
+					InitContextUtil.getCompanyId(),
+					InitContextUtil.getSampleUserId(),
+					DataFactoryConstants.SAMPLE_USER_NAME,
+					InitContextUtil.getFutureDateCounter(),
+					InitContextUtil.getDefaultDLFileEntryTypeModel()));
+		}
+
+		return dlFolderModels;
+	}
+
 }
