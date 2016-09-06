@@ -21,12 +21,10 @@ import com.liferay.asset.kernel.model.AssetTagStatsModel;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.blogs.kernel.model.BlogsEntryModel;
-import com.liferay.blogs.web.constants.BlogsPortletKeys;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
 import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLFolderModel;
-import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleLocalizationModel;
 import com.liferay.journal.model.JournalArticleModel;
@@ -36,14 +34,11 @@ import com.liferay.message.boards.kernel.model.MBMessage;
 import com.liferay.message.boards.kernel.model.MBMessageModel;
 import com.liferay.message.boards.kernel.model.MBThread;
 import com.liferay.message.boards.kernel.model.MBThreadModel;
-import com.liferay.portal.kernel.model.PortletConstants;
-import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portlet.asset.model.impl.AssetEntryModelImpl;
 import com.liferay.util.SimpleCounter;
-import com.liferay.wiki.constants.WikiPortletKeys;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.model.WikiPageModel;
 
@@ -290,28 +285,6 @@ public class AssetDataFactory {
 				WikiPage.class, InitContextUtil.getClassNameModels()),
 			wikiPageModel.getResourcePrimKey(), wikiPageModel.getUuid(), 0,
 			true, true, ContentTypes.TEXT_HTML, wikiPageModel.getTitle());
-	}
-
-	public static List<PortletPreferencesModel>
-		newAssetPublisherPortletPreferencesModels(long plid) {
-
-		List<PortletPreferencesModel> portletPreferencesModels =
-			new ArrayList<>(3);
-
-		portletPreferencesModels.add(
-			InitDataFactoryUtil.newPortletPreferencesModel(
-				plid, BlogsPortletKeys.BLOGS,
-				PortletConstants.DEFAULT_PREFERENCES));
-		portletPreferencesModels.add(
-			InitDataFactoryUtil.newPortletPreferencesModel(
-				plid, JournalPortletKeys.JOURNAL,
-				PortletConstants.DEFAULT_PREFERENCES));
-		portletPreferencesModels.add(
-			InitDataFactoryUtil.newPortletPreferencesModel(
-				plid, WikiPortletKeys.WIKI,
-				PortletConstants.DEFAULT_PREFERENCES));
-
-		return portletPreferencesModels;
 	}
 
 	protected static AssetEntryModel newAssetEntryModel(

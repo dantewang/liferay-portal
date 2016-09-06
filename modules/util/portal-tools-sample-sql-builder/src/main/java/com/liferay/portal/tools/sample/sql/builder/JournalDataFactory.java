@@ -22,7 +22,6 @@ import com.liferay.dynamic.data.mapping.model.DDMTemplateLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateLinkModelImpl;
-import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleConstants;
 import com.liferay.journal.model.JournalArticleLocalizationModel;
@@ -34,19 +33,11 @@ import com.liferay.journal.model.impl.JournalArticleModelImpl;
 import com.liferay.journal.model.impl.JournalArticleResourceModelImpl;
 import com.liferay.journal.model.impl.JournalContentSearchModelImpl;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.PortletConstants;
-import com.liferay.portal.kernel.model.PortletPreferencesModel;
-import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portlet.PortletPreferencesImpl;
 
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
-
-import javax.portlet.PortletPreferences;
 
 /**
  * @author Lily Chi
@@ -261,34 +252,6 @@ public class JournalDataFactory {
 			journalArticleModel.getArticleId());
 
 		return journalContentSearchModel;
-	}
-
-	public static List<PortletPreferencesModel>
-		newJournalPortletPreferencesModels(long plid) {
-
-		return Collections.singletonList(
-			InitDataFactoryUtil.newPortletPreferencesModel(
-				plid, JournalPortletKeys.JOURNAL,
-				PortletConstants.DEFAULT_PREFERENCES));
-	}
-
-	public static PortletPreferencesModel newPortletPreferencesModel(
-			long plid, String portletId,
-			JournalArticleResourceModel journalArticleResourceModel,
-			PortletPreferencesFactory portletPreferencesFactory)
-		throws Exception {
-
-		PortletPreferences jxPortletPreferences = new PortletPreferencesImpl();
-
-		jxPortletPreferences.setValue(
-			"articleId", journalArticleResourceModel.getArticleId());
-		jxPortletPreferences.setValue(
-			"groupId",
-			String.valueOf(journalArticleResourceModel.getGroupId()));
-
-		return InitDataFactoryUtil.newPortletPreferencesModel(
-			plid, portletId,
-			portletPreferencesFactory.toXML(jxPortletPreferences));
 	}
 
 }
