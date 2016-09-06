@@ -111,7 +111,6 @@ import com.liferay.portal.model.impl.ContactModelImpl;
 import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
 import com.liferay.portal.model.impl.LayoutModelImpl;
 import com.liferay.portal.model.impl.SubscriptionModelImpl;
-import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.blogs.social.BlogsActivityKeys;
 import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
@@ -148,7 +147,7 @@ public class DataFactory {
 	public DataFactory(Properties properties) throws Exception {
 		InitContextUtil.initContext(properties);
 		InitContextUtil.initParameter();
-		InitContextUtil.initResource(_clazz, _portletPreferencesFactory);
+		InitContextUtil.initResource(_clazz);
 		InitContextUtil.initCompanyModels();
 		InitContextUtil.initUserNames(_clazz);
 		InitContextUtil.initGroupModels();
@@ -429,8 +428,11 @@ public class DataFactory {
 		ObjectValuePair<JournalArticleModel, JournalArticleLocalizationModel>
 			objectValuePair) {
 
+		Map<Long, String> journalArticleResourceUUIDs = 
+			InitContextUtil.getJournalArticleResourceUUIDs();
+
 		return AssetDataFactory.newAssetEntryModel(
-			objectValuePair, _journalArticleResourceUUIDs);
+			objectValuePair, journalArticleResourceUUIDs);
 	}
 
 	public AssetEntryModel newAssetEntryModel(WikiPageModel wikiPageModel) {
@@ -684,8 +686,11 @@ public class DataFactory {
 	public JournalArticleResourceModel newJournalArticleResourceModel(
 		long groupId) {
 
+		Map<Long, String> journalArticleResourceUUIDs = 
+			InitContextUtil.getJournalArticleResourceUUIDs();
+
 		return JournalDataFactory.newJournalArticleResourceModel(
-			groupId, _journalArticleResourceUUIDs);
+			groupId, journalArticleResourceUUIDs);
 	}
 
 	public JournalContentSearchModel newJournalContentSearchModel(
@@ -728,12 +733,15 @@ public class DataFactory {
 	public LayoutModel newLayoutModel(
 		long groupId, String name, String column1, String column2) {
 
-		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
+		Map<Long, SimpleCounter> layoutCounters = 
+			InitContextUtil.getLayoutCounters();
+
+		SimpleCounter simpleCounter = layoutCounters.get(groupId);
 
 		if (simpleCounter == null) {
 			simpleCounter = new SimpleCounter();
 
-			_layoutCounters.put(groupId, simpleCounter);
+			layoutCounters.put(groupId, simpleCounter);
 		}
 
 		LayoutModel layoutModel = new LayoutModelImpl();
@@ -864,12 +872,15 @@ public class DataFactory {
 				plid, portletId, PortletConstants.DEFAULT_PREFERENCES);
 		}
 
-		SimpleCounter counter = _assetPublisherQueryCounter.get(groupId);
+		Map<Long, SimpleCounter> assetPublisherQueryCounter = 
+			InitContextUtil.getAssetPublisherQueryCounter();
+
+		SimpleCounter counter = assetPublisherQueryCounter.get(groupId);
 
 		if (counter == null) {
 			counter = new SimpleCounter(0);
 
-			_assetPublisherQueryCounter.put(groupId, counter);
+			assetPublisherQueryCounter.put(groupId, counter);
 		}
 
 		String[] assetPublisherQueryValues = null;
@@ -912,6 +923,8 @@ public class DataFactory {
 		PortletPreferences jxPortletPreferences =
 			(PortletPreferences)InitContextUtil.
 				getDefaultAssetPublisherPortletPreference().clone();
+		PortletPreferencesFactory portletPreferencesFactory = 
+			InitContextUtil.getPortletPreferencesFactory();
 
 		jxPortletPreferences.setValue("queryAndOperator0", "false");
 		jxPortletPreferences.setValue("queryContains0", "true");
@@ -932,7 +945,7 @@ public class DataFactory {
 
 		return InitDataFactoryUtil.newPortletPreferencesModel(
 			plid, portletId,
-			_portletPreferencesFactory.toXML(jxPortletPreferences));
+			portletPreferencesFactory.toXML(jxPortletPreferences));
 	}
 
 	public PortletPreferencesModel newPortletPreferencesModel(
@@ -940,6 +953,8 @@ public class DataFactory {
 		throws Exception {
 
 		PortletPreferences jxPortletPreferences = new PortletPreferencesImpl();
+		PortletPreferencesFactory portletPreferencesFactory = 
+			InitContextUtil.getPortletPreferencesFactory();
 
 		jxPortletPreferences.setValue("editable", "true");
 		jxPortletPreferences.setValue(
@@ -948,7 +963,7 @@ public class DataFactory {
 
 		return InitDataFactoryUtil.newPortletPreferencesModel(
 			plid, portletId,
-			_portletPreferencesFactory.toXML(jxPortletPreferences));
+			portletPreferencesFactory.toXML(jxPortletPreferences));
 	}
 
 	public PortletPreferencesModel newPortletPreferencesModel(
@@ -956,9 +971,12 @@ public class DataFactory {
 			JournalArticleResourceModel journalArticleResourceModel)
 		throws Exception {
 
+		PortletPreferencesFactory portletPreferencesFactory = 
+			InitContextUtil.getPortletPreferencesFactory();
+
 		return JournalDataFactory.newPortletPreferencesModel(
 			plid, portletId, journalArticleResourceModel,
-			_portletPreferencesFactory);
+			portletPreferencesFactory);
 	}
 
 	public List<LayoutModel> newPublicLayoutModels(long groupId) {
@@ -1452,15 +1470,5 @@ public class DataFactory {
 	}
 
 	private static final long _CURRENT_TIME = System.currentTimeMillis();
-
-	private static final PortletPreferencesFactory _portletPreferencesFactory =
-		new PortletPreferencesFactoryImpl();
-
-	private final Map<Long, SimpleCounter> _assetPublisherQueryCounter =
-		new HashMap<>();
 	private final Class<?> _clazz = getClass();
-	private final Map<Long, String> _journalArticleResourceUUIDs =
-		new HashMap<>();
-	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
-
 }

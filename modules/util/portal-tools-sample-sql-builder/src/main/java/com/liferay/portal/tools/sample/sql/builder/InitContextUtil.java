@@ -47,6 +47,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.asset.model.impl.AssetTagModelImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeModelImpl;
@@ -400,6 +401,22 @@ public class InitContextUtil {
 		return _virtualHostModel;
 	}
 
+	public static PortletPreferencesFactory getPortletPreferencesFactory() {
+		return _portletPreferencesFactory;
+	}
+
+	public static Map<Long, String> getJournalArticleResourceUUIDs() {
+		return _journalArticleResourceUUIDs;
+	}
+
+	public static Map<Long, SimpleCounter> getLayoutCounters() {
+		return _layoutCounters;
+	}
+
+	public static Map<Long, SimpleCounter> getAssetPublisherQueryCounter() {
+		return _assetPublisherQueryCounter;
+	}
+
 	public static void initAssetCategoryModels(String userName) {
 		_assetCategoryModelsArray =
 			(List<AssetCategoryModel>[])new List<?>[_maxGroupsCount];
@@ -725,9 +742,7 @@ public class InitContextUtil {
 		_sampleUserId = _counter.get();
 	}
 
-	public static void initResource(
-			Class<?> clazz, PortletPreferencesFactory portletPreferencesFactory)
-		throws Exception {
+	public static void initResource(Class<?> clazz) throws Exception {
 
 		_dlDDMStructureContent = InitDataFactoryUtil.getResource(
 			clazz, "ddm_structure_basic_document.json");
@@ -743,7 +758,7 @@ public class InitContextUtil {
 				clazz, "default_asset_publisher_preference.xml"));
 
 		_defaultAssetPublisherPortletPreference =
-			(PortletPreferencesImpl)portletPreferencesFactory.fromDefaultXML(
+			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
 				defaultAssetPublisherPreference);
 	}
 
@@ -948,7 +963,11 @@ public class InitContextUtil {
 	private static final SimpleCounter _userScreenNameCounter;
 	private static VirtualHostModel _virtualHostModel;
 	private static final Map<Long, SimpleCounter> _assetCategoryCounters;
-		
+	private static final PortletPreferencesFactory _portletPreferencesFactory;
+	private static final Map<Long, String> _journalArticleResourceUUIDs;
+	private static final Map<Long, SimpleCounter> _layoutCounters;
+	private static final Map<Long, SimpleCounter> _assetPublisherQueryCounter;
+
 	static {
 		_counter = new SimpleCounter(_maxGroupsCount + 1);
 		_timeCounter = new SimpleCounter();
@@ -957,6 +976,11 @@ public class InitContextUtil {
 		_socialActivityCounter = new SimpleCounter();
 		_userScreenNameCounter = new SimpleCounter();
 		_assetCategoryCounters = new HashMap<>();
+		_portletPreferencesFactory = new PortletPreferencesFactoryImpl();
+		_assetPublisherQueryCounter = new HashMap<>();
+		_journalArticleResourceUUIDs = new HashMap<>();
+		_layoutCounters = new HashMap<>();
+
 	}
 
 }
