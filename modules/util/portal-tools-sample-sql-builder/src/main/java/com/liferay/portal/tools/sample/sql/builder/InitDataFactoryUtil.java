@@ -49,8 +49,6 @@ import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.LayoutSetModel;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
-import com.liferay.portal.kernel.model.ResourceConstants;
-import com.liferay.portal.kernel.model.ResourcePermissionModel;
 import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.model.VirtualHostModel;
@@ -59,7 +57,6 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -72,7 +69,6 @@ import com.liferay.portal.model.impl.CompanyModelImpl;
 import com.liferay.portal.model.impl.GroupModelImpl;
 import com.liferay.portal.model.impl.LayoutSetModelImpl;
 import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
-import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
@@ -771,27 +767,6 @@ public class InitDataFactoryUtil {
 		layoutSetModel.setPageCount(pageCount);
 
 		return layoutSetModel;
-	}
-
-	public static ResourcePermissionModel newResourcePermissionModel(
-		String name, String primKey, long roleId, long ownerId,
-		long resourcePermissionId, long companyId) {
-
-		ResourcePermissionModel resourcePermissionModel =
-			new ResourcePermissionModelImpl();
-
-		resourcePermissionModel.setResourcePermissionId(resourcePermissionId);
-		resourcePermissionModel.setCompanyId(companyId);
-		resourcePermissionModel.setName(name);
-		resourcePermissionModel.setScope(ResourceConstants.SCOPE_INDIVIDUAL);
-		resourcePermissionModel.setPrimKey(primKey);
-		resourcePermissionModel.setPrimKeyId(GetterUtil.getLong(primKey));
-		resourcePermissionModel.setRoleId(roleId);
-		resourcePermissionModel.setOwnerId(ownerId);
-		resourcePermissionModel.setActionIds(1);
-		resourcePermissionModel.setViewActionId(true);
-
-		return resourcePermissionModel;
 	}
 
 	public static WikiNodeModel newWikiNodeModel(

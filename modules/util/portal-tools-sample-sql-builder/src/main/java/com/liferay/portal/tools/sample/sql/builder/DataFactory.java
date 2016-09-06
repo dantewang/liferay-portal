@@ -14,13 +14,10 @@
 
 package com.liferay.portal.tools.sample.sql.builder;
 
-import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.model.AssetCategoryModel;
 import com.liferay.asset.kernel.model.AssetEntryModel;
-import com.liferay.asset.kernel.model.AssetTag;
 import com.liferay.asset.kernel.model.AssetTagModel;
 import com.liferay.asset.kernel.model.AssetTagStatsModel;
-import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.blogs.kernel.model.BlogsEntryModel;
@@ -34,7 +31,6 @@ import com.liferay.document.library.kernel.model.DLFileEntryMetadataModel;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
 import com.liferay.document.library.kernel.model.DLFileEntryTypeModel;
 import com.liferay.document.library.kernel.model.DLFileVersionModel;
-import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLFolderModel;
 import com.liferay.document.library.web.constants.DLPortletKeys;
 import com.liferay.dynamic.data.lists.model.DDLRecordModel;
@@ -43,12 +39,10 @@ import com.liferay.dynamic.data.lists.model.DDLRecordSetModel;
 import com.liferay.dynamic.data.lists.model.DDLRecordVersionModel;
 import com.liferay.dynamic.data.mapping.model.DDMContentModel;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLinkModel;
-import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureVersionModel;
-import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
 import com.liferay.journal.model.JournalArticle;
@@ -59,7 +53,6 @@ import com.liferay.journal.model.JournalArticleResourceModel;
 import com.liferay.journal.model.JournalContentSearchModel;
 import com.liferay.journal.social.JournalActivityKeys;
 import com.liferay.login.web.constants.LoginPortletKeys;
-import com.liferay.message.boards.kernel.model.MBCategory;
 import com.liferay.message.boards.kernel.model.MBCategoryModel;
 import com.liferay.message.boards.kernel.model.MBDiscussionModel;
 import com.liferay.message.boards.kernel.model.MBMailingListModel;
@@ -76,7 +69,6 @@ import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.ContactConstants;
 import com.liferay.portal.kernel.model.ContactModel;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutConstants;
@@ -87,7 +79,6 @@ import com.liferay.portal.kernel.model.LayoutTypePortletConstants;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.model.ResourcePermissionModel;
-import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.model.SubscriptionConstants;
 import com.liferay.portal.kernel.model.SubscriptionModel;
@@ -97,7 +88,6 @@ import com.liferay.portal.kernel.model.VirtualHostModel;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.security.auth.FullNameGenerator;
 import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
-import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -117,7 +107,6 @@ import com.liferay.social.kernel.model.SocialActivityConstants;
 import com.liferay.social.kernel.model.SocialActivityModel;
 import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.constants.WikiPortletKeys;
-import com.liferay.wiki.model.WikiNode;
 import com.liferay.wiki.model.WikiNodeModel;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.model.WikiPageModel;
@@ -126,7 +115,6 @@ import com.liferay.wiki.social.WikiActivityKeys;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -899,93 +887,59 @@ public class DataFactory {
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		AssetCategoryModel assetCategoryModel) {
 
-		return newResourcePermissionModels(
-			AssetCategory.class.getName(),
-			String.valueOf(assetCategoryModel.getCategoryId()),
-			InitContextUtil.getSampleUserId());
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				assetCategoryModel);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		AssetTagModel assetTagModel) {
 
-		return newResourcePermissionModels(
-			AssetTag.class.getName(), String.valueOf(assetTagModel.getTagId()),
-			InitContextUtil.getSampleUserId());
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				assetTagModel);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		AssetVocabularyModel assetVocabularyModel) {
 
-		if (assetVocabularyModel.getUserId() ==
-				InitContextUtil.getDefaultUserId()) {
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				assetVocabularyModel);
 
-			return Collections.singletonList(
-				InitDataFactoryUtil.newResourcePermissionModel(
-					AssetVocabulary.class.getName(),
-					String.valueOf(assetVocabularyModel.getVocabularyId()),
-					InitContextUtil.getOwnerRoleModel().getRoleId(),
-					InitContextUtil.getDefaultUserId(),
-					InitContextUtil.getResourcePermissionCounter().get(),
-					InitContextUtil.getCompanyId()));
-		}
-
-		return newResourcePermissionModels(
-			AssetVocabulary.class.getName(),
-			String.valueOf(assetVocabularyModel.getVocabularyId()),
-			InitContextUtil.getSampleUserId());
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		BlogsEntryModel blogsEntryModel) {
 
-		return newResourcePermissionModels(
-			BlogsEntry.class.getName(),
-			String.valueOf(blogsEntryModel.getEntryId()),
-			InitContextUtil.getSampleUserId());
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				blogsEntryModel);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		DDLRecordSetModel ddlRecordSetModel) {
 
-		return Collections.singletonList(
-			InitDataFactoryUtil.newResourcePermissionModel(
-				DDLRecordSet.class.getName(),
-				String.valueOf(ddlRecordSetModel.getRecordSetId()),
-				InitContextUtil.getOwnerRoleModel().getRoleId(),
-				InitContextUtil.getDefaultUserId(),
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				ddlRecordSetModel);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		DDMStructureModel ddmStructureModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			new ArrayList<>(3);
-
-		String name = InitDataFactoryUtil.getResourcePermissionModelName(
-			DDMStructure.class.getName(),
-			InitDataFactoryUtil.getClassName(
-				ddmStructureModel.getClassNameId(),
-				InitContextUtil.getClassNameModels()));
-		String primKey = String.valueOf(ddmStructureModel.getStructureId());
-
-		resourcePermissionModels.add(
-			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitContextUtil.getGuestRoleModel().getRoleId(),
-				0, InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
-		resourcePermissionModels.add(
-			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitContextUtil.getOwnerRoleModel().getRoleId(),
-				ddmStructureModel.getUserId(),
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
-		resourcePermissionModels.add(
-			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitContextUtil.getUserRoleModel().getRoleId(),
-				0, InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				ddmStructureModel);
 
 		return resourcePermissionModels;
 	}
@@ -994,30 +948,8 @@ public class DataFactory {
 		DDMTemplateModel ddmTemplateModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			new ArrayList<>(3);
-
-		String name = InitDataFactoryUtil.getResourcePermissionModelName(
-			DDMTemplate.class.getName(), InitDataFactoryUtil.getClassName(
-				ddmTemplateModel.getResourceClassNameId(),
-				InitContextUtil.getClassNameModels()));
-		String primKey = String.valueOf(ddmTemplateModel.getTemplateId());
-
-		resourcePermissionModels.add(
-			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitContextUtil.getGuestRoleModel().getRoleId(),
-				0, InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
-		resourcePermissionModels.add(
-			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitContextUtil.getOwnerRoleModel().getRoleId(),
-				ddmTemplateModel.getUserId(),
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
-		resourcePermissionModels.add(
-			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitContextUtil.getUserRoleModel().getRoleId(),
-				0, InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				ddmTemplateModel);
 
 		return resourcePermissionModels;
 	}
@@ -1025,136 +957,131 @@ public class DataFactory {
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		DLFileEntryModel dlFileEntryModel) {
 
-		return newResourcePermissionModels(
-			DLFileEntry.class.getName(),
-			String.valueOf(dlFileEntryModel.getFileEntryId()),
-			InitContextUtil.getSampleUserId());
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				dlFileEntryModel);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		DLFolderModel dlFolderModel) {
 
-		return newResourcePermissionModels(
-			DLFolder.class.getName(),
-			String.valueOf(dlFolderModel.getFolderId()),
-			InitContextUtil.getSampleUserId());
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				dlFolderModel);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		GroupModel groupModel) {
 
-		return Collections.singletonList(
-			InitDataFactoryUtil.newResourcePermissionModel(
-				Group.class.getName(), String.valueOf(groupModel.getGroupId()),
-				InitContextUtil.getOwnerRoleModel().getRoleId(),
-				InitContextUtil.getSampleUserId(),
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				groupModel);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		JournalArticleResourceModel journalArticleResourceModel) {
 
-		return newResourcePermissionModels(
-			JournalArticle.class.getName(),
-			String.valueOf(journalArticleResourceModel.getResourcePrimKey()),
-			InitContextUtil.getSampleUserId());
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				journalArticleResourceModel);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		LayoutModel layoutModel) {
 
-		return newResourcePermissionModels(
-			Layout.class.getName(), String.valueOf(layoutModel.getPlid()), 0);
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				layoutModel);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		MBCategoryModel mbCategoryModel) {
 
-		return newResourcePermissionModels(
-			MBCategory.class.getName(),
-			String.valueOf(mbCategoryModel.getCategoryId()),
-			InitContextUtil.getSampleUserId());
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				mbCategoryModel);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		MBMessageModel mbMessageModel) {
 
-		return Collections.singletonList(
-			InitDataFactoryUtil.newResourcePermissionModel(
-				MBMessage.class.getName(),
-				String.valueOf(mbMessageModel.getMessageId()),
-				InitContextUtil.getOwnerRoleModel().getRoleId(),
-				InitContextUtil.getSampleUserId(),
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				mbMessageModel);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		PortletPreferencesModel portletPreferencesModel) {
 
-		String portletId = portletPreferencesModel.getPortletId();
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				portletPreferencesModel);
 
-		String name = portletId;
-
-		int index = portletId.indexOf(StringPool.UNDERLINE);
-
-		if (index > 0) {
-			name = portletId.substring(0, index);
-		}
-
-		String primKey = PortletPermissionUtil.getPrimaryKey(
-			portletPreferencesModel.getPlid(), portletId);
-
-		return newResourcePermissionModels(name, primKey, 0);
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		RoleModel roleModel) {
 
-		return Collections.singletonList(
-			InitDataFactoryUtil.newResourcePermissionModel(
-				Role.class.getName(), String.valueOf(roleModel.getRoleId()),
-				InitContextUtil.getOwnerRoleModel().getRoleId(),
-				InitContextUtil.getSampleUserId(),
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				roleModel);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		String name, long primKey) {
 
-		return newResourcePermissionModels(
-			name, String.valueOf(primKey), InitContextUtil.getSampleUserId());
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				name, primKey);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		UserModel userModel) {
 
-		return Collections.singletonList(
-			InitDataFactoryUtil.newResourcePermissionModel(
-				User.class.getName(), String.valueOf(userModel.getUserId()),
-				InitContextUtil.getOwnerRoleModel().getRoleId(),
-				userModel.getUserId(),
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				userModel);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		WikiNodeModel wikiNodeModel) {
 
-		return newResourcePermissionModels(
-			WikiNode.class.getName(), String.valueOf(wikiNodeModel.getNodeId()),
-			InitContextUtil.getSampleUserId());
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				wikiNodeModel);
+
+		return resourcePermissionModels;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		WikiPageModel wikiPageModel) {
 
-		return newResourcePermissionModels(
-			WikiPage.class.getName(),
-			String.valueOf(wikiPageModel.getResourcePrimKey()),
-			InitContextUtil.getSampleUserId());
+		List<ResourcePermissionModel> resourcePermissionModels =
+			ResourcePermissionDataFactory.newResourcePermissionModels(
+				wikiPageModel);
+
+		return resourcePermissionModels;
 	}
 
 	public SocialActivityModel newSocialActivityModel(
@@ -1297,32 +1224,6 @@ public class DataFactory {
 		WikiPageModel wikiPageModel) {
 
 		return WikiDataFactory.newWikiPageResourceModel(wikiPageModel);
-	}
-
-	protected List<ResourcePermissionModel> newResourcePermissionModels(
-		String name, String primKey, long ownerId) {
-
-		List<ResourcePermissionModel> resourcePermissionModels =
-			new ArrayList<>(3);
-
-		resourcePermissionModels.add(
-			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitContextUtil.getGuestRoleModel().getRoleId(),
-				0, InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
-		resourcePermissionModels.add(
-			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey, InitContextUtil.getOwnerRoleModel().getRoleId(),
-				ownerId, InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
-		resourcePermissionModels.add(
-			InitDataFactoryUtil.newResourcePermissionModel(
-				name, primKey,
-				InitContextUtil.getSiteMemberRoleModel().getRoleId(), 0,
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
-
-		return resourcePermissionModels;
 	}
 
 	protected SocialActivityModel newSocialActivityModel(
