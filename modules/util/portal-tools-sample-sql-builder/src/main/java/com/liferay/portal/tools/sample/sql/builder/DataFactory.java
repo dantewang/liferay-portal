@@ -56,7 +56,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.CompanyModel;
-import com.liferay.portal.kernel.model.ContactConstants;
 import com.liferay.portal.kernel.model.ContactModel;
 import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.Layout;
@@ -68,15 +67,11 @@ import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.model.ResourcePermissionModel;
 import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.model.SubscriptionModel;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.model.VirtualHostModel;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
-import com.liferay.portal.kernel.security.auth.FullNameGenerator;
-import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.ObjectValuePair;
-import com.liferay.portal.model.impl.ContactModelImpl;
 import com.liferay.social.kernel.model.SocialActivity;
 import com.liferay.social.kernel.model.SocialActivityModel;
 import com.liferay.util.SimpleCounter;
@@ -301,22 +296,8 @@ public class DataFactory {
 	}
 
 	public List<Long> getNewUserGroupIds(long groupId) {
-		int maxUserToGroupCount = InitContextUtil.getMaxUserToGroupCount();
-		int maxGroupsCount = InitContextUtil.getMaxGroupsCount();
 
-		List<Long> groupIds = new ArrayList<>(maxUserToGroupCount + 1);
-
-		groupIds.add(InitContextUtil.getGuestGroupModel().getGroupId());
-
-		if ((groupId + maxUserToGroupCount) > maxGroupsCount) {
-			groupId = groupId - maxUserToGroupCount + 1;
-		}
-
-		for (int i = 0; i < maxUserToGroupCount; i++) {
-			groupIds.add(groupId + i);
-		}
-
-		return groupIds;
+		return UserDataFactory.getNewUserGroupIds(groupId);
 	}
 
 	public RoleModel getPowerUserRoleModel() {
@@ -407,36 +388,8 @@ public class DataFactory {
 	}
 
 	public ContactModel newContactModel(UserModel userModel) {
-		ContactModel contactModel = new ContactModelImpl();
 
-		contactModel.setContactId(userModel.getContactId());
-		contactModel.setCompanyId(userModel.getCompanyId());
-		contactModel.setUserId(userModel.getUserId());
-
-		FullNameGenerator fullNameGenerator =
-			FullNameGeneratorFactory.getInstance();
-
-		String fullName = fullNameGenerator.getFullName(
-			userModel.getFirstName(), userModel.getMiddleName(),
-			userModel.getLastName());
-
-		contactModel.setUserName(fullName);
-		contactModel.setCreateDate(new Date());
-		contactModel.setModifiedDate(new Date());
-		contactModel.setClassNameId(
-			InitDataFactoryUtil.getClassNameId(
-				User.class, InitContextUtil.getClassNameModels()));
-		contactModel.setClassPK(userModel.getUserId());
-		contactModel.setAccountId(InitContextUtil.getAccountId());
-		contactModel.setParentContactId(
-			ContactConstants.DEFAULT_PARENT_CONTACT_ID);
-		contactModel.setEmailAddress(userModel.getEmailAddress());
-		contactModel.setFirstName(userModel.getFirstName());
-		contactModel.setLastName(userModel.getLastName());
-		contactModel.setMale(true);
-		contactModel.setBirthday(new Date());
-
-		return contactModel;
+		return UserDataFactory.newContactModel(userModel);
 	}
 
 	public List<CounterModel> newCounterModels() {
@@ -594,12 +547,7 @@ public class DataFactory {
 	}
 
 	public GroupModel newGroupModel(UserModel userModel) throws Exception {
-		return InitDataFactoryUtil.newGroupModel(
-			InitContextUtil.getCounter().get(),
-			InitDataFactoryUtil.getClassNameId(
-				User.class, InitContextUtil.getClassNameModels()),
-			userModel.getUserId(), userModel.getScreenName(), false,
-			InitContextUtil.getCompanyId(), InitContextUtil.getSampleUserId());
+		return UserDataFactory.newGroupModel(userModel);
 	}
 
 	public IntegerWrapper newInteger() {
@@ -1015,22 +963,8 @@ public class DataFactory {
 	}
 
 	public List<UserModel> newUserModels() {
-		List<UserModel> userModels = new ArrayList<>(
-			InitContextUtil.getMaxUserCount());
 
-		for (int i = 0; i < InitContextUtil.getMaxUserCount(); i++) {
-			String[] userName = InitDataFactoryUtil.nextUserName(i);
-			String lastName =
-				"test" + InitContextUtil.getUserScreenNameCounter().get();
-			userModels.add(
-				InitDataFactoryUtil.newUserModel(
-					InitContextUtil.getCounter().get(), userName[0],
-					userName[1], lastName, false,
-					InitContextUtil.getCounter().get(),
-					InitContextUtil.getCompanyId()));
-		}
-
-		return userModels;
+		return UserDataFactory.newUserModels();
 	}
 
 	public List<WikiNodeModel> newWikiNodeModels(long groupId) {
