@@ -150,7 +150,7 @@ public class InvokerFilterChain implements FilterChain {
 
 				doFilter(request, response);
 
-					return;
+				return;
 			}
 			finally {
 				unifiedDirectCallFilter.doDirectCallFinally(
