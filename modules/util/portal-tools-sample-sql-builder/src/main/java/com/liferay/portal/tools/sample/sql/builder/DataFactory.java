@@ -25,7 +25,6 @@ import com.liferay.blogs.kernel.model.BlogsStatsUserModel;
 import com.liferay.counter.kernel.model.Counter;
 import com.liferay.counter.kernel.model.CounterModel;
 import com.liferay.counter.model.impl.CounterModelImpl;
-import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFileEntryMetadataModel;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
 import com.liferay.document.library.kernel.model.DLFileEntryTypeModel;
@@ -43,17 +42,13 @@ import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureVersionModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
-import com.liferay.journal.model.JournalArticle;
-import com.liferay.journal.model.JournalArticleConstants;
 import com.liferay.journal.model.JournalArticleLocalizationModel;
 import com.liferay.journal.model.JournalArticleModel;
 import com.liferay.journal.model.JournalArticleResourceModel;
 import com.liferay.journal.model.JournalContentSearchModel;
-import com.liferay.journal.social.JournalActivityKeys;
 import com.liferay.message.boards.kernel.model.MBCategoryModel;
 import com.liferay.message.boards.kernel.model.MBDiscussionModel;
 import com.liferay.message.boards.kernel.model.MBMailingListModel;
-import com.liferay.message.boards.kernel.model.MBMessage;
 import com.liferay.message.boards.kernel.model.MBMessageModel;
 import com.liferay.message.boards.kernel.model.MBStatsUserModel;
 import com.liferay.message.boards.kernel.model.MBThread;
@@ -84,23 +79,15 @@ import com.liferay.portal.kernel.security.auth.FullNameGenerator;
 import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.ObjectValuePair;
-import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.impl.ContactModelImpl;
 import com.liferay.portal.model.impl.SubscriptionModelImpl;
-import com.liferay.portlet.blogs.social.BlogsActivityKeys;
-import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
-import com.liferay.portlet.messageboards.social.MBActivityKeys;
-import com.liferay.portlet.social.model.impl.SocialActivityModelImpl;
 import com.liferay.social.kernel.model.SocialActivity;
-import com.liferay.social.kernel.model.SocialActivityConstants;
 import com.liferay.social.kernel.model.SocialActivityModel;
 import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.model.WikiNodeModel;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.model.WikiPageModel;
 import com.liferay.wiki.model.WikiPageResourceModel;
-import com.liferay.wiki.social.WikiActivityKeys;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -992,82 +979,28 @@ public class DataFactory {
 	public SocialActivityModel newSocialActivityModel(
 		BlogsEntryModel blogsEntryModel) {
 
-		return newSocialActivityModel(
-			blogsEntryModel.getGroupId(), InitDataFactoryUtil.getClassNameId(
-				BlogsEntry.class, InitContextUtil.getClassNameModels()),
-			blogsEntryModel.getEntryId(), BlogsActivityKeys.ADD_ENTRY,
-			"{\"title\":\"" + blogsEntryModel.getTitle() + "\"}");
+		return SocialActivityDataFactory.newSocialActivityModel(
+			blogsEntryModel);
 	}
 
 	public SocialActivityModel newSocialActivityModel(
 		DLFileEntryModel dlFileEntryModel) {
 
-		return newSocialActivityModel(
-			dlFileEntryModel.getGroupId(), InitDataFactoryUtil.getClassNameId(
-				DLFileEntry.class, InitContextUtil.getClassNameModels()),
-			dlFileEntryModel.getFileEntryId(), DLActivityKeys.ADD_FILE_ENTRY,
-			StringPool.BLANK);
+		return SocialActivityDataFactory.newSocialActivityModel(
+			dlFileEntryModel);
 	}
 
 	public SocialActivityModel newSocialActivityModel(
 		JournalArticleModel journalArticleModel) {
 
-		int type = JournalActivityKeys.UPDATE_ARTICLE;
-
-		if (journalArticleModel.getVersion() ==
-				JournalArticleConstants.VERSION_DEFAULT) {
-
-			type = JournalActivityKeys.ADD_ARTICLE;
-		}
-
-		return newSocialActivityModel(
-			journalArticleModel.getGroupId(),
-			InitDataFactoryUtil.getClassNameId(
-				JournalArticle.class, InitContextUtil.getClassNameModels()),
-			journalArticleModel.getResourcePrimKey(), type,
-			"{\"title\":\"" + journalArticleModel.getUrlTitle() + "\"}");
+		return SocialActivityDataFactory.newSocialActivityModel(
+			journalArticleModel);
 	}
 
 	public SocialActivityModel newSocialActivityModel(
 		MBMessageModel mbMessageModel) {
 
-		long classNameId = mbMessageModel.getClassNameId();
-		long classPK = mbMessageModel.getClassPK();
-
-		int type = 0;
-		String extraData = null;
-
-		if (classNameId == InitDataFactoryUtil.getClassNameId(
-				WikiPage.class, InitContextUtil.getClassNameModels())) {
-
-			extraData = "{\"version\":1}";
-			type = WikiActivityKeys.ADD_PAGE;
-		}
-		else if (classNameId == 0) {
-			extraData = "{\"title\":\"" + mbMessageModel.getSubject() + "\"}";
-
-			type = MBActivityKeys.ADD_MESSAGE;
-
-			classNameId = InitDataFactoryUtil.getClassNameId(
-				MBMessage.class, InitContextUtil.getClassNameModels());
-			classPK = mbMessageModel.getMessageId();
-		}
-		else {
-			StringBundler sb = new StringBundler(5);
-
-			sb.append("{\"messageId\": \"");
-			sb.append(mbMessageModel.getMessageId());
-			sb.append("\", \"title\": ");
-			sb.append(mbMessageModel.getSubject());
-			sb.append("}");
-
-			extraData = sb.toString();
-
-			type = SocialActivityConstants.TYPE_ADD_COMMENT;
-		}
-
-		return newSocialActivityModel(
-			mbMessageModel.getGroupId(), classNameId, classPK, type, extraData);
+		return SocialActivityDataFactory.newSocialActivityModel(mbMessageModel);
 	}
 
 	public SubscriptionModel newSubscriptionModel(
@@ -1131,27 +1064,6 @@ public class DataFactory {
 		return WikiDataFactory.newWikiPageResourceModel(wikiPageModel);
 	}
 
-	protected SocialActivityModel newSocialActivityModel(
-		long groupId, long classNameId, long classPK, int type,
-		String extraData) {
-
-		SocialActivityModel socialActivityModel = new SocialActivityModelImpl();
-
-		socialActivityModel.setActivityId(
-			InitContextUtil.getSocialActivityCounter().get());
-		socialActivityModel.setGroupId(groupId);
-		socialActivityModel.setCompanyId(InitContextUtil.getCompanyId());
-		socialActivityModel.setUserId(InitContextUtil.getSampleUserId());
-		socialActivityModel.setCreateDate(
-			_CURRENT_TIME + InitContextUtil.getTimeCounter().get());
-		socialActivityModel.setClassNameId(classNameId);
-		socialActivityModel.setClassPK(classPK);
-		socialActivityModel.setType(type);
-		socialActivityModel.setExtraData(extraData);
-
-		return socialActivityModel;
-	}
-
 	protected SubscriptionModel newSubscriptionModel(
 		long classNameId, long classPK) {
 
@@ -1170,6 +1082,5 @@ public class DataFactory {
 		return subscriptionModel;
 	}
 
-	private static final long _CURRENT_TIME = System.currentTimeMillis();
 	private final Class<?> _clazz = getClass();
 }
