@@ -19,7 +19,6 @@ import com.liferay.asset.kernel.model.AssetEntryModel;
 import com.liferay.asset.kernel.model.AssetTagModel;
 import com.liferay.asset.kernel.model.AssetTagStatsModel;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
-import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.blogs.kernel.model.BlogsEntryModel;
 import com.liferay.blogs.kernel.model.BlogsStatsUserModel;
 import com.liferay.counter.kernel.model.Counter;
@@ -51,7 +50,6 @@ import com.liferay.message.boards.kernel.model.MBDiscussionModel;
 import com.liferay.message.boards.kernel.model.MBMailingListModel;
 import com.liferay.message.boards.kernel.model.MBMessageModel;
 import com.liferay.message.boards.kernel.model.MBStatsUserModel;
-import com.liferay.message.boards.kernel.model.MBThread;
 import com.liferay.message.boards.kernel.model.MBThreadFlagModel;
 import com.liferay.message.boards.kernel.model.MBThreadModel;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -69,7 +67,6 @@ import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.model.ResourcePermissionModel;
 import com.liferay.portal.kernel.model.RoleModel;
-import com.liferay.portal.kernel.model.SubscriptionConstants;
 import com.liferay.portal.kernel.model.SubscriptionModel;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserModel;
@@ -80,12 +77,10 @@ import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.model.impl.ContactModelImpl;
-import com.liferay.portal.model.impl.SubscriptionModelImpl;
 import com.liferay.social.kernel.model.SocialActivity;
 import com.liferay.social.kernel.model.SocialActivityModel;
 import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.model.WikiNodeModel;
-import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.model.WikiPageModel;
 import com.liferay.wiki.model.WikiPageResourceModel;
 
@@ -1006,26 +1001,17 @@ public class DataFactory {
 	public SubscriptionModel newSubscriptionModel(
 		BlogsEntryModel blogsEntryModel) {
 
-		return newSubscriptionModel(
-			InitDataFactoryUtil.getClassNameId(
-				BlogsEntry.class, InitContextUtil.getClassNameModels()),
-			blogsEntryModel.getEntryId());
+		return SubscriptionDataFactory.newSubscriptionModel(blogsEntryModel);
 	}
 
 	public SubscriptionModel newSubscriptionModel(MBThreadModel mBThreadModel)
 	{
-		return newSubscriptionModel(
-			InitDataFactoryUtil.getClassNameId(
-				MBThread.class, InitContextUtil.getClassNameModels()),
-			mBThreadModel.getThreadId());
+		return SubscriptionDataFactory.newSubscriptionModel(mBThreadModel);
 	}
 
 	public SubscriptionModel newSubscriptionModel(WikiPageModel wikiPageModel)
 	{
-		return newSubscriptionModel(
-			InitDataFactoryUtil.getClassNameId(
-				WikiPage.class, InitContextUtil.getClassNameModels()),
-			wikiPageModel.getResourcePrimKey());
+		return SubscriptionDataFactory.newSubscriptionModel(wikiPageModel);
 	}
 
 	public List<UserModel> newUserModels() {
@@ -1062,24 +1048,6 @@ public class DataFactory {
 		WikiPageModel wikiPageModel) {
 
 		return WikiDataFactory.newWikiPageResourceModel(wikiPageModel);
-	}
-
-	protected SubscriptionModel newSubscriptionModel(
-		long classNameId, long classPK) {
-
-		SubscriptionModel subscriptionModel = new SubscriptionModelImpl();
-
-		subscriptionModel.setSubscriptionId(InitContextUtil.getCounter().get());
-		subscriptionModel.setCompanyId(InitContextUtil.getCompanyId());
-		subscriptionModel.setUserId(InitContextUtil.getSampleUserId());
-		subscriptionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		subscriptionModel.setCreateDate(new Date());
-		subscriptionModel.setModifiedDate(new Date());
-		subscriptionModel.setClassNameId(classNameId);
-		subscriptionModel.setClassPK(classPK);
-		subscriptionModel.setFrequency(SubscriptionConstants.FREQUENCY_INSTANT);
-
-		return subscriptionModel;
 	}
 
 	private final Class<?> _clazz = getClass();
