@@ -100,7 +100,13 @@ public class InvokerFilterChain implements FilterChain {
 				}
 
 				try {
-					processDirectCallFilter(filter, request, response);
+					if (filter instanceof UnifiedDirectCallFilter) {
+						processUnifiedDirectCallFilter(
+							(UnifiedDirectCallFilter)filter, request, response);
+					}
+					else {
+						processDirectCallFilter(filter, request, response);
+					}
 				}
 				catch (IOException | RuntimeException | ServletException e) {
 					throw e;
@@ -124,39 +130,6 @@ public class InvokerFilterChain implements FilterChain {
 			Filter filter, HttpServletRequest request,
 			HttpServletResponse response)
 		throws Exception {
-
-		if (filter instanceof UnifiedDirectCallFilter) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(
-					"Invoke doDirectCallBefore for filter " +
-						filter.getClass());
-			}
-
-			UnifiedDirectCallFilter unifiedDirectCallFilter =
-				(UnifiedDirectCallFilter)filter;
-
-			UnifiedDirectCallFilterResult unifiedDirectCallFilterResult = null;
-
-			try {
-				unifiedDirectCallFilterResult =
-					unifiedDirectCallFilter.doDirectCall(request, response);
-
-				if (!unifiedDirectCallFilterResult.isContinue()) {
-					return;
-				}
-
-				request = unifiedDirectCallFilterResult.getRequest();
-				response = unifiedDirectCallFilterResult.getResponse();
-
-				doFilter(request, response);
-
-				return;
-			}
-			finally {
-				unifiedDirectCallFilter.doDirectCallFinally(
-					unifiedDirectCallFilterResult);
-			}
-		}
 
 		if (filter instanceof WrapHttpServletRequestFilter) {
 			if (_log.isDebugEnabled()) {
@@ -238,6 +211,42 @@ public class InvokerFilterChain implements FilterChain {
 		}
 		finally {
 			currentThread.setContextClassLoader(contextClassLoader);
+		}
+	}
+
+	protected void processUnifiedDirectCallFilter(
+			UnifiedDirectCallFilter filter, HttpServletRequest request,
+			HttpServletResponse response)
+		throws Exception {
+
+		UnifiedDirectCallFilterResult unifiedDirectCallFilterResult = null;
+
+		try {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Invoke doDirectCall for filter " + filter.getClass());
+			}
+
+			unifiedDirectCallFilterResult = filter.doDirectCall(
+				request, response);
+
+			if (!unifiedDirectCallFilterResult.isContinue()) {
+				return;
+			}
+
+			request = unifiedDirectCallFilterResult.getRequest();
+			response = unifiedDirectCallFilterResult.getResponse();
+
+			doFilter(request, response);
+		}
+		finally {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Invoke doDirectCallFinally for filter " +
+						filter.getClass());
+			}
+
+			filter.doDirectCallFinally(unifiedDirectCallFilterResult);
 		}
 	}
 
