@@ -112,6 +112,25 @@ public class LayoutDataFactory {
 		return layoutModel;
 	}
 
+	public static LayoutSetModel newLayoutSetModel(
+		long groupId, boolean privateLayout, int pageCount, long layoutSetId,
+		long companyId) {
+
+		LayoutSetModel layoutSetModel = new LayoutSetModelImpl();
+
+		layoutSetModel.setLayoutSetId(layoutSetId);
+		layoutSetModel.setGroupId(groupId);
+		layoutSetModel.setCompanyId(companyId);
+		layoutSetModel.setCreateDate(new Date());
+		layoutSetModel.setModifiedDate(new Date());
+		layoutSetModel.setPrivateLayout(privateLayout);
+		layoutSetModel.setThemeId("classic_WAR_classictheme");
+		layoutSetModel.setColorSchemeId("01");
+		layoutSetModel.setPageCount(pageCount);
+
+		return layoutSetModel;
+	}
+
 	public static List<LayoutSetModel> newLayoutSetModels(
 		long groupId, int publicLayoutSetPageCount) {
 
@@ -150,25 +169,6 @@ public class LayoutDataFactory {
 			newLayoutModel(groupId, "wiki", "", WikiPortletKeys.WIKI + ","));
 
 		return layoutModels;
-	}
-
-	public static LayoutSetModel newLayoutSetModel(
-		long groupId, boolean privateLayout, int pageCount, long layoutSetId,
-		long companyId) {
-
-		LayoutSetModel layoutSetModel = new LayoutSetModelImpl();
-
-		layoutSetModel.setLayoutSetId(layoutSetId);
-		layoutSetModel.setGroupId(groupId);
-		layoutSetModel.setCompanyId(companyId);
-		layoutSetModel.setCreateDate(new Date());
-		layoutSetModel.setModifiedDate(new Date());
-		layoutSetModel.setPrivateLayout(privateLayout);
-		layoutSetModel.setThemeId("classic_WAR_classictheme");
-		layoutSetModel.setColorSchemeId("01");
-		layoutSetModel.setPageCount(pageCount);
-
-		return layoutSetModel;
 	}
 
 }

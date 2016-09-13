@@ -16,13 +16,8 @@ package com.liferay.portal.tools.sample.sql.builder;
 
 import com.liferay.asset.kernel.model.AssetCategoryConstants;
 import com.liferay.asset.kernel.model.AssetCategoryModel;
-import com.liferay.asset.kernel.model.AssetTagModel;
 import com.liferay.asset.kernel.model.AssetTagStatsModel;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
-import com.liferay.blogs.kernel.model.BlogsEntryModel;
-import com.liferay.document.library.kernel.model.DLFileEntryModel;
-import com.liferay.document.library.kernel.model.DLFileEntryTypeModel;
-import com.liferay.document.library.kernel.model.DLFolderModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureConstants;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
@@ -35,8 +30,6 @@ import com.liferay.dynamic.data.mapping.model.impl.DDMStructureModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureVersionModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
 import com.liferay.dynamic.data.mapping.storage.StorageType;
-import com.liferay.message.boards.kernel.model.MBCategoryConstants;
-import com.liferay.message.boards.kernel.model.MBCategoryModel;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
@@ -44,9 +37,7 @@ import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.GroupModel;
-import com.liferay.portal.kernel.model.LayoutSetModel;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
-import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.model.VirtualHostModel;
@@ -70,16 +61,13 @@ import com.liferay.portlet.asset.model.impl.AssetTagStatsModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
 import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.model.WikiNodeModel;
-import com.liferay.wiki.model.WikiPageModel;
 import com.liferay.wiki.model.impl.WikiNodeModelImpl;
-
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -565,8 +553,8 @@ public class InitDataFactoryUtil {
 		ddmStructureVersionModel.setCompanyId(InitContextUtil.getCompanyId());
 		ddmStructureVersionModel.setUserId(ddmStructureModel.getUserId());
 		ddmStructureVersionModel.setUserName(userName);
-		ddmStructureVersionModel.setCreateDate(nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
+		ddmStructureVersionModel.setCreateDate(
+			nextFutureDate(InitContextUtil.getFutureDateCounter()));
 		ddmStructureVersionModel.setStructureId(
 			ddmStructureModel.getStructureId());
 		ddmStructureVersionModel.setVersion(

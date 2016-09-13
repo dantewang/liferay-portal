@@ -38,6 +38,31 @@ public class BlogDataFactory {
 		return InitContextUtil.getMaxBlogsEntryCommentCount();
 	}
 
+	public static BlogsEntryModel newBlogsEntryModel(
+		long groupId, int index, long entryId, long companyId,
+		long sampleUserId, String userName) {
+
+		BlogsEntryModel blogsEntryModel = new BlogsEntryModelImpl();
+
+		blogsEntryModel.setUuid(SequentialUUID.generate());
+		blogsEntryModel.setEntryId(entryId);
+		blogsEntryModel.setGroupId(groupId);
+		blogsEntryModel.setCompanyId(companyId);
+		blogsEntryModel.setUserId(sampleUserId);
+		blogsEntryModel.setUserName(userName);
+		blogsEntryModel.setCreateDate(new Date());
+		blogsEntryModel.setModifiedDate(new Date());
+		blogsEntryModel.setTitle("Test Blog " + index);
+		blogsEntryModel.setSubtitle("Subtitle of Test Blog " + index);
+		blogsEntryModel.setUrlTitle("testblog" + index);
+		blogsEntryModel.setContent("This is test blog " + index + ".");
+		blogsEntryModel.setDisplayDate(new Date());
+		blogsEntryModel.setLastPublishDate(new Date());
+		blogsEntryModel.setStatusDate(new Date());
+
+		return blogsEntryModel;
+	}
+
 	public static List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
 		int maxBlogsEntryCount = InitContextUtil.getMaxBlogsEntryCount();
 
@@ -68,31 +93,6 @@ public class BlogDataFactory {
 		blogsStatsUserModel.setLastPostDate(new Date());
 
 		return blogsStatsUserModel;
-	}
-
-	public static BlogsEntryModel newBlogsEntryModel(
-		long groupId, int index, long entryId, long companyId,
-		long sampleUserId, String userName) {
-
-		BlogsEntryModel blogsEntryModel = new BlogsEntryModelImpl();
-
-		blogsEntryModel.setUuid(SequentialUUID.generate());
-		blogsEntryModel.setEntryId(entryId);
-		blogsEntryModel.setGroupId(groupId);
-		blogsEntryModel.setCompanyId(companyId);
-		blogsEntryModel.setUserId(sampleUserId);
-		blogsEntryModel.setUserName(userName);
-		blogsEntryModel.setCreateDate(new Date());
-		blogsEntryModel.setModifiedDate(new Date());
-		blogsEntryModel.setTitle("Test Blog " + index);
-		blogsEntryModel.setSubtitle("Subtitle of Test Blog " + index);
-		blogsEntryModel.setUrlTitle("testblog" + index);
-		blogsEntryModel.setContent("This is test blog " + index + ".");
-		blogsEntryModel.setDisplayDate(new Date());
-		blogsEntryModel.setLastPublishDate(new Date());
-		blogsEntryModel.setStatusDate(new Date());
-
-		return blogsEntryModel;
 	}
 
 }

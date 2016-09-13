@@ -25,7 +25,6 @@ import com.liferay.document.library.kernel.model.DLFileVersionModel;
 import com.liferay.document.library.kernel.model.DLFolderModel;
 import com.liferay.dynamic.data.mapping.model.DDMContentModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLinkModel;
-import com.liferay.util.SimpleCounter;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -33,6 +32,7 @@ import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelIm
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryModelImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileVersionModelImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFolderModelImpl;
+import com.liferay.util.SimpleCounter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +103,40 @@ public class DLDataFactory {
 		return dlFileEntryMetadataModel;
 	}
 
+	public static DLFileEntryModel newDlFileEntryModel(
+		DLFolderModel dlFolerModel, int index, long fileEntryId, long companyId,
+		long userId, String userName, SimpleCounter futureDateCounter,
+		int size) {
+
+		DLFileEntryModel dlFileEntryModel = new DLFileEntryModelImpl();
+
+		dlFileEntryModel.setUuid(SequentialUUID.generate());
+		dlFileEntryModel.setFileEntryId(fileEntryId);
+		dlFileEntryModel.setGroupId(dlFolerModel.getGroupId());
+		dlFileEntryModel.setCompanyId(companyId);
+		dlFileEntryModel.setUserId(userId);
+		dlFileEntryModel.setUserName(userName);
+		dlFileEntryModel.setCreateDate(
+			InitDataFactoryUtil.nextFutureDate(futureDateCounter));
+		dlFileEntryModel.setModifiedDate(
+			InitDataFactoryUtil.nextFutureDate(futureDateCounter));
+		dlFileEntryModel.setRepositoryId(dlFolerModel.getRepositoryId());
+		dlFileEntryModel.setFolderId(dlFolerModel.getFolderId());
+		dlFileEntryModel.setName("TestFile" + index);
+		dlFileEntryModel.setFileName("TestFile" + index + ".txt");
+		dlFileEntryModel.setExtension("txt");
+		dlFileEntryModel.setMimeType(ContentTypes.TEXT_PLAIN);
+		dlFileEntryModel.setTitle("TestFile" + index + ".txt");
+		dlFileEntryModel.setFileEntryTypeId(
+			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
+		dlFileEntryModel.setVersion(DLFileEntryConstants.VERSION_DEFAULT);
+		dlFileEntryModel.setSize(size);
+		dlFileEntryModel.setLastPublishDate(
+			InitDataFactoryUtil.nextFutureDate(futureDateCounter));
+
+		return dlFileEntryModel;
+	}
+
 	public static List<DLFileEntryModel> newDlFileEntryModels(
 		DLFolderModel dlFolerModel) {
 
@@ -160,62 +194,6 @@ public class DLDataFactory {
 		return dlFileVersionModel;
 	}
 
-	public static List<DLFolderModel> newDLFolderModels(
-		long groupId, long parentFolderId) {
-
-		int maxDLFolderCount = InitContextUtil.getMaxDLFolderCount();
-
-		List<DLFolderModel> dlFolderModels = new ArrayList<>(maxDLFolderCount);
-
-		for (int i = 1; i <= maxDLFolderCount; i++) {
-			dlFolderModels.add(
-				newDLFolderModel(
-					groupId, parentFolderId, i,
-					InitContextUtil.getCounter().get(),
-					InitContextUtil.getCompanyId(),
-					InitContextUtil.getSampleUserId(),
-					DataFactoryConstants.SAMPLE_USER_NAME,
-					InitContextUtil.getFutureDateCounter(),
-					InitContextUtil.getDefaultDLFileEntryTypeModel()));
-		}
-
-		return dlFolderModels;
-	}
-
-	public static DLFileEntryModel newDlFileEntryModel(
-		DLFolderModel dlFolerModel, int index, long fileEntryId, long companyId,
-		long userId, String userName, SimpleCounter futureDateCounter,
-		int size) {
-
-		DLFileEntryModel dlFileEntryModel = new DLFileEntryModelImpl();
-
-		dlFileEntryModel.setUuid(SequentialUUID.generate());
-		dlFileEntryModel.setFileEntryId(fileEntryId);
-		dlFileEntryModel.setGroupId(dlFolerModel.getGroupId());
-		dlFileEntryModel.setCompanyId(companyId);
-		dlFileEntryModel.setUserId(userId);
-		dlFileEntryModel.setUserName(userName);
-		dlFileEntryModel.setCreateDate(
-			InitDataFactoryUtil.nextFutureDate(futureDateCounter));
-		dlFileEntryModel.setModifiedDate(
-			InitDataFactoryUtil.nextFutureDate(futureDateCounter));
-		dlFileEntryModel.setRepositoryId(dlFolerModel.getRepositoryId());
-		dlFileEntryModel.setFolderId(dlFolerModel.getFolderId());
-		dlFileEntryModel.setName("TestFile" + index);
-		dlFileEntryModel.setFileName("TestFile" + index + ".txt");
-		dlFileEntryModel.setExtension("txt");
-		dlFileEntryModel.setMimeType(ContentTypes.TEXT_PLAIN);
-		dlFileEntryModel.setTitle("TestFile" + index + ".txt");
-		dlFileEntryModel.setFileEntryTypeId(
-			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
-		dlFileEntryModel.setVersion(DLFileEntryConstants.VERSION_DEFAULT);
-		dlFileEntryModel.setSize(size);
-		dlFileEntryModel.setLastPublishDate(
-			InitDataFactoryUtil.nextFutureDate(futureDateCounter));
-
-		return dlFileEntryModel;
-	}
-
 	public static DLFolderModel newDLFolderModel(
 		long groupId, long parentFolderId, int index, long folderId,
 		long companyId, long sampleUserId, String userName,
@@ -248,4 +226,27 @@ public class DLDataFactory {
 
 		return dlFolderModel;
 	}
+
+	public static List<DLFolderModel> newDLFolderModels(
+		long groupId, long parentFolderId) {
+
+		int maxDLFolderCount = InitContextUtil.getMaxDLFolderCount();
+
+		List<DLFolderModel> dlFolderModels = new ArrayList<>(maxDLFolderCount);
+
+		for (int i = 1; i <= maxDLFolderCount; i++) {
+			dlFolderModels.add(
+				newDLFolderModel(
+					groupId, parentFolderId, i,
+					InitContextUtil.getCounter().get(),
+					InitContextUtil.getCompanyId(),
+					InitContextUtil.getSampleUserId(),
+					DataFactoryConstants.SAMPLE_USER_NAME,
+					InitContextUtil.getFutureDateCounter(),
+					InitContextUtil.getDefaultDLFileEntryTypeModel()));
+		}
+
+		return dlFolderModels;
+	}
+
 }

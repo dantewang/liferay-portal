@@ -72,6 +72,38 @@ import java.util.Map;
  */
 public class ResourcePermissionDataFactory {
 
+	public static String getClassName(
+		long classNameId, Map<String, ClassNameModel> classNameModels) {
+
+		for (ClassNameModel classNameModel : classNameModels.values()) {
+			if (classNameModel.getClassNameId() == classNameId) {
+				return classNameModel.getValue();
+			}
+		}
+
+		throw new RuntimeException(
+			"Unable to find class name for id " + classNameId);
+	}
+
+	public static String getResourcePermissionModelName(String... classNames) {
+		if (ArrayUtil.isEmpty(classNames)) {
+			return StringPool.BLANK;
+		}
+
+		Arrays.sort(classNames);
+
+		StringBundler sb = new StringBundler(classNames.length * 2);
+
+		for (String className : classNames) {
+			sb.append(className);
+			sb.append(StringPool.DASH);
+		}
+
+		sb.setIndex(sb.index() - 1);
+
+		return sb.toString();
+	}
+
 	public static ResourcePermissionModel newResourcePermissionModel(
 		String name, String primKey, long roleId, long ownerId,
 		long resourcePermissionId, long companyId) {
@@ -380,37 +412,4 @@ public class ResourcePermissionDataFactory {
 			InitContextUtil.getSampleUserId());
 	}
 
-	public static String getResourcePermissionModelName(
-		String... classNames) {
-
-		if (ArrayUtil.isEmpty(classNames)) {
-			return StringPool.BLANK;
-		}
-
-		Arrays.sort(classNames);
-
-		StringBundler sb = new StringBundler(classNames.length * 2);
-
-		for (String className : classNames) {
-			sb.append(className);
-			sb.append(StringPool.DASH);
-		}
-
-		sb.setIndex(sb.index() - 1);
-
-		return sb.toString();
-	}
-
-	public static String getClassName(
-		long classNameId, Map<String, ClassNameModel> classNameModels) {
-
-		for (ClassNameModel classNameModel : classNameModels.values()) {
-			if (classNameModel.getClassNameId() == classNameId) {
-				return classNameModel.getValue();
-			}
-		}
-
-		throw new RuntimeException(
-			"Unable to find class name for id " + classNameId);
-	}
 }

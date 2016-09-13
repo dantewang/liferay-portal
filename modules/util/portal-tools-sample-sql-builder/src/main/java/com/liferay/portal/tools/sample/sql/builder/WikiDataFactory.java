@@ -117,4 +117,5 @@ public class WikiDataFactory {
 
 		return wikiPageModel;
 	}
+
 }
