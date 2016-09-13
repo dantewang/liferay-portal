@@ -466,10 +466,8 @@ public class InitDataFactoryUtil {
 		ddmStructureModel.setUserName(userName);
 		ddmStructureModel.setVersionUserId(userId);
 		ddmStructureModel.setVersionUserName(userName);
-		ddmStructureModel.setCreateDate(
-			InitDataFactoryUtil.nextFutureDate(futureDateCounter));
-		ddmStructureModel.setModifiedDate(
-			InitDataFactoryUtil.nextFutureDate(futureDateCounter));
+		ddmStructureModel.setCreateDate(nextFutureDate(futureDateCounter));
+		ddmStructureModel.setModifiedDate(nextFutureDate(futureDateCounter));
 		ddmStructureModel.setClassNameId(classNameId);
 		ddmStructureModel.setStructureKey(structureKey);
 		ddmStructureModel.setVersion(DDMStructureConstants.VERSION_DEFAULT);
@@ -485,8 +483,7 @@ public class InitDataFactoryUtil {
 
 		ddmStructureModel.setDefinition(definition);
 		ddmStructureModel.setStorageType(StorageType.JSON.toString());
-		ddmStructureModel.setLastPublishDate(
-			InitDataFactoryUtil.nextFutureDate(futureDateCounter));
+		ddmStructureModel.setLastPublishDate(nextFutureDate(futureDateCounter));
 
 		return ddmStructureModel;
 	}
@@ -568,8 +565,7 @@ public class InitDataFactoryUtil {
 		ddmStructureVersionModel.setCompanyId(InitContextUtil.getCompanyId());
 		ddmStructureVersionModel.setUserId(ddmStructureModel.getUserId());
 		ddmStructureVersionModel.setUserName(userName);
-		ddmStructureVersionModel.setCreateDate(
-			InitDataFactoryUtil.nextFutureDate(
+		ddmStructureVersionModel.setCreateDate(nextFutureDate(
 				InitContextUtil.getFutureDateCounter()));
 		ddmStructureVersionModel.setStructureId(
 			ddmStructureModel.getStructureId());
@@ -592,8 +588,7 @@ public class InitDataFactoryUtil {
 			ddmStructureModel.getUserId());
 		ddmStructureVersionModel.setStatusByUserName(userName);
 		ddmStructureVersionModel.setStatusDate(
-			InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
+			nextFutureDate(InitContextUtil.getFutureDateCounter()));
 
 		return ddmStructureVersionModel;
 	}
