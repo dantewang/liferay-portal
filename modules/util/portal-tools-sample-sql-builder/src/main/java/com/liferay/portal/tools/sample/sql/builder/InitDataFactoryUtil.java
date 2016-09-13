@@ -20,9 +20,7 @@ import com.liferay.asset.kernel.model.AssetTagModel;
 import com.liferay.asset.kernel.model.AssetTagStatsModel;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.blogs.kernel.model.BlogsEntryModel;
-import com.liferay.document.library.kernel.model.DLFileEntryConstants;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
-import com.liferay.document.library.kernel.model.DLFileEntryTypeConstants;
 import com.liferay.document.library.kernel.model.DLFileEntryTypeModel;
 import com.liferay.document.library.kernel.model.DLFolderModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
@@ -53,11 +51,8 @@ import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.model.VirtualHostModel;
 import com.liferay.portal.kernel.template.TemplateConstants;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
-import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
-import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -67,24 +62,17 @@ import com.liferay.portal.model.impl.AccountModelImpl;
 import com.liferay.portal.model.impl.ClassNameModelImpl;
 import com.liferay.portal.model.impl.CompanyModelImpl;
 import com.liferay.portal.model.impl.GroupModelImpl;
-import com.liferay.portal.model.impl.LayoutSetModelImpl;
-import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetTagStatsModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
-import com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFolderModelImpl;
-import com.liferay.portlet.messageboards.model.impl.MBCategoryModelImpl;
 import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.model.WikiNodeModel;
-import com.liferay.wiki.model.WikiPageConstants;
 import com.liferay.wiki.model.WikiPageModel;
 import com.liferay.wiki.model.impl.WikiNodeModelImpl;
-import com.liferay.wiki.model.impl.WikiPageModelImpl;
+
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -195,39 +183,6 @@ public class InitDataFactoryUtil {
 		sb.append(new String(chars));
 
 		sb.append("]]></dynamic-content></dynamic-element></root>");
-
-		return sb.toString();
-	}
-
-	public static String getResourcePermissionModelName(String... classNames) {
-
-		if (ArrayUtil.isEmpty(classNames)) {
-			return StringPool.BLANK;
-		}
-
-		Arrays.sort(classNames);
-
-		StringBundler sb = new StringBundler(classNames.length * 2);
-
-		for (String className : classNames) {
-			sb.append(className);
-			sb.append(StringPool.DASH);
-		}
-
-		sb.setIndex(sb.index() - 1);
-
-		return sb.toString();
-	}
-
-	public static String nextDDLCustomFieldName(
-		long groupId, int customFieldIndex) {
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("custom_field_text_");
-		sb.append(groupId);
-		sb.append("_");
-		sb.append(customFieldIndex);
 
 		return sb.toString();
 	}
@@ -392,62 +347,6 @@ public class InitDataFactoryUtil {
 		return virtualHostModel;
 	}
 
-	public static String[] getAssetPublisherAssetCategoriesQueryValues(
-		List<AssetCategoryModel> assetCategoryModels, int index,
-		int maxAssetEntryToAssetCategoryCount) {
-
-		AssetCategoryModel assetCategoryModel0 = assetCategoryModels.get(
-			index % assetCategoryModels.size());
-		AssetCategoryModel assetCategoryModel1 = assetCategoryModels.get(
-			(index + maxAssetEntryToAssetCategoryCount) %
-				assetCategoryModels.size());
-		AssetCategoryModel assetCategoryModel2 = assetCategoryModels.get(
-			(index + maxAssetEntryToAssetCategoryCount * 2) %
-				assetCategoryModels.size());
-		AssetCategoryModel assetCategoryModel3 = assetCategoryModels.get(
-			(index + maxAssetEntryToAssetCategoryCount * 3) %
-				assetCategoryModels.size());
-
-		return new String[] {
-			String.valueOf(assetCategoryModel0.getCategoryId()),
-			String.valueOf(assetCategoryModel1.getCategoryId()),
-			String.valueOf(assetCategoryModel2.getCategoryId()),
-			String.valueOf(assetCategoryModel3.getCategoryId())
-		};
-	}
-
-	public static String[] getAssetPublisherAssetTagsQueryValues(
-		List<AssetTagModel> assetTagModels, int index,
-		int maxAssetEntryToAssetTagCount) {
-
-		AssetTagModel assetTagModel0 = assetTagModels.get(
-			index % assetTagModels.size());
-		AssetTagModel assetTagModel1 = assetTagModels.get(
-			(index + maxAssetEntryToAssetTagCount) % assetTagModels.size());
-		AssetTagModel assetTagModel2 = assetTagModels.get(
-			(index + maxAssetEntryToAssetTagCount * 2) % assetTagModels.size());
-		AssetTagModel assetTagModel3 = assetTagModels.get(
-			(index + maxAssetEntryToAssetTagCount * 3) % assetTagModels.size());
-
-		return new String[] {
-			assetTagModel0.getName(), assetTagModel1.getName(),
-			assetTagModel2.getName(), assetTagModel3.getName()
-		};
-	}
-
-	public static String getClassName(
-		long classNameId, Map<String, ClassNameModel> classNameModels) {
-
-		for (ClassNameModel classNameModel : classNameModels.values()) {
-			if (classNameModel.getClassNameId() == classNameId) {
-				return classNameModel.getValue();
-			}
-		}
-
-		throw new RuntimeException(
-			"Unable to find class name for id " + classNameId);
-	}
-
 	public static AssetCategoryModel newAssetCategoryModel(
 		long groupId, long lastRightCategoryId, String name, long vocabularyId,
 		long categoryId, long companyId, long userId, String userName) {
@@ -526,31 +425,6 @@ public class InitDataFactoryUtil {
 		assetTagStatsModel.setClassNameId(classNameId);
 
 		return assetTagStatsModel;
-	}
-
-	public static BlogsEntryModel newBlogsEntryModel(
-		long groupId, int index, long entryId, long companyId,
-		long sampleUserId, String userName) {
-
-		BlogsEntryModel blogsEntryModel = new BlogsEntryModelImpl();
-
-		blogsEntryModel.setUuid(SequentialUUID.generate());
-		blogsEntryModel.setEntryId(entryId);
-		blogsEntryModel.setGroupId(groupId);
-		blogsEntryModel.setCompanyId(companyId);
-		blogsEntryModel.setUserId(sampleUserId);
-		blogsEntryModel.setUserName(userName);
-		blogsEntryModel.setCreateDate(new Date());
-		blogsEntryModel.setModifiedDate(new Date());
-		blogsEntryModel.setTitle("Test Blog " + index);
-		blogsEntryModel.setSubtitle("Subtitle of Test Blog " + index);
-		blogsEntryModel.setUrlTitle("testblog" + index);
-		blogsEntryModel.setContent("This is test blog " + index + ".");
-		blogsEntryModel.setDisplayDate(new Date());
-		blogsEntryModel.setLastPublishDate(new Date());
-		blogsEntryModel.setStatusDate(new Date());
-
-		return blogsEntryModel;
 	}
 
 	public static DDMStructureLayoutModel newDDMStructureLayoutModel(
@@ -660,115 +534,6 @@ public class InitDataFactoryUtil {
 		return ddmTemplateModel;
 	}
 
-	public static DLFileEntryModel newDlFileEntryModel(
-		DLFolderModel dlFolerModel, int index, long fileEntryId, long companyId,
-		long userId, String userName, SimpleCounter futureDateCounter,
-		int size) {
-
-		DLFileEntryModel dlFileEntryModel = new DLFileEntryModelImpl();
-
-		dlFileEntryModel.setUuid(SequentialUUID.generate());
-		dlFileEntryModel.setFileEntryId(fileEntryId);
-		dlFileEntryModel.setGroupId(dlFolerModel.getGroupId());
-		dlFileEntryModel.setCompanyId(companyId);
-		dlFileEntryModel.setUserId(userId);
-		dlFileEntryModel.setUserName(userName);
-		dlFileEntryModel.setCreateDate(
-			InitDataFactoryUtil.nextFutureDate(futureDateCounter));
-		dlFileEntryModel.setModifiedDate(
-			InitDataFactoryUtil.nextFutureDate(futureDateCounter));
-		dlFileEntryModel.setRepositoryId(dlFolerModel.getRepositoryId());
-		dlFileEntryModel.setFolderId(dlFolerModel.getFolderId());
-		dlFileEntryModel.setName("TestFile" + index);
-		dlFileEntryModel.setFileName("TestFile" + index + ".txt");
-		dlFileEntryModel.setExtension("txt");
-		dlFileEntryModel.setMimeType(ContentTypes.TEXT_PLAIN);
-		dlFileEntryModel.setTitle("TestFile" + index + ".txt");
-		dlFileEntryModel.setFileEntryTypeId(
-			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
-		dlFileEntryModel.setVersion(DLFileEntryConstants.VERSION_DEFAULT);
-		dlFileEntryModel.setSize(size);
-		dlFileEntryModel.setLastPublishDate(
-			InitDataFactoryUtil.nextFutureDate(futureDateCounter));
-
-		return dlFileEntryModel;
-	}
-
-	public static DLFolderModel newDLFolderModel(
-		long groupId, long parentFolderId, int index, long folderId,
-		long companyId, long sampleUserId, String userName,
-		SimpleCounter futureDateCounter,
-		DLFileEntryTypeModel defaultDLFileEntryTypeModel) {
-
-		DLFolderModel dlFolderModel = new DLFolderModelImpl();
-
-		dlFolderModel.setUuid(SequentialUUID.generate());
-		dlFolderModel.setFolderId(folderId);
-		dlFolderModel.setGroupId(groupId);
-		dlFolderModel.setCompanyId(companyId);
-		dlFolderModel.setUserId(sampleUserId);
-		dlFolderModel.setUserName(userName);
-		dlFolderModel.setCreateDate(nextFutureDate(futureDateCounter));
-		dlFolderModel.setModifiedDate(nextFutureDate(futureDateCounter));
-		dlFolderModel.setRepositoryId(groupId);
-		dlFolderModel.setParentFolderId(parentFolderId);
-		dlFolderModel.setName("Test Folder " + index);
-		dlFolderModel.setLastPostDate(nextFutureDate(futureDateCounter));
-		dlFolderModel.setDefaultFileEntryTypeId(
-			defaultDLFileEntryTypeModel.getFileEntryTypeId());
-		dlFolderModel.setLastPublishDate(nextFutureDate(futureDateCounter));
-		dlFolderModel.setStatusDate(nextFutureDate(futureDateCounter));
-
-		return dlFolderModel;
-	}
-
-	public static MBCategoryModel newMBCategoryModel(
-		long groupId, int index, long categoryId, long companyId, long userId,
-		String userName, int threadCount, int messageCount) {
-
-		MBCategoryModel mbCategoryModel = new MBCategoryModelImpl();
-
-		mbCategoryModel.setUuid(SequentialUUID.generate());
-		mbCategoryModel.setCategoryId(categoryId);
-		mbCategoryModel.setGroupId(groupId);
-		mbCategoryModel.setCompanyId(companyId);
-		mbCategoryModel.setUserId(userId);
-		mbCategoryModel.setUserName(userName);
-		mbCategoryModel.setCreateDate(new Date());
-		mbCategoryModel.setModifiedDate(new Date());
-		mbCategoryModel.setParentCategoryId(
-			MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID);
-		mbCategoryModel.setName("Test Category " + index);
-		mbCategoryModel.setDisplayStyle(
-			MBCategoryConstants.DEFAULT_DISPLAY_STYLE);
-		mbCategoryModel.setThreadCount(threadCount);
-		mbCategoryModel.setMessageCount(threadCount * messageCount);
-		mbCategoryModel.setLastPostDate(new Date());
-		mbCategoryModel.setLastPublishDate(new Date());
-		mbCategoryModel.setStatusDate(new Date());
-
-		return mbCategoryModel;
-	}
-
-	public static LayoutSetModel newLayoutSetModel(
-		long groupId, boolean privateLayout, int pageCount, long layoutSetId,
-		long companyId) {
-
-		LayoutSetModel layoutSetModel = new LayoutSetModelImpl();
-
-		layoutSetModel.setLayoutSetId(layoutSetId);
-		layoutSetModel.setGroupId(groupId);
-		layoutSetModel.setCompanyId(companyId);
-		layoutSetModel.setCreateDate(new Date());
-		layoutSetModel.setModifiedDate(new Date());
-		layoutSetModel.setPrivateLayout(privateLayout);
-		layoutSetModel.setThemeId("classic_WAR_classictheme");
-		layoutSetModel.setColorSchemeId("01");
-		layoutSetModel.setPageCount(pageCount);
-
-		return layoutSetModel;
-	}
-
 	public static WikiNodeModel newWikiNodeModel(
 		long groupId, int index, long nodeId, long companyId, long userId,
 		String userName) {
@@ -789,32 +554,6 @@ public class InitDataFactoryUtil {
 		wikiNodeModel.setStatusDate(new Date());
 
 		return wikiNodeModel;
-	}
-
-	public static WikiPageModel newWikiPageModel(
-		WikiNodeModel wikiNodeModel, int index, long pageId,
-		long resourcePrimKey, long companyId, long userId, String userName) {
-
-		WikiPageModel wikiPageModel = new WikiPageModelImpl();
-
-		wikiPageModel.setUuid(SequentialUUID.generate());
-		wikiPageModel.setPageId(pageId);
-		wikiPageModel.setResourcePrimKey(resourcePrimKey);
-		wikiPageModel.setGroupId(wikiNodeModel.getGroupId());
-		wikiPageModel.setCompanyId(companyId);
-		wikiPageModel.setUserId(userId);
-		wikiPageModel.setUserName(userName);
-		wikiPageModel.setCreateDate(new Date());
-		wikiPageModel.setModifiedDate(new Date());
-		wikiPageModel.setNodeId(wikiNodeModel.getNodeId());
-		wikiPageModel.setTitle("Test Page " + index);
-		wikiPageModel.setVersion(WikiPageConstants.VERSION_DEFAULT);
-		wikiPageModel.setContent("This is test page " + index + ".");
-		wikiPageModel.setFormat("creole");
-		wikiPageModel.setHead(true);
-		wikiPageModel.setLastPublishDate(new Date());
-
-		return wikiPageModel;
 	}
 
 	public static DDMStructureVersionModel newDDMStructureVersionModel(
@@ -857,24 +596,6 @@ public class InitDataFactoryUtil {
 				InitContextUtil.getFutureDateCounter()));
 
 		return ddmStructureVersionModel;
-	}
-
-	public static PortletPreferencesModel newPortletPreferencesModel(
-		long plid, String portletId, String preferences) {
-
-		PortletPreferencesModel portletPreferencesModel =
-			new PortletPreferencesModelImpl();
-
-		portletPreferencesModel.setPortletPreferencesId(
-			InitContextUtil.getCounter().get());
-		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
-		portletPreferencesModel.setOwnerType(
-			PortletKeys.PREFS_OWNER_TYPE_LAYOUT);
-		portletPreferencesModel.setPlid(plid);
-		portletPreferencesModel.setPortletId(portletId);
-		portletPreferencesModel.setPreferences(preferences);
-
-		return portletPreferencesModel;
 	}
 
 	public static String[] nextUserName(long index) {

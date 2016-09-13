@@ -16,11 +16,14 @@ package com.liferay.portal.tools.sample.sql.builder;
 
 import com.liferay.wiki.model.WikiNodeModel;
 import com.liferay.wiki.model.WikiPage;
+import com.liferay.wiki.model.WikiPageConstants;
 import com.liferay.wiki.model.WikiPageModel;
 import com.liferay.wiki.model.WikiPageResourceModel;
+import com.liferay.wiki.model.impl.WikiPageModelImpl;
 import com.liferay.wiki.model.impl.WikiPageResourceModelImpl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,7 +57,7 @@ public class WikiDataFactory {
 
 		for (int i = 1; i <= maxWikiPageCount; i++) {
 			wikiPageModels.add(
-				InitDataFactoryUtil.newWikiPageModel(
+				newWikiPageModel(
 					wikiNodeModel, i, InitContextUtil.getCounter().get(),
 					InitContextUtil.getCounter().get(),
 					InitContextUtil.getCompanyId(),
@@ -89,4 +92,29 @@ public class WikiDataFactory {
 		return InitContextUtil.getMaxWikiPageCommentCount();
 	}
 
+	public static WikiPageModel newWikiPageModel(
+		WikiNodeModel wikiNodeModel, int index, long pageId,
+		long resourcePrimKey, long companyId, long userId, String userName) {
+
+		WikiPageModel wikiPageModel = new WikiPageModelImpl();
+
+		wikiPageModel.setUuid(SequentialUUID.generate());
+		wikiPageModel.setPageId(pageId);
+		wikiPageModel.setResourcePrimKey(resourcePrimKey);
+		wikiPageModel.setGroupId(wikiNodeModel.getGroupId());
+		wikiPageModel.setCompanyId(companyId);
+		wikiPageModel.setUserId(userId);
+		wikiPageModel.setUserName(userName);
+		wikiPageModel.setCreateDate(new Date());
+		wikiPageModel.setModifiedDate(new Date());
+		wikiPageModel.setNodeId(wikiNodeModel.getNodeId());
+		wikiPageModel.setTitle("Test Page " + index);
+		wikiPageModel.setVersion(WikiPageConstants.VERSION_DEFAULT);
+		wikiPageModel.setContent("This is test page " + index + ".");
+		wikiPageModel.setFormat("creole");
+		wikiPageModel.setHead(true);
+		wikiPageModel.setLastPublishDate(new Date());
+
+		return wikiPageModel;
+	}
 }

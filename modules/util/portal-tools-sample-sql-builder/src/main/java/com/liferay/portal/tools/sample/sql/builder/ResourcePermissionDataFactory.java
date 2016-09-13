@@ -38,6 +38,7 @@ import com.liferay.message.boards.kernel.model.MBCategory;
 import com.liferay.message.boards.kernel.model.MBCategoryModel;
 import com.liferay.message.boards.kernel.model.MBMessage;
 import com.liferay.message.boards.kernel.model.MBMessageModel;
+import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.Layout;
@@ -50,7 +51,9 @@ import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.wiki.model.WikiNode;
@@ -59,8 +62,10 @@ import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.model.WikiPageModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Lily Chi
@@ -155,9 +160,9 @@ public class ResourcePermissionDataFactory {
 		List<ResourcePermissionModel> resourcePermissionModels =
 			new ArrayList<>(3);
 
-		String name = InitDataFactoryUtil.getResourcePermissionModelName(
+		String name = getResourcePermissionModelName(
 			DDMStructure.class.getName(),
-			InitDataFactoryUtil.getClassName(
+			getClassName(
 				ddmStructureModel.getClassNameId(),
 				InitContextUtil.getClassNameModels()));
 		String primKey = String.valueOf(ddmStructureModel.getStructureId());
@@ -188,8 +193,8 @@ public class ResourcePermissionDataFactory {
 		List<ResourcePermissionModel> resourcePermissionModels =
 			new ArrayList<>(3);
 
-		String name = InitDataFactoryUtil.getResourcePermissionModelName(
-			DDMTemplate.class.getName(), InitDataFactoryUtil.getClassName(
+		String name = getResourcePermissionModelName(
+			DDMTemplate.class.getName(), getClassName(
 				ddmTemplateModel.getResourceClassNameId(),
 				InitContextUtil.getClassNameModels()));
 		String primKey = String.valueOf(ddmTemplateModel.getTemplateId());
@@ -375,4 +380,37 @@ public class ResourcePermissionDataFactory {
 			InitContextUtil.getSampleUserId());
 	}
 
+	public static String getResourcePermissionModelName(
+		String... classNames) {
+
+		if (ArrayUtil.isEmpty(classNames)) {
+			return StringPool.BLANK;
+		}
+
+		Arrays.sort(classNames);
+
+		StringBundler sb = new StringBundler(classNames.length * 2);
+
+		for (String className : classNames) {
+			sb.append(className);
+			sb.append(StringPool.DASH);
+		}
+
+		sb.setIndex(sb.index() - 1);
+
+		return sb.toString();
+	}
+
+	public static String getClassName(
+		long classNameId, Map<String, ClassNameModel> classNameModels) {
+
+		for (ClassNameModel classNameModel : classNameModels.values()) {
+			if (classNameModel.getClassNameId() == classNameId) {
+				return classNameModel.getValue();
+			}
+		}
+
+		throw new RuntimeException(
+			"Unable to find class name for id " + classNameId);
+	}
 }

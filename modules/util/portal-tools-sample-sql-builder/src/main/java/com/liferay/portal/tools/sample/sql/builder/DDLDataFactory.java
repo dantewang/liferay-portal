@@ -82,7 +82,7 @@ public class DDLDataFactory {
 
 		for (int i = 0; i < maxDDLCustomFieldCount; i++) {
 			sb.append("{\"columns\": [{\"fieldNames\": [\"");
-			sb.append(InitDataFactoryUtil.nextDDLCustomFieldName(groupId, i));
+			sb.append(nextDDLCustomFieldName(groupId, i));
 			sb.append("\"], \"size\": 12}]}");
 			sb.append(", ");
 		}
@@ -118,7 +118,7 @@ public class DDLDataFactory {
 			sb.append("\"label\": {\"en_US\": \"Text");
 			sb.append(i);
 			sb.append("\"}, \"name\": \"");
-			sb.append(InitDataFactoryUtil.nextDDLCustomFieldName(groupId, i));
+			sb.append(nextDDLCustomFieldName(groupId, i));
 			sb.append("\", \"readOnly\": false, \"repeatable\": false,");
 			sb.append("\"required\": false, \"showLabel\": true, \"type\": ");
 			sb.append("\"text\"}");
@@ -244,9 +244,7 @@ public class DDLDataFactory {
 			sb.append("{\"instanceId\": \"");
 			sb.append(StringUtil.randomId());
 			sb.append("\", \"name\": \"");
-			sb.append(
-				InitDataFactoryUtil.nextDDLCustomFieldName(
-					ddlRecordModel.getGroupId(), i));
+			sb.append(nextDDLCustomFieldName(ddlRecordModel.getGroupId(), i));
 			sb.append("\", \"value\": {\"en_US\": \"Test Record ");
 			sb.append(currentIndex);
 			sb.append("\"}},");
@@ -328,4 +326,16 @@ public class DDLDataFactory {
 		return ddmStructureLinkModel;
 	}
 
+	public static String nextDDLCustomFieldName(
+		long groupId, int customFieldIndex) {
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append("custom_field_text_");
+		sb.append(groupId);
+		sb.append("_");
+		sb.append(customFieldIndex);
+
+		return sb.toString();
+	}
 }

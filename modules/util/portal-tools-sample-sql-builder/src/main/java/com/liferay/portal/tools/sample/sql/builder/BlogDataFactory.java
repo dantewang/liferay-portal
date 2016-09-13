@@ -17,6 +17,7 @@ package com.liferay.portal.tools.sample.sql.builder;
 import com.liferay.blogs.kernel.model.BlogsEntry;
 import com.liferay.blogs.kernel.model.BlogsEntryModel;
 import com.liferay.blogs.kernel.model.BlogsStatsUserModel;
+import com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl;
 import com.liferay.portlet.blogs.model.impl.BlogsStatsUserModelImpl;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class BlogDataFactory {
 
 		for (int i = 1; i <= maxBlogsEntryCount; i++) {
 			blogEntryModels.add(
-				InitDataFactoryUtil.newBlogsEntryModel(
+				newBlogsEntryModel(
 					groupId, i, InitContextUtil.getCounter().get(),
 					InitContextUtil.getCompanyId(),
 					InitContextUtil.getSampleUserId(),
@@ -67,6 +68,31 @@ public class BlogDataFactory {
 		blogsStatsUserModel.setLastPostDate(new Date());
 
 		return blogsStatsUserModel;
+	}
+
+	public static BlogsEntryModel newBlogsEntryModel(
+		long groupId, int index, long entryId, long companyId,
+		long sampleUserId, String userName) {
+
+		BlogsEntryModel blogsEntryModel = new BlogsEntryModelImpl();
+
+		blogsEntryModel.setUuid(SequentialUUID.generate());
+		blogsEntryModel.setEntryId(entryId);
+		blogsEntryModel.setGroupId(groupId);
+		blogsEntryModel.setCompanyId(companyId);
+		blogsEntryModel.setUserId(sampleUserId);
+		blogsEntryModel.setUserName(userName);
+		blogsEntryModel.setCreateDate(new Date());
+		blogsEntryModel.setModifiedDate(new Date());
+		blogsEntryModel.setTitle("Test Blog " + index);
+		blogsEntryModel.setSubtitle("Subtitle of Test Blog " + index);
+		blogsEntryModel.setUrlTitle("testblog" + index);
+		blogsEntryModel.setContent("This is test blog " + index + ".");
+		blogsEntryModel.setDisplayDate(new Date());
+		blogsEntryModel.setLastPublishDate(new Date());
+		blogsEntryModel.setStatusDate(new Date());
+
+		return blogsEntryModel;
 	}
 
 }

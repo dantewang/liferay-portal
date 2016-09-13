@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
 import com.liferay.portal.model.impl.LayoutModelImpl;
+import com.liferay.portal.model.impl.LayoutSetModelImpl;
 import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.constants.WikiPortletKeys;
 
@@ -117,11 +118,11 @@ public class LayoutDataFactory {
 		List<LayoutSetModel> layoutSetModels = new ArrayList<>(2);
 
 		layoutSetModels.add(
-			InitDataFactoryUtil.newLayoutSetModel(
+			newLayoutSetModel(
 				groupId, true, 0, InitContextUtil.getCounter().get(),
 				InitContextUtil.getCompanyId()));
 		layoutSetModels.add(
-			InitDataFactoryUtil.newLayoutSetModel(
+			newLayoutSetModel(
 				groupId, false, publicLayoutSetPageCount,
 				InitContextUtil.getCounter().get(),
 				InitContextUtil.getCompanyId()));
@@ -149,6 +150,25 @@ public class LayoutDataFactory {
 			newLayoutModel(groupId, "wiki", "", WikiPortletKeys.WIKI + ","));
 
 		return layoutModels;
+	}
+
+	public static LayoutSetModel newLayoutSetModel(
+		long groupId, boolean privateLayout, int pageCount, long layoutSetId,
+		long companyId) {
+
+		LayoutSetModel layoutSetModel = new LayoutSetModelImpl();
+
+		layoutSetModel.setLayoutSetId(layoutSetId);
+		layoutSetModel.setGroupId(groupId);
+		layoutSetModel.setCompanyId(companyId);
+		layoutSetModel.setCreateDate(new Date());
+		layoutSetModel.setModifiedDate(new Date());
+		layoutSetModel.setPrivateLayout(privateLayout);
+		layoutSetModel.setThemeId("classic_WAR_classictheme");
+		layoutSetModel.setColorSchemeId("01");
+		layoutSetModel.setPageCount(pageCount);
+
+		return layoutSetModel;
 	}
 
 }

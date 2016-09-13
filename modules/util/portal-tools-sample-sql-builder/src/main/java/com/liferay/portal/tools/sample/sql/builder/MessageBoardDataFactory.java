@@ -23,6 +23,7 @@ import com.liferay.message.boards.kernel.model.MBMessageModel;
 import com.liferay.message.boards.kernel.model.MBStatsUserModel;
 import com.liferay.message.boards.kernel.model.MBThreadFlagModel;
 import com.liferay.message.boards.kernel.model.MBThreadModel;
+import com.liferay.portlet.messageboards.model.impl.MBCategoryModelImpl;
 import com.liferay.portlet.messageboards.model.impl.MBDiscussionModelImpl;
 import com.liferay.portlet.messageboards.model.impl.MBMailingListModelImpl;
 import com.liferay.portlet.messageboards.model.impl.MBMessageModelImpl;
@@ -47,7 +48,7 @@ public class MessageBoardDataFactory {
 
 		for (int i = 1; i <= maxMBCategoryCount; i++) {
 			mbCategoryModels.add(
-				InitDataFactoryUtil.newMBCategoryModel(
+				newMBCategoryModel(
 					groupId, i, InitContextUtil.getCounter().get(),
 					InitContextUtil.getCompanyId(),
 					InitContextUtil.getSampleUserId(),
@@ -300,6 +301,34 @@ public class MessageBoardDataFactory {
 		mbThreadModel.setStatusDate(new Date());
 
 		return mbThreadModel;
+	}
+
+	public static MBCategoryModel newMBCategoryModel(
+		long groupId, int index, long categoryId, long companyId, long userId,
+		String userName, int threadCount, int messageCount) {
+
+		MBCategoryModel mbCategoryModel = new MBCategoryModelImpl();
+
+		mbCategoryModel.setUuid(SequentialUUID.generate());
+		mbCategoryModel.setCategoryId(categoryId);
+		mbCategoryModel.setGroupId(groupId);
+		mbCategoryModel.setCompanyId(companyId);
+		mbCategoryModel.setUserId(userId);
+		mbCategoryModel.setUserName(userName);
+		mbCategoryModel.setCreateDate(new Date());
+		mbCategoryModel.setModifiedDate(new Date());
+		mbCategoryModel.setParentCategoryId(
+			MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID);
+		mbCategoryModel.setName("Test Category " + index);
+		mbCategoryModel.setDisplayStyle(
+			MBCategoryConstants.DEFAULT_DISPLAY_STYLE);
+		mbCategoryModel.setThreadCount(threadCount);
+		mbCategoryModel.setMessageCount(threadCount * messageCount);
+		mbCategoryModel.setLastPostDate(new Date());
+		mbCategoryModel.setLastPublishDate(new Date());
+		mbCategoryModel.setStatusDate(new Date());
+
+		return mbCategoryModel;
 	}
 
 }
