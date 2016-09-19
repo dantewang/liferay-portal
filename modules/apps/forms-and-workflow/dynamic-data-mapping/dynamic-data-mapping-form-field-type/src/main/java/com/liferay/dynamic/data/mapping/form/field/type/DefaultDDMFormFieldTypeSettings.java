@@ -138,7 +138,6 @@ public interface DefaultDDMFormFieldTypeSettings
 	/**
 	 * @deprecated As of 2.0.0
 	 */
-	@Deprecated
 	@DDMFormField(
 		label = "%field-visibility-expression",
 		properties = {
@@ -146,6 +145,7 @@ public interface DefaultDDMFormFieldTypeSettings
 			"tooltip=%write-a-conditional-expression-to-control-whether-this-field-is-displayed"
 		}
 	)
+	@Deprecated
 	public String visibilityExpression();
 
 }
