@@ -119,7 +119,7 @@ public class VirtualHostFilterTest {
 			MockFilterChain filterChain)
 		throws Exception {
 
-		_virtualHostFilter.processFilter(request, response, filterChain);
+		_virtualHostFilter.doDirectCall(request, response);
 
 		LastPath lastPath = (LastPath)request.getAttribute(WebKeys.LAST_PATH);
 
