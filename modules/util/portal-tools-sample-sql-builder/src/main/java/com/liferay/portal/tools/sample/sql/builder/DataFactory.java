@@ -1191,24 +1191,17 @@ public class DataFactory {
 	public SubscriptionModel newSubscriptionModel(
 		BlogsEntryModel blogsEntryModel) {
 
-		return newSubscriptionModel(
-			InitDataFactoryUtil.getClassNameId(
-				BlogsEntry.class, InitContextUtil.getClassNameModels()),
-			blogsEntryModel.getEntryId());
+		return SubscriptionDataFactory.newSubscriptionModel(blogsEntryModel);
 	}
 
 	public SubscriptionModel newSubscriptionModel(MBThreadModel mBThreadModel) {
-		return newSubscriptionModel(
-			InitDataFactoryUtil.getClassNameId(
-				MBThread.class, InitContextUtil.getClassNameModels()),
-			mBThreadModel.getThreadId());
+
+		return SubscriptionDataFactory.newSubscriptionModel(mBThreadModel);
 	}
 
 	public SubscriptionModel newSubscriptionModel(WikiPageModel wikiPageModel) {
-		return newSubscriptionModel(
-			InitDataFactoryUtil.getClassNameId(
-				WikiPage.class, InitContextUtil.getClassNameModels()),
-			wikiPageModel.getResourcePrimKey());
+
+		return SubscriptionDataFactory.newSubscriptionModel(wikiPageModel);
 	}
 
 	public List<UserModel> newUserModels() {
@@ -1346,24 +1339,6 @@ public class DataFactory {
 				name, primKey, InitContextUtil.getSiteMemberRoleModel().getRoleId(), 0));
 
 		return resourcePermissionModels;
-	}
-
-	protected SubscriptionModel newSubscriptionModel(
-		long classNameId, long classPK) {
-
-		SubscriptionModel subscriptionModel = new SubscriptionModelImpl();
-
-		subscriptionModel.setSubscriptionId(InitContextUtil.getCounter().get());
-		subscriptionModel.setCompanyId(InitContextUtil.getCompanyId());
-		subscriptionModel.setUserId(InitContextUtil.getSampleUserId());
-		subscriptionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		subscriptionModel.setCreateDate(new Date());
-		subscriptionModel.setModifiedDate(new Date());
-		subscriptionModel.setClassNameId(classNameId);
-		subscriptionModel.setClassPK(classPK);
-		subscriptionModel.setFrequency(SubscriptionConstants.FREQUENCY_INSTANT);
-
-		return subscriptionModel;
 	}
 
 	protected WikiPageModel newWikiPageModel(
