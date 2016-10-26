@@ -338,7 +338,7 @@ public class DataFactory {
 	}
 
 	public DLFileEntryTypeModel getDefaultDLFileEntryTypeModel() {
-		return InitContextUtil.getDefaultDLFileEntryTypeModel();
+		return DLDataFactory.getDefaultDLFileEntryTypeModel();
 	}
 
 	public DDMStructureLayoutModel getDefaultJournalDDMStructureLayoutModel() {
@@ -364,8 +364,7 @@ public class DataFactory {
 	}
 
 	public long getDLFileEntryClassNameId() {
-		return InitDataFactoryUtil.getClassNameId(
-			DLFileEntry.class, InitContextUtil.getClassNameModels());
+		return DLDataFactory.getDLFileEntryClassNameId();
 	}
 
 	public GroupModel getGlobalGroupModel() {
@@ -426,7 +425,7 @@ public class DataFactory {
 	}
 
 	public int getMaxDLFolderDepth() {
-		return InitContextUtil.getMaxDLFolderDepth();
+		return DLDataFactory.getMaxDLFolderDepth();
 	}
 
 	public int getMaxGroupCount() {
@@ -717,18 +716,7 @@ public class DataFactory {
 	public DDMContentModel newDDMContentModel(
 		DLFileEntryModel dlFileEntryModel) {
 
-		StringBundler sb = new StringBundler(6);
-
-		sb.append("{\"availableLanguageIds\": [\"en_US\"],");
-		sb.append("\"defaultLanguageId\": \"en_US\", \"fieldValues\": [{");
-		sb.append("\"instanceId\": \"");
-		sb.append(StringUtil.randomId());
-		sb.append("\", \"name\": \"CONTENT_TYPE\", \"value\": {\"en_US\": ");
-		sb.append("\"text/plain\"}}]}");
-
-		return DDLDataFactory.newDDMContentModel(
-			InitContextUtil.getCounter().get(), dlFileEntryModel.getGroupId(),
-			sb.toString());
+		return DLDataFactory.newDDMContentModel(dlFileEntryModel);
 	}
 
 	public DDMStorageLinkModel newDDMStorageLinkModel(
@@ -765,12 +753,7 @@ public class DataFactory {
 	public DDMStructureLinkModel newDDMStructureLinkModel(
 		DLFileEntryMetadataModel dLFileEntryMetadataModel) {
 
-		return DDLDataFactory.newDDMStructureLinkModel(
-			InitDataFactoryUtil.getClassNameId(
-				DLFileEntryMetadata.class,
-				InitContextUtil.getClassNameModels()),
-			dLFileEntryMetadataModel.getFileEntryMetadataId(),
-			dLFileEntryMetadataModel.getDDMStructureId());
+		return DLDataFactory.newDDMStructureLinkModel(dLFileEntryMetadataModel);
 	}
 
 	public DDMStructureVersionModel newDDMStructureVersionModel(
@@ -802,84 +785,26 @@ public class DataFactory {
 		long ddmStorageLinkId, long ddmStructureId,
 		DLFileVersionModel dlFileVersionModel) {
 
-		DLFileEntryMetadataModel dlFileEntryMetadataModel =
-			new DLFileEntryMetadataModelImpl();
-
-		dlFileEntryMetadataModel.setUuid(SequentialUUID.generate());
-		dlFileEntryMetadataModel.setFileEntryMetadataId(
-			InitContextUtil.getCounter().get());
-		dlFileEntryMetadataModel.setDDMStorageId(ddmStorageLinkId);
-		dlFileEntryMetadataModel.setDDMStructureId(ddmStructureId);
-		dlFileEntryMetadataModel.setFileEntryId(
-			dlFileVersionModel.getFileEntryId());
-		dlFileEntryMetadataModel.setFileVersionId(
-			dlFileVersionModel.getFileVersionId());
-
-		return dlFileEntryMetadataModel;
+		return DLDataFactory.newDLFileEntryMetadataModel(
+			ddmStorageLinkId, ddmStructureId, dlFileVersionModel);
 	}
 
 	public List<DLFileEntryModel> newDlFileEntryModels(
 		DLFolderModel dlFolerModel) {
 
-		int maxDLFileEntryCount = InitContextUtil.getMaxDLFileEntryCount();
-
-		List<DLFileEntryModel> dlFileEntryModels = new ArrayList<>(
-			maxDLFileEntryCount);
-
-		for (int i = 1; i <= maxDLFileEntryCount; i++) {
-			dlFileEntryModels.add(newDlFileEntryModel(dlFolerModel, i));
-		}
-
-		return dlFileEntryModels;
+		return DLDataFactory.newDlFileEntryModels(dlFolerModel);
 	}
 
 	public DLFileVersionModel newDLFileVersionModel(
 		DLFileEntryModel dlFileEntryModel) {
 
-		DLFileVersionModel dlFileVersionModel = new DLFileVersionModelImpl();
-
-		dlFileVersionModel.setUuid(SequentialUUID.generate());
-		dlFileVersionModel.setFileVersionId(InitContextUtil.getCounter().get());
-		dlFileVersionModel.setGroupId(dlFileEntryModel.getGroupId());
-		dlFileVersionModel.setCompanyId(InitContextUtil.getCompanyId());
-		dlFileVersionModel.setUserId(InitContextUtil.getSampleUserId());
-		dlFileVersionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		dlFileVersionModel.setCreateDate(
-			InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
-		dlFileVersionModel.setModifiedDate(
-			InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
-		dlFileVersionModel.setRepositoryId(dlFileEntryModel.getRepositoryId());
-		dlFileVersionModel.setFolderId(dlFileEntryModel.getFolderId());
-		dlFileVersionModel.setFileEntryId(dlFileEntryModel.getFileEntryId());
-		dlFileVersionModel.setFileName(dlFileEntryModel.getFileName());
-		dlFileVersionModel.setExtension(dlFileEntryModel.getExtension());
-		dlFileVersionModel.setMimeType(dlFileEntryModel.getMimeType());
-		dlFileVersionModel.setTitle(dlFileEntryModel.getTitle());
-		dlFileVersionModel.setFileEntryTypeId(
-			dlFileEntryModel.getFileEntryTypeId());
-		dlFileVersionModel.setVersion(dlFileEntryModel.getVersion());
-		dlFileVersionModel.setSize(dlFileEntryModel.getSize());
-		dlFileVersionModel.setLastPublishDate(
-			InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
-
-		return dlFileVersionModel;
+		return DLDataFactory.newDLFileVersionModel(dlFileEntryModel);
 	}
 
 	public List<DLFolderModel> newDLFolderModels(
 		long groupId, long parentFolderId) {
 
-		int maxDLFolderCount = InitContextUtil.getMaxDLFolderCount();
-
-		List<DLFolderModel> dlFolderModels = new ArrayList<>(maxDLFolderCount);
-
-		for (int i = 1; i <= maxDLFolderCount; i++) {
-			dlFolderModels.add(newDLFolderModel(groupId, parentFolderId, i));
-		}
-
-		return dlFolderModels;
+		return DLDataFactory.newDLFolderModels(groupId, parentFolderId);
 	}
 
 	public FriendlyURLModel newFriendlyURLModel(
@@ -1929,77 +1854,6 @@ public class DataFactory {
 		blogsEntryModel.setStatusDate(new Date());
 
 		return blogsEntryModel;
-	}
-
-	protected DLFileEntryModel newDlFileEntryModel(
-		DLFolderModel dlFolerModel, int index) {
-
-		DLFileEntryModel dlFileEntryModel = new DLFileEntryModelImpl();
-
-		dlFileEntryModel.setUuid(SequentialUUID.generate());
-		dlFileEntryModel.setFileEntryId(InitContextUtil.getCounter().get());
-		dlFileEntryModel.setGroupId(dlFolerModel.getGroupId());
-		dlFileEntryModel.setCompanyId(InitContextUtil.getCompanyId());
-		dlFileEntryModel.setUserId(InitContextUtil.getSampleUserId());
-		dlFileEntryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		dlFileEntryModel.setCreateDate(
-			InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
-		dlFileEntryModel.setModifiedDate(
-			InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
-		dlFileEntryModel.setRepositoryId(dlFolerModel.getRepositoryId());
-		dlFileEntryModel.setFolderId(dlFolerModel.getFolderId());
-		dlFileEntryModel.setName("TestFile" + index);
-		dlFileEntryModel.setFileName("TestFile" + index + ".txt");
-		dlFileEntryModel.setExtension("txt");
-		dlFileEntryModel.setMimeType(ContentTypes.TEXT_PLAIN);
-		dlFileEntryModel.setTitle("TestFile" + index + ".txt");
-		dlFileEntryModel.setFileEntryTypeId(
-			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
-		dlFileEntryModel.setVersion(DLFileEntryConstants.VERSION_DEFAULT);
-		dlFileEntryModel.setSize(InitContextUtil.getMaxDLFileEntrySize());
-		dlFileEntryModel.setLastPublishDate(
-				InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
-
-		return dlFileEntryModel;
-	}
-
-	protected DLFolderModel newDLFolderModel(
-		long groupId, long parentFolderId, int index) {
-
-		DLFolderModel dlFolderModel = new DLFolderModelImpl();
-
-		dlFolderModel.setUuid(SequentialUUID.generate());
-		dlFolderModel.setFolderId(InitContextUtil.getCounter().get());
-		dlFolderModel.setGroupId(groupId);
-		dlFolderModel.setCompanyId(InitContextUtil.getCompanyId());
-		dlFolderModel.setUserId(InitContextUtil.getSampleUserId());
-		dlFolderModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		dlFolderModel.setCreateDate(
-				InitDataFactoryUtil.nextFutureDate(
-					InitContextUtil.getFutureDateCounter()));
-		dlFolderModel.setModifiedDate(
-				InitDataFactoryUtil.nextFutureDate(
-					InitContextUtil.getFutureDateCounter()));
-		dlFolderModel.setRepositoryId(groupId);
-		dlFolderModel.setParentFolderId(parentFolderId);
-		dlFolderModel.setName("Test Folder " + index);
-		dlFolderModel.setLastPostDate(
-				InitDataFactoryUtil.nextFutureDate(
-					InitContextUtil.getFutureDateCounter()));
-		dlFolderModel.setDefaultFileEntryTypeId(
-			InitContextUtil.getDefaultDLFileEntryTypeModel().
-				getFileEntryTypeId());
-		dlFolderModel.setLastPublishDate(
-			InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
-		dlFolderModel.setStatusDate(
-				InitDataFactoryUtil.nextFutureDate(
-					InitContextUtil.getFutureDateCounter()));
-
-		return dlFolderModel;
 	}
 
 	protected LayoutSetModel newLayoutSetModel(
