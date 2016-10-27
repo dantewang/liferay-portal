@@ -432,7 +432,7 @@ public class DataFactory {
 	}
 
 	public int getMaxWikiPageCommentCount() {
-		return InitContextUtil.getMaxWikiPageCommentCount();
+		return WikiDataFactory.getMaxWikiPageCommentCount();
 	}
 
 	public List<Long> getNewUserGroupIds(long groupId) {
@@ -471,8 +471,7 @@ public class DataFactory {
 	}
 
 	public long getWikiPageClassNameId() {
-		return InitDataFactoryUtil.getClassNameId(
-			WikiPage.class, InitContextUtil.getClassNameModels());
+		return WikiDataFactory.getWikiPageClassNameId();
 	}
 
 	public AssetEntryModel newAssetEntryModel(BlogsEntryModel blogsEntryModel) {
@@ -1143,47 +1142,17 @@ public class DataFactory {
 	}
 
 	public List<WikiNodeModel> newWikiNodeModels(long groupId) {
-		int maxWikiNodeCount = InitContextUtil.getMaxWikiNodeCount();
-
-		List<WikiNodeModel> wikiNodeModels = new ArrayList<>(maxWikiNodeCount);
-
-		for (int i = 1; i <= maxWikiNodeCount; i++) {
-			wikiNodeModels.add(
-				InitDataFactoryUtil.newWikiNodeModel(
-					groupId, i, InitContextUtil.getCounter().get(),
-					InitContextUtil.getCompanyId(),
-					InitContextUtil.getSampleUserId(),
-					DataFactoryConstants.SAMPLE_USER_NAME));
-		}
-
-		return wikiNodeModels;
+		return WikiDataFactory.newWikiNodeModels(groupId);
 	}
 
 	public List<WikiPageModel> newWikiPageModels(WikiNodeModel wikiNodeModel) {
-		int maxWikiPageCount = InitContextUtil.getMaxWikiPageCount();
-
-		List<WikiPageModel> wikiPageModels = new ArrayList<>(maxWikiPageCount);
-
-		for (int i = 1; i <= maxWikiPageCount; i++) {
-			wikiPageModels.add(newWikiPageModel(wikiNodeModel, i));
-		}
-
-		return wikiPageModels;
+		return WikiDataFactory.newWikiPageModels(wikiNodeModel);
 	}
 
 	public WikiPageResourceModel newWikiPageResourceModel(
 		WikiPageModel wikiPageModel) {
 
-		WikiPageResourceModel wikiPageResourceModel =
-			new WikiPageResourceModelImpl();
-
-		wikiPageResourceModel.setUuid(SequentialUUID.generate());
-		wikiPageResourceModel.setResourcePrimKey(
-			wikiPageModel.getResourcePrimKey());
-		wikiPageResourceModel.setNodeId(wikiPageModel.getNodeId());
-		wikiPageResourceModel.setTitle(wikiPageModel.getTitle());
-
-		return wikiPageResourceModel;
+		return WikiDataFactory.newWikiPageResourceModel(wikiPageModel);
 	}
 
 	protected BlogsEntryModel newBlogsEntryModel(long groupId, int index) {
@@ -1207,31 +1176,6 @@ public class DataFactory {
 		blogsEntryModel.setStatusDate(new Date());
 
 		return blogsEntryModel;
-	}
-
-	protected WikiPageModel newWikiPageModel(
-		WikiNodeModel wikiNodeModel, int index) {
-
-		WikiPageModel wikiPageModel = new WikiPageModelImpl();
-
-		wikiPageModel.setUuid(SequentialUUID.generate());
-		wikiPageModel.setPageId(InitContextUtil.getCounter().get());
-		wikiPageModel.setResourcePrimKey(InitContextUtil.getCounter().get());
-		wikiPageModel.setGroupId(wikiNodeModel.getGroupId());
-		wikiPageModel.setCompanyId(InitContextUtil.getCompanyId());
-		wikiPageModel.setUserId(InitContextUtil.getSampleUserId());
-		wikiPageModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		wikiPageModel.setCreateDate(new Date());
-		wikiPageModel.setModifiedDate(new Date());
-		wikiPageModel.setNodeId(wikiNodeModel.getNodeId());
-		wikiPageModel.setTitle("Test Page " + index);
-		wikiPageModel.setVersion(WikiPageConstants.VERSION_DEFAULT);
-		wikiPageModel.setContent("This is test page " + index + ".");
-		wikiPageModel.setFormat("creole");
-		wikiPageModel.setHead(true);
-		wikiPageModel.setLastPublishDate(new Date());
-
-		return wikiPageModel;
 	}
 
 	private final Class<?> _clazz = getClass();
