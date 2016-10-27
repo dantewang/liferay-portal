@@ -287,8 +287,7 @@ public class DataFactory {
 	}
 
 	public long getBlogsEntryClassNameId() {
-		return InitDataFactoryUtil.getClassNameId(
-			BlogsEntry.class, InitContextUtil.getClassNameModels());
+		return BlogDataFactory.getBlogsEntryClassNameId();
 	}
 
 	public Collection<ClassNameModel> getClassNameModels() {
@@ -400,7 +399,7 @@ public class DataFactory {
 	}
 
 	public int getMaxBlogsEntryCommentCount() {
-		return InitContextUtil.getMaxBlogsEntryCommentCount();
+		return BlogDataFactory.getMaxBlogsEntryCommentCount();
 	}
 
 	public int getMaxDDLRecordCount() {
@@ -519,30 +518,13 @@ public class DataFactory {
 	}
 
 	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
-		int maxBlogsEntryCount = InitContextUtil.getMaxBlogsEntryCount();
 
-		List<BlogsEntryModel> blogEntryModels = new ArrayList<>(
-			maxBlogsEntryCount);
-
-		for (int i = 1; i <= maxBlogsEntryCount; i++) {
-			blogEntryModels.add(newBlogsEntryModel(groupId, i));
-		}
-
-		return blogEntryModels;
+		return BlogDataFactory.newBlogsEntryModels(groupId);
 	}
 
 	public BlogsStatsUserModel newBlogsStatsUserModel(long groupId) {
-		BlogsStatsUserModel blogsStatsUserModel = new BlogsStatsUserModelImpl();
 
-		blogsStatsUserModel.setStatsUserId(InitContextUtil.getCounter().get());
-		blogsStatsUserModel.setGroupId(groupId);
-		blogsStatsUserModel.setCompanyId(InitContextUtil.getCompanyId());
-		blogsStatsUserModel.setUserId(InitContextUtil.getSampleUserId());
-		blogsStatsUserModel.setEntryCount(
-			InitContextUtil.getMaxBlogsEntryCount());
-		blogsStatsUserModel.setLastPostDate(new Date());
-
-		return blogsStatsUserModel;
+		return BlogDataFactory.newBlogsStatsUserModel(groupId);
 	}
 
 	public ContactModel newContactModel(UserModel userModel) {
@@ -704,21 +686,7 @@ public class DataFactory {
 	public FriendlyURLModel newFriendlyURLModel(
 		BlogsEntryModel blogsEntryModel) {
 
-		FriendlyURLModel friendlyURLModel = new FriendlyURLModelImpl();
-
-		friendlyURLModel.setUuid(SequentialUUID.generate());
-		friendlyURLModel.setFriendlyURLId(InitContextUtil.getCounter().get());
-		friendlyURLModel.setGroupId(blogsEntryModel.getGroupId());
-		friendlyURLModel.setCompanyId(InitContextUtil.getCompanyId());
-		friendlyURLModel.setCreateDate(new Date());
-		friendlyURLModel.setModifiedDate(new Date());
-		friendlyURLModel.setClassNameId(InitDataFactoryUtil.getClassNameId(
-				BlogsEntry.class, InitContextUtil.getClassNameModels()));
-		friendlyURLModel.setClassPK(blogsEntryModel.getEntryId());
-		friendlyURLModel.setUrlTitle(blogsEntryModel.getUrlTitle());
-		friendlyURLModel.setMain(true);
-
-		return friendlyURLModel;
+		return BlogDataFactory.newFriendlyURLModel(blogsEntryModel);
 	}
 
 	public GroupModel newGroupModel(UserModel userModel) throws Exception {
@@ -1153,29 +1121,6 @@ public class DataFactory {
 		WikiPageModel wikiPageModel) {
 
 		return WikiDataFactory.newWikiPageResourceModel(wikiPageModel);
-	}
-
-	protected BlogsEntryModel newBlogsEntryModel(long groupId, int index) {
-		BlogsEntryModel blogsEntryModel = new BlogsEntryModelImpl();
-
-		blogsEntryModel.setUuid(SequentialUUID.generate());
-		blogsEntryModel.setEntryId(InitContextUtil.getCounter().get());
-		blogsEntryModel.setGroupId(groupId);
-		blogsEntryModel.setCompanyId(InitContextUtil.getCompanyId());
-		blogsEntryModel.setUserId(InitContextUtil.getSampleUserId());
-		blogsEntryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		blogsEntryModel.setCreateDate(new Date());
-		blogsEntryModel.setModifiedDate(new Date());
-		blogsEntryModel.setTitle("Test Blog " + index);
-		blogsEntryModel.setSubtitle("Subtitle of Test Blog " + index);
-		blogsEntryModel.setUrlTitle("testblog" + index);
-		blogsEntryModel.setContent("This is test blog " + index + ".");
-		blogsEntryModel.setDisplayDate(new Date());
-		blogsEntryModel.setLastPublishDate(new Date());
-		blogsEntryModel.setStatusByUserId(InitContextUtil.getSampleUserId());
-		blogsEntryModel.setStatusDate(new Date());
-
-		return blogsEntryModel;
 	}
 
 	private final Class<?> _clazz = getClass();
