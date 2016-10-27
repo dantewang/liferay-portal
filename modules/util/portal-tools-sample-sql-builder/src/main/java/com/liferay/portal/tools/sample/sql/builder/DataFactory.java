@@ -392,8 +392,7 @@ public class DataFactory {
 	}
 
 	public long getLayoutClassNameId() {
-		return InitDataFactoryUtil.getClassNameId(
-			Layout.class, InitContextUtil.getClassNameModels());
+		return LayoutDataFactory.getLayoutClassNameId();
 	}
 
 	public int getMaxAssetPublisherPageCount() {
@@ -853,83 +852,21 @@ public class DataFactory {
 	public LayoutFriendlyURLModel newLayoutFriendlyURLModel(
 		LayoutModel layoutModel) {
 
-		LayoutFriendlyURLModel layoutFriendlyURLModel =
-			new LayoutFriendlyURLModelImpl();
-
-		layoutFriendlyURLModel.setUuid(SequentialUUID.generate());
-		layoutFriendlyURLModel.setLayoutFriendlyURLId(
-			InitContextUtil.getCounter().get());
-		layoutFriendlyURLModel.setGroupId(layoutModel.getGroupId());
-		layoutFriendlyURLModel.setCompanyId(InitContextUtil.getCompanyId());
-		layoutFriendlyURLModel.setUserId(InitContextUtil.getSampleUserId());
-		layoutFriendlyURLModel.setUserName(
-			DataFactoryConstants.SAMPLE_USER_NAME);
-		layoutFriendlyURLModel.setCreateDate(new Date());
-		layoutFriendlyURLModel.setModifiedDate(new Date());
-		layoutFriendlyURLModel.setPlid(layoutModel.getPlid());
-		layoutFriendlyURLModel.setFriendlyURL(layoutModel.getFriendlyURL());
-		layoutFriendlyURLModel.setLanguageId("en_US");
-		layoutFriendlyURLModel.setLastPublishDate(new Date());
-
-		return layoutFriendlyURLModel;
+		return LayoutDataFactory.newLayoutFriendlyURLModel(layoutModel);
 	}
 
 	public LayoutModel newLayoutModel(
 		long groupId, String name, String column1, String column2) {
 
-		Map<Long, SimpleCounter> layoutCounters =
-			InitContextUtil.getLayoutCounters();
-
-		SimpleCounter simpleCounter = layoutCounters.get(groupId);
-
-		if (simpleCounter == null) {
-			simpleCounter = new SimpleCounter();
-
-			layoutCounters.put(groupId, simpleCounter);
-		}
-
-		LayoutModel layoutModel = new LayoutModelImpl();
-
-		layoutModel.setUuid(SequentialUUID.generate());
-		layoutModel.setPlid(InitContextUtil.getCounter().get());
-		layoutModel.setGroupId(groupId);
-		layoutModel.setCompanyId(InitContextUtil.getCompanyId());
-		layoutModel.setUserId(InitContextUtil.getSampleUserId());
-		layoutModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		layoutModel.setCreateDate(new Date());
-		layoutModel.setModifiedDate(new Date());
-		layoutModel.setLayoutId(simpleCounter.get());
-		layoutModel.setName(
-			"<?xml version=\"1.0\"?><root><name>" + name + "</name></root>");
-		layoutModel.setType(LayoutConstants.TYPE_PORTLET);
-		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + name);
-
-		UnicodeProperties typeSettingsProperties = new UnicodeProperties(true);
-
-		typeSettingsProperties.setProperty(
-			LayoutTypePortletConstants.LAYOUT_TEMPLATE_ID, "2_columns_ii");
-		typeSettingsProperties.setProperty("column-1", column1);
-		typeSettingsProperties.setProperty("column-2", column2);
-
-		String typeSettings = StringUtil.replace(
-			typeSettingsProperties.toString(), '\n', "\\n");
-
-		layoutModel.setTypeSettings(typeSettings);
-		layoutModel.setLastPublishDate(new Date());
-
-		return layoutModel;
+		return LayoutDataFactory.newLayoutModel(
+			groupId, name, column1, column2);
 	}
 
 	public List<LayoutSetModel> newLayoutSetModels(
 		long groupId, int publicLayoutSetPageCount) {
 
-		List<LayoutSetModel> layoutSetModels = new ArrayList<>(2);
-
-		layoutSetModels.add(newLayoutSetModel(groupId, true, 0));
-		layoutSetModels.add(
-			newLayoutSetModel(groupId, false, publicLayoutSetPageCount));
-
-		return layoutSetModels;
+		return LayoutDataFactory.newLayoutSetModels(
+			groupId, publicLayoutSetPageCount);
 	}
 
 	public List<MBCategoryModel> newMBCategoryModels(long groupId) {
@@ -1256,25 +1193,8 @@ public class DataFactory {
 	}
 
 	public List<LayoutModel> newPublicLayoutModels(long groupId) {
-		List<LayoutModel> layoutModels = new ArrayList<>();
 
-		layoutModels.add(
-			newLayoutModel(
-				groupId, "welcome", LoginPortletKeys.LOGIN + ",",
-				"com_liferay_hello_world_web_portlet_HelloWorldPortlet,"));
-		layoutModels.add(
-			newLayoutModel(groupId, "blogs", "", BlogsPortletKeys.BLOGS + ","));
-		layoutModels.add(
-			newLayoutModel(
-				groupId, "document_library", "",
-				DLPortletKeys.DOCUMENT_LIBRARY + ","));
-		layoutModels.add(
-			newLayoutModel(
-				groupId, "forums", "", MBPortletKeys.MESSAGE_BOARDS + ","));
-		layoutModels.add(
-			newLayoutModel(groupId, "wiki", "", WikiPortletKeys.WIKI + ","));
-
-		return layoutModels;
+		return LayoutDataFactory.newPublicLayoutModels(groupId);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -1734,24 +1654,6 @@ public class DataFactory {
 		blogsEntryModel.setStatusDate(new Date());
 
 		return blogsEntryModel;
-	}
-
-	protected LayoutSetModel newLayoutSetModel(
-		long groupId, boolean privateLayout, int pageCount) {
-
-		LayoutSetModel layoutSetModel = new LayoutSetModelImpl();
-
-		layoutSetModel.setLayoutSetId(InitContextUtil.getCounter().get());
-		layoutSetModel.setGroupId(groupId);
-		layoutSetModel.setCompanyId(InitContextUtil.getCompanyId());
-		layoutSetModel.setCreateDate(new Date());
-		layoutSetModel.setModifiedDate(new Date());
-		layoutSetModel.setPrivateLayout(privateLayout);
-		layoutSetModel.setThemeId("classic_WAR_classictheme");
-		layoutSetModel.setColorSchemeId("01");
-		layoutSetModel.setPageCount(pageCount);
-
-		return layoutSetModel;
 	}
 
 	protected MBCategoryModel newMBCategoryModel(long groupId, int index) {
