@@ -299,11 +299,11 @@ public class DataFactory {
 	}
 
 	public SimpleCounter getCounter() {
-		return InitContextUtil.getCounter();
+		return CounterDataFactory.getCounter();
 	}
 
 	public long getCounterNext() {
-		return InitContextUtil.getCounter().get();
+		return CounterDataFactory.getCounterNext();
 	}
 
 	public String getDateLong(Date date) {
@@ -452,13 +452,8 @@ public class DataFactory {
 	}
 
 	public List<Integer> getSequence(int size) {
-		List<Integer> sequence = new ArrayList<>(size);
 
-		for (int i = 1; i <= size; i++) {
-			sequence.add(i);
-		}
-
-		return sequence;
+		return CounterDataFactory.getSequence(size);
 	}
 
 	public RoleModel getUserRoleModel() {
@@ -533,36 +528,8 @@ public class DataFactory {
 	}
 
 	public List<CounterModel> newCounterModels() {
-		List<CounterModel> counterModels = new ArrayList<>();
 
-		// Counter
-
-		CounterModel counterModel = new CounterModelImpl();
-
-		counterModel.setName(Counter.class.getName());
-		counterModel.setCurrentId(InitContextUtil.getCounter().get());
-
-		counterModels.add(counterModel);
-
-		// ResourcePermission
-
-		counterModel = new CounterModelImpl();
-
-		counterModel.setName(ResourcePermission.class.getName());
-		counterModel.setCurrentId(InitContextUtil.getResourcePermissionCounter().get());
-
-		counterModels.add(counterModel);
-
-		// SocialActivity
-
-		counterModel = new CounterModelImpl();
-
-		counterModel.setName(SocialActivity.class.getName());
-		counterModel.setCurrentId(InitContextUtil.getSocialActivityCounter().get());
-
-		counterModels.add(counterModel);
-
-		return counterModels;
+		return CounterDataFactory.newCounterModels();
 	}
 
 	public DDMStructureLayoutModel newDDLDDMStructureLayoutModel(
