@@ -317,24 +317,24 @@ public class DataFactory {
 	}
 
 	public long getDDLRecordSetClassNameId() {
-		return InitDataFactoryUtil.getClassNameId(
-			DDLRecordSet.class, InitContextUtil.getClassNameModels());
+
+		return DDLDataFactory.getDDLRecordSetClassNameId();
 	}
 
 	public long getDefaultDLDDMStructureId() {
-		return InitContextUtil.getDefaultDLDDMStructureModel().getStructureId();
+		return DDLDataFactory.getDefaultDLDDMStructureId();
 	}
 
 	public DDMStructureLayoutModel getDefaultDLDDMStructureLayoutModel() {
-		return InitContextUtil.getDefaultDLDDMStructureLayoutModel();
+		return DDLDataFactory.getDefaultDLDDMStructureLayoutModel();
 	}
 
 	public DDMStructureModel getDefaultDLDDMStructureModel() {
-		return InitContextUtil.getDefaultDLDDMStructureModel();
+		return DDLDataFactory.getDefaultDLDDMStructureModel();
 	}
 
 	public DDMStructureVersionModel getDefaultDLDDMStructureVersionModel() {
-		return InitContextUtil.getDefaultDLDDMStructureVersionModel();
+		return DDLDataFactory.getDefaultDLDDMStructureVersionModel();
 	}
 
 	public DLFileEntryTypeModel getDefaultDLFileEntryTypeModel() {
@@ -418,11 +418,11 @@ public class DataFactory {
 	}
 
 	public int getMaxDDLRecordCount() {
-		return InitContextUtil.getMaxDDLRecordCount();
+		return DDLDataFactory.getMaxDDLRecordCount();
 	}
 
 	public int getMaxDDLRecordSetCount() {
-		return InitContextUtil.getMaxDDLRecordSetCount();
+		return DDLDataFactory.getMaxDDLRecordSetCount();
 	}
 
 	public int getMaxDLFolderDepth() {
@@ -659,72 +659,12 @@ public class DataFactory {
 	public DDMStructureLayoutModel newDDLDDMStructureLayoutModel(
 		long groupId, DDMStructureVersionModel ddmStructureVersionModel) {
 
-		int maxDDLCustomFieldCount =
-			InitContextUtil.getMaxDDLCustomFieldCount();
-		StringBundler sb = new StringBundler(4 + maxDDLCustomFieldCount * 4);
-
-		sb.append("{\"defaultLanguageId\": \"en_US\", \"pages\": [{\"rows\": ");
-		sb.append("[");
-
-		for (int i = 0; i < maxDDLCustomFieldCount; i++) {
-			sb.append("{\"columns\": [{\"fieldNames\": [\"");
-			sb.append(nextDDLCustomFieldName(groupId, i));
-			sb.append("\"], \"size\": 12}]}");
-			sb.append(", ");
-		}
-
-		if (maxDDLCustomFieldCount > 0) {
-			sb.setIndex(sb.index() - 1);
-		}
-
-		sb.append("], \"title\": {\"en_US\": \"\"}}],\"paginationMode\": ");
-		sb.append("\"single-page\"}");
-
-		return InitDataFactoryUtil.newDDMStructureLayoutModel(
-			InitContextUtil.getGlobalGroupId(),
-			InitContextUtil.getDefaultUserId(),
-			ddmStructureVersionModel.getStructureVersionId(), sb.toString(),
-			InitContextUtil.getCounter().get(), InitContextUtil.getCompanyId(),
-			DataFactoryConstants.SAMPLE_USER_NAME,
-			InitContextUtil.getFutureDateCounter());
+		return DDLDataFactory.newDDLDDMStructureLayoutModel(
+			groupId, ddmStructureVersionModel);
 	}
 
 	public DDMStructureModel newDDLDDMStructureModel(long groupId) {
-		int maxDDLCustomFieldCount =
-			InitContextUtil.getMaxDDLCustomFieldCount();
-
-		StringBundler sb = new StringBundler(3 + maxDDLCustomFieldCount * 9);
-
-		sb.append("{\"availableLanguageIds\": [\"en_US\"],");
-		sb.append("\"defaultLanguageId\": \"en_US\", \"fields\": [");
-
-		for (int i = 0; i < maxDDLCustomFieldCount; i++) {
-			sb.append(
-				"{\"dataType\": \"string\", \"indexType\": \"keyword\", ");
-			sb.append("\"label\": {\"en_US\": \"Text");
-			sb.append(i);
-			sb.append("\"}, \"name\": \"");
-			sb.append(nextDDLCustomFieldName(groupId, i));
-			sb.append("\", \"readOnly\": false, \"repeatable\": false,");
-			sb.append("\"required\": false, \"showLabel\": true, \"type\": ");
-			sb.append("\"text\"}");
-			sb.append(",");
-		}
-
-		if (maxDDLCustomFieldCount > 0) {
-			sb.setIndex(sb.index() - 1);
-		}
-
-		sb.append("]}");
-
-		return InitDataFactoryUtil.newDDMStructureModel(
-			groupId, InitContextUtil.getSampleUserId(),
-			InitDataFactoryUtil.getClassNameId(
-				DDLRecordSet.class, InitContextUtil.getClassNameModels()),
-			"Test DDM Structure", sb.toString(),
-			InitContextUtil.getCounter().get(), InitContextUtil.getCompanyId(),
-			DataFactoryConstants.SAMPLE_USER_NAME,
-			InitContextUtil.getFutureDateCounter());
+		return DDLDataFactory.newDDLDDMStructureModel(groupId);
 	}
 
 	public List<PortletPreferencesModel>
@@ -752,121 +692,26 @@ public class DataFactory {
 	public DDLRecordModel newDDLRecordModel(
 		DDLRecordSetModel dDLRecordSetModel) {
 
-		DDLRecordModel ddlRecordModel = new DDLRecordModelImpl();
-
-		ddlRecordModel.setUuid(SequentialUUID.generate());
-		ddlRecordModel.setRecordId(InitContextUtil.getCounter().get());
-		ddlRecordModel.setGroupId(dDLRecordSetModel.getGroupId());
-		ddlRecordModel.setCompanyId(InitContextUtil.getCompanyId());
-		ddlRecordModel.setUserId(InitContextUtil.getSampleUserId());
-		ddlRecordModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		ddlRecordModel.setVersionUserId(InitContextUtil.getSampleUserId());
-		ddlRecordModel.setVersionUserName(
-			DataFactoryConstants.SAMPLE_USER_NAME);
-		ddlRecordModel.setCreateDate(new Date());
-		ddlRecordModel.setModifiedDate(new Date());
-		ddlRecordModel.setDDMStorageId(InitContextUtil.getCounter().get());
-		ddlRecordModel.setRecordSetId(dDLRecordSetModel.getRecordSetId());
-		ddlRecordModel.setVersion(DDLRecordConstants.VERSION_DEFAULT);
-		ddlRecordModel.setDisplayIndex(
-			DDLRecordConstants.DISPLAY_INDEX_DEFAULT);
-		ddlRecordModel.setLastPublishDate(new Date());
-
-		return ddlRecordModel;
+		return DDLDataFactory.newDDLRecordModel(dDLRecordSetModel);
 	}
 
 	public DDLRecordSetModel newDDLRecordSetModel(
 		DDMStructureModel ddmStructureModel, int currentIndex) {
 
-		DDLRecordSetModel ddlRecordSetModel = new DDLRecordSetModelImpl();
-
-		ddlRecordSetModel.setUuid(SequentialUUID.generate());
-		ddlRecordSetModel.setRecordSetId(InitContextUtil.getCounter().get());
-		ddlRecordSetModel.setGroupId(ddmStructureModel.getGroupId());
-		ddlRecordSetModel.setCompanyId(InitContextUtil.getCompanyId());
-		ddlRecordSetModel.setUserId(InitContextUtil.getSampleUserId());
-		ddlRecordSetModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		ddlRecordSetModel.setCreateDate(new Date());
-		ddlRecordSetModel.setModifiedDate(new Date());
-		ddlRecordSetModel.setDDMStructureId(ddmStructureModel.getStructureId());
-		ddlRecordSetModel.setRecordSetKey(
-			String.valueOf(InitContextUtil.getCounter().get()));
-
-		StringBundler sb = new StringBundler(5);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append("Test DDL Record Set ");
-		sb.append(currentIndex);
-		sb.append("</name></root>");
-
-		ddlRecordSetModel.setName(sb.toString());
-
-		ddlRecordSetModel.setMinDisplayRows(
-			DDLRecordSetConstants.MIN_DISPLAY_ROWS_DEFAULT);
-		ddlRecordSetModel.setScope(
-			DDLRecordSetConstants.SCOPE_DYNAMIC_DATA_LISTS);
-		ddlRecordSetModel.setSettings(StringPool.BLANK);
-		ddlRecordSetModel.setLastPublishDate(new Date());
-
-		return ddlRecordSetModel;
+		return DDLDataFactory.newDDLRecordSetModel(
+			ddmStructureModel, currentIndex);
 	}
 
 	public DDLRecordVersionModel newDDLRecordVersionModel(
 		DDLRecordModel dDLRecordModel) {
-		
-		DDLRecordVersionModel ddlRecordVersionModel =
-			new DDLRecordVersionModelImpl();
 
-		ddlRecordVersionModel.setRecordVersionId(
-			InitContextUtil.getCounter().get());
-		ddlRecordVersionModel.setGroupId(dDLRecordModel.getGroupId());
-		ddlRecordVersionModel.setCompanyId(InitContextUtil.getCompanyId());
-		ddlRecordVersionModel.setUserId(InitContextUtil.getSampleUserId());
-		ddlRecordVersionModel.setUserName(
-			DataFactoryConstants.SAMPLE_USER_NAME);
-		ddlRecordVersionModel.setCreateDate(dDLRecordModel.getModifiedDate());
-		ddlRecordVersionModel.setDDMStorageId(dDLRecordModel.getDDMStorageId());
-		ddlRecordVersionModel.setRecordSetId(dDLRecordModel.getRecordSetId());
-		ddlRecordVersionModel.setRecordId(dDLRecordModel.getRecordId());
-		ddlRecordVersionModel.setVersion(dDLRecordModel.getVersion());
-		ddlRecordVersionModel.setDisplayIndex(dDLRecordModel.getDisplayIndex());
-		ddlRecordVersionModel.setStatus(WorkflowConstants.STATUS_APPROVED);
-		ddlRecordVersionModel.setStatusDate(dDLRecordModel.getModifiedDate());
-
-		return ddlRecordVersionModel;
+		return DDLDataFactory.newDDLRecordVersionModel(dDLRecordModel);
 	}
 
 	public DDMContentModel newDDMContentModel(
 		DDLRecordModel ddlRecordModel, int currentIndex) {
 
-		int maxDDLCustomFieldCount =
-			InitContextUtil.getMaxDDLCustomFieldCount();
-
-		StringBundler sb = new StringBundler(3 + maxDDLCustomFieldCount * 7);
-
-		sb.append("{\"availableLanguageIds\": [\"en_US\"],");
-		sb.append("\"defaultLanguageId\": \"en_US\", \"fieldValues\": [");
-
-		for (int i = 0; i < maxDDLCustomFieldCount; i++) {
-			sb.append("{\"instanceId\": \"");
-			sb.append(StringUtil.randomId());
-			sb.append("\", \"name\": \"");
-			sb.append(nextDDLCustomFieldName(ddlRecordModel.getGroupId(), i));
-			sb.append("\", \"value\": {\"en_US\": \"Test Record ");
-			sb.append(currentIndex);
-			sb.append("\"}},");
-		}
-
-		if (maxDDLCustomFieldCount > 0) {
-			sb.setIndex(sb.index() - 1);
-		}
-
-		sb.append("]}");
-
-		return newDDMContentModel(
-			ddlRecordModel.getDDMStorageId(), ddlRecordModel.getGroupId(),
-			sb.toString());
+		return DDLDataFactory.newDDMContentModel(ddlRecordModel, currentIndex);
 	}
 
 	public DDMContentModel newDDMContentModel(
@@ -881,8 +726,9 @@ public class DataFactory {
 		sb.append("\", \"name\": \"CONTENT_TYPE\", \"value\": {\"en_US\": ");
 		sb.append("\"text/plain\"}}]}");
 
-		return newDDMContentModel(
-			InitContextUtil.getCounter().get(), dlFileEntryModel.getGroupId(), sb.toString());
+		return DDLDataFactory.newDDMContentModel(
+			InitContextUtil.getCounter().get(), dlFileEntryModel.getGroupId(),
+			sb.toString());
 	}
 
 	public DDMStorageLinkModel newDDMStorageLinkModel(
@@ -906,33 +752,20 @@ public class DataFactory {
 		long ddmStorageLinkId, DDMContentModel ddmContentModel,
 		long structureId) {
 
-		DDMStorageLinkModel ddmStorageLinkModel = new DDMStorageLinkModelImpl();
-
-		ddmStorageLinkModel.setUuid(SequentialUUID.generate());
-		ddmStorageLinkModel.setStorageLinkId(ddmStorageLinkId);
-		ddmStorageLinkModel.setClassNameId(
-			InitDataFactoryUtil.getClassNameId(
-				DDMContent.class, InitContextUtil.getClassNameModels()));
-		ddmStorageLinkModel.setClassPK(ddmContentModel.getContentId());
-		ddmStorageLinkModel.setStructureId(structureId);
-
-		return ddmStorageLinkModel;
+		return DDLDataFactory.newDDMStorageLinkModel(
+			ddmStorageLinkId, ddmContentModel, structureId);
 	}
 
 	public DDMStructureLinkModel newDDMStructureLinkModel(
 		DDLRecordSetModel ddlRecordSetModel) {
 
-		return newDDMStructureLinkModel(
-			InitDataFactoryUtil.getClassNameId(
-				DDLRecordSet.class, InitContextUtil.getClassNameModels()),
-			ddlRecordSetModel.getRecordSetId(),
-			ddlRecordSetModel.getDDMStructureId());
+		return DDLDataFactory.newDDMStructureLinkModel(ddlRecordSetModel);
 	}
 
 	public DDMStructureLinkModel newDDMStructureLinkModel(
 		DLFileEntryMetadataModel dLFileEntryMetadataModel) {
 
-		return newDDMStructureLinkModel(
+		return DDLDataFactory.newDDMStructureLinkModel(
 			InitDataFactoryUtil.getClassNameId(
 				DLFileEntryMetadata.class,
 				InitContextUtil.getClassNameModels()),
@@ -2098,44 +1931,6 @@ public class DataFactory {
 		return blogsEntryModel;
 	}
 
-	protected DDMContentModel newDDMContentModel(
-		long contentId, long groupId, String data) {
-
-		DDMContentModel ddmContentModel = new DDMContentModelImpl();
-
-		ddmContentModel.setUuid(SequentialUUID.generate());
-		ddmContentModel.setContentId(contentId);
-		ddmContentModel.setGroupId(groupId);
-		ddmContentModel.setCompanyId(InitContextUtil.getCompanyId());
-		ddmContentModel.setUserId(InitContextUtil.getSampleUserId());
-		ddmContentModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		ddmContentModel.setCreateDate(
-			InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
-		ddmContentModel.setModifiedDate(
-			InitDataFactoryUtil.nextFutureDate(
-				InitContextUtil.getFutureDateCounter()));
-		ddmContentModel.setName(DDMStorageLink.class.getName());
-		ddmContentModel.setData(data);
-
-		return ddmContentModel;
-	}
-
-	protected DDMStructureLinkModel newDDMStructureLinkModel(
-		long classNameId, long classPK, long structureId) {
-
-		DDMStructureLinkModel ddmStructureLinkModel =
-			new DDMStructureLinkModelImpl();
-
-		ddmStructureLinkModel.setStructureLinkId(
-			InitContextUtil.getCounter().get());
-		ddmStructureLinkModel.setClassNameId(classNameId);
-		ddmStructureLinkModel.setClassPK(classPK);
-		ddmStructureLinkModel.setStructureId(structureId);
-
-		return ddmStructureLinkModel;
-	}
-
 	protected DLFileEntryModel newDlFileEntryModel(
 		DLFolderModel dlFolerModel, int index) {
 
@@ -2425,19 +2220,6 @@ public class DataFactory {
 		wikiPageModel.setLastPublishDate(new Date());
 
 		return wikiPageModel;
-	}
-
-	protected String nextDDLCustomFieldName(
-		long groupId, int customFieldIndex) {
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("custom_field_text_");
-		sb.append(groupId);
-		sb.append("_");
-		sb.append(customFieldIndex);
-
-		return sb.toString();
 	}
 
 	private String _getResourcePermissionModelName(String... classNames) {
