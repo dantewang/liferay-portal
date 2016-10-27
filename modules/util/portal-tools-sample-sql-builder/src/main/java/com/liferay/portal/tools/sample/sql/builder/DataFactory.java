@@ -255,11 +255,11 @@ public class DataFactory {
 	}
 
 	public AccountModel getAccountModel() {
-		return InitContextUtil.getAccountModel();
+		return UserDataFactory.getAccountModel();
 	}
 
 	public RoleModel getAdministratorRoleModel() {
-		return InitContextUtil.getAdministratorRoleModel();
+		return UserDataFactory.getAdministratorRoleModel();
 	}
 
 	public List<Long> getAssetCategoryIds(long groupId) {
@@ -296,7 +296,7 @@ public class DataFactory {
 	}
 
 	public CompanyModel getCompanyModel() {
-		return InitContextUtil.getCompanyModel();
+		return UserDataFactory.getCompanyModel();
 	}
 
 	public SimpleCounter getCounter() {
@@ -360,7 +360,7 @@ public class DataFactory {
 	}
 
 	public UserModel getDefaultUserModel() {
-		return InitContextUtil.getDefaultUserModel();
+		return UserDataFactory.getDefaultUserModel();
 	}
 
 	public long getDLFileEntryClassNameId() {
@@ -368,19 +368,19 @@ public class DataFactory {
 	}
 
 	public GroupModel getGlobalGroupModel() {
-		return InitContextUtil.getGlobalGroupModel();
+		return UserDataFactory.getGlobalGroupModel();
 	}
 
 	public List<GroupModel> getGroupModels() {
-		return InitContextUtil.getGroupModels();
+		return UserDataFactory.getGroupModels();
 	}
 
 	public GroupModel getGuestGroupModel() {
-		return InitContextUtil.getGuestGroupModel();
+		return UserDataFactory.getGuestGroupModel();
 	}
 
 	public UserModel getGuestUserModel() {
-		return InitContextUtil.getGuestUserModel();
+		return UserDataFactory.getGuestUserModel();
 	}
 
 	public long getJournalArticleClassNameId() {
@@ -416,7 +416,7 @@ public class DataFactory {
 	}
 
 	public int getMaxGroupCount() {
-		return InitContextUtil.getMaxGroupsCount();
+		return UserDataFactory.getMaxGroupCount();
 	}
 
 	public int getMaxJournalArticleCount() {
@@ -436,34 +436,20 @@ public class DataFactory {
 	}
 
 	public List<Long> getNewUserGroupIds(long groupId) {
-		int maxUserToGroupCount = InitContextUtil.getMaxUserToGroupCount();
-		int maxGroupsCount = InitContextUtil.getMaxGroupsCount();
 
-		List<Long> groupIds = new ArrayList<>(maxUserToGroupCount + 1);
-
-		groupIds.add(InitContextUtil.getGuestGroupModel().getGroupId());
-
-		if ((groupId + maxUserToGroupCount) > maxGroupsCount) {
-			groupId = groupId - maxUserToGroupCount + 1;
-		}
-
-		for (int i = 0; i < maxUserToGroupCount; i++) {
-			groupIds.add(groupId + i);
-		}
-
-		return groupIds;
+		return UserDataFactory.getNewUserGroupIds(groupId);
 	}
 
 	public RoleModel getPowerUserRoleModel() {
-		return InitContextUtil.getPowerUserRoleModel();
+		return UserDataFactory.getPowerUserRoleModel();
 	}
 
 	public List<RoleModel> getRoleModels() {
-		return InitContextUtil.getRoleModels();
+		return UserDataFactory.getRoleModels();
 	}
 
 	public UserModel getSampleUserModel() {
-		return InitContextUtil.getSampleUserModel();
+		return UserDataFactory.getSampleUserModel();
 	}
 
 	public List<Integer> getSequence(int size) {
@@ -477,11 +463,11 @@ public class DataFactory {
 	}
 
 	public RoleModel getUserRoleModel() {
-		return InitContextUtil.getUserRoleModel();
+		return UserDataFactory.getUserRoleModel();
 	}
 
 	public VirtualHostModel getVirtualHostModel() {
-		return InitContextUtil.getVirtualHostModel();
+		return UserDataFactory.getVirtualHostModel();
 	}
 
 	public long getWikiPageClassNameId() {
@@ -561,37 +547,8 @@ public class DataFactory {
 	}
 
 	public ContactModel newContactModel(UserModel userModel) {
-		ContactModel contactModel = new ContactModelImpl();
 
-		contactModel.setContactId(userModel.getContactId());
-		contactModel.setCompanyId(userModel.getCompanyId());
-		contactModel.setUserId(userModel.getUserId());
-
-		FullNameGenerator fullNameGenerator =
-			FullNameGeneratorFactory.getInstance();
-
-		String fullName = fullNameGenerator.getFullName(
-			userModel.getFirstName(), userModel.getMiddleName(),
-			userModel.getLastName());
-
-		contactModel.setUserName(fullName);
-
-		contactModel.setCreateDate(new Date());
-		contactModel.setModifiedDate(new Date());
-		contactModel.setClassNameId(
-			InitDataFactoryUtil.getClassNameId(
-				User.class, InitContextUtil.getClassNameModels()));
-		contactModel.setClassPK(userModel.getUserId());
-		contactModel.setAccountId(InitContextUtil.getAccountId());
-		contactModel.setParentContactId(
-			ContactConstants.DEFAULT_PARENT_CONTACT_ID);
-		contactModel.setEmailAddress(userModel.getEmailAddress());
-		contactModel.setFirstName(userModel.getFirstName());
-		contactModel.setLastName(userModel.getLastName());
-		contactModel.setMale(true);
-		contactModel.setBirthday(new Date());
-
-		return contactModel;
+		return UserDataFactory.newContactModel(userModel);
 	}
 
 	public List<CounterModel> newCounterModels() {
@@ -766,12 +723,8 @@ public class DataFactory {
 	}
 
 	public GroupModel newGroupModel(UserModel userModel) throws Exception {
-		return InitDataFactoryUtil.newGroupModel(
-			InitContextUtil.getCounter().get(),
-			InitDataFactoryUtil.getClassNameId(
-				User.class, InitContextUtil.getClassNameModels()),
-			userModel.getUserId(), userModel.getScreenName(), false,
-			InitContextUtil.getCompanyId(), InitContextUtil.getSampleUserId());
+
+		return UserDataFactory.newGroupModel(userModel);
 	}
 
 	public IntegerWrapper newInteger() {
@@ -1185,22 +1138,8 @@ public class DataFactory {
 	}
 
 	public List<UserModel> newUserModels() {
-		List<UserModel> userModels = new ArrayList<>(
-			InitContextUtil.getMaxUserCount());
 
-		for (int i = 0; i < InitContextUtil.getMaxUserCount(); i++) {
-			String[] userName = InitDataFactoryUtil.nextUserName(i);
-			String lastName =
-				"test" + InitContextUtil.getUserScreenNameCounter().get();
-			userModels.add(
-				InitDataFactoryUtil.newUserModel(
-					InitContextUtil.getCounter().get(), userName[0],
-					userName[1], lastName, false,
-					InitContextUtil.getCounter().get(),
-					InitContextUtil.getCompanyId()));
-		}
-
-		return userModels;
+		return UserDataFactory.newUserModels();
 	}
 
 	public List<WikiNodeModel> newWikiNodeModels(long groupId) {
