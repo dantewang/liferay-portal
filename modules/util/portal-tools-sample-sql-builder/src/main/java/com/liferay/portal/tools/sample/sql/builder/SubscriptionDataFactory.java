@@ -31,41 +31,43 @@ import java.util.Date;
  */
 public class SubscriptionDataFactory {
 
-	public static SubscriptionModel newSubscriptionModel(
+	public SubscriptionDataFactory(InitContext initContext) {
+		_initContext = initContext;
+	}
+
+	public SubscriptionModel newSubscriptionModel(
 		BlogsEntryModel blogsEntryModel) {
 
 		return newSubscriptionModel(
-			InitDataFactoryUtil.getClassNameId(
-				BlogsEntry.class, InitContextUtil.getClassNameModels()),
+			_initContext.getClassNameId(
+				BlogsEntry.class, _initContext.getClassNameModels()),
 			blogsEntryModel.getEntryId());
 	}
 
-	public static SubscriptionModel newSubscriptionModel(
-			MBThreadModel mBThreadModel)
+	public SubscriptionModel newSubscriptionModel(MBThreadModel mBThreadModel)
 	{
 		return newSubscriptionModel(
-			InitDataFactoryUtil.getClassNameId(
-				MBThread.class, InitContextUtil.getClassNameModels()),
+			_initContext.getClassNameId(
+				MBThread.class, _initContext.getClassNameModels()),
 			mBThreadModel.getThreadId());
 	}
 
-	public static SubscriptionModel newSubscriptionModel(
-			WikiPageModel wikiPageModel)
+	public SubscriptionModel newSubscriptionModel(WikiPageModel wikiPageModel)
 	{
 		return newSubscriptionModel(
-			InitDataFactoryUtil.getClassNameId(
-				WikiPage.class, InitContextUtil.getClassNameModels()),
+			_initContext.getClassNameId(
+				WikiPage.class, _initContext.getClassNameModels()),
 			wikiPageModel.getResourcePrimKey());
 	}
 
-	protected static SubscriptionModel newSubscriptionModel(
+	protected SubscriptionModel newSubscriptionModel(
 		long classNameId, long classPK) {
 
 		SubscriptionModel subscriptionModel = new SubscriptionModelImpl();
 
-		subscriptionModel.setSubscriptionId(InitContextUtil.getCounter().get());
-		subscriptionModel.setCompanyId(InitContextUtil.getCompanyId());
-		subscriptionModel.setUserId(InitContextUtil.getSampleUserId());
+		subscriptionModel.setSubscriptionId(_initContext.getCounter().get());
+		subscriptionModel.setCompanyId(_initContext.getCompanyId());
+		subscriptionModel.setUserId(_initContext.getSampleUserId());
 		subscriptionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		subscriptionModel.setCreateDate(new Date());
 		subscriptionModel.setModifiedDate(new Date());
@@ -76,4 +78,5 @@ public class SubscriptionDataFactory {
 		return subscriptionModel;
 	}
 
+	private InitContext _initContext;
 }

@@ -29,15 +29,19 @@ import java.util.List;
  */
 public class CounterDataFactory {
 
-	public static SimpleCounter getCounter() {
-		return InitContextUtil.getCounter();
+	public CounterDataFactory(InitContext initContext) {
+		_initContext = initContext;
 	}
 
-	public static long getCounterNext() {
-		return InitContextUtil.getCounter().get();
+	public SimpleCounter getCounter() {
+		return _initContext.getCounter();
 	}
 
-	public static List<Integer> getSequence(int size) {
+	public long getCounterNext() {
+		return _initContext.getCounter().get();
+	}
+
+	public List<Integer> getSequence(int size) {
 		List<Integer> sequence = new ArrayList<>(size);
 
 		for (int i = 1; i <= size; i++) {
@@ -47,7 +51,7 @@ public class CounterDataFactory {
 		return sequence;
 	}
 
-	public static List<CounterModel> newCounterModels() {
+	public List<CounterModel> newCounterModels() {
 		List<CounterModel> counterModels = new ArrayList<>();
 
 		// Counter
@@ -55,7 +59,7 @@ public class CounterDataFactory {
 		CounterModel counterModel = new CounterModelImpl();
 
 		counterModel.setName(Counter.class.getName());
-		counterModel.setCurrentId(InitContextUtil.getCounter().get());
+		counterModel.setCurrentId(_initContext.getCounter().get());
 
 		counterModels.add(counterModel);
 
@@ -64,7 +68,8 @@ public class CounterDataFactory {
 		counterModel = new CounterModelImpl();
 
 		counterModel.setName(ResourcePermission.class.getName());
-		counterModel.setCurrentId(InitContextUtil.getResourcePermissionCounter().get());
+		counterModel.setCurrentId(
+			_initContext.getResourcePermissionCounter().get());
 
 		counterModels.add(counterModel);
 
@@ -73,10 +78,14 @@ public class CounterDataFactory {
 		counterModel = new CounterModelImpl();
 
 		counterModel.setName(SocialActivity.class.getName());
-		counterModel.setCurrentId(InitContextUtil.getSocialActivityCounter().get());
+		counterModel.setCurrentId(
+			_initContext.getSocialActivityCounter().get());
 
 		counterModels.add(counterModel);
 
 		return counterModels;
 	}
+
+	private final InitContext _initContext;
+
 }

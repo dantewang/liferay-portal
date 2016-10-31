@@ -14,223 +14,71 @@
 
 package com.liferay.portal.tools.sample.sql.builder;
 
-import com.liferay.asset.kernel.model.AssetCategory;
-import com.liferay.asset.kernel.model.AssetCategoryConstants;
 import com.liferay.asset.kernel.model.AssetCategoryModel;
 import com.liferay.asset.kernel.model.AssetEntryModel;
-import com.liferay.asset.kernel.model.AssetTag;
 import com.liferay.asset.kernel.model.AssetTagModel;
 import com.liferay.asset.kernel.model.AssetTagStatsModel;
-import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
-import com.liferay.blogs.model.BlogsEntry;
 import com.liferay.blogs.model.BlogsEntryModel;
 import com.liferay.blogs.model.BlogsStatsUserModel;
-import com.liferay.blogs.model.impl.BlogsEntryModelImpl;
-import com.liferay.blogs.model.impl.BlogsStatsUserModelImpl;
-import com.liferay.blogs.social.BlogsActivityKeys;
-import com.liferay.blogs.web.constants.BlogsPortletKeys;
-import com.liferay.counter.kernel.model.Counter;
 import com.liferay.counter.kernel.model.CounterModel;
-import com.liferay.counter.model.impl.CounterModelImpl;
-import com.liferay.document.library.kernel.model.DLFileEntry;
-import com.liferay.document.library.kernel.model.DLFileEntryConstants;
-import com.liferay.document.library.kernel.model.DLFileEntryMetadata;
 import com.liferay.document.library.kernel.model.DLFileEntryMetadataModel;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
-import com.liferay.document.library.kernel.model.DLFileEntryTypeConstants;
 import com.liferay.document.library.kernel.model.DLFileEntryTypeModel;
 import com.liferay.document.library.kernel.model.DLFileVersionModel;
-import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLFolderModel;
-import com.liferay.document.library.web.constants.DLPortletKeys;
-import com.liferay.dynamic.data.lists.constants.DDLPortletKeys;
-import com.liferay.dynamic.data.lists.model.DDLRecordConstants;
 import com.liferay.dynamic.data.lists.model.DDLRecordModel;
-import com.liferay.dynamic.data.lists.model.DDLRecordSet;
-import com.liferay.dynamic.data.lists.model.DDLRecordSetConstants;
 import com.liferay.dynamic.data.lists.model.DDLRecordSetModel;
 import com.liferay.dynamic.data.lists.model.DDLRecordVersionModel;
-import com.liferay.dynamic.data.lists.model.impl.DDLRecordModelImpl;
-import com.liferay.dynamic.data.lists.model.impl.DDLRecordSetModelImpl;
-import com.liferay.dynamic.data.lists.model.impl.DDLRecordVersionModelImpl;
-import com.liferay.dynamic.data.mapping.constants.DDMPortletKeys;
-import com.liferay.dynamic.data.mapping.model.DDMContent;
 import com.liferay.dynamic.data.mapping.model.DDMContentModel;
-import com.liferay.dynamic.data.mapping.model.DDMStorageLink;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLinkModel;
-import com.liferay.dynamic.data.mapping.model.DDMStructure;
-import com.liferay.dynamic.data.mapping.model.DDMStructureConstants;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureVersionModel;
-import com.liferay.dynamic.data.mapping.model.DDMTemplate;
-import com.liferay.dynamic.data.mapping.model.DDMTemplateConstants;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
-import com.liferay.dynamic.data.mapping.model.impl.DDMContentModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLayoutModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLinkModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStructureModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStructureVersionModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateLinkModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
-import com.liferay.dynamic.data.mapping.storage.StorageType;
 import com.liferay.friendly.url.model.FriendlyURLModel;
-import com.liferay.friendly.url.model.impl.FriendlyURLModelImpl;
-import com.liferay.journal.constants.JournalPortletKeys;
-import com.liferay.journal.model.JournalArticle;
-import com.liferay.journal.model.JournalArticleConstants;
 import com.liferay.journal.model.JournalArticleLocalizationModel;
 import com.liferay.journal.model.JournalArticleModel;
 import com.liferay.journal.model.JournalArticleResourceModel;
 import com.liferay.journal.model.JournalContentSearchModel;
-import com.liferay.journal.model.impl.JournalArticleLocalizationModelImpl;
-import com.liferay.journal.model.impl.JournalArticleModelImpl;
-import com.liferay.journal.model.impl.JournalArticleResourceModelImpl;
-import com.liferay.journal.model.impl.JournalContentSearchModelImpl;
-import com.liferay.journal.social.JournalActivityKeys;
-import com.liferay.login.web.constants.LoginPortletKeys;
-import com.liferay.message.boards.kernel.model.MBCategory;
-import com.liferay.message.boards.kernel.model.MBCategoryConstants;
 import com.liferay.message.boards.kernel.model.MBCategoryModel;
-import com.liferay.message.boards.kernel.model.MBDiscussion;
 import com.liferay.message.boards.kernel.model.MBDiscussionModel;
 import com.liferay.message.boards.kernel.model.MBMailingListModel;
-import com.liferay.message.boards.kernel.model.MBMessage;
-import com.liferay.message.boards.kernel.model.MBMessageConstants;
 import com.liferay.message.boards.kernel.model.MBMessageModel;
 import com.liferay.message.boards.kernel.model.MBStatsUserModel;
-import com.liferay.message.boards.kernel.model.MBThread;
 import com.liferay.message.boards.kernel.model.MBThreadFlagModel;
 import com.liferay.message.boards.kernel.model.MBThreadModel;
-import com.liferay.message.boards.web.constants.MBPortletKeys;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
-import com.liferay.portal.kernel.metadata.RawMetadataProcessor;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.ClassNameModel;
-import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.CompanyModel;
-import com.liferay.portal.kernel.model.ContactConstants;
 import com.liferay.portal.kernel.model.ContactModel;
-import com.liferay.portal.kernel.model.Group;
-import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.GroupModel;
-import com.liferay.portal.kernel.model.Layout;
-import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.model.LayoutFriendlyURLModel;
 import com.liferay.portal.kernel.model.LayoutModel;
 import com.liferay.portal.kernel.model.LayoutSetModel;
-import com.liferay.portal.kernel.model.LayoutTypePortletConstants;
-import com.liferay.portal.kernel.model.ModelHintsUtil;
-import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
-import com.liferay.portal.kernel.model.ResourceConstants;
-import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.model.ResourcePermissionModel;
-import com.liferay.portal.kernel.model.Role;
-import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.model.RoleModel;
-import com.liferay.portal.kernel.model.SubscriptionConstants;
 import com.liferay.portal.kernel.model.SubscriptionModel;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.model.VirtualHostModel;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
-import com.liferay.portal.kernel.security.auth.FullNameGenerator;
-import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
-import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
-import com.liferay.portal.kernel.template.TemplateConstants;
-import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.CharPool;
-import com.liferay.portal.kernel.util.ContentTypes;
-import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
-import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.ObjectValuePair;
-import com.liferay.portal.kernel.util.PortletKeys;
-import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Time;
-import com.liferay.portal.kernel.util.UnicodeProperties;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.model.impl.AccountModelImpl;
-import com.liferay.portal.model.impl.ClassNameModelImpl;
-import com.liferay.portal.model.impl.CompanyModelImpl;
-import com.liferay.portal.model.impl.ContactModelImpl;
-import com.liferay.portal.model.impl.GroupModelImpl;
-import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
-import com.liferay.portal.model.impl.LayoutModelImpl;
-import com.liferay.portal.model.impl.LayoutSetModelImpl;
-import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
-import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
-import com.liferay.portal.model.impl.RoleModelImpl;
-import com.liferay.portal.model.impl.SubscriptionModelImpl;
-import com.liferay.portal.model.impl.UserModelImpl;
-import com.liferay.portal.model.impl.VirtualHostModelImpl;
-import com.liferay.portal.util.PropsValues;
-import com.liferay.portlet.PortletPreferencesFactoryImpl;
-import com.liferay.portlet.PortletPreferencesImpl;
-import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
-import com.liferay.portlet.asset.model.impl.AssetEntryModelImpl;
-import com.liferay.portlet.asset.model.impl.AssetTagModelImpl;
-import com.liferay.portlet.asset.model.impl.AssetTagStatsModelImpl;
-import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFileVersionModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFolderModelImpl;
-import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
-import com.liferay.portlet.messageboards.model.impl.MBCategoryModelImpl;
-import com.liferay.portlet.messageboards.model.impl.MBDiscussionModelImpl;
-import com.liferay.portlet.messageboards.model.impl.MBMailingListModelImpl;
-import com.liferay.portlet.messageboards.model.impl.MBMessageModelImpl;
-import com.liferay.portlet.messageboards.model.impl.MBStatsUserModelImpl;
-import com.liferay.portlet.messageboards.model.impl.MBThreadFlagModelImpl;
-import com.liferay.portlet.messageboards.model.impl.MBThreadModelImpl;
-import com.liferay.portlet.messageboards.social.MBActivityKeys;
-import com.liferay.portlet.social.model.impl.SocialActivityModelImpl;
-import com.liferay.social.kernel.model.SocialActivity;
-import com.liferay.social.kernel.model.SocialActivityConstants;
 import com.liferay.social.kernel.model.SocialActivityModel;
 import com.liferay.util.SimpleCounter;
-import com.liferay.wiki.constants.WikiPortletKeys;
-import com.liferay.wiki.model.WikiNode;
 import com.liferay.wiki.model.WikiNodeModel;
-import com.liferay.wiki.model.WikiPage;
-import com.liferay.wiki.model.WikiPageConstants;
 import com.liferay.wiki.model.WikiPageModel;
 import com.liferay.wiki.model.WikiPageResourceModel;
-import com.liferay.wiki.model.impl.WikiNodeModelImpl;
-import com.liferay.wiki.model.impl.WikiPageModelImpl;
-import com.liferay.wiki.model.impl.WikiPageResourceModelImpl;
-import com.liferay.wiki.social.WikiActivityKeys;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import java.text.Format;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.TimeZone;
-
-import javax.portlet.PortletPreferences;
 
 /**
  * @author Brian Wing Shun Chan
@@ -238,256 +86,268 @@ import javax.portlet.PortletPreferences;
 public class DataFactory {
 
 	public DataFactory(Properties properties) throws Exception {
-		InitContextUtil.initContext(properties);
-		InitContextUtil.initParameter();
-		InitContextUtil.initResource(_clazz);
-		InitContextUtil.initCompanyModels();
-		InitContextUtil.initUserNames(_clazz);
-		InitContextUtil.initGroupModels();
-		InitContextUtil.initUserModels(DataFactoryConstants.SAMPLE_USER_NAME);
-		InitContextUtil.initAssetCategoryModels(
-			DataFactoryConstants.SAMPLE_USER_NAME);
-		InitContextUtil.initAssetTagModels(
-			DataFactoryConstants.SAMPLE_USER_NAME);
-		InitContextUtil.initDLFileEntryTypeModel(
-			DataFactoryConstants.SAMPLE_USER_NAME);
-		InitContextUtil.initRoleModels(DataFactoryConstants.SAMPLE_USER_NAME);
+		_initContext = new InitContext(properties);
+
+		_initContext.init();
+
+		initDataFactory();
 	}
 
 	public AccountModel getAccountModel() {
-		return UserDataFactory.getAccountModel();
+		return _userDataFactory.getAccountModel();
 	}
 
 	public RoleModel getAdministratorRoleModel() {
-		return UserDataFactory.getAdministratorRoleModel();
+		return _userDataFactory.getAdministratorRoleModel();
 	}
 
 	public List<Long> getAssetCategoryIds(long groupId) {
-		return AssetDataFactory.getAssetCategoryIds(groupId);
+		return _assetDataFactory.getAssetCategoryIds(groupId);
 	}
 
 	public List<AssetCategoryModel> getAssetCategoryModels() {
-		return AssetDataFactory.getAssetCategoryModels();
+		return _assetDataFactory.getAssetCategoryModels();
 	}
 
 	public List<Long> getAssetTagIds(long groupId) {
-		return AssetDataFactory.getAssetTagIds(groupId);
+		return _assetDataFactory.getAssetTagIds(groupId);
 	}
 
 	public List<AssetTagModel> getAssetTagModels() {
-		return AssetDataFactory.getAssetTagModels();
+		return _assetDataFactory.getAssetTagModels();
 	}
 
 	public List<AssetTagStatsModel> getAssetTagStatsModels() {
-		return AssetDataFactory.getAssetTagStatsModels();
+		return _assetDataFactory.getAssetTagStatsModels();
 	}
 
 	public List<AssetVocabularyModel> getAssetVocabularyModels() {
-		return AssetDataFactory.getAssetVocabularyModels();
+		return _assetDataFactory.getAssetVocabularyModels();
 	}
 
 	public long getBlogsEntryClassNameId() {
-		return BlogDataFactory.getBlogsEntryClassNameId();
+		return _blogDataFactory.getBlogsEntryClassNameId();
 	}
 
-	public Collection<ClassNameModel> getClassNameModels() {
-		return InitDataFactoryUtil.getClassNameModels();
+	public Collection<ClassNameModel> getClassNameModelValues() {
+		return _initContext.getClassNameModelValues();
 	}
 
 	public CompanyModel getCompanyModel() {
-		return UserDataFactory.getCompanyModel();
+		return _userDataFactory.getCompanyModel();
 	}
 
 	public SimpleCounter getCounter() {
-		return CounterDataFactory.getCounter();
+		return _counterDataFactory.getCounter();
 	}
 
 	public long getCounterNext() {
-		return CounterDataFactory.getCounterNext();
+		return _counterDataFactory.getCounterNext();
 	}
 
 	public String getDateLong(Date date) {
-		return InitDataFactoryUtil.getDateLong(date);
+		return _initContext.getDateLong(date);
 	}
 
 	public String getDateString(Date date) {
 
-		return InitDataFactoryUtil.getDateString(date);
+		return _initContext.getDateString(date);
 	}
 
 	public long getDDLRecordSetClassNameId() {
 
-		return DDLDataFactory.getDDLRecordSetClassNameId();
+		return _dDLDataFactory.getDDLRecordSetClassNameId();
 	}
 
 	public long getDefaultDLDDMStructureId() {
-		return DDLDataFactory.getDefaultDLDDMStructureId();
+		return _dDLDataFactory.getDefaultDLDDMStructureId();
 	}
 
 	public DDMStructureLayoutModel getDefaultDLDDMStructureLayoutModel() {
-		return DDLDataFactory.getDefaultDLDDMStructureLayoutModel();
+		return _dDLDataFactory.getDefaultDLDDMStructureLayoutModel();
 	}
 
 	public DDMStructureModel getDefaultDLDDMStructureModel() {
-		return DDLDataFactory.getDefaultDLDDMStructureModel();
+		return _dDLDataFactory.getDefaultDLDDMStructureModel();
 	}
 
 	public DDMStructureVersionModel getDefaultDLDDMStructureVersionModel() {
-		return DDLDataFactory.getDefaultDLDDMStructureVersionModel();
+		return _dDLDataFactory.getDefaultDLDDMStructureVersionModel();
 	}
 
 	public DLFileEntryTypeModel getDefaultDLFileEntryTypeModel() {
-		return DLDataFactory.getDefaultDLFileEntryTypeModel();
+		return _dLDataFactory.getDefaultDLFileEntryTypeModel();
 	}
 
 	public DDMStructureLayoutModel getDefaultJournalDDMStructureLayoutModel() {
-		return JournalDataFactory.getDefaultJournalDDMStructureLayoutModel();
+		return _journalDataFactory.getDefaultJournalDDMStructureLayoutModel();
 	}
 
 	public DDMStructureModel getDefaultJournalDDMStructureModel() {
-		return JournalDataFactory.getDefaultJournalDDMStructureModel();
+		return _journalDataFactory.getDefaultJournalDDMStructureModel();
 	}
 
 	public DDMStructureVersionModel
 		getDefaultJournalDDMStructureVersionModel() {
 
-		return JournalDataFactory.getDefaultJournalDDMStructureVersionModel();
+		return _journalDataFactory.getDefaultJournalDDMStructureVersionModel();
 	}
 
 	public DDMTemplateModel getDefaultJournalDDMTemplateModel() {
-		return JournalDataFactory.getDefaultJournalDDMTemplateModel();
+		return _journalDataFactory.getDefaultJournalDDMTemplateModel();
 	}
 
 	public UserModel getDefaultUserModel() {
-		return UserDataFactory.getDefaultUserModel();
+		return _userDataFactory.getDefaultUserModel();
 	}
 
 	public long getDLFileEntryClassNameId() {
-		return DLDataFactory.getDLFileEntryClassNameId();
+		return _dLDataFactory.getDLFileEntryClassNameId();
 	}
 
 	public GroupModel getGlobalGroupModel() {
-		return UserDataFactory.getGlobalGroupModel();
+		return _userDataFactory.getGlobalGroupModel();
 	}
 
 	public List<GroupModel> getGroupModels() {
-		return UserDataFactory.getGroupModels();
+		return _userDataFactory.getGroupModels();
 	}
 
 	public GroupModel getGuestGroupModel() {
-		return UserDataFactory.getGuestGroupModel();
+		return _userDataFactory.getGuestGroupModel();
 	}
 
 	public UserModel getGuestUserModel() {
-		return UserDataFactory.getGuestUserModel();
+		return _userDataFactory.getGuestUserModel();
 	}
 
 	public long getJournalArticleClassNameId() {
-		return JournalDataFactory.getJournalArticleClassNameId();
+		return _journalDataFactory.getJournalArticleClassNameId();
 	}
 
 	public String getJournalArticleLayoutColumn(String portletPrefix) {
-		return JournalDataFactory.getJournalArticleLayoutColumn(portletPrefix);
+		return _journalDataFactory.getJournalArticleLayoutColumn(portletPrefix);
 	}
 
 	public long getLayoutClassNameId() {
-		return LayoutDataFactory.getLayoutClassNameId();
+		return _layoutDataFactory.getLayoutClassNameId();
 	}
 
 	public int getMaxAssetPublisherPageCount() {
-		return AssetDataFactory.getMaxAssetPublisherPageCount();
+		return _assetDataFactory.getMaxAssetPublisherPageCount();
 	}
 
 	public int getMaxBlogsEntryCommentCount() {
-		return BlogDataFactory.getMaxBlogsEntryCommentCount();
+		return _blogDataFactory.getMaxBlogsEntryCommentCount();
 	}
 
 	public int getMaxDDLRecordCount() {
-		return DDLDataFactory.getMaxDDLRecordCount();
+		return _dDLDataFactory.getMaxDDLRecordCount();
 	}
 
 	public int getMaxDDLRecordSetCount() {
-		return DDLDataFactory.getMaxDDLRecordSetCount();
+		return _dDLDataFactory.getMaxDDLRecordSetCount();
 	}
 
 	public int getMaxDLFolderDepth() {
-		return DLDataFactory.getMaxDLFolderDepth();
+		return _dLDataFactory.getMaxDLFolderDepth();
 	}
 
 	public int getMaxGroupCount() {
-		return UserDataFactory.getMaxGroupCount();
+		return _userDataFactory.getMaxGroupCount();
 	}
 
 	public int getMaxJournalArticleCount() {
-		return JournalDataFactory.getMaxJournalArticleCount();
+		return _journalDataFactory.getMaxJournalArticleCount();
 	}
 
 	public int getMaxJournalArticlePageCount() {
-		return JournalDataFactory.getMaxJournalArticlePageCount();
+		return _journalDataFactory.getMaxJournalArticlePageCount();
 	}
 
 	public int getMaxJournalArticleVersionCount() {
-		return JournalDataFactory.getMaxJournalArticleVersionCount();
+		return _journalDataFactory.getMaxJournalArticleVersionCount();
 	}
 
 	public int getMaxWikiPageCommentCount() {
-		return WikiDataFactory.getMaxWikiPageCommentCount();
+		return _wikiDataFactory.getMaxWikiPageCommentCount();
 	}
 
 	public List<Long> getNewUserGroupIds(long groupId) {
 
-		return UserDataFactory.getNewUserGroupIds(groupId);
+		return _userDataFactory.getNewUserGroupIds(groupId);
 	}
 
 	public RoleModel getPowerUserRoleModel() {
-		return UserDataFactory.getPowerUserRoleModel();
+		return _userDataFactory.getPowerUserRoleModel();
 	}
 
 	public List<RoleModel> getRoleModels() {
-		return UserDataFactory.getRoleModels();
+		return _userDataFactory.getRoleModels();
 	}
 
 	public UserModel getSampleUserModel() {
-		return UserDataFactory.getSampleUserModel();
+		return _userDataFactory.getSampleUserModel();
 	}
 
 	public List<Integer> getSequence(int size) {
 
-		return CounterDataFactory.getSequence(size);
+		return _counterDataFactory.getSequence(size);
 	}
 
 	public RoleModel getUserRoleModel() {
-		return UserDataFactory.getUserRoleModel();
+		return _userDataFactory.getUserRoleModel();
 	}
 
 	public VirtualHostModel getVirtualHostModel() {
-		return UserDataFactory.getVirtualHostModel();
+		return _userDataFactory.getVirtualHostModel();
 	}
 
 	public long getWikiPageClassNameId() {
-		return WikiDataFactory.getWikiPageClassNameId();
+		return _wikiDataFactory.getWikiPageClassNameId();
+	}
+
+	public void initDataFactory() {
+
+	_assetDataFactory = new AssetDataFactory(_initContext);
+	_blogDataFactory = new BlogDataFactory(_initContext);
+	_counterDataFactory = new CounterDataFactory(_initContext);
+	_dLDataFactory = new DLDataFactory(_initContext);
+	_dDLDataFactory = new DDLDataFactory(_initContext);
+	_journalDataFactory = new JournalDataFactory(_initContext);
+	_layoutDataFactory = new LayoutDataFactory(_initContext);
+	_messageBoardDataFactory = new MessageBoardDataFactory(_initContext);
+	_portletPreferenceDataFactory = new PortletPreferenceDataFactory(
+		_initContext);
+	_resourcePermissionDataFactory = new ResourcePermissionDataFactory(
+		_initContext);
+	_socialActivityDataFactory = new SocialActivityDataFactory(_initContext);
+	_subscriptionDataFactory = new SubscriptionDataFactory(_initContext);
+	_userDataFactory = new UserDataFactory(_initContext);
+	_wikiDataFactory = new WikiDataFactory(_initContext);
+
 	}
 
 	public AssetEntryModel newAssetEntryModel(BlogsEntryModel blogsEntryModel) {
-		return AssetDataFactory.newAssetEntryModel(blogsEntryModel);
+		return _assetDataFactory.newAssetEntryModel(blogsEntryModel);
 	}
 
 	public AssetEntryModel newAssetEntryModel(
 		DLFileEntryModel dLFileEntryModel) {
 
-		return AssetDataFactory.newAssetEntryModel(dLFileEntryModel);
+		return _assetDataFactory.newAssetEntryModel(dLFileEntryModel);
 	}
 
 	public AssetEntryModel newAssetEntryModel(DLFolderModel dLFolderModel) {
-		return AssetDataFactory.newAssetEntryModel(dLFolderModel);
+		return _assetDataFactory.newAssetEntryModel(dLFolderModel);
 	}
 
 	public AssetEntryModel newAssetEntryModel(MBMessageModel mbMessageModel) {
-		return AssetDataFactory.newAssetEntryModel(mbMessageModel);
+		return _assetDataFactory.newAssetEntryModel(mbMessageModel);
 	}
 
 	public AssetEntryModel newAssetEntryModel(MBThreadModel mbThreadModel) {
-		return AssetDataFactory.newAssetEntryModel(mbThreadModel);
+		return _assetDataFactory.newAssetEntryModel(mbThreadModel);
 	}
 
 	public AssetEntryModel newAssetEntryModel(
@@ -495,59 +355,59 @@ public class DataFactory {
 			objectValuePair) {
 
 		Map<Long, String> journalArticleResourceUUIDs =
-			InitContextUtil.getJournalArticleResourceUUIDs();
+			_initContext.getJournalArticleResourceUUIDs();
 
-		return AssetDataFactory.newAssetEntryModel(
+		return _assetDataFactory.newAssetEntryModel(
 			objectValuePair, journalArticleResourceUUIDs);
 	}
 
 	public AssetEntryModel newAssetEntryModel(WikiPageModel wikiPageModel) {
-		return AssetDataFactory.newAssetEntryModel(wikiPageModel);
+		return _assetDataFactory.newAssetEntryModel(wikiPageModel);
 	}
 
 	public List<PortletPreferencesModel>
 		newAssetPublisherPortletPreferencesModels(long plid) {
 
-		return PortletPreferenceDataFactory.
+		return _portletPreferenceDataFactory.
 			newAssetPublisherPortletPreferencesModels(plid);
 	}
 
 	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
 
-		return BlogDataFactory.newBlogsEntryModels(groupId);
+		return _blogDataFactory.newBlogsEntryModels(groupId);
 	}
 
 	public BlogsStatsUserModel newBlogsStatsUserModel(long groupId) {
 
-		return BlogDataFactory.newBlogsStatsUserModel(groupId);
+		return _blogDataFactory.newBlogsStatsUserModel(groupId);
 	}
 
 	public ContactModel newContactModel(UserModel userModel) {
 
-		return UserDataFactory.newContactModel(userModel);
+		return _userDataFactory.newContactModel(userModel);
 	}
 
 	public List<CounterModel> newCounterModels() {
 
-		return CounterDataFactory.newCounterModels();
+		return _counterDataFactory.newCounterModels();
 	}
 
 	public DDMStructureLayoutModel newDDLDDMStructureLayoutModel(
 		long groupId, DDMStructureVersionModel ddmStructureVersionModel) {
 
-		return DDLDataFactory.newDDLDDMStructureLayoutModel(
+		return _dDLDataFactory.newDDLDDMStructureLayoutModel(
 			groupId, ddmStructureVersionModel);
 	}
 
 	public DDMStructureModel newDDLDDMStructureModel(long groupId) {
-		return DDLDataFactory.newDDLDDMStructureModel(groupId);
+		return _dDLDataFactory.newDDLDDMStructureModel(groupId);
 	}
 
 	public List<PortletPreferencesModel>
 		newDDLPortletPreferencesModels(long plid) {
 
 		List<PortletPreferencesModel> dDLPortletPreferencesModels =
-			PortletPreferenceDataFactory.newDDLPortletPreferencesModels(plid);
+			_portletPreferenceDataFactory.newDDLPortletPreferencesModels(plid);
 
 		return dDLPortletPreferencesModels;
 	}
@@ -555,38 +415,38 @@ public class DataFactory {
 	public DDLRecordModel newDDLRecordModel(
 		DDLRecordSetModel dDLRecordSetModel) {
 
-		return DDLDataFactory.newDDLRecordModel(dDLRecordSetModel);
+		return _dDLDataFactory.newDDLRecordModel(dDLRecordSetModel);
 	}
 
 	public DDLRecordSetModel newDDLRecordSetModel(
 		DDMStructureModel ddmStructureModel, int currentIndex) {
 
-		return DDLDataFactory.newDDLRecordSetModel(
+		return _dDLDataFactory.newDDLRecordSetModel(
 			ddmStructureModel, currentIndex);
 	}
 
 	public DDLRecordVersionModel newDDLRecordVersionModel(
 		DDLRecordModel dDLRecordModel) {
 
-		return DDLDataFactory.newDDLRecordVersionModel(dDLRecordModel);
+		return _dDLDataFactory.newDDLRecordVersionModel(dDLRecordModel);
 	}
 
 	public DDMContentModel newDDMContentModel(
 		DDLRecordModel ddlRecordModel, int currentIndex) {
 
-		return DDLDataFactory.newDDMContentModel(ddlRecordModel, currentIndex);
+		return _dDLDataFactory.newDDMContentModel(ddlRecordModel, currentIndex);
 	}
 
 	public DDMContentModel newDDMContentModel(
 		DLFileEntryModel dlFileEntryModel) {
 
-		return DLDataFactory.newDDMContentModel(dlFileEntryModel);
+		return _dLDataFactory.newDDMContentModel(dlFileEntryModel);
 	}
 
 	public DDMStorageLinkModel newDDMStorageLinkModel(
 		JournalArticleModel journalArticleModel, long structureId) {
 
-		return JournalDataFactory.newDDMStorageLinkModel(
+		return _journalDataFactory.newDDMStorageLinkModel(
 			journalArticleModel, structureId);
 	}
 
@@ -594,33 +454,34 @@ public class DataFactory {
 		long ddmStorageLinkId, DDMContentModel ddmContentModel,
 		long structureId) {
 
-		return DDLDataFactory.newDDMStorageLinkModel(
+		return _dDLDataFactory.newDDMStorageLinkModel(
 			ddmStorageLinkId, ddmContentModel, structureId);
 	}
 
 	public DDMStructureLinkModel newDDMStructureLinkModel(
 		DDLRecordSetModel ddlRecordSetModel) {
 
-		return DDLDataFactory.newDDMStructureLinkModel(ddlRecordSetModel);
+		return _dDLDataFactory.newDDMStructureLinkModel(ddlRecordSetModel);
 	}
 
 	public DDMStructureLinkModel newDDMStructureLinkModel(
 		DLFileEntryMetadataModel dLFileEntryMetadataModel) {
 
-		return DLDataFactory.newDDMStructureLinkModel(dLFileEntryMetadataModel);
+		return _dLDataFactory.newDDMStructureLinkModel(
+			dLFileEntryMetadataModel);
 	}
 
 	public DDMStructureVersionModel newDDMStructureVersionModel(
 		DDMStructureModel ddmStructureModel) {
 
-		return InitDataFactoryUtil.newDDMStructureVersionModel(
+		return _initContext.newDDMStructureVersionModel(
 			ddmStructureModel, DataFactoryConstants.SAMPLE_USER_NAME);
 	}
 
 	public DDMTemplateLinkModel newDDMTemplateLinkModel(
 		JournalArticleModel journalArticleModel, long templateId) {
 
-		return JournalDataFactory.newDDMTemplateLinkModel(
+		return _journalDataFactory.newDDMTemplateLinkModel(
 			journalArticleModel, templateId);
 	}
 
@@ -628,37 +489,37 @@ public class DataFactory {
 		long ddmStorageLinkId, long ddmStructureId,
 		DLFileVersionModel dlFileVersionModel) {
 
-		return DLDataFactory.newDLFileEntryMetadataModel(
+		return _dLDataFactory.newDLFileEntryMetadataModel(
 			ddmStorageLinkId, ddmStructureId, dlFileVersionModel);
 	}
 
 	public List<DLFileEntryModel> newDlFileEntryModels(
 		DLFolderModel dlFolerModel) {
 
-		return DLDataFactory.newDlFileEntryModels(dlFolerModel);
+		return _dLDataFactory.newDlFileEntryModels(dlFolerModel);
 	}
 
 	public DLFileVersionModel newDLFileVersionModel(
 		DLFileEntryModel dlFileEntryModel) {
 
-		return DLDataFactory.newDLFileVersionModel(dlFileEntryModel);
+		return _dLDataFactory.newDLFileVersionModel(dlFileEntryModel);
 	}
 
 	public List<DLFolderModel> newDLFolderModels(
 		long groupId, long parentFolderId) {
 
-		return DLDataFactory.newDLFolderModels(groupId, parentFolderId);
+		return _dLDataFactory.newDLFolderModels(groupId, parentFolderId);
 	}
 
 	public FriendlyURLModel newFriendlyURLModel(
 		BlogsEntryModel blogsEntryModel) {
 
-		return BlogDataFactory.newFriendlyURLModel(blogsEntryModel);
+		return _blogDataFactory.newFriendlyURLModel(blogsEntryModel);
 	}
 
 	public GroupModel newGroupModel(UserModel userModel) throws Exception {
 
-		return UserDataFactory.newGroupModel(userModel);
+		return _userDataFactory.newGroupModel(userModel);
 	}
 
 	public IntegerWrapper newInteger() {
@@ -669,7 +530,7 @@ public class DataFactory {
 		JournalArticleModel journalArticleModel, int articleIndex,
 		int versionIndex) {
 
-		return JournalDataFactory.newJournalArticleLocalizationModel(
+		return _journalDataFactory.newJournalArticleLocalizationModel(
 			journalArticleModel, articleIndex, versionIndex);
 	}
 
@@ -678,7 +539,7 @@ public class DataFactory {
 			int articleIndex, int versionIndex)
 		throws PortalException {
 
-		return JournalDataFactory.newJournalArticleModel(
+		return _journalDataFactory.newJournalArticleModel(
 			journalArticleResourceModel, articleIndex, versionIndex);
 	}
 
@@ -686,16 +547,16 @@ public class DataFactory {
 		long groupId) {
 
 		Map<Long, String> journalArticleResourceUUIDs =
-			InitContextUtil.getJournalArticleResourceUUIDs();
+			_initContext.getJournalArticleResourceUUIDs();
 
-		return JournalDataFactory.newJournalArticleResourceModel(
+		return _journalDataFactory.newJournalArticleResourceModel(
 			groupId, journalArticleResourceUUIDs);
 	}
 
 	public JournalContentSearchModel newJournalContentSearchModel(
 		JournalArticleModel journalArticleModel, long layoutId) {
 
-		return JournalDataFactory.newJournalContentSearchModel(
+		return _journalDataFactory.newJournalContentSearchModel(
 			journalArticleModel, layoutId);
 	}
 
@@ -703,91 +564,92 @@ public class DataFactory {
 		newJournalPortletPreferencesModels(long plid) {
 
 		List<PortletPreferencesModel> journalPortletPreferencesModels =
-			PortletPreferenceDataFactory.newJournalPortletPreferencesModels(
+			_portletPreferenceDataFactory.newJournalPortletPreferencesModels(
 				plid);
+
 		return journalPortletPreferencesModels;
 	}
 
 	public LayoutFriendlyURLModel newLayoutFriendlyURLModel(
 		LayoutModel layoutModel) {
 
-		return LayoutDataFactory.newLayoutFriendlyURLModel(layoutModel);
+		return _layoutDataFactory.newLayoutFriendlyURLModel(layoutModel);
 	}
 
 	public LayoutModel newLayoutModel(
 		long groupId, String name, String column1, String column2) {
 
-		return LayoutDataFactory.newLayoutModel(
+		return _layoutDataFactory.newLayoutModel(
 			groupId, name, column1, column2);
 	}
 
 	public List<LayoutSetModel> newLayoutSetModels(
 		long groupId, int publicLayoutSetPageCount) {
 
-		return LayoutDataFactory.newLayoutSetModels(
+		return _layoutDataFactory.newLayoutSetModels(
 			groupId, publicLayoutSetPageCount);
 	}
 
 	public List<MBCategoryModel> newMBCategoryModels(long groupId) {
-		return MessageBoardDataFactory.newMBCategoryModels(groupId);
+		return _messageBoardDataFactory.newMBCategoryModels(groupId);
 	}
 
 	public MBDiscussionModel newMBDiscussionModel(
 		long groupId, long classNameId, long classPK, long threadId) {
 
-		return MessageBoardDataFactory.newMBDiscussionModel(
+		return _messageBoardDataFactory.newMBDiscussionModel(
 			groupId, classNameId, classPK, threadId);
 	}
 
 	public MBMailingListModel newMBMailingListModel(
 		MBCategoryModel mbCategoryModel) {
 
-		return MessageBoardDataFactory.newMBMailingListModel(mbCategoryModel);
+		return _messageBoardDataFactory.newMBMailingListModel(mbCategoryModel);
 	}
 
 	public MBMessageModel newMBMessageModel(
 		MBThreadModel mbThreadModel, long classNameId, long classPK,
 		int index) {
 
-		return MessageBoardDataFactory.newMBMessageModel(
+		return _messageBoardDataFactory.newMBMessageModel(
 			mbThreadModel, classNameId, classPK, index);
 	}
 
 	public List<MBMessageModel> newMBMessageModels(
 		MBThreadModel mbThreadModel) {
 
-		return MessageBoardDataFactory.newMBMessageModels(mbThreadModel);
+		return _messageBoardDataFactory.newMBMessageModels(mbThreadModel);
 	}
 
 	public List<MBMessageModel> newMBMessageModels(
 		MBThreadModel mbThreadModel, long classNameId, long classPK,
 		int maxMessageCount) {
 
-		return MessageBoardDataFactory.newMBMessageModels(
+		return _messageBoardDataFactory.newMBMessageModels(
 			mbThreadModel, classNameId, classPK, maxMessageCount);
 	}
 
 	public MBStatsUserModel newMBStatsUserModel(long groupId) {
 
-		return MessageBoardDataFactory.newMBStatsUserModel(groupId);
+		return _messageBoardDataFactory.newMBStatsUserModel(groupId);
 	}
 
 	public MBThreadFlagModel newMBThreadFlagModel(MBThreadModel mbThreadModel) {
 
-		return MessageBoardDataFactory.newMBThreadFlagModel(mbThreadModel);
+		return _messageBoardDataFactory.newMBThreadFlagModel(mbThreadModel);
 	}
 
 	public MBThreadModel newMBThreadModel(
 		long threadId, long groupId, long rootMessageId, int messageCount) {
 
-		return MessageBoardDataFactory.newMBThreadModel(
+		return _messageBoardDataFactory.newMBThreadModel(
 			threadId, groupId, rootMessageId, messageCount);
 	}
 
 	public List<MBThreadModel> newMBThreadModels(
 		MBCategoryModel mbCategoryModel) {
 
-		return MessageBoardDataFactory.newMBThreadModels(mbCategoryModel);
+		return _messageBoardDataFactory.newMBThreadModels(mbCategoryModel);
 	}
 
 	public <K, V> ObjectValuePair<K, V> newObjectValuePair(K key, V value) {
@@ -798,7 +660,7 @@ public class DataFactory {
 			long plid, long groupId, String portletId, int currentIndex)
 		throws Exception {
 
-		return PortletPreferenceDataFactory.newPortletPreferencesModel(
+		return _portletPreferenceDataFactory.newPortletPreferencesModel(
 			plid, groupId, portletId, currentIndex);
 	}
 
@@ -806,7 +668,7 @@ public class DataFactory {
 			long plid, String portletId, DDLRecordSetModel ddlRecordSetModel)
 		throws Exception {
 
-		return PortletPreferenceDataFactory.newPortletPreferencesModel(
+		return _portletPreferenceDataFactory.newPortletPreferencesModel(
 			plid, portletId, ddlRecordSetModel);
 	}
 
@@ -816,23 +678,23 @@ public class DataFactory {
 		throws Exception {
 
 		PortletPreferencesFactory portletPreferencesFactory =
-			InitContextUtil.getPortletPreferencesFactory();
+			_initContext.getPortletPreferencesFactory();
 
-		return PortletPreferenceDataFactory.newPortletPreferencesModel(
+		return _portletPreferenceDataFactory.newPortletPreferencesModel(
 			plid, portletId, journalArticleResourceModel,
 			portletPreferencesFactory);
 	}
 
 	public List<LayoutModel> newPublicLayoutModels(long groupId) {
 
-		return LayoutDataFactory.newPublicLayoutModels(groupId);
+		return _layoutDataFactory.newPublicLayoutModels(groupId);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		AssetCategoryModel assetCategoryModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				assetCategoryModel);
 
 		return resourcePermissionModels;
@@ -842,7 +704,7 @@ public class DataFactory {
 		AssetTagModel assetTagModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				assetTagModel);
 
 		return resourcePermissionModels;
@@ -852,7 +714,7 @@ public class DataFactory {
 		AssetVocabularyModel assetVocabularyModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				assetVocabularyModel);
 
 		return resourcePermissionModels;
@@ -862,7 +724,7 @@ public class DataFactory {
 		BlogsEntryModel blogsEntryModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				blogsEntryModel);
 
 		return resourcePermissionModels;
@@ -872,7 +734,7 @@ public class DataFactory {
 		DDLRecordSetModel ddlRecordSetModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				ddlRecordSetModel);
 
 		return resourcePermissionModels;
@@ -882,7 +744,7 @@ public class DataFactory {
 		DDMStructureModel ddmStructureModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				ddmStructureModel);
 
 		return resourcePermissionModels;
@@ -892,7 +754,7 @@ public class DataFactory {
 		DDMTemplateModel ddmTemplateModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				ddmTemplateModel);
 
 		return resourcePermissionModels;
@@ -902,7 +764,7 @@ public class DataFactory {
 		DLFileEntryModel dlFileEntryModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				dlFileEntryModel);
 
 		return resourcePermissionModels;
@@ -912,7 +774,7 @@ public class DataFactory {
 		DLFolderModel dlFolderModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				dlFolderModel);
 
 		return resourcePermissionModels;
@@ -922,7 +784,7 @@ public class DataFactory {
 		GroupModel groupModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				groupModel);
 
 		return resourcePermissionModels;
@@ -932,7 +794,7 @@ public class DataFactory {
 		JournalArticleResourceModel journalArticleResourceModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				journalArticleResourceModel);
 
 		return resourcePermissionModels;
@@ -942,7 +804,7 @@ public class DataFactory {
 		LayoutModel layoutModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				layoutModel);
 
 		return resourcePermissionModels;
@@ -952,7 +814,7 @@ public class DataFactory {
 		MBCategoryModel mbCategoryModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				mbCategoryModel);
 
 		return resourcePermissionModels;
@@ -962,7 +824,7 @@ public class DataFactory {
 		MBMessageModel mbMessageModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				mbMessageModel);
 
 		return resourcePermissionModels;
@@ -972,7 +834,7 @@ public class DataFactory {
 		PortletPreferencesModel portletPreferencesModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				portletPreferencesModel);
 
 		return resourcePermissionModels;
@@ -982,7 +844,7 @@ public class DataFactory {
 		RoleModel roleModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				roleModel);
 
 		return resourcePermissionModels;
@@ -992,7 +854,7 @@ public class DataFactory {
 		String name, long primKey) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				name, primKey);
 
 		return resourcePermissionModels;
@@ -1002,7 +864,7 @@ public class DataFactory {
 		UserModel userModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				userModel);
 
 		return resourcePermissionModels;
@@ -1012,7 +874,7 @@ public class DataFactory {
 		WikiNodeModel wikiNodeModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				wikiNodeModel);
 
 		return resourcePermissionModels;
@@ -1022,7 +884,7 @@ public class DataFactory {
 		WikiPageModel wikiPageModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
-			ResourcePermissionDataFactory.newResourcePermissionModels(
+			_resourcePermissionDataFactory.newResourcePermissionModels(
 				wikiPageModel);
 
 		return resourcePermissionModels;
@@ -1031,64 +893,79 @@ public class DataFactory {
 	public SocialActivityModel newSocialActivityModel(
 		BlogsEntryModel blogsEntryModel) {
 
-		return SocialActivityDataFactory.newSocialActivityModel(
+		return _socialActivityDataFactory.newSocialActivityModel(
 			blogsEntryModel);
 	}
 
 	public SocialActivityModel newSocialActivityModel(
 		DLFileEntryModel dlFileEntryModel) {
 
-		return SocialActivityDataFactory.newSocialActivityModel(
+		return _socialActivityDataFactory.newSocialActivityModel(
 			dlFileEntryModel);
 	}
 
 	public SocialActivityModel newSocialActivityModel(
 		JournalArticleModel journalArticleModel) {
 
-		return SocialActivityDataFactory.newSocialActivityModel(
+		return _socialActivityDataFactory.newSocialActivityModel(
 			journalArticleModel);
 	}
 
 	public SocialActivityModel newSocialActivityModel(
 		MBMessageModel mbMessageModel) {
 
-		return SocialActivityDataFactory.newSocialActivityModel(mbMessageModel);
+		return _socialActivityDataFactory.newSocialActivityModel(
+			mbMessageModel);
 	}
 
 	public SubscriptionModel newSubscriptionModel(
 		BlogsEntryModel blogsEntryModel) {
 
-		return SubscriptionDataFactory.newSubscriptionModel(blogsEntryModel);
+		return _subscriptionDataFactory.newSubscriptionModel(blogsEntryModel);
 	}
 
 	public SubscriptionModel newSubscriptionModel(MBThreadModel mBThreadModel) {
 
-		return SubscriptionDataFactory.newSubscriptionModel(mBThreadModel);
+		return _subscriptionDataFactory.newSubscriptionModel(mBThreadModel);
 	}
 
 	public SubscriptionModel newSubscriptionModel(WikiPageModel wikiPageModel) {
 
-		return SubscriptionDataFactory.newSubscriptionModel(wikiPageModel);
+		return _subscriptionDataFactory.newSubscriptionModel(wikiPageModel);
 	}
 
 	public List<UserModel> newUserModels() {
 
-		return UserDataFactory.newUserModels();
+		return _userDataFactory.newUserModels();
 	}
 
 	public List<WikiNodeModel> newWikiNodeModels(long groupId) {
-		return WikiDataFactory.newWikiNodeModels(groupId);
+		return _wikiDataFactory.newWikiNodeModels(groupId);
 	}
 
 	public List<WikiPageModel> newWikiPageModels(WikiNodeModel wikiNodeModel) {
-		return WikiDataFactory.newWikiPageModels(wikiNodeModel);
+		return _wikiDataFactory.newWikiPageModels(wikiNodeModel);
 	}
 
 	public WikiPageResourceModel newWikiPageResourceModel(
 		WikiPageModel wikiPageModel) {
 
-		return WikiDataFactory.newWikiPageResourceModel(wikiPageModel);
+		return _wikiDataFactory.newWikiPageResourceModel(wikiPageModel);
 	}
 
-	private final Class<?> _clazz = getClass();
+	private final InitContext _initContext;
+	private AssetDataFactory _assetDataFactory;
+	private BlogDataFactory _blogDataFactory;
+	private CounterDataFactory _counterDataFactory;
+	private DLDataFactory _dLDataFactory;
+	private DDLDataFactory _dDLDataFactory;
+	private JournalDataFactory _journalDataFactory;
+	private LayoutDataFactory _layoutDataFactory;
+	private MessageBoardDataFactory _messageBoardDataFactory;
+	private PortletPreferenceDataFactory _portletPreferenceDataFactory;
+	private ResourcePermissionDataFactory _resourcePermissionDataFactory;
+	private SocialActivityDataFactory _socialActivityDataFactory;
+	private SubscriptionDataFactory _subscriptionDataFactory;
+	private UserDataFactory _userDataFactory;
+	private WikiDataFactory _wikiDataFactory;
 }

@@ -42,13 +42,17 @@ import java.util.Map;
  * @author Lily Chi
  */
 public class LayoutDataFactory {
-	
-	public static long getLayoutClassNameId() {
-		return InitDataFactoryUtil.getClassNameId(
-			Layout.class, InitContextUtil.getClassNameModels());
+
+	public LayoutDataFactory(InitContext initContext) {
+		_initContext = initContext;
 	}
 
-	public static LayoutFriendlyURLModel newLayoutFriendlyURLModel(
+	public long getLayoutClassNameId() {
+		return _initContext.getClassNameId(
+			Layout.class, _initContext.getClassNameModels());
+	}
+
+	public LayoutFriendlyURLModel newLayoutFriendlyURLModel(
 		LayoutModel layoutModel) {
 
 		LayoutFriendlyURLModel layoutFriendlyURLModel =
@@ -56,10 +60,10 @@ public class LayoutDataFactory {
 
 		layoutFriendlyURLModel.setUuid(SequentialUUID.generate());
 		layoutFriendlyURLModel.setLayoutFriendlyURLId(
-			InitContextUtil.getCounter().get());
+			_initContext.getCounter().get());
 		layoutFriendlyURLModel.setGroupId(layoutModel.getGroupId());
-		layoutFriendlyURLModel.setCompanyId(InitContextUtil.getCompanyId());
-		layoutFriendlyURLModel.setUserId(InitContextUtil.getSampleUserId());
+		layoutFriendlyURLModel.setCompanyId(_initContext.getCompanyId());
+		layoutFriendlyURLModel.setUserId(_initContext.getSampleUserId());
 		layoutFriendlyURLModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		layoutFriendlyURLModel.setCreateDate(new Date());
@@ -72,11 +76,11 @@ public class LayoutDataFactory {
 		return layoutFriendlyURLModel;
 	}
 
-	public static LayoutModel newLayoutModel(
+	public LayoutModel newLayoutModel(
 		long groupId, String name, String column1, String column2) {
 
 		Map<Long, SimpleCounter> layoutCounters =
-			InitContextUtil.getLayoutCounters();
+			_initContext.getLayoutCounters();
 
 		SimpleCounter simpleCounter = layoutCounters.get(groupId);
 
@@ -89,10 +93,10 @@ public class LayoutDataFactory {
 		LayoutModel layoutModel = new LayoutModelImpl();
 
 		layoutModel.setUuid(SequentialUUID.generate());
-		layoutModel.setPlid(InitContextUtil.getCounter().get());
+		layoutModel.setPlid(_initContext.getCounter().get());
 		layoutModel.setGroupId(groupId);
-		layoutModel.setCompanyId(InitContextUtil.getCompanyId());
-		layoutModel.setUserId(InitContextUtil.getSampleUserId());
+		layoutModel.setCompanyId(_initContext.getCompanyId());
+		layoutModel.setUserId(_initContext.getSampleUserId());
 		layoutModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		layoutModel.setCreateDate(new Date());
 		layoutModel.setModifiedDate(new Date());
@@ -113,30 +117,30 @@ public class LayoutDataFactory {
 			typeSettingsProperties.toString(), '\n', "\\n");
 
 		layoutModel.setTypeSettings(typeSettings);
+
 		layoutModel.setLastPublishDate(new Date());
 
 		return layoutModel;
 	}
 
-	public static List<LayoutSetModel> newLayoutSetModels(
+	public List<LayoutSetModel> newLayoutSetModels(
 		long groupId, int publicLayoutSetPageCount) {
 
 		List<LayoutSetModel> layoutSetModels = new ArrayList<>(2);
 
 		layoutSetModels.add(
 			newLayoutSetModel(
-				groupId, true, 0, InitContextUtil.getCounter().get(),
-				InitContextUtil.getCompanyId()));
+				groupId, true, 0, _initContext.getCounter().get(),
+				_initContext.getCompanyId()));
 		layoutSetModels.add(
 			newLayoutSetModel(
 				groupId, false, publicLayoutSetPageCount,
-				InitContextUtil.getCounter().get(),
-				InitContextUtil.getCompanyId()));
+				_initContext.getCounter().get(), _initContext.getCompanyId()));
 
 		return layoutSetModels;
 	}
 
-	public static List<LayoutModel> newPublicLayoutModels(long groupId) {
+	public List<LayoutModel> newPublicLayoutModels(long groupId) {
 		List<LayoutModel> layoutModels = new ArrayList<>();
 
 		layoutModels.add(
@@ -158,7 +162,7 @@ public class LayoutDataFactory {
 		return layoutModels;
 	}
 
-	protected static LayoutSetModel newLayoutSetModel(
+	protected LayoutSetModel newLayoutSetModel(
 		long groupId, boolean privateLayout, int pageCount, long layoutSetId,
 		long companyId) {
 
@@ -176,4 +180,7 @@ public class LayoutDataFactory {
 
 		return layoutSetModel;
 	}
+
+	private final InitContext _initContext;
+
 }

@@ -72,68 +72,72 @@ import java.util.Map;
  */
 public class ResourcePermissionDataFactory {
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public ResourcePermissionDataFactory(InitContext initContext) {
+		_initContext = initContext;
+	}
+
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		AssetCategoryModel assetCategoryModel) {
 
 		return newResourcePermissionModels(
 			AssetCategory.class.getName(),
 			String.valueOf(assetCategoryModel.getCategoryId()),
-			InitContextUtil.getSampleUserId());
+			_initContext.getSampleUserId());
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		AssetTagModel assetTagModel) {
 
 		return newResourcePermissionModels(
 			AssetTag.class.getName(), String.valueOf(assetTagModel.getTagId()),
-			InitContextUtil.getSampleUserId());
+			_initContext.getSampleUserId());
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		AssetVocabularyModel assetVocabularyModel) {
 
 		if (assetVocabularyModel.getUserId() ==
-				InitContextUtil.getDefaultUserId()) {
+				_initContext.getDefaultUserId()) {
 
 			return Collections.singletonList(
 				newResourcePermissionModel(
 					AssetVocabulary.class.getName(),
 					String.valueOf(assetVocabularyModel.getVocabularyId()),
-					InitContextUtil.getOwnerRoleModel().getRoleId(),
-					InitContextUtil.getDefaultUserId(),
-					InitContextUtil.getResourcePermissionCounter().get(),
-					InitContextUtil.getCompanyId()));
+					_initContext.getOwnerRoleModel().getRoleId(),
+					_initContext.getDefaultUserId(),
+					_initContext.getResourcePermissionCounter().get(),
+					_initContext.getCompanyId()));
 		}
 
 		return newResourcePermissionModels(
 			AssetVocabulary.class.getName(),
 			String.valueOf(assetVocabularyModel.getVocabularyId()),
-			InitContextUtil.getSampleUserId());
+			_initContext.getSampleUserId());
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		BlogsEntryModel blogsEntryModel) {
 
 		return newResourcePermissionModels(
 			BlogsEntry.class.getName(),
 			String.valueOf(blogsEntryModel.getEntryId()),
-			InitContextUtil.getSampleUserId());
+			_initContext.getSampleUserId());
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		DDLRecordSetModel ddlRecordSetModel) {
 
 		return Collections.singletonList(
 			newResourcePermissionModel(
 				DDLRecordSet.class.getName(),
 				String.valueOf(ddlRecordSetModel.getRecordSetId()),
-				InitContextUtil.getOwnerRoleModel().getRoleId(),
-				InitContextUtil.getDefaultUserId(),
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+				_initContext.getOwnerRoleModel().getRoleId(),
+				_initContext.getDefaultUserId(),
+				_initContext.getResourcePermissionCounter().get(),
+				_initContext.getCompanyId()));
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		DDMStructureModel ddmStructureModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
@@ -143,30 +147,30 @@ public class ResourcePermissionDataFactory {
 			DDMStructure.class.getName(),
 			getClassName(
 				ddmStructureModel.getClassNameId(),
-				InitContextUtil.getClassNameModels()));
+				_initContext.getClassNameModels()));
 		String primKey = String.valueOf(ddmStructureModel.getStructureId());
 
 		resourcePermissionModels.add(
 			newResourcePermissionModel(
-				name, primKey, InitContextUtil.getGuestRoleModel().getRoleId(),
-				0, InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+				name, primKey, _initContext.getGuestRoleModel().getRoleId(), 0,
+				_initContext.getResourcePermissionCounter().get(),
+				_initContext.getCompanyId()));
 		resourcePermissionModels.add(
 			newResourcePermissionModel(
-				name, primKey, InitContextUtil.getOwnerRoleModel().getRoleId(),
+				name, primKey, _initContext.getOwnerRoleModel().getRoleId(),
 				ddmStructureModel.getUserId(),
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+				_initContext.getResourcePermissionCounter().get(),
+				_initContext.getCompanyId()));
 		resourcePermissionModels.add(
 			newResourcePermissionModel(
-				name, primKey, InitContextUtil.getUserRoleModel().getRoleId(),
-				0, InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+				name, primKey, _initContext.getUserRoleModel().getRoleId(), 0,
+				_initContext.getResourcePermissionCounter().get(),
+				_initContext.getCompanyId()));
 
 		return resourcePermissionModels;
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		DDMTemplateModel ddmTemplateModel) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
@@ -175,98 +179,98 @@ public class ResourcePermissionDataFactory {
 		String name = _getResourcePermissionModelName(
 			DDMTemplate.class.getName(), getClassName(
 				ddmTemplateModel.getResourceClassNameId(),
-				InitContextUtil.getClassNameModels()));
+				_initContext.getClassNameModels()));
 		String primKey = String.valueOf(ddmTemplateModel.getTemplateId());
 
 		resourcePermissionModels.add(
 			newResourcePermissionModel(
-				name, primKey, InitContextUtil.getGuestRoleModel().getRoleId(),
-				0, InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+				name, primKey, _initContext.getGuestRoleModel().getRoleId(), 0,
+				_initContext.getResourcePermissionCounter().get(),
+				_initContext.getCompanyId()));
 		resourcePermissionModels.add(
 			newResourcePermissionModel(
-				name, primKey, InitContextUtil.getOwnerRoleModel().getRoleId(),
+				name, primKey, _initContext.getOwnerRoleModel().getRoleId(),
 				ddmTemplateModel.getUserId(),
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+				_initContext.getResourcePermissionCounter().get(),
+				_initContext.getCompanyId()));
 		resourcePermissionModels.add(
 			newResourcePermissionModel(
-				name, primKey, InitContextUtil.getUserRoleModel().getRoleId(),
-				0, InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+				name, primKey, _initContext.getUserRoleModel().getRoleId(), 0,
+				_initContext.getResourcePermissionCounter().get(),
+				_initContext.getCompanyId()));
 
 		return resourcePermissionModels;
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		DLFileEntryModel dlFileEntryModel) {
 
 		return newResourcePermissionModels(
 			DLFileEntry.class.getName(),
 			String.valueOf(dlFileEntryModel.getFileEntryId()),
-			InitContextUtil.getSampleUserId());
+			_initContext.getSampleUserId());
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		DLFolderModel dlFolderModel) {
 
 		return newResourcePermissionModels(
 			DLFolder.class.getName(),
 			String.valueOf(dlFolderModel.getFolderId()),
-			InitContextUtil.getSampleUserId());
+			_initContext.getSampleUserId());
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		GroupModel groupModel) {
 
 		return Collections.singletonList(
 			newResourcePermissionModel(
 				Group.class.getName(), String.valueOf(groupModel.getGroupId()),
-				InitContextUtil.getOwnerRoleModel().getRoleId(),
-				InitContextUtil.getSampleUserId(),
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+				_initContext.getOwnerRoleModel().getRoleId(),
+				_initContext.getSampleUserId(),
+				_initContext.getResourcePermissionCounter().get(),
+				_initContext.getCompanyId()));
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		JournalArticleResourceModel journalArticleResourceModel) {
 
 		return newResourcePermissionModels(
 			JournalArticle.class.getName(),
 			String.valueOf(journalArticleResourceModel.getResourcePrimKey()),
-			InitContextUtil.getSampleUserId());
+			_initContext.getSampleUserId());
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		LayoutModel layoutModel) {
 
 		return newResourcePermissionModels(
 			Layout.class.getName(), String.valueOf(layoutModel.getPlid()), 0);
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		MBCategoryModel mbCategoryModel) {
 
 		return newResourcePermissionModels(
 			MBCategory.class.getName(),
 			String.valueOf(mbCategoryModel.getCategoryId()),
-			InitContextUtil.getSampleUserId());
+			_initContext.getSampleUserId());
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		MBMessageModel mbMessageModel) {
 
 		return Collections.singletonList(
 			newResourcePermissionModel(
 				MBMessage.class.getName(),
 				String.valueOf(mbMessageModel.getMessageId()),
-				InitContextUtil.getOwnerRoleModel().getRoleId(),
-				InitContextUtil.getSampleUserId(),
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+				_initContext.getOwnerRoleModel().getRoleId(),
+				_initContext.getSampleUserId(),
+				_initContext.getResourcePermissionCounter().get(),
+				_initContext.getCompanyId()));
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		PortletPreferencesModel portletPreferencesModel) {
 
 		String portletId = portletPreferencesModel.getPortletId();
@@ -285,55 +289,55 @@ public class ResourcePermissionDataFactory {
 		return newResourcePermissionModels(name, primKey, 0);
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		RoleModel roleModel) {
 
 		return Collections.singletonList(
 			newResourcePermissionModel(
 				Role.class.getName(), String.valueOf(roleModel.getRoleId()),
-				InitContextUtil.getOwnerRoleModel().getRoleId(),
-				InitContextUtil.getSampleUserId(),
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+				_initContext.getOwnerRoleModel().getRoleId(),
+				_initContext.getSampleUserId(),
+				_initContext.getResourcePermissionCounter().get(),
+				_initContext.getCompanyId()));
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		String name, long primKey) {
 
 		return newResourcePermissionModels(
-			name, String.valueOf(primKey), InitContextUtil.getSampleUserId());
+			name, String.valueOf(primKey), _initContext.getSampleUserId());
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		UserModel userModel) {
 
 		return Collections.singletonList(
 			newResourcePermissionModel(
 				User.class.getName(), String.valueOf(userModel.getUserId()),
-				InitContextUtil.getOwnerRoleModel().getRoleId(),
+				_initContext.getOwnerRoleModel().getRoleId(),
 				userModel.getUserId(),
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+				_initContext.getResourcePermissionCounter().get(),
+				_initContext.getCompanyId()));
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		WikiNodeModel wikiNodeModel) {
 
 		return newResourcePermissionModels(
 			WikiNode.class.getName(), String.valueOf(wikiNodeModel.getNodeId()),
-			InitContextUtil.getSampleUserId());
+			_initContext.getSampleUserId());
 	}
 
-	public static List<ResourcePermissionModel> newResourcePermissionModels(
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		WikiPageModel wikiPageModel) {
 
 		return newResourcePermissionModels(
 			WikiPage.class.getName(),
 			String.valueOf(wikiPageModel.getResourcePrimKey()),
-			InitContextUtil.getSampleUserId());
+			_initContext.getSampleUserId());
 	}
 
-	protected static String getClassName(
+	protected String getClassName(
 		long classNameId, Map<String, ClassNameModel> classNameModels) {
 
 		for (ClassNameModel classNameModel : classNameModels.values()) {
@@ -346,7 +350,7 @@ public class ResourcePermissionDataFactory {
 			"Unable to find class name for id " + classNameId);
 	}
 
-	protected static ResourcePermissionModel newResourcePermissionModel(
+	protected ResourcePermissionModel newResourcePermissionModel(
 		String name, String primKey, long roleId, long ownerId,
 		long resourcePermissionId, long companyId) {
 
@@ -367,7 +371,7 @@ public class ResourcePermissionDataFactory {
 		return resourcePermissionModel;
 	}
 
-	protected static List<ResourcePermissionModel> newResourcePermissionModels(
+	protected List<ResourcePermissionModel> newResourcePermissionModels(
 		String name, String primKey, long ownerId) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
@@ -375,25 +379,25 @@ public class ResourcePermissionDataFactory {
 
 		resourcePermissionModels.add(
 			newResourcePermissionModel(
-				name, primKey, InitContextUtil.getGuestRoleModel().getRoleId(),
-				0, InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+				name, primKey, _initContext.getGuestRoleModel().getRoleId(), 0,
+				_initContext.getResourcePermissionCounter().get(),
+				_initContext.getCompanyId()));
 		resourcePermissionModels.add(
 			newResourcePermissionModel(
-				name, primKey, InitContextUtil.getOwnerRoleModel().getRoleId(),
-				ownerId, InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+				name, primKey, _initContext.getOwnerRoleModel().getRoleId(),
+				ownerId, _initContext.getResourcePermissionCounter().get(),
+				_initContext.getCompanyId()));
 		resourcePermissionModels.add(
 			newResourcePermissionModel(
 				name, primKey,
-				InitContextUtil.getSiteMemberRoleModel().getRoleId(), 0,
-				InitContextUtil.getResourcePermissionCounter().get(),
-				InitContextUtil.getCompanyId()));
+				_initContext.getSiteMemberRoleModel().getRoleId(), 0,
+				_initContext.getResourcePermissionCounter().get(),
+				_initContext.getCompanyId()));
 
 		return resourcePermissionModels;
 	}
 
-	private static String _getResourcePermissionModelName(String... classNames) {
+	private String _getResourcePermissionModelName(String... classNames) {
 		if (ArrayUtil.isEmpty(classNames)) {
 			return StringPool.BLANK;
 		}
@@ -411,5 +415,7 @@ public class ResourcePermissionDataFactory {
 
 		return sb.toString();
 	}
+
+	private final InitContext _initContext;
 
 }

@@ -40,27 +40,31 @@ import com.liferay.wiki.social.WikiActivityKeys;
  */
 public class SocialActivityDataFactory {
 
-	public static SocialActivityModel newSocialActivityModel(
+	public SocialActivityDataFactory(InitContext initContext) {
+		_initContext = initContext;
+	}
+
+	public SocialActivityModel newSocialActivityModel(
 		BlogsEntryModel blogsEntryModel) {
 
 		return newSocialActivityModel(
-			blogsEntryModel.getGroupId(), InitDataFactoryUtil.getClassNameId(
-				BlogsEntry.class, InitContextUtil.getClassNameModels()),
+			blogsEntryModel.getGroupId(), _initContext.getClassNameId(
+				BlogsEntry.class, _initContext.getClassNameModels()),
 			blogsEntryModel.getEntryId(), BlogsActivityKeys.ADD_ENTRY,
 			"{\"title\":\"" + blogsEntryModel.getTitle() + "\"}");
 	}
 
-	public static SocialActivityModel newSocialActivityModel(
+	public SocialActivityModel newSocialActivityModel(
 		DLFileEntryModel dlFileEntryModel) {
 
 		return newSocialActivityModel(
-			dlFileEntryModel.getGroupId(), InitDataFactoryUtil.getClassNameId(
-				DLFileEntry.class, InitContextUtil.getClassNameModels()),
+			dlFileEntryModel.getGroupId(), _initContext.getClassNameId(
+				DLFileEntry.class, _initContext.getClassNameModels()),
 			dlFileEntryModel.getFileEntryId(), DLActivityKeys.ADD_FILE_ENTRY,
 			StringPool.BLANK);
 	}
 
-	public static SocialActivityModel newSocialActivityModel(
+	public SocialActivityModel newSocialActivityModel(
 		JournalArticleModel journalArticleModel) {
 
 		int type = JournalActivityKeys.UPDATE_ARTICLE;
@@ -73,13 +77,13 @@ public class SocialActivityDataFactory {
 
 		return newSocialActivityModel(
 			journalArticleModel.getGroupId(),
-			InitDataFactoryUtil.getClassNameId(
-				JournalArticle.class, InitContextUtil.getClassNameModels()),
+			_initContext.getClassNameId(
+				JournalArticle.class, _initContext.getClassNameModels()),
 			journalArticleModel.getResourcePrimKey(), type,
 			"{\"title\":\"" + journalArticleModel.getUrlTitle() + "\"}");
 	}
 
-	public static SocialActivityModel newSocialActivityModel(
+	public SocialActivityModel newSocialActivityModel(
 		MBMessageModel mbMessageModel) {
 
 		long classNameId = mbMessageModel.getClassNameId();
@@ -88,8 +92,8 @@ public class SocialActivityDataFactory {
 		int type = 0;
 		String extraData = null;
 
-		if (classNameId == InitDataFactoryUtil.getClassNameId(
-				WikiPage.class, InitContextUtil.getClassNameModels())) {
+		if (classNameId == _initContext.getClassNameId(
+				WikiPage.class, _initContext.getClassNameModels())) {
 
 			extraData = "{\"version\":1}";
 			type = WikiActivityKeys.ADD_PAGE;
@@ -99,8 +103,8 @@ public class SocialActivityDataFactory {
 
 			type = MBActivityKeys.ADD_MESSAGE;
 
-			classNameId = InitDataFactoryUtil.getClassNameId(
-				MBMessage.class, InitContextUtil.getClassNameModels());
+			classNameId = _initContext.getClassNameId(
+				MBMessage.class, _initContext.getClassNameModels());
 			classPK = mbMessageModel.getMessageId();
 		}
 		else {
@@ -121,19 +125,19 @@ public class SocialActivityDataFactory {
 			mbMessageModel.getGroupId(), classNameId, classPK, type, extraData);
 	}
 
-	protected static SocialActivityModel newSocialActivityModel(
+	protected SocialActivityModel newSocialActivityModel(
 		long groupId, long classNameId, long classPK, int type,
 		String extraData) {
 
 		SocialActivityModel socialActivityModel = new SocialActivityModelImpl();
 
 		socialActivityModel.setActivityId(
-			InitContextUtil.getSocialActivityCounter().get());
+			_initContext.getSocialActivityCounter().get());
 		socialActivityModel.setGroupId(groupId);
-		socialActivityModel.setCompanyId(InitContextUtil.getCompanyId());
-		socialActivityModel.setUserId(InitContextUtil.getSampleUserId());
+		socialActivityModel.setCompanyId(_initContext.getCompanyId());
+		socialActivityModel.setUserId(_initContext.getSampleUserId());
 		socialActivityModel.setCreateDate(
-			_CURRENT_TIME + InitContextUtil.getTimeCounter().get());
+			_CURRENT_TIME + _initContext.getTimeCounter().get());
 		socialActivityModel.setClassNameId(classNameId);
 		socialActivityModel.setClassPK(classPK);
 		socialActivityModel.setType(type);
@@ -141,5 +145,9 @@ public class SocialActivityDataFactory {
 
 		return socialActivityModel;
 	}
-	private static final long _CURRENT_TIME = System.currentTimeMillis(); 
+
+	private static final long _CURRENT_TIME = System.currentTimeMillis();
+
+	private final InitContext _initContext;
+
 }

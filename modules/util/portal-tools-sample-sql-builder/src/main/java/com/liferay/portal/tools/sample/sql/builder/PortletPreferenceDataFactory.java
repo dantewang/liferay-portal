@@ -43,7 +43,11 @@ import javax.portlet.PortletPreferences;
  */
 public class PortletPreferenceDataFactory {
 
-	public static List<PortletPreferencesModel>
+	public PortletPreferenceDataFactory(InitContext initContext) {
+		_initContext = initContext;
+	}
+
+	public List<PortletPreferencesModel>
 		newAssetPublisherPortletPreferencesModels(long plid) {
 
 		List<PortletPreferencesModel> portletPreferencesModels =
@@ -65,7 +69,7 @@ public class PortletPreferenceDataFactory {
 		return portletPreferencesModels;
 	}
 
-	public static List<PortletPreferencesModel>
+	public List<PortletPreferencesModel>
 		newDDLPortletPreferencesModels(long plid) {
 
 		List<PortletPreferencesModel> portletPreferencesModels =
@@ -87,7 +91,7 @@ public class PortletPreferenceDataFactory {
 		return portletPreferencesModels;
 	}
 
-	public static List<PortletPreferencesModel>
+	public List<PortletPreferencesModel>
 		newJournalPortletPreferencesModels(long plid) {
 
 		return Collections.singletonList(
@@ -96,7 +100,7 @@ public class PortletPreferenceDataFactory {
 				PortletConstants.DEFAULT_PREFERENCES));
 	}
 
-	public static PortletPreferencesModel newPortletPreferencesModel(
+	public PortletPreferencesModel newPortletPreferencesModel(
 			long plid, long groupId, String portletId, int currentIndex)
 		throws Exception {
 
@@ -108,7 +112,7 @@ public class PortletPreferenceDataFactory {
 		}
 
 		Map<Long, SimpleCounter> assetPublisherQueryCounter =
-			InitContextUtil.getAssetPublisherQueryCounter();
+			_initContext.getAssetPublisherQueryCounter();
 
 		SimpleCounter counter = assetPublisherQueryCounter.get(groupId);
 
@@ -120,11 +124,11 @@ public class PortletPreferenceDataFactory {
 
 		String[] assetPublisherQueryValues = null;
 
-		if (InitContextUtil.getAssetPublisherQueryName().equals(
+		if (_initContext.getAssetPublisherQueryName().equals(
 				"assetCategories")) {
 
 			List<AssetCategoryModel> assetCategoryModels =
-				InitContextUtil.getAssetCategoryModelsArray()[size];
+				_initContext.getAssetCategoryModelsArray()[size];
 
 			if ((assetCategoryModels == null) ||
 				assetCategoryModels.isEmpty()) {
@@ -134,7 +138,8 @@ public class PortletPreferenceDataFactory {
 			}
 
 			int maxAssetEntryToAssetCategoryCount =
-				InitContextUtil.getMaxAssetEntryToAssetCategoryCount();
+				_initContext.getMaxAssetEntryToAssetCategoryCount();
+
 			assetPublisherQueryValues =
 				getAssetPublisherAssetCategoriesQueryValues(
 					assetCategoryModels, (int)counter.get(),
@@ -142,7 +147,7 @@ public class PortletPreferenceDataFactory {
 		}
 		else {
 			List<AssetTagModel> assetTagModels =
-				InitContextUtil.getAssetTagModelsArray()[size];
+				_initContext.getAssetTagModelsArray()[size];
 
 			if ((assetTagModels == null) || assetTagModels.isEmpty()) {
 				return newPortletPreferencesModel(
@@ -151,19 +156,19 @@ public class PortletPreferenceDataFactory {
 
 			assetPublisherQueryValues = getAssetPublisherAssetTagsQueryValues(
 				assetTagModels, (int)counter.get(),
-				InitContextUtil.getMaxAssetEntryToAssetTagCount());
+				_initContext.getMaxAssetEntryToAssetTagCount());
 		}
 
 		PortletPreferences jxPortletPreferences =
-			(PortletPreferences)InitContextUtil.
+			(PortletPreferences)_initContext.
 				getDefaultAssetPublisherPortletPreference().clone();
 		PortletPreferencesFactory portletPreferencesFactory =
-			InitContextUtil.getPortletPreferencesFactory();
+			_initContext.getPortletPreferencesFactory();
 
 		jxPortletPreferences.setValue("queryAndOperator0", "false");
 		jxPortletPreferences.setValue("queryContains0", "true");
 		jxPortletPreferences.setValue(
-			"queryName0", InitContextUtil.getAssetPublisherQueryName());
+			"queryName0", _initContext.getAssetPublisherQueryName());
 		jxPortletPreferences.setValues(
 			"queryValues0",
 			new String[] {
@@ -173,7 +178,7 @@ public class PortletPreferenceDataFactory {
 		jxPortletPreferences.setValue("queryAndOperator1", "false");
 		jxPortletPreferences.setValue("queryContains1", "false");
 		jxPortletPreferences.setValue(
-			"queryName1", InitContextUtil.getAssetPublisherQueryName());
+			"queryName1", _initContext.getAssetPublisherQueryName());
 		jxPortletPreferences.setValue(
 			"queryValues1", assetPublisherQueryValues[3]);
 
@@ -182,13 +187,13 @@ public class PortletPreferenceDataFactory {
 			portletPreferencesFactory.toXML(jxPortletPreferences));
 	}
 
-	public static PortletPreferencesModel newPortletPreferencesModel(
+	public PortletPreferencesModel newPortletPreferencesModel(
 			long plid, String portletId, DDLRecordSetModel ddlRecordSetModel)
 		throws Exception {
 
 		PortletPreferences jxPortletPreferences = new PortletPreferencesImpl();
 		PortletPreferencesFactory portletPreferencesFactory =
-			InitContextUtil.getPortletPreferencesFactory();
+			_initContext.getPortletPreferencesFactory();
 
 		jxPortletPreferences.setValue("editable", "true");
 		jxPortletPreferences.setValue(
@@ -200,7 +205,7 @@ public class PortletPreferenceDataFactory {
 			portletPreferencesFactory.toXML(jxPortletPreferences));
 	}
 
-	public static PortletPreferencesModel newPortletPreferencesModel(
+	public PortletPreferencesModel newPortletPreferencesModel(
 			long plid, String portletId,
 			JournalArticleResourceModel journalArticleResourceModel,
 			PortletPreferencesFactory portletPreferencesFactory)
@@ -219,7 +224,7 @@ public class PortletPreferenceDataFactory {
 			portletPreferencesFactory.toXML(jxPortletPreferences));
 	}
 
-	protected static String[] getAssetPublisherAssetCategoriesQueryValues(
+	protected String[] getAssetPublisherAssetCategoriesQueryValues(
 		List<AssetCategoryModel> assetCategoryModels, int index,
 		int maxAssetEntryToAssetCategoryCount) {
 
@@ -243,7 +248,7 @@ public class PortletPreferenceDataFactory {
 		};
 	}
 
-	protected static String[] getAssetPublisherAssetTagsQueryValues(
+	protected String[] getAssetPublisherAssetTagsQueryValues(
 		List<AssetTagModel> assetTagModels, int index,
 		int maxAssetEntryToAssetTagCount) {
 
@@ -261,14 +266,15 @@ public class PortletPreferenceDataFactory {
 			assetTagModel2.getName(), assetTagModel3.getName()
 		};
 	}
-	protected static PortletPreferencesModel newPortletPreferencesModel(
+
+	protected PortletPreferencesModel newPortletPreferencesModel(
 		long plid, String portletId, String preferences) {
 
 		PortletPreferencesModel portletPreferencesModel =
 			new PortletPreferencesModelImpl();
 
 		portletPreferencesModel.setPortletPreferencesId(
-			InitContextUtil.getCounter().get());
+			_initContext.getCounter().get());
 		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
 		portletPreferencesModel.setOwnerType(
 			PortletKeys.PREFS_OWNER_TYPE_LAYOUT);
@@ -278,5 +284,7 @@ public class PortletPreferenceDataFactory {
 
 		return portletPreferencesModel;
 	}
+
+	private final InitContext _initContext;
 
 }
