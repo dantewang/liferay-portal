@@ -38,7 +38,9 @@ public class CounterDataFactory {
 	}
 
 	public long getCounterNext() {
-		return _initContext.getCounter().get();
+
+		SimpleCounter counter = _initContext.getCounter();
+		return counter.get();
 	}
 
 	public List<Integer> getSequence(int size) {
@@ -58,8 +60,10 @@ public class CounterDataFactory {
 
 		CounterModel counterModel = new CounterModelImpl();
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		counterModel.setName(Counter.class.getName());
-		counterModel.setCurrentId(_initContext.getCounter().get());
+		counterModel.setCurrentId(counter.get());
 
 		counterModels.add(counterModel);
 

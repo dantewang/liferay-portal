@@ -1297,8 +1297,8 @@ public class InitContext {
 
 		DDMStructureVersionModel ddmStructureVersionModel =
 			new DDMStructureVersionModelImpl();
-
-		ddmStructureVersionModel.setStructureVersionId(getCounter().get());
+		
+		ddmStructureVersionModel.setStructureVersionId(_counter.get());
 		ddmStructureVersionModel.setGroupId(ddmStructureModel.getGroupId());
 		ddmStructureVersionModel.setCompanyId(getCompanyId());
 		ddmStructureVersionModel.setUserId(ddmStructureModel.getUserId());
@@ -1356,7 +1356,7 @@ public class InitContext {
 		DDMStructureLinkModel ddmStructureLinkModel =
 			new DDMStructureLinkModelImpl();
 
-		ddmStructureLinkModel.setStructureLinkId(getCounter().get());
+		ddmStructureLinkModel.setStructureLinkId(_counter.get());
 		ddmStructureLinkModel.setClassNameId(classNameId);
 		ddmStructureLinkModel.setClassPK(classPK);
 		ddmStructureLinkModel.setStructureId(structureId);

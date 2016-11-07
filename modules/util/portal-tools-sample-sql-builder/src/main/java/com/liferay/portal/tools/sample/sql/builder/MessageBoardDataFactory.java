@@ -30,6 +30,7 @@ import com.liferay.portlet.messageboards.model.impl.MBMessageModelImpl;
 import com.liferay.portlet.messageboards.model.impl.MBStatsUserModelImpl;
 import com.liferay.portlet.messageboards.model.impl.MBThreadFlagModelImpl;
 import com.liferay.portlet.messageboards.model.impl.MBThreadModelImpl;
+import com.liferay.util.SimpleCounter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,10 +51,12 @@ public class MessageBoardDataFactory {
 		List<MBCategoryModel> mbCategoryModels = new ArrayList<>(
 			maxMBCategoryCount);
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		for (int i = 1; i <= maxMBCategoryCount; i++) {
 			mbCategoryModels.add(
 				newMBCategoryModel(
-					groupId, i, _initContext.getCounter().get(),
+					groupId, i, counter.get(),
 					_initContext.getCompanyId(), _initContext.getSampleUserId(),
 					DataFactoryConstants.SAMPLE_USER_NAME,
 					_initContext.getMaxMBThreadCount(),
@@ -68,8 +71,10 @@ public class MessageBoardDataFactory {
 
 		MBDiscussionModel mbDiscussionModel = new MBDiscussionModelImpl();
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		mbDiscussionModel.setUuid(SequentialUUID.generate());
-		mbDiscussionModel.setDiscussionId(_initContext.getCounter().get());
+		mbDiscussionModel.setDiscussionId(counter.get());
 		mbDiscussionModel.setGroupId(groupId);
 		mbDiscussionModel.setCompanyId(_initContext.getCompanyId());
 		mbDiscussionModel.setUserId(_initContext.getSampleUserId());
@@ -89,8 +94,10 @@ public class MessageBoardDataFactory {
 
 		MBMailingListModel mbMailingListModel = new MBMailingListModelImpl();
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		mbMailingListModel.setUuid(SequentialUUID.generate());
-		mbMailingListModel.setMailingListId(_initContext.getCounter().get());
+		mbMailingListModel.setMailingListId(counter.get());
 		mbMailingListModel.setGroupId(mbCategoryModel.getGroupId());
 		mbMailingListModel.setCompanyId(_initContext.getCompanyId());
 		mbMailingListModel.setUserId(_initContext.getSampleUserId());
@@ -118,6 +125,8 @@ public class MessageBoardDataFactory {
 		long parentMessageId = 0;
 		String subject = null;
 		String body = null;
+	
+		SimpleCounter counter = _initContext.getCounter();
 
 		if (index == 0) {
 			messageId = mbThreadModel.getRootMessageId();
@@ -126,7 +135,7 @@ public class MessageBoardDataFactory {
 			body = String.valueOf(classPK);
 		}
 		else {
-			messageId = _initContext.getCounter().get();
+			messageId = counter.get();
 			parentMessageId = mbThreadModel.getRootMessageId();
 			subject = "N/A";
 			body = "This is test comment " + index + ".";
@@ -147,6 +156,8 @@ public class MessageBoardDataFactory {
 		List<MBMessageModel> mbMessageModels = new ArrayList<>(
 			maxMBMessageCount);
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		mbMessageModels.add(
 			newMBMessageModel(
 				mbThreadModel.getGroupId(), 0, 0, mbThreadModel.getCategoryId(),
@@ -160,8 +171,7 @@ public class MessageBoardDataFactory {
 				newMBMessageModel(
 					mbThreadModel.getGroupId(), 0, 0,
 					mbThreadModel.getCategoryId(), mbThreadModel.getThreadId(),
-					_initContext.getCounter().get(),
-					mbThreadModel.getRootMessageId(),
+					counter.get(), mbThreadModel.getRootMessageId(),
 					mbThreadModel.getRootMessageId(), "Test Message " + i,
 					"This is test message " + i + "."));
 		}
@@ -189,8 +199,10 @@ public class MessageBoardDataFactory {
 		int maxMBMessageCount = _initContext.getMaxMBMessageCount();
 
 		MBStatsUserModel mbStatsUserModel = new MBStatsUserModelImpl();
+		
+		SimpleCounter counter = _initContext.getCounter();
 
-		mbStatsUserModel.setStatsUserId(_initContext.getCounter().get());
+		mbStatsUserModel.setStatsUserId(counter.get());
 		mbStatsUserModel.setGroupId(groupId);
 		mbStatsUserModel.setUserId(_initContext.getSampleUserId());
 		mbStatsUserModel.setMessageCount(
@@ -204,8 +216,10 @@ public class MessageBoardDataFactory {
 	{
 		MBThreadFlagModel mbThreadFlagModel = new MBThreadFlagModelImpl();
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		mbThreadFlagModel.setUuid(SequentialUUID.generate());
-		mbThreadFlagModel.setThreadFlagId(_initContext.getCounter().get());
+		mbThreadFlagModel.setThreadFlagId(counter.get());
 		mbThreadFlagModel.setGroupId(mbThreadModel.getGroupId());
 		mbThreadFlagModel.setCompanyId(_initContext.getCompanyId());
 		mbThreadFlagModel.setUserId(_initContext.getSampleUserId());
@@ -236,13 +250,13 @@ public class MessageBoardDataFactory {
 		List<MBThreadModel> mbThreadModels = new ArrayList<>(
 			_initContext.getMaxMBThreadCount());
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		for (int i = 0; i < _initContext.getMaxMBThreadCount(); i++) {
 			mbThreadModels.add(
 				newMBThreadModel(
-					_initContext.getCounter().get(),
-					mbCategoryModel.getGroupId(),
-					mbCategoryModel.getCategoryId(),
-					_initContext.getCounter().get(),
+					counter.get(),mbCategoryModel.getGroupId(),
+					mbCategoryModel.getCategoryId(),counter.get(),
 					_initContext.getMaxMBMessageCount()));
 		}
 

@@ -58,9 +58,10 @@ public class LayoutDataFactory {
 		LayoutFriendlyURLModel layoutFriendlyURLModel =
 			new LayoutFriendlyURLModelImpl();
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		layoutFriendlyURLModel.setUuid(SequentialUUID.generate());
-		layoutFriendlyURLModel.setLayoutFriendlyURLId(
-			_initContext.getCounter().get());
+		layoutFriendlyURLModel.setLayoutFriendlyURLId(counter.get());
 		layoutFriendlyURLModel.setGroupId(layoutModel.getGroupId());
 		layoutFriendlyURLModel.setCompanyId(_initContext.getCompanyId());
 		layoutFriendlyURLModel.setUserId(_initContext.getSampleUserId());
@@ -83,6 +84,8 @@ public class LayoutDataFactory {
 			_initContext.getLayoutCounters();
 
 		SimpleCounter simpleCounter = layoutCounters.get(groupId);
+		
+		SimpleCounter counter = _initContext.getCounter();
 
 		if (simpleCounter == null) {
 			simpleCounter = new SimpleCounter();
@@ -93,7 +96,7 @@ public class LayoutDataFactory {
 		LayoutModel layoutModel = new LayoutModelImpl();
 
 		layoutModel.setUuid(SequentialUUID.generate());
-		layoutModel.setPlid(_initContext.getCounter().get());
+		layoutModel.setPlid(counter.get());
 		layoutModel.setGroupId(groupId);
 		layoutModel.setCompanyId(_initContext.getCompanyId());
 		layoutModel.setUserId(_initContext.getSampleUserId());
@@ -128,14 +131,15 @@ public class LayoutDataFactory {
 
 		List<LayoutSetModel> layoutSetModels = new ArrayList<>(2);
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		layoutSetModels.add(
 			newLayoutSetModel(
-				groupId, true, 0, _initContext.getCounter().get(),
-				_initContext.getCompanyId()));
+				groupId, true, 0, counter.get(),_initContext.getCompanyId()));
 		layoutSetModels.add(
 			newLayoutSetModel(
 				groupId, false, publicLayoutSetPageCount,
-				_initContext.getCounter().get(), _initContext.getCompanyId()));
+				counter.get(), _initContext.getCompanyId()));
 
 		return layoutSetModels;
 	}

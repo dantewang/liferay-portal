@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.model.VirtualHostModel;
 import com.liferay.portal.kernel.security.auth.FullNameGenerator;
 import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.model.impl.ContactModelImpl;
+import com.liferay.util.SimpleCounter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -150,9 +151,11 @@ public class UserDataFactory {
 	}
 
 	public GroupModel newGroupModel(UserModel userModel) throws Exception {
+
+		SimpleCounter counter = _initContext.getCounter();
+
 		return _initContext.newGroupModel(
-			_initContext.getCounter().get(),
-			_initContext.getClassNameId(
+			counter.get(), _initContext.getClassNameId(
 				User.class, _initContext.getClassNameModels()),
 			userModel.getUserId(), userModel.getScreenName(), false,
 			_initContext.getCompanyId(), _initContext.getSampleUserId());
@@ -162,6 +165,8 @@ public class UserDataFactory {
 		List<UserModel> userModels = new ArrayList<>(
 			_initContext.getMaxUserCount());
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		for (int i = 0; i < _initContext.getMaxUserCount(); i++) {
 			String[] userName = nextUserName(i);
 			String lastName =
@@ -169,9 +174,8 @@ public class UserDataFactory {
 
 			userModels.add(
 				_initContext.newUserModel(
-					_initContext.getCounter().get(), userName[0], userName[1],
-					lastName, false, _initContext.getCounter().get(),
-					_initContext.getCompanyId()));
+					counter.get(), userName[0], userName[1],lastName, false,
+					counter.get(),_initContext.getCompanyId()));
 		}
 
 		return userModels;

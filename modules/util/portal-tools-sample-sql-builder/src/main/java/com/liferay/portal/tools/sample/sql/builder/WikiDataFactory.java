@@ -14,6 +14,7 @@
 
 package com.liferay.portal.tools.sample.sql.builder;
 
+import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.model.WikiNodeModel;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.model.WikiPageConstants;
@@ -41,10 +42,12 @@ public class WikiDataFactory {
 
 		List<WikiNodeModel> wikiNodeModels = new ArrayList<>(maxWikiNodeCount);
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		for (int i = 1; i <= maxWikiNodeCount; i++) {
 			wikiNodeModels.add(
 				newWikiNodeModel(
-					groupId, i, _initContext.getCounter().get(),
+					groupId, i, counter.get(),
 					_initContext.getCompanyId(), _initContext.getSampleUserId(),
 					DataFactoryConstants.SAMPLE_USER_NAME));
 		}
@@ -57,12 +60,13 @@ public class WikiDataFactory {
 		int maxWikiPageCount = _initContext.getMaxWikiPageCount();
 
 		List<WikiPageModel> wikiPageModels = new ArrayList<>(maxWikiPageCount);
+		
+		SimpleCounter counter = _initContext.getCounter();
 
 		for (int i = 1; i <= maxWikiPageCount; i++) {
 			wikiPageModels.add(
 				newWikiPageModel(
-					wikiNodeModel, i, _initContext.getCounter().get(),
-					_initContext.getCounter().get(),
+					wikiNodeModel, i, counter.get(),counter.get(),
 					_initContext.getCompanyId(), _initContext.getSampleUserId(),
 					DataFactoryConstants.SAMPLE_USER_NAME));
 		}

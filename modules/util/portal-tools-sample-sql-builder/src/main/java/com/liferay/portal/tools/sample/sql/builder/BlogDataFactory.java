@@ -21,6 +21,7 @@ import com.liferay.blogs.model.impl.BlogsEntryModelImpl;
 import com.liferay.blogs.model.impl.BlogsStatsUserModelImpl;
 import com.liferay.friendly.url.model.FriendlyURLModel;
 import com.liferay.friendly.url.model.impl.FriendlyURLModelImpl;
+import com.liferay.util.SimpleCounter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,10 +51,12 @@ public class BlogDataFactory {
 		List<BlogsEntryModel> blogEntryModels = new ArrayList<>(
 			maxBlogsEntryCount);
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		for (int i = 1; i <= maxBlogsEntryCount; i++) {
 			blogEntryModels.add(
 				newBlogsEntryModel(
-					groupId, i, _initContext.getCounter().get(),
+					groupId, i, counter.get(),
 					_initContext.getCompanyId(), _initContext.getSampleUserId(),
 					DataFactoryConstants.SAMPLE_USER_NAME));
 		}
@@ -64,7 +67,9 @@ public class BlogDataFactory {
 	public BlogsStatsUserModel newBlogsStatsUserModel(long groupId) {
 		BlogsStatsUserModel blogsStatsUserModel = new BlogsStatsUserModelImpl();
 
-		blogsStatsUserModel.setStatsUserId(_initContext.getCounter().get());
+		SimpleCounter counter = _initContext.getCounter();
+
+		blogsStatsUserModel.setStatsUserId(counter.get());
 		blogsStatsUserModel.setGroupId(groupId);
 		blogsStatsUserModel.setCompanyId(_initContext.getCompanyId());
 		blogsStatsUserModel.setUserId(_initContext.getSampleUserId());
@@ -79,8 +84,10 @@ public class BlogDataFactory {
 
 		FriendlyURLModel friendlyURLModel = new FriendlyURLModelImpl();
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		friendlyURLModel.setUuid(SequentialUUID.generate());
-		friendlyURLModel.setFriendlyURLId(_initContext.getCounter().get());
+		friendlyURLModel.setFriendlyURLId(counter.get());
 		friendlyURLModel.setGroupId(blogsEntryModel.getGroupId());
 		friendlyURLModel.setCompanyId(_initContext.getCompanyId());
 		friendlyURLModel.setCreateDate(new Date());

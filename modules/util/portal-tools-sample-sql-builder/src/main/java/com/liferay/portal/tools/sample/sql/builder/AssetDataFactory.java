@@ -287,7 +287,9 @@ public class AssetDataFactory {
 
 		AssetEntryModel assetEntryModel = new AssetEntryModelImpl();
 
-		assetEntryModel.setEntryId(_initContext.getCounter().get());
+		SimpleCounter counter = _initContext.getCounter();
+
+		assetEntryModel.setEntryId(counter.get());
 		assetEntryModel.setGroupId(groupId);
 		assetEntryModel.setCompanyId(_initContext.getCompanyId());
 		assetEntryModel.setUserId(_initContext.getSampleUserId());

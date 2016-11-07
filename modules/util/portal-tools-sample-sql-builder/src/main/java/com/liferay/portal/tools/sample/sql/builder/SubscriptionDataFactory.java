@@ -21,6 +21,7 @@ import com.liferay.message.boards.kernel.model.MBThreadModel;
 import com.liferay.portal.kernel.model.SubscriptionConstants;
 import com.liferay.portal.kernel.model.SubscriptionModel;
 import com.liferay.portal.model.impl.SubscriptionModelImpl;
+import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.model.WikiPageModel;
 
@@ -65,7 +66,9 @@ public class SubscriptionDataFactory {
 
 		SubscriptionModel subscriptionModel = new SubscriptionModelImpl();
 
-		subscriptionModel.setSubscriptionId(_initContext.getCounter().get());
+		SimpleCounter counter = _initContext.getCounter();
+
+		subscriptionModel.setSubscriptionId(counter.get());
 		subscriptionModel.setCompanyId(_initContext.getCompanyId());
 		subscriptionModel.setUserId(_initContext.getSampleUserId());
 		subscriptionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);

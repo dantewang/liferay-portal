@@ -35,6 +35,7 @@ import com.liferay.journal.model.impl.JournalContentSearchModelImpl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.util.SimpleCounter;
 
 import java.util.Date;
 import java.util.Map;
@@ -104,8 +105,10 @@ public class JournalDataFactory {
 
 		DDMStorageLinkModel ddmStorageLinkModel = new DDMStorageLinkModelImpl();
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		ddmStorageLinkModel.setUuid(SequentialUUID.generate());
-		ddmStorageLinkModel.setStorageLinkId(_initContext.getCounter().get());
+		ddmStorageLinkModel.setStorageLinkId(counter.get());
 		ddmStorageLinkModel.setClassNameId(
 			_initContext.getClassNameId(
 				JournalArticle.class, _initContext.getClassNameModels()));
@@ -121,8 +124,10 @@ public class JournalDataFactory {
 		DDMTemplateLinkModel ddmTemplateLinkModel =
 			new DDMTemplateLinkModelImpl();
 
+		SimpleCounter counter = _initContext.getCounter();
+		
 		ddmTemplateLinkModel.setCompanyId(_initContext.getCompanyId());
-		ddmTemplateLinkModel.setTemplateLinkId(_initContext.getCounter().get());
+		ddmTemplateLinkModel.setTemplateLinkId(counter.get());
 		ddmTemplateLinkModel.setClassNameId(
 			_initContext.getClassNameId(
 				JournalArticle.class, _initContext.getClassNameModels()));
@@ -142,13 +147,14 @@ public class JournalDataFactory {
 
 		StringBundler sb = new StringBundler(4);
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		sb.append("TestJournalArticle_");
 		sb.append(articleIndex);
 		sb.append(StringPool.UNDERLINE);
 		sb.append(versionIndex);
 
-		journalArticleLocalizationModel.setArticleLocalizationId(
-			_initContext.getCounter().get());
+		journalArticleLocalizationModel.setArticleLocalizationId(counter.get());
 		journalArticleLocalizationModel.setCompanyId(
 			journalArticleModel.getCompanyId());
 		journalArticleLocalizationModel.setArticlePK(
@@ -167,8 +173,10 @@ public class JournalDataFactory {
 
 		JournalArticleModel journalArticleModel = new JournalArticleModelImpl();
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		journalArticleModel.setUuid(SequentialUUID.generate());
-		journalArticleModel.setId(_initContext.getCounter().get());
+		journalArticleModel.setId(counter.get());
 		journalArticleModel.setResourcePrimKey(
 			journalArticleResourceModel.getResourcePrimKey());
 		journalArticleModel.setGroupId(
@@ -219,12 +227,12 @@ public class JournalDataFactory {
 		JournalArticleResourceModel journalArticleResourceModel =
 			new JournalArticleResourceModelImpl();
 
+		SimpleCounter counter = _initContext.getCounter();
+		
 		journalArticleResourceModel.setUuid(SequentialUUID.generate());
-		journalArticleResourceModel.setResourcePrimKey(
-			_initContext.getCounter().get());
+		journalArticleResourceModel.setResourcePrimKey(counter.get());
 		journalArticleResourceModel.setGroupId(groupId);
-		journalArticleResourceModel.setArticleId(
-			String.valueOf(_initContext.getCounter().get()));
+		journalArticleResourceModel.setArticleId(String.valueOf(counter.get()));
 
 		journalArticleResourceUUIDs.put(
 			journalArticleResourceModel.getPrimaryKey(),
@@ -239,8 +247,9 @@ public class JournalDataFactory {
 		JournalContentSearchModel journalContentSearchModel =
 			new JournalContentSearchModelImpl();
 
-		journalContentSearchModel.setContentSearchId(
-			_initContext.getCounter().get());
+		SimpleCounter counter = _initContext.getCounter();
+
+		journalContentSearchModel.setContentSearchId(counter.get());
 		journalContentSearchModel.setGroupId(journalArticleModel.getGroupId());
 		journalContentSearchModel.setCompanyId(_initContext.getCompanyId());
 		journalContentSearchModel.setLayoutId(layoutId);

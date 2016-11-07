@@ -64,6 +64,8 @@ public class DLDataFactory {
 
 		StringBundler sb = new StringBundler(6);
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		sb.append("{\"availableLanguageIds\": [\"en_US\"],");
 		sb.append("\"defaultLanguageId\": \"en_US\", \"fieldValues\": [{");
 		sb.append("\"instanceId\": \"");
@@ -72,8 +74,7 @@ public class DLDataFactory {
 		sb.append("\"text/plain\"}}]}");
 
 		return _initContext.newDDMContentModel(
-			_initContext.getCounter().get(), dlFileEntryModel.getGroupId(),
-			sb.toString());
+			counter.get(), dlFileEntryModel.getGroupId(),sb.toString());
 	}
 
 	public DDMStructureLinkModel newDDMStructureLinkModel(
@@ -93,9 +94,10 @@ public class DLDataFactory {
 		DLFileEntryMetadataModel dlFileEntryMetadataModel =
 			new DLFileEntryMetadataModelImpl();
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		dlFileEntryMetadataModel.setUuid(SequentialUUID.generate());
-		dlFileEntryMetadataModel.setFileEntryMetadataId(
-			_initContext.getCounter().get());
+		dlFileEntryMetadataModel.setFileEntryMetadataId(counter.get());
 		dlFileEntryMetadataModel.setDDMStorageId(ddmStorageLinkId);
 		dlFileEntryMetadataModel.setDDMStructureId(ddmStructureId);
 		dlFileEntryMetadataModel.setFileEntryId(
@@ -114,10 +116,12 @@ public class DLDataFactory {
 		List<DLFileEntryModel> dlFileEntryModels = new ArrayList<>(
 			maxDLFileEntryCount);
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		for (int i = 1; i <= maxDLFileEntryCount; i++) {
 			dlFileEntryModels.add(
 				newDlFileEntryModel(
-					dlFolerModel, i, _initContext.getCounter().get(),
+					dlFolerModel, i, counter.get(),
 					_initContext.getCompanyId(), _initContext.getSampleUserId(),
 					DataFactoryConstants.SAMPLE_USER_NAME,
 					_initContext.getFutureDateCounter(),
@@ -132,8 +136,10 @@ public class DLDataFactory {
 
 		DLFileVersionModel dlFileVersionModel = new DLFileVersionModelImpl();
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		dlFileVersionModel.setUuid(SequentialUUID.generate());
-		dlFileVersionModel.setFileVersionId(_initContext.getCounter().get());
+		dlFileVersionModel.setFileVersionId(counter.get());
 		dlFileVersionModel.setGroupId(dlFileEntryModel.getGroupId());
 		dlFileVersionModel.setCompanyId(_initContext.getCompanyId());
 		dlFileVersionModel.setUserId(_initContext.getSampleUserId());
@@ -166,10 +172,12 @@ public class DLDataFactory {
 
 		List<DLFolderModel> dlFolderModels = new ArrayList<>(maxDLFolderCount);
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		for (int i = 1; i <= maxDLFolderCount; i++) {
 			dlFolderModels.add(
 				newDLFolderModel(
-					groupId, parentFolderId, i, _initContext.getCounter().get(),
+					groupId, parentFolderId, i, counter.get(),
 					_initContext.getCompanyId(), _initContext.getSampleUserId(),
 					DataFactoryConstants.SAMPLE_USER_NAME,
 					_initContext.getFutureDateCounter(),

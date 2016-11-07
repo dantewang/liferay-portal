@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.util.SimpleCounter;
 
 import java.util.Date;
 
@@ -87,6 +88,8 @@ public class DDLDataFactory {
 
 		StringBundler sb = new StringBundler(4 + maxDDLCustomFieldCount * 4);
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		sb.append("{\"defaultLanguageId\": \"en_US\", \"pages\": [{\"rows\": ");
 		sb.append("[");
 
@@ -107,7 +110,7 @@ public class DDLDataFactory {
 		return _initContext.newDDMStructureLayoutModel(
 			_initContext.getGlobalGroupId(), _initContext.getDefaultUserId(),
 			ddmStructureVersionModel.getStructureVersionId(), sb.toString(),
-			_initContext.getCounter().get(), _initContext.getCompanyId(),
+			counter.get(), _initContext.getCompanyId(),
 			DataFactoryConstants.SAMPLE_USER_NAME,
 			_initContext.getFutureDateCounter());
 	}
@@ -116,6 +119,8 @@ public class DDLDataFactory {
 		int maxDDLCustomFieldCount = _initContext.getMaxDDLCustomFieldCount();
 
 		StringBundler sb = new StringBundler(3 + maxDDLCustomFieldCount * 9);
+
+		SimpleCounter counter = _initContext.getCounter();
 
 		sb.append("{\"availableLanguageIds\": [\"en_US\"],");
 		sb.append("\"defaultLanguageId\": \"en_US\", \"fields\": [");
@@ -143,9 +148,8 @@ public class DDLDataFactory {
 			groupId, _initContext.getSampleUserId(),
 			_initContext.getClassNameId(
 				DDLRecordSet.class, _initContext.getClassNameModels()),
-			"Test DDM Structure", sb.toString(),
-			_initContext.getCounter().get(), _initContext.getCompanyId(),
-			DataFactoryConstants.SAMPLE_USER_NAME,
+			"Test DDM Structure", sb.toString(), counter.get(),
+			_initContext.getCompanyId(), DataFactoryConstants.SAMPLE_USER_NAME,
 			_initContext.getFutureDateCounter());
 	}
 
@@ -154,8 +158,10 @@ public class DDLDataFactory {
 
 		DDLRecordModel ddlRecordModel = new DDLRecordModelImpl();
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		ddlRecordModel.setUuid(SequentialUUID.generate());
-		ddlRecordModel.setRecordId(_initContext.getCounter().get());
+		ddlRecordModel.setRecordId(counter.get());
 		ddlRecordModel.setGroupId(dDLRecordSetModel.getGroupId());
 		ddlRecordModel.setCompanyId(_initContext.getCompanyId());
 		ddlRecordModel.setUserId(_initContext.getSampleUserId());
@@ -165,7 +171,7 @@ public class DDLDataFactory {
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		ddlRecordModel.setCreateDate(new Date());
 		ddlRecordModel.setModifiedDate(new Date());
-		ddlRecordModel.setDDMStorageId(_initContext.getCounter().get());
+		ddlRecordModel.setDDMStorageId(counter.get());
 		ddlRecordModel.setRecordSetId(dDLRecordSetModel.getRecordSetId());
 		ddlRecordModel.setVersion(DDLRecordConstants.VERSION_DEFAULT);
 		ddlRecordModel.setDisplayIndex(
@@ -180,8 +186,10 @@ public class DDLDataFactory {
 
 		DDLRecordSetModel ddlRecordSetModel = new DDLRecordSetModelImpl();
 
+		SimpleCounter counter = _initContext.getCounter();
+
 		ddlRecordSetModel.setUuid(SequentialUUID.generate());
-		ddlRecordSetModel.setRecordSetId(_initContext.getCounter().get());
+		ddlRecordSetModel.setRecordSetId(counter.get());
 		ddlRecordSetModel.setGroupId(ddmStructureModel.getGroupId());
 		ddlRecordSetModel.setCompanyId(_initContext.getCompanyId());
 		ddlRecordSetModel.setUserId(_initContext.getSampleUserId());
@@ -190,7 +198,7 @@ public class DDLDataFactory {
 		ddlRecordSetModel.setModifiedDate(new Date());
 		ddlRecordSetModel.setDDMStructureId(ddmStructureModel.getStructureId());
 		ddlRecordSetModel.setRecordSetKey(
-			String.valueOf(_initContext.getCounter().get()));
+			String.valueOf(counter.get()));
 
 		StringBundler sb = new StringBundler(5);
 
@@ -218,8 +226,9 @@ public class DDLDataFactory {
 		DDLRecordVersionModel ddlRecordVersionModel =
 			new DDLRecordVersionModelImpl();
 
-		ddlRecordVersionModel.setRecordVersionId(
-			_initContext.getCounter().get());
+		SimpleCounter counter = _initContext.getCounter();
+
+		ddlRecordVersionModel.setRecordVersionId(counter.get());
 		ddlRecordVersionModel.setGroupId(dDLRecordModel.getGroupId());
 		ddlRecordVersionModel.setCompanyId(_initContext.getCompanyId());
 		ddlRecordVersionModel.setUserId(_initContext.getSampleUserId());
