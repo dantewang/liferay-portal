@@ -197,8 +197,7 @@ public class DDLDataFactory {
 		ddlRecordSetModel.setCreateDate(new Date());
 		ddlRecordSetModel.setModifiedDate(new Date());
 		ddlRecordSetModel.setDDMStructureId(ddmStructureModel.getStructureId());
-		ddlRecordSetModel.setRecordSetKey(
-			String.valueOf(counter.get()));
+		ddlRecordSetModel.setRecordSetKey(String.valueOf(counter.get()));
 
 		StringBundler sb = new StringBundler(5);
 
@@ -229,6 +228,7 @@ public class DDLDataFactory {
 		SimpleCounter counter = _initContext.getCounter();
 
 		ddlRecordVersionModel.setRecordVersionId(counter.get());
+
 		ddlRecordVersionModel.setGroupId(dDLRecordModel.getGroupId());
 		ddlRecordVersionModel.setCompanyId(_initContext.getCompanyId());
 		ddlRecordVersionModel.setUserId(_initContext.getSampleUserId());

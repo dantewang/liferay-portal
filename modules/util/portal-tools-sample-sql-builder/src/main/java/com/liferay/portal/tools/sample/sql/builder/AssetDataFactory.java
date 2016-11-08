@@ -290,6 +290,7 @@ public class AssetDataFactory {
 		SimpleCounter counter = _initContext.getCounter();
 
 		assetEntryModel.setEntryId(counter.get());
+
 		assetEntryModel.setGroupId(groupId);
 		assetEntryModel.setCompanyId(_initContext.getCompanyId());
 		assetEntryModel.setUserId(_initContext.getSampleUserId());

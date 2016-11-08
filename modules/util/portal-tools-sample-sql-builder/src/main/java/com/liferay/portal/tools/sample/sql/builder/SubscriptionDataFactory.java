@@ -69,6 +69,7 @@ public class SubscriptionDataFactory {
 		SimpleCounter counter = _initContext.getCounter();
 
 		subscriptionModel.setSubscriptionId(counter.get());
+
 		subscriptionModel.setCompanyId(_initContext.getCompanyId());
 		subscriptionModel.setUserId(_initContext.getSampleUserId());
 		subscriptionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);

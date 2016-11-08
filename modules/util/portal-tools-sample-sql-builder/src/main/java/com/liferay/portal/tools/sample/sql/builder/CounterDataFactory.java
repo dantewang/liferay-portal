@@ -38,8 +38,8 @@ public class CounterDataFactory {
 	}
 
 	public long getCounterNext() {
-
 		SimpleCounter counter = _initContext.getCounter();
+
 		return counter.get();
 	}
 

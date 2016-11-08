@@ -1297,7 +1297,7 @@ public class InitContext {
 
 		DDMStructureVersionModel ddmStructureVersionModel =
 			new DDMStructureVersionModelImpl();
-		
+
 		ddmStructureVersionModel.setStructureVersionId(_counter.get());
 		ddmStructureVersionModel.setGroupId(ddmStructureModel.getGroupId());
 		ddmStructureVersionModel.setCompanyId(getCompanyId());

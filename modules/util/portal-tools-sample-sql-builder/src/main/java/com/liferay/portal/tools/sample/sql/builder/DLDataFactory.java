@@ -74,7 +74,7 @@ public class DLDataFactory {
 		sb.append("\"text/plain\"}}]}");
 
 		return _initContext.newDDMContentModel(
-			counter.get(), dlFileEntryModel.getGroupId(),sb.toString());
+			counter.get(), dlFileEntryModel.getGroupId(), sb.toString());
 	}
 
 	public DDMStructureLinkModel newDDMStructureLinkModel(
@@ -121,8 +121,8 @@ public class DLDataFactory {
 		for (int i = 1; i <= maxDLFileEntryCount; i++) {
 			dlFileEntryModels.add(
 				newDlFileEntryModel(
-					dlFolerModel, i, counter.get(),
-					_initContext.getCompanyId(), _initContext.getSampleUserId(),
+					dlFolerModel, i, counter.get(), _initContext.getCompanyId(),
+					_initContext.getSampleUserId(),
 					DataFactoryConstants.SAMPLE_USER_NAME,
 					_initContext.getFutureDateCounter(),
 					_initContext.getMaxDLFileEntrySize()));

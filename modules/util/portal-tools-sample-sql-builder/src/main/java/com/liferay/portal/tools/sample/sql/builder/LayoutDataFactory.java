@@ -84,7 +84,7 @@ public class LayoutDataFactory {
 			_initContext.getLayoutCounters();
 
 		SimpleCounter simpleCounter = layoutCounters.get(groupId);
-		
+
 		SimpleCounter counter = _initContext.getCounter();
 
 		if (simpleCounter == null) {
@@ -135,11 +135,11 @@ public class LayoutDataFactory {
 
 		layoutSetModels.add(
 			newLayoutSetModel(
-				groupId, true, 0, counter.get(),_initContext.getCompanyId()));
+				groupId, true, 0, counter.get(), _initContext.getCompanyId()));
 		layoutSetModels.add(
 			newLayoutSetModel(
-				groupId, false, publicLayoutSetPageCount,
-				counter.get(), _initContext.getCompanyId()));
+				groupId, false, publicLayoutSetPageCount, counter.get(),
+				_initContext.getCompanyId()));
 
 		return layoutSetModels;
 	}

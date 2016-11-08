@@ -47,8 +47,8 @@ public class WikiDataFactory {
 		for (int i = 1; i <= maxWikiNodeCount; i++) {
 			wikiNodeModels.add(
 				newWikiNodeModel(
-					groupId, i, counter.get(),
-					_initContext.getCompanyId(), _initContext.getSampleUserId(),
+					groupId, i, counter.get(), _initContext.getCompanyId(),
+					_initContext.getSampleUserId(),
 					DataFactoryConstants.SAMPLE_USER_NAME));
 		}
 
@@ -60,13 +60,13 @@ public class WikiDataFactory {
 		int maxWikiPageCount = _initContext.getMaxWikiPageCount();
 
 		List<WikiPageModel> wikiPageModels = new ArrayList<>(maxWikiPageCount);
-		
+
 		SimpleCounter counter = _initContext.getCounter();
 
 		for (int i = 1; i <= maxWikiPageCount; i++) {
 			wikiPageModels.add(
 				newWikiPageModel(
-					wikiNodeModel, i, counter.get(),counter.get(),
+					wikiNodeModel, i, counter.get(), counter.get(),
 					_initContext.getCompanyId(), _initContext.getSampleUserId(),
 					DataFactoryConstants.SAMPLE_USER_NAME));
 		}

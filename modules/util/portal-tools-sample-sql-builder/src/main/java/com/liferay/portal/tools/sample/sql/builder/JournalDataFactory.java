@@ -125,7 +125,7 @@ public class JournalDataFactory {
 			new DDMTemplateLinkModelImpl();
 
 		SimpleCounter counter = _initContext.getCounter();
-		
+
 		ddmTemplateLinkModel.setCompanyId(_initContext.getCompanyId());
 		ddmTemplateLinkModel.setTemplateLinkId(counter.get());
 		ddmTemplateLinkModel.setClassNameId(
@@ -228,7 +228,7 @@ public class JournalDataFactory {
 			new JournalArticleResourceModelImpl();
 
 		SimpleCounter counter = _initContext.getCounter();
-		
+
 		journalArticleResourceModel.setUuid(SequentialUUID.generate());
 		journalArticleResourceModel.setResourcePrimKey(counter.get());
 		journalArticleResourceModel.setGroupId(groupId);
@@ -250,6 +250,7 @@ public class JournalDataFactory {
 		SimpleCounter counter = _initContext.getCounter();
 
 		journalContentSearchModel.setContentSearchId(counter.get());
+
 		journalContentSearchModel.setGroupId(journalArticleModel.getGroupId());
 		journalContentSearchModel.setCompanyId(_initContext.getCompanyId());
 		journalContentSearchModel.setLayoutId(layoutId);

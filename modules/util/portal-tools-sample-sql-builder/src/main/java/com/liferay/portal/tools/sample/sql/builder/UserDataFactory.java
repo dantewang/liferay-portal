@@ -151,7 +151,6 @@ public class UserDataFactory {
 	}
 
 	public GroupModel newGroupModel(UserModel userModel) throws Exception {
-
 		SimpleCounter counter = _initContext.getCounter();
 
 		return _initContext.newGroupModel(
@@ -174,8 +173,8 @@ public class UserDataFactory {
 
 			userModels.add(
 				_initContext.newUserModel(
-					counter.get(), userName[0], userName[1],lastName, false,
-					counter.get(),_initContext.getCompanyId()));
+					counter.get(), userName[0], userName[1], lastName, false,
+					counter.get(), _initContext.getCompanyId()));
 		}
 
 		return userModels;

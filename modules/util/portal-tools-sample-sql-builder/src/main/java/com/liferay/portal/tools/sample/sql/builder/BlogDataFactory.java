@@ -56,8 +56,8 @@ public class BlogDataFactory {
 		for (int i = 1; i <= maxBlogsEntryCount; i++) {
 			blogEntryModels.add(
 				newBlogsEntryModel(
-					groupId, i, counter.get(),
-					_initContext.getCompanyId(), _initContext.getSampleUserId(),
+					groupId, i, counter.get(), _initContext.getCompanyId(),
+					_initContext.getSampleUserId(),
 					DataFactoryConstants.SAMPLE_USER_NAME));
 		}
 
@@ -70,6 +70,7 @@ public class BlogDataFactory {
 		SimpleCounter counter = _initContext.getCounter();
 
 		blogsStatsUserModel.setStatsUserId(counter.get());
+
 		blogsStatsUserModel.setGroupId(groupId);
 		blogsStatsUserModel.setCompanyId(_initContext.getCompanyId());
 		blogsStatsUserModel.setUserId(_initContext.getSampleUserId());
