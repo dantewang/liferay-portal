@@ -110,16 +110,6 @@ public class InitContext {
 		_counter = new SimpleCounter(_maxGroupsCount + 1);
 		initMaxJournalArticleSize(properties);
 		initVirtualHostModel(properties);
-		_timeCounter = new SimpleCounter();
-		_futureDateCounter = new SimpleCounter();
-		_resourcePermissionCounter = new SimpleCounter();
-		_socialActivityCounter = new SimpleCounter();
-		_userScreenNameCounter = new SimpleCounter();
-		_assetCategoryCounters = new HashMap<>();
-		_portletPreferencesFactory = new PortletPreferencesFactoryImpl();
-		_assetPublisherQueryCounter = new HashMap<>();
-		_journalArticleResourceUUIDs = new HashMap<>();
-		_layoutCounters = new HashMap<>();
 	}
 
 	public long getAccountId() {
@@ -1453,9 +1443,11 @@ public class InitContext {
 	private long _accountId;
 	private AccountModel _accountModel;
 	private RoleModel _administratorRoleModel;
-	private final Map<Long, SimpleCounter> _assetCategoryCounters;
+	private final Map<Long, SimpleCounter> _assetCategoryCounters =
+		new HashMap<>();
 	private List<AssetCategoryModel>[] _assetCategoryModelsArray;
-	private final Map<Long, SimpleCounter> _assetPublisherQueryCounter;
+	private final Map<Long, SimpleCounter> _assetPublisherQueryCounter =
+		new HashMap<>();
 	private String _assetPublisherQueryName;
 	private List<AssetTagModel>[] _assetTagModelsArray;
 	private List<AssetTagStatsModel>[] _assetTagStatsModelsArray;
@@ -1480,7 +1472,7 @@ public class InitContext {
 	private String _dlDDMStructureContent;
 	private String _dlDDMStructureLayoutContent;
 	private List<String> _firstNames;
-	private final SimpleCounter _futureDateCounter;
+	private final SimpleCounter _futureDateCounter = new SimpleCounter();
 	private long _globalGroupId;
 	private GroupModel _globalGroupModel;
 	private List<GroupModel> _groupModels;
@@ -1489,11 +1481,12 @@ public class InitContext {
 	private RoleModel _guestRoleModel;
 	private UserModel _guestUserModel;
 	private String _journalArticleContent;
-	private final Map<Long, String> _journalArticleResourceUUIDs;
+	private final Map<Long, String> _journalArticleResourceUUIDs =
+		new HashMap<>();
 	private String _journalDDMStructureContent;
 	private String _journalDDMStructureLayoutContent;
 	private List<String> _lastNames;
-	private final Map<Long, SimpleCounter> _layoutCounters;
+	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
 	private int _maxAssetCategoryCount;
 	private int _maxAssetEntryToAssetCategoryCount;
 	private int _maxAssetEntryToAssetTagCount;
@@ -1522,19 +1515,21 @@ public class InitContext {
 	private int _maxWikiPageCommentCount;
 	private int _maxWikiPageCount;
 	private RoleModel _ownerRoleModel;
-	private final PortletPreferencesFactory _portletPreferencesFactory;
+	private final PortletPreferencesFactory _portletPreferencesFactory =
+		new PortletPreferencesFactoryImpl();
 	private RoleModel _powerUserRoleModel;
-	private final SimpleCounter _resourcePermissionCounter;
+	private final SimpleCounter _resourcePermissionCounter =
+		new SimpleCounter();
 	private List<RoleModel> _roleModels;
 	private long _sampleUserId;
 	private UserModel _sampleUserModel;
 	private Format _simpleDateFormat =
 		FastDateFormatFactoryUtil.getSimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private RoleModel _siteMemberRoleModel;
-	private final SimpleCounter _socialActivityCounter;
-	private final SimpleCounter _timeCounter;
+	private final SimpleCounter _socialActivityCounter = new SimpleCounter();
+	private final SimpleCounter _timeCounter = new SimpleCounter();
 	private RoleModel _userRoleModel;
-	private final SimpleCounter _userScreenNameCounter;
+	private final SimpleCounter _userScreenNameCounter = new SimpleCounter();
 	private VirtualHostModel _virtualHostModel;
 
 }
