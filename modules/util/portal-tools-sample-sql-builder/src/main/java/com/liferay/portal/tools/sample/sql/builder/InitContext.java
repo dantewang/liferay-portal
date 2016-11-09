@@ -106,6 +106,9 @@ import java.util.TimeZone;
 public class InitContext {
 
 	public InitContext(Properties properties) {
+		Format simpleDateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
+			"yyyy-MM-dd HH:mm:ss");
+
 		String timeZoneId = properties.getProperty("sample.sql.db.time.zone");
 
 		if (Validator.isNotNull(timeZoneId)) {
@@ -114,18 +117,22 @@ public class InitContext {
 			if (timeZone != null) {
 				TimeZone.setDefault(timeZone);
 
-				_simpleDateFormat =
+				simpleDateFormat =
 					FastDateFormatFactoryUtil.getSimpleDateFormat(
 						"yyyy-MM-dd HH:mm:ss", timeZone);
 			}
 		}
 
-		_assetPublisherQueryName = GetterUtil.getString(
+		_simpleDateFormat = simpleDateFormat;
+
+		String assetPublisherQueryName = GetterUtil.getString(
 			properties.getProperty("sample.sql.asset.publisher.query.name"));
 
-		if (!_assetPublisherQueryName.equals("assetCategories")) {
-			_assetPublisherQueryName = "assetTags";
+		if (!assetPublisherQueryName.equals("assetCategories")) {
+			assetPublisherQueryName = "assetTags";
 		}
+
+		_assetPublisherQueryName = assetPublisherQueryName;
 
 		_maxAssetCategoryCount = GetterUtil.getInteger(
 			properties.getProperty("sample.sql.max.asset.category.count"));
@@ -1445,7 +1452,7 @@ public class InitContext {
 	private List<AssetCategoryModel>[] _assetCategoryModelsArray;
 	private final Map<Long, SimpleCounter> _assetPublisherQueryCounter =
 		new HashMap<>();
-	private String _assetPublisherQueryName;
+	private final String _assetPublisherQueryName;
 	private List<AssetTagModel>[] _assetTagModelsArray;
 	private List<AssetTagStatsModel>[] _assetTagStatsModelsArray;
 	private List<AssetVocabularyModel>[] _assetVocabularyModelsArray;
@@ -1521,8 +1528,7 @@ public class InitContext {
 	private List<RoleModel> _roleModels;
 	private long _sampleUserId;
 	private UserModel _sampleUserModel;
-	private Format _simpleDateFormat =
-		FastDateFormatFactoryUtil.getSimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private final Format _simpleDateFormat;
 	private RoleModel _siteMemberRoleModel;
 	private final SimpleCounter _socialActivityCounter = new SimpleCounter();
 	private final SimpleCounter _timeCounter = new SimpleCounter();
