@@ -90,7 +90,23 @@ public class DataFactory {
 
 		_initContext.init();
 
-		initDataFactory();
+		_assetDataFactory = new AssetDataFactory(_initContext);
+		_blogDataFactory = new BlogDataFactory(_initContext);
+		_counterDataFactory = new CounterDataFactory(_initContext);
+		_dLDataFactory = new DLDataFactory(_initContext);
+		_dDLDataFactory = new DDLDataFactory(_initContext);
+		_journalDataFactory = new JournalDataFactory(_initContext);
+		_layoutDataFactory = new LayoutDataFactory(_initContext);
+		_messageBoardDataFactory = new MessageBoardDataFactory(_initContext);
+		_portletPreferenceDataFactory = new PortletPreferenceDataFactory(
+			_initContext);
+		_resourcePermissionDataFactory = new ResourcePermissionDataFactory(
+			_initContext);
+		_socialActivityDataFactory = new SocialActivityDataFactory(
+			_initContext);
+		_subscriptionDataFactory = new SubscriptionDataFactory(_initContext);
+		_userDataFactory = new UserDataFactory(_initContext);
+		_wikiDataFactory = new WikiDataFactory(_initContext);
 	}
 
 	public AccountModel getAccountModel() {
@@ -301,26 +317,6 @@ public class DataFactory {
 
 	public long getWikiPageClassNameId() {
 		return _wikiDataFactory.getWikiPageClassNameId();
-	}
-
-	public void initDataFactory() {
-		_assetDataFactory = new AssetDataFactory(_initContext);
-		_blogDataFactory = new BlogDataFactory(_initContext);
-		_counterDataFactory = new CounterDataFactory(_initContext);
-		_dLDataFactory = new DLDataFactory(_initContext);
-		_dDLDataFactory = new DDLDataFactory(_initContext);
-		_journalDataFactory = new JournalDataFactory(_initContext);
-		_layoutDataFactory = new LayoutDataFactory(_initContext);
-		_messageBoardDataFactory = new MessageBoardDataFactory(_initContext);
-		_portletPreferenceDataFactory = new PortletPreferenceDataFactory(
-			_initContext);
-		_resourcePermissionDataFactory = new ResourcePermissionDataFactory(
-			_initContext);
-		_socialActivityDataFactory = new SocialActivityDataFactory(
-			_initContext);
-		_subscriptionDataFactory = new SubscriptionDataFactory(_initContext);
-		_userDataFactory = new UserDataFactory(_initContext);
-		_wikiDataFactory = new WikiDataFactory(_initContext);
 	}
 
 	public AssetEntryModel newAssetEntryModel(BlogsEntryModel blogsEntryModel) {
@@ -937,20 +933,20 @@ public class DataFactory {
 		return _wikiDataFactory.newWikiPageResourceModel(wikiPageModel);
 	}
 
-	private AssetDataFactory _assetDataFactory;
-	private BlogDataFactory _blogDataFactory;
-	private CounterDataFactory _counterDataFactory;
-	private DDLDataFactory _dDLDataFactory;
-	private DLDataFactory _dLDataFactory;
+	private final AssetDataFactory _assetDataFactory;
+	private final BlogDataFactory _blogDataFactory;
+	private final CounterDataFactory _counterDataFactory;
+	private final DDLDataFactory _dDLDataFactory;
+	private final DLDataFactory _dLDataFactory;
 	private final InitContext _initContext;
-	private JournalDataFactory _journalDataFactory;
-	private LayoutDataFactory _layoutDataFactory;
-	private MessageBoardDataFactory _messageBoardDataFactory;
-	private PortletPreferenceDataFactory _portletPreferenceDataFactory;
-	private ResourcePermissionDataFactory _resourcePermissionDataFactory;
-	private SocialActivityDataFactory _socialActivityDataFactory;
-	private SubscriptionDataFactory _subscriptionDataFactory;
-	private UserDataFactory _userDataFactory;
-	private WikiDataFactory _wikiDataFactory;
+	private final JournalDataFactory _journalDataFactory;
+	private final LayoutDataFactory _layoutDataFactory;
+	private final MessageBoardDataFactory _messageBoardDataFactory;
+	private final PortletPreferenceDataFactory _portletPreferenceDataFactory;
+	private final ResourcePermissionDataFactory _resourcePermissionDataFactory;
+	private final SocialActivityDataFactory _socialActivityDataFactory;
+	private final SubscriptionDataFactory _subscriptionDataFactory;
+	private final UserDataFactory _userDataFactory;
+	private final WikiDataFactory _wikiDataFactory;
 
 }
