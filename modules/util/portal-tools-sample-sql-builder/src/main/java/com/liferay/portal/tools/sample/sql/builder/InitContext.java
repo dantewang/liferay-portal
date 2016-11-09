@@ -167,6 +167,8 @@ public class InitContext {
 		_maxJournalArticlePageCount = GetterUtil.getInteger(
 			properties.getProperty(
 				"sample.sql.max.journal.article.page.count"));
+		_maxJournalArticleSize = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.journal.article.size"));
 		_maxJournalArticleVersionCount = GetterUtil.getInteger(
 			properties.getProperty(
 				"sample.sql.max.journal.article.version.count"));
@@ -186,10 +188,10 @@ public class InitContext {
 			properties.getProperty("sample.sql.max.wiki.page.comment.count"));
 		_maxWikiPageCount = GetterUtil.getInteger(
 			properties.getProperty("sample.sql.max.wiki.page.count"));
+		_virtualHostName = properties.getProperty(
+			"sample.sql.virtual.hostname");
 
 		_counter = new SimpleCounter(_maxGroupsCount + 1);
-		initMaxJournalArticleSize(properties);
-		initVirtualHostModel(properties);
 	}
 
 	public long getAccountId() {
@@ -592,6 +594,8 @@ public class InitContext {
 		initAssetTagModels(DataFactoryConstants.SAMPLE_USER_NAME);
 		initDLFileEntryTypeModel(DataFactoryConstants.SAMPLE_USER_NAME);
 		initRoleModels(DataFactoryConstants.SAMPLE_USER_NAME);
+		initMaxJournalArticleSize();
+		initVirtualHostModel();
 	}
 
 	public AccountModel initAccountModel(long companyId, long accountId) {
@@ -882,12 +886,9 @@ public class InitContext {
 		return sb.toString();
 	}
 
-	public void initMaxJournalArticleSize(Properties properties) {
-		int maxJournalArticleSize = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.journal.article.size"));
-
+	public void initMaxJournalArticleSize() {
 		_journalArticleContent = initJournalArticleContent(
-			maxJournalArticleSize);
+			_maxJournalArticleSize);
 	}
 
 	public void initParameter() {
@@ -1067,10 +1068,9 @@ public class InitContext {
 		_lastNames = initUserLastNames(_clazz);
 	}
 
-	public void initVirtualHostModel(Properties properties) {
+	public void initVirtualHostModel() {
 		_virtualHostModel = initVirtualHostModel(
-			properties.getProperty("sample.sql.virtual.hostname"),
-			_counter.get(), _companyId);
+			_virtualHostName, _counter.get(), _companyId);
 	}
 
 	public DDMContentModel newDDMContentModel(
@@ -1445,7 +1445,7 @@ public class InitContext {
 	private List<AssetCategoryModel>[] _assetCategoryModelsArray;
 	private final Map<Long, SimpleCounter> _assetPublisherQueryCounter =
 		new HashMap<>();
-	private final String _assetPublisherQueryName;
+	private String _assetPublisherQueryName;
 	private List<AssetTagModel>[] _assetTagModelsArray;
 	private List<AssetTagStatsModel>[] _assetTagStatsModelsArray;
 	private List<AssetVocabularyModel>[] _assetVocabularyModelsArray;
@@ -1502,6 +1502,7 @@ public class InitContext {
 	private final int _maxGroupsCount;
 	private final int _maxJournalArticleCount;
 	private final int _maxJournalArticlePageCount;
+	private final int _maxJournalArticleSize;
 	private final int _maxJournalArticleVersionCount;
 	private final int _maxMBCategoryCount;
 	private final int _maxMBMessageCount;
@@ -1520,7 +1521,7 @@ public class InitContext {
 	private List<RoleModel> _roleModels;
 	private long _sampleUserId;
 	private UserModel _sampleUserModel;
-	private final Format _simpleDateFormat =
+	private Format _simpleDateFormat =
 		FastDateFormatFactoryUtil.getSimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private RoleModel _siteMemberRoleModel;
 	private final SimpleCounter _socialActivityCounter = new SimpleCounter();
@@ -1528,5 +1529,6 @@ public class InitContext {
 	private RoleModel _userRoleModel;
 	private final SimpleCounter _userScreenNameCounter = new SimpleCounter();
 	private VirtualHostModel _virtualHostModel;
+	private final String _virtualHostName;
 
 }
