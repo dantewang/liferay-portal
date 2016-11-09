@@ -146,5 +146,6 @@ public class WikiDataFactory {
 		return wikiNodeModel;
 	}
 
-	private InitContext _initContext;
+	private final InitContext _initContext;
+
 }

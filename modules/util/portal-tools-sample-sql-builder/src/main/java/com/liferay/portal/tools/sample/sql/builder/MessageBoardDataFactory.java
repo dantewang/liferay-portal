@@ -213,8 +213,7 @@ public class MessageBoardDataFactory {
 		return mbStatsUserModel;
 	}
 
-	public MBThreadFlagModel newMBThreadFlagModel(MBThreadModel mbThreadModel)
-	{
+	public MBThreadFlagModel newMBThreadFlagModel(MBThreadModel mbThreadModel) {
 		MBThreadFlagModel mbThreadFlagModel = new MBThreadFlagModelImpl();
 
 		SimpleCounter counter = _initContext.getCounter();
@@ -348,5 +347,6 @@ public class MessageBoardDataFactory {
 		return mbThreadModel;
 	}
 
-	private InitContext _initContext;
+	private final InitContext _initContext;
+
 }

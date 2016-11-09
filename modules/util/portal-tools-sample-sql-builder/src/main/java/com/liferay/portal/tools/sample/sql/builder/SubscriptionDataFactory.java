@@ -82,5 +82,6 @@ public class SubscriptionDataFactory {
 		return subscriptionModel;
 	}
 
-	private InitContext _initContext;
+	private final InitContext _initContext;
+
 }

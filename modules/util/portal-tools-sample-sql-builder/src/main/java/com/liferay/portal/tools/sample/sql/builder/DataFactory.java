@@ -150,12 +150,10 @@ public class DataFactory {
 	}
 
 	public String getDateString(Date date) {
-
 		return _initContext.getDateString(date);
 	}
 
 	public long getDDLRecordSetClassNameId() {
-
 		return _dDLDataFactory.getDDLRecordSetClassNameId();
 	}
 
@@ -274,7 +272,6 @@ public class DataFactory {
 	}
 
 	public List<Long> getNewUserGroupIds(long groupId) {
-
 		return _userDataFactory.getNewUserGroupIds(groupId);
 	}
 
@@ -291,7 +288,6 @@ public class DataFactory {
 	}
 
 	public List<Integer> getSequence(int size) {
-
 		return _counterDataFactory.getSequence(size);
 	}
 
@@ -308,24 +304,23 @@ public class DataFactory {
 	}
 
 	public void initDataFactory() {
-
-	_assetDataFactory = new AssetDataFactory(_initContext);
-	_blogDataFactory = new BlogDataFactory(_initContext);
-	_counterDataFactory = new CounterDataFactory(_initContext);
-	_dLDataFactory = new DLDataFactory(_initContext);
-	_dDLDataFactory = new DDLDataFactory(_initContext);
-	_journalDataFactory = new JournalDataFactory(_initContext);
-	_layoutDataFactory = new LayoutDataFactory(_initContext);
-	_messageBoardDataFactory = new MessageBoardDataFactory(_initContext);
-	_portletPreferenceDataFactory = new PortletPreferenceDataFactory(
-		_initContext);
-	_resourcePermissionDataFactory = new ResourcePermissionDataFactory(
-		_initContext);
-	_socialActivityDataFactory = new SocialActivityDataFactory(_initContext);
-	_subscriptionDataFactory = new SubscriptionDataFactory(_initContext);
-	_userDataFactory = new UserDataFactory(_initContext);
-	_wikiDataFactory = new WikiDataFactory(_initContext);
-
+		_assetDataFactory = new AssetDataFactory(_initContext);
+		_blogDataFactory = new BlogDataFactory(_initContext);
+		_counterDataFactory = new CounterDataFactory(_initContext);
+		_dLDataFactory = new DLDataFactory(_initContext);
+		_dDLDataFactory = new DDLDataFactory(_initContext);
+		_journalDataFactory = new JournalDataFactory(_initContext);
+		_layoutDataFactory = new LayoutDataFactory(_initContext);
+		_messageBoardDataFactory = new MessageBoardDataFactory(_initContext);
+		_portletPreferenceDataFactory = new PortletPreferenceDataFactory(
+			_initContext);
+		_resourcePermissionDataFactory = new ResourcePermissionDataFactory(
+			_initContext);
+		_socialActivityDataFactory = new SocialActivityDataFactory(
+			_initContext);
+		_subscriptionDataFactory = new SubscriptionDataFactory(_initContext);
+		_userDataFactory = new UserDataFactory(_initContext);
+		_wikiDataFactory = new WikiDataFactory(_initContext);
 	}
 
 	public AssetEntryModel newAssetEntryModel(BlogsEntryModel blogsEntryModel) {
@@ -373,22 +368,18 @@ public class DataFactory {
 	}
 
 	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
-
 		return _blogDataFactory.newBlogsEntryModels(groupId);
 	}
 
 	public BlogsStatsUserModel newBlogsStatsUserModel(long groupId) {
-
 		return _blogDataFactory.newBlogsStatsUserModel(groupId);
 	}
 
 	public ContactModel newContactModel(UserModel userModel) {
-
 		return _userDataFactory.newContactModel(userModel);
 	}
 
 	public List<CounterModel> newCounterModels() {
-
 		return _counterDataFactory.newCounterModels();
 	}
 
@@ -518,7 +509,6 @@ public class DataFactory {
 	}
 
 	public GroupModel newGroupModel(UserModel userModel) throws Exception {
-
 		return _userDataFactory.newGroupModel(userModel);
 	}
 
@@ -630,12 +620,10 @@ public class DataFactory {
 	}
 
 	public MBStatsUserModel newMBStatsUserModel(long groupId) {
-
 		return _messageBoardDataFactory.newMBStatsUserModel(groupId);
 	}
 
 	public MBThreadFlagModel newMBThreadFlagModel(MBThreadModel mbThreadModel) {
-
 		return _messageBoardDataFactory.newMBThreadFlagModel(mbThreadModel);
 	}
 
@@ -686,7 +674,6 @@ public class DataFactory {
 	}
 
 	public List<LayoutModel> newPublicLayoutModels(long groupId) {
-
 		return _layoutDataFactory.newPublicLayoutModels(groupId);
 	}
 
@@ -925,17 +912,14 @@ public class DataFactory {
 	}
 
 	public SubscriptionModel newSubscriptionModel(MBThreadModel mBThreadModel) {
-
 		return _subscriptionDataFactory.newSubscriptionModel(mBThreadModel);
 	}
 
 	public SubscriptionModel newSubscriptionModel(WikiPageModel wikiPageModel) {
-
 		return _subscriptionDataFactory.newSubscriptionModel(wikiPageModel);
 	}
 
 	public List<UserModel> newUserModels() {
-
 		return _userDataFactory.newUserModels();
 	}
 
@@ -953,12 +937,12 @@ public class DataFactory {
 		return _wikiDataFactory.newWikiPageResourceModel(wikiPageModel);
 	}
 
-	private final InitContext _initContext;
 	private AssetDataFactory _assetDataFactory;
 	private BlogDataFactory _blogDataFactory;
 	private CounterDataFactory _counterDataFactory;
-	private DLDataFactory _dLDataFactory;
 	private DDLDataFactory _dDLDataFactory;
+	private DLDataFactory _dLDataFactory;
+	private final InitContext _initContext;
 	private JournalDataFactory _journalDataFactory;
 	private LayoutDataFactory _layoutDataFactory;
 	private MessageBoardDataFactory _messageBoardDataFactory;
@@ -968,4 +952,5 @@ public class DataFactory {
 	private SubscriptionDataFactory _subscriptionDataFactory;
 	private UserDataFactory _userDataFactory;
 	private WikiDataFactory _wikiDataFactory;
+
 }

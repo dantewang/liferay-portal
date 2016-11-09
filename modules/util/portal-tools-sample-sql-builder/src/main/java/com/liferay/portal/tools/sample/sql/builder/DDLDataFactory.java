@@ -60,7 +60,7 @@ public class DDLDataFactory {
 	public DDMStructureLayoutModel
 		getDefaultDLDDMStructureLayoutModel() {
 
-			return _initContext.getDefaultDLDDMStructureLayoutModel();
+		return _initContext.getDefaultDLDDMStructureLayoutModel();
 	}
 
 	public DDMStructureModel getDefaultDLDDMStructureModel() {
@@ -70,7 +70,7 @@ public class DDLDataFactory {
 	public DDMStructureVersionModel
 		getDefaultDLDDMStructureVersionModel() {
 
-			return _initContext.getDefaultDLDDMStructureVersionModel();
+		return _initContext.getDefaultDLDDMStructureVersionModel();
 	}
 
 	public int getMaxDDLRecordCount() {

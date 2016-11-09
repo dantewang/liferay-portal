@@ -284,6 +284,10 @@ public class InitContext {
 		return _globalGroupModel;
 	}
 
+	public long getGroupClassNameId() {
+		return getClassNameId(Group.class, getClassNameModels());
+	}
+
 	public List<GroupModel> getGroupModels() {
 		return _groupModels;
 	}
@@ -436,14 +440,6 @@ public class InitContext {
 		return _maxWikiPageCount;
 	}
 
-	public long getGroupClassNameId() {
-		return getClassNameId(Group.class, getClassNameModels());
-	}
-
-	public Date nextFutureDate(SimpleCounter futureDateCounter) {
-		return new Date(_FUTURE_TIME + (futureDateCounter.get() * Time.SECOND));
-	}
-
 	public RoleModel getOwnerRoleModel() {
 		return _ownerRoleModel;
 	}
@@ -456,12 +452,7 @@ public class InitContext {
 		return _powerUserRoleModel;
 	}
 
-	public SimpleCounter getResourcePermissionCounter() {
-		return _resourcePermissionCounter;
-	}
-
 	public String getResource(String resourceName) throws Exception {
-
 		List<String> lines = new ArrayList<>();
 
 		StringUtil.readLines(getResourceInputStream(resourceName), lines);
@@ -470,11 +461,14 @@ public class InitContext {
 	}
 
 	public InputStream getResourceInputStream(String resourceName) {
-
 		ClassLoader classLoader = _clazz.getClassLoader();
 
 		return classLoader.getResourceAsStream(
 			_DEPENDENCIES_DIR + resourceName);
+	}
+
+	public SimpleCounter getResourcePermissionCounter() {
+		return _resourcePermissionCounter;
 	}
 
 	public List<RoleModel> getRoleModels() {
@@ -517,8 +511,20 @@ public class InitContext {
 		return _virtualHostModel;
 	}
 
-	public AccountModel initAccountModel(long companyId, long accountId) {
+	public void init() throws Exception {
+		initParameter();
+		initResource();
+		initCompanyModels();
+		initUserNames();
+		initGroupModels();
+		initUserModels(DataFactoryConstants.SAMPLE_USER_NAME);
+		initAssetCategoryModels(DataFactoryConstants.SAMPLE_USER_NAME);
+		initAssetTagModels(DataFactoryConstants.SAMPLE_USER_NAME);
+		initDLFileEntryTypeModel(DataFactoryConstants.SAMPLE_USER_NAME);
+		initRoleModels(DataFactoryConstants.SAMPLE_USER_NAME);
+	}
 
+	public AccountModel initAccountModel(long companyId, long accountId) {
 		AccountModel accountModel = new AccountModelImpl();
 
 		accountModel.setAccountId(accountId);
@@ -669,7 +675,6 @@ public class InitContext {
 	}
 
 	public CompanyModel initCompanyModel(long companyId, long accountId) {
-
 		CompanyModel companyModel = new CompanyModelImpl();
 
 		companyModel.setCompanyId(companyId);
@@ -769,33 +774,6 @@ public class InitContext {
 			properties.getProperty("sample.sql.max.wiki.page.count"));
 	}
 
-	public void initMaxJournalArticleSize(Properties properties) {
-		int maxJournalArticleSize = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.journal.article.size"));
-
-		_journalArticleContent = initJournalArticleContent(
-			maxJournalArticleSize);
-	}
-
-	public void initVirtualHostModel(Properties properties) {
-		_virtualHostModel = initVirtualHostModel(
-			properties.getProperty("sample.sql.virtual.hostname"),
-			_counter.get(), _companyId);
-	}
-
-	public void init() throws Exception {
-		initParameter();
-		initResource();
-		initCompanyModels();
-		initUserNames();
-		initGroupModels();
-		initUserModels(DataFactoryConstants.SAMPLE_USER_NAME);
-		initAssetCategoryModels(DataFactoryConstants.SAMPLE_USER_NAME);
-		initAssetTagModels(DataFactoryConstants.SAMPLE_USER_NAME);
-		initDLFileEntryTypeModel(DataFactoryConstants.SAMPLE_USER_NAME);
-		initRoleModels(DataFactoryConstants.SAMPLE_USER_NAME);
-	}
-
 	public void initDLFileEntryTypeModel(String userName) {
 		_defaultDLFileEntryTypeModel = new DLFileEntryTypeModelImpl();
 
@@ -860,42 +838,6 @@ public class InitContext {
 			_counter.get(), userName);
 	}
 
-	public List<String> initUserFirstNames(Class<?> clazz) throws IOException {
-
-		List<String> firstNames = new ArrayList<>();
-
-		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
-			new InputStreamReader(getResourceInputStream("first_names.txt")));
-
-		String line = null;
-
-		while ((line = unsyncBufferedReader.readLine()) != null) {
-			firstNames.add(line);
-		}
-
-		unsyncBufferedReader.close();
-
-		return firstNames;
-	}
-
-	public List<String> initUserLastNames(Class<?> clazz) throws IOException {
-
-		List<String> lastNames = new ArrayList<>();
-
-		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
-			new InputStreamReader(getResourceInputStream("last_names.txt")));
-
-		String line = null;
-
-		while ((line = unsyncBufferedReader.readLine()) != null) {
-			lastNames.add(line);
-		}
-
-		unsyncBufferedReader.close();
-
-		return lastNames;
-	}
-
 	public GroupModel initGroupModel(
 			long groupId, long classNameId, long classPK, String name,
 			boolean site, long companyId, long sampleUserId)
@@ -905,35 +847,6 @@ public class InitContext {
 			groupId, classNameId, classPK, name, site, companyId, sampleUserId);
 
 		return globalGroupModel;
-	}
-
-	public GroupModel newGroupModel(
-			long groupId, long classNameId, long classPK, String name,
-			boolean site, long companyId, long sampleUserId)
-		throws Exception {
-
-		GroupModel groupModel = new GroupModelImpl();
-
-		groupModel.setUuid(SequentialUUID.generate());
-		groupModel.setGroupId(groupId);
-		groupModel.setCompanyId(companyId);
-		groupModel.setCreatorUserId(sampleUserId);
-		groupModel.setClassNameId(classNameId);
-		groupModel.setClassPK(classPK);
-		groupModel.setTreePath(
-			StringPool.SLASH + groupModel.getGroupId() + StringPool.SLASH);
-		groupModel.setGroupKey(name);
-		groupModel.setName(name);
-		groupModel.setManualMembership(true);
-		groupModel.setMembershipRestriction(
-			GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION);
-		groupModel.setFriendlyURL(
-			StringPool.FORWARD_SLASH +
-				FriendlyURLNormalizerUtil.normalize(name));
-		groupModel.setSite(site);
-		groupModel.setActive(true);
-
-		return groupModel;
 	}
 
 	public void initGroupModels() throws Exception {
@@ -957,8 +870,7 @@ public class InitContext {
 		}
 	}
 
-	public String initJournalArticleContent(int maxJournalArticleSize)
-	{
+	public String initJournalArticleContent(int maxJournalArticleSize) {
 		StringBundler sb = new StringBundler(6);
 
 		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
@@ -981,6 +893,14 @@ public class InitContext {
 		sb.append("]]></dynamic-content></dynamic-element></root>");
 
 		return sb.toString();
+	}
+
+	public void initMaxJournalArticleSize(Properties properties) {
+		int maxJournalArticleSize = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.journal.article.size"));
+
+		_journalArticleContent = initJournalArticleContent(
+			maxJournalArticleSize);
 	}
 
 	public void initParameter() {
@@ -1106,6 +1026,40 @@ public class InitContext {
 		_roleModels.add(_userRoleModel);
 	}
 
+	public List<String> initUserFirstNames(Class<?> clazz) throws IOException {
+		List<String> firstNames = new ArrayList<>();
+
+		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
+			new InputStreamReader(getResourceInputStream("first_names.txt")));
+
+		String line = null;
+
+		while ((line = unsyncBufferedReader.readLine()) != null) {
+			firstNames.add(line);
+		}
+
+		unsyncBufferedReader.close();
+
+		return firstNames;
+	}
+
+	public List<String> initUserLastNames(Class<?> clazz) throws IOException {
+		List<String> lastNames = new ArrayList<>();
+
+		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
+			new InputStreamReader(getResourceInputStream("last_names.txt")));
+
+		String line = null;
+
+		while ((line = unsyncBufferedReader.readLine()) != null) {
+			lastNames.add(line);
+		}
+
+		unsyncBufferedReader.close();
+
+		return lastNames;
+	}
+
 	public void initUserModels(String userName) {
 		_defaultUserModel = newUserModel(
 			_defaultUserId, StringPool.BLANK, StringPool.BLANK,
@@ -1126,109 +1080,29 @@ public class InitContext {
 		_lastNames = initUserLastNames(_clazz);
 	}
 
-	public UserModel newUserModel(
-		long userId, String firstName, String lastName, String screenName,
-		boolean defaultUser, long contactId, long companyId) {
-
-		if (Validator.isNull(screenName)) {
-			screenName = String.valueOf(userId);
-		}
-
-		UserModel userModel = new UserModelImpl();
-
-		userModel.setUuid(SequentialUUID.generate());
-		userModel.setUserId(userId);
-		userModel.setCompanyId(companyId);
-		userModel.setCreateDate(new Date());
-		userModel.setModifiedDate(new Date());
-		userModel.setDefaultUser(defaultUser);
-		userModel.setContactId(contactId);
-		userModel.setPassword("test");
-		userModel.setPasswordModifiedDate(new Date());
-		userModel.setReminderQueryQuestion("What is your screen name?");
-		userModel.setReminderQueryAnswer(screenName);
-		userModel.setEmailAddress(screenName + "@liferay.com");
-		userModel.setScreenName(screenName);
-		userModel.setLanguageId("en_US");
-		userModel.setGreeting("Welcome " + screenName + StringPool.EXCLAMATION);
-		userModel.setFirstName(firstName);
-		userModel.setLastName(lastName);
-		userModel.setLoginDate(new Date());
-		userModel.setLastLoginDate(new Date());
-		userModel.setLastFailedLoginDate(new Date());
-		userModel.setLockoutDate(new Date());
-		userModel.setAgreedToTermsOfUse(true);
-		userModel.setEmailAddressVerified(true);
-
-		return userModel;
+	public void initVirtualHostModel(Properties properties) {
+		_virtualHostModel = initVirtualHostModel(
+			properties.getProperty("sample.sql.virtual.hostname"),
+			_counter.get(), _companyId);
 	}
 
-	protected AssetCategoryModel newAssetCategoryModel(
-		long groupId, long lastRightCategoryId, String name, long vocabularyId,
-		long categoryId, long companyId, long userId, String userName) {
+	public DDMContentModel newDDMContentModel(
+		long contentId, long groupId, String data) {
 
-		AssetCategoryModel assetCategoryModel = new AssetCategoryModelImpl();
+		DDMContentModel ddmContentModel = new DDMContentModelImpl();
 
-		assetCategoryModel.setUuid(SequentialUUID.generate());
-		assetCategoryModel.setCategoryId(categoryId);
-		assetCategoryModel.setGroupId(groupId);
-		assetCategoryModel.setCompanyId(companyId);
-		assetCategoryModel.setUserId(userId);
-		assetCategoryModel.setUserName(userName);
-		assetCategoryModel.setCreateDate(new Date());
-		assetCategoryModel.setModifiedDate(new Date());
-		assetCategoryModel.setParentCategoryId(
-			AssetCategoryConstants.DEFAULT_PARENT_CATEGORY_ID);
-		assetCategoryModel.setLeftCategoryId(lastRightCategoryId++);
-		assetCategoryModel.setRightCategoryId(lastRightCategoryId++);
-		assetCategoryModel.setName(name);
+		ddmContentModel.setUuid(SequentialUUID.generate());
+		ddmContentModel.setContentId(contentId);
+		ddmContentModel.setGroupId(groupId);
+		ddmContentModel.setCompanyId(_companyId);
+		ddmContentModel.setUserId(_sampleUserId);
+		ddmContentModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
+		ddmContentModel.setCreateDate(nextFutureDate(getFutureDateCounter()));
+		ddmContentModel.setModifiedDate(nextFutureDate(getFutureDateCounter()));
+		ddmContentModel.setName(DDMStorageLink.class.getName());
+		ddmContentModel.setData(data);
 
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><Title language-id=\"en_US\">");
-		sb.append(name);
-		sb.append("</Title></root>");
-
-		assetCategoryModel.setTitle(sb.toString());
-
-		assetCategoryModel.setVocabularyId(vocabularyId);
-		assetCategoryModel.setLastPublishDate(new Date());
-
-		return assetCategoryModel;
-	}
-
-	protected AssetVocabularyModel newAssetVocabularyModel(
-		long grouId, long userId, String userName, String name,
-		long vocabularyId, long companyId) {
-
-		AssetVocabularyModel assetVocabularyModel =
-			new AssetVocabularyModelImpl();
-
-		assetVocabularyModel.setUuid(SequentialUUID.generate());
-		assetVocabularyModel.setVocabularyId(vocabularyId);
-		assetVocabularyModel.setGroupId(grouId);
-		assetVocabularyModel.setCompanyId(companyId);
-		assetVocabularyModel.setUserId(userId);
-		assetVocabularyModel.setUserName(userName);
-		assetVocabularyModel.setCreateDate(new Date());
-		assetVocabularyModel.setModifiedDate(new Date());
-		assetVocabularyModel.setName(name);
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><Title language-id=\"en_US\">");
-		sb.append(name);
-		sb.append("</Title></root>");
-
-		assetVocabularyModel.setTitle(sb.toString());
-
-		assetVocabularyModel.setSettings(
-			"multiValued=true\\nselectedClassNameIds=0");
-		assetVocabularyModel.setLastPublishDate(new Date());
-
-		return assetVocabularyModel;
+		return ddmContentModel;
 	}
 
 	public DDMStructureLayoutModel newDDMStructureLayoutModel(
@@ -1253,6 +1127,20 @@ public class InitContext {
 		ddmStructureLayoutModel.setDefinition(definition);
 
 		return ddmStructureLayoutModel;
+	}
+
+	public DDMStructureLinkModel newDDMStructureLinkModel(
+		long classNameId, long classPK, long structureId) {
+
+		DDMStructureLinkModel ddmStructureLinkModel =
+			new DDMStructureLinkModelImpl();
+
+		ddmStructureLinkModel.setStructureLinkId(_counter.get());
+		ddmStructureLinkModel.setClassNameId(classNameId);
+		ddmStructureLinkModel.setClassPK(classPK);
+		ddmStructureLinkModel.setStructureId(structureId);
+
+		return ddmStructureLinkModel;
 	}
 
 	public DDMStructureModel newDDMStructureModel(
@@ -1331,37 +1219,74 @@ public class InitContext {
 		return ddmStructureVersionModel;
 	}
 
-	public DDMContentModel newDDMContentModel(
-		long contentId, long groupId, String data) {
+	public GroupModel newGroupModel(
+			long groupId, long classNameId, long classPK, String name,
+			boolean site, long companyId, long sampleUserId)
+		throws Exception {
 
-		DDMContentModel ddmContentModel = new DDMContentModelImpl();
+		GroupModel groupModel = new GroupModelImpl();
 
-		ddmContentModel.setUuid(SequentialUUID.generate());
-		ddmContentModel.setContentId(contentId);
-		ddmContentModel.setGroupId(groupId);
-		ddmContentModel.setCompanyId(_companyId);
-		ddmContentModel.setUserId(_sampleUserId);
-		ddmContentModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		ddmContentModel.setCreateDate(nextFutureDate(getFutureDateCounter()));
-		ddmContentModel.setModifiedDate(nextFutureDate(getFutureDateCounter()));
-		ddmContentModel.setName(DDMStorageLink.class.getName());
-		ddmContentModel.setData(data);
+		groupModel.setUuid(SequentialUUID.generate());
+		groupModel.setGroupId(groupId);
+		groupModel.setCompanyId(companyId);
+		groupModel.setCreatorUserId(sampleUserId);
+		groupModel.setClassNameId(classNameId);
+		groupModel.setClassPK(classPK);
+		groupModel.setTreePath(
+			StringPool.SLASH + groupModel.getGroupId() + StringPool.SLASH);
+		groupModel.setGroupKey(name);
+		groupModel.setName(name);
+		groupModel.setManualMembership(true);
+		groupModel.setMembershipRestriction(
+			GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION);
+		groupModel.setFriendlyURL(
+			StringPool.FORWARD_SLASH +
+				FriendlyURLNormalizerUtil.normalize(name));
+		groupModel.setSite(site);
+		groupModel.setActive(true);
 
-		return ddmContentModel;
+		return groupModel;
 	}
 
-	public DDMStructureLinkModel newDDMStructureLinkModel(
-		long classNameId, long classPK, long structureId) {
+	public UserModel newUserModel(
+		long userId, String firstName, String lastName, String screenName,
+		boolean defaultUser, long contactId, long companyId) {
 
-		DDMStructureLinkModel ddmStructureLinkModel =
-			new DDMStructureLinkModelImpl();
+		if (Validator.isNull(screenName)) {
+			screenName = String.valueOf(userId);
+		}
 
-		ddmStructureLinkModel.setStructureLinkId(_counter.get());
-		ddmStructureLinkModel.setClassNameId(classNameId);
-		ddmStructureLinkModel.setClassPK(classPK);
-		ddmStructureLinkModel.setStructureId(structureId);
+		UserModel userModel = new UserModelImpl();
 
-		return ddmStructureLinkModel;
+		userModel.setUuid(SequentialUUID.generate());
+		userModel.setUserId(userId);
+		userModel.setCompanyId(companyId);
+		userModel.setCreateDate(new Date());
+		userModel.setModifiedDate(new Date());
+		userModel.setDefaultUser(defaultUser);
+		userModel.setContactId(contactId);
+		userModel.setPassword("test");
+		userModel.setPasswordModifiedDate(new Date());
+		userModel.setReminderQueryQuestion("What is your screen name?");
+		userModel.setReminderQueryAnswer(screenName);
+		userModel.setEmailAddress(screenName + "@liferay.com");
+		userModel.setScreenName(screenName);
+		userModel.setLanguageId("en_US");
+		userModel.setGreeting("Welcome " + screenName + StringPool.EXCLAMATION);
+		userModel.setFirstName(firstName);
+		userModel.setLastName(lastName);
+		userModel.setLoginDate(new Date());
+		userModel.setLastLoginDate(new Date());
+		userModel.setLastFailedLoginDate(new Date());
+		userModel.setLockoutDate(new Date());
+		userModel.setAgreedToTermsOfUse(true);
+		userModel.setEmailAddressVerified(true);
+
+		return userModel;
+	}
+
+	public Date nextFutureDate(SimpleCounter futureDateCounter) {
+		return new Date(_FUTURE_TIME + (futureDateCounter.get() * Time.SECOND));
 	}
 
 	protected VirtualHostModel initVirtualHostModel(
@@ -1375,25 +1300,39 @@ public class InitContext {
 		return virtualHostModel;
 	}
 
-	protected RoleModel newRoleModel(
-		String name, int type, long roleId, long companyId, long sampleUserId,
-		String sampleUserName, long classNameId) {
+	protected AssetCategoryModel newAssetCategoryModel(
+		long groupId, long lastRightCategoryId, String name, long vocabularyId,
+		long categoryId, long companyId, long userId, String userName) {
 
-		RoleModel roleModel = new RoleModelImpl();
+		AssetCategoryModel assetCategoryModel = new AssetCategoryModelImpl();
 
-		roleModel.setUuid(SequentialUUID.generate());
-		roleModel.setRoleId(roleId);
-		roleModel.setCompanyId(companyId);
-		roleModel.setUserId(sampleUserId);
-		roleModel.setUserName(sampleUserName);
-		roleModel.setCreateDate(new Date());
-		roleModel.setModifiedDate(new Date());
-		roleModel.setClassNameId(classNameId);
-		roleModel.setClassPK(roleModel.getRoleId());
-		roleModel.setName(name);
-		roleModel.setType(type);
+		assetCategoryModel.setUuid(SequentialUUID.generate());
+		assetCategoryModel.setCategoryId(categoryId);
+		assetCategoryModel.setGroupId(groupId);
+		assetCategoryModel.setCompanyId(companyId);
+		assetCategoryModel.setUserId(userId);
+		assetCategoryModel.setUserName(userName);
+		assetCategoryModel.setCreateDate(new Date());
+		assetCategoryModel.setModifiedDate(new Date());
+		assetCategoryModel.setParentCategoryId(
+			AssetCategoryConstants.DEFAULT_PARENT_CATEGORY_ID);
+		assetCategoryModel.setLeftCategoryId(lastRightCategoryId++);
+		assetCategoryModel.setRightCategoryId(lastRightCategoryId++);
+		assetCategoryModel.setName(name);
 
-		return roleModel;
+		StringBundler sb = new StringBundler(4);
+
+		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\"><Title language-id=\"en_US\">");
+		sb.append(name);
+		sb.append("</Title></root>");
+
+		assetCategoryModel.setTitle(sb.toString());
+
+		assetCategoryModel.setVocabularyId(vocabularyId);
+		assetCategoryModel.setLastPublishDate(new Date());
+
+		return assetCategoryModel;
 	}
 
 	protected AssetTagStatsModel newAssetTagStatsModel(
@@ -1406,6 +1345,39 @@ public class InitContext {
 		assetTagStatsModel.setClassNameId(classNameId);
 
 		return assetTagStatsModel;
+	}
+
+	protected AssetVocabularyModel newAssetVocabularyModel(
+		long grouId, long userId, String userName, String name,
+		long vocabularyId, long companyId) {
+
+		AssetVocabularyModel assetVocabularyModel =
+			new AssetVocabularyModelImpl();
+
+		assetVocabularyModel.setUuid(SequentialUUID.generate());
+		assetVocabularyModel.setVocabularyId(vocabularyId);
+		assetVocabularyModel.setGroupId(grouId);
+		assetVocabularyModel.setCompanyId(companyId);
+		assetVocabularyModel.setUserId(userId);
+		assetVocabularyModel.setUserName(userName);
+		assetVocabularyModel.setCreateDate(new Date());
+		assetVocabularyModel.setModifiedDate(new Date());
+		assetVocabularyModel.setName(name);
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\"><Title language-id=\"en_US\">");
+		sb.append(name);
+		sb.append("</Title></root>");
+
+		assetVocabularyModel.setTitle(sb.toString());
+
+		assetVocabularyModel.setSettings(
+			"multiValued=true\\nselectedClassNameIds=0");
+		assetVocabularyModel.setLastPublishDate(new Date());
+
+		return assetVocabularyModel;
 	}
 
 	protected DDMTemplateModel newDDMTemplateModel(
@@ -1451,6 +1423,33 @@ public class InitContext {
 		return ddmTemplateModel;
 	}
 
+	protected RoleModel newRoleModel(
+		String name, int type, long roleId, long companyId, long sampleUserId,
+		String sampleUserName, long classNameId) {
+
+		RoleModel roleModel = new RoleModelImpl();
+
+		roleModel.setUuid(SequentialUUID.generate());
+		roleModel.setRoleId(roleId);
+		roleModel.setCompanyId(companyId);
+		roleModel.setUserId(sampleUserId);
+		roleModel.setUserName(sampleUserName);
+		roleModel.setCreateDate(new Date());
+		roleModel.setModifiedDate(new Date());
+		roleModel.setClassNameId(classNameId);
+		roleModel.setClassPK(roleModel.getRoleId());
+		roleModel.setName(name);
+		roleModel.setType(type);
+
+		return roleModel;
+	}
+
+	private static final String _DEPENDENCIES_DIR =
+		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
+
+	private static final long _FUTURE_TIME =
+		System.currentTimeMillis() + Time.YEAR;
+
 	private long _accountId;
 	private AccountModel _accountModel;
 	private RoleModel _administratorRoleModel;
@@ -1462,6 +1461,7 @@ public class InitContext {
 	private List<AssetTagStatsModel>[] _assetTagStatsModelsArray;
 	private List<AssetVocabularyModel>[] _assetVocabularyModelsArray;
 	private Map<String, ClassNameModel> _classNameModels;
+	private final Class<?> _clazz = getClass();
 	private long _companyId;
 	private CompanyModel _companyModel;
 	private final SimpleCounter _counter;
@@ -1536,9 +1536,5 @@ public class InitContext {
 	private RoleModel _userRoleModel;
 	private final SimpleCounter _userScreenNameCounter;
 	private VirtualHostModel _virtualHostModel;
-	private final Class<?> _clazz = getClass();
-	private static final String _DEPENDENCIES_DIR =
-		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
-	private static final long _FUTURE_TIME =
-		System.currentTimeMillis() + Time.YEAR;
+
 }
