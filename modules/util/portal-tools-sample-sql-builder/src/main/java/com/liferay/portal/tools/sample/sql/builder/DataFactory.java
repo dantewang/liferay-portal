@@ -59,33 +59,33 @@ public class DataFactory extends BaseDataFactory {
 		_dDLDataFactory.setUserDataFactory(_userDataFactory);
 		_messageBoardDataFactory.setUserDataFactory(_userDataFactory);
 
-		_dataFactorys.put("assetDataFactory", _assetDataFactory);
-		_dataFactorys.put("blogDataFactory", _blogDataFactory);
-		_dataFactorys.put("counterDataFactory", _counterDataFactory);
-		_dataFactorys.put("dDLDataFactory", _dDLDataFactory);
-		_dataFactorys.put("dLDataFactory", _dLDataFactory);
-		_dataFactorys.put("journalDataFactory", _journalDataFactory);
-		_dataFactorys.put("layoutDataFactory", _layoutDataFactory);
-		_dataFactorys.put("messageBoardDataFactory", _messageBoardDataFactory);
-		_dataFactorys.put(
+		_dataFactories.put("assetDataFactory", _assetDataFactory);
+		_dataFactories.put("blogDataFactory", _blogDataFactory);
+		_dataFactories.put("counterDataFactory", _counterDataFactory);
+		_dataFactories.put("dDLDataFactory", _dDLDataFactory);
+		_dataFactories.put("dLDataFactory", _dLDataFactory);
+		_dataFactories.put("journalDataFactory", _journalDataFactory);
+		_dataFactories.put("layoutDataFactory", _layoutDataFactory);
+		_dataFactories.put("messageBoardDataFactory", _messageBoardDataFactory);
+		_dataFactories.put(
 			"portletPreferenceDataFactory", _portletPreferenceDataFactory);
-		_dataFactorys.put(
+		_dataFactories.put(
 			"resourcePermissionDataFactory", _resourcePermissionDataFactory);
-		_dataFactorys.put(
+		_dataFactories.put(
 			"socialActivityDataFactory", _socialActivityDataFactory);
-		_dataFactorys.put("subscriptionDataFactory", _subscriptionDataFactory);
-		_dataFactorys.put("userDataFactory", _userDataFactory);
-		_dataFactorys.put("wikiDataFactory", _wikiDataFactory);
+		_dataFactories.put("subscriptionDataFactory", _subscriptionDataFactory);
+		_dataFactories.put("userDataFactory", _userDataFactory);
+		_dataFactories.put("wikiDataFactory", _wikiDataFactory);
 	}
 
-	public Map<String, Object> getDataFactorys() {
-		return _dataFactorys;
+	public Map<String, Object> getDataFactories() {
+		return _dataFactories;
 	}
 
 	private final AssetDataFactory _assetDataFactory;
 	private final BlogDataFactory _blogDataFactory;
 	private final CounterDataFactory _counterDataFactory;
-	private final Map<String, Object> _dataFactorys = new HashMap<>();
+	private final Map<String, Object> _dataFactories = new HashMap<>();
 	private final DDLDataFactory _dDLDataFactory;
 	private final DLDataFactory _dLDataFactory;
 	private final JournalDataFactory _journalDataFactory;

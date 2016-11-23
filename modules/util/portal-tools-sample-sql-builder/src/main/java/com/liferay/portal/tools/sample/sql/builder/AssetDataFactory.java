@@ -71,7 +71,9 @@ public class AssetDataFactory extends BaseDataFactory {
 		throws Exception {
 
 		super(initContext);
+
 		_userDataFactory = userDataFactory;
+
 		_initAssetCategoryModels();
 		_initAssetTagModels();
 		_initAssetPublisherPortletPreference();
@@ -135,14 +137,15 @@ public class AssetDataFactory extends BaseDataFactory {
 
 	public List<Long> getAssetTagIds(long groupId) {
 		SimpleCounter counter = _assetTagCounters.get(groupId);
-		int maxAssetEntryToAssetTagCount =
-			initContext.getMaxAssetEntryToAssetTagCount();
 
 		if (counter == null) {
 			counter = new SimpleCounter(0);
 
 			_assetTagCounters.put(groupId, counter);
 		}
+
+		int maxAssetEntryToAssetTagCount =
+			initContext.getMaxAssetEntryToAssetTagCount();
 
 		List<AssetTagModel> assetTagModels =
 			_assetTagModelsArray[(int)groupId - 1];
@@ -420,7 +423,7 @@ public class AssetDataFactory extends BaseDataFactory {
 	}
 
 	protected AssetVocabularyModel newAssetVocabularyModel(
-		long grouId, long userId, String userName, String name) {
+		long groupId, long userId, String userName, String name) {
 
 		AssetVocabularyModel assetVocabularyModel =
 			new AssetVocabularyModelImpl();
@@ -429,7 +432,7 @@ public class AssetDataFactory extends BaseDataFactory {
 
 		assetVocabularyModel.setUuid(SequentialUUID.generate());
 		assetVocabularyModel.setVocabularyId(counter.get());
-		assetVocabularyModel.setGroupId(grouId);
+		assetVocabularyModel.setGroupId(groupId);
 		assetVocabularyModel.setCompanyId(initContext.getCompanyId());
 		assetVocabularyModel.setUserId(userId);
 		assetVocabularyModel.setUserName(userName);
@@ -462,6 +465,7 @@ public class AssetDataFactory extends BaseDataFactory {
 			(List<AssetCategoryModel>[])new List<?>[maxGroupsCount];
 		_assetVocabularyModelsArray =
 			(List<AssetVocabularyModel>[])new List<?>[maxGroupsCount];
+
 		_defaultAssetVocabularyModel = newAssetVocabularyModel(
 			_userDataFactory.getGlobalGroupId(), initContext.getDefaultUserId(),
 			null, PropsValues.ASSET_VOCABULARY_DEFAULT);
@@ -518,7 +522,7 @@ public class AssetDataFactory extends BaseDataFactory {
 	private void _initAssetPublisherPortletPreference() throws Exception {
 		String defaultAssetPublisherPreference = StringUtil.read(
 			getResourceInputStream(
-				DataFactoryConstants.DEFAULT_ASSETPUBLISHER_PREFERENCE));
+				DataFactoryConstants.DEFAULT_ASSET_PUBLISHER_PREFERENCE));
 
 		_defaultAssetPublisherPortletPreference =
 			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
