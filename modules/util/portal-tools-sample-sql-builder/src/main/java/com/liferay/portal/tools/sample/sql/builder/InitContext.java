@@ -38,9 +38,11 @@ public class InitContext {
 
 	public InitContext(Properties properties) throws Exception {
 		_initContextValue(properties);
+
 		_counter = new SimpleCounter(_maxGroupsCount + 1);
 
 		_classNameModels = _initClassNameModels();
+
 		_accountId = _counter.get();
 		_companyId = _counter.get();
 		_defaultUserId = _counter.get();

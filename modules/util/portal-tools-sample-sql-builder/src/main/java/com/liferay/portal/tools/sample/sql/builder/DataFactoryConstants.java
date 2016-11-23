@@ -19,9 +19,9 @@ package com.liferay.portal.tools.sample.sql.builder;
  */
 public interface DataFactoryConstants {
 
-	public static final String ACCOUNT_NAME = "Liferay";
+	public static final String ACCOUNT_LEGAL_NAME = "Liferay, Inc.";
 
-	public static final String ACCOUTN_LEGANAME = "Liferay, Inc.";
+	public static final String ACCOUNT_NAME = "Liferay";
 
 	public static final String ASSET_CATEGORY_NAME_PREFIX = "TestCategory_";
 
@@ -42,7 +42,7 @@ public interface DataFactoryConstants {
 
 	public static final String COMPANY_WEBID = "liferay.com";
 
-	public static final String DEFAULT_ASSETPUBLISHER_PREFERENCE =
+	public static final String DEFAULT_ASSET_PUBLISHER_PREFERENCE =
 		"default_asset_publisher_preference.xml";
 
 	public static final String DL_DDM_STRUCTURE_CONTENT =
@@ -69,7 +69,7 @@ public interface DataFactoryConstants {
 
 	public static final String GROUP_NAME_PREFIX = "Site ";
 
-	public static final String HELLOW_WORLF_PORTLET_ID =
+	public static final String HELLO_WORLD_PORTLET_ID =
 		"com_liferay_hello_world_web_portlet_HelloWorldPortlet";
 
 	public static final String JOURNAL_ARTICLE_TITLE_PREFIX =
@@ -84,7 +84,7 @@ public interface DataFactoryConstants {
 	public static final String JOURNAL_DDM_STRUCTURE_LAYOUT_CONTENT =
 		"ddm_structure_layout_basic_web_content.json";
 
-	public static final String JOURNAL_STRUCTUREKEY = "BASIC-WEB-CONTENT";
+	public static final String JOURNAL_STRUCTURE_KEY = "BASIC-WEB-CONTENT";
 
 	public static final String LANGUAGE_ID = "en_US";
 
@@ -113,10 +113,10 @@ public interface DataFactoryConstants {
 
 	public static final String WIKI_NODE_NAME_PREFIX = "Test Node ";
 
+	public static final String WIKI_PAGE_CONTENT_PREFIX = "This is test page ";
+
 	public static final String WIKI_PAGE_FORMAT = "creole";
 
 	public static final String WIKI_PAGE_TITLE_PREFIX = "Test Page ";
-
-	public static final String WIKI_PAHE_CONTENT_PREFIX = "This is test page ";
 
 }

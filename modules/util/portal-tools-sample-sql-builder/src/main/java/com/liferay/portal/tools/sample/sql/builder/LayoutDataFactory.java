@@ -148,7 +148,7 @@ public class LayoutDataFactory extends BaseDataFactory {
 			newLayoutModel(
 				groupId, DataFactoryConstants.GREETING_PREFIX,
 				LoginPortletKeys.LOGIN + ",",
-				DataFactoryConstants.HELLOW_WORLF_PORTLET_ID + ","));
+				DataFactoryConstants.HELLO_WORLD_PORTLET_ID + ","));
 		layoutModels.add(
 			newLayoutModel(
 				groupId, DataFactoryConstants.BLOG_LAYOUT_NAME, "",

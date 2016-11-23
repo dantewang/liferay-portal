@@ -313,7 +313,7 @@ public class JournalDataFactory extends BaseDataFactory {
 		_defaultJournalDDMStructureModel = newDDMStructureModel(
 			groupId, userId, getClassNameId(
 				JournalArticle.class, classNameModels),
-			DataFactoryConstants.JOURNAL_STRUCTUREKEY,
+			DataFactoryConstants.JOURNAL_STRUCTURE_KEY,
 			_journalDDMStructureContent);
 
 		_defaultJournalDDMStructureVersionModel = newDDMStructureVersionModel(
