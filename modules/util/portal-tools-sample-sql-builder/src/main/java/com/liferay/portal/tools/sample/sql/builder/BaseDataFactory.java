@@ -30,7 +30,6 @@ import com.liferay.dynamic.data.mapping.model.impl.DDMStructureVersionModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
 import com.liferay.dynamic.data.mapping.storage.StorageType;
 import com.liferay.portal.kernel.model.ClassNameModel;
-import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.ObjectValuePair;
@@ -38,8 +37,6 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.util.SimpleCounter;
 
 import java.io.InputStream;
@@ -293,49 +290,6 @@ public abstract class BaseDataFactory {
 
 	public <K, V> ObjectValuePair<K, V> newObjectValuePair(K key, V value) {
 		return new ObjectValuePair<>(key, value);
-	}
-
-	public UserModel newUserModel(
-		long userId, String firstName, String lastName, String screenName,
-		boolean defaultUser) {
-
-		String greeting =
-			DataFactoryConstants.GREETING_PREFIX + screenName +
-				StringPool.EXCLAMATION;
-
-		if (Validator.isNull(screenName)) {
-			screenName = String.valueOf(userId);
-		}
-
-		UserModel userModel = new UserModelImpl();
-
-		userModel.setUuid(SequentialUUID.generate());
-		userModel.setUserId(userId);
-		userModel.setCompanyId(initContext.getCompanyId());
-		userModel.setCreateDate(new Date());
-		userModel.setModifiedDate(new Date());
-		userModel.setDefaultUser(defaultUser);
-		userModel.setContactId(initContext.getCounter().get());
-		userModel.setPassword(DataFactoryConstants.USER_PASSWORD);
-		userModel.setPasswordModifiedDate(new Date());
-		userModel.setReminderQueryQuestion(
-			DataFactoryConstants.REMINDER_QUERY_QUESTION);
-		userModel.setReminderQueryAnswer(screenName);
-		userModel.setEmailAddress(
-			screenName + DataFactoryConstants.EMAIL_POSTFIX);
-		userModel.setScreenName(screenName);
-		userModel.setLanguageId(DataFactoryConstants.LANGUAGE_ID);
-		userModel.setGreeting(greeting);
-		userModel.setFirstName(firstName);
-		userModel.setLastName(lastName);
-		userModel.setLoginDate(new Date());
-		userModel.setLastLoginDate(new Date());
-		userModel.setLastFailedLoginDate(new Date());
-		userModel.setLockoutDate(new Date());
-		userModel.setAgreedToTermsOfUse(true);
-		userModel.setEmailAddressVerified(true);
-
-		return userModel;
 	}
 
 	public Date nextFutureDate(SimpleCounter futureDateCounter) {
