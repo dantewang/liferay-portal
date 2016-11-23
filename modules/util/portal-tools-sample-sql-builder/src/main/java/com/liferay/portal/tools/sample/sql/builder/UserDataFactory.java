@@ -418,7 +418,6 @@ public class UserDataFactory extends BaseDataFactory {
 		SimpleCounter counter = initContext.getCounter();
 
 		long defaultUserId = initContext.getDefaultUserId();
-		long sampleUserId = initContext.getSampleUserId();
 
 		_defaultUserModel = newUserModel(
 			defaultUserId, StringPool.BLANK, StringPool.BLANK, StringPool.BLANK,

@@ -62,8 +62,8 @@ public class DataFactory extends BaseDataFactory {
 		_dataFactorys.put("assetDataFactory", _assetDataFactory);
 		_dataFactorys.put("blogDataFactory", _blogDataFactory);
 		_dataFactorys.put("counterDataFactory", _counterDataFactory);
-		_dataFactorys.put("dLDataFactory", _dLDataFactory);
 		_dataFactorys.put("dDLDataFactory", _dDLDataFactory);
+		_dataFactorys.put("dLDataFactory", _dLDataFactory);
 		_dataFactorys.put("journalDataFactory", _journalDataFactory);
 		_dataFactorys.put("layoutDataFactory", _layoutDataFactory);
 		_dataFactorys.put("messageBoardDataFactory", _messageBoardDataFactory);

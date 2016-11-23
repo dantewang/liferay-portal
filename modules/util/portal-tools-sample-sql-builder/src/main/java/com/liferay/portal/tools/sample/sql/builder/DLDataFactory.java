@@ -268,9 +268,6 @@ public class DLDataFactory extends BaseDataFactory {
 		Date lastPublishDate = nextFutureDate(futureDateCounter);
 		Date modifiedDate = nextFutureDate(futureDateCounter);
 
-		SimpleCounter counter = initContext.getCounter();
-
-		long companyId = initContext.getCompanyId();
 		long groupId = _userDataFactory.getGlobalGroupId();
 		long userId = initContext.getDefaultUserId();
 
