@@ -102,7 +102,7 @@ public class WikiDataFactory extends BaseDataFactory {
 			DataFactoryConstants.WIKI_PAGE_TITLE_PREFIX + index);
 		wikiPageModel.setVersion(WikiPageConstants.VERSION_DEFAULT);
 		wikiPageModel.setContent(
-			DataFactoryConstants.WIKI_PAHE_CONTENT_PREFIX + index + ".");
+			DataFactoryConstants.WIKI_PAGE_CONTENT_PREFIX + index + ".");
 		wikiPageModel.setFormat(DataFactoryConstants.WIKI_PAGE_FORMAT);
 		wikiPageModel.setHead(true);
 		wikiPageModel.setLastPublishDate(new Date());

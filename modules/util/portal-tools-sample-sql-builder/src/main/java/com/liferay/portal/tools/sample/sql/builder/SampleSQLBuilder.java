@@ -351,7 +351,7 @@ public class SampleSQLBuilder {
 	}
 
 	protected Map<String, Object> getContext() throws Exception {
-		Map<String, Object> context = _dataFactory.getDataFactorys();
+		Map<String, Object> context = _dataFactory.getDataFactories();
 
 		context.put("dataFactory", _dataFactory);
 		context.put("initContext", _dataFactory.getInitContext());

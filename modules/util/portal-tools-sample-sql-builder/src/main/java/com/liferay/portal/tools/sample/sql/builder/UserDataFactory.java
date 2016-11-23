@@ -57,8 +57,10 @@ public class UserDataFactory extends BaseDataFactory {
 
 	public UserDataFactory(InitContext initContext) throws Exception {
 		super(initContext);
+
 		_globalGroupId = initContext.getCounter().get();
 		_guestGroupId = initContext.getCounter().get();
+
 		_initAccountModel();
 		_initCompanyModel();
 		_initGroupModels();
@@ -251,7 +253,7 @@ public class UserDataFactory extends BaseDataFactory {
 		_accountModel.setCreateDate(new Date());
 		_accountModel.setModifiedDate(new Date());
 		_accountModel.setName(DataFactoryConstants.ACCOUNT_NAME);
-		_accountModel.setLegalName(DataFactoryConstants.ACCOUTN_LEGANAME);
+		_accountModel.setLegalName(DataFactoryConstants.ACCOUNT_LEGAL_NAME);
 	}
 
 	private void _initCompanyModel() {

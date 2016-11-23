@@ -46,10 +46,6 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		super(initContext);
 	}
 
-	public void setUserDataFactory(UserDataFactory userDataFactory) {
-		_userDataFactory = userDataFactory;
-	}
-
 	public List<MBCategoryModel> newMBCategoryModels(long groupId) {
 		int maxMBCategoryCount = initContext.getMaxMBCategoryCount();
 
@@ -261,6 +257,10 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		}
 
 		return mbThreadModels;
+	}
+
+	public void setUserDataFactory(UserDataFactory userDataFactory) {
+		_userDataFactory = userDataFactory;
 	}
 
 	protected MBCategoryModel newMBCategoryModel(long groupId, int index) {
