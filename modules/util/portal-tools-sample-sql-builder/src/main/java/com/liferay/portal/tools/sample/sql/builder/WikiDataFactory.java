@@ -42,8 +42,6 @@ public class WikiDataFactory extends BaseDataFactory {
 
 		List<WikiNodeModel> wikiNodeModels = new ArrayList<>(maxWikiNodeCount);
 
-		SimpleCounter counter = initContext.getCounter();
-
 		for (int i = 1; i <= maxWikiNodeCount; i++) {
 			wikiNodeModels.add(newWikiNodeModel(groupId, i));
 		}
@@ -56,8 +54,6 @@ public class WikiDataFactory extends BaseDataFactory {
 		int maxWikiPageCount = initContext.getMaxWikiPageCount();
 
 		List<WikiPageModel> wikiPageModels = new ArrayList<>(maxWikiPageCount);
-
-		SimpleCounter counter = initContext.getCounter();
 
 		for (int i = 1; i <= maxWikiPageCount; i++) {
 			wikiPageModels.add(newWikiPageModel(wikiNodeModel, i));

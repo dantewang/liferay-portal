@@ -56,8 +56,6 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		List<MBCategoryModel> mbCategoryModels = new ArrayList<>(
 			maxMBCategoryCount);
 
-		SimpleCounter counter = initContext.getCounter();
-
 		for (int i = 1; i <= maxMBCategoryCount; i++) {
 			mbCategoryModels.add(newMBCategoryModel(groupId, i));
 		}
