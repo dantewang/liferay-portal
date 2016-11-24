@@ -15,13 +15,16 @@
 package com.liferay.portal.tools.sample.sql.builder;
 
 import com.liferay.dynamic.data.mapping.model.DDMStorageLinkModel;
+import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureVersionModel;
+import com.liferay.dynamic.data.mapping.model.DDMTemplateConstants;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateLinkModelImpl;
+import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleConstants;
 import com.liferay.journal.model.JournalArticleLocalizationModel;
@@ -34,7 +37,9 @@ import com.liferay.journal.model.impl.JournalArticleResourceModelImpl;
 import com.liferay.journal.model.impl.JournalContentSearchModelImpl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.ClassNameModel;
+import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.util.SimpleCounter;
@@ -164,6 +169,55 @@ public class JournalDataFactory extends BaseDataFactory {
 		return ddmTemplateLinkModel;
 	}
 
+	public DDMTemplateModel newDDMTemplateModel(
+		long groupId, long userId, long structureId, long sourceClassNameId) {
+
+		SimpleCounter futureDateCounter = initContext.getFutureDateCounter();
+
+		Date createDate = nextFutureDate(futureDateCounter);
+		Date lastPublishDate = nextFutureDate(futureDateCounter);
+		Date modifiedDate = nextFutureDate(futureDateCounter);
+
+		DDMTemplateModel ddmTemplateModel = new DDMTemplateModelImpl();
+
+		ddmTemplateModel.setUuid(SequentialUUID.generate());
+		ddmTemplateModel.setTemplateId(initContext.getCounter().get());
+		ddmTemplateModel.setGroupId(groupId);
+		ddmTemplateModel.setCompanyId(initContext.getCompanyId());
+		ddmTemplateModel.setUserId(userId);
+		ddmTemplateModel.setCreateDate(createDate);
+		ddmTemplateModel.setModifiedDate(modifiedDate);
+		ddmTemplateModel.setClassNameId(
+			getClassNameId(
+				DDMStructure.class, initContext.getClassNameModels()));
+		ddmTemplateModel.setClassPK(structureId);
+		ddmTemplateModel.setResourceClassNameId(sourceClassNameId);
+		ddmTemplateModel.setTemplateKey(
+			String.valueOf(initContext.getCounter().get()));
+		ddmTemplateModel.setVersion(DDMTemplateConstants.VERSION_DEFAULT);
+		ddmTemplateModel.setVersionUserId(userId);
+		ddmTemplateModel.setVersionUserName(
+			DataFactoryConstants.SAMPLE_USER_NAME);
+
+		StringBundler sb = new StringBundler(3);
+
+		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
+		sb.append("Basic Web Content</name></root>");
+
+		ddmTemplateModel.setName(sb.toString());
+
+		ddmTemplateModel.setType(DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY);
+		ddmTemplateModel.setMode(DDMTemplateConstants.TEMPLATE_MODE_CREATE);
+		ddmTemplateModel.setLanguage(TemplateConstants.LANG_TYPE_FTL);
+		ddmTemplateModel.setScript("${content.getData()}");
+		ddmTemplateModel.setCacheable(true);
+		ddmTemplateModel.setSmallImage(false);
+		ddmTemplateModel.setLastPublishDate(lastPublishDate);
+
+		return ddmTemplateModel;
+	}
+
 	public JournalArticleLocalizationModel
 		newJournalArticleLocalizationModel(
 			JournalArticleModel journalArticleModel, int articleIndex,
@@ -287,6 +341,10 @@ public class JournalDataFactory extends BaseDataFactory {
 			journalArticleModel.getArticleId());
 
 		return journalContentSearchModel;
+	}
+
+	public <K, V> ObjectValuePair<K, V> newObjectValuePair(K key, V value) {
+		return new ObjectValuePair<>(key, value);
 	}
 
 	private void _initJournalArticleContent() {

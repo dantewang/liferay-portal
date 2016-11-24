@@ -16,30 +16,21 @@ package com.liferay.portal.tools.sample.sql.builder;
 
 import com.liferay.dynamic.data.mapping.model.DDMContentModel;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLink;
-import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureConstants;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureVersionModel;
-import com.liferay.dynamic.data.mapping.model.DDMTemplateConstants;
-import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
 import com.liferay.dynamic.data.mapping.model.impl.DDMContentModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLayoutModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureVersionModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
 import com.liferay.dynamic.data.mapping.storage.StorageType;
 import com.liferay.portal.kernel.model.ClassNameModel;
-import com.liferay.portal.kernel.model.UserModel;
-import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.IntegerWrapper;
-import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.util.SimpleCounter;
 
 import java.io.InputStream;
@@ -238,104 +229,8 @@ public abstract class BaseDataFactory {
 		return ddmStructureVersionModel;
 	}
 
-	public DDMTemplateModel newDDMTemplateModel(
-		long groupId, long userId, long structureId, long sourceClassNameId) {
-
-		SimpleCounter futureDateCounter = initContext.getFutureDateCounter();
-
-		Date createDate = nextFutureDate(futureDateCounter);
-		Date lastPublishDate = nextFutureDate(futureDateCounter);
-		Date modifiedDate = nextFutureDate(futureDateCounter);
-
-		DDMTemplateModel ddmTemplateModel = new DDMTemplateModelImpl();
-
-		ddmTemplateModel.setUuid(SequentialUUID.generate());
-		ddmTemplateModel.setTemplateId(initContext.getCounter().get());
-		ddmTemplateModel.setGroupId(groupId);
-		ddmTemplateModel.setCompanyId(initContext.getCompanyId());
-		ddmTemplateModel.setUserId(userId);
-		ddmTemplateModel.setCreateDate(createDate);
-		ddmTemplateModel.setModifiedDate(modifiedDate);
-		ddmTemplateModel.setClassNameId(
-			getClassNameId(
-				DDMStructure.class, initContext.getClassNameModels()));
-		ddmTemplateModel.setClassPK(structureId);
-		ddmTemplateModel.setResourceClassNameId(sourceClassNameId);
-		ddmTemplateModel.setTemplateKey(
-			String.valueOf(initContext.getCounter().get()));
-		ddmTemplateModel.setVersion(DDMTemplateConstants.VERSION_DEFAULT);
-		ddmTemplateModel.setVersionUserId(userId);
-		ddmTemplateModel.setVersionUserName(
-			DataFactoryConstants.SAMPLE_USER_NAME);
-
-		StringBundler sb = new StringBundler(3);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append("Basic Web Content</name></root>");
-
-		ddmTemplateModel.setName(sb.toString());
-
-		ddmTemplateModel.setType(DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY);
-		ddmTemplateModel.setMode(DDMTemplateConstants.TEMPLATE_MODE_CREATE);
-		ddmTemplateModel.setLanguage(TemplateConstants.LANG_TYPE_FTL);
-		ddmTemplateModel.setScript("${content.getData()}");
-		ddmTemplateModel.setCacheable(true);
-		ddmTemplateModel.setSmallImage(false);
-		ddmTemplateModel.setLastPublishDate(lastPublishDate);
-
-		return ddmTemplateModel;
-	}
-
 	public IntegerWrapper newInteger() {
 		return new IntegerWrapper();
-	}
-
-	public <K, V> ObjectValuePair<K, V> newObjectValuePair(K key, V value) {
-		return new ObjectValuePair<>(key, value);
-	}
-
-	public UserModel newUserModel(
-		long userId, String firstName, String lastName, String screenName,
-		boolean defaultUser) {
-
-		String greeting =
-			DataFactoryConstants.GREETING_PREFIX + screenName +
-				StringPool.EXCLAMATION;
-
-		if (Validator.isNull(screenName)) {
-			screenName = String.valueOf(userId);
-		}
-
-		UserModel userModel = new UserModelImpl();
-
-		userModel.setUuid(SequentialUUID.generate());
-		userModel.setUserId(userId);
-		userModel.setCompanyId(initContext.getCompanyId());
-		userModel.setCreateDate(new Date());
-		userModel.setModifiedDate(new Date());
-		userModel.setDefaultUser(defaultUser);
-		userModel.setContactId(initContext.getCounter().get());
-		userModel.setPassword(DataFactoryConstants.USER_PASSWORD);
-		userModel.setPasswordModifiedDate(new Date());
-		userModel.setReminderQueryQuestion(
-			DataFactoryConstants.REMINDER_QUERY_QUESTION);
-		userModel.setReminderQueryAnswer(screenName);
-		userModel.setEmailAddress(
-			screenName + DataFactoryConstants.EMAIL_POSTFIX);
-		userModel.setScreenName(screenName);
-		userModel.setLanguageId(DataFactoryConstants.LANGUAGE_ID);
-		userModel.setGreeting(greeting);
-		userModel.setFirstName(firstName);
-		userModel.setLastName(lastName);
-		userModel.setLoginDate(new Date());
-		userModel.setLastLoginDate(new Date());
-		userModel.setLastFailedLoginDate(new Date());
-		userModel.setLockoutDate(new Date());
-		userModel.setAgreedToTermsOfUse(true);
-		userModel.setEmailAddressVerified(true);
-
-		return userModel;
 	}
 
 	public Date nextFutureDate(SimpleCounter futureDateCounter) {
