@@ -229,10 +229,6 @@ public abstract class BaseDataFactory {
 		return ddmStructureVersionModel;
 	}
 
-	public IntegerWrapper newInteger() {
-		return new IntegerWrapper();
-	}
-
 	public Date nextFutureDate(SimpleCounter futureDateCounter) {
 		return new Date(_FUTURE_TIME + (futureDateCounter.get() * Time.SECOND));
 	}
