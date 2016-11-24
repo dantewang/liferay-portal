@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class WikiDataFactory extends BaseDataFactory {
 
-	public WikiDataFactory(InitContext initContext) throws Exception {
+	public WikiDataFactory(InitContext initContext) {
 		super(initContext);
 	}
 

@@ -44,7 +44,7 @@ import java.util.Map;
  */
 public class LayoutDataFactory extends BaseDataFactory {
 
-	public LayoutDataFactory(InitContext initContext) throws Exception {
+	public LayoutDataFactory(InitContext initContext) {
 		super(initContext);
 	}
 

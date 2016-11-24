@@ -42,7 +42,7 @@ import java.util.List;
  */
 public class MessageBoardDataFactory extends BaseDataFactory {
 
-	public MessageBoardDataFactory(InitContext initContext) throws Exception {
+	public MessageBoardDataFactory(InitContext initContext) {
 		super(initContext);
 	}
 

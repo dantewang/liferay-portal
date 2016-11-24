@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class CounterDataFactory extends BaseDataFactory {
 
-	public CounterDataFactory(InitContext initContext) throws Exception {
+	public CounterDataFactory(InitContext initContext) {
 		super(initContext);
 	}
 

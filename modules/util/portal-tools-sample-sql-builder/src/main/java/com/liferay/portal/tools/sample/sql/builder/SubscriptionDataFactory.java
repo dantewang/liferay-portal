@@ -32,7 +32,7 @@ import java.util.Date;
  */
 public class SubscriptionDataFactory extends BaseDataFactory {
 
-	public SubscriptionDataFactory(InitContext initContext) throws Exception {
+	public SubscriptionDataFactory(InitContext initContext) {
 		super(initContext);
 	}
 
