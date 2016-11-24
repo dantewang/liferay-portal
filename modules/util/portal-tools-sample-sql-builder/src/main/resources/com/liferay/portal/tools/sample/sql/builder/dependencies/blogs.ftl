@@ -1,4 +1,4 @@
-<#assign blogsEntryModels = dataFactory.newBlogsEntryModels(groupId) />
+<#assign blogsEntryModels = blogDataFactory.newBlogsEntryModels(groupId) />
 
 <#list blogsEntryModels as blogsEntryModel>
 	insert into BlogsEntry values ('${blogsEntryModel.uuid}', ${blogsEntryModel.entryId}, ${blogsEntryModel.groupId}, ${blogsEntryModel.companyId}, ${blogsEntryModel.userId}, '${blogsEntryModel.userName}', '${dataFactory.getDateString(blogsEntryModel.createDate)}', '${dataFactory.getDateString(blogsEntryModel.modifiedDate)}', '${blogsEntryModel.title}', '${blogsEntryModel.subtitle}', '${blogsEntryModel.urlTitle}', '${blogsEntryModel.description}', '${blogsEntryModel.content}', '${dataFactory.getDateString(blogsEntryModel.displayDate)}', ${blogsEntryModel.allowPingbacks?string}, ${blogsEntryModel.allowTrackbacks?string}, '${blogsEntryModel.trackbacks}', '${blogsEntryModel.coverImageCaption}', ${blogsEntryModel.coverImageFileEntryId}, '${blogsEntryModel.coverImageURL}', ${blogsEntryModel.smallImage?string}, ${blogsEntryModel.smallImageFileEntryId}, ${blogsEntryModel.smallImageId}, '${blogsEntryModel.smallImageURL}', '${dataFactory.getDateString(blogsEntryModel.lastPublishDate)}', ${blogsEntryModel.status}, ${blogsEntryModel.statusByUserId}, '${blogsEntryModel.statusByUserName}', '${dataFactory.getDateString(blogsEntryModel.statusDate)}');
@@ -17,15 +17,15 @@
 	/>
 
 	<#assign
-		mbThreadId = dataFactory.getCounterNext()
-		mbRootMessageId = dataFactory.getCounterNext()
+		mbThreadId = counterDataFactory.getCounterNext()
+		mbRootMessageId = counterDataFactory.getCounterNext()
 	/>
 
 	<@insertMBDiscussion
-		_classNameId = dataFactory.blogsEntryClassNameId
+		_classNameId = blogDataFactory.blogsEntryClassNameId
 		_classPK = blogsEntryModel.entryId
 		_groupId = groupId
-		_maxCommentCount = dataFactory.maxBlogsEntryCommentCount
+		_maxCommentCount = initContext.maxBlogsEntryCommentCount
 		_mbRootMessageId = mbRootMessageId
 		_mbThreadId = mbThreadId
 	/>

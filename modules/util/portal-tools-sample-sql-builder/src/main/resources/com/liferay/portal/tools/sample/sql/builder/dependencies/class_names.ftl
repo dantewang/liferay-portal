@@ -1,3 +1,3 @@
-<#list dataFactory.classNameModels as classNameModel>
-	insert into ClassName_ values (${classNameModel.mvccVersion}, ${classNameModel.classNameId}, '${classNameModel.value}');
+<#list initContext.classNameModelValues as classNameModelValue>
+	insert into ClassName_ values (${classNameModelValue.mvccVersion}, ${classNameModelValue.classNameId}, '${classNameModelValue.value}');
 </#list>

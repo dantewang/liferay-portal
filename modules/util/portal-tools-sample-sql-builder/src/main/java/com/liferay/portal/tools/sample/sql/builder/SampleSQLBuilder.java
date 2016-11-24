@@ -66,7 +66,9 @@ public class SampleSQLBuilder {
 
 			properties.load(reader);
 
-			DataFactory dataFactory = new DataFactory(properties);
+			InitContext initContext = new InitContext(properties);
+
+			DataFactory dataFactory = new DataFactory(initContext);
 
 			new SampleSQLBuilder(properties, dataFactory);
 		}
@@ -349,9 +351,10 @@ public class SampleSQLBuilder {
 	}
 
 	protected Map<String, Object> getContext() throws Exception {
-		Map<String, Object> context = new HashMap<>();
+		Map<String, Object> context = _dataFactory.getDataFactories();
 
 		context.put("dataFactory", _dataFactory);
+		context.put("initContext", _dataFactory.getInitContext());
 
 		for (String csvFileName : _csvFileNames) {
 			Writer csvWriter = createFileWriter(
