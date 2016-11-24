@@ -41,7 +41,7 @@ import com.liferay.wiki.social.WikiActivityKeys;
  */
 public class SocialActivityDataFactory extends BaseDataFactory {
 
-	public SocialActivityDataFactory(InitContext initContext) throws Exception {
+	public SocialActivityDataFactory(InitContext initContext) {
 		super(initContext);
 	}
 

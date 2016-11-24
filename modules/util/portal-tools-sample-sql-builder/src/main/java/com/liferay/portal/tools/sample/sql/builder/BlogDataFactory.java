@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class BlogDataFactory extends BaseDataFactory {
 
-	public BlogDataFactory(InitContext initContext) throws Exception {
+	public BlogDataFactory(InitContext initContext) {
 		super(initContext);
 	}
 

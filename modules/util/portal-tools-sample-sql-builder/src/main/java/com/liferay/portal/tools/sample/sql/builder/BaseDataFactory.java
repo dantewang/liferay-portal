@@ -342,7 +342,7 @@ public abstract class BaseDataFactory {
 		return new Date(_FUTURE_TIME + (futureDateCounter.get() * Time.SECOND));
 	}
 
-	protected BaseDataFactory(InitContext initContext) throws Exception {
+	protected BaseDataFactory(InitContext initContext) {
 		this.initContext = initContext;
 	}
 

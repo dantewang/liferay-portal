@@ -43,9 +43,7 @@ import javax.portlet.PortletPreferences;
  */
 public class PortletPreferenceDataFactory extends BaseDataFactory {
 
-	public PortletPreferenceDataFactory(InitContext initContext)
-		throws Exception {
-
+	public PortletPreferenceDataFactory(InitContext initContext) {
 		super(initContext);
 	}
 
