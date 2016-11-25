@@ -20,11 +20,9 @@ import java.util.Map;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DataFactory extends BaseDataFactory {
+public class DataFactory {
 
 	public DataFactory(InitContext initContext) throws Exception {
-		super(initContext);
-
 		_userDataFactory = new UserDataFactory(initContext);
 
 		_journalDataFactory = new JournalDataFactory(
@@ -34,7 +32,7 @@ public class DataFactory extends BaseDataFactory {
 		_blogDataFactory = new BlogDataFactory(initContext);
 		_counterDataFactory = new CounterDataFactory(initContext);
 		_dLDataFactory = new DLDataFactory(initContext, _userDataFactory);
-		_dDLDataFactory = new DDLDataFactory(initContext);
+		_dDLDDMDataFactory = new DDLDDMDataFactory(initContext);
 		_layoutDataFactory = new LayoutDataFactory(initContext);
 		_messageBoardDataFactory = new MessageBoardDataFactory(initContext);
 		_portletPreferenceDataFactory = new PortletPreferenceDataFactory(
@@ -56,13 +54,13 @@ public class DataFactory extends BaseDataFactory {
 			_resourcePermissionDataFactory);
 		_counterDataFactory.setSocialActivityDataFactory(
 			_socialActivityDataFactory);
-		_dDLDataFactory.setUserDataFactory(_userDataFactory);
+		_dDLDDMDataFactory.setUserDataFactory(_userDataFactory);
 		_messageBoardDataFactory.setUserDataFactory(_userDataFactory);
 
 		_dataFactories.put("assetDataFactory", _assetDataFactory);
 		_dataFactories.put("blogDataFactory", _blogDataFactory);
 		_dataFactories.put("counterDataFactory", _counterDataFactory);
-		_dataFactories.put("dDLDataFactory", _dDLDataFactory);
+		_dataFactories.put("dDLDDMDataFactory", _dDLDDMDataFactory);
 		_dataFactories.put("dLDataFactory", _dLDataFactory);
 		_dataFactories.put("journalDataFactory", _journalDataFactory);
 		_dataFactories.put("layoutDataFactory", _layoutDataFactory);
@@ -86,7 +84,7 @@ public class DataFactory extends BaseDataFactory {
 	private final BlogDataFactory _blogDataFactory;
 	private final CounterDataFactory _counterDataFactory;
 	private final Map<String, Object> _dataFactories = new HashMap<>();
-	private final DDLDataFactory _dDLDataFactory;
+	private final DDLDDMDataFactory _dDLDDMDataFactory;
 	private final DLDataFactory _dLDataFactory;
 	private final JournalDataFactory _journalDataFactory;
 	private final LayoutDataFactory _layoutDataFactory;

@@ -51,7 +51,7 @@ import java.util.Map;
 /**
  * @author Lily Chi
  */
-public class JournalDataFactory extends BaseDataFactory {
+public class JournalDataFactory extends DDLDDMBaseDataFactory {
 
 	public JournalDataFactory(
 			InitContext initContext, UserDataFactory userDataFactory)
