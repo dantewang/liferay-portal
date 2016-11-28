@@ -1,23 +1,23 @@
-<#assign ddmStructureModel = dataFactory.defaultJournalDDMStructureModel />
+<#assign ddmStructureModel = journalDataFactory.defaultJournalDDMStructureModel />
 
 <@insertDDMStructure
 	_ddmStructureModel = ddmStructureModel
-	_ddmStructureLayoutModel = dataFactory.defaultJournalDDMStructureLayoutModel
-	_ddmStructureVersionModel = dataFactory.defaultJournalDDMStructureVersionModel
+	_ddmStructureLayoutModel = journalDataFactory.defaultJournalDDMStructureLayoutModel
+	_ddmStructureVersionModel = journalDataFactory.defaultJournalDDMStructureVersionModel
 />
 
-<#assign ddmTemplateModel = dataFactory.defaultJournalDDMTemplateModel />
+<#assign ddmTemplateModel = journalDataFactory.defaultJournalDDMTemplateModel />
 
-insert into DDMTemplate values ('${ddmTemplateModel.uuid}', ${ddmTemplateModel.templateId}, ${ddmTemplateModel.groupId}, ${ddmTemplateModel.companyId}, ${ddmTemplateModel.userId}, '${ddmTemplateModel.userName}', ${ddmTemplateModel.versionUserId}, '${ddmTemplateModel.versionUserName}', '${dataFactory.getDateString(ddmTemplateModel.createDate)}', '${dataFactory.getDateString(ddmTemplateModel.modifiedDate)}', ${ddmTemplateModel.classNameId}, ${ddmTemplateModel.classPK}, ${ddmTemplateModel.resourceClassNameId}, '${ddmTemplateModel.templateKey}', '${ddmTemplateModel.version}', '${ddmTemplateModel.name}', '${ddmTemplateModel.description}', '${ddmTemplateModel.type}', '${ddmTemplateModel.mode}', '${ddmTemplateModel.language}', '${ddmTemplateModel.script}', ${ddmTemplateModel.cacheable?string}, ${ddmTemplateModel.smallImage?string}, ${ddmTemplateModel.smallImageId}, '${ddmTemplateModel.smallImageURL}', '${dataFactory.getDateString(ddmTemplateModel.lastPublishDate)}');
+insert into DDMTemplate values ('${ddmTemplateModel.uuid}', ${ddmTemplateModel.templateId}, ${ddmTemplateModel.groupId}, ${ddmTemplateModel.companyId}, ${ddmTemplateModel.userId}, '${ddmTemplateModel.userName}', ${ddmTemplateModel.versionUserId}, '${ddmTemplateModel.versionUserName}', '${initContext.getDateString(ddmTemplateModel.createDate)}', '${initContext.getDateString(ddmTemplateModel.modifiedDate)}', ${ddmTemplateModel.classNameId}, ${ddmTemplateModel.classPK}, ${ddmTemplateModel.resourceClassNameId}, '${ddmTemplateModel.templateKey}', '${ddmTemplateModel.version}', '${ddmTemplateModel.name}', '${ddmTemplateModel.description}', '${ddmTemplateModel.type}', '${ddmTemplateModel.mode}', '${ddmTemplateModel.language}', '${ddmTemplateModel.script}', ${ddmTemplateModel.cacheable?string}, ${ddmTemplateModel.smallImage?string}, ${ddmTemplateModel.smallImageId}, '${ddmTemplateModel.smallImageURL}', '${initContext.getDateString(ddmTemplateModel.lastPublishDate)}');
 
 <@insertResourcePermissions
 	_entry = ddmTemplateModel
 />
 
 <#assign
-	journalArticlePageCounts = dataFactory.getSequence(dataFactory.maxJournalArticlePageCount)
+	journalArticlePageCounts = counterDataFactory.getSequence(initContext.maxJournalArticlePageCount)
 
-	resourcePermissionModels = dataFactory.newResourcePermissionModels("com.liferay.journal", groupId)
+	resourcePermissionModels = resourcePermissionDataFactory.newResourcePermissionModels("com.liferay.journal", groupId)
 />
 
 <#list resourcePermissionModels as resourcePermissionModel>
@@ -30,7 +30,7 @@ insert into DDMTemplate values ('${ddmTemplateModel.uuid}', ${ddmTemplateModel.t
 	<#assign
 		portletIdPrefix = "com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_TEST_" + journalArticlePageCount + "_"
 
-		layoutModel = dataFactory.newLayoutModel(groupId, groupId + "_journal_article_" + journalArticlePageCount, "", dataFactory.getJournalArticleLayoutColumn(portletIdPrefix))
+		layoutModel = layoutDataFactory.newLayoutModel(groupId, groupId + "_journal_article_" + journalArticlePageCount, "", journalDataFactory.getJournalArticleLayoutColumn(portletIdPrefix))
 	/>
 
 	${layoutCSVWriter.write(layoutModel.friendlyURL + "\n")}
@@ -39,7 +39,7 @@ insert into DDMTemplate values ('${ddmTemplateModel.uuid}', ${ddmTemplateModel.t
 		_layoutModel = layoutModel
 	/>
 
-	<#assign portletPreferencesModels = dataFactory.newJournalPortletPreferencesModels(layoutModel.plid) />
+	<#assign portletPreferencesModels = portletPreferenceDataFactory.newJournalPortletPreferencesModels(layoutModel.plid) />
 
 	<#list portletPreferencesModels as portletPreferencesModel>
 		<@insertPortletPreferences
@@ -47,39 +47,39 @@ insert into DDMTemplate values ('${ddmTemplateModel.uuid}', ${ddmTemplateModel.t
 		/>
 	</#list>
 
-	<#assign journalArticleCounts = dataFactory.getSequence(dataFactory.maxJournalArticleCount) />
+	<#assign journalArticleCounts = counterDataFactory.getSequence(initContext.maxJournalArticleCount) />
 
 	<#list journalArticleCounts as journalArticleCount>
-		<#assign journalArticleResourceModel = dataFactory.newJournalArticleResourceModel(groupId) />
+		<#assign journalArticleResourceModel = journalDataFactory.newJournalArticleResourceModel(groupId) />
 
 		insert into JournalArticleResource values ('${journalArticleResourceModel.uuid}', ${journalArticleResourceModel.resourcePrimKey}, ${journalArticleResourceModel.groupId}, ${journalArticleResourceModel.companyId}, '${journalArticleResourceModel.articleId}');
 
-		<#assign versionCounts = dataFactory.getSequence(dataFactory.maxJournalArticleVersionCount) />
+		<#assign versionCounts = counterDataFactory.getSequence(initContext.maxJournalArticleVersionCount) />
 
 		<#list versionCounts as versionCount>
-			<#assign journalArticleModel = dataFactory.newJournalArticleModel(journalArticleResourceModel, journalArticleCount, versionCount) />
+			<#assign journalArticleModel = journalDataFactory.newJournalArticleModel(journalArticleResourceModel, journalArticleCount, versionCount) />
 
-			insert into JournalArticle values ('${journalArticleModel.uuid}', ${journalArticleModel.id}, ${journalArticleModel.resourcePrimKey}, ${journalArticleModel.groupId}, ${journalArticleModel.companyId}, ${journalArticleModel.userId}, '${journalArticleModel.userName}', '${dataFactory.getDateString(journalArticleModel.createDate)}', '${dataFactory.getDateString(journalArticleModel.modifiedDate)}', ${journalArticleModel.folderId}, ${journalArticleModel.classNameId}, ${journalArticleModel.classPK}, '', '${journalArticleModel.articleId}', ${journalArticleModel.version}, '${journalArticleModel.urlTitle}', '${journalArticleModel.content}', '${journalArticleModel.DDMStructureKey}', '${journalArticleModel.DDMTemplateKey}', '${journalArticleModel.defaultLanguageId}', '${journalArticleModel.layoutUuid}', '${dataFactory.getDateString(journalArticleModel.displayDate)}', '${dataFactory.getDateString(journalArticleModel.expirationDate)}', '${dataFactory.getDateString(journalArticleModel.reviewDate)}', ${journalArticleModel.indexable?string}, ${journalArticleModel.smallImage?string}, ${journalArticleModel.smallImageId}, '${journalArticleModel.smallImageURL}', '${dataFactory.getDateString(journalArticleModel.lastPublishDate)}', ${journalArticleModel.status}, ${journalArticleModel.statusByUserId}, '${journalArticleModel.statusByUserName}', '${dataFactory.getDateString(journalArticleModel.statusDate)}');
+			insert into JournalArticle values ('${journalArticleModel.uuid}', ${journalArticleModel.id}, ${journalArticleModel.resourcePrimKey}, ${journalArticleModel.groupId}, ${journalArticleModel.companyId}, ${journalArticleModel.userId}, '${journalArticleModel.userName}', '${initContext.getDateString(journalArticleModel.createDate)}', '${initContext.getDateString(journalArticleModel.modifiedDate)}', ${journalArticleModel.folderId}, ${journalArticleModel.classNameId}, ${journalArticleModel.classPK}, '', '${journalArticleModel.articleId}', ${journalArticleModel.version}, '${journalArticleModel.urlTitle}', '${journalArticleModel.content}', '${journalArticleModel.DDMStructureKey}', '${journalArticleModel.DDMTemplateKey}', '${journalArticleModel.defaultLanguageId}', '${journalArticleModel.layoutUuid}', '${initContext.getDateString(journalArticleModel.displayDate)}', '${initContext.getDateString(journalArticleModel.expirationDate)}', '${initContext.getDateString(journalArticleModel.reviewDate)}', ${journalArticleModel.indexable?string}, ${journalArticleModel.smallImage?string}, ${journalArticleModel.smallImageId}, '${journalArticleModel.smallImageURL}', '${initContext.getDateString(journalArticleModel.lastPublishDate)}', ${journalArticleModel.status}, ${journalArticleModel.statusByUserId}, '${journalArticleModel.statusByUserName}', '${initContext.getDateString(journalArticleModel.statusDate)}');
 
-			<#assign journalArticleLocalizationModel = dataFactory.newJournalArticleLocalizationModel(journalArticleModel, journalArticleCount, versionCount) />
+			<#assign journalArticleLocalizationModel = journalDataFactory.newJournalArticleLocalizationModel(journalArticleModel, journalArticleCount, versionCount) />
 
 			insert into JournalArticleLocalization values (${journalArticleLocalizationModel.articleLocalizationId}, ${journalArticleLocalizationModel.companyId}, ${journalArticleLocalizationModel.articlePK}, '${journalArticleLocalizationModel.title}', '${journalArticleLocalizationModel.description}', '${journalArticleLocalizationModel.languageId}');
 
-			<#assign ddmTemplateLinkModel = dataFactory.newDDMTemplateLinkModel(journalArticleModel, ddmTemplateModel.templateId) />
+			<#assign ddmTemplateLinkModel = journalDataFactory.newDDMTemplateLinkModel(journalArticleModel, ddmTemplateModel.templateId) />
 
 			insert into DDMTemplateLink values (${ddmTemplateLinkModel.templateLinkId}, ${ddmTemplateLinkModel.companyId}, ${ddmTemplateLinkModel.classNameId}, ${ddmTemplateLinkModel.classPK}, ${ddmTemplateLinkModel.templateId});
 
 			<@insertDDMStorageLink
-				_ddmStorageLinkModel = dataFactory.newDDMStorageLinkModel(journalArticleModel, ddmStructureModel.structureId)
+				_ddmStorageLinkModel = journalDataFactory.newDDMStorageLinkModel(journalArticleModel, ddmStructureModel.structureId)
 			/>
 
 			<@insertSocialActivity
 				_entry = journalArticleModel
 			/>
 
-			<#if versionCount = dataFactory.maxJournalArticleVersionCount>
+			<#if versionCount = initContext.maxJournalArticleVersionCount>
 				<@insertAssetEntry
-					_entry = dataFactory.newObjectValuePair(journalArticleModel, journalArticleLocalizationModel)
+					_entry = journalDataFactory.newObjectValuePair(journalArticleModel, journalArticleLocalizationModel)
 					_categoryAndTag = true
 				/>
 			</#if>
@@ -90,21 +90,21 @@ insert into DDMTemplate values ('${ddmTemplateModel.uuid}', ${ddmTemplateModel.t
 		/>
 
 		<@insertMBDiscussion
-			_classNameId = dataFactory.journalArticleClassNameId
+			_classNameId = journalDataFactory.journalArticleClassNameId
 			_classPK = journalArticleResourceModel.resourcePrimKey
 			_groupId = groupId
 			_maxCommentCount = 0
-			_mbRootMessageId = dataFactory.getCounterNext()
-			_mbThreadId = dataFactory.getCounterNext()
+			_mbRootMessageId = counterDataFactory.getCounterNext()
+			_mbThreadId = counterDataFactory.getCounterNext()
 		/>
 
-		<#assign portletPreferencesModel = dataFactory.newPortletPreferencesModel(layoutModel.plid, portletIdPrefix + journalArticleCount, journalArticleResourceModel) />
+		<#assign portletPreferencesModel = portletPreferenceDataFactory.newPortletPreferencesModel(layoutModel.plid, portletIdPrefix + journalArticleCount, journalArticleResourceModel) />
 
 		<@insertPortletPreferences
 			_portletPreferencesModel = portletPreferencesModel
 		/>
 
-		<#assign journalContentSearchModel = dataFactory.newJournalContentSearchModel(journalArticleModel, layoutModel.plid) />
+		<#assign journalContentSearchModel = journalDataFactory.newJournalContentSearchModel(journalArticleModel, layoutModel.plid) />
 
 		insert into JournalContentSearch values (${journalContentSearchModel.contentSearchId}, ${journalContentSearchModel.groupId}, ${journalContentSearchModel.companyId}, ${journalContentSearchModel.privateLayout?string}, ${journalContentSearchModel.layoutId}, '${journalContentSearchModel.portletId}', '${journalContentSearchModel.articleId}');
 	</#list>
