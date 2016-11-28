@@ -66,9 +66,11 @@ public class SampleSQLBuilder {
 
 			properties.load(reader);
 
-			DataFactory dataFactory = new DataFactory(properties);
+			InitContext initContext = new InitContext(properties);
 
-			new SampleSQLBuilder(properties, dataFactory);
+			DataFactory dataFactory = new DataFactory(initContext);
+
+			new SampleSQLBuilder(properties, dataFactory, initContext);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -85,7 +87,9 @@ public class SampleSQLBuilder {
 		}
 	}
 
-	public SampleSQLBuilder(Properties properties, DataFactory dataFactory)
+	public SampleSQLBuilder(
+			Properties properties, DataFactory dataFactory,
+			InitContext initContext)
 		throws Exception {
 
 		_dbType = DBType.valueOf(
@@ -100,6 +104,7 @@ public class SampleSQLBuilder {
 		_script = properties.getProperty("sample.sql.script");
 
 		_dataFactory = dataFactory;
+		_initContext = initContext;
 
 		// Generic
 
@@ -349,9 +354,9 @@ public class SampleSQLBuilder {
 	}
 
 	protected Map<String, Object> getContext() throws Exception {
-		Map<String, Object> context = new HashMap<>();
+		Map<String, Object> context = _dataFactory.getDataFactories();
 
-		context.put("dataFactory", _dataFactory);
+		context.put("initContext", _initContext);
 
 		for (String csvFileName : _csvFileNames) {
 			Writer csvWriter = createFileWriter(
@@ -455,6 +460,7 @@ public class SampleSQLBuilder {
 	private final DataFactory _dataFactory;
 	private final DBType _dbType;
 	private volatile Throwable _freeMarkerThrowable;
+	private final InitContext _initContext;
 	private final int _optimizeBufferSize;
 	private final String _outputDir;
 	private final String _script;
