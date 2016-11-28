@@ -32,7 +32,7 @@ public class DataFactory {
 		_blogDataFactory = new BlogDataFactory(initContext);
 		_counterDataFactory = new CounterDataFactory(initContext);
 		_dLDataFactory = new DLDataFactory(initContext, _userDataFactory);
-		_dDLDDMDataFactory = new DDLDDMDataFactory(initContext);
+		_dDLDDMDataFactory = new DDLDataFactory(initContext);
 		_layoutDataFactory = new LayoutDataFactory(initContext);
 		_messageBoardDataFactory = new MessageBoardDataFactory(initContext);
 		_portletPreferenceDataFactory = new PortletPreferenceDataFactory(
@@ -84,7 +84,7 @@ public class DataFactory {
 	private final BlogDataFactory _blogDataFactory;
 	private final CounterDataFactory _counterDataFactory;
 	private final Map<String, Object> _dataFactories = new HashMap<>();
-	private final DDLDDMDataFactory _dDLDDMDataFactory;
+	private final DDLDataFactory _dDLDDMDataFactory;
 	private final DLDataFactory _dLDataFactory;
 	private final JournalDataFactory _journalDataFactory;
 	private final LayoutDataFactory _layoutDataFactory;
