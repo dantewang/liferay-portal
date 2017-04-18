@@ -938,13 +938,6 @@ public class DataFactory {
 			}
 		}
 
-		_assetPublisherQueryName = GetterUtil.getString(
-			properties.getProperty("sample.sql.asset.publisher.query.name"));
-
-		if (!_assetPublisherQueryName.equals("assetCategories")) {
-			_assetPublisherQueryName = "assetTags";
-		}
-
 		_maxAssetCategoryCount = GetterUtil.getInteger(
 			properties.getProperty("sample.sql.max.asset.category.count"));
 		_maxAssetEntryToAssetCategoryCount = GetterUtil.getInteger(
@@ -2270,69 +2263,71 @@ public class DataFactory {
 				plid, portletId, PortletConstants.DEFAULT_PREFERENCES);
 		}
 
-		ObjectValuePair<String[], Integer> objectValuePair = null;
-
 		Integer startIndex = _assetPublisherQueryStartIndexes.get(groupId);
 
 		if (startIndex == null) {
 			startIndex = 0;
 		}
 
-		if (_assetPublisherQueryName.equals("assetCategories")) {
-			Map<Long, List<AssetCategoryModel>> assetCategoryModelsMap =
-				_assetCategoryModelsMaps[(int)groupId - 1];
+		long classNameId = getNextAssetClassNameId(groupId);
 
-			List<AssetCategoryModel> assetCategoryModels =
-				assetCategoryModelsMap.get(getNextAssetClassNameId(groupId));
+		Map<Long, List<AssetCategoryModel>> assetCategoryModelsMap =
+			_assetCategoryModelsMaps[(int)groupId - 1];
 
-			if ((assetCategoryModels == null) ||
-				assetCategoryModels.isEmpty()) {
+		List<AssetCategoryModel> assetCategoryModels =
+			assetCategoryModelsMap.get(classNameId);
 
-				return newPortletPreferencesModel(
-					plid, portletId, PortletConstants.DEFAULT_PREFERENCES);
-			}
+		if ((assetCategoryModels == null) || assetCategoryModels.isEmpty()) {
+			return newPortletPreferencesModel(
+				plid, portletId, PortletConstants.DEFAULT_PREFERENCES);
+		}
 
-			objectValuePair = getAssetPublisherAssetCategoriesQueryValues(
+		ObjectValuePair<String[], Integer> assetCategoryObjectValuePair =
+			getAssetPublisherAssetCategoriesQueryValues(
 				assetCategoryModels, startIndex);
-		}
-		else {
-			Map<Long, List<AssetTagModel>> assetTagModelsMap =
-				_assetTagModelsMaps[(int)groupId - 1];
 
-			List<AssetTagModel> assetTagModels = assetTagModelsMap.get(
-				getNextAssetClassNameId(groupId));
+		Map<Long, List<AssetTagModel>> assetTagModelsMap =
+			_assetTagModelsMaps[(int)groupId - 1];
 
-			if ((assetTagModels == null) || assetTagModels.isEmpty()) {
-				return newPortletPreferencesModel(
-					plid, portletId, PortletConstants.DEFAULT_PREFERENCES);
-			}
+		List<AssetTagModel> assetTagModels = assetTagModelsMap.get(classNameId);
 
-			objectValuePair = getAssetPublisherAssetTagsQueryValues(
-				assetTagModels, startIndex);
+		if ((assetTagModels == null) || assetTagModels.isEmpty()) {
+			return newPortletPreferencesModel(
+				plid, portletId, PortletConstants.DEFAULT_PREFERENCES);
 		}
 
-		String[] assetPublisherQueryValues = objectValuePair.getKey();
+		ObjectValuePair<String[], Integer> assetTagObjectValuePair =
+			getAssetPublisherAssetTagsQueryValues(assetTagModels, startIndex);
 
-		_assetPublisherQueryStartIndexes.put(
-			groupId, objectValuePair.getValue());
+		String[] assetCategoryQueryValues =
+			assetCategoryObjectValuePair.getKey();
+		String[] assetTagQueryValues = assetTagObjectValuePair.getKey();
+
+		startIndex =
+			(assetCategoryObjectValuePair.getValue() +
+				assetTagObjectValuePair.getValue()) / 2;
+
+		_assetPublisherQueryStartIndexes.put(groupId, startIndex);
 
 		PortletPreferences jxPortletPreferences =
 			(PortletPreferences)_defaultAssetPublisherPortletPreference.clone();
 
 		jxPortletPreferences.setValue("queryAndOperator0", "false");
 		jxPortletPreferences.setValue("queryContains0", "true");
-		jxPortletPreferences.setValue("queryName0", _assetPublisherQueryName);
+		jxPortletPreferences.setValue("queryName0", "AssetContains");
 		jxPortletPreferences.setValues(
 			"queryValues0",
 			new String[] {
-				assetPublisherQueryValues[0], assetPublisherQueryValues[1],
-				assetPublisherQueryValues[2]
+				assetCategoryQueryValues[0], assetCategoryQueryValues[1],
+				assetCategoryQueryValues[2], assetTagQueryValues[0],
+				assetTagQueryValues[1], assetTagQueryValues[2]
 			});
 		jxPortletPreferences.setValue("queryAndOperator1", "false");
 		jxPortletPreferences.setValue("queryContains1", "false");
-		jxPortletPreferences.setValue("queryName1", _assetPublisherQueryName);
-		jxPortletPreferences.setValue(
-			"queryValues1", assetPublisherQueryValues[3]);
+		jxPortletPreferences.setValue("queryName1", "AssetNotContains");
+		jxPortletPreferences.setValues(
+			"queryValues1",
+			new String[] {assetCategoryQueryValues[3], assetTagQueryValues[3]});
 
 		return newPortletPreferencesModel(
 			plid, portletId,
@@ -3710,7 +3705,6 @@ public class DataFactory {
 	private final long[] _assetClassNameIds;
 	private final Map<Long, Integer> _assetClassNameIdsIndexes =
 		new HashMap<>();
-	private String _assetPublisherQueryName;
 	private final Map<Long, Integer> _assetPublisherQueryStartIndexes =
 		new HashMap<>();
 	private Map<Long, SimpleCounter>[] _assetTagCounters;
