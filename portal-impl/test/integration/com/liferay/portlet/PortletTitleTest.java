@@ -27,12 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.portlet.PortletConfig;
+
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-
-import javax.portlet.PortletConfig;
 
 /**
  * @author Preston Crary
