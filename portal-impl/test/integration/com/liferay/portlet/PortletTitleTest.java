@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.portlet.PortletBag;
 import com.liferay.portal.kernel.portlet.PortletBagPool;
 import com.liferay.portal.kernel.portlet.PortletConfigFactoryUtil;
+import com.liferay.portal.kernel.portlet.bridges.mvc.bundle.mvcactioncommand.TestPortlet;
 import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -50,6 +51,10 @@ public class PortletTitleTest {
 
 		for (Portlet portlet : PortletLocalServiceUtil.getPortlets()) {
 			String rootPortletId = portlet.getRootPortletId();
+
+			if (rootPortletId.contains("TestPortlet")) {
+				continue;
+			}
 
 			PortletBag portletBag = PortletBagPool.get(rootPortletId);
 
