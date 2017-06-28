@@ -27,7 +27,8 @@ import org.osgi.service.component.annotations.Component;
 	immediate = true,
 	property = {
 		"javax.portlet.init-param.copy-request-parameters=false",
-		"javax.portlet.name=" + TestPortlet.PORTLET_NAME
+		"javax.portlet.name=" + TestPortlet.PORTLET_NAME,
+		"javax.portlet.resource-bundle=content.Language"
 	},
 	service = Portlet.class
 )
