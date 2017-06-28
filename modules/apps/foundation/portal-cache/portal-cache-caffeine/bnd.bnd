@@ -1,0 +1,7 @@
+Bundle-Name: Liferay Portal Cache Caffeine
+Bundle-SymbolicName: com.liferay.portal.cache.caffeine
+Bundle-Version: 1.0.0
+DynamicImport-Package: *
+Export-Package:
+Liferay-Releng-Module-Group-Description:
+Liferay-Releng-Module-Group-Title: Cache Engines
