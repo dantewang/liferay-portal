@@ -60,8 +60,8 @@ public class AppServer {
 
 	public static AppServer getTCServerAppServer() {
 		return new AppServer(
-			"../../tc-server-2.9.11", "", "/liferay/lib",
-			"/liferay/webapps/ROOT", "tomcat");
+			"../../tc-server-3.2.5", "/tomcat-8.5.13.B.RELEASE/lib",
+			"/liferay/lib", "/liferay/webapps/ROOT", "tomcat");
 	}
 
 	public static AppServer getTomcatAppServer() {
@@ -77,7 +77,7 @@ public class AppServer {
 
 	public static AppServer getWebSphereAppServer() {
 		return new AppServer(
-			"../../websphere-8.5.5.0", "", "/lib/ext",
+			"../../websphere-8.5.5.0", "", "/lib",
 			"/profiles/liferay/installedApps/liferay-cell/liferay-portal.ear" +
 				"/liferay-portal.war",
 			"websphere");
@@ -110,7 +110,7 @@ public class AppServer {
 
 		_dir = new File(dirName);
 
-		if (extraLibDirNames != null) {
+		if ((extraLibDirNames != null) && !extraLibDirNames.isEmpty()) {
 			for (String extraLibDir : extraLibDirNames.split(",")) {
 				_extraLibDirs.add(new File(dirName, extraLibDir));
 			}
@@ -158,9 +158,9 @@ public class AppServer {
 	}
 
 	public void setExtraLibDirNames(String extraLibDirNames) {
-		if (extraLibDirNames != null) {
+		if ((extraLibDirNames != null) && !extraLibDirNames.isEmpty()) {
 			for (String extraLibDirName : extraLibDirNames.split(",")) {
-				_extraLibDirs.add(new File(extraLibDirNames, extraLibDirName));
+				_extraLibDirs.add(new File(_dir, extraLibDirName));
 			}
 		}
 	}
