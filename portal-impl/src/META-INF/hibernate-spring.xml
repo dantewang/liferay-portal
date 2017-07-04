@@ -60,6 +60,11 @@
 			</props>
 		</property>
 		<property name="mvccEnabled" value="false" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="javax.persistence.validation.mode">none</prop>
+			</props>
+		</property>
 	</bean>
 	<bean class="com.liferay.portal.spring.hibernate.PortalHibernateConfiguration" id="liferayHibernateSessionFactory">
 		<property name="dataSource" ref="liferayDataSource" />
