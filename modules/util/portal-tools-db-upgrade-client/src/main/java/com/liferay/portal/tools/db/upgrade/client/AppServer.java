@@ -110,7 +110,7 @@ public class AppServer {
 
 		_dir = new File(dirName);
 
-		if (extraLibDirNames != null) {
+		if ((extraLibDirNames != null) && !extraLibDirNames.isEmpty()) {
 			for (String extraLibDir : extraLibDirNames.split(",")) {
 				_extraLibDirs.add(new File(dirName, extraLibDir));
 			}
@@ -158,9 +158,9 @@ public class AppServer {
 	}
 
 	public void setExtraLibDirNames(String extraLibDirNames) {
-		if (extraLibDirNames != null) {
+		if ((extraLibDirNames != null) && !extraLibDirNames.isEmpty()) {
 			for (String extraLibDirName : extraLibDirNames.split(",")) {
-				_extraLibDirs.add(new File(extraLibDirNames, extraLibDirName));
+				_extraLibDirs.add(new File(_dir, extraLibDirName));
 			}
 		}
 	}
