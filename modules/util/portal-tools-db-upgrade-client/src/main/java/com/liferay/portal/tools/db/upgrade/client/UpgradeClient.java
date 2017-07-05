@@ -464,9 +464,12 @@ public class UpgradeClient {
 				_appServer.setDirName(response);
 			}
 
+			String extraLibNames = StringUtil.join(
+				_getRelativeFileNames(dir, _appServer.getExtraLibDirs()), ',');
+
 			System.out.println(
 				"Please enter your extra library directories (" +
-					_appServer.getExtraLibDirNames() + "): ");
+					extraLibNames + "): ");
 
 			response = _consoleReader.readLine();
 
@@ -475,8 +478,8 @@ public class UpgradeClient {
 			}
 
 			System.out.println(
-				"Please enter your global library directory (" + globalLibDir +
-					"): ");
+				"Please enter your global library directory (" +
+					_getRelativeFileName(dir, globalLibDir) + "): ");
 
 			response = _consoleReader.readLine();
 
@@ -485,7 +488,8 @@ public class UpgradeClient {
 			}
 
 			System.out.println(
-				"Please enter your portal directory (" + portalDir + "): ");
+				"Please enter your portal directory (" +
+					_getRelativeFileName(dir, portalDir) + "): ");
 
 			response = _consoleReader.readLine();
 

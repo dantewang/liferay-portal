@@ -18,6 +18,9 @@ import com.liferay.portal.tools.db.upgrade.client.util.StringUtil;
 
 import java.io.File;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,16 +111,28 @@ public class AppServer {
 		String dirName, String extraLibDirNames, String globalLibDirName,
 		String portalDirName, String serverDetectorServerId) {
 
-		_dir = new File(dirName);
+		Path appServerPath = _normalizePath(Paths.get(dirName));
+
+		_dir = appServerPath.toFile();
 
 		if (extraLibDirNames != null) {
-			for (String extraLibDir : extraLibDirNames.split(",")) {
-				_extraLibDirs.add(new File(dirName, extraLibDir));
+			for (String extraLibDirName : extraLibDirNames.split(",")) {
+				Path extraLibPath = _resolveToAppServerPath(
+					Paths.get(extraLibDirName));
+
+				_extraLibDirs.add(extraLibPath.toFile());
 			}
 		}
 
-		_globalLibDir = new File(dirName, globalLibDirName);
-		_portalDir = new File(dirName, portalDirName);
+		Path globalLibPath = _resolveToAppServerPath(
+			Paths.get(globalLibDirName));
+
+		_globalLibDir = globalLibPath.toFile();
+
+		Path portalPath = _resolveToAppServerPath(Paths.get(portalDirName));
+
+		_portalDir = portalPath.toFile();
+
 		_serverDetectorServerId = serverDetectorServerId;
 	}
 
@@ -154,23 +169,54 @@ public class AppServer {
 	}
 
 	public void setDirName(String dirName) {
-		_dir = new File(dirName);
+		Path appServerPath = _normalizePath(Paths.get(dirName));
+
+		_dir = appServerPath.toFile();
 	}
 
 	public void setExtraLibDirNames(String extraLibDirNames) {
 		if (extraLibDirNames != null) {
 			for (String extraLibDirName : extraLibDirNames.split(",")) {
-				_extraLibDirs.add(new File(extraLibDirNames, extraLibDirName));
+				Path extraLibPath = _resolveToAppServerPath(
+					Paths.get(extraLibDirName));
+
+				_extraLibDirs.add(extraLibPath.toFile());
 			}
 		}
 	}
 
 	public void setGlobalLibDirName(String globalLibDirName) {
-		_globalLibDir = new File(_dir, globalLibDirName);
+		Path globalLibPath = _resolveToAppServerPath(
+			Paths.get(globalLibDirName));
+
+		_globalLibDir = globalLibPath.toFile();
 	}
 
 	public void setPortalDirName(String portalDirName) {
-		_portalDir = new File(_dir, portalDirName);
+		Path portalPath = _resolveToAppServerPath(Paths.get(portalDirName));
+
+		_portalDir = portalPath.toFile();
+	}
+
+	private Path _normalizePath(Path path) {
+		path = path.toAbsolutePath();
+		path = path.normalize();
+
+		return path;
+	}
+
+	private Path _resolveToAppServerPath(Path path) {
+		Path appServerPath = _dir.toPath();
+
+		path = _normalizePath(path);
+
+		if (path.startsWith(appServerPath)) {
+			return path;
+		}
+
+		path = Paths.get(appServerPath.toString(), path.toString());
+
+		return _normalizePath(path);
 	}
 
 	private File _dir;
