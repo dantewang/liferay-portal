@@ -81,8 +81,12 @@ public class Cache2kPortalCacheManager<K extends Serializable, V>
 		if ((portalCacheName == null) || (portalCacheName.length() == 0)) {
 			return;
 		}
-		
+
 		Cache cache = _cacheManager.getCache(portalCacheName);
+
+		if (cache == null) {
+			return;
+		}
 
 		cache.close();
 	}
