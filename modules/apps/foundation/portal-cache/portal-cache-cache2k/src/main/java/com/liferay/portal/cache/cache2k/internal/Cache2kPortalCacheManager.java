@@ -78,6 +78,10 @@ public class Cache2kPortalCacheManager<K extends Serializable, V>
 
 	@Override
 	protected void doRemovePortalCache(String portalCacheName) {
+		if ((portalCacheName == null) || (portalCacheName.length() == 0)) {
+			return;
+		}
+		
 		Cache cache = _cacheManager.getCache(portalCacheName);
 
 		cache.close();
