@@ -1,0 +1,8 @@
+Bundle-Name: Liferay Portal Cache Cache2k
+Bundle-SymbolicName: com.liferay.portal.cache.cache2k
+Bundle-Version: 1.0.0
+DynamicImport-Package: *
+Export-Package:
+Import-Package: !xmlpull.v1
+Liferay-Releng-Module-Group-Description:
+Liferay-Releng-Module-Group-Title: Cache Engines
