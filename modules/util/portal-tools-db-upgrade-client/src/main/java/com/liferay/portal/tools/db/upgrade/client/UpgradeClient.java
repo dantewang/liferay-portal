@@ -28,11 +28,7 @@ import java.io.InputStreamReader;
 
 import java.nio.file.Path;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import jline.console.ConsoleReader;
 
@@ -268,18 +264,28 @@ public class UpgradeClient {
 	private void _appendClassPath(StringBuilder sb, File dir)
 		throws IOException {
 
+		Set<String> jarDirs = new HashSet<>();
+
 		if (dir.exists() && dir.isDirectory()) {
 			for (File file : dir.listFiles()) {
 				String fileName = file.getName();
 
 				if (file.isFile() && fileName.endsWith("jar")) {
-					sb.append(file.getCanonicalPath());
-					sb.append(File.pathSeparator);
+					File parent = file.getParentFile();
+
+					jarDirs.add(parent.getCanonicalPath());
 				}
 				else if (file.isDirectory()) {
 					_appendClassPath(sb, file);
 				}
 			}
+		}
+
+		for (String jarDir : jarDirs) {
+			sb.append(jarDir);
+			sb.append(File.separator);
+			sb.append("*");
+			sb.append(File.pathSeparator);
 		}
 	}
 
