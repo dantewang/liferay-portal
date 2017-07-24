@@ -24,7 +24,11 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import java.net.URI;
+import java.net.URL;
 
 import java.nio.file.Path;
 
@@ -33,6 +37,10 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
 
 import jline.console.ConsoleReader;
 
@@ -148,6 +156,8 @@ public class UpgradeClient {
 		System.setOut(
 			new TeePrintStream(new FileOutputStream(_logFile), System.out));
 
+		File bootstrapJarFile = _createBootstrapJar();
+
 		ProcessBuilder processBuilder = new ProcessBuilder();
 
 		List<String> commands = new ArrayList<>();
@@ -160,7 +170,7 @@ public class UpgradeClient {
 		}
 
 		commands.add("-cp");
-		commands.add(_getClassPath());
+		commands.add(bootstrapJarFile.getName());
 
 		Collections.addAll(commands, _jvmOpts.split(" "));
 
@@ -293,6 +303,72 @@ public class UpgradeClient {
 
 	private void _close(Closeable closeable) throws IOException {
 		closeable.close();
+	}
+
+	private File _createBootstrapJar() throws IOException {
+		File bootstrapJarFile = new File("bootstrap.jar");
+
+		bootstrapJarFile.deleteOnExit();
+
+		String classpath = _getClassPath();
+
+		Manifest manifest = new Manifest();
+
+		StringBuilder sb = new StringBuilder();
+
+		for (String classpathEntry : classpath.split(File.pathSeparator)) {
+			File classpathFile = new File(classpathEntry);
+
+			URI uri = classpathFile.toURI();
+
+			URL url = new URL(uri.toString());
+
+			sb.append(url.toExternalForm());
+
+			sb.append(" ");
+		}
+
+		sb.setLength(sb.length() - 1);
+
+		Attributes attributes = manifest.getMainAttributes();
+
+		attributes.putValue(Attributes.Name.MANIFEST_VERSION.toString(), "1.0");
+		attributes.putValue(
+			Attributes.Name.CLASS_PATH.toString(), sb.toString());
+
+		try (JarOutputStream jarOutputStream = new JarOutputStream(
+				new FileOutputStream(bootstrapJarFile))) {
+
+			jarOutputStream.setLevel(JarOutputStream.STORED);
+
+			JarEntry manifestEntry = new JarEntry("META-INF/MANIFEST.MF");
+
+			jarOutputStream.putNextEntry(manifestEntry);
+
+			manifest.write(jarOutputStream);
+
+			String propertiesFileName = "portal-upgrade.properties";
+
+			ClassLoader classLoader = UpgradeClient.class.getClassLoader();
+
+			JarEntry bootstrapClassEntry = new JarEntry(propertiesFileName);
+
+			jarOutputStream.putNextEntry(bootstrapClassEntry);
+
+			try (InputStream inputStream = classLoader.getResourceAsStream(
+				propertiesFileName)) {
+
+				byte[] buffer = new byte[1024];
+
+				int length;
+
+				while ((length = inputStream.read(buffer)) != -1) {
+					jarOutputStream.write(buffer, 0, length);
+				}
+			}
+		}
+
+		return bootstrapJarFile;
 	}
 
 	private String _getClassPath() throws IOException {
