@@ -567,11 +567,9 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 			File srcFile, String displayName, PluginPackage pluginPackage)
 		throws Exception {
 
-		if (appServerType.equals(ServerDetector.JBOSS_ID)) {
-			copyDependencyXml(
-				"jboss-deployment-structure.xml", srcFile + "/WEB-INF");
-		}
-		else if (appServerType.equals(ServerDetector.WILDFLY_ID)) {
+		if (appServerType.equals(ServerDetector.JBOSS_ID) ||
+			appServerType.equals(ServerDetector.WILDFLY_ID)) {
+
 			copyDependencyXml(
 				"jboss-deployment-structure.xml", srcFile + "/WEB-INF");
 		}
