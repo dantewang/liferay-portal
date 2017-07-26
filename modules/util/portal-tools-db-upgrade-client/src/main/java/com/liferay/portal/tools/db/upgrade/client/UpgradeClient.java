@@ -24,15 +24,25 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import java.net.URI;
+import java.net.URL;
 
 import java.nio.file.Path;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
 
 import jline.console.ConsoleReader;
 
@@ -148,6 +158,8 @@ public class UpgradeClient {
 		System.setOut(
 			new TeePrintStream(new FileOutputStream(_logFile), System.out));
 
+		File bootstrapJarFile = _createBootstrapJar();
+
 		ProcessBuilder processBuilder = new ProcessBuilder();
 
 		List<String> commands = new ArrayList<>();
@@ -160,7 +172,7 @@ public class UpgradeClient {
 		}
 
 		commands.add("-cp");
-		commands.add(_getClassPath());
+		commands.add(bootstrapJarFile.getName());
 
 		Collections.addAll(commands, _jvmOpts.split(" "));
 
@@ -265,7 +277,7 @@ public class UpgradeClient {
 		return options;
 	}
 
-	private void _appendClassPath(StringBuilder sb, File dir)
+	private void _appendClassPath(Set<File> classpaths, File dir)
 		throws IOException {
 
 		if (dir.exists() && dir.isDirectory()) {
@@ -273,21 +285,20 @@ public class UpgradeClient {
 				String fileName = file.getName();
 
 				if (file.isFile() && fileName.endsWith("jar")) {
-					sb.append(file.getCanonicalPath());
-					sb.append(File.pathSeparator);
+					classpaths.add(file);
 				}
 				else if (file.isDirectory()) {
-					_appendClassPath(sb, file);
+					_appendClassPath(classpaths, file);
 				}
 			}
 		}
 	}
 
-	private void _appendClassPath(StringBuilder sb, List<File> dirs)
+	private void _appendClassPath(Set<File> classpaths, List<File> dirs)
 		throws IOException {
 
 		for (File dir : dirs) {
-			_appendClassPath(sb, dir);
+			_appendClassPath(classpaths, dir);
 		}
 	}
 
@@ -295,30 +306,95 @@ public class UpgradeClient {
 		closeable.close();
 	}
 
-	private String _getClassPath() throws IOException {
+	private File _createBootstrapJar() throws IOException {
+		File bootstrapJarFile = new File("bootstrap.jar");
+
+		bootstrapJarFile.deleteOnExit();
+
+		Set<File> classpaths = _getClassPath();
+
+		Manifest manifest = new Manifest();
+
 		StringBuilder sb = new StringBuilder();
+
+		for (File classpathEntry : classpaths) {
+			URI uri = classpathEntry.toURI();
+
+			URL url = new URL(uri.toString());
+
+			sb.append(url.toExternalForm());
+
+			sb.append(" ");
+		}
+
+		sb.setLength(sb.length() - 1);
+
+		Attributes attributes = manifest.getMainAttributes();
+
+		attributes.putValue(Attributes.Name.MANIFEST_VERSION.toString(), "1.0");
+		attributes.putValue(
+			Attributes.Name.CLASS_PATH.toString(), sb.toString());
+
+		try (JarOutputStream jarOutputStream = new JarOutputStream(
+				new FileOutputStream(bootstrapJarFile))) {
+
+			jarOutputStream.setLevel(JarOutputStream.STORED);
+
+			JarEntry manifestEntry = new JarEntry("META-INF/MANIFEST.MF");
+
+			jarOutputStream.putNextEntry(manifestEntry);
+
+			manifest.write(jarOutputStream);
+
+			String propertiesFileName = "portal-upgrade.properties";
+
+			ClassLoader classLoader = UpgradeClient.class.getClassLoader();
+
+			JarEntry bootstrapClassEntry = new JarEntry(propertiesFileName);
+
+			jarOutputStream.putNextEntry(bootstrapClassEntry);
+
+			try (InputStream inputStream = classLoader.getResourceAsStream(
+					propertiesFileName)) {
+
+				byte[] buffer = new byte[1024];
+
+				int length;
+
+				while ((length = inputStream.read(buffer)) != -1) {
+					jarOutputStream.write(buffer, 0, length);
+				}
+			}
+		}
+
+		return bootstrapJarFile;
+	}
+
+	private Set<File> _getClassPath() throws IOException {
+		Set<File> classpaths = new HashSet<>();
 
 		String liferayClassPath = System.getenv("LIFERAY_CLASSPATH");
 
 		if ((liferayClassPath != null) && !liferayClassPath.isEmpty()) {
-			sb.append(liferayClassPath);
-			sb.append(File.pathSeparator);
+			for (String liferayClassPathEntry : liferayClassPath.split(
+					File.pathSeparator)) {
+
+				classpaths.add(new File(liferayClassPathEntry));
+			}
 		}
 
-		_appendClassPath(sb, new File("lib"));
-		_appendClassPath(sb, new File("."));
-		_appendClassPath(sb, _appServer.getGlobalLibDir());
-		_appendClassPath(sb, _appServer.getExtraLibDirs());
+		_appendClassPath(classpaths, new File("lib"));
+		_appendClassPath(classpaths, new File("."));
+		_appendClassPath(classpaths, _appServer.getGlobalLibDir());
+		_appendClassPath(classpaths, _appServer.getExtraLibDirs());
 
 		File portalClassesDir = _appServer.getPortalClassesDir();
 
-		sb.append(portalClassesDir.getCanonicalPath());
+		classpaths.add(_appServer.getPortalClassesDir());
 
-		sb.append(File.pathSeparator);
+		_appendClassPath(classpaths, _appServer.getPortalLibDir());
 
-		_appendClassPath(sb, _appServer.getPortalLibDir());
-
-		return sb.toString();
+		return classpaths;
 	}
 
 	private String _getRelativeFileName(File baseFile, File pathFile) {
