@@ -754,14 +754,14 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 	}
 
 	private String _encodeURL(String url) {
-		String path = StringUtil.replace(
-			url, CharPool.BACK_SLASH, CharPool.SLASH);
+//		String path = StringUtil.replace(
+//			url, CharPool.BACK_SLASH, CharPool.SLASH);
+//
+//		if (!path.startsWith(StringPool.SLASH)) {
+//			path = StringPool.SLASH + path;
+//		}
 
-		if (!path.startsWith(StringPool.SLASH)) {
-			path = StringPool.SLASH + path;
-		}
-
-		return URLCodec.encodeURL(path, StringPool.UTF8, true);
+		return URLCodec.encodeURL(url, StringPool.UTF8, true);
 	}
 
 	private String _getFelixFileInstallDir() {
