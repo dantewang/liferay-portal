@@ -572,6 +572,21 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 
 			copyDependencyXml(
 				"jboss-deployment-structure.xml", srcFile + "/WEB-INF");
+			copyDependencyXml("jboss-all.xml", srcFile + "/WEB-INF");
+
+			Path path = Paths.get(
+				SystemProperties.get(PropsKeys.LIFERAY_WEB_PORTAL_DIR));
+
+			path = path.getFileName();
+
+			File jbossAllFile = new File(srcFile + "/", "jboss-all.xml");
+
+			String jbossAllContent = FileUtil.read(jbossAllFile);
+
+			jbossAllContent = StringUtil.replace(
+				jbossAllContent, "ROOT.war", path.toString());
+
+			FileUtil.write(jbossAllFile, jbossAllContent);
 		}
 
 		for (DeploymentExtension deploymentExtension : _deploymentExtensions) {
