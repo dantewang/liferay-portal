@@ -572,6 +572,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 
 			copyDependencyXml(
 				"jboss-deployment-structure.xml", srcFile + "/WEB-INF");
+			copyDependencyXml("jboss-all.xml", srcFile + "/WEB-INF");
 		}
 
 		for (DeploymentExtension deploymentExtension : _deploymentExtensions) {
