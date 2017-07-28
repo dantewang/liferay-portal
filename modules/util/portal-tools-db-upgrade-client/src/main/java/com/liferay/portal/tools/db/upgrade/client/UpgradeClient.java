@@ -269,17 +269,8 @@ public class UpgradeClient {
 		throws IOException {
 
 		if (dir.exists() && dir.isDirectory()) {
-			for (File file : dir.listFiles()) {
-				String fileName = file.getName();
-
-				if (file.isFile() && fileName.endsWith("jar")) {
-					sb.append(file.getCanonicalPath());
-					sb.append(File.pathSeparator);
-				}
-				else if (file.isDirectory()) {
-					_appendClassPath(sb, file);
-				}
-			}
+			sb.append(dir.getCanonicalPath());
+			sb.append(File.pathSeparator);
 		}
 	}
 
