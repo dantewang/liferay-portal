@@ -573,6 +573,28 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 			copyDependencyXml(
 				"jboss-deployment-structure.xml", srcFile + "/WEB-INF");
 			copyDependencyXml("jboss-all.xml", srcFile + "/WEB-INF");
+
+			// Replace ROOT.war with actual deployment name
+
+			Path liferayWebPortalPath = Paths.get(
+				SystemProperties.get(PropsKeys.LIFERAY_WEB_PORTAL_DIR));
+
+			liferayWebPortalPath = liferayWebPortalPath.getFileName();
+
+			String liferayDeploymentName = liferayWebPortalPath.toString();
+
+			if (!"ROOT.war".equals(liferayDeploymentName)) {
+				File jbossAllFile = new File(
+					srcFile + "/WEB-INF", "jboss-all.xml");
+
+				String jbossAllContent = FileUtil.read(jbossAllFile);
+
+				jbossAllContent = StringUtil.replace(
+					jbossAllContent, "ROOT.war",
+					liferayWebPortalPath.toString());
+
+				FileUtil.write(jbossAllFile, jbossAllContent);
+			}
 		}
 
 		for (DeploymentExtension deploymentExtension : _deploymentExtensions) {
