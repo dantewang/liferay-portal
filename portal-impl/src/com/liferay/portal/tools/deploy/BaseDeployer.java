@@ -77,6 +77,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -572,29 +573,12 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 
 			copyDependencyXml(
 				"jboss-deployment-structure.xml", srcFile + "/WEB-INF");
-			copyDependencyXml("jboss-all.xml", srcFile + "/WEB-INF");
 
-			// Replace ROOT.war with actual deployment name
+			File file = new File(PropsValues.LIFERAY_WEB_PORTAL_DIR);
 
-			Path liferayWebPortalPath = Paths.get(
-				SystemProperties.get(PropsKeys.LIFERAY_WEB_PORTAL_DIR));
-
-			liferayWebPortalPath = liferayWebPortalPath.getFileName();
-
-			String liferayDeploymentName = liferayWebPortalPath.toString();
-
-			if (!"ROOT.war".equals(liferayDeploymentName)) {
-				File jbossAllFile = new File(
-					srcFile + "/WEB-INF", "jboss-all.xml");
-
-				String jbossAllContent = FileUtil.read(jbossAllFile);
-
-				jbossAllContent = StringUtil.replace(
-					jbossAllContent, "ROOT.war",
-					liferayWebPortalPath.toString());
-
-				FileUtil.write(jbossAllFile, jbossAllContent);
-			}
+			copyDependencyXml(
+				"jboss-all.xml", srcFile + "/WEB-INF",
+				Collections.singletonMap("root_war", file.getName()), true);
 		}
 
 		for (DeploymentExtension deploymentExtension : _deploymentExtensions) {
