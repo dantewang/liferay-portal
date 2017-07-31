@@ -77,6 +77,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -572,6 +573,12 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 
 			copyDependencyXml(
 				"jboss-deployment-structure.xml", srcFile + "/WEB-INF");
+
+			File file = new File(PropsValues.LIFERAY_WEB_PORTAL_DIR);
+
+			copyDependencyXml(
+				"jboss-all.xml", srcFile + "/WEB-INF",
+				Collections.singletonMap("root_war", file.getName()), true);
 		}
 
 		for (DeploymentExtension deploymentExtension : _deploymentExtensions) {
