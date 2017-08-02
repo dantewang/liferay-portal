@@ -141,9 +141,11 @@ import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
 import com.liferay.portal.kernel.servlet.DynamicServletRequest;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.HttpMethods;
+import com.liferay.portal.kernel.servlet.HttpSessionWrapper;
 import com.liferay.portal.kernel.servlet.NonSerializableObjectRequestWrapper;
 import com.liferay.portal.kernel.servlet.PersistentHttpServletRequestWrapper;
 import com.liferay.portal.kernel.servlet.PortalMessages;
+import com.liferay.portal.kernel.servlet.PortalSessionContext;
 import com.liferay.portal.kernel.servlet.PortalSessionThreadLocal;
 import com.liferay.portal.kernel.servlet.PortalWebResourcesUtil;
 import com.liferay.portal.kernel.servlet.PortletServlet;
@@ -5503,6 +5505,19 @@ public class PortalImpl implements Portal {
 
 		if (x != -1) {
 			return url;
+		}
+
+		// LPS-73785
+
+		if (ServerDetector.isWebLogic()) {
+			HttpSession httpSession = PortalSessionContext.get(sessionId);
+
+			while (httpSession instanceof HttpSessionWrapper) {
+				httpSession =
+					((HttpSessionWrapper)httpSession).getWrappedSession();
+			}
+
+			sessionId = httpSession.getId();
 		}
 
 		x = url.indexOf(CharPool.QUESTION);
