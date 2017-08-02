@@ -5512,12 +5512,14 @@ public class PortalImpl implements Portal {
 		if (ServerDetector.isWebLogic()) {
 			HttpSession httpSession = PortalSessionContext.get(sessionId);
 
-			while (httpSession instanceof HttpSessionWrapper) {
-				httpSession =
-					((HttpSessionWrapper)httpSession).getWrappedSession();
-			}
+			if (httpSession != null) {
+				while (httpSession instanceof HttpSessionWrapper) {
+					httpSession =
+						((HttpSessionWrapper)httpSession).getWrappedSession();
+				}
 
-			sessionId = httpSession.getId();
+				sessionId = httpSession.getId();
+			}
 		}
 
 		x = url.indexOf(CharPool.QUESTION);
