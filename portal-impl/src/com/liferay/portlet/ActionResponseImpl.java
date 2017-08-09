@@ -29,7 +29,7 @@ public class ActionResponseImpl
 	}
 
 	@Override
-	public void sendRedirect(String location) {
+	public void sendRedirect(String location) throws java.io.IOException {
 		if ((location == null) ||
 			(!location.startsWith("/") && !location.contains("://") &&
 			 !location.startsWith("wsrp_rewrite?"))) {
@@ -54,7 +54,8 @@ public class ActionResponseImpl
 	}
 
 	@Override
-	public void sendRedirect(String location, String renderUrlParamName) {
+	public void sendRedirect(String location, String renderUrlParamName)
+		throws java.io.IOException {
 	}
 
 }
