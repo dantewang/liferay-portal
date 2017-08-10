@@ -68,6 +68,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.function.BiConsumer;
 
 import javax.portlet.PortletMode;
@@ -400,6 +402,12 @@ public class PortletURLImpl
 	public void setCacheability(String cacheability) {
 		if (cacheability == null) {
 			throw new IllegalArgumentException("Cacheability is null");
+		}
+
+		String cacheabilityValue = _cacheabilities.get(cacheability);
+
+		if (cacheabilityValue != null) {
+			cacheability = cacheabilityValue;
 		}
 
 		if (!cacheability.equals(FULL) && !cacheability.equals(PORTLET) &&
@@ -1379,6 +1387,16 @@ public class PortletURLImpl
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(PortletURLImpl.class);
+
+	private static final ConcurrentMap<String, String> _cacheabilities;
+
+	static {
+		_cacheabilities = new ConcurrentHashMap<>();
+
+		_cacheabilities.put("FULL", ResourceURL.FULL);
+		_cacheabilities.put("PAGE", ResourceURL.PAGE);
+		_cacheabilities.put("PORTLET", ResourceURL.PORTLET);
+	}
 
 	private boolean _anchor = true;
 	private String _cacheability = ResourceURL.PAGE;
