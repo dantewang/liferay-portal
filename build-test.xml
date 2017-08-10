@@ -4036,7 +4036,9 @@ war.path=${app.server.weblogic.portal.dir}/</echo>
 
 								DirectoryScanner directoryScanner = new DirectoryScanner();
 
-								directoryScanner.setIncludes(new String[] {project.getProperty("test.app.server.dir") + "/logs/catalina.*.log"});
+								File logsDir = new File(project.getProperty("test.app.server.dir") + "/logs");
+
+								directoryScanner.setIncludes(new String[] {logsDir.getCanonicalPath() + "/catalina.*.log"});
 
 								directoryScanner.scan();
 
@@ -6127,6 +6129,9 @@ go]]></replacevalue>
 					<include name="**/TEST-*.xml" />
 				</fileset>
 				<fileset dir="util-java/test-results" erroronmissingdir="false">
+					<include name="**/TEST-*.xml" />
+				</fileset>
+				<fileset dir="tck/test-results" erroronmissingdir="false">
 					<include name="**/TEST-*.xml" />
 				</fileset>
 				<fileset dir="${blade.samples.dir}/liferay-workspace/tests" erroronmissingdir="false">
