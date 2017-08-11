@@ -497,7 +497,7 @@ public class PortletURLImpl
 
 	@Override
 	public void setParameter(String name, String value, boolean append) {
-		if (name == null) {
+		if (Validator.isNull(name)) {
 			throw new IllegalArgumentException();
 		}
 
@@ -517,7 +517,7 @@ public class PortletURLImpl
 
 	@Override
 	public void setParameter(String name, String[] values, boolean append) {
-		if ((name == null) || (values == null)) {
+		if (Validator.isNull(name) || (values == null)) {
 			throw new IllegalArgumentException();
 		}
 
