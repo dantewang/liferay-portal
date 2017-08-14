@@ -29,7 +29,9 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.Set;
 
 import javax.portlet.PortletRequestDispatcher;
@@ -68,7 +70,12 @@ public class PortletContextImpl implements LiferayPortletContext {
 
 	@Override
 	public Enumeration<String> getContainerRuntimeOptions() {
-		return null;
+		PortletApp portletApp = _portlet.getPortletApp();
+
+		Map<String, String[]> containerRuntimeOptions =
+			portletApp.getContainerRuntimeOptions();
+
+		return Collections.enumeration(containerRuntimeOptions.keySet());
 	}
 
 	@Override

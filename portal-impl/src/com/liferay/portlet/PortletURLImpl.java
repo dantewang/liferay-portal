@@ -68,11 +68,14 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.function.BiConsumer;
 
 import javax.portlet.PortletMode;
 import javax.portlet.PortletModeException;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletSecurityException;
 import javax.portlet.PortletURL;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceURL;
@@ -401,6 +404,12 @@ public class PortletURLImpl
 			throw new IllegalArgumentException("Cacheability is null");
 		}
 
+		String cacheabilityValue = _cacheabilities.get(cacheability);
+
+		if (cacheabilityValue != null) {
+			cacheability = cacheabilityValue;
+		}
+
 		if (!cacheability.equals(FULL) && !cacheability.equals(PORTLET) &&
 			!cacheability.equals(PAGE)) {
 
@@ -491,7 +500,7 @@ public class PortletURLImpl
 
 	@Override
 	public void setParameter(String name, String value, boolean append) {
-		if (name == null) {
+		if (Validator.isNull(name)) {
 			throw new IllegalArgumentException();
 		}
 
@@ -511,7 +520,7 @@ public class PortletURLImpl
 
 	@Override
 	public void setParameter(String name, String[] values, boolean append) {
-		if ((name == null) || (values == null)) {
+		if (Validator.isNull(name) || (values == null)) {
 			throw new IllegalArgumentException();
 		}
 
@@ -645,7 +654,7 @@ public class PortletURLImpl
 	}
 
 	@Override
-	public void setSecure(boolean secure) {
+	public void setSecure(boolean secure) throws PortletSecurityException {
 		_secure = secure;
 
 		clearCache();
@@ -1378,6 +1387,16 @@ public class PortletURLImpl
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(PortletURLImpl.class);
+
+	private static final ConcurrentMap<String, String> _cacheabilities;
+
+	static {
+		_cacheabilities = new ConcurrentHashMap<>();
+
+		_cacheabilities.put("FULL", ResourceURL.FULL);
+		_cacheabilities.put("PAGE", ResourceURL.PAGE);
+		_cacheabilities.put("PORTLET", ResourceURL.PORTLET);
+	}
 
 	private boolean _anchor = true;
 	private String _cacheability = ResourceURL.PAGE;
