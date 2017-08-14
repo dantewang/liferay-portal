@@ -64,6 +64,7 @@ import java.security.Key;
 import java.security.PrivilegedAction;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -401,12 +402,18 @@ public class PortletURLImpl
 			throw new IllegalArgumentException("Cacheability is null");
 		}
 
+		String cacheabilityValue = _cacheabilities.get(cacheability);
+
+		if (cacheabilityValue != null) {
+			cacheability = cacheabilityValue;
+		}
+
 		if (!cacheability.equals(FULL) && !cacheability.equals(PORTLET) &&
 			!cacheability.equals(PAGE)) {
 
 			throw new IllegalArgumentException(
-				"Cacheability " + cacheability + " is not " + FULL + ", " +
-					PORTLET + ", or " + PAGE);
+				"Cacheability " + cacheability + " is not FULL, " + FULL +
+					", PORTLET, " + PORTLET + ", or PAGE, " + PAGE);
 		}
 
 		if (_portletRequest instanceof ResourceRequest) {
@@ -1378,6 +1385,14 @@ public class PortletURLImpl
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(PortletURLImpl.class);
+
+	private static final Map<String, String> _cacheabilities = new HashMap<>();
+
+	static {
+		_cacheabilities.put("FULL", ResourceURL.FULL);
+		_cacheabilities.put("PAGE", ResourceURL.PAGE);
+		_cacheabilities.put("PORTLET", ResourceURL.PORTLET);
+	}
 
 	private boolean _anchor = true;
 	private String _cacheability = ResourceURL.PAGE;
