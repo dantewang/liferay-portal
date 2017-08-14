@@ -49,12 +49,16 @@ public abstract class ClientDataRequestImpl
 
 	@Override
 	public InputStream getPortletInputStream() throws IOException {
+		_checkContentType();
+
 		return getHttpServletRequest().getInputStream();
 	}
 
 	@Override
 	public BufferedReader getReader()
 		throws IOException, UnsupportedEncodingException {
+
+		_checkContentType();
 
 		_calledGetReader = true;
 
@@ -70,6 +74,20 @@ public abstract class ClientDataRequestImpl
 		}
 
 		getHttpServletRequest().setCharacterEncoding(enc);
+	}
+
+	private void _checkContentType() {
+		String method = getMethod();
+
+		if (method.equals("POST")) {
+			String contentType = getContentType();
+
+			if ((contentType == null) ||
+				contentType.equals("application/x-www-form-urlencoded")) {
+
+				throw new IllegalStateException();
+			}
+		}
 	}
 
 	private boolean _calledGetReader;
