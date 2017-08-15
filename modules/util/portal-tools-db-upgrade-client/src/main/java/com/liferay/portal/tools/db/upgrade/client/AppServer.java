@@ -20,6 +20,8 @@ import java.io.File;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author David Truong
@@ -80,16 +82,16 @@ public class AppServer {
 		String dirName, String extraLibDirNames, String globalLibDirName,
 		String portalDirName, String serverDetectorServerId) {
 
-		_dir = new File(dirName);
-		_globalLibDir = new File(dirName, globalLibDirName);
-		_portalDir = new File(dirName, portalDirName);
+		_dir = dirName;
+		_globalLibDir = globalLibDirName;
+		_portalDir = portalDirName;
 		_serverDetectorServerId = serverDetectorServerId;
 
 		_setExtraLibDirNames(extraLibDirNames);
 	}
 
 	public File getDir() {
-		return _dir;
+		return new File(_dir);
 	}
 
 	public String getExtraLibDirNames() {
@@ -97,23 +99,29 @@ public class AppServer {
 	}
 
 	public List<File> getExtraLibDirs() {
-		return _extraLibDirs;
+		Stream<String> stream = _extraLibDirs.stream();
+
+		return stream.map(
+			extraLibDir -> new File(getDir(), extraLibDir)
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	public File getGlobalLibDir() {
-		return _globalLibDir;
+		return new File(getDir(), _globalLibDir);
 	}
 
 	public File getPortalClassesDir() {
-		return new File(_portalDir, "/WEB-INF/classes");
+		return new File(getPortalDir(), "/WEB-INF/classes");
 	}
 
 	public File getPortalDir() {
-		return _portalDir;
+		return new File(getDir(), _portalDir);
 	}
 
 	public File getPortalLibDir() {
-		return new File(_portalDir, "/WEB-INF/lib");
+		return new File(getPortalDir(), "/WEB-INF/lib");
 	}
 
 	public String getServerDetectorServerId() {
@@ -121,7 +129,7 @@ public class AppServer {
 	}
 
 	public void setDirName(String dirName) {
-		_dir = new File(dirName);
+		_dir = dirName;
 	}
 
 	public void setExtraLibDirNames(String extraLibDirNames) {
@@ -129,11 +137,11 @@ public class AppServer {
 	}
 
 	public void setGlobalLibDirName(String globalLibDirName) {
-		_globalLibDir = new File(_dir, globalLibDirName);
+		_globalLibDir = globalLibDirName;
 	}
 
 	public void setPortalDirName(String portalDirName) {
-		_portalDir = new File(_dir, portalDirName);
+		_portalDir = portalDirName;
 	}
 
 	private static String _getJBossExtraLibDirNames() {
@@ -157,15 +165,15 @@ public class AppServer {
 	private void _setExtraLibDirNames(String extraLibDirNames) {
 		if ((extraLibDirNames != null) && !extraLibDirNames.isEmpty()) {
 			for (String extraLibDirName : extraLibDirNames.split(",")) {
-				_extraLibDirs.add(new File(_dir, extraLibDirName));
+				_extraLibDirs.add(extraLibDirName);
 			}
 		}
 	}
 
-	private File _dir;
-	private final List<File> _extraLibDirs = new ArrayList<>();
-	private File _globalLibDir;
-	private File _portalDir;
+	private String _dir;
+	private final List<String> _extraLibDirs = new ArrayList<>();
+	private String _globalLibDir;
+	private String _portalDir;
 	private final String _serverDetectorServerId;
 
 }
