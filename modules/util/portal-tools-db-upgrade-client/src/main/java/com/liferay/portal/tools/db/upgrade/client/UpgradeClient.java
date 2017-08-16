@@ -408,6 +408,25 @@ public class UpgradeClient {
 		}
 	}
 
+	private boolean _isValidPath(String path) {
+		File dir = new File(path);
+
+		if (!dir.isAbsolute()) {
+			System.err.println("The path must be absolute.");
+
+			return false;
+		}
+
+		if (!dir.exists()) {
+			System.err.println(
+				"The path " + path + " doesn't exist.");
+
+			return false;
+		}
+
+		return true;
+	}
+
 	private void _printHelp() {
 		System.out.println("\nUpgrade commands:");
 		System.out.println("exit or quit - Exit Gogo Shell");
@@ -673,16 +692,26 @@ public class UpgradeClient {
 	private void _verifyPortalUpgradeExtProperties() throws IOException {
 		String value = _portalUpgradeExtProperties.getProperty("liferay.home");
 
-		if ((value == null) || value.isEmpty()) {
-			System.out.println("Please enter your Liferay home (../../): ");
+		if ((value == null) || value.isEmpty() || !_isValidPath(value)) {
+			File liferayHome = null;
 
-			String response = _consoleReader.readLine();
+			while (liferayHome == null) {
+				System.out.println(
+					"Please enter the absolute path to your Liferay home " +
+						"(/opt/liferay): ");
 
-			if (response.isEmpty()) {
-				response = "../../";
+				String response = _consoleReader.readLine();
+
+				if (response.isEmpty()) {
+					response = "/opt/liferay";
+				}
+
+				if (!_isValidPath(response)) {
+					continue;
+				}
+
+				liferayHome = new File(response);
 			}
-
-			File liferayHome = new File(response);
 
 			_portalUpgradeExtProperties.setProperty(
 				"liferay.home", liferayHome.getCanonicalPath());
