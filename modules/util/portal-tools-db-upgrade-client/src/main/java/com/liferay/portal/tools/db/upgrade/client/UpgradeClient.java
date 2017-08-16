@@ -408,23 +408,24 @@ public class UpgradeClient {
 		}
 	}
 
-	private boolean _isValidPath(String path) {
-		File dir = new File(path);
-
-		if (!dir.isAbsolute()) {
+	private boolean _isValidPath(File file) {
+		if (!file.isAbsolute()) {
 			System.err.println("The path must be absolute.");
 
 			return false;
 		}
 
-		if (!dir.exists()) {
-			System.err.println(
-				"The path " + path + " doesn't exist.");
+		if (!file.exists()) {
+			System.err.println("The path " + file + " doesn't exist.");
 
 			return false;
 		}
 
 		return true;
+	}
+
+	private boolean _isValidPath(String path) {
+		return _isValidPath(new File(path));
 	}
 
 	private void _printHelp() {
@@ -511,15 +512,33 @@ public class UpgradeClient {
 			File globalLibDir = _appServer.getGlobalLibDir();
 			File portalDir = _appServer.getPortalDir();
 
-			System.out.println(
-				"Please enter your application server directory (" + dir +
-					"): ");
+			File newDir = null;
 
-			response = _consoleReader.readLine();
+			while (newDir == null) {
+				System.out.println(
+					"Please enter your application server directory (" + dir +
+						"): ");
 
-			if (!response.isEmpty()) {
-				_appServer.setDirName(response);
+				response = _consoleReader.readLine();
+
+				if (!response.isEmpty() && !_isValidPath(response)) {
+					continue;
+				}
+
+				if (response.isEmpty()) {
+					if (_isValidPath(dir)) {
+						break;
+					}
+
+					continue;
+				}
+
+				newDir = new File(response);
+
+				_appServer.setDirName(newDir.getCanonicalPath());
 			}
+
+			dir = newDir;
 
 			System.out.println(
 				"Please enter your extra library directories (" +
@@ -565,8 +584,35 @@ public class UpgradeClient {
 				_appServer.getServerDetectorServerId());
 		}
 		else {
+			String appServerDirPath = _appServerProperties.getProperty("dir");
+
+			if (!_isValidPath(appServerDirPath)) {
+				System.err.println(
+					"The application server directory (" + appServerDirPath +
+						") set in app.server.properties is not valid.");
+
+				File newDir = null;
+
+				while (newDir == null) {
+					System.out.println(
+						"Please enter your application server directory:");
+
+					String response = _consoleReader.readLine();
+
+					if (response.isEmpty() ||
+						(!response.isEmpty() && !_isValidPath(response))) {
+
+						continue;
+					}
+
+					newDir = new File(response);
+				}
+
+				appServerDirPath = newDir.getCanonicalPath();
+			}
+
 			_appServer = new AppServer(
-				_appServerProperties.getProperty("dir"),
+				appServerDirPath,
 				_appServerProperties.getProperty("extra.lib.dirs"),
 				_appServerProperties.getProperty("global.lib.dir"),
 				_appServerProperties.getProperty("portal.dir"), value);
