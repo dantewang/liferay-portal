@@ -250,9 +250,9 @@ public class UpgradeClient {
 
 	public void verifyProperties() {
 		try {
+			_verifyPortalUpgradeExtProperties();
 			_verifyAppServerProperties();
 			_verifyPortalUpgradeDatabaseProperties();
-			_verifyPortalUpgradeExtProperties();
 
 			_saveProperties();
 		}
@@ -469,10 +469,10 @@ public class UpgradeClient {
 	}
 
 	private void _saveProperties() throws IOException {
+		_portalUpgradeExtProperties.store(_portalUpgradeExtPropertiesFile);
 		_appServerProperties.store(_appServerPropertiesFile);
 		_portalUpgradeDatabaseProperties.store(
 			_portalUpgradeDatabasePropertiesFile);
-		_portalUpgradeExtProperties.store(_portalUpgradeExtPropertiesFile);
 	}
 
 	private void _verifyAppServerProperties() throws IOException {
