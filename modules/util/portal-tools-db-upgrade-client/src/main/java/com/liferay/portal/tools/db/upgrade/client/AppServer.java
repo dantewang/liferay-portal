@@ -28,42 +28,44 @@ public class AppServer {
 
 	public static AppServer getJBossEAPAppServer() {
 		return new AppServer(
-			"../../jboss-eap-6.4.0", _getJBossExtraLibDirNames(),
+			"/opt/liferay/jboss-eap-6.4.0", _getJBossExtraLibDirNames(),
 			"/modules/com/liferay/portal/main",
 			"/standalone/deployments/ROOT.war", "jboss");
 	}
 
 	public static AppServer getJOnASAppServer() {
 		return new AppServer(
-			"../../jonas-5.2.3", "", "/lib/ext", "/deploy/liferay-portal",
-			"jonas");
+			"/opt/liferay/jonas-5.2.3", "", "/lib/ext",
+			"/deploy/liferay-portal", "jonas");
 	}
 
 	public static AppServer getResinAppServer() {
 		return new AppServer(
-			"../../resin-4.0.44", "", "/ext-lib", "/webapps/ROOT", "resin");
+			"/opt/liferay/resin-4.0.44", "", "/ext-lib", "/webapps/ROOT",
+			"resin");
 	}
 
 	public static AppServer getTCServerAppServer() {
 		return new AppServer(
-			"../../tc-server-2.9.11", "/tomcat-7.0.64.B.RELEASE/lib",
+			"/opt/liferay/tc-server-2.9.11", "/tomcat-7.0.64.B.RELEASE/lib",
 			"/liferay/lib", "/liferay/webapps/ROOT", "tomcat");
 	}
 
 	public static AppServer getTomcatAppServer() {
 		return new AppServer(
-			"../../tomcat-8.0.32", "/bin", "/lib", "/webapps/ROOT", "tomcat");
+			"/opt/liferay/tomcat-8.0.32", "/bin", "/lib", "/webapps/ROOT",
+			"tomcat");
 	}
 
 	public static AppServer getWebLogicAppServer() {
 		return new AppServer(
-			"../../weblogic-12.1.3", "/bin", "/domains/liferay/lib",
+			"/opt/liferay/weblogic-12.1.3", "/bin", "/domains/liferay/lib",
 			"/domains/liferay/autodeploy/ROOT", "weblogic");
 	}
 
 	public static AppServer getWebSphereAppServer() {
 		return new AppServer(
-			"../../websphere-8.5.5.0", "", "/lib",
+			"/opt/liferay/websphere-8.5.5.0", "", "/lib",
 			"/profiles/liferay/installedApps/liferay-cell/liferay-portal.ear" +
 				"/liferay-portal.war",
 			"websphere");
@@ -71,7 +73,7 @@ public class AppServer {
 
 	public static AppServer getWildFlyAppServer() {
 		return new AppServer(
-			"../../wildfly-10.0.0", _getJBossExtraLibDirNames(),
+			"/opt/liferay/wildfly-10.0.0", _getJBossExtraLibDirNames(),
 			"/modules/com/liferay/portal/main",
 			"/standalone/deployments/ROOT.war", "wildfly");
 	}
