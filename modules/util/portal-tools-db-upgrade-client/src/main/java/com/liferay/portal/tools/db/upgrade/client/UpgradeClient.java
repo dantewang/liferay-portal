@@ -408,6 +408,26 @@ public class UpgradeClient {
 		}
 	}
 
+	private boolean _isValidPath(File file) {
+		if (!file.isAbsolute()) {
+			System.err.println("The path must be absolute.");
+
+			return false;
+		}
+
+		if (!file.exists()) {
+			System.err.println("The path " + file + " doesn't exist.");
+
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean _isValidPath(String path) {
+		return _isValidPath(new File(path));
+	}
+
 	private void _printHelp() {
 		System.out.println("\nUpgrade commands:");
 		System.out.println("exit or quit - Exit Gogo Shell");
