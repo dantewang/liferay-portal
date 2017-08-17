@@ -509,18 +509,39 @@ public class UpgradeClient {
 			}
 
 			File dir = _appServer.getDir();
+
+			File inputAppServerDir = null;
+
+			while (inputAppServerDir == null) {
+				System.out.println(
+					"Please enter absolute path of your application server " +
+						"directory (" + dir + "): ");
+
+				response = _consoleReader.readLine();
+
+				if (!response.isEmpty() && !_isValidPath(response)) {
+					continue;
+				}
+
+				if (response.isEmpty()) {
+					if (_isValidPath(dir)) {
+						break;
+					}
+
+					continue;
+				}
+
+				inputAppServerDir = new File(response);
+
+				_appServer.setDirName(inputAppServerDir.getCanonicalPath());
+			}
+
+			if (inputAppServerDir != null) {
+				dir = inputAppServerDir;
+			}
+
 			File globalLibDir = _appServer.getGlobalLibDir();
 			File portalDir = _appServer.getPortalDir();
-
-			System.out.println(
-				"Please enter your application server directory (" + dir +
-					"): ");
-
-			response = _consoleReader.readLine();
-
-			if (!response.isEmpty()) {
-				_appServer.setDirName(response);
-			}
 
 			System.out.println(
 				"Please enter your extra library directories (" +
@@ -566,8 +587,19 @@ public class UpgradeClient {
 				_appServer.getServerDetectorServerId());
 		}
 		else {
+			String appServerDirPath = _appServerProperties.getProperty("dir");
+
+			if (!_isValidPath(appServerDirPath)) {
+				System.err.println(
+					"The application server directory (" + appServerDirPath +
+						") set in app-server.properties is not valid. Please " +
+							"edit the properties file.");
+
+				System.exit(1);
+			}
+
 			_appServer = new AppServer(
-				_appServerProperties.getProperty("dir"),
+				appServerDirPath,
 				_appServerProperties.getProperty("extra.lib.dirs"),
 				_appServerProperties.getProperty("global.lib.dir"),
 				_appServerProperties.getProperty("portal.dir"), value);
