@@ -693,16 +693,26 @@ public class UpgradeClient {
 	private void _verifyPortalUpgradeExtProperties() throws IOException {
 		String value = _portalUpgradeExtProperties.getProperty("liferay.home");
 
-		if ((value == null) || value.isEmpty()) {
-			System.out.println("Please enter your Liferay home (../../): ");
+		if ((value == null) || value.isEmpty() || !_isValidPath(value)) {
+			File liferayHome = null;
 
-			String response = _consoleReader.readLine();
+			while (liferayHome == null) {
+				System.out.println(
+					"Please enter the absolute path to your Liferay home " +
+						"(/opt/liferay): ");
 
-			if (response.isEmpty()) {
-				response = "../../";
+				String response = _consoleReader.readLine();
+
+				if (response.isEmpty()) {
+					response = "/opt/liferay";
+				}
+
+				if (!_isValidPath(response)) {
+					continue;
+				}
+
+				liferayHome = new File(response);
 			}
-
-			File liferayHome = new File(response);
 
 			_portalUpgradeExtProperties.setProperty(
 				"liferay.home", liferayHome.getCanonicalPath());
