@@ -540,9 +540,6 @@ public class UpgradeClient {
 				dir = inputAppServerDir;
 			}
 
-			File globalLibDir = _appServer.getGlobalLibDir();
-			File portalDir = _appServer.getPortalDir();
-
 			System.out.println(
 				"Please enter your extra library directories (" +
 					_appServer.getExtraLibDirNames() + "): ");
@@ -554,8 +551,8 @@ public class UpgradeClient {
 			}
 
 			System.out.println(
-				"Please enter your global library directory (" + globalLibDir +
-					"): ");
+				"Please enter your global library directory (" +
+					_appServer.getGlobalLibDirName() + "): ");
 
 			response = _consoleReader.readLine();
 
@@ -564,7 +561,8 @@ public class UpgradeClient {
 			}
 
 			System.out.println(
-				"Please enter your portal directory (" + portalDir + "): ");
+				"Please enter your portal directory (" +
+					_appServer.getPortalDirName() + "): ");
 
 			response = _consoleReader.readLine();
 
@@ -579,9 +577,11 @@ public class UpgradeClient {
 					_getRelativeFileNames(dir, _appServer.getExtraLibDirs()),
 					','));
 			_appServerProperties.setProperty(
-				"global.lib.dir", _getRelativeFileName(dir, globalLibDir));
+				"global.lib.dir",
+				_getRelativeFileName(dir, _appServer.getGlobalLibDir()));
 			_appServerProperties.setProperty(
-				"portal.dir", _getRelativeFileName(dir, portalDir));
+				"portal.dir",
+				_getRelativeFileName(dir, _appServer.getPortalDir()));
 			_appServerProperties.setProperty(
 				"server.detector.server.id",
 				_appServer.getServerDetectorServerId());
