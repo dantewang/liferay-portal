@@ -408,6 +408,26 @@ public class UpgradeClient {
 		}
 	}
 
+	private boolean _isValidPath(File file) {
+		if (!file.isAbsolute()) {
+			System.err.println("The path must be absolute.");
+
+			return false;
+		}
+
+		if (!file.exists()) {
+			System.err.println("The path " + file + " doesn't exist.");
+
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean _isValidPath(String path) {
+		return _isValidPath(new File(path));
+	}
+
 	private void _printHelp() {
 		System.out.println("\nUpgrade commands:");
 		System.out.println("exit or quit - Exit Gogo Shell");
@@ -489,17 +509,35 @@ public class UpgradeClient {
 			}
 
 			File dir = _appServer.getDir();
-			File globalLibDir = _appServer.getGlobalLibDir();
-			File portalDir = _appServer.getPortalDir();
 
-			System.out.println(
-				"Please enter your application server directory (" + dir +
-					"): ");
+			File inputAppServerDir = null;
 
-			response = _consoleReader.readLine();
+			while (inputAppServerDir == null) {
+				System.out.println(
+					"Please enter absolute path of your application server " +
+						"directory (" + dir + "): ");
 
-			if (!response.isEmpty()) {
-				_appServer.setDirName(response);
+				response = _consoleReader.readLine();
+
+				if (!response.isEmpty() && !_isValidPath(response)) {
+					continue;
+				}
+
+				if (response.isEmpty()) {
+					if (_isValidPath(dir)) {
+						break;
+					}
+
+					continue;
+				}
+
+				inputAppServerDir = new File(response);
+
+				_appServer.setDirName(inputAppServerDir.getCanonicalPath());
+			}
+
+			if (inputAppServerDir != null) {
+				dir = inputAppServerDir;
 			}
 
 			System.out.println(
@@ -513,8 +551,8 @@ public class UpgradeClient {
 			}
 
 			System.out.println(
-				"Please enter your global library directory (" + globalLibDir +
-					"): ");
+				"Please enter your global library directory (" +
+					_appServer.getGlobalLibDirName() + "): ");
 
 			response = _consoleReader.readLine();
 
@@ -523,7 +561,8 @@ public class UpgradeClient {
 			}
 
 			System.out.println(
-				"Please enter your portal directory (" + portalDir + "): ");
+				"Please enter your portal directory (" +
+					_appServer.getPortalDirName() + "): ");
 
 			response = _consoleReader.readLine();
 
@@ -538,16 +577,29 @@ public class UpgradeClient {
 					_getRelativeFileNames(dir, _appServer.getExtraLibDirs()),
 					','));
 			_appServerProperties.setProperty(
-				"global.lib.dir", _getRelativeFileName(dir, globalLibDir));
+				"global.lib.dir",
+				_getRelativeFileName(dir, _appServer.getGlobalLibDir()));
 			_appServerProperties.setProperty(
-				"portal.dir", _getRelativeFileName(dir, portalDir));
+				"portal.dir",
+				_getRelativeFileName(dir, _appServer.getPortalDir()));
 			_appServerProperties.setProperty(
 				"server.detector.server.id",
 				_appServer.getServerDetectorServerId());
 		}
 		else {
+			String appServerDirPath = _appServerProperties.getProperty("dir");
+
+			if (!_isValidPath(appServerDirPath)) {
+				System.err.println(
+					"The application server directory (" + appServerDirPath +
+						") set in app-server.properties is not valid. Please " +
+							"edit the properties file.");
+
+				System.exit(1);
+			}
+
 			_appServer = new AppServer(
-				_appServerProperties.getProperty("dir"),
+				appServerDirPath,
 				_appServerProperties.getProperty("extra.lib.dirs"),
 				_appServerProperties.getProperty("global.lib.dir"),
 				_appServerProperties.getProperty("portal.dir"), value);
@@ -673,16 +725,26 @@ public class UpgradeClient {
 	private void _verifyPortalUpgradeExtProperties() throws IOException {
 		String value = _portalUpgradeExtProperties.getProperty("liferay.home");
 
-		if ((value == null) || value.isEmpty()) {
-			System.out.println("Please enter your Liferay home (../../): ");
+		if ((value == null) || value.isEmpty() || !_isValidPath(value)) {
+			File liferayHome = null;
 
-			String response = _consoleReader.readLine();
+			while (liferayHome == null) {
+				System.out.println(
+					"Please enter the absolute path to your Liferay home " +
+						"(/opt/liferay): ");
 
-			if (response.isEmpty()) {
-				response = "../../";
+				String response = _consoleReader.readLine();
+
+				if (response.isEmpty()) {
+					response = "/opt/liferay";
+				}
+
+				if (!_isValidPath(response)) {
+					continue;
+				}
+
+				liferayHome = new File(response);
 			}
-
-			File liferayHome = new File(response);
 
 			_portalUpgradeExtProperties.setProperty(
 				"liferay.home", liferayHome.getCanonicalPath());
