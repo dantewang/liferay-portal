@@ -258,6 +258,10 @@
 			<replacefilter token="shindig.signing.viewer-access-tokens-enabled=false" value="shindig.signing.viewer-access-tokens-enabled=true" />
 		</replace>
 
+		<!-- Rename commons-logging -->
+
+		<rename src="tmp/WEB-INF/lib/commons-logging-1.1.1.jar" dest="tmp/WEB-INF/lib/commons-logging.jar"/>
+
 		<!-- Delete Xerces -->
 
 		<delete file="tmp/WEB-INF/lib/xercesImpl-2.9.1.jar" />
