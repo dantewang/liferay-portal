@@ -56,6 +56,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.nio.file.DirectoryStream;
@@ -250,6 +251,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		if (_log.isDebugEnabled()) {
 			_log.debug("Initializing the OSGi framework");
 		}
+
+		_validateModuleFrameworkBaseDir();
 
 		_initRequiredStartupDirs();
 
@@ -1541,6 +1544,30 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 							" is already unregistered");
 				}
 			}
+		}
+	}
+
+	private void _validateModuleFrameworkBaseDir()
+		throws MalformedURLException {
+
+		File baseDirFile = new File(PropsValues.MODULE_FRAMEWORK_BASE_DIR);
+
+		baseDirFile = baseDirFile.getAbsoluteFile();
+
+		URL baseDirURL = baseDirFile.toURL();
+
+		File baseDirURLFile = new File(baseDirURL.getFile());
+
+		if (!baseDirFile.equals(baseDirURLFile) && _log.isWarnEnabled()) {
+			StringBundler sb = new StringBundler(5);
+
+			sb.append(" The module.framework.base.dir path \"");
+			sb.append(baseDirFile);
+			sb.append("\" contains character that Equinox doesn't support; ");
+			sb.append("the osgi persistence dir will be created as \"");
+			sb.append(baseDirURLFile);
+
+			_log.warn(sb.toString());
 		}
 	}
 
