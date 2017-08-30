@@ -414,6 +414,14 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 	public Enumeration<String> getProperties(String name) {
 		List<String> values = new ArrayList<>();
 
+		Enumeration<String> headers = _request.getHeaders(name);
+
+		while (headers.hasMoreElements()) {
+			String header = headers.nextElement();
+
+			values.add(header);
+		}
+
 		String value = _portalContext.getProperty(name);
 
 		if (value != null) {
@@ -425,12 +433,35 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 
 	@Override
 	public String getProperty(String name) {
-		return _portalContext.getProperty(name);
+		String value = _request.getHeader(name);
+
+		if (value == null) {
+			value = _portalContext.getProperty(name);
+		}
+
+		return value;
 	}
 
 	@Override
 	public Enumeration<String> getPropertyNames() {
-		return _portalContext.getPropertyNames();
+		List<String> names = new ArrayList<>();
+
+		Enumeration<String> headerNameEnu = _request.getHeaderNames();
+		Enumeration<String> propertyNameEnu = _portalContext.getPropertyNames();
+
+		while (headerNameEnu.hasMoreElements()) {
+			String headerName = headerNameEnu.nextElement();
+
+			names.add(headerName);
+		}
+
+		while (propertyNameEnu.hasMoreElements()) {
+			String propertyName = propertyNameEnu.nextElement();
+
+			names.add(propertyName);
+		}
+
+		return Collections.enumeration(names);
 	}
 
 	@Override
