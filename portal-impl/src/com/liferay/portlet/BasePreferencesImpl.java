@@ -303,9 +303,7 @@ public abstract class BasePreferencesImpl implements Serializable {
 	}
 
 	protected boolean isNull(String[] values) {
-		if (ArrayUtil.isEmpty(values) ||
-			((values.length == 1) && (getActualValue(values[0]) == null))) {
-
+		if (ArrayUtil.isEmpty(values)) {
 			return true;
 		}
 
