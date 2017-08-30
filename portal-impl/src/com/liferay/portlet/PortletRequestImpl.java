@@ -412,25 +412,57 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 
 	@Override
 	public Enumeration<String> getProperties(String name) {
-		List<String> values = new ArrayList<>();
+		List<String> properties = new ArrayList<>();
+
+		Enumeration<String> headersEnumeration = _request.getHeaders(name);
+
+		while (headersEnumeration.hasMoreElements()) {
+			String header = headersEnumeration.nextElement();
+
+			properties.add(header);
+		}
 
 		String value = _portalContext.getProperty(name);
 
 		if (value != null) {
-			values.add(value);
+			properties.add(value);
 		}
 
-		return Collections.enumeration(values);
+		return Collections.enumeration(properties);
 	}
 
 	@Override
 	public String getProperty(String name) {
-		return _portalContext.getProperty(name);
+		String property = _request.getHeader(name);
+
+		if (property == null) {
+			property = _portalContext.getProperty(name);
+		}
+
+		return property;
 	}
 
 	@Override
 	public Enumeration<String> getPropertyNames() {
-		return _portalContext.getPropertyNames();
+		List<String> propertyNames = new ArrayList<>();
+
+		Enumeration<String> headerNameEnumeration = _request.getHeaderNames();
+		Enumeration<String> propertyNameEnumeration =
+			_portalContext.getPropertyNames();
+
+		while (headerNameEnumeration.hasMoreElements()) {
+			String headerName = headerNameEnumeration.nextElement();
+
+			propertyNames.add(headerName);
+		}
+
+		while (propertyNameEnumeration.hasMoreElements()) {
+			String propertyName = propertyNameEnumeration.nextElement();
+
+			propertyNames.add(propertyName);
+		}
+
+		return Collections.enumeration(propertyNames);
 	}
 
 	@Override
