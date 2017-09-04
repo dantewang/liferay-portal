@@ -14,14 +14,11 @@
 
 package com.liferay.portal.module.framework;
 
-import com.liferay.portal.kernel.util.CharPool;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.URLCodec;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
 
+import java.net.URI;
 import java.net.URL;
 
 /**
@@ -48,16 +45,9 @@ public class RuntimeClassPathResolver implements ClassPathResolver {
 			// Otherwise, we will run into unexpected errors when referencing a
 			// class from a JSP. See LPS-61210 for more information.
 
-			String path = StringUtil.replace(
-				files[i].getAbsolutePath(), CharPool.BACK_SLASH,
-				CharPool.SLASH);
+			URI uri = files[i].toURI();
 
-			if (!path.startsWith(StringPool.SLASH)) {
-				path = StringPool.SLASH + path;
-			}
-
-			urls[i] = new URL(
-				"file", null, URLCodec.encodeURL(path, StringPool.UTF8, true));
+			urls[i] = uri.toURL();
 		}
 
 		return urls;
