@@ -436,6 +436,10 @@ public class PortletURLImpl
 			}
 		}
 
+		if (mappedCacheability.equals(FULL)) {
+			setCopyCurrentRenderParameters(false);
+		}
+
 		_cacheability = mappedCacheability;
 
 		clearCache();
