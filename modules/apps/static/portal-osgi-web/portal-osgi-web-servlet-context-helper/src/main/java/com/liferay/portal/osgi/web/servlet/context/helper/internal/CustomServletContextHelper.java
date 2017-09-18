@@ -130,17 +130,13 @@ public class CustomServletContextHelper
 	public boolean handleSecurity(
 		HttpServletRequest request, HttpServletResponse response) {
 
-		String path = null;
+		if ((request.getDispatcherType() == DispatcherType.ASYNC) &&
+			(request.getDispatcherType() == DispatcherType.REQUEST)) {
 
-		if (request.getDispatcherType() == DispatcherType.INCLUDE) {
-			String pathInfo = (String)request.getAttribute(
-				RequestDispatcher.INCLUDE_PATH_INFO);
+			return true;
+		}
 
-			path = pathInfo;
-		}
-		else {
-			path = request.getPathInfo();
-		}
+		String path = request.getPathInfo();
 
 		if (path == null) {
 			return true;
