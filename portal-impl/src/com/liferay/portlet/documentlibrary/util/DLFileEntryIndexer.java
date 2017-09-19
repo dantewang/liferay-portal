@@ -198,7 +198,7 @@ public class DLFileEntryIndexer
 		}
 		catch (Exception e) {
 			if (_log.isInfoEnabled()) {
-				_log.info("Error retrieving file entry", e);
+				_log.info("Unble to get file entry", e);
 			}
 
 			return false;

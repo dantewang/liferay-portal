@@ -166,7 +166,7 @@ public class MBMessageIndexer
 		}
 		catch (Exception e) {
 			if (_log.isInfoEnabled()) {
-				_log.info("Error retrieving message", e);
+				_log.info("Unable to get message boards message", e);
 			}
 
 			return false;
