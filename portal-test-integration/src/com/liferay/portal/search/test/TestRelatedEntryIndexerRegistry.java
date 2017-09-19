@@ -55,15 +55,15 @@ public class TestRelatedEntryIndexerRegistry
 
 	@Override
 	public List<RelatedEntryIndexer> getRelatedEntryIndexers() {
-		List<RelatedEntryIndexer> relatedEntryIndexerList = new ArrayList<>();
+		List<RelatedEntryIndexer> relatedEntryIndexers = new ArrayList<>();
 
 		for (List<RelatedEntryIndexer> relatedEntryIndexers :
 				_relatedEntryIndexers.values()) {
 
-			relatedEntryIndexerList.addAll(relatedEntryIndexers);
+			relatedEntryIndexers.addAll(relatedEntryIndexers);
 		}
 
-		return relatedEntryIndexerList;
+		return relatedEntryIndexers;
 	}
 
 	@Override
@@ -110,17 +110,17 @@ public class TestRelatedEntryIndexerRegistry
 					"Service must contain a related.entry.indexer.class.name");
 			}
 
-			List<RelatedEntryIndexer> relatedEntryIndexerList =
+			List<RelatedEntryIndexer> relatedEntryIndexers =
 				_relatedEntryIndexers.get(relatedEntryIndexerClassName);
 
-			if (relatedEntryIndexerList == null) {
-				relatedEntryIndexerList = new ArrayList<>();
+			if (relatedEntryIndexers == null) {
+				relatedEntryIndexers = new ArrayList<>();
 
 				_relatedEntryIndexers.put(
-					relatedEntryIndexerClassName, relatedEntryIndexerList);
+					relatedEntryIndexerClassName, relatedEntryIndexers);
 			}
 
-			relatedEntryIndexerList.add(relatedEntryIndexer);
+			relatedEntryIndexers.add(relatedEntryIndexer);
 
 			return relatedEntryIndexer;
 		}
@@ -144,10 +144,10 @@ public class TestRelatedEntryIndexerRegistry
 				(String)serviceReference.getProperty(
 					"related.entry.indexer.class.name");
 
-			List<RelatedEntryIndexer> relatedEntryIndexerList =
+			List<RelatedEntryIndexer> relatedEntryIndexers =
 				_relatedEntryIndexers.get(relatedEntryIndexerClassName);
 
-			relatedEntryIndexerList.remove(relatedEntryIndexer);
+			relatedEntryIndexers.remove(relatedEntryIndexer);
 		}
 
 	}
