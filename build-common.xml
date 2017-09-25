@@ -1550,11 +1550,17 @@ rerun your task.
 		<var name="exec.file" unset="true" />
 
 		<if>
-			<isset property="class.name" />
+			<or>
+				<isset property="class.name" />
+				<isset property="test.class" />
+			</or>
 
 			<then>
 				<script classpathref="project.classpath" language="beanshell">
 					String className = project.getProperty("class.name");
+					if(className == null){
+						className = project.getProperty("test.class");
+					}
 					if(className.endsWith("Test")){
 						int index = className.lastIndexOf("Test");
 
