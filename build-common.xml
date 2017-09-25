@@ -1553,17 +1553,28 @@ rerun your task.
 			<isset property="class.name" />
 
 			<then>
+				<script classpathref="project.classpath" language="beanshell">
+					String className = project.getProperty("class.name");
+					if(className.endsWith("Test")){
+						int index = className.lastIndexOf("Test");
+
+						className = className.substring(0, index);
+					}
+
+					project.setProperty("file.name",className);
+				</script>
+
 				<sequential>
 					<if>
 						<resourcecount count="0" when="gt">
-							<fileset dir="portal-impl" erroronmissingdir="false" includes="**/${class.name}.java" />
+							<fileset dir="portal-impl" erroronmissingdir="false" includes="**/${file.name}.java" />
 						</resourcecount>
 						<then>
 							<var name="sub.dir" value="portal-impl" />
 						</then>
 						<elseif>
 							<resourcecount count="0" when="gt">
-								<fileset dir="portal-kernel" erroronmissingdir="false" includes="**/${class.name}.java" />
+								<fileset dir="portal-kernel" erroronmissingdir="false" includes="**/${file.name}.java" />
 							</resourcecount>
 							<then>
 								<var name="sub.dir" value="portal-kernel" />
@@ -1571,7 +1582,7 @@ rerun your task.
 						</elseif>
 						<elseif>
 							<resourcecount count="0" when="gt">
-								<fileset dir="portal-test" erroronmissingdir="false" includes="**/${class.name}.java" />
+								<fileset dir="portal-test" erroronmissingdir="false" includes="**/${file.name}.java" />
 							</resourcecount>
 							<then>
 								<var name="sub.dir" value="portal-test" />
@@ -1579,7 +1590,7 @@ rerun your task.
 						</elseif>
 						<elseif>
 							<resourcecount count="0" when="gt">
-								<fileset dir="portal-test-integration" erroronmissingdir="false" includes="**/${class.name}.java" />
+								<fileset dir="portal-test-integration" erroronmissingdir="false" includes="**/${file.name}.java" />
 							</resourcecount>
 							<then>
 								<var name="sub.dir" value="portal-test-integration" />
@@ -1587,7 +1598,7 @@ rerun your task.
 						</elseif>
 						<elseif>
 							<resourcecount count="0" when="gt">
-								<fileset dir="util-java" erroronmissingdir="false" includes="**/${class.name}.java" />
+								<fileset dir="util-java" erroronmissingdir="false" includes="**/${file.name}.java" />
 							</resourcecount>
 							<then>
 								<var name="sub.dir" value="util-java" />
@@ -1595,7 +1606,7 @@ rerun your task.
 						</elseif>
 						<elseif>
 							<resourcecount count="0" when="gt">
-								<fileset dir="modules/apps" erroronmissingdir="false" includes="**/${class.name}.java" />
+								<fileset dir="modules/apps" erroronmissingdir="false" includes="**/${file.name}.java" />
 							</resourcecount>
 							<then>
 								<var name="sub.dir" value="modules/apps" />
@@ -1603,7 +1614,7 @@ rerun your task.
 						</elseif>
 						<elseif>
 							<resourcecount count="0" when="gt">
-								<fileset dir="modules/core" erroronmissingdir="false" includes="**/${class.name}.java" />
+								<fileset dir="modules/core" erroronmissingdir="false" includes="**/${file.name}.java" />
 							</resourcecount>
 							<then>
 								<var name="sub.dir" value="modules/core" />
@@ -1611,7 +1622,7 @@ rerun your task.
 						</elseif>
 						<elseif>
 							<resourcecount count="0" when="gt">
-								<fileset dir="modules/sdk" erroronmissingdir="false" includes="**/${class.name}.java" />
+								<fileset dir="modules/sdk" erroronmissingdir="false" includes="**/${file.name}.java" />
 							</resourcecount>
 							<then>
 								<var name="sub.dir" value="modules/sdk" />
@@ -1619,7 +1630,7 @@ rerun your task.
 						</elseif>
 						<elseif>
 							<resourcecount count="0" when="gt">
-								<fileset dir="modules/test" erroronmissingdir="false" includes="**/${class.name}.java" />
+								<fileset dir="modules/test" erroronmissingdir="false" includes="**/${file.name}.java" />
 							</resourcecount>
 							<then>
 								<var name="sub.dir" value="modules/test" />
@@ -1627,7 +1638,7 @@ rerun your task.
 						</elseif>
 						<elseif>
 							<resourcecount count="0" when="gt">
-								<fileset dir="modules/util" erroronmissingdir="false" includes="**/${class.name}.java" />
+								<fileset dir="modules/util" erroronmissingdir="false" includes="**/${file.name}.java" />
 							</resourcecount>
 							<then>
 								<var name="sub.dir" value="modules/util" />
@@ -1635,13 +1646,13 @@ rerun your task.
 						</elseif>
 
 						<else>
-							<fail>${class.name}.java cannot be found.</fail>
+							<fail>${file.name}.java cannot be found.</fail>
 						</else>
 					</if>
 				</sequential>
 
 				<fileset dir="${project.dir}/${sub.dir}" id="classSet">
-					<include name="**/classes/com/liferay/**/${class.name}.class" />
+					<include name="**/classes/com/liferay/**/${file.name}.class" />
 				</fileset>
 
 				<dirset dir="${project.dir}/${sub.dir}" id="srcSet">
