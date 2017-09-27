@@ -1554,13 +1554,14 @@ rerun your task.
 				<isset property="class.name" />
 				<isset property="test.class" />
 			</or>
-
 			<then>
 				<script classpathref="project.classpath" language="beanshell">
 					String className = project.getProperty("class.name");
+
 					if(className == null){
 						className = project.getProperty("test.class");
 					}
+
 					if(className.endsWith("Test")){
 						int index = className.lastIndexOf("Test");
 
@@ -1570,92 +1571,89 @@ rerun your task.
 					project.setProperty("file.name",className);
 				</script>
 
-				<sequential>
-					<if>
+				<if>
+					<resourcecount count="0" when="gt">
+						<fileset dir="portal-impl" erroronmissingdir="false" includes="**/${file.name}.java" />
+					</resourcecount>
+					<then>
+						<var name="sub.dir" value="portal-impl" />
+					</then>
+					<elseif>
 						<resourcecount count="0" when="gt">
-							<fileset dir="portal-impl" erroronmissingdir="false" includes="**/${file.name}.java" />
+							<fileset dir="portal-kernel" erroronmissingdir="false" includes="**/${file.name}.java" />
 						</resourcecount>
 						<then>
-							<var name="sub.dir" value="portal-impl" />
+							<var name="sub.dir" value="portal-kernel" />
 						</then>
-						<elseif>
-							<resourcecount count="0" when="gt">
-								<fileset dir="portal-kernel" erroronmissingdir="false" includes="**/${file.name}.java" />
-							</resourcecount>
-							<then>
-								<var name="sub.dir" value="portal-kernel" />
-							</then>
-						</elseif>
-						<elseif>
-							<resourcecount count="0" when="gt">
-								<fileset dir="portal-test" erroronmissingdir="false" includes="**/${file.name}.java" />
-							</resourcecount>
-							<then>
-								<var name="sub.dir" value="portal-test" />
-							</then>
-						</elseif>
-						<elseif>
-							<resourcecount count="0" when="gt">
-								<fileset dir="portal-test-integration" erroronmissingdir="false" includes="**/${file.name}.java" />
-							</resourcecount>
-							<then>
-								<var name="sub.dir" value="portal-test-integration" />
-							</then>
-						</elseif>
-						<elseif>
-							<resourcecount count="0" when="gt">
-								<fileset dir="util-java" erroronmissingdir="false" includes="**/${file.name}.java" />
-							</resourcecount>
-							<then>
-								<var name="sub.dir" value="util-java" />
-							</then>
-						</elseif>
-						<elseif>
-							<resourcecount count="0" when="gt">
-								<fileset dir="modules/apps" erroronmissingdir="false" includes="**/${file.name}.java" />
-							</resourcecount>
-							<then>
-								<var name="sub.dir" value="modules/apps" />
-							</then>
-						</elseif>
-						<elseif>
-							<resourcecount count="0" when="gt">
-								<fileset dir="modules/core" erroronmissingdir="false" includes="**/${file.name}.java" />
-							</resourcecount>
-							<then>
-								<var name="sub.dir" value="modules/core" />
-							</then>
-						</elseif>
-						<elseif>
-							<resourcecount count="0" when="gt">
-								<fileset dir="modules/sdk" erroronmissingdir="false" includes="**/${file.name}.java" />
-							</resourcecount>
-							<then>
-								<var name="sub.dir" value="modules/sdk" />
-							</then>
-						</elseif>
-						<elseif>
-							<resourcecount count="0" when="gt">
-								<fileset dir="modules/test" erroronmissingdir="false" includes="**/${file.name}.java" />
-							</resourcecount>
-							<then>
-								<var name="sub.dir" value="modules/test" />
-							</then>
-						</elseif>
-						<elseif>
-							<resourcecount count="0" when="gt">
-								<fileset dir="modules/util" erroronmissingdir="false" includes="**/${file.name}.java" />
-							</resourcecount>
-							<then>
-								<var name="sub.dir" value="modules/util" />
-							</then>
-						</elseif>
-
-						<else>
-							<fail>${file.name}.java cannot be found.</fail>
-						</else>
-					</if>
-				</sequential>
+					</elseif>
+					<elseif>
+						<resourcecount count="0" when="gt">
+							<fileset dir="portal-test" erroronmissingdir="false" includes="**/${file.name}.java" />
+						</resourcecount>
+						<then>
+							<var name="sub.dir" value="portal-test" />
+						</then>
+					</elseif>
+					<elseif>
+						<resourcecount count="0" when="gt">
+							<fileset dir="portal-test-integration" erroronmissingdir="false" includes="**/${file.name}.java" />
+						</resourcecount>
+						<then>
+							<var name="sub.dir" value="portal-test-integration" />
+						</then>
+					</elseif>
+					<elseif>
+						<resourcecount count="0" when="gt">
+							<fileset dir="util-java" erroronmissingdir="false" includes="**/${file.name}.java" />
+						</resourcecount>
+						<then>
+							<var name="sub.dir" value="util-java" />
+						</then>
+					</elseif>
+					<elseif>
+						<resourcecount count="0" when="gt">
+							<fileset dir="modules/apps" erroronmissingdir="false" includes="**/${file.name}.java" />
+						</resourcecount>
+						<then>
+							<var name="sub.dir" value="modules/apps" />
+						</then>
+					</elseif>
+					<elseif>
+						<resourcecount count="0" when="gt">
+							<fileset dir="modules/core" erroronmissingdir="false" includes="**/${file.name}.java" />
+						</resourcecount>
+						<then>
+							<var name="sub.dir" value="modules/core" />
+						</then>
+					</elseif>
+					<elseif>
+						<resourcecount count="0" when="gt">
+							<fileset dir="modules/sdk" erroronmissingdir="false" includes="**/${file.name}.java" />
+						</resourcecount>
+						<then>
+							<var name="sub.dir" value="modules/sdk" />
+						</then>
+					</elseif>
+					<elseif>
+						<resourcecount count="0" when="gt">
+							<fileset dir="modules/test" erroronmissingdir="false" includes="**/${file.name}.java" />
+						</resourcecount>
+						<then>
+							<var name="sub.dir" value="modules/test" />
+						</then>
+					</elseif>
+					<elseif>
+						<resourcecount count="0" when="gt">
+							<fileset dir="modules/util" erroronmissingdir="false" includes="**/${file.name}.java" />
+						</resourcecount>
+						<then>
+							<var name="sub.dir" value="modules/util" />
+						</then>
+					</elseif>
+					<else>
+						<fail>${file.name}.java cannot be found.</fail>
+					</else>
+				</if>
 
 				<fileset dir="${project.dir}/${sub.dir}" id="classSet">
 					<include name="**/classes/com/liferay/**/${file.name}.class" />
@@ -1666,11 +1664,11 @@ rerun your task.
 					<include name="**/src/main/java" />
 				</dirset>
 			</then>
-
 			<else>
 				<fileset dir="${project.dir}" id="classSet">
 					<include name="**/classes/com/liferay/**/*.class" />
 				</fileset>
+
 				<dirset dir="${project.dir}" id="srcSet">
 					<include name="**/src" />
 					<include name="**/src/main/java" />
