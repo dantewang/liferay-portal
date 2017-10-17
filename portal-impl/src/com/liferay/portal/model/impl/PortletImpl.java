@@ -2421,6 +2421,10 @@ public class PortletImpl extends PortletBaseImpl {
 	 */
 	@Override
 	public boolean hasPortletMode(String mimeType, PortletMode portletMode) {
+		if (_portletModes.isEmpty() && portletMode.equals(PortletMode.VIEW)) {
+			return true;
+		}
+
 		if (mimeType == null) {
 			mimeType = ContentTypes.TEXT_HTML;
 		}
