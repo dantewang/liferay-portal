@@ -706,11 +706,9 @@ information.
 	<macrodef name="jacoco-report">
 		<attribute name="exec.file" />
 		<element name="class.files" />
+		<element name="source.files" />
 
 		<sequential>
-			<delete dir="${jacoco.report.folder}" />
-			<mkdir dir="${jacoco.report.folder}" />
-
 			<jacoco:report>
 				<executiondata>
 					<file file="@{exec.file}" />
@@ -722,10 +720,7 @@ information.
 					</classfiles>
 
 					<sourcefiles if:true="${jacoco.report.include.source.file}">
-						<dirset dir="${project.dir}">
-							<include name="**/src" />
-							<include name="**/src/main/java" />
-						</dirset>
+						<source.files/>
 					</sourcefiles>
 				</structure>
 
@@ -1494,6 +1489,91 @@ rerun your task.
 		</sequential>
 	</macrodef>
 
+	<target name="code-coverage-report">
+		<if>
+			<and>
+				<isset property="class.file" />
+			</and>
+			<then>
+				<script classpathref="project.classpath" language="beanshell">
+					String className = project.getProperty("class.file");
+					int startIndex = className.lastIndexOf(File.separator);
+					int endIndex = className.lastIndexOf(".");
+					className = className.substring(startIndex+1,endIndex);
+
+					project.setProperty("class.name",className);
+				</script>
+
+				<getPath absolutePathClassFile="${class.file}" includeSrcFile="true" rootDir="${project.dir}" srcFileBaseDir="src.dir" srcFileName="${class.name}" />
+
+				<fileset file="${class.file}" id="classSet" />
+
+				<dirset dir="${src.dir}" id="srcSet">
+					<include name="**/src" />
+					<include name="**/src/main/java" />
+				</dirset>
+			</then>
+
+			<else>
+				<fileset dir="${project.dir}" id="classSet">
+					<include name="**/classes/com/liferay/**/*.class" />
+				</fileset>
+
+				<dirset dir="${project.dir}" id="srcSet">
+					<include name="**/src" />
+					<include name="**/src/main/java" />
+				</dirset>
+			</else>
+		</if>
+
+		<var name="exec.file" unset="true" />
+
+		<if>
+			<available file="${jacoco.dump.file}" type="file" />
+			<then>
+				<var name="exec.file" value="${jacoco.dump.file}" />
+			</then>
+			<elseif>
+				<available file="${jacoco.dump.file}" type="dir" />
+				<then>
+					<var name="exec.file" value="${jacoco.dump.file}/liferay-jacoco-merged.exec" />
+
+					<jacoco:merge destfile="${exec.file}">
+						<fileset dir="${jacoco.dump.file}" includes="*.exec" />
+					</jacoco:merge>
+				</then>
+			</elseif>
+			<else>
+				<fail message="Unable to find JaCoCo session file ${jacoco.dump.file}. Please run tests with code coverage before generating reports." />
+			</else>
+		</if>
+
+		<if>
+			<isset property="jacoco.merged.jar" />
+			<then>
+				<jacoco-report
+					exec.file="${exec.file}"
+				>
+					<class.files>
+						<file file="${jacoco.merged.jar}" />
+					</class.files>
+				</jacoco-report>
+			</then>
+			<else>
+				<jacoco-report
+					exec.file="${exec.file}"
+				>
+					<class.files>
+						<fileset refid="classSet" />
+					</class.files>
+					<source.files>
+						<dirset refid="srcSet" />
+					</source.files>
+				</jacoco-report>
+			</else>
+		</if>
+	</target>
+
 	<target name="compile">
 	</target>
 
@@ -1549,49 +1629,28 @@ rerun your task.
 	</target>
 
 	<target name="generate-code-coverage-report">
-		<var name="exec.file" unset="true" />
+		<delete dir="${jacoco.report.folder}" />
+		<mkdir dir="${jacoco.report.folder}" />
+
+		<taskdef classname="com.liferay.util.ant.GetPathTask" classpath="${project.dir}/util-java/util-java.jar" name="getPath" />
 
 		<if>
-			<available file="${jacoco.dump.file}" type="file" />
-			<then>
-				<var name="exec.file" value="${jacoco.dump.file}" />
-			</then>
-			<elseif>
-				<available file="${jacoco.dump.file}" type="dir" />
-				<then>
-					<var name="exec.file" value="${jacoco.dump.file}/liferay-jacoco-merged.exec" />
+			<isset property="class.names" />
 
-					<jacoco:merge destfile="${exec.file}">
-						<fileset dir="${jacoco.dump.file}" includes="*.exec" />
-					</jacoco:merge>
-				</then>
-			</elseif>
-			<else>
-				<fail message="Unable to find JaCoCo session file ${jacoco.dump.file}. Please run tests with code coverage before generating reports." />
-			</else>
-		</if>
-
-		<if>
-			<isset property="jacoco.merged.jar" />
 			<then>
-				<jacoco-report
-					exec.file="${exec.file}"
-				>
-					<class.files>
-						<file file="${jacoco.merged.jar}" />
-					</class.files>
-				</jacoco-report>
+				<getPath classFiles="class.files" classNames="${class.names}" includeClassFile="true" rootDir="${project.dir}" />
+
+				<for list="${class.files}" param="class.file">
+					<sequential>
+						<antcall target="code-coverage-report">
+							<param name="class.file" value="@{class.file}" />
+						</antcall>
+					</sequential>
+				</for>
 			</then>
+
 			<else>
-				<jacoco-report
-					exec.file="${exec.file}"
-				>
-					<class.files>
-						<fileset dir="${project.dir}">
-							<include name="**/classes/com/liferay/**/*.class" />
-						</fileset>
-					</class.files>
-				</jacoco-report>
+				<antcall target="code-coverage-report" />
 			</else>
 		</if>
 	</target>
