@@ -183,6 +183,9 @@ public class PortletRequestDispatcherImpl
 		PortletResponseImpl portletResponseImpl =
 			PortletResponseImpl.getPortletResponseImpl(portletResponse);
 
+		HttpServletRequest oldPortletRequestDispatcherRequest =
+			portletRequestImpl.getPortletRequestDispatcherRequest();
+
 		HttpServletRequest httpServletRequest =
 			PortalUtil.getHttpServletRequest(portletRequest);
 
@@ -296,7 +299,8 @@ public class PortletRequestDispatcherImpl
 			throw new PortletException(se);
 		}
 		finally {
-			portletRequestImpl.setPortletRequestDispatcherRequest(null);
+			portletRequestImpl.setPortletRequestDispatcherRequest(
+				oldPortletRequestDispatcherRequest);
 		}
 	}
 
@@ -304,6 +308,8 @@ public class PortletRequestDispatcherImpl
 			ServletRequest servletRequest, ServletResponse servletResponse,
 			boolean include)
 		throws IOException, ServletException {
+
+		HttpServletRequest oldPortletRequestDispatcherRequest = null;
 
 		PortletRequestImpl portletRequestImpl = null;
 
@@ -314,6 +320,9 @@ public class PortletRequestDispatcherImpl
 
 			portletRequestImpl = PortletRequestImpl.getPortletRequestImpl(
 				portletRequest);
+
+			oldPortletRequestDispatcherRequest =
+				portletRequestImpl.getPortletRequestDispatcherRequest();
 
 			HttpServletRequest httpServletRequest =
 				(HttpServletRequest)servletRequest;
@@ -359,6 +368,12 @@ public class PortletRequestDispatcherImpl
 			_log.error("Unable to dispatch request: " + se.getMessage());
 
 			throw new ServletException(se);
+		}
+		finally {
+			if (servletRequest instanceof PortletServletRequest) {
+				portletRequestImpl.setPortletRequestDispatcherRequest(
+					oldPortletRequestDispatcherRequest);
+			}
 		}
 	}
 
