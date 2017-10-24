@@ -81,6 +81,17 @@ public class PortletRequestDispatcherImpl
 		_portlet = _liferayPortletContext.getPortlet();
 	}
 
+	public PortletRequestDispatcherImpl(
+		RequestDispatcher requestDispatcher, String path) {
+
+		_requestDispatcher = requestDispatcher;
+		_named = false;
+		_liferayPortletContext = null;
+		_path = path;
+
+		_portlet = null;
+	}
+
 	@Override
 	public void forward(
 			PortletRequest portletRequest, PortletResponse portletResponse)
