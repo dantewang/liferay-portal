@@ -60,7 +60,7 @@ import org.apache.struts.Globals;
  * @author Raymond Augé
  */
 public class PortletRequestDispatcherImpl
-	implements LiferayPortletRequestDispatcher {
+	implements LiferayPortletRequestDispatcher, RequestDispatcher {
 
 	public PortletRequestDispatcherImpl(
 		RequestDispatcher requestDispatcher, boolean named,
@@ -97,6 +97,14 @@ public class PortletRequestDispatcherImpl
 	}
 
 	@Override
+	public void forward(
+			ServletRequest servletRequest, ServletResponse servletResponse)
+		throws IOException, ServletException {
+
+		dispatch(servletRequest, servletResponse, false);
+	}
+
+	@Override
 	public void include(
 			PortletRequest portletRequest, PortletResponse portletResponse)
 		throws IOException, PortletException {
@@ -119,6 +127,14 @@ public class PortletRequestDispatcherImpl
 		throws IOException, PortletException {
 
 		dispatch(renderRequest, renderResponse, false, true);
+	}
+
+	@Override
+	public void include(
+			ServletRequest servletRequest, ServletResponse servletResponse)
+		throws IOException, ServletException {
+
+		dispatch(servletRequest, servletResponse, true);
 	}
 
 	protected void checkCalledFlushBuffer(
