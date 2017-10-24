@@ -47,6 +47,8 @@ import javax.portlet.RenderResponse;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -265,6 +267,79 @@ public class PortletRequestDispatcherImpl
 			_log.error("Unable to dispatch request: " + se.getMessage());
 
 			throw new PortletException(se);
+		}
+	}
+
+	protected void dispatch(
+			ServletRequest servletRequest, ServletResponse servletResponse,
+			boolean include)
+		throws IOException, ServletException {
+
+		HttpServletRequest oldPortletRequestDispatcherRequest = null;
+
+		PortletRequestImpl portletRequestImpl = null;
+
+		if (servletRequest instanceof PortletServletRequest) {
+			PortletRequest portletRequest =
+				(PortletRequest)servletRequest.getAttribute(
+					"javax.portlet.request");
+
+			portletRequestImpl = PortletRequestImpl.getPortletRequestImpl(
+				portletRequest);
+
+			oldPortletRequestDispatcherRequest =
+				portletRequestImpl.getPortletRequestDispatcherRequest();
+
+			HttpServletRequest httpServletRequest =
+				(HttpServletRequest)servletRequest;
+
+			if (_path != null) {
+				String queryString = null;
+
+				int pos = _path.indexOf(CharPool.QUESTION);
+
+				if (pos != -1) {
+					queryString = _path.substring(pos + 1);
+
+					httpServletRequest = createDynamicServletRequest(
+						httpServletRequest, portletRequestImpl,
+						toParameterMap(queryString));
+				}
+			}
+
+			PortletServletRequest portletServletRequest =
+				(PortletServletRequest)servletRequest;
+
+			servletRequest = new PortletServletRequest(
+				httpServletRequest, portletRequest,
+				portletServletRequest.getPathInfo(),
+				portletServletRequest.getQueryString(),
+				portletServletRequest.getRequestURI(),
+				portletServletRequest.getServletPath(), _named, include);
+		}
+
+		try {
+			if (include) {
+				_requestDispatcher.include(servletRequest, servletResponse);
+			}
+			else {
+				_requestDispatcher.forward(servletRequest, servletResponse);
+			}
+		}
+		catch (ServletException se) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Unable to dispatch request", se);
+			}
+
+			_log.error("Unable to dispatch request: " + se.getMessage());
+
+			throw new ServletException(se);
+		}
+		finally {
+			if (servletRequest instanceof PortletServletRequest) {
+				portletRequestImpl.setPortletRequestDispatcherRequest(
+					oldPortletRequestDispatcherRequest);
+			}
 		}
 	}
 
