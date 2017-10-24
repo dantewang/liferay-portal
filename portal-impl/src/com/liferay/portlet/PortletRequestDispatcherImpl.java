@@ -47,6 +47,8 @@ import javax.portlet.RenderResponse;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -58,7 +60,16 @@ import org.apache.struts.Globals;
  * @author Raymond Augé
  */
 public class PortletRequestDispatcherImpl
-	implements LiferayPortletRequestDispatcher {
+	implements LiferayPortletRequestDispatcher, RequestDispatcher {
+
+	public PortletRequestDispatcherImpl(RequestDispatcher requestDispatcher) {
+		_requestDispatcher = requestDispatcher;
+		_named = false;
+		_liferayPortletContext = null;
+		_path = null;
+
+		_portlet = null;
+	}
 
 	public PortletRequestDispatcherImpl(
 		RequestDispatcher requestDispatcher, boolean named,
@@ -95,6 +106,18 @@ public class PortletRequestDispatcherImpl
 	}
 
 	@Override
+	public void forward(
+			ServletRequest servletRequest, ServletResponse servletResponse)
+		throws IOException, ServletException {
+
+		if (servletRequest instanceof PortletServletRequest) {
+			((PortletServletRequest)servletRequest).setInclude(false);
+		}
+
+		_requestDispatcher.forward(servletRequest, servletResponse);
+	}
+
+	@Override
 	public void include(
 			PortletRequest portletRequest, PortletResponse portletResponse)
 		throws IOException, PortletException {
@@ -117,6 +140,18 @@ public class PortletRequestDispatcherImpl
 		throws IOException, PortletException {
 
 		dispatch(renderRequest, renderResponse, false, true);
+	}
+
+	@Override
+	public void include(
+			ServletRequest servletRequest, ServletResponse servletResponse)
+		throws IOException, ServletException {
+
+		if (servletRequest instanceof PortletServletRequest) {
+			((PortletServletRequest)servletRequest).setInclude(true);
+		}
+
+		_requestDispatcher.include(servletRequest, servletResponse);
 	}
 
 	protected void checkCalledFlushBuffer(
