@@ -183,6 +183,9 @@ public class PortletRequestDispatcherImpl
 		PortletResponseImpl portletResponseImpl =
 			PortletResponseImpl.getPortletResponseImpl(portletResponse);
 
+		HttpServletRequest oldPortletRequestDispatcherRequest =
+			portletRequestImpl.getPortletRequestDispatcherRequest();
+
 		HttpServletRequest httpServletRequest =
 			PortalUtil.getHttpServletRequest(portletRequest);
 
@@ -294,6 +297,10 @@ public class PortletRequestDispatcherImpl
 			_log.error("Unable to dispatch request: " + se.getMessage());
 
 			throw new PortletException(se);
+		}
+		finally {
+			portletRequestImpl.setPortletRequestDispatcherRequest(
+				oldPortletRequestDispatcherRequest);
 		}
 	}
 
