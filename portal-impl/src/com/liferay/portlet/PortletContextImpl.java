@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.PortletApp;
+import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.LiferayPortletContext;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
@@ -29,7 +30,10 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Set;
 
 import javax.portlet.PortletRequestDispatcher;
@@ -68,7 +72,7 @@ public class PortletContextImpl implements LiferayPortletContext {
 
 	@Override
 	public Enumeration<String> getContainerRuntimeOptions() {
-		return null;
+		return Collections.enumeration(_supportedContainerRuntimeOptions);
 	}
 
 	@Override
@@ -240,6 +244,16 @@ public class PortletContextImpl implements LiferayPortletContext {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		PortletContextImpl.class);
+
+	private static final List<String> _supportedContainerRuntimeOptions =
+		new ArrayList<>();
+
+	static {
+		_supportedContainerRuntimeOptions.add(
+			LiferayPortletConfig.RUNTIME_OPTION_ESCAPE_XML);
+		_supportedContainerRuntimeOptions.add(
+			LiferayPortletConfig.RUNTIME_OPTION_PORTAL_CONTEXT);
+	}
 
 	private final Portlet _portlet;
 	private final ServletContext _servletContext;
