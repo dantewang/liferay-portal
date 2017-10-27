@@ -240,15 +240,22 @@ public abstract class BasePreferencesImpl implements Serializable {
 			if (actualValue == null) {
 				return null;
 			}
-			else {
-				return new String[] {actualValue};
+
+			if (actualValue.equals(_NULL_ELEMENT)) {
+				return new String[] {null};
 			}
+
+			return new String[] {actualValue};
 		}
 
 		String[] actualValues = new String[values.length];
 
 		for (int i = 0; i < actualValues.length; i++) {
 			actualValues[i] = getActualValue(values[i]);
+
+			if (_NULL_ELEMENT.equals(actualValues[i])) {
+				actualValues[i] = null;
+			}
 		}
 
 		return actualValues;
@@ -280,12 +287,7 @@ public abstract class BasePreferencesImpl implements Serializable {
 	}
 
 	protected String getXMLSafeValue(String value) {
-		if (value == null) {
-			return _NULL_VALUE;
-		}
-		else {
-			return XMLUtil.toCompactSafe(value);
-		}
+		return _getXMLSafeValue(value, _NULL_VALUE);
 	}
 
 	protected String[] getXMLSafeValues(String[] values) {
@@ -296,7 +298,7 @@ public abstract class BasePreferencesImpl implements Serializable {
 		String[] xmlSafeValues = new String[values.length];
 
 		for (int i = 0; i < xmlSafeValues.length; i++) {
-			xmlSafeValues[i] = getXMLSafeValue(values[i]);
+			xmlSafeValues[i] = _getXMLSafeValue(values[i], _NULL_ELEMENT);
 		}
 
 		return xmlSafeValues;
@@ -351,6 +353,17 @@ public abstract class BasePreferencesImpl implements Serializable {
 
 		return portletPreferencesElement.toXMLString();
 	}
+
+	private String _getXMLSafeValue(String value, String replacement) {
+		if (value == null) {
+			return replacement;
+		}
+		else {
+			return XMLUtil.toCompactSafe(value);
+		}
+	}
+
+	private static final String _NULL_ELEMENT = "NULL_ELEMENT";
 
 	private static final String _NULL_VALUE = "NULL_VALUE";
 
