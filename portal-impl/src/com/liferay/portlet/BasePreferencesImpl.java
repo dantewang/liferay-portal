@@ -299,10 +299,6 @@ public abstract class BasePreferencesImpl implements Serializable {
 	}
 
 	protected String[] getXMLSafeValues(String[] values) {
-		if (values == null) {
-			return new String[] {_NULL_VALUE};
-		}
-
 		String[] xmlSafeValues = new String[values.length];
 
 		for (int i = 0; i < xmlSafeValues.length; i++) {
