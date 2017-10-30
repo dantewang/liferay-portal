@@ -153,9 +153,15 @@ public abstract class BasePreferencesImpl implements Serializable {
 			throw new IllegalArgumentException();
 		}
 
-		value = getXMLSafeValue(value);
-
 		Map<String, Preference> modifiedPreferences = getModifiedPreferences();
+
+		if (value == null) {
+			modifiedPreferences.remove(key);
+
+			return;
+		}
+
+		value = getXMLSafeValue(value);
 
 		Preference preference = modifiedPreferences.get(key);
 
@@ -186,9 +192,13 @@ public abstract class BasePreferencesImpl implements Serializable {
 			throw new IllegalArgumentException();
 		}
 
-		values = getXMLSafeValues(values);
-
 		Map<String, Preference> modifiedPreferences = getModifiedPreferences();
+
+		if (values == null) {
+			modifiedPreferences.remove(key);
+		}
+
+		values = getXMLSafeValues(values);
 
 		Preference preference = modifiedPreferences.get(key);
 
