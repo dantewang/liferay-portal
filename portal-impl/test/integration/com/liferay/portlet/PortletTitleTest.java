@@ -51,6 +51,10 @@ public class PortletTitleTest {
 		for (Portlet portlet : PortletLocalServiceUtil.getPortlets()) {
 			String rootPortletId = portlet.getRootPortletId();
 
+			if (rootPortletId.contains("TestPortlet")) {
+				continue;
+			}
+
 			PortletBag portletBag = PortletBagPool.get(rootPortletId);
 
 			PortletConfig portletConfig = PortletConfigFactoryUtil.create(
