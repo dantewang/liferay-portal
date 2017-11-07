@@ -86,7 +86,7 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 	@Override
 	public Object getAttribute(String name) {
 		if (_include || (name == null)) {
-			return _request.getAttribute(name);
+			return _portletRequest.getAttribute(name);
 		}
 
 		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_CONTEXT_PATH)) {
@@ -134,12 +134,12 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 			}
 		}
 
-		return _request.getAttribute(name);
+		return _portletRequest.getAttribute(name);
 	}
 
 	@Override
 	public Enumeration<String> getAttributeNames() {
-		return _request.getAttributeNames();
+		return _portletRequest.getAttributeNames();
 	}
 
 	@Override

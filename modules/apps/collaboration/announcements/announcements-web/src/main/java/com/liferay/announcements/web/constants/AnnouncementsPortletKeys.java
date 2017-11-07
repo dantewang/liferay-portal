@@ -16,7 +16,10 @@ package com.liferay.announcements.web.constants;
 
 /**
  * @author Adolfo Pérez
+ * @deprecated As of 1.1.0, replaced by {@link
+ *             com.liferay.announcements.constants.AnnouncementsPortletKeys}
  */
+@Deprecated
 public class AnnouncementsPortletKeys {
 
 	public static final String ALERTS =
