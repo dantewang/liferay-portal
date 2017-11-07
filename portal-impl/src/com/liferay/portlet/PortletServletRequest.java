@@ -78,62 +78,78 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 
 		_lifecycle = _portletRequestImpl.getLifecycle();
 
-		if (Validator.isNotNull(_queryString)) {
-			_portletRequestImpl.setPortletRequestDispatcherRequest(request);
-		}
+		_portletRequestImpl.setPortletRequestDispatcherRequest(
+			new HttpServletRequestWrapper(request) {
+
+				@Override
+				public Object getAttribute(String name) {
+					if (_include || (name == null)) {
+						return _request.getAttribute(name);
+					}
+
+					if (name.equals(
+						JavaConstants.JAVAX_SERVLET_FORWARD_CONTEXT_PATH)) {
+
+						if (_named) {
+							return null;
+						}
+						else {
+							return _portletRequest.getContextPath();
+						}
+					}
+
+					if (name.equals(
+						JavaConstants.JAVAX_SERVLET_FORWARD_PATH_INFO)) {
+
+						if (_named) {
+							return null;
+						}
+						else {
+							return _pathInfo;
+						}
+					}
+
+					if (name.equals(
+						JavaConstants.JAVAX_SERVLET_FORWARD_QUERY_STRING)) {
+
+						if (_named) {
+							return null;
+						}
+						else {
+							return _queryString;
+						}
+					}
+
+					if (name.equals(
+						JavaConstants.JAVAX_SERVLET_FORWARD_REQUEST_URI)) {
+
+						if (_named) {
+							return null;
+						}
+						else {
+							return _requestURI;
+						}
+					}
+
+					if (name.equals(
+						JavaConstants.JAVAX_SERVLET_FORWARD_SERVLET_PATH)) {
+
+						if (_named) {
+							return null;
+						}
+						else {
+							return _servletPath;
+						}
+					}
+
+					return _request.getAttribute(name);
+				}
+
+			});
 	}
 
 	@Override
 	public Object getAttribute(String name) {
-		if (_include || (name == null)) {
-			return _portletRequest.getAttribute(name);
-		}
-
-		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_CONTEXT_PATH)) {
-			if (_named) {
-				return null;
-			}
-			else {
-				return _portletRequest.getContextPath();
-			}
-		}
-
-		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_PATH_INFO)) {
-			if (_named) {
-				return null;
-			}
-			else {
-				return _pathInfo;
-			}
-		}
-
-		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_QUERY_STRING)) {
-			if (_named) {
-				return null;
-			}
-			else {
-				return _queryString;
-			}
-		}
-
-		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_REQUEST_URI)) {
-			if (_named) {
-				return null;
-			}
-			else {
-				return _requestURI;
-			}
-		}
-
-		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_SERVLET_PATH)) {
-			if (_named) {
-				return null;
-			}
-			else {
-				return _servletPath;
-			}
-		}
-
 		return _portletRequest.getAttribute(name);
 	}
 
