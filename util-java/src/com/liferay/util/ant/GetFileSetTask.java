@@ -63,6 +63,8 @@ public class GetFileSetTask extends Task {
 			return;
 		}
 
+		HashSet<String> srcFileNames = new HashSet<>();
+
 		DirSet srcDirSet = new DirSet();
 
 		srcDirSet.setProject(getProject());
@@ -72,6 +74,20 @@ public class GetFileSetTask extends Task {
 			String srcResult = String.valueOf(srcResultList.get(i));
 
 			srcDirSet.setIncludes(srcResult);
+
+			int startIndex = srcResult.lastIndexOf(File.separator);
+			int endIndex = srcResult.lastIndexOf(".");
+
+			srcFileNames.add(srcResult.substring(startIndex + 1, endIndex));
+		}
+
+		if (srcFileNames.size() < names.size()) {
+			names.removeAll(srcFileNames);
+
+			for (int i = 0; i < names.size(); i++) {
+				_LOGGER.log(
+					Level.WARNING, "{0}.java did not be found!", names.get(i));
+			}
 		}
 
 		getProject().addReference("srcSet", srcDirSet);
