@@ -147,13 +147,11 @@ public class GetFileSetTask extends Task {
 						String fileName = fileNamePath.toString();
 
 						for (String targetFileName : targetNames) {
-							String targetClassName = targetFileName.concat(
-								".class");
 
 							String targetSrcName = targetFileName.concat(
 								".java");
 
-							if (fileName.equals(targetClassName)) {
+							if (_matchClassName(targetFileName,fileName)) {
 								classFileList.add(file);
 							}
 							else if (fileName.equals(targetSrcName)) {
@@ -186,6 +184,23 @@ public class GetFileSetTask extends Task {
 		else {
 			return false;
 		}
+	}
+
+	private boolean _matchClassName(String targetName, String fileName) {
+		String targetClassName = targetName.concat(".class");
+
+		if (fileName.equals(targetClassName)) {
+			return true;
+		}
+
+		if(fileName.startsWith(targetName + "$") &&
+			fileName.endsWith(".class")){
+
+			return true;
+		}
+
+		return false;
+		
 	}
 
 	private static final Logger _LOGGER = Logger.getLogger(
