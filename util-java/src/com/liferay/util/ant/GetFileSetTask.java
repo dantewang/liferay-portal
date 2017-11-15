@@ -219,7 +219,7 @@ public class GetFileSetTask extends Task {
 	private static final String _MODULE_SRC_PARAMETER = Paths.get(
 		"src", File.separator, "main", File.separator, "java").toString();
 
-	private static final List _SKIP_LIST = Arrays.asList(
+	private static final List<String> _SKIP_LIST = Arrays.asList(
 		"node_modules", "benchmarks", "definitions", "gradle", "lib",
 		"nbproject", "oss-licenses", "portal-client", "readme", "sql", "tools");
 
