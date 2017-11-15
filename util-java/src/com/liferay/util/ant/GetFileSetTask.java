@@ -207,7 +207,7 @@ public class GetFileSetTask extends Task {
 			return true;
 		}
 
-		if(fileName.startsWith(targetName + "$") &&
+		if(fileName.startsWith(targetName.concat("$")) &&
 			fileName.endsWith(".class")){
 
 			return true;
