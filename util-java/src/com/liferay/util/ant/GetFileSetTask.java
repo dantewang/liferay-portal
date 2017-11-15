@@ -159,6 +159,12 @@ public class GetFileSetTask extends Task {
 							else if (fileName.equals(targetSrcName)) {
 								srcFileList.add(file);
 							}
+
+							if (fileName.startsWith(targetFileName + "$") &&
+								fileName.endsWith(".class")) {
+
+								classFileList.add(file);
+							}
 						}
 
 						return FileVisitResult.CONTINUE;
