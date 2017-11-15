@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -160,9 +162,12 @@ public class GetFileSetTask extends Task {
 								srcFileList.add(file);
 							}
 
-							if (fileName.startsWith(targetFileName + "$") &&
-								fileName.endsWith(".class")) {
+							String regularExpression = 
+								"\\b" + targetFileName + "\\$.*?\\.class\\b";
+							Pattern pattern = Pattern.compile(regularExpression);		
+							Matcher matcher = pattern.matcher(fileName);
 
+							if (matcher.matches()) {
 								classFileList.add(file);
 							}
 						}
