@@ -161,11 +161,10 @@ public class GetFileSetTask extends Task {
 						String fileName = fileNamePath.toString();
 
 						for (String targetFileName : targetNames) {
-
 							String targetSrcName = targetFileName.concat(
 								".java");
 
-							if (_matchClassName(targetFileName,fileName)) {
+							if (_matchClassName(targetFileName, fileName)) {
 								classFileList.add(file);
 							}
 							else if (fileName.equals(targetSrcName)) {
@@ -191,15 +190,6 @@ public class GetFileSetTask extends Task {
 		_rootDir = rootDir;
 	}
 
-	private boolean _skipDirectory(String fileName) {
-		if (fileName.startsWith(".") || _SKIP_LIST.contains(fileName)) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
 	private boolean _matchClassName(String targetName, String fileName) {
 		String targetClassName = targetName.concat(".class");
 
@@ -207,23 +197,31 @@ public class GetFileSetTask extends Task {
 			return true;
 		}
 
-		if(fileName.startsWith(targetName.concat("$")) &&
-			fileName.endsWith(".class")){
+		if (fileName.startsWith(targetName.concat("$")) &&
+			fileName.endsWith(".class")) {
 
 			return true;
 		}
 
 		return false;
-		
+	}
+
+	private boolean _skipDirectory(String fileName) {
+		if (fileName.startsWith(".") || _skipList.contains(fileName)) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	private static final Logger _LOGGER = Logger.getLogger(
 		GetFileSetTask.class.getName());
 
-	private static final String _MODULE_SRC_PARAMETER = 
-		String.valueOf(Paths.get("src","main", "java"));
+	private static final String _MODULE_SRC_PARAMETER = String.valueOf(
+		Paths.get("src", "main", "java"));
 
-	private static final List<String> _SKIP_LIST = Arrays.asList(
+	private static final List<String> _skipList = Arrays.asList(
 		"node_modules", "benchmarks", "definitions", "gradle", "lib",
 		"nbproject", "oss-licenses", "portal-client", "readme", "sql", "tools");
 
