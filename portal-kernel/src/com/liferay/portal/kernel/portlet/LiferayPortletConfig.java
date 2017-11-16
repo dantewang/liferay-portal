@@ -16,6 +16,10 @@ package com.liferay.portal.kernel.portlet;
 
 import com.liferay.portal.kernel.model.Portlet;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletContext;
 
@@ -29,6 +33,11 @@ public interface LiferayPortletConfig extends PortletConfig {
 
 	public static final String RUNTIME_OPTION_PORTAL_CONTEXT =
 		"com.liferay.portal.portalContext";
+
+	public static final List<String> supportedRuntimeOptions =
+		Collections.unmodifiableList(
+			Arrays.asList(
+				RUNTIME_OPTION_ESCAPE_XML, RUNTIME_OPTION_PORTAL_CONTEXT));
 
 	public Portlet getPortlet();
 
