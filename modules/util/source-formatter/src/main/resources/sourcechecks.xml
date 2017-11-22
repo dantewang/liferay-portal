@@ -64,7 +64,6 @@
 			<property name="allowedExportPackageDirName" value="modules/apps/foundation/frontend-js/frontend-js-loader-modules-extender" />
 			<property name="allowedExportPackageDirName" value="modules/apps/foundation/frontend-js/frontend-js-top-head-extender" />
 			<property name="allowedExportPackageDirName" value="modules/apps/foundation/frontend-theme/frontend-theme-contributor-extender" />
-			<property name="allowedExportPackageDirName" value="modules/apps/foundation/login/login-web" />
 			<property name="allowedExportPackageDirName" value="modules/apps/foundation/mobile-device-rules/mobile-device-rules-service" />
 			<property name="allowedExportPackageDirName" value="modules/apps/foundation/petra/petra-collection" />
 			<property name="allowedExportPackageDirName" value="modules/apps/foundation/petra/petra-concurrent" />
@@ -150,7 +149,6 @@
 			<property name="allowedExportPackageDirName" value="modules/apps/web-experience/rss/rss-util" />
 			<property name="allowedExportPackageDirName" value="modules/apps/web-experience/rss/rss-web" />
 			<property name="allowedExportPackageDirName" value="modules/apps/web-experience/site-navigation/site-navigation-breadcrumb-web" />
-			<property name="allowedExportPackageDirName" value="modules/apps/web-experience/site-navigation/site-navigation-language-web" />
 			<property name="allowedExportPackageDirName" value="modules/apps/web-experience/site-navigation/site-navigation-service" />
 			<property name="allowedExportPackageDirName" value="modules/apps/web-experience/staging/staging-portlet-data-handler" />
 			<property name="allowedExportPackageDirName" value="vulcan-liferay-portal" />

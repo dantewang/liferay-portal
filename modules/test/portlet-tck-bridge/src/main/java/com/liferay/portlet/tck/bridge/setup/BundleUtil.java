@@ -12,15 +12,23 @@
  * details.
  */
 
-package com.liferay.site.navigation.language.web.constants;
+package com.liferay.portlet.tck.bridge.setup;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 
 /**
- * @author Eudaldo Alonso
+ * @author Vernon Singleton
  */
-public class SiteNavigationLanguagePortletKeys {
+public class BundleUtil {
 
-	public static final String SITE_NAVIGATION_LANGUAGE =
-		"com_liferay_site_navigation_language_web_portlet_" +
-			"SiteNavigationLanguagePortlet";
+	public static Bundle[] getBundles() {
+		Bundle portletBundle = FrameworkUtil.getBundle(BundleUtil.class);
+
+		BundleContext bundleContext = portletBundle.getBundleContext();
+
+		return bundleContext.getBundles();
+	}
 
 }

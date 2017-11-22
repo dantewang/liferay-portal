@@ -12,17 +12,15 @@
  * details.
  */
 
-package com.liferay.login.web.constants;
+package com.liferay.site.navigation.language.constants;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author Eudaldo Alonso
  */
-public class LoginPortletKeys {
+public class SiteNavigationLanguagePortletKeys {
 
-	public static final String FAST_LOGIN =
-		"com_liferay_login_web_portlet_FastLoginPortlet";
-
-	public static final String LOGIN =
-		"com_liferay_login_web_portlet_LoginPortlet";
+	public static final String SITE_NAVIGATION_LANGUAGE =
+		"com_liferay_site_navigation_language_web_portlet_" +
+			"SiteNavigationLanguagePortlet";
 
 }
