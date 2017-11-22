@@ -70,6 +70,12 @@ public class GetFileSetTask extends Task {
 			}
 		}
 
+		classNames.removeAll(new ArrayList<String>(notFoundClassNames));
+
+		_LOGGER.log(
+				Level.INFO, "Generate code coverage report for {0}!",
+				classNames.toString());
+
 		DirSet srcDirSet = new DirSet();
 
 		srcDirSet.setProject(getProject());
