@@ -145,15 +145,16 @@ public class Setup {
 							"portlet");
 						List<Portlet> portlets = new LinkedList<>();
 
-						for (Element elem : portletElements) {
-							nameAttribute = elem.attribute("name");
+						for (int i = 0; i < portletElements.size(); i += 2) {
+							portlets.add(
+								_createPortlet(
+									portletElements.get(i), pageName));
+						}
 
-							String portletName = nameAttribute.getValue();
-
-							Portlet portlet = new Portlet(
-								portletName, pageName, false);
-
-							portlets.add(portlet);
+						for (int i = 1; i < portletElements.size(); i += 2) {
+							portlets.add(
+								_createPortlet(
+									portletElements.get(i), pageName));
 						}
 
 						PortalPage portalPage = new PortalPage(
@@ -206,10 +207,19 @@ public class Setup {
 		// NOTE: In Liferay 6.1.x the following call was to setPortletIds()
 		// but that method was removed in 6.2.x
 
-		layoutTypePortlet.addPortletId(userId, portletId, columnNumberLabel, 1);
+		layoutTypePortlet.addPortletId(
+			userId, portletId, columnNumberLabel, -1);
 
 		layoutTypePortlet.resetModes();
 		layoutTypePortlet.resetStates();
+	}
+
+	private static Portlet _createPortlet(Element element, String pageName) {
+		Attribute nameAttribute = element.attribute("name");
+
+		String portletName = nameAttribute.getValue();
+
+		return new Portlet(portletName, pageName, false);
 	}
 
 	private static Group _getGroupForSite(long companyId, long userId)
