@@ -649,6 +649,8 @@ public class InvokerPortletImpl
 				(StateAwareResponseImpl)portletResponse;
 
 			stateAwareResponseImpl.reset();
+
+			return;
 		}
 
 		if (e instanceof RuntimeException) {
