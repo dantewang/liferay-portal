@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.portlet.WindowStateFactory;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.taglib.util.ParamAndPropertyAncestorTagImpl;
 
@@ -236,14 +237,23 @@ public class ActionURLTag extends ParamAndPropertyAncestorTagImpl {
 		_cacheability = cacheability;
 	}
 
-	@Override
 	public void setCopyCurrentRenderParameters(
-		boolean copyCurrentRenderParameters) {
+		String copyCurrentRenderParameters) {
 
-		super.setCopyCurrentRenderParameters(copyCurrentRenderParameters);
+		copyCurrentRenderParameters = StringUtil.toLowerCase(
+			copyCurrentRenderParameters);
+
+		if ((copyCurrentRenderParameters != null) &&
+			!copyCurrentRenderParameters.equals("true") &&
+			!copyCurrentRenderParameters.equals("false")) {
+
+			throw new IllegalArgumentException();
+		}
 
 		_copyCurrentRenderParameters = Boolean.valueOf(
 			copyCurrentRenderParameters);
+
+		super.setCopyCurrentRenderParameters(_copyCurrentRenderParameters);
 	}
 
 	public void setDoAsGroupId(long doAsGroupId) {
