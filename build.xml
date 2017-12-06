@@ -17,7 +17,7 @@
 				<echo>
 Please clone the repository at https://github.com/liferay/${build.binaries.cache.repository.name}
 into ${build.binaries.cache.dir.absolute.path} to have a cached copy of all
-Gradle dependencies used during the build.
+Gradle dependencies used during the build..
 
 Set the property "build.binaries.cache.dir" to an empty value to suppress this
 message.
