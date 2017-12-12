@@ -74,8 +74,8 @@ public class NamespaceServletRequest extends DynamicServletRequest {
 
 		super(request, inherit);
 
-		_attrNamespace = attrNamespace;
-		_paramNamespace = paramNamespace;
+		_attrNamespace = _CLASSNAME.concat(attrNamespace);
+		_paramNamespace = _CLASSNAME.concat(paramNamespace);
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class NamespaceServletRequest extends DynamicServletRequest {
 			if (name.startsWith(_attrNamespace)) {
 				names.add(name.substring(_attrNamespace.length()));
 			}
-			else if (_isReservedParam(name)) {
+			else if (_isReservedParam(name) || !name.startsWith(_CLASSNAME)) {
 				names.add(name);
 			}
 		}
@@ -178,6 +178,9 @@ public class NamespaceServletRequest extends DynamicServletRequest {
 
 		return false;
 	}
+
+	private static final String _CLASSNAME =
+		NamespaceServletRequest.class.getName();
 
 	private final String _attrNamespace;
 	private final String _paramNamespace;
