@@ -166,6 +166,10 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			}
 		}
 
+		if (_portletRequestDispatcherRequest != null) {
+			return _portletRequestDispatcherRequest.getAttribute(name);
+		}
+
 		return _request.getAttribute(name);
 	}
 
@@ -174,6 +178,10 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		List<String> names = new ArrayList<>();
 
 		Enumeration<String> enu = _request.getAttributeNames();
+
+		if (_portletRequestDispatcherRequest != null) {
+			enu = _portletRequestDispatcherRequest.getAttributeNames();
+		}
 
 		while (enu.hasMoreElements()) {
 			String name = enu.nextElement();
