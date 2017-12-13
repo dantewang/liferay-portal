@@ -78,63 +78,13 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 
 		_lifecycle = _portletRequestImpl.getLifecycle();
 
-		if (Validator.isNotNull(_queryString)) {
-			_portletRequestImpl.setPortletRequestDispatcherRequest(request);
-		}
+		_portletRequestImpl.setPortletRequestDispatcherRequest(
+			new PortletRequestDispatcherRequest(request));
 	}
 
 	@Override
 	public Object getAttribute(String name) {
-		if (_include || (name == null)) {
-			return _request.getAttribute(name);
-		}
-
-		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_CONTEXT_PATH)) {
-			if (_named) {
-				return null;
-			}
-			else {
-				return _portletRequest.getContextPath();
-			}
-		}
-
-		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_PATH_INFO)) {
-			if (_named) {
-				return null;
-			}
-			else {
-				return _pathInfo;
-			}
-		}
-
-		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_QUERY_STRING)) {
-			if (_named) {
-				return null;
-			}
-			else {
-				return _queryString;
-			}
-		}
-
-		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_REQUEST_URI)) {
-			if (_named) {
-				return null;
-			}
-			else {
-				return _requestURI;
-			}
-		}
-
-		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_SERVLET_PATH)) {
-			if (_named) {
-				return null;
-			}
-			else {
-				return _servletPath;
-			}
-		}
-
-		return _request.getAttribute(name);
+		return _getAttribute(name);
 	}
 
 	@Override
@@ -529,6 +479,59 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 		return (HttpSession)constructor.newInstance(new Object[] {session});
 	}
 
+	private Object _getAttribute(String name) {
+		if (_include || (name == null)) {
+			return _request.getAttribute(name);
+		}
+
+		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_CONTEXT_PATH)) {
+			if (_named) {
+				return null;
+			}
+			else {
+				return _portletRequest.getContextPath();
+			}
+		}
+
+		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_PATH_INFO)) {
+			if (_named) {
+				return null;
+			}
+			else {
+				return _pathInfo;
+			}
+		}
+
+		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_QUERY_STRING)) {
+			if (_named) {
+				return null;
+			}
+			else {
+				return _queryString;
+			}
+		}
+
+		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_REQUEST_URI)) {
+			if (_named) {
+				return null;
+			}
+			else {
+				return _requestURI;
+			}
+		}
+
+		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_SERVLET_PATH)) {
+			if (_named) {
+				return null;
+			}
+			else {
+				return _servletPath;
+			}
+		}
+
+		return _request.getAttribute(name);
+	}
+
 	private ClientDataRequest _getClientDataRequest() {
 		return (ClientDataRequest)_portletRequest;
 	}
@@ -550,5 +553,18 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 	private final HttpServletRequest _request;
 	private final String _requestURI;
 	private final String _servletPath;
+
+	private class PortletRequestDispatcherRequest
+		extends HttpServletRequestWrapper {
+
+		public PortletRequestDispatcherRequest(HttpServletRequest request) {
+			super(request);
+		}
+
+		public Object getAttribute(String name) {
+			return _getAttribute(name);
+		}
+
+	}
 
 }
