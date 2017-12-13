@@ -166,6 +166,10 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			}
 		}
 
+		if (_portletRequestDispatcherRequest != null) {
+			return _portletRequestDispatcherRequest.getAttribute(name);
+		}
+
 		return _request.getAttribute(name);
 	}
 
@@ -174,6 +178,10 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		List<String> names = new ArrayList<>();
 
 		Enumeration<String> enu = _request.getAttributeNames();
+
+		if (_portletRequestDispatcherRequest != null) {
+			return _portletRequestDispatcherRequest.getAttributeNames();
+		}
 
 		while (enu.hasMoreElements()) {
 			String name = enu.nextElement();
@@ -677,7 +685,12 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			throw new IllegalArgumentException();
 		}
 
-		_request.removeAttribute(name);
+		if (_portletRequestDispatcherRequest != null) {
+			_portletRequestDispatcherRequest.removeAttribute(name);
+		}
+		else {
+			_request.removeAttribute(name);
+		}
 	}
 
 	@Override
@@ -687,10 +700,15 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		}
 
 		if (obj == null) {
-			_request.removeAttribute(name);
+			removeAttribute(name);
 		}
 		else {
-			_request.setAttribute(name, obj);
+			if (_portletRequestDispatcherRequest != null) {
+				_portletRequestDispatcherRequest.setAttribute(name, obj);
+			}
+			else {
+				_request.setAttribute(name, obj);
+			}
 		}
 	}
 
