@@ -440,12 +440,12 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 
 	@Override
 	public void removeAttribute(String name) {
-		_portletRequest.removeAttribute(name);
+		_request.removeAttribute(name);
 	}
 
 	@Override
 	public void setAttribute(String name, Object obj) {
-		_portletRequest.setAttribute(name, obj);
+		_request.setAttribute(name, obj);
 	}
 
 	@Override
