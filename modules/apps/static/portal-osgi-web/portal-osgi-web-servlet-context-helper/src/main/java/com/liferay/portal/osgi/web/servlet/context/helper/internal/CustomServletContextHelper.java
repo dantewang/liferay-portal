@@ -25,6 +25,7 @@ import com.liferay.portal.servlet.delegate.ServletContextDelegate;
 
 import java.io.IOException;
 
+import java.net.URI;
 import java.net.URL;
 
 import java.util.Enumeration;
@@ -40,7 +41,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.felix.utils.log.Logger;
 
+import org.eclipse.osgi.service.urlconversion.URLConverter;
+
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.context.ServletContextHelper;
 
 /**
@@ -78,6 +83,25 @@ public class CustomServletContextHelper
 
 	@Override
 	public String getRealPath(String path) {
+		BundleContext bundleContext = _bundle.getBundleContext();
+
+		ServiceReference<URLConverter> serviceReference =
+			bundleContext.getServiceReference(URLConverter.class);
+
+		URLConverter urlConverter = bundleContext.getService(serviceReference);
+
+		if (urlConverter != null) {
+			try {
+				URL url = urlConverter.toFileURL(_bundle.getEntry(path));
+
+				URI uri = url.toURI();
+
+				return uri.getPath();
+			}
+			catch (Exception e) {
+			}
+		}
+
 		return null;
 	}
 
