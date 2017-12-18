@@ -514,13 +514,18 @@ public class MetaInfoCacheServletResponse extends HttpServletResponseWrapper {
 			return;
 		}
 
-		Set<Header> values = new HashSet<>();
+		if (value != null) {
+			Set<Header> values = new HashSet<>();
 
-		_metaData._headers.put(name, values);
+			_metaData._headers.put(name, values);
 
-		Header header = new Header(value);
+			Header header = new Header(value);
 
-		values.add(header);
+			values.add(header);
+		}
+		else {
+			_metaData._headers.remove(name);
+		}
 
 		super.setHeader(name, value);
 	}

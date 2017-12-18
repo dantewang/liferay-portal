@@ -1605,6 +1605,24 @@ public class MetaInfoCacheServletResponseTest {
 		Assert.assertEquals(
 			new ObjectValuePair<String, String>("name2", "value1"),
 			objectValuePairs.get(2));
+
+		// Fourth add
+
+		metaInfoCacheServletResponse.setHeader("name2", null);
+
+		Assert.assertEquals(headers.toString(), 1, headers.size());
+		Assert.assertFalse(
+			metaInfoCacheServletResponse.containsHeader("name2"));
+
+		Set<Header> headers3 = headers.get("name2");
+
+		Assert.assertNull(headers3);
+
+		Assert.assertEquals(
+			objectValuePairs.toString(), 4, objectValuePairs.size());
+		Assert.assertEquals(
+			new ObjectValuePair<String, String>("name2", null),
+			objectValuePairs.get(3));
 	}
 
 	@Test
