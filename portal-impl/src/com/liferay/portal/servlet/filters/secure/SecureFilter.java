@@ -320,7 +320,7 @@ public class SecureFilter extends BasePortalFilter {
 
 			if (!user.isDefaultUser()) {
 				request = setCredentials(
-					request, request.getSession(), user, null);
+					request, request.getSession(), user, StringPool.BLANK);
 			}
 			else {
 				if (_digestAuthEnabled) {
