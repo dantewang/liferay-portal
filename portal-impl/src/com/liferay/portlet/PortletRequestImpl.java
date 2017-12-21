@@ -627,6 +627,10 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 
 	@Override
 	public boolean isRequestedSessionIdValid() {
+		if (_session.isInvalidated() || _invalidSession) {
+			return false;
+		}
+
 		return _request.isRequestedSessionIdValid();
 	}
 
