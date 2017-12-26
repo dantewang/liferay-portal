@@ -79,6 +79,10 @@ public class PortletSessionImpl implements LiferayPortletSession {
 			throw new IllegalArgumentException();
 		}
 
+		if (_invalidated) {
+			throw new IllegalStateException();
+		}
+
 		if (scope == PORTLET_SCOPE) {
 			name = scopePrefix.concat(name);
 		}
@@ -130,6 +134,10 @@ public class PortletSessionImpl implements LiferayPortletSession {
 
 	@Override
 	public long getCreationTime() {
+		if (_invalidated) {
+			throw new IllegalStateException();
+		}
+
 		return session.getCreationTime();
 	}
 
@@ -159,7 +167,13 @@ public class PortletSessionImpl implements LiferayPortletSession {
 
 	@Override
 	public void invalidate() {
+		_invalidated = true;
+
 		session.invalidate();
+	}
+
+	public boolean isInvalidated() {
+		return _invalidated;
 	}
 
 	@Override
@@ -216,6 +230,8 @@ public class PortletSessionImpl implements LiferayPortletSession {
 	protected final PortletContext portletContext;
 	protected final String scopePrefix;
 	protected HttpSession session;
+
+	private boolean _invalidated = false;
 
 	private HttpSession _wrapHttpSession(HttpSession session) {
 		if (PropsValues.PORTLET_SESSION_REPLICATE_ENABLED &&
