@@ -130,14 +130,7 @@ public class Setup {
 					excludedName.put(warName, "1");
 				}
 
-				String prefix = servletContextName.replaceFirst("tck-", "");
-
-				// TODO remove V2.  Later the V2 prefix may go away
-				// when we start implementing portlet 3.
-
-				if ("tck-V2*".equals(servletContextName)) {
-					prefix = "V2";
-				}
+				String prefix = "V2";
 
 				if (pageName.startsWith(prefix)) {
 					if (excludedName.get(pageName) == null) {
@@ -161,8 +154,7 @@ public class Setup {
 							pageName, portlets);
 
 						_setupPage(
-							userId, groupId, portalPage, servletContextName,
-							servletContextNames);
+							userId, groupId, portalPage, servletContextNames);
 					}
 				}
 			}
@@ -310,7 +302,7 @@ public class Setup {
 
 	private static void _setupPage(
 			long userId, long groupId, PortalPage portalPage,
-			String servletContextName, String[] servletContextNames)
+			String[] servletContextNames)
 		throws Exception {
 
 		Bundle[] bundles = BundleUtil.getBundles();
@@ -335,17 +327,10 @@ public class Setup {
 
 		List<String> addedPortletIds = new ArrayList<>();
 
+		String servletContextName = _getServletContextName(
+			portalPageName, servletContextNames);
+
 		for (Portlet portlet : portlets) {
-
-			// TODO remove V2.  Later the V2 prefix may go away
-			// when we start implementing portlet 3.
-
-			// establish the servletContextName for this page, if it is a glob
-
-			if ("tck-V2*".equals(servletContextName)) {
-				servletContextName = _getServletContextName(
-					portalPageName, servletContextNames);
-			}
 
 			if (_log.isInfoEnabled()) {
 				_log.info(
