@@ -649,6 +649,10 @@ public class InvokerPortletImpl
 				(StateAwareResponseImpl)portletResponse;
 
 			stateAwareResponseImpl.reset();
+
+			if (portletResponse instanceof EventResponse) {
+				_log.error(e);
+			}
 		}
 
 		if (e instanceof RuntimeException) {
@@ -668,7 +672,9 @@ public class InvokerPortletImpl
 		}
 
 		if (e instanceof PortletException) {
-			if (!(portletRequest instanceof RenderRequest)) {
+			if (!(portletRequest instanceof RenderRequest) ||
+				!(portletRequest instanceof EventRequest)) {
+
 				portletRequest.setAttribute(
 					_portletId + PortletException.class.getName(), e);
 			}
