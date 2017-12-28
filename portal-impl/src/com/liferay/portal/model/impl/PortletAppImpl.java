@@ -108,6 +108,10 @@ public class PortletAppImpl implements PortletApp {
 
 	@Override
 	public String getContextPath() {
+		if (_contextPath.startsWith("/o")) {
+			return _contextPath.substring(2);
+		}
+
 		return _contextPath;
 	}
 
