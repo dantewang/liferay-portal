@@ -95,6 +95,8 @@ import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebAppPool;
 import com.liferay.portlet.PortletBagFactory;
 import com.liferay.portlet.UndeployedPortlet;
+import com.liferay.portlet.extraPortletApp.ExtraPortletApp;
+import com.liferay.portlet.extraPortletApp.ExtraPortletApps;
 import com.liferay.registry.Filter;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
@@ -738,7 +740,8 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 			portletApp.setServletContext(servletContext);
 
-			Set<String> servletURLPatterns = readWebXML(xmls[4]);
+			Set<String> servletURLPatterns = readWebXML(
+				xmls[4], portletApp.getServletContextName());
 
 			Map<String, Portlet> portletsMap = readPortletXML(
 				StringPool.BLANK, servletContext, xmls[0], servletURLPatterns,
@@ -839,7 +842,8 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		Set<String> liferayPortletIds = null;
 
 		try {
-			Set<String> servletURLPatterns = readWebXML(xmls[3]);
+			Set<String> servletURLPatterns = readWebXML(
+				xmls[3], servletContextName);
 
 			portletsMap = readPortletXML(
 				servletContextName, servletContext, xmls[0], servletURLPatterns,
@@ -2594,7 +2598,9 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		return portletsMap;
 	}
 
-	protected Set<String> readWebXML(String xml) throws Exception {
+	protected Set<String> readWebXML(String xml, String servletContextName)
+		throws Exception {
+
 		Set<String> servletURLPatterns = new LinkedHashSet<>();
 
 		if (xml == null) {
@@ -2612,6 +2618,29 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 				"url-pattern");
 
 			servletURLPatterns.add(urlPattern);
+		}
+
+		for (Element localeEncodingMappingListElement :
+				rootElement.elements("locale-encoding-mapping-list")) {
+
+			ExtraPortletApp extraPortletApp =
+				ExtraPortletApps.getExtraPortletApp(servletContextName);
+
+			Map<String, String> localeEncodingMappingList =
+				extraPortletApp.getLocaleEncodingMappingList();
+
+			for (Element localeEncodingMappingElement :
+					localeEncodingMappingListElement.elements(
+						"locale-encoding-mapping")) {
+
+				String locale = GetterUtil.getString(
+					localeEncodingMappingElement.elementText("locale"));
+
+				String encoding = GetterUtil.getString(
+					localeEncodingMappingElement.elementText("encoding"));
+
+				localeEncodingMappingList.put(locale, encoding);
+			}
 		}
 
 		return servletURLPatterns;
