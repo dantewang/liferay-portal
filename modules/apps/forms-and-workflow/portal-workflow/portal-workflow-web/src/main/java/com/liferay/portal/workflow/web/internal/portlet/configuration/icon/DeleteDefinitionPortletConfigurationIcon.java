@@ -19,11 +19,10 @@ import com.liferay.portal.kernel.portlet.configuration.icon.BasePortletConfigura
 import com.liferay.portal.kernel.portlet.configuration.icon.PortletConfigurationIcon;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.ResourceBundleLoader;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowDefinition;
 import com.liferay.portal.workflow.web.internal.constants.WorkflowPortletKeys;
-
-import java.util.ResourceBundle;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletRequest;
@@ -34,9 +33,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Configuration icon to allow the deactivation of a workflow definition.
+ * Configuration icon to allow the deletion of a workflow definition.
  *
- * @author Jeyvison Nascimento
+ * @author Lino Alves
  * @review
  */
 @Component(
@@ -47,15 +46,32 @@ import org.osgi.service.component.annotations.Reference;
 	},
 	service = PortletConfigurationIcon.class
 )
-public class UnpublishDefinitionPortletConfigurationIcon
+public class DeleteDefinitionPortletConfigurationIcon
 	extends BasePortletConfigurationIcon {
 
 	@Override
 	public String getMessage(PortletRequest portletRequest) {
-		ResourceBundle resourceBundle =
-			_resourceBundleLoader.loadResourceBundle(getLocale(portletRequest));
+		return LanguageUtil.get(getLocale(portletRequest), "delete");
+	}
 
-		return LanguageUtil.get(resourceBundle, "unpublish");
+	@Override
+	public String getOnClick(
+		PortletRequest portletRequest, PortletResponse portletResponse) {
+
+		String portletId = _portal.getPortletId(portletRequest);
+
+		String portletNamespace = _portal.getPortletNamespace(portletId);
+
+		String deleteURL = getURL(portletRequest, portletResponse);
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(portletNamespace);
+		sb.append("confirmDeleteDefinition('");
+		sb.append(deleteURL);
+		sb.append("'); return false;");
+
+		return sb.toString();
 	}
 
 	/**
@@ -73,7 +89,7 @@ public class UnpublishDefinitionPortletConfigurationIcon
 			PortletRequest.ACTION_PHASE);
 
 		portletURL.setParameter(
-			ActionRequest.ACTION_NAME, "deactivateWorkflowDefinition");
+			ActionRequest.ACTION_NAME, "deleteWorkflowDefinition");
 		portletURL.setParameter("name", portletRequest.getParameter("name"));
 		portletURL.setParameter(
 			"version", portletRequest.getParameter("version"));
@@ -87,11 +103,13 @@ public class UnpublishDefinitionPortletConfigurationIcon
 			(WorkflowDefinition)portletRequest.getAttribute(
 				WebKeys.WORKFLOW_DEFINITION);
 
-		if ((workflowDefinition != null) && workflowDefinition.isActive()) {
-			return true;
+		boolean unpublished = false;
+
+		if ((workflowDefinition != null) && !workflowDefinition.isActive()) {
+			unpublished = true;
 		}
 
-		return false;
+		return unpublished;
 	}
 
 	@Reference(
