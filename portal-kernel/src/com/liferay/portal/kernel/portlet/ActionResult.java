@@ -30,8 +30,15 @@ public class ActionResult implements Serializable {
 		Collections.<Event>emptyList(), null);
 
 	public ActionResult(List<Event> events, String location) {
+		this(events, location, false);
+	}
+
+	public ActionResult(
+		List<Event> events, String location, boolean actionURLRedirect) {
+
 		_events = events;
 		_location = location;
+		_actionURLRedirect = actionURLRedirect;
 	}
 
 	public List<Event> getEvents() {
@@ -42,6 +49,11 @@ public class ActionResult implements Serializable {
 		return _location;
 	}
 
+	public boolean isActionURLRedirect() {
+		return _actionURLRedirect;
+	}
+
+	private final boolean _actionURLRedirect;
 	private final List<Event> _events;
 	private final String _location;
 
