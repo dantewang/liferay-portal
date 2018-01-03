@@ -423,6 +423,8 @@ public class PortletContainerImpl implements PortletContainer {
 				}
 
 				redirectLocation = portletURL.toString();
+
+				return new ActionResult(events, redirectLocation, true);
 			}
 
 			return new ActionResult(events, redirectLocation);
