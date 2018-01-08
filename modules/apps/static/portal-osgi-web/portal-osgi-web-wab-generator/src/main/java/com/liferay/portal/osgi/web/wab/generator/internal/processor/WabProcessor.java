@@ -146,7 +146,7 @@ public class WabProcessor {
 		String webContextpath = getWebContextPath();
 
 		AutoDeploymentContext autoDeploymentContext =
-			buildAutoDeploymentContext(webContextpath);
+			buildAutoDeploymentContext(webContextpath.substring(1));
 
 		executeAutoDeployers(autoDeploymentContext);
 
