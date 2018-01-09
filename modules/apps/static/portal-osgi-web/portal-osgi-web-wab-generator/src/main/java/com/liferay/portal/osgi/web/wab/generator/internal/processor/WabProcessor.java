@@ -212,7 +212,7 @@ public class WabProcessor {
 		AutoDeploymentContext autoDeploymentContext =
 			new AutoDeploymentContext();
 
-		autoDeploymentContext.setContext(context);
+		autoDeploymentContext.setContext(context.substring(1));
 		autoDeploymentContext.setFile(_file);
 
 		if (_file.isDirectory()) {
