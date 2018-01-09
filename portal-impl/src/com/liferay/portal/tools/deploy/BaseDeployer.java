@@ -885,6 +885,10 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 
 		String specifiedContext = autoDeploymentContext.getContext();
 
+		if (specifiedContext.startsWith(StringPool.FORWARD_SLASH)) {
+			specifiedContext = specifiedContext.substring(1);
+		}
+
 		String displayName = specifiedContext;
 
 		boolean overwrite = false;
