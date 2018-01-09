@@ -156,7 +156,7 @@ public class WabProcessor {
 			_context = _pluginPackage.getContext();
 		}
 		else {
-			_context = autoDeploymentContext.getContext();
+			_context = webContextpath;
 		}
 
 		if (_file.isDirectory()) {
@@ -211,6 +211,10 @@ public class WabProcessor {
 	protected AutoDeploymentContext buildAutoDeploymentContext(String context) {
 		AutoDeploymentContext autoDeploymentContext =
 			new AutoDeploymentContext();
+
+		if (context.startsWith(StringPool.SLASH)) {
+			context = context.substring(1);
+		}
 
 		autoDeploymentContext.setContext(context);
 		autoDeploymentContext.setFile(_file);
