@@ -47,6 +47,7 @@ import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.plugin.PluginPackage;
 import com.liferay.portal.kernel.portlet.FriendlyURLMapper;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
+import com.liferay.portal.kernel.portlet.LiferayPortletMode;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletConfigFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletContextFactoryUtil;
@@ -2101,7 +2102,8 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	protected void readPortletXML(
 			String servletContextName, PluginPackage pluginPackage,
 			PortletApp portletApp, Element portletElement,
-			Map<String, Portlet> portletsMap)
+			Map<String, Portlet> portletsMap,
+			Set<String> validCustomPortletModes)
 		throws PortletIdException {
 
 		String portletName = portletElement.elementText("portlet-name");
@@ -2181,8 +2183,16 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 			for (Element portletModeElement :
 					supportsElement.elements("portlet-mode")) {
 
-				mimeTypePortletModes.add(
-					StringUtil.toLowerCase(portletModeElement.getTextTrim()));
+				String portletMode = StringUtil.toLowerCase(
+					portletModeElement.getTextTrim());
+
+				if (_isCustomPortletMode(portletMode) &&
+					!validCustomPortletModes.contains(portletMode)) {
+
+					continue;
+				}
+
+				mimeTypePortletModes.add(portletMode);
 			}
 
 			portletModes.put(mimeType, mimeTypePortletModes);
@@ -2520,10 +2530,28 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 			}
 		}
 
+		Set<String> validCustomPortletModes = new HashSet<>();
+
+		for (Element customPortletModeElement :
+				rootElement.elements("custom-portlet-mode")) {
+
+			String portletMode = StringUtil.toLowerCase(
+				customPortletModeElement.elementTextTrim("portlet-mode"));
+
+			boolean portalManaged = Boolean.valueOf(
+				customPortletModeElement.elementText("portal-managed"));
+
+			if (_isCustomPortletMode(portletMode) && portalManaged) {
+				continue;
+			}
+
+			validCustomPortletModes.add(portletMode);
+		}
+
 		for (Element portletElement : rootElement.elements("portlet")) {
 			readPortletXML(
 				servletContextName, pluginPackage, portletApp, portletElement,
-				portletsMap);
+				portletsMap, validCustomPortletModes);
 		}
 
 		for (Element filterElement : rootElement.elements("filter")) {
@@ -2725,6 +2753,25 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 			throw new PrincipalException("Invalid portlet ID " + portletId);
 		}
+	}
+
+	private boolean _isCustomPortletMode(String portletModeName) {
+		PortletMode portletMode = new PortletMode(portletModeName);
+
+		if (LiferayPortletMode.ABOUT.equals(portletMode) ||
+			LiferayPortletMode.CONFIG.equals(portletMode) ||
+			LiferayPortletMode.EDIT.equals(portletMode) ||
+			LiferayPortletMode.EDIT_DEFAULTS.equals(portletMode) ||
+			LiferayPortletMode.EDIT_GUEST.equals(portletMode) ||
+			LiferayPortletMode.HELP.equals(portletMode) ||
+			LiferayPortletMode.PREVIEW.equals(portletMode) ||
+			LiferayPortletMode.PRINT.equals(portletMode) ||
+			LiferayPortletMode.VIEW.equals(portletMode)) {
+
+			return false;
+		}
+
+		return true;
 	}
 
 	private void _readWebXML(String xml, String servletContextName)
