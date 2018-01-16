@@ -2101,7 +2101,8 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	protected void readPortletXML(
 			String servletContextName, PluginPackage pluginPackage,
 			PortletApp portletApp, Element portletElement,
-			Map<String, Portlet> portletsMap)
+			Map<String, Portlet> portletsMap,
+			Set<String> validCustomPortletModes)
 		throws PortletIdException {
 
 		String portletName = portletElement.elementText("portlet-name");
@@ -2181,8 +2182,16 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 			for (Element portletModeElement :
 					supportsElement.elements("portlet-mode")) {
 
-				mimeTypePortletModes.add(
-					StringUtil.toLowerCase(portletModeElement.getTextTrim()));
+				String portletMode = StringUtil.toLowerCase(
+					portletModeElement.getTextTrim());
+
+				if (_isCustomPortletMode(portletMode) &&
+					!validCustomPortletModes.contains(portletMode)) {
+
+					continue;
+				}
+
+				mimeTypePortletModes.add(portletMode);
 			}
 
 			portletModes.put(mimeType, mimeTypePortletModes);
@@ -2520,10 +2529,28 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 			}
 		}
 
+		Set<String> validCustomPortletModes = new HashSet<>();
+
+		for (Element customPortletModeElement :
+				rootElement.elements("custom-portlet-mode")) {
+
+			String portletMode = StringUtil.toLowerCase(
+				customPortletModeElement.elementTextTrim("portlet-mode"));
+
+			boolean portalManaged = Boolean.valueOf(
+				customPortletModeElement.elementText("portal-managed"));
+
+			if (_isCustomPortletMode(portletMode) && portalManaged) {
+				continue;
+			}
+
+			validCustomPortletModes.add(portletMode);
+		}
+
 		for (Element portletElement : rootElement.elements("portlet")) {
 			readPortletXML(
 				servletContextName, pluginPackage, portletApp, portletElement,
-				portletsMap);
+				portletsMap, validCustomPortletModes);
 		}
 
 		for (Element filterElement : rootElement.elements("filter")) {
@@ -2725,6 +2752,10 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 			throw new PrincipalException("Invalid portlet ID " + portletId);
 		}
+	}
+
+	private boolean _isCustomPortletMode(String portletModeName) {
+		return PortalUtil.isCustomPortletMode(new PortletMode(portletModeName));
 	}
 
 	private void _readWebXML(String xml, String servletContextName)
