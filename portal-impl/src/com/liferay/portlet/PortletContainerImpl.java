@@ -430,6 +430,12 @@ public class PortletContainerImpl implements PortletContainer {
 
 				redirectLocation = portletURL.toString();
 			}
+			else if (Validator.isNull(redirectLocation)) {
+				if (actionScopeId != null) {
+					actionResponseImpl.setRenderParameter(
+						PortletRequest.ACTION_SCOPE_ID, actionScopeId);
+				}
+			}
 
 			return new ActionResult(events, redirectLocation);
 		}
