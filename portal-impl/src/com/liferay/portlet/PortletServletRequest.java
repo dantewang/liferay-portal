@@ -69,6 +69,9 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 		_portletRequestImpl = PortletRequestImpl.getPortletRequestImpl(
 			_portletRequest);
 
+		_actionScopedRequestAttributes =
+			_portletRequestImpl.getActionScopedRequestAttributes();
+
 		_pathInfo = pathInfo;
 		_queryString = queryString;
 		_requestURI = GetterUtil.getString(requestURI);
@@ -85,6 +88,16 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 
 	@Override
 	public Object getAttribute(String name) {
+		Object object = null;
+
+		if (_actionScopedRequestAttributes != null) {
+			object = _actionScopedRequestAttributes.get(name);
+		}
+
+		if (object != null) {
+			return object;
+		}
+
 		if (_include || (name == null)) {
 			return _request.getAttribute(name);
 		}
@@ -540,6 +553,7 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 	private static final Log _log = LogFactoryUtil.getLog(
 		PortletServletRequest.class);
 
+	private final Map<String, Object> _actionScopedRequestAttributes;
 	private final boolean _include;
 	private final String _lifecycle;
 	private final boolean _named;
