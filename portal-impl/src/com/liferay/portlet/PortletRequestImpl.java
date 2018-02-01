@@ -920,6 +920,16 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			}
 		}
 
+		String actionScopeId = (String)request.getAttribute(
+			PortletRequest.ACTION_SCOPE_ID);
+
+		if (actionScopeId != null) {
+			dynamicRequest.setParameter(
+				PortletRequest.ACTION_SCOPE_ID, actionScopeId);
+
+			request.removeAttribute(PortletRequest.ACTION_SCOPE_ID);
+		}
+
 		_mergePublicRenderParameters(
 			dynamicRequest, publicRenderParametersMap, preferences,
 			getLifecycle());
