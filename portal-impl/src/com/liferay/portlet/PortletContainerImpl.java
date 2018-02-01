@@ -393,6 +393,10 @@ public class PortletContainerImpl implements PortletContainer {
 
 			ServiceContextThreadLocal.pushServiceContext(serviceContext);
 
+			String actionScopeId =
+				ActionScopedRequestAttributesPool.
+					handleActionScopedRequestAttributesPool(actionRequestImpl);
+
 			invokerPortlet.processAction(actionRequestImpl, actionResponseImpl);
 
 			actionResponseImpl.transferHeaders(response);
