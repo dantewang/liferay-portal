@@ -606,6 +606,9 @@ public class InvokerPortletImpl
 		LiferayPortletResponse portletResponse =
 			PortalUtil.getLiferayPortletResponse(renderResponse);
 
+		ActionScopedRequestAttributesUtil.handleActionScopedRequestAttributes(
+			portletRequest);
+
 		try {
 			invoke(
 				portletRequest, portletResponse, PortletRequest.RENDER_PHASE,
