@@ -1001,9 +1001,12 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			for (PublicRenderParameter publicRenderParameter :
 					publicRenderParameters) {
 
-				String[] values = publicRenderParametersMap.get(
+				String publicRenderParameterName =
 					PortletQNameUtil.getPublicRenderParameterName(
-						publicRenderParameter.getQName()));
+						publicRenderParameter.getQName());
+
+				String[] values = publicRenderParametersMap.get(
+					publicRenderParameterName);
 
 				if (ArrayUtil.isEmpty(values) || Validator.isNull(values[0])) {
 					continue;
@@ -1013,6 +1016,20 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 
 				String[] requestValues = dynamicRequest.getParameterValues(
 					name);
+
+				// In resource phase, the requestValues can only be retrieved
+				// using "name", while in action phase, the requestValues can
+				// only be retrieved by "publicRenderParameterName" on the inner
+				// request that the DynamicRequest wraps.
+				// Why?
+
+				if (requestValues == null) {
+					HttpServletRequest request =
+						(HttpServletRequest)dynamicRequest.getRequest();
+
+					requestValues = request.getParameterValues(
+						publicRenderParameterName);
+				}
 
 				if ((requestValues != null) &&
 					(lifecycle.equals(PortletRequest.ACTION_PHASE) ||
