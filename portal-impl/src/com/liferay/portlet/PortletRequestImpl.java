@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.portlet.PortletQNameUtil;
 import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.DynamicServletRequest;
+import com.liferay.portal.kernel.servlet.PortletServlet;
 import com.liferay.portal.kernel.servlet.ProtectedPrincipal;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -150,6 +151,10 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		setAttribute(PortletRequest.LIFECYCLE_PHASE, getLifecycle());
 	}
 
+	public Map<String, Object> getActionScopedRequestAttributesPool() {
+		return _actionScopedRequestAttributesPool;
+	}
+
 	@Override
 	public Object getAttribute(String name) {
 		if (name == null) {
@@ -167,12 +172,28 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			}
 		}
 
-		return _request.getAttribute(name);
+		Object object = null;
+
+		if (_actionScopedRequestAttributesPool != null) {
+			object = _actionScopedRequestAttributesPool.get(name);
+		}
+
+		if (object == null) {
+			object = _request.getAttribute(name);
+		}
+
+		return object;
 	}
 
 	@Override
 	public Enumeration<String> getAttributeNames() {
 		Set<String> names = new HashSet<>();
+
+		if (_actionScopedRequestAttributesPool != null) {
+			Set<String> keySet = _actionScopedRequestAttributesPool.keySet();
+
+			_copyAttributeNames(names, keySet);
+		}
 
 		Enumeration<String> enu = _request.getAttributeNames();
 
@@ -663,7 +684,30 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			throw new IllegalArgumentException();
 		}
 
-		_request.removeAttribute(name);
+		if ((_actionScopedRequestAttributesPool != null) && _isNameOK(name)) {
+			_actionScopedRequestAttributesPool.remove(name);
+		}
+		else {
+			_request.removeAttribute(name);
+		}
+	}
+
+	public void removePortletRequestAttrs() {
+		Enumeration<String> attributesNames = getAttributeNames();
+
+		while (attributesNames.hasMoreElements()) {
+			String attributeName = attributesNames.nextElement();
+
+			if (_isNameOK(attributeName)) {
+				_request.removeAttribute(attributeName);
+			}
+		}
+	}
+
+	public void setActionScopedRequestAttributesPool(
+		Map<String, Object> actionScopedRequestAttributesPool) {
+
+		_actionScopedRequestAttributesPool = actionScopedRequestAttributesPool;
 	}
 
 	@Override
@@ -673,10 +717,24 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		}
 
 		if (obj == null) {
-			_request.removeAttribute(name);
+			if ((_actionScopedRequestAttributesPool != null) &&
+				_isNameOK(name)) {
+
+				_actionScopedRequestAttributesPool.remove(name);
+			}
+			else {
+				_request.removeAttribute(name);
+			}
 		}
 		else {
-			_request.setAttribute(name, obj);
+			if ((_actionScopedRequestAttributesPool != null) &&
+				_isNameOK(name)) {
+
+				_actionScopedRequestAttributesPool.put(name, obj);
+			}
+			else {
+				_request.setAttribute(name, obj);
+			}
 		}
 	}
 
@@ -886,6 +944,16 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			}
 		}
 
+		String actionScopeId = (String)request.getAttribute(
+			PortletRequest.ACTION_SCOPE_ID);
+
+		if (actionScopeId != null) {
+			dynamicRequest.setParameter(
+				PortletRequest.ACTION_SCOPE_ID, actionScopeId);
+
+			request.removeAttribute(PortletRequest.ACTION_SCOPE_ID);
+		}
+
 		_mergePublicRenderParameters(
 			dynamicRequest, publicRenderParametersMap, preferences,
 			getLifecycle());
@@ -977,6 +1045,23 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 				names.add(name);
 			}
 		}
+	}
+
+	private void _copyAttributeNames(Set<String> names, Set<String> keySet) {
+		for (String name : keySet) {
+			names.add(name);
+		}
+	}
+
+	private boolean _isNameOK(String name) {
+		if (name.startsWith("javax.portlet.") ||
+			name.startsWith("javax.servlet.") ||
+			name.startsWith("org.apache.") || _reservedAttrs.contains(name)) {
+
+			return false;
+		}
+
+		return true;
 	}
 
 	private void _mergePublicRenderParameters(
@@ -1107,9 +1192,28 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 	private static final Log _log = LogFactoryUtil.getLog(
 		PortletRequestImpl.class);
 
+	private static final Set<String> _reservedAttrs = new HashSet<>();
 	private static final Pattern _strutsPortletIgnoredParamtersPattern =
 		Pattern.compile(PropsValues.STRUTS_PORTLET_IGNORED_PARAMETERS_REGEXP);
 
+	static {
+		_reservedAttrs.add(WebKeys.INVOKER_FILTER_URI);
+		_reservedAttrs.add(WebKeys.PORTLET_CONTENT);
+		_reservedAttrs.add(WebKeys.PORTLET_ID);
+		_reservedAttrs.add(WebKeys.THEME_DISPLAY);
+		_reservedAttrs.add(WebKeys.WINDOW_STATE);
+		_reservedAttrs.add(WebKeys.LAYOUT);
+		_reservedAttrs.add(WebKeys.RENDER_PATH);
+		_reservedAttrs.add(WebKeys.RENDER_PORTLET);
+		_reservedAttrs.add(WebKeys.PORTLET_CONFIGURATOR_VISIBILITY);
+		_reservedAttrs.add(PortletServlet.PORTLET_APP);
+		_reservedAttrs.add(PortletServlet.PORTLET_SERVLET_CONFIG);
+		_reservedAttrs.add(PortletServlet.PORTLET_SERVLET_FILTER_CHAIN);
+		_reservedAttrs.add(PortletServlet.PORTLET_SERVLET_REQUEST);
+		_reservedAttrs.add(PortletServlet.PORTLET_SERVLET_RESPONSE);
+	}
+
+	private Map<String, Object> _actionScopedRequestAttributesPool;
 	private boolean _invalidSession;
 	private Locale _locale;
 	private HttpServletRequest _originalRequest;
