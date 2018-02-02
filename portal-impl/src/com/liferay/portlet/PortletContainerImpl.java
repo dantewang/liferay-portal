@@ -428,6 +428,18 @@ public class PortletContainerImpl implements PortletContainer {
 			return new ActionResult(events, redirectLocation);
 		}
 		finally {
+			Map<String, String[]> publicRenderParameters =
+				PublicRenderParametersPool.get(request, layout.getPlid());
+
+			publicRenderParameters.forEach(
+				(name, values) -> {
+					if (values.length != 1) {
+						values = new String[] {values[values.length - 1]};
+
+						publicRenderParameters.put(name, values);
+					}
+				});
+
 			ServiceContextThreadLocal.popServiceContext();
 		}
 	}
