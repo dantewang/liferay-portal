@@ -152,6 +152,10 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		setAttribute(PortletRequest.LIFECYCLE_PHASE, getLifecycle());
 	}
 
+	public Map<String, Object> getActionScopedRequestAttributes() {
+		return _actionScopedRequestAttributes;
+	}
+
 	@Override
 	public Object getAttribute(String name) {
 		if (name == null) {
@@ -691,6 +695,12 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		}
 	}
 
+	public void setActionScopedRequestAttributes(
+		Map<String, Object> actionScopedRequestAttributes) {
+
+		_actionScopedRequestAttributes = actionScopedRequestAttributes;
+	}
+
 	@Override
 	public void setAttribute(String name, Object obj) {
 		if (name == null) {
@@ -1154,6 +1164,7 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 	private static final Pattern _strutsPortletIgnoredParamtersPattern =
 		Pattern.compile(PropsValues.STRUTS_PORTLET_IGNORED_PARAMETERS_REGEXP);
 
+	private Map<String, Object> _actionScopedRequestAttributes;
 	private boolean _invalidSession;
 	private Locale _locale;
 	private HttpServletRequest _originalRequest;
