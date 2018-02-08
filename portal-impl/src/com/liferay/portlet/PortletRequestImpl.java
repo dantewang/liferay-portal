@@ -84,6 +84,7 @@ import javax.portlet.filter.PortletRequestWrapper;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -666,6 +667,29 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		_request.removeAttribute(name);
 	}
 
+	public void removePortletRequestAttributes() {
+		HttpServletRequest originalRequest = _request;
+
+		while (originalRequest instanceof HttpServletRequestWrapper) {
+			HttpServletRequestWrapper httpServletRequestWrapper =
+				(HttpServletRequestWrapper)originalRequest;
+
+			originalRequest =
+				(HttpServletRequest)httpServletRequestWrapper.getRequest();
+		}
+
+		Enumeration<String> attributesNames =
+			originalRequest.getAttributeNames();
+
+		while (attributesNames.hasMoreElements()) {
+			String attributeName = attributesNames.nextElement();
+
+			if (_isAttributeRemovable(attributeName)) {
+				originalRequest.removeAttribute(attributeName);
+			}
+		}
+	}
+
 	@Override
 	public void setAttribute(String name, Object obj) {
 		if (name == null) {
@@ -977,6 +1001,16 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 				names.add(name);
 			}
 		}
+	}
+
+	private boolean _isAttributeRemovable(String attributeName) {
+		String portletNamespace = PortalUtil.getPortletNamespace(_portletName);
+
+		if (attributeName.startsWith(portletNamespace)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private void _mergePublicRenderParameters(
