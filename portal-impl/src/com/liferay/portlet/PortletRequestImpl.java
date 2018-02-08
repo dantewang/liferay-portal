@@ -74,6 +74,7 @@ import javax.ccpp.Profile;
 import javax.portlet.PortalContext;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletContext;
+import javax.portlet.PortletException;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
@@ -994,6 +995,15 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		String portletNamespace = PortalUtil.getPortletNamespace(_portletName);
 
 		if (attributeName.startsWith(portletNamespace)) {
+			String portletId = _portlet.getPortletId();
+
+			String portletExceptionAttributeName =
+				portletId + PortletException.class.getName();
+
+			if (attributeName.endsWith(portletExceptionAttributeName)) {
+				return false;
+			}
+
 			return true;
 		}
 
