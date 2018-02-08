@@ -173,12 +173,28 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			}
 		}
 
-		return _request.getAttribute(name);
+		Object object = null;
+
+		if (_actionScopedRequestAttributesPool != null) {
+			object = _actionScopedRequestAttributesPool.get(name);
+		}
+
+		if (object == null) {
+			object = _request.getAttribute(name);
+		}
+
+		return object;
 	}
 
 	@Override
 	public Enumeration<String> getAttributeNames() {
 		Set<String> names = new HashSet<>();
+
+		if (_actionScopedRequestAttributesPool != null) {
+			Set<String> keySet = _actionScopedRequestAttributesPool.keySet();
+
+			_copyAttributeNames(names, keySet);
+		}
 
 		Enumeration<String> enu = _request.getAttributeNames();
 
@@ -669,7 +685,14 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			throw new IllegalArgumentException();
 		}
 
-		_request.removeAttribute(name);
+		if (_actionScopedRequestAttributesPool != null) {
+			if (_isNameOK(name)) {
+				_actionScopedRequestAttributesPool.remove(name);
+			}
+		}
+		else {
+			_request.removeAttribute(name);
+		}
 	}
 
 	public void removePortletRequestAttrs() {
@@ -707,10 +730,24 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		}
 
 		if (obj == null) {
-			_request.removeAttribute(name);
+			if (_actionScopedRequestAttributesPool != null) {
+				if (_isNameOK(name)) {
+					_actionScopedRequestAttributesPool.remove(name);
+				}
+			}
+			else {
+				_request.removeAttribute(name);
+			}
 		}
 		else {
-			_request.setAttribute(name, obj);
+			if (_actionScopedRequestAttributesPool != null) {
+				if (_isNameOK(name)) {
+					_actionScopedRequestAttributesPool.put(name, obj);
+				}
+			}
+			else {
+				_request.setAttribute(name, obj);
+			}
 		}
 	}
 
@@ -1040,6 +1077,22 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 				names.add(name);
 			}
 		}
+	}
+
+	private void _copyAttributeNames(Set<String> names, Set<String> keySet) {
+		for (String name : keySet) {
+			names.add(name);
+		}
+	}
+
+	private boolean _isNameOK(String name) {
+		if (name.startsWith("javax.portlet.") ||
+			name.startsWith("javax.servlet.")) {
+
+			return false;
+		}
+
+		return true;
 	}
 
 	private void _mergePublicRenderParameters(
