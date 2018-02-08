@@ -373,8 +373,10 @@ public class PortletContainerImpl implements PortletContainer {
 			_log.debug("Content type " + contentType);
 		}
 
+		ActionRequestImpl actionRequestImpl = null;
+
 		try {
-			ActionRequestImpl actionRequestImpl = ActionRequestFactory.create(
+			actionRequestImpl = ActionRequestFactory.create(
 				request, portlet, invokerPortlet, portletContext, windowState,
 				portletMode, portletPreferences, layout.getPlid());
 
@@ -429,6 +431,10 @@ public class PortletContainerImpl implements PortletContainer {
 		}
 		finally {
 			ServiceContextThreadLocal.popServiceContext();
+
+			if (actionRequestImpl != null) {
+				actionRequestImpl.removePortletRequestAttrs();
+			}
 		}
 	}
 
@@ -552,6 +558,8 @@ public class PortletContainerImpl implements PortletContainer {
 		}
 		finally {
 			eventRequestImpl.cleanUp();
+
+			eventRequestImpl.removePortletRequestAttrs();
 		}
 	}
 
