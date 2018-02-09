@@ -451,7 +451,7 @@ public class PortletContainerImpl implements PortletContainer {
 			ServiceContextThreadLocal.popServiceContext();
 
 			if (actionRequestImpl != null) {
-				actionRequestImpl.removePortletRequestAttrs();
+				actionRequestImpl.removePortletRequestAttributes();
 			}
 		}
 	}
@@ -586,7 +586,7 @@ public class PortletContainerImpl implements PortletContainer {
 		finally {
 			eventRequestImpl.cleanUp();
 
-			eventRequestImpl.removePortletRequestAttrs();
+			eventRequestImpl.removePortletRequestAttributes();
 		}
 	}
 
