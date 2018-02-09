@@ -712,7 +712,7 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		while (attributesNames.hasMoreElements()) {
 			String attributeName = attributesNames.nextElement();
 
-			if (_canRemove(attributeName)) {
+			if (_isAttributeRemovable(attributeName)) {
 				originalRequest.removeAttribute(attributeName);
 			}
 		}
@@ -1049,7 +1049,7 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		return name;
 	}
 
-	private boolean _canRemove(String attributeName) {
+	private boolean _isAttributeRemovable(String attributeName) {
 		String portletNamespace = PortalUtil.getPortletNamespace(_portletName);
 
 		if (attributeName.startsWith(portletNamespace)) {
