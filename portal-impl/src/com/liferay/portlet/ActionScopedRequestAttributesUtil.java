@@ -49,8 +49,7 @@ public class ActionScopedRequestAttributesUtil {
 				"javax.portlet.actionScopedRequestAttributes");
 
 		if ((actionScopedRequestAttributesValues == null) ||
-			(Boolean.parseBoolean(actionScopedRequestAttributesValues[0]) ==
-				false)) {
+			!Boolean.parseBoolean(actionScopedRequestAttributesValues[0])) {
 
 			return null;
 		}
