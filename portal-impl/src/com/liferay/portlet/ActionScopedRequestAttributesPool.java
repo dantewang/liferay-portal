@@ -66,15 +66,15 @@ public class ActionScopedRequestAttributesPool {
 
 		PortletSession portletSession = portletRequest.getPortletSession();
 
-		ActionScopedRequestAttributesSessionData sessionData =
-			(ActionScopedRequestAttributesSessionData)portletSession.
+		SessionData sessionData =
+			(SessionData)portletSession.
 				getAttribute(ACTION_SCOPED_REQUEST_ATTRIBUTES_SESSION_DATA);
 
 		if (lifecycle.equals(PortletRequest.ACTION_PHASE)) {
-			sessionData = new ActionScopedRequestAttributesSessionData();
+			sessionData = new SessionData();
 
 			portletRequestImpl.setActionScopedRequestAttributesPool(
-				sessionData.actionScopedRequestAttributesPool);
+				sessionData.actionScopedRequestAttributes);
 
 			portletSession.setAttribute(
 				ACTION_SCOPED_REQUEST_ATTRIBUTES_SESSION_DATA, sessionData);
@@ -85,10 +85,10 @@ public class ActionScopedRequestAttributesPool {
 			if ((actionScopeIdParameter == null) ||
 				((sessionData != null) && (sessionData.rendered == true))) {
 
-				sessionData = new ActionScopedRequestAttributesSessionData();
+				sessionData = new SessionData();
 
 				portletRequestImpl.setActionScopedRequestAttributesPool(
-					sessionData.actionScopedRequestAttributesPool);
+					sessionData.actionScopedRequestAttributes);
 
 				portletSession.setAttribute(
 					ACTION_SCOPED_REQUEST_ATTRIBUTES_SESSION_DATA, sessionData);
@@ -101,7 +101,7 @@ public class ActionScopedRequestAttributesPool {
 				(sessionData.rendered == false)) {
 
 				portletRequestImpl.setActionScopedRequestAttributesPool(
-					sessionData.actionScopedRequestAttributesPool);
+					sessionData.actionScopedRequestAttributes);
 
 				return sessionData.actionScopeId;
 			}
@@ -118,7 +118,7 @@ public class ActionScopedRequestAttributesPool {
 				sessionData.rendered = true;
 
 				portletRequestImpl.setActionScopedRequestAttributesPool(
-					sessionData.actionScopedRequestAttributesPool);
+					sessionData.actionScopedRequestAttributes);
 			}
 		}
 		else if (lifecycle.equals(PortletRequest.RESOURCE_PHASE)) {
@@ -126,26 +126,25 @@ public class ActionScopedRequestAttributesPool {
 				actionScopeIdParameter.equals(sessionData.actionScopeId)) {
 
 				portletRequestImpl.setActionScopedRequestAttributesPool(
-					sessionData.actionScopedRequestAttributesPool);
+					sessionData.actionScopedRequestAttributes);
 			}
 		}
 
 		return null;
 	}
 
-	private static class ActionScopedRequestAttributesSessionData
-		implements Serializable {
+	private static class SessionData implements Serializable {
 
-		public ActionScopedRequestAttributesSessionData() {
+		public SessionData() {
 			UUID uuid = new UUID(
 				SecureRandomUtil.nextLong(), SecureRandomUtil.nextLong());
 
 			actionScopeId = uuid.toString();
 
-			actionScopedRequestAttributesPool = new ConcurrentHashMap<>();
+			actionScopedRequestAttributes = new ConcurrentHashMap<>();
 		}
 
-		public final Map<String, Object> actionScopedRequestAttributesPool;
+		public final Map<String, Object> actionScopedRequestAttributes;
 		public final String actionScopeId;
 		public boolean rendered = false;
 
