@@ -60,7 +60,7 @@ public class ActionScopedRequestAttributesUtil {
 
 		String lifecycle = portletRequestImpl.getLifecycle();
 
-		String actionScopeIdParameter = portletRequest.getParameter(
+		String actionScopeId = portletRequest.getParameter(
 			PortletRequest.ACTION_SCOPE_ID);
 
 		PortletSession portletSession = portletRequest.getPortletSession();
@@ -81,8 +81,8 @@ public class ActionScopedRequestAttributesUtil {
 			return sessionData.actionScopeId;
 		}
 		else if (lifecycle.equals(PortletRequest.EVENT_PHASE)) {
-			if ((actionScopeIdParameter == null) ||
-				((sessionData != null) && sessionData.rendered)) {
+			if ((actionScopeId == null) || ((sessionData != null) &&
+				sessionData.rendered)) {
 
 				sessionData = new SessionData();
 
@@ -95,8 +95,8 @@ public class ActionScopedRequestAttributesUtil {
 				return sessionData.actionScopeId;
 			}
 
-			if ((actionScopeIdParameter != null) && (sessionData != null) &&
-				actionScopeIdParameter.equals(sessionData.actionScopeId) &&
+			if ((actionScopeId != null) && (sessionData != null) &&
+				actionScopeId.equals(sessionData.actionScopeId) &&
 				!sessionData.rendered) {
 
 				portletRequestImpl.setActionScopedRequestAttributesPool(
@@ -106,13 +106,13 @@ public class ActionScopedRequestAttributesUtil {
 			}
 		}
 		else if (lifecycle.equals(PortletRequest.RENDER_PHASE)) {
-			if (actionScopeIdParameter == null) {
+			if (actionScopeId == null) {
 				portletSession.removeAttribute(
 					ACTION_SCOPED_REQUEST_ATTRIBUTES_SESSION_DATA);
 			}
 
-			if ((actionScopeIdParameter != null) && (sessionData != null) &&
-				actionScopeIdParameter.equals(sessionData.actionScopeId)) {
+			if ((actionScopeId != null) && (sessionData != null) &&
+				actionScopeId.equals(sessionData.actionScopeId)) {
 
 				sessionData.rendered = true;
 
@@ -121,8 +121,8 @@ public class ActionScopedRequestAttributesUtil {
 			}
 		}
 		else if (lifecycle.equals(PortletRequest.RESOURCE_PHASE)) {
-			if ((actionScopeIdParameter != null) && (sessionData != null) &&
-				actionScopeIdParameter.equals(sessionData.actionScopeId)) {
+			if ((actionScopeId != null) && (sessionData != null) &&
+				actionScopeId.equals(sessionData.actionScopeId)) {
 
 				portletRequestImpl.setActionScopedRequestAttributesPool(
 					sessionData.actionScopedRequestAttributes);
