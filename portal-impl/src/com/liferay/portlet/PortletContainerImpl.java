@@ -394,7 +394,7 @@ public class PortletContainerImpl implements PortletContainer {
 			ServiceContextThreadLocal.pushServiceContext(serviceContext);
 
 			String actionScopeId =
-				ActionScopedRequestAttributesPool.
+				ActionScopedRequestAttributesUtil.
 					handleActionScopedRequestAttributesPool(actionRequestImpl);
 
 			invokerPortlet.processAction(actionRequestImpl, actionResponseImpl);
@@ -557,7 +557,7 @@ public class PortletContainerImpl implements PortletContainer {
 
 		try {
 			String actionScopeId =
-				ActionScopedRequestAttributesPool.
+				ActionScopedRequestAttributesUtil.
 					handleActionScopedRequestAttributesPool(eventRequestImpl);
 
 			invokerPortlet.processEvent(eventRequestImpl, eventResponseImpl);
@@ -877,7 +877,7 @@ public class PortletContainerImpl implements PortletContainer {
 
 			ServiceContextThreadLocal.pushServiceContext(serviceContext);
 
-			ActionScopedRequestAttributesPool.
+			ActionScopedRequestAttributesUtil.
 				handleActionScopedRequestAttributesPool(resourceRequestImpl);
 
 			invokerPortlet.serveResource(
