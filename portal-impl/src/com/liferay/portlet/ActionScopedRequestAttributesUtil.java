@@ -29,7 +29,7 @@ import javax.portlet.PortletSession;
 /**
  * @author Leon Chi
  */
-public class ActionScopedRequestAttributesPool {
+public class ActionScopedRequestAttributesUtil {
 
 	public static final String ACTION_SCOPED_REQUEST_ATTRIBUTES_SESSION_DATA =
 		"action.scoped.request.attributes.session.data";
