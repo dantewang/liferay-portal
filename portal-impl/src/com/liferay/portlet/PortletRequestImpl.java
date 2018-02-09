@@ -695,7 +695,7 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		}
 	}
 
-	public void removePortletRequestAttrs() {
+	public void removePortletRequestAttributes() {
 		HttpServletRequest tempRequest = _request;
 
 		while (tempRequest instanceof HttpServletRequestWrapper) {
