@@ -82,7 +82,7 @@ public class ActionScopedRequestAttributesUtil {
 		}
 		else if (lifecycle.equals(PortletRequest.EVENT_PHASE)) {
 			if ((actionScopeIdParameter == null) ||
-				((sessionData != null) && (sessionData.rendered == true))) {
+				((sessionData != null) && sessionData.rendered)) {
 
 				sessionData = new SessionData();
 
@@ -97,7 +97,7 @@ public class ActionScopedRequestAttributesUtil {
 
 			if ((actionScopeIdParameter != null) && (sessionData != null) &&
 				actionScopeIdParameter.equals(sessionData.actionScopeId) &&
-				(sessionData.rendered == false)) {
+				!sessionData.rendered) {
 
 				portletRequestImpl.setActionScopedRequestAttributesPool(
 					sessionData.actionScopedRequestAttributes);
