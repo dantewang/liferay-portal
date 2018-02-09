@@ -696,23 +696,24 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 	}
 
 	public void removePortletRequestAttributes() {
-		HttpServletRequest tempRequest = _request;
+		HttpServletRequest originalRequest = _request;
 
-		while (tempRequest instanceof HttpServletRequestWrapper) {
+		while (originalRequest instanceof HttpServletRequestWrapper) {
 			HttpServletRequestWrapper httpServletRequestWrapper =
-				(HttpServletRequestWrapper)tempRequest;
+				(HttpServletRequestWrapper)originalRequest;
 
-			tempRequest =
+			originalRequest =
 				(HttpServletRequest)httpServletRequestWrapper.getRequest();
 		}
 
-		Enumeration<String> attributesNames = tempRequest.getAttributeNames();
+		Enumeration<String> attributesNames =
+			originalRequest.getAttributeNames();
 
 		while (attributesNames.hasMoreElements()) {
 			String attributeName = attributesNames.nextElement();
 
 			if (_canRemove(attributeName)) {
-				tempRequest.removeAttribute(attributeName);
+				originalRequest.removeAttribute(attributeName);
 			}
 		}
 	}
