@@ -14,13 +14,12 @@
 
 package com.liferay.portlet;
 
-import com.liferay.portal.kernel.security.SecureRandomUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 
 import java.io.Serializable;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.portlet.PortletConfig;
@@ -135,17 +134,9 @@ public class ActionScopedRequestAttributesPool {
 
 	private static class SessionData implements Serializable {
 
-		public SessionData() {
-			UUID uuid = new UUID(
-				SecureRandomUtil.nextLong(), SecureRandomUtil.nextLong());
-
-			actionScopeId = uuid.toString();
-
-			actionScopedRequestAttributes = new ConcurrentHashMap<>();
-		}
-
-		public final Map<String, Object> actionScopedRequestAttributes;
-		public final String actionScopeId;
+		public final Map<String, Object> actionScopedRequestAttributes =
+			new ConcurrentHashMap<>();
+		public final String actionScopeId = PortalUUIDUtil.generate();
 		public boolean rendered = false;
 
 	}
