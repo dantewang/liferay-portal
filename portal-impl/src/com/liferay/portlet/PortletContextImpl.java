@@ -247,6 +247,11 @@ public class PortletContextImpl implements LiferayPortletContext {
 	private static final Set<String> _supportedRuntimeOptions = new HashSet<>();
 
 	static {
+		//Temporarily use this string to prevent a portal-kernel version error
+		//on CI
+
+		_supportedRuntimeOptions.add(
+			"javax.portlet.actionScopedRequestAttributes");
 		_supportedRuntimeOptions.add(
 			LiferayPortletConfig.RUNTIME_OPTION_ESCAPE_XML);
 		_supportedRuntimeOptions.add(

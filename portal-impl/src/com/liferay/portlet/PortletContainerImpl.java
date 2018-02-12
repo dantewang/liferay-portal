@@ -373,8 +373,10 @@ public class PortletContainerImpl implements PortletContainer {
 			_log.debug("Content type " + contentType);
 		}
 
+		ActionRequestImpl actionRequestImpl = null;
+
 		try {
-			ActionRequestImpl actionRequestImpl = ActionRequestFactory.create(
+			actionRequestImpl = ActionRequestFactory.create(
 				request, portlet, invokerPortlet, portletContext, windowState,
 				portletMode, portletPreferences, layout.getPlid());
 
@@ -390,6 +392,10 @@ public class PortletContainerImpl implements PortletContainer {
 				actionRequestImpl);
 
 			ServiceContextThreadLocal.pushServiceContext(serviceContext);
+
+			String actionScopeId =
+				ActionScopedRequestAttributesUtil.
+					handleActionScopedRequestAttributesPool(actionRequestImpl);
 
 			invokerPortlet.processAction(actionRequestImpl, actionResponseImpl);
 
@@ -422,13 +428,31 @@ public class PortletContainerImpl implements PortletContainer {
 					portletURL.setParameter(key, value);
 				}
 
+				if (actionScopeId != null) {
+					portletURL.setParameter(
+						PortletRequest.ACTION_SCOPE_ID, actionScopeId);
+
+					request.setAttribute(
+						PortletRequest.ACTION_SCOPE_ID, actionScopeId);
+				}
+
 				redirectLocation = portletURL.toString();
+			}
+			else if (Validator.isNull(redirectLocation)) {
+				if (actionScopeId != null) {
+					actionResponseImpl.setRenderParameter(
+						PortletRequest.ACTION_SCOPE_ID, actionScopeId);
+				}
 			}
 
 			return new ActionResult(events, redirectLocation);
 		}
 		finally {
 			ServiceContextThreadLocal.popServiceContext();
+
+			if (actionRequestImpl != null) {
+				actionRequestImpl.removePortletRequestAttributes();
+			}
 		}
 	}
 
@@ -532,7 +556,16 @@ public class PortletContainerImpl implements PortletContainer {
 		eventRequestImpl.defineObjects(portletConfig, eventResponseImpl);
 
 		try {
+			String actionScopeId =
+				ActionScopedRequestAttributesUtil.
+					handleActionScopedRequestAttributesPool(eventRequestImpl);
+
 			invokerPortlet.processEvent(eventRequestImpl, eventResponseImpl);
+
+			if (actionScopeId != null) {
+				eventResponseImpl.setRenderParameter(
+					PortletRequest.ACTION_SCOPE_ID, actionScopeId);
+			}
 
 			eventResponseImpl.transferHeaders(response);
 
@@ -552,6 +585,8 @@ public class PortletContainerImpl implements PortletContainer {
 		}
 		finally {
 			eventRequestImpl.cleanUp();
+
+			eventRequestImpl.removePortletRequestAttributes();
 		}
 	}
 
@@ -841,6 +876,9 @@ public class PortletContainerImpl implements PortletContainer {
 				resourceRequestImpl);
 
 			ServiceContextThreadLocal.pushServiceContext(serviceContext);
+
+			ActionScopedRequestAttributesUtil.
+				handleActionScopedRequestAttributesPool(resourceRequestImpl);
 
 			invokerPortlet.serveResource(
 				resourceRequestImpl, resourceResponseImpl);
