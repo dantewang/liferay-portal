@@ -175,8 +175,8 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 
 		Object object = null;
 
-		if (_actionScopedRequestAttributesPool != null) {
-			object = _actionScopedRequestAttributesPool.get(name);
+		if (_actionScopedRequestAttributes != null) {
+			object = _actionScopedRequestAttributes.get(name);
 		}
 
 		if (object == null) {
@@ -190,10 +190,10 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 	public Enumeration<String> getAttributeNames() {
 		Set<String> names = new HashSet<>();
 
-		if (_actionScopedRequestAttributesPool != null) {
-			Set<String> keySet = _actionScopedRequestAttributesPool.keySet();
+		if (_actionScopedRequestAttributes != null) {
+			Set<String> keySet = _actionScopedRequestAttributes.keySet();
 
-			_copyAttributeNames(names, keySet);
+			_copyAttributeNames(names, Collections.enumeration(keySet));
 		}
 
 		Enumeration<String> enu = _request.getAttributeNames();
@@ -685,9 +685,9 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			throw new IllegalArgumentException();
 		}
 
-		if (_actionScopedRequestAttributesPool != null) {
+		if (_actionScopedRequestAttributes != null) {
 			if (_isNameOK(name)) {
-				_actionScopedRequestAttributesPool.remove(name);
+				_actionScopedRequestAttributes.remove(name);
 			}
 		}
 		else {
@@ -731,9 +731,9 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		}
 
 		if (obj == null) {
-			if (_actionScopedRequestAttributesPool != null) {
+			if (_actionScopedRequestAttributes != null) {
 				if (_isNameOK(name)) {
-					_actionScopedRequestAttributesPool.remove(name);
+					_actionScopedRequestAttributes.remove(name);
 				}
 			}
 			else {
@@ -741,9 +741,9 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			}
 		}
 		else {
-			if (_actionScopedRequestAttributesPool != null) {
+			if (_actionScopedRequestAttributes != null) {
 				if (_isNameOK(name)) {
-					_actionScopedRequestAttributesPool.put(name, obj);
+					_actionScopedRequestAttributes.put(name, obj);
 				}
 			}
 			else {
