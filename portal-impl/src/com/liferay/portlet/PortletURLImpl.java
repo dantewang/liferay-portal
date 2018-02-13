@@ -1229,6 +1229,13 @@ public class PortletURLImpl
 		if (_params.containsKey(name)) {
 			_params.remove(name);
 		}
+
+		Map<String, String[]> renderParameters = RenderParametersPool.get(
+			_request, _plid, _portlet.getPortletId());
+
+		if ((renderParameters != null) && renderParameters.containsKey(name)) {
+			renderParameters.remove(name);
+		}
 	}
 
 	private PortletURLImpl(
