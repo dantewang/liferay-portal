@@ -74,6 +74,7 @@ import javax.ccpp.Profile;
 import javax.portlet.PortalContext;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletContext;
+import javax.portlet.PortletException;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
@@ -84,6 +85,7 @@ import javax.portlet.filter.PortletRequestWrapper;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -150,6 +152,10 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		setAttribute(PortletRequest.LIFECYCLE_PHASE, getLifecycle());
 	}
 
+	public Map<String, Object> getActionScopedRequestAttributes() {
+		return _actionScopedRequestAttributes;
+	}
+
 	@Override
 	public Object getAttribute(String name) {
 		if (name == null) {
@@ -167,12 +173,28 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			}
 		}
 
-		return _request.getAttribute(name);
+		Object object = null;
+
+		if (_actionScopedRequestAttributes != null) {
+			object = _actionScopedRequestAttributes.get(name);
+		}
+
+		if (object == null) {
+			object = _request.getAttribute(name);
+		}
+
+		return object;
 	}
 
 	@Override
 	public Enumeration<String> getAttributeNames() {
 		Set<String> names = new HashSet<>();
+
+		if (_actionScopedRequestAttributes != null) {
+			Set<String> keySet = _actionScopedRequestAttributes.keySet();
+
+			_copyAttributeNames(names, Collections.enumeration(keySet));
+		}
 
 		Enumeration<String> enu = _request.getAttributeNames();
 
@@ -663,7 +685,43 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			throw new IllegalArgumentException();
 		}
 
-		_request.removeAttribute(name);
+		if (_actionScopedRequestAttributes != null) {
+			if (_isNameOK(name)) {
+				_actionScopedRequestAttributes.remove(name);
+			}
+		}
+		else {
+			_request.removeAttribute(name);
+		}
+	}
+
+	public void removePortletRequestAttributes() {
+		HttpServletRequest originalRequest = _request;
+
+		while (originalRequest instanceof HttpServletRequestWrapper) {
+			HttpServletRequestWrapper httpServletRequestWrapper =
+				(HttpServletRequestWrapper)originalRequest;
+
+			originalRequest =
+				(HttpServletRequest)httpServletRequestWrapper.getRequest();
+		}
+
+		Enumeration<String> attributesNames =
+			originalRequest.getAttributeNames();
+
+		while (attributesNames.hasMoreElements()) {
+			String attributeName = attributesNames.nextElement();
+
+			if (_isAttributeRemovable(attributeName)) {
+				originalRequest.removeAttribute(attributeName);
+			}
+		}
+	}
+
+	public void setActionScopedRequestAttributes(
+		Map<String, Object> actionScopedRequestAttributes) {
+
+		_actionScopedRequestAttributes = actionScopedRequestAttributes;
 	}
 
 	@Override
@@ -673,10 +731,24 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		}
 
 		if (obj == null) {
-			_request.removeAttribute(name);
+			if (_actionScopedRequestAttributes != null) {
+				if (_isNameOK(name)) {
+					_actionScopedRequestAttributes.remove(name);
+				}
+			}
+			else {
+				_request.removeAttribute(name);
+			}
 		}
 		else {
-			_request.setAttribute(name, obj);
+			if (_actionScopedRequestAttributes != null) {
+				if (_isNameOK(name)) {
+					_actionScopedRequestAttributes.put(name, obj);
+				}
+			}
+			else {
+				_request.setAttribute(name, obj);
+			}
 		}
 	}
 
@@ -886,6 +958,16 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			}
 		}
 
+		String actionScopeId = (String)request.getAttribute(
+			PortletRequest.ACTION_SCOPE_ID);
+
+		if (actionScopeId != null) {
+			dynamicRequest.setParameter(
+				PortletRequest.ACTION_SCOPE_ID, actionScopeId);
+
+			request.removeAttribute(PortletRequest.ACTION_SCOPE_ID);
+		}
+
 		_mergePublicRenderParameters(
 			dynamicRequest, publicRenderParametersMap, preferences,
 			getLifecycle());
@@ -977,6 +1059,35 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 				names.add(name);
 			}
 		}
+	}
+
+	private boolean _isAttributeRemovable(String attributeName) {
+		String portletNamespace = PortalUtil.getPortletNamespace(_portletName);
+
+		if (attributeName.startsWith(portletNamespace)) {
+			String portletId = _portlet.getPortletId();
+
+			String portletExceptionAttributeName =
+				portletId + PortletException.class.getName();
+
+			if (attributeName.endsWith(portletExceptionAttributeName)) {
+				return false;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean _isNameOK(String name) {
+		if (name.startsWith("javax.portlet.") ||
+			name.startsWith("javax.servlet.")) {
+
+			return false;
+		}
+
+		return true;
 	}
 
 	private void _mergePublicRenderParameters(
@@ -1110,6 +1221,7 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 	private static final Pattern _strutsPortletIgnoredParamtersPattern =
 		Pattern.compile(PropsValues.STRUTS_PORTLET_IGNORED_PARAMETERS_REGEXP);
 
+	private Map<String, Object> _actionScopedRequestAttributes;
 	private boolean _invalidSession;
 	private Locale _locale;
 	private HttpServletRequest _originalRequest;
