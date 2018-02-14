@@ -238,6 +238,8 @@ terms.of.use.required=false
 theme.portlet.decorate.default=false
 
 users.reminder.queries.enabled=false
+
+web.server.https.port=8443
 		</echo>
 
 		<print-file file.name="${liferay.home}/portal-ext.properties" />
