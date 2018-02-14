@@ -422,6 +422,48 @@ web.server.https.port=8443
 		</if>
 
 		<if>
+			<isset property="test.context.base" />
+			<then>
+				<var name="test.arguments" value="${test.arguments} -Dtest.context.base='${test.context.base}'" />
+			</then>
+		</if>
+
+		<if>
+			<isset property="test.server.login.url" />
+			<then>
+				<var name="test.arguments" value="${test.arguments} -Dtest.server.login.url='${test.server.login.url}'" />
+			</then>
+		</if>
+
+		<if>
+			<isset property="test.server.username.id" />
+			<then>
+				<var name="test.arguments" value="${test.arguments} -Dtest.server.username.id='${test.server.username.id}'" />
+			</then>
+		</if>
+
+		<if>
+			<isset property="test.server.username" />
+			<then>
+				<var name="test.arguments" value="${test.arguments} -Dtest.server.username='${test.server.username}'" />
+			</then>
+		</if>
+
+		<if>
+			<isset property="test.server.password.id" />
+			<then>
+				<var name="test.arguments" value="${test.arguments} -Dtest.server.password.id='${test.server.password.id}'" />
+			</then>
+		</if>
+
+		<if>
+			<isset property="test.server.password" />
+			<then>
+				<var name="test.arguments" value="${test.arguments} -Dtest.server.password='${test.server.password}'" />
+			</then>
+		</if>
+
+		<if>
 			<isset property="test.timeout" />
 			<then>
 				<var name="test.arguments" value="${test.arguments} -Dtest.timeout='${test.timeout}'" />
