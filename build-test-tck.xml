@@ -206,6 +206,8 @@ tckDeployFiles=${tck.deploy.files}</echo>
 		<antcall target="clean-up-tck-dependencies" />
 
 		<antcall target="prepare-tck-portal-ext-properties" />
+
+		<antcall target="prepare-portal-ssl" />
 	</target>
 
 	<target name="prepare-tck">
