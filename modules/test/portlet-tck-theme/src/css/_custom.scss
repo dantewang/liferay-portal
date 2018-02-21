@@ -7,6 +7,12 @@
 	top: 0;
 }
 
+/*
+ * overrides display: none!important in
+ * frontend-theme-styled/src/main/resources/META-INF/resources/_styled/css/clay.scss
+ */
+.hide { display: block!important; }
+
 /* ---------- inject:imports ---------- */
 /* ---------- endinject ---------- */
 
