@@ -63,9 +63,6 @@
 	<target name="clean-up-tck-dependencies">
 		<delete file="${liferay.home}/.continue" />
 		<delete file=".testable.portal.started" />
-		<delete file="${liferay.home}/osgi/modules/com.liferay.portlet.tck.bridge.configuration.PortletTCKBridgeConfiguration.cfg" />
-
-		<antcall target="undeploy-portlet-tck-bridge" />
 	</target>
 
 	<target name="deploy-portlet-tck-bridge">
@@ -208,6 +205,10 @@ tckDeployFiles=${tck.deploy.files}</echo>
 		<antcall target="prepare-tck-portal-ext-properties" />
 
 		<antcall target="prepare-portal-ssl" />
+
+		<antcall target="undeploy-portlet-tck-bridge" />
+
+		<delete file="${liferay.home}/osgi/modules/com.liferay.portlet.tck.bridge.configuration.PortletTCKBridgeConfiguration.cfg" />
 	</target>
 
 	<target name="prepare-tck">
@@ -349,7 +350,14 @@ web.server.https.port=8443
 			<param name="testable.portal.started.marker.file" value=".testable.portal.started" />
 		</antcall>
 
-		<antcall target="deploy-portlet-tck-theme" />
+		<if>
+			<not>
+				<isset property="skip.deploys" />
+			</not>
+			<then>
+				<antcall target="deploy-portlet-tck-theme" />
+			</then>
+		</if>
 
 		<antcall target="test-class" />
 
@@ -357,7 +365,15 @@ web.server.https.port=8443
 	</target>
 
 	<target name="test-class">
-		<antcall target="deploy-portlet-tck-bridge" />
+
+		<if>
+			<not>
+				<isset property="skip.deploys" />
+			</not>
+			<then>
+				<antcall target="deploy-portlet-tck-bridge" />
+			</then>
+		</if>
 
 		<condition else="_" property="starts.with" value="${starts.with}">
 			<isset property="starts.with" />
@@ -514,8 +530,6 @@ web.server.https.port=8443
 				/>
 			</then>
 		</if>
-
-		<antcall target="undeploy-portlet-tck-bridge" />
 	</target>
 
 	<target depends="prepare-portlet-tck" name="test-class-group">
