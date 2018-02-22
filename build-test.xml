@@ -4225,7 +4225,9 @@ war.path=${app.server.weblogic.portal.dir}/</echo>
 
 								DirectoryScanner directoryScanner = new DirectoryScanner();
 
-								directoryScanner.setIncludes(new String[] {project.getProperty("test.app.server.dir") + "/logs/catalina.*.log"});
+								File logsDir = new File(project.getProperty("test.app.server.dir") + "/logs");
+
+								directoryScanner.setIncludes(new String[] {logsDir.getCanonicalPath() + "/catalina.*.log"});
 
 								directoryScanner.scan();
 
@@ -6334,6 +6336,9 @@ go]]></replacevalue>
 				<fileset dir="util-java/test-results" erroronmissingdir="false">
 					<include name="**/TEST-*.xml" />
 				</fileset>
+				<fileset dir="tck/test-results" erroronmissingdir="false">
+					<include name="**/TEST-*.xml" />
+				</fileset>
 				<fileset dir="${blade.samples.dir}/liferay-workspace/tests" erroronmissingdir="false">
 					<include name="**/TEST-*.xml" />
 				</fileset>
@@ -7061,28 +7066,35 @@ auto.deploy.dest.dir=C:/WINDOWS/system32/config/systemprofile/liferay/websphere-
 			<equals arg1="${app.server.type}" arg2="tomcat" />
 			<then>
 				<if>
-					<os family="unix" />
+					<not>
+						<available file="${app.server.parent.dir}/keystore.jks" />
+					</not>
 					<then>
-						<exec dir="${app.server.parent.dir}" executable="/bin/bash">
-							<arg value="-c" />
-							<arg value="keytool -genkey -alias tomcat -dname CN=localhost -keyalg RSA -keypass liferay -storepass liferay -keystore keystore.jks" />
-						</exec>
+						<if>
+							<os family="unix" />
+							<then>
+								<exec dir="${app.server.parent.dir}" executable="/bin/bash">
+									<arg value="-c" />
+									<arg value="keytool -genkey -alias tomcat -dname CN=localhost -keyalg RSA -keypass liferay -storepass liferay -keystore keystore.jks" />
+								</exec>
+							</then>
+							<elseif>
+								<os family="windows" />
+								<then>
+									<exec dir="${app.server.parent.dir}" executable="cmd">
+										<arg value="/c" />
+										<arg value="keytool -genkey -alias tomcat -dname CN=localhost -keyalg RSA -keypass liferay -storepass liferay -keystore keystore.jks" />
+									</exec>
+								</then>
+							</elseif>
+						</if>
 					</then>
-					<elseif>
-						<os family="windows" />
-						<then>
-							<exec dir="${app.server.parent.dir}" executable="cmd">
-								<arg value="/c" />
-								<arg value="keytool -genkey -alias tomcat -dname CN=localhost -keyalg RSA -keypass liferay -storepass liferay -keystore keystore.jks" />
-							</exec>
-						</then>
-					</elseif>
 				</if>
 
 				<replace
 					file="${app.server.dir}/conf/server.xml"
 					token="&lt;Service name=&quot;Catalina&quot;&gt;"
-					value="&lt;Service name=&quot;Catalina&quot;&gt;${line.separator}    &lt;Connector port=&quot;8443&quot; protocol=&quot;org.apache.coyote.http11.Http11Protocol&quot;${line.separator}           maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot; scheme=&quot;https&quot; secure=&quot;true&quot;${line.separator}           clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot; keystoreFile=&quot;${app.server.parent.dir}/keystore.jks&quot; keystorePass=&quot;liferay&quot; /&gt;"
+					value="&lt;Service name=&quot;Catalina&quot; &gt;${line.separator}    &lt;Connector port=&quot;8443&quot; protocol=&quot;org.apache.coyote.http11.Http11Protocol&quot;${line.separator}           maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot; scheme=&quot;https&quot; secure=&quot;true&quot;${line.separator}           clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot; keystoreFile=&quot;${app.server.parent.dir}/keystore.jks&quot; keystorePass=&quot;liferay&quot; /&gt;"
 				/>
 			</then>
 			<else>
