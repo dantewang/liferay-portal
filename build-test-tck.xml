@@ -104,6 +104,63 @@
 				<echo>Copying '@{tck.war}' to '${liferay.home}/deploy/${tck.servlet.context.name}.war'</echo>
 
 				<copy file="@{tck.war}" tofile="${liferay.home}/deploy/${tck.servlet.context.name}.war" />
+
+				<!-- check for additional wars to deploy, if any -->
+				<if>
+					<not>
+						<equals arg1="${test.context}" arg2="tck-V2*" />
+					</not>
+					<then>
+
+						<propertyregex
+							input="${test.context}"
+							property="test.war"
+							regexp="tck-"
+							replace=""
+						/>
+
+						<length string="${tck.home}" property="len.tck.home" />
+
+						<var name="test.cases"
+							value="${tck.home}/*/src/main/resources/xml-resources/additionalTCs.xml" />
+
+						<exec executable="/bin/bash" outputproperty="additional.contexts">
+							<arg value="-c" />
+							<arg value="grep -l ${test.war} ${test.cases} | grep -v ${test.war} | cut -c${len.tck.home}- | cut -d\/ -f2" />
+						</exec>
+
+						<if>
+							<not>
+								<equals arg1="${additional.contexts}" arg2="" />
+							</not>
+							<then>
+								<propertyregex
+									global="true"
+									input="${additional.contexts}"
+									property="csv.contexts"
+									regexp="\n"
+									replace=","
+								/>
+								<for list="${csv.contexts}" param="context">
+									<sequential>
+										<var name="tck.servlet.context.names" value="${tck.servlet.context.names}|tck-@{context}" />
+
+										<exec executable="/bin/bash" outputproperty="additional.war.file">
+											<arg value="-c" />
+											<arg value="ls ${tck.deploy.files}/tck-@{context}-*.war" />
+										</exec>
+
+										<echo>Copying '${additional.war.file}' to '${liferay.home}/deploy/tck-@{context}.war'</echo>
+
+										<copy file="${additional.war.file}" tofile="${liferay.home}/deploy/tck-@{context}.war" />
+
+										<var name="additional.war.file" unset="true" />
+									</sequential>
+								</for>
+							</then>
+						</if>
+					</then>
+				</if>
 			</sequential>
 		</for>
 
@@ -375,9 +432,17 @@ web.server.https.port=8443
 			</then>
 		</if>
 
-		<condition else="_" property="starts.with" value="${starts.with}">
-			<isset property="starts.with" />
-		</condition>
+		<if>
+			<equals arg1="${test.context}" arg2="tck-V2*" />
+			<then>
+				<property name="starts.with" value="" />
+			</then>
+			<else>
+				<condition else="_" property="starts.with" value="${starts.with}">
+					<isset property="starts.with" />
+				</condition>
+			</else>
+		</if>
 
 		<condition else="${test.context}" property="test.module.context" value="tck-V2">
 			<equals arg1="${test.context}" arg2="tck-V2*" />
