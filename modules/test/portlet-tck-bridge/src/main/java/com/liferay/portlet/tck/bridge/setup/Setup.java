@@ -99,70 +99,74 @@ public class Setup {
 						configFileURL.toString());
 			}
 
-			Document document = SAXReaderUtil.read(configFileURL);
+			String[] servletContextNames =
+				portletTCKBridgeConfiguration.servletContextNames();
 
-			Element rootElement = document.getRootElement();
+			for (String servletContextName : servletContextNames) {
 
-			Element renderConfigElement = rootElement.element("render-config");
+				Document document = SAXReaderUtil.read(configFileURL);
 
-			Iterator<Element> pageElementIterator =
-				renderConfigElement.elementIterator("page");
+				Element rootElement = document.getRootElement();
 
-			while (pageElementIterator.hasNext()) {
-				Element pageElement = pageElementIterator.next();
+				Element renderConfigElement =
+					rootElement.element("render-config");
 
-				Attribute nameAttribute = pageElement.attribute("name");
+				Iterator<Element> pageElementIterator =
+					renderConfigElement.elementIterator("page");
 
-				String pageName = nameAttribute.getValue();
+				while (pageElementIterator.hasNext()) {
+					Element pageElement = pageElementIterator.next();
 
-				HashMap<String, String> excludedName = new HashMap<>();
+					Attribute nameAttribute = pageElement.attribute("name");
 
-				String[] excludeWarNames =
-					portletTCKBridgeConfiguration.excludeWarNames();
+					String pageName = nameAttribute.getValue();
 
-				String servletContextName =
-					portletTCKBridgeConfiguration.testContext();
+					HashMap<String, String> excludedName = new HashMap<>();
 
-				String[] servletContextNames =
-					portletTCKBridgeConfiguration.servletContextNames();
+					String[] excludeWarNames =
+						portletTCKBridgeConfiguration.excludeWarNames();
 
-				for (String warName : excludeWarNames) {
-					excludedName.put(warName, "1");
-				}
+					for (String warName : excludeWarNames) {
+						excludedName.put(warName, "1");
+					}
 
-				String prefix = servletContextName.replaceFirst("tck-", "");
+					String prefix = servletContextName.replaceFirst("tck-", "");
 
-				// TODO remove V2.  Later the V2 prefix may go away
-				// when we start implementing portlet 3.
+					// TODO remove V2.  Later the V2 prefix may go away
+					// when we start implementing portlet 3.
 
-				if ("tck-V2*".equals(servletContextName)) {
-					prefix = "V2";
-				}
+					if ("tck-V2*".equals(servletContextName)) {
+						prefix = "V2";
+					}
 
-				if (pageName.startsWith(prefix)) {
-					if (excludedName.get(pageName) == null) {
-						List<Element> portletElements = pageElement.elements(
-							"portlet");
-						List<Portlet> portlets = new LinkedList<>();
+					if (pageName.startsWith(prefix)) {
+						if (excludedName.get(pageName) == null) {
+							List<Element> portletElements =
+								pageElement.elements(
+									"portlet");
+							List<Portlet> portlets = new LinkedList<>();
 
-						for (int i = 0; i < portletElements.size(); i += 2) {
-							portlets.add(
-								_createPortlet(
-									portletElements.get(i), pageName));
+							for (int i = 0; i < portletElements.size();
+								 i += 2) {
+								portlets.add(
+									_createPortlet(
+										portletElements.get(i), pageName));
+							}
+
+							for (int i = 1; i < portletElements.size();
+								 i += 2) {
+								portlets.add(
+									_createPortlet(
+										portletElements.get(i), pageName));
+							}
+
+							PortalPage portalPage = new PortalPage(
+								pageName, portlets);
+
+							_setupPage(
+								userId, groupId, portalPage, servletContextName,
+								servletContextNames);
 						}
-
-						for (int i = 1; i < portletElements.size(); i += 2) {
-							portlets.add(
-								_createPortlet(
-									portletElements.get(i), pageName));
-						}
-
-						PortalPage portalPage = new PortalPage(
-							pageName, portlets);
-
-						_setupPage(
-							userId, groupId, portalPage, servletContextName,
-							servletContextNames);
 					}
 				}
 			}
