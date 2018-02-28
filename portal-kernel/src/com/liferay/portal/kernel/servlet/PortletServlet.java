@@ -104,6 +104,11 @@ public class PortletServlet extends HttpServlet {
 
 		portletSession.setHttpSession(session);
 
+		LiferayPortletRequest liferayPortletRequest =
+			(LiferayPortletRequest)portletRequest;
+
+		liferayPortletRequest.setHttpServletRequest(request);
+
 		try {
 			PortletFilterUtil.doFilter(
 				portletRequest, portletResponse, lifecycle, filterChain);

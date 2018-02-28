@@ -339,6 +339,12 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			return null;
 		}
 
+		if (_session.isInvalidated()) {
+			_session = new PortletSessionImpl(
+				_request.getSession(true), _portletContext, _portletName,
+				_plid);
+		}
+
 		return _session;
 	}
 
@@ -678,6 +684,10 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		else {
 			_request.setAttribute(name, obj);
 		}
+	}
+
+	public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
+		_request = httpServletRequest;
 	}
 
 	public void setPortletMode(PortletMode portletMode) {
