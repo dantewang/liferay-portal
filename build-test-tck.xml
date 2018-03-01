@@ -504,6 +504,13 @@ web.server.https.port=8443
 			</then>
 		</if>
 
+		<property name="test.context.base" value="group/portlet-tck/" />
+		<property name="test.server.login.url" value="http://localhost:8080/group/portlet-tck" />
+		<property name="test.server.username.id" value="_com_liferay_login_web_portlet_LoginPortlet_login" />
+		<property name="test.server.username" value="test" />
+		<property name="test.server.password.id" value="_com_liferay_login_web_portlet_LoginPortlet_password" />
+		<property name="test.server.password" value="test" />
+
 		<if>
 			<isset property="test.context.base" />
 			<then>
