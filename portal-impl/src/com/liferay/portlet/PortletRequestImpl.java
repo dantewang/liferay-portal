@@ -25,7 +25,7 @@ import com.liferay.portal.kernel.model.PublicRenderParameter;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.InvokerPortlet;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
-import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
+import com.liferay.portal.kernel.portlet.LiferayPortletRequestO;
 import com.liferay.portal.kernel.portlet.LiferayPortletSession;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletQName;
@@ -92,7 +92,7 @@ import javax.servlet.http.HttpSession;
  * @author Sergey Ponomarev
  * @author Raymond Augé
  */
-public abstract class PortletRequestImpl implements LiferayPortletRequest {
+public abstract class PortletRequestImpl implements LiferayPortletRequestO {
 
 	public static PortletRequestImpl getPortletRequestImpl(
 		PortletRequest portletRequest) {
@@ -337,6 +337,12 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 	public PortletSession getPortletSession(boolean create) {
 		if (!create && !isRequestedSessionIdValid()) {
 			return null;
+		}
+
+		if (_session.isInvalidated()) {
+			_session = new PortletSessionImpl(
+				_request.getSession(true), _portletContext, _portletName,
+				_plid);
 		}
 
 		return _session;
@@ -678,6 +684,10 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		else {
 			_request.setAttribute(name, obj);
 		}
+	}
+
+	public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
+		_request = httpServletRequest;
 	}
 
 	public void setPortletMode(PortletMode portletMode) {

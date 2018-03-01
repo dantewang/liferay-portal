@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
+import com.liferay.portal.kernel.portlet.LiferayPortletRequestO;
 import com.liferay.portal.kernel.portlet.LiferayPortletSession;
 import com.liferay.portal.kernel.portlet.PortletFilterUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
@@ -103,6 +104,11 @@ public class PortletServlet extends HttpServlet {
 		HttpSession session = _getSharedSession(request, portletRequest);
 
 		portletSession.setHttpSession(session);
+
+		LiferayPortletRequestO liferayPortletRequest =
+			(LiferayPortletRequestO)portletRequest;
+
+		liferayPortletRequest.setHttpServletRequest(request);
 
 		try {
 			PortletFilterUtil.doFilter(
