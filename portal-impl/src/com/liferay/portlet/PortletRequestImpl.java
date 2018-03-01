@@ -25,7 +25,7 @@ import com.liferay.portal.kernel.model.PublicRenderParameter;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.InvokerPortlet;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
-import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
+import com.liferay.portal.kernel.portlet.LiferayPortletRequestO;
 import com.liferay.portal.kernel.portlet.LiferayPortletSession;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletQName;
@@ -92,7 +92,7 @@ import javax.servlet.http.HttpSession;
  * @author Sergey Ponomarev
  * @author Raymond Augé
  */
-public abstract class PortletRequestImpl implements LiferayPortletRequest {
+public abstract class PortletRequestImpl implements LiferayPortletRequestO {
 
 	public static PortletRequestImpl getPortletRequestImpl(
 		PortletRequest portletRequest) {
