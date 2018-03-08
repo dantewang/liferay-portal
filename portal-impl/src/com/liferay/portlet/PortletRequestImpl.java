@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.InvokerPortlet;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
+import com.liferay.portal.kernel.portlet.LiferayPortletRequestO;
 import com.liferay.portal.kernel.portlet.LiferayPortletSession;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletQName;
@@ -34,6 +35,7 @@ import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.DynamicServletRequest;
 import com.liferay.portal.kernel.servlet.ProtectedPrincipal;
+import com.liferay.portal.kernel.servlet.SharedSessionUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -92,7 +94,7 @@ import javax.servlet.http.HttpSession;
  * @author Sergey Ponomarev
  * @author Raymond Augé
  */
-public abstract class PortletRequestImpl implements LiferayPortletRequest {
+public abstract class PortletRequestImpl implements LiferayPortletRequestO {
 
 	public static PortletRequestImpl getPortletRequestImpl(
 		PortletRequest portletRequest) {
@@ -330,13 +332,19 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 
 	@Override
 	public PortletSession getPortletSession() {
-		return _session;
+		return getPortletSession(true);
 	}
 
 	@Override
 	public PortletSession getPortletSession(boolean create) {
 		if (!create && !isRequestedSessionIdValid()) {
 			return null;
+		}
+
+		if (_session.isInvalidated()) {
+			_session = new PortletSessionImpl(
+				_getSharedSession(), _portletContext, _portletName,
+				_plid);
 		}
 
 		return _session;
@@ -688,6 +696,11 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		_portletRequestDispatcherRequest = request;
 	}
 
+	@Override
+	public void setSessionRequest(HttpServletRequest httpServletRequest) {
+		_sessionRequest = httpServletRequest;
+	}
+
 	public void setWindowState(WindowState windowState) {
 		_windowState = windowState;
 	}
@@ -893,6 +906,7 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		_processCheckbox(dynamicRequest);
 
 		_request = dynamicRequest;
+		_sessionRequest = _request;
 		_originalRequest = request;
 		_portlet = portlet;
 		_portalContext = new PortalContextImpl();
@@ -977,6 +991,22 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 				names.add(name);
 			}
 		}
+	}
+
+	private HttpSession _getSharedSession() {
+		Portlet portlet = getPortlet();
+
+		HttpServletRequest originalRequest =
+			getOriginalHttpServletRequest();
+
+		HttpSession portalSession = originalRequest.getSession();
+
+		if (!portlet.isPrivateSessionAttributes()) {
+			return portalSession;
+		}
+
+		return SharedSessionUtil.getSharedSessionWrapper(
+			portalSession, _sessionRequest);
 	}
 
 	private void _mergePublicRenderParameters(
@@ -1126,6 +1156,7 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 	private long _remoteUserId;
 	private HttpServletRequest _request;
 	private PortletSessionImpl _session;
+	private HttpServletRequest _sessionRequest;
 	private boolean _strutsPortlet;
 	private boolean _triggeredByActionURL;
 	private Principal _userPrincipal;
