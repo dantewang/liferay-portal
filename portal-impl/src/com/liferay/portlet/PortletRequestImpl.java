@@ -688,6 +688,11 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		_portletRequestDispatcherRequest = request;
 	}
 
+	@Override
+	public void setSessionRequest(HttpServletRequest httpServletRequest) {
+		_sessionRequest = httpServletRequest;
+	}
+
 	public void setWindowState(WindowState windowState) {
 		_windowState = windowState;
 	}
@@ -893,6 +898,7 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		_processCheckbox(dynamicRequest);
 
 		_request = dynamicRequest;
+		_sessionRequest = dynamicRequest;
 		_originalRequest = request;
 		_portlet = portlet;
 		_portalContext = new PortalContextImpl();
@@ -1126,6 +1132,7 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 	private long _remoteUserId;
 	private HttpServletRequest _request;
 	private PortletSessionImpl _session;
+	private HttpServletRequest _sessionRequest;
 	private boolean _strutsPortlet;
 	private boolean _triggeredByActionURL;
 	private Principal _userPrincipal;
