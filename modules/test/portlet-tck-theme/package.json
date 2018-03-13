@@ -19,5 +19,8 @@
 	"publishConfig": {
 		"tag": "7_0_x"
 	},
-	"version": "1.0.0"
+	"version": "1.0.0",
+	"dependencies": {
+		"node-sass": "4.7.2"
+	}
 }
