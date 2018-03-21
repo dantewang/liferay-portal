@@ -53,7 +53,6 @@ import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.TransferHeadersHelperUtil;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -161,7 +160,7 @@ public class PortletContainerImpl implements PortletContainer {
 
 		portlets.remove(portlet);
 
-		_processPublicRenderParameters(request, layout, portlets, false);
+		_processPublicRenderParameters(request, layout, portlets);
 	}
 
 	@Override
@@ -292,9 +291,7 @@ public class PortletContainerImpl implements PortletContainer {
 				LanguageUtil.getLanguageId(request));
 		}
 
-		_processPublicRenderParameters(
-			request, layout, Arrays.asList(portlet),
-			themeDisplay.isLifecycleAction());
+		_processPublicRenderParameters(request, layout, Arrays.asList(portlet));
 
 		if (themeDisplay.isLifecycleRender() ||
 			themeDisplay.isLifecycleResource()) {
@@ -559,8 +556,18 @@ public class PortletContainerImpl implements PortletContainer {
 	}
 
 	private void _processPublicRenderParameters(
-		HttpServletRequest request, Layout layout, List<Portlet> portlets,
-		boolean lifecycleAction) {
+		HttpServletRequest request, Layout layout, List<Portlet> portlets) {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		// If it's not RENDER phase, the request parameter with the same name
+		// as public render parameter should be processed in PortletRequest
+		// so that the values only take effect in that phase scope.
+
+		if (!themeDisplay.isLifecycleRender()) {
+			return;
+		}
 
 		PortletQName portletQName = PortletQNameUtil.getPortletQName();
 		Map<String, String[]> publicRenderParameters = null;
@@ -596,15 +603,6 @@ public class PortletContainerImpl implements PortletContainer {
 						PortletQName.PUBLIC_RENDER_PARAMETER_NAMESPACE)) {
 
 					String[] values = entry.getValue();
-
-					if (lifecycleAction) {
-						String[] oldValues = publicRenderParameters.get(
-							publicRenderParameterName);
-
-						if ((oldValues != null) && (oldValues.length != 0)) {
-							values = ArrayUtil.append(values, oldValues);
-						}
-					}
 
 					publicRenderParameters.put(
 						publicRenderParameterName, values);
