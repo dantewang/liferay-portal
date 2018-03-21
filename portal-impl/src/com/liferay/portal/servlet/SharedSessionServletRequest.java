@@ -14,6 +14,7 @@
 
 package com.liferay.portal.servlet;
 
+import com.liferay.portal.kernel.servlet.PortletServlet;
 import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.resiliency.spi.agent.SPIAgentRequest;
 
@@ -32,6 +33,7 @@ public class SharedSessionServletRequest extends HttpServletRequestWrapper {
 
 		super(request);
 
+		_request = request;
 		_portalSession = request.getSession();
 		_shared = shared;
 	}
@@ -51,7 +53,14 @@ public class SharedSessionServletRequest extends HttpServletRequestWrapper {
 			return _portalSession;
 		}
 
-		HttpSession portletSession = super.getSession(create);
+		HttpServletRequest request = (HttpServletRequest)getAttribute(
+			PortletServlet.PORTLET_SERVLET_REQUEST);
+
+		if (request == null) {
+			request = _request;
+		}
+
+		HttpSession portletSession = request.getSession(create);
 
 		if ((portletSession != null) && (portletSession != _portalSession)) {
 			SPIAgentRequest.populatePortletSessionAttributes(
@@ -88,6 +97,7 @@ public class SharedSessionServletRequest extends HttpServletRequestWrapper {
 	}
 
 	private HttpSession _portalSession;
+	private final HttpServletRequest _request;
 	private final boolean _shared;
 
 }
