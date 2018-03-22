@@ -330,7 +330,8 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 
 	@Override
 	public PortletSession getPortletSession() {
-		return _session;
+		return new PortletSessionImpl(
+			_request.getSession(), _portletContext, _portletName, _plid);
 	}
 
 	@Override
@@ -339,7 +340,8 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			return null;
 		}
 
-		return _session;
+		return new PortletSessionImpl(
+			_request.getSession(true), _portletContext, _portletName, _plid);
 	}
 
 	@Override
@@ -500,10 +502,6 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 
 	@Override
 	public String getRequestedSessionId() {
-		if (_session != null) {
-			return _session.getId();
-		}
-
 		HttpSession session = _request.getSession(false);
 
 		if (session == null) {
@@ -607,7 +605,7 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 
 	@Override
 	public boolean isRequestedSessionIdValid() {
-		if (_session.isInvalidated() || _invalidSession) {
+		if (_invalidSession) {
 			return false;
 		}
 
@@ -900,8 +898,6 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		_windowState = windowState;
 		_portletMode = portletMode;
 		_preferences = preferences;
-		_session = new PortletSessionImpl(
-			_request.getSession(), _portletContext, _portletName, plid);
 
 		String remoteUser = request.getRemoteUser();
 
@@ -1125,7 +1121,6 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 	private String _remoteUser;
 	private long _remoteUserId;
 	private HttpServletRequest _request;
-	private PortletSessionImpl _session;
 	private boolean _strutsPortlet;
 	private boolean _triggeredByActionURL;
 	private Principal _userPrincipal;
