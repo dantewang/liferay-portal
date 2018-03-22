@@ -561,14 +561,6 @@ public class PortletContainerImpl implements PortletContainer {
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		// If it's not RENDER phase, the request parameter with the same name
-		// as public render parameter should be processed in PortletRequest
-		// so that the values only take effect in that phase scope.
-
-		if (!themeDisplay.isLifecycleRender()) {
-			return;
-		}
-
 		PortletQName portletQName = PortletQNameUtil.getPortletQName();
 		Map<String, String[]> publicRenderParameters = null;
 		Map<String, String[]> parameters = request.getParameterMap();
@@ -599,7 +591,12 @@ public class PortletContainerImpl implements PortletContainer {
 				String publicRenderParameterName =
 					portletQName.getPublicRenderParameterName(qName);
 
-				if (name.startsWith(
+				// If it's not RENDER phase, a request parameter with the same
+				// name with a public render parameter should not make its way
+				// into the public render parameter pool.
+
+				if (themeDisplay.isLifecycleRender() &&
+					name.startsWith(
 						PortletQName.PUBLIC_RENDER_PARAMETER_NAMESPACE)) {
 
 					String[] values = entry.getValue();
