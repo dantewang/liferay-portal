@@ -598,9 +598,14 @@ public class PortletContainerImpl implements PortletContainer {
 				if (name.startsWith(
 						PortletQName.PUBLIC_RENDER_PARAMETER_NAMESPACE)) {
 
-					if (themeDisplay.isLifecycleRender()) {
-						String[] values = entry.getValue();
+					String[] values = entry.getValue();
 
+					if ((values.length == 1) && Validator.isNull(values[0])) {
+						publicRenderParameters.remove(
+							publicRenderParameterName);
+					}
+
+					if (themeDisplay.isLifecycleRender()) {
 						publicRenderParameters.put(
 							publicRenderParameterName, values);
 					}
