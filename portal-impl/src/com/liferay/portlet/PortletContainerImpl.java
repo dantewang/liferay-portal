@@ -595,14 +595,15 @@ public class PortletContainerImpl implements PortletContainer {
 				// name with a public render parameter should not make its way
 				// into the public render parameter pool.
 
-				if (themeDisplay.isLifecycleRender() &&
-					name.startsWith(
+				if (name.startsWith(
 						PortletQName.PUBLIC_RENDER_PARAMETER_NAMESPACE)) {
 
-					String[] values = entry.getValue();
+					if (themeDisplay.isLifecycleRender()) {
+						String[] values = entry.getValue();
 
-					publicRenderParameters.put(
-						publicRenderParameterName, values);
+						publicRenderParameters.put(
+							publicRenderParameterName, values);
+					}
 				}
 				else {
 					publicRenderParameters.remove(publicRenderParameterName);
