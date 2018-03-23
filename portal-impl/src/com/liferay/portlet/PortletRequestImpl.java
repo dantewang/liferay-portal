@@ -994,10 +994,6 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		Enumeration<String> enumeration = preferences.getNames();
 
 		if (!enumeration.hasMoreElements()) {
-			if (publicRenderParametersMap.isEmpty()) {
-				return;
-			}
-
 			for (PublicRenderParameter publicRenderParameter :
 					publicRenderParameters) {
 
@@ -1007,10 +1003,6 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 
 				String[] values = publicRenderParametersMap.get(
 					publicRenderParameterName);
-
-				if (ArrayUtil.isEmpty(values) || Validator.isNull(values[0])) {
-					continue;
-				}
 
 				String name = publicRenderParameter.getIdentifier();
 
@@ -1029,10 +1021,19 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 					(lifecycle.equals(PortletRequest.ACTION_PHASE) ||
 					 lifecycle.equals(PortletRequest.RESOURCE_PHASE))) {
 
-					dynamicRequest.setParameterValues(
-						name, ArrayUtil.append(requestValues, values));
+					if (ArrayUtil.isEmpty(values) ||
+						Validator.isNull(values[0])) {
+
+						dynamicRequest.setParameterValues(name, requestValues);
+					}
+					else {
+						dynamicRequest.setParameterValues(
+							name, ArrayUtil.append(requestValues, values));
+					}
 				}
-				else {
+				else if (ArrayUtil.isNotEmpty(values) &&
+						 Validator.isNotNull(values[0])) {
+
 					dynamicRequest.setParameterValues(name, values);
 				}
 			}
