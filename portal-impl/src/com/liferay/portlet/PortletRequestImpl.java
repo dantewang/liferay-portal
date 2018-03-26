@@ -1021,6 +1021,12 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 					(lifecycle.equals(PortletRequest.ACTION_PHASE) ||
 					 lifecycle.equals(PortletRequest.RESOURCE_PHASE))) {
 
+					if ((requestValues.length == 1) &&
+						Validator.isNull(requestValues[0])) {
+
+						continue;
+					}
+
 					if (ArrayUtil.isEmpty(values) ||
 						Validator.isNull(values[0])) {
 
