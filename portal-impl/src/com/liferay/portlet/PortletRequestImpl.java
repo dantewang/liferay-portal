@@ -994,34 +994,52 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		Enumeration<String> enumeration = preferences.getNames();
 
 		if (!enumeration.hasMoreElements()) {
-			if (publicRenderParametersMap.isEmpty()) {
-				return;
-			}
-
 			for (PublicRenderParameter publicRenderParameter :
 					publicRenderParameters) {
 
-				String[] values = publicRenderParametersMap.get(
+				String publicRenderParameterName =
 					PortletQNameUtil.getPublicRenderParameterName(
-						publicRenderParameter.getQName()));
+						publicRenderParameter.getQName());
 
-				if (ArrayUtil.isEmpty(values) || Validator.isNull(values[0])) {
-					continue;
-				}
+				String[] values = publicRenderParametersMap.get(
+					publicRenderParameterName);
 
 				String name = publicRenderParameter.getIdentifier();
 
 				String[] requestValues = dynamicRequest.getParameterValues(
 					name);
 
+				if (requestValues == null) {
+					HttpServletRequest request =
+						(HttpServletRequest)dynamicRequest.getRequest();
+
+					requestValues = request.getParameterValues(
+						publicRenderParameterName);
+				}
+
 				if ((requestValues != null) &&
 					(lifecycle.equals(PortletRequest.ACTION_PHASE) ||
 					 lifecycle.equals(PortletRequest.RESOURCE_PHASE))) {
 
-					dynamicRequest.setParameterValues(
-						name, ArrayUtil.append(requestValues, values));
+					if ((requestValues.length == 1) &&
+						Validator.isNull(requestValues[0])) {
+
+						continue;
+					}
+
+					if (ArrayUtil.isEmpty(values) ||
+						Validator.isNull(values[0])) {
+
+						dynamicRequest.setParameterValues(name, requestValues);
+					}
+					else {
+						dynamicRequest.setParameterValues(
+							name, ArrayUtil.append(requestValues, values));
+					}
 				}
-				else {
+				else if (ArrayUtil.isNotEmpty(values) &&
+						 Validator.isNotNull(values[0])) {
+
 					dynamicRequest.setParameterValues(name, values);
 				}
 			}
