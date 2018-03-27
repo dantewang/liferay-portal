@@ -53,7 +53,6 @@ import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.TransferHeadersHelperUtil;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -161,7 +160,7 @@ public class PortletContainerImpl implements PortletContainer {
 
 		portlets.remove(portlet);
 
-		_processPublicRenderParameters(request, layout, portlets, false);
+		_processPublicRenderParameters(request, layout, portlets);
 	}
 
 	@Override
@@ -292,9 +291,7 @@ public class PortletContainerImpl implements PortletContainer {
 				LanguageUtil.getLanguageId(request));
 		}
 
-		_processPublicRenderParameters(
-			request, layout, Arrays.asList(portlet),
-			themeDisplay.isLifecycleAction());
+		_processPublicRenderParameters(request, layout, Arrays.asList(portlet));
 
 		if (themeDisplay.isLifecycleRender() ||
 			themeDisplay.isLifecycleResource()) {
@@ -559,8 +556,10 @@ public class PortletContainerImpl implements PortletContainer {
 	}
 
 	private void _processPublicRenderParameters(
-		HttpServletRequest request, Layout layout, List<Portlet> portlets,
-		boolean lifecycleAction) {
+		HttpServletRequest request, Layout layout, List<Portlet> portlets) {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
 		PortletQName portletQName = PortletQNameUtil.getPortletQName();
 		Map<String, String[]> publicRenderParameters = null;
@@ -592,22 +591,24 @@ public class PortletContainerImpl implements PortletContainer {
 				String publicRenderParameterName =
 					portletQName.getPublicRenderParameterName(qName);
 
+				// If it's not RENDER phase, a request parameter with the same
+				// name with a public render parameter should not make its way
+				// into the public render parameter pool.
+
 				if (name.startsWith(
 						PortletQName.PUBLIC_RENDER_PARAMETER_NAMESPACE)) {
 
 					String[] values = entry.getValue();
 
-					if (lifecycleAction) {
-						String[] oldValues = publicRenderParameters.get(
+					if ((values.length == 1) && Validator.isNull(values[0])) {
+						publicRenderParameters.remove(
 							publicRenderParameterName);
-
-						if ((oldValues != null) && (oldValues.length != 0)) {
-							values = ArrayUtil.append(values, oldValues);
-						}
 					}
 
-					publicRenderParameters.put(
-						publicRenderParameterName, values);
+					if (themeDisplay.isLifecycleRender()) {
+						publicRenderParameters.put(
+							publicRenderParameterName, values);
+					}
 				}
 				else {
 					publicRenderParameters.remove(publicRenderParameterName);
