@@ -1311,6 +1311,13 @@ this task.
 			</replacevalue>
 		</replace>
 
+		<if>
+			<os family="windows" />
+			<then>
+				<fixcrlf eol="dos" file="${app.server.wildfly.dir}/standalone/configuration/standalone.xml" fixlast="false" />
+			</then>
+		</if>
+
 		<replace
 			file="${app.server.jboss.dir}/standalone/configuration/standalone.xml"
 		>
@@ -3168,6 +3175,13 @@ this task.
 				]]>
 			</replacevalue>
 		</replace>
+
+		<if>
+			<os family="windows" />
+			<then>
+				<fixcrlf eol="dos" file="${app.server.wildfly.dir}/standalone/configuration/standalone.xml" fixlast="false" />
+			</then>
+		</if>
 
 		<replace
 			file="${app.server.wildfly.dir}/standalone/configuration/standalone.xml"
