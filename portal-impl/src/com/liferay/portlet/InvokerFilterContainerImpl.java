@@ -38,6 +38,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.portlet.PortletContext;
@@ -93,9 +94,15 @@ public class InvokerFilterContainerImpl
 			PortletFilter portletFilter = PortletFilterFactory.create(
 				portletFilterModel, portletContext);
 
+			Map<String, Object> filterProperties = new HashMap<>();
+
+			filterProperties.putAll(properties);
+
+			filterProperties.put("filter.model", portletFilterModel);
+
 			ServiceRegistration<PortletFilter> serviceRegistration =
 				registry.registerService(
-					PortletFilter.class, portletFilter, properties);
+					PortletFilter.class, portletFilter, filterProperties);
 
 			ServiceRegistrationTuple serviceRegistrationTuple =
 				new ServiceRegistrationTuple(
@@ -304,19 +311,35 @@ public class InvokerFilterContainerImpl
 				}
 			}
 
-			if (portletFilter instanceof ActionFilter) {
+			com.liferay.portal.kernel.model.PortletFilter portletFilterModel =
+				(com.liferay.portal.kernel.model.PortletFilter)
+					serviceReference.getProperty("filter.model");
+
+			if (_isFilterLifecycle(
+					"ACTION_PHASE", ActionFilter.class, portletFilter,
+					portletFilterModel)) {
+
 				_actionFilters.add((ActionFilter)portletFilter);
 			}
 
-			if (portletFilter instanceof EventFilter) {
+			if (_isFilterLifecycle(
+					"EVENT_PHASE", EventFilter.class, portletFilter,
+					portletFilterModel)) {
+
 				_eventFilters.add((EventFilter)portletFilter);
 			}
 
-			if (portletFilter instanceof RenderFilter) {
+			if (_isFilterLifecycle(
+					"RENDER_PHASE", RenderFilter.class, portletFilter,
+					portletFilterModel)) {
+
 				_renderFilters.add((RenderFilter)portletFilter);
 			}
 
-			if (portletFilter instanceof ResourceFilter) {
+			if (_isFilterLifecycle(
+					"RESOURCE_PHASE", ResourceFilter.class, portletFilter,
+					portletFilterModel)) {
+
 				_resourceFilters.add((ResourceFilter)portletFilter);
 			}
 
@@ -351,6 +374,29 @@ public class InvokerFilterContainerImpl
 			}
 
 			portletFilter.destroy();
+		}
+
+		private boolean _isFilterLifecycle(
+			String lifecycle, Class<?> filterInterface,
+			PortletFilter portletFilter,
+			com.liferay.portal.kernel.model.PortletFilter portletFilterModel) {
+
+			if (portletFilterModel != null) {
+				Set<String> lifecycles = portletFilterModel.getLifecycles();
+
+				if ((lifecycles != null) && !lifecycles.isEmpty()) {
+					if (lifecycles.contains(lifecycle) &&
+						filterInterface.isInstance(portletFilter)) {
+
+						return true;
+					}
+					else {
+						return false;
+					}
+				}
+			}
+
+			return filterInterface.isInstance(portletFilter);
 		}
 
 		private final PortletContext _portletContext;
