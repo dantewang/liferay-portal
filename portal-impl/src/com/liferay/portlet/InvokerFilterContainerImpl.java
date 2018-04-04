@@ -38,6 +38,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.portlet.PortletContext;
@@ -93,9 +94,15 @@ public class InvokerFilterContainerImpl
 			PortletFilter portletFilter = PortletFilterFactory.create(
 				portletFilterModel, portletContext);
 
+			Map<String, Object> filterProperties = new HashMap<>();
+
+			filterProperties.putAll(properties);
+
+			filterProperties.put("filter.model", portletFilterModel);
+
 			ServiceRegistration<PortletFilter> serviceRegistration =
 				registry.registerService(
-					PortletFilter.class, portletFilter, properties);
+					PortletFilter.class, portletFilter, filterProperties);
 
 			ServiceRegistrationTuple serviceRegistrationTuple =
 				new ServiceRegistrationTuple(
@@ -304,19 +311,31 @@ public class InvokerFilterContainerImpl
 				}
 			}
 
-			if (portletFilter instanceof ActionFilter) {
+			if (_isFilterLifecycle(
+					portletFilter, "ACTION_PHASE", ActionFilter.class,
+					serviceReference)) {
+
 				_actionFilters.add((ActionFilter)portletFilter);
 			}
 
-			if (portletFilter instanceof EventFilter) {
+			if (_isFilterLifecycle(
+					portletFilter, "EVENT_PHASE", EventFilter.class,
+					serviceReference)) {
+
 				_eventFilters.add((EventFilter)portletFilter);
 			}
 
-			if (portletFilter instanceof RenderFilter) {
+			if (_isFilterLifecycle(
+					portletFilter, "RENDER_PHASE", RenderFilter.class,
+					serviceReference)) {
+
 				_renderFilters.add((RenderFilter)portletFilter);
 			}
 
-			if (portletFilter instanceof ResourceFilter) {
+			if (_isFilterLifecycle(
+					portletFilter, "RESOURCE_PHASE", ResourceFilter.class,
+					serviceReference)) {
+
 				_resourceFilters.add((ResourceFilter)portletFilter);
 			}
 
@@ -351,6 +370,28 @@ public class InvokerFilterContainerImpl
 			}
 
 			portletFilter.destroy();
+		}
+
+		private boolean _isFilterLifecycle(
+			PortletFilter portletFilter, String lifecycle,
+			Class<?> filterInterface,
+			ServiceReference<PortletFilter> serviceReference) {
+
+			com.liferay.portal.kernel.model.PortletFilter portletFilterModel =
+				(com.liferay.portal.kernel.model.PortletFilter)
+					serviceReference.getProperty("filter.model");
+
+			if (portletFilterModel != null) {
+				Set<String> lifecycles = portletFilterModel.getLifecycles();
+
+				if (!lifecycles.isEmpty() && lifecycles.contains(lifecycle) &&
+					filterInterface.isInstance(portletFilter)) {
+
+					return true;
+				}
+			}
+
+			return filterInterface.isInstance(portletFilter);
 		}
 
 		private final PortletContext _portletContext;
