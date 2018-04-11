@@ -1284,6 +1284,13 @@ public interface Portlet extends PortletModel, PersistedModel {
 	*/
 	public boolean isAjaxable();
 
+	/**
+	* Returns <code>True</code> if the portlet supports asynchronous operation.
+	*
+	* @return <code>True</code> if the portlet supports asynchronous operation.
+	*/
+	public boolean isAsyncSupported();
+
 	public boolean isFullPageDisplayable();
 
 	/**
@@ -1554,6 +1561,14 @@ public interface Portlet extends PortletModel, PersistedModel {
 	*/
 	public void setAssetRendererFactoryClasses(
 		java.util.List<java.lang.String> assetRendererFactoryClasses);
+
+	/**
+	* Set to <code>True</code> if the portlet supports asynchronous operation.
+	*
+	* @param asyncSupported boolean value for whether the portlet supports
+	asynchronous operation.
+	*/
+	public void setAsyncSupported(boolean asyncSupported);
 
 	/**
 	* Sets the names of the classes that represent atom collection adapters
