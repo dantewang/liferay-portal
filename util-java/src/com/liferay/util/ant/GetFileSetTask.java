@@ -165,7 +165,9 @@ public class GetFileSetTask extends Task {
 
 						String fileName = fileNamePath.toString();
 
-						if (_isSkip(fileName)) {
+						Path parentDir = path.getParent();
+
+						if (_isSkip(fileName, parentDir.toString())) {
 							return FileVisitResult.SKIP_SUBTREE;
 						}
 
@@ -251,8 +253,10 @@ public class GetFileSetTask extends Task {
 		return true;
 	}
 
-	private boolean _isSkip(String fileName) {
-		if (fileName.startsWith(".") || _skipFileNames.contains(fileName)) {
+	private boolean _isSkip(String fileName, String parentDir) {
+		if (fileName.startsWith(".") ||
+			(_skipFileNames.contains(fileName) && parentDir.equals(_rootDir))) {
+
 			return true;
 		}
 
