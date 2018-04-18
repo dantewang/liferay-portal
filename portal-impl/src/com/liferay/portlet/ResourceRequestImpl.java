@@ -50,6 +50,7 @@ import javax.servlet.DispatcherType;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 /**
  * @author Brian Wing Shun Chan
@@ -193,7 +194,14 @@ public class ResourceRequestImpl
 		HttpServletResponse httpServletResponse =
 			liferayPortletResponse.getHttpServletResponse();
 
-		while (httpServletRequest instanceof HttpServletResponseWrapper) {
+		while (httpServletRequest instanceof HttpServletRequestWrapper) {
+			httpServletRequest =
+				(HttpServletRequest)
+					((HttpServletRequestWrapper)
+						httpServletRequest).getRequest();
+		}
+
+		while (httpServletResponse instanceof HttpServletResponseWrapper) {
 			httpServletResponse =
 				(HttpServletResponse)
 					((HttpServletResponseWrapper)
