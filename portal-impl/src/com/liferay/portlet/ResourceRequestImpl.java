@@ -44,6 +44,7 @@ import javax.portlet.ResourceResponse;
 import javax.portlet.ResourceURL;
 import javax.portlet.WindowState;
 
+import javax.servlet.AsyncContext;
 import javax.servlet.DispatcherType;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -165,19 +166,6 @@ public class ResourceRequestImpl
 			throw new IllegalStateException();
 		}
 
-		if (_portletAsyncContext != null) {
-			PortletAsyncContextImpl portletAsyncContextImpl =
-				(PortletAsyncContextImpl)_portletAsyncContext;
-
-			boolean dispatched = portletAsyncContextImpl.isCalledDispatch();
-
-			if (!dispatched) {
-				throw new IllegalStateException();
-			}
-		}
-
-		_asyncStarted = true;
-
 		HttpServletRequest httpServletRequest =
 			(HttpServletRequest)getAttribute(
 				PortletServlet.PORTLET_SERVLET_REQUEST);
@@ -199,13 +187,14 @@ public class ResourceRequestImpl
 //						httpServletResponse).getResponse();
 //		}
 
-		_portletAsyncContext = new PortletAsyncContextImpl(
-			resourceRequest, resourceResponse,
+		AsyncContext asyncContext =
 			httpServletRequest.startAsync(
-				httpServletRequest, httpServletResponse));
+				httpServletRequest, httpServletResponse);
 
-		PortletAsyncContextImpl portletAsyncContextImpl =
-			(PortletAsyncContextImpl)_portletAsyncContext;
+		_portletAsyncContext = new PortletAsyncContextImpl(
+			resourceRequest, resourceResponse, asyncContext);
+
+		_asyncStarted = true;
 
 		return _portletAsyncContext;
 	}
