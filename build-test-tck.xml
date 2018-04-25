@@ -305,12 +305,27 @@ tckDeployFiles=${tck.deploy.files}</echo>
 	</target>
 
 	<target name="prepare-tck">
-		<echo>mvn -P liferay clean install</echo>
+		<echo>mvn -P all,liferay clean install</echo>
 		<maven
 			basedir="${portals.pluto.dir}"
 			goal="clean install"
-			options="-P liferay"
+			options="-P all,liferay"
 		/>
+		<if>
+			<equals arg1="${maven.result}" arg2="0" />
+			<then>
+				<echo message="PASSED: maven.result = ${maven.result}" />
+			</then>
+			<else>
+				<echo message="FAILED: maven.result = ${maven.result} ... failed to build the tck from the pluto repo." />
+			</else>
+		</if>
+
+<exec executable="/bin/bash" outputproperty="deploy.files.property">
+	<arg value="-c" />
+	<arg value="ls -ltra ${tck.home}/deploy/target/deploy-files" />
+</exec>
+<echo>prepare-tck: deploy.files.property = ${deploy.files.property}</echo>
 
 	</target>
 
@@ -654,7 +669,7 @@ web.server.https.port=8443
 				<echo message="PASSED: maven.result = ${maven.result}" />
 			</then>
 			<else>
-				<echo message="FAILED: maven.result = ${maven.result}" />
+				<echo message="FAILED: maven.result = ${maven.result} ... failed the tck." />
 			</else>
 		</if>
 
