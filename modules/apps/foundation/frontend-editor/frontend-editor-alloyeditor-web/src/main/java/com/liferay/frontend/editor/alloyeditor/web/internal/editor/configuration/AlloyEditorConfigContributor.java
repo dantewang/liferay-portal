@@ -63,7 +63,7 @@ public class AlloyEditorConfigContributor
 		String extraPlugins = jsonObject.getString("extraPlugins");
 
 		if (Validator.isNotNull(extraPlugins)) {
-			extraPlugins += ",itemselector,media,embedurl";
+			extraPlugins = extraPlugins.concat(",itemselector,media,embedurl");
 		}
 		else {
 			extraPlugins = "itemselector,media,embedurl";
