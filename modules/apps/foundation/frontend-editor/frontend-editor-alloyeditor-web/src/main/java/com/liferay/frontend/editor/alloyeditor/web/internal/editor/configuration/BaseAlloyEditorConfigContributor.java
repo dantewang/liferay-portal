@@ -34,6 +34,7 @@ import java.util.Map;
 
 import javax.portlet.PortletURL;
 
+import com.liferay.portal.kernel.util.StringUtil;
 import org.osgi.service.component.annotations.Reference;
 
 /**
@@ -61,7 +62,8 @@ public abstract class BaseAlloyEditorConfigContributor
 			inputEditorTaglibAttributes);
 
 		jsonObject.put(
-			"contentsLanguage", contentsLanguageId.replace("iw_", "he_"));
+			"contentsLanguage",
+			StringUtil.replace(contentsLanguageId, "iw_", "he_"));
 
 		jsonObject.put("disableNativeSpellChecker", Boolean.FALSE);
 
@@ -75,7 +77,8 @@ public abstract class BaseAlloyEditorConfigContributor
 
 		String languageId = getLanguageId(themeDisplay);
 
-		jsonObject.put("language", languageId.replace("iw_", "he_"));
+		jsonObject.put(
+			"language", StringUtil.replace(languageId, "iw_", "he_"));
 
 		jsonObject.put(
 			"removePlugins",
