@@ -36,7 +36,10 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Sergio González
  */
-@Component(service = EditorConfigContributor.class)
+@Component(
+	property = "editor.config.key=contentEditor,subtitleEditor,coverImageCaptionEditor,titleEditor,descriptionEditor",
+	service = EditorConfigContributor.class
+)
 public class ImageEditorConfigContributor extends BaseEditorConfigContributor {
 
 	@Override
