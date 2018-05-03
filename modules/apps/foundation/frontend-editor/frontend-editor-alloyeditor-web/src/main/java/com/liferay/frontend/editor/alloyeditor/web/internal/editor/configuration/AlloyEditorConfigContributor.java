@@ -31,8 +31,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -87,13 +85,7 @@ public class AlloyEditorConfigContributor
 	}
 
 	protected JSONArray getStyleFormatsJSONArray(Locale locale) {
-		JSONArray jsonArray = _styleFormatsJSONArrays.get(locale);
-
-		if (jsonArray != null) {
-			return jsonArray;
-		}
-
-		// TODO: Handle runtime change of resource bundle content
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
 		ResourceBundle resourceBundle = null;
 
@@ -104,54 +96,50 @@ public class AlloyEditorConfigContributor
 			resourceBundle = ResourceBundleUtil.EMPTY_RESOURCE_BUNDLE;
 		}
 
-		JSONArray newJsonArray = JSONFactoryUtil.createJSONArray();
-
-		newJsonArray.put(
+		jsonArray.put(
 			getStyleFormatJSONObject(
 				LanguageUtil.get(resourceBundle, "normal"), "p", null,
 				_CKEDITOR_STYLE_BLOCK));
-		newJsonArray.put(
+		jsonArray.put(
 			getStyleFormatJSONObject(
 				LanguageUtil.format(resourceBundle, "heading-x", "1"), "h1",
 				null, _CKEDITOR_STYLE_BLOCK));
-		newJsonArray.put(
+		jsonArray.put(
 			getStyleFormatJSONObject(
 				LanguageUtil.format(resourceBundle, "heading-x", "2"), "h2",
 				null, _CKEDITOR_STYLE_BLOCK));
-		newJsonArray.put(
+		jsonArray.put(
 			getStyleFormatJSONObject(
 				LanguageUtil.format(resourceBundle, "heading-x", "3"), "h3",
 				null, _CKEDITOR_STYLE_BLOCK));
-		newJsonArray.put(
+		jsonArray.put(
 			getStyleFormatJSONObject(
 				LanguageUtil.format(resourceBundle, "heading-x", "4"), "h4",
 				null, _CKEDITOR_STYLE_BLOCK));
-		newJsonArray.put(
+		jsonArray.put(
 			getStyleFormatJSONObject(
 				LanguageUtil.get(resourceBundle, "preformatted-text"), "pre",
 				null, _CKEDITOR_STYLE_BLOCK));
-		newJsonArray.put(
+		jsonArray.put(
 			getStyleFormatJSONObject(
 				LanguageUtil.get(resourceBundle, "cited-work"), "cite", null,
 				_CKEDITOR_STYLE_INLINE));
-		newJsonArray.put(
+		jsonArray.put(
 			getStyleFormatJSONObject(
 				LanguageUtil.get(resourceBundle, "computer-code"), "code", null,
 				_CKEDITOR_STYLE_INLINE));
-		newJsonArray.put(
+		jsonArray.put(
 			getStyleFormatJSONObject(
 				LanguageUtil.get(resourceBundle, "info-message"), "div",
 				"portlet-msg-info", _CKEDITOR_STYLE_BLOCK));
-		newJsonArray.put(
+		jsonArray.put(
 			getStyleFormatJSONObject(
 				LanguageUtil.get(resourceBundle, "alert-message"), "div",
 				"portlet-msg-alert", _CKEDITOR_STYLE_BLOCK));
-		newJsonArray.put(
+		jsonArray.put(
 			getStyleFormatJSONObject(
 				LanguageUtil.get(resourceBundle, "error-message"), "div",
 				"portlet-msg-error", _CKEDITOR_STYLE_BLOCK));
-
-		jsonArray = _styleFormatsJSONArrays.putIfAbsent(locale, newJsonArray);
 
 		return jsonArray;
 	}
@@ -323,8 +311,5 @@ public class AlloyEditorConfigContributor
 	private static final int _CKEDITOR_STYLE_INLINE = 2;
 
 	private volatile ResourceBundleLoader _resourceBundleLoader;
-
-	private final ConcurrentMap<Locale, JSONArray> _styleFormatsJSONArrays =
-		new ConcurrentHashMap<>();
 
 }
