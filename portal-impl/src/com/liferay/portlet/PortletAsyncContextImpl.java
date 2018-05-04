@@ -19,6 +19,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.executor.CopyThreadLocalCallable;
 import com.liferay.portal.kernel.portlet.LiferayPortletAsyncContext;
 import com.liferay.portal.kernel.util.DefaultThreadLocalBinder;
+import com.liferay.portal.kernel.util.JavaConstants;
 
 import javax.portlet.PortletAsyncListener;
 import javax.portlet.PortletException;
@@ -155,6 +156,10 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws IllegalStateException {
 
+		if (!_resourceRequest.isAsyncStarted() || _calledComplete || _calledDispatch) {
+			throw new IllegalStateException();
+		}
+
 		_portletAsyncListenerAdapter.addListener(
 			portletAsyncListener, resourceRequest, resourceResponse);
 	}
@@ -263,6 +268,12 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 		}
 
 		return true;
+	}
+
+	public void reSet(){
+		_calledDispatch = false;
+		_calledComplete = false;
+		_pendingRunnable = null;
 	}
 
 	public boolean isCalledComplete() {

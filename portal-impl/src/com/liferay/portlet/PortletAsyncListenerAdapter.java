@@ -113,6 +113,8 @@ public class PortletAsyncListenerAdapter implements AsyncListener {
 
 	@Override
 	public void onStartAsync(AsyncEvent asyncEvent) throws IOException {
+		((PortletAsyncContextImpl)_portletAsyncContext).reSet();
+
 		for (PortletAsyncListenerAdapterEntry entry :
 			_portletAsyncListenerAdapterEntries) {
 
@@ -124,6 +126,8 @@ public class PortletAsyncListenerAdapter implements AsyncListener {
 					_portletAsyncContext, entry._resourceRequest,
 					entry._resourceResponse));
 		}
+
+		_portletAsyncListenerAdapterEntries.clear();
 	}
 
 	private final List<PortletAsyncListenerAdapterEntry>

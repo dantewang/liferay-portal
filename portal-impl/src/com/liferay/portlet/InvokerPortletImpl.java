@@ -655,11 +655,11 @@ public class InvokerPortletImpl
 
 							@Override
 							public void resetBuffer() {
-								if (request.isAsyncStarted()) {
-									return;
-								}
-
-								super.resetBuffer();
+//								if (request.isAsyncStarted()) {
+//									return;
+//								}
+//
+//								super.resetBuffer();
 							}
 
 							@Override

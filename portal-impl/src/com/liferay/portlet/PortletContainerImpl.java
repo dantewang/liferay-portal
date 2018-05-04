@@ -940,14 +940,29 @@ public class PortletContainerImpl implements PortletContainer {
 			portletDisplay.setWebDAVEnabled(false);
 		}
 
-		ResourceRequestImpl resourceRequestImpl = ResourceRequestFactory.create(
-			request, portlet, invokerPortlet, portletContext, windowState,
-			portletMode, portletPreferences, layout.getPlid());
+		ResourceRequestImpl resourceRequestImpl =
+			(ResourceRequestImpl)request.getAttribute(
+				JavaConstants.JAVAX_PORTLET_REQUEST);
 
-		ResourceResponseImpl resourceResponseImpl =
-			ResourceResponseFactory.create(resourceRequestImpl, response);
+		ResourceResponseImpl resourceResponseImpl = null;
 
-		resourceRequestImpl.defineObjects(portletConfig, resourceResponseImpl);
+		if(resourceRequestImpl != null){
+			resourceRequestImpl.setAsyncStarted(false);
+
+			resourceResponseImpl = (ResourceResponseImpl)request.getAttribute(
+				JavaConstants.JAVAX_PORTLET_RESPONSE);
+		}
+		else{
+			resourceRequestImpl = ResourceRequestFactory.create(
+				request, portlet, invokerPortlet, portletContext, windowState,
+				portletMode, portletPreferences, layout.getPlid());
+
+			resourceResponseImpl =
+				ResourceResponseFactory.create(resourceRequestImpl, response);
+		}
+
+		resourceRequestImpl.defineObjects(
+			portletConfig, resourceResponseImpl);
 
 		try {
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(

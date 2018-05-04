@@ -121,6 +121,10 @@ public class ETagFilter extends BasePortalFilter {
 				@Override
 				public void onStartAsync(AsyncEvent asyncEvent)
 					throws IOException {
+
+					_postProcessETag(
+						request, response,
+						restrictedByteBufferCacheServletResponse);
 				}
 			});
 		}
