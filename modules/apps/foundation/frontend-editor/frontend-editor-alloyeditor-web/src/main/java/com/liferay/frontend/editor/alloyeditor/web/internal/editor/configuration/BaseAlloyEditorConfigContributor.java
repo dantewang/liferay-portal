@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactory;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,6 @@ import java.util.Map;
 
 import javax.portlet.PortletURL;
 
-import com.liferay.portal.kernel.util.StringUtil;
 import org.osgi.service.component.annotations.Reference;
 
 /**
