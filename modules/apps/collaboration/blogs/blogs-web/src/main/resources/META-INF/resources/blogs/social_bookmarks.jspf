@@ -15,7 +15,7 @@
 --%>
 
 <%
-	String socialBookmarksTypes = SocialBookmarksUtil.getSocialBookmarksTypes(blogsPortletInstanceConfiguration);
+String socialBookmarksTypes = SocialBookmarksUtil.getSocialBookmarksTypes(blogsPortletInstanceConfiguration);
 %>
 
 <c:if test="<%= (socialBookmarksTypes == null) || !socialBookmarksTypes.isEmpty() %>">
