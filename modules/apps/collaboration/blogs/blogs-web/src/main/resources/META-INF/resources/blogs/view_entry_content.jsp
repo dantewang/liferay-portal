@@ -205,7 +205,7 @@ RatingsStats ratingsStats = (RatingsStats)request.getAttribute("view_entry_conte
 					</c:if>
 
 					<div class="autofit-col autofit-col-end">
-                        <%@ include file="/blogs/social_bookmarks.jspf" %>
+						<%@ include file="/blogs/social_bookmarks.jspf" %>
 					</div>
 				</div>
 			</div>
