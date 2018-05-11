@@ -53,9 +53,9 @@ public class HtmlContentTransformerImpl
 			return null;
 		}
 
-		String lowerCaseHtml = StringUtil.toLowerCase(html);
+		if (!html.contains("data-fileentryid") ||
+			!html.contains("data-fileEntryId")) {
 
-		if (!lowerCaseHtml.contains("data-fileentryid")) {
 			return html;
 		}
 
