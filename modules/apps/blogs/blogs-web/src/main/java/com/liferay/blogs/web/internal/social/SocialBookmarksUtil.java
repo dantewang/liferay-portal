@@ -14,7 +14,6 @@
 
 package com.liferay.blogs.web.internal.social;
 
-import com.liferay.blogs.web.internal.configuration.BlogsPortletInstanceConfiguration;
 import com.liferay.petra.string.StringPool;
 
 /**
@@ -22,12 +21,7 @@ import com.liferay.petra.string.StringPool;
  */
 public class SocialBookmarksUtil {
 
-	public static String getSocialBookmarksTypes(
-		BlogsPortletInstanceConfiguration blogsPortletInstanceConfiguration) {
-
-		String socialBookmarksTypes =
-			blogsPortletInstanceConfiguration.socialBookmarksTypes();
-
+	public static String getSocialBookmarksTypes(String socialBookmarksTypes) {
 		if (StringPool.STAR.equals(socialBookmarksTypes)) {
 			return null;
 		}
