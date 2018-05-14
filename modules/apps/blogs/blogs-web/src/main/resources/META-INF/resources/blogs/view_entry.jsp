@@ -84,6 +84,8 @@ if (portletTitleBasedNavigation) {
 
 		BlogsEntry previousEntry = prevAndNext[0];
 		BlogsEntry nextEntry = prevAndNext[2];
+
+		String socialBookmarksTypes = blogsPortletInstanceConfiguration.socialBookmarksTypes();
 		%>
 
 		<c:if test="<%= (previousEntry != null) || (nextEntry != null) %>">
@@ -223,28 +225,30 @@ if (portletTitleBasedNavigation) {
 												</c:if>
 
 												<div class="autofit-col autofit-col-end">
-													<portlet:renderURL var="previousEntryBookmarksURL">
-														<portlet:param name="mvcRenderCommandName" value="/blogs/view_entry" />
+													<c:if test="<%= !socialBookmarksTypes.isEmpty() %>">
+														<portlet:renderURL var="previousEntryBookmarksURL">
+															<portlet:param name="mvcRenderCommandName" value="/blogs/view_entry" />
 
-														<c:choose>
-															<c:when test="<%= Validator.isNotNull(previousEntry.getUrlTitle()) %>">
-																<portlet:param name="urlTitle" value="<%= previousEntry.getUrlTitle() %>" />
-															</c:when>
-															<c:otherwise>
-																<portlet:param name="entryId" value="<%= String.valueOf(previousEntry.getEntryId()) %>" />
-															</c:otherwise>
-														</c:choose>
-													</portlet:renderURL>
+															<c:choose>
+																<c:when test="<%= Validator.isNotNull(previousEntry.getUrlTitle()) %>">
+																	<portlet:param name="urlTitle" value="<%= previousEntry.getUrlTitle() %>" />
+																</c:when>
+																<c:otherwise>
+																	<portlet:param name="entryId" value="<%= String.valueOf(previousEntry.getEntryId()) %>" />
+																</c:otherwise>
+															</c:choose>
+														</portlet:renderURL>
 
-													<liferay-social-bookmarks:bookmarks
-														className="<%= BlogsEntry.class.getName() %>"
-														classPK="<%= previousEntry.getEntryId() %>"
-														displayStyle="menu"
-														target="_blank"
-														title="<%= BlogsEntryUtil.getDisplayTitle(resourceBundle, previousEntry) %>"
-														types="<%= SocialBookmarksUtil.getSocialBookmarksTypes(blogsPortletInstanceConfiguration) %>"
-														url="<%= PortalUtil.getCanonicalURL(previousEntryBookmarksURL.toString(), themeDisplay, layout) %>"
-													/>
+														<liferay-social-bookmarks:bookmarks
+															className="<%= BlogsEntry.class.getName() %>"
+															classPK="<%= previousEntry.getEntryId() %>"
+															displayStyle="menu"
+															target="_blank"
+															title="<%= BlogsEntryUtil.getDisplayTitle(resourceBundle, previousEntry) %>"
+															types="<%= SocialBookmarksUtil.getSocialBookmarksTypes(socialBookmarksTypes) %>"
+															url="<%= PortalUtil.getCanonicalURL(previousEntryBookmarksURL.toString(), themeDisplay, layout) %>"
+														/>
+													</c:if>
 												</div>
 											</div>
 										</div>
@@ -384,28 +388,30 @@ if (portletTitleBasedNavigation) {
 												</c:if>
 
 												<div class="autofit-col autofit-col-end">
-													<portlet:renderURL var="nextEntryBookmarksURL">
-														<portlet:param name="mvcRenderCommandName" value="/blogs/view_entry" />
+													<c:if test="<%= !socialBookmarksTypes.isEmpty() %>">
+														<portlet:renderURL var="nextEntryBookmarksURL">
+															<portlet:param name="mvcRenderCommandName" value="/blogs/view_entry" />
 
-														<c:choose>
-															<c:when test="<%= Validator.isNotNull(nextEntry.getUrlTitle()) %>">
-																<portlet:param name="urlTitle" value="<%= nextEntry.getUrlTitle() %>" />
-															</c:when>
-															<c:otherwise>
-																<portlet:param name="entryId" value="<%= String.valueOf(nextEntry.getEntryId()) %>" />
-															</c:otherwise>
-														</c:choose>
-													</portlet:renderURL>
+															<c:choose>
+																<c:when test="<%= Validator.isNotNull(nextEntry.getUrlTitle()) %>">
+																	<portlet:param name="urlTitle" value="<%= nextEntry.getUrlTitle() %>" />
+																</c:when>
+																<c:otherwise>
+																	<portlet:param name="entryId" value="<%= String.valueOf(nextEntry.getEntryId()) %>" />
+																</c:otherwise>
+															</c:choose>
+														</portlet:renderURL>
 
-													<liferay-social-bookmarks:bookmarks
-														className="<%= BlogsEntry.class.getName() %>"
-														classPK="<%= nextEntry.getEntryId() %>"
-														displayStyle="menu"
-														target="_blank"
-														title="<%= BlogsEntryUtil.getDisplayTitle(resourceBundle, nextEntry) %>"
-														types="<%= SocialBookmarksUtil.getSocialBookmarksTypes(blogsPortletInstanceConfiguration) %>"
-														url="<%= PortalUtil.getCanonicalURL(nextEntryBookmarksURL.toString(), themeDisplay, layout) %>"
-													/>
+														<liferay-social-bookmarks:bookmarks
+															className="<%= BlogsEntry.class.getName() %>"
+															classPK="<%= nextEntry.getEntryId() %>"
+															displayStyle="menu"
+															target="_blank"
+															title="<%= BlogsEntryUtil.getDisplayTitle(resourceBundle, nextEntry) %>"
+															types="<%= SocialBookmarksUtil.getSocialBookmarksTypes(socialBookmarksTypes) %>"
+															url="<%= PortalUtil.getCanonicalURL(nextEntryBookmarksURL.toString(), themeDisplay, layout) %>"
+														/>
+													</c:if>
 												</div>
 											</div>
 										</div>
