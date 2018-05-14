@@ -242,7 +242,7 @@ if (portletTitleBasedNavigation) {
 														displayStyle="menu"
 														target="_blank"
 														title="<%= BlogsEntryUtil.getDisplayTitle(resourceBundle, previousEntry) %>"
-														types="<%= SocialBookmarksUtil.getSocialBookmarksTypes(blogsPortletInstanceConfiguration) %>"
+														types="<%= SocialBookmarksUtil.getSocialBookmarksTypes(blogsPortletInstanceConfiguration.socialBookmarksTypes()) %>"
 														url="<%= PortalUtil.getCanonicalURL(previousEntryBookmarksURL.toString(), themeDisplay, layout) %>"
 													/>
 												</div>
@@ -403,7 +403,7 @@ if (portletTitleBasedNavigation) {
 														displayStyle="menu"
 														target="_blank"
 														title="<%= BlogsEntryUtil.getDisplayTitle(resourceBundle, nextEntry) %>"
-														types="<%= SocialBookmarksUtil.getSocialBookmarksTypes(blogsPortletInstanceConfiguration) %>"
+														types="<%= SocialBookmarksUtil.getSocialBookmarksTypes(blogsPortletInstanceConfiguration.socialBookmarksTypes()) %>"
 														url="<%= PortalUtil.getCanonicalURL(nextEntryBookmarksURL.toString(), themeDisplay, layout) %>"
 													/>
 												</div>

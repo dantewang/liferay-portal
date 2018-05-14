@@ -33,6 +33,6 @@
 	displayStyle="<%= blogsPortletInstanceConfiguration.socialBookmarksDisplayStyle() %>"
 	target="_blank"
 	title="<%= BlogsEntryUtil.getDisplayTitle(resourceBundle, entry) %>"
-	types="<%= SocialBookmarksUtil.getSocialBookmarksTypes(blogsPortletInstanceConfiguration) %>"
+	types="<%= SocialBookmarksUtil.getSocialBookmarksTypes(blogsPortletInstanceConfiguration.socialBookmarksTypes()) %>"
 	url="<%= PortalUtil.getCanonicalURL(bookmarkURL.toString(), themeDisplay, layout) %>"
 />
