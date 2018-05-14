@@ -18,6 +18,8 @@
 
 <%
 blogsPortletInstanceConfiguration = ConfigurationProviderUtil.getConfiguration(BlogsPortletInstanceConfiguration.class, new ParameterMapSettingsLocator(request.getParameterMap(), new PortletInstanceSettingsLocator(themeDisplay.getLayout(), portletDisplay.getPortletResource())));
+
+String socialBookmarksTypes = blogsPortletInstanceConfiguration.socialBookmarksTypes();
 %>
 
 <liferay-portlet:actionURL portletConfiguration="<%= true %>" var="configurationActionURL" />
@@ -55,7 +57,7 @@ blogsPortletInstanceConfiguration = ConfigurationProviderUtil.getConfiguration(B
 			>
 				<liferay-social-bookmarks:bookmarks-settings
 					displayStyle="<%= blogsPortletInstanceConfiguration.socialBookmarksDisplayStyle() %>"
-					types="<%= SocialBookmarksUtil.getSocialBookmarksTypes(blogsPortletInstanceConfiguration) %>"
+					types="<%= SocialBookmarksUtil.getSocialBookmarksTypes(socialBookmarksTypes) %>"
 				/>
 			</liferay-frontend:fieldset>
 		</liferay-frontend:fieldset-group>
