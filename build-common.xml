@@ -716,6 +716,20 @@ information.
 		</sequential>
 	</macrodef>
 
+	<macrodef name = "git">
+		<attribute name = "command" />
+		<attribute name = "dir" default = "" />
+		<element name = "args" optional = "true" />
+
+		<sequential>
+			<echo message = "git @{command}" />
+			<exec executable = "git" dir = "@{dir}">
+				<arg value = "@{command}" />
+				<args/>
+			</exec>
+		</sequential>
+	</macrodef>
+
 	<macrodef name="gradle-execute">
 		<attribute default="false" name="checktask" />
 		<attribute default="${basedir}" name="dir" />
@@ -1906,6 +1920,12 @@ rerun your task.
 	<target name="generate-code-coverage-report">
 		<delete dir="${jacoco.report.folder}" />
 		<mkdir dir="${jacoco.report.folder}" />
+
+		<git command = "clean" dir = "${project.dir}">
+			<args>
+				<arg value = "-fd" />
+			</args>
+		</git>
 
 		<if>
 			<isset property="class.names" />
