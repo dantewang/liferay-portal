@@ -716,15 +716,15 @@ information.
 		</sequential>
 	</macrodef>
 
-	<macrodef name = "git">
-		<attribute name = "command" />
-		<attribute name = "dir" default = "" />
-		<element name = "args" optional = "true" />
+	<macrodef name="git">
+		<attribute name="command" />
+		<attribute default="" name="dir" />
+		<element name="args" optional="true" />
 
 		<sequential>
-			<echo message = "git @{command}" />
-			<exec executable = "git" dir = "@{dir}">
-				<arg value = "@{command}" />
+			<echo message="git @{command}" />
+			<exec dir="@{dir}" executable="git">
+				<arg value="@{command}" />
 				<args/>
 			</exec>
 		</sequential>
@@ -1921,9 +1921,9 @@ rerun your task.
 		<delete dir="${jacoco.report.folder}" />
 		<mkdir dir="${jacoco.report.folder}" />
 
-		<git command = "clean" dir = "${project.dir}">
+		<git command="clean" dir="${project.dir}">
 			<args>
-				<arg value = "-fd" />
+				<arg value="-fd" />
 			</args>
 		</git>
 
