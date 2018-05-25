@@ -80,11 +80,22 @@ public class AppServer {
 		String dirName, String extraLibDirNames, String globalLibDirName,
 		String portalDirName, String serverDetectorServerId) {
 
+		this(
+			dirName, extraLibDirNames, globalLibDirName, portalDirName, "",
+			serverDetectorServerId);
+	}
+
+	public AppServer(
+		String dirName, String extraLibDirNames, String globalLibDirName,
+		String portalDirName, String libDirExclusions,
+		String serverDetectorServerId) {
+
 		_setDirName(dirName);
 
 		_extraLibDirNames = extraLibDirNames;
 		_globalLibDirName = globalLibDirName;
 		_portalDirName = portalDirName;
+		_libDirExclusionNames = libDirExclusions;
 		_serverDetectorServerId = serverDetectorServerId;
 	}
 
@@ -114,6 +125,24 @@ public class AppServer {
 
 	public String getGlobalLibDirName() {
 		return _globalLibDirName;
+	}
+
+	public String getLibDirExclusionNames() {
+		return _libDirExclusionNames;
+	}
+
+	public List<File> getLibDirExclusions() {
+		List<File> libDirExclusions = new ArrayList<>();
+
+		if ((_libDirExclusionNames != null) &&
+			!_libDirExclusionNames.isEmpty()) {
+
+			for (String libDirExclusion : _libDirExclusionNames.split(",")) {
+				libDirExclusions.add(new File(_dir, libDirExclusion));
+			}
+		}
+
+		return libDirExclusions;
 	}
 
 	public File getPortalClassesDir() {
@@ -146,6 +175,10 @@ public class AppServer {
 
 	public void setGlobalLibDirName(String globalLibDirName) {
 		_globalLibDirName = globalLibDirName;
+	}
+
+	public void setLibDirExclusionNames(String libDirExclusionNames) {
+		_libDirExclusionNames = libDirExclusionNames;
 	}
 
 	public void setPortalDirName(String portalDirName) {
@@ -186,6 +219,7 @@ public class AppServer {
 	private File _dir;
 	private String _extraLibDirNames;
 	private String _globalLibDirName;
+	private String _libDirExclusionNames;
 	private String _portalDirName;
 	private final String _serverDetectorServerId;
 
