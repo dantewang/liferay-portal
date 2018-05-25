@@ -160,6 +160,8 @@ public class UpgradeClient {
 	public void upgrade() throws IOException {
 		verifyProperties();
 
+		_libDirExclusions = _appServer.getLibDirExclusions();
+
 		System.setOut(
 			new TeePrintStream(new FileOutputStream(_logFile), System.out));
 
@@ -288,6 +290,10 @@ public class UpgradeClient {
 
 	private void _appendClassPath(StringBuilder sb, File dir)
 		throws IOException {
+
+		if (_libDirExclusions.contains(dir)) {
+			return;
+		}
 
 		if (dir.exists() && dir.isDirectory()) {
 			for (File file : dir.listFiles()) {
@@ -482,6 +488,16 @@ public class UpgradeClient {
 				_appServer.setPortalDirName(response);
 			}
 
+			System.out.println(
+				"Please enter directories you want to exclude (" +
+					_appServer.getLibDirExclusionNames() + "): ");
+
+			response = _consoleReader.readLine();
+
+			if (!response.isEmpty()) {
+				_appServer.setLibDirExclusionNames(response);
+			}
+
 			_appServerProperties.setProperty("dir", dir.getCanonicalPath());
 			_appServerProperties.setProperty(
 				"extra.lib.dirs", _appServer.getExtraLibDirNames());
@@ -489,6 +505,8 @@ public class UpgradeClient {
 				"global.lib.dir", _appServer.getGlobalLibDirName());
 			_appServerProperties.setProperty(
 				"portal.dir", _appServer.getPortalDirName());
+			_appServerProperties.setProperty(
+				"lib.dir.exclusions", _appServer.getLibDirExclusionNames());
 			_appServerProperties.setProperty(
 				"server.detector.server.id",
 				_appServer.getServerDetectorServerId());
@@ -509,7 +527,8 @@ public class UpgradeClient {
 			_appServer = new AppServer(
 				dirName, _appServerProperties.getProperty("extra.lib.dirs"),
 				_appServerProperties.getProperty("global.lib.dir"),
-				_appServerProperties.getProperty("portal.dir"), value);
+				_appServerProperties.getProperty("portal.dir"),
+				_appServerProperties.getProperty("lib.dir.exclusions"), value);
 		}
 	}
 
@@ -711,6 +730,7 @@ public class UpgradeClient {
 	private final File _appServerPropertiesFile;
 	private final ConsoleReader _consoleReader = new ConsoleReader();
 	private final String _jvmOpts;
+	private List<File> _libDirExclusions;
 	private final File _logFile;
 	private final Properties _portalUpgradeDatabaseProperties;
 	private final File _portalUpgradeDatabasePropertiesFile;
