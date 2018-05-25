@@ -58,7 +58,7 @@ public class AppServer {
 		return new AppServer(
 			"../../weblogic-12.2.1", "/wlserver/server/lib",
 			"/domains/liferay/lib", "/domains/liferay/autodeploy/ROOT",
-			"weblogic");
+			"/wlserver/server/lib/consoleapp", "weblogic");
 	}
 
 	public static AppServer getWebSphereAppServer() {
