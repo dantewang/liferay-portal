@@ -34,7 +34,7 @@ public class CompoundSessionIdServletRequest
 	public HttpSession getSession() {
 		HttpSession session = super.getSession();
 
-		return new CompoundSessionIdHttpSession(session);
+		return _create(session);
 	}
 
 	@Override
@@ -45,7 +45,22 @@ public class CompoundSessionIdServletRequest
 			return session;
 		}
 
-		return new CompoundSessionIdHttpSession(session);
+		return _create(session);
 	}
+
+	private CompoundSessionIdHttpSession _create(HttpSession session) {
+		if ((_compoundSessionIdHttpSession != null) &&
+			(session == _compoundSessionIdHttpSession.getWrappedSession())) {
+
+			return _compoundSessionIdHttpSession;
+		}
+
+		_compoundSessionIdHttpSession = new CompoundSessionIdHttpSession(
+			session);
+
+		return _compoundSessionIdHttpSession;
+	}
+
+	private CompoundSessionIdHttpSession _compoundSessionIdHttpSession;
 
 }
