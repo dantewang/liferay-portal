@@ -58,6 +58,8 @@ List<BlogsEntry> blogsEntries = _convertToBlogEntries(results);
 
 		int index = 0;
 
+		request.setAttribute("view_entry_content.jsp-searchContainer", searchContainer);
+
 		for (Object result : results) {
 			BlogsEntry entry = blogsEntries.get(index);
 
@@ -71,7 +73,6 @@ List<BlogsEntry> blogsEntries = _convertToBlogEntries(results);
 
 			index++;
 
-			request.setAttribute("view_entry_content.jsp-searchContainer", searchContainer);
 
 			request.setAttribute("view_entry_content.jsp-entry", entry);
 
