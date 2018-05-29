@@ -35,8 +35,8 @@ String icon = "../aui/google-plus-sign";
 	image="<%= icon %>"
 	label="<%= false %>"
 	linkCssClass="btn btn-borderless btn-outline-borderless btn-outline-secondary btn-sm"
-	message="<%= postUrl %>"
+	message="<%= socialBookmark.getName(locale) %>"
 	method="get"
 	src="<%= icon %>"
-	url="<%= socialBookmark.getPostURL(title, url) %>"
+	url="<%= postUrl %>"
 />
