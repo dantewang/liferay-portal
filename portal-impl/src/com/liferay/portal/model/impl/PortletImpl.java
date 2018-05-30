@@ -426,6 +426,7 @@ public class PortletImpl extends PortletBaseImpl {
 			getPublicRenderParameters(), getPortletApp());
 
 		portletImpl.setApplicationTypes(getApplicationTypes());
+		portletImpl.setAsyncSupported(isAsyncSupported());
 		portletImpl.setId(getId());
 		portletImpl.setUndeployedPortlet(isUndeployedPortlet());
 
