@@ -46,9 +46,12 @@ String dropdownMenuComponentId = randomNamespace + "socialBookmarksDropdownMenu"
 				for (int i = 0; i < Math.min(types.length, maxInlineItems); i++) {
 					SocialBookmark socialBookmark = SocialBookmarksRegistryUtil.getSocialBookmark(types[i]);
 					String styleClass = "taglib-social-bookmark-" + types[i];
+					String postURL = socialBookmark.getPostURL(title, url);
+
+					request.setAttribute("liferay-social-bookmarks:bookmark:postUrl", postURL);
 				%>
 
-					<li class="taglib-social-bookmark <%= styleClass %>" onClick="<%= "return " + SocialBookmarksTagUtil.getClickJSCall(className, classPK, types[i], socialBookmark.getPostURL(title, url), url) %>">
+					<li class="taglib-social-bookmark <%= styleClass %>" onClick="<%= "return " + SocialBookmarksTagUtil.getClickJSCall(className, classPK, types[i], postURL, url) %>">
 						<liferay-social-bookmarks:bookmark
 							displayStyle="<%= displayStyle %>"
 							target="<%= target %>"
