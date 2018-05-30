@@ -163,7 +163,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 
 								<c:if test="<%= commentTreeDisplayContext.isEditControlsVisible() %>">
 									<div class="lfr-discussion-form lfr-discussion-form-edit" id="<%= namespace + randomNamespace %>editForm<%= index %>" style="<%= "display: none; max-width: " + ModelHintsConstants.TEXTAREA_DISPLAY_WIDTH + "px;" %>">
-										<liferay-ui:input-editor
+<%--										<liferay-ui:input-editor
 											autoCreate="<%= false %>"
 											configKey="commentEditor"
 											contents="<%= discussionComment.getBody() %>"
@@ -172,7 +172,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 											onChangeMethod='<%= randomNamespace + index + "EditOnChange" %>'
 											showSource="<%= false %>"
 											skipEditorLoading="<%= skipEditorLoading %>"
-										/>
+										/>--%>
 
 										<aui:input name='<%= "editReplyBody" + index %>' type="hidden" value="<%= discussionComment.getBody() %>" />
 
@@ -281,7 +281,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 					</div>
 
 					<div class="lfr-discussion-body">
-						<liferay-ui:input-editor
+<%--						<liferay-ui:input-editor
 							autoCreate="<%= false %>"
 							configKey="commentEditor"
 							contents=""
@@ -291,7 +291,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 							placeholder="type-your-comment-here"
 							showSource="<%= false %>"
 							skipEditorLoading="<%= skipEditorLoading %>"
-						/>
+						/>--%>
 
 						<aui:input name='<%= "postReplyBody" + index %>' type="hidden" />
 
