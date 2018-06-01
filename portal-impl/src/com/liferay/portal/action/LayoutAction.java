@@ -44,6 +44,7 @@ import com.liferay.portal.struts.ActionConstants;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.PortletRequestImpl;
 import com.liferay.portlet.RenderParametersPool;
+import com.liferay.portlet.ResourceRequestImpl;
 import com.liferay.portlet.internal.RenderData;
 import com.liferay.portlet.internal.RenderStateUtil;
 
@@ -414,7 +415,14 @@ public class LayoutAction extends Action {
 						PortletRequestImpl.getPortletRequestImpl(
 							portletRequest);
 
-					portletRequestImpl.cleanUp();
+					ResourceRequestImpl resourceRequestImpl =
+						(ResourceRequestImpl)portletRequestImpl;
+
+					if (!(portletRequestImpl instanceof ResourceRequestImpl) ||
+						!resourceRequestImpl.isAsyncStarted()) {
+
+						portletRequestImpl.cleanUp();
+					}
 				}
 			}
 		}
