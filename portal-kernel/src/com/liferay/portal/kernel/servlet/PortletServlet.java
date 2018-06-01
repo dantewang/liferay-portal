@@ -17,6 +17,7 @@ package com.liferay.portal.kernel.servlet;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Portlet;
+import com.liferay.portal.kernel.portlet.LiferayPortletAsyncContext;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletSession;
 import com.liferay.portal.kernel.portlet.PortletFilterUtil;
@@ -29,8 +30,10 @@ import java.io.IOException;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
+import javax.portlet.ResourceRequest;
 import javax.portlet.filter.FilterChain;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -107,6 +110,28 @@ public class PortletServlet extends HttpServlet {
 		try {
 			PortletFilterUtil.doFilter(
 				portletRequest, portletResponse, lifecycle, filterChain);
+
+			if (lifecycle != PortletRequest.RESOURCE_PHASE) {
+				return;
+			}
+
+			ResourceRequest resourceRequest = (ResourceRequest)portletRequest;
+
+			if (!resourceRequest.isAsyncSupported() ||
+				(!resourceRequest.isAsyncStarted() &&
+				 (resourceRequest.getDispatcherType() !=
+					 DispatcherType.ASYNC))) {
+
+				return;
+			}
+
+			LiferayPortletAsyncContext liferayPortletAsyncContext =
+				(LiferayPortletAsyncContext)
+					resourceRequest.getPortletAsyncContext();
+
+			if (liferayPortletAsyncContext != null) {
+				liferayPortletAsyncContext.doStart();
+			}
 		}
 		catch (PortletException pe) {
 			_log.error(pe, pe);
