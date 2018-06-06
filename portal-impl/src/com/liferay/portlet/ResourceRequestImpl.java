@@ -135,6 +135,10 @@ public class ResourceRequestImpl
 		return portlet.isAsyncSupported();
 	}
 
+	public void setAsyncStarted(boolean asyncStarted) {
+		_asyncStarted = asyncStarted;
+	}
+
 	@Override
 	public PortletAsyncContext startPortletAsync()
 		throws IllegalStateException {
@@ -195,6 +199,7 @@ public class ResourceRequestImpl
 		}
 	}
 
+	private boolean _asyncStarted;
 	private String _cacheablity;
 	private LiferayPortletAsyncContext _portletAsyncContext;
 	private String _resourceID;
