@@ -20,6 +20,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.PublicRenderParameter;
 import com.liferay.portal.kernel.portlet.InvokerPortlet;
+import com.liferay.portal.kernel.portlet.LiferayPortletAsyncContext;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -134,6 +135,10 @@ public class ResourceRequestImpl
 		return portlet.isAsyncSupported();
 	}
 
+	public void setAsyncStarted(boolean asyncStarted) {
+		_asyncStarted = asyncStarted;
+	}
+
 	@Override
 	public PortletAsyncContext startPortletAsync()
 		throws IllegalStateException {
@@ -194,8 +199,9 @@ public class ResourceRequestImpl
 		}
 	}
 
+	private boolean _asyncStarted;
 	private String _cacheablity;
-	private PortletAsyncContext _portletAsyncContext;
+	private LiferayPortletAsyncContext _portletAsyncContext;
 	private String _resourceID;
 
 }
