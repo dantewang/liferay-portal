@@ -44,6 +44,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.osgi.framework.Bundle;
@@ -176,8 +178,9 @@ public class NPMRegistryImpl implements NPMRegistry {
 
 			});
 
-		Range range = Range.from(
-			jsPackageDependency.getVersionConstraints(), true);
+		Range range = _jsPackageDependencyRanges.computeIfAbsent(
+			jsPackageDependency.getVersionConstraints(),
+			key -> Range.from(key, true));
 
 		for (JSPackage jsPackage : jsPackages) {
 			Version version = Version.from(jsPackage.getVersion(), true);
@@ -374,6 +377,8 @@ public class NPMRegistryImpl implements NPMRegistry {
 	private JSONFactory _jsonFactory;
 
 	private Map<String, JSPackage> _jsPackages = new HashMap<>();
+	private ConcurrentMap<String, Range> _jsPackageDependencyRanges =
+		new ConcurrentHashMap<>();
 	private Map<String, JSModule> _resolvedJSModules = new HashMap<>();
 	private Map<String, JSPackage> _resolvedJSPackages = new HashMap<>();
 
