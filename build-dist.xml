@@ -2302,6 +2302,11 @@ cd('/Servers/AdminServer')
 set('ListenAddress', '')
 set('ListenPort', 8080)
 
+create('AdminServer', 'Log')
+cd('/Servers/AdminServer/Log/AdminServer')
+
+cmo.setStdoutSeverity(weblogic.logging.Severities.ERROR_TEXT)
+
 writeDomain('${app.server.weblogic.instance.dir}')
 
 closeTemplate()
