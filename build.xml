@@ -529,10 +529,19 @@ message.
 				<if>
 					<equals arg1="${app.server.websphere.version}" arg2="8.5.5.0" />
 					<then>
+						<pathconvert property="app.server.websphere.java.dir">
+							<last>
+								<dirset
+									dir="${app.server.websphere.dir}"
+									includes="java_*"
+								/>
+							</last>
+						</pathconvert>
+
 						<move
 							file="${app.server.lib.global.dir}/portlet.jar"
 							force="true"
-							toDir="${app.server.websphere.dir}/java_1.8_64/jre/lib/ext"
+							toDir="${app.server.websphere.java.dir}/jre/lib/ext"
 						/>
 					</then>
 					<else>
