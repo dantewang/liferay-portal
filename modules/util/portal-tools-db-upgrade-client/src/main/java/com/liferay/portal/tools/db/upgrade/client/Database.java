@@ -143,12 +143,10 @@ public class Database {
 
 	private String _buildDatabaseName(String databaseName) {
 		if (_protocol.contains("sqlserver")) {
-			databaseName = ";databaseName="+databaseName;
+			databaseName = ";databaseName=".concat(databaseName);
 		}
-		else if (_protocol.contains("oracle")) {
-		}
-		else {
-			databaseName = "/"+databaseName;
+		else if (!_protocol.contains("oracle")) {
+			databaseName = "/".concat(databaseName);
 		}
 
 		return databaseName;
