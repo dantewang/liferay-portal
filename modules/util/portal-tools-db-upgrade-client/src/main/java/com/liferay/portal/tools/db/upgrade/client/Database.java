@@ -38,8 +38,7 @@ public class Database {
 
 	public static Database getMySQLDatabase() {
 		return new Database(
-			"com.mysql.jdbc.Driver", "jdbc:mysql://", "localhost", 0,
-			"lportal",
+			"com.mysql.jdbc.Driver", "jdbc:mysql://", "localhost", 0, "lportal",
 			"?characterEncoding=UTF-8&dontTrackOpenResources=true" +
 				"&holdResultsOpenOverStatementClose=true" +
 					"&useFastDateParsing=false&useUnicode=true");
@@ -130,20 +129,6 @@ public class Database {
 		_protocol = protocol;
 	}
 
-	private String _buildDatabaseName(String databaseName){
-		if(_protocol.contains("sqlserver")){
-			databaseName = ";databaseName="+databaseName;
-		}
-		else if(_protocol.contains("oracle")){
-
-		}
-		else{
-			databaseName = "/"+databaseName;
-		}
-
-		return databaseName;
-	}
-
 	private Database(
 		String className, String protocol, String host, int port,
 		String databaseName, String params) {
@@ -154,6 +139,19 @@ public class Database {
 		_port = port;
 		_databaseName = databaseName;
 		_params = params;
+	}
+
+	private String _buildDatabaseName(String databaseName) {
+		if (_protocol.contains("sqlserver")) {
+			databaseName = ";databaseName="+databaseName;
+		}
+		else if (_protocol.contains("oracle")) {
+		}
+		else {
+			databaseName = "/"+databaseName;
+		}
+
+		return databaseName;
 	}
 
 	private String _className;
