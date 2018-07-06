@@ -2523,6 +2523,11 @@ public class DataFactory {
 		layoutModels.add(
 			newLayoutModel(groupId, "wiki", "", WikiPortletKeys.WIKI + ","));
 
+		for (GroupModel groupModel : _groupModels) {
+			layoutModels.add(
+				newSearchLayoutModel(groupModel.getGroupId(), "search"));
+		}
+
 		return layoutModels;
 	}
 
@@ -2771,6 +2776,89 @@ public class DataFactory {
 		return newResourcePermissionModels(
 			WikiPage.class.getName(),
 			String.valueOf(wikiPageModel.getResourcePrimKey()), _sampleUserId);
+	}
+
+	public LayoutModel newSearchLayoutModel(long groupId, String name) {
+		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
+		String prefix = "com_liferay_portal_search_web";
+
+		StringBundler column1SB = new StringBundler(4);
+
+		column1SB.append(prefix);
+		column1SB.append("_search_bar_portlet_SearchBarPortlet,");
+		column1SB.append(prefix);
+		column1SB.append("_suggestions_portlet_SuggestionsPortlet,");
+
+		StringBundler column2SB = new StringBundler(14);
+
+		column2SB.append(prefix);
+		column2SB.append("_site_facet_portlet_SiteFacetPortlet,");
+		column2SB.append(prefix);
+		column2SB.append("_type_facet_portlet_TypeFacetPortlet,");
+		column2SB.append(prefix);
+		column2SB.append("_tag_facet_portlet_TagFacetPortlet,");
+		column2SB.append(prefix);
+		column2SB.append("_category_facet_portlet_CategoryFacetPortlet,");
+		column2SB.append(prefix);
+		column2SB.append("_folder_facet_portlet_FolderFacetPortlet,");
+		column2SB.append(prefix);
+		column2SB.append("_user_facet_portlet_UserFacetPortlet,");
+		column2SB.append(prefix);
+		column2SB.append("_modified_facet_portlet_ModifiedFacetPortlet,");
+
+		StringBundler column3SB = new StringBundler(4);
+
+		column3SB.append(prefix);
+		column3SB.append("_search_results_portlet_SearchResultsPortlet,");
+		column3SB.append(prefix);
+		column3SB.append("_search_options_portlet_SearchOptionsPortlet,");
+
+		if (simpleCounter == null) {
+			simpleCounter = new SimpleCounter();
+
+			_layoutCounters.put(groupId, simpleCounter);
+		}
+
+		LayoutModel layoutModel = new LayoutModelImpl();
+
+		layoutModel.setUuid(SequentialUUID.generate());
+		layoutModel.setPlid(_counter.get());
+		layoutModel.setGroupId(groupId);
+		layoutModel.setCompanyId(_companyId);
+		layoutModel.setUserId(_sampleUserId);
+		layoutModel.setUserName(_SAMPLE_USER_NAME);
+		layoutModel.setCreateDate(new Date());
+		layoutModel.setModifiedDate(new Date());
+		layoutModel.setLayoutId(simpleCounter.get());
+		layoutModel.setName(
+			"<?xml version=\"1.0\"?><root><name>" + name + "</name></root>");
+		layoutModel.setType(LayoutConstants.TYPE_PORTLET);
+		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + name);
+
+		UnicodeProperties typeSettingsProperties = new UnicodeProperties(true);
+
+		typeSettingsProperties.setProperty(
+			LayoutTypePortletConstants.LAYOUT_TEMPLATE_ID, "1_2_columns_i");
+		typeSettingsProperties.setProperty("column-1", column1SB.toString());
+		typeSettingsProperties.setProperty("column-2", column2SB.toString());
+		typeSettingsProperties.setProperty("column-3", column3SB.toString());
+		typeSettingsProperties.setProperty("column-1-customizable", "false");
+		typeSettingsProperties.setProperty("column-2-customizable", "false");
+		typeSettingsProperties.setProperty("column-3-customizable", "false");
+		typeSettingsProperties.setProperty(
+			LayoutConstants.CUSTOMIZABLE_LAYOUT, "false");
+		typeSettingsProperties.setProperty("layoutUpdateable", "true");
+		typeSettingsProperties.setProperty("merge-fail-count", "0");
+		typeSettingsProperties.setProperty("privateLayout", "true");
+
+		String typeSettings = StringUtil.replace(
+			typeSettingsProperties.toString(), '\n', "\\n");
+
+		layoutModel.setTypeSettings(typeSettings);
+
+		layoutModel.setLastPublishDate(new Date());
+
+		return layoutModel;
 	}
 
 	public SocialActivityModel newSocialActivityModel(
