@@ -2779,7 +2779,6 @@ public class DataFactory {
 	}
 
 	public LayoutModel newSearchLayoutModel(long groupId, String name) {
-		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
 		String prefix = "com_liferay_portal_search_web";
 
 		StringBundler column1SB = new StringBundler(4);
@@ -2812,6 +2811,8 @@ public class DataFactory {
 		column3SB.append("_search_results_portlet_SearchResultsPortlet,");
 		column3SB.append(prefix);
 		column3SB.append("_search_options_portlet_SearchOptionsPortlet,");
+
+		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
 
 		if (simpleCounter == null) {
 			simpleCounter = new SimpleCounter();
