@@ -14,16 +14,15 @@
 
 package com.liferay.portal.template.freemarker.internal;
 
+import com.liferay.petra.lang.ClassLoaderPool;
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.AggregateClassLoader;
-import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.ClassLoaderUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.template.freemarker.configuration.FreeMarkerEngineConfiguration;
 
 import freemarker.core.Environment;
@@ -34,25 +33,17 @@ import freemarker.template.TemplateException;
 import freemarker.template.utility.Execute;
 import freemarker.template.utility.ObjectConstructor;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.lang.reflect.Field;
 
-import org.osgi.framework.Bundle;
+import java.util.Collection;
+import java.util.Map;
+
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
-import org.osgi.framework.wiring.BundleCapability;
-import org.osgi.framework.wiring.BundleRevision;
-import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
-import org.osgi.util.tracker.BundleTracker;
-import org.osgi.util.tracker.BundleTrackerCustomizer;
 
 /**
  * @author Raymond Augé
@@ -106,13 +97,17 @@ public class LiferayTemplateClassResolver implements TemplateClassResolver {
 
 		if (allowed) {
 			try {
-				ClassLoader[] wwhitelistedClassLoaders =
-					_whitelistedClassLoaders.toArray(
-						new ClassLoader[_whitelistedClassLoaders.size()]);
+				Field field = ReflectionUtil.getDeclaredField(
+					ClassLoaderPool.class, "_classLoaders");
 
-				ClassLoader[] classLoaders = ArrayUtil.append(
-					wwhitelistedClassLoaders,
-					ClassLoaderUtil.getContextClassLoader());
+				Map<String, ClassLoader> classLoaderMap =
+					(Map<String, ClassLoader>)field.get(null);
+
+				Collection<ClassLoader> classLoaderMapValues =
+					classLoaderMap.values();
+
+				ClassLoader[] classLoaders = classLoaderMapValues.toArray(
+					new ClassLoader[classLoaderMapValues.size()]);
 
 				ClassLoader wwhitelistedAggregateClassLoader =
 					AggregateClassLoader.getAggregateClassLoader(classLoaders);
@@ -138,117 +133,10 @@ public class LiferayTemplateClassResolver implements TemplateClassResolver {
 
 		_freeMarkerEngineConfiguration = ConfigurableUtil.createConfigurable(
 			FreeMarkerEngineConfiguration.class, properties);
-
-		_classLoaderBundleTracker = new BundleTracker<>(
-			bundleContext, Bundle.ACTIVE,
-			new ClassLoaderBundleTrackerCustomizer());
-
-		_classLoaderBundleTracker.open();
-
-		_whitelistedClassLoaders.add(
-			LiferayTemplateClassResolver.class.getClassLoader());
 	}
 
 	@Deactivate
 	protected void deactivate() {
-		_classLoaderBundleTracker.close();
-	}
-
-	protected ClassLoader findClassLoader(
-		String clazz, BundleContext bundleContext) {
-
-		Bundle bundle = bundleContext.getBundle();
-
-		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
-
-		List<BundleCapability> bundleCapabilities =
-			bundleWiring.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
-
-		for (BundleCapability bundleCapability : bundleCapabilities) {
-			Map<String, Object> attributes = bundleCapability.getAttributes();
-
-			String packageName = (String)attributes.get(
-				BundleRevision.PACKAGE_NAMESPACE);
-
-			if (clazz.endsWith(StringPool.STAR)) {
-				if (packageName.regionMatches(
-						0, clazz, 0, clazz.length() - 1)) {
-
-					BundleRevision bundleRevision =
-						bundleCapability.getRevision();
-
-					Bundle bundleRevisionBundle = bundleRevision.getBundle();
-
-					BundleWiring bundleRevisionBundleWiring =
-						bundleRevisionBundle.adapt(BundleWiring.class);
-
-					return bundleRevisionBundleWiring.getClassLoader();
-				}
-			}
-			else if (clazz.equals(packageName)) {
-				BundleRevision bundleRevision = bundleCapability.getRevision();
-
-				Bundle bundleRevisionBundle = bundleRevision.getBundle();
-
-				BundleWiring bundleRevisionBundleWiring =
-					bundleRevisionBundle.adapt(BundleWiring.class);
-
-				return bundleRevisionBundleWiring.getClassLoader();
-			}
-			else {
-				int index = clazz.lastIndexOf('.');
-
-				if ((packageName.length() == index) &&
-					packageName.regionMatches(0, clazz, 0, index)) {
-
-					BundleRevision bundleRevision =
-						bundleCapability.getRevision();
-
-					Bundle bundleRevisionBundle = bundleRevision.getBundle();
-
-					BundleWiring bundleRevisionBundleWiring =
-						bundleRevisionBundle.adapt(BundleWiring.class);
-
-					return bundleRevisionBundleWiring.getClassLoader();
-				}
-			}
-		}
-
-		return null;
-	}
-
-	protected ClassLoader findClassLoader(
-		String[] allowedClassNames, BundleContext bundleContext) {
-
-		if (allowedClassNames == null) {
-			allowedClassNames = new String[0];
-		}
-
-		for (String allowedClassName : allowedClassNames) {
-			if (Validator.isBlank(allowedClassName) ||
-				allowedClassName.equals(StringPool.STAR)) {
-
-				continue;
-			}
-
-			ClassLoader classLoader = findClassLoader(
-				allowedClassName, bundleContext);
-
-			if (classLoader != null) {
-				return classLoader;
-			}
-
-			if (_log.isWarnEnabled()) {
-				Bundle bundle = bundleContext.getBundle();
-
-				_log.warn(
-					StringBundler.concat(
-						"Bundle ", bundle.getSymbolicName(),
-						" does not export ", allowedClassName));
-			}
-		}
-
-		return null;
 	}
 
 	protected boolean match(String className, String matchedClassName) {
@@ -284,65 +172,12 @@ public class LiferayTemplateClassResolver implements TemplateClassResolver {
 
 		_freeMarkerEngineConfiguration = ConfigurableUtil.createConfigurable(
 			FreeMarkerEngineConfiguration.class, properties);
-
-		for (Bundle bundle : _bundles) {
-			ClassLoader classLoader = findClassLoader(
-				_freeMarkerEngineConfiguration.allowedClasses(),
-				bundle.getBundleContext());
-
-			if (classLoader != null) {
-				_whitelistedClassLoaders.add(classLoader);
-			}
-		}
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		LiferayTemplateClassResolver.class);
 
-	private final Set<Bundle> _bundles = Collections.newSetFromMap(
-		new ConcurrentHashMap<>());
-	private BundleTracker<ClassLoader> _classLoaderBundleTracker;
 	private volatile FreeMarkerEngineConfiguration
 		_freeMarkerEngineConfiguration;
-	private final Set<ClassLoader> _whitelistedClassLoaders =
-		Collections.newSetFromMap(new ConcurrentHashMap<>());
-
-	private class ClassLoaderBundleTrackerCustomizer
-		implements BundleTrackerCustomizer<ClassLoader> {
-
-		@Override
-		public ClassLoader addingBundle(
-			Bundle bundle, BundleEvent bundleEvent) {
-
-			ClassLoader classLoader = findClassLoader(
-				_freeMarkerEngineConfiguration.allowedClasses(),
-				bundle.getBundleContext());
-
-			if (classLoader != null) {
-				_whitelistedClassLoaders.add(classLoader);
-			}
-
-			_bundles.add(bundle);
-
-			BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
-
-			return bundleWiring.getClassLoader();
-		}
-
-		@Override
-		public void modifiedBundle(
-			Bundle bundle, BundleEvent bundleEvent, ClassLoader classLoader) {
-		}
-
-		@Override
-		public void removedBundle(
-			Bundle bundle, BundleEvent bundleEvent, ClassLoader classLoader) {
-
-			_whitelistedClassLoaders.remove(classLoader);
-
-			_bundles.remove(bundle);
-		}
-
-	}
 
 }

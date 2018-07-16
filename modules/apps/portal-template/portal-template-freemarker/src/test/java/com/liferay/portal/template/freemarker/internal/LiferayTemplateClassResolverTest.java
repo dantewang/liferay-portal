@@ -14,6 +14,7 @@
 
 package com.liferay.portal.template.freemarker.internal;
 
+import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.template.freemarker.configuration.FreeMarkerEngineConfiguration;
@@ -27,6 +28,7 @@ import java.lang.reflect.Method;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -34,6 +36,13 @@ import org.junit.Test;
  * @author Manuel de la Peña
  */
 public class LiferayTemplateClassResolverTest {
+
+	@BeforeClass
+	public static void setUpClass() {
+		ClassLoaderPool.register(
+			"LiferayTemplateClassResolverTest",
+			Thread.currentThread().getContextClassLoader());
+	}
 
 	@Before
 	public void setUp() throws Exception {
