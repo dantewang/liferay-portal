@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -52,6 +53,26 @@ public class ClassLoaderPoolTest {
 	@Test
 	public void testConstructor() {
 		new ClassLoaderPool();
+	}
+
+	@Test
+	public void testGetClassLoaders() {
+		ClassLoader classLoader = new URLClassLoader(new URL[0]);
+
+		ClassLoaderPool.register(_CONTEXT_NAME, classLoader);
+
+		Collection<ClassLoader> classLoaders =
+			ClassLoaderPool.getClassLoaders();
+
+		Assert.assertEquals(classLoaders.toString(), 1, classLoaders.size());
+
+		try {
+			classLoaders.clear();
+
+			Assert.fail();
+		}
+		catch (UnsupportedOperationException uoe) {
+		}
 	}
 
 	@Test

@@ -14,6 +14,8 @@
 
 package com.liferay.petra.lang;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -49,6 +51,10 @@ public class ClassLoaderPool {
 		}
 
 		return classLoader;
+	}
+
+	public static Collection<ClassLoader> getClassLoaders() {
+		return Collections.unmodifiableCollection(_classLoaders.values());
 	}
 
 	/**
