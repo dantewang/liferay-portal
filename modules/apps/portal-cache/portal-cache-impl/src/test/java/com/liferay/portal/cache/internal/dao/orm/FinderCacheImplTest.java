@@ -14,14 +14,18 @@
 
 package com.liferay.portal.cache.internal.dao.orm;
 
+import com.liferay.portal.cache.internal.MultiVMPoolImpl;
 import com.liferay.portal.cache.key.HashCodeHexStringCacheKeyGenerator;
+import com.liferay.portal.cache.test.util.TestPortalCacheManager;
 import com.liferay.portal.kernel.cache.MultiVMPool;
+import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.key.CacheKeyGenerator;
 import com.liferay.portal.kernel.cache.key.CacheKeyGeneratorUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ProxyUtil;
@@ -77,6 +81,38 @@ public class FinderCacheImplTest {
 			true, true, FinderCacheImplTest.class,
 			FinderCacheImplTest.class.getName(), "test",
 			new String[] {String.class.getName()});
+	}
+
+	@Test
+	public void testNotifyPortalCacheRemoved() {
+		TestPortalCacheManager testPortalCacheManager =
+			TestPortalCacheManager.createTestPortalCacheManager(
+				"TestPortalCacheManager");
+
+		MultiVMPool multiVMPool = new MultiVMPoolImpl();
+
+		ReflectionTestUtil.setFieldValue(
+			multiVMPool, "_portalCacheManager", testPortalCacheManager);
+
+		FinderCacheImpl finderCacheImpl = (FinderCacheImpl)_activateFinderCache(
+			multiVMPool);
+
+		List<Serializable> values = new ArrayList<>();
+
+		finderCacheImpl.putResult(_finderPath, _KEY1, values, true);
+
+		String groupKeyPrefix = ReflectionTestUtil.getFieldValue(
+			finderCacheImpl, "_GROUP_KEY_PREFIX");
+
+		String portalCacheName = groupKeyPrefix.concat(
+			FinderCacheImplTest.class.getName());
+
+		testPortalCacheManager.removePortalCache(portalCacheName);
+
+		Map<String, PortalCache> portalCaches =
+			ReflectionTestUtil.getFieldValue(finderCacheImpl, "_portalCaches");
+
+		Assert.assertTrue(portalCaches.toString(), portalCaches.isEmpty());
 	}
 
 	@Test
