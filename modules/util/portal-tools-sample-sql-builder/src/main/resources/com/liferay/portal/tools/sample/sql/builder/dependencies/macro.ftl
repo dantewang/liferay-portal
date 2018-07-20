@@ -138,6 +138,14 @@
 	${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(_layoutModel))}
 </#macro>
 
+<#macro inserContentLayout
+_layoutModel
+>
+	${dataFactory.toInsertSQL(_layoutModel)}
+
+	${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(_layoutModel))}
+</#macro>
+
 <#macro insertMBDiscussion
 	_classNameId
 	_classPK
