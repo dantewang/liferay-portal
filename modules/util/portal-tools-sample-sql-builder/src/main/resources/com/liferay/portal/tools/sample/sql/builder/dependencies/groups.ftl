@@ -41,12 +41,6 @@
 		_parentDLFolderId=0
 	/>
 
-	<#assign publicLayoutModels = dataFactory.newPublicLayoutModels(groupId) />
-
-	<#list publicLayoutModels as publicLayoutModel>
-		<@insertLayout _layoutModel=publicLayoutModel />
-	</#list>
-
 	<#assign fragmentEntryModels = dataFactory.newFragmentEntryModels(groupId) />
 
 	<list fragmentEntryModels?keys as fragmentEntryModelName>
@@ -62,7 +56,7 @@
 		/>
 	</#list>
 
-	<#assign publicPageCount = publicLayoutModels?size + dataFactory.maxDDLRecordSetCount + dataFactory.maxJournalArticleCount />
+	<#assign publicPageCount = contentLayoutModels?size + dataFactory.maxDDLRecordSetCount + dataFactory.maxJournalArticleCount />
 
 	<@insertGroup
 		_groupModel=groupModel
