@@ -79,6 +79,8 @@ import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateVersionModelImpl;
 import com.liferay.dynamic.data.mapping.storage.StorageType;
+import com.liferay.fragment.model.FragmentEntryModel;
+import com.liferay.fragment.model.impl.FragmentEntryModelImpl;
 import com.liferay.friendly.url.model.FriendlyURLEntryLocalization;
 import com.liferay.friendly.url.model.FriendlyURLEntryLocalizationModel;
 import com.liferay.friendly.url.model.FriendlyURLEntryMappingModel;
@@ -1973,6 +1975,64 @@ public class DataFactory {
 		}
 
 		return dlFolderModels;
+	}
+
+	public FragmentEntryModel newFragmentEntryModel(
+			long groupId, String fragmentName)
+		throws Exception {
+
+		FragmentEntryModel fragmentEntryModel = new FragmentEntryModelImpl();
+
+		fragmentEntryModel.setUuid(SequentialUUID.generate());
+		fragmentEntryModel.setFragmentEntryId(_counter.get());
+		fragmentEntryModel.setGroupId(groupId);
+		fragmentEntryModel.setCompanyId(_companyId);
+		fragmentEntryModel.setUserId(_sampleUserId);
+		fragmentEntryModel.setUserName(_SAMPLE_USER_NAME);
+		fragmentEntryModel.setCreateDate(new Date());
+		fragmentEntryModel.setModifiedDate(new Date());
+
+		fragmentEntryModel.setName(fragmentName);
+		fragmentEntryModel.setCss(StringPool.BLANK);
+		fragmentEntryModel.setJs(StringPool.BLANK);
+		fragmentEntryModel.setFragmentEntryKey(
+			String.valueOf(fragmentEntryModel.getFragmentEntryId()));
+		fragmentEntryModel.setStatus(WorkflowConstants.STATUS_APPROVED);
+
+		List<String> lines = new ArrayList<>();
+
+		StringUtil.readLines(
+			getResourceInputStream("fragments/" + fragmentName + ".html"),
+			lines);
+
+		String html = StringUtil.merge(lines, StringPool.SPACE);
+
+		fragmentEntryModel.setHtml(html);
+
+		return fragmentEntryModel;
+	}
+
+	public Map<String, FragmentEntryModel> newFragmentEntryModels(long groupId)
+		throws Exception {
+
+		Map<String, FragmentEntryModel> fragmentEntryModels = new HashMap<>();
+
+		fragmentEntryModels.put(
+			"asset_list", newFragmentEntryModel(groupId, "asset_list"));
+		fragmentEntryModels.put(
+			"footer", newFragmentEntryModel(groupId, "footer"));
+		fragmentEntryModels.put(
+			"header", newFragmentEntryModel(groupId, "header"));
+		fragmentEntryModels.put(
+			"media_gallery", newFragmentEntryModel(groupId, "media_gallery"));
+		fragmentEntryModels.put(
+			"navigation", newFragmentEntryModel(groupId, "navigation"));
+		fragmentEntryModels.put(
+			"site_map", newFragmentEntryModel(groupId, "site_map"));
+		fragmentEntryModels.put(
+			"web_content", newFragmentEntryModel(groupId, "web_content"));
+
+		return fragmentEntryModels;
 	}
 
 	public FriendlyURLEntryLocalizationModel
