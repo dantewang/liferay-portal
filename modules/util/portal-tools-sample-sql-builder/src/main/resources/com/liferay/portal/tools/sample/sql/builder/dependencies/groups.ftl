@@ -47,6 +47,12 @@
 		<@insertLayout _layoutModel=publicLayoutModel />
 	</#list>
 
+	<#assign contentLayoutModels = dataFactory.newContentLayoutModels(groupId) />
+
+	<#list contentLayoutModels as contentLayoutModel>
+		<@insertContentLayout _layoutModel=contentLayoutModel />
+	</#list>
+
 	<#assign publicPageCount = publicLayoutModels?size + dataFactory.maxDDLRecordSetCount + dataFactory.maxJournalArticleCount />
 
 	<@insertGroup
