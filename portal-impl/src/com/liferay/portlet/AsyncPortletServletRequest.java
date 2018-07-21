@@ -14,6 +14,8 @@
 
 package com.liferay.portlet;
 
+import com.liferay.portal.kernel.servlet.DynamicServletRequest;
+
 import javax.servlet.DispatcherType;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -26,100 +28,87 @@ public class AsyncPortletServletRequest extends HttpServletRequestWrapper {
 	public static AsyncPortletServletRequest getAsyncPortletServletRequest(
 		HttpServletRequest httpServletRequest) {
 
-		// TODO
+		while (httpServletRequest instanceof HttpServletRequestWrapper) {
+			if (httpServletRequest instanceof AsyncPortletServletRequest) {
+				return (AsyncPortletServletRequest)httpServletRequest;
+			}
 
-		throw new UnsupportedOperationException();
+			httpServletRequest =
+				(HttpServletRequest)
+					((HttpServletRequestWrapper)
+						httpServletRequest).getRequest();
+		}
+
+		return null;
 	}
 
 	public AsyncPortletServletRequest(HttpServletRequest request) {
 		super(request);
 
-		// TODO
-
-		throw new UnsupportedOperationException();
+		_contextPath = super.getContextPath();
+		_queryString = super.getQueryString();
+		_requestURI = super.getRequestURI();
+		_servletPath = super.getServletPath();
 	}
 
 	@Override
 	public String getContextPath() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return _contextPath;
 	}
 
 	@Override
 	public DispatcherType getDispatcherType() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return DispatcherType.ASYNC;
 	}
 
 	@Override
 	public String getPathInfo() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return _pathInfo;
 	}
 
 	@Override
 	public String getQueryString() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return _queryString;
 	}
 
 	@Override
 	public String getRequestURI() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return _requestURI;
 	}
 
 	@Override
 	public String getServletPath() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return _servletPath;
 	}
 
 	public void setContextPath(String contextPath) {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		_contextPath = contextPath;
 	}
 
 	public void setPathInfo(String pathInfo) {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		_pathInfo = pathInfo;
 	}
 
 	public void setQueryString(String queryString) {
+		_queryString = queryString;
 
-		// TODO
-
-		throw new UnsupportedOperationException();
+		setRequest(
+			DynamicServletRequest.addQueryString(
+				(HttpServletRequest)getRequest(), queryString, true));
 	}
 
 	public void setRequestURI(String requestUri) {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		_requestURI = requestUri;
 	}
 
 	public void setServletPath(String servletPath) {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		_servletPath = servletPath;
 	}
+
+	private String _contextPath;
+	private String _pathInfo;
+	private String _queryString;
+	private String _requestURI;
+	private String _servletPath;
 
 }

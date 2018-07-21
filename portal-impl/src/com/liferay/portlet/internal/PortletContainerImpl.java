@@ -967,12 +967,29 @@ public class PortletContainerImpl implements PortletContainer {
 		}
 
 		LiferayResourceRequest liferayResourceRequest =
-			ResourceRequestFactory.create(
+			(LiferayResourceRequest)request.getAttribute(
+				JavaConstants.JAVAX_PORTLET_REQUEST);
+
+		LiferayResourceResponse liferayResourceResponse = null;
+
+		if (liferayResourceRequest != null) {
+			ResourceRequestImpl resourceRequestImpl =
+				(ResourceRequestImpl)liferayResourceRequest;
+
+			resourceRequestImpl.setAsyncStarted(false);
+
+			liferayResourceResponse =
+				(LiferayResourceResponse)request.getAttribute(
+					JavaConstants.JAVAX_PORTLET_RESPONSE);
+		}
+		else {
+			liferayResourceRequest = ResourceRequestFactory.create(
 				request, portlet, invokerPortlet, portletContext, windowState,
 				portletMode, portletPreferences, layout.getPlid());
 
-		LiferayResourceResponse liferayResourceResponse =
-			ResourceResponseFactory.create(liferayResourceRequest, response);
+			liferayResourceResponse = ResourceResponseFactory.create(
+				liferayResourceRequest, response);
+		}
 
 		liferayResourceRequest.defineObjects(
 			portletConfig, liferayResourceResponse);

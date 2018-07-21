@@ -14,9 +14,18 @@
 
 package com.liferay.portal.util;
 
+import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portlet.AsyncPortletServletRequest;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRegistration;
 
 /**
  * @author Dante Wang
@@ -28,9 +37,82 @@ public class DispatchInfoUtil {
 		AsyncPortletServletRequest asyncPortletServletRequest,
 		ServletContext servletContext, String path) {
 
-		// TODO
+		Map<String, ServletRegistration> servletRegistrationMap =
+			(Map<String, ServletRegistration>)
+				servletContext.getServletRegistrations();
 
-		throw new UnsupportedOperationException();
+		Collection<ServletRegistration> servletRegistrations =
+			servletRegistrationMap.values();
+
+		Stream<ServletRegistration> servletRegistrationStream =
+			servletRegistrations.stream();
+
+		Set<String> servletURLPatterns = servletRegistrationStream.flatMap(
+			servletRegistration -> {
+				Collection<String> mappings = servletRegistration.getMappings();
+
+				return mappings.stream();
+			}
+		).collect(
+			Collectors.toSet()
+		);
+
+		String contextPath = servletContext.getContextPath();
+		String pathInfo = null;
+		String queryString = null;
+		String requestURI = null;
+		String servletPath = null;
+
+		// TODO: what if Liferay is deployed into e.g. /liferay?
+
+		if ((contextPath.length() > 0) && path.startsWith(contextPath)) {
+			path = path.substring(contextPath.length());
+		}
+
+		if (path != null) {
+			String pathNoQueryString = path;
+
+			int pos = path.indexOf(CharPool.QUESTION);
+
+			if (pos != -1) {
+				pathNoQueryString = path.substring(0, pos);
+				queryString = path.substring(pos + 1);
+			}
+
+			for (String urlPattern : servletURLPatterns) {
+				if (urlPattern.endsWith("/*")) {
+					int length = urlPattern.length() - 2;
+
+					if ((pathNoQueryString.length() > length) &&
+						pathNoQueryString.regionMatches(
+							0, urlPattern, 0, length) &&
+						(pathNoQueryString.charAt(length) == CharPool.SLASH)) {
+
+						pathInfo = pathNoQueryString.substring(length);
+						servletPath = urlPattern.substring(0, length);
+
+						break;
+					}
+				}
+			}
+
+			if (servletPath == null) {
+				servletPath = pathNoQueryString;
+			}
+
+			if (contextPath.equals(StringPool.SLASH)) {
+				requestURI = pathNoQueryString;
+			}
+			else {
+				requestURI = contextPath + pathNoQueryString;
+			}
+		}
+
+		asyncPortletServletRequest.setContextPath(contextPath);
+		asyncPortletServletRequest.setPathInfo(pathInfo);
+		asyncPortletServletRequest.setQueryString(queryString);
+		asyncPortletServletRequest.setRequestURI(requestURI);
+		asyncPortletServletRequest.setServletPath(servletPath);
 	}
 
 }

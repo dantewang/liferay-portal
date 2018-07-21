@@ -125,6 +125,7 @@
 			<param-value>0</param-value>
 		</init-param>
 		<load-on-startup>0</load-on-startup>
+		<async-supported>true</async-supported>
 	</servlet>
 	<servlet>
 		<servlet-name>Atom Servlet</servlet-name>
@@ -159,6 +160,7 @@
 			<param-value>(servlet.init.private=true)(servlet.init.user=false)(servlet.type=friendly-url)</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+		<async-supported>true</async-supported>
 	</servlet>
 	<servlet>
 		<servlet-name>Friendly URL Servlet - Private User</servlet-name>
@@ -168,6 +170,7 @@
 			<param-value>(servlet.init.private=true)(servlet.init.user=true)(servlet.type=friendly-url)</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+		<async-supported>true</async-supported>
 	</servlet>
 	<servlet>
 		<servlet-name>Friendly URL Servlet - Public</servlet-name>
@@ -177,6 +180,7 @@
 			<param-value>(servlet.init.private=false)(servlet.type=friendly-url)</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+		<async-supported>true</async-supported>
 	</servlet>
 	<servlet>
 		<servlet-name>Google Gadget Servlet</servlet-name>
