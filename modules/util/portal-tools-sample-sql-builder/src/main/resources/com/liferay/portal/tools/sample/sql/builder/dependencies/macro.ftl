@@ -150,6 +150,10 @@
 
 	<#list fragmentEntryLinkModels as fragmentEntryLinkModel>
 		${dataFactory.toInsertSQL(fragmentEntryLinkModel)}
+
+		<#if fragmentEntryLinkModel.getHtml()?contains("lfr-widget-web-content")>
+			${dataFactory.toInserSQL(dataFactory.newJournalContentPortletPreferencesModel(fragmentEntryLinkModel), true)}
+		</#if>
 	</#list>
 </#macro>
 
