@@ -91,6 +91,7 @@ import com.liferay.friendly.url.model.impl.FriendlyURLEntryLocalizationModelImpl
 import com.liferay.friendly.url.model.impl.FriendlyURLEntryMappingModelImpl;
 import com.liferay.friendly.url.model.impl.FriendlyURLEntryModelImpl;
 import com.liferay.journal.constants.JournalActivityKeys;
+import com.liferay.journal.constants.JournalContentPortletKeys;
 import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleConstants;
@@ -167,6 +168,7 @@ import com.liferay.portal.kernel.model.UserPersonalSite;
 import com.liferay.portal.kernel.model.VirtualHostModel;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
+import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.security.auth.FullNameGenerator;
 import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
@@ -2252,6 +2254,10 @@ public class DataFactory {
 		journalArticleModel.setLastPublishDate(new Date());
 		journalArticleModel.setStatusDate(new Date());
 
+		if (Validator.isNull(_defaultJournalArticleId)) {
+			_defaultJournalArticleId = journalArticleModel.getArticleId();
+		}
+
 		return journalArticleModel;
 	}
 
@@ -2273,6 +2279,33 @@ public class DataFactory {
 			journalArticleResourceModel.getUuid());
 
 		return journalArticleResourceModel;
+	}
+
+	public PortletPreferencesModel newJournalContentPortletPreferencesModel(
+			FragmentEntryLinkModel fragmentEntryLinkModel)
+		throws Exception {
+
+		String portletId = PortletIdCodec.encode(
+			JournalContentPortletKeys.JOURNAL_CONTENT,
+			fragmentEntryLinkModel.getNamespace());
+
+		PortletPreferences portletPreferences = new PortletPreferencesImpl();
+
+		portletPreferences.setValue("articleId", _defaultJournalArticleId);
+
+		PortletPreferencesModel portletPreferencesModel =
+			new PortletPreferencesModelImpl();
+
+		portletPreferencesModel.setPortletPreferencesId(_counter.get());
+		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
+		portletPreferencesModel.setOwnerType(
+			PortletKeys.PREFS_OWNER_TYPE_LAYOUT);
+		portletPreferencesModel.setPlid(0);
+		portletPreferencesModel.setPortletId(portletId);
+		portletPreferencesModel.setPreferences(
+			PortletPreferencesFactoryUtil.toXML(portletPreferences));
+
+		return portletPreferencesModel;
 	}
 
 	public JournalContentSearchModel newJournalContentSearchModel(
@@ -3121,10 +3154,16 @@ public class DataFactory {
 	}
 
 	public String toInsertSQL(BaseModel<?> baseModel) {
+		return toInsertSQL(baseModel, false);
+	}
+
+	public String toInsertSQL(
+		BaseModel<?> baseModel, boolean useControlPanelPlid) {
+
 		try {
 			StringBundler sb = new StringBundler();
 
-			toInsertSQL(sb, baseModel);
+			toInsertSQL(sb, baseModel, useControlPanelPlid);
 
 			Class<?> clazz = baseModel.getClass();
 
@@ -3139,7 +3178,8 @@ public class DataFactory {
 
 						sb.append("\n");
 
-						toInsertSQL(sb, resourcePermissionModel);
+						toInsertSQL(
+							sb, resourcePermissionModel, useControlPanelPlid);
 					}
 				}
 				catch (NoSuchMethodException nsme) {
@@ -3924,6 +3964,12 @@ public class DataFactory {
 	}
 
 	protected void toInsertSQL(StringBundler sb, BaseModel<?> baseModel) {
+		toInsertSQL(sb, baseModel, false);
+	}
+
+	protected void toInsertSQL(
+		StringBundler sb, BaseModel<?> baseModel, boolean useControlPanelPlid) {
+
 		try {
 			sb.append("insert into ");
 
@@ -3947,38 +3993,47 @@ public class DataFactory {
 					name = name.substring(0, name.length() - 1);
 				}
 
-				int type = (int)tableColumn[1];
+				if (useControlPanelPlid &&
+					StringUtil.equalsIgnoreCase(name, "plid")) {
 
-				if (type == Types.TIMESTAMP) {
-					Method method = clazz.getMethod("get".concat(name));
-
-					Date date = (Date)method.invoke(baseModel);
-
-					if (date == null) {
-						sb.append("null");
-					}
-					else {
-						sb.append("'");
-						sb.append(getDateString(date));
-						sb.append("'");
-					}
-				}
-				else if ((type == Types.VARCHAR) || (type == Types.CLOB)) {
-					Method method = clazz.getMethod("get".concat(name));
-
-					sb.append("'");
-					sb.append(method.invoke(baseModel));
-					sb.append("'");
-				}
-				else if (type == Types.BOOLEAN) {
-					Method method = clazz.getMethod("is".concat(name));
-
-					sb.append(method.invoke(baseModel));
+					sb.append("(select plid from Layout where type_ = '");
+					sb.append(LayoutConstants.TYPE_CONTROL_PANEL);
+					sb.append("')");
 				}
 				else {
-					Method method = clazz.getMethod("get".concat(name));
+					int type = (int)tableColumn[1];
 
-					sb.append(method.invoke(baseModel));
+					if (type == Types.TIMESTAMP) {
+						Method method = clazz.getMethod("get".concat(name));
+
+						Date date = (Date)method.invoke(baseModel);
+
+						if (date == null) {
+							sb.append("null");
+						}
+						else {
+							sb.append("'");
+							sb.append(getDateString(date));
+							sb.append("'");
+						}
+					}
+					else if ((type == Types.VARCHAR) || (type == Types.CLOB)) {
+						Method method = clazz.getMethod("get".concat(name));
+
+						sb.append("'");
+						sb.append(method.invoke(baseModel));
+						sb.append("'");
+					}
+					else if (type == Types.BOOLEAN) {
+						Method method = clazz.getMethod("is".concat(name));
+
+						sb.append(method.invoke(baseModel));
+					}
+					else {
+						Method method = clazz.getMethod("get".concat(name));
+
+						sb.append(method.invoke(baseModel));
+					}
 				}
 
 				sb.append(", ");
@@ -4056,6 +4111,7 @@ public class DataFactory {
 	private DDMStructureModel _defaultDLDDMStructureModel;
 	private DDMStructureVersionModel _defaultDLDDMStructureVersionModel;
 	private DLFileEntryTypeModel _defaultDLFileEntryTypeModel;
+	private String _defaultJournalArticleId;
 	private DDMStructureLayoutModel _defaultJournalDDMStructureLayoutModel;
 	private DDMStructureModel _defaultJournalDDMStructureModel;
 	private DDMStructureVersionModel _defaultJournalDDMStructureVersionModel;
