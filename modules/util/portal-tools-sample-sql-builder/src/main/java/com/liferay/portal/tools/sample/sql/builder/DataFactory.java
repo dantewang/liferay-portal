@@ -1982,9 +1982,8 @@ public class DataFactory {
 	}
 
 	public FragmentEntryLinkModel newFragmentEntryLinkModel(
-			LayoutModel layoutModel, FragmentEntryModel fragmentEntryModel,
-			int position)
-		throws Exception {
+        LayoutModel layoutModel, FragmentEntryModel fragmentEntryModel,
+        int position) {
 
 		FragmentEntryLinkModel fragmentEntryLinkModel =
 			new FragmentEntryLinkModelImpl();
@@ -2011,9 +2010,8 @@ public class DataFactory {
 	}
 
 	public List<FragmentEntryLinkModel> newFragmentEntryLinkModels(
-			LayoutModel layoutModel,
-			Map<String, FragmentEntryModel> fragmentEntryModels)
-		throws Exception {
+        LayoutModel layoutModel,
+		Map<String, FragmentEntryModel> fragmentEntryModels) {
 
 		List<FragmentEntryLinkModel> fragmentEntryLinkModels =
 			new ArrayList<>();
