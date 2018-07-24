@@ -2025,17 +2025,13 @@ public class DataFactory {
 		String fragmentEntries = typeSettingsProperties.getProperty(
 			"fragmentEntries");
 
-		String[] fragmentEntryNames = fragmentEntries.split(StringPool.COMMA);
+		String[] fragmentEntryNames = StringUtil.split(fragmentEntries);
 
-		int position = 0;
-
-		for (String fragmentEntryName : fragmentEntryNames) {
+		for (int i = 0; i < fragmentEntryNames.length; i++) {
 			fragmentEntryLinkModels.add(
 				newFragmentEntryLinkModel(
-					layoutModel, fragmentEntryModels.get(fragmentEntryName),
-					position));
-
-			position++;
+					layoutModel, fragmentEntryModels.get(fragmentEntryNames[i]),
+					i));
 		}
 
 		return fragmentEntryLinkModels;
