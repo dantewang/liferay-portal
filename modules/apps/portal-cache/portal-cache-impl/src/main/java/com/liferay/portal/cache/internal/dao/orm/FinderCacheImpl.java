@@ -80,7 +80,7 @@ public class FinderCacheImpl
 	public void clearCache(String className) {
 		clearLocalCache();
 
-		PortalCache<?, ?> portalCache = _getPortalCache(className);
+		PortalCache<?, ?> portalCache = _portalCaches.get(className);
 
 		if (portalCache != null) {
 			portalCache.removeAll();

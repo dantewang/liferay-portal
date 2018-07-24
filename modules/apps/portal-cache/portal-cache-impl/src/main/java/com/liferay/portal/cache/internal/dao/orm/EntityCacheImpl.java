@@ -72,7 +72,7 @@ public class EntityCacheImpl
 	public void clearCache(Class<?> clazz) {
 		clearLocalCache();
 
-		PortalCache<?, ?> portalCache = getPortalCache(clazz);
+		PortalCache<?, ?> portalCache = _portalCaches.get(clazz.getName());
 
 		if (portalCache != null) {
 			portalCache.removeAll();
