@@ -89,6 +89,7 @@ public class LiferayObjectWrapperTest extends PowerMockito {
 		Assert.assertTrue(result instanceof LiferayTemplateModel);
 
 		//ResourceBundle object
+
 		ResourceBundle resourceBundle = mock(ResourceBundle.class);
 
 		result = _liferayObjectWrapper.handleUnknownType(resourceBundle);
@@ -131,7 +132,7 @@ public class LiferayObjectWrapperTest extends PowerMockito {
 	@AdviseWith(adviceClasses = ReflectionUtilAdvice.class)
 	@NewEnv(type = NewEnv.Type.CLASSLOADER)
 	@Test
-	public void testInitializationFailure() throws ClassNotFoundException {
+	public void testInitializationFailure() {
 		Throwable throwable = new Throwable();
 
 		ReflectionUtilAdvice.setDeclaredFieldThrowable(throwable);
@@ -201,9 +202,7 @@ public class LiferayObjectWrapperTest extends PowerMockito {
 
 		// object is null
 
-		Object object = null;
-
-		result = _liferayObjectWrapper.wrap(object);
+		result = _liferayObjectWrapper.wrap(null);
 
 		Assert.assertNull(result);
 
