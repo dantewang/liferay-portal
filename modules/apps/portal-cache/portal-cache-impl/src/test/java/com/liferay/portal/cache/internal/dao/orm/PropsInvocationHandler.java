@@ -25,6 +25,14 @@ import java.lang.reflect.Method;
  */
 public class PropsInvocationHandler implements InvocationHandler {
 
+	public PropsInvocationHandler() {
+		this(0);
+	}
+
+	public PropsInvocationHandler(int localCacheMaxSize) {
+		_localCacheMaxSize = localCacheMaxSize;
+	}
+
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) {
 		String methodName = method.getName();
@@ -40,6 +48,13 @@ public class PropsInvocationHandler implements InvocationHandler {
 				return "true";
 			}
 
+			if (key.equals(
+					PropsKeys.
+						VALUE_OBJECT_ENTITY_THREAD_LOCAL_CACHE_MAX_SIZE)) {
+
+				return String.valueOf(_localCacheMaxSize);
+			}
+
 			if (PropsKeys.VALUE_OBJECT_FINDER_CACHE_LIST_THRESHOLD.equals(
 					key)) {
 
@@ -49,5 +64,7 @@ public class PropsInvocationHandler implements InvocationHandler {
 
 		return null;
 	}
+
+	private final int _localCacheMaxSize;
 
 }
