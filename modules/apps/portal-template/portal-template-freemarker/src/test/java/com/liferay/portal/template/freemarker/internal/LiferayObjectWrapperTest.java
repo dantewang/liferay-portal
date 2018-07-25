@@ -30,7 +30,7 @@ import freemarker.ext.beans.MapModel;
 import freemarker.ext.beans.ResourceBundleModel;
 import freemarker.ext.beans.StringModel;
 
-import freemarker.template.SimpleNumber;
+import freemarker.template.SimpleDate;
 import freemarker.template.SimpleSequence;
 import freemarker.template.TemplateModel;
 
@@ -214,23 +214,17 @@ public class LiferayObjectWrapperTest extends PowerMockito {
 
 		Assert.assertSame(templateModel, result);
 
-		// unknown object is Integer
+		// Test wrap unknown type after handleUnknownType
 
-		Integer integer = 0;
+		Date date = mock(Date.class);
 
-		result = _liferayObjectWrapper.wrap(integer);
+		result = _liferayObjectWrapper.wrap(date);
 
-		Assert.assertTrue(result instanceof SimpleNumber);
+		Assert.assertTrue(result instanceof SimpleDate);
 
-		// unknown object is String,call handleUnknownType method for test
+		_liferayObjectWrapper.handleUnknownType(date);
 
-		// modelFactory is not null
-
-		String string = "";
-
-		_liferayObjectWrapper.handleUnknownType(string);
-
-		result = _liferayObjectWrapper.wrap(string);
+		result = _liferayObjectWrapper.wrap(date);
 
 		Assert.assertTrue(result instanceof StringModel);
 	}
