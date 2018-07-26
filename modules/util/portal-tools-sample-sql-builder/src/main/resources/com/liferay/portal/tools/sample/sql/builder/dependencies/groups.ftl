@@ -43,9 +43,9 @@
 
 	<#assign fragmentEntryModels = dataFactory.newFragmentEntryModels(groupId) />
 
-	<list fragmentEntryModels?keys as fragmentEntryModelName>
-		${dataFactory.toInsertSQL(fragmentEntryModels.get(fragmentEntryModelName))}
-	</list>
+	<#list fragmentEntryModels?keys as fragmentEntryModelName>
+		${dataFactory.toInsertSQL(fragmentEntryModels["${fragmentEntryModelName}"])}
+	</#list>
 
 	<#assign contentLayoutModels = dataFactory.newContentLayoutModels(groupId) />
 
