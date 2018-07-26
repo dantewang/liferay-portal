@@ -17,6 +17,10 @@
 			/>
 			<fileset
 				dir="${sdk.dir}/dist"
+				includes="com.liferay.fragment.*.jar"
+			/>
+			<fileset
+				dir="${sdk.dir}/dist"
 				includes="com.liferay.friendly.url.*.jar"
 			/>
 			<fileset
