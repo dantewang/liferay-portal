@@ -47,6 +47,10 @@ public class PortalCacheInvocationHandler implements InvocationHandler {
 			if (_serialized) {
 				byte[] bytes = (byte[])_map.get(args[0]);
 
+				if (bytes == null) {
+					return null;
+				}
+
 				Deserializer deserializer = new Deserializer(
 					ByteBuffer.wrap(bytes));
 
