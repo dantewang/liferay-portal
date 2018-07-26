@@ -2026,6 +2026,11 @@ public class DataFactory {
 		String[] fragmentEntryNames = StringUtil.split(fragmentEntries);
 
 		for (int i = 0; i < fragmentEntryNames.length; i++) {
+			if(i == fragmentEntryNames.length - 1){
+				fragmentEntryNames[i] = fragmentEntryNames[i].substring(0, fragmentEntryNames[i].length() - 2);
+
+			}
+
 			fragmentEntryLinkModels.add(
 				newFragmentEntryLinkModel(
 					layoutModel, fragmentEntryModels.get(fragmentEntryNames[i]),
@@ -2297,7 +2302,7 @@ public class DataFactory {
 		portletPreferencesModel.setPlid(0);
 		portletPreferencesModel.setPortletId(portletId);
 		portletPreferencesModel.setPreferences(
-			PortletPreferencesFactoryUtil.toXML(portletPreferences));
+			_portletPreferencesFactory.toXML(portletPreferences));
 
 		return portletPreferencesModel;
 	}
