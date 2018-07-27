@@ -253,10 +253,10 @@ public class LiferayObjectWrapperTest {
 		Assert.assertTrue(result instanceof StringModel);
 	}
 
-	private class TestLiferayCollection extends ArrayList {
+	private class TestLiferayCollection extends ArrayList<Object> {
 	}
 
-	private class TestLiferayMap extends HashMap {
+	private class TestLiferayMap extends HashMap<String, Object> {
 	}
 
 	private class TestLiferayObject {
