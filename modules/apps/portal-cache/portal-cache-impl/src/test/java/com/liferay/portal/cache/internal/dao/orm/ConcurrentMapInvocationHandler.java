@@ -37,9 +37,9 @@ public class ConcurrentMapInvocationHandler implements InvocationHandler {
 		_portalCaches = portalCaches;
 	}
 
-	public void block(boolean fair) {
+	public void block() {
 		_count.set(0);
-		_semaphore = new Semaphore(0, fair);
+		_semaphore = new Semaphore(0);
 	}
 
 	public int getPutIfAbsentExecutionCount() {
