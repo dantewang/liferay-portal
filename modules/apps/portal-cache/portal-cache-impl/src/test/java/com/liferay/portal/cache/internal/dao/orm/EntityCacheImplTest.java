@@ -161,7 +161,7 @@ public class EntityCacheImplTest {
 			_entityCacheImpl.clearCache(FinderCacheImplTest.class);
 		}
 		catch (Exception e) {
-			Assert.fail(e.getMessage());
+			Assert.fail("Exception is thrown.");
 		}
 
 		PortalCache<Serializable, Serializable> entityCacheImplCache =
