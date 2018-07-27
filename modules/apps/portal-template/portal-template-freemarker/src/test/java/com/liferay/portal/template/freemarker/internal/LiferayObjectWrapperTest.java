@@ -117,7 +117,7 @@ public class LiferayObjectWrapperTest {
 
 		// Enumeration object
 
-		Enumeration enumeration = Collections.enumeration(
+		Enumeration<?> enumeration = Collections.enumeration(
 			Collections.emptyList());
 
 		result = liferayObjectWrapper.handleUnknownType(enumeration);
