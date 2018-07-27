@@ -133,6 +133,8 @@
 		<suppress checks="BNDSuiteCheck" files="modules/private/apps/lcs/.*" />
 		<suppress checks="JavaAPISignatureCheck" files="modules/apps/apio-architect/.*" />
 		<suppress checks="JavaAPISignatureCheck" files="modules/private/apps/commerce/.*" />
+		<suppress checks="JavaConfigurationCategoryCheck" files="modules/apps/apio-architect/.*" />
+		<suppress checks="JavaConfigurationCategoryCheck" files="modules/apps/commerce/.*" />
 		<suppress checks="JavaConfigurationCategoryCheck" files="modules/private/.*" />
 		<suppress checks="JavaDeprecatedKernelClassesCheck" files="modules/private/.*" />
 		<suppress checks="PropertiesLiferayPluginPackageLiferayVersionsCheck" files="modules/private/apio-architect/.*" />
