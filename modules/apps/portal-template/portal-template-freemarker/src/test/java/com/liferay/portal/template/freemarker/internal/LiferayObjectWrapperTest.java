@@ -199,25 +199,26 @@ public class LiferayObjectWrapperTest {
 
 		// Instance of Collection class starting with com.liferay.
 
-		TestLiferayCollection liferayCollection = new TestLiferayCollection();
+		TestLiferayCollection testLiferayCollection =
+			new TestLiferayCollection();
 
-		result = liferayObjectWrapper.wrap(liferayCollection);
+		result = liferayObjectWrapper.wrap(testLiferayCollection);
 
 		Assert.assertTrue(result instanceof SimpleSequence);
 
 		// Instance of Map class starting with com.liferay.
 
-		TestLiferayMap liferayMap = new TestLiferayMap();
+		TestLiferayMap testLiferayMap = new TestLiferayMap();
 
-		result = liferayObjectWrapper.wrap(liferayMap);
+		result = liferayObjectWrapper.wrap(testLiferayMap);
 
 		Assert.assertTrue(result instanceof MapModel);
 
 		// Instance of Unknown class starting with com.liferay.
 
-		TestLiferayObject liferayObject = new TestLiferayObject();
+		TestLiferayObject testLiferayObject = new TestLiferayObject();
 
-		result = liferayObjectWrapper.wrap(liferayObject);
+		result = liferayObjectWrapper.wrap(testLiferayObject);
 
 		Assert.assertTrue(result instanceof StringModel);
 
