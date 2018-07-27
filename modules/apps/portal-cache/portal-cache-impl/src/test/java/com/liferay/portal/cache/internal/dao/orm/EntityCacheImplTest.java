@@ -164,10 +164,10 @@ public class EntityCacheImplTest {
 			Assert.fail(e.getMessage());
 		}
 
-		PortalCache entityCacheImplCache = _entityCacheImpl.getPortalCache(
-			EntityCacheImpl.class);
-		PortalCache entityCacheImplTestCache = _entityCacheImpl.getPortalCache(
-			EntityCacheImplTest.class);
+		PortalCache<Serializable, Serializable> entityCacheImplCache =
+			_entityCacheImpl.getPortalCache(EntityCacheImpl.class);
+		PortalCache<Serializable, Serializable> entityCacheImplTestCache =
+			_entityCacheImpl.getPortalCache(EntityCacheImplTest.class);
 
 		entityCacheImplCache.put(_PRIMARY_KEY_1, _nullModel);
 		entityCacheImplTestCache.put(_PRIMARY_KEY_2, _nullModel);
@@ -222,29 +222,34 @@ public class EntityCacheImplTest {
 
 		_entityCacheImpl.dispose();
 
-		ConcurrentMap<String, PortalCache> portalCaches =
-			ReflectionTestUtil.getFieldValue(_entityCacheImpl, "_portalCaches");
+		ConcurrentMap<String, PortalCache<Serializable, Serializable>>
+			portalCaches = ReflectionTestUtil.getFieldValue(
+				_entityCacheImpl, "_portalCaches");
 
 		Assert.assertTrue(portalCaches.isEmpty());
 	}
 
 	@Test
 	public void testGetPortalCache() {
-		PortalCache portalCache = _entityCacheImpl.getPortalCache(
-			EntityCacheImplTest.class);
+		PortalCache<Serializable, Serializable> portalCache =
+			_entityCacheImpl.getPortalCache(EntityCacheImplTest.class);
+
+		String prefix = ReflectionTestUtil.getFieldValue(
+			_entityCacheImpl, "_GROUP_KEY_PREFIX");
 
 		String portalCacheName = portalCache.getPortalCacheName();
 
-		Assert.assertTrue(
-			portalCacheName,
-			portalCacheName.endsWith(EntityCacheImplTest.class.getName()));
+		Assert.assertNotNull(portalCacheName);
+		Assert.assertEquals(
+			prefix.concat(EntityCacheImplTest.class.getName()),
+			portalCacheName);
 
 		// Test Internal Map
 
-		PortalCache portalCache1 = _entityCacheImpl.getPortalCache(
-			EntityCacheImplTest.class);
+		PortalCache<Serializable, Serializable> anotherPortalCache =
+			_entityCacheImpl.getPortalCache(EntityCacheImplTest.class);
 
-		Assert.assertSame(portalCache, portalCache1);
+		Assert.assertSame(portalCache, anotherPortalCache);
 
 		// Test MVCC
 
@@ -268,16 +273,17 @@ public class EntityCacheImplTest {
 
 	@Test
 	public void testGetPortalCacheConcurrent() throws InterruptedException {
-		ConcurrentMap<String, PortalCache> portalCaches =
-			ReflectionTestUtil.getFieldValue(_entityCacheImpl, "_portalCaches");
+		ConcurrentMap<String, PortalCache<Serializable, Serializable>>
+			portalCaches = ReflectionTestUtil.getFieldValue(
+				_entityCacheImpl, "_portalCaches");
 
 		Assert.assertTrue(portalCaches.isEmpty());
 
 		ConcurrentMapInvocationHandler concurrentMapInvocationHandler =
 			new ConcurrentMapInvocationHandler(portalCaches);
 
-		ConcurrentMap<String, PortalCache> proxyPortalCaches =
-			(ConcurrentMap)ProxyUtil.newProxyInstance(
+		ConcurrentMap<String, PortalCache<Serializable, Serializable>>
+			proxyPortalCaches = (ConcurrentMap)ProxyUtil.newProxyInstance(
 				_classLoader, new Class<?>[] {ConcurrentMap.class},
 				concurrentMapInvocationHandler);
 
@@ -319,8 +325,8 @@ public class EntityCacheImplTest {
 
 	@Test
 	public void testGetResult() {
-		PortalCache portalCache = _entityCacheImpl.getPortalCache(
-			EntityCacheImplTest.class);
+		PortalCache<Serializable, Serializable> portalCache =
+			_entityCacheImpl.getPortalCache(EntityCacheImplTest.class);
 
 		portalCache.put(_PRIMARY_KEY_1, _nullModel);
 
@@ -369,8 +375,9 @@ public class EntityCacheImplTest {
 
 	@Test
 	public void testGetResultWithLocalCache() {
-		PortalCache portalCache = _entityCacheImplWithLocalCache.getPortalCache(
-			EntityCacheImplTest.class);
+		PortalCache<Serializable, Serializable> portalCache =
+			_entityCacheImplWithLocalCache.getPortalCache(
+				EntityCacheImplTest.class);
 
 		portalCache.put(_PRIMARY_KEY_1, _nullModel);
 
@@ -416,8 +423,8 @@ public class EntityCacheImplTest {
 
 		SessionFactory sessionFactory = _getSessionFactory(sessionLoadCount);
 
-		PortalCache portalCache = _entityCacheImpl.getPortalCache(
-			EntityCacheImplTest.class);
+		PortalCache<Serializable, Serializable> portalCache =
+			_entityCacheImpl.getPortalCache(EntityCacheImplTest.class);
 
 		// Test shortcut when method parameter entityCacheEnabled is false
 
@@ -599,8 +606,8 @@ public class EntityCacheImplTest {
 
 	@Test
 	public void testPutResult() {
-		PortalCache portalCache = _entityCacheImpl.getPortalCache(
-			EntityCacheImplTest.class);
+		PortalCache<Serializable, Serializable> portalCache =
+			_entityCacheImpl.getPortalCache(EntityCacheImplTest.class);
 
 		// Test shortcut when method parameter entityCacheEnabled is false
 
@@ -648,8 +655,8 @@ public class EntityCacheImplTest {
 
 		// Test put without replicator
 
-		TestPortalCacheReplicator testPortalCacheReplicator =
-			new TestPortalCacheReplicator();
+		TestPortalCacheReplicator<Serializable, Serializable>
+			testPortalCacheReplicator = new TestPortalCacheReplicator();
 
 		portalCache.registerPortalCacheListener(testPortalCacheReplicator);
 
@@ -731,6 +738,9 @@ public class EntityCacheImplTest {
 
 	@Test
 	public void testRemoveResult() {
+		PortalCache<Serializable, Serializable> portalCache =
+			_entityCacheImpl.getPortalCache(EntityCacheImplTest.class);
+
 		_entityCacheImpl.putResult(
 			true, EntityCacheImplTest.class, _PRIMARY_KEY_1, _nullModel);
 
@@ -739,9 +749,7 @@ public class EntityCacheImplTest {
 		_entityCacheImpl.removeResult(
 			false, EntityCacheImplTest.class, _PRIMARY_KEY_1);
 
-		Assert.assertNotNull(
-			_entityCacheImpl.getResult(
-				true, EntityCacheImplTest.class, _PRIMARY_KEY_1));
+		Assert.assertNotNull(portalCache.get(_PRIMARY_KEY_1));
 
 		// Test shortcut when _valueObjectEntityCacheEnabled is false
 
@@ -757,9 +765,7 @@ public class EntityCacheImplTest {
 				_entityCacheImpl, "_valueObjectEntityCacheEnabled", true);
 		}
 
-		Assert.assertNotNull(
-			_entityCacheImpl.getResult(
-				true, EntityCacheImplTest.class, _PRIMARY_KEY_1));
+		Assert.assertNotNull(portalCache.get(_PRIMARY_KEY_1));
 
 		// Test shortcut when CacheRegistryUtil.isActive() is false
 
@@ -773,18 +779,14 @@ public class EntityCacheImplTest {
 			CacheRegistryUtil.setActive(true);
 		}
 
-		Assert.assertNotNull(
-			_entityCacheImpl.getResult(
-				true, EntityCacheImplTest.class, _PRIMARY_KEY_1));
+		Assert.assertNotNull(portalCache.get(_PRIMARY_KEY_1));
 
 		// Test remove
 
 		_entityCacheImpl.removeResult(
 			true, EntityCacheImplTest.class, _PRIMARY_KEY_1);
 
-		Assert.assertNull(
-			_entityCacheImpl.getResult(
-				true, EntityCacheImplTest.class, _PRIMARY_KEY_1));
+		Assert.assertNull(portalCache.get(_PRIMARY_KEY_1));
 	}
 
 	@Test
@@ -916,11 +918,11 @@ public class EntityCacheImplTest {
 
 					if (mvcc) {
 						return new MVCCPortalCache(
-							new TestPortalCache(portalCacheName));
+							new TestPortalCache<>(portalCacheName));
 					}
 				}
 
-				return new TestPortalCache(portalCacheName);
+				return new TestPortalCache<>(portalCacheName);
 			}
 
 			return super.invoke(proxy, method, args);
