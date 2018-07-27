@@ -25,6 +25,17 @@ import java.lang.reflect.Method;
  */
 public class PropsInvocationHandler implements InvocationHandler {
 
+	public PropsInvocationHandler() {
+		this(true, true);
+	}
+
+	public PropsInvocationHandler(
+		boolean valueObjectFinderCacheEnabled, boolean localCacheAvailable) {
+
+		_valueObjectFinderCacheEnabled = valueObjectFinderCacheEnabled;
+		_localCacheAvailable = localCacheAvailable;
+	}
+
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) {
 		String methodName = method.getName();
@@ -43,11 +54,31 @@ public class PropsInvocationHandler implements InvocationHandler {
 			if (PropsKeys.VALUE_OBJECT_FINDER_CACHE_LIST_THRESHOLD.equals(
 					key)) {
 
-				return "-1";
+				if (_valueObjectFinderCacheEnabled) {
+					return "-1";
+				}
+				else {
+					return "0";
+				}
+			}
+
+			if (key.equals(
+					PropsKeys.
+						VALUE_OBJECT_FINDER_THREAD_LOCAL_CACHE_MAX_SIZE)) {
+
+				if (_localCacheAvailable) {
+					return "2";
+				}
+				else {
+					return "-1";
+				}
 			}
 		}
 
 		return null;
 	}
+
+	private boolean _localCacheAvailable;
+	private boolean _valueObjectFinderCacheEnabled;
 
 }
