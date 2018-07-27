@@ -311,16 +311,10 @@ public class EntityCacheImplTest {
 		ReflectionTestUtil.setFieldValue(
 			_entityCacheImpl, "_portalCaches", proxyPortalCaches);
 
-		// Test with a fair semaphore to ensure thread1 gets unblocked first
-
-		concurrentMapInvocationHandler.block(true);
-
-		List<PortalCache<Serializable, Serializable>> firstPortalCacheHolder =
-			new ArrayList<>(1);
+		concurrentMapInvocationHandler.block();
 
 		Thread thread1 = new Thread(
-			() -> firstPortalCacheHolder.add(
-				_entityCacheImpl.getPortalCache(EntityCacheImplTest.class)));
+			() -> _entityCacheImpl.getPortalCache(EntityCacheImplTest.class));
 
 		thread1.start();
 
@@ -342,9 +336,6 @@ public class EntityCacheImplTest {
 			"ConcurrentMap.putIfAbsent should be executed 2 times.", 2,
 			concurrentMapInvocationHandler.getPutIfAbsentExecutionCount());
 		Assert.assertEquals(portalCaches.toString(), 1, portalCaches.size());
-		Assert.assertSame(
-			firstPortalCacheHolder.get(0),
-			portalCaches.get(EntityCacheImplTest.class.getName()));
 	}
 
 	@Test
