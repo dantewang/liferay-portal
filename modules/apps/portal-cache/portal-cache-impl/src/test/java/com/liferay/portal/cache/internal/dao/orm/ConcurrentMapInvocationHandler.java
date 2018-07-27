@@ -16,6 +16,8 @@ package com.liferay.portal.cache.internal.dao.orm;
 
 import com.liferay.portal.kernel.cache.PortalCache;
 
+import java.io.Serializable;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
@@ -29,7 +31,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ConcurrentMapInvocationHandler implements InvocationHandler {
 
 	public ConcurrentMapInvocationHandler(
-		ConcurrentMap<String, PortalCache> portalCaches) {
+		ConcurrentMap<String, PortalCache<Serializable, Serializable>>
+			portalCaches) {
 
 		_portalCaches = portalCaches;
 	}
@@ -87,7 +90,8 @@ public class ConcurrentMapInvocationHandler implements InvocationHandler {
 	}
 
 	private final AtomicInteger _count = new AtomicInteger();
-	private final ConcurrentMap<String, PortalCache> _portalCaches;
+	private final ConcurrentMap<String, PortalCache<Serializable, Serializable>>
+		_portalCaches;
 	private volatile Semaphore _semaphore;
 
 }
