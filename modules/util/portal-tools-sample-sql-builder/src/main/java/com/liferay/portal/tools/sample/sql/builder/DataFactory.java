@@ -168,7 +168,6 @@ import com.liferay.portal.kernel.model.UserPersonalSite;
 import com.liferay.portal.kernel.model.VirtualHostModel;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
-import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.security.auth.FullNameGenerator;
 import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
@@ -1982,14 +1981,16 @@ public class DataFactory {
 	}
 
 	public FragmentEntryLinkModel newFragmentEntryLinkModel(
-        LayoutModel layoutModel, FragmentEntryModel fragmentEntryModel,
-        int position) {
+		LayoutModel layoutModel, FragmentEntryModel fragmentEntryModel,
+		int position) {
 
 		FragmentEntryLinkModel fragmentEntryLinkModel =
 			new FragmentEntryLinkModelImpl();
 
 		fragmentEntryLinkModel.setUuid(SequentialUUID.generate());
-		fragmentEntryLinkModel.setFragmentEntryId(_counter.get());
+		fragmentEntryLinkModel.setFragmentEntryLinkId(_counter.get());
+		fragmentEntryLinkModel.setFragmentEntryId(
+			fragmentEntryModel.getFragmentEntryId());
 		fragmentEntryLinkModel.setGroupId(fragmentEntryLinkModel.getGroupId());
 		fragmentEntryLinkModel.setCompanyId(_companyId);
 		fragmentEntryLinkModel.setUserId(_sampleUserId);
@@ -2010,7 +2011,7 @@ public class DataFactory {
 	}
 
 	public List<FragmentEntryLinkModel> newFragmentEntryLinkModels(
-        LayoutModel layoutModel,
+		LayoutModel layoutModel,
 		Map<String, FragmentEntryModel> fragmentEntryModels) {
 
 		List<FragmentEntryLinkModel> fragmentEntryLinkModels =
@@ -2026,9 +2027,9 @@ public class DataFactory {
 		String[] fragmentEntryNames = StringUtil.split(fragmentEntries);
 
 		for (int i = 0; i < fragmentEntryNames.length; i++) {
-			if(i == fragmentEntryNames.length - 1){
-				fragmentEntryNames[i] = fragmentEntryNames[i].substring(0, fragmentEntryNames[i].length() - 2);
-
+			if (i == (fragmentEntryNames.length - 1)) {
+				fragmentEntryNames[i] = fragmentEntryNames[i].substring(
+					0, fragmentEntryNames[i].length() - 2);
 			}
 
 			fragmentEntryLinkModels.add(
