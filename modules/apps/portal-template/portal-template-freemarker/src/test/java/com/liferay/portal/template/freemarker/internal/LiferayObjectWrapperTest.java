@@ -168,6 +168,7 @@ public class LiferayObjectWrapperTest {
 		// Map object
 
 		Map<String, String> map = new HashMap<>();
+
 		String testKey = "testKey";
 		String testValue = "testValue";
 
@@ -221,6 +222,7 @@ public class LiferayObjectWrapperTest {
 
 		try {
 			new LiferayObjectWrapper();
+
 			Assert.fail("no exception thrown!");
 		}
 		catch (Exception e) {
