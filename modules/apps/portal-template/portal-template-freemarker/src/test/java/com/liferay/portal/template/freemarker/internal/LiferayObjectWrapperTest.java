@@ -89,9 +89,8 @@ public class LiferayObjectWrapperTest {
 
 		NodeModel nodeModel = (NodeModel)result;
 
-		Node handledNode = nodeModel.getNode();
-
-		Assert.assertEquals(node.ELEMENT_NODE, handledNode.getNodeType());
+		Assert.assertSame(node, nodeModel.getNode());
+		Assert.assertEquals("element", nodeModel.getNodeType());
 
 		// TemplateNode object
 
