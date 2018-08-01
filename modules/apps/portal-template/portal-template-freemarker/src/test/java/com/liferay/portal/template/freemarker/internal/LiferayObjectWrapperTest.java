@@ -103,8 +103,9 @@ public class LiferayObjectWrapperTest {
 		LiferayTemplateModel liferayTemplateModel =
 			(LiferayTemplateModel)result;
 
-		Assert.assertEquals(
-			"testName", liferayTemplateModel.get("name").toString());
+		TemplateModel nameModel = liferayTemplateModel.get("name");
+
+		Assert.assertEquals("testName", nameModel.toString());
 
 		// ResourceBundle object
 
@@ -148,7 +149,9 @@ public class LiferayObjectWrapperTest {
 
 		EnumerationModel enumerationModel = (EnumerationModel)result;
 
-		Assert.assertEquals(testElement, enumerationModel.next().toString());
+		TemplateModel nextModel = enumerationModel.next();
+
+		Assert.assertEquals(testElement, nextModel.toString());
 
 		// Collection object
 
@@ -158,7 +161,9 @@ public class LiferayObjectWrapperTest {
 
 		SimpleSequence simpleSequence = (SimpleSequence)result;
 
-		Assert.assertEquals(testElement, simpleSequence.get(0).toString());
+		TemplateModel elementModel = simpleSequence.get(0);
+
+		Assert.assertEquals(testElement, elementModel.toString());
 
 		// Map object
 
@@ -174,7 +179,9 @@ public class LiferayObjectWrapperTest {
 
 		MapModel mapModel = (MapModel)result;
 
-		Assert.assertEquals(testValue, mapModel.get(testKey).toString());
+		TemplateModel testValueModel = mapModel.get(testKey);
+
+		Assert.assertEquals(testValue, testValueModel.toString());
 
 		// Unknown type object
 
@@ -242,8 +249,9 @@ public class LiferayObjectWrapperTest {
 		LiferayTemplateModel liferayTemplateModel =
 			(LiferayTemplateModel)result;
 
-		Assert.assertEquals(
-			"testName", liferayTemplateModel.get("name").toString());
+		TemplateModel nameModel = liferayTemplateModel.get("name");
+
+		Assert.assertEquals("testName", nameModel.toString());
 
 		// Instance of Collection class starting with com.liferay.
 
@@ -260,7 +268,9 @@ public class LiferayObjectWrapperTest {
 
 		SimpleSequence simpleSequence = (SimpleSequence)result;
 
-		Assert.assertEquals(testElement, simpleSequence.get(0).toString());
+		TemplateModel elementModel = simpleSequence.get(0);
+
+		Assert.assertEquals(testElement, elementModel.toString());
 
 		// Instance of Map class starting with com.liferay.
 
@@ -277,7 +287,9 @@ public class LiferayObjectWrapperTest {
 
 		MapModel mapModel = (MapModel)result;
 
-		Assert.assertEquals(testValue, mapModel.get(testKey).toString());
+		TemplateModel testValueModel = mapModel.get(testKey);
+
+		Assert.assertEquals(testValue, testValueModel.toString());
 
 		// Instance of Unknown class starting with com.liferay.
 
