@@ -138,7 +138,7 @@ public class LiferayObjectWrapperTest {
 
 		String testElement = "testElement";
 
-		list.add(0, testElement);
+		list.add(testElement);
 
 		Enumeration<String> enumeration = Collections.enumeration(list);
 
@@ -252,7 +252,7 @@ public class LiferayObjectWrapperTest {
 
 		String testElement = "testElement";
 
-		testLiferayCollection.add(0, testElement);
+		testLiferayCollection.add(testElement);
 
 		result = liferayObjectWrapper.wrap(testLiferayCollection);
 
