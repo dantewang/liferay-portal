@@ -179,15 +179,15 @@ public class LiferayObjectWrapperTest {
 
 		// Unknown type object
 
-		Date date = new Date();
+		Thread thread = new Thread("testThread");
 
-		result = liferayObjectWrapper.handleUnknownType(date);
+		result = liferayObjectWrapper.handleUnknownType(thread);
 
 		Assert.assertTrue(result instanceof StringModel);
 
 		StringModel stringModel = (StringModel)result;
 
-		Assert.assertEquals(date.toString(), stringModel.toString());
+		Assert.assertEquals(thread.toString(), stringModel.getAsString());
 	}
 
 	@AdviseWith(adviceClasses = ReflectionUtilAdvice.class)
