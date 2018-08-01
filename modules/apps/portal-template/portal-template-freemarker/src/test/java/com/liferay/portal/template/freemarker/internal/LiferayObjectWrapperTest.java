@@ -135,8 +135,13 @@ public class LiferayObjectWrapperTest {
 
 		// Enumeration object
 
-		Enumeration<?> enumeration = Collections.enumeration(
-			Collections.emptyList());
+		List<String> list = new ArrayList<>();
+
+		String testElement = "testElement";
+
+		list.add(0, testElement);
+
+		Enumeration<String> enumeration = Collections.enumeration(list);
 
 		result = liferayObjectWrapper.handleUnknownType(enumeration);
 
@@ -144,15 +149,9 @@ public class LiferayObjectWrapperTest {
 
 		EnumerationModel enumerationModel = (EnumerationModel)result;
 
-		Assert.assertFalse(enumerationModel.hasNext());
+		Assert.assertEquals(testElement, enumerationModel.next().toString());
 
 		// Collection object
-
-		List<String> list = new ArrayList<>();
-
-		String testElement = "testElement";
-
-		list.add(0, testElement);
 
 		result = liferayObjectWrapper.handleUnknownType(list);
 
