@@ -30,7 +30,6 @@ import freemarker.ext.beans.ResourceBundleModel;
 import freemarker.ext.beans.StringModel;
 import freemarker.ext.dom.NodeModel;
 
-import freemarker.template.SimpleDate;
 import freemarker.template.SimpleSequence;
 import freemarker.template.TemplateModel;
 
@@ -38,12 +37,12 @@ import java.lang.reflect.Field;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -310,27 +309,34 @@ public class LiferayObjectWrapperTest {
 
 		Assert.assertSame(templateModel, result);
 
-		// Wrap unknown type after handleUnknownType
+		// Test that handleUnknownType() cache is used by wrap()
 
-		Date date = new Date();
+		AtomicInteger handleUnknowTypeCount = new AtomicInteger(0);
 
-		result = liferayObjectWrapper.wrap(date);
+		liferayObjectWrapper = new LiferayObjectWrapper() {
 
-		Assert.assertTrue(result instanceof SimpleDate);
+			@Override
+			protected TemplateModel handleUnknownType(Object object) {
+				handleUnknowTypeCount.incrementAndGet();
 
-		SimpleDate simpleDate = (SimpleDate)result;
+				return super.handleUnknownType(object);
+			}
 
-		Assert.assertEquals(date.toString(), simpleDate.toString());
+		};
 
-		liferayObjectWrapper.handleUnknownType(date);
+		Thread thread = new Thread("testThread");
 
-		result = liferayObjectWrapper.wrap(date);
+		liferayObjectWrapper.wrap(thread);
 
-		Assert.assertTrue(result instanceof StringModel);
+		Assert.assertEquals(1, handleUnknowTypeCount.get());
+
+		result = liferayObjectWrapper.wrap(thread);
+
+		Assert.assertEquals(1, handleUnknowTypeCount.get());
 
 		stringModel = (StringModel)result;
 
-		Assert.assertEquals(date.toString(), stringModel.toString());
+		Assert.assertEquals(thread.toString(), stringModel.getAsString());
 	}
 
 	private class TestLiferayCollection extends ArrayList<Object> {
