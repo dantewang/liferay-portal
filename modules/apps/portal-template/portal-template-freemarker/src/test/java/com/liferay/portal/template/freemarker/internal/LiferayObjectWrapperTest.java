@@ -290,7 +290,7 @@ public class LiferayObjectWrapperTest {
 		StringModel stringModel = (StringModel)result;
 
 		Assert.assertEquals(
-			testLiferayObject.toString(), stringModel.toString());
+			testLiferayObject.toString(), stringModel.getAsString());
 
 		// null
 
