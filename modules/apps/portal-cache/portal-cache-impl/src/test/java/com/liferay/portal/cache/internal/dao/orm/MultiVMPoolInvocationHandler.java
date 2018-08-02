@@ -14,9 +14,14 @@
 
 package com.liferay.portal.cache.internal.dao.orm;
 
+import com.liferay.portal.cache.LowLevelCache;
+import com.liferay.portal.cache.MVCCPortalCache;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
+import com.liferay.portal.kernel.model.MVCCModel;
 import com.liferay.portal.kernel.util.ProxyUtil;
+
+import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -42,6 +47,20 @@ public class MultiVMPoolInvocationHandler implements InvocationHandler {
 
 		if (methodName.equals("getPortalCache") && (args != null) &&
 			(args.length > 0) && (args[0] instanceof String)) {
+
+			if ((args.length == 3) && (args[2] instanceof Boolean) &&
+				(boolean)args[2]) {
+
+				return new MVCCPortalCache<>(
+					(LowLevelCache<? extends Serializable, ? extends MVCCModel>)
+						ProxyUtil.newProxyInstance(
+							_classLoader,
+							new Class<?>[] {
+								PortalCache.class, LowLevelCache.class
+							},
+							new PortalCacheInvocationHandler(
+								(String)args[0], _serialized)));
+			}
 
 			return ProxyUtil.newProxyInstance(
 				_classLoader, new Class<?>[] {PortalCache.class},

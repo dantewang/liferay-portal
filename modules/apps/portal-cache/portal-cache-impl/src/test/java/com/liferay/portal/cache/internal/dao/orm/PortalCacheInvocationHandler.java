@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 
 import java.nio.ByteBuffer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +51,10 @@ public class PortalCacheInvocationHandler implements InvocationHandler {
 			if (_serialized) {
 				byte[] bytes = (byte[])_map.get(args[0]);
 
+				if (bytes == null) {
+					return null;
+				}
+
 				Deserializer deserializer = new Deserializer(
 					ByteBuffer.wrap(bytes));
 
@@ -57,6 +62,10 @@ public class PortalCacheInvocationHandler implements InvocationHandler {
 			}
 
 			return _map.get(args[0]);
+		}
+
+		if (methodName.equals("getKeys")) {
+			return new ArrayList<>(_map.keySet());
 		}
 
 		if (methodName.equals("getPortalCacheName")) {
@@ -80,6 +89,10 @@ public class PortalCacheInvocationHandler implements InvocationHandler {
 
 		if (methodName.equals("remove")) {
 			return _map.remove(args[0]);
+		}
+
+		if (methodName.equals("removeAll")) {
+			_map.clear();
 		}
 
 		return null;
