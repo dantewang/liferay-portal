@@ -61,7 +61,9 @@ public class ResourceRequestImpl
 
 	@Override
 	public DispatcherType getDispatcherType() {
-		return getHttpServletRequest().getDispatcherType();
+		HttpServletRequest httpServletRequest = getHttpServletRequest();
+
+		return httpServletRequest.getDispatcherType();
 	}
 
 	@Override
