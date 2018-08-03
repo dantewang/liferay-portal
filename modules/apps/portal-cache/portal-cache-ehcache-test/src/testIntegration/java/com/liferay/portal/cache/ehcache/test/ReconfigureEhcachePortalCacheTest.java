@@ -17,17 +17,18 @@ package com.liferay.portal.cache.ehcache.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.lang.management.ManagementFactory;
+
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import java.lang.management.ManagementFactory;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Stream;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author Dante Wang
@@ -36,23 +37,20 @@ import java.util.stream.Stream;
 public class ReconfigureEhcachePortalCacheTest {
 
 	@Test
-	public void testEhcachePortalCacheReconfigured()
-		throws Exception {
+	public void testEhcachePortalCacheReconfigured() throws Exception {
+		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
 
-		MBeanServer _mBeanServer = ManagementFactory.getPlatformMBeanServer();
-
-		Set<ObjectName> objectNames = _mBeanServer.queryNames(
+		Set<ObjectName> objectNames = mBeanServer.queryNames(
 			null, new ObjectName("net.sf.ehcache".concat(":*")));
 
 		Stream<ObjectName> stream = objectNames.stream();
 
 		Optional<ObjectName> result = stream.filter(
-			objectName ->
-				"CacheConfiguration".equals(objectName.getKeyProperty("type"))
+			objectName -> "CacheConfiguration".equals(
+				objectName.getKeyProperty("type"))
 		).filter(
-			objectName ->
-				PortalCacheManagerNames.MULTI_VM.equals(
-					objectName.getKeyProperty("CacheManager"))
+			objectName -> PortalCacheManagerNames.MULTI_VM.equals(
+				objectName.getKeyProperty("CacheManager"))
 		).filter(
 			objectName -> {
 				String name = objectName.getKeyProperty("name");
@@ -64,9 +62,8 @@ public class ReconfigureEhcachePortalCacheTest {
 
 		Assert.assertTrue(result.isPresent());
 
-		String maxElementsInMemory =
-			String.valueOf(
-				_mBeanServer.getAttribute(result.get(), "MaxElementsInMemory"));
+		String maxElementsInMemory = String.valueOf(
+			mBeanServer.getAttribute(result.get(), "MaxElementsInMemory"));
 
 		Assert.assertEquals("1", maxElementsInMemory);
 	}
