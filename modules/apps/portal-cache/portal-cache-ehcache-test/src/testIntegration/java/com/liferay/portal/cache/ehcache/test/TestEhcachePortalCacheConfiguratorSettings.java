@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Reference;
 	service = PortalCacheConfiguratorSettings.class
 )
 public class TestEhcachePortalCacheConfiguratorSettings
-	extends PortalCacheConfiguratorSettings{
+	extends PortalCacheConfiguratorSettings {
 
 	public TestEhcachePortalCacheConfiguratorSettings() {
 		super(
