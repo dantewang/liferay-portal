@@ -17,7 +17,7 @@ package com.liferay.portal.kernel.portlet;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.petra.lang.CentralizedThreadLocal;
-import com.liferay.petra.lang.ClassLoaderPool;
+import com.liferay.petra.lang.ServletClassLoaderPool;
 
 import javax.servlet.ServletContext;
 
@@ -28,7 +28,7 @@ import javax.servlet.ServletContext;
 public class PortletClassLoaderUtil {
 
 	public static ClassLoader getClassLoader() {
-		return ClassLoaderPool.getClassLoader(getServletContextName());
+		return ServletClassLoaderPool.getClassLoader(getServletContextName());
 	}
 
 	public static ClassLoader getClassLoader(String portletId) {
