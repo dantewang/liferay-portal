@@ -134,11 +134,11 @@ public class RMIMultiVMEhcachePortalCacheManagerConfiguratorTest {
 			configuration, portalCacheManagerConfiguration);
 
 		List<FactoryConfiguration>
-			cacheManagerPeerProviderFactoryConfigurationLsit =
+			cacheManagerPeerProviderFactoryConfigurations =
 				configuration.getCacheManagerPeerProviderFactoryConfiguration();
 
 		FactoryConfiguration peerProviderFactoryConfiguration =
-			cacheManagerPeerProviderFactoryConfigurationLsit.get(0);
+			cacheManagerPeerProviderFactoryConfigurations.get(0);
 
 		Assert.assertSame(
 			PropsInvocationHandler.
