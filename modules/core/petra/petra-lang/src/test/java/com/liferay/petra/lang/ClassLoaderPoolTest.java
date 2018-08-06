@@ -14,12 +14,14 @@
 
 package com.liferay.petra.lang;
 
+import com.liferay.petra.lang.internal.ClassLoaderPoolImpl;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -34,17 +36,28 @@ public class ClassLoaderPoolTest {
 
 	@ClassRule
 	public static final CodeCoverageAssertor codeCoverageAssertor =
-		CodeCoverageAssertor.INSTANCE;
+		new CodeCoverageAssertor() {
+
+			@Override
+			public void appendAssertClasses(List<Class<?>> assertClasses) {
+				assertClasses.add(ClassLoaderPoolImpl.class);
+			}
+
+		};
 
 	@Before
 	public void setUp() {
+		ClassLoaderPoolImpl classLoaderPoolImpl =
+			ReflectionTestUtil.getFieldValue(
+				ClassLoaderPool.class, "_classLoaderPoolImpl");
+
 		_classLoaders = ReflectionTestUtil.getFieldValue(
-			ClassLoaderPool.class, "_classLoaders");
+			classLoaderPoolImpl, "_classLoaders");
 
 		_classLoaders.clear();
 
 		_contextNames = ReflectionTestUtil.getFieldValue(
-			ClassLoaderPool.class, "_contextNames");
+			classLoaderPoolImpl, "_contextNames");
 
 		_contextNames.clear();
 	}
