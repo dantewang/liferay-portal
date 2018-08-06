@@ -14,7 +14,7 @@
 
 package com.liferay.portal.resiliency.service;
 
-import com.liferay.petra.lang.ClassLoaderPool;
+import com.liferay.petra.lang.ServletClassLoaderPool;
 import com.liferay.portal.internal.resiliency.service.ServiceMethodProcessCallable;
 import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiServiceInvokerUtil;
 import com.liferay.portal.kernel.nio.intraband.rpc.IntrabandRPCUtil;
@@ -57,7 +57,7 @@ public class PortalResiliencyAdvice
 
 		Class<?> targetClass = targetObject.getClass();
 
-		String servletContextName = ClassLoaderPool.getContextName(
+		String servletContextName = ServletClassLoaderPool.getContextName(
 			targetClass.getClassLoader());
 
 		SPI spi = SPIRegistryUtil.getServletContextSPI(servletContextName);

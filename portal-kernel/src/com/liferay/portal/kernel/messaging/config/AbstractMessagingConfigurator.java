@@ -14,7 +14,7 @@
 
 package com.liferay.portal.kernel.messaging.config;
 
-import com.liferay.petra.lang.ClassLoaderPool;
+import com.liferay.petra.lang.ServletClassLoaderPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.DestinationConfiguration;
@@ -156,7 +156,7 @@ public abstract class AbstractMessagingConfigurator
 
 		ClassLoader operatingClassLoader = getOperatingClassloader();
 
-		String servletContextName = ClassLoaderPool.getContextName(
+		String servletContextName = ServletClassLoaderPool.getContextName(
 			operatingClassLoader);
 
 		MessagingConfiguratorRegistry.unregisterMessagingConfigurator(
@@ -279,7 +279,7 @@ public abstract class AbstractMessagingConfigurator
 
 		connect();
 
-		String servletContextName = ClassLoaderPool.getContextName(
+		String servletContextName = ServletClassLoaderPool.getContextName(
 			operatingClassLoader);
 
 		if ((servletContextName != null) &&

@@ -17,7 +17,7 @@ package com.liferay.portal.service.impl;
 import com.liferay.admin.kernel.util.PortalMyAccountApplicationType;
 import com.liferay.expando.kernel.model.CustomAttributesDisplay;
 import com.liferay.petra.content.ContentUtil;
-import com.liferay.petra.lang.ClassLoaderPool;
+import com.liferay.petra.lang.ServletClassLoaderPool;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.application.type.ApplicationType;
@@ -302,7 +302,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		PortletBagFactory portletBagFactory = new PortletBagFactory();
 
 		portletBagFactory.setClassLoader(
-			ClassLoaderPool.getClassLoader(
+			ServletClassLoaderPool.getClassLoader(
 				servletContext.getServletContextName()));
 		portletBagFactory.setServletContext(servletContext);
 		portletBagFactory.setWARFile(true);
@@ -912,7 +912,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		PortletBagFactory portletBagFactory = new PortletBagFactory();
 
 		portletBagFactory.setClassLoader(
-			ClassLoaderPool.getClassLoader(servletContextName));
+			ServletClassLoaderPool.getClassLoader(servletContextName));
 		portletBagFactory.setServletContext(servletContext);
 		portletBagFactory.setWARFile(true);
 
