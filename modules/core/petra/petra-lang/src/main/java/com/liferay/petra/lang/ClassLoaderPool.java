@@ -14,8 +14,7 @@
 
 package com.liferay.petra.lang;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import com.liferay.petra.lang.internal.ClassLoaderPoolImpl;
 
 /**
  * Maps servlet context names to/from the servlet context's class loader.
@@ -36,19 +35,7 @@ public class ClassLoaderPool {
 	 * @return the class loader associated with the context name
 	 */
 	public static ClassLoader getClassLoader(String contextName) {
-		ClassLoader classLoader = null;
-
-		if ((contextName != null) && !contextName.equals("null")) {
-			classLoader = _classLoaders.get(contextName);
-		}
-
-		if (classLoader == null) {
-			Thread currentThread = Thread.currentThread();
-
-			classLoader = currentThread.getContextClassLoader();
-		}
-
-		return classLoader;
+		return _classLoaderPoolImpl.getClassLoader(contextName);
 	}
 
 	/**
@@ -64,44 +51,23 @@ public class ClassLoaderPool {
 	 * @return the context name associated with the class loader
 	 */
 	public static String getContextName(ClassLoader classLoader) {
-		if (classLoader == null) {
-			return "null";
-		}
-
-		String contextName = _contextNames.get(classLoader);
-
-		if (contextName == null) {
-			contextName = "null";
-		}
-
-		return contextName;
+		return _classLoaderPoolImpl.getContextName(classLoader);
 	}
 
 	public static void register(String contextName, ClassLoader classLoader) {
-		_classLoaders.put(contextName, classLoader);
-		_contextNames.put(classLoader, contextName);
+		_classLoaderPoolImpl.register(contextName, classLoader);
 	}
 
 	public static void unregister(ClassLoader classLoader) {
-		String contextName = _contextNames.remove(classLoader);
-
-		if (contextName != null) {
-			_classLoaders.remove(contextName);
-		}
+		_classLoaderPoolImpl.unregister(classLoader);
 	}
 
 	public static void unregister(String contextName) {
-		ClassLoader classLoader = _classLoaders.remove(contextName);
-
-		if (classLoader != null) {
-			_contextNames.remove(classLoader);
-		}
+		_classLoaderPoolImpl.unregister(contextName);
 	}
 
-	private static final Map<String, ClassLoader> _classLoaders =
-		new ConcurrentHashMap<>();
-	private static final Map<ClassLoader, String> _contextNames =
-		new ConcurrentHashMap<>();
+	private static final ClassLoaderPoolImpl _classLoaderPoolImpl =
+		new ClassLoaderPoolImpl();
 
 	static {
 		register("GlobalClassLoader", ClassLoaderPool.class.getClassLoader());
