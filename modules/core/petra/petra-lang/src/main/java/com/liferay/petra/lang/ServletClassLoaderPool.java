@@ -14,6 +14,8 @@
 
 package com.liferay.petra.lang;
 
+import com.liferay.petra.lang.internal.ClassLoaderPoolImpl;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,64 +25,36 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ServletClassLoaderPool {
 
 	public static ClassLoader getClassLoader(String contextName) {
-		ClassLoader classLoader = null;
-
-		if ((contextName != null) && !contextName.equals("null")) {
-			classLoader = _classLoaders.get(contextName);
-		}
-
-		if (classLoader == null) {
-			Thread currentThread = Thread.currentThread();
-
-			classLoader = currentThread.getContextClassLoader();
-		}
-
-		return classLoader;
+		return _classLoaderPoolImpl.getClassLoader(contextName);
 	}
 
 	public static String getContextName(ClassLoader classLoader) {
-		if (classLoader == null) {
-			return "null";
-		}
-
-		String contextName = _contextNames.get(classLoader);
-
-		if (contextName == null) {
-			contextName = "null";
-		}
-
-		return contextName;
+		return _classLoaderPoolImpl.getContextName(classLoader);
 	}
 
 	public static void register(String contextName, ClassLoader classLoader) {
-		_classLoaders.put(contextName, classLoader);
-		_contextNames.put(classLoader, contextName);
+		_classLoaderPoolImpl.register(contextName, classLoader);
 	}
 
 	public static void unregister(ClassLoader classLoader) {
-		String contextName = _contextNames.remove(classLoader);
-
-		if (contextName != null) {
-			_classLoaders.remove(contextName);
-		}
+		_classLoaderPoolImpl.unregister(classLoader);
 	}
 
 	public static void unregister(String contextName) {
-		ClassLoader classLoader = _classLoaders.remove(contextName);
-
-		if (classLoader != null) {
-			_contextNames.remove(classLoader);
-		}
+		_classLoaderPoolImpl.unregister(contextName);
 	}
 
+	private static final ClassLoaderPoolImpl _classLoaderPoolImpl;
 	private static final Map<String, ClassLoader> _classLoaders =
 		new ConcurrentHashMap<>();
 	private static final Map<ClassLoader, String> _contextNames =
 		new ConcurrentHashMap<>();
 
 	static {
-		register(
-			"GlobalClassLoader", ServletClassLoaderPool.class.getClassLoader());
+		_classLoaderPoolImpl = new ClassLoaderPoolImpl(
+			_classLoaders, _contextNames);
+
+		register("GlobalClassLoader", ClassLoaderPool.class.getClassLoader());
 	}
 
 }
