@@ -14,7 +14,7 @@
 
 package com.liferay.portal.kernel.util;
 
-import com.liferay.petra.lang.ClassLoaderPool;
+import com.liferay.petra.lang.ServletClassLoaderPool;
 
 /**
  * @author Raymond Augé
@@ -43,7 +43,7 @@ public class ClassLoaderUtil {
 		}
 
 		for (int i = 0; i < servletContextNames.length; i++) {
-			classLoaders[offset + i] = ClassLoaderPool.getClassLoader(
+			classLoaders[offset + i] = ServletClassLoaderPool.getClassLoader(
 				servletContextNames[i]);
 		}
 
@@ -61,7 +61,7 @@ public class ClassLoaderUtil {
 	}
 
 	public static ClassLoader getPluginClassLoader(String servletContextName) {
-		return ClassLoaderPool.getClassLoader(servletContextName);
+		return ServletClassLoaderPool.getClassLoader(servletContextName);
 	}
 
 	public static ClassLoader getPortalClassLoader() {
