@@ -101,9 +101,27 @@ public class TagResourceBundleUtil {
 				JavaConstants.JAVAX_PORTLET_CONFIG);
 
 			if (portletConfig != null) {
-				resourceBundleLoader = locale -> {
-					return portletConfig.getResourceBundle(locale);
-				};
+				resourceBundleLoader =
+					locale -> portletConfig.getResourceBundle(locale);
+
+				ServletContext servletContext = request.getServletContext();
+
+				String servletContextName =
+					servletContext.getServletContextName();
+
+				if (!Validator.isNull(servletContextName)) {
+					ResourceBundleLoader servletContextResourceBundlerLoader =
+						ResourceBundleLoaderUtil.
+							getResourceBundleLoaderByServletContextName(
+								servletContextName);
+
+					if (servletContextResourceBundlerLoader != null) {
+						resourceBundleLoader =
+							new AggregateResourceBundleLoader(
+								resourceBundleLoader,
+								servletContextResourceBundlerLoader);
+					}
+				}
 			}
 			else {
 				ServletContext servletContext = request.getServletContext();
