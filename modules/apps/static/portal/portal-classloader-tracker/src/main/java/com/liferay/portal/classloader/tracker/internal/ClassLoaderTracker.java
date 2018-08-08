@@ -53,7 +53,7 @@ public class ClassLoaderTracker implements BundleActivator {
 				Bundle bundle, BundleEvent bundleEvent,
 				ClassLoader classLoader) {
 
-				ClassLoaderPool.unregister(classLoader);
+				ClassLoaderPool.unregister(_toClassLoaderName(bundle));
 			}
 
 		};
