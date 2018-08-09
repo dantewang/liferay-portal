@@ -14,13 +14,13 @@
 
 package com.liferay.taglib.util;
 
+import com.liferay.petra.lang.ServletClassLoaderPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Theme;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
-import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.servlet.taglib.DynamicIncludeUtil;
 import com.liferay.portal.kernel.template.Template;
@@ -140,8 +140,8 @@ public class ThemeUtil {
 		ClassLoader pluginClassLoader = null;
 
 		if (pluginServletContext != null) {
-			pluginClassLoader = (ClassLoader)pluginServletContext.getAttribute(
-				PluginContextListener.PLUGIN_CLASS_LOADER);
+			pluginClassLoader = ServletClassLoaderPool.getClassLoader(
+				pluginServletContext.getServletContextName());
 		}
 
 		Thread currentThread = Thread.currentThread();

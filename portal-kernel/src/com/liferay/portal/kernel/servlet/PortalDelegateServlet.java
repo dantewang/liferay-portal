@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.servlet;
 
+import com.liferay.petra.lang.ServletClassLoaderPool;
 import com.liferay.portal.kernel.util.InstanceFactory;
 
 import javax.servlet.Servlet;
@@ -41,8 +42,8 @@ public class PortalDelegateServlet extends SecureServlet {
 	protected void doPortalInit() throws Exception {
 		ServletContext servletContext = servletConfig.getServletContext();
 
-		ClassLoader classLoader = (ClassLoader)servletContext.getAttribute(
-			PluginContextListener.PLUGIN_CLASS_LOADER);
+		ClassLoader classLoader = ServletClassLoaderPool.getClassLoader(
+			servletContext.getServletContextName());
 
 		String servletClass = servletConfig.getInitParameter("servlet-class");
 
