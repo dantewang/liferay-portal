@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.internal;
 
+import com.liferay.petra.lang.ServletClassLoaderPool;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -31,7 +32,6 @@ import com.liferay.portal.kernel.portlet.PortletFilterUtil;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.BufferCacheServletResponse;
-import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.kernel.servlet.PortletServlet;
 import com.liferay.portal.kernel.util.ClassLoaderUtil;
 import com.liferay.portal.kernel.util.ClassUtil;
@@ -223,9 +223,11 @@ public class InvokerPortletImpl
 
 	@Override
 	public ClassLoader getPortletClassLoader() {
-		ClassLoader classLoader =
-			(ClassLoader)_liferayPortletContext.getAttribute(
-				PluginContextListener.PLUGIN_CLASS_LOADER);
+		ServletContext servletContext =
+			_liferayPortletContext.getServletContext();
+
+		ClassLoader classLoader = ServletClassLoaderPool.getClassLoader(
+			servletContext.getServletContextName());
 
 		if (classLoader == null) {
 			classLoader = ClassLoaderUtil.getPortalClassLoader();
