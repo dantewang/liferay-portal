@@ -14,16 +14,12 @@
 
 package com.liferay.portal.kernel.servlet;
 
-import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.portal.kernel.deploy.hot.HotDeployEvent;
 import com.liferay.portal.kernel.deploy.hot.HotDeployUtil;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
+import com.liferay.portal.kernel.util.ServletContextClassLoaderPool;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextAttributeEvent;
-import javax.servlet.ServletContextAttributeListener;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -31,86 +27,14 @@ import javax.servlet.ServletContextListener;
  * @author Brian Wing Shun Chan
  */
 public class PluginContextListener
-	extends BasePortalLifecycle
-	implements ServletContextAttributeListener, ServletContextListener {
-
-	public static final String PLUGIN_CLASS_LOADER = "PLUGIN_CLASS_LOADER";
-
-	@Override
-	public void attributeAdded(
-		ServletContextAttributeEvent servletContextAttributeEvent) {
-
-		if (servletContextAttributeEvent.getServletContext() !=
-				servletContext) {
-
-			return;
-		}
-
-		String name = servletContextAttributeEvent.getName();
-
-		if (_addedPluginClassLoader && name.equals(PLUGIN_CLASS_LOADER) &&
-			(servletContextAttributeEvent.getValue() != pluginClassLoader)) {
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(
-					"Preventing the addition of another plugin class loader");
-			}
-
-			servletContext.setAttribute(PLUGIN_CLASS_LOADER, pluginClassLoader);
-		}
-		else if (!_addedPluginClassLoader && name.equals(PLUGIN_CLASS_LOADER)) {
-			_addedPluginClassLoader = true;
-		}
-	}
-
-	@Override
-	public void attributeRemoved(
-		ServletContextAttributeEvent servletContextAttributeEvent) {
-
-		if (servletContextAttributeEvent.getServletContext() !=
-				servletContext) {
-
-			return;
-		}
-
-		String name = servletContextAttributeEvent.getName();
-
-		if (_addedPluginClassLoader && name.equals(PLUGIN_CLASS_LOADER)) {
-			if (_log.isWarnEnabled()) {
-				_log.warn("Preventing the removal of the plugin class loader");
-			}
-
-			servletContext.setAttribute(PLUGIN_CLASS_LOADER, pluginClassLoader);
-		}
-	}
-
-	@Override
-	public void attributeReplaced(
-		ServletContextAttributeEvent servletContextAttributeEvent) {
-
-		if (servletContextAttributeEvent.getServletContext() !=
-				servletContext) {
-
-			return;
-		}
-
-		String name = servletContextAttributeEvent.getName();
-
-		if (_addedPluginClassLoader && name.equals(PLUGIN_CLASS_LOADER)) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(
-					"Preventing the replacement of the plugin class loader");
-			}
-
-			servletContext.removeAttribute(PLUGIN_CLASS_LOADER);
-		}
-	}
+	extends BasePortalLifecycle implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		ServletContext servletContext = servletContextEvent.getServletContext();
 
-		ClassLoaderPool.unregister(servletContext.getServletContextName());
+		ServletContextClassLoaderPool.unregister(
+			servletContext.getServletContextName());
 
 		portalDestroy();
 	}
@@ -123,10 +47,8 @@ public class PluginContextListener
 
 		pluginClassLoader = currentThread.getContextClassLoader();
 
-		ClassLoaderPool.register(
+		ServletContextClassLoaderPool.register(
 			servletContext.getServletContextName(), pluginClassLoader);
-
-		servletContext.setAttribute(PLUGIN_CLASS_LOADER, pluginClassLoader);
 
 		ServletContextPool.put(
 			servletContext.getServletContextName(), servletContext);
@@ -190,10 +112,5 @@ public class PluginContextListener
 
 	protected ClassLoader pluginClassLoader;
 	protected ServletContext servletContext;
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		PluginContextListener.class);
-
-	private boolean _addedPluginClassLoader;
 
 }
