@@ -18,6 +18,7 @@ import com.liferay.petra.concurrent.ThreadPoolHandler;
 import com.liferay.petra.concurrent.ThreadPoolHandlerAdapter;
 import com.liferay.petra.executor.PortalExecutorManager;
 import com.liferay.petra.lang.CentralizedThreadLocal;
+import com.liferay.petra.lang.ServletClassLoaderPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.layoutconfiguration.util.RuntimePage;
@@ -28,7 +29,6 @@ import com.liferay.portal.kernel.model.LayoutTemplate;
 import com.liferay.portal.kernel.model.LayoutTemplateConstants;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.service.LayoutTemplateLocalServiceUtil;
-import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
@@ -311,9 +311,8 @@ public class RuntimePageImpl implements RuntimePage {
 				pluginServletContextName);
 
 			if (pluginServletContext != null) {
-				pluginClassLoader =
-					(ClassLoader)pluginServletContext.getAttribute(
-						PluginContextListener.PLUGIN_CLASS_LOADER);
+				pluginClassLoader = ServletClassLoaderPool.getClassLoader(
+					pluginServletContext.getServletContextName());
 			}
 		}
 
