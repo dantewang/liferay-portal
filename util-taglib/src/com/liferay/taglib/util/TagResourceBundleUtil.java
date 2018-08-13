@@ -115,8 +115,11 @@ public class TagResourceBundleUtil {
 			return null;
 		}
 		else {
+			ResourceBundleLoader portletResourceBundleLoader =
+				locale -> getPortletResourceBundle(request, locale);
+
 			return new AggregateResourceBundleLoader(
-				resourceBundleLoader,
+				portletResourceBundleLoader, resourceBundleLoader,
 				ResourceBundleLoaderUtil.getPortalResourceBundleLoader());
 		}
 	}
