@@ -123,21 +123,23 @@ public class LiferayObjectWrapper extends DefaultObjectWrapper {
 
 	@Override
 	protected TemplateModel handleUnknownType(Object object) {
+		ModelFactory modelFactory = _STRING_MODEL_FACTORY;
+
 		if (object instanceof Node) {
-			return wrapDomNode(object);
+			modelFactory = _NODE_MODEL_FACTORY;
 		}
 
 		if (object instanceof ResourceBundle) {
-			return _RESOURCE_BUNDLE_MODEL_FACTORY.create(object, this);
+			modelFactory = _RESOURCE_BUNDLE_MODEL_FACTORY;
 		}
 
 		if (object instanceof Enumeration) {
-			return _ENUMERATION_MODEL_FACTORY.create(object, this);
+			modelFactory = _ENUMERATION_MODEL_FACTORY;
 		}
 
-		_modelFactories.put(object.getClass(), _STRING_MODEL_FACTORY);
+		_modelFactories.put(object.getClass(), modelFactory);
 
-		return _STRING_MODEL_FACTORY.create(object, this);
+		return modelFactory.create(object, this);
 	}
 
 	private static final ModelFactory _ENUMERATION_MODEL_FACTORY =
@@ -152,6 +154,20 @@ public class LiferayObjectWrapper extends DefaultObjectWrapper {
 			}
 
 		};
+
+	private static final ModelFactory _NODE_MODEL_FACTORY = new ModelFactory() {
+
+		@Override
+		public TemplateModel create(
+			Object object, ObjectWrapper objectWrapper) {
+
+			LiferayObjectWrapper liferayObjectWrapper =
+				(LiferayObjectWrapper)objectWrapper;
+
+			return liferayObjectWrapper.wrapDomNode(object);
+		}
+
+	};
 
 	private static final ModelFactory _RESOURCE_BUNDLE_MODEL_FACTORY =
 		new ModelFactory() {
