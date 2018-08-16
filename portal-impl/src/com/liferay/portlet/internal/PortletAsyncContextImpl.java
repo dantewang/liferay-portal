@@ -72,10 +72,15 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 
 	@Override
 	public void complete() throws IllegalStateException {
+		if (!_resourceRequest.isAsyncStarted() || _calledComplete ||
+			_calledDispatch) {
 
-		// TODO
+			throw new IllegalStateException();
+		}
 
-		throw new UnsupportedOperationException();
+		_asyncContext.complete();
+
+		_calledComplete = true;
 	}
 
 	@Override
@@ -93,18 +98,28 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 
 	@Override
 	public void dispatch() throws IllegalStateException {
+		if (!_resourceRequest.isAsyncStarted() || _calledComplete ||
+			_calledDispatch) {
 
-		// TODO
+			throw new IllegalStateException();
+		}
 
-		throw new UnsupportedOperationException();
+		_asyncContext.dispatch();
+
+		_calledDispatch = true;
 	}
 
 	@Override
 	public void dispatch(String path) throws IllegalStateException {
+		if (!_resourceRequest.isAsyncStarted() || _calledComplete ||
+			_calledDispatch) {
 
-		// TODO
+			throw new IllegalStateException();
+		}
 
-		throw new UnsupportedOperationException();
+		_asyncContext.dispatch(path);
+
+		_calledDispatch = true;
 	}
 
 	@Override
@@ -143,10 +158,7 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 
 	@Override
 	public boolean isCalledDispatch() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return _calledDispatch;
 	}
 
 	@Override
@@ -172,13 +184,18 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 
 	@Override
 	public void start(Runnable runnable) throws IllegalStateException {
+		if (!_resourceRequest.isAsyncStarted() || _calledComplete ||
+			_calledDispatch) {
 
-		// TODO
+			throw new IllegalStateException();
+		}
 
-		throw new UnsupportedOperationException();
+		_asyncContext.start(runnable);
 	}
 
 	private final AsyncContext _asyncContext;
+	private boolean _calledComplete;
+	private boolean _calledDispatch;
 	private final ResourceRequest _resourceRequest;
 	private final ResourceResponse _resourceResponse;
 
