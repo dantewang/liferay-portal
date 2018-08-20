@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Theme;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
-import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
@@ -32,6 +31,7 @@ import com.liferay.portal.kernel.template.TemplateResourceLoaderUtil;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ServletContextClassLoaderPool;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.ThemeHelper;
 import com.liferay.portal.kernel.util.Validator;
@@ -139,8 +139,8 @@ public class ThemeUtil {
 		ClassLoader pluginClassLoader = null;
 
 		if (pluginServletContext != null) {
-			pluginClassLoader = (ClassLoader)pluginServletContext.getAttribute(
-				PluginContextListener.PLUGIN_CLASS_LOADER);
+			pluginClassLoader = ServletContextClassLoaderPool.getClassLoader(
+				pluginServletContext.getServletContextName());
 		}
 
 		Thread currentThread = Thread.currentThread();
