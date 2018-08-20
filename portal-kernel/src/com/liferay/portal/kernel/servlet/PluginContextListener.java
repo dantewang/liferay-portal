@@ -34,8 +34,17 @@ public class PluginContextListener
 	extends BasePortalLifecycle
 	implements ServletContextAttributeListener, ServletContextListener {
 
+	/**
+	 * @deprecated As of Judson (7.1.x), replaced by {@link
+	 *             ServletContextClassLoaderPool#getClassLoader(String)}
+	 */
+	@Deprecated
 	public static final String PLUGIN_CLASS_LOADER = "PLUGIN_CLASS_LOADER";
 
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public void attributeAdded(
 		ServletContextAttributeEvent servletContextAttributeEvent) {
@@ -63,6 +72,10 @@ public class PluginContextListener
 		}
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public void attributeRemoved(
 		ServletContextAttributeEvent servletContextAttributeEvent) {
@@ -84,6 +97,10 @@ public class PluginContextListener
 		}
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public void attributeReplaced(
 		ServletContextAttributeEvent servletContextAttributeEvent) {
