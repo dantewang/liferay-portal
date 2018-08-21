@@ -1,0 +1,21 @@
+<ehcache
+        dynamicConfig="true"
+        monitoring="off"
+        name="liferay-single-vm"
+        updateCheck="false"
+>
+
+    <defaultCache
+            eternal="false"
+            maxElementsInMemory="9999"
+            overflowToDisk="false"
+            timeToIdleSeconds="600"
+    />
+    <cache
+    eternal="false"
+    maxElementsInMemory="10000"
+    name="com.liferay.portal.kernel.servlet.filters.invoker.InvokerFilter"
+    overflowToDisk="false"
+    timeToIdleSeconds="600"
+    />
+</ehcache>
