@@ -26,8 +26,20 @@ import javax.servlet.AsyncListener;
 
 /**
  * @author Neil Griffin
+ * @author Dante Wang
+ * @author Leon Chi
  */
 public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
+
+	public PortletAsyncContextImpl(
+		ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+		AsyncContext asyncContext, boolean hasOriginalRequestAndResponse) {
+
+		_resourceRequest = resourceRequest;
+		_resourceResponse = resourceResponse;
+		_asyncContext = asyncContext;
+		_hasOriginalRequestAndResponse = hasOriginalRequestAndResponse;
+	}
 
 	@Override
 	public void addListener(AsyncListener asyncListener) {
@@ -59,10 +71,15 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 
 	@Override
 	public void complete() throws IllegalStateException {
+		if (!_resourceRequest.isAsyncStarted() || _calledComplete ||
+			_calledDispatch) {
 
-		// TODO
+			throw new IllegalStateException();
+		}
 
-		throw new UnsupportedOperationException();
+		_asyncContext.complete();
+
+		_calledComplete = true;
 	}
 
 	@Override
@@ -70,25 +87,38 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 			Class<T> listenerClass)
 		throws PortletException {
 
-		// TODO
-
-		throw new UnsupportedOperationException();
+		try {
+			return listenerClass.newInstance();
+		}
+		catch (Throwable e) {
+			throw new PortletException(e);
+		}
 	}
 
 	@Override
 	public void dispatch() throws IllegalStateException {
-		throw new UnsupportedOperationException();
+		if (!_resourceRequest.isAsyncStarted() || _calledComplete ||
+			_calledDispatch) {
 
-		// TODO
+			throw new IllegalStateException();
+		}
 
+		_asyncContext.dispatch();
+
+		_calledDispatch = true;
 	}
 
 	@Override
 	public void dispatch(String path) throws IllegalStateException {
+		if (!_resourceRequest.isAsyncStarted() || _calledComplete ||
+			_calledDispatch) {
 
-		// TODO
+			throw new IllegalStateException();
+		}
 
-		throw new UnsupportedOperationException();
+		_asyncContext.dispatch(path);
+
+		_calledDispatch = true;
 	}
 
 	@Override
@@ -101,42 +131,39 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 
 	@Override
 	public ResourceRequest getResourceRequest() throws IllegalStateException {
+		if ((_calledDispatch && !_resourceRequest.isAsyncStarted()) ||
+			_calledComplete) {
 
-		// TODO
+			throw new IllegalStateException();
+		}
 
-		throw new UnsupportedOperationException();
+		return _resourceRequest;
 	}
 
 	@Override
 	public ResourceResponse getResourceResponse() throws IllegalStateException {
+		if ((_calledDispatch && !_resourceRequest.isAsyncStarted()) ||
+			_calledComplete) {
 
-		// TODO
+			throw new IllegalStateException();
+		}
 
-		throw new UnsupportedOperationException();
+		return _resourceResponse;
 	}
 
 	@Override
 	public long getTimeout() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return _asyncContext.getTimeout();
 	}
 
 	@Override
 	public boolean hasOriginalRequestAndResponse() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return _hasOriginalRequestAndResponse;
 	}
 
 	@Override
 	public boolean isCalledDispatch() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return _calledDispatch;
 	}
 
 	@Override
@@ -149,26 +176,33 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 
 	@Override
 	public void reset(AsyncContext asyncContext) {
+		_calledDispatch = false;
+		_calledComplete = false;
 
-		// TODO
-
-		throw new UnsupportedOperationException();
+		_asyncContext = asyncContext;
 	}
 
 	@Override
 	public void setTimeout(long timeout) {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		_asyncContext.setTimeout(timeout);
 	}
 
 	@Override
 	public void start(Runnable runnable) throws IllegalStateException {
+		if (!_resourceRequest.isAsyncStarted() || _calledComplete ||
+			_calledDispatch) {
 
-		// TODO
+			throw new IllegalStateException();
+		}
 
-		throw new UnsupportedOperationException();
+		_asyncContext.start(runnable);
 	}
+
+	private AsyncContext _asyncContext;
+	private boolean _calledComplete;
+	private boolean _calledDispatch;
+	private final boolean _hasOriginalRequestAndResponse;
+	private final ResourceRequest _resourceRequest;
+	private final ResourceResponse _resourceResponse;
 
 }
