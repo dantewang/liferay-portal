@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.portlet.InvokerPortlet;
 import com.liferay.portal.kernel.portlet.LiferayPortletAsyncContext;
 import com.liferay.portal.kernel.portlet.LiferayResourceRequest;
+import com.liferay.portal.kernel.servlet.PortletServlet;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -40,8 +42,10 @@ import javax.portlet.ResourceResponse;
 import javax.portlet.ResourceURL;
 import javax.portlet.WindowState;
 
+import javax.servlet.AsyncContext;
 import javax.servlet.DispatcherType;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Brian Wing Shun Chan
@@ -72,6 +76,10 @@ public class ResourceRequestImpl
 
 	@Override
 	public PortletAsyncContext getPortletAsyncContext() {
+		if (!isAsyncSupported() || !isAsyncStarted()) {
+			throw new IllegalStateException();
+		}
+
 		return _portletAsyncContext;
 	}
 
@@ -151,7 +159,9 @@ public class ResourceRequestImpl
 
 	@Override
 	public boolean isAsyncStarted() {
-		throw new UnsupportedOperationException();
+		HttpServletRequest httpServletRequest = getHttpServletRequest();
+
+		return httpServletRequest.isAsyncStarted();
 	}
 
 	@Override
@@ -161,23 +171,14 @@ public class ResourceRequestImpl
 		return portlet.isAsyncSupported();
 	}
 
-	public void setAsyncStarted(boolean asyncStarted) {
-		_asyncStarted = asyncStarted;
-	}
-
 	@Override
 	public PortletAsyncContext startPortletAsync()
 		throws IllegalStateException {
 
-		if (!isAsyncSupported()) {
-			throw new IllegalStateException();
-		}
+		ResourceResponse resourceResponse = (ResourceResponse)getAttribute(
+			JavaConstants.JAVAX_PORTLET_RESPONSE);
 
-		// TODO
-
-		_portletAsyncContext = new PortletAsyncContextImpl();
-
-		return _portletAsyncContext;
+		return startPortletAsync(this, resourceResponse);
 	}
 
 	@Override
@@ -189,14 +190,49 @@ public class ResourceRequestImpl
 			throw new IllegalStateException();
 		}
 
-		// TODO
+		HttpServletRequest httpServletRequest =
+			(HttpServletRequest)getAttribute(
+				PortletServlet.PORTLET_SERVLET_REQUEST);
 
-		_portletAsyncContext = new PortletAsyncContextImpl();
+		HttpServletResponse httpServletResponse =
+			(HttpServletResponse)getAttribute(
+				PortletServlet.PORTLET_SERVLET_RESPONSE);
+
+		if (_portletAsyncContext == null) {
+			AsyncContext asyncContext = httpServletRequest.startAsync(
+				httpServletRequest, httpServletResponse);
+
+			boolean hasOriginalRequestAndResponse = false;
+
+			if ((resourceRequest == this) &&
+				(resourceResponse == getAttribute(
+					JavaConstants.JAVAX_PORTLET_RESPONSE))) {
+
+				hasOriginalRequestAndResponse = true;
+			}
+
+			_portletAsyncContext = new PortletAsyncContextImpl(
+				resourceRequest, resourceResponse, asyncContext,
+				hasOriginalRequestAndResponse);
+		}
+		else {
+
+			// Reinitialize the portletAsyncContext instance when appropriate
+
+			AsyncContext asyncContext = httpServletRequest.startAsync(
+				httpServletRequest, httpServletResponse);
+
+			_portletAsyncContext.reset(asyncContext);
+		}
+
+		// The portletConfig is already set by PortletRequestImpl.defineObjects
+
+		setAttribute(JavaConstants.JAVAX_PORTLET_REQUEST, resourceRequest);
+		setAttribute(JavaConstants.JAVAX_PORTLET_RESPONSE, resourceResponse);
 
 		return _portletAsyncContext;
 	}
 
-	private boolean _asyncStarted;
 	private String _cacheablity;
 	private LiferayPortletAsyncContext _portletAsyncContext;
 	private String _resourceID;
