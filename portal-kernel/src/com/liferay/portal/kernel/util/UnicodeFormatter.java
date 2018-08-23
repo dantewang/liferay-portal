@@ -25,7 +25,7 @@ public class UnicodeFormatter {
 
 	public static final String UNICODE_PREFIX = "\\u";
 
-	public static String bytesToHex(byte[] bytes) {
+	public static String bytesToHexString(byte[] bytes) {
 		char[] array = new char[bytes.length * 2];
 
 		for (int i = 0; i < bytes.length; i++) {
@@ -38,26 +38,26 @@ public class UnicodeFormatter {
 		return new String(array);
 	}
 
-	public static String byteToHex(byte b) {
+	public static char[] byteToHexChars(byte b) {
+		return byteToHexChars(b, false);
+	}
+
+	public static char[] byteToHexChars(byte b, boolean upperCase) {
+		if (upperCase) {
+			return _byteToHexChars(b, _HEX_DIGITS_UPPER_CASE);
+		}
+		else {
+			return _byteToHexChars(b, _HEX_DIGITS);
+		}
+	}
+
+	public static String byteToHexString(byte b) {
 		char[] array = {_HEX_DIGITS[(b >> 4) & 0x0f], _HEX_DIGITS[b & 0x0f]};
 
 		return new String(array);
 	}
 
-	public static char[] byteToHex(byte b, char[] hexes) {
-		return byteToHex(b, hexes, false);
-	}
-
-	public static char[] byteToHex(byte b, char[] hexes, boolean upperCase) {
-		if (upperCase) {
-			return _byteToHex(b, hexes, _HEX_DIGITS_UPPER_CASE);
-		}
-		else {
-			return _byteToHex(b, hexes, _HEX_DIGITS);
-		}
-	}
-
-	public static String charToHex(char c) {
+	public static String charToHexString(char c) {
 		byte hi = (byte)(c >>> 8);
 		byte lo = (byte)(c & 0xff);
 
@@ -70,7 +70,7 @@ public class UnicodeFormatter {
 	}
 
 	public static byte[] hexToBytes(String hexString) {
-		if ((hexString.length() % 2) != 0) {
+		if ((hexString == null) || (hexString.length() % 2) != 0) {
 			return new byte[0];
 		}
 
@@ -91,6 +91,10 @@ public class UnicodeFormatter {
 	}
 
 	public static String parseString(String hexString) {
+		if (hexString == null) {
+			return null;
+		}
+
 		StringBuilder sb = new StringBuilder();
 
 		char[] array = hexString.toCharArray();
@@ -120,13 +124,15 @@ public class UnicodeFormatter {
 	}
 
 	public static String toString(char[] array) {
-		StringBuilder sb = new StringBuilder(array.length * 6);
+		if (array == null) {
+			return null;
+		}
 
-		char[] hexes = new char[4];
+		StringBuilder sb = new StringBuilder(array.length * 6);
 
 		for (char c : array) {
 			sb.append(UNICODE_PREFIX);
-			sb.append(_charToHex(c, hexes));
+			sb.append(_charToHexChars(c));
 		}
 
 		return sb.toString();
@@ -139,26 +145,28 @@ public class UnicodeFormatter {
 
 		StringBuilder sb = new StringBuilder(s.length() * 6);
 
-		char[] hexes = new char[4];
-
 		for (int i = 0; i < s.length(); i++) {
 			sb.append(UNICODE_PREFIX);
-			sb.append(_charToHex(s.charAt(i), hexes));
+			sb.append(_charToHexChars(s.charAt(i)));
 		}
 
 		return sb.toString();
 	}
 
-	private static char[] _byteToHex(byte b, char[] hexes, char[] table) {
+	private static char[] _byteToHexChars(byte b, char[] table) {
+		char[] hexes = new char[2];
+
 		hexes[0] = table[(b >> 4) & 0x0f];
 		hexes[1] = table[b & 0x0f];
 
 		return hexes;
 	}
 
-	private static char[] _charToHex(char c, char[] hexes) {
+	private static char[] _charToHexChars(char c) {
 		byte hi = (byte)(c >>> 8);
 		byte lo = (byte)(c & 0xff);
+
+		char[] hexes = new char[4];
 
 		hexes[0] = _HEX_DIGITS[(hi >> 4) & 0x0f];
 		hexes[1] = _HEX_DIGITS[hi & 0x0f];
