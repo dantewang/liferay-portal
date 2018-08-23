@@ -130,6 +130,10 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 		return _hasOriginalRequestAndResponse;
 	}
 
+	public boolean isCalledComplete() {
+		return _calledComplete;
+	}
+
 	@Override
 	public boolean isCalledDispatch() {
 		return _calledDispatch;

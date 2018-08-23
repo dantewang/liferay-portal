@@ -169,9 +169,17 @@ public class ResourceRequestImpl
 
 	@Override
 	public boolean isAsyncStarted() {
-		HttpServletRequest httpServletRequest = getHttpServletRequest();
+		if (_portletAsyncContextImpl == null) {
+			return false;
+		}
 
-		return httpServletRequest.isAsyncStarted();
+		if (_portletAsyncContextImpl.isCalledDispatch() ||
+			_portletAsyncContextImpl.isCalledComplete()) {
+
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
