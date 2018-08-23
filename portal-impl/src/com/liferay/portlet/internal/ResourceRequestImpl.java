@@ -31,10 +31,12 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.portlet.PortletAsyncContext;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletContext;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import javax.portlet.RenderParameters;
 import javax.portlet.ResourceParameters;
 import javax.portlet.ResourceRequest;
@@ -53,6 +55,15 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ResourceRequestImpl
 	extends ClientDataRequestImpl implements LiferayResourceRequest {
+
+	@Override
+	public void defineObjects(
+		PortletConfig portletConfig, PortletResponse portletResponse) {
+
+		super.defineObjects(portletConfig, portletResponse);
+
+		_resourceResponse = (ResourceResponse)portletResponse;
+	}
 
 	@Override
 	public String getCacheability() {
@@ -175,10 +186,7 @@ public class ResourceRequestImpl
 	public PortletAsyncContext startPortletAsync()
 		throws IllegalStateException {
 
-		ResourceResponse resourceResponse = (ResourceResponse)getAttribute(
-			JavaConstants.JAVAX_PORTLET_RESPONSE);
-
-		return startPortletAsync(this, resourceResponse);
+		return startPortletAsync(this, _resourceResponse);
 	}
 
 	@Override
@@ -205,8 +213,7 @@ public class ResourceRequestImpl
 			boolean hasOriginalRequestAndResponse = false;
 
 			if ((resourceRequest == this) &&
-				(resourceResponse == getAttribute(
-					JavaConstants.JAVAX_PORTLET_RESPONSE))) {
+				(resourceResponse == _resourceResponse)) {
 
 				hasOriginalRequestAndResponse = true;
 			}
@@ -234,5 +241,6 @@ public class ResourceRequestImpl
 	private LiferayPortletAsyncContext _portletAsyncContext;
 	private String _resourceID;
 	private ResourceParameters _resourceParameters;
+	private ResourceResponse _resourceResponse;
 
 }
