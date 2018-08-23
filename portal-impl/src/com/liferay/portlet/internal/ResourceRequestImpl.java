@@ -18,8 +18,9 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.portlet.InvokerPortlet;
 import com.liferay.portal.kernel.portlet.LiferayPortletAsyncContext;
+import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
+import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayResourceRequest;
-import com.liferay.portal.kernel.servlet.PortletServlet;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -198,13 +199,17 @@ public class ResourceRequestImpl
 			throw new IllegalStateException();
 		}
 
+		LiferayPortletRequest liferayPortletRequest =
+			PortalUtil.getLiferayPortletRequest(resourceRequest);
+
 		HttpServletRequest httpServletRequest =
-			(HttpServletRequest)getAttribute(
-				PortletServlet.PORTLET_SERVLET_REQUEST);
+			liferayPortletRequest.getHttpServletRequest();
+
+		LiferayPortletResponse liferayPortletResponse =
+			PortalUtil.getLiferayPortletResponse(resourceResponse);
 
 		HttpServletResponse httpServletResponse =
-			(HttpServletResponse)getAttribute(
-				PortletServlet.PORTLET_SERVLET_RESPONSE);
+			liferayPortletResponse.getHttpServletResponse();
 
 		AsyncContext asyncContext = httpServletRequest.startAsync(
 			httpServletRequest, httpServletResponse);
