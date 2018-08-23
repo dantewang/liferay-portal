@@ -30,7 +30,6 @@ import com.liferay.portal.kernel.test.rule.BaseTestRule.StatementWrapper;
 import com.liferay.portal.kernel.test.rule.NewEnv.Environment;
 import com.liferay.portal.kernel.test.rule.NewEnv.JVMArgsLine;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -451,7 +450,7 @@ public class NewEnvTestRule implements TestRule {
 
 		@Override
 		public void evaluate() throws Throwable {
-			MethodCache.reset();
+			MethodKey.resetCache();
 
 			Thread currentThread = Thread.currentThread();
 
@@ -496,7 +495,7 @@ public class NewEnvTestRule implements TestRule {
 
 				currentThread.setContextClassLoader(contextClassLoader);
 
-				MethodCache.reset();
+				MethodKey.resetCache();
 			}
 		}
 
