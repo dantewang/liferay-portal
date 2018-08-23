@@ -72,6 +72,8 @@ public class MethodKey implements Externalizable {
 		this(
 			method.getDeclaringClass(), method.getName(),
 			method.getParameterTypes());
+
+		_methods.putIfAbsent(this, method);
 	}
 
 	/**
