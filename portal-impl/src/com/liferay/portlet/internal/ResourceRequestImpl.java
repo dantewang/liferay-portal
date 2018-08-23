@@ -17,11 +17,9 @@ package com.liferay.portlet.internal;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.portlet.InvokerPortlet;
-import com.liferay.portal.kernel.portlet.LiferayPortletAsyncContext;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayResourceRequest;
-import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -92,7 +90,7 @@ public class ResourceRequestImpl
 			throw new IllegalStateException();
 		}
 
-		return _portletAsyncContext;
+		return _portletAsyncContextImpl;
 	}
 
 	/**
@@ -214,31 +212,27 @@ public class ResourceRequestImpl
 		AsyncContext asyncContext = httpServletRequest.startAsync(
 			httpServletRequest, httpServletResponse);
 
-		if (_portletAsyncContext == null) {
-			boolean hasOriginalRequestAndResponse = false;
-
-			if ((resourceRequest == this) &&
-				(resourceResponse == _resourceResponse)) {
-
-				hasOriginalRequestAndResponse = true;
-			}
-
-			_portletAsyncContext = new PortletAsyncContextImpl(
-				resourceRequest, resourceResponse, asyncContext,
-				hasOriginalRequestAndResponse);
-		}
-		else {
-
-			// Reinitialize the portletAsyncContext instance when appropriate
-
-			_portletAsyncContext.reset(asyncContext);
+		if (_portletAsyncContextImpl == null) {
+			_portletAsyncContextImpl = new PortletAsyncContextImpl();
 		}
 
-		return _portletAsyncContext;
+		boolean hasOriginalRequestAndResponse = false;
+
+		if ((resourceRequest == this) &&
+			(resourceResponse == _resourceResponse)) {
+
+			hasOriginalRequestAndResponse = true;
+		}
+
+		_portletAsyncContextImpl.initialize(
+			resourceRequest, resourceResponse, asyncContext,
+			hasOriginalRequestAndResponse);
+
+		return _portletAsyncContextImpl;
 	}
 
 	private String _cacheablity;
-	private LiferayPortletAsyncContext _portletAsyncContext;
+	private PortletAsyncContextImpl _portletAsyncContextImpl;
 	private String _resourceID;
 	private ResourceParameters _resourceParameters;
 	private ResourceResponse _resourceResponse;

@@ -31,16 +31,6 @@ import javax.servlet.AsyncListener;
  */
 public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 
-	public PortletAsyncContextImpl(
-		ResourceRequest resourceRequest, ResourceResponse resourceResponse,
-		AsyncContext asyncContext, boolean hasOriginalRequestAndResponse) {
-
-		_resourceRequest = resourceRequest;
-		_resourceResponse = resourceResponse;
-		_asyncContext = asyncContext;
-		_hasOriginalRequestAndResponse = hasOriginalRequestAndResponse;
-	}
-
 	@Override
 	public void addListener(AsyncListener asyncListener) {
 
@@ -155,10 +145,6 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 
 	@Override
 	public void reset(AsyncContext asyncContext) {
-		_calledDispatch = false;
-		_calledComplete = false;
-
-		_asyncContext = asyncContext;
 	}
 
 	@Override
@@ -171,11 +157,24 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 		_asyncContext.start(runnable);
 	}
 
+	protected void initialize(
+		ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+		AsyncContext asyncContext, boolean hasOriginalRequestAndResponse) {
+
+		_resourceRequest = resourceRequest;
+		_resourceResponse = resourceResponse;
+		_asyncContext = asyncContext;
+		_hasOriginalRequestAndResponse = hasOriginalRequestAndResponse;
+
+		_calledDispatch = false;
+		_calledComplete = false;
+	}
+
 	private AsyncContext _asyncContext;
 	private boolean _calledComplete;
 	private boolean _calledDispatch;
-	private final boolean _hasOriginalRequestAndResponse;
-	private final ResourceRequest _resourceRequest;
-	private final ResourceResponse _resourceResponse;
+	private boolean _hasOriginalRequestAndResponse;
+	private ResourceRequest _resourceRequest;
+	private ResourceResponse _resourceResponse;
 
 }
