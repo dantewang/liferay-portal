@@ -17,7 +17,8 @@ package com.liferay.portlet.internal;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.portlet.InvokerPortlet;
-import com.liferay.portal.kernel.portlet.LiferayPortletAsyncContext;
+import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
+import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayResourceRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -29,10 +30,12 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.portlet.PortletAsyncContext;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletContext;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import javax.portlet.RenderParameters;
 import javax.portlet.ResourceParameters;
 import javax.portlet.ResourceRequest;
@@ -40,8 +43,10 @@ import javax.portlet.ResourceResponse;
 import javax.portlet.ResourceURL;
 import javax.portlet.WindowState;
 
+import javax.servlet.AsyncContext;
 import javax.servlet.DispatcherType;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Brian Wing Shun Chan
@@ -49,6 +54,15 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ResourceRequestImpl
 	extends ClientDataRequestImpl implements LiferayResourceRequest {
+
+	@Override
+	public void defineObjects(
+		PortletConfig portletConfig, PortletResponse portletResponse) {
+
+		super.defineObjects(portletConfig, portletResponse);
+
+		_resourceResponse = (ResourceResponse)portletResponse;
+	}
 
 	@Override
 	public String getCacheability() {
@@ -72,7 +86,11 @@ public class ResourceRequestImpl
 
 	@Override
 	public PortletAsyncContext getPortletAsyncContext() {
-		return _portletAsyncContext;
+		if (!isAsyncSupported() || !isAsyncStarted()) {
+			throw new IllegalStateException();
+		}
+
+		return _portletAsyncContextImpl;
 	}
 
 	/**
@@ -157,7 +175,17 @@ public class ResourceRequestImpl
 
 	@Override
 	public boolean isAsyncStarted() {
-		throw new UnsupportedOperationException();
+		if (_portletAsyncContextImpl == null) {
+			return false;
+		}
+
+		if (_portletAsyncContextImpl.isCalledDispatch() ||
+			_portletAsyncContextImpl.isCalledComplete()) {
+
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
@@ -167,23 +195,11 @@ public class ResourceRequestImpl
 		return portlet.isAsyncSupported();
 	}
 
-	public void setAsyncStarted(boolean asyncStarted) {
-		_asyncStarted = asyncStarted;
-	}
-
 	@Override
 	public PortletAsyncContext startPortletAsync()
 		throws IllegalStateException {
 
-		if (!isAsyncSupported()) {
-			throw new IllegalStateException();
-		}
-
-		// TODO
-
-		_portletAsyncContext = new PortletAsyncContextImpl();
-
-		return _portletAsyncContext;
+		return startPortletAsync(this, _resourceResponse);
 	}
 
 	@Override
@@ -195,17 +211,44 @@ public class ResourceRequestImpl
 			throw new IllegalStateException();
 		}
 
-		// TODO
+		LiferayPortletRequest liferayPortletRequest =
+			PortalUtil.getLiferayPortletRequest(resourceRequest);
 
-		_portletAsyncContext = new PortletAsyncContextImpl();
+		HttpServletRequest httpServletRequest =
+			liferayPortletRequest.getHttpServletRequest();
 
-		return _portletAsyncContext;
+		LiferayPortletResponse liferayPortletResponse =
+			PortalUtil.getLiferayPortletResponse(resourceResponse);
+
+		HttpServletResponse httpServletResponse =
+			liferayPortletResponse.getHttpServletResponse();
+
+		AsyncContext asyncContext = httpServletRequest.startAsync(
+			httpServletRequest, httpServletResponse);
+
+		if (_portletAsyncContextImpl == null) {
+			_portletAsyncContextImpl = new PortletAsyncContextImpl();
+		}
+
+		boolean hasOriginalRequestAndResponse = false;
+
+		if ((resourceRequest == this) &&
+			(resourceResponse == _resourceResponse)) {
+
+			hasOriginalRequestAndResponse = true;
+		}
+
+		_portletAsyncContextImpl.initialize(
+			resourceRequest, resourceResponse, asyncContext,
+			hasOriginalRequestAndResponse);
+
+		return _portletAsyncContextImpl;
 	}
 
-	private boolean _asyncStarted;
 	private String _cacheablity;
-	private LiferayPortletAsyncContext _portletAsyncContext;
+	private PortletAsyncContextImpl _portletAsyncContextImpl;
 	private String _resourceID;
 	private ResourceParameters _resourceParameters;
+	private ResourceResponse _resourceResponse;
 
 }
