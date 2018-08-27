@@ -315,25 +315,35 @@ public class LiferayObjectWrapperTest {
 
 		};
 
-		Thread thread = new Thread("testThread");
+		Assert.assertEquals(0, handleUnknownTypeCount.get());
+
+		// Test 1, wrap unkown type for the first time
+
+		Thread thread = new Thread("testThread1");
 
 		TemplateModel templateModel = liferayObjectWrapper.wrap(thread);
 
+		Assert.assertEquals(1, handleUnknownTypeCount.get());
+
 		Assert.assertTrue(templateModel instanceof StringModel);
 
-		Map<Class<?>, ModelFactory> modelFactories =
-			ReflectionTestUtil.getFieldValue(
-				LiferayObjectWrapper.class, "_modelFactories");
+		_assertModelFactoryCache("_STRING_MODEL_FACTORY", thread.getClass());
 
-		Assert.assertNotNull(modelFactories.get(Thread.class));
+		StringModel stringModel = (StringModel)templateModel;
 
-		Assert.assertEquals(1, handleUnknownTypeCount.get());
+		Assert.assertEquals(thread.toString(), stringModel.getAsString());
+
+		// Test 2, wrap the same type again
+
+		thread = new Thread("testThread2");
 
 		templateModel = liferayObjectWrapper.wrap(thread);
 
 		Assert.assertEquals(1, handleUnknownTypeCount.get());
 
-		StringModel stringModel = (StringModel)templateModel;
+		Assert.assertTrue(templateModel instanceof StringModel);
+
+		stringModel = (StringModel)templateModel;
 
 		Assert.assertEquals(thread.toString(), stringModel.getAsString());
 	}
