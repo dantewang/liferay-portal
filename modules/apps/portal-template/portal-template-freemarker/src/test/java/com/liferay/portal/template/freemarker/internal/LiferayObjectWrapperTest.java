@@ -164,11 +164,9 @@ public class LiferayObjectWrapperTest {
 		ReflectionUtilAdvice.setDeclaredFieldThrowable(exception);
 
 		try {
-			Class<?> clazz = Class.forName(
+			Class.forName(
 				"com.liferay.portal.template.freemarker.internal." +
 					"LiferayObjectWrapper");
-
-			clazz.newInstance();
 
 			Assert.fail("No exception thrown!");
 		}
@@ -187,6 +185,7 @@ public class LiferayObjectWrapperTest {
 
 		try {
 			new LiferayObjectWrapper();
+
 			Assert.fail("No exception thrown!");
 		}
 		catch (Exception e) {
