@@ -44,18 +44,20 @@ public class UnicodeFormatterTest {
 
 	@Test
 	public void testByteToHexChars() {
-		char[] hexes = new char[2];
-		char[] expectedHexeChars = {'f', 'f'};
+		char[] hexChars = new char[2];
+		char[] expectedHexChars = {'f', 'f'};
 
-		Assert.assertArrayEquals(
-			expectedHexeChars, UnicodeFormatter.byteToHex((byte)255, hexes));
+		char[] resultHexChars = UnicodeFormatter.byteToHex((byte)255, hexChars);
 
-		expectedHexeChars[0] = 'F';
-		expectedHexeChars[1] = 'F';
+		Assert.assertArrayEquals(expectedHexChars, resultHexChars);
+		Assert.assertSame(hexChars, resultHexChars);
 
-		Assert.assertArrayEquals(
-			expectedHexeChars,
-			UnicodeFormatter.byteToHex((byte)255, hexes, true));
+		expectedHexChars = new char[] {'F', 'F'};
+
+		resultHexChars = UnicodeFormatter.byteToHex((byte)255, hexChars, true);
+
+		Assert.assertArrayEquals(expectedHexChars, resultHexChars);
+		Assert.assertSame(hexChars, resultHexChars);
 	}
 
 	@Test
