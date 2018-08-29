@@ -92,20 +92,26 @@ public class UnicodeFormatterTest {
 				JDKLoggerTestUtil.configureJDKLogger(
 					UnicodeFormatter.class.getName(), Level.SEVERE)) {
 
+			// Test 1, string is not in hex format
+
 			Assert.assertEquals(
 				"\\u000061", UnicodeFormatter.parseString("\\u000061"));
 
-			Assert.assertEquals(
-				"\\u0 61", UnicodeFormatter.parseString("\\u0 61"));
-
 			List<LogRecord> logRecords = captureHandler.getLogRecords();
 
-			Assert.assertEquals(logRecords.toString(), 2, logRecords.size());
+			Assert.assertEquals(logRecords.toString(), 1, logRecords.size());
 
 			LogRecord logRecord = logRecords.get(0);
 
 			Assert.assertEquals(
 				"String is not in hex format", logRecord.getMessage());
+
+			// Test 2, string has invalid number format
+
+			Assert.assertEquals(
+				"\\u0 61", UnicodeFormatter.parseString("\\u0 61"));
+
+			Assert.assertEquals(logRecords.toString(), 2, logRecords.size());
 
 			logRecord = logRecords.get(1);
 
@@ -119,9 +125,8 @@ public class UnicodeFormatterTest {
 
 	@Test
 	public void testToString() {
-		char[] array = {'a'};
-
-		Assert.assertEquals("\\u0061", UnicodeFormatter.toString(array));
+		Assert.assertEquals(
+			"\\u0061", UnicodeFormatter.toString(new char[] {'a'}));
 
 		Assert.assertNull(UnicodeFormatter.toString((String)null));
 
