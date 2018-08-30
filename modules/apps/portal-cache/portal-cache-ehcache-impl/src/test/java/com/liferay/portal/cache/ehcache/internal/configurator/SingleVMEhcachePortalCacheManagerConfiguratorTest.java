@@ -537,10 +537,7 @@ public class SingleVMEhcachePortalCacheManagerConfiguratorTest {
 	}
 
 	@Aspect
-	public class UnsyncStringReaderAdvice {
-
-		public UnsyncStringReaderAdvice() {
-		}
+	public static class UnsyncStringReaderAdvice {
 
 		@Around(
 			"execution(public int com.liferay.portal.kernel.io.unsync." +
@@ -562,7 +559,8 @@ public class SingleVMEhcachePortalCacheManagerConfiguratorTest {
 
 	private static final String _TEST_CACHE_NAME = "testCacheName";
 
-	private final IOException _ioException = new IOException();
+	private static final IOException _ioException = new IOException();
+
 	private SingleVMEhcachePortalCacheManagerConfigurator
 		_singleVMEhcachePortalCacheManagerConfigurator;
 
