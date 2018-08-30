@@ -510,17 +510,14 @@ public class SingleVMEhcachePortalCacheManagerConfiguratorTest {
 			singleVMEhcachePortalCacheManagerConfigurator =
 				new SingleVMEhcachePortalCacheManagerConfigurator();
 
-		String propertiesString = "key1=value1,key2=value2,key3=value3";
-
 		try {
 			singleVMEhcachePortalCacheManagerConfigurator.parseProperties(
-				propertiesString, StringPool.COMMA);
+				"key1=value1", StringPool.COMMA);
 
 			Assert.fail("No exception thrown!");
 		}
-		catch (Exception e) {
-			Assert.assertTrue(e instanceof RuntimeException);
-			Assert.assertEquals(_ioException, e.getCause());
+		catch (RuntimeException re) {
+			Assert.assertEquals(_ioException, re.getCause());
 		}
 	}
 
@@ -544,16 +541,10 @@ public class SingleVMEhcachePortalCacheManagerConfiguratorTest {
 				"UnsyncStringReader.read(char[]))"
 		)
 		public Object read(ProceedingJoinPoint proceedingJoinPoint)
-			throws Throwable {
+			throws IOException {
 
-			if (_readThrowable != null) {
-				throw _readThrowable;
-			}
-
-			return proceedingJoinPoint.proceed();
+			throw _ioException;
 		}
-
-		private Throwable _readThrowable = _ioException;
 
 	}
 
