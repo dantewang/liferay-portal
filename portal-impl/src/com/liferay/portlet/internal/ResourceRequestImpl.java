@@ -73,7 +73,9 @@ public class ResourceRequestImpl
 
 	@Override
 	public DispatcherType getDispatcherType() {
-		throw new UnsupportedOperationException();
+		HttpServletRequest httpServletRequest = _getHttpServletRequest(this);
+
+		return httpServletRequest.getDispatcherType();
 	}
 
 	@Override
