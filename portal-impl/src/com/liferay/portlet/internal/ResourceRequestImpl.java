@@ -90,7 +90,9 @@ public class ResourceRequestImpl
 
 	@Override
 	public PortletAsyncContext getPortletAsyncContext() {
-		if (!isAsyncSupported() || !isAsyncStarted()) {
+		if (!isAsyncSupported() ||
+			(!isAsyncStarted() && (_portletAsyncContextImpl == null))) {
+
 			throw new IllegalStateException();
 		}
 
