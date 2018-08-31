@@ -73,9 +73,13 @@ public class ResourceRequestImpl
 
 	@Override
 	public DispatcherType getDispatcherType() {
-		HttpServletRequest httpServletRequest = _getHttpServletRequest(this);
+		if ((_portletAsyncContextImpl != null) &&
+			_portletAsyncContextImpl.isCalledDispatch()) {
 
-		return httpServletRequest.getDispatcherType();
+			return DispatcherType.ASYNC;
+		}
+
+		return DispatcherType.REQUEST;
 	}
 
 	@Override
