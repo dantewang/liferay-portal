@@ -176,12 +176,9 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 		_calledComplete = false;
 		_returnedToContainer = false;
 
-		if (_portletAsyncListenerAdapter == null) {
-			_portletAsyncListenerAdapter = new PortletAsyncListenerAdapter(
-				this);
+		_portletAsyncListenerAdapter = new PortletAsyncListenerAdapter(this);
 
-			_asyncContext.addListener(_portletAsyncListenerAdapter);
-		}
+		_asyncContext.addListener(_portletAsyncListenerAdapter);
 	}
 
 	private AsyncContext _asyncContext;
