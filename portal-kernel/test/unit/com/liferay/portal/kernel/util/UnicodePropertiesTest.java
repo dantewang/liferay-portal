@@ -19,8 +19,27 @@ import org.junit.Test;
 
 /**
  * @author Alexander Chow
+ * @author Xiangyue Cai
  */
 public class UnicodePropertiesTest {
+
+	@Test
+	public void testReplaceNullValue() {
+		UnicodeProperties unicodeProperties = new UnicodeProperties();
+
+		int hashCode = unicodeProperties.hashCode();
+
+		String testKey = "testKey";
+		String testValue = "testValue";
+
+		unicodeProperties.put(testKey, testValue);
+
+		unicodeProperties.replace(testKey, null);
+
+		Assert.assertEquals(
+			"replace() of null value must remove entry", hashCode,
+			unicodeProperties.hashCode());
+	}
 
 	@Test
 	public void testSetNullProperty() throws Exception {
@@ -41,6 +60,23 @@ public class UnicodePropertiesTest {
 		Assert.assertEquals(
 			"setProperty() of null value must remove entry", hashCode,
 			props.hashCode());
+	}
+
+	@Test
+	public void testToString() {
+		UnicodeProperties unicodeProperties = new UnicodeProperties();
+
+		String testKey = "testKey";
+		String testValue = "";
+
+		String testLine = StringBundler.concat(
+			testKey, StringPool.EQUAL, testValue);
+
+		unicodeProperties.fastLoad(testLine);
+
+		Assert.assertEquals(testValue, unicodeProperties.getProperty(testKey));
+
+		Assert.assertEquals(testLine, unicodeProperties.toString());
 	}
 
 }
