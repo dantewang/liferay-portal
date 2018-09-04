@@ -73,9 +73,12 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 			Class<T> listenerClass)
 		throws PortletException {
 
-		// TODO
-
-		throw new UnsupportedOperationException();
+		try {
+			return listenerClass.newInstance();
+		}
+		catch (Throwable e) {
+			throw new PortletException(e);
+		}
 	}
 
 	@Override
