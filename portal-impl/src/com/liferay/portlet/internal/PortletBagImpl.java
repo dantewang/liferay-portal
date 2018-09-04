@@ -106,6 +106,8 @@ public class PortletBagImpl implements PortletBag {
 		}
 
 		_serviceRegistrations.clear();
+
+		_friendlyURLMapperTracker.close();
 	}
 
 	@Override
