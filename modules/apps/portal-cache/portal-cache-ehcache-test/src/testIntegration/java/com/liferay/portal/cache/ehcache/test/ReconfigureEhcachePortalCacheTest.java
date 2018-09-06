@@ -59,7 +59,8 @@ public class ReconfigureEhcachePortalCacheTest {
 
 		_invokeReconfigure(
 			_multiVMPool.getPortalCacheManager(),
-			new TestPortalCacheConfiguratorSettings(
+			new PortalCacheConfiguratorSettings(
+				ReconfigureEhcachePortalCacheTest.class.getClassLoader(),
 				"META-INF/module-multi-vm-clustered.xml"));
 
 		_assertMaxElementsInMemory(portalCache1, 4321);
@@ -78,7 +79,8 @@ public class ReconfigureEhcachePortalCacheTest {
 
 		_invokeReconfigure(
 			_singleVMPool.getPortalCacheManager(),
-			new TestPortalCacheConfiguratorSettings(
+			new PortalCacheConfiguratorSettings(
+				ReconfigureEhcachePortalCacheTest.class.getClassLoader(),
 				"META-INF/module-single-vm.xml"));
 
 		_assertMaxElementsInMemory(portalCache1, 4321);
@@ -115,16 +117,5 @@ public class ReconfigureEhcachePortalCacheTest {
 
 	@Inject
 	private SingleVMPool _singleVMPool;
-
-	private class TestPortalCacheConfiguratorSettings
-		extends PortalCacheConfiguratorSettings {
-
-		public TestPortalCacheConfiguratorSettings(String configFile) {
-			super(
-				ReconfigureEhcachePortalCacheTest.class.getClassLoader(),
-				configFile);
-		}
-
-	}
 
 }
