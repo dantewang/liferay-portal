@@ -30,12 +30,28 @@ public class UnicodeFormatter_IW {
 		return UnicodeFormatter.byteToHex(b);
 	}
 
+	/**
+	 * @deprecated
+	 */
+	@Deprecated
 	public char[] byteToHex(byte b, char[] hexes) {
 		return UnicodeFormatter.byteToHex(b, hexes);
 	}
 
+	/**
+	 * @deprecated
+	 */
+	@Deprecated
 	public char[] byteToHex(byte b, char[] hexes, boolean upperCase) {
 		return UnicodeFormatter.byteToHex(b, hexes, upperCase);
+	}
+
+	public void byteToHexCharArray(byte b, char[] hexes) {
+		UnicodeFormatter.byteToHexCharArray(b, hexes);
+	}
+
+	public void byteToHexCharArray(byte b, char[] hexes, boolean upperCase) {
+		UnicodeFormatter.byteToHexCharArray(b, hexes, upperCase);
 	}
 
 	public java.lang.String charToHex(char c) {

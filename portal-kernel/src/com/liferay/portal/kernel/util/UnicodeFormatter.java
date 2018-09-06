@@ -44,16 +44,46 @@ public class UnicodeFormatter {
 		return new String(array);
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), replaced by {@link
+	 *             #byteToHexCharArray(byte, char[])}
+	 */
+	@Deprecated
 	public static char[] byteToHex(byte b, char[] hexes) {
-		return byteToHex(b, hexes, false);
+		byteToHexCharArray(b, hexes, false);
+
+		return hexes;
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), replaced by {@link
+	 *             #byteToHexCharArray(byte, char[], boolean)}
+	 */
+	@Deprecated
 	public static char[] byteToHex(byte b, char[] hexes, boolean upperCase) {
 		if (upperCase) {
-			return _byteToHex(b, hexes, _HEX_DIGITS_UPPER_CASE);
+			_byteToHex(b, hexes, _HEX_DIGITS_UPPER_CASE);
+		}
+		else {
+			_byteToHex(b, hexes, _HEX_DIGITS);
 		}
 
-		return _byteToHex(b, hexes, _HEX_DIGITS);
+		return hexes;
+	}
+
+	public static void byteToHexCharArray(byte b, char[] hexes) {
+		byteToHexCharArray(b, hexes, false);
+	}
+
+	public static void byteToHexCharArray(
+		byte b, char[] hexes, boolean upperCase) {
+
+		if (upperCase) {
+			_byteToHex(b, hexes, _HEX_DIGITS_UPPER_CASE);
+		}
+		else {
+			_byteToHex(b, hexes, _HEX_DIGITS);
+		}
 	}
 
 	public static String charToHex(char c) {
@@ -124,8 +154,10 @@ public class UnicodeFormatter {
 		char[] hexes = new char[4];
 
 		for (char c : array) {
+			_charToHex(c, hexes);
+
 			sb.append(UNICODE_PREFIX);
-			sb.append(_charToHex(c, hexes));
+			sb.append(hexes);
 		}
 
 		return sb.toString();
@@ -141,21 +173,21 @@ public class UnicodeFormatter {
 		char[] hexes = new char[4];
 
 		for (int i = 0; i < s.length(); i++) {
+			_charToHex(s.charAt(i), hexes);
+
 			sb.append(UNICODE_PREFIX);
-			sb.append(_charToHex(s.charAt(i), hexes));
+			sb.append(hexes);
 		}
 
 		return sb.toString();
 	}
 
-	private static char[] _byteToHex(byte b, char[] hexes, char[] table) {
+	private static void _byteToHex(byte b, char[] hexes, char[] table) {
 		hexes[0] = table[(b >> 4) & 0x0f];
 		hexes[1] = table[b & 0x0f];
-
-		return hexes;
 	}
 
-	private static char[] _charToHex(char c, char[] hexes) {
+	private static void _charToHex(char c, char[] hexes) {
 		byte hi = (byte)(c >>> 8);
 		byte lo = (byte)(c & 0xff);
 
@@ -163,8 +195,6 @@ public class UnicodeFormatter {
 		hexes[1] = _HEX_DIGITS[hi & 0x0f];
 		hexes[2] = _HEX_DIGITS[(lo >> 4) & 0x0f];
 		hexes[3] = _HEX_DIGITS[lo & 0x0f];
-
-		return hexes;
 	}
 
 	private static final char[] _HEX_DIGITS = {
