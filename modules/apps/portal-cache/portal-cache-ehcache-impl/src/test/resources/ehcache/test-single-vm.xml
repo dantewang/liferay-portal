@@ -3,6 +3,8 @@
     monitoring="off"
     name="liferay-single-vm"
     updateCheck="false"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ehcache.org/ehcache.xsd"
 >
     <defaultCache
         eternal="false"
