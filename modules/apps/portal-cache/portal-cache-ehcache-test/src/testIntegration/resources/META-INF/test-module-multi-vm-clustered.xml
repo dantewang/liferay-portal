@@ -1,7 +1,7 @@
 <ehcache
 	dynamicConfig="true"
 	monitoring="off"
-	name="module-single-vm"
+	name="test-module-multi-vm-clustered"
 	updateCheck="false"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://www.ehcache.org/ehcache.xsd"
@@ -17,7 +17,7 @@
 	<cache
 		eternal="false"
 		maxElementsInMemory="4321"
-		name="com.liferay.portal.util.WebCachePool"
+		name="com.liferay.portal.kernel.template.TemplateResourceLoader.xsl"
 		overflowToDisk="false"
 		timeToIdleSeconds="600"
 	>
