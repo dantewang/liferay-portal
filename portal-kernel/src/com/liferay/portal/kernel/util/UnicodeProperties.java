@@ -181,7 +181,7 @@ public class UnicodeProperties extends HashMap<String, String> {
 		for (Map.Entry<String, String> entry : treeMap.entrySet()) {
 			String value = entry.getValue();
 
-			if (Validator.isNull(value)) {
+			if (value == null) {
 				continue;
 			}
 
