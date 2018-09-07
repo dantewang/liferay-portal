@@ -127,10 +127,10 @@ public class PluginContextListener
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		ServletContext servletContext = servletContextEvent.getServletContext();
 
+		portalDestroy();
+
 		ServletContextClassLoaderPool.unregister(
 			servletContext.getServletContextName());
-
-		portalDestroy();
 	}
 
 	@Override
