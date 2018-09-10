@@ -71,18 +71,18 @@ public class UnicodeFormatter {
 		return hexes;
 	}
 
-	public static void byteToHexCharArray(byte b, char[] hexes) {
-		byteToHexCharArray(b, hexes, false);
+	public static void byteToHexCharArray(byte b, char[] buffer) {
+		byteToHexCharArray(b, buffer, false);
 	}
 
 	public static void byteToHexCharArray(
-		byte b, char[] hexes, boolean upperCase) {
+		byte b, char[] buffer, boolean upperCase) {
 
 		if (upperCase) {
-			_byteToHex(b, hexes, _HEX_DIGITS_UPPER_CASE);
+			_byteToHex(b, buffer, _HEX_DIGITS_UPPER_CASE);
 		}
 		else {
-			_byteToHex(b, hexes, _HEX_DIGITS);
+			_byteToHex(b, buffer, _HEX_DIGITS);
 		}
 	}
 
@@ -182,19 +182,19 @@ public class UnicodeFormatter {
 		return sb.toString();
 	}
 
-	private static void _byteToHex(byte b, char[] hexes, char[] table) {
-		hexes[0] = table[(b >> 4) & 0x0f];
-		hexes[1] = table[b & 0x0f];
+	private static void _byteToHex(byte b, char[] buffer, char[] table) {
+		buffer[0] = table[(b >> 4) & 0x0f];
+		buffer[1] = table[b & 0x0f];
 	}
 
-	private static void _charToHex(char c, char[] hexes) {
+	private static void _charToHex(char c, char[] buffer) {
 		byte hi = (byte)(c >>> 8);
 		byte lo = (byte)(c & 0xff);
 
-		hexes[0] = _HEX_DIGITS[(hi >> 4) & 0x0f];
-		hexes[1] = _HEX_DIGITS[hi & 0x0f];
-		hexes[2] = _HEX_DIGITS[(lo >> 4) & 0x0f];
-		hexes[3] = _HEX_DIGITS[lo & 0x0f];
+		buffer[0] = _HEX_DIGITS[(hi >> 4) & 0x0f];
+		buffer[1] = _HEX_DIGITS[hi & 0x0f];
+		buffer[2] = _HEX_DIGITS[(lo >> 4) & 0x0f];
+		buffer[3] = _HEX_DIGITS[lo & 0x0f];
 	}
 
 	private static final char[] _HEX_DIGITS = {
