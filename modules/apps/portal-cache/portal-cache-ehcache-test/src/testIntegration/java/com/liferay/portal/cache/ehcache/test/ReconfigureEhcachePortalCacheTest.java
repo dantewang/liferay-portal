@@ -15,6 +15,7 @@
 package com.liferay.portal.cache.ehcache.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.portal.cache.AggregatedPortalCacheListener;
 import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
@@ -29,6 +30,8 @@ import java.lang.reflect.Method;
 
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.event.CacheEventListener;
+import net.sf.ehcache.event.RegisteredEventListeners;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -54,8 +57,15 @@ public class ReconfigureEhcachePortalCacheTest {
 		PortalCache<?, ?> portalCache2 = _multiVMPool.getPortalCache(
 			ReconfigureEhcachePortalCacheTest.class.getName());
 
-		_assertMaxElementsInMemory(portalCache1, 100000);
-		_assertMaxElementsInMemory(portalCache2, 10000);
+		AggregatedPortalCacheListener<?, ?> aggregatedPortalCacheListener1 =
+			ReflectionTestUtil.getFieldValue(
+				portalCache1, "aggregatedPortalCacheListener");
+		AggregatedPortalCacheListener<?, ?> aggregatedPortalCacheListener2 =
+			ReflectionTestUtil.getFieldValue(
+				portalCache2, "aggregatedPortalCacheListener");
+
+		_assertEhcache(portalCache1, aggregatedPortalCacheListener1, 100000);
+		_assertEhcache(portalCache2, aggregatedPortalCacheListener2, 10000);
 
 		_invokeReconfigure(
 			_multiVMPool.getPortalCacheManager(),
@@ -63,8 +73,8 @@ public class ReconfigureEhcachePortalCacheTest {
 				ReconfigureEhcachePortalCacheTest.class.getClassLoader(),
 				"META-INF/test-module-multi-vm-clustered.xml"));
 
-		_assertMaxElementsInMemory(portalCache1, 4321);
-		_assertMaxElementsInMemory(portalCache2, 1234);
+		_assertEhcache(portalCache1, aggregatedPortalCacheListener1, 4321);
+		_assertEhcache(portalCache2, aggregatedPortalCacheListener2, 1234);
 	}
 
 	@Test
@@ -74,8 +84,15 @@ public class ReconfigureEhcachePortalCacheTest {
 		PortalCache<?, ?> portalCache2 = _singleVMPool.getPortalCache(
 			ReconfigureEhcachePortalCacheTest.class.getName());
 
-		_assertMaxElementsInMemory(portalCache1, 10000);
-		_assertMaxElementsInMemory(portalCache2, 10000);
+		AggregatedPortalCacheListener<?, ?> aggregatedPortalCacheListener1 =
+			ReflectionTestUtil.getFieldValue(
+				portalCache1, "aggregatedPortalCacheListener");
+		AggregatedPortalCacheListener<?, ?> aggregatedPortalCacheListener2 =
+			ReflectionTestUtil.getFieldValue(
+				portalCache2, "aggregatedPortalCacheListener");
+
+		_assertEhcache(portalCache1, aggregatedPortalCacheListener1, 10000);
+		_assertEhcache(portalCache2, aggregatedPortalCacheListener2, 10000);
 
 		_invokeReconfigure(
 			_singleVMPool.getPortalCacheManager(),
@@ -83,12 +100,14 @@ public class ReconfigureEhcachePortalCacheTest {
 				ReconfigureEhcachePortalCacheTest.class.getClassLoader(),
 				"META-INF/test-module-single-vm.xml"));
 
-		_assertMaxElementsInMemory(portalCache1, 4321);
-		_assertMaxElementsInMemory(portalCache2, 1234);
+		_assertEhcache(portalCache1, aggregatedPortalCacheListener1, 4321);
+		_assertEhcache(portalCache2, aggregatedPortalCacheListener2, 1234);
 	}
 
-	private void _assertMaxElementsInMemory(
-		PortalCache<?, ?> portalCache, int expectedMaxElementsInMemory) {
+	private void _assertEhcache(
+		PortalCache<?, ?> portalCache,
+		AggregatedPortalCacheListener<?, ?> aggregatedPortalCacheListener,
+		int expectedMaxElementsInMemory) {
 
 		Ehcache ehcache = ReflectionTestUtil.getFieldValue(
 			portalCache, "ehcache");
@@ -98,6 +117,33 @@ public class ReconfigureEhcachePortalCacheTest {
 		Assert.assertEquals(
 			expectedMaxElementsInMemory,
 			cacheConfiguration.getMaxElementsInMemory());
+
+		RegisteredEventListeners registeredEventListeners =
+			ehcache.getCacheEventNotificationService();
+
+		boolean listenerPresent = false;
+
+		for (CacheEventListener cacheEventListener :
+				registeredEventListeners.getCacheEventListeners()) {
+
+			try {
+				if (aggregatedPortalCacheListener ==
+						ReflectionTestUtil.getFieldValue(
+							cacheEventListener,
+							"_aggregatedPortalCacheListener")) {
+
+					listenerPresent = true;
+
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+		}
+
+		Assert.assertTrue(
+			"Expected AggregatedPortalCacheListener is not present!",
+			listenerPresent);
 	}
 
 	private void _invokeReconfigure(
