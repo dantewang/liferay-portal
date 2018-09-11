@@ -3,6 +3,9 @@ targetCompatibility = "1.8"
 
 dependencies {
 	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
+	testIntegrationCompile project(":apps:portal-cache:portal-cache-api")
 	testIntegrationCompile project(":apps:portal-cache:portal-cache-ehcache-provider")
+	testIntegrationCompile project(":apps:portal-cache:portal-cache-ehcache-spi")
+	testIntegrationCompile project(":apps:portal-cache:portal-cache-test-util")
 	testIntegrationCompile project(":test:arquillian-extension-junit-bridge")
 }

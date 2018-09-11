@@ -13,6 +13,7 @@
 		overflowToDisk="false"
 		timeToIdleSeconds="600"
 	>
+		<cacheEventListenerFactory class="com.liferay.portal.cache.ehcache.test.event.TestCacheEventListenerFactory" />
 	</cache>
 	<cache
 		eternal="false"
