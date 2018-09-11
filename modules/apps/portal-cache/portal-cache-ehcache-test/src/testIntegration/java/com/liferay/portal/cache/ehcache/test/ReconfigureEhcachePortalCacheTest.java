@@ -15,20 +15,28 @@
 package com.liferay.portal.cache.ehcache.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.portal.cache.AggregatedPortalCacheListener;
 import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
+import com.liferay.portal.kernel.cache.PortalCacheListener;
+import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
 import com.liferay.portal.kernel.cache.SingleVMPool;
 import com.liferay.portal.kernel.cache.configurator.PortalCacheConfiguratorSettings;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.lang.reflect.Method;
 
+import java.util.Map;
+
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.event.CacheEventListener;
+import net.sf.ehcache.event.RegisteredEventListeners;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -54,8 +62,23 @@ public class ReconfigureEhcachePortalCacheTest {
 		PortalCache<?, ?> portalCache2 = _multiVMPool.getPortalCache(
 			ReconfigureEhcachePortalCacheTest.class.getName());
 
+		AggregatedPortalCacheListener<?, ?> aggregatedPortalCacheListener1 =
+			ReflectionTestUtil.getFieldValue(
+				portalCache1, "aggregatedPortalCacheListener");
+		AggregatedPortalCacheListener<?, ?> aggregatedPortalCacheListener2 =
+			ReflectionTestUtil.getFieldValue(
+				portalCache2, "aggregatedPortalCacheListener");
+
+		portalCache2.registerPortalCacheListener(
+			_testPortalCacheListener, PortalCacheListenerScope.ALL);
+
 		_assertMaxElementsInMemory(portalCache1, 100000);
 		_assertMaxElementsInMemory(portalCache2, 10000);
+
+		_assertListeners(portalCache1, aggregatedPortalCacheListener1, null);
+		_assertListeners(
+			portalCache2, aggregatedPortalCacheListener2,
+			_testPortalCacheListener);
 
 		_invokeReconfigure(
 			_multiVMPool.getPortalCacheManager(),
@@ -65,6 +88,11 @@ public class ReconfigureEhcachePortalCacheTest {
 
 		_assertMaxElementsInMemory(portalCache1, 4321);
 		_assertMaxElementsInMemory(portalCache2, 1234);
+
+		_assertListeners(portalCache1, aggregatedPortalCacheListener1, null);
+		_assertListeners(
+			portalCache2, aggregatedPortalCacheListener2,
+			_testPortalCacheListener);
 	}
 
 	@Test
@@ -74,8 +102,23 @@ public class ReconfigureEhcachePortalCacheTest {
 		PortalCache<?, ?> portalCache2 = _singleVMPool.getPortalCache(
 			ReconfigureEhcachePortalCacheTest.class.getName());
 
+		AggregatedPortalCacheListener<?, ?> aggregatedPortalCacheListener1 =
+			ReflectionTestUtil.getFieldValue(
+				portalCache1, "aggregatedPortalCacheListener");
+		AggregatedPortalCacheListener<?, ?> aggregatedPortalCacheListener2 =
+			ReflectionTestUtil.getFieldValue(
+				portalCache2, "aggregatedPortalCacheListener");
+
+		portalCache2.registerPortalCacheListener(
+			_testPortalCacheListener, PortalCacheListenerScope.ALL);
+
 		_assertMaxElementsInMemory(portalCache1, 10000);
 		_assertMaxElementsInMemory(portalCache2, 10000);
+
+		_assertListeners(portalCache1, aggregatedPortalCacheListener1, null);
+		_assertListeners(
+			portalCache2, aggregatedPortalCacheListener2,
+			_testPortalCacheListener);
 
 		_invokeReconfigure(
 			_singleVMPool.getPortalCacheManager(),
@@ -85,6 +128,63 @@ public class ReconfigureEhcachePortalCacheTest {
 
 		_assertMaxElementsInMemory(portalCache1, 4321);
 		_assertMaxElementsInMemory(portalCache2, 1234);
+
+		_assertListeners(portalCache1, aggregatedPortalCacheListener1, null);
+		_assertListeners(
+			portalCache2, aggregatedPortalCacheListener2,
+			_testPortalCacheListener);
+	}
+
+	private void _assertListeners(
+		PortalCache<?, ?> portalCache,
+		AggregatedPortalCacheListener<?, ?> aggregatedPortalCacheListener,
+		PortalCacheListener<?, ?> registeredPortalCacheListener) {
+
+		// Assert the provided AggregatedPortalCacheListener is registered on
+		// the Ehcache
+
+		Ehcache ehcache = ReflectionTestUtil.getFieldValue(
+			portalCache, "ehcache");
+
+		RegisteredEventListeners registeredEventListeners =
+			ehcache.getCacheEventNotificationService();
+
+		boolean hasAggregatedPortalCacheListener = false;
+
+		for (CacheEventListener cacheEventListener :
+				registeredEventListeners.getCacheEventListeners()) {
+
+			try {
+				if (aggregatedPortalCacheListener ==
+						ReflectionTestUtil.getFieldValue(
+							cacheEventListener,
+							"_aggregatedPortalCacheListener")) {
+
+					hasAggregatedPortalCacheListener = true;
+
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+		}
+
+		Assert.assertTrue(
+			"Expected AggregatedPortalCacheListener is not present!",
+			hasAggregatedPortalCacheListener);
+
+		// Assert the provided PortalCacheListener is registered on the
+		// PortalCache
+
+		Map<? extends PortalCacheListener<?, ?>, PortalCacheListenerScope>
+			portalCacheListeners =
+				aggregatedPortalCacheListener.getPortalCacheListeners();
+
+		if (registeredPortalCacheListener != null) {
+			Assert.assertEquals(
+				PortalCacheListenerScope.ALL,
+				portalCacheListeners.get(registeredPortalCacheListener));
+		}
 	}
 
 	private void _assertMaxElementsInMemory(
@@ -117,5 +217,22 @@ public class ReconfigureEhcachePortalCacheTest {
 
 	@Inject
 	private SingleVMPool _singleVMPool;
+
+	private final PortalCacheListener _testPortalCacheListener =
+		(PortalCacheListener)ProxyUtil.newProxyInstance(
+			ReconfigureEhcachePortalCacheTest.class.getClassLoader(),
+			new Class<?>[] {PortalCacheListener.class},
+			(proxy, method, args) -> {
+				String methodName = method.getName();
+
+				if (methodName.equals("equals")) {
+					return equals(args[0]);
+				}
+				else if (methodName.equals("hashCode")) {
+					return hashCode();
+				}
+
+				return null;
+			});
 
 }
