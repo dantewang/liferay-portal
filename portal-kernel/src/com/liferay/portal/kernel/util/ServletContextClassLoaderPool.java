@@ -25,7 +25,7 @@ public class ServletContextClassLoaderPool {
 	public static ClassLoader getClassLoader(String contextName) {
 		ClassLoader classLoader = null;
 
-		if ((contextName != null) && !contextName.equals("null")) {
+		if ((contextName != null)) {
 			classLoader = _classLoaders.get(contextName);
 		}
 
@@ -40,16 +40,10 @@ public class ServletContextClassLoaderPool {
 
 	public static String getContextName(ClassLoader classLoader) {
 		if (classLoader == null) {
-			return "null";
+			return null;
 		}
 
-		String contextName = _contextNames.get(classLoader);
-
-		if (contextName == null) {
-			contextName = "null";
-		}
-
-		return contextName;
+		return _contextNames.get(classLoader);
 	}
 
 	public static void register(String contextName, ClassLoader classLoader) {
@@ -77,11 +71,5 @@ public class ServletContextClassLoaderPool {
 		new ConcurrentHashMap<>();
 	private static final Map<ClassLoader, String> _contextNames =
 		new ConcurrentHashMap<>();
-
-	static {
-		register(
-			"GlobalClassLoader",
-			ServletContextClassLoaderPool.class.getClassLoader());
-	}
 
 }
