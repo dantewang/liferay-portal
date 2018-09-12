@@ -51,7 +51,7 @@ public class CustomServletContextHelper
 	extends ServletContextHelper implements ServletContextListener {
 
 	public CustomServletContextHelper(
-		Bundle bundle, Logger logger,
+		Bundle bundle, Logger logger, boolean hasPluginContextListener,
 		List<WebResourceCollectionDefinition>
 			webResourceCollectionDefinitions) {
 
@@ -59,6 +59,7 @@ public class CustomServletContextHelper
 
 		_bundle = bundle;
 		_logger = logger;
+		_hasPluginContextListener = hasPluginContextListener;
 		_webResourceCollectionDefinitions = webResourceCollectionDefinitions;
 
 		Class<?> clazz = getClass();
@@ -68,8 +69,10 @@ public class CustomServletContextHelper
 
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
-		ServletContextClassLoaderPool.unregister(
-			_servletContext.getServletContextName());
+		if (!_hasPluginContextListener) {
+			ServletContextClassLoaderPool.unregister(
+				_servletContext.getServletContextName());
+		}
 
 		_servletContext = null;
 	}
@@ -79,9 +82,11 @@ public class CustomServletContextHelper
 		_servletContext = ServletContextDelegate.create(
 			servletContextEvent.getServletContext());
 
-		ServletContextClassLoaderPool.register(
-			_servletContext.getServletContextName(),
-			_servletContext.getClassLoader());
+		if (!_hasPluginContextListener) {
+			ServletContextClassLoaderPool.register(
+				_servletContext.getServletContextName(),
+				_servletContext.getClassLoader());
+		}
 	}
 
 	@Override
@@ -284,6 +289,7 @@ public class CustomServletContextHelper
 	}
 
 	private final Bundle _bundle;
+	private final boolean _hasPluginContextListener;
 	private final Logger _logger;
 	private ServletContext _servletContext;
 	private final String _string;
