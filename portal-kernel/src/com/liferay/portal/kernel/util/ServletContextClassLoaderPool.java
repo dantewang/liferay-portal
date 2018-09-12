@@ -25,7 +25,7 @@ public class ServletContextClassLoaderPool {
 	public static ClassLoader getClassLoader(String contextName) {
 		ClassLoader classLoader = null;
 
-		if ((contextName != null)) {
+		if (contextName != null) {
 			classLoader = _classLoaders.get(contextName);
 		}
 

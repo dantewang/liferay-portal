@@ -84,10 +84,10 @@ public class ServletContextHelperRegistrationImpl
 				webXMLDefinition = webXMLDefinitionLoader.loadWebXML();
 
 				for (ListenerDefinition listenerDefinition :
-					webXMLDefinition.getListenerDefinitions()) {
+						webXMLDefinition.getListenerDefinitions()) {
 
 					if (listenerDefinition.getEventListener() instanceof
-						PluginContextListener) {
+							PluginContextListener) {
 
 						hasPluginContextListener = true;
 					}
