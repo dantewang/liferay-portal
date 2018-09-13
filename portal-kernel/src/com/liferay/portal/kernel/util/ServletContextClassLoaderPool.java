@@ -78,10 +78,4 @@ public class ServletContextClassLoaderPool {
 	private static final Map<ClassLoader, String> _contextNames =
 		new ConcurrentHashMap<>();
 
-	static {
-		register(
-			"GlobalClassLoader",
-			ServletContextClassLoaderPool.class.getClassLoader());
-	}
-
 }
