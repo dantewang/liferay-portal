@@ -19,6 +19,7 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.ServletContextClassLoaderPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.osgi.web.servlet.context.helper.definition.WebResourceCollectionDefinition;
 import com.liferay.portal.servlet.delegate.ServletContextDelegate;
@@ -50,7 +51,7 @@ public class CustomServletContextHelper
 	extends ServletContextHelper implements ServletContextListener {
 
 	public CustomServletContextHelper(
-		Bundle bundle, Logger logger,
+		Bundle bundle, Logger logger, boolean wabShapedBundle,
 		List<WebResourceCollectionDefinition>
 			webResourceCollectionDefinitions) {
 
@@ -58,6 +59,7 @@ public class CustomServletContextHelper
 
 		_bundle = bundle;
 		_logger = logger;
+		_wabShapedBundle = wabShapedBundle;
 		_webResourceCollectionDefinitions = webResourceCollectionDefinitions;
 
 		Class<?> clazz = getClass();
@@ -67,6 +69,11 @@ public class CustomServletContextHelper
 
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
+		if (!_wabShapedBundle) {
+			ServletContextClassLoaderPool.unregister(
+				_servletContext.getServletContextName());
+		}
+
 		_servletContext = null;
 	}
 
@@ -74,6 +81,12 @@ public class CustomServletContextHelper
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		_servletContext = ServletContextDelegate.create(
 			servletContextEvent.getServletContext());
+
+		if (!_wabShapedBundle) {
+			ServletContextClassLoaderPool.register(
+				_servletContext.getServletContextName(),
+				_servletContext.getClassLoader());
+		}
 	}
 
 	@Override
@@ -279,6 +292,7 @@ public class CustomServletContextHelper
 	private final Logger _logger;
 	private ServletContext _servletContext;
 	private final String _string;
+	private final boolean _wabShapedBundle;
 	private final List<WebResourceCollectionDefinition>
 		_webResourceCollectionDefinitions;
 
