@@ -14,8 +14,12 @@
 
 package com.liferay.portlet.internal;
 
+import com.liferay.portal.kernel.executor.CopyThreadLocalCallable;
 import com.liferay.portal.kernel.portlet.LiferayPortletAsyncContext;
+import com.liferay.portal.kernel.util.DefaultThreadLocalBinder;
 import com.liferay.portlet.PortletAsyncListenerAdapter;
+
+import java.io.IOException;
 
 import javax.portlet.PortletAsyncListener;
 import javax.portlet.PortletException;
@@ -23,6 +27,7 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import javax.servlet.AsyncContext;
+import javax.servlet.AsyncEvent;
 import javax.servlet.AsyncListener;
 
 /**
@@ -160,7 +165,7 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 
 	@Override
 	public void start(Runnable runnable) throws IllegalStateException {
-		_asyncContext.start(runnable);
+		_asyncContext.start(new PortletAsyncRunnableWrapper(runnable));
 	}
 
 	protected void initialize(
@@ -192,5 +197,43 @@ public class PortletAsyncContextImpl implements LiferayPortletAsyncContext {
 	private ResourceRequest _resourceRequest;
 	private ResourceResponse _resourceResponse;
 	private boolean _returnedToContainer;
+
+	private class PortletAsyncRunnableWrapper
+		extends CopyThreadLocalCallable<Object> implements Runnable {
+
+		public PortletAsyncRunnableWrapper(Runnable runnable) {
+			super(new DefaultThreadLocalBinder(), false, true);
+
+			_runnable = runnable;
+		}
+
+		@Override
+		public Object doCall() throws Exception {
+			_runnable.run();
+
+			return null;
+		}
+
+		@Override
+		public void run() {
+			try {
+				call();
+			}
+			catch (Throwable t) {
+
+				// Tomcat doesn't invoke onError
+
+				try {
+					_portletAsyncListenerAdapter.onError(
+						new AsyncEvent(_asyncContext, t));
+				}
+				catch (IOException ioe) {
+				}
+			}
+		}
+
+		private final Runnable _runnable;
+
+	}
 
 }
