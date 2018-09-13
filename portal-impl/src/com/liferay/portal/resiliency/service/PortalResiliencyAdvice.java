@@ -61,6 +61,10 @@ public class PortalResiliencyAdvice
 			ServletContextClassLoaderPool.getContextName(
 				targetClass.getClassLoader());
 
+		if (servletContextName == null) {
+			return null;
+		}
+
 		SPI spi = SPIRegistryUtil.getServletContextSPI(servletContextName);
 
 		if (spi == null) {
