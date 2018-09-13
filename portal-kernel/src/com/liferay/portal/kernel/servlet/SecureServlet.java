@@ -17,6 +17,7 @@ package com.liferay.portal.kernel.servlet;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
 import com.liferay.portal.kernel.util.InstanceFactory;
+import com.liferay.portal.kernel.util.ServletContextClassLoaderPool;
 
 import java.io.IOException;
 
@@ -98,8 +99,8 @@ public class SecureServlet
 	protected void doPortalInit() throws Exception {
 		ServletContext servletContext = servletConfig.getServletContext();
 
-		ClassLoader classLoader = (ClassLoader)servletContext.getAttribute(
-			PluginContextListener.PLUGIN_CLASS_LOADER);
+		ClassLoader classLoader = ServletContextClassLoaderPool.getClassLoader(
+			servletContext.getServletContextName());
 
 		String servletClass = servletConfig.getInitParameter("servlet-class");
 
