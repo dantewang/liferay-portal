@@ -23,19 +23,33 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ServletContextClassLoaderPool {
 
 	public static ClassLoader getClassLoader(String contextName) {
-		if (contextName == null) {
-			return null;
+		ClassLoader classLoader = null;
+
+		if ((contextName != null) && !contextName.equals("null")) {
+			classLoader = _classLoaders.get(contextName);
 		}
 
-		return _classLoaders.get(contextName);
+		if (classLoader == null) {
+			Thread currentThread = Thread.currentThread();
+
+			classLoader = currentThread.getContextClassLoader();
+		}
+
+		return classLoader;
 	}
 
 	public static String getContextName(ClassLoader classLoader) {
 		if (classLoader == null) {
-			return null;
+			return "null";
 		}
 
-		return _contextNames.get(classLoader);
+		String contextName = _contextNames.get(classLoader);
+
+		if (contextName == null) {
+			contextName = "null";
+		}
+
+		return contextName;
 	}
 
 	public static void register(String contextName, ClassLoader classLoader) {
@@ -63,5 +77,11 @@ public class ServletContextClassLoaderPool {
 		new ConcurrentHashMap<>();
 	private static final Map<ClassLoader, String> _contextNames =
 		new ConcurrentHashMap<>();
+
+	static {
+		register(
+			"GlobalClassLoader",
+			ServletContextClassLoaderPool.class.getClassLoader());
+	}
 
 }
