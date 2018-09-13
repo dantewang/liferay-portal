@@ -69,6 +69,7 @@ import com.liferay.portal.kernel.servlet.ServletContextUtil;
 import com.liferay.portal.kernel.spring.aop.Skip;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.ClassLoaderUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -294,11 +295,16 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 		ServletContext servletContext = portletApp.getServletContext();
 
+		ClassLoader classLoader = ServletContextClassLoaderPool.getClassLoader(
+			servletContext.getServletContextName());
+
+		if (classLoader == null) {
+			classLoader = ClassLoaderUtil.getContextClassLoader();
+		}
+
 		PortletBagFactory portletBagFactory = new PortletBagFactory();
 
-		portletBagFactory.setClassLoader(
-			ServletContextClassLoaderPool.getClassLoader(
-				servletContext.getServletContextName()));
+		portletBagFactory.setClassLoader(classLoader);
 		portletBagFactory.setServletContext(servletContext);
 		portletBagFactory.setWARFile(true);
 
@@ -903,10 +909,16 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 			}
 		}
 
+		ClassLoader classLoader = ServletContextClassLoaderPool.getClassLoader(
+			servletContext.getServletContextName());
+
+		if (classLoader == null) {
+			classLoader = ClassLoaderUtil.getContextClassLoader();
+		}
+
 		PortletBagFactory portletBagFactory = new PortletBagFactory();
 
-		portletBagFactory.setClassLoader(
-			ServletContextClassLoaderPool.getClassLoader(servletContextName));
+		portletBagFactory.setClassLoader(classLoader);
 		portletBagFactory.setServletContext(servletContext);
 		portletBagFactory.setWARFile(true);
 

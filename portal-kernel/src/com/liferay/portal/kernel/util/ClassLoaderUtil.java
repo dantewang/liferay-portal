@@ -41,9 +41,15 @@ public class ClassLoaderUtil {
 		}
 
 		for (int i = 0; i < servletContextNames.length; i++) {
-			classLoaders[offset + i] =
+			ClassLoader classLoader =
 				ServletContextClassLoaderPool.getClassLoader(
 					servletContextNames[i]);
+
+			if (classLoader == null) {
+				classLoader = getContextClassLoader();
+			}
+
+			classLoaders[offset + i] = classLoader;
 		}
 
 		return AggregateClassLoader.getAggregateClassLoader(classLoaders);
