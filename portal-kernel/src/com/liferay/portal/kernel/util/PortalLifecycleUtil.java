@@ -14,7 +14,6 @@
 
 package com.liferay.portal.kernel.util;
 
-import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.portal.kernel.deploy.hot.HotDeployUtil;
 
 import java.util.ArrayList;
@@ -70,7 +69,8 @@ public class PortalLifecycleUtil {
 
 				if (PortalClassLoaderUtil.isPortalClassLoader(classLoader) ||
 					!HotDeployUtil.registerDependentPortalLifecycle(
-						ClassLoaderPool.getContextName(classLoader),
+						ServletContextClassLoaderPool.getContextName(
+							classLoader),
 						portalLifecycle)) {
 
 					portalLifecycle.portalInit();
