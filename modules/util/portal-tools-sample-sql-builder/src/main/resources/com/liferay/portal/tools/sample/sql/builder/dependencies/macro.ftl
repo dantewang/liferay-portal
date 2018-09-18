@@ -120,10 +120,11 @@
 <#macro insertGroup
 	_groupModel
 	_publicPageCount
+	_privatePageCount
 >
 	${dataFactory.toInsertSQL(_groupModel)}
 
-	<#local layoutSetModels = dataFactory.newLayoutSetModels(_groupModel.groupId, _publicPageCount)>
+	<#local layoutSetModels = dataFactory.newLayoutSetModels(_groupModel.groupId, _publicPageCount, _privatePageCount)>
 
 	<#list layoutSetModels as layoutSetModel>
 		${dataFactory.toInsertSQL(layoutSetModel)}
@@ -136,25 +137,6 @@
 	${dataFactory.toInsertSQL(_layoutModel)}
 
 	${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(_layoutModel))}
-</#macro>
-
-<#macro insertContentLayout
-	_layoutModel
-	_fragmentEntryModels
->
-	${dataFactory.toInsertSQL(_layoutModel)}
-
-	${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(_layoutModel))}
-
-	<#local fragmentEntryLinkModels = dataFactory.newFragmentEntryLinkModels(_layoutModel, _fragmentEntryModels)>
-
-	<#list fragmentEntryLinkModels as fragmentEntryLinkModel>
-		${dataFactory.toInsertSQL(fragmentEntryLinkModel)}
-
-		<#if fragmentEntryLinkModel.getHtml()?contains("lfr-widget-web-content")>
-			${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferencesModel(fragmentEntryLinkModel), true)}
-		</#if>
-	</#list>
 </#macro>
 
 <#macro insertMBDiscussion
