@@ -12,37 +12,17 @@
  * details.
  */
 
-package com.liferay.portal.layoutconfiguration.util;
-
-import com.liferay.petra.lang.ThreadLocalBinder;
+package com.liferay.petra.lang;
 
 /**
  * @author Shuyang Zhou
  */
-public class ParallelRenderThreadLocalBinderUtil {
+public interface ThreadLocalBinder {
 
-	public static void bind() {
-		_threadLocalBinder.bind();
-	}
+	public void bind();
 
-	public static void cleanUp() {
-		_threadLocalBinder.cleanUp();
-	}
+	public void cleanUp();
 
-	public static ThreadLocalBinder getThreadLocalBinder() {
-		return _threadLocalBinder;
-	}
-
-	public static void record() {
-		_threadLocalBinder.record();
-	}
-
-	public static void setThreadLocalBinder(
-		ThreadLocalBinder threadLocalBinder) {
-
-		_threadLocalBinder = threadLocalBinder;
-	}
-
-	private static ThreadLocalBinder _threadLocalBinder;
+	public void record();
 
 }

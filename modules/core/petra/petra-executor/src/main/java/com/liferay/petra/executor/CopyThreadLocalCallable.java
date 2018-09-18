@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.kernel.executor;
+package com.liferay.petra.executor;
 
 import com.liferay.petra.lang.CentralizedThreadLocal;
 import com.liferay.petra.lang.ThreadLocalBinder;
@@ -22,10 +22,8 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 /**
- * @author     Shuyang Zhou
- * @deprecated As of Judson (7.1.x), replaced by {@link com.liferay.petra.executor.CopyThreadLocalCallable}
+ * @author Shuyang Zhou
  */
-@Deprecated
 public abstract class CopyThreadLocalCallable<T> implements Callable<T> {
 
 	public CopyThreadLocalCallable(boolean readOnly, boolean clearOnExit) {
