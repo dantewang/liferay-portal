@@ -21,8 +21,10 @@ import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.test.rule.ArquillianUtil;
 import com.liferay.portal.kernel.test.rule.callback.BaseTestCallback;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.kernel.util.ClassLoaderUtil;
 import com.liferay.portal.kernel.util.PortalLifecycle;
 import com.liferay.portal.kernel.util.PortalLifecycleUtil;
+import com.liferay.portal.kernel.util.ServletContextClassLoaderPool;
 import com.liferay.portal.module.framework.ModuleFrameworkUtilAdapter;
 import com.liferay.portal.service.test.ServiceTestUtil;
 import com.liferay.portal.servlet.MainServlet;
@@ -69,6 +71,11 @@ public class MainServletTestCallback extends BaseTestCallback<Void, Void> {
 			final MockServletContext mockServletContext =
 				new AutoDeployMockServletContext(
 					new FileSystemResourceLoader());
+
+			mockServletContext.setServletContextName(StringPool.BLANK);
+
+			ServletContextClassLoaderPool.register(
+				StringPool.BLANK, ClassLoaderUtil.getContextClassLoader());
 
 			PortalLifecycleUtil.register(
 				new PortalLifecycle() {
