@@ -64,6 +64,14 @@ public class SampleSQLBuilderTest {
 		_initProperties(properties, tempDir.getAbsolutePath());
 
 		try {
+			properties.put("sample.sql.content.page.enable", "false");
+
+			new SampleSQLBuilder(properties, new DataFactory(properties));
+
+			_loadHypersonic("../../../sql", tempDir.getAbsolutePath());
+
+			properties.put("sample.sql.content.page.enable", "true");
+
 			new SampleSQLBuilder(properties, new DataFactory(properties));
 
 			_loadHypersonic("../../../sql", tempDir.getAbsolutePath());
@@ -115,7 +123,7 @@ public class SampleSQLBuilderTest {
 		properties.put("sample.sql.max.dl.folder.depth", "1");
 		properties.put("sample.sql.max.group.count", "1");
 		properties.put("sample.sql.max.journal.article.count", "1");
-		properties.put("sample.sql.max.journal.article.page.count", "1");
+		properties.put("sample.sql.max.journal.article.page.count", "2");
 		properties.put("sample.sql.max.journal.article.size", "1");
 		properties.put("sample.sql.max.journal.article.version.count", "1");
 		properties.put("sample.sql.max.mb.category.count", "1");
