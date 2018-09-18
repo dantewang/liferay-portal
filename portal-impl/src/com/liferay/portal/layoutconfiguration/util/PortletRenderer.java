@@ -15,6 +15,7 @@
 package com.liferay.portal.layoutconfiguration.util;
 
 import com.liferay.petra.lang.CentralizedThreadLocal;
+import com.liferay.petra.lang.ThreadLocalBinder;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.portlet.PortletContainerException;
 import com.liferay.portal.kernel.portlet.PortletContainerUtil;
@@ -22,7 +23,6 @@ import com.liferay.portal.kernel.portlet.RestrictPortletServletRequest;
 import com.liferay.portal.kernel.servlet.BufferCacheServletResponse;
 import com.liferay.portal.kernel.util.Mergeable;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.ThreadLocalBinder;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;

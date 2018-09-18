@@ -15,7 +15,7 @@
 package com.liferay.portal.kernel.executor;
 
 import com.liferay.petra.lang.CentralizedThreadLocal;
-import com.liferay.portal.kernel.util.ThreadLocalBinder;
+import com.liferay.petra.lang.ThreadLocalBinder;
 
 import java.util.Collections;
 import java.util.Map;

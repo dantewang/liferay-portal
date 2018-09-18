@@ -14,7 +14,7 @@
 
 package com.liferay.portal.layoutconfiguration.util;
 
-import com.liferay.portal.kernel.util.ThreadLocalBinder;
+import com.liferay.petra.lang.ThreadLocalBinder;
 
 /**
  * @author Shuyang Zhou
