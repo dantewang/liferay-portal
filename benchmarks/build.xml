@@ -29,6 +29,10 @@
 			/>
 			<fileset
 				dir="${sdk.dir}/dist"
+				includes="com.liferay.layout.page.template.*.jar"
+			/>
+			<fileset
+				dir="${sdk.dir}/dist"
 				includes="com.liferay.message.boards.*.jar"
 			/>
 			<fileset
