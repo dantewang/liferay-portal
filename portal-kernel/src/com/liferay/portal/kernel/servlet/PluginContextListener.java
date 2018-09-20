@@ -14,12 +14,12 @@
 
 package com.liferay.portal.kernel.servlet;
 
-import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.portal.kernel.deploy.hot.HotDeployEvent;
 import com.liferay.portal.kernel.deploy.hot.HotDeployUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
+import com.liferay.portal.kernel.util.ServletContextClassLoaderPool;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
@@ -34,8 +34,17 @@ public class PluginContextListener
 	extends BasePortalLifecycle
 	implements ServletContextAttributeListener, ServletContextListener {
 
+	/**
+	 * @deprecated As of Judson (7.1.x), replaced by {@link
+	 *             ServletContextClassLoaderPool#getClassLoader(String)}
+	 */
+	@Deprecated
 	public static final String PLUGIN_CLASS_LOADER = "PLUGIN_CLASS_LOADER";
 
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public void attributeAdded(
 		ServletContextAttributeEvent servletContextAttributeEvent) {
@@ -63,6 +72,10 @@ public class PluginContextListener
 		}
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public void attributeRemoved(
 		ServletContextAttributeEvent servletContextAttributeEvent) {
@@ -84,6 +97,10 @@ public class PluginContextListener
 		}
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public void attributeReplaced(
 		ServletContextAttributeEvent servletContextAttributeEvent) {
@@ -110,9 +127,10 @@ public class PluginContextListener
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		ServletContext servletContext = servletContextEvent.getServletContext();
 
-		ClassLoaderPool.unregister(servletContext.getServletContextName());
-
 		portalDestroy();
+
+		ServletContextClassLoaderPool.unregister(
+			servletContext.getServletContextName());
 	}
 
 	@Override
@@ -123,7 +141,7 @@ public class PluginContextListener
 
 		pluginClassLoader = currentThread.getContextClassLoader();
 
-		ClassLoaderPool.register(
+		ServletContextClassLoaderPool.register(
 			servletContext.getServletContextName(), pluginClassLoader);
 
 		servletContext.setAttribute(PLUGIN_CLASS_LOADER, pluginClassLoader);
