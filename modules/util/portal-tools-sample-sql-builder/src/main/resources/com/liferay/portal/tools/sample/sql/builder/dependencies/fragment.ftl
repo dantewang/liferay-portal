@@ -1,5 +1,32 @@
 <#assign contentPageEnable = dataFactory.contentPageEnable />
-<#if contentPageEnable== "false">
+<#if contentPageEnable== "true">
+
+	<#assign controlPanelLayoutModel = dataFactory.newControlPanelLayoutModel() />
+
+	${dataFactory.toInsertSQL(controlPanelLayoutModel)}
+
+	<@insertGroup
+		_groupModel=dataFactory.controlPanelGroupModel
+		_privatePageCount=1
+		_publicPageCount=0
+	/>
+
+	${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(controlPanelLayoutModel))}
+
+	<#assign fragmentCollectionModel = dataFactory.newFragmentCollectionModel(groupId) />
+
+	${dataFactory.toInsertSQL(fragmentCollectionModel)}
+
+	<#assign fragmentEntryModels = dataFactory.newFragmentEntryModels(groupId, fragmentCollectionModel) />
+
+	<#list fragmentEntryModels?keys as fragmentEntryModelName>
+		${dataFactory.toInsertSQL(fragmentEntryModels["${fragmentEntryModelName}"])}
+	</#list>
+
+	<#assign portletIdPrefix = "com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_test" />
+
+	${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferencesModel(controlPanelLayoutModel, portletIdPrefix))}
+
 	<#assign ddmStructureModel = dataFactory.defaultJournalDDMStructureModel />
 
 	<@insertDDMStructure
@@ -27,21 +54,9 @@
 	</#list>
 
 	<#list journalArticlePageCounts as journalArticlePageCount>
-		<#assign
-			portletIdPrefix = "com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_TEST_" + journalArticlePageCount + "_"
+		<#assign contentLayoutModel = dataFactory.newContentLayoutModel(groupId, groupId + "_journal_article_" + journalArticlePageCount, "web_content") />
 
-			layoutModel = dataFactory.newLayoutModel(groupId, groupId + "_journal_article_" + journalArticlePageCount, "", dataFactory.getJournalArticleLayoutColumn(portletIdPrefix))
-		/>
-
-		${dataFactory.getCSVWriter("layout").write(layoutModel.friendlyURL + "\n")}
-
-		<@insertLayout _layoutModel=layoutModel />
-
-		<#assign portletPreferencesModels = dataFactory.newJournalPortletPreferencesModels(layoutModel.plid) />
-
-		<#list portletPreferencesModels as portletPreferencesModel>
-		${dataFactory.toInsertSQL(portletPreferencesModel)}
-		</#list>
+		${dataFactory.getCSVWriter("layout").write(contentLayoutModel.friendlyURL + "\n")}
 
 		<#assign journalArticleCounts = dataFactory.getSequence(dataFactory.maxJournalArticleCount) />
 
@@ -84,9 +99,25 @@
 				_mbThreadId=dataFactory.getCounterNext()
 			/>
 
-			${dataFactory.toInsertSQL(dataFactory.newPortletPreferencesModel(layoutModel.plid, portletIdPrefix + journalArticleCount, journalArticleResourceModel))}
+			${dataFactory.toInsertSQL(contentLayoutModel)}
 
-			${dataFactory.toInsertSQL(dataFactory.newJournalContentSearchModel(journalArticleModel, layoutModel.plid))}
+			${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(contentLayoutModel))}
+
+			<#assign fragmentEntryLinkModels = dataFactory.newFragmentEntryLinkModels(contentLayoutModel, fragmentEntryModels) />
+
+			<#list fragmentEntryLinkModels as fragmentEntryLinkModel>
+				${dataFactory.toInsertSQL(fragmentEntryLinkModel)}
+
+				<#assign layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(contentLayoutModel, fragmentEntryLinkModel) />
+
+				${dataFactory.toInsertSQL(layoutPageTemplateStructureModel)}
+
+				<#if fragmentEntryLinkModel.getHtml()?contains("lfr-widget-web-content")>
+					${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferencesModel(contentLayoutModel, fragmentEntryLinkModel, journalArticleResourceModel))}
+					${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferencesModel(controlPanelLayoutModel, fragmentEntryLinkModel, journalArticleResourceModel))}
+					${dataFactory.toInsertSQL(dataFactory.newJournalContentSearchModel(controlPanelLayoutModel, journalArticleModel, fragmentEntryLinkModel))}
+				</#if>
+			</#list>
 		</#list>
 	</#list>
 </#if>

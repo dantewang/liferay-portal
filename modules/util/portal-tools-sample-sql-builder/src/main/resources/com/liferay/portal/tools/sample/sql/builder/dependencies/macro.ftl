@@ -120,10 +120,11 @@
 <#macro insertGroup
 	_groupModel
 	_publicPageCount
+	_privatePageCount
 >
 	${dataFactory.toInsertSQL(_groupModel)}
 
-	<#local layoutSetModels = dataFactory.newLayoutSetModels(_groupModel.groupId, _publicPageCount)>
+	<#local layoutSetModels = dataFactory.newLayoutSetModels(_groupModel.groupId, _publicPageCount, _privatePageCount)>
 
 	<#list layoutSetModels as layoutSetModel>
 		${dataFactory.toInsertSQL(layoutSetModel)}
