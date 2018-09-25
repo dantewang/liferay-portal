@@ -159,7 +159,7 @@ public class LiferayObjectWrapperTest {
 				e.getMessage());
 		}
 
-		// test 7, byte.class.getName() return "byte" does not contain period
+		// test 7, a class without package is considered allowed
 
 		Method checkClassIsRestricted = ReflectionTestUtil.getMethod(
 			LiferayObjectWrapper.class, "_checkClassIsRestricted", Class.class);
@@ -369,6 +369,9 @@ public class LiferayObjectWrapperTest {
 				restrictedPackageNames.size());
 			Assert.assertTrue(
 				restrictedPackageNames.contains(testRestrictedClassNames[2]));
+
+			// Test 5, a restricted class name unable to be loaded as class is
+			// registered as restricted package with log output
 
 			captureHandler.resetLogLevel(Level.INFO);
 
