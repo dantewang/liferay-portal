@@ -106,6 +106,9 @@ public class SampleSQLBuilderTest {
 		properties.put("sample.sql.max.asset.vocabulary.count", "1");
 		properties.put("sample.sql.max.blogs.entry.comment.count", "1");
 		properties.put("sample.sql.max.blogs.entry.count", "1");
+		properties.put("sample.sql.max.content.page.count", "1");
+		properties.put(
+			"sample.sql.max.content.page.journal.article.count", "1");
 		properties.put("sample.sql.max.ddl.custom.field.count", "1");
 		properties.put("sample.sql.max.ddl.record.count", "1");
 		properties.put("sample.sql.max.ddl.record.set.count", "1");
