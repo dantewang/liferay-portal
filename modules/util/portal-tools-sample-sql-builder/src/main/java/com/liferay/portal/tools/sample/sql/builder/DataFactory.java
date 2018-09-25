@@ -1508,17 +1508,14 @@ public class DataFactory {
 			"<?xml version=\"1.0\"?><root><name>" + name + "</name></root>");
 		layoutModel.setType(LayoutAdminConstants.LAYOUT_TYPE_CONTENT);
 		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + name);
+		layoutModel.setLastPublishDate(new Date());
 
 		UnicodeProperties typeSettingsProperties = new UnicodeProperties(true);
 
 		typeSettingsProperties.setProperty("fragmentEntries", fragmentEntries);
 
-		String typeSettings = StringUtil.replace(
-			typeSettingsProperties.toString(), '\n', "\\n");
-
-		layoutModel.setTypeSettings(typeSettings);
-
-		layoutModel.setLastPublishDate(new Date());
+		layoutModel.setTypeSettings(
+			StringUtil.replace(typeSettingsProperties.toString(), '\n', "\\n"));
 
 		return layoutModel;
 	}
@@ -1550,17 +1547,14 @@ public class DataFactory {
 		layoutModel.setType(LayoutConstants.TYPE_CONTROL_PANEL);
 		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + "manage");
 		layoutModel.setHidden(false);
+		layoutModel.setLastPublishDate(new Date());
 
 		UnicodeProperties typeSettingsProperties = new UnicodeProperties(true);
 
 		typeSettingsProperties.setProperty("privateLayout", "true");
 
-		String typeSettings = StringUtil.replace(
-			typeSettingsProperties.toString(), '\n', "\\n");
-
-		layoutModel.setTypeSettings(typeSettings);
-
-		layoutModel.setLastPublishDate(new Date());
+		layoutModel.setTypeSettings(
+			StringUtil.replace(typeSettingsProperties.toString(), '\n', "\\n"));
 
 		return layoutModel;
 	}
@@ -2061,7 +2055,6 @@ public class DataFactory {
 		fragmentEntryLinkModel.setUserName(_SAMPLE_USER_NAME);
 		fragmentEntryLinkModel.setCreateDate(new Date());
 		fragmentEntryLinkModel.setModifiedDate(new Date());
-
 		fragmentEntryLinkModel.setClassNameId(getClassNameId(Layout.class));
 		fragmentEntryLinkModel.setClassPK(layoutModel.getPlid());
 		fragmentEntryLinkModel.setCss(fragmentEntryModel.getCss());
@@ -2085,10 +2078,8 @@ public class DataFactory {
 
 		typeSettingsProperties.fastLoad(layoutModel.getTypeSettings());
 
-		String fragmentEntries = typeSettingsProperties.getProperty(
-			"fragmentEntries");
-
-		String[] fragmentEntryNames = StringUtil.split(fragmentEntries);
+		String[] fragmentEntryNames = StringUtil.split(
+			typeSettingsProperties.getProperty("fragmentEntries"));
 
 		for (int i = 0; i < fragmentEntryNames.length; i++) {
 			if (i == (fragmentEntryNames.length - 1)) {
@@ -2122,7 +2113,6 @@ public class DataFactory {
 		fragmentEntryModel.setUserName(_SAMPLE_USER_NAME);
 		fragmentEntryModel.setCreateDate(new Date());
 		fragmentEntryModel.setModifiedDate(new Date());
-
 		fragmentEntryModel.setName(fragmentName);
 		fragmentEntryModel.setCss(StringPool.BLANK);
 		fragmentEntryModel.setJs(StringPool.BLANK);
@@ -2135,9 +2125,7 @@ public class DataFactory {
 			getResourceInputStream("fragments/" + fragmentName + ".html"),
 			lines);
 
-		String html = StringUtil.merge(lines, StringPool.SPACE);
-
-		fragmentEntryModel.setHtml(html);
+		fragmentEntryModel.setHtml(StringUtil.merge(lines, StringPool.SPACE));
 
 		return fragmentEntryModel;
 	}
@@ -2340,23 +2328,14 @@ public class DataFactory {
 			JournalArticleResourceModel journalArticleResourceModel)
 		throws Exception {
 
-		String portletId = PortletIdCodec.encode(
-			JournalContentPortletKeys.JOURNAL_CONTENT,
-			fragmentEntryLinkModel.getNamespace());
-
 		PortletPreferences portletPreferences = new PortletPreferencesImpl();
 
 		portletPreferences.setValue("ddmTemplateKey", "BASIC-WEB-CONTENT");
-
 		portletPreferences.setValue("userToolAssetAddonEntryKeys", "");
-
 		portletPreferences.setValue("enableViewCountIncrement", "false");
-
 		portletPreferences.setValue("contentMetadataAssetAddonEntryKeys", "");
-
 		portletPreferences.setValue(
 			"articleId", journalArticleResourceModel.getArticleId());
-
 		portletPreferences.setValue(
 			"groupId",
 			String.valueOf(journalArticleResourceModel.getGroupId()));
@@ -2371,7 +2350,10 @@ public class DataFactory {
 		portletPreferencesModel.setOwnerType(
 			PortletKeys.PREFS_OWNER_TYPE_LAYOUT);
 		portletPreferencesModel.setPlid(layoutModel.getPlid());
-		portletPreferencesModel.setPortletId(portletId);
+		portletPreferencesModel.setPortletId(
+			PortletIdCodec.encode(
+				JournalContentPortletKeys.JOURNAL_CONTENT,
+				fragmentEntryLinkModel.getNamespace()));
 		portletPreferencesModel.setPreferences(
 			_portletPreferencesFactory.toXML(portletPreferences));
 
@@ -2422,15 +2404,14 @@ public class DataFactory {
 		JournalContentSearchModel journalContentSearchModel =
 			new JournalContentSearchModelImpl();
 
-		String portletId = PortletIdCodec.encode(
-			JournalContentPortletKeys.JOURNAL_CONTENT,
-			fragmentEntryLinkModel.getNamespace());
-
 		journalContentSearchModel.setContentSearchId(_counter.get());
 		journalContentSearchModel.setGroupId(layoutModel.getGroupId());
 		journalContentSearchModel.setCompanyId(_companyId);
 		journalContentSearchModel.setLayoutId(layoutModel.getGroupId());
-		journalContentSearchModel.setPortletId(portletId);
+		journalContentSearchModel.setPortletId(
+			PortletIdCodec.encode(
+				JournalContentPortletKeys.JOURNAL_CONTENT,
+				fragmentEntryLinkModel.getNamespace()));
 		journalContentSearchModel.setArticleId(
 			journalArticleModel.getArticleId());
 
@@ -2542,12 +2523,10 @@ public class DataFactory {
 			getClassNameId(Layout.class));
 		layoutPageTemplateStructureModel.setClassPK(layoutModel.getPlid());
 
-		long fragmentEntryLinkId =
-			fragmentEntryLinkModel.getFragmentEntryLinkId();
 		StringBundler sb = new StringBundler(3);
 
 		sb.append("{\"structure\":[\"");
-		sb.append(fragmentEntryLinkId);
+		sb.append(fragmentEntryLinkModel.getFragmentEntryLinkId());
 		sb.append("\"]}");
 
 		layoutPageTemplateStructureModel.setData(sb.toString());
