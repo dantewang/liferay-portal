@@ -4,16 +4,19 @@
 
 <@insertGroup
 	_groupModel=dataFactory.globalGroupModel
+	_privatePageCount=0
 	_publicPageCount=1
 />
 
 <@insertGroup
 	_groupModel=dataFactory.guestGroupModel
+	_privatePageCount=0
 	_publicPageCount=1
 />
 
 <@insertGroup
 	_groupModel=dataFactory.userPersonalSiteGroupModel
+	_privatePageCount=0
 	_publicPageCount=1
 />
 
@@ -25,6 +28,8 @@
 	<#include "blogs.ftl">
 
 	<#include "ddl.ftl">
+
+	<#include "fragment.ftl">
 
 	<#include "journal_article.ftl">
 
@@ -51,6 +56,7 @@
 
 	<@insertGroup
 		_groupModel=groupModel
+		_privatePageCount=0
 		_publicPageCount=publicPageCount
 	/>
 
