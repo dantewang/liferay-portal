@@ -106,7 +106,7 @@ public class SampleSQLBuilderTest {
 		properties.put("sample.sql.max.asset.vocabulary.count", "1");
 		properties.put("sample.sql.max.blogs.entry.comment.count", "1");
 		properties.put("sample.sql.max.blogs.entry.count", "1");
-		properties.put("sample.sql.max.content.page.count", "1");
+		properties.put("sample.sql.max.content.page.count", "2");
 		properties.put(
 			"sample.sql.max.content.page.journal.article.count", "1");
 		properties.put("sample.sql.max.ddl.custom.field.count", "1");
@@ -118,7 +118,7 @@ public class SampleSQLBuilderTest {
 		properties.put("sample.sql.max.dl.folder.depth", "1");
 		properties.put("sample.sql.max.group.count", "1");
 		properties.put("sample.sql.max.journal.article.count", "1");
-		properties.put("sample.sql.max.journal.article.page.count", "1");
+		properties.put("sample.sql.max.journal.article.page.count", "2");
 		properties.put("sample.sql.max.journal.article.size", "1");
 		properties.put("sample.sql.max.journal.article.version.count", "1");
 		properties.put("sample.sql.max.mb.category.count", "1");
