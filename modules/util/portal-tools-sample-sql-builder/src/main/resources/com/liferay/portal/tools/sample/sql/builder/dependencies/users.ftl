@@ -16,6 +16,7 @@
 
 	<@insertGroup
 		_groupModel=userGroupModel
+		_privatePageCount=0
 		_publicPageCount=1
 	/>
 

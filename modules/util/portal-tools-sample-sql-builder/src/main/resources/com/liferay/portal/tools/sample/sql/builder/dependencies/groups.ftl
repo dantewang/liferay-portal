@@ -4,16 +4,19 @@
 
 <@insertGroup
 	_groupModel=dataFactory.globalGroupModel
+	_privatePageCount=0
 	_publicPageCount=1
 />
 
 <@insertGroup
 	_groupModel=dataFactory.guestGroupModel
+	_privatePageCount=0
 	_publicPageCount=1
 />
 
 <@insertGroup
 	_groupModel=dataFactory.userPersonalSiteGroupModel
+	_privatePageCount=0
 	_publicPageCount=1
 />
 
@@ -25,6 +28,8 @@
 	<#include "blogs.ftl">
 
 	<#include "ddl.ftl">
+
+	<#include "fragment.ftl">
 
 	<#include "journal_article.ftl">
 
@@ -41,25 +46,17 @@
 		_parentDLFolderId=0
 	/>
 
-	<#assign fragmentEntryModels = dataFactory.newFragmentEntryModels(groupId) />
+	<#assign publicLayoutModels = dataFactory.newPublicLayoutModels(groupId) />
 
-	<#list fragmentEntryModels?keys as fragmentEntryModelName>
-		${dataFactory.toInsertSQL(fragmentEntryModels["${fragmentEntryModelName}"])}
+	<#list publicLayoutModels as publicLayoutModel>
+		<@insertLayout _layoutModel=publicLayoutModel />
 	</#list>
 
-	<#assign contentLayoutModels = dataFactory.newContentLayoutModels(groupId) />
-
-	<#list contentLayoutModels as contentLayoutModel>
-		<@insertContentLayout
-			_fragmentEntryModels=fragmentEntryModels
-			_layoutModel=contentLayoutModel
-		/>
-	</#list>
-
-	<#assign publicPageCount = contentLayoutModels?size + dataFactory.maxDDLRecordSetCount + dataFactory.maxJournalArticleCount />
+	<#assign publicPageCount = publicLayoutModels?size + dataFactory.maxDDLRecordSetCount + dataFactory.maxJournalArticleCount />
 
 	<@insertGroup
 		_groupModel=groupModel
+		_privatePageCount=0
 		_publicPageCount=publicPageCount
 	/>
 
