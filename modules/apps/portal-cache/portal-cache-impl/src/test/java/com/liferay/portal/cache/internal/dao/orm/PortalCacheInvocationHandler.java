@@ -14,6 +14,9 @@
 
 package com.liferay.portal.cache.internal.dao.orm;
 
+import com.liferay.portal.cache.AggregatedPortalCacheListener;
+import com.liferay.portal.kernel.cache.PortalCache;
+import com.liferay.portal.kernel.cache.PortalCacheListener;
 import com.liferay.portal.kernel.io.Deserializer;
 import com.liferay.portal.kernel.io.Serializer;
 
@@ -50,6 +53,10 @@ public class PortalCacheInvocationHandler implements InvocationHandler {
 			if (_serialized) {
 				byte[] bytes = (byte[])_map.get(args[0]);
 
+				if (bytes == null) {
+					return null;
+				}
+
 				Deserializer deserializer = new Deserializer(
 					ByteBuffer.wrap(bytes));
 
@@ -72,19 +79,36 @@ public class PortalCacheInvocationHandler implements InvocationHandler {
 				ByteBuffer byteBuffer = serializer.toByteBuffer();
 
 				_map.put((Serializable)args[0], byteBuffer.array());
+				_aggregatedPortalCacheListener.notifyEntryPut(
+					(PortalCache)proxy, (Serializable)args[0],
+					byteBuffer.array(), 0);
 			}
 			else {
 				_map.put((Serializable)args[0], args[1]);
+				_aggregatedPortalCacheListener.notifyEntryPut(
+					(PortalCache)proxy, (Serializable)args[0], args[1], 0);
 			}
 		}
 
 		if (methodName.equals("remove")) {
-			return _map.remove(args[0]);
+			Object previousValue = _map.remove(args[0]);
+
+			_aggregatedPortalCacheListener.notifyEntryRemoved(
+				(PortalCache)proxy, (Serializable)args[0], previousValue, 0);
+
+			return previousValue;
+		}
+
+		if (methodName.equals("registerPortalCacheListener")) {
+			_aggregatedPortalCacheListener.addPortalCacheListener(
+				(PortalCacheListener)args[0]);
 		}
 
 		return null;
 	}
 
+	private final AggregatedPortalCacheListener _aggregatedPortalCacheListener =
+		new AggregatedPortalCacheListener<>();
 	private final Map<Serializable, Object> _map = new HashMap<>();
 	private final String _portalCacheName;
 	private final boolean _serialized;
