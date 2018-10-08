@@ -377,15 +377,15 @@ public class LiferayObjectWrapperTest {
 
 	@Test
 	public void testWrapLiferayCollection() throws Exception {
-		LiferayObjectWrapper liferayObjectWrapper = new LiferayObjectWrapper(
-			null, null);
-
 		TestLiferayCollection testLiferayCollection =
 			new TestLiferayCollection();
 
 		String testElement = "testElement";
 
 		testLiferayCollection.add(testElement);
+
+		LiferayObjectWrapper liferayObjectWrapper = new LiferayObjectWrapper(
+			null, null);
 
 		TemplateModel templateModel = liferayObjectWrapper.wrap(
 			testLiferayCollection);
@@ -457,14 +457,14 @@ public class LiferayObjectWrapperTest {
 
 	@Test
 	public void testWrapTemplateModel() throws Exception {
-		LiferayObjectWrapper liferayObjectWrapper = new LiferayObjectWrapper(
-			null, null);
-
 		TemplateModel originalTemplateModel =
 			(TemplateModel)ProxyUtil.newProxyInstance(
 				LiferayObjectWrapper.class.getClassLoader(),
 				new Class<?>[] {TemplateModel.class},
 				(proxy, method, args) -> null);
+
+		LiferayObjectWrapper liferayObjectWrapper = new LiferayObjectWrapper(
+			null, null);
 
 		Assert.assertSame(
 			originalTemplateModel,
