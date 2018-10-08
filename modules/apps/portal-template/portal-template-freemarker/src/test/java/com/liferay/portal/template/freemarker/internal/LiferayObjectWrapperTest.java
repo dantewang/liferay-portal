@@ -73,7 +73,7 @@ public class LiferayObjectWrapperTest {
 			AspectJNewEnvTestRule.INSTANCE, CodeCoverageAssertor.INSTANCE);
 
 	@Test
-	public void testCheckClassIsRestricted() throws Exception {
+	public void testRestrictions() throws Exception {
 
 		// Test 1, if neither allowedClassNames nor restrictedClassNames is
 		// provided, the object can be wrapped
@@ -152,10 +152,10 @@ public class LiferayObjectWrapperTest {
 
 		// test 8, a class without package is considered allowed
 
-		Method checkClassIsRestricted = ReflectionTestUtil.getMethod(
+		Method checkClassIsRestrictedMethod = ReflectionTestUtil.getMethod(
 			LiferayObjectWrapper.class, "_checkClassIsRestricted", Class.class);
 
-		checkClassIsRestricted.invoke(liferayObjectWrapper, byte.class);
+		checkClassIsRestrictedMethod.invoke(liferayObjectWrapper, byte.class);
 	}
 
 	@Test
@@ -279,7 +279,7 @@ public class LiferayObjectWrapperTest {
 	}
 
 	@Test
-	public void testLiferayObjectWrapperConstructor() throws Exception {
+	public void testConstructor() {
 
 		// Test 1, blank string is ignored
 
@@ -361,7 +361,7 @@ public class LiferayObjectWrapperTest {
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void testLiferayObjectWrapperConstructorWithException() {
+	public void testConstructorWithException() {
 		Field cacheClassNamesField = ReflectionTestUtil.getAndSetFieldValue(
 			LiferayObjectWrapper.class, "_cacheClassNamesField", null);
 
