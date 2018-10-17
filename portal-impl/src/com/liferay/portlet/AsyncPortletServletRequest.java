@@ -14,9 +14,21 @@
 
 package com.liferay.portlet;
 
+import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.servlet.DynamicServletRequest;
+
 import javax.servlet.DispatcherType;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Dante Wang
@@ -26,100 +38,166 @@ public class AsyncPortletServletRequest extends HttpServletRequestWrapper {
 	public static AsyncPortletServletRequest getAsyncPortletServletRequest(
 		HttpServletRequest httpServletRequest) {
 
-		// TODO
+		while (httpServletRequest instanceof HttpServletRequestWrapper) {
+			if (httpServletRequest instanceof AsyncPortletServletRequest) {
+				return (AsyncPortletServletRequest)httpServletRequest;
+			}
 
-		throw new UnsupportedOperationException();
+			HttpServletRequestWrapper httpServletRequestWrapper =
+				(HttpServletRequestWrapper)httpServletRequest;
+
+			httpServletRequest =
+				(HttpServletRequest)httpServletRequestWrapper.getRequest();
+		}
+
+		return null;
 	}
 
 	public AsyncPortletServletRequest(HttpServletRequest request) {
 		super(request);
 
-		// TODO
-
-		throw new UnsupportedOperationException();
+		_contextPath = super.getContextPath();
+		_queryString = super.getQueryString();
+		_requestURI = super.getRequestURI();
+		_servletPath = super.getServletPath();
+		_pathInfo = super.getPathInfo();
 	}
 
 	@Override
 	public String getContextPath() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return _contextPath;
 	}
 
 	@Override
 	public DispatcherType getDispatcherType() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return DispatcherType.ASYNC;
 	}
 
 	@Override
 	public String getPathInfo() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return _pathInfo;
 	}
 
 	@Override
 	public String getQueryString() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return _queryString;
 	}
 
 	@Override
 	public String getRequestURI() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return _requestURI;
 	}
 
 	@Override
 	public String getServletPath() {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		return _servletPath;
 	}
 
 	public void setContextPath(String contextPath) {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		_contextPath = contextPath;
 	}
 
 	public void setPathInfo(String pathInfo) {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		_pathInfo = pathInfo;
 	}
 
 	public void setQueryString(String queryString) {
+		_queryString = queryString;
 
-		// TODO
-
-		throw new UnsupportedOperationException();
+		setRequest(
+			DynamicServletRequest.addQueryString(
+				(HttpServletRequest)getRequest(), queryString, true));
 	}
 
 	public void setRequestURI(String requestUri) {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		_requestURI = requestUri;
 	}
 
 	public void setServletPath(String servletPath) {
-
-		// TODO
-
-		throw new UnsupportedOperationException();
+		_servletPath = servletPath;
 	}
+
+	public void update(ServletContext servletContext, String path) {
+		Map<String, ServletRegistration> servletRegistrationMap =
+			(Map<String, ServletRegistration>)
+				servletContext.getServletRegistrations();
+
+		Collection<ServletRegistration> servletRegistrations =
+			servletRegistrationMap.values();
+
+		Stream<ServletRegistration> servletRegistrationStream =
+			servletRegistrations.stream();
+
+		Set<String> servletURLPatterns = servletRegistrationStream.flatMap(
+			servletRegistration -> {
+				Collection<String> mappings = servletRegistration.getMappings();
+
+				return mappings.stream();
+			}
+		).collect(
+			Collectors.toSet()
+		);
+
+		String contextPath = servletContext.getContextPath();
+		String pathInfo = null;
+		String queryString = null;
+		String requestURI = null;
+		String servletPath = null;
+
+		if (path != null) {
+			if ((contextPath.length() > 0) && path.startsWith(contextPath)) {
+				path = path.substring(contextPath.length());
+			}
+
+			String pathNoQueryString = path;
+
+			int pos = path.indexOf(CharPool.QUESTION);
+
+			if (pos != -1) {
+				pathNoQueryString = path.substring(0, pos);
+				queryString = path.substring(pos + 1);
+			}
+
+			for (String urlPattern : servletURLPatterns) {
+				if (urlPattern.endsWith("/*")) {
+					int length = urlPattern.length() - 2;
+
+					if ((pathNoQueryString.length() > length) &&
+						pathNoQueryString.regionMatches(
+							0, urlPattern, 0, length) &&
+						(pathNoQueryString.charAt(length) == CharPool.SLASH)) {
+
+						pathInfo = pathNoQueryString.substring(length);
+						servletPath = urlPattern.substring(0, length);
+
+						break;
+					}
+				}
+			}
+
+			if (servletPath == null) {
+				servletPath = pathNoQueryString;
+			}
+
+			if (contextPath.equals(StringPool.SLASH)) {
+				requestURI = pathNoQueryString;
+			}
+			else {
+				requestURI = contextPath + pathNoQueryString;
+			}
+		}
+
+		setContextPath(contextPath);
+		setPathInfo(pathInfo);
+		setQueryString(queryString);
+		setRequestURI(requestURI);
+		setServletPath(servletPath);
+	}
+
+	private String _contextPath;
+	private String _pathInfo;
+	private String _queryString;
+	private String _requestURI;
+	private String _servletPath;
 
 }
