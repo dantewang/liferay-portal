@@ -2968,6 +2968,18 @@ and put it in ${app.server.parent.dir}. Then rerun this task.
 			<replacevalue><![CDATA[genericJvmArguments="-Xquickstart -Dfile.encoding=UTF-8 -Duser.timezone=GMT"]]></replacevalue>
 		</replace>
 
+		<replace-multilines
+			file="${app.server.websphere.instance.dir}/config/cells/liferay-cell/nodes/liferay-node/servers/server1/server.xml"
+		>
+			<replace-elements>
+				<replacetoken><![CDATA[</tuningParams>
+      </services>]]></replacetoken>
+				<replacevalue><![CDATA[</tuningParams>
+      </services>
+      <properties name="com.ibm.ws.webcontainer.emptyServletMappings" value="true" />]]></replacevalue>
+			</replace-elements>
+		</replace-multilines>
+
 		<echo>Installing fix pack. This may take a few minutes.</echo>
 
 		<tstamp>
