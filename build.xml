@@ -1296,6 +1296,17 @@ if isAppInstalled('liferay-portal'):
 else:
 	print AdminApp.install('${app.server.websphere.instance.dir}/wsadmin-deploy/liferay-portal.war', '[-appname liferay-portal -contextroot / -defaultbinding.virtual.host default_host -usedefaultbindings]')
 
+webcontainer = AdminConfig.list('WebContainer', AdminConfig.getid('/Server:server1'))
+properties = AdminConfig.showAttribute(webcontainer, 'properties').splitlines()
+createProperty = 1
+
+for property in properties:
+	if 'com.ibm.ws.webcontainer.emptyServletMappings' == AdminConfig.showAttribute(property[1:-1], "name"):
+		createProperty = 0
+
+if createProperty:
+	print AdminConfig.create('Property', webcontainer, [['name', 'com.ibm.ws.webcontainer.emptyServletMappings'], ['value', 'true']])
+
 print AdminConfig.save()
 
 print AdminControl.invoke(appManager, 'startApplication', 'liferay-portal')
