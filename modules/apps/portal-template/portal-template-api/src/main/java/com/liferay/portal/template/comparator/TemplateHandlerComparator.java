@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.kernel.template.comparator;
+package com.liferay.portal.template.comparator;
 
 import com.liferay.portal.kernel.template.TemplateHandler;
 import com.liferay.portal.kernel.util.CollatorUtil;
@@ -25,11 +25,8 @@ import java.util.Comparator;
 import java.util.Locale;
 
 /**
- * @author     Eduardo Garcia
- * @deprecated As of Judson (7.1.x), moved to {@link
- *             com.liferay.portal.template.comparator.TemplateHandlerComparator}
+ * @author Eduardo Garcia
  */
-@Deprecated
 public class TemplateHandlerComparator
 	implements Comparator<TemplateHandler>, Serializable {
 

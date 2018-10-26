@@ -15,8 +15,11 @@
 package com.liferay.portal.kernel.template;
 
 /**
- * @author Raymond Augé
+ * @author     Raymond Augé
+ * @deprecated As of Judson (7.1.x), moved to {@link
+ *             com.liferay.portal.template.ClassLoaderTemplateResource}
  */
+@Deprecated
 public class ClassLoaderTemplateResource extends URLTemplateResource {
 
 	public ClassLoaderTemplateResource(

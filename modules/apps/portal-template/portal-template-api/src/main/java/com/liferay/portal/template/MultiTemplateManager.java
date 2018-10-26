@@ -12,13 +12,10 @@
  * details.
  */
 
-package com.liferay.portal.kernel.template;
+package com.liferay.portal.template;
 
 /**
- * @author     Miroslav Ligas
- * @deprecated As of Judson (7.1.x), moved to {@link
- *             com.liferay.portal.template.MultiTemplateManager}
+ * @author Miroslav Ligas
  */
-@Deprecated
 public interface MultiTemplateManager {
 }

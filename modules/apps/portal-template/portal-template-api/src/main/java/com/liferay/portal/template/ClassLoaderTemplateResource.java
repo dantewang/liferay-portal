@@ -12,13 +12,27 @@
  * details.
  */
 
-package com.liferay.portal.kernel.template;
+package com.liferay.portal.template;
+
+import com.liferay.portal.kernel.template.URLTemplateResource;
 
 /**
- * @author     Miroslav Ligas
- * @deprecated As of Judson (7.1.x), moved to {@link
- *             com.liferay.portal.template.MultiTemplateManager}
+ * @author Raymond Augé
  */
-@Deprecated
-public interface MultiTemplateManager {
+public class ClassLoaderTemplateResource extends URLTemplateResource {
+
+	public ClassLoaderTemplateResource(
+		ClassLoader classLoader, String templateId) {
+
+		super(templateId, classLoader.getResource(templateId));
+
+		_classLoader = classLoader;
+	}
+
+	public ClassLoader getClassLoader() {
+		return _classLoader;
+	}
+
+	private final ClassLoader _classLoader;
+
 }

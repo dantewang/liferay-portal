@@ -12,12 +12,15 @@
  * details.
  */
 
-package com.liferay.portal.kernel.template;
+package com.liferay.portal.template;
 
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.configuration.Filter;
+import com.liferay.portal.kernel.template.TemplateHandler;
+import com.liferay.portal.kernel.template.TemplateManager;
+import com.liferay.portal.kernel.template.TemplateManagerUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -34,11 +37,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author     Jorge Ferrer
- * @deprecated As of Judson (7.1.x), moved to {@link
- *             com.liferay.portal.template.BaseTemplateHandler}
+ * @author Jorge Ferrer
  */
-@Deprecated
 @ProviderType
 public abstract class BaseTemplateHandler implements TemplateHandler {
 
