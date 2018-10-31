@@ -17,9 +17,10 @@ package com.liferay.portal.template.internal;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.template.TemplateResourceParser;
+import com.liferay.portal.template.URLResourceParser;
 import com.liferay.portal.theme.ThemeLoader;
 import com.liferay.portal.theme.ThemeLoaderFactory;
 
@@ -29,10 +30,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Tina Tian
  */
-@OSGiBeanProperties(
+@Component(
+	immediate = true,
 	property = {
 		"lang.type=" + TemplateConstants.LANG_TYPE_FTL,
 		"lang.type=" + TemplateConstants.LANG_TYPE_VM
