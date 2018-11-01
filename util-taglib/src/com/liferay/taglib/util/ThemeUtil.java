@@ -76,16 +76,7 @@ public class ThemeUtil {
 			HttpServletResponse response, String path, Theme theme)
 		throws Exception {
 
-		String extension = theme.getTemplateExtension();
-
-		if (extension.equals(ThemeHelper.TEMPLATE_EXTENSION_FTL)) {
-			includeFTL(servletContext, request, response, path, theme, true);
-		}
-		else {
-			path = theme.getTemplatesPath() + StringPool.SLASH + path;
-
-			includeJSP(servletContext, request, response, path, theme);
-		}
+		includeFTL(servletContext, request, response, path, theme, true);
 	}
 
 	public static String includeFTL(
@@ -99,6 +90,10 @@ public class ThemeUtil {
 			ThemeHelper.TEMPLATE_EXTENSION_FTL);
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
 	public static void includeJSP(
 			ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, String path, Theme theme)
@@ -154,16 +149,8 @@ public class ThemeUtil {
 		}
 
 		try {
-			if (extension.equals(ThemeHelper.TEMPLATE_EXTENSION_FTL)) {
-				return doIncludeFTL(
-					servletContext, request, response, path, theme, false,
-					write);
-			}
-			else if (extension.equals(ThemeHelper.TEMPLATE_EXTENSION_JSP)) {
-				doIncludeJSP(servletContext, request, response, path, theme);
-			}
-
-			return null;
+			return doIncludeFTL(
+				servletContext, request, response, path, theme, false, write);
 		}
 		finally {
 			if ((pluginClassLoader != null) &&
@@ -286,6 +273,10 @@ public class ThemeUtil {
 		return writer.toString();
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
 	protected static void doIncludeJSP(
 			ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, String path, Theme theme)
