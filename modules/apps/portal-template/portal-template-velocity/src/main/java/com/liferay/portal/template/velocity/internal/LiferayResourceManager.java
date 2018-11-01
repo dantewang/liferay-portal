@@ -24,7 +24,7 @@ import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.template.TemplateResourceLoader;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.template.TemplateResourceThreadLocal;
+import com.liferay.portal.template.util.TemplateResourceThreadLocal;
 
 import java.io.IOException;
 import java.io.Reader;

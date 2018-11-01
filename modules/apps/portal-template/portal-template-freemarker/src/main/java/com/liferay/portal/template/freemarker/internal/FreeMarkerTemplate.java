@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.template.AbstractSingleResourceTemplate;
 import com.liferay.portal.template.TemplateContextHelper;
-import com.liferay.portal.template.TemplateResourceThreadLocal;
+import com.liferay.portal.template.util.TemplateResourceThreadLocal;
 
 import freemarker.core.ParseException;
 

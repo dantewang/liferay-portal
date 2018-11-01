@@ -20,8 +20,8 @@ import com.liferay.portal.kernel.cache.SingleVMPool;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.template.TemplateResourceLoader;
-import com.liferay.portal.template.TemplateResourceThreadLocal;
 import com.liferay.portal.template.freemarker.configuration.FreeMarkerEngineConfiguration;
+import com.liferay.portal.template.util.TemplateResourceThreadLocal;
 
 import freemarker.cache.TemplateCache;
 
