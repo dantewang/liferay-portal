@@ -1,0 +1,7 @@
+Bundle-Name: Liferay Portal Template API
+Bundle-SymbolicName: com.liferay.portal.template.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.liferay.portal.template,\
+	com.liferay.portal.template.comparator,\
+	com.liferay.portal.template.util
