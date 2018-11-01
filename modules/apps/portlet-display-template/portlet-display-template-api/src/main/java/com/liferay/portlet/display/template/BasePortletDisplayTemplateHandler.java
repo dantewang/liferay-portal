@@ -12,10 +12,11 @@
  * details.
  */
 
-package com.liferay.portal.kernel.portletdisplaytemplate;
+package com.liferay.portlet.display.template;
 
-import com.liferay.portal.kernel.template.BaseTemplateHandler;
+import com.liferay.portal.kernel.portletdisplaytemplate.PortletDisplayTemplateManagerUtil;
 import com.liferay.portal.kernel.template.TemplateVariableGroup;
+import com.liferay.portal.template.BaseTemplateHandler;
 
 import java.util.Locale;
 import java.util.Map;
