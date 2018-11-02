@@ -30,12 +30,28 @@ import org.junit.Test;
 public class URLCodecTest {
 
 	@Test
-	public void testDecodeURL() throws Exception {
-		for (int i = 0; i < _RAW_URLS.length; i++) {
-			String result = URLCodec.decodeURL(
-				_ENCODED_URLS[i], StringPool.UTF8);
+	public void testConstructor() {
+		new URLCodec();
+	}
 
-			Assert.assertEquals(_RAW_URLS[i], result);
+	@Test
+	public void testDecodeURL() {
+		for (int i = 0; i < _RAW_URLS.length; i++) {
+			Assert.assertEquals(
+				_RAW_URLS[i], URLCodec.decodeURL(_ENCODED_URLS[i]));
+
+			Assert.assertEquals(
+				_RAW_URLS[i],
+				URLCodec.decodeURL(_ENCODED_URLS[i], StringPool.UTF8));
+
+			Assert.assertEquals(
+				_RAW_URLS[i],
+				URLCodec.decodeURL(_ESCAPE_SPACES_ENCODED_URLS[i]));
+
+			Assert.assertEquals(
+				_RAW_URLS[i],
+				URLCodec.decodeURL(
+					_ESCAPE_SPACES_ENCODED_URLS[i], StringPool.UTF8));
 		}
 
 		testDecodeURL("%");
@@ -51,24 +67,30 @@ public class URLCodecTest {
 	}
 
 	@Test
-	public void testDecodeURLWithPercentageInURLParameters() throws Exception {
+	public void testDecodeURLWithPercentageInURLParameters() {
 		testDecodeURL("http://localhost:8080/?id=%'");
 	}
 
 	@Test
-	public void testEncodeURL() throws Exception {
+	public void testEncodeURL() {
 		for (int i = 0; i < _RAW_URLS.length; i++) {
-			String result = URLCodec.encodeURL(
-				_RAW_URLS[i], StringPool.UTF8, false);
+			Assert.assertEquals(
+				_ENCODED_URLS[i], URLCodec.encodeURL(_RAW_URLS[i]));
 
-			Assert.assertTrue(
-				StringUtil.equalsIgnoreCase(_ENCODED_URLS[i], result));
+			Assert.assertEquals(
+				_ENCODED_URLS[i], URLCodec.encodeURL(_RAW_URLS[i], false));
 
-			result = URLCodec.encodeURL(_RAW_URLS[i], StringPool.UTF8, true);
+			Assert.assertEquals(
+				_ENCODED_URLS[i],
+				URLCodec.encodeURL(_RAW_URLS[i], StringPool.UTF8, false));
 
-			Assert.assertTrue(
-				StringUtil.equalsIgnoreCase(
-					_ESCAPE_SPACES_ENCODED_URLS[i], result));
+			Assert.assertEquals(
+				_ESCAPE_SPACES_ENCODED_URLS[i],
+				URLCodec.encodeURL(_RAW_URLS[i], true));
+
+			Assert.assertEquals(
+				_ESCAPE_SPACES_ENCODED_URLS[i],
+				URLCodec.encodeURL(_RAW_URLS[i], StringPool.UTF8, true));
 		}
 	}
 
@@ -85,9 +107,7 @@ public class URLCodecTest {
 
 		String animalsString = new String(animalsInts, 0, animalsInts.length);
 
-		byte[] animalsBytes = animalsString.getBytes(StringPool.UTF8);
-
-		for (byte animalsByte : animalsBytes) {
+		for (byte animalsByte : animalsString.getBytes(StringPool.UTF8)) {
 			sb.append(StringPool.PERCENT);
 			sb.append(Integer.toHexString(0xFF & animalsByte));
 		}
@@ -98,9 +118,15 @@ public class URLCodecTest {
 			animalsString,
 			URLCodec.decodeURL(escapedAnimalsString, StringPool.UTF8));
 		Assert.assertEquals(
-			StringUtil.toLowerCase(escapedAnimalsString),
-			StringUtil.toLowerCase(
-				URLCodec.encodeURL(animalsString, StringPool.UTF8, false)));
+			StringUtil.toUpperCase(escapedAnimalsString),
+			URLCodec.encodeURL(animalsString, StringPool.UTF8, false));
+
+		// Character missing low surrogate
+
+		Assert.assertEquals(
+			"%3F", URLCodec.encodeURL(animalsString.substring(0, 1)));
+		Assert.assertEquals(
+			"%3Fx", URLCodec.encodeURL(animalsString.substring(0, 1) + "x"));
 	}
 
 	protected void testDecodeURL(String encodedURLString) {
@@ -113,22 +139,28 @@ public class URLCodecTest {
 		}
 	}
 
-	private static final String[] _ENCODED_URLS = new String[9];
+	private static final String[] _ENCODED_URLS;
 
-	private static final String[] _ESCAPE_SPACES_ENCODED_URLS = new String[9];
+	private static final String[] _ESCAPE_SPACES_ENCODED_URLS;
 
 	private static final String[] _RAW_URLS = {
-		"abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-		"0123456789", ".-*_", " ", "~`!@#$%^&()+={[}]|\\:;\"'<,>?/", "中文测试",
-		"/abc/def", "abc <def> ghi"
+		null, StringPool.BLANK, "abcdefghijklmnopqrstuvwxyz",
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789", ".-*_", " ",
+		"~`!@#$%^&()+={[}]|\\:;\"'<,>?/", "中文测试", "/abc/def", "abc <def> ghi"
 	};
 
 	private static final String[] _UNICODE_CATS_AND_DOGS =
 		{"1f408", "1f431", "1f415", "1f436"};
 
 	static {
+		_ENCODED_URLS = new String[_RAW_URLS.length];
+		_ESCAPE_SPACES_ENCODED_URLS = new String[_RAW_URLS.length];
+
+		_ENCODED_URLS[0] = null;
+		_ESCAPE_SPACES_ENCODED_URLS[0] = null;
+
 		try {
-			for (int i = 0; i < _RAW_URLS.length; i++) {
+			for (int i = 1; i < _RAW_URLS.length; i++) {
 				_ENCODED_URLS[i] = URLEncoder.encode(
 					_RAW_URLS[i], StringPool.UTF8);
 
