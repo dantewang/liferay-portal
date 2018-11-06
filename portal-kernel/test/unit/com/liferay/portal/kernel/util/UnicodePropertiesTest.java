@@ -35,10 +35,14 @@ import org.junit.Test;
 public class UnicodePropertiesTest {
 
 	@Test
-	public void testFastLoad() {
-		_testFastLoad(false);
+	public void testFastLoad() throws Exception {
+		_testLoad(
+			(props, unicodeProperties) -> unicodeProperties.fastLoad(props),
+			false);
 
-		_testFastLoad(true);
+		_testLoad(
+			(props, unicodeProperties) -> unicodeProperties.fastLoad(props),
+			true);
 	}
 
 	@Test
@@ -90,9 +94,11 @@ public class UnicodePropertiesTest {
 
 	@Test
 	public void testLoad() throws Exception {
-		_testLoad(false);
+		_testLoad(
+			(props, unicodeProperties) -> unicodeProperties.load(props), false);
 
-		_testLoad(true);
+		_testLoad(
+			(props, unicodeProperties) -> unicodeProperties.load(props), true);
 	}
 
 	@Test
@@ -190,83 +196,38 @@ public class UnicodePropertiesTest {
 		}
 	}
 
-	private void _testFastLoad(boolean safe) {
+	private void _testLoad(
+			UnsafeBiConsumer<String, UnicodeProperties, Exception> load,
+			boolean safe)
+		throws Exception {
+
 		UnicodeProperties unicodeProperties = new UnicodeProperties(safe);
 
-		unicodeProperties.fastLoad(null);
+		load.accept(null, unicodeProperties);
 
 		Assert.assertTrue(
 			"nothing will be put in if props is null",
 			unicodeProperties.isEmpty());
 
-		unicodeProperties.fastLoad(_TEST_LINE_1);
+		load.accept(_TEST_LINE_1, unicodeProperties);
 
 		_assertUnicodeProperties(
 			new String[] {_TEST_VALUE_1}, new String[] {_TEST_KEY_1},
 			unicodeProperties);
 
-		unicodeProperties.fastLoad(_TEST_PROPS);
+		load.accept(_TEST_PROPS, unicodeProperties);
 
 		_assertUnicodeProperties(
 			new String[] {_TEST_VALUE_1, _TEST_VALUE_2, _TEST_VALUE_3},
 			new String[] {_TEST_KEY_1, _TEST_KEY_2, _TEST_KEY_3},
 			unicodeProperties);
 
-		unicodeProperties.fastLoad(
+		load.accept(
 			_TEST_LINE_1 + _SAFE_NEWLINE_CHARACTER + StringPool.NEW_LINE +
 				_TEST_LINE_2 + _SAFE_NEWLINE_CHARACTER + StringPool.NEW_LINE +
 					_TEST_LINE_3 + _SAFE_NEWLINE_CHARACTER +
-						StringPool.NEW_LINE);
-
-		if (safe) {
-			_assertUnicodeProperties(
-				new String[] {
-					_TEST_VALUE_1 + StringPool.NEW_LINE,
-					_TEST_VALUE_2 + StringPool.NEW_LINE,
-					_TEST_VALUE_3 + StringPool.NEW_LINE
-				},
-				new String[] {_TEST_KEY_1, _TEST_KEY_2, _TEST_KEY_3},
-				unicodeProperties);
-		}
-		else {
-			_assertUnicodeProperties(
-				new String[] {
-					_TEST_VALUE_1 + _SAFE_NEWLINE_CHARACTER,
-					_TEST_VALUE_2 + _SAFE_NEWLINE_CHARACTER,
-					_TEST_VALUE_3 + _SAFE_NEWLINE_CHARACTER
-				},
-				new String[] {_TEST_KEY_1, _TEST_KEY_2, _TEST_KEY_3},
-				unicodeProperties);
-		}
-	}
-
-	private void _testLoad(boolean safe) throws Exception {
-		UnicodeProperties unicodeProperties = new UnicodeProperties(safe);
-
-		unicodeProperties.load(null);
-
-		Assert.assertTrue(
-			"nothing will be put in if props is null",
-			unicodeProperties.isEmpty());
-
-		unicodeProperties.load(_TEST_LINE_1);
-
-		_assertUnicodeProperties(
-			new String[] {_TEST_VALUE_1}, new String[] {_TEST_KEY_1},
+						StringPool.NEW_LINE,
 			unicodeProperties);
-
-		unicodeProperties.load(_TEST_PROPS);
-
-		_assertUnicodeProperties(
-			new String[] {_TEST_VALUE_1, _TEST_VALUE_2, _TEST_VALUE_3},
-			new String[] {_TEST_KEY_1, _TEST_KEY_2, _TEST_KEY_3},
-			unicodeProperties);
-
-		unicodeProperties.load(
-			_TEST_LINE_1 + _SAFE_NEWLINE_CHARACTER + StringPool.NEW_LINE +
-				_TEST_LINE_2 + _SAFE_NEWLINE_CHARACTER + StringPool.NEW_LINE +
-					_TEST_LINE_3 + _SAFE_NEWLINE_CHARACTER +
-						StringPool.NEW_LINE);
 
 		if (safe) {
 			_assertUnicodeProperties(
@@ -431,6 +392,12 @@ public class UnicodePropertiesTest {
 		_TEST_PROPS =
 			_TEST_LINE_1 + StringPool.NEW_LINE + _TEST_LINE_2 +
 				StringPool.NEW_LINE + _TEST_LINE_3;
+	}
+
+	private interface UnsafeBiConsumer<E, U, T extends Throwable> {
+
+		public void accept(E e, U u) throws T;
+
 	}
 
 }
