@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<suppressions>
+	<checkstyle>
+		<suppress checks="MethodNameCheck" files="modules/apps/portal-template/portal-template-api/src/main/java/com/liferay/portal/template/AbstractTemplate\.java" />
+		<suppress checks="MethodNamingCheck" files="modules/apps/portal-template/portal-template-api/src/main/java/com/liferay/portal/template/TemplateContextHelper\.java" />
+	</checkstyle>
+</suppressions>

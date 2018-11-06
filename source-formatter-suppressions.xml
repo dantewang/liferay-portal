@@ -26,7 +26,6 @@
 		<suppress checks="MemberNameCheck" files="portal-impl/test/unit/com/liferay/portal/nio/intraband/proxy/IntrabandProxyUtilTest\.java" />
 		<suppress checks="MemberNameCheck" files="portal-test-integration/src/com/liferay/portal/search/test/BaseSearchTestCase\.java" />
 		<suppress checks="MethodNameCheck" files="portal-impl/src/com/liferay/portal/events/EventsProcessorUtil\.java" />
-		<suppress checks="MethodNameCheck" files="portal-impl/src/com/liferay/portal/template/AbstractTemplate\.java" />
 		<suppress checks="MethodNameCheck" files="portal-impl/src/com/liferay/portal/util/HttpImpl\.java" />
 		<suppress checks="MethodNameCheck" files="portal-impl/test/unit/com/liferay/portal/kernel/nio/intraband/CancelingPortalExecutorManagerUtilAdvice\.java" />
 		<suppress checks="MethodNameCheck" files="portal-impl/test/unit/com/liferay/portal/kernel/nio/intraband/PortalExecutorManagerUtilAdvice\.java" />
@@ -34,7 +33,6 @@
 		<suppress checks="MethodNameCheck" files="portal-kernel/src/com/liferay/portal/kernel/util/Http\.java" />
 		<suppress checks="MethodNameCheck" files="portal-kernel/src/com/liferay/portal/kernel/util/HttpUtil\.java" />
 		<suppress checks="MethodNameCheck" files="portal-kernel/test/unit/com/liferay/portal/kernel/annotation/AnnotationLocatorTest\.java" />
-		<suppress checks="MethodNamingCheck" files="portal-impl/src/com/liferay/portal/template/TemplateContextHelper\.java" />
 		<suppress checks="MethodNamingCheck" files="portal-impl/src/com/liferay/portal/util/HttpImpl\.java" />
 		<suppress checks="MethodNamingCheck" files="portal-impl/src/com/liferay/portlet/documentlibrary/util/LiferayConverter\.java" />
 		<suppress checks="MethodNamingCheck" files="portal-impl/test/unit/com/liferay/portal/nio/intraband/proxy/IntrabandProxyUtilTest\.java" />
