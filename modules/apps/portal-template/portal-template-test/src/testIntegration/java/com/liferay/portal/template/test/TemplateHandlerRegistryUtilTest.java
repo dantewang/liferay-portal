@@ -12,14 +12,16 @@
  * details.
  */
 
-package com.liferay.portal.kernel.template;
+package com.liferay.portal.template.test;
 
-import com.liferay.portal.kernel.template.bundle.templatehandlerregistryutil.TestTemplateHandler;
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.portal.kernel.template.TemplateHandler;
+import com.liferay.portal.kernel.template.TemplateHandlerRegistryUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.template.test.util.templatehandlerregistryutil.TestTemplateHandler;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
 
 import java.util.List;
 
@@ -27,18 +29,18 @@ import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author Peter Fellwock
  */
+@RunWith(Arquillian.class)
 public class TemplateHandlerRegistryUtilTest {
 
 	@ClassRule
 	@Rule
 	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.templatehandlerregistryutil"));
+		new LiferayIntegrationTestRule();
 
 	@Test
 	public void testGetClassNameIds() {
