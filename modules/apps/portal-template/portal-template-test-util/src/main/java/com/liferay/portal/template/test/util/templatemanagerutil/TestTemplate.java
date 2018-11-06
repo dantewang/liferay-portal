@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.kernel.template.bundle.templatemanagerutil;
+package com.liferay.portal.template.test.util.templatemanagerutil;
 
 import com.liferay.portal.kernel.template.Template;
 
