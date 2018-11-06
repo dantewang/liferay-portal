@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.kernel.template.bundle.templateresourceloaderutil;
+package com.liferay.portal.template.test.util.templateresourceloaderutil;
 
 import com.liferay.portal.kernel.template.TemplateResource;
 
