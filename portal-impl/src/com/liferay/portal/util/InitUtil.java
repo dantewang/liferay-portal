@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.security.xml.SecureXMLFactoryProviderUtil;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.JavaDetector;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -136,7 +137,16 @@ public class InitUtil {
 
 			ClassLoader classLoader = InitUtil.class.getClassLoader();
 
-			Log4JUtil.configureLog4J(classLoader);
+			HtmlUtil htmlUtil = new HtmlUtil();
+
+			htmlUtil.setHtml(new HtmlImpl());
+
+			try {
+				Log4JUtil.configureLog4J(classLoader);
+			}
+			finally {
+				htmlUtil.setHtml(null);
+			}
 		}
 
 		// Shared log
