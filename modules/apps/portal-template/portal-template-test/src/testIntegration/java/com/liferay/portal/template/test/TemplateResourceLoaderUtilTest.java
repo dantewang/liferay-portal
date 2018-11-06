@@ -12,13 +12,17 @@
  * details.
  */
 
-package com.liferay.portal.kernel.template;
+package com.liferay.portal.template.test;
 
-import com.liferay.portal.kernel.template.bundle.templateresourceloaderutil.TestTemplateResource;
-import com.liferay.portal.kernel.template.bundle.templateresourceloaderutil.TestTemplateResourceLoader;
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.portal.kernel.template.TemplateException;
+import com.liferay.portal.kernel.template.TemplateResource;
+import com.liferay.portal.kernel.template.TemplateResourceLoader;
+import com.liferay.portal.kernel.template.TemplateResourceLoaderUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.template.test.util.templateresourceloaderutil.TestTemplateResource;
+import com.liferay.portal.template.test.util.templateresourceloaderutil.TestTemplateResourceLoader;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
 
 import java.util.Set;
 
@@ -26,18 +30,18 @@ import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author Philip Jones
  */
+@RunWith(Arquillian.class)
 public class TemplateResourceLoaderUtilTest {
 
 	@ClassRule
 	@Rule
 	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.templateresourceloaderutil"));
+		new LiferayIntegrationTestRule();
 
 	@Test
 	public void testGetTemplateResource() throws TemplateException {
