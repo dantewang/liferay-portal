@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.template.URLTemplateResource;
 import com.liferay.portal.kernel.test.ConsoleTestUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.util.ClassLoaderUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.template.CacheTemplateResource;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -121,10 +122,10 @@ public class TemplateResourceExternalizationTest {
 	public void testDDMTemplateResourceExternalization() throws Exception {
 		final long templateId = 100;
 
-		Class<?> clazz = getClass();
+		ClassLoader classLoader = ClassLoaderUtil.getPortalClassLoader();
 
 		DDMTemplate ddmTemplate = (DDMTemplate)ProxyUtil.newProxyInstance(
-			clazz.getClassLoader(), new Class<?>[] {DDMTemplate.class},
+			classLoader, new Class<?>[] {DDMTemplate.class},
 			new InvocationHandler() {
 
 				@Override
