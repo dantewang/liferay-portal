@@ -19,7 +19,6 @@ import com.liferay.portal.kernel.test.CaptureHandler;
 import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -134,12 +133,13 @@ public class UnicodePropertiesTest {
 
 		Assert.assertNull(unicodeProperties.remove(null));
 
-		Assert.assertEquals(
-			Collections.singletonMap(_TEST_KEY_1, _TEST_VALUE_1),
-			unicodeProperties);
+		Assert.assertEquals(1, unicodeProperties.size());
+		Assert.assertEquals(_TEST_VALUE_1, unicodeProperties.get(_TEST_KEY_1));
 
 		Assert.assertEquals(
 			_TEST_VALUE_1, unicodeProperties.remove(_TEST_KEY_1));
+
+		Assert.assertEquals(0, unicodeProperties.size());
 
 		Assert.assertNull(unicodeProperties.get(_TEST_KEY_1));
 	}
@@ -160,9 +160,7 @@ public class UnicodePropertiesTest {
 
 		Assert.assertNull(
 			unicodeProperties.setProperty(_TEST_KEY_1, _TEST_VALUE_1));
-		Assert.assertEquals(
-			Collections.singletonMap(_TEST_KEY_1, _TEST_VALUE_1),
-			unicodeProperties);
+		Assert.assertEquals(_TEST_VALUE_1, unicodeProperties.get(_TEST_KEY_1));
 
 		Assert.assertEquals(
 			_TEST_VALUE_1, unicodeProperties.setProperty(_TEST_KEY_1, null));
@@ -299,9 +297,7 @@ public class UnicodePropertiesTest {
 
 		unicodeProperties.put(_TEST_LINE_1);
 
-		Assert.assertEquals(
-			Collections.singletonMap(_TEST_KEY_1, _TEST_VALUE_1),
-			unicodeProperties);
+		Assert.assertEquals(_TEST_VALUE_1, unicodeProperties.get(_TEST_KEY_1));
 
 		// safe is true
 
@@ -309,15 +305,13 @@ public class UnicodePropertiesTest {
 
 		if (safe) {
 			Assert.assertEquals(
-				Collections.singletonMap(
-					_TEST_KEY_1, _TEST_VALUE_1 + StringPool.NEW_LINE),
-				unicodeProperties);
+				_TEST_VALUE_1 + StringPool.NEW_LINE,
+				unicodeProperties.get(_TEST_KEY_1));
 		}
 		else {
 			Assert.assertEquals(
-				Collections.singletonMap(
-					_TEST_KEY_1, _TEST_VALUE_1 + _SAFE_NEWLINE_CHARACTER),
-				unicodeProperties);
+				_TEST_VALUE_1 + _SAFE_NEWLINE_CHARACTER,
+				unicodeProperties.get(_TEST_KEY_1));
 		}
 	}
 
