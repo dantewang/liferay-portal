@@ -25,6 +25,7 @@ import com.liferay.portal.template.velocity.configuration.VelocityEngineConfigur
 
 import java.util.Map;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -77,12 +78,14 @@ public class VelocityTemplateResourceLoader implements TemplateResourceLoader {
 
 	@Activate
 	@Modified
-	protected void activate(Map<String, Object> properties) {
+	protected void activate(
+		BundleContext bundleContext, Map<String, Object> properties) {
+
 		_velocityEngineConfiguration = ConfigurableUtil.createConfigurable(
 			VelocityEngineConfiguration.class, properties);
 
 		_defaultTemplateResourceLoader = new DefaultTemplateResourceLoader(
-			TemplateConstants.LANG_TYPE_VM,
+			bundleContext, TemplateConstants.LANG_TYPE_VM,
 			_velocityEngineConfiguration.resourceModificationCheckInterval(),
 			_multiVMPool, _singleVMPool);
 	}

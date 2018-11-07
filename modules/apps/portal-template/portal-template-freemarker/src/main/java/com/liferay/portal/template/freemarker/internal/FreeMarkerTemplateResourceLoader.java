@@ -25,6 +25,7 @@ import com.liferay.portal.template.freemarker.configuration.FreeMarkerEngineConf
 
 import java.util.Map;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -77,12 +78,14 @@ public class FreeMarkerTemplateResourceLoader
 
 	@Activate
 	@Modified
-	protected void activate(Map<String, Object> properties) {
+	protected void activate(
+		BundleContext bundleContext, Map<String, Object> properties) {
+
 		_freeMarkerEngineConfiguration = ConfigurableUtil.createConfigurable(
 			FreeMarkerEngineConfiguration.class, properties);
 
 		_defaultTemplateResourceLoader = new DefaultTemplateResourceLoader(
-			TemplateConstants.LANG_TYPE_FTL,
+			bundleContext, TemplateConstants.LANG_TYPE_FTL,
 			_freeMarkerEngineConfiguration.resourceModificationCheck(),
 			_multiVMPool, _singleVMPool);
 	}
