@@ -148,12 +148,12 @@ public class ThemeHelper {
 			return false;
 		}
 
-		String resourcePath = getResourcePath(
-			servletContext, theme, portletId, path);
-
 		String extension = theme.getTemplateExtension();
 
 		if (extension.equals(TEMPLATE_EXTENSION_FTL)) {
+			String resourcePath = getResourcePath(
+				servletContext, theme, portletId, path);
+
 			return TemplateResourceLoaderUtil.hasTemplateResource(
 				TemplateConstants.LANG_TYPE_FTL, resourcePath);
 		}
