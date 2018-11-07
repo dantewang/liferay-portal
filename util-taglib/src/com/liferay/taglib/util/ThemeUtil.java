@@ -81,11 +81,6 @@ public class ThemeUtil {
 		if (extension.equals(ThemeHelper.TEMPLATE_EXTENSION_FTL)) {
 			includeFTL(servletContext, request, response, path, theme, true);
 		}
-		else {
-			path = theme.getTemplatesPath() + StringPool.SLASH + path;
-
-			includeJSP(servletContext, request, response, path, theme);
-		}
 	}
 
 	public static String includeFTL(
@@ -162,9 +157,6 @@ public class ThemeUtil {
 				return doIncludeFTL(
 					servletContext, request, response, path, theme, false,
 					write);
-			}
-			else if (extension.equals(ThemeHelper.TEMPLATE_EXTENSION_JSP)) {
-				doIncludeJSP(servletContext, request, response, path, theme);
 			}
 
 			return null;

@@ -157,25 +157,8 @@ public class ThemeHelper {
 			return TemplateResourceLoaderUtil.hasTemplateResource(
 				TemplateConstants.LANG_TYPE_FTL, resourcePath);
 		}
-		else {
-			URL url = null;
 
-			if (theme.isWARFile()) {
-				ServletContext themeServletContext = servletContext.getContext(
-					theme.getContextPath());
-
-				url = themeServletContext.getResource(resourcePath);
-			}
-			else {
-				url = servletContext.getResource(resourcePath);
-			}
-
-			if (url == null) {
-				return false;
-			}
-
-			return true;
-		}
+		return false;
 	}
 
 }
