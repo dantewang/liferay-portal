@@ -15,12 +15,14 @@
 package com.liferay.portal.osgi.web.servlet.context.helper.internal;
 
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.kernel.servlet.PortletServlet;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.osgi.web.servlet.JSPServletFactory;
 import com.liferay.portal.osgi.web.servlet.context.helper.ServletContextHelperRegistration;
+import com.liferay.portal.osgi.web.servlet.context.helper.definition.ListenerDefinition;
 import com.liferay.portal.osgi.web.servlet.context.helper.definition.WebXMLDefinition;
 import com.liferay.portal.osgi.web.servlet.context.helper.internal.definition.WebXMLDefinitionLoader;
 
@@ -65,6 +67,8 @@ public class ServletContextHelperRegistrationImpl
 
 		_servletContextName = getServletContextName(contextPath);
 
+		boolean hasPluginContextListener = false;
+
 		URL url = _bundle.getEntry("WEB-INF/");
 
 		if (url != null) {
@@ -78,6 +82,16 @@ public class ServletContextHelperRegistrationImpl
 
 			try {
 				webXMLDefinition = webXMLDefinitionLoader.loadWebXML();
+
+				for (ListenerDefinition listenerDefinition :
+						webXMLDefinition.getListenerDefinitions()) {
+
+					if (listenerDefinition.getEventListener() instanceof
+							PluginContextListener) {
+
+						hasPluginContextListener = true;
+					}
+				}
 			}
 			catch (Exception e) {
 				webXMLDefinition = new WebXMLDefinition();
@@ -96,7 +110,7 @@ public class ServletContextHelperRegistrationImpl
 		_bundleContext = _bundle.getBundleContext();
 
 		_customServletContextHelper = new CustomServletContextHelper(
-			_bundle, _logger,
+			_bundle, _logger, hasPluginContextListener,
 			_webXMLDefinition.getWebResourceCollectionDefinitions());
 
 		_servletContextHelperServiceRegistration = createServletContextHelper(
