@@ -301,15 +301,15 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 		List<ClassLoader> classLoaders = new ArrayList<>(
 			servletContextNames.length);
 
-		for (int i = 0; i < servletContextNames.length; i++) {
+		for (String servletContextName : servletContextNames) {
 			ClassLoader classLoader =
 				ServletContextClassLoaderPool.getClassLoader(
-					servletContextNames[i]);
+					servletContextName);
 
 			if (classLoader == null) {
 				_log.error(
 					"Unable to find class loader for servlet context " +
-						servletContextNames[i]);
+						servletContextName);
 			}
 			else {
 				classLoaders.add(classLoader);
