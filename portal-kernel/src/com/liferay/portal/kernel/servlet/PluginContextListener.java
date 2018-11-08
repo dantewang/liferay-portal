@@ -108,6 +108,9 @@ public class PluginContextListener
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		portalDestroy();
+
+		ServletContextClassLoaderPool.unregister(
+			servletContext.getServletContextName());
 	}
 
 	@Override
@@ -117,6 +120,9 @@ public class PluginContextListener
 		Thread currentThread = Thread.currentThread();
 
 		pluginClassLoader = currentThread.getContextClassLoader();
+
+		ServletContextClassLoaderPool.register(
+			servletContext.getServletContextName(), pluginClassLoader);
 
 		servletContext.setAttribute(PLUGIN_CLASS_LOADER, pluginClassLoader);
 
