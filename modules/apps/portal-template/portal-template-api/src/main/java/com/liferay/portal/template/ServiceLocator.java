@@ -21,10 +21,11 @@ import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.registry.Registry;
-import com.liferay.registry.RegistryUtil;
 
-import java.util.function.Function;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 /**
  * @author Brian Wing Shun Chan
@@ -40,9 +41,13 @@ public class ServiceLocator {
 		Object bean = null;
 
 		try {
-			Registry registry = RegistryUtil.getRegistry();
+			ServiceReference<Object> serviceReference =
+				(ServiceReference<Object>)
+					_bundleContext.getServiceReference(serviceName);
 
-			bean = registry.callService(serviceName, Function.identity());
+			if (serviceReference != null) {
+				bean = _bundleContext.getService(serviceReference);
+			}
 
 			if (bean == null) {
 				bean = PortalBeanLocatorUtil.locate(
@@ -71,6 +76,9 @@ public class ServiceLocator {
 	}
 
 	private ServiceLocator() {
+		Bundle bundle = FrameworkUtil.getBundle(ServiceLocator.class);
+
+		_bundleContext = bundle.getBundleContext();
 	}
 
 	private String _getServiceName(String serviceName) {
@@ -84,5 +92,7 @@ public class ServiceLocator {
 	private static final Log _log = LogFactoryUtil.getLog(ServiceLocator.class);
 
 	private static final ServiceLocator _instance = new ServiceLocator();
+
+	private final BundleContext _bundleContext;
 
 }
