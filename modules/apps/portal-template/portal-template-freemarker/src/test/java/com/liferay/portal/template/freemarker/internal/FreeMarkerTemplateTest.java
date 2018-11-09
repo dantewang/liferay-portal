@@ -78,7 +78,7 @@ public class FreeMarkerTemplateTest {
 			registry.getService(SingleVMPool.class));
 
 		freeMarkerTemplateResourceLoader.activate(
-			Collections.<String, Object>emptyMap());
+			null, Collections.<String, Object>emptyMap());
 
 		TemplateCache templateCache = new LiferayTemplateCache(
 			_configuration, _freeMarkerEngineConfiguration,
