@@ -1,0 +1,7 @@
+Bundle-Name: Liferay Portal Template Test Utilities
+Bundle-SymbolicName: com.liferay.portal.template.test.util
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.liferay.portal.template.test.util.templatehandlerregistryutil,\
+	com.liferay.portal.template.test.util.templatemanagerutil,\
+	com.liferay.portal.template.test.util.templateresourceloaderutil
