@@ -63,10 +63,12 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 
 		_name = name;
 
-		_serviceTrackerMap = ServiceTrackerMapFactory.openMultiValueMap(
-			bundleContext, TemplateResourceParser.class,
-			"(lang.type=" + _name + ")",
-			new PropertyServiceReferenceMapper<>("lang.type"));
+		if (bundleContext != null) {
+			_serviceTrackerMap = ServiceTrackerMapFactory.openMultiValueMap(
+				bundleContext, TemplateResourceParser.class,
+				"(lang.type=" + _name + ")",
+				new PropertyServiceReferenceMapper<>("lang.type"));
+		}
 
 		_modificationCheckInterval = modificationCheckInterval;
 
