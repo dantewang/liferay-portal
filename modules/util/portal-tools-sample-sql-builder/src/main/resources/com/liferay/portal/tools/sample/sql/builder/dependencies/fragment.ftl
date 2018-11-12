@@ -22,6 +22,24 @@
 		${dataFactory.toInsertSQL(fragmentEntryModels["${fragmentEntryModelName}"])}
 	</#list>
 
+	<#assign layoutPageTemplateCollectionModel = dataFactory.newLayoutPageTemplateCollectionModel(groupId) />
+
+	${dataFactory.toInsertSQL(layoutPageTemplateCollectionModel)}
+
+	<#assign layoutPageTemplateEntryModel = dataFactory.newLayoutPageTemplateEntryModel(layoutPageTemplateCollectionModel) />
+
+	${dataFactory.toInsertSQL(layoutPageTemplateEntryModel)}
+
+	<#assign originalFragmentEntryLinkModels = dataFactory.newOriginalFragmentEntryLinkModels(layoutPageTemplateEntryModel, fragmentEntryModels) />
+
+	<#list originalFragmentEntryLinkModels as originalFragmentEntryLinkModel>
+		${dataFactory.toInsertSQL(originalFragmentEntryLinkModel)}
+	</#list>
+
+	<#assign layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(layoutPageTemplateEntryModel, originalFragmentEntryLinkModels) />
+
+	${dataFactory.toInsertSQL(layoutPageTemplateStructureModel)}
+
 	<#assign portletIdPrefix = "com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_test" />
 
 	${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferencesModel(controlPanelLayoutModel, portletIdPrefix))}
@@ -29,7 +47,7 @@
 	<#assign contentPageCounts = dataFactory.getSequence(dataFactory.maxContentPageCount) />
 
 	<#list contentPageCounts as contentPageCount>
-		<#assign contentLayoutModel = dataFactory.newContentLayoutModel(groupId, groupId + "_content_page_" + contentPageCount, "web_content") />
+		<#assign contentLayoutModel = dataFactory.newContentLayoutModel(groupId, groupId + "_content_page_" + contentPageCount, layoutPageTemplateEntryModel) />
 
 		${dataFactory.getCSVWriter("layout").write(contentLayoutModel.friendlyURL + "\n")}
 
@@ -78,22 +96,28 @@
 				_mbThreadId=dataFactory.getCounterNext()
 			/>
 
+			<#assign assetEntryModel = dataFactory.newAssetEntryModel(contentLayoutModel) />
+
+			${dataFactory.toInsertSQL(assetEntryModel)}
+
 			${dataFactory.toInsertSQL(contentLayoutModel)}
 
 			${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(contentLayoutModel))}
 
-			<#assign fragmentEntryLinkModels = dataFactory.newFragmentEntryLinkModels(contentLayoutModel, fragmentEntryModels) />
+			<#assign
+				fragmentEntryLinkModels = dataFactory.newFragmentEntryLinkModels(originalFragmentEntryLinkModels, contentLayoutModel, fragmentEntryModels)
+				layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(contentLayoutModel,fragmentEntryLinkModels)
+			/>
+
+			${dataFactory.toInsertSQL(layoutPageTemplateStructureModel)}
 
 			<#list fragmentEntryLinkModels as fragmentEntryLinkModel>
 				${dataFactory.toInsertSQL(fragmentEntryLinkModel)}
 
-				<#assign layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(contentLayoutModel, fragmentEntryLinkModel) />
-
-				${dataFactory.toInsertSQL(layoutPageTemplateStructureModel)}
-
 				<#if fragmentEntryLinkModel.getHtml()?contains("lfr-widget-web-content")>
-					${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferencesModel(contentLayoutModel, fragmentEntryLinkModel, journalArticleResourceModel))}
-					${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferencesModel(controlPanelLayoutModel, fragmentEntryLinkModel, journalArticleResourceModel))}
+					${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferencesModel(contentLayoutModel, fragmentEntryLinkModel, journalArticleResourceModel, assetEntryModel))}
+					${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferencesModel(controlPanelLayoutModel, fragmentEntryLinkModel, journalArticleResourceModel, assetEntryModel))}
+					${dataFactory.toInsertSQL(dataFactory.newJournalContentSearchModel(contentLayoutModel, journalArticleModel, fragmentEntryLinkModel))}
 					${dataFactory.toInsertSQL(dataFactory.newJournalContentSearchModel(controlPanelLayoutModel, journalArticleModel, fragmentEntryLinkModel))}
 				</#if>
 			</#list>

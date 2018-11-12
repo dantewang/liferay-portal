@@ -79,6 +79,7 @@ import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateVersionModelImpl;
 import com.liferay.dynamic.data.mapping.storage.StorageType;
+import com.liferay.fragment.entry.processor.editable.EditableFragmentEntryProcessor;
 import com.liferay.fragment.model.FragmentCollectionModel;
 import com.liferay.fragment.model.FragmentEntryLinkModel;
 import com.liferay.fragment.model.FragmentEntryModel;
@@ -106,7 +107,13 @@ import com.liferay.journal.model.impl.JournalArticleModelImpl;
 import com.liferay.journal.model.impl.JournalArticleResourceModelImpl;
 import com.liferay.journal.model.impl.JournalContentSearchModelImpl;
 import com.liferay.layout.admin.constants.LayoutAdminConstants;
+import com.liferay.layout.page.template.model.LayoutPageTemplateCollection;
+import com.liferay.layout.page.template.model.LayoutPageTemplateCollectionModel;
+import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
+import com.liferay.layout.page.template.model.LayoutPageTemplateEntryModel;
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructureModel;
+import com.liferay.layout.page.template.model.impl.LayoutPageTemplateCollectionModelImpl;
+import com.liferay.layout.page.template.model.impl.LayoutPageTemplateEntryModelImpl;
 import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureModelImpl;
 import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.constants.MBMessageConstants;
@@ -266,6 +273,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.portlet.PortletPreferences;
@@ -1346,6 +1354,16 @@ public class DataFactory {
 			null, dLFolderModel.getName());
 	}
 
+	public AssetEntryModel newAssetEntryModel(LayoutModel layoutModel) {
+		String title = layoutModel.getFriendlyURL();
+
+		return newAssetEntryModel(
+			layoutModel.getGroupId(), layoutModel.getCreateDate(),
+			layoutModel.getModifiedDate(), getClassNameId(Layout.class),
+			layoutModel.getPlid(), layoutModel.getUuid(), 0, true, false,
+			ContentTypes.TEXT_HTML, title.substring(1));
+	}
+
 	public AssetEntryModel newAssetEntryModel(MBMessageModel mbMessageModel) {
 		long classNameId = 0;
 		boolean visible = false;
@@ -1485,7 +1503,8 @@ public class DataFactory {
 	}
 
 	public LayoutModel newContentLayoutModel(
-		long groupId, String name, String fragmentEntries) {
+		long groupId, String name,
+		LayoutPageTemplateEntryModel layoutPageTemplateEntryModel) {
 
 		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
 
@@ -1514,7 +1533,10 @@ public class DataFactory {
 
 		UnicodeProperties typeSettingsProperties = new UnicodeProperties(true);
 
-		typeSettingsProperties.setProperty("fragmentEntries", fragmentEntries);
+		typeSettingsProperties.setProperty(
+			"layoutPageTemplateEntryId",
+			String.valueOf(
+				layoutPageTemplateEntryModel.getLayoutPageTemplateEntryId()));
 
 		layoutModel.setTypeSettings(
 			StringUtil.replace(typeSettingsProperties.toString(), '\n', "\\n"));
@@ -1578,6 +1600,30 @@ public class DataFactory {
 		counterModel = new CounterModelImpl();
 
 		counterModel.setName(FriendlyURLEntryLocalization.class.getName());
+		counterModel.setCurrentId(_counter.get());
+
+		counterModels.add(counterModel);
+
+		//Layout
+
+		for (GroupModel groupModel : _groupModels) {
+			counterModel = new CounterModelImpl();
+
+			counterModel.setName(
+				generateCounterName(
+					Layout.class.getName(), groupModel.getGroupId()));
+
+			counterModel.setCurrentId(_counter.get());
+
+			counterModels.add(counterModel);
+		}
+
+		counterModel = new CounterModelImpl();
+
+		counterModel.setName(
+			generateCounterName(
+				Layout.class.getName(), _guestGroupModel.getGroupId()));
+
 		counterModel.setCurrentId(_counter.get());
 
 		counterModels.add(counterModel);
@@ -2041,58 +2087,39 @@ public class DataFactory {
 	}
 
 	public FragmentEntryLinkModel newFragmentEntryLinkModel(
-		LayoutModel layoutModel, FragmentEntryModel fragmentEntryModel,
+		FragmentEntryLinkModel originalFragmentEntryLinkModel,
+		FragmentEntryModel fragmentEntryModel, LayoutModel layoutModel,
 		int position) {
 
-		FragmentEntryLinkModel fragmentEntryLinkModel =
-			new FragmentEntryLinkModelImpl();
-
-		fragmentEntryLinkModel.setUuid(SequentialUUID.generate());
-		fragmentEntryLinkModel.setFragmentEntryLinkId(_counter.get());
-		fragmentEntryLinkModel.setFragmentEntryId(
-			fragmentEntryModel.getFragmentEntryId());
-		fragmentEntryLinkModel.setGroupId(fragmentEntryModel.getGroupId());
-		fragmentEntryLinkModel.setCompanyId(_companyId);
-		fragmentEntryLinkModel.setUserId(_sampleUserId);
-		fragmentEntryLinkModel.setUserName(_SAMPLE_USER_NAME);
-		fragmentEntryLinkModel.setCreateDate(new Date());
-		fragmentEntryLinkModel.setModifiedDate(new Date());
-		fragmentEntryLinkModel.setClassNameId(getClassNameId(Layout.class));
-		fragmentEntryLinkModel.setClassPK(layoutModel.getPlid());
-		fragmentEntryLinkModel.setCss(fragmentEntryModel.getCss());
-		fragmentEntryLinkModel.setJs(fragmentEntryModel.getJs());
-		fragmentEntryLinkModel.setHtml(fragmentEntryModel.getHtml());
-		fragmentEntryLinkModel.setEditableValues(StringPool.BLANK);
-		fragmentEntryLinkModel.setNamespace(StringUtil.randomId());
-		fragmentEntryLinkModel.setPosition(position);
-
-		return fragmentEntryLinkModel;
+		return newFragmentEntryLinkModel(
+			fragmentEntryModel,
+			originalFragmentEntryLinkModel.getFragmentEntryLinkId(),
+			getClassNameId(Layout.class), layoutModel.getPlid(), position);
 	}
 
 	public List<FragmentEntryLinkModel> newFragmentEntryLinkModels(
+		List<FragmentEntryLinkModel> originalFragmentEntryLinkModels,
 		LayoutModel layoutModel,
 		Map<String, FragmentEntryModel> fragmentEntryModels) {
 
 		List<FragmentEntryLinkModel> fragmentEntryLinkModels =
 			new ArrayList<>();
 
-		UnicodeProperties typeSettingsProperties = new UnicodeProperties();
+		Set<String> keys = fragmentEntryModels.keySet();
 
-		typeSettingsProperties.fastLoad(layoutModel.getTypeSettings());
+		int position = 0;
 
-		String[] fragmentEntryNames = StringUtil.split(
-			typeSettingsProperties.getProperty("fragmentEntries"));
+		for (String key : keys) {
+			position++;
 
-		for (int i = 0; i < fragmentEntryNames.length; i++) {
-			if (i == (fragmentEntryNames.length - 1)) {
-				fragmentEntryNames[i] = fragmentEntryNames[i].substring(
-					0, fragmentEntryNames[i].length() - 2);
+			for (FragmentEntryLinkModel originalFragmentEntryLinkModel :
+					originalFragmentEntryLinkModels) {
+
+				fragmentEntryLinkModels.add(
+					newFragmentEntryLinkModel(
+						originalFragmentEntryLinkModel,
+						fragmentEntryModels.get(key), layoutModel, position));
 			}
-
-			fragmentEntryLinkModels.add(
-				newFragmentEntryLinkModel(
-					layoutModel, fragmentEntryModels.get(fragmentEntryNames[i]),
-					i + 1));
 		}
 
 		return fragmentEntryLinkModels;
@@ -2120,6 +2147,9 @@ public class DataFactory {
 		fragmentEntryModel.setJs(StringPool.BLANK);
 		fragmentEntryModel.setFragmentEntryKey(fragmentName);
 		fragmentEntryModel.setStatus(WorkflowConstants.STATUS_APPROVED);
+		fragmentEntryModel.setStatusByUserId(_sampleUserId);
+		fragmentEntryModel.setStatusByUserName(_SAMPLE_USER_NAME);
+		fragmentEntryModel.setStatusDate(new Date());
 
 		List<String> lines = new ArrayList<>();
 
@@ -2327,20 +2357,23 @@ public class DataFactory {
 	public PortletPreferencesModel newJournalContentPortletPreferencesModel(
 			LayoutModel layoutModel,
 			FragmentEntryLinkModel fragmentEntryLinkModel,
-			JournalArticleResourceModel journalArticleResourceModel)
+			JournalArticleResourceModel journalArticleResourceModel,
+			AssetEntryModel assetEntryModel)
 		throws Exception {
 
 		PortletPreferences portletPreferences = new PortletPreferencesImpl();
 
-		portletPreferences.setValue("ddmTemplateKey", "BASIC-WEB-CONTENT");
+		portletPreferences.setValue("ddmTemplateKey", "");
+		portletPreferences.setValue(
+			"assetEntryId", String.valueOf(assetEntryModel.getEntryId()));
 		portletPreferences.setValue("userToolAssetAddonEntryKeys", "");
 		portletPreferences.setValue("enableViewCountIncrement", "false");
-		portletPreferences.setValue("contentMetadataAssetAddonEntryKeys", "");
-		portletPreferences.setValue(
-			"articleId", journalArticleResourceModel.getArticleId());
 		portletPreferences.setValue(
 			"groupId",
 			String.valueOf(journalArticleResourceModel.getGroupId()));
+		portletPreferences.setValue(
+			"articleId", journalArticleResourceModel.getArticleId());
+		portletPreferences.setValue("contentMetadataAssetAddonEntryKeys", "");
 
 		PortletPreferencesModel portletPreferencesModel =
 			new PortletPreferencesModelImpl();
@@ -2409,13 +2442,19 @@ public class DataFactory {
 		journalContentSearchModel.setContentSearchId(_counter.get());
 		journalContentSearchModel.setGroupId(layoutModel.getGroupId());
 		journalContentSearchModel.setCompanyId(_companyId);
-		journalContentSearchModel.setLayoutId(layoutModel.getGroupId());
+		journalContentSearchModel.setLayoutId(layoutModel.getLayoutId());
 		journalContentSearchModel.setPortletId(
 			PortletIdCodec.encode(
 				JournalContentPortletKeys.JOURNAL_CONTENT,
 				fragmentEntryLinkModel.getNamespace()));
 		journalContentSearchModel.setArticleId(
 			journalArticleModel.getArticleId());
+
+		String type = layoutModel.getType();
+
+		if (type.equals("control_panel")) {
+			journalContentSearchModel.setPrivateLayout(true);
+		}
 
 		return journalContentSearchModel;
 	}
@@ -2501,9 +2540,56 @@ public class DataFactory {
 		return layoutModel;
 	}
 
+	public LayoutPageTemplateCollectionModel
+		newLayoutPageTemplateCollectionModel(long groupId) {
+
+		LayoutPageTemplateCollectionModel layoutPageTemplateCollectionModel =
+			new LayoutPageTemplateCollectionModelImpl();
+
+		layoutPageTemplateCollectionModel.setUuid(SequentialUUID.generate());
+		layoutPageTemplateCollectionModel.setLayoutPageTemplateCollectionId(
+			_counter.get());
+		layoutPageTemplateCollectionModel.setGroupId(groupId);
+		layoutPageTemplateCollectionModel.setCompanyId(_companyId);
+		layoutPageTemplateCollectionModel.setUserId(_sampleUserId);
+		layoutPageTemplateCollectionModel.setUserName(_SAMPLE_USER_NAME);
+		layoutPageTemplateCollectionModel.setCreateDate(new Date());
+		layoutPageTemplateCollectionModel.setModifiedDate(new Date());
+		layoutPageTemplateCollectionModel.setName("pagecollection");
+
+		return layoutPageTemplateCollectionModel;
+	}
+
+	public LayoutPageTemplateEntryModel newLayoutPageTemplateEntryModel(
+		LayoutPageTemplateCollectionModel layoutPageTemplateCollectionModel) {
+
+		LayoutPageTemplateEntryModel layoutPageTemplateEntryModel =
+			new LayoutPageTemplateEntryModelImpl();
+
+		layoutPageTemplateEntryModel.setUuid(SequentialUUID.generate());
+		layoutPageTemplateEntryModel.setLayoutPageTemplateEntryId(
+			_counter.get());
+		layoutPageTemplateEntryModel.setGroupId(
+			layoutPageTemplateCollectionModel.getGroupId());
+		layoutPageTemplateEntryModel.setCompanyId(_companyId);
+		layoutPageTemplateEntryModel.setUserId(_sampleUserId);
+		layoutPageTemplateEntryModel.setUserName(_SAMPLE_USER_NAME);
+		layoutPageTemplateEntryModel.setCreateDate(new Date());
+		layoutPageTemplateEntryModel.setModifiedDate(new Date());
+		layoutPageTemplateEntryModel.setLayoutPageTemplateCollectionId(
+			layoutPageTemplateCollectionModel.
+				getLayoutPageTemplateCollectionId());
+		layoutPageTemplateEntryModel.setName("pagetemplate");
+		layoutPageTemplateEntryModel.setStatusByUserId(_sampleUserId);
+		layoutPageTemplateEntryModel.setStatusByUserName(_SAMPLE_USER_NAME);
+		layoutPageTemplateEntryModel.setStatusDate(new Date());
+
+		return layoutPageTemplateEntryModel;
+	}
+
 	public LayoutPageTemplateStructureModel newLayoutPageTemplateStructureModel(
 		LayoutModel layoutModel,
-		FragmentEntryLinkModel fragmentEntryLinkModel) {
+		List<FragmentEntryLinkModel> fragmentEntryLinkModels) {
 
 		LayoutPageTemplateStructureModel layoutPageTemplateStructureModel =
 			new LayoutPageTemplateStructureModelImpl();
@@ -2522,11 +2608,62 @@ public class DataFactory {
 			getClassNameId(Layout.class));
 		layoutPageTemplateStructureModel.setClassPK(layoutModel.getPlid());
 
-		StringBundler sb = new StringBundler(3);
+		StringBundler sb = new StringBundler(
+			fragmentEntryLinkModels.size() + 3);
 
-		sb.append("{\"structure\":[\"");
-		sb.append(fragmentEntryLinkModel.getFragmentEntryLinkId());
-		sb.append("\"]}");
+		sb.append("{\"nextColumnId\":1,\"nextRowId\":1,\"structure\":");
+		sb.append("[{\"columns\":[{\"fragmentEntryLinkIds\":[\"");
+
+		for (FragmentEntryLinkModel fragmentEntryLinkModel :
+				fragmentEntryLinkModels) {
+
+			sb.append(fragmentEntryLinkModel.getFragmentEntryLinkId());
+		}
+
+		sb.append("\"],\"size\":12,\"columnId\":0}],\"rowId\":0}]}");
+
+		layoutPageTemplateStructureModel.setData(sb.toString());
+
+		return layoutPageTemplateStructureModel;
+	}
+
+	public LayoutPageTemplateStructureModel newLayoutPageTemplateStructureModel(
+		LayoutPageTemplateEntryModel layoutPageTemplateEntryModel,
+		List<FragmentEntryLinkModel> originalFragmentEntryLinkModels) {
+
+		LayoutPageTemplateStructureModel layoutPageTemplateStructureModel =
+			new LayoutPageTemplateStructureModelImpl();
+
+		layoutPageTemplateStructureModel.setUuid(SequentialUUID.generate());
+		layoutPageTemplateStructureModel.setLayoutPageTemplateStructureId(
+			_counter.get());
+		layoutPageTemplateStructureModel.setGroupId(
+			layoutPageTemplateEntryModel.getGroupId());
+		layoutPageTemplateStructureModel.setCompanyId(_companyId);
+		layoutPageTemplateStructureModel.setUserId(_sampleUserId);
+		layoutPageTemplateStructureModel.setUserName(_SAMPLE_USER_NAME);
+		layoutPageTemplateStructureModel.setCreateDate(new Date());
+		layoutPageTemplateStructureModel.setModifiedDate(new Date());
+		layoutPageTemplateStructureModel.setModifiedDate(new Date());
+		layoutPageTemplateStructureModel.setClassNameId(
+			getClassNameId(LayoutPageTemplateEntry.class));
+		layoutPageTemplateStructureModel.setClassPK(
+			layoutPageTemplateEntryModel.getLayoutPageTemplateEntryId());
+
+		StringBundler sb = new StringBundler(
+			originalFragmentEntryLinkModels.size() + 4);
+
+		sb.append("{\"structure\":[{\"columns\":");
+		sb.append("[{\"columnId\":0,\"fragmentEntryLinkIds\":[\"");
+
+		for (FragmentEntryLinkModel fragmentEntryLinkModel :
+				originalFragmentEntryLinkModels) {
+
+			sb.append(fragmentEntryLinkModel.getFragmentEntryLinkId());
+		}
+
+		sb.append("\"],\"size\":12}],\"rowId\":0}],");
+		sb.append("\"nextColumnId\":1,\"nextRowId\":1}");
 
 		layoutPageTemplateStructureModel.setData(sb.toString());
 
@@ -2733,6 +2870,40 @@ public class DataFactory {
 
 	public <K, V> ObjectValuePair<K, V> newObjectValuePair(K key, V value) {
 		return new ObjectValuePair<>(key, value);
+	}
+
+	public FragmentEntryLinkModel newOriginalFragmentEntryLinkModel(
+		LayoutPageTemplateEntryModel layoutPageTemplateEntryModel,
+		FragmentEntryModel fragmentEntryModel, int position) {
+
+		return newFragmentEntryLinkModel(
+			fragmentEntryModel, 0,
+			getClassNameId(LayoutPageTemplateEntry.class),
+			layoutPageTemplateEntryModel.getLayoutPageTemplateEntryId(),
+			position);
+	}
+
+	public List<FragmentEntryLinkModel> newOriginalFragmentEntryLinkModels(
+		LayoutPageTemplateEntryModel layoutPageTemplateEntryModel,
+		Map<String, FragmentEntryModel> fragmentEntryModels) {
+
+		List<FragmentEntryLinkModel> fragmentEntryLinkModels =
+			new ArrayList<>();
+
+		Set<String> keys = fragmentEntryModels.keySet();
+
+		int position = 0;
+
+		for (String key : keys) {
+			position++;
+
+			fragmentEntryLinkModels.add(
+				newOriginalFragmentEntryLinkModel(
+					layoutPageTemplateEntryModel, fragmentEntryModels.get(key),
+					position));
+		}
+
+		return fragmentEntryLinkModels;
 	}
 
 	public PortletPreferencesModel newPortletPreferencesModel(
@@ -3038,6 +3209,33 @@ public class DataFactory {
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
+		LayoutPageTemplateCollectionModel layoutPageTemplateCollectionModel) {
+
+		return newResourcePermissionModels(
+			LayoutPageTemplateCollection.class.getName(),
+			String.valueOf(
+				layoutPageTemplateCollectionModel.
+					getLayoutPageTemplateCollectionId()));
+	}
+
+	public List<ResourcePermissionModel> newResourcePermissionModels(
+		LayoutPageTemplateEntryModel layoutPageTemplateEntryModel) {
+
+		List<ResourcePermissionModel> resourcePermissionModels =
+			new ArrayList<>(3);
+
+		resourcePermissionModels.add(
+			newResourcePermissionModel(
+				LayoutPageTemplateEntry.class.getName(),
+				String.valueOf(
+					layoutPageTemplateEntryModel.
+						getLayoutPageTemplateEntryId()),
+				_ownerRoleModel.getRoleId(), _sampleUserId));
+
+		return resourcePermissionModels;
+	}
+
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		MBCategoryModel mbCategoryModel) {
 
 		return newResourcePermissionModels(
@@ -3315,6 +3513,25 @@ public class DataFactory {
 		catch (ReflectiveOperationException roe) {
 			return ReflectionUtil.throwException(roe);
 		}
+	}
+
+	protected String generateCounterName(String className, long groupId) {
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(className);
+		sb.append("#");
+		sb.append(groupId);
+		sb.append("#false");
+
+		return sb.toString();
+	}
+
+	protected String generateEditableValues(String html) {
+		List<String> htmls = new ArrayList<>();
+
+		htmls = Arrays.asList(html.split("<lfr-editable id="));
+
+		return _getEditableHtmlValues(htmls);
 	}
 
 	protected ObjectValuePair<String[], Integer>
@@ -3730,6 +3947,39 @@ public class DataFactory {
 		return dlFolderModel;
 	}
 
+	protected FragmentEntryLinkModel newFragmentEntryLinkModel(
+		FragmentEntryModel fragmentEntryModel, long originalFragmentEntryLinkId,
+		long classNameId, long classPK, int position) {
+
+		FragmentEntryLinkModel fragmentEntryLinkModel =
+			new FragmentEntryLinkModelImpl();
+
+		fragmentEntryLinkModel.setUuid(SequentialUUID.generate());
+		fragmentEntryLinkModel.setFragmentEntryLinkId(_counter.get());
+		fragmentEntryLinkModel.setFragmentEntryId(
+			fragmentEntryModel.getFragmentEntryId());
+		fragmentEntryLinkModel.setGroupId(fragmentEntryModel.getGroupId());
+		fragmentEntryLinkModel.setCompanyId(_companyId);
+		fragmentEntryLinkModel.setUserId(_sampleUserId);
+		fragmentEntryLinkModel.setUserName(_SAMPLE_USER_NAME);
+		fragmentEntryLinkModel.setCreateDate(new Date());
+		fragmentEntryLinkModel.setModifiedDate(new Date());
+		fragmentEntryLinkModel.setClassNameId(classNameId);
+		fragmentEntryLinkModel.setClassPK(classPK);
+		fragmentEntryLinkModel.setCss(fragmentEntryModel.getCss());
+		fragmentEntryLinkModel.setJs(fragmentEntryModel.getJs());
+		fragmentEntryLinkModel.setHtml(fragmentEntryModel.getHtml());
+		fragmentEntryLinkModel.setEditableValues(StringPool.BLANK);
+		fragmentEntryLinkModel.setNamespace(StringUtil.randomId());
+		fragmentEntryLinkModel.setOriginalFragmentEntryLinkId(
+			originalFragmentEntryLinkId);
+		fragmentEntryLinkModel.setPosition(position);
+		fragmentEntryLinkModel.setEditableValues(
+			generateEditableValues(fragmentEntryModel.getHtml()));
+
+		return fragmentEntryLinkModel;
+	}
+
 	protected GroupModel newGroupModel(
 			long groupId, long classNameId, long classPK, String name,
 			boolean site)
@@ -3912,6 +4162,25 @@ public class DataFactory {
 		resourcePermissionModel.setViewActionId(true);
 
 		return resourcePermissionModel;
+	}
+
+	protected List<ResourcePermissionModel> newResourcePermissionModels(
+		String name, String primKey) {
+
+		List<ResourcePermissionModel> resourcePermissionModels =
+			new ArrayList<>(3);
+
+		resourcePermissionModels.add(
+			newResourcePermissionModel(
+				name, name, _guestRoleModel.getRoleId(), 0));
+		resourcePermissionModels.add(
+			newResourcePermissionModel(
+				name, name, _ownerRoleModel.getRoleId(), 0));
+		resourcePermissionModels.add(
+			newResourcePermissionModel(
+				name, primKey, _ownerRoleModel.getRoleId(), _sampleUserId));
+
+		return resourcePermissionModels;
 	}
 
 	protected List<ResourcePermissionModel> newResourcePermissionModels(
@@ -4158,6 +4427,57 @@ public class DataFactory {
 		catch (ReflectiveOperationException roe) {
 			ReflectionUtil.throwException(roe);
 		}
+	}
+
+	private String _getEditableHtmlValues(List<String> htmls) {
+		Map<String, String> resultsMap = new HashMap<>();
+
+		for (String line : htmls) {
+			if (!line.contains("lfr-editable")) {
+				continue;
+			}
+
+			resultsMap.put(
+				line.substring(
+					line.indexOf("\"") + 1, line.indexOf("\" type=")),
+				line.substring(
+					line.indexOf(">") + 1, line.indexOf("</lfr-editable>")));
+		}
+
+		int count = 0;
+
+		StringBundler sb = new StringBundler();
+
+		sb.append("{\"");
+		sb.append(EditableFragmentEntryProcessor.class.getName());
+		sb.append("\":{");
+
+		for (Map.Entry<String, String> entry : resultsMap.entrySet()) {
+			String key = entry.getKey();
+			String value = entry.getValue();
+
+			sb.append("\"");
+			sb.append(key);
+			sb.append("\":{\"defaultValue\":\"");
+
+			if (key.contains("Link")) {
+				value = value.replace("\"", "\\\\\"");
+				value = value.replace("/", "\\\\/");
+			}
+
+			sb.append(value.trim());
+
+			sb.append("\"}");
+			count++;
+
+			if (count < resultsMap.size()) {
+				sb.append(",");
+			}
+		}
+
+		sb.append("}}");
+
+		return sb.toString();
 	}
 
 	private String _getResourcePermissionModelName(String... classNames) {
