@@ -14,7 +14,6 @@
 
 package com.liferay.taglib.util;
 
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -81,11 +80,6 @@ public class ThemeUtil {
 		if (extension.equals(ThemeHelper.TEMPLATE_EXTENSION_FTL)) {
 			includeFTL(servletContext, request, response, path, theme, true);
 		}
-		else {
-			path = theme.getTemplatesPath() + StringPool.SLASH + path;
-
-			includeJSP(servletContext, request, response, path, theme);
-		}
 	}
 
 	public static String includeFTL(
@@ -99,6 +93,10 @@ public class ThemeUtil {
 			ThemeHelper.TEMPLATE_EXTENSION_FTL);
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
 	public static void includeJSP(
 			ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, String path, Theme theme)
@@ -158,9 +156,6 @@ public class ThemeUtil {
 				return doIncludeFTL(
 					servletContext, request, response, path, theme, false,
 					write);
-			}
-			else if (extension.equals(ThemeHelper.TEMPLATE_EXTENSION_JSP)) {
-				doIncludeJSP(servletContext, request, response, path, theme);
 			}
 
 			return null;
@@ -286,6 +281,10 @@ public class ThemeUtil {
 		return writer.toString();
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
 	protected static void doIncludeJSP(
 			ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, String path, Theme theme)

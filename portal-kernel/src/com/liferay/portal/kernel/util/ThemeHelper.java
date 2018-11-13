@@ -21,8 +21,6 @@ import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateResourceLoaderUtil;
 
-import java.net.URL;
-
 import java.util.Objects;
 
 import javax.servlet.ServletContext;
@@ -34,6 +32,10 @@ public class ThemeHelper {
 
 	public static final String TEMPLATE_EXTENSION_FTL = "ftl";
 
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String TEMPLATE_EXTENSION_JSP = "jsp";
 
 	/**
@@ -144,34 +146,17 @@ public class ThemeHelper {
 			return false;
 		}
 
-		String resourcePath = getResourcePath(
-			servletContext, theme, portletId, path);
-
 		String extension = theme.getTemplateExtension();
 
 		if (extension.equals(TEMPLATE_EXTENSION_FTL)) {
+			String resourcePath = getResourcePath(
+				servletContext, theme, portletId, path);
+
 			return TemplateResourceLoaderUtil.hasTemplateResource(
 				TemplateConstants.LANG_TYPE_FTL, resourcePath);
 		}
-		else {
-			URL url = null;
 
-			if (theme.isWARFile()) {
-				ServletContext themeServletContext = servletContext.getContext(
-					theme.getContextPath());
-
-				url = themeServletContext.getResource(resourcePath);
-			}
-			else {
-				url = servletContext.getResource(resourcePath);
-			}
-
-			if (url == null) {
-				return false;
-			}
-
-			return true;
-		}
+		return false;
 	}
 
 }
