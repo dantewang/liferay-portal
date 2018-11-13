@@ -56,11 +56,12 @@ public class VelocityTemplateResourceLoader
 	@Activate
 	@Modified
 	protected void activate(Map<String, Object> properties) {
-		_velocityEngineConfiguration = ConfigurableUtil.createConfigurable(
-			VelocityEngineConfiguration.class, properties);
+		VelocityEngineConfiguration velocityEngineConfiguration =
+			ConfigurableUtil.createConfigurable(
+				VelocityEngineConfiguration.class, properties);
 
 		modificationCheckInterval =
-			_velocityEngineConfiguration.resourceModificationCheckInterval();
+			velocityEngineConfiguration.resourceModificationCheckInterval();
 
 		init();
 	}
@@ -97,8 +98,5 @@ public class VelocityTemplateResourceLoader
 
 		templateResourceParsers.remove(templateResourceParser);
 	}
-
-	private static volatile VelocityEngineConfiguration
-		_velocityEngineConfiguration;
 
 }

@@ -55,11 +55,12 @@ public class FreeMarkerTemplateResourceLoader
 	@Activate
 	@Modified
 	protected void activate(Map<String, Object> properties) {
-		_freeMarkerEngineConfiguration = ConfigurableUtil.createConfigurable(
-			FreeMarkerEngineConfiguration.class, properties);
+		FreeMarkerEngineConfiguration freeMarkerEngineConfiguration =
+			ConfigurableUtil.createConfigurable(
+				FreeMarkerEngineConfiguration.class, properties);
 
 		modificationCheckInterval =
-			_freeMarkerEngineConfiguration.resourceModificationCheck();
+			freeMarkerEngineConfiguration.resourceModificationCheck();
 
 		init();
 	}
@@ -96,8 +97,5 @@ public class FreeMarkerTemplateResourceLoader
 
 		templateResourceParsers.remove(templateResourceParser);
 	}
-
-	private static volatile FreeMarkerEngineConfiguration
-		_freeMarkerEngineConfiguration;
 
 }

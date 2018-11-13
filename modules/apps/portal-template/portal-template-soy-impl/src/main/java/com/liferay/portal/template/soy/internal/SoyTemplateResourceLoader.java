@@ -53,11 +53,12 @@ public class SoyTemplateResourceLoader extends BaseTemplateResourceLoader {
 	@Activate
 	@Modified
 	protected void activate(Map<String, Object> properties) {
-		_soyTemplateEngineConfiguration = ConfigurableUtil.createConfigurable(
-			SoyTemplateEngineConfiguration.class, properties);
+		SoyTemplateEngineConfiguration soyTemplateEngineConfiguration =
+			ConfigurableUtil.createConfigurable(
+				SoyTemplateEngineConfiguration.class, properties);
 
 		modificationCheckInterval =
-			_soyTemplateEngineConfiguration.resourceModificationCheck();
+			soyTemplateEngineConfiguration.resourceModificationCheck();
 
 		init();
 	}
@@ -94,8 +95,5 @@ public class SoyTemplateResourceLoader extends BaseTemplateResourceLoader {
 
 		templateResourceParsers.remove(templateResourceParser);
 	}
-
-	private static volatile SoyTemplateEngineConfiguration
-		_soyTemplateEngineConfiguration;
 
 }
