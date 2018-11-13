@@ -22,17 +22,18 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
-import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.template.DDMTemplateResource;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.template.TemplateResourceParser;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Tina Tian
@@ -96,14 +97,14 @@ public class DDMTemplateResourceParser implements TemplateResourceParser {
 				groupId, classNameId, ddmTemplateKey);
 
 			if (ddmTemplate == null) {
-				Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
+				Group companyGroup = _groupLocalService.getCompanyGroup(
 					companyId);
 
 				ddmTemplate = DDMTemplateManagerUtil.fetchTemplate(
 					companyGroup.getGroupId(), classNameId, ddmTemplateKey);
 
 				if (ddmTemplate == null) {
-					classNameId = PortalUtil.getClassNameId(
+					classNameId = _portal.getClassNameId(
 						DDMStructureManagerUtil.getDDMStructureModelClass());
 
 					ddmTemplate = DDMTemplateManagerUtil.fetchTemplate(
@@ -143,5 +144,11 @@ public class DDMTemplateResourceParser implements TemplateResourceParser {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		DDMTemplateResourceParser.class);
+
+	@Reference
+	private GroupLocalService _groupLocalService;
+
+	@Reference
+	private Portal _portal;
 
 }
