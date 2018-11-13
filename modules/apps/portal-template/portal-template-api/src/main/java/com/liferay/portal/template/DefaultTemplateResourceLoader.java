@@ -14,9 +14,6 @@
 
 package com.liferay.portal.template;
 
-import com.liferay.osgi.service.tracker.collections.map.PropertyServiceReferenceMapper;
-import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
-import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
@@ -38,13 +35,8 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.Reader;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
-import org.osgi.framework.BundleContext;
 
 /**
  * @author Tina Tian
@@ -52,7 +44,7 @@ import org.osgi.framework.BundleContext;
 public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 
 	public DefaultTemplateResourceLoader(
-		BundleContext bundleContext, String name,
+		Set<TemplateResourceParser> templateResourceParsers, String name,
 		long modificationCheckInterval, MultiVMPool multiVMPool,
 		SingleVMPool singleVMPool) {
 
@@ -61,14 +53,9 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 				"Template resource loader name is null");
 		}
 
-		_name = name;
+		_templateResourceParsers = templateResourceParsers;
 
-		if (bundleContext != null) {
-			_serviceTrackerMap = ServiceTrackerMapFactory.openMultiValueMap(
-				bundleContext, TemplateResourceParser.class,
-				"(lang.type=" + _name + ")",
-				new PropertyServiceReferenceMapper<>("lang.type"));
-		}
+		_name = name;
 
 		_modificationCheckInterval = modificationCheckInterval;
 
@@ -129,8 +116,6 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 			_multiVMPortalCache.getPortalCacheName());
 		_singleVMPool.removePortalCache(
 			_singleVMPortalCache.getPortalCacheName());
-
-		_serviceTrackerMap.close();
 	}
 
 	@Override
@@ -189,18 +174,6 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 	private Set<TemplateResourceParser> _getTemplateResourceParsers() {
 		TemplateResource templateResource = _getTemplateResource();
 
-		Collection<List<TemplateResourceParser>> templateResourceParserLists =
-			_serviceTrackerMap.values();
-
-		List<TemplateResourceParser> templateResourceParserList =
-			new ArrayList<>();
-
-		for (List<TemplateResourceParser> templateResourceParser :
-				templateResourceParserLists) {
-
-			templateResourceParserList.addAll(templateResourceParser);
-		}
-
 		if ((templateResource != null) &&
 			(templateResource instanceof ClassLoaderTemplateResource)) {
 
@@ -212,14 +185,14 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 					classLoaderTemplateResource.getClassLoader());
 
 			Set<TemplateResourceParser> templateResourceParsers = new HashSet(
-				templateResourceParserList);
+				_templateResourceParsers);
 
 			templateResourceParsers.add(classLoaderResourceParser);
 
 			return templateResourceParsers;
 		}
 
-		return new HashSet(templateResourceParserList);
+		return new HashSet(_templateResourceParsers);
 	}
 
 	private TemplateResource _loadFromCache(
@@ -363,10 +336,9 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 	private final MultiVMPool _multiVMPool;
 	private final PortalCache<String, TemplateResource> _multiVMPortalCache;
 	private final String _name;
-	private ServiceTrackerMap<String, List<TemplateResourceParser>>
-		_serviceTrackerMap;
 	private final SingleVMPool _singleVMPool;
 	private final PortalCache<String, TemplateResource> _singleVMPortalCache;
+	private final Set<TemplateResourceParser> _templateResourceParsers;
 
 	private static class NullHolderTemplateResource
 		implements TemplateResource {

@@ -21,9 +21,13 @@ import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.template.TemplateResourceLoader;
 import com.liferay.portal.template.DefaultTemplateResourceLoader;
+import com.liferay.portal.template.TemplateResourceParser;
 import com.liferay.portal.template.soy.internal.configuration.SoyTemplateEngineConfiguration;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
@@ -83,7 +87,7 @@ public class SoyTemplateResourceLoader implements TemplateResourceLoader {
 			SoyTemplateEngineConfiguration.class, properties);
 
 		_defaultTemplateResourceLoader = new DefaultTemplateResourceLoader(
-			bundleContext, TemplateConstants.LANG_TYPE_SOY,
+			_templateResourceParsers, TemplateConstants.LANG_TYPE_SOY,
 			_soyTemplateEngineConfiguration.resourceModificationCheck(),
 			_multiVMPool, _singleVMPool);
 	}
@@ -98,6 +102,16 @@ public class SoyTemplateResourceLoader implements TemplateResourceLoader {
 		_singleVMPool = singleVMPool;
 	}
 
+	@Reference(
+		target = "(lang.type=" + TemplateConstants.LANG_TYPE_SOY + ")",
+		unbind = "-"
+	)
+	protected void setTemplateResourceParser(
+		TemplateResourceParser templateResourceParser) {
+
+		_templateResourceParsers.add(templateResourceParser);
+	}
+
 	private static volatile DefaultTemplateResourceLoader
 		_defaultTemplateResourceLoader;
 	private static volatile SoyTemplateEngineConfiguration
@@ -105,5 +119,7 @@ public class SoyTemplateResourceLoader implements TemplateResourceLoader {
 
 	private MultiVMPool _multiVMPool;
 	private SingleVMPool _singleVMPool;
+	private final Set<TemplateResourceParser> _templateResourceParsers =
+		Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 }
