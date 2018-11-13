@@ -78,7 +78,7 @@ public class SoyTemplateResourceLoader extends BaseTemplateResourceLoader {
 	}
 
 	@Reference(
-		cardinality = ReferenceCardinality.MULTIPLE,
+		cardinality = ReferenceCardinality.AT_LEAST_ONE,
 		policy = ReferencePolicy.DYNAMIC,
 		policyOption = ReferencePolicyOption.GREEDY,
 		target = "(lang.type=" + TemplateConstants.LANG_TYPE_SOY + ")"
