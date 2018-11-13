@@ -41,50 +41,8 @@ import java.util.Set;
 /**
  * @author Tina Tian
  */
-public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
-
-	public DefaultTemplateResourceLoader(
-		Set<TemplateResourceParser> templateResourceParsers, String name,
-		long modificationCheckInterval, MultiVMPool multiVMPool,
-		SingleVMPool singleVMPool) {
-
-		if (Validator.isNull(name)) {
-			throw new IllegalArgumentException(
-				"Template resource loader name is null");
-		}
-
-		_templateResourceParsers = templateResourceParsers;
-
-		_name = name;
-
-		_modificationCheckInterval = modificationCheckInterval;
-
-		_multiVMPool = multiVMPool;
-
-		String portalCacheName = TemplateResourceLoader.class.getName();
-
-		portalCacheName = portalCacheName.concat(
-			StringPool.PERIOD).concat(name);
-
-		_multiVMPortalCache =
-			(PortalCache<String, TemplateResource>)_multiVMPool.getPortalCache(
-				portalCacheName);
-
-		PortalCacheListener<String, TemplateResource> cacheListener =
-			new TemplateResourcePortalCacheListener(name);
-
-		_multiVMPortalCache.registerPortalCacheListener(
-			cacheListener, PortalCacheListenerScope.ALL);
-
-		_singleVMPool = singleVMPool;
-
-		_singleVMPortalCache =
-			(PortalCache<String, TemplateResource>)_singleVMPool.getPortalCache(
-				portalCacheName);
-
-		_singleVMPortalCache.registerPortalCacheListener(
-			cacheListener, PortalCacheListenerScope.ALL);
-	}
+public abstract class DefaultTemplateResourceLoader
+	implements TemplateResourceLoader {
 
 	@Override
 	public void clearCache() {
@@ -100,20 +58,17 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 
 	@Override
 	public void destroy() {
-		_multiVMPool.removePortalCache(
-			_multiVMPortalCache.getPortalCacheName());
-		_singleVMPool.removePortalCache(
+		multiVMPool.removePortalCache(_multiVMPortalCache.getPortalCacheName());
+		singleVMPool.removePortalCache(
 			_singleVMPortalCache.getPortalCacheName());
 	}
 
 	@Override
-	public String getName() {
-		return _name;
-	}
+	public abstract String getName();
 
 	@Override
 	public TemplateResource getTemplateResource(String templateId) {
-		if (_modificationCheckInterval == 0) {
+		if (modificationCheckInterval == 0) {
 			return _loadFromParser(templateId);
 		}
 
@@ -145,9 +100,43 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 		return false;
 	}
 
+	public void init() {
+		if (Validator.isNull(getName())) {
+			throw new IllegalArgumentException(
+				"Template resource loader name is null");
+		}
+
+		String portalCacheName = TemplateResourceLoader.class.getName();
+
+		portalCacheName = portalCacheName.concat(
+			StringPool.PERIOD).concat(getName());
+
+		_multiVMPortalCache =
+			(PortalCache<String, TemplateResource>)multiVMPool.getPortalCache(
+				portalCacheName);
+
+		PortalCacheListener<String, TemplateResource> cacheListener =
+			new TemplateResourcePortalCacheListener(getName());
+
+		_multiVMPortalCache.registerPortalCacheListener(
+			cacheListener, PortalCacheListenerScope.ALL);
+
+		_singleVMPortalCache =
+			(PortalCache<String, TemplateResource>)singleVMPool.getPortalCache(
+				portalCacheName);
+
+		_singleVMPortalCache.registerPortalCacheListener(
+			cacheListener, PortalCacheListenerScope.ALL);
+	}
+
+	protected long modificationCheckInterval;
+	protected MultiVMPool multiVMPool;
+	protected SingleVMPool singleVMPool;
+	protected Set<TemplateResourceParser> templateResourceParsers;
+
 	private TemplateResource _getTemplateResource() {
 		TemplateResource templateResource =
-			TemplateResourceThreadLocal.getTemplateResource(_name);
+			TemplateResourceThreadLocal.getTemplateResource(getName());
 
 		if (templateResource instanceof CacheTemplateResource) {
 			CacheTemplateResource cacheTemplateResource =
@@ -173,14 +162,14 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 					classLoaderTemplateResource.getClassLoader());
 
 			Set<TemplateResourceParser> templateResourceParsers = new HashSet(
-				_templateResourceParsers);
+				this.templateResourceParsers);
 
 			templateResourceParsers.add(classLoaderResourceParser);
 
 			return templateResourceParsers;
 		}
 
-		return new HashSet(_templateResourceParsers);
+		return new HashSet(templateResourceParsers);
 	}
 
 	private TemplateResource _loadFromCache(
@@ -206,9 +195,9 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 
 		TemplateResource templateResource = (TemplateResource)object;
 
-		if (_modificationCheckInterval > 0) {
+		if (modificationCheckInterval > 0) {
 			long expireTime =
-				templateResource.getLastModified() + _modificationCheckInterval;
+				templateResource.getLastModified() + modificationCheckInterval;
 
 			if (System.currentTimeMillis() > expireTime) {
 				portalCache.remove(templateId);
@@ -266,7 +255,7 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 					templateResourceParser.getTemplateResource(templateId);
 
 				if (templateResource != null) {
-					if (_modificationCheckInterval != 0) {
+					if (modificationCheckInterval != 0) {
 						templateResource = new CacheTemplateResource(
 							templateResource);
 					}
@@ -320,13 +309,8 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 	private static final NullHolderTemplateResource
 		_nullHolderTemplateResource = new NullHolderTemplateResource();
 
-	private long _modificationCheckInterval;
-	private final MultiVMPool _multiVMPool;
-	private final PortalCache<String, TemplateResource> _multiVMPortalCache;
-	private final String _name;
-	private final SingleVMPool _singleVMPool;
-	private final PortalCache<String, TemplateResource> _singleVMPortalCache;
-	private final Set<TemplateResourceParser> _templateResourceParsers;
+	private PortalCache<String, TemplateResource> _multiVMPortalCache;
+	private PortalCache<String, TemplateResource> _singleVMPortalCache;
 
 	private static class NullHolderTemplateResource
 		implements TemplateResource {
