@@ -18,16 +18,12 @@ import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.SingleVMPool;
 import com.liferay.portal.kernel.template.TemplateConstants;
-import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.template.TemplateResourceLoader;
-import com.liferay.portal.template.DefaultTemplateResourceLoader;
+import com.liferay.portal.template.BaseTemplateResourceLoader;
 import com.liferay.portal.template.TemplateResourceParser;
 import com.liferay.portal.template.velocity.configuration.VelocityEngineConfiguration;
 
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -49,37 +45,12 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 	service =
 		{TemplateResourceLoader.class, VelocityTemplateResourceLoader.class}
 )
-public class VelocityTemplateResourceLoader implements TemplateResourceLoader {
-
-	@Override
-	public void clearCache() {
-		_defaultTemplateResourceLoader.clearCache();
-	}
-
-	@Override
-	public void clearCache(String templateId) {
-		_defaultTemplateResourceLoader.clearCache(templateId);
-	}
-
-	@Deactivate
-	@Override
-	public void destroy() {
-		_defaultTemplateResourceLoader.destroy();
-	}
+public class VelocityTemplateResourceLoader
+	extends BaseTemplateResourceLoader {
 
 	@Override
 	public String getName() {
-		return _defaultTemplateResourceLoader.getName();
-	}
-
-	@Override
-	public TemplateResource getTemplateResource(String templateId) {
-		return _defaultTemplateResourceLoader.getTemplateResource(templateId);
-	}
-
-	@Override
-	public boolean hasTemplateResource(String templateId) {
-		return _defaultTemplateResourceLoader.hasTemplateResource(templateId);
+		return null;
 	}
 
 	@Activate
@@ -88,20 +59,25 @@ public class VelocityTemplateResourceLoader implements TemplateResourceLoader {
 		_velocityEngineConfiguration = ConfigurableUtil.createConfigurable(
 			VelocityEngineConfiguration.class, properties);
 
-		_defaultTemplateResourceLoader = new DefaultTemplateResourceLoader(
-			_templateResourceParsers, TemplateConstants.LANG_TYPE_VM,
-			_velocityEngineConfiguration.resourceModificationCheckInterval(),
-			_multiVMPool, _singleVMPool);
+		modificationCheckInterval =
+			_velocityEngineConfiguration.resourceModificationCheckInterval();
+
+		init();
+	}
+
+	@Deactivate
+	protected void deactivate() {
+		destroy();
 	}
 
 	@Reference(unbind = "-")
 	protected void setMultiVMPool(MultiVMPool multiVMPool) {
-		_multiVMPool = multiVMPool;
+		this.multiVMPool = multiVMPool;
 	}
 
 	@Reference(unbind = "-")
 	protected void setSingleVMPool(SingleVMPool singleVMPool) {
-		_singleVMPool = singleVMPool;
+		this.singleVMPool = singleVMPool;
 	}
 
 	@Reference(
@@ -113,23 +89,16 @@ public class VelocityTemplateResourceLoader implements TemplateResourceLoader {
 	protected void setTemplateResourceParser(
 		TemplateResourceParser templateResourceParser) {
 
-		_templateResourceParsers.add(templateResourceParser);
+		templateResourceParsers.add(templateResourceParser);
 	}
 
 	protected void unsetTemplateResourceParser(
 		TemplateResourceParser templateResourceParser) {
 
-		_templateResourceParsers.remove(templateResourceParser);
+		templateResourceParsers.remove(templateResourceParser);
 	}
 
-	private static volatile DefaultTemplateResourceLoader
-		_defaultTemplateResourceLoader;
 	private static volatile VelocityEngineConfiguration
 		_velocityEngineConfiguration;
-
-	private MultiVMPool _multiVMPool;
-	private SingleVMPool _singleVMPool;
-	private final Set<TemplateResourceParser> _templateResourceParsers =
-		Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 }
