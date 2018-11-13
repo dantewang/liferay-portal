@@ -41,7 +41,7 @@ import java.util.Set;
 /**
  * @author Tina Tian
  */
-public abstract class DefaultTemplateResourceLoader
+public abstract class BaseTemplateResourceLoader
 	implements TemplateResourceLoader {
 
 	@Override
@@ -304,7 +304,7 @@ public abstract class DefaultTemplateResourceLoader
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		DefaultTemplateResourceLoader.class);
+		BaseTemplateResourceLoader.class);
 
 	private static final NullHolderTemplateResource
 		_nullHolderTemplateResource = new NullHolderTemplateResource();
