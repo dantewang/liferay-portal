@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.template.TemplateResourceLoaderUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.ThemeHelper;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.HashMap;
@@ -114,6 +115,22 @@ public class ThemeHotDeployListener extends BaseHotDeployListener {
 					StringBundler.concat(
 						String.valueOf(themes.size()), " themes for ",
 						servletContextName, " are available for use"));
+			}
+		}
+
+		if (_log.isWarnEnabled()) {
+			for (Theme theme : themes) {
+				String templateExtension = theme.getTemplateExtension();
+
+				if (templateExtension.equals(
+						ThemeHelper.TEMPLATE_EXTENSION_JSP)) {
+
+					_log.warn(
+						StringBundler.concat(
+							"JSP template is no longer supported for theme. ",
+							"Please Update theme ", theme.getName(),
+							" to use FreeMarker for forward compatibility."));
+				}
 			}
 		}
 	}
