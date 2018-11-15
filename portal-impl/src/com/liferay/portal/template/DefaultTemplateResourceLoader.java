@@ -200,7 +200,7 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 				new ClassLoaderResourceParser(
 					classLoaderTemplateResource.getClassLoader());
 
-			Set<TemplateResourceParser> templateResourceParsers = new HashSet(
+			Set<TemplateResourceParser> templateResourceParsers = new HashSet<>(
 				_templateResourceParsers);
 
 			templateResourceParsers.add(classLoaderResourceParser);
@@ -208,7 +208,7 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 			return templateResourceParsers;
 		}
 
-		return new HashSet(_templateResourceParsers);
+		return new HashSet<>(_templateResourceParsers);
 	}
 
 	private TemplateResource _loadFromCache(
