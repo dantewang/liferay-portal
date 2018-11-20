@@ -42,6 +42,7 @@ import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
 import com.liferay.portal.kernel.servlet.DirectServletRegistryUtil;
 import com.liferay.portal.kernel.servlet.PortletSessionListenerManager;
 import com.liferay.portal.kernel.servlet.SerializableSessionAttributeListener;
+import com.liferay.portal.kernel.servlet.ServletContextClassLoaderPool;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.template.TemplateResourceLoaderUtil;
 import com.liferay.portal.kernel.util.ClearThreadLocalUtil;
@@ -173,6 +174,9 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		ModuleFrameworkUtilAdapter.unregisterContext(_arrayApplicationContext);
 
 		_arrayApplicationContext.close();
+
+		ClassLoaderPool.unregister(_portalServletContextName);
+		ServletContextClassLoaderPool.unregister(_portalServletContextName);
 	}
 
 	@Override
@@ -250,6 +254,8 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
 
 		ClassLoaderPool.register(_portalServletContextName, portalClassLoader);
+		ServletContextClassLoaderPool.register(
+			_portalServletContextName, portalClassLoader);
 
 		ServiceDependencyManager serviceDependencyManager =
 			new ServiceDependencyManager();

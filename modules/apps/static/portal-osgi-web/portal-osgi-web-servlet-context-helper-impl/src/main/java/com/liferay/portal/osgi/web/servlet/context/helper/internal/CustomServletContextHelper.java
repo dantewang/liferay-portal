@@ -18,6 +18,7 @@ import com.liferay.osgi.util.BundleUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.servlet.ServletContextClassLoaderPool;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.osgi.web.servlet.context.helper.definition.WebResourceCollectionDefinition;
@@ -41,6 +42,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.felix.utils.log.Logger;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.http.context.ServletContextHelper;
 
 /**
@@ -67,6 +69,9 @@ public class CustomServletContextHelper
 
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
+		ServletContextClassLoaderPool.unregister(
+			_servletContext.getServletContextName());
+
 		_servletContext = null;
 	}
 
@@ -74,6 +79,12 @@ public class CustomServletContextHelper
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		_servletContext = ServletContextDelegate.create(
 			servletContextEvent.getServletContext());
+
+		BundleWiring bundleWiring = _bundle.adapt(BundleWiring.class);
+
+		ServletContextClassLoaderPool.register(
+			_servletContext.getServletContextName(),
+			bundleWiring.getClassLoader());
 	}
 
 	@Override
