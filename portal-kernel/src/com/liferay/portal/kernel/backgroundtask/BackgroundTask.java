@@ -59,6 +59,8 @@ public interface BackgroundTask {
 
 	public BaseModel<?> getModel();
 
+	public Date getModifiedDate();
+
 	public String getName();
 
 	public String getServletContextNames();

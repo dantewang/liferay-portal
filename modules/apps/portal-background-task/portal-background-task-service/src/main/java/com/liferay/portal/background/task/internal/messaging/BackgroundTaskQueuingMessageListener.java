@@ -14,6 +14,7 @@
 
 package com.liferay.portal.background.task.internal.messaging;
 
+import com.liferay.background.task.kernel.util.comparator.BackgroundTaskModifiedDateComparator;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskConstants;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskLockHelperUtil;
@@ -85,7 +86,8 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 
 		BackgroundTask backgroundTask =
 			_backgroundTaskManager.fetchFirstBackgroundTask(
-				taskExecutorClassName, BackgroundTaskConstants.STATUS_QUEUED);
+				taskExecutorClassName, BackgroundTaskConstants.STATUS_QUEUED,
+				new BackgroundTaskModifiedDateComparator(true));
 
 		if (backgroundTask == null) {
 			if (_log.isDebugEnabled()) {
