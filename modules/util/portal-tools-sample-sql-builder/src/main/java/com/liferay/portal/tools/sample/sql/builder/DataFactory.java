@@ -3700,6 +3700,14 @@ public class DataFactory {
 
 		WikiPageModel wikiPageModel = new WikiPageModelImpl();
 
+		StringBundler sb = new StringBundler(5);
+
+		sb.append("This is Test Page ");
+		sb.append(index);
+		sb.append(" of ");
+		sb.append(wikiNodeModel.getName());
+		sb.append(".");
+
 		wikiPageModel.setUuid(SequentialUUID.generate());
 		wikiPageModel.setPageId(_counter.get());
 		wikiPageModel.setResourcePrimKey(_counter.get());
@@ -3712,7 +3720,7 @@ public class DataFactory {
 		wikiPageModel.setNodeId(wikiNodeModel.getNodeId());
 		wikiPageModel.setTitle("Test Page " + index);
 		wikiPageModel.setVersion(WikiPageConstants.VERSION_DEFAULT);
-		wikiPageModel.setContent("This is test page " + index + ".");
+		wikiPageModel.setContent(sb.toString());
 		wikiPageModel.setFormat("creole");
 		wikiPageModel.setHead(true);
 		wikiPageModel.setLastPublishDate(new Date());
