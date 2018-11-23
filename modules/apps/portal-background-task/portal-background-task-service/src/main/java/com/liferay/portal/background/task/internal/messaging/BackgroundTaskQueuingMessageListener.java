@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.Validator;
 
 /**
@@ -93,6 +94,12 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 
 			return;
 		}
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		_backgroundTaskManager.amendBackgroundTask(
+			backgroundTask.getBackgroundTaskId(), null,
+			BackgroundTaskConstants.STATUS_NEW, serviceContext);
 
 		_backgroundTaskManager.resumeBackgroundTask(
 			backgroundTask.getBackgroundTaskId());
