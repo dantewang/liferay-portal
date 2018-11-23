@@ -58,6 +58,8 @@ public class BackgroundTaskConstants {
 
 	public static final int STATUS_QUEUED = 4;
 
+	public static final int STATUS_RESUMING = 6;
+
 	public static final int STATUS_SUCCESSFUL = 3;
 
 	public static String getStatusCssClass(int status) {

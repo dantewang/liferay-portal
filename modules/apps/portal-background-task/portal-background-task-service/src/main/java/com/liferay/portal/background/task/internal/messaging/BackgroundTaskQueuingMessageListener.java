@@ -99,7 +99,7 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 
 		_backgroundTaskManager.amendBackgroundTask(
 			backgroundTask.getBackgroundTaskId(), null,
-			BackgroundTaskConstants.STATUS_NEW, serviceContext);
+			BackgroundTaskConstants.STATUS_RESUMING, serviceContext);
 
 		_backgroundTaskManager.resumeBackgroundTask(
 			backgroundTask.getBackgroundTaskId());
