@@ -326,7 +326,7 @@ public class SetupWizardUtil {
 			passwordReset = true;
 		}
 
-		User user = SetupWizardSampleDataUtil.updateAdminUser(
+		User user = SetupSampleDataUtil.updateAdminUser(
 			company, themeDisplay.getLocale(), themeDisplay.getLanguageId(),
 			emailAddress, firstName, lastName, passwordReset);
 
@@ -372,8 +372,7 @@ public class SetupWizardUtil {
 		String companyName = ParamUtil.getString(
 			request, "companyName", PropsValues.COMPANY_DEFAULT_NAME);
 
-		SetupWizardSampleDataUtil.updateCompany(
-			company, companyName, languageId);
+		SetupSampleDataUtil.updateCompany(company, companyName, languageId);
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);

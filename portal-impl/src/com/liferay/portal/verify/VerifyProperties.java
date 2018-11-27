@@ -1969,6 +1969,7 @@ public class VerifyProperties extends VerifyProcess {
 		{"referer.url.domains.allowed", "redirect.url.domains.allowed"},
 		{"referer.url.ips.allowed", "redirect.url.ips.allowed"},
 		{"referer.url.security.mode", "redirect.url.security.mode"},
+		{"setup.wizard.add.sample.data", "setup.add.sample.data"},
 		{
 			"tags.asset.increment.view.counter.enabled",
 			"asset.entry.increment.view.counter.enabled"
