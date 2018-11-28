@@ -25,4 +25,5 @@
 
 		${dataFactory.getCSVWriter("messageBoard").write(mbCategoryModel.categoryId + "," + mbThreadModel.threadId + "," + mbThreadModel.rootMessageId + "\n")}
 	</#list>
+	${dataFactory.getCSVWriter("mbcategory").write(mbCategoryModel.categoryId + "," + mbCategoryModel.name + "\n")}
 </#list>
