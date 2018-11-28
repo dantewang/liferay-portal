@@ -2209,6 +2209,8 @@ public interface PropsKeys {
 
 	public static final String SESSION_VERIFY_SERIALIZABLE_ATTRIBUTE = "session.verify.serializable.attribute";
 
+	public static final String SETUP_ADD_SAMPLE_DATA = "setup.add.sample.data";
+
 	public static final String SETUP_DATABASE_DRIVER_CLASS_NAME = "setup.database.driverClassName";
 
 	public static final String SETUP_DATABASE_JAR_NAME = "setup.database.jar.name";
@@ -2227,6 +2229,11 @@ public interface PropsKeys {
 
 	public static final String SETUP_LIFERAY_POOL_PROVIDER_JAR_URL = "setup.liferay.pool.provider.jar.url";
 
+	/**
+	 * @deprecated As of Judson (7.1.x), replaced by {@link
+	 *             #SETUP_ADD_SAMPLE_DATA}
+	 */
+	@Deprecated
 	public static final String SETUP_WIZARD_ADD_SAMPLE_DATA = "setup.wizard.add.sample.data";
 
 	public static final String SETUP_WIZARD_ENABLED = "setup.wizard.enabled";
