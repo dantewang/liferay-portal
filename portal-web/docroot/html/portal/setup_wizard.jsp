@@ -89,8 +89,6 @@
 										<aui:button name="changeLanguageButton" value="change" />
 									</div>
 								</aui:field-wrapper>
-
-								<aui:input label="add-sample-data" name='<%= "properties--" + PropsKeys.SETUP_WIZARD_ADD_SAMPLE_DATA + "--" %>' type="checkbox" value="<%= true %>" />
 							</aui:fieldset>
 
 							<aui:fieldset cssClass="col-md-6">
