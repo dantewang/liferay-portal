@@ -652,7 +652,7 @@
 		<priority value="ERROR" />
 	</category>
 
-	<category name="com.liferay.portal.setup.SetupWizardSampleDataUtil">
+	<category name="com.liferay.portal.setup.SetupSampleDataUtil">
 		<priority value="INFO" />
 	</category>
 

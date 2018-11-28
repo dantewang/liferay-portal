@@ -55,7 +55,7 @@ import org.apache.commons.lang.time.StopWatch;
 /**
  * @author Shinn Lok
  */
-public class SetupWizardSampleDataUtil {
+public class SetupSampleDataUtil {
 
 	public static void addSampleData(long companyId) throws Exception {
 		addSampleData(
@@ -348,6 +348,6 @@ public class SetupWizardSampleDataUtil {
 	};
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		SetupWizardSampleDataUtil.class);
+		SetupSampleDataUtil.class);
 
 }
