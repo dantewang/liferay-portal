@@ -404,7 +404,7 @@ public class InvokerFilterHelper {
 				urlPatterns.add(urlPatternElement.getTextTrim());
 			}
 
-			Set<Dispatcher> dispatchers = new HashSet<>(4);
+			Set<Dispatcher> dispatchers = new HashSet<>();
 
 			List<Element> dispatcherElements = filterMappingElement.elements(
 				"dispatcher");
