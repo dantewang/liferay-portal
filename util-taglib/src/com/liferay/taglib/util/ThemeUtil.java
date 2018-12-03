@@ -75,18 +75,62 @@ public class ThemeUtil {
 			HttpServletResponse response, String path, Theme theme)
 		throws Exception {
 
-		includeFTL(servletContext, request, response, path, theme, true);
+		include(servletContext, request, response, path, theme, true);
 	}
 
+	public static String include(
+			ServletContext servletContext, HttpServletRequest request,
+			HttpServletResponse response, String path, Theme theme,
+			boolean write)
+		throws Exception {
+
+		String pluginServletContextName = GetterUtil.getString(
+			theme.getServletContextName());
+
+		ServletContext pluginServletContext = ServletContextPool.get(
+			pluginServletContextName);
+
+		ClassLoader pluginClassLoader = null;
+
+		if (pluginServletContext != null) {
+			pluginClassLoader = (ClassLoader)pluginServletContext.getAttribute(
+				PluginContextListener.PLUGIN_CLASS_LOADER);
+		}
+
+		Thread currentThread = Thread.currentThread();
+
+		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+
+		if ((pluginClassLoader != null) &&
+			(pluginClassLoader != contextClassLoader)) {
+
+			currentThread.setContextClassLoader(pluginClassLoader);
+		}
+
+		try {
+			return doIncludeFTL(
+				servletContext, request, response, path, theme, false, write);
+		}
+		finally {
+			if ((pluginClassLoader != null) &&
+				(pluginClassLoader != contextClassLoader)) {
+
+				currentThread.setContextClassLoader(contextClassLoader);
+			}
+		}
+	}
+
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
 	public static String includeFTL(
 			ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, String path, Theme theme,
 			boolean write)
 		throws Exception {
 
-		return doDispatch(
-			servletContext, request, response, path, theme, write,
-			ThemeHelper.TEMPLATE_EXTENSION_FTL);
+		return include(servletContext, request, response, path, theme, write);
 	}
 
 	/**
@@ -118,51 +162,17 @@ public class ThemeUtil {
 			ThemeHelper.TEMPLATE_EXTENSION_VM);
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
 	protected static String doDispatch(
 			ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, String path, Theme theme,
 			boolean write, String extension)
 		throws Exception {
 
-		String pluginServletContextName = GetterUtil.getString(
-			theme.getServletContextName());
-
-		ServletContext pluginServletContext = ServletContextPool.get(
-			pluginServletContextName);
-
-		ClassLoader pluginClassLoader = null;
-
-		if (pluginServletContext != null) {
-			pluginClassLoader = (ClassLoader)pluginServletContext.getAttribute(
-				PluginContextListener.PLUGIN_CLASS_LOADER);
-		}
-
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
-
-		if ((pluginClassLoader != null) &&
-			(pluginClassLoader != contextClassLoader)) {
-
-			currentThread.setContextClassLoader(pluginClassLoader);
-		}
-
-		try {
-			if (extension.equals(ThemeHelper.TEMPLATE_EXTENSION_FTL)) {
-				return doIncludeFTL(
-					servletContext, request, response, path, theme, false,
-					write);
-			}
-
-			return null;
-		}
-		finally {
-			if ((pluginClassLoader != null) &&
-				(pluginClassLoader != contextClassLoader)) {
-
-				currentThread.setContextClassLoader(contextClassLoader);
-			}
-		}
+		throw new UnsupportedOperationException(extension);
 	}
 
 	protected static String doIncludeFTL(
