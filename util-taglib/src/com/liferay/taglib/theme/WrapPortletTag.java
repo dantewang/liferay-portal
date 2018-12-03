@@ -65,8 +65,8 @@ public class WrapPortletTag
 
 		// Page
 
-		String content = ThemeUtil.includeFTL(
-				servletContext, request, response, wrapPage, theme, false);
+		String content = ThemeUtil.include(
+			servletContext, request, response, wrapPage, theme, false);
 
 		return _CONTENT_WRAPPER_PRE.concat(content).concat(
 			_CONTENT_WRAPPER_POST);
