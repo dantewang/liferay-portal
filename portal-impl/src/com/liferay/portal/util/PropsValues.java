@@ -1574,6 +1574,8 @@ public class PropsValues {
 	@Deprecated
 	public static final int SEARCH_CONTAINER_SHOW_PAGINATION_TOP_DELTA = GetterUtil.getInteger(PropsUtil.get(PropsKeys.SEARCH_CONTAINER_SHOW_PAGINATION_TOP_DELTA), 10);
 
+	public static final boolean SERVLET_CONTEXT_CLASS_LOADER_POOL_FALLBACK = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.SERVLET_CONTEXT_CLASS_LOADER_POOL_FALLBACK));
+
 	public static final String[] SERVLET_SERVICE_EVENTS_POST = PropsUtil.getArray(PropsKeys.SERVLET_SERVICE_EVENTS_POST);
 
 	public static final String[] SERVLET_SERVICE_EVENTS_PRE = PropsUtil.getArray(PropsKeys.SERVLET_SERVICE_EVENTS_PRE);
