@@ -172,6 +172,34 @@ public abstract class BaseUpgradePortletId extends UpgradeProcess {
 		return new String[0];
 	}
 
+	protected boolean hasPortlet(String portletId) throws SQLException {
+		return hasRow(
+			"select count(*) from Portlet where portletId = ?", portletId);
+	}
+
+	protected boolean hasResourcePermission(String name) throws SQLException {
+		return hasRow(
+			"select count(*) from ResourcePermission where name = ?", name);
+	}
+
+	protected boolean hasRow(String sql, String value) throws SQLException {
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setString(1, value);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					int count = rs.getInt(1);
+
+					if (count > 0) {
+						return true;
+					}
+				}
+
+				return false;
+			}
+		}
+	}
+
 	protected void updateGroup(long groupId, String typeSettings)
 		throws Exception {
 
@@ -413,6 +441,13 @@ public abstract class BaseUpgradePortletId extends UpgradeProcess {
 			String oldRootPortletId, String newRootPortletId)
 		throws Exception {
 
+		if (hasPortlet(newRootPortletId)) {
+			runSQL(
+				StringBundler.concat(
+					"delete from Portlet where portletId = '", newRootPortletId,
+					"'"));
+		}
+
 		runSQL(
 			StringBundler.concat(
 				"update Portlet set portletId = '", newRootPortletId,
@@ -490,6 +525,14 @@ public abstract class BaseUpgradePortletId extends UpgradeProcess {
 		}
 
 		if (updateName) {
+			if (hasResourcePermission(newRootPortletId)) {
+				runSQL(
+					StringBundler.concat(
+						"delete from ResourcePermission where name = '",
+						newRootPortletId, "' and primKey != '",
+						newRootPortletId, "'"));
+			}
+
 			runSQL(
 				StringBundler.concat(
 					"update ResourcePermission set primKey = '",

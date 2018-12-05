@@ -76,47 +76,9 @@ public abstract class BaseReplacePortletId extends BaseUpgradePortletId {
 		super.doUpgrade();
 	}
 
-	protected boolean hasPortlet(String portletId) throws SQLException {
-		return hasRow(
-			"select count(*) from Portlet where portletId = ?", portletId);
-	}
-
 	protected boolean hasResourceAction(String name) throws SQLException {
 		return hasRow(
 			"select count(*) from ResourceAction where name = ?", name);
-	}
-
-	protected boolean hasResourcePermission(String name) throws SQLException {
-		return hasRow(
-			"select count(*) from ResourcePermission where name = ?", name);
-	}
-
-	protected boolean hasRow(String sql, String value) throws SQLException {
-		try (PreparedStatement ps = connection.prepareStatement(sql)) {
-			ps.setString(1, value);
-
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					int count = rs.getInt(1);
-
-					if (count > 0) {
-						return true;
-					}
-				}
-
-				return false;
-			}
-		}
-	}
-
-	@Override
-	protected void updatePortletId(
-			String oldRootPortletId, String newRootPortletId)
-		throws Exception {
-
-		if (!hasPortlet(newRootPortletId)) {
-			super.updatePortletId(oldRootPortletId, newRootPortletId);
-		}
 	}
 
 	@Override
