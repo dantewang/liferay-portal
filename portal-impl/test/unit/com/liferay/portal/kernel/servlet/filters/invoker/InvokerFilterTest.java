@@ -68,7 +68,16 @@ public class InvokerFilterTest {
 			mockHttpServletRequest);
 
 		Assert.assertEquals(
-			"/c/portal/login", invokerFilter.getURI(originalURI));
+			"/c/portal/login",
+			invokerFilter.getURI(mockHttpServletRequest, originalURI));
+
+		mockHttpServletRequest = new MockHttpServletRequest(
+			HttpMethods.GET,
+			"/c///portal/%2e/../login;jsessionid=ae01b0f2af.worker1");
+
+		Assert.assertEquals(
+			"/c/portal/login",
+			invokerFilter.getURI(mockHttpServletRequest, originalURI));
 	}
 
 	@Test
@@ -84,7 +93,8 @@ public class InvokerFilterTest {
 			mockHttpServletRequest);
 
 		Assert.assertEquals(
-			"/c/portal/login", invokerFilter.getURI(originalURI));
+			"/c/portal/login",
+			invokerFilter.getURI(mockHttpServletRequest, originalURI));
 	}
 
 	@Test

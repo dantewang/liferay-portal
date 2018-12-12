@@ -83,7 +83,7 @@ public class InvokerFilter extends BasePortalLifecycle implements Filter {
 
 		response = secureResponseHeaders(request, response);
 
-		String uri = getURI(originalURI);
+		String uri = getURI(request, originalURI);
 
 		request.setAttribute(WebKeys.INVOKER_FILTER_URI, uri);
 
