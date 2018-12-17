@@ -16,7 +16,6 @@ package com.liferay.portal.template.internal;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.template.ClassLoaderTemplateResource;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateResource;
@@ -24,10 +23,13 @@ import com.liferay.portal.kernel.util.FileUtil;
 
 import java.net.URL;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Tina Tian
  */
-@OSGiBeanProperties(
+@Component(
+	immediate = true,
 	property = {
 		"lang.type=" + TemplateConstants.LANG_TYPE_FTL,
 		"lang.type=" + TemplateConstants.LANG_TYPE_SOY,
