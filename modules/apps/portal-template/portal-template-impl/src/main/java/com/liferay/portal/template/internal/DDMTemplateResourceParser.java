@@ -18,6 +18,7 @@ import com.liferay.dynamic.data.mapping.kernel.DDMStructureManager;
 import com.liferay.dynamic.data.mapping.kernel.DDMTemplate;
 import com.liferay.dynamic.data.mapping.kernel.DDMTemplateManager;
 import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -29,7 +30,6 @@ import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.template.TemplateResourceParser;
 
 import org.osgi.service.component.annotations.Component;
@@ -87,9 +87,8 @@ public class DDMTemplateResourceParser implements TemplateResourceParser {
 			if (_log.isDebugEnabled()) {
 				_log.debug(
 					StringBundler.concat(
-						"Loading {companyId=", String.valueOf(companyId),
-						", groupId=", String.valueOf(groupId), ", classNameId=",
-						String.valueOf(classNameId), ", ddmTemplateKey=",
+						"Loading {companyId=", companyId, ", groupId=", groupId,
+						", classNameId=", classNameId, ", ddmTemplateKey=",
 						ddmTemplateKey, "}"));
 			}
 
