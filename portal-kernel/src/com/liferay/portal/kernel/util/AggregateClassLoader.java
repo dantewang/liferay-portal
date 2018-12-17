@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.petra.lang.HashUtil;
 import com.liferay.petra.memory.EqualityWeakReference;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.kernel.exception.LoggedExceptionInInitializerError;
@@ -32,6 +33,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Brian Wing Shun Chan
@@ -156,10 +158,7 @@ public class AggregateClassLoader extends ClassLoader {
 
 		if (_classLoaderReferences.equals(
 				aggregateClassLoader._classLoaderReferences) &&
-			(((getParent() == null) &&
-			  (aggregateClassLoader.getParent() == null)) ||
-			 ((getParent() != null) &&
-			  getParent().equals(aggregateClassLoader.getParent())))) {
+			Objects.equals(getParent(), aggregateClassLoader.getParent())) {
 
 			return true;
 		}
@@ -218,11 +217,9 @@ public class AggregateClassLoader extends ClassLoader {
 
 	@Override
 	public int hashCode() {
-		if (_classLoaderReferences != null) {
-			return _classLoaderReferences.hashCode();
-		}
+		int hash = HashUtil.hash(0, _classLoaderReferences);
 
-		return 0;
+		return HashUtil.hash(hash, getParent());
 	}
 
 	@Override
