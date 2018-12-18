@@ -17,24 +17,18 @@ package com.liferay.portal.template.internal;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.test.CaptureHandler;
 import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
-import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * @author Shuyang Zhou
  */
 public class ClassLoaderResourceParserTest {
-
-	@ClassRule
-	public static final CodeCoverageAssertor codeCoverageAssertor =
-		CodeCoverageAssertor.INSTANCE;
 
 	@SuppressWarnings("deprecation")
 	@Test
@@ -55,11 +49,6 @@ public class ClassLoaderResourceParserTest {
 			classLoaderResourceParser.getURL(
 				TemplateConstants.THEME_LOADER_SEPARATOR));
 
-		Class<?> clazz = getClass();
-
-		classLoaderResourceParser = new ClassLoaderResourceParser(
-			clazz.getClassLoader());
-
 		String templateId = "DummyFile";
 
 		Assert.assertNull(classLoaderResourceParser.getURL(templateId));
@@ -78,6 +67,16 @@ public class ClassLoaderResourceParserTest {
 
 			Assert.assertEquals(
 				"Loading " + templateId, logRecord.getMessage());
+		}
+
+		Class<?> clazz = getClass();
+
+		try {
+			new ClassLoaderResourceParser(clazz.getClassLoader());
+
+			Assert.fail("UnsupportedOperationException is not thrown");
+		}
+		catch (UnsupportedOperationException uoe) {
 		}
 	}
 
