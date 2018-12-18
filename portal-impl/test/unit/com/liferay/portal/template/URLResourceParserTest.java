@@ -93,13 +93,11 @@ public class URLResourceParserTest {
 
 	@Test
 	public void testNormalizePath() {
-		Assert.assertEquals(
-			"abc", ClassLoaderResourceParser.normalizePath("abc"));
-		Assert.assertEquals(
-			"/abc", ClassLoaderResourceParser.normalizePath("/abc"));
+		Assert.assertEquals("abc", URLResourceParser.normalizePath("abc"));
+		Assert.assertEquals("/abc", URLResourceParser.normalizePath("/abc"));
 
 		try {
-			ClassLoaderResourceParser.normalizePath("//");
+			URLResourceParser.normalizePath("//");
 
 			Assert.fail();
 		}
@@ -107,13 +105,12 @@ public class URLResourceParserTest {
 			Assert.assertEquals("Unable to parse path //", iae.getMessage());
 		}
 
+		Assert.assertEquals("abc", URLResourceParser.normalizePath("abc/./"));
 		Assert.assertEquals(
-			"abc", ClassLoaderResourceParser.normalizePath("abc/./"));
-		Assert.assertEquals(
-			"def", ClassLoaderResourceParser.normalizePath("abc/../def"));
+			"def", URLResourceParser.normalizePath("abc/../def"));
 
 		try {
-			ClassLoaderResourceParser.normalizePath("../");
+			URLResourceParser.normalizePath("../");
 
 			Assert.fail();
 		}
@@ -122,8 +119,7 @@ public class URLResourceParserTest {
 		}
 
 		Assert.assertEquals(
-			"/efg/hij",
-			ClassLoaderResourceParser.normalizePath("/abc/../efg/./hij/"));
+			"/efg/hij", URLResourceParser.normalizePath("/abc/../efg/./hij/"));
 	}
 
 }
