@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
-import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.template.DDMTemplateResource;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateException;
@@ -35,14 +34,9 @@ import com.liferay.portal.kernel.util.StringBundler;
 /**
  * @author Tina Tian
  * @author Juan Fernández
+ * @deprecated As of Mueller (7.2.x), with no direct replacement
  */
-@OSGiBeanProperties(
-	property = {
-		"lang.type=" + TemplateConstants.LANG_TYPE_FTL,
-		"lang.type=" + TemplateConstants.LANG_TYPE_VM
-	},
-	service = TemplateResourceParser.class
-)
+@Deprecated
 public class DDMTemplateResourceParser implements TemplateResourceParser {
 
 	@Override
