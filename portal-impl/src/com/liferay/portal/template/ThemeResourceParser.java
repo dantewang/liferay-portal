@@ -16,7 +16,6 @@ package com.liferay.portal.template;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.theme.ThemeLoader;
@@ -30,11 +29,9 @@ import java.net.URL;
 
 /**
  * @author Tina Tian
+ * @deprecated As of Mueller (7.2.x), with no direct replacement
  */
-@OSGiBeanProperties(
-	property = "lang.type=" + TemplateConstants.LANG_TYPE_FTL,
-	service = TemplateResourceParser.class
-)
+@Deprecated
 public class ThemeResourceParser extends URLResourceParser {
 
 	@Override
