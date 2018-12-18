@@ -26,8 +26,8 @@ import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.template.TemplateResourceLoader;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.template.ClassLoaderResourceParser;
 import com.liferay.portal.template.TemplateContextHelper;
+import com.liferay.portal.template.URLResourceParser;
 import com.liferay.portal.template.velocity.configuration.VelocityEngineConfiguration;
 import com.liferay.portal.tools.ToolDependencies;
 import com.liferay.portal.util.FileImpl;
@@ -41,6 +41,8 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.Reader;
 import java.io.StringReader;
+
+import java.net.URL;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -492,7 +494,19 @@ public class VelocityTemplateTest {
 			setSingleVMPool(
 				registry.callService(SingleVMPool.class, Function.identity()));
 
-			setTemplateResourceParser(new ClassLoaderResourceParser());
+			setTemplateResourceParser(
+				new URLResourceParser() {
+
+					@Override
+					public URL getURL(String templateId) {
+						Class<?> clazz = getClass();
+
+						ClassLoader classLoader = clazz.getClassLoader();
+
+						return classLoader.getResource(templateId);
+					}
+
+				});
 
 			super.activate(properties);
 		}
