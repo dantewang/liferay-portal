@@ -17,7 +17,10 @@ package com.liferay.portal.template;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.template.ClassLoaderTemplateResource;
 import com.liferay.portal.kernel.template.TemplateConstants;
+import com.liferay.portal.kernel.template.TemplateResource;
+import com.liferay.portal.kernel.util.FileUtil;
 
 import java.net.URL;
 
@@ -59,7 +62,42 @@ public class ClassLoaderResourceParser extends URLResourceParser {
 			_log.debug("Loading " + templateId);
 		}
 
-		return _classLoader.getResource(templateId);
+		URL url = _classLoader.getResource(templateId);
+
+		if (url != null) {
+			return url;
+		}
+
+		TemplateResource templateResource = _getTemplateResource(templateId);
+
+		if ((templateResource != null) &&
+			(templateResource instanceof ClassLoaderTemplateResource)) {
+
+			ClassLoaderTemplateResource classLoaderTemplateResource =
+				(ClassLoaderTemplateResource)templateResource;
+
+			ClassLoader classLoader =
+				classLoaderTemplateResource.getClassLoader();
+
+			return classLoader.getResource(templateId);
+		}
+
+		return null;
+	}
+
+	private TemplateResource _getTemplateResource(String templateId) {
+		TemplateResource templateResource =
+			TemplateResourceThreadLocal.getTemplateResource(
+				FileUtil.getExtension(templateId));
+
+		if (templateResource instanceof CacheTemplateResource) {
+			CacheTemplateResource cacheTemplateResource =
+				(CacheTemplateResource)templateResource;
+
+			return cacheTemplateResource.getInnerTemplateResource();
+		}
+
+		return templateResource;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
