@@ -32,10 +32,6 @@ import org.junit.Test;
  */
 public class ClassLoaderResourceParserTest {
 
-	@ClassRule
-	public static final CodeCoverageAssertor codeCoverageAssertor =
-		CodeCoverageAssertor.INSTANCE;
-
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetURL() {
@@ -55,11 +51,6 @@ public class ClassLoaderResourceParserTest {
 			classLoaderResourceParser.getURL(
 				TemplateConstants.THEME_LOADER_SEPARATOR));
 
-		Class<?> clazz = getClass();
-
-		classLoaderResourceParser = new ClassLoaderResourceParser(
-			clazz.getClassLoader());
-
 		String templateId = "DummyFile";
 
 		Assert.assertNull(classLoaderResourceParser.getURL(templateId));
@@ -78,6 +69,16 @@ public class ClassLoaderResourceParserTest {
 
 			Assert.assertEquals(
 				"Loading " + templateId, logRecord.getMessage());
+		}
+
+		Class<?> clazz = getClass();
+
+		try {
+			new ClassLoaderResourceParser(clazz.getClassLoader());
+
+			Assert.fail("UnsupportedOperationException is not thrown");
+		}
+		catch (UnsupportedOperationException uoe) {
 		}
 	}
 
