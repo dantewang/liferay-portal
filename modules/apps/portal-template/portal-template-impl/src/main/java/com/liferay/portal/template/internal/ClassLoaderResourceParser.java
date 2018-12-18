@@ -20,6 +20,10 @@ import com.liferay.portal.kernel.template.ClassLoaderTemplateResource;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.template.CacheTemplateResource;
+import com.liferay.portal.template.TemplateResourceParser;
+import com.liferay.portal.template.TemplateResourceThreadLocal;
+import com.liferay.portal.template.URLResourceParser;
 
 import java.net.URL;
 
