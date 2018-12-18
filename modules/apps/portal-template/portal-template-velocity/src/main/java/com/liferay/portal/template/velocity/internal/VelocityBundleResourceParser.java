@@ -15,8 +15,10 @@
 package com.liferay.portal.template.velocity.internal;
 
 import com.liferay.portal.kernel.template.TemplateConstants;
-import com.liferay.portal.template.ClassLoaderResourceParser;
 import com.liferay.portal.template.TemplateResourceParser;
+import com.liferay.portal.template.URLResourceParser;
+
+import java.net.URL;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -27,5 +29,24 @@ import org.osgi.service.component.annotations.Component;
 	immediate = true, property = "lang.type=" + TemplateConstants.LANG_TYPE_VM,
 	service = TemplateResourceParser.class
 )
-public class VelocityBundleResourceParser extends ClassLoaderResourceParser {
+public class VelocityBundleResourceParser extends URLResourceParser {
+
+	@Override
+	@SuppressWarnings("deprecation")
+	public URL getURL(String templateId) {
+		if (templateId.contains(TemplateConstants.JOURNAL_SEPARATOR) ||
+			templateId.contains(TemplateConstants.SERVLET_SEPARATOR) ||
+			templateId.contains(TemplateConstants.TEMPLATE_SEPARATOR) ||
+			templateId.contains(TemplateConstants.THEME_LOADER_SEPARATOR)) {
+
+			return null;
+		}
+
+		Class<?> clazz = getClass();
+
+		ClassLoader classLoader = clazz.getClassLoader();
+
+		return classLoader.getResource(templateId);
+	}
+
 }
