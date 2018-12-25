@@ -42,7 +42,14 @@ public class WeavingClassLoader extends URLClassLoader {
 	public WeavingClassLoader(
 		URL[] urls, Class<?>[] aspectClasses, File dumpDir) {
 
-		super(urls, null);
+		this(urls, aspectClasses, dumpDir, null);
+	}
+
+	public WeavingClassLoader(
+		URL[] urls, Class<?>[] aspectClasses, File dumpDir,
+		ClassLoader parentClassLoader) {
+
+		super(urls, parentClassLoader);
 
 		_dumpDir = dumpDir;
 
