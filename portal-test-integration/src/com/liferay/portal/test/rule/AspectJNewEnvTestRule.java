@@ -118,7 +118,7 @@ public class AspectJNewEnvTestRule extends NewEnvTestRule {
 		try {
 			return new WeavingClassLoader(
 				ClassPathUtil.getClassPathURLs(CLASS_PATH), adviceClasses,
-				dumpDir);
+				dumpDir, parentClassLoader);
 		}
 		catch (MalformedURLException murle) {
 			throw new RuntimeException(murle);
@@ -180,7 +180,7 @@ public class AspectJNewEnvTestRule extends NewEnvTestRule {
 				WeavingClassLoader weavingClassLoader = new WeavingClassLoader(
 					ClassPathUtil.getClassPathURLs(
 						ClassPathUtil.getJVMClassPath(true)),
-					aspectClasses, _dumpDir);
+					aspectClasses, _dumpDir, parentClassLoader);
 
 				currentThread.setContextClassLoader(weavingClassLoader);
 

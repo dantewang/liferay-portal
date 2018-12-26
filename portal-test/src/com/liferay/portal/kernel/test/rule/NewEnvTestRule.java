@@ -206,7 +206,7 @@ public class NewEnvTestRule implements TestRule {
 	protected ClassLoader createClassLoader(Description description) {
 		try {
 			return new URLClassLoader(
-				ClassPathUtil.getClassPathURLs(CLASS_PATH), null);
+				ClassPathUtil.getClassPathURLs(CLASS_PATH), parentClassLoader);
 		}
 		catch (MalformedURLException murle) {
 			throw new RuntimeException(murle);
