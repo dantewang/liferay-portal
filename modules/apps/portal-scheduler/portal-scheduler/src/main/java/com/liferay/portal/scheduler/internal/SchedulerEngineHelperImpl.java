@@ -946,6 +946,23 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				return null;
 			}
 
+			if (!(schedulerEventMessageListener instanceof
+					SchedulerEventMessageListenerWrapper)) {
+
+				SchedulerEventMessageListenerWrapper
+					schedulerEventMessageListenerWrapper =
+						new SchedulerEventMessageListenerWrapper();
+
+				schedulerEventMessageListenerWrapper.setMessageListener(
+					schedulerEventMessageListener);
+
+				schedulerEventMessageListenerWrapper.setSchedulerEntry(
+					schedulerEntry);
+
+				schedulerEventMessageListener =
+					schedulerEventMessageListenerWrapper;
+			}
+
 			StorageType storageType = StorageType.MEMORY_CLUSTERED;
 
 			if (schedulerEntry instanceof StorageTypeAware) {
@@ -1030,6 +1047,29 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				(schedulerEntry.getTrigger() == null)) {
 
 				return;
+			}
+
+			Bundle bundle = serviceReference.getBundle();
+
+			BundleContext bundleContext = bundle.getBundleContext();
+
+			SchedulerEventMessageListener
+				modifiedSchedulerEventMessageListener =
+					bundleContext.getService(serviceReference);
+
+			if (!(modifiedSchedulerEventMessageListener instanceof
+					SchedulerEventMessageListenerWrapper)) {
+
+				schedulerEntry =
+					modifiedSchedulerEventMessageListener.getSchedulerEntry();
+
+				SchedulerEventMessageListenerWrapper
+					schedulerEventMessageListenerwrap =
+						(SchedulerEventMessageListenerWrapper)
+							schedulerEventMessageListener;
+
+				schedulerEventMessageListenerwrap.setSchedulerEntry(
+					schedulerEntry);
 			}
 
 			StorageType storageType = StorageType.MEMORY_CLUSTERED;
