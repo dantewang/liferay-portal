@@ -18,25 +18,41 @@ import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
-import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
 import com.liferay.portal.kernel.scheduler.SchedulerEntry;
 import com.liferay.portal.kernel.scheduler.SchedulerEntryImpl;
 import com.liferay.portal.kernel.scheduler.TimeUnit;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.portal.kernel.service.SystemEventLocalService;
 import com.liferay.portal.util.PropsValues;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Akos Thurzo
  */
-@Component(immediate = true, service = CheckSystemEventMessageListener.class)
-public class CheckSystemEventMessageListener extends BaseMessageListener {
+@Component(
+	immediate = true,
+	property = "destination.name=" + DestinationNames.SCHEDULER_DISPATCH,
+	service = {
+		CheckSystemEventMessageListener.class,
+		SchedulerEventMessageListener.class
+	}
+)
+public class CheckSystemEventMessageListener
+	extends BaseMessageListener implements SchedulerEventMessageListener {
+
+	@Override
+	public SchedulerEntry getSchedulerEntry() {
+		return _schedulerEntry;
+	}
+
+	public void setSchedulerEntry(SchedulerEntry schedulerEntry) {
+		_schedulerEntry = schedulerEntry;
+	}
 
 	@Activate
 	protected void activate() {
@@ -51,13 +67,7 @@ public class CheckSystemEventMessageListener extends BaseMessageListener {
 		SchedulerEntry schedulerEntry = new SchedulerEntryImpl(
 			className, trigger);
 
-		_schedulerEngineHelper.register(
-			this, schedulerEntry, DestinationNames.SCHEDULER_DISPATCH);
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		_schedulerEngineHelper.unregister(this);
+		setSchedulerEntry(schedulerEntry);
 	}
 
 	@Override
@@ -71,20 +81,13 @@ public class CheckSystemEventMessageListener extends BaseMessageListener {
 	}
 
 	@Reference(unbind = "-")
-	protected void setSchedulerEngineHelper(
-		SchedulerEngineHelper schedulerEngineHelper) {
-
-		_schedulerEngineHelper = schedulerEngineHelper;
-	}
-
-	@Reference(unbind = "-")
 	protected void setSystemEventLocalService(
 		SystemEventLocalService systemEventLocalService) {
 
 		_systemEventLocalService = systemEventLocalService;
 	}
 
-	private SchedulerEngineHelper _schedulerEngineHelper;
+	private SchedulerEntry _schedulerEntry;
 	private SystemEventLocalService _systemEventLocalService;
 
 	@Reference
