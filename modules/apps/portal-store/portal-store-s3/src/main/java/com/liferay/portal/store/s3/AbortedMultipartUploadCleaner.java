@@ -66,9 +66,12 @@ public class AbortedMultipartUploadCleaner {
 			bundleContext.createFilter(
 				StringBundler.concat(
 					"(&(", Constants.OBJECTCLASS, "=", Store.class.getName(),
-					")(store.type=", S3Store.class.getName(), "))")),
+					")(store.type=", S3Store.class.getName(),
+					")(current.store=true))")),
 			new S3StoreServiceTrackerCustomizer(
 				bundleContext, _triggerFactory));
+
+		_serviceTracker.open();
 	}
 
 	@Deactivate
