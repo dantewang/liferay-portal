@@ -225,6 +225,10 @@ public class SchedulerEngineHelperUtil {
 		_getSchedulerEngineHelper().pause(jobName, groupName, storageType);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static void register(
 		MessageListener messageListener, SchedulerEntry schedulerEntry,
 		String destinationName) {
@@ -282,6 +286,10 @@ public class SchedulerEngineHelperUtil {
 			jobName, groupName, storageType);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static void unregister(MessageListener messageListener) {
 		_getSchedulerEngineHelper().unregister(messageListener);
 	}
