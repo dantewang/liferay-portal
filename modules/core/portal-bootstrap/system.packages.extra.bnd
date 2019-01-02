@@ -345,11 +345,11 @@ Provide-Capability:\
 	@../../../lib/development/servlet-api.jar,\
 	@../../../lib/global/portlet.jar,\
 	@../../../lib/portal/ant.jar,\
-	@../../../lib/portal/asm.jar,\
 	@../../../lib/portal/asm-analysis.jar,\
 	@../../../lib/portal/asm-commons.jar,\
-	@../../../lib/portal/asm-util.jar,\
 	@../../../lib/portal/asm-tree.jar,\
+	@../../../lib/portal/asm-util.jar,\
+	@../../../lib/portal/asm.jar,\
 	@../../../lib/portal/aspectj-rt.jar,\
 	@../../../lib/portal/bnd.jar!/aQute/bnd/annotation/metatype/*,\
 	@../../../lib/portal/bnd.jar!/aQute/bnd/header/*,\
