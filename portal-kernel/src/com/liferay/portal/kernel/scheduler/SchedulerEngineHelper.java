@@ -116,6 +116,10 @@ public interface SchedulerEngineHelper {
 	public void pause(String jobName, String groupName, StorageType storageType)
 		throws SchedulerException;
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public void register(
 		MessageListener messageListener, SchedulerEntry schedulerEntry,
 		String destinationName);
@@ -145,6 +149,10 @@ public interface SchedulerEngineHelper {
 			String jobName, String groupName, StorageType storageType)
 		throws SchedulerException;
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public void unregister(MessageListener messageListener);
 
 	public void unschedule(
