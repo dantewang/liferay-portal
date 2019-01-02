@@ -20,12 +20,12 @@ import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.model.Company;
-import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
 import com.liferay.portal.kernel.scheduler.SchedulerEntry;
 import com.liferay.portal.kernel.scheduler.SchedulerEntryImpl;
 import com.liferay.portal.kernel.scheduler.TimeUnit;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.security.ldap.configuration.ConfigurationProvider;
 import com.liferay.portal.security.ldap.exportimport.LDAPUserImporter;
@@ -36,7 +36,6 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferencePolicy;
@@ -45,8 +44,20 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 /**
  * @author Shuyang Zhou
  */
-@Component(immediate = true, service = UserImportMessageListener.class)
-public class UserImportMessageListener extends BaseMessageListener {
+@Component(
+	immediate = true,
+	property = "destination.name=" + LDAPDestinationNames.SCHEDULED_USER_LDAP_IMPORT,
+	service = {
+		SchedulerEventMessageListener.class, UserImportMessageListener.class
+	}
+)
+public class UserImportMessageListener
+	extends BaseMessageListener implements SchedulerEventMessageListener {
+
+	@Override
+	public SchedulerEntry getSchedulerEntry() {
+		return _schedulerEntry;
+	}
 
 	@Activate
 	@Modified
@@ -68,17 +79,7 @@ public class UserImportMessageListener extends BaseMessageListener {
 		Trigger trigger = _triggerFactory.createTrigger(
 			className, className, null, null, interval, TimeUnit.MINUTE);
 
-		SchedulerEntry schedulerEntry = new SchedulerEntryImpl(
-			className, trigger);
-
-		_schedulerEngineHelper.register(
-			this, schedulerEntry,
-			LDAPDestinationNames.SCHEDULED_USER_LDAP_IMPORT);
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		_schedulerEngineHelper.unregister(this);
+		_schedulerEntry = new SchedulerEntryImpl(className, trigger);
 	}
 
 	@Override
@@ -140,13 +141,6 @@ public class UserImportMessageListener extends BaseMessageListener {
 		_ldapImportConfigurationProvider = ldapImportConfigurationProvider;
 	}
 
-	@Reference(unbind = "-")
-	protected void setSchedulerEngineHelper(
-		SchedulerEngineHelper schedulerEngineHelper) {
-
-		_schedulerEngineHelper = schedulerEngineHelper;
-	}
-
 	private static final Log _log = LogFactoryUtil.getLog(
 		UserImportMessageListener.class);
 
@@ -160,7 +154,7 @@ public class UserImportMessageListener extends BaseMessageListener {
 	)
 	private volatile LDAPUserImporter _ldapUserImporter;
 
-	private SchedulerEngineHelper _schedulerEngineHelper;
+	private SchedulerEntry _schedulerEntry;
 
 	@Reference
 	private TriggerFactory _triggerFactory;
