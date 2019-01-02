@@ -1005,7 +1005,7 @@ information.
 				<jvmarg if:true="${junit.code.coverage}" line="-javaagent:${jacoco.agent.jar}${jacoco.agent.configuration}" />
 				<jvmarg if:true="${aspectj.weaver.enabled}" line="${aspectj.agent}" />
 				<jvmarg line="${junit.java.gc}" />
-				<jvmarg if:true="${junit.add.opens.needed}" line="${junit.add.opens}" />
+				<jvmarg if:true="${junit.add.opens.needed}" line="${junit.java.add.opens}" />
 				<jvmarg line="${whip.agent}" />
 				<jvmarg value="-Xss2m" />
 				<jvmarg value="-Dexternal-properties=${test.properties}" />
