@@ -278,8 +278,9 @@ Export-Package:\
 	\
 	org.objectweb.asm;version='7.0',\
 	org.objectweb.asm.commons;version='7.0',\
+	org.objectweb.asm.signature;version='7.0',\
 	org.objectweb.asm.tree;version='7.0',\
-	org.objectweb.asm.analysis;version='7.0',\
+	org.objectweb.asm.tree.analysis;version='7.0',\
 	org.objectweb.asm.util;version='7.0',\
 	\
 	org.slf4j;version='1.7.2',\
