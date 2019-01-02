@@ -20,10 +20,14 @@ import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.proxy.ProxyModeThreadLocal;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
-import com.liferay.portal.kernel.scheduler.SchedulerEngineHelperUtil;
 import com.liferay.portal.kernel.scheduler.SchedulerEntry;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerAdapter;
 import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -58,13 +62,31 @@ public class PluginSchedulingConfigurator {
 							PortletClassLoaderUtil.getClassLoader(),
 							schedulerEntry.getEventListenerClass());
 
-					SchedulerEngineHelperUtil.register(
-						messageListener, schedulerEntry,
+					SchedulerEventMessageListenerAdapter
+						schedulerEventMessageListenerAdapter =
+							new SchedulerEventMessageListenerAdapter();
+
+					schedulerEventMessageListenerAdapter.setMessageListener(
+						messageListener);
+					schedulerEventMessageListenerAdapter.setSchedulerEntry(
+						schedulerEntry);
+
+					Map<String, Object> properties = new HashMap<>();
+
+					properties.put(
+						"destination.name",
 						DestinationNames.SCHEDULER_DISPATCH);
 
-					_messageListeners.put(
+					Registry registry = RegistryUtil.getRegistry();
+
+					ServiceRegistration<SchedulerEventMessageListener>
+						serviceRegistration = registry.registerService(
+							SchedulerEventMessageListener.class,
+							schedulerEventMessageListenerAdapter, properties);
+
+					_serviceRegistrations.put(
 						schedulerEntry.getEventListenerClass(),
-						messageListener);
+						serviceRegistration);
 				}
 				catch (Exception e) {
 					_log.error("Unable to schedule " + schedulerEntry, e);
@@ -79,11 +101,13 @@ public class PluginSchedulingConfigurator {
 	}
 
 	public void destroy() {
-		for (MessageListener messageListener : _messageListeners.values()) {
-			SchedulerEngineHelperUtil.unregister(messageListener);
+		for (ServiceRegistration<SchedulerEventMessageListener>
+				serviceRegistration : _serviceRegistrations.values()) {
+
+			serviceRegistration.unregister();
 		}
 
-		_messageListeners.clear();
+		_serviceRegistrations.clear();
 		_schedulerEntries.clear();
 	}
 
@@ -94,8 +118,9 @@ public class PluginSchedulingConfigurator {
 	private static final Log _log = LogFactoryUtil.getLog(
 		PluginSchedulingConfigurator.class);
 
-	private final Map<String, MessageListener> _messageListeners =
-		new HashMap<>();
 	private List<SchedulerEntry> _schedulerEntries = Collections.emptyList();
+	private final Map
+		<String, ServiceRegistration<SchedulerEventMessageListener>>
+			_serviceRegistrations = new HashMap<>();
 
 }
