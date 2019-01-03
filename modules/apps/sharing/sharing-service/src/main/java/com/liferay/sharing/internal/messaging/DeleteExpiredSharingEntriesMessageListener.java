@@ -18,12 +18,12 @@ import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
 import com.liferay.portal.kernel.scheduler.SchedulerEntry;
 import com.liferay.portal.kernel.scheduler.SchedulerEntryImpl;
 import com.liferay.portal.kernel.scheduler.TimeUnit;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.sharing.internal.configuration.SharingConfiguration;
 import com.liferay.sharing.service.SharingEntryLocalService;
 
@@ -31,7 +31,6 @@ import java.util.Map;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
@@ -40,10 +39,20 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	configurationPid = "com.liferay.sharing.internal.configuration.SharingConfiguration",
-	immediate = true, service = DeleteExpiredSharingEntriesMessageListener.class
+	immediate = true,
+	property = "destination.name=" + DestinationNames.SCHEDULER_DISPATCH,
+	service = {
+		DeleteExpiredSharingEntriesMessageListener.class,
+		SchedulerEventMessageListener.class
+	}
 )
 public class DeleteExpiredSharingEntriesMessageListener
-	extends BaseMessageListener {
+	extends BaseMessageListener implements SchedulerEventMessageListener {
+
+	@Override
+	public SchedulerEntry getSchedulerEntry() {
+		return _schedulerEntry;
+	}
 
 	@Activate
 	@Modified
@@ -60,16 +69,7 @@ public class DeleteExpiredSharingEntriesMessageListener
 			_sharingConfiguration.expiredSharingEntriesCheckInterval(),
 			TimeUnit.MINUTE);
 
-		SchedulerEntry schedulerEntry = new SchedulerEntryImpl(
-			className, trigger);
-
-		_schedulerEngineHelper.register(
-			this, schedulerEntry, DestinationNames.SCHEDULER_DISPATCH);
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		_schedulerEngineHelper.unregister(this);
+		_schedulerEntry = new SchedulerEntryImpl(className, trigger);
 	}
 
 	@Override
@@ -77,9 +77,7 @@ public class DeleteExpiredSharingEntriesMessageListener
 		_sharingEntryLocalService.deleteExpiredEntries();
 	}
 
-	@Reference
-	private SchedulerEngineHelper _schedulerEngineHelper;
-
+	private SchedulerEntry _schedulerEntry;
 	private volatile SharingConfiguration _sharingConfiguration;
 
 	@Reference
