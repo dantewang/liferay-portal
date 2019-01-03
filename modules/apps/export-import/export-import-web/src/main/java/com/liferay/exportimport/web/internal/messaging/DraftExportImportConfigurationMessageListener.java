@@ -36,12 +36,12 @@ import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
-import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
 import com.liferay.portal.kernel.scheduler.SchedulerEntry;
 import com.liferay.portal.kernel.scheduler.SchedulerEntryImpl;
 import com.liferay.portal.kernel.scheduler.TimeUnit;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -51,7 +51,6 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 /**
@@ -60,10 +59,19 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	service = DraftExportImportConfigurationMessageListener.class
+	property = "destination.name=" + DestinationNames.SCHEDULER_DISPATCH,
+	service = {
+		DraftExportImportConfigurationMessageListener.class,
+		SchedulerEventMessageListener.class
+	}
 )
 public class DraftExportImportConfigurationMessageListener
-	extends BaseMessageListener {
+	extends BaseMessageListener implements SchedulerEventMessageListener {
+
+	@Override
+	public SchedulerEntry getSchedulerEntry() {
+		return _schedulerEntry;
+	}
 
 	@Activate
 	protected void activate() {
@@ -77,11 +85,7 @@ public class DraftExportImportConfigurationMessageListener
 				DRAFT_EXPORT_IMPORT_CONFIGURATION_CHECK_INTERVAL,
 			TimeUnit.HOUR);
 
-		SchedulerEntry schedulerEntry = new SchedulerEntryImpl(
-			className, trigger);
-
-		_schedulerEngineHelper.register(
-			this, schedulerEntry, DestinationNames.SCHEDULER_DISPATCH);
+		_schedulerEntry = new SchedulerEntryImpl(className, trigger);
 	}
 
 	protected void addCommonCriterions(DynamicQuery dynamicQuery) {
@@ -99,11 +103,6 @@ public class DraftExportImportConfigurationMessageListener
 		Property statusProperty = PropertyFactoryUtil.forName("status");
 
 		dynamicQuery.add(statusProperty.eq(WorkflowConstants.STATUS_DRAFT));
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		_schedulerEngineHelper.unregister(this);
 	}
 
 	@Override
@@ -259,18 +258,11 @@ public class DraftExportImportConfigurationMessageListener
 		ModuleServiceLifecycle moduleServiceLifecycle) {
 	}
 
-	@Reference(unbind = "-")
-	protected void setSchedulerEngineHelper(
-		SchedulerEngineHelper schedulerEngineHelper) {
-
-		_schedulerEngineHelper = schedulerEngineHelper;
-	}
-
 	private BackgroundTaskLocalService _backgroundTaskLocalService;
 	private ExportImportConfigurationLocalService
 		_exportImportConfigurationLocalService;
 	private GroupLocalService _groupLocalService;
-	private SchedulerEngineHelper _schedulerEngineHelper;
+	private SchedulerEntry _schedulerEntry;
 
 	@Reference
 	private TriggerFactory _triggerFactory;

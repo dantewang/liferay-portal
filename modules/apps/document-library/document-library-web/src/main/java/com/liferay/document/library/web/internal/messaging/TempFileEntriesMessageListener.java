@@ -29,19 +29,18 @@ import com.liferay.portal.kernel.repository.LocalRepository;
 import com.liferay.portal.kernel.repository.RepositoryProvider;
 import com.liferay.portal.kernel.repository.UndeployedExternalRepositoryException;
 import com.liferay.portal.kernel.repository.capabilities.TemporaryFileEntriesCapability;
-import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
 import com.liferay.portal.kernel.scheduler.SchedulerEntry;
 import com.liferay.portal.kernel.scheduler.SchedulerEntryImpl;
 import com.liferay.portal.kernel.scheduler.TimeUnit;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.portal.kernel.service.RepositoryLocalService;
 
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
@@ -50,9 +49,20 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	configurationPid = "com.liferay.document.library.configuration.DLConfiguration",
-	immediate = true, service = TempFileEntriesMessageListener.class
+	immediate = true,
+	property = "destination.name=" + DestinationNames.SCHEDULER_DISPATCH,
+	service = {
+		SchedulerEventMessageListener.class,
+		TempFileEntriesMessageListener.class
+	}
 )
-public class TempFileEntriesMessageListener extends BaseMessageListener {
+public class TempFileEntriesMessageListener
+	extends BaseMessageListener implements SchedulerEventMessageListener {
+
+	@Override
+	public SchedulerEntry getSchedulerEntry() {
+		return _schedulerEntry;
+	}
 
 	@Activate
 	@Modified
@@ -69,16 +79,7 @@ public class TempFileEntriesMessageListener extends BaseMessageListener {
 			_dlConfiguration.temporaryFileEntriesCheckInterval(),
 			TimeUnit.HOUR);
 
-		SchedulerEntry schedulerEntry = new SchedulerEntryImpl(
-			className, trigger);
-
-		_schedulerEngineHelper.register(
-			this, schedulerEntry, DestinationNames.SCHEDULER_DISPATCH);
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		_schedulerEngineHelper.unregister(this);
+		_schedulerEntry = new SchedulerEntryImpl(className, trigger);
 	}
 
 	protected void deleteExpiredTemporaryFileEntries(Repository repository) {
@@ -153,20 +154,13 @@ public class TempFileEntriesMessageListener extends BaseMessageListener {
 		_repositoryProvider = repositoryProvider;
 	}
 
-	@Reference(unbind = "-")
-	protected void setSchedulerEngineHelper(
-		SchedulerEngineHelper schedulerEngineHelper) {
-
-		_schedulerEngineHelper = schedulerEngineHelper;
-	}
-
 	private static final Log _log = LogFactoryUtil.getLog(
 		TempFileEntriesMessageListener.class);
 
 	private volatile DLConfiguration _dlConfiguration;
 	private RepositoryLocalService _repositoryLocalService;
 	private RepositoryProvider _repositoryProvider;
-	private SchedulerEngineHelper _schedulerEngineHelper;
+	private SchedulerEntry _schedulerEntry;
 
 	@Reference
 	private TriggerFactory _triggerFactory;

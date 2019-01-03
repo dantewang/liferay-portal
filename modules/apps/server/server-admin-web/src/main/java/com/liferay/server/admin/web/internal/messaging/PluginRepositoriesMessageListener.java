@@ -20,11 +20,11 @@ import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
-import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
 import com.liferay.portal.kernel.scheduler.SchedulerEntry;
 import com.liferay.portal.kernel.scheduler.SchedulerEntryImpl;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.portal.kernel.search.SearchEngineHelperUtil;
 import com.liferay.portal.plugin.PluginPackageUtil;
 import com.liferay.server.admin.web.configuration.PluginRepositoriesConfiguration;
@@ -34,7 +34,6 @@ import java.util.Map;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
@@ -45,9 +44,19 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	configurationPid = "com.liferay.server.admin.web.configuration.PluginRepositoriesConfiguration",
 	configurationPolicy = ConfigurationPolicy.OPTIONAL, immediate = true,
-	service = PluginRepositoriesMessageListener.class
+	property = "destination.name=" + DestinationNames.SCHEDULER_DISPATCH,
+	service = {
+		PluginRepositoriesMessageListener.class,
+		SchedulerEventMessageListener.class
+	}
 )
-public class PluginRepositoriesMessageListener extends BaseMessageListener {
+public class PluginRepositoriesMessageListener
+	extends BaseMessageListener implements SchedulerEventMessageListener {
+
+	@Override
+	public SchedulerEntry getSchedulerEntry() {
+		return _schedulerEntry;
+	}
 
 	@Activate
 	@Modified
@@ -69,16 +78,7 @@ public class PluginRepositoriesMessageListener extends BaseMessageListener {
 			pluginRepositoriesConfiguration.interval(),
 			pluginRepositoriesConfiguration.timeUnit());
 
-		SchedulerEntry schedulerEntry = new SchedulerEntryImpl(
-			className, trigger);
-
-		_schedulerEngineHelper.register(
-			this, schedulerEntry, DestinationNames.SCHEDULER_DISPATCH);
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		_schedulerEngineHelper.unregister(this);
+		_schedulerEntry = new SchedulerEntryImpl(className, trigger);
 	}
 
 	@Override
@@ -93,14 +93,7 @@ public class PluginRepositoriesMessageListener extends BaseMessageListener {
 		ModuleServiceLifecycle moduleServiceLifecycle) {
 	}
 
-	@Reference(unbind = "-")
-	protected void setSchedulerEngineHelper(
-		SchedulerEngineHelper schedulerEngineHelper) {
-
-		_schedulerEngineHelper = schedulerEngineHelper;
-	}
-
-	private SchedulerEngineHelper _schedulerEngineHelper;
+	private SchedulerEntry _schedulerEntry;
 
 	@Reference
 	private TriggerFactory _triggerFactory;

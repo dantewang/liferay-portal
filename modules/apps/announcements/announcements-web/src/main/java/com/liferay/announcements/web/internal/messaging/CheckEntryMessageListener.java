@@ -20,12 +20,12 @@ import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
-import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
 import com.liferay.portal.kernel.scheduler.SchedulerEntry;
 import com.liferay.portal.kernel.scheduler.SchedulerEntryImpl;
 import com.liferay.portal.kernel.scheduler.TimeUnit;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.util.PropsValues;
 
@@ -33,7 +33,6 @@ import java.util.Date;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 /**
@@ -42,14 +41,22 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
+	property = "destination.name=" + DestinationNames.SCHEDULER_DISPATCH,
 	service = {
 		CheckEntryMessageListener.class,
-		ClusterMasterTokenTransitionListener.class
+		ClusterMasterTokenTransitionListener.class,
+		SchedulerEventMessageListener.class
 	}
 )
 public class CheckEntryMessageListener
 	extends BaseMessageListener
-	implements ClusterMasterTokenTransitionListener {
+	implements ClusterMasterTokenTransitionListener,
+			   SchedulerEventMessageListener {
+
+	@Override
+	public SchedulerEntry getSchedulerEntry() {
+		return _schedulerEntry;
+	}
 
 	@Override
 	public void masterTokenAcquired() {
@@ -70,16 +77,7 @@ public class CheckEntryMessageListener
 			className, className, null, null,
 			PropsValues.ANNOUNCEMENTS_ENTRY_CHECK_INTERVAL, TimeUnit.MINUTE);
 
-		SchedulerEntry schedulerEntry = new SchedulerEntryImpl(
-			className, trigger);
-
-		_schedulerEngineHelper.register(
-			this, schedulerEntry, DestinationNames.SCHEDULER_DISPATCH);
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		_schedulerEngineHelper.unregister(this);
+		_schedulerEntry = new SchedulerEntryImpl(className, trigger);
 	}
 
 	@Override
@@ -109,19 +107,12 @@ public class CheckEntryMessageListener
 		ModuleServiceLifecycle moduleServiceLifecycle) {
 	}
 
-	@Reference(unbind = "-")
-	protected void setSchedulerEngineHelper(
-		SchedulerEngineHelper schedulerEngineHelper) {
-
-		_schedulerEngineHelper = schedulerEngineHelper;
-	}
-
 	private static final long _ANNOUNCEMENTS_ENTRY_CHECK_INTERVAL =
 		PropsValues.ANNOUNCEMENTS_ENTRY_CHECK_INTERVAL * Time.MINUTE;
 
 	private AnnouncementsEntryLocalService _announcementsEntryLocalService;
 	private Date _previousEndDate;
-	private SchedulerEngineHelper _schedulerEngineHelper;
+	private SchedulerEntry _schedulerEntry;
 
 	@Reference
 	private TriggerFactory _triggerFactory;

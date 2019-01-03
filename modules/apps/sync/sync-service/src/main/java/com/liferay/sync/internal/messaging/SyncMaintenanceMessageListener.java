@@ -24,12 +24,12 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
-import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
 import com.liferay.portal.kernel.scheduler.SchedulerEntry;
 import com.liferay.portal.kernel.scheduler.SchedulerEntryImpl;
 import com.liferay.portal.kernel.scheduler.TimeUnit;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.sync.service.SyncDLFileVersionDiffLocalService;
 import com.liferay.sync.service.SyncDLObjectLocalService;
@@ -37,17 +37,29 @@ import com.liferay.sync.service.internal.configuration.SyncServiceConfigurationV
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Dennis Ju
  */
-@Component(immediate = true, service = SyncMaintenanceMessageListener.class)
-public class SyncMaintenanceMessageListener extends BaseMessageListener {
+@Component(
+	immediate = true,
+	property = "destination.name=" + SyncMaintenanceMessageListener.DESTINATION_NAME,
+	service = {
+		SchedulerEventMessageListener.class,
+		SyncMaintenanceMessageListener.class
+	}
+)
+public class SyncMaintenanceMessageListener
+	extends BaseMessageListener implements SchedulerEventMessageListener {
 
 	public static final String DESTINATION_NAME =
 		"liferay/sync_maintenance_processor";
+
+	@Override
+	public SchedulerEntry getSchedulerEntry() {
+		return _schedulerEntry;
+	}
 
 	@Activate
 	protected void activate() {
@@ -58,15 +70,7 @@ public class SyncMaintenanceMessageListener extends BaseMessageListener {
 		Trigger trigger = _triggerFactory.createTrigger(
 			className, className, null, null, 1, TimeUnit.HOUR);
 
-		SchedulerEntry schedulerEntry = new SchedulerEntryImpl(
-			className, trigger);
-
-		_schedulerEngineHelper.register(this, schedulerEntry, DESTINATION_NAME);
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		_schedulerEngineHelper.unregister(this);
+		_schedulerEntry = new SchedulerEntryImpl(className, trigger);
 	}
 
 	@Override
@@ -124,13 +128,6 @@ public class SyncMaintenanceMessageListener extends BaseMessageListener {
 	}
 
 	@Reference(unbind = "-")
-	protected void setSchedulerEngineHelper(
-		SchedulerEngineHelper schedulerEngineHelper) {
-
-		_schedulerEngineHelper = schedulerEngineHelper;
-	}
-
-	@Reference(unbind = "-")
 	protected void setSyncDLFileVersionDiffLocalService(
 		SyncDLFileVersionDiffLocalService syncDLFileVersionDiffLocalService) {
 
@@ -148,7 +145,7 @@ public class SyncMaintenanceMessageListener extends BaseMessageListener {
 		SyncMaintenanceMessageListener.class);
 
 	private DLSyncEventLocalService _dlSyncEventLocalService;
-	private SchedulerEngineHelper _schedulerEngineHelper;
+	private SchedulerEntry _schedulerEntry;
 	private SyncDLFileVersionDiffLocalService
 		_syncDLFileVersionDiffLocalService;
 	private SyncDLObjectLocalService _syncDLObjectLocalService;
