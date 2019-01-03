@@ -1049,26 +1049,32 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				return;
 			}
 
-			Bundle bundle = serviceReference.getBundle();
-
-			BundleContext bundleContext = bundle.getBundleContext();
-
-			SchedulerEventMessageListener
-				modifiedSchedulerEventMessageListener =
-					bundleContext.getService(serviceReference);
-
-			if (!(modifiedSchedulerEventMessageListener instanceof
+			if (!(schedulerEventMessageListener instanceof
 					SchedulerEventMessageListenerWrapper)) {
 
-				schedulerEntry =
-					modifiedSchedulerEventMessageListener.getSchedulerEntry();
+				ServiceRegistration<MessageListener> serviceRegistration =
+					_messageListenerServiceRegistrations.get(
+						schedulerEntry.getEventListenerClass());
+
+				if (serviceRegistration == null) {
+					throw new IllegalStateException();
+				}
+
+				ServiceReference<MessageListener>
+					messageListenerServiceReference =
+						serviceRegistration.getReference();
+
+				Bundle bundle = messageListenerServiceReference.getBundle();
+
+				BundleContext bundleContext = bundle.getBundleContext();
 
 				SchedulerEventMessageListenerWrapper
-					schedulerEventMessageListenerwrap =
+					schedulerEventMessageListenerWrapper =
 						(SchedulerEventMessageListenerWrapper)
-							schedulerEventMessageListener;
+							bundleContext.getService(
+								messageListenerServiceReference);
 
-				schedulerEventMessageListenerwrap.setSchedulerEntry(
+				schedulerEventMessageListenerWrapper.setSchedulerEntry(
 					schedulerEntry);
 			}
 
