@@ -997,9 +997,28 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 				properties.put("destination.name", destinationName);
 
-				serviceRegistration = bundleContext.registerService(
-					MessageListener.class, schedulerEventMessageListener,
-					properties);
+				if (schedulerEventMessageListener instanceof
+						SchedulerEventMessageListenerWrapper) {
+
+					serviceRegistration = bundleContext.registerService(
+						MessageListener.class, schedulerEventMessageListener,
+						properties);
+				}
+				else {
+					SchedulerEventMessageListenerWrapper
+						schedulerEventMessageListenerWrapper =
+							new SchedulerEventMessageListenerWrapper();
+
+					schedulerEventMessageListenerWrapper.setMessageListener(
+						schedulerEventMessageListener);
+
+					schedulerEventMessageListenerWrapper.setSchedulerEntry(
+						schedulerEntry);
+
+					serviceRegistration = bundleContext.registerService(
+						MessageListener.class,
+						schedulerEventMessageListenerWrapper, properties);
+				}
 
 				_messageListenerServiceRegistrations.put(
 					schedulerEntry.getEventListenerClass(),
@@ -1030,6 +1049,35 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				(schedulerEntry.getTrigger() == null)) {
 
 				return;
+			}
+
+			if (!(schedulerEventMessageListener instanceof
+					SchedulerEventMessageListenerWrapper)) {
+
+				ServiceRegistration<MessageListener> serviceRegistration =
+					_messageListenerServiceRegistrations.get(
+						schedulerEntry.getEventListenerClass());
+
+				if (serviceRegistration == null) {
+					throw new IllegalStateException();
+				}
+
+				ServiceReference<MessageListener>
+					messageListenerServiceReference =
+						serviceRegistration.getReference();
+
+				Bundle bundle = messageListenerServiceReference.getBundle();
+
+				BundleContext bundleContext = bundle.getBundleContext();
+
+				SchedulerEventMessageListenerWrapper
+					schedulerEventMessageListenerWrapper =
+						(SchedulerEventMessageListenerWrapper)
+							bundleContext.getService(
+								messageListenerServiceReference);
+
+				schedulerEventMessageListenerWrapper.setSchedulerEntry(
+					schedulerEntry);
 			}
 
 			StorageType storageType = StorageType.MEMORY_CLUSTERED;
