@@ -14,10 +14,13 @@
 
 package com.liferay.portal.kernel.search;
 
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
-import com.liferay.portal.util.test.AtomicState;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -33,26 +36,57 @@ public class SearchEngineUtilTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.searchengineutil"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
 
 	@BeforeClass
 	public static void setUpClass() {
-		_atomicState = new AtomicState();
+		TestSearchEngineConfigurator testSearchEngineConfigurator =
+			new TestSearchEngineConfigurator();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			SearchEngineConfigurator.class, testSearchEngineConfigurator,
+			properties);
 	}
 
 	@AfterClass
 	public static void tearDownClass() {
-		_atomicState.close();
+		_serviceRegistration.unregister();
 	}
 
 	@Test
 	public void testAfterPropertiesSet() {
-		Assert.assertTrue(_atomicState.get());
+		Assert.assertTrue(_called);
 	}
 
-	private static AtomicState _atomicState;
+	private static boolean _called;
+	private static ServiceRegistration<SearchEngineConfigurator>
+		_serviceRegistration;
+
+	private static class TestSearchEngineConfigurator
+		implements SearchEngineConfigurator {
+
+		@Override
+		public void afterPropertiesSet() {
+			_called = true;
+		}
+
+		@Override
+		public void destroy() {
+			_called = true;
+		}
+
+		@Override
+		public void setSearchEngines(Map<String, SearchEngine> searchEngines) {
+			_called = true;
+		}
+
+	}
 
 }

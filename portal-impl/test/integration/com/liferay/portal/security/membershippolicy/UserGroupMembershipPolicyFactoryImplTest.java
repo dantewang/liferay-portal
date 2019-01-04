@@ -14,18 +14,24 @@
 
 package com.liferay.portal.security.membershippolicy;
 
+import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.security.membershippolicy.UserGroupMembershipPolicy;
 import com.liferay.portal.kernel.security.membershippolicy.UserGroupMembershipPolicyFactory;
 import com.liferay.portal.kernel.security.membershippolicy.UserGroupMembershipPolicyFactoryUtil;
 import com.liferay.portal.kernel.security.membershippolicy.UserGroupMembershipPolicyUtil;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
-import com.liferay.portal.security.membershippolicy.bundle.usergroupmembershippolicyfactoryimpl.TestUserGroupMembershipPolicy;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
-import com.liferay.portal.util.test.AtomicState;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
+
+import java.io.Serializable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -38,31 +44,42 @@ public class UserGroupMembershipPolicyFactoryImplTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule(
-				"bundle.usergroupmembershippolicyfactoryimpl"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
 
 	@BeforeClass
 	public static void setUpClass() {
-		_atomicState = new AtomicState();
+		TestUserGroupMembershipPolicy testUserGroupMembershipPolicy =
+			new TestUserGroupMembershipPolicy();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			UserGroupMembershipPolicy.class, testUserGroupMembershipPolicy,
+			properties);
 	}
 
 	@AfterClass
 	public static void tearDownClass() {
-		_atomicState.close();
+		_serviceRegistration.unregister();
+	}
+
+	@Before
+	public void setUp() {
+		_called = false;
 	}
 
 	@Test
 	public void testCheckMembership() throws Exception {
-		_atomicState.reset();
-
 		long[] array = {1, 2, 3};
 
 		UserGroupMembershipPolicyUtil.checkMembership(array, array, array);
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
@@ -109,42 +126,91 @@ public class UserGroupMembershipPolicyFactoryImplTest {
 
 	@Test
 	public void testPropagateMembership() throws Exception {
-		_atomicState.reset();
-
 		long[] array = {1, 2, 3};
 
 		UserGroupMembershipPolicyUtil.propagateMembership(array, array, array);
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
 	public void testVerifyPolicy1() throws Exception {
-		_atomicState.reset();
-
 		UserGroupMembershipPolicyUtil.verifyPolicy();
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
 	public void testVerifyPolicy2() throws Exception {
-		_atomicState.reset();
-
 		UserGroupMembershipPolicyUtil.verifyPolicy(null);
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
 	public void testVerifyPolicy3() throws Exception {
-		_atomicState.reset();
-
 		UserGroupMembershipPolicyUtil.verifyPolicy(null, null, null);
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
-	private static AtomicState _atomicState;
+	private static boolean _called;
+	private static ServiceRegistration<UserGroupMembershipPolicy>
+		_serviceRegistration;
+
+	private static class TestUserGroupMembershipPolicy
+		implements UserGroupMembershipPolicy {
+
+		@Override
+		public void checkMembership(
+			long[] userIds, long[] addUserGroupIds, long[] removeUserGroupIds) {
+
+			_called = true;
+		}
+
+		@Override
+		public boolean isMembershipAllowed(long userId, long userGroupId) {
+			if (userId == 1) {
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public boolean isMembershipRequired(long userId, long userGroupId) {
+			if (userId == 1) {
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public void propagateMembership(
+			long[] userIds, long[] addUserGroupIds, long[] removeUserGroupIds) {
+
+			_called = true;
+		}
+
+		@Override
+		public void verifyPolicy() {
+			_called = true;
+		}
+
+		@Override
+		public void verifyPolicy(UserGroup userGroup) {
+			_called = true;
+		}
+
+		@Override
+		public void verifyPolicy(
+			UserGroup userGroup, UserGroup oldUserGroup,
+			Map<String, Serializable> oldExpandoAttributes) {
+
+			_called = true;
+		}
+
+	}
 
 }

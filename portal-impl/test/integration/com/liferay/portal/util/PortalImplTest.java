@@ -14,21 +14,26 @@
 
 package com.liferay.portal.util;
 
+import com.liferay.portal.kernel.security.auth.AlwaysAllowDoAsUser;
 import com.liferay.portal.kernel.servlet.PersistentHttpServletRequestWrapper;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
 import com.liferay.portal.upload.LiferayServletRequest;
 import com.liferay.portal.upload.UploadServletRequestImpl;
-import com.liferay.portal.util.bundle.portalimpl.TestAlwaysAllowDoAsUser;
-import com.liferay.portal.util.test.AtomicState;
 import com.liferay.portal.util.test.PortletContainerTestUtil;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
 import java.io.InputStream;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -50,19 +55,27 @@ public class PortalImplTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.portalimpl"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
 
 	@BeforeClass
 	public static void setUpClass() {
-		_atomicState = new AtomicState();
+		TestAlwaysAllowDoAsUser testAlwaysAllowDoAsUser =
+			new TestAlwaysAllowDoAsUser();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			AlwaysAllowDoAsUser.class, testAlwaysAllowDoAsUser, properties);
 	}
 
 	@AfterClass
 	public static void tearDownClass() {
-		_atomicState.close();
+		_serviceRegistration.unregister();
 	}
 
 	@Test
@@ -154,7 +167,7 @@ public class PortalImplTest {
 
 	@Test
 	public void testGetUserId() {
-		_atomicState.reset();
+		_called = false;
 
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest();
@@ -173,9 +186,9 @@ public class PortalImplTest {
 
 		Assert.assertEquals(0, userId);
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 
-		_atomicState.reset();
+		_called = false;
 
 		mockHttpServletRequest = new MockHttpServletRequest();
 
@@ -187,7 +200,7 @@ public class PortalImplTest {
 
 		Assert.assertEquals(0, userId);
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
@@ -216,7 +229,9 @@ public class PortalImplTest {
 		return (HttpServletRequest)requestWrapper.getRequest();
 	}
 
-	private static AtomicState _atomicState;
+	private static boolean _called;
+	private static ServiceRegistration<AlwaysAllowDoAsUser>
+		_serviceRegistration;
 
 	private static class PersistentHttpServletRequestWrapper1
 		extends PersistentHttpServletRequestWrapper {
@@ -236,6 +251,66 @@ public class PortalImplTest {
 			HttpServletRequest request) {
 
 			super(request);
+		}
+
+	}
+
+	private static class TestAlwaysAllowDoAsUser
+		implements AlwaysAllowDoAsUser {
+
+		public static final String ACTION_NAME =
+			"/TestAlwaysAllowDoAsUser/action/name";
+
+		public static final String MVC_RENDER_COMMMAND_NAME =
+			"/TestAlwaysAllowDoAsUser/mvc/render/command/name";
+
+		public static final String PATH = "/TestAlwaysAllowDoAsUser/";
+
+		public static final String STRUTS_ACTION =
+			"/TestAlwaysAllowDoAsUser/struts/action";
+
+		@Override
+		public Collection<String> getActionNames() {
+			_called = true;
+
+			Collection<String> actionNames = new ArrayList<>();
+
+			actionNames.add(ACTION_NAME);
+
+			return actionNames;
+		}
+
+		@Override
+		public Collection<String> getMVCRenderCommandNames() {
+			_called = true;
+
+			Collection<String> mvcRenderCommandNames = new ArrayList<>();
+
+			mvcRenderCommandNames.add(MVC_RENDER_COMMMAND_NAME);
+
+			return mvcRenderCommandNames;
+		}
+
+		@Override
+		public Collection<String> getPaths() {
+			_called = true;
+
+			Collection<String> paths = new ArrayList<>();
+
+			paths.add(PATH);
+
+			return paths;
+		}
+
+		@Override
+		public Collection<String> getStrutsActions() {
+			_called = true;
+
+			Collection<String> strutsActions = new ArrayList<>();
+
+			strutsActions.add(STRUTS_ACTION);
+
+			return strutsActions;
 		}
 
 	}
