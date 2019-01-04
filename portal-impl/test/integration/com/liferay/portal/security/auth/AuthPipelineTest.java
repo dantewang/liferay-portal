@@ -15,14 +15,20 @@
 package com.liferay.portal.security.auth;
 
 import com.liferay.portal.kernel.security.auth.AuthException;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.security.auth.AuthFailure;
+import com.liferay.portal.kernel.security.auth.Authenticator;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
-import com.liferay.portal.util.test.AtomicState;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -35,58 +41,75 @@ public class AuthPipelineTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.authpipeline"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
 
 	@BeforeClass
 	public static void setUpClass() {
-		_atomicState = new AtomicState();
+		Registry registry = RegistryUtil.getRegistry();
+
+		TestAuthFailure testAuthFailure = new TestAuthFailure();
+
+		Map<String, Object> properties1 = new HashMap<>();
+
+		properties1.put(
+			"key", new String[] {"auth.failure", "auth.max.failures"});
+		properties1.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration1 = registry.registerService(
+			AuthFailure.class, testAuthFailure, properties1);
+
+		TestAuthenticator testAuthenticator = new TestAuthenticator();
+
+		Map<String, Object> properties2 = new HashMap<>();
+
+		properties2.put("key", "auth.pipeline.pre");
+		properties2.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration2 = registry.registerService(
+			Authenticator.class, testAuthenticator, properties2);
 	}
 
 	@AfterClass
 	public static void tearDownClass() {
-		_atomicState.close();
+		_serviceRegistration1.unregister();
+		_serviceRegistration2.unregister();
+	}
+
+	@Before
+	public void setUp() {
+		_called = false;
 	}
 
 	@Test
 	public void testAuthenticateByEmailAddress() throws AuthException {
-		_atomicState.reset();
-
 		AuthPipeline.authenticateByEmailAddress(
 			"auth.pipeline.pre", 0, RandomTestUtil.randomString(),
 			RandomTestUtil.randomString(), null, null);
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
 	public void testAuthenticateByScreenName() throws AuthException {
-		_atomicState.reset();
-
 		AuthPipeline.authenticateByScreenName(
 			"auth.pipeline.pre", 0, RandomTestUtil.randomString(),
 			RandomTestUtil.randomString(), null, null);
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
 	public void testAuthenticateByUserId() throws AuthException {
-		_atomicState.reset();
-
 		AuthPipeline.authenticateByUserId(
 			"auth.pipeline.pre", 0, RandomTestUtil.randomLong(),
 			RandomTestUtil.randomString(), null, null);
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
 	public void testOnFailureByScreenName() {
-		_atomicState.reset();
-
 		try {
 			AuthPipeline.onFailureByScreenName(
 				"auth.failure", 0, RandomTestUtil.randomString(), null, null);
@@ -94,13 +117,11 @@ public class AuthPipelineTest {
 		catch (AuthException ae) {
 		}
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
 	public void testOnFailureByUserId() {
-		_atomicState.reset();
-
 		try {
 			AuthPipeline.onFailureByUserId(
 				"auth.failure", 0, RandomTestUtil.randomLong(), null, null);
@@ -108,13 +129,11 @@ public class AuthPipelineTest {
 		catch (AuthException ae) {
 		}
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
 	public void testOnMaxFailuresByEmailAddress() {
-		_atomicState.reset();
-
 		try {
 			AuthPipeline.onMaxFailuresByEmailAddress(
 				"auth.max.failures", 0, RandomTestUtil.randomString(), null,
@@ -123,13 +142,11 @@ public class AuthPipelineTest {
 		catch (AuthException ae) {
 		}
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
 	public void testOnMaxFailuresByScreenName() {
-		_atomicState.reset();
-
 		try {
 			AuthPipeline.onMaxFailuresByScreenName(
 				"auth.max.failures", 0, RandomTestUtil.randomString(), null,
@@ -138,13 +155,11 @@ public class AuthPipelineTest {
 		catch (AuthException ae) {
 		}
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
 	public void testOnMaxFailuresByUserId() {
-		_atomicState.reset();
-
 		try {
 			AuthPipeline.onMaxFailuresByUserId(
 				"auth.max.failures", 0, RandomTestUtil.randomLong(), null,
@@ -153,9 +168,77 @@ public class AuthPipelineTest {
 		catch (AuthException ae) {
 		}
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
-	private static AtomicState _atomicState;
+	private static boolean _called;
+	private static ServiceRegistration<AuthFailure> _serviceRegistration1;
+	private static ServiceRegistration<Authenticator> _serviceRegistration2;
+
+	private static class TestAuthenticator implements Authenticator {
+
+		@Override
+		public int authenticateByEmailAddress(
+			long companyId, String emailAddress, String password,
+			Map<String, String[]> headerMap,
+			Map<String, String[]> parameterMap) {
+
+			_called = true;
+
+			return Authenticator.SUCCESS;
+		}
+
+		@Override
+		public int authenticateByScreenName(
+			long companyId, String screenName, String password,
+			Map<String, String[]> headerMap,
+			Map<String, String[]> parameterMap) {
+
+			_called = true;
+
+			return Authenticator.SUCCESS;
+		}
+
+		@Override
+		public int authenticateByUserId(
+			long companyId, long userId, String password,
+			Map<String, String[]> headerMap,
+			Map<String, String[]> parameterMap) {
+
+			_called = true;
+
+			return Authenticator.SUCCESS;
+		}
+
+	}
+
+	private static class TestAuthFailure implements AuthFailure {
+
+		@Override
+		public void onFailureByEmailAddress(
+			long companyId, String emailAddress,
+			Map<String, String[]> headerMap,
+			Map<String, String[]> parameterMap) {
+
+			_called = true;
+		}
+
+		@Override
+		public void onFailureByScreenName(
+			long companyId, String screenName, Map<String, String[]> headerMap,
+			Map<String, String[]> parameterMap) {
+
+			_called = true;
+		}
+
+		@Override
+		public void onFailureByUserId(
+			long companyId, long userId, Map<String, String[]> headerMap,
+			Map<String, String[]> parameterMap) {
+
+			_called = true;
+		}
+
+	}
 
 }

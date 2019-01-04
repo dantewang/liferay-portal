@@ -18,11 +18,11 @@ import com.liferay.portal.kernel.deploy.hot.DependencyManagementThreadLocal;
 import com.liferay.portal.kernel.deploy.hot.HotDeployEvent;
 import com.liferay.portal.kernel.deploy.hot.HotDeployException;
 import com.liferay.portal.kernel.deploy.hot.HotDeployListener;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
-import com.liferay.portal.util.test.AtomicState;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
 import javax.servlet.ServletContext;
 
@@ -42,19 +42,23 @@ public class OSGiHotDeployListenerTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.osgihotdeploylistener"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
 
 	@BeforeClass
 	public static void setUpClass() {
-		_atomicState = new AtomicState();
+		TestHotDeployListener testHotDeployListener =
+			new TestHotDeployListener();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		_serviceRegistration = registry.registerService(
+			HotDeployListener.class, testHotDeployListener);
 	}
 
 	@AfterClass
 	public static void tearDownClass() {
-		_atomicState.close();
+		_serviceRegistration.unregister();
 	}
 
 	@Before
@@ -62,6 +66,8 @@ public class OSGiHotDeployListenerTest {
 		_dependencyManagerEnabled = DependencyManagementThreadLocal.isEnabled();
 
 		DependencyManagementThreadLocal.setEnabled(false);
+
+		_called = false;
 	}
 
 	@After
@@ -74,7 +80,7 @@ public class OSGiHotDeployListenerTest {
 		_hotDeployListener.invokeDeploy(
 			new HotDeployEvent(_servletContext, null));
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
@@ -82,15 +88,30 @@ public class OSGiHotDeployListenerTest {
 		_hotDeployListener.invokeUndeploy(
 			new HotDeployEvent(_servletContext, null));
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
-	private static AtomicState _atomicState;
+	private static boolean _called;
+	private static ServiceRegistration<HotDeployListener> _serviceRegistration;
 
 	private boolean _dependencyManagerEnabled;
 	private final HotDeployListener _hotDeployListener =
 		new OSGiHotDeployListener();
 	private final ServletContext _servletContext =
 		ProxyFactory.newDummyInstance(ServletContext.class);
+
+	private static class TestHotDeployListener implements HotDeployListener {
+
+		@Override
+		public void invokeDeploy(HotDeployEvent event) {
+			_called = true;
+		}
+
+		@Override
+		public void invokeUndeploy(HotDeployEvent event) {
+			_called = true;
+		}
+
+	}
 
 }
