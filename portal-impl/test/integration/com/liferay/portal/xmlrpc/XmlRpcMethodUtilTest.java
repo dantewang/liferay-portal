@@ -14,13 +14,19 @@
 
 package com.liferay.portal.xmlrpc;
 
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.xmlrpc.Method;
+import com.liferay.portal.kernel.xmlrpc.Response;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
-import com.liferay.portal.xmlrpc.bundle.xmlrpcmethodutil.TestMethod;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,10 +38,27 @@ public class XmlRpcMethodUtilTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.xmlrpcmethodutil"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestMethod testMethod = new TestMethod();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			Method.class, testMethod, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testNoReturn() {
@@ -45,6 +68,36 @@ public class XmlRpcMethodUtilTest {
 		Class<?> clazz = method.getClass();
 
 		Assert.assertEquals(TestMethod.class.getName(), clazz.getName());
+	}
+
+	private static ServiceRegistration<Method> _serviceRegistration;
+
+	private static class TestMethod implements Method {
+
+		public static final String METHOD_NAME = "METHOD_NAME";
+
+		public static final String TOKEN = "TOKEN";
+
+		@Override
+		public Response execute(long companyId) {
+			return null;
+		}
+
+		@Override
+		public String getMethodName() {
+			return METHOD_NAME;
+		}
+
+		@Override
+		public String getToken() {
+			return TOKEN;
+		}
+
+		@Override
+		public boolean setArguments(Object[] arguments) {
+			return false;
+		}
+
 	}
 
 }

@@ -19,9 +19,15 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -43,6 +49,23 @@ public class ScreenNameValidatorFactoryTest {
 	@BeforeClass
 	public static void setUpClass() throws Exception {
 		_screenNameValidator = ScreenNameValidatorFactory.getInstance();
+
+		TestScreenNameValidator testScreenNameValidator =
+			new TestScreenNameValidator();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			ScreenNameValidator.class, testScreenNameValidator, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
 	}
 
 	@Test
@@ -68,5 +91,33 @@ public class ScreenNameValidatorFactoryTest {
 	}
 
 	private static ScreenNameValidator _screenNameValidator;
+	private static ServiceRegistration<ScreenNameValidator>
+		_serviceRegistration;
+
+	private static class TestScreenNameValidator
+		implements ScreenNameValidator {
+
+		@Override
+		public String getAUIValidatorJS() {
+			return "function() {return true;}";
+		}
+
+		@Override
+		public String getDescription(Locale locale) {
+			return locale.toString();
+		}
+
+		@Override
+		public boolean validate(long companyId, String screenName) {
+			if (companyId == 1) {
+				if (screenName.equals("lftest")) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+	}
 
 }

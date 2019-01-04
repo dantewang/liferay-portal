@@ -15,11 +15,17 @@
 package com.liferay.portal.security.auth;
 
 import com.liferay.portal.kernel.security.auth.ScreenNameGenerator;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,10 +37,28 @@ public class ScreenNameGeneratorFactoryTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.screennamegeneratorfactory"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestScreenNameGenerator testScreenNameGenerator =
+			new TestScreenNameGenerator();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			ScreenNameGenerator.class, testScreenNameGenerator, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testGenerate() throws Exception {
@@ -45,6 +69,21 @@ public class ScreenNameGeneratorFactoryTest {
 			"1-1",
 			screenNameGenerator.generate(
 				1, 1, "test@screenamegeneratorfactorytest.com"));
+	}
+
+	private static ServiceRegistration<ScreenNameGenerator>
+		_serviceRegistration;
+
+	private static class TestScreenNameGenerator
+		implements ScreenNameGenerator {
+
+		@Override
+		public String generate(long companyId, long userId, String emailAddress)
+			throws Exception {
+
+			return companyId + "-" + userId;
+		}
+
 	}
 
 }

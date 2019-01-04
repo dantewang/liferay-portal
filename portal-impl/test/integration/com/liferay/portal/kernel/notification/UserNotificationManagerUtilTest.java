@@ -16,18 +16,22 @@ package com.liferay.portal.kernel.notification;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.UserNotificationEvent;
-import com.liferay.portal.kernel.notification.bundle.usernotificationmanagerutil.TestUserNotificationHandler;
 import com.liferay.portal.kernel.notifications.UserNotificationFeedEntry;
 import com.liferay.portal.kernel.notifications.UserNotificationHandler;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.model.impl.UserNotificationEventImpl;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,10 +43,29 @@ public class UserNotificationManagerUtilTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.usernotificationmanagerutil"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestUserNotificationHandler testUserNotificationHandler =
+			new TestUserNotificationHandler();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			UserNotificationHandler.class, testUserNotificationHandler,
+			properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testGetUserNotificationHandlers() {
@@ -100,6 +123,59 @@ public class UserNotificationManagerUtilTest {
 		catch (Exception e) {
 			throw new Error(e);
 		}
+	}
+
+	private static ServiceRegistration<UserNotificationHandler>
+		_serviceRegistration;
+
+	private static class TestUserNotificationHandler
+		implements UserNotificationHandler {
+
+		public static final String LINK = "http://www.liferay.com";
+
+		public static final String PORTLET_ID = "PORTLET_ID";
+
+		public static final String SELECTOR = "SELECTOR";
+
+		@Override
+		public String getPortletId() {
+			return PORTLET_ID;
+		}
+
+		@Override
+		public String getSelector() {
+			return SELECTOR;
+		}
+
+		@Override
+		public UserNotificationFeedEntry interpret(
+			UserNotificationEvent userNotificationEvent,
+			ServiceContext serviceContext) {
+
+			boolean applicable = isApplicable(
+				userNotificationEvent, serviceContext);
+
+			return new UserNotificationFeedEntry(
+				false, "body", LINK, applicable);
+		}
+
+		@Override
+		public boolean isDeliver(
+			long userId, long classNameId, int notificationType,
+			int deliveryType, ServiceContext serviceContext) {
+
+			if (userId == 1) {
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public boolean isOpenDialog() {
+			return false;
+		}
+
 	}
 
 }

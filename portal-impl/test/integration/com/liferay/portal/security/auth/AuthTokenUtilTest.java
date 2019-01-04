@@ -14,18 +14,29 @@
 
 package com.liferay.portal.security.auth;
 
+import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
+import com.liferay.portal.kernel.security.auth.AuthToken;
 import com.liferay.portal.kernel.security.auth.AuthTokenUtil;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.portlet.PortletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,10 +50,27 @@ public class AuthTokenUtilTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.authtokenutil"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestAuthToken testAuthToken = new TestAuthToken();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			AuthToken.class, testAuthToken, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testAddCSRFToken() {
@@ -104,6 +132,72 @@ public class AuthTokenUtilTest {
 		Assert.assertFalse(
 			AuthTokenUtil.isValidPortletInvocationToken(
 				mockHttpServletRequest, null, null));
+	}
+
+	private static ServiceRegistration<AuthToken> _serviceRegistration;
+
+	private static class TestAuthToken implements AuthToken {
+
+		@Override
+		public void addCSRFToken(
+			HttpServletRequest request, LiferayPortletURL liferayPortletURL) {
+
+			liferayPortletURL.setParameter("p_auth", "TEST_TOKEN");
+		}
+
+		@Override
+		public void addPortletInvocationToken(
+			HttpServletRequest request, LiferayPortletURL liferayPortletURL) {
+
+			liferayPortletURL.setParameter(
+				"p_p_auth", "TEST_TOKEN_BY_PLID_AND_PORTLET_ID");
+		}
+
+		/**
+		 * @deprecated As of Wilberforce (7.0.x)
+		 */
+		@Deprecated
+		@Override
+		public void check(HttpServletRequest request) {
+		}
+
+		@Override
+		public void checkCSRFToken(HttpServletRequest request, String origin) {
+		}
+
+		@Override
+		public String getToken(HttpServletRequest request) {
+			return "TEST_TOKEN";
+		}
+
+		@Override
+		public String getToken(
+			HttpServletRequest request, long plid, String portletId) {
+
+			return "TEST_TOKEN_BY_PLID_AND_PORTLET_ID";
+		}
+
+		@Override
+		public boolean isValidPortletInvocationToken(
+			HttpServletRequest request, Layout layout, Portlet portlet) {
+
+			String tokenValue = request.getParameter("p_p_auth");
+
+			return "VALID_PORTLET_INVOCATION_TOKEN".equals(tokenValue);
+		}
+
+		/**
+		 * @deprecated As of Wilberforce (7.0.x)
+		 */
+		@Deprecated
+		@Override
+		public boolean isValidPortletInvocationToken(
+			HttpServletRequest request, long plid, String portletId,
+			String strutsAction, String tokenValue) {
+
+			return "VALID_PORTLET_INVOCATION_TOKEN".equals(tokenValue);
+		}
+
 	}
 
 }

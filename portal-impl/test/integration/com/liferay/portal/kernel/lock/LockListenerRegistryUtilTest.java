@@ -14,12 +14,17 @@
 
 package com.liferay.portal.kernel.lock;
 
-import com.liferay.portal.kernel.lock.bundle.locklistenerregistryutil.TestLockListener;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,10 +36,27 @@ public class LockListenerRegistryUtilTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.locklistenerregistryutil"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestLockListener testLockListener = new TestLockListener();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			LockListener.class, testLockListener, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testGetLockListener() {
@@ -43,6 +65,33 @@ public class LockListenerRegistryUtilTest {
 
 		Assert.assertEquals(
 			lockListener.getClassName(), TestLockListener.class.getName());
+	}
+
+	private static ServiceRegistration<LockListener> _serviceRegistration;
+
+	private static class TestLockListener implements LockListener {
+
+		@Override
+		public String getClassName() {
+			return TestLockListener.class.getName();
+		}
+
+		@Override
+		public void onAfterExpire(String key) {
+		}
+
+		@Override
+		public void onAfterRefresh(String key) {
+		}
+
+		@Override
+		public void onBeforeExpire(String key) {
+		}
+
+		@Override
+		public void onBeforeRefresh(String key) {
+		}
+
 	}
 
 }
