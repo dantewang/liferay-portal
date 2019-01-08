@@ -924,7 +924,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 		return destination;
 	}
 
-	protected SchedulerEventMessageListenerWrapper registerMessageListener(
+	protected SchedulerEventMessageListenerWrapper schedule(
 		BundleContext bundleContext, String destinationName,
 		SchedulerEntry schedulerEntry,
 		SchedulerEventMessageListenerWrapper
@@ -1108,7 +1108,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			schedulerEventMessageListenerWrapper.setSchedulerEntry(
 				schedulerEventMessageListener.getSchedulerEntry());
 
-			schedulerEventMessageListenerWrapper = registerMessageListener(
+			schedulerEventMessageListenerWrapper = schedule(
 				bundleContext,
 				(String)serviceReference.getProperty("destination.name"),
 				schedulerEventMessageListener.getSchedulerEntry(),
@@ -1196,7 +1196,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				schedulerEventMessageListenerWrapper = bundleContext.getService(
 					serviceReference);
 
-			return registerMessageListener(
+			return schedule(
 				bundleContext,
 				(String)serviceReference.getProperty("destination.name"),
 				schedulerEventMessageListenerWrapper.getSchedulerEntry(),
