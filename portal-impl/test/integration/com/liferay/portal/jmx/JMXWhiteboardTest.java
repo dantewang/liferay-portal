@@ -14,9 +14,9 @@
 
 package com.liferay.portal.jmx;
 
-import com.liferay.portal.jmx.bundle.jmxwhiteboard.JMXWhiteboardByDynamicMBean;
-import com.liferay.portal.jmx.bundle.jmxwhiteboard.JMXWhiteboardByInterface;
-import com.liferay.portal.jmx.bundle.jmxwhiteboard.JMXWhiteboardByInterfaceMBean;
+import com.liferay.portal.jmx.jmxwhiteboard.JMXWhiteboardByDynamicMBean;
+import com.liferay.portal.jmx.jmxwhiteboard.JMXWhiteboardByInterface;
+import com.liferay.portal.jmx.jmxwhiteboard.JMXWhiteboardByInterfaceMBean;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.registry.Registry;
