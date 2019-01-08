@@ -1175,10 +1175,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 			bundleContext.ungetService(serviceReference);
 
-			SchedulerEntry schedulerEntry =
-				schedulerEventMessageListener.getSchedulerEntry();
-
-			delete(schedulerEntry);
+			delete(schedulerEventMessageListener.getSchedulerEntry());
 		}
 
 	}
@@ -1240,10 +1237,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 			bundleContext.ungetService(serviceReference);
 
-			SchedulerEntry schedulerEntry =
-				schedulerEventMessageListenerWrapper.getSchedulerEntry();
-
-			delete(schedulerEntry);
+			delete(schedulerEventMessageListenerWrapper.getSchedulerEntry());
 		}
 
 	}
