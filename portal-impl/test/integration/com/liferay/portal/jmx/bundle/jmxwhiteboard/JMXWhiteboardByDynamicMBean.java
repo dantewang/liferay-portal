@@ -14,19 +14,12 @@
 
 package com.liferay.portal.jmx.bundle.jmxwhiteboard;
 
-import javax.management.DynamicMBean;
 import javax.management.NotCompliantMBeanException;
 import javax.management.StandardMBean;
-
-import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Raymond Augé
  */
-@Component(
-	property = "jmx.objectname=" + JMXWhiteboardByDynamicMBean.OBJECT_NAME,
-	service = DynamicMBean.class
-)
 public class JMXWhiteboardByDynamicMBean
 	extends StandardMBean implements JMXWhiteboardByInterfaceMBean {
 

@@ -14,15 +14,9 @@
 
 package com.liferay.portal.jmx.bundle.jmxwhiteboard;
 
-import org.osgi.service.component.annotations.Component;
-
 /**
  * @author Raymond Augé
  */
-@Component(
-	property = "jmx.objectname=" + JMXWhiteboardByInterfaceMBean.OBJECT_NAME,
-	service = JMXWhiteboardByInterfaceMBean.class
-)
 public class JMXWhiteboardByInterface implements JMXWhiteboardByInterfaceMBean {
 
 	@Override

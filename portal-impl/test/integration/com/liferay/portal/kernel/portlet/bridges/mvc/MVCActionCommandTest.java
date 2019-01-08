@@ -21,16 +21,18 @@ import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.bridges.mvc.bundle.mvcactioncommand.TestMVCActionCommand1;
 import com.liferay.portal.kernel.portlet.bridges.mvc.bundle.mvcactioncommand.TestMVCActionCommand2;
 import com.liferay.portal.kernel.portlet.bridges.mvc.bundle.mvcactioncommand.TestPortlet;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
 import java.io.IOException;
 
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.portlet.ActionParameters;
@@ -48,7 +50,9 @@ import javax.servlet.http.Part;
 
 import javax.xml.namespace.QName;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -65,10 +69,57 @@ public class MVCActionCommandTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.mvcactioncommand"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		TestPortlet testPortlet = new TestPortlet();
+
+		Map<String, Object> properties1 = new HashMap<>();
+
+		properties1.put(
+			"javax.portlet.init-param.copy-request-parameters", "false");
+		properties1.put("javax.portlet.name", TestPortlet.PORTLET_NAME);
+
+		_serviceRegistration1 = registry.registerService(
+			javax.portlet.Portlet.class, testPortlet, properties1);
+
+		TestMVCActionCommand1 testMVCActionCommand1 =
+			new TestMVCActionCommand1();
+
+		Map<String, Object> properties2 = new HashMap<>();
+
+		properties2.put("javax.portlet.name", TestPortlet.PORTLET_NAME);
+		properties2.put(
+			"mvc.command.name",
+			TestMVCActionCommand1.TEST_MVC_ACTION_COMMAND_NAME);
+
+		_serviceRegistration2 = registry.registerService(
+			MVCActionCommand.class, testMVCActionCommand1, properties2);
+
+		TestMVCActionCommand2 testMVCActionCommand2 =
+			new TestMVCActionCommand2();
+
+		Map<String, Object> properties3 = new HashMap<>();
+
+		properties3.put("javax.portlet.name", TestPortlet.PORTLET_NAME);
+		properties3.put(
+			"mvc.command.name",
+			TestMVCActionCommand2.TEST_MVC_ACTION_COMMAND_NAME);
+
+		_serviceRegistration3 = registry.registerService(
+			MVCActionCommand.class, testMVCActionCommand2, properties3);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration1.unregister();
+		_serviceRegistration2.unregister();
+		_serviceRegistration3.unregister();
+	}
 
 	@Test
 	public void testMultipleMVCActionCommandsWithMultipleParameters()
@@ -149,6 +200,11 @@ public class MVCActionCommandTest {
 			mockActionRequest.getAttribute(
 				TestMVCActionCommand1.TEST_MVC_ACTION_COMMAND_ATTRIBUTE));
 	}
+
+	private static ServiceRegistration<javax.portlet.Portlet>
+		_serviceRegistration1;
+	private static ServiceRegistration<MVCActionCommand> _serviceRegistration2;
+	private static ServiceRegistration<MVCActionCommand> _serviceRegistration3;
 
 	@Inject(filter = "javax.portlet.name=" + TestPortlet.PORTLET_NAME)
 	private final javax.portlet.Portlet _portlet = null;
