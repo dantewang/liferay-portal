@@ -14,18 +14,26 @@
 
 package com.liferay.portlet.social.service.impl;
 
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
-import com.liferay.portlet.social.service.impl.bundle.socialactivityinterpreterlocalserviceimpl.TestSocialActivityInterpreter;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
+import com.liferay.social.kernel.model.SocialActivity;
+import com.liferay.social.kernel.model.SocialActivityFeedEntry;
 import com.liferay.social.kernel.model.SocialActivityInterpreter;
+import com.liferay.social.kernel.model.SocialActivitySet;
 import com.liferay.social.kernel.service.SocialActivityInterpreterLocalServiceUtil;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,11 +45,32 @@ public class SocialActivityInterpreterLocalServiceImplTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule(
-				"bundle.socialactivityinterpreterlocalserviceimpl"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestSocialActivityInterpreter testSocialActivityInterpreter =
+			new TestSocialActivityInterpreter();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put(
+			"javax.portlet.name",
+			"SocialActivityInterpreterLocalServiceImplTest");
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			SocialActivityInterpreter.class, testSocialActivityInterpreter,
+			properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testGetActivityInterpreters1() {
@@ -90,6 +119,52 @@ public class SocialActivityInterpreterLocalServiceImplTest {
 		Assert.assertEquals(Arrays.toString(classNames), 1, classNames.length);
 		Assert.assertEquals(
 			TestSocialActivityInterpreter.class.getName(), classNames[0]);
+	}
+
+	private static ServiceRegistration<SocialActivityInterpreter>
+		_serviceRegistration;
+
+	private static class TestSocialActivityInterpreter
+		implements SocialActivityInterpreter {
+
+		public static final String SELECTOR = "SELECTOR";
+
+		@Override
+		public String[] getClassNames() {
+			return new String[] {TestSocialActivityInterpreter.class.getName()};
+		}
+
+		@Override
+		public String getSelector() {
+			return SELECTOR;
+		}
+
+		@Override
+		public boolean hasPermission(
+			PermissionChecker permissionChecker, SocialActivity activity,
+			String actionId, ServiceContext serviceContext) {
+
+			return false;
+		}
+
+		@Override
+		public SocialActivityFeedEntry interpret(
+			SocialActivity activity, ServiceContext serviceContext) {
+
+			return null;
+		}
+
+		@Override
+		public SocialActivityFeedEntry interpret(
+			SocialActivitySet activitySet, ServiceContext serviceContext) {
+
+			return null;
+		}
+
+		@Override
+		public void updateActivitySet(long activityId) {
+		}
+
 	}
 
 }

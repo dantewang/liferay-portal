@@ -18,8 +18,8 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.PortletPreferencesIds;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
@@ -27,16 +27,20 @@ import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.service.test.ServiceTestUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
 import com.liferay.portal.util.test.LayoutTestUtil;
-import com.liferay.portlet.bundle.portletpreferencesfactoryimplgetpreferencesids.TestCompanyPortlet;
-import com.liferay.portlet.bundle.portletpreferencesfactoryimplgetpreferencesids.TestGroupLayoutPortlet;
-import com.liferay.portlet.bundle.portletpreferencesfactoryimplgetpreferencesids.TestGroupPortlet;
-import com.liferay.portlet.bundle.portletpreferencesfactoryimplgetpreferencesids.TestUserLayoutPortlet;
-import com.liferay.portlet.bundle.portletpreferencesfactoryimplgetpreferencesids.TestUserPortlet;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.portlet.Portlet;
+
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,11 +53,96 @@ public class PortletPreferencesFactoryImplGetPreferencesIdsTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule(
-				"bundle.portletpreferencesfactoryimplgetpreferencesids"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		TestCompanyPortlet testCompanyPortlet = new TestCompanyPortlet();
+
+		Map<String, Object> properties1 = new HashMap<>();
+
+		properties1.put("com.liferay.portlet.preferences-company-wide", "true");
+		properties1.put("javax.portlet.name", TestCompanyPortlet.PORTLET_NAME);
+
+		_serviceRegistration1 = registry.registerService(
+			Portlet.class, testCompanyPortlet, properties1);
+
+		TestGroupLayoutPortlet testGroupLayoutPortlet =
+			new TestGroupLayoutPortlet();
+
+		Map<String, Object> properties2 = new HashMap<>();
+
+		properties2.put(
+			"com.liferay.portlet.preferences-company-wide", "false");
+		properties2.put(
+			"com.liferay.portlet.preferences-owned-by-group", "true");
+		properties2.put(
+			"com.liferay.portlet.preferences-unique-per-layout", "true");
+		properties2.put(
+			"javax.portlet.name", TestGroupLayoutPortlet.PORTLET_NAME);
+
+		_serviceRegistration2 = registry.registerService(
+			Portlet.class, testGroupLayoutPortlet, properties2);
+
+		TestGroupPortlet testGroupPortlet = new TestGroupPortlet();
+
+		Map<String, Object> properties3 = new HashMap<>();
+
+		properties3.put(
+			"com.liferay.portlet.preferences-company-wide", "false");
+		properties3.put(
+			"com.liferay.portlet.preferences-owned-by-group", "true");
+		properties3.put(
+			"com.liferay.portlet.preferences-unique-per-layout", "false");
+		properties3.put("javax.portlet.name", TestGroupPortlet.PORTLET_NAME);
+
+		_serviceRegistration3 = registry.registerService(
+			Portlet.class, testGroupPortlet, properties3);
+
+		TestUserLayoutPortlet testUserLayoutPortlet =
+			new TestUserLayoutPortlet();
+
+		Map<String, Object> properties4 = new HashMap<>();
+
+		properties4.put(
+			"com.liferay.portlet.preferences-company-wide", "false");
+		properties4.put(
+			"com.liferay.portlet.preferences-owned-by-group", "false");
+		properties4.put(
+			"com.liferay.portlet.preferences-unique-per-layout", "true");
+		properties4.put(
+			"javax.portlet.name", TestUserLayoutPortlet.PORTLET_NAME);
+
+		_serviceRegistration4 = registry.registerService(
+			Portlet.class, testUserLayoutPortlet, properties4);
+
+		TestUserPortlet testUserPortlet = new TestUserPortlet();
+
+		Map<String, Object> properties5 = new HashMap<>();
+
+		properties5.put(
+			"com.liferay.portlet.preferences-company-wide", "false");
+		properties5.put(
+			"com.liferay.portlet.preferences-owned-by-group", "false");
+		properties5.put(
+			"com.liferay.portlet.preferences-unique-per-layout", "false");
+		properties5.put("javax.portlet.name", TestUserPortlet.PORTLET_NAME);
+
+		_serviceRegistration5 = registry.registerService(
+			Portlet.class, testUserPortlet, properties5);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration1.unregister();
+		_serviceRegistration2.unregister();
+		_serviceRegistration3.unregister();
+		_serviceRegistration4.unregister();
+		_serviceRegistration5.unregister();
+	}
 
 	@Before
 	public void setUp() throws Exception {
@@ -202,9 +291,55 @@ public class PortletPreferencesFactoryImplGetPreferencesIdsTest {
 			modeEditGuest);
 	}
 
+	private static ServiceRegistration<Portlet> _serviceRegistration1;
+	private static ServiceRegistration<Portlet> _serviceRegistration2;
+	private static ServiceRegistration<Portlet> _serviceRegistration3;
+	private static ServiceRegistration<Portlet> _serviceRegistration4;
+	private static ServiceRegistration<Portlet> _serviceRegistration5;
+
 	@DeleteAfterTestRun
 	private Group _group;
 
 	private Layout _layout;
+
+	private static class TestCompanyPortlet extends MVCPortlet {
+
+		public static final String PORTLET_NAME =
+			"com_liferay_portlet_PortletPreferencesFactoryImplGet" +
+				"PreferencesIdsTest_TestCompanyPortlet";
+
+	}
+
+	private static class TestGroupLayoutPortlet extends MVCPortlet {
+
+		public static final String PORTLET_NAME =
+			"com_liferay_portlet_PortletPreferencesFactoryImplGet" +
+				"PreferencesIdsTest_TestGroupLayoutPortlet";
+
+	}
+
+	private static class TestGroupPortlet extends MVCPortlet {
+
+		public static final String PORTLET_NAME =
+			"com_liferay_portlet_PortletPreferencesFactoryImplGet" +
+				"PreferencesIdsTest_TestGroupPortlet";
+
+	}
+
+	private static class TestUserLayoutPortlet extends MVCPortlet {
+
+		public static final String PORTLET_NAME =
+			"com_liferay_portlet_PortletPreferencesFactoryImplGet" +
+				"PreferencesIdsTest_TestUserLayoutPortlet";
+
+	}
+
+	private static class TestUserPortlet extends MVCPortlet {
+
+		public static final String PORTLET_NAME =
+			"com_liferay_portlet_PortletPreferencesFactoryImplGet" +
+				"PreferencesIdsTest_TestUserPortlet";
+
+	}
 
 }

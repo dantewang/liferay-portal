@@ -17,15 +17,22 @@ package com.liferay.portlet;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.portlet.FriendlyURLMapper;
 import com.liferay.portal.kernel.portlet.FriendlyURLMapperTracker;
+import com.liferay.portal.kernel.portlet.LiferayPortletURL;
+import com.liferay.portal.kernel.portlet.Router;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.model.impl.PortletImpl;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
-import com.liferay.portlet.bundle.friendlyurlmappertrackerimpl.TestFriendlyURLMapper;
 import com.liferay.portlet.internal.FriendlyURLMapperTrackerImpl;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,10 +44,30 @@ public class FriendlyURLMapperTrackerImplTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.friendlyurlmappertrackerimpl"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestFriendlyURLMapper testFriendlyURLMapper =
+			new TestFriendlyURLMapper();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put(
+			"javax.portlet.name", "FriendlyURLMapperTrackerImplTest");
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			FriendlyURLMapper.class, testFriendlyURLMapper, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testGetFriendlyURLMapper() throws Exception {
@@ -59,6 +86,64 @@ public class FriendlyURLMapperTrackerImplTest {
 
 		Assert.assertEquals(
 			TestFriendlyURLMapper.class.getName(), clazz.getName());
+	}
+
+	private static ServiceRegistration<FriendlyURLMapper> _serviceRegistration;
+
+	private static class TestFriendlyURLMapper implements FriendlyURLMapper {
+
+		@Override
+		public String buildPath(LiferayPortletURL liferayPortletURL) {
+			return null;
+		}
+
+		@Override
+		public String getMapping() {
+			return null;
+		}
+
+		@Override
+		public String getPortletId() {
+			return null;
+		}
+
+		@Override
+		public Router getRouter() {
+			return null;
+		}
+
+		@Override
+		public boolean isCheckMappingWithPrefix() {
+			return false;
+		}
+
+		@Override
+		public boolean isPortletInstanceable() {
+			return false;
+		}
+
+		@Override
+		public void populateParams(
+			String friendlyURLPath, Map<String, String[]> parameterMap,
+			Map<String, Object> requestContext) {
+		}
+
+		@Override
+		public void setMapping(String mapping) {
+		}
+
+		@Override
+		public void setPortletId(String portletId) {
+		}
+
+		@Override
+		public void setPortletInstanceable(boolean portletInstanceable) {
+		}
+
+		@Override
+		public void setRouter(Router router) {
+		}
+
 	}
 
 }

@@ -14,16 +14,23 @@
 
 package com.liferay.portal.kernel.template;
 
-import com.liferay.portal.kernel.template.bundle.templatehandlerregistryutil.TestTemplateHandler;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,10 +42,27 @@ public class TemplateHandlerRegistryUtilTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.templatehandlerregistryutil"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestTemplateHandler testTemplateHandler = new TestTemplateHandler();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			TemplateHandler.class, testTemplateHandler, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testGetClassNameIds() {
@@ -93,5 +117,73 @@ public class TemplateHandlerRegistryUtilTest {
 
 		Assert.assertTrue(exists);
 	}
+
+	public static class TestTemplateHandler implements TemplateHandler {
+
+		@Override
+		public String getClassName() {
+			return TestTemplateHandler.class.getName();
+		}
+
+		@Override
+		public Map<String, Object> getCustomContextObjects() {
+			return Collections.emptyMap();
+		}
+
+		@Override
+		public List<Element> getDefaultTemplateElements() {
+			return Collections.emptyList();
+		}
+
+		@Override
+		public String getDefaultTemplateKey() {
+			return null;
+		}
+
+		@Override
+		public String getName(Locale locale) {
+			return null;
+		}
+
+		@Override
+		public String getResourceName() {
+			return null;
+		}
+
+		@Override
+		public String[] getRestrictedVariables(String language) {
+			return null;
+		}
+
+		@Override
+		public String getTemplatesHelpContent(String language) {
+			return null;
+		}
+
+		@Override
+		public String getTemplatesHelpPath(String language) {
+			return null;
+		}
+
+		@Override
+		public String getTemplatesHelpPropertyKey() {
+			return null;
+		}
+
+		@Override
+		public Map<String, TemplateVariableGroup> getTemplateVariableGroups(
+			long classPK, String language, Locale locale) {
+
+			return null;
+		}
+
+		@Override
+		public boolean isDisplayTemplateHandler() {
+			return false;
+		}
+
+	}
+
+	private static ServiceRegistration<TemplateHandler> _serviceRegistration;
 
 }

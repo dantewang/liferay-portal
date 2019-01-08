@@ -14,12 +14,17 @@
 
 package com.liferay.portal.kernel.format;
 
-import com.liferay.portal.kernel.format.bundle.phonenumberformatutil.TestPhoneNumberFormat;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,10 +36,28 @@ public class PhoneNumberFormatUtilTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.phonenumberformatutil"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestPhoneNumberFormat testPhoneNumberFormat =
+			new TestPhoneNumberFormat();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			PhoneNumberFormat.class, testPhoneNumberFormat, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testFormat() {
@@ -67,6 +90,43 @@ public class PhoneNumberFormatUtilTest {
 			PhoneNumberFormatUtil.validate(TestPhoneNumberFormat.FORMATTED));
 		Assert.assertFalse(
 			PhoneNumberFormatUtil.validate(TestPhoneNumberFormat.UNFORMATTED));
+	}
+
+	private static ServiceRegistration<PhoneNumberFormat> _serviceRegistration;
+
+	private static class TestPhoneNumberFormat implements PhoneNumberFormat {
+
+		public static final String FORMATTED = "123-456-7890";
+
+		public static final String UNFORMATTED = "1234567890";
+
+		@Override
+		public String format(String phoneNumber) {
+			if (phoneNumber.equals(UNFORMATTED)) {
+				return FORMATTED;
+			}
+
+			return "";
+		}
+
+		@Override
+		public String strip(String phoneNumber) {
+			if (phoneNumber.equals(FORMATTED)) {
+				return UNFORMATTED;
+			}
+
+			return "";
+		}
+
+		@Override
+		public boolean validate(String phoneNumber) {
+			if (phoneNumber.equals(FORMATTED)) {
+				return true;
+			}
+
+			return false;
+		}
+
 	}
 
 }
