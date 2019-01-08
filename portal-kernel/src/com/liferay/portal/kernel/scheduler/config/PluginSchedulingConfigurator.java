@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.proxy.ProxyModeThreadLocal;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.scheduler.SchedulerEntry;
-import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerWrapper;
 import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
@@ -79,9 +78,9 @@ public class PluginSchedulingConfigurator {
 
 					Registry registry = RegistryUtil.getRegistry();
 
-					ServiceRegistration<SchedulerEventMessageListener>
+					ServiceRegistration<SchedulerEventMessageListenerWrapper>
 						serviceRegistration = registry.registerService(
-							SchedulerEventMessageListener.class,
+							SchedulerEventMessageListenerWrapper.class,
 							schedulerEventMessageListenerWrapper, properties);
 
 					_serviceRegistrations.put(
@@ -101,7 +100,7 @@ public class PluginSchedulingConfigurator {
 	}
 
 	public void destroy() {
-		for (ServiceRegistration<SchedulerEventMessageListener>
+		for (ServiceRegistration<SchedulerEventMessageListenerWrapper>
 				serviceRegistration : _serviceRegistrations.values()) {
 
 			serviceRegistration.unregister();
@@ -120,7 +119,7 @@ public class PluginSchedulingConfigurator {
 
 	private List<SchedulerEntry> _schedulerEntries = Collections.emptyList();
 	private final Map
-		<String, ServiceRegistration<SchedulerEventMessageListener>>
+		<String, ServiceRegistration<SchedulerEventMessageListenerWrapper>>
 			_serviceRegistrations = new HashMap<>();
 
 }
