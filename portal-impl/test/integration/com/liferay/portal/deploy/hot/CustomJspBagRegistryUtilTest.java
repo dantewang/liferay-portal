@@ -53,28 +53,25 @@ public class CustomJspBagRegistryUtilTest {
 	public static void setUpClass() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		TestCustomJspBag testCustomJspBag = new TestCustomJspBag();
-
-		Map<String, Object> properties1 = new HashMap<>();
-
-		properties1.put("context.id", "TestCustomJspBag");
-		properties1.put("context.name", "Test Custom JSP Bag");
-		properties1.put("service.ranking", Integer.MAX_VALUE);
-
 		_serviceRegistration1 = registry.registerService(
-			CustomJspBag.class, testCustomJspBag, properties1);
-
-		TestGlobalCustomJspBag testGlobalCustomJspBag =
-			new TestGlobalCustomJspBag();
-
-		Map<String, Object> properties2 = new HashMap<>();
-
-		properties2.put("context.id", "TestGlobalCustomJspBag");
-		properties2.put("context.name", "Test Global Custom JSP Bag");
-		properties2.put("service.ranking", Integer.MAX_VALUE);
+			CustomJspBag.class, new TestCustomJspBag(),
+			new HashMap<String, Object>() {
+				{
+					put("context.id", "TestCustomJspBag");
+					put("context.name", "Test Custom JSP Bag");
+					put("service.ranking", Integer.MAX_VALUE);
+				}
+			});
 
 		_serviceRegistration2 = registry.registerService(
-			CustomJspBag.class, testGlobalCustomJspBag, properties2);
+			CustomJspBag.class, new TestGlobalCustomJspBag(),
+			new HashMap<String, Object>() {
+				{
+					put("context.id", "TestGlobalCustomJspBag");
+					put("context.name", "Test Global Custom JSP Bag");
+					put("service.ranking", Integer.MAX_VALUE);
+				}
+			});
 	}
 
 	@AfterClass
