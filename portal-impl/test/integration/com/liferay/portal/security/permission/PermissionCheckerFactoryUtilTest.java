@@ -14,14 +14,21 @@
 
 package com.liferay.portal.security.permission;
 
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
-import com.liferay.portal.security.permission.bundle.permissioncheckerfactoryutil.TestPermissionCheckerFactory;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,10 +40,29 @@ public class PermissionCheckerFactoryUtilTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.permissioncheckerfactoryutil"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestPermissionCheckerFactory testPermissionCheckerFactory =
+			new TestPermissionCheckerFactory();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			PermissionCheckerFactory.class, testPermissionCheckerFactory,
+			properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testGetPermissionCheckerFactory() {
@@ -49,6 +75,19 @@ public class PermissionCheckerFactoryUtilTest {
 
 		Assert.assertEquals(
 			TestPermissionCheckerFactory.class.getName(), clazz.getName());
+	}
+
+	private static ServiceRegistration<PermissionCheckerFactory>
+		_serviceRegistration;
+
+	private static class TestPermissionCheckerFactory
+		implements PermissionCheckerFactory {
+
+		@Override
+		public PermissionChecker create(User user) throws Exception {
+			return null;
+		}
+
 	}
 
 }

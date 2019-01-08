@@ -15,11 +15,17 @@
 package com.liferay.portal.security.auth;
 
 import com.liferay.portal.kernel.security.auth.EmailAddressValidator;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,10 +37,28 @@ public class EmailAddressValidatorFactoryTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.emailaddressvalidatorfactory"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestEmailAddressValidator testEmailAddressValidator =
+			new TestEmailAddressValidator();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			EmailAddressValidator.class, testEmailAddressValidator, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testValidate() {
@@ -49,6 +73,27 @@ public class EmailAddressValidatorFactoryTest {
 				2, "TestEmailAddressValidator@liferay-test.com"));
 		Assert.assertFalse(
 			emailAddressValidator.validate(1, "not@liferay-test.com"));
+	}
+
+	private static ServiceRegistration<EmailAddressValidator>
+		_serviceRegistration;
+
+	private static class TestEmailAddressValidator
+		implements EmailAddressValidator {
+
+		@Override
+		public boolean validate(long companyId, String emailAddress) {
+			if (companyId == 1) {
+				if (emailAddress.equals(
+						"TestEmailAddressValidator@liferay-test.com")) {
+
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 	}
 
 }

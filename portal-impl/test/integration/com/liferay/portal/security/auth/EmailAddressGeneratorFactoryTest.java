@@ -15,11 +15,17 @@
 package com.liferay.portal.security.auth;
 
 import com.liferay.portal.kernel.security.auth.EmailAddressGenerator;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,10 +37,28 @@ public class EmailAddressGeneratorFactoryTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.emailaddressgeneratorfactory"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestEmailAddressGenerator testEmailAddressGenerator =
+			new TestEmailAddressGenerator();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			EmailAddressGenerator.class, testEmailAddressGenerator, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testGenerate() {
@@ -60,6 +84,33 @@ public class EmailAddressGeneratorFactoryTest {
 			EmailAddressGeneratorFactory.getInstance();
 
 		Assert.assertTrue(emailAddressGenerator.isGenerated("2@generated.com"));
+	}
+
+	private static ServiceRegistration<EmailAddressGenerator>
+		_serviceRegistration;
+
+	private static class TestEmailAddressGenerator
+		implements EmailAddressGenerator {
+
+		@Override
+		public String generate(long companyId, long userId) {
+			return userId + "@generated.com";
+		}
+
+		@Override
+		public boolean isFake(String emailAddress) {
+			if (emailAddress.endsWith("@generated.com")) {
+				return false;
+			}
+
+			return true;
+		}
+
+		@Override
+		public boolean isGenerated(String emailAddress) {
+			return emailAddress.endsWith("@generated.com");
+		}
+
 	}
 
 }

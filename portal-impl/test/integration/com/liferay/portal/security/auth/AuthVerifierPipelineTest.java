@@ -17,13 +17,24 @@ package com.liferay.portal.security.auth;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.auth.AccessControlContext;
+import com.liferay.portal.kernel.security.auth.verifier.AuthVerifier;
+import com.liferay.portal.kernel.security.auth.verifier.AuthVerifierResult;
 import com.liferay.portal.kernel.servlet.HttpMethods;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,10 +49,29 @@ public class AuthVerifierPipelineTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.authverifierpipeline"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestAuthVerifier testAuthVerifier = new TestAuthVerifier();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+		properties.put(
+			"urls.includes", "/TestAuthVerifier/*,/TestAuthVerifierTest/*");
+
+		_serviceRegistration = registry.registerService(
+			AuthVerifier.class, testAuthVerifier, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testVerifyRequest() throws PortalException {
@@ -71,6 +101,37 @@ public class AuthVerifierPipelineTest {
 		mockHttpServletRequest.setPathInfo(pathInfo);
 
 		return mockHttpServletRequest;
+	}
+
+	private static ServiceRegistration<AuthVerifier> _serviceRegistration;
+
+	private static class TestAuthVerifier implements AuthVerifier {
+
+		@Override
+		public String getAuthType() {
+			return HttpServletRequest.BASIC_AUTH;
+		}
+
+		@Override
+		public AuthVerifierResult verify(
+			AccessControlContext accessControlContext, Properties properties) {
+
+			AuthVerifierResult authVerifierResult = new AuthVerifierResult();
+
+			authVerifierResult.setPassword("best_password_ever");
+
+			Map<String, Object> settings = new HashMap<>();
+
+			settings.put("auth.type", HttpServletRequest.BASIC_AUTH);
+
+			authVerifierResult.setSettings(settings);
+
+			authVerifierResult.setState(AuthVerifierResult.State.SUCCESS);
+			authVerifierResult.setUserId(1);
+
+			return authVerifierResult;
+		}
+
 	}
 
 }

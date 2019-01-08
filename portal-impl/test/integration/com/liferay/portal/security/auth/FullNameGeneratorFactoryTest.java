@@ -16,14 +16,20 @@ package com.liferay.portal.security.auth;
 
 import com.liferay.portal.kernel.security.auth.FullNameGenerator;
 import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,10 +41,28 @@ public class FullNameGeneratorFactoryTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.fullnamegeneratorfactory"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestFullNameGenerator testFullNameGenerator =
+			new TestFullNameGenerator();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			FullNameGenerator.class, testFullNameGenerator, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testGetFullName() {
@@ -76,6 +100,39 @@ public class FullNameGeneratorFactoryTest {
 
 		Assert.assertEquals(
 			Arrays.toString(splitFullName), 3, splitFullName.length);
+	}
+
+	private static ServiceRegistration<FullNameGenerator> _serviceRegistration;
+
+	private static class TestFullNameGenerator implements FullNameGenerator {
+
+		@Override
+		public String getFullName(
+			String firstName, String middleName, String lastName) {
+
+			return StringBundler.concat(
+				firstName, " ", middleName, " ", lastName);
+		}
+
+		@Override
+		public String getLocalizedFullName(
+			String firstName, String middleName, String lastName, Locale locale,
+			long prefixId, long suffixId) {
+
+			if (firstName.equals("James")) {
+				if (locale.equals(Locale.FRENCH)) {
+					return "Jacques";
+				}
+			}
+
+			return "not Jacques";
+		}
+
+		@Override
+		public String[] splitFullName(String fullName) {
+			return new String[] {"firstName", "middleName", "lastName"};
+		}
+
 	}
 
 }
