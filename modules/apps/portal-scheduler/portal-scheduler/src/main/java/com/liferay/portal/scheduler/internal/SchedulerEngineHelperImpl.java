@@ -928,7 +928,13 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 		BundleContext bundleContext, String destinationName,
 		SchedulerEntry schedulerEntry,
 		SchedulerEventMessageListenerWrapper
-			schedulerEventMessageListenerWrapper) throws SchedulerException {
+			schedulerEventMessageListenerWrapper) {
+
+		if ((schedulerEntry == null) ||
+			(schedulerEntry.getTrigger() == null)) {
+
+			return null;
+		}
 
 		StorageType storageType = StorageType.MEMORY_CLUSTERED;
 
@@ -939,43 +945,61 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			storageType = storageTypeAware.getStorageType();
 		}
 
-		schedule(
-			schedulerEntry.getTrigger(), storageType,
-			schedulerEntry.getDescription(), destinationName, null, 0);
-
-		ServiceRegistration<MessageListener> serviceRegistration =
-			_messageListenerServiceRegistrations.get(
-				schedulerEntry.getEventListenerClass());
-
-		if (serviceRegistration != null) {
-			ServiceReference<MessageListener> oldServiceReference =
-				serviceRegistration.getReference();
-
-			MessageListener messageListener = bundleContext.getService(
-				oldServiceReference);
-
-			SchedulerEventMessageListenerWrapper
-				oldSchedulerEventMessageListenerWrapper =
-					(SchedulerEventMessageListenerWrapper)messageListener;
-
-			oldSchedulerEventMessageListenerWrapper.setSchedulerEntry(
-				schedulerEntry);
-
-			return null;
+		if (Validator.isNull(destinationName)) {
+			destinationName = DestinationNames.SCHEDULER_DISPATCH;
 		}
 
-		Dictionary<String, Object> properties = new HashMapDictionary<>();
+		ClusterableContextThreadLocal.putThreadLocalContext(
+			SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, false);
 
-		properties.put("destination.name", destinationName);
+		try {
+			schedule(
+				schedulerEntry.getTrigger(), storageType,
+				schedulerEntry.getDescription(), destinationName, null, 0);
 
-		serviceRegistration = bundleContext.registerService(
-			MessageListener.class, schedulerEventMessageListenerWrapper,
-			properties);
+			ServiceRegistration<MessageListener> serviceRegistration =
+				_messageListenerServiceRegistrations.get(
+					schedulerEntry.getEventListenerClass());
 
-		_messageListenerServiceRegistrations.put(
-			schedulerEntry.getEventListenerClass(), serviceRegistration);
+			if (serviceRegistration != null) {
+				ServiceReference<MessageListener> oldServiceReference =
+					serviceRegistration.getReference();
 
-		return schedulerEventMessageListenerWrapper;
+				MessageListener messageListener = bundleContext.getService(
+					oldServiceReference);
+
+				SchedulerEventMessageListenerWrapper
+					oldSchedulerEventMessageListenerWrapper =
+						(SchedulerEventMessageListenerWrapper)messageListener;
+
+				oldSchedulerEventMessageListenerWrapper.setSchedulerEntry(
+					schedulerEntry);
+
+				return null;
+			}
+
+			Dictionary<String, Object> properties = new HashMapDictionary<>();
+
+			properties.put("destination.name", destinationName);
+
+			serviceRegistration = bundleContext.registerService(
+				MessageListener.class, schedulerEventMessageListenerWrapper,
+				properties);
+
+			_messageListenerServiceRegistrations.put(
+				schedulerEntry.getEventListenerClass(), serviceRegistration);
+
+			return schedulerEventMessageListenerWrapper;
+		}
+		catch (SchedulerException se) {
+			_log.error(se, se);
+		}
+		finally {
+			ClusterableContextThreadLocal.putThreadLocalContext(
+				SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, true);
+		}
+
+		return null;
 	}
 
 	@Reference(unbind = "-")
@@ -1077,50 +1101,23 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			SchedulerEventMessageListener schedulerEventMessageListener =
 				bundleContext.getService(serviceReference);
 
-			SchedulerEntry schedulerEntry =
-				schedulerEventMessageListener.getSchedulerEntry();
-
-			if ((schedulerEntry == null) ||
-				(schedulerEntry.getTrigger() == null)) {
-
-				return null;
-			}
-
-			String destinationName = (String)serviceReference.getProperty(
-				"destination.name");
-
-			if (Validator.isNull(destinationName)) {
-				destinationName = DestinationNames.SCHEDULER_DISPATCH;
-			}
-
-			ClusterableContextThreadLocal.putThreadLocalContext(
-				SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, false);
-
 			SchedulerEventMessageListenerWrapper
 				schedulerEventMessageListenerWrapper =
 					new SchedulerEventMessageListenerWrapper();
 
 			schedulerEventMessageListenerWrapper.setMessageListener(
 				schedulerEventMessageListener);
-
 			schedulerEventMessageListenerWrapper.setSchedulerEntry(
-				schedulerEntry);
+				schedulerEventMessageListener.getSchedulerEntry());
 
-			try {
-				schedulerEventMessageListenerWrapper = registerMessageListener(
-					bundleContext, destinationName, schedulerEntry,
-					schedulerEventMessageListenerWrapper);
+			schedulerEventMessageListenerWrapper = registerMessageListener(
+				bundleContext,
+				(String)serviceReference.getProperty("destination.name"),
+				schedulerEventMessageListener.getSchedulerEntry(),
+				schedulerEventMessageListenerWrapper);
 
-				if (schedulerEventMessageListenerWrapper != null) {
-					return schedulerEventMessageListener;
-				}
-			}
-			catch (SchedulerException se) {
-				_log.error(se, se);
-			}
-			finally {
-				ClusterableContextThreadLocal.putThreadLocalContext(
-					SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, true);
+			if (schedulerEventMessageListenerWrapper != null) {
+				return schedulerEventMessageListener;
 			}
 
 			return null;
@@ -1204,43 +1201,11 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				schedulerEventMessageListenerWrapper = bundleContext.getService(
 					serviceReference);
 
-			SchedulerEntry schedulerEntry =
-				schedulerEventMessageListenerWrapper.getSchedulerEntry();
-
-			if ((schedulerEntry == null) ||
-				(schedulerEntry.getTrigger() == null)) {
-
-				return null;
-			}
-
-			String destinationName = (String)serviceReference.getProperty(
-				"destination.name");
-
-			if (Validator.isNull(destinationName)) {
-				destinationName = DestinationNames.SCHEDULER_DISPATCH;
-			}
-
-			ClusterableContextThreadLocal.putThreadLocalContext(
-				SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, false);
-
-			try {
-				schedulerEventMessageListenerWrapper = registerMessageListener(
-					bundleContext, destinationName, schedulerEntry,
-					schedulerEventMessageListenerWrapper);
-
-				if (schedulerEventMessageListenerWrapper != null) {
-					return schedulerEventMessageListenerWrapper;
-				}
-			}
-			catch (SchedulerException se) {
-				_log.error(se, se);
-			}
-			finally {
-				ClusterableContextThreadLocal.putThreadLocalContext(
-					SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, true);
-			}
-
-			return null;
+			return registerMessageListener(
+				bundleContext,
+				(String)serviceReference.getProperty("destination.name"),
+				schedulerEventMessageListenerWrapper.getSchedulerEntry(),
+				schedulerEventMessageListenerWrapper);
 		}
 
 		@Override
