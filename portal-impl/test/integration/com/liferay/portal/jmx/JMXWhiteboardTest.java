@@ -15,19 +15,28 @@
 package com.liferay.portal.jmx;
 
 import com.liferay.portal.jmx.bundle.jmxwhiteboard.JMXWhiteboardByDynamicMBean;
+import com.liferay.portal.jmx.bundle.jmxwhiteboard.JMXWhiteboardByInterface;
 import com.liferay.portal.jmx.bundle.jmxwhiteboard.JMXWhiteboardByInterfaceMBean;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.management.DynamicMBean;
 import javax.management.MBeanInfo;
 import javax.management.MBeanOperationInfo;
 import javax.management.MBeanParameterInfo;
 import javax.management.MBeanServer;
+import javax.management.NotCompliantMBeanException;
 import javax.management.ObjectName;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,10 +48,42 @@ public class JMXWhiteboardTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.jmxwhiteboard"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() throws NotCompliantMBeanException {
+		Registry registry = RegistryUtil.getRegistry();
+
+		JMXWhiteboardByDynamicMBean jmxWhiteboardByDynamicMBean =
+			new JMXWhiteboardByDynamicMBean();
+
+		Map<String, Object> properties1 = new HashMap<>();
+
+		properties1.put(
+			"jmx.objectname", JMXWhiteboardByDynamicMBean.OBJECT_NAME);
+
+		_serviceRegistration1 = registry.registerService(
+			DynamicMBean.class, jmxWhiteboardByDynamicMBean, properties1);
+
+		JMXWhiteboardByInterface jmxWhiteboardByInterface =
+			new JMXWhiteboardByInterface();
+
+		Map<String, Object> properties2 = new HashMap<>();
+
+		properties2.put(
+			"jmx.objectname", JMXWhiteboardByInterfaceMBean.OBJECT_NAME);
+
+		_serviceRegistration2 = registry.registerService(
+			JMXWhiteboardByInterfaceMBean.class, jmxWhiteboardByInterface,
+			properties2);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration1.unregister();
+		_serviceRegistration2.unregister();
+	}
 
 	@Test
 	public void testMBeanByDynamicMBean() throws Exception {
@@ -108,5 +149,9 @@ public class JMXWhiteboardTest {
 
 	@Inject
 	private static MBeanServer _mBeanServer;
+
+	private static ServiceRegistration<DynamicMBean> _serviceRegistration1;
+	private static ServiceRegistration<JMXWhiteboardByInterfaceMBean>
+		_serviceRegistration2;
 
 }
