@@ -12,17 +12,17 @@
  * details.
  */
 
-package com.liferay.portal.jmx.bundle.jmxwhiteboard;
+package com.liferay.portal.kernel.portlet.bridges.mvc.mvcactioncommand;
+
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 /**
- * @author Raymond Augé
+ * @author Manuel de la Peña
  */
-public interface JMXWhiteboardByInterfaceMBean {
+public class TestPortlet extends MVCPortlet {
 
-	public static final String OBJECT_NAME =
-		"JMXWhiteboard:name=com.liferay.portal.jmx.bundle.jmxwhiteboard." +
-			"JMXWhiteboardByInterfaceMBean";
-
-	public String returnValue(String value);
+	public static final String PORTLET_NAME =
+		"com_liferay_portal_kernel_portlet_bridges_mvc_actioncommand_" +
+			"TestPortlet";
 
 }

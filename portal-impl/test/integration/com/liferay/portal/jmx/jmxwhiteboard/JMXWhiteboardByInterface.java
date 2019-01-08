@@ -12,24 +12,12 @@
  * details.
  */
 
-package com.liferay.portal.jmx.bundle.jmxwhiteboard;
-
-import javax.management.NotCompliantMBeanException;
-import javax.management.StandardMBean;
+package com.liferay.portal.jmx.jmxwhiteboard;
 
 /**
  * @author Raymond Augé
  */
-public class JMXWhiteboardByDynamicMBean
-	extends StandardMBean implements JMXWhiteboardByInterfaceMBean {
-
-	public static final String OBJECT_NAME =
-		"JMXWhiteboard:name=com.liferay.portal.jmx.bundle.jmxwhiteboard." +
-			"JMXWhiteboardByDynamicMBean";
-
-	public JMXWhiteboardByDynamicMBean() throws NotCompliantMBeanException {
-		super(JMXWhiteboardByInterfaceMBean.class);
-	}
+public class JMXWhiteboardByInterface implements JMXWhiteboardByInterfaceMBean {
 
 	@Override
 	public String returnValue(String value) {
