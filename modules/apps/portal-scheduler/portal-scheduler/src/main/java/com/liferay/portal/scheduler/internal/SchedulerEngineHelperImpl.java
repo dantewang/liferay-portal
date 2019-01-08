@@ -930,9 +930,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 		SchedulerEventMessageListenerWrapper
 			schedulerEventMessageListenerWrapper) {
 
-		if ((schedulerEntry == null) ||
-			(schedulerEntry.getTrigger() == null)) {
-
+		if ((schedulerEntry == null) || (schedulerEntry.getTrigger() == null)) {
 			return null;
 		}
 
