@@ -14,14 +14,18 @@
 
 package com.liferay.portal.kernel.parsers.bbcode;
 
-import com.liferay.portal.kernel.parsers.bbcode.bundle.bbcodetranslatorutil.TestBBCodeTranslator;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,10 +37,27 @@ public class BBCodeTranslatorUtilTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.bbcodetranslatorutil"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestBBCodeTranslator testBBCodeTranslator = new TestBBCodeTranslator();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			BBCodeTranslator.class, testBBCodeTranslator, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testEmoticonDescriptions() {
@@ -87,6 +108,50 @@ public class BBCodeTranslatorUtilTest {
 		Assert.assertEquals(
 			TestBBCodeTranslator.END_TAG,
 			BBCodeTranslatorUtil.parse(TestBBCodeTranslator.START_TAG));
+	}
+
+	private static ServiceRegistration<BBCodeTranslator> _serviceRegistration;
+
+	private static class TestBBCodeTranslator implements BBCodeTranslator {
+
+		public static final String END_TAG = "</TestBBCcodeTranslator>";
+
+		public static final String START_TAG = "<TestBBCcodeTranslator>";
+
+		@Override
+		public String[] getEmoticonDescriptions() {
+			return new String[] {"1", "2", "3"};
+		}
+
+		@Override
+		public String[] getEmoticonFiles() {
+			return new String[] {"1", "2"};
+		}
+
+		@Override
+		public String[][] getEmoticons() {
+			return null;
+		}
+
+		@Override
+		public String[] getEmoticonSymbols() {
+			return new String[] {"1", "2", "3", "4"};
+		}
+
+		@Override
+		public String getHTML(String bbcode) {
+			return START_TAG + bbcode + END_TAG;
+		}
+
+		@Override
+		public String parse(String message) {
+			if (message.equals(START_TAG)) {
+				return END_TAG;
+			}
+
+			return START_TAG;
+		}
+
 	}
 
 }

@@ -15,18 +15,23 @@
 package com.liferay.portal.servlet.filters.autologin;
 
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.security.auto.login.AutoLogin;
 import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
-import com.liferay.portal.util.test.AtomicState;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
 import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.junit.AfterClass;
@@ -43,19 +48,26 @@ public class AutoLoginFilterTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.autologinfilter"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
 
 	@BeforeClass
 	public static void setUpClass() {
-		_atomicState = new AtomicState();
+		TestAutoLogin testAutoLogin = new TestAutoLogin();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			AutoLogin.class, testAutoLogin, properties);
 	}
 
 	@AfterClass
 	public static void tearDownClass() {
-		_atomicState.close();
+		_serviceRegistration.unregister();
 	}
 
 	@Test
@@ -64,8 +76,6 @@ public class AutoLoginFilterTest {
 
 		FilterChain filterChain = ProxyFactory.newDummyInstance(
 			FilterChain.class);
-
-		_atomicState.reset();
 
 		autoLoginFilter.doFilter(
 			new HttpServletRequestWrapper(
@@ -84,9 +94,31 @@ public class AutoLoginFilterTest {
 			},
 			null, filterChain);
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
-	private static AtomicState _atomicState;
+	private static boolean _called;
+	private static ServiceRegistration<AutoLogin> _serviceRegistration;
+
+	private static class TestAutoLogin implements AutoLogin {
+
+		@Override
+		public String[] handleException(
+			HttpServletRequest request, HttpServletResponse response,
+			Exception e) {
+
+			return null;
+		}
+
+		@Override
+		public String[] login(
+			HttpServletRequest request, HttpServletResponse response) {
+
+			_called = true;
+
+			return null;
+		}
+
+	}
 
 }

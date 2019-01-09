@@ -15,11 +15,17 @@
 package com.liferay.portal.security.auth;
 
 import com.liferay.portal.kernel.security.auth.FullNameValidator;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,10 +37,28 @@ public class FullNameValidatorFactoryTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.fullnamevalidatorfactory"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestFullNameValidator testFullNameValidator =
+			new TestFullNameValidator();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			FullNameValidator.class, testFullNameValidator, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testValidate() {
@@ -47,6 +71,26 @@ public class FullNameValidatorFactoryTest {
 			fullNameValidator.validate(2, "Brian", "middleName", "lastName"));
 		Assert.assertFalse(
 			fullNameValidator.validate(1, "Peter", "middleName", "lastName"));
+	}
+
+	private static ServiceRegistration<FullNameValidator> _serviceRegistration;
+
+	private static class TestFullNameValidator implements FullNameValidator {
+
+		@Override
+		public boolean validate(
+			long companyId, String firstName, String middleName,
+			String lastName) {
+
+			if (companyId == 1) {
+				if (firstName.equals("Brian")) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 	}
 
 }

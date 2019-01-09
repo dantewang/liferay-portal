@@ -14,14 +14,20 @@
 
 package com.liferay.portal.security.ldap;
 
+import com.liferay.portal.kernel.security.ldap.LDAPSettings;
 import com.liferay.portal.kernel.security.ldap.LDAPSettingsUtil;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,10 +39,27 @@ public class LDAPSettingsUtilTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.ldapsettingsutil"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		TestLDAPSettings testLDAPSettings = new TestLDAPSettings();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			LDAPSettings.class, testLDAPSettings, properties);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testGetAuthSearchFilter() throws Exception {
@@ -125,6 +148,150 @@ public class LDAPSettingsUtilTest {
 	public void testIsPasswordPolicyEnabled() {
 		Assert.assertTrue(LDAPSettingsUtil.isPasswordPolicyEnabled(1));
 		Assert.assertFalse(LDAPSettingsUtil.isPasswordPolicyEnabled(2));
+	}
+
+	private static ServiceRegistration<LDAPSettings> _serviceRegistration;
+
+	private static class TestLDAPSettings implements LDAPSettings {
+
+		@Override
+		public String getAuthSearchFilter(
+				long ldapServerId, long companyId, String emailAddress,
+				String screenName, String userId)
+			throws Exception {
+
+			return "(companyId=" + companyId + ")";
+		}
+
+		@Override
+		public Properties getContactExpandoMappings(
+				long ldapServerId, long companyId)
+			throws Exception {
+
+			Properties properties = new Properties();
+
+			properties.setProperty(
+				"ldapServerId", String.valueOf(ldapServerId));
+
+			return properties;
+		}
+
+		@Override
+		public Properties getContactMappings(long ldapServerId, long companyId)
+			throws Exception {
+
+			Properties properties = new Properties();
+
+			properties.setProperty(
+				"ldapServerId", String.valueOf(ldapServerId));
+
+			return properties;
+		}
+
+		@Override
+		public String[] getErrorPasswordHistoryKeywords(long companyId) {
+			return new String[] {"history"};
+		}
+
+		@Override
+		public Properties getGroupMappings(long ldapServerId, long companyId)
+			throws Exception {
+
+			Properties properties = new Properties();
+
+			properties.setProperty("ldapServerId", ldapServerId + "");
+
+			return properties;
+		}
+
+		@Override
+		public long getPreferredLDAPServerId(
+			long companyId, String screenName) {
+
+			if (companyId == 1) {
+				return 1234567890;
+			}
+
+			return 0;
+		}
+
+		@Override
+		public String getPropertyPostfix(long ldapServerId) {
+			if (ldapServerId == 1) {
+				return "liferay.ldap";
+			}
+
+			return "unknown";
+		}
+
+		@Override
+		public Properties getUserExpandoMappings(
+				long ldapServerId, long companyId)
+			throws Exception {
+
+			Properties properties = new Properties();
+
+			properties.setProperty("ldapServerId", ldapServerId + "");
+
+			return properties;
+		}
+
+		@Override
+		public Properties getUserMappings(long ldapServerId, long companyId)
+			throws Exception {
+
+			Properties properties = new Properties();
+
+			properties.setProperty("ldapServerId", ldapServerId + "");
+
+			return properties;
+		}
+
+		@Override
+		public boolean isExportEnabled(long companyId) {
+			if (companyId == 1) {
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public boolean isExportGroupEnabled(long companyId) {
+			if (companyId == 1) {
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public boolean isImportEnabled(long companyId) {
+			if (companyId == 1) {
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public boolean isImportOnStartup(long companyId) {
+			if (companyId == 1) {
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public boolean isPasswordPolicyEnabled(long companyId) {
+			if (companyId == 1) {
+				return true;
+			}
+
+			return false;
+		}
+
 	}
 
 }

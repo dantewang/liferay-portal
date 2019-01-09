@@ -14,17 +14,21 @@
 
 package com.liferay.portal.kernel.lar.lifecycle;
 
+import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleEvent;
 import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleEventListenerRegistryUtil;
 import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleListener;
-import com.liferay.portal.kernel.lar.lifecycle.bundle.exportimportlifecycleeventlistenerregistryutil.TestAsyncExportImportLifecycleListener;
-import com.liferay.portal.kernel.lar.lifecycle.bundle.exportimportlifecycleeventlistenerregistryutil.TestSyncExportImportLifecycleListener;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,11 +40,43 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule(
-				"bundle.exportimportlifecycleeventlistenerregistryutil"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		TestAsyncExportImportLifecycleListener
+			testAsyncExportImportLifecycleListener =
+				new TestAsyncExportImportLifecycleListener();
+
+		Map<String, Object> properties1 = new HashMap<>();
+
+		properties1.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration1 = registry.registerService(
+			ExportImportLifecycleListener.class,
+			testAsyncExportImportLifecycleListener, properties1);
+
+		TestSyncExportImportLifecycleListener
+			testSyncExportImportLifecycleListener =
+				new TestSyncExportImportLifecycleListener();
+
+		Map<String, Object> properties2 = new HashMap<>();
+
+		properties2.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration2 = registry.registerService(
+			ExportImportLifecycleListener.class,
+			testSyncExportImportLifecycleListener, properties2);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration1.unregister();
+		_serviceRegistration2.unregister();
+	}
 
 	@Test
 	public void testGetAsyncExportImportLifecycleListeners() {
@@ -102,6 +138,43 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 		}
 
 		Assert.assertTrue(exists);
+	}
+
+	private static ServiceRegistration<ExportImportLifecycleListener>
+		_serviceRegistration1;
+	private static ServiceRegistration<ExportImportLifecycleListener>
+		_serviceRegistration2;
+
+	private static class TestAsyncExportImportLifecycleListener
+		implements ExportImportLifecycleListener {
+
+		@Override
+		public boolean isParallel() {
+			return true;
+		}
+
+		@Override
+		public void onExportImportLifecycleEvent(
+				ExportImportLifecycleEvent exportImportLifecycleEvent)
+			throws Exception {
+		}
+
+	}
+
+	private static class TestSyncExportImportLifecycleListener
+		implements ExportImportLifecycleListener {
+
+		@Override
+		public boolean isParallel() {
+			return false;
+		}
+
+		@Override
+		public void onExportImportLifecycleEvent(
+				ExportImportLifecycleEvent exportImportLifecycleEvent)
+			throws Exception {
+		}
+
 	}
 
 }

@@ -14,23 +14,25 @@
 
 package com.liferay.portal.security.membershippolicy;
 
+import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.security.membershippolicy.RoleMembershipPolicy;
 import com.liferay.portal.kernel.security.membershippolicy.RoleMembershipPolicyFactory;
 import com.liferay.portal.kernel.security.membershippolicy.RoleMembershipPolicyFactoryUtil;
 import com.liferay.portal.kernel.security.membershippolicy.RoleMembershipPolicyUtil;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.model.impl.RoleImpl;
-import com.liferay.portal.security.membershippolicy.bundle.rolemembershippolicyfactoryimpl.TestRoleMembershipPolicy;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
-import com.liferay.portal.util.test.AtomicState;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
 import java.io.Serializable;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -43,30 +45,41 @@ public class RoleMembershipPolicyFactoryImplTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.rolemembershippolicyfactoryimpl"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
 
 	@BeforeClass
 	public static void setUpClass() {
-		_atomicState = new AtomicState();
+		TestRoleMembershipPolicy testRoleMembershipPolicy =
+			new TestRoleMembershipPolicy();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("service.ranking", Integer.MAX_VALUE);
+
+		_serviceRegistration = registry.registerService(
+			RoleMembershipPolicy.class, testRoleMembershipPolicy, properties);
 	}
 
 	@AfterClass
 	public static void tearDownClass() {
-		_atomicState.close();
+		_serviceRegistration.unregister();
+	}
+
+	@Before
+	public void setUp() {
+		_called = false;
 	}
 
 	@Test
 	public void testCheckRoles() throws Exception {
-		_atomicState.reset();
-
 		long[] array = {1, 2, 3};
 
 		RoleMembershipPolicyUtil.checkRoles(array, array, array);
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
@@ -108,44 +121,93 @@ public class RoleMembershipPolicyFactoryImplTest {
 
 	@Test
 	public void testPropagateRoles() throws Exception {
-		_atomicState.reset();
-
 		long[] array = {1, 2, 3};
 
 		RoleMembershipPolicyUtil.propagateRoles(array, array, array);
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
 	public void testVerifyPolicy1() throws Exception {
-		_atomicState.reset();
-
 		RoleMembershipPolicyUtil.verifyPolicy();
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
 	public void testVerifyPolicy2() throws Exception {
-		_atomicState.reset();
-
 		RoleMembershipPolicyUtil.verifyPolicy(new RoleImpl());
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
 	@Test
 	public void testVerifyPolicy3() throws Exception {
-		_atomicState.reset();
-
 		RoleMembershipPolicyUtil.verifyPolicy(
 			new RoleImpl(), new RoleImpl(),
 			new HashMap<String, Serializable>());
 
-		Assert.assertTrue(_atomicState.isSet());
+		Assert.assertTrue(_called);
 	}
 
-	private static AtomicState _atomicState;
+	private static boolean _called;
+	private static ServiceRegistration<RoleMembershipPolicy>
+		_serviceRegistration;
+
+	private static class TestRoleMembershipPolicy
+		implements RoleMembershipPolicy {
+
+		@Override
+		public void checkRoles(
+			long[] userIds, long[] addRoleIds, long[] removeRoleIds) {
+
+			_called = true;
+		}
+
+		@Override
+		public boolean isRoleAllowed(long userId, long roleId) {
+			if (userId == 1) {
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public boolean isRoleRequired(long userId, long roleId) {
+			if (userId == 1) {
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public void propagateRoles(
+			long[] userIds, long[] addRoleIds, long[] removeRoleIds) {
+
+			_called = true;
+		}
+
+		@Override
+		public void verifyPolicy() {
+			_called = true;
+		}
+
+		@Override
+		public void verifyPolicy(Role role) {
+			_called = true;
+		}
+
+		@Override
+		public void verifyPolicy(
+			Role role, Role oldRole,
+			Map<String, Serializable> oldExpandoAttributes) {
+
+			_called = true;
+		}
+
+	}
 
 }
