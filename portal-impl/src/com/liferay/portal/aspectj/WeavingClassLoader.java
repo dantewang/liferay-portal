@@ -40,9 +40,10 @@ import org.aspectj.bridge.AbortException;
 public class WeavingClassLoader extends URLClassLoader {
 
 	public WeavingClassLoader(
-		URL[] urls, Class<?>[] aspectClasses, File dumpDir) {
+		URL[] urls, Class<?>[] aspectClasses, File dumpDir,
+		ClassLoader parentClassLoader) {
 
-		super(urls, null);
+		super(urls, parentClassLoader);
 
 		_dumpDir = dumpDir;
 
