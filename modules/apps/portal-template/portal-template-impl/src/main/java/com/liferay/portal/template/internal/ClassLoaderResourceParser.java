@@ -12,20 +12,31 @@
  * details.
  */
 
-package com.liferay.portal.template;
+package com.liferay.portal.template.internal;
 
 import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.template.TemplateConstants;
+import com.liferay.portal.template.TemplateResourceParser;
+import com.liferay.portal.template.URLResourceParser;
 
 import java.net.URL;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Tina Tian
- * @deprecated As of Mueller (7.2.x), with no direct replacement
  */
-@Deprecated
+@Component(
+	immediate = true,
+	property = {
+		"lang.type=" + TemplateConstants.LANG_TYPE_FTL,
+		"lang.type=" + TemplateConstants.LANG_TYPE_SOY,
+		"lang.type=" + TemplateConstants.LANG_TYPE_VM
+	},
+	service = TemplateResourceParser.class
+)
 public class ClassLoaderResourceParser extends URLResourceParser {
 
 	public ClassLoaderResourceParser() {
