@@ -18,6 +18,7 @@ import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.template.TemplateConstants;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.template.TemplateResourceParser;
 import com.liferay.portal.template.URLResourceParser;
 
@@ -40,9 +41,7 @@ import org.osgi.service.component.annotations.Component;
 public class ClassLoaderResourceParser extends URLResourceParser {
 
 	public ClassLoaderResourceParser() {
-		Class<?> clazz = getClass();
-
-		_classLoader = clazz.getClassLoader();
+		_classLoader = PortalClassLoaderUtil.getClassLoader();
 	}
 
 	/**
