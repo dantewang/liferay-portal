@@ -572,8 +572,9 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 		Class<?> messageListenerClass = messageListener.getClass();
 
-		ServiceRegistration<SchedulerEventMessageListener> serviceRegistration =
-			_serviceRegistrations.get(messageListenerClass.getName());
+		ServiceRegistration<SchedulerEventMessageListenerWrapper>
+			serviceRegistration = _serviceRegistrations.get(
+				messageListenerClass.getName());
 
 		if (serviceRegistration != null) {
 			SchedulerEventMessageListenerWrapper
@@ -600,7 +601,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 		schedulerEventMessageListenerWrapper.setSchedulerEntry(schedulerEntry);
 
 		serviceRegistration = _bundleContext.registerService(
-			SchedulerEventMessageListener.class,
+			SchedulerEventMessageListenerWrapper.class,
 			schedulerEventMessageListenerWrapper, properties);
 
 		_serviceRegistrations.put(
@@ -779,11 +780,12 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 		scriptingDestination.register(schedulerEventMessageListenerWrapper);
 
-		_serviceTracker = ServiceTrackerFactory.open(
-			_bundleContext,
-			"(objectClass=" + SchedulerEventMessageListener.class.getName() +
-				")",
-			new SchedulerEventMessageListenerServiceTrackerCustomizer());
+		_schedulerEventMessageListenerWrapperServiceTracker =
+			ServiceTrackerFactory.open(
+				_bundleContext,
+				"(objectClass=" +
+					SchedulerEventMessageListenerWrapper.class.getName() + ")",
+				new SchedulerEventMessageListenerWrapperServiceTrackerCustomizer());
 	}
 
 	protected void addWeeklyDayPos(
@@ -800,8 +802,8 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			return;
 		}
 
-		if (_serviceTracker != null) {
-			_serviceTracker.close();
+		if (_schedulerEventMessageListenerWrapperServiceTracker != null) {
+			_schedulerEventMessageListenerWrapperServiceTracker.close();
 		}
 
 		try {
@@ -824,7 +826,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			destination.destroy();
 		}
 
-		for (ServiceRegistration<SchedulerEventMessageListener>
+		for (ServiceRegistration<SchedulerEventMessageListenerWrapper>
 				serviceRegistration : _serviceRegistrations.values()) {
 
 			serviceRegistration.unregister();
@@ -915,30 +917,34 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 	private SchedulerEngine _schedulerEngine;
 	private volatile SchedulerEngineHelperConfiguration
 		_schedulerEngineHelperConfiguration;
-	private final Map
-		<String, ServiceRegistration<SchedulerEventMessageListener>>
-			_serviceRegistrations = new ConcurrentHashMap<>();
 	private volatile ServiceTracker
-		<SchedulerEventMessageListener, SchedulerEventMessageListener>
-			_serviceTracker;
+		<SchedulerEventMessageListenerWrapper,
+		 SchedulerEventMessageListenerWrapper>
+			_schedulerEventMessageListenerWrapperServiceTracker;
+	private final Map
+		<String, ServiceRegistration<SchedulerEventMessageListenerWrapper>>
+			_serviceRegistrations = new ConcurrentHashMap<>();
 
-	private class SchedulerEventMessageListenerServiceTrackerCustomizer
+	private class SchedulerEventMessageListenerWrapperServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer
-			<SchedulerEventMessageListener, SchedulerEventMessageListener> {
+			<SchedulerEventMessageListenerWrapper,
+			 SchedulerEventMessageListenerWrapper> {
 
 		@Override
-		public SchedulerEventMessageListener addingService(
-			ServiceReference<SchedulerEventMessageListener> serviceReference) {
+		public SchedulerEventMessageListenerWrapper addingService(
+			ServiceReference<SchedulerEventMessageListenerWrapper>
+				serviceReference) {
 
 			Bundle bundle = serviceReference.getBundle();
 
 			BundleContext bundleContext = bundle.getBundleContext();
 
-			SchedulerEventMessageListener schedulerEventMessageListener =
-				bundleContext.getService(serviceReference);
+			SchedulerEventMessageListenerWrapper
+				schedulerEventMessageListenerWrapper = bundleContext.getService(
+					serviceReference);
 
 			SchedulerEntry schedulerEntry =
-				schedulerEventMessageListener.getSchedulerEntry();
+				schedulerEventMessageListenerWrapper.getSchedulerEntry();
 
 			if ((schedulerEntry == null) ||
 				(schedulerEntry.getTrigger() == null)) {
@@ -982,11 +988,11 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 						oldServiceReference);
 
 					SchedulerEventMessageListenerWrapper
-						schedulerEventMessageListenerWrapper =
+						oldSchedulerEventMessageListenerWrapper =
 							(SchedulerEventMessageListenerWrapper)
 								messageListener;
 
-					schedulerEventMessageListenerWrapper.setSchedulerEntry(
+					oldSchedulerEventMessageListenerWrapper.setSchedulerEntry(
 						schedulerEntry);
 
 					return null;
@@ -998,14 +1004,14 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				properties.put("destination.name", destinationName);
 
 				serviceRegistration = bundleContext.registerService(
-					MessageListener.class, schedulerEventMessageListener,
+					MessageListener.class, schedulerEventMessageListenerWrapper,
 					properties);
 
 				_messageListenerServiceRegistrations.put(
 					schedulerEntry.getEventListenerClass(),
 					serviceRegistration);
 
-				return schedulerEventMessageListener;
+				return schedulerEventMessageListenerWrapper;
 			}
 			catch (SchedulerException se) {
 				_log.error(se, se);
@@ -1020,11 +1026,13 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 		@Override
 		public void modifiedService(
-			ServiceReference<SchedulerEventMessageListener> serviceReference,
-			SchedulerEventMessageListener schedulerEventMessageListener) {
+			ServiceReference<SchedulerEventMessageListenerWrapper>
+				serviceReference,
+			SchedulerEventMessageListenerWrapper
+				schedulerEventMessageListenerWrapper) {
 
 			SchedulerEntry schedulerEntry =
-				schedulerEventMessageListener.getSchedulerEntry();
+				schedulerEventMessageListenerWrapper.getSchedulerEntry();
 
 			if ((schedulerEntry == null) ||
 				(schedulerEntry.getTrigger() == null)) {
@@ -1058,8 +1066,10 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 		@Override
 		public void removedService(
-			ServiceReference<SchedulerEventMessageListener> serviceReference,
-			SchedulerEventMessageListener schedulerEntryMessageListener) {
+			ServiceReference<SchedulerEventMessageListenerWrapper>
+				serviceReference,
+			SchedulerEventMessageListenerWrapper
+				schedulerEventMessageListenerWrapper) {
 
 			Bundle bundle = serviceReference.getBundle();
 
@@ -1068,7 +1078,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			bundleContext.ungetService(serviceReference);
 
 			SchedulerEntry schedulerEntry =
-				schedulerEntryMessageListener.getSchedulerEntry();
+				schedulerEventMessageListenerWrapper.getSchedulerEntry();
 
 			if (schedulerEntry == null) {
 				return;
