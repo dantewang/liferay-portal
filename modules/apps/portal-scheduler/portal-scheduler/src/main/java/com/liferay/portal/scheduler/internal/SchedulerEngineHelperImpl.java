@@ -779,6 +779,13 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 		scriptingDestination.register(schedulerEventMessageListenerWrapper);
 
+		_schedulerEventMessageListenerServiceTracker =
+			ServiceTrackerFactory.open(
+				_bundleContext,
+				"(objectClass=" +
+					SchedulerEventMessageListener.class.getName() + ")",
+				new SchedulerEventMessageListenerServiceTrackerCustomizer());
+
 		_schedulerEventMessageListenerWrapperServiceTracker =
 			ServiceTrackerFactory.open(
 				_bundleContext,
@@ -799,6 +806,10 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 	protected void deactivate() {
 		if (_bundleContext == null) {
 			return;
+		}
+
+		if (_schedulerEventMessageListenerServiceTracker != null) {
+			_schedulerEventMessageListenerServiceTracker.close();
 		}
 
 		if (_schedulerEventMessageListenerWrapperServiceTracker != null) {
@@ -1054,12 +1065,108 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 	private volatile SchedulerEngineHelperConfiguration
 		_schedulerEngineHelperConfiguration;
 	private volatile ServiceTracker
+		<SchedulerEventMessageListener, SchedulerEventMessageListener>
+			_schedulerEventMessageListenerServiceTracker;
+	private volatile ServiceTracker
 		<SchedulerEventMessageListenerWrapper,
 		 SchedulerEventMessageListenerWrapper>
 			_schedulerEventMessageListenerWrapperServiceTracker;
 	private final Map
 		<String, ServiceRegistration<SchedulerEventMessageListenerWrapper>>
 			_serviceRegistrations = new ConcurrentHashMap<>();
+
+	private class SchedulerEventMessageListenerServiceTrackerCustomizer
+		implements ServiceTrackerCustomizer
+			<SchedulerEventMessageListener, SchedulerEventMessageListener> {
+
+		@Override
+		public SchedulerEventMessageListener addingService(
+			ServiceReference<SchedulerEventMessageListener> serviceReference) {
+
+			Bundle bundle = serviceReference.getBundle();
+
+			BundleContext bundleContext = bundle.getBundleContext();
+
+			SchedulerEventMessageListener schedulerEventMessageListener =
+				bundleContext.getService(serviceReference);
+
+			SchedulerEventMessageListenerWrapper
+				schedulerEventMessageListenerWrapper =
+					new SchedulerEventMessageListenerWrapper();
+
+			schedulerEventMessageListenerWrapper.setMessageListener(
+				schedulerEventMessageListener);
+			schedulerEventMessageListenerWrapper.setSchedulerEntry(
+				schedulerEventMessageListener.getSchedulerEntry());
+
+			if (_schedule(
+					bundleContext,
+					(String)serviceReference.getProperty("destination.name"),
+					schedulerEventMessageListener.getSchedulerEntry(),
+					schedulerEventMessageListenerWrapper)) {
+
+				return schedulerEventMessageListener;
+			}
+
+			return null;
+		}
+
+		@Override
+		public void modifiedService(
+			ServiceReference<SchedulerEventMessageListener> serviceReference,
+			SchedulerEventMessageListener schedulerEventMessageListener) {
+
+			SchedulerEntry schedulerEntry =
+				schedulerEventMessageListener.getSchedulerEntry();
+
+			if ((schedulerEntry == null) ||
+				(schedulerEntry.getTrigger() == null)) {
+
+				return;
+			}
+
+			ServiceRegistration<MessageListener> serviceRegistration =
+				_messageListenerServiceRegistrations.get(
+					schedulerEntry.getEventListenerClass());
+
+			if (serviceRegistration == null) {
+				throw new IllegalStateException();
+			}
+
+			ServiceReference<MessageListener> messageListenerServiceReference =
+				serviceRegistration.getReference();
+
+			Bundle bundle = messageListenerServiceReference.getBundle();
+
+			BundleContext bundleContext = bundle.getBundleContext();
+
+			SchedulerEventMessageListenerWrapper
+				schedulerEventMessageListenerWrapper =
+					(SchedulerEventMessageListenerWrapper)
+						bundleContext.getService(
+							messageListenerServiceReference);
+
+			schedulerEventMessageListenerWrapper.setSchedulerEntry(
+				schedulerEntry);
+
+			_update(schedulerEntry);
+		}
+
+		@Override
+		public void removedService(
+			ServiceReference<SchedulerEventMessageListener> serviceReference,
+			SchedulerEventMessageListener schedulerEventMessageListener) {
+
+			Bundle bundle = serviceReference.getBundle();
+
+			BundleContext bundleContext = bundle.getBundleContext();
+
+			bundleContext.ungetService(serviceReference);
+
+			_delete(schedulerEventMessageListener.getSchedulerEntry());
+		}
+
+	}
 
 	private class SchedulerEventMessageListenerWrapperServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer
