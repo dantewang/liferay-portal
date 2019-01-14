@@ -892,6 +892,143 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 		_schedulerEngine = schedulerEngine;
 	}
 
+	private void _delete(SchedulerEntry schedulerEntry) {
+		if (schedulerEntry == null) {
+			return;
+		}
+
+		StorageType storageType = StorageType.MEMORY_CLUSTERED;
+
+		if (schedulerEntry instanceof StorageTypeAware) {
+			StorageTypeAware storageTypeAware =
+				(StorageTypeAware)schedulerEntry;
+
+			storageType = storageTypeAware.getStorageType();
+		}
+
+		ClusterableContextThreadLocal.putThreadLocalContext(
+			SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, false);
+
+		try {
+			delete(schedulerEntry, storageType);
+		}
+		catch (SchedulerException se) {
+			_log.error(se, se);
+		}
+		finally {
+			ClusterableContextThreadLocal.putThreadLocalContext(
+				SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, true);
+		}
+
+		ServiceRegistration<MessageListener>
+			messageListenerServiceRegistration =
+				_messageListenerServiceRegistrations.remove(
+					schedulerEntry.getEventListenerClass());
+
+		messageListenerServiceRegistration.unregister();
+	}
+
+	private boolean _schedule(
+		BundleContext bundleContext, String destinationName,
+		SchedulerEntry schedulerEntry,
+		SchedulerEventMessageListenerWrapper
+			schedulerEventMessageListenerWrapper) {
+
+		if ((schedulerEntry == null) || (schedulerEntry.getTrigger() == null)) {
+			return false;
+		}
+
+		StorageType storageType = StorageType.MEMORY_CLUSTERED;
+
+		if (schedulerEntry instanceof StorageTypeAware) {
+			StorageTypeAware storageTypeAware =
+				(StorageTypeAware)schedulerEntry;
+
+			storageType = storageTypeAware.getStorageType();
+		}
+
+		if (Validator.isNull(destinationName)) {
+			destinationName = DestinationNames.SCHEDULER_DISPATCH;
+		}
+
+		ClusterableContextThreadLocal.putThreadLocalContext(
+			SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, false);
+
+		try {
+			schedule(
+				schedulerEntry.getTrigger(), storageType,
+				schedulerEntry.getDescription(), destinationName, null, 0);
+
+			ServiceRegistration<MessageListener> serviceRegistration =
+				_messageListenerServiceRegistrations.get(
+					schedulerEntry.getEventListenerClass());
+
+			if (serviceRegistration != null) {
+				ServiceReference<MessageListener> oldServiceReference =
+					serviceRegistration.getReference();
+
+				MessageListener messageListener = bundleContext.getService(
+					oldServiceReference);
+
+				SchedulerEventMessageListenerWrapper
+					oldSchedulerEventMessageListenerWrapper =
+						(SchedulerEventMessageListenerWrapper)messageListener;
+
+				oldSchedulerEventMessageListenerWrapper.setSchedulerEntry(
+					schedulerEntry);
+
+				return false;
+			}
+
+			Dictionary<String, Object> properties = new HashMapDictionary<>();
+
+			properties.put("destination.name", destinationName);
+
+			serviceRegistration = bundleContext.registerService(
+				MessageListener.class, schedulerEventMessageListenerWrapper,
+				properties);
+
+			_messageListenerServiceRegistrations.put(
+				schedulerEntry.getEventListenerClass(), serviceRegistration);
+
+			return true;
+		}
+		catch (SchedulerException se) {
+			_log.error(se, se);
+		}
+		finally {
+			ClusterableContextThreadLocal.putThreadLocalContext(
+				SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, true);
+		}
+
+		return false;
+	}
+
+	private void _update(SchedulerEntry schedulerEntry) {
+		StorageType storageType = StorageType.MEMORY_CLUSTERED;
+
+		if (schedulerEntry instanceof StorageTypeAware) {
+			StorageTypeAware storageTypeAware =
+				(StorageTypeAware)schedulerEntry;
+
+			storageType = storageTypeAware.getStorageType();
+		}
+
+		ClusterableContextThreadLocal.putThreadLocalContext(
+			SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, false);
+
+		try {
+			update(schedulerEntry.getTrigger(), storageType);
+		}
+		catch (SchedulerException se) {
+			_log.error(se, se);
+		}
+		finally {
+			ClusterableContextThreadLocal.putThreadLocalContext(
+				SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, true);
+		}
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		SchedulerEngineHelperImpl.class);
 
@@ -942,82 +1079,13 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				schedulerEventMessageListenerWrapper = bundleContext.getService(
 					serviceReference);
 
-			SchedulerEntry schedulerEntry =
-				schedulerEventMessageListenerWrapper.getSchedulerEntry();
-
-			if ((schedulerEntry == null) ||
-				(schedulerEntry.getTrigger() == null)) {
-
-				return null;
-			}
-
-			StorageType storageType = StorageType.MEMORY_CLUSTERED;
-
-			if (schedulerEntry instanceof StorageTypeAware) {
-				StorageTypeAware storageTypeAware =
-					(StorageTypeAware)schedulerEntry;
-
-				storageType = storageTypeAware.getStorageType();
-			}
-
-			String destinationName = (String)serviceReference.getProperty(
-				"destination.name");
-
-			if (Validator.isNull(destinationName)) {
-				destinationName = DestinationNames.SCHEDULER_DISPATCH;
-			}
-
-			ClusterableContextThreadLocal.putThreadLocalContext(
-				SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, false);
-
-			try {
-				schedule(
-					schedulerEntry.getTrigger(), storageType,
-					schedulerEntry.getDescription(), destinationName, null, 0);
-
-				ServiceRegistration<MessageListener> serviceRegistration =
-					_messageListenerServiceRegistrations.get(
-						schedulerEntry.getEventListenerClass());
-
-				if (serviceRegistration != null) {
-					ServiceReference<MessageListener> oldServiceReference =
-						serviceRegistration.getReference();
-
-					MessageListener messageListener = bundleContext.getService(
-						oldServiceReference);
-
-					SchedulerEventMessageListenerWrapper
-						oldSchedulerEventMessageListenerWrapper =
-							(SchedulerEventMessageListenerWrapper)
-								messageListener;
-
-					oldSchedulerEventMessageListenerWrapper.setSchedulerEntry(
-						schedulerEntry);
-
-					return null;
-				}
-
-				Dictionary<String, Object> properties =
-					new HashMapDictionary<>();
-
-				properties.put("destination.name", destinationName);
-
-				serviceRegistration = bundleContext.registerService(
-					MessageListener.class, schedulerEventMessageListenerWrapper,
-					properties);
-
-				_messageListenerServiceRegistrations.put(
-					schedulerEntry.getEventListenerClass(),
-					serviceRegistration);
+			if (_schedule(
+					bundleContext,
+					(String)serviceReference.getProperty("destination.name"),
+					schedulerEventMessageListenerWrapper.getSchedulerEntry(),
+					schedulerEventMessageListenerWrapper)) {
 
 				return schedulerEventMessageListenerWrapper;
-			}
-			catch (SchedulerException se) {
-				_log.error(se, se);
-			}
-			finally {
-				ClusterableContextThreadLocal.putThreadLocalContext(
-					SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, true);
 			}
 
 			return null;
@@ -1039,28 +1107,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				return;
 			}
 
-			StorageType storageType = StorageType.MEMORY_CLUSTERED;
-
-			if (schedulerEntry instanceof StorageTypeAware) {
-				StorageTypeAware storageTypeAware =
-					(StorageTypeAware)schedulerEntry;
-
-				storageType = storageTypeAware.getStorageType();
-			}
-
-			ClusterableContextThreadLocal.putThreadLocalContext(
-				SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, false);
-
-			try {
-				update(schedulerEntry.getTrigger(), storageType);
-			}
-			catch (SchedulerException se) {
-				_log.error(se, se);
-			}
-			finally {
-				ClusterableContextThreadLocal.putThreadLocalContext(
-					SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, true);
-			}
+			_update(schedulerEntry);
 		}
 
 		@Override
@@ -1076,42 +1123,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 			bundleContext.ungetService(serviceReference);
 
-			SchedulerEntry schedulerEntry =
-				schedulerEventMessageListenerWrapper.getSchedulerEntry();
-
-			if (schedulerEntry == null) {
-				return;
-			}
-
-			StorageType storageType = StorageType.MEMORY_CLUSTERED;
-
-			if (schedulerEntry instanceof StorageTypeAware) {
-				StorageTypeAware storageTypeAware =
-					(StorageTypeAware)schedulerEntry;
-
-				storageType = storageTypeAware.getStorageType();
-			}
-
-			ClusterableContextThreadLocal.putThreadLocalContext(
-				SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, false);
-
-			try {
-				delete(schedulerEntry, storageType);
-			}
-			catch (SchedulerException se) {
-				_log.error(se, se);
-			}
-			finally {
-				ClusterableContextThreadLocal.putThreadLocalContext(
-					SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, true);
-			}
-
-			ServiceRegistration<MessageListener>
-				messageListenerServiceRegistration =
-					_messageListenerServiceRegistrations.remove(
-						schedulerEntry.getEventListenerClass());
-
-			messageListenerServiceRegistration.unregister();
+			_delete(schedulerEventMessageListenerWrapper.getSchedulerEntry());
 		}
 
 	}
