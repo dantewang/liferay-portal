@@ -572,15 +572,15 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 		Class<?> messageListenerClass = messageListener.getClass();
 
-		ServiceRegistration<SchedulerEventMessageListener> serviceRegistration =
-			_serviceRegistrations.get(messageListenerClass.getName());
+		ServiceRegistration<SchedulerEventMessageListenerWrapper>
+			serviceRegistration = _serviceRegistrations.get(
+				messageListenerClass.getName());
 
 		if (serviceRegistration != null) {
 			SchedulerEventMessageListenerWrapper
 				schedulerEventMessageListenerWrapper =
-					(SchedulerEventMessageListenerWrapper)
-						_bundleContext.getService(
-							serviceRegistration.getReference());
+					_bundleContext.getService(
+						serviceRegistration.getReference());
 
 			schedulerEventMessageListenerWrapper.setSchedulerEntry(
 				schedulerEntry);
@@ -600,7 +600,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 		schedulerEventMessageListenerWrapper.setSchedulerEntry(schedulerEntry);
 
 		serviceRegistration = _bundleContext.registerService(
-			SchedulerEventMessageListener.class,
+			SchedulerEventMessageListenerWrapper.class,
 			schedulerEventMessageListenerWrapper, properties);
 
 		_serviceRegistrations.put(
@@ -824,7 +824,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			destination.destroy();
 		}
 
-		for (ServiceRegistration<SchedulerEventMessageListener>
+		for (ServiceRegistration<SchedulerEventMessageListenerWrapper>
 				serviceRegistration : _serviceRegistrations.values()) {
 
 			serviceRegistration.unregister();
@@ -916,7 +916,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 	private volatile SchedulerEngineHelperConfiguration
 		_schedulerEngineHelperConfiguration;
 	private final Map
-		<String, ServiceRegistration<SchedulerEventMessageListener>>
+		<String, ServiceRegistration<SchedulerEventMessageListenerWrapper>>
 			_serviceRegistrations = new ConcurrentHashMap<>();
 	private volatile ServiceTracker
 		<SchedulerEventMessageListener, SchedulerEventMessageListener>
