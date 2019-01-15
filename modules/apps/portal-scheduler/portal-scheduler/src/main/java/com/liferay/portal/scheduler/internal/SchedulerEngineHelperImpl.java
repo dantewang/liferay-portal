@@ -779,11 +779,12 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 		scriptingDestination.register(schedulerEventMessageListenerWrapper);
 
-		_serviceTracker = ServiceTrackerFactory.open(
-			_bundleContext,
-			"(objectClass=" +
-				SchedulerEventMessageListenerWrapper.class.getName() + ")",
-			new SchedulerEventMessageListenerServiceTrackerCustomizer());
+		_schedulerEventMessageListenerWrapperServiceTracker =
+			ServiceTrackerFactory.open(
+				_bundleContext,
+				"(objectClass=" +
+					SchedulerEventMessageListenerWrapper.class.getName() + ")",
+				new SchedulerEventMessageListenerWrapperServiceTrackerCustomizer());
 	}
 
 	protected void addWeeklyDayPos(
@@ -800,8 +801,8 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			return;
 		}
 
-		if (_serviceTracker != null) {
-			_serviceTracker.close();
+		if (_schedulerEventMessageListenerWrapperServiceTracker != null) {
+			_schedulerEventMessageListenerWrapperServiceTracker.close();
 		}
 
 		try {
@@ -915,15 +916,15 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 	private SchedulerEngine _schedulerEngine;
 	private volatile SchedulerEngineHelperConfiguration
 		_schedulerEngineHelperConfiguration;
-	private final Map
-		<String, ServiceRegistration<SchedulerEventMessageListenerWrapper>>
-			_serviceRegistrations = new ConcurrentHashMap<>();
 	private volatile ServiceTracker
 		<SchedulerEventMessageListenerWrapper,
 		 SchedulerEventMessageListenerWrapper>
-			_serviceTracker;
+			_schedulerEventMessageListenerWrapperServiceTracker;
+	private final Map
+		<String, ServiceRegistration<SchedulerEventMessageListenerWrapper>>
+			_serviceRegistrations = new ConcurrentHashMap<>();
 
-	private class SchedulerEventMessageListenerServiceTrackerCustomizer
+	private class SchedulerEventMessageListenerWrapperServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer
 			<SchedulerEventMessageListenerWrapper,
 			 SchedulerEventMessageListenerWrapper> {
