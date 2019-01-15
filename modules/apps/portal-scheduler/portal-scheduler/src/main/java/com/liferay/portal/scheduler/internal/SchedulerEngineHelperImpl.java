@@ -949,9 +949,11 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 	private boolean _schedule(
 		BundleContext bundleContext, String destinationName,
-		SchedulerEntry schedulerEntry,
 		SchedulerEventMessageListenerWrapper
 			schedulerEventMessageListenerWrapper) {
+
+		SchedulerEntry schedulerEntry =
+			schedulerEventMessageListenerWrapper.getSchedulerEntry();
 
 		if ((schedulerEntry == null) || (schedulerEntry.getTrigger() == null)) {
 			return false;
@@ -1110,7 +1112,6 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			if (_schedule(
 					bundleContext,
 					(String)serviceReference.getProperty("destination.name"),
-					schedulerEventMessageListener.getSchedulerEntry(),
 					schedulerEventMessageListenerWrapper)) {
 
 				return schedulerEventMessageListener;
@@ -1197,7 +1198,6 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			if (_schedule(
 					bundleContext,
 					(String)serviceReference.getProperty("destination.name"),
-					schedulerEventMessageListenerWrapper.getSchedulerEntry(),
 					schedulerEventMessageListenerWrapper)) {
 
 				return schedulerEventMessageListenerWrapper;
