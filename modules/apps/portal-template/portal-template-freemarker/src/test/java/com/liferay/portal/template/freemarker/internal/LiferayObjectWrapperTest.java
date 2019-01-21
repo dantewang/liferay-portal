@@ -15,19 +15,20 @@
 package com.liferay.portal.template.freemarker.internal;
 
 import com.liferay.petra.function.UnsafeFunction;
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.templateparser.TemplateNode;
 import com.liferay.portal.kernel.test.CaptureHandler;
 import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
+import com.liferay.portal.kernel.test.SwappableSecurityManager;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.rule.NewEnv;
+import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
+import com.liferay.portal.kernel.test.util.SecurityManagerTestUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
-import com.liferay.portal.test.aspects.ReflectionUtilAdvice;
-import com.liferay.portal.test.rule.AdviseWith;
-import com.liferay.portal.test.rule.AspectJNewEnvTestRule;
 
 import freemarker.ext.beans.EnumerationModel;
 import freemarker.ext.beans.MapModel;
@@ -70,7 +71,7 @@ public class LiferayObjectWrapperTest {
 	@Rule
 	public static final AggregateTestRule aggregateTestRule =
 		new AggregateTestRule(
-			AspectJNewEnvTestRule.INSTANCE, CodeCoverageAssertor.INSTANCE);
+			CodeCoverageAssertor.INSTANCE, NewEnvTestRule.INSTANCE);
 
 	@Test
 	public void testCheckClassIsRestricted() {
@@ -258,15 +259,14 @@ public class LiferayObjectWrapperTest {
 		_assertModelFactoryCache("_STRING_MODEL_FACTORY", Version.class);
 	}
 
-	@AdviseWith(adviceClasses = ReflectionUtilAdvice.class)
 	@NewEnv(type = NewEnv.Type.CLASSLOADER)
 	@Test
 	public void testInitializationFailure() throws Exception {
-		Exception exception = new Exception();
+		SecurityException securityException = new SecurityException();
 
-		ReflectionUtilAdvice.setDeclaredFieldThrowable(exception);
-
-		try {
+		try (SwappableSecurityManager swappableSecurityManager =
+				SecurityManagerTestUtil.installSecurityManagerForCaller(
+					ReflectionUtil.class, securityException)) {
 			Class.forName(
 				"com.liferay.portal.template.freemarker.internal." +
 					"LiferayObjectWrapper");
@@ -274,7 +274,7 @@ public class LiferayObjectWrapperTest {
 			Assert.fail("ExceptionInInitializerError was not thrown");
 		}
 		catch (ExceptionInInitializerError eiie) {
-			Assert.assertSame(exception, eiie.getCause());
+			Assert.assertSame(securityException, eiie.getCause());
 		}
 	}
 
