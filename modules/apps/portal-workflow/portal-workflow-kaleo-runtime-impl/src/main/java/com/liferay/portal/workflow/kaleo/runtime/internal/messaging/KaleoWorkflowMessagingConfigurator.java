@@ -26,7 +26,6 @@ import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.proxy.ProxyMessageListener;
-import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerWrapper;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.workflow.WorkflowDefinitionManager;
 import com.liferay.portal.kernel.workflow.WorkflowEngineManager;
@@ -66,8 +65,6 @@ public class KaleoWorkflowMessagingConfigurator {
 		registerWorkflowMessageListeners();
 
 		registerWorkflowTimerDestination();
-
-		registerSchedulerEventMessageListener();
 	}
 
 	@Deactivate
@@ -77,8 +74,6 @@ public class KaleoWorkflowMessagingConfigurator {
 		unregisterWorkflowEngineDestinationListener();
 
 		unregisterWorkflowMessageListeners();
-
-		unregisterSchedulerEventMessageListener();
 
 		_bundleContext = null;
 	}
@@ -147,25 +142,6 @@ public class KaleoWorkflowMessagingConfigurator {
 		_proxyMessageListeners.put(destinationName, proxyMessageListener);
 
 		return proxyMessageListener;
-	}
-
-	protected void registerSchedulerEventMessageListener() {
-		SchedulerEventMessageListenerWrapper
-			schedulerEventMessageListenerWrapper =
-				new SchedulerEventMessageListenerWrapper();
-
-		schedulerEventMessageListenerWrapper.setMessageListener(
-			_timerMessageListener);
-
-		Dictionary<String, Object> properties = new HashMapDictionary<>();
-
-		properties.put(
-			"destination.name", KaleoRuntimeDestinationNames.WORKFLOW_TIMER);
-
-		_schedulerEventMessageListenerServiceRegistration =
-			_bundleContext.registerService(
-				MessageListener.class, schedulerEventMessageListenerWrapper,
-				properties);
 	}
 
 	protected void registerWorkflowDefinitionLinkDestination() {
@@ -284,16 +260,6 @@ public class KaleoWorkflowMessagingConfigurator {
 		_serviceRegistrations.clear();
 	}
 
-	protected void unregisterSchedulerEventMessageListener() {
-		if (_schedulerEventMessageListenerServiceRegistration == null) {
-			return;
-		}
-
-		_schedulerEventMessageListenerServiceRegistration.unregister();
-
-		_schedulerEventMessageListenerServiceRegistration = null;
-	}
-
 	protected void unregisterWorkflowEngineDestinationListener() {
 		_workflowEngineDestination.removeDestinationEventListener(
 			_defaultWorkflowDestinationEventListener);
@@ -327,8 +293,6 @@ public class KaleoWorkflowMessagingConfigurator {
 
 	private final Map<String, MessageListener> _proxyMessageListeners =
 		new HashMap<>();
-	private ServiceRegistration<MessageListener>
-		_schedulerEventMessageListenerServiceRegistration;
 	private final Map<String, ServiceRegistration<Destination>>
 		_serviceRegistrations = new HashMap<>();
 
