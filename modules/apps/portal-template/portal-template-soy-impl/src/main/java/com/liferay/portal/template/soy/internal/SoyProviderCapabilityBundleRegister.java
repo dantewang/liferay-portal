@@ -14,6 +14,7 @@
 
 package com.liferay.portal.template.soy.internal;
 
+import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -34,9 +36,7 @@ import org.osgi.service.component.annotations.Component;
 public class SoyProviderCapabilityBundleRegister {
 
 	public static Bundle getTemplateBundle(String templateId) {
-		long bundleId = SoyTemplateUtil.getBundleId(templateId);
-
-		Bundle bundle = _bundles.get(bundleId);
+		Bundle bundle = _bundles.get(SoyTemplateUtil.getBundleId(templateId));
 
 		if (bundle == null) {
 			Collection<Bundle> bundles = _bundles.values();
@@ -58,16 +58,23 @@ public class SoyProviderCapabilityBundleRegister {
 	}
 
 	public void register(Bundle bundle) {
-		_bundles.put(bundle.getBundleId(), bundle);
+		_bundles.put(_getContextName(bundle), bundle);
 	}
 
 	public void unregister(Bundle bundle) {
-		_bundles.remove(bundle.getBundleId());
+		_bundles.remove(_getContextName(bundle));
+	}
+
+	private String _getContextName(Bundle bundle) {
+		return StringBundler.concat(
+			bundle.getSymbolicName(), StringPool.UNDERLINE,
+			String.valueOf(bundle.getVersion()));
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		SoyProviderCapabilityBundleRegister.class);
 
-	private static final Map<Long, Bundle> _bundles = new ConcurrentHashMap<>();
+	private static final Map<String, Bundle> _bundles =
+		new ConcurrentHashMap<>();
 
 }

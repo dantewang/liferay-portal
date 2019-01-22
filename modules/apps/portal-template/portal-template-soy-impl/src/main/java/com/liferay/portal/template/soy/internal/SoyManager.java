@@ -132,11 +132,6 @@ public class SoyManager extends BaseMultiTemplateManager {
 			soyProviderCapabilityBundleRegister;
 	}
 
-	@Reference(unbind = "-")
-	protected void setSoyTemplateBundleResourceParser(
-		SoyTemplateBundleResourceParser soyTemplateBundleResourceParser) {
-	}
-
 	private BundleTracker<List<BundleCapability>> _bundleTracker;
 	private SoyCapabilityBundleTrackerCustomizer
 		_soyCapabilityBundleTrackerCustomizer;
