@@ -891,6 +891,44 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 		_schedulerEngine = schedulerEngine;
 	}
 
+	private void _registerMessageListenerWithoutSchedule(
+		BundleContext bundleContext, Dictionary<String, Object> properties,
+		SchedulerEventMessageListener schedulerEventMessageListener) {
+
+		SchedulerEventMessageListenerWrapper
+			schedulerEventMessageListenerWrapper =
+				new SchedulerEventMessageListenerWrapper();
+
+		schedulerEventMessageListenerWrapper.setMessageListener(
+			schedulerEventMessageListener);
+
+		ServiceRegistration<MessageListener> serviceRegistration =
+			bundleContext.registerService(
+				MessageListener.class, schedulerEventMessageListenerWrapper,
+				properties);
+
+		Class<?> clazz = schedulerEventMessageListener.getClass();
+
+		String className = clazz.getName();
+
+		_messageListenerServiceRegistrations.put(
+			className, serviceRegistration);
+	}
+
+	private void _unregisterMessageListenerWithoutSchedule(
+		SchedulerEventMessageListener schedulerEntryMessageListener) {
+
+		Class<?> clazz = schedulerEntryMessageListener.getClass();
+
+		String className = clazz.getName();
+
+		ServiceRegistration<MessageListener>
+			messageListenerServiceRegistration =
+				_messageListenerServiceRegistrations.remove(className);
+
+		messageListenerServiceRegistration.unregister();
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		SchedulerEngineHelperImpl.class);
 
@@ -940,10 +978,24 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			SchedulerEntry schedulerEntry =
 				schedulerEventMessageListener.getSchedulerEntry();
 
+			String destinationName = (String)serviceReference.getProperty(
+				"destination.name");
+
+			if (Validator.isNull(destinationName)) {
+				destinationName = DestinationNames.SCHEDULER_DISPATCH;
+			}
+
+			Dictionary<String, Object> properties = new HashMapDictionary<>();
+
+			properties.put("destination.name", destinationName);
+
 			if ((schedulerEntry == null) ||
 				(schedulerEntry.getTrigger() == null)) {
 
-				return null;
+				_registerMessageListenerWithoutSchedule(
+					bundleContext, properties, schedulerEventMessageListener);
+
+				return schedulerEventMessageListener;
 			}
 
 			StorageType storageType = StorageType.MEMORY_CLUSTERED;
@@ -953,13 +1005,6 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 					(StorageTypeAware)schedulerEntry;
 
 				storageType = storageTypeAware.getStorageType();
-			}
-
-			String destinationName = (String)serviceReference.getProperty(
-				"destination.name");
-
-			if (Validator.isNull(destinationName)) {
-				destinationName = DestinationNames.SCHEDULER_DISPATCH;
 			}
 
 			ClusterableContextThreadLocal.putThreadLocalContext(
@@ -988,11 +1033,6 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 					return null;
 				}
-
-				Dictionary<String, Object> properties =
-					new HashMapDictionary<>();
-
-				properties.put("destination.name", destinationName);
 
 				SchedulerEventMessageListenerWrapper
 					schedulerEventMessageListenerWrapper =
@@ -1075,6 +1115,9 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				schedulerEntryMessageListener.getSchedulerEntry();
 
 			if (schedulerEntry == null) {
+				_unregisterMessageListenerWithoutSchedule(
+					schedulerEntryMessageListener);
+
 				return;
 			}
 
