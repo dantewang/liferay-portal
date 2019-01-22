@@ -23,8 +23,8 @@ import com.liferay.portal.kernel.template.TemplateConstants;
  */
 public class SoyTemplateUtil {
 
-	public static long getBundleId(String templateId) {
-		int pos = templateId.indexOf(TemplateConstants.BUNDLE_SEPARATOR);
+	public static String getBundleId(String templateId) {
+		int pos = templateId.indexOf(TemplateConstants.CLASS_LOADER_SEPARATOR);
 
 		if (pos == -1) {
 			if (_log.isDebugEnabled()) {
@@ -35,10 +35,10 @@ public class SoyTemplateUtil {
 				_log.debug(message);
 			}
 
-			return -1;
+			return null;
 		}
 
-		return Long.valueOf(templateId.substring(0, pos));
+		return templateId.substring(0, pos);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
