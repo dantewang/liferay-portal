@@ -27,6 +27,8 @@ import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageStatus;
 import com.liferay.portal.kernel.model.Release;
+import com.liferay.portal.kernel.scheduler.SchedulerEntry;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 
@@ -34,10 +36,7 @@ import java.io.Serializable;
 
 import java.util.Map;
 
-import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 /**
@@ -51,22 +50,19 @@ import org.osgi.service.component.annotations.Reference;
 		"destination.name=" + DestinationNames.LAYOUTS_LOCAL_PUBLISHER,
 		"message.status.destination.name=" + DestinationNames.MESSAGE_BUS_MESSAGE_STATUS
 	},
-	service = LayoutsLocalPublisherMessageListener.class
+	service = {
+		LayoutsLocalPublisherMessageListener.class,
+		SchedulerEventMessageListener.class
+	}
 )
 @ProviderType
 public class LayoutsLocalPublisherMessageListener
-	extends BasePublisherMessageListener {
+	extends BasePublisherMessageListener
+	implements SchedulerEventMessageListener {
 
-	@Activate
-	protected void activate(ComponentContext componentContext) {
-		initialize(componentContext);
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		if (serviceRegistration != null) {
-			serviceRegistration.unregister();
-		}
+	@Override
+	public SchedulerEntry getSchedulerEntry() {
+		return null;
 	}
 
 	@Override
