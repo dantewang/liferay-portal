@@ -47,7 +47,11 @@ public class SchedulerEventMessageListenerWrapper
 
 	@Override
 	public SchedulerEntry getSchedulerEntry() {
-		return _schedulerEntry;
+		return _schedulerEventMessageListener.getSchedulerEntry();
+	}
+
+	public SchedulerEventMessageListener getSchedulerEventMessageListener() {
+		return _schedulerEventMessageListener;
 	}
 
 	@Override
@@ -58,7 +62,9 @@ public class SchedulerEventMessageListenerWrapper
 		String groupName = message.getString(SchedulerEngine.GROUP_NAME);
 
 		if (destinationName.equals(DestinationNames.SCHEDULER_DISPATCH)) {
-			Trigger trigger = _schedulerEntry.getTrigger();
+			SchedulerEntry schedulerEntry = getSchedulerEntry();
+
+			Trigger trigger = schedulerEntry.getTrigger();
 
 			if (!jobName.equals(trigger.getJobName()) ||
 				!groupName.equals(trigger.getGroupName())) {
@@ -102,12 +108,26 @@ public class SchedulerEventMessageListenerWrapper
 		}
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public void setMessageListener(MessageListener messageListener) {
 		_messageListener = messageListener;
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public void setSchedulerEntry(SchedulerEntry schedulerEntry) {
 		_schedulerEntry = schedulerEntry;
+	}
+
+	public void setSchedulerEventMessageListener(
+		SchedulerEventMessageListener schedulerEventMessageListener) {
+
+		_schedulerEventMessageListener = schedulerEventMessageListener;
 	}
 
 	protected void handleException(Message message, Exception exception) {
@@ -124,7 +144,7 @@ public class SchedulerEventMessageListenerWrapper
 		throws MessageListenerException {
 
 		try {
-			_messageListener.receive(message);
+			_schedulerEventMessageListener.receive(message);
 		}
 		catch (Exception e) {
 			handleException(message, e);
@@ -190,7 +210,21 @@ public class SchedulerEventMessageListenerWrapper
 		SchedulerEventMessageListenerWrapper.class);
 
 	private final Lock _lock = new ReentrantLock();
+
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
+	@SuppressWarnings("unused")
 	private MessageListener _messageListener;
+
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
+	@SuppressWarnings("unused")
 	private volatile SchedulerEntry _schedulerEntry;
+
+	private SchedulerEventMessageListener _schedulerEventMessageListener;
 
 }
