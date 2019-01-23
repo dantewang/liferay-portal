@@ -57,7 +57,8 @@ public class ConfigurableUtilTest {
 		SecurityException securityException = new SecurityException();
 
 		try (SwappableSecurityManager swappableSecurityManager =
-				SecurityManagerTestUtil.installSecurityManagerForCaller(
+				SecurityManagerTestUtil.installForCheckPermission(
+					SecurityManagerTestUtil.ACCESS_PERMISSION,
 					ReflectionUtil.class, securityException)) {
 
 			Class.forName(ConfigurableUtil.class.getName());

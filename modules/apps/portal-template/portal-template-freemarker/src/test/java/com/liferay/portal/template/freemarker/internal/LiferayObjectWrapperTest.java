@@ -265,7 +265,8 @@ public class LiferayObjectWrapperTest {
 		SecurityException securityException = new SecurityException();
 
 		try (SwappableSecurityManager swappableSecurityManager =
-				SecurityManagerTestUtil.installSecurityManagerForCaller(
+				SecurityManagerTestUtil.installForCheckPermission(
+					SecurityManagerTestUtil.ACCESS_PERMISSION,
 					ReflectionUtil.class, securityException)) {
 			Class.forName(
 				"com.liferay.portal.template.freemarker.internal." +
