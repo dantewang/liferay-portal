@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.test.util;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.kernel.test.SwappableSecurityManager;
 
 import java.security.Permission;
@@ -24,10 +25,11 @@ import java.security.Permission;
 public class SecurityManagerTestUtil {
 
 	public static SwappableSecurityManager installSecurityManagerForCaller(
-			Class<?> callerClass, RuntimeException exception)
+			Class<?> callerClass, Throwable throwable)
 		throws ClassNotFoundException {
 
 		Class.forName(callerClass.getName());
+		Class.forName(ReflectionUtil.class.getName());
 
 		SwappableSecurityManager swappableSecurityManager =
 			new SwappableSecurityManager() {
@@ -37,7 +39,7 @@ public class SecurityManagerTestUtil {
 					if ("suppressAccessChecks".equals(permission.getName())) {
 						for (Class<?> clazz : getClassContext()) {
 							if (clazz == callerClass) {
-								throw exception;
+								ReflectionUtil.throwException(throwable);
 							}
 						}
 					}
