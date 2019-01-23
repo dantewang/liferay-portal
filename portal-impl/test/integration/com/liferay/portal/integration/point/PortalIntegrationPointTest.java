@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.util.ServiceProxyFactory;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.module.framework.ModuleFrameworkUtilAdapter;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.registry.Registry;
@@ -93,11 +94,9 @@ public class PortalIntegrationPointTest {
 	private static InputStream _createBundle() throws Exception {
 		URL url = PortalIntegrationPointTest.class.getResource("");
 
-		String basePath = url.getPath();
-
-		int index = basePath.indexOf("com/liferay/portal/integration/point/");
-
-		File baseDir = new File(basePath.substring(0, index));
+		File baseDir = new File(
+			StringUtil.removeSubstring(
+				url.getPath(), "com/liferay/portal/integration/point/"));
 
 		try (Builder builder = new Builder()) {
 			builder.setBundleSymbolicName(
