@@ -103,9 +103,6 @@ public class PortalIntegrationPointTest {
 				PortalIntegrationPointTest.class.getName());
 			builder.setBase(baseDir);
 			builder.setClasspath(new File[] {baseDir});
-			builder.setProperty(
-				"Bundle-Description",
-				"Test Bundle for PortalIntegrationPointTest");
 			builder.setProperty("Bundle-Version", "1.0.0");
 			builder.setProperty(
 				"Private-Package",
