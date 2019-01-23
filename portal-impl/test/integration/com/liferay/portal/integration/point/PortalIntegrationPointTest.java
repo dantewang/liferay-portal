@@ -33,7 +33,6 @@ import com.liferay.registry.ServiceTracker;
 import com.liferay.registry.ServiceTrackerCustomizer;
 
 import java.io.File;
-import java.io.InputStream;
 
 import java.net.URL;
 
@@ -56,8 +55,37 @@ public class PortalIntegrationPointTest {
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		_bundleId = ModuleFrameworkUtilAdapter.addBundle(
-			PortalIntegrationPointTest.class.getName(), _createBundle());
+		URL url = PortalIntegrationPointTest.class.getResource("");
+
+		File baseDir = new File(
+			StringUtil.removeSubstring(
+				url.getPath(), "com/liferay/portal/integration/point/"));
+
+		try (Builder builder = new Builder()) {
+			builder.setBundleSymbolicName(
+				PortalIntegrationPointTest.class.getName());
+			builder.setBase(baseDir);
+			builder.setClasspath(new File[] {baseDir});
+			builder.setProperty("Bundle-Version", "1.0.0");
+			builder.setProperty(
+				"Private-Package",
+				"com.liferay.portal.integration.point.bundle." +
+					"portalintegrationpoint.*");
+			builder.setProperty("-dsannotations", "*");
+
+			try (Jar jar = builder.build()) {
+				UnsyncByteArrayOutputStream outputStream =
+					new UnsyncByteArrayOutputStream();
+
+				jar.write(outputStream);
+
+				_bundleId = ModuleFrameworkUtilAdapter.addBundle(
+					PortalIntegrationPointTest.class.getName(),
+					new UnsyncByteArrayInputStream(
+						outputStream.unsafeGetByteArray(), 0,
+						outputStream.size()));
+			}
+		}
 
 		ModuleFrameworkUtilAdapter.startBundle(_bundleId);
 	}
@@ -89,37 +117,6 @@ public class PortalIntegrationPointTest {
 	public void testPortalIntegrationPointWithServiceTracker() {
 		_testPortalIntegrationPointWithServiceTracker(true);
 		_testPortalIntegrationPointWithServiceTracker(false);
-	}
-
-	private static InputStream _createBundle() throws Exception {
-		URL url = PortalIntegrationPointTest.class.getResource("");
-
-		File baseDir = new File(
-			StringUtil.removeSubstring(
-				url.getPath(), "com/liferay/portal/integration/point/"));
-
-		try (Builder builder = new Builder()) {
-			builder.setBundleSymbolicName(
-				PortalIntegrationPointTest.class.getName());
-			builder.setBase(baseDir);
-			builder.setClasspath(new File[] {baseDir});
-			builder.setProperty("Bundle-Version", "1.0.0");
-			builder.setProperty(
-				"Private-Package",
-				"com.liferay.portal.integration.point.bundle." +
-					"portalintegrationpoint.*");
-			builder.setProperty("-dsannotations", "*");
-
-			try (Jar jar = builder.build()) {
-				UnsyncByteArrayOutputStream outputStream =
-					new UnsyncByteArrayOutputStream();
-
-				jar.write(outputStream);
-
-				return new UnsyncByteArrayInputStream(
-					outputStream.unsafeGetByteArray(), 0, outputStream.size());
-			}
-		}
 	}
 
 	private void _testPortalIntegrationPointWithServiceTracker(
