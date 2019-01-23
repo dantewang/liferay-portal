@@ -76,7 +76,8 @@ public class ASMWrapperUtilTest {
 		SecurityException securityException = new SecurityException();
 
 		try (SwappableSecurityManager swappableSecurityManager =
-				SecurityManagerTestUtil.installSecurityManagerForCaller(
+				SecurityManagerTestUtil.installForCheckPermission(
+					SecurityManagerTestUtil.ACCESS_PERMISSION,
 					ReflectionUtil.class, securityException)) {
 
 			ASMWrapperUtil.createASMWrapper(
