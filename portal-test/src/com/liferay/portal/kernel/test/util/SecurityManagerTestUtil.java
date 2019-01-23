@@ -24,11 +24,12 @@ import java.security.Permission;
  */
 public class SecurityManagerTestUtil {
 
-	public static SwappableSecurityManager installSecurityManagerForCaller(
-			Class<?> callerClass, Throwable throwable)
+	public static final String ACCESS_PERMISSION = "suppressAccessChecks";
+
+	public static SwappableSecurityManager installForCheckPermission(
+			String permissionName, Class<?> callerClass, Throwable throwable)
 		throws ClassNotFoundException {
 
-		Class.forName(callerClass.getName());
 		Class.forName(ReflectionUtil.class.getName());
 
 		SwappableSecurityManager swappableSecurityManager =
@@ -36,11 +37,13 @@ public class SecurityManagerTestUtil {
 
 				@Override
 				public void checkPermission(Permission permission) {
-					if ("suppressAccessChecks".equals(permission.getName())) {
-						for (Class<?> clazz : getClassContext()) {
-							if (clazz == callerClass) {
-								ReflectionUtil.throwException(throwable);
-							}
+					if (!permissionName.equals(permission.getName())) {
+						return;
+					}
+
+					for (Class<?> clazz : getClassContext()) {
+						if (clazz == callerClass) {
+							ReflectionUtil.throwException(throwable);
 						}
 					}
 				}
