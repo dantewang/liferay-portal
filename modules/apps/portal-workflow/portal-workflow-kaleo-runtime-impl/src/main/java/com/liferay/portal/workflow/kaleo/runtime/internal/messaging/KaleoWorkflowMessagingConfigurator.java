@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.proxy.ProxyMessageListener;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerAdapter;
 import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerWrapper;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.workflow.WorkflowDefinitionManager;
@@ -154,8 +155,15 @@ public class KaleoWorkflowMessagingConfigurator {
 			schedulerEventMessageListenerWrapper =
 				new SchedulerEventMessageListenerWrapper();
 
-		schedulerEventMessageListenerWrapper.setMessageListener(
+		SchedulerEventMessageListenerAdapter
+			schedulerEventMessageListenerAdapter =
+				new SchedulerEventMessageListenerAdapter();
+
+		schedulerEventMessageListenerAdapter.setMessageListener(
 			_timerMessageListener);
+
+		schedulerEventMessageListenerWrapper.setSchedulerEventMessageListener(
+			schedulerEventMessageListenerAdapter);
 
 		Dictionary<String, Object> properties = new HashMapDictionary<>();
 
