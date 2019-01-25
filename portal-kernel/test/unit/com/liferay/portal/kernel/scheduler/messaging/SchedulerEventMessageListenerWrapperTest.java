@@ -73,8 +73,15 @@ public class SchedulerEventMessageListenerWrapperTest {
 			schedulerEventMessageListenerWrapper =
 				new SchedulerEventMessageListenerWrapper();
 
-		schedulerEventMessageListenerWrapper.setMessageListener(
+		SchedulerEventMessageListenerAdapter
+			schedulerEventMessageListenerAdapter =
+				new SchedulerEventMessageListenerAdapter();
+
+		schedulerEventMessageListenerAdapter.setMessageListener(
 			_testMessageListener);
+
+		schedulerEventMessageListenerWrapper.setSchedulerEventMessageListener(
+			schedulerEventMessageListenerAdapter);
 
 		FutureTask<Void> futureTask1 = _startThread(
 			schedulerEventMessageListenerWrapper, "Thread1", _testMessage1);
@@ -115,8 +122,15 @@ public class SchedulerEventMessageListenerWrapperTest {
 			schedulerEventMessageListenerWrapper =
 				new SchedulerEventMessageListenerWrapper();
 
-		schedulerEventMessageListenerWrapper.setMessageListener(
+		SchedulerEventMessageListenerAdapter
+			schedulerEventMessageListenerAdapter =
+				new SchedulerEventMessageListenerAdapter();
+
+		schedulerEventMessageListenerAdapter.setMessageListener(
 			_testMessageListener);
+
+		schedulerEventMessageListenerWrapper.setSchedulerEventMessageListener(
+			schedulerEventMessageListenerAdapter);
 
 		Registry registry = RegistryUtil.getRegistry();
 
