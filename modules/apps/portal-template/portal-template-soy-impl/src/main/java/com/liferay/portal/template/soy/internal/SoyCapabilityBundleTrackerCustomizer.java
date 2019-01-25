@@ -165,7 +165,7 @@ public class SoyCapabilityBundleTrackerCustomizer
 		while (iterator.hasNext()) {
 			TemplateResource templateResource = iterator.next();
 
-			String templateIdContextName = SoyTemplateUtil.getBundleId(
+			String templateIdContextName = SoyTemplateUtil.getBundleContextName(
 				templateResource.getTemplateId());
 
 			if (contextName.equals(templateIdContextName)) {
