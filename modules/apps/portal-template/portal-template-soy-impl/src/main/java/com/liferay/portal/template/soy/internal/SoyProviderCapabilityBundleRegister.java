@@ -36,7 +36,8 @@ import org.osgi.service.component.annotations.Component;
 public class SoyProviderCapabilityBundleRegister {
 
 	public static Bundle getTemplateBundle(String templateId) {
-		Bundle bundle = _bundles.get(SoyTemplateUtil.getBundleId(templateId));
+		Bundle bundle = _bundles.get(
+			SoyTemplateUtil.getBundleContextName(templateId));
 
 		if (bundle == null) {
 			Collection<Bundle> bundles = _bundles.values();
@@ -58,17 +59,11 @@ public class SoyProviderCapabilityBundleRegister {
 	}
 
 	public void register(Bundle bundle) {
-		_bundles.put(_getContextName(bundle), bundle);
+		_bundles.put(SoyTemplateUtil.getBundleContextName(bundle), bundle);
 	}
 
 	public void unregister(Bundle bundle) {
-		_bundles.remove(_getContextName(bundle));
-	}
-
-	private String _getContextName(Bundle bundle) {
-		return StringBundler.concat(
-			bundle.getSymbolicName(), StringPool.UNDERLINE,
-			String.valueOf(bundle.getVersion()));
+		_bundles.remove(SoyTemplateUtil.getBundleContextName(bundle));
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
