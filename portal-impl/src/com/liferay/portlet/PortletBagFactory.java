@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.portlet.PortletLayoutListener;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.scheduler.SchedulerEntry;
 import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerAdapter;
 import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerWrapper;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.OpenSearch;
@@ -626,6 +627,10 @@ public class PortletBagFactory {
 				schedulerEventMessageListenerWrapper =
 					new SchedulerEventMessageListenerWrapper();
 
+			SchedulerEventMessageListenerAdapter
+				schedulerEventMessageListenerAdapter =
+					new SchedulerEventMessageListenerAdapter();
+
 			com.liferay.portal.kernel.messaging.MessageListener
 				messageListener =
 					(com.liferay.portal.kernel.messaging.MessageListener)
@@ -633,11 +638,14 @@ public class PortletBagFactory {
 							_classLoader,
 							schedulerEntry.getEventListenerClass());
 
-			schedulerEventMessageListenerWrapper.setMessageListener(
+			schedulerEventMessageListenerAdapter.setMessageListener(
 				messageListener);
 
-			schedulerEventMessageListenerWrapper.setSchedulerEntry(
+			schedulerEventMessageListenerAdapter.setSchedulerEntry(
 				schedulerEntry);
+
+			schedulerEventMessageListenerWrapper.setSchedulerEventMessageListener(
+				schedulerEventMessageListenerAdapter);
 
 			ServiceRegistration<?> serviceRegistration =
 				registry.registerService(
