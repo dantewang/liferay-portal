@@ -14,6 +14,7 @@
 
 package com.liferay.portal.template.soy.internal.util;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -62,7 +63,7 @@ public class SoyTemplateResourcesCollector {
 		List<URL> urls = getSoyResourceURLs(bundle, _templatePath);
 
 		for (URL url : urls) {
-			String templateId = getTemplateId(bundle.getBundleId(), url);
+			String templateId = getTemplateId(bundle, url);
 
 			try {
 				TemplateResource templateResource = _getTemplateResource(
@@ -98,8 +99,7 @@ public class SoyTemplateResourcesCollector {
 				providerBundle, StringPool.SLASH);
 
 			for (URL url : urls) {
-				String templateId = getTemplateId(
-					providerBundle.getBundleId(), url);
+				String templateId = getTemplateId(providerBundle, url);
 
 				TemplateResource templateResource = null;
 
@@ -143,14 +143,10 @@ public class SoyTemplateResourcesCollector {
 		return Collections.list(urls);
 	}
 
-	protected String getTemplateId(long bundleId, URL url) {
-		return String.valueOf(
-			bundleId
-		).concat(
-			TemplateConstants.BUNDLE_SEPARATOR
-		).concat(
-			url.getPath()
-		);
+	protected String getTemplateId(Bundle bundle, URL url) {
+		return StringBundler.concat(
+			SoyTemplateUtil.getBundleContextName(bundle),
+			TemplateConstants.CLASS_LOADER_SEPARATOR, url.getPath());
 	}
 
 	private TemplateResource _getTemplateResource(String templateId, URL url)

@@ -14,6 +14,7 @@
 
 package com.liferay.portal.template.soy.internal;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -156,13 +157,17 @@ public class SoyCapabilityBundleTrackerCustomizer
 
 		Iterator<TemplateResource> iterator = _templateResources.iterator();
 
+		String contextName = StringBundler.concat(
+			bundle.getSymbolicName(), StringPool.UNDERLINE,
+			bundle.getVersion());
+
 		while (iterator.hasNext()) {
 			TemplateResource templateResource = iterator.next();
 
-			long bundleId = SoyTemplateUtil.getBundleId(
+			String templateIdContextName = SoyTemplateUtil.getBundleContextName(
 				templateResource.getTemplateId());
 
-			if (bundle.getBundleId() == bundleId) {
+			if (contextName.equals(templateIdContextName)) {
 				removedTemplateResources.add(templateResource);
 			}
 		}

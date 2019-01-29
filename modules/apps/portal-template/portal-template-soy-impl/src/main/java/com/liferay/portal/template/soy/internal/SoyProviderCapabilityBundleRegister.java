@@ -34,9 +34,8 @@ import org.osgi.service.component.annotations.Component;
 public class SoyProviderCapabilityBundleRegister {
 
 	public static Bundle getTemplateBundle(String templateId) {
-		long bundleId = SoyTemplateUtil.getBundleId(templateId);
-
-		Bundle bundle = _bundles.get(bundleId);
+		Bundle bundle = _bundles.get(
+			SoyTemplateUtil.getBundleContextName(templateId));
 
 		if (bundle == null) {
 			Collection<Bundle> bundles = _bundles.values();
@@ -58,16 +57,17 @@ public class SoyProviderCapabilityBundleRegister {
 	}
 
 	public void register(Bundle bundle) {
-		_bundles.put(bundle.getBundleId(), bundle);
+		_bundles.put(SoyTemplateUtil.getBundleContextName(bundle), bundle);
 	}
 
 	public void unregister(Bundle bundle) {
-		_bundles.remove(bundle.getBundleId());
+		_bundles.remove(SoyTemplateUtil.getBundleContextName(bundle));
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		SoyProviderCapabilityBundleRegister.class);
 
-	private static final Map<Long, Bundle> _bundles = new ConcurrentHashMap<>();
+	private static final Map<String, Bundle> _bundles =
+		new ConcurrentHashMap<>();
 
 }

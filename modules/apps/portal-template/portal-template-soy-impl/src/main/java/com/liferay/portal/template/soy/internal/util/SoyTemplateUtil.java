@@ -14,17 +14,27 @@
 
 package com.liferay.portal.template.soy.internal.util;
 
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.template.TemplateConstants;
+
+import org.osgi.framework.Bundle;
 
 /**
  * @author Rafael Praxedes
  */
 public class SoyTemplateUtil {
 
-	public static long getBundleId(String templateId) {
-		int pos = templateId.indexOf(TemplateConstants.BUNDLE_SEPARATOR);
+	public static String getBundleContextName(Bundle bundle) {
+		return StringBundler.concat(
+			bundle.getSymbolicName(), StringPool.UNDERLINE,
+			bundle.getVersion());
+	}
+
+	public static String getBundleContextName(String templateId) {
+		int pos = templateId.indexOf(TemplateConstants.CLASS_LOADER_SEPARATOR);
 
 		if (pos == -1) {
 			if (_log.isDebugEnabled()) {
@@ -35,10 +45,10 @@ public class SoyTemplateUtil {
 				_log.debug(message);
 			}
 
-			return -1;
+			return null;
 		}
 
-		return Long.valueOf(templateId.substring(0, pos));
+		return templateId.substring(0, pos);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
