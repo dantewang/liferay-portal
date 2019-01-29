@@ -1000,14 +1000,22 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 							(SchedulerEventMessageListenerWrapper)
 								messageListener;
 
-					SchedulerEventMessageListenerAdapter
-						schedulerEventMessageListenerAdapter =
-							(SchedulerEventMessageListenerAdapter)
-								schedulerEventMessageListenerWrapper.
-									getSchedulerEventMessageListener();
+					SchedulerEventMessageListener
+						wrappedSchedulerEventMessageListener =
+							schedulerEventMessageListenerWrapper.
+								getSchedulerEventMessageListener();
 
-					schedulerEventMessageListenerAdapter.setSchedulerEntry(
-						schedulerEntry);
+					if (wrappedSchedulerEventMessageListener instanceof
+							SchedulerEventMessageListenerAdapter) {
+
+						SchedulerEventMessageListenerAdapter
+							schedulerEventMessageListenerAdapter =
+								(SchedulerEventMessageListenerAdapter)
+									wrappedSchedulerEventMessageListener;
+
+						schedulerEventMessageListenerAdapter.setSchedulerEntry(
+							schedulerEntry);
+					}
 
 					return null;
 				}
