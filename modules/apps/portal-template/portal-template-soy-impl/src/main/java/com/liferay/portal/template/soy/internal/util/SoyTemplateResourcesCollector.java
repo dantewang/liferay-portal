@@ -144,11 +144,8 @@ public class SoyTemplateResourcesCollector {
 	}
 
 	protected String getTemplateId(Bundle bundle, URL url) {
-		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
-
 		return StringBundler.concat(
-			bundle.getSymbolicName(), StringPool.UNDERLINE,
-			String.valueOf(bundle.getVersion()),
+			bundle.getSymbolicName(), StringPool.UNDERLINE, bundle.getVersion(),
 			TemplateConstants.CLASS_LOADER_SEPARATOR, url.getPath());
 	}
 

@@ -132,7 +132,7 @@ public class SoyManager extends BaseMultiTemplateManager {
 			soyProviderCapabilityBundleRegister;
 	}
 
-	@Reference
+	@Reference(unbind = "-")
 	protected void setSoyTemplateResourceLoader(
 		SoyTemplateResourceLoader soyTemplateResourceLoader) {
 	}

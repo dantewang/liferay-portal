@@ -19,12 +19,19 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.template.TemplateConstants;
+
 import org.osgi.framework.Bundle;
 
 /**
  * @author Rafael Praxedes
  */
 public class SoyTemplateUtil {
+
+	public static String getBundleContextName(Bundle bundle) {
+		return StringBundler.concat(
+			bundle.getSymbolicName(), StringPool.UNDERLINE,
+			bundle.getVersion());
+	}
 
 	public static String getBundleContextName(String templateId) {
 		int pos = templateId.indexOf(TemplateConstants.CLASS_LOADER_SEPARATOR);
@@ -42,12 +49,6 @@ public class SoyTemplateUtil {
 		}
 
 		return templateId.substring(0, pos);
-	}
-
-	public static String getBundleContextName(Bundle bundle) {
-		return StringBundler.concat(
-			bundle.getSymbolicName(), StringPool.UNDERLINE,
-			String.valueOf(bundle.getVersion()));
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

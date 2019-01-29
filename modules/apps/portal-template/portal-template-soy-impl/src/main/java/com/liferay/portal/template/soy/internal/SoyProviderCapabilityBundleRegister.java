@@ -14,7 +14,6 @@
 
 package com.liferay.portal.template.soy.internal;
 
-import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
@@ -26,7 +25,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.component.annotations.Component;
 
 /**

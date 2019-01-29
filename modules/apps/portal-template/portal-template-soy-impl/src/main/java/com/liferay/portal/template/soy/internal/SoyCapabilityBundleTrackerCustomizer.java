@@ -14,7 +14,6 @@
 
 package com.liferay.portal.template.soy.internal;
 
-import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
@@ -160,7 +159,7 @@ public class SoyCapabilityBundleTrackerCustomizer
 
 		String contextName = StringBundler.concat(
 			bundle.getSymbolicName(), StringPool.UNDERLINE,
-			String.valueOf(bundle.getVersion()));
+			bundle.getVersion());
 
 		while (iterator.hasNext()) {
 			TemplateResource templateResource = iterator.next();
