@@ -16,19 +16,18 @@ package com.liferay.portal.test.randomizerbumpers;
 
 import com.liferay.portal.kernel.test.CaptureHandler;
 import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
+import com.liferay.portal.kernel.test.SwappableSecurityManager;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.rule.NewEnv;
+import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
+import com.liferay.portal.kernel.test.util.SecurityManagerTestUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
-import com.liferay.portal.test.rule.AdviseWith;
-import com.liferay.portal.test.rule.AspectJNewEnvTestRule;
 
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -44,7 +43,7 @@ public class TikaSafeRandomizerBumperTest {
 	@Rule
 	public static final AggregateTestRule aggregateTestRule =
 		new AggregateTestRule(
-			AspectJNewEnvTestRule.INSTANCE, CodeCoverageAssertor.INSTANCE);
+			CodeCoverageAssertor.INSTANCE, NewEnvTestRule.INSTANCE);
 
 	@Test
 	public void testAcceptAny() {
@@ -91,38 +90,24 @@ public class TikaSafeRandomizerBumperTest {
 			tikaSafeRandomizerBumper, _BROKEN_EXE_BYTES, false, Level.INFO);
 	}
 
-	@AdviseWith(adviceClasses = ReflectionTestUtilAdvice.class)
 	@NewEnv(type = NewEnv.Type.CLASSLOADER)
 	@Test
 	public void testExceptionInInitializerError()
 		throws ClassNotFoundException {
 
-		try {
+		SecurityException securityException = new SecurityException();
+
+		try (SwappableSecurityManager swappableSecurityManager =
+				SecurityManagerTestUtil.throwForSetAccessible(
+					ReflectionTestUtil.class, securityException)) {
+
 			Class.forName(TikaSafeRandomizerBumper.class.getName());
 
 			Assert.fail();
 		}
 		catch (ExceptionInInitializerError eiie) {
-			Assert.assertSame(
-				ReflectionTestUtilAdvice._exception, eiie.getCause());
+			Assert.assertSame(securityException, eiie.getCause());
 		}
-	}
-
-	@Aspect
-	public static class ReflectionTestUtilAdvice {
-
-		@Before(
-			"execution(public static T " +
-				"com.liferay.portal.kernel.test.ReflectionTestUtil." +
-					"getFieldValue(java.lang.Class<?>, java.lang.String))"
-		)
-		public void getFieldValue() {
-			throw _exception;
-		}
-
-		private static final RuntimeException _exception =
-			new RuntimeException();
-
 	}
 
 	protected void doAccept(
