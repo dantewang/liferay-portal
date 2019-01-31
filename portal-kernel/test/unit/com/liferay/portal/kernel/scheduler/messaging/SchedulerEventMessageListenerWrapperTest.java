@@ -107,10 +107,10 @@ public class SchedulerEventMessageListenerWrapperTest {
 		futureTask2.get();
 
 		Assert.assertSame(
-			"Message is not processed", _testMessage1,
+			"Message is not processed", _testMessage1.getPayload(),
 			_testMessage1.getResponse());
 		Assert.assertSame(
-			"Message is not processed", _testMessage2,
+			"Message is not processed", _testMessage2.getPayload(),
 			_testMessage2.getResponse());
 	}
 
@@ -159,7 +159,7 @@ public class SchedulerEventMessageListenerWrapperTest {
 		futureTask1.get();
 
 		Assert.assertSame(
-			"Message is not processed", _testMessage1,
+			"Message is not processed", _testMessage1.getPayload(),
 			_testMessage1.getResponse());
 	}
 
@@ -201,7 +201,7 @@ public class SchedulerEventMessageListenerWrapperTest {
 		futureTask2.get();
 
 		Assert.assertSame(
-			"Message is not processed", _testMessage1,
+			"Message is not processed", _testMessage1.getPayload(),
 			_testMessage1.getResponse());
 		Assert.assertNull(_testMessage2.getResponse());
 	}
@@ -290,7 +290,7 @@ public class SchedulerEventMessageListenerWrapperTest {
 
 				_blockCountDownLatch.await();
 
-				message.setResponse(message);
+				message.setResponse(message.getPayload());
 			}
 			catch (InterruptedException ie) {
 			}
