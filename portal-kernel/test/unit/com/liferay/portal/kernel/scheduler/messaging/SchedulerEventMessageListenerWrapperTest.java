@@ -259,9 +259,6 @@ public class SchedulerEventMessageListenerWrapperTest {
 					"Unable to wait " + timeout + " milliseconds before retry",
 					logRecord.getMessage());
 			}
-			catch (Exception e) {
-				Assert.assertTrue(e instanceof IllegalMonitorStateException);
-			}
 
 			return null;
 		}
