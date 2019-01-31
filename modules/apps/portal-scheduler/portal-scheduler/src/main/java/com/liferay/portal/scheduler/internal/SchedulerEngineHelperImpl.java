@@ -54,6 +54,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.scheduler.internal.configuration.SchedulerEngineHelperConfiguration;
+import com.liferay.portal.scheduler.internal.messaging.SchedulerEventMessageListenerAdapter;
 import com.liferay.portal.scheduler.internal.messaging.config.ScriptingMessageListener;
 
 import java.util.ArrayList;
@@ -576,32 +577,17 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			_serviceRegistrations.get(messageListenerClass.getName());
 
 		if (serviceRegistration != null) {
-			SchedulerEventMessageListenerWrapper
-				schedulerEventMessageListenerWrapper =
-					(SchedulerEventMessageListenerWrapper)
-						_bundleContext.getService(
-							serviceRegistration.getReference());
-
-			schedulerEventMessageListenerWrapper.setSchedulerEntry(
-				schedulerEntry);
-
-			serviceRegistration.setProperties(properties);
-
-			return;
+			serviceRegistration.unregister();
 		}
 
-		SchedulerEventMessageListenerWrapper
-			schedulerEventMessageListenerWrapper =
-				new SchedulerEventMessageListenerWrapper();
-
-		schedulerEventMessageListenerWrapper.setMessageListener(
-			messageListener);
-
-		schedulerEventMessageListenerWrapper.setSchedulerEntry(schedulerEntry);
+		SchedulerEventMessageListenerAdapter
+			schedulerEventMessageListenerAdapter =
+				new SchedulerEventMessageListenerAdapter(
+					messageListener, schedulerEntry);
 
 		serviceRegistration = _bundleContext.registerService(
 			SchedulerEventMessageListener.class,
-			schedulerEventMessageListenerWrapper, properties);
+			schedulerEventMessageListenerAdapter, properties);
 
 		_serviceRegistrations.put(
 			messageListenerClass.getName(), serviceRegistration);
