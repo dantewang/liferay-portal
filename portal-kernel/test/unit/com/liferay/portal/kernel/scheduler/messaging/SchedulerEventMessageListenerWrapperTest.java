@@ -182,10 +182,36 @@ public class SchedulerEventMessageListenerWrapperTest {
 
 		_testMessageListener.waitUntilBlock();
 
-		TestCallable testCallable = new TestCallable(
-			_testMessage2, schedulerEventMessageListenerWrapper);
+		FutureTask<Void> futureTask2 = new FutureTask<>(
+			() -> {
+				try (CaptureHandler captureHandler =
+						JDKLoggerTestUtil.configureJDKLogger(
+							SchedulerEventMessageListenerWrapper.class.
+								getName(),
+							Level.INFO)) {
 
-		FutureTask<Void> futureTask2 = new FutureTask<>(testCallable);
+					schedulerEventMessageListenerWrapper.receive(_testMessage2);
+
+					List<LogRecord> logRecords = captureHandler.getLogRecords();
+
+					Assert.assertEquals(
+						logRecords.toString(), 1, logRecords.size());
+
+					LogRecord logRecord = logRecords.get(0);
+
+					int timeout = GetterUtil.getInteger(
+						PropsUtil.get(
+							PropsKeys.
+								SCHEDULER_EVENT_MESSAGE_LISTENER_LOCK_TIMEOUT));
+
+					Assert.assertEquals(
+						"Unable to wait " + timeout + " milliseconds before " +
+							"retry",
+						logRecord.getMessage());
+				}
+
+				return null;
+			});
 
 		Thread thread2 = new Thread(
 			futureTask2,
@@ -231,53 +257,6 @@ public class SchedulerEventMessageListenerWrapperTest {
 	private Message _testMessage1;
 	private Message _testMessage2;
 	private TestMessageListener _testMessageListener;
-
-	private class TestCallable implements Callable<Void> {
-
-		@Override
-		public Void call() throws Exception {
-			try (CaptureHandler captureHandler =
-					JDKLoggerTestUtil.configureJDKLogger(
-						SchedulerEventMessageListenerWrapper.class.getName(),
-						Level.INFO)) {
-
-				_schedulerEventMessageListenerWrapper.receive(_testMessage);
-
-				List<LogRecord> logRecords = captureHandler.getLogRecords();
-
-				Assert.assertEquals(
-					logRecords.toString(), 1, logRecords.size());
-
-				LogRecord logRecord = logRecords.get(0);
-
-				int timeout = GetterUtil.getInteger(
-					PropsUtil.get(
-						PropsKeys.
-							SCHEDULER_EVENT_MESSAGE_LISTENER_LOCK_TIMEOUT));
-
-				Assert.assertEquals(
-					"Unable to wait " + timeout + " milliseconds before retry",
-					logRecord.getMessage());
-			}
-
-			return null;
-		}
-
-		private TestCallable(
-			Message message,
-			SchedulerEventMessageListenerWrapper
-				schedulerEventMessageListenerWrapper) {
-
-			_testMessage = message;
-			_schedulerEventMessageListenerWrapper =
-				schedulerEventMessageListenerWrapper;
-		}
-
-		private final SchedulerEventMessageListenerWrapper
-			_schedulerEventMessageListenerWrapper;
-		private final Message _testMessage;
-
-	}
 
 	private class TestMessageListener implements MessageListener {
 
