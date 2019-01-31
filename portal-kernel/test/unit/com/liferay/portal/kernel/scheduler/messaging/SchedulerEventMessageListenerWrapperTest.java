@@ -17,29 +17,21 @@ package com.liferay.portal.kernel.scheduler.messaging;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.messaging.MessageListener;
-import com.liferay.portal.kernel.test.CaptureHandler;
-import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
 import com.liferay.portal.kernel.test.util.PropsTestUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.registry.BasicRegistryImpl;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 
-import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -184,31 +176,7 @@ public class SchedulerEventMessageListenerWrapperTest {
 
 		FutureTask<Void> futureTask2 = new FutureTask<>(
 			() -> {
-				try (CaptureHandler captureHandler =
-						JDKLoggerTestUtil.configureJDKLogger(
-							SchedulerEventMessageListenerWrapper.class.
-								getName(),
-							Level.INFO)) {
-
-					schedulerEventMessageListenerWrapper.receive(_testMessage2);
-
-					List<LogRecord> logRecords = captureHandler.getLogRecords();
-
-					Assert.assertEquals(
-						logRecords.toString(), 1, logRecords.size());
-
-					LogRecord logRecord = logRecords.get(0);
-
-					int timeout = GetterUtil.getInteger(
-						PropsUtil.get(
-							PropsKeys.
-								SCHEDULER_EVENT_MESSAGE_LISTENER_LOCK_TIMEOUT));
-
-					Assert.assertEquals(
-						"Unable to wait " + timeout + " milliseconds before " +
-							"retry",
-						logRecord.getMessage());
-				}
+				schedulerEventMessageListenerWrapper.receive(_testMessage2);
 
 				return null;
 			});
