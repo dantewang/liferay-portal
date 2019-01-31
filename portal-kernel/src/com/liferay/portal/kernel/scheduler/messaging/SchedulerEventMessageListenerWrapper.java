@@ -45,9 +45,19 @@ import java.util.concurrent.locks.ReentrantLock;
 public class SchedulerEventMessageListenerWrapper
 	implements SchedulerEventMessageListener {
 
+	public SchedulerEventMessageListenerWrapper(
+		SchedulerEventMessageListener schedulerEventMessageListener) {
+
+		_schedulerEventMessageListener = schedulerEventMessageListener;
+	}
+
 	@Override
 	public SchedulerEntry getSchedulerEntry() {
-		return _schedulerEntry;
+		return _schedulerEventMessageListener.getSchedulerEntry();
+	}
+
+	public SchedulerEventMessageListener getSchedulerEventMessageListener() {
+		return _schedulerEventMessageListener;
 	}
 
 	@Override
@@ -58,7 +68,9 @@ public class SchedulerEventMessageListenerWrapper
 		String groupName = message.getString(SchedulerEngine.GROUP_NAME);
 
 		if (destinationName.equals(DestinationNames.SCHEDULER_DISPATCH)) {
-			Trigger trigger = _schedulerEntry.getTrigger();
+			SchedulerEntry schedulerEntry = getSchedulerEntry();
+
+			Trigger trigger = schedulerEntry.getTrigger();
 
 			if (!jobName.equals(trigger.getJobName()) ||
 				!groupName.equals(trigger.getGroupName())) {
@@ -73,8 +85,8 @@ public class SchedulerEventMessageListenerWrapper
 		else {
 			try {
 				if (!_lock.tryLock(
-						_SCHEDULER_EVENT_MESSAGE_LISTENER_LOCK_TIMEOUT,
-						TimeUnit.MILLISECONDS)) {
+					_SCHEDULER_EVENT_MESSAGE_LISTENER_LOCK_TIMEOUT,
+					TimeUnit.MILLISECONDS)) {
 
 					MessageBusUtil.sendMessage(destinationName, message);
 
@@ -86,7 +98,7 @@ public class SchedulerEventMessageListenerWrapper
 					_log.info(
 						"Unable to wait " +
 							_SCHEDULER_EVENT_MESSAGE_LISTENER_LOCK_TIMEOUT +
-								" milliseconds before retry",
+							" milliseconds before retry",
 						ie);
 				}
 			}
@@ -116,10 +128,18 @@ public class SchedulerEventMessageListenerWrapper
 		_jobName = jobName;
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public void setMessageListener(MessageListener messageListener) {
 		_messageListener = messageListener;
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public void setSchedulerEntry(SchedulerEntry schedulerEntry) {
 		_schedulerEntry = schedulerEntry;
 	}
@@ -133,12 +153,12 @@ public class SchedulerEventMessageListenerWrapper
 	}
 
 	private void _processMessage(
-			Message message, String destinationName, String jobName,
-			String groupName)
+		Message message, String destinationName, String jobName,
+		String groupName)
 		throws MessageListenerException {
 
 		try {
-			_messageListener.receive(message);
+			_schedulerEventMessageListener.receive(message);
 		}
 		catch (Exception e) {
 			handleException(message, e);
@@ -156,7 +176,7 @@ public class SchedulerEventMessageListenerWrapper
 				triggerState = TriggerState.COMPLETE;
 
 				if (destinationName.equals(
-						DestinationNames.SCHEDULER_DISPATCH)) {
+					DestinationNames.SCHEDULER_DISPATCH)) {
 
 					MessageBusUtil.unregisterMessageListener(
 						destinationName, this);
@@ -218,7 +238,21 @@ public class SchedulerEventMessageListenerWrapper
 	private String _jobName;
 
 	private final Lock _lock = new ReentrantLock();
+
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
+	@SuppressWarnings("unused")
 	private MessageListener _messageListener;
+
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
+	@SuppressWarnings("unused")
 	private volatile SchedulerEntry _schedulerEntry;
+
+	private SchedulerEventMessageListener _schedulerEventMessageListener;
 
 }
