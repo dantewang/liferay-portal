@@ -59,6 +59,7 @@ import com.liferay.portal.scheduler.internal.messaging.config.ScriptingMessageLi
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashSet;
@@ -892,8 +893,8 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 	private final Set<ServiceRegistration<Destination>>
 		_destinationServiceRegistrations = new HashSet<>();
 	private JSONFactory _jsonFactory;
-	private final Map<String, ServiceRegistration<MessageListener>>
-		_messageListenerServiceRegistrations = new ConcurrentHashMap<>();
+	private final Set<String> _listenersScheduled =
+		Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 	@Reference
 	private Portal _portal;
@@ -951,45 +952,21 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			ClusterableContextThreadLocal.putThreadLocalContext(
 				SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, false);
 
+			String eventListenerClassName =
+				schedulerEntry.getEventListenerClass();
+
 			try {
-				schedule(
-					schedulerEntry.getTrigger(), storageType,
-					schedulerEntry.getDescription(), destinationName, null, 0);
-
-				ServiceRegistration<MessageListener> serviceRegistration =
-					_messageListenerServiceRegistrations.get(
-						schedulerEntry.getEventListenerClass());
-
-				if (serviceRegistration != null) {
-					ServiceReference<MessageListener> oldServiceReference =
-						serviceRegistration.getReference();
-
-					MessageListener messageListener = bundleContext.getService(
-						oldServiceReference);
-
-					SchedulerEventMessageListenerWrapper
-						schedulerEventMessageListenerWrapper =
-							(SchedulerEventMessageListenerWrapper)
-								messageListener;
-
-					schedulerEventMessageListenerWrapper.setSchedulerEntry(
-						schedulerEntry);
-
-					return null;
+				if (_listenersScheduled.contains(eventListenerClassName)) {
+					update(schedulerEntry.getTrigger(), storageType);
 				}
+				else {
+					schedule(
+						schedulerEntry.getTrigger(), storageType,
+						schedulerEntry.getDescription(), destinationName, null,
+						0);
 
-				Dictionary<String, Object> properties =
-					new HashMapDictionary<>();
-
-				properties.put("destination.name", destinationName);
-
-				serviceRegistration = bundleContext.registerService(
-					MessageListener.class, schedulerEventMessageListener,
-					properties);
-
-				_messageListenerServiceRegistrations.put(
-					schedulerEntry.getEventListenerClass(),
-					serviceRegistration);
+					_listenersScheduled.add(eventListenerClassName);
+				}
 
 				return schedulerEventMessageListener;
 			}
@@ -1074,6 +1051,9 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 			try {
 				delete(schedulerEntry, storageType);
+
+				_listenersScheduled.remove(
+					schedulerEntry.getEventListenerClass());
 			}
 			catch (SchedulerException se) {
 				_log.error(se, se);
@@ -1082,13 +1062,6 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				ClusterableContextThreadLocal.putThreadLocalContext(
 					SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, true);
 			}
-
-			ServiceRegistration<MessageListener>
-				messageListenerServiceRegistration =
-					_messageListenerServiceRegistrations.remove(
-						schedulerEntry.getEventListenerClass());
-
-			messageListenerServiceRegistration.unregister();
 		}
 
 	}
