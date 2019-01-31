@@ -192,12 +192,21 @@ public class SchedulerEventMessageListenerWrapperTest {
 		_testMessageListener.unblock();
 
 		futureTask1.get();
-		futureTask2.get();
+
+		Exception exception = null;
+
+		try {
+			futureTask2.get();
+		}
+		catch (IllegalMonitorStateException imse) {
+			exception = imse;
+		}
 
 		Assert.assertSame(
 			"Message is not processed", _testMessage1.getPayload(),
 			_testMessage1.getResponse());
 		Assert.assertNull(_testMessage2.getResponse());
+		Assert.assertNull(exception);
 	}
 
 	private FutureTask<Void> _startThread(
