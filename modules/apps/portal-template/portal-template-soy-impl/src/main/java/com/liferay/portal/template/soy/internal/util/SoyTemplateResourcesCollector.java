@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateResource;
-import com.liferay.portal.kernel.template.TemplateResourceLoaderUtil;
 import com.liferay.portal.kernel.template.URLTemplateResource;
 
 import java.net.URL;
@@ -156,19 +155,7 @@ public class SoyTemplateResourcesCollector {
 	private TemplateResource _getTemplateResource(String templateId, URL url)
 		throws TemplateException {
 
-		TemplateResource templateResource;
-
-		if (TemplateResourceLoaderUtil.hasTemplateResourceLoader(
-				TemplateConstants.LANG_TYPE_SOY)) {
-
-			templateResource = TemplateResourceLoaderUtil.getTemplateResource(
-				TemplateConstants.LANG_TYPE_SOY, templateId);
-		}
-		else {
-			templateResource = new URLTemplateResource(templateId, url);
-		}
-
-		return templateResource;
+		return new URLTemplateResource(templateId, url);
 	}
 
 	private static final String _SOY_FILE_EXTENSION = "*.soy";
