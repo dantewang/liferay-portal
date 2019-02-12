@@ -64,16 +64,16 @@ public class SoyTemplateResourcesCollector {
 			String templateId = getTemplateId(bundle.getBundleId(), url);
 
 			try {
-				TemplateResource templateResource = _getTemplateResource(
+				TemplateResource templateResource = new URLTemplateResource(
 					templateId, url);
 
 				templateResources.add(templateResource);
 			}
-			catch (TemplateException te) {
+			catch (IllegalArgumentException iae) {
 				throw new IllegalStateException(
 					"Unable to collect template reosurces for bundle " +
 						bundle.getBundleId(),
-					te);
+					iae);
 			}
 		}
 	}
@@ -103,15 +103,15 @@ public class SoyTemplateResourcesCollector {
 				TemplateResource templateResource = null;
 
 				try {
-					templateResource = _getTemplateResource(templateId, url);
+					templateResource = new URLTemplateResource(templateId, url);
 				}
-				catch (IllegalStateException ise) {
+				catch (IllegalArgumentException iae) {
 					_log.error(
 						String.format(
 							"{providerBundle=%s, templateId=%s}",
 							providerBundle.getSymbolicName(), templateId));
 
-					throw ise;
+					throw iae;
 				}
 
 				templateResources.add(templateResource);
@@ -150,12 +150,6 @@ public class SoyTemplateResourcesCollector {
 		).concat(
 			url.getPath()
 		);
-	}
-
-	private TemplateResource _getTemplateResource(String templateId, URL url)
-		throws TemplateException {
-
-		return new URLTemplateResource(templateId, url);
 	}
 
 	private static final String _SOY_FILE_EXTENSION = "*.soy";
