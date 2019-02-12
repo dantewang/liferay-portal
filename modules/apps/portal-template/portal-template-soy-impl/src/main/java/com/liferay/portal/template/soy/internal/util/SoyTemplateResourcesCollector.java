@@ -15,8 +15,6 @@
 package com.liferay.portal.template.soy.internal.util;
 
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateResource;
@@ -63,18 +61,10 @@ public class SoyTemplateResourcesCollector {
 		for (URL url : urls) {
 			String templateId = getTemplateId(bundle.getBundleId(), url);
 
-			try {
-				TemplateResource templateResource = new URLTemplateResource(
-					templateId, url);
+			TemplateResource templateResource = new URLTemplateResource(
+				templateId, url);
 
-				templateResources.add(templateResource);
-			}
-			catch (IllegalArgumentException iae) {
-				throw new IllegalStateException(
-					"Unable to collect template reosurces for bundle " +
-						bundle.getBundleId(),
-					iae);
-			}
+			templateResources.add(templateResource);
 		}
 	}
 
@@ -106,12 +96,11 @@ public class SoyTemplateResourcesCollector {
 					templateResource = new URLTemplateResource(templateId, url);
 				}
 				catch (IllegalArgumentException iae) {
-					_log.error(
+					throw new TemplateException(
 						String.format(
 							"{providerBundle=%s, templateId=%s}",
-							providerBundle.getSymbolicName(), templateId));
-
-					throw iae;
+							providerBundle.getSymbolicName(), templateId),
+						iae);
 				}
 
 				templateResources.add(templateResource);
@@ -153,9 +142,6 @@ public class SoyTemplateResourcesCollector {
 	}
 
 	private static final String _SOY_FILE_EXTENSION = "*.soy";
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		SoyTemplateResourcesCollector.class);
 
 	private final Bundle _bundle;
 	private final String _templatePath;

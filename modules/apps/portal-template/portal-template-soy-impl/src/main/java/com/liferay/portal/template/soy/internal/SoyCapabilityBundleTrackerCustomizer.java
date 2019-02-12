@@ -17,7 +17,6 @@ package com.liferay.portal.template.soy.internal;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.template.soy.internal.util.SoyTemplateResourcesCollector;
@@ -139,13 +138,11 @@ public class SoyCapabilityBundleTrackerCustomizer
 					}
 				});
 		}
-		catch (TemplateException te) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(
-					"Unable to add template resources for bundle " +
-						bundle.getBundleId(),
-					te);
-			}
+		catch (Exception e) {
+			_log.error(
+				"Unable to add template resources for bundle " +
+					bundle.getBundleId(),
+				e);
 		}
 	}
 
