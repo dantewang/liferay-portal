@@ -291,13 +291,13 @@ public class JspCompiler extends Compiler {
 			javaCompiler.getStandardFileManager(
 				diagnosticCollector, null, null);
 
-		try {
-			standardJavaFileManager.setLocation(
-				StandardLocation.CLASS_PATH, _getClassPath());
-		}
-		catch (IOException ioe) {
-			throw new JasperException(ioe);
-		}
+		//try {
+		//	standardJavaFileManager.setLocation(
+		//		StandardLocation.CLASS_PATH, _getClassPath());
+		//}
+		//catch (IOException ioe) {
+		//	throw new JasperException(ioe);
+		//}
 
 		try (JavaFileManager javaFileManager = getJavaFileManager(
 				standardJavaFileManager)) {
@@ -342,10 +342,6 @@ public class JspCompiler extends Compiler {
 				new StringBuilder(diagnostic.getMessage(null)),
 				(int)diagnostic.getLineNumber());
 		}
-	}
-
-	private List<File> _getClassPath() {
-		return new ArrayList<>();
 	}
 
 	protected JavaFileManager getJavaFileManager(
