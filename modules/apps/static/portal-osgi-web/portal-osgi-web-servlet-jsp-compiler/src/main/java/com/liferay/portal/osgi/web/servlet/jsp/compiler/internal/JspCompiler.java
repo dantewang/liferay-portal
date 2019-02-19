@@ -291,11 +291,9 @@ public class JspCompiler extends Compiler {
 			javaCompiler.getStandardFileManager(
 				diagnosticCollector, null, null);
 
-		List<File> cpath = new ArrayList<>();
-
 		try {
 			standardJavaFileManager.setLocation(
-				StandardLocation.CLASS_PATH, cpath);
+				StandardLocation.CLASS_PATH, _getClassPath());
 		}
 		catch (IOException ioe) {
 			throw new JasperException(ioe);
@@ -344,6 +342,10 @@ public class JspCompiler extends Compiler {
 				new StringBuilder(diagnostic.getMessage(null)),
 				(int)diagnostic.getLineNumber());
 		}
+	}
+
+	private List<File> _getClassPath() {
+		return new ArrayList<>();
 	}
 
 	protected JavaFileManager getJavaFileManager(
