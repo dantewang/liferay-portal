@@ -23,12 +23,12 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.osgi.web.servlet.jsp.compiler.internal.util.ClassPathUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -73,6 +73,7 @@ import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.JavacErrorDetail;
 import org.apache.jasper.compiler.JspRuntimeContext;
 import org.apache.jasper.compiler.SmapStratum;
+import org.apache.jasper.compiler.TldCache;
 import org.apache.jasper.servlet.JspServletWrapper;
 
 import org.osgi.framework.Bundle;
@@ -91,14 +92,11 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class JavaJspCompiler extends Compiler {
 
-	private List<BytecodeFile> classFiles;
-	private JspRuntimeContext _jspRuntimeContext;
-
 	@Override
 	protected void generateClass(Map<String, SmapStratum> smaps)
-		throws FileNotFoundException, JasperException, Exception {
+		throws Exception {
 
-		classFiles = new ArrayList<>();
+		_classFiles = new ArrayList<>();
 
 		String className = ctxt.getServletClassName();
 
@@ -119,6 +117,8 @@ public class JavaJspCompiler extends Compiler {
 			javaCompiler.getStandardFileManager(
 				diagnosticCollector, null, null);
 
+		List<File> cpath = new ArrayList<>();
+
 		try {
 			standardJavaFileManager.setLocation(
 				StandardLocation.CLASS_PATH, cpath);
@@ -128,25 +128,25 @@ public class JavaJspCompiler extends Compiler {
 		}
 
 		try (JavaFileManager javaFileManager = getJavaFileManager(
-			standardJavaFileManager)) {
+				standardJavaFileManager)) {
 
 			JavaCompiler.CompilationTask compilationTask = javaCompiler.getTask(
-				null, javaFileManager, diagnosticCollector, options, null,
+				null, javaFileManager, diagnosticCollector, _getOptions(), null,
 				Arrays.asList(
 					new StringJavaFileObject(
 						className.substring(className.lastIndexOf('.') + 1),
-						charArrayWriter.toString())));
+						FileUtil.read(javaFileName))));
 
 			if (_log.isDebugEnabled()) {
 				_log.debug("Compiling JSP: ".concat(className));
 			}
 
 			if (compilationTask.call()) {
-//				for (BytecodeFile bytecodeFile : classFiles) {
-//					_jspRuntimeContext.setBytecode(
-//						bytecodeFile.getClassName(),
-//						bytecodeFile.getBytecode());
-//				}
+				//for (BytecodeFile bytecodeFile : _classFiles) {
+				//	_jspRuntimeContext.setBytecode(
+				//		bytecodeFile.getClassName(),
+				//		bytecodeFile.getBytecode());
+				//}
 
 				return;
 			}
@@ -234,7 +234,7 @@ public class JavaJspCompiler extends Compiler {
 			sb.append(" has dependent bundle wirings: ");
 
 			for (BundleWiring curBundleWiring :
-				_bundleWiringPackageNames.keySet()) {
+					_bundleWiringPackageNames.keySet()) {
 
 				Bundle currentBundle = curBundleWiring.getBundle();
 
@@ -253,8 +253,8 @@ public class JavaJspCompiler extends Compiler {
 		jspCompilationContext.setClassLoader(jspBundleClassloader);
 
 		initClassPath(servletContext);
-		initTLDMappings(
-			servletContext, jspCompilationContext.getTagFileJarUrls());
+		//initTLDMappings(
+		//	servletContext, jspCompilationContext.getTagFileJarUrls());
 
 		super.init(jspCompilationContext, jspServletWrapper);
 	}
@@ -370,63 +370,6 @@ public class JavaJspCompiler extends Compiler {
 		return _getJavaFileManager(javaFileManager);
 	}
 
-	private JavaFileManager _getJavaFileManager(
-		JavaFileManager javaFileManager) {
-
-		return new ForwardingJavaFileManager<JavaFileManager>(javaFileManager) {
-
-			@Override
-			public JavaFileObject getJavaFileForOutput(
-				Location location, String className, JavaFileObject.Kind kind,
-				FileObject sibling){
-
-				return getOutputFile(
-					className,
-					URI.create("file:///" + className.replace('.','/') + kind));
-			}
-
-			@Override
-			public String inferBinaryName(
-				Location location, JavaFileObject javaFileObject) {
-
-				if (javaFileObject instanceof BytecodeFile) {
-					BytecodeFile bytecodeFile = (BytecodeFile)javaFileObject;
-
-					return bytecodeFile.getClassName();
-				}
-
-				return super.inferBinaryName(location, javaFileObject);
-			}
-
-			@Override
-			public Iterable<JavaFileObject> list(
-					Location location, String packageName,
-					Set<JavaFileObject.Kind> kinds, boolean recurse)
-				throws IOException {
-
-				if ((location == StandardLocation.CLASS_PATH) &&
-					packageName.startsWith(Constants.JSP_PACKAGE_NAME)) {
-
-					Map<String, JavaFileObject> packageFiles =
-						_packageMap.get(packageName);
-
-					if (packageFiles != null) {
-						return packageFiles.values();
-					}
-				}
-
-				Iterable<JavaFileObject> itr =
-					super.list(location, packageName, kinds, recurse);
-
-				return itr;
-			}
-		};
-
-	}
-
-	private Map<String, Map<String, JavaFileObject>> _packageMap =
-		new ConcurrentHashMap<>();
-
 	protected JavaFileObject getOutputFile(String className, URI uri) {
 		String packageName = className.substring(
 			0, className.lastIndexOf(CharPool.PERIOD));
@@ -444,7 +387,7 @@ public class JavaJspCompiler extends Compiler {
 
 		packageJavaFileObjects.put(className, bytecodeFile);
 
-		classFiles.add(bytecodeFile);
+		_classFiles.add(bytecodeFile);
 
 		return bytecodeFile;
 	}
@@ -474,7 +417,7 @@ public class JavaJspCompiler extends Compiler {
 
 		Map<String, String[]> tldMappings =
 			(Map<String, String[]>)servletContext.getAttribute(
-				Constants.JSP_TLD_URI_TO_LOCATION_MAP);
+				TldCache.SERVLET_CONTEXT_ATTRIBUTE_NAME);
 
 		if (tldMappings != null) {
 			return;
@@ -503,7 +446,7 @@ public class JavaJspCompiler extends Compiler {
 		}
 
 		servletContext.setAttribute(
-			Constants.JSP_TLD_URI_TO_LOCATION_MAP, tldMappings);
+			TldCache.SERVLET_CONTEXT_ATTRIBUTE_NAME, tldMappings);
 	}
 
 	private static Set<String> _collectPackageNames(BundleWiring bundleWiring) {
@@ -517,8 +460,8 @@ public class JavaJspCompiler extends Compiler {
 		packageNames = new HashSet<>();
 
 		for (BundleCapability bundleCapability :
-			bundleWiring.getCapabilities(
-				BundleRevision.PACKAGE_NAMESPACE)) {
+				bundleWiring.getCapabilities(
+					BundleRevision.PACKAGE_NAMESPACE)) {
 
 			Map<String, Object> attributes = bundleCapability.getAttributes();
 
@@ -535,6 +478,91 @@ public class JavaJspCompiler extends Compiler {
 		return packageNames;
 	}
 
+	private JavaFileManager _getJavaFileManager(
+		JavaFileManager javaFileManager) {
+
+		return new ForwardingJavaFileManager<JavaFileManager>(javaFileManager) {
+
+			@Override
+			public JavaFileObject getJavaFileForOutput(
+				Location location, String className, JavaFileObject.Kind kind,
+				FileObject sibling) {
+
+				return getOutputFile(
+					className,
+					URI.create(
+						"file:///" + className.replace('.', '/') + kind));
+			}
+
+			@Override
+			public String inferBinaryName(
+				Location location, JavaFileObject javaFileObject) {
+
+				if (javaFileObject instanceof BytecodeFile) {
+					BytecodeFile bytecodeFile = (BytecodeFile)javaFileObject;
+
+					return bytecodeFile.getClassName();
+				}
+
+				return super.inferBinaryName(location, javaFileObject);
+			}
+
+			@Override
+			public Iterable<JavaFileObject> list(
+				Location location, String packageName,
+				Set<JavaFileObject.Kind> kinds, boolean recurse)
+				throws IOException {
+
+				if ((location == StandardLocation.CLASS_PATH) &&
+					packageName.startsWith(Constants.JSP_PACKAGE_NAME)) {
+
+					Map<String, JavaFileObject> packageFiles =
+						_packageMap.get(packageName);
+
+					if (packageFiles != null) {
+						return packageFiles.values();
+					}
+				}
+
+				Iterable<JavaFileObject> itr =
+					super.list(location, packageName, kinds, recurse);
+
+				return itr;
+			}
+
+		};
+	}
+
+	private List<String> _getOptions() {
+		List<String> optionList = new ArrayList<>();
+
+		optionList.add("-proc:none");
+
+		String javaExtDirs = System.getProperty("java.ext.dirs");
+
+		if (javaExtDirs != null) {
+			optionList.add("-extdirs");
+			optionList.add(javaExtDirs);
+		}
+
+		// In Tomcat 9.0.16 Jasper, options.getCompilerSourceVM() and
+		// options.getCompilerTargetVM() never returns null
+
+		optionList.add("-source");
+		optionList.add(options.getCompilerSourceVM());
+		optionList.add("-target");
+		optionList.add(options.getCompilerTargetVM());
+
+		if (options.getClassDebugInfo()) {
+			optionList.add("-g");
+		}
+		else {
+			optionList.add("-g:none");
+		}
+
+		return optionList;
+	}
+
 	private static final String[] _JSP_COMPILER_DEPENDENCIES = {
 		"com.liferay.portal.kernel.exception.PortalException",
 		"com.liferay.portal.util.PortalImpl", "javax.portlet.PortletException",
@@ -545,9 +573,9 @@ public class JavaJspCompiler extends Compiler {
 
 	private static final Map<BundleWiring, Set<String>>
 		_bundleWiringPackageNamesCache = new ConcurrentReferenceKeyHashMap<>(
-		new ConcurrentReferenceValueHashMap<BundleWiring, Set<String>>(
-			FinalizeManager.SOFT_REFERENCE_FACTORY),
-		FinalizeManager.WEAK_REFERENCE_FACTORY);
+			new ConcurrentReferenceValueHashMap<BundleWiring, Set<String>>(
+				FinalizeManager.SOFT_REFERENCE_FACTORY),
+			FinalizeManager.WEAK_REFERENCE_FACTORY);
 	private static final BundleWiring _jspBundleWiring;
 	private static final Map<BundleWiring, Set<String>>
 		_jspBundleWiringPackageNames = new HashMap<>();
@@ -580,24 +608,28 @@ public class JavaJspCompiler extends Compiler {
 	private Bundle[] _allParticipatingBundles;
 	private final Map<BundleWiring, Set<String>> _bundleWiringPackageNames =
 		new HashMap<>(_jspBundleWiringPackageNames);
+	private List<BytecodeFile> _classFiles;
 	private ClassLoader _classLoader;
 	private final List<File> _classPath = new ArrayList<>();
 	private final List<JavaFileObjectResolver> _javaFileObjectResolvers =
 		new ArrayList<>();
+	private JspRuntimeContext _jspRuntimeContext;
+	private Map<String, Map<String, JavaFileObject>> _packageMap =
+		new ConcurrentHashMap<>();
 
 	private static class BytecodeFile extends SimpleJavaFileObject {
 
-		BytecodeFile(URI uri, String className) {
+		public BytecodeFile(URI uri, String className) {
 			super(uri, Kind.CLASS);
 
 			_className = className;
 		}
 
-		String getClassName() {
+		public String getClassName() {
 			return _className;
 		}
 
-		byte[] getBytecode() {
+		public byte[] getBytecode() {
 			return _bytecode;
 		}
 
