@@ -10,6 +10,7 @@ classes {
 
 dependencies {
 	compileInclude group: "org.apache.tomcat", name: "tomcat-jasper", version: "9.0.16"
+	compileInclude group: "org.apache.tomcat", name: "tomcat-util-scan", version: '9.0.16'
 
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "default"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
