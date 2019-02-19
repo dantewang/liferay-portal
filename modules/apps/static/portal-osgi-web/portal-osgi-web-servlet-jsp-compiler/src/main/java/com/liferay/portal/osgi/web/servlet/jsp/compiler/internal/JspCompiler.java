@@ -88,7 +88,6 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * @author Raymond Augé
  * @author Miguel Pastor
- * @author Dante Wang
  */
 public class JspCompiler extends Compiler {
 
