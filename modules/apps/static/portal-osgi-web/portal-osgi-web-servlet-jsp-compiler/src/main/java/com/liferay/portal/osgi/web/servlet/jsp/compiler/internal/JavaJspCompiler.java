@@ -30,9 +30,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import java.net.URI;
 import java.net.URL;
 
@@ -54,6 +54,8 @@ import javax.servlet.ServletContext;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
+import javax.tools.FileObject;
+import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
@@ -140,11 +142,11 @@ public class JavaJspCompiler extends Compiler {
 			}
 
 			if (compilationTask.call()) {
-				for (BytecodeFile bytecodeFile : classFiles) {
-					_jspRuntimeContext.setBytecode(
-						bytecodeFile.getClassName(),
-						bytecodeFile.getBytecode());
-				}
+//				for (BytecodeFile bytecodeFile : classFiles) {
+//					_jspRuntimeContext.setBytecode(
+//						bytecodeFile.getClassName(),
+//						bytecodeFile.getBytecode());
+//				}
 
 				return;
 			}
@@ -308,8 +310,8 @@ public class JavaJspCompiler extends Compiler {
 	}
 
 	protected void collectTLDMappings(
-		Map<String, String[]> tldMappings, Map<String, URL> tagFileJarUrls,
-		Bundle bundle)
+			Map<String, String[]> tldMappings, Map<String, URL> tagFileJarUrls,
+			Bundle bundle)
 		throws IOException {
 
 		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
@@ -365,31 +367,86 @@ public class JavaJspCompiler extends Compiler {
 				_javaFileObjectResolvers);
 		}
 
-		return super.getJavaFileManager(javaFileManager);
+		return _getJavaFileManager(javaFileManager);
 	}
 
-	protected JavaFileObject getOutputFile(String className, URI uri) {
-		Map<String, Map<String, JavaFileObject>> packageMap =
-			_jspRuntimeContext.getPackageMap();
+	private JavaFileManager _getJavaFileManager(
+		JavaFileManager javaFileManager) {
 
+		return new ForwardingJavaFileManager<JavaFileManager>(javaFileManager) {
+
+			@Override
+			public JavaFileObject getJavaFileForOutput(
+				Location location, String className, JavaFileObject.Kind kind,
+				FileObject sibling){
+
+				return getOutputFile(
+					className,
+					URI.create("file:///" + className.replace('.','/') + kind));
+			}
+
+			@Override
+			public String inferBinaryName(
+				Location location, JavaFileObject javaFileObject) {
+
+				if (javaFileObject instanceof BytecodeFile) {
+					BytecodeFile bytecodeFile = (BytecodeFile)javaFileObject;
+
+					return bytecodeFile.getClassName();
+				}
+
+				return super.inferBinaryName(location, javaFileObject);
+			}
+
+			@Override
+			public Iterable<JavaFileObject> list(
+					Location location, String packageName,
+					Set<JavaFileObject.Kind> kinds, boolean recurse)
+				throws IOException {
+
+				if ((location == StandardLocation.CLASS_PATH) &&
+					packageName.startsWith(Constants.JSP_PACKAGE_NAME)) {
+
+					Map<String, JavaFileObject> packageFiles =
+						_packageMap.get(packageName);
+
+					if (packageFiles != null) {
+						return packageFiles.values();
+					}
+				}
+
+				Iterable<JavaFileObject> itr =
+					super.list(location, packageName, kinds, recurse);
+
+				return itr;
+			}
+		};
+
+	}
+
+	private Map<String, Map<String, JavaFileObject>> _packageMap =
+		new ConcurrentHashMap<>();
+
+	protected JavaFileObject getOutputFile(String className, URI uri) {
 		String packageName = className.substring(
 			0, className.lastIndexOf(CharPool.PERIOD));
 
-		// Swap the parent class's packageJavaFileObjects reference from a plain
-		// HashMap to a thread safe ConcurrentHashMap
-
-		Map<String, JavaFileObject> packageJavaFileObjects = packageMap.get(
+		Map<String, JavaFileObject> packageJavaFileObjects = _packageMap.get(
 			packageName);
 
-		JavaFileObject javaFileObject = super.getOutputFile(className, uri);
+		BytecodeFile bytecodeFile = new BytecodeFile(uri, className);
 
 		if (packageJavaFileObjects == null) {
-			packageMap.put(
-				packageName,
-				new ConcurrentHashMap<>(packageMap.get(packageName)));
+			packageJavaFileObjects = new ConcurrentHashMap<>();
+
+			_packageMap.put(packageName, packageJavaFileObjects);
 		}
 
-		return javaFileObject;
+		packageJavaFileObjects.put(className, bytecodeFile);
+
+		classFiles.add(bytecodeFile);
+
+		return bytecodeFile;
 	}
 
 	protected void initClassPath(ServletContext servletContext) {
