@@ -20,6 +20,7 @@ patch {
 	}
 
 	fileNames "**/org/apache/jasper/JspCompilationContext.java"
+	fileNames "**/org/apache/jasper/compiler/JavaCompiler.java"
 	fileNames "**/org/apache/jasper/compiler/Jsr199JavaCompiler.java"
 	fileNames "**/org/apache/jasper/compiler/Node.java"
 	fileNames "**/org/apache/jasper/compiler/SmapUtil.java"
