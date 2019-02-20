@@ -1,41 +1,15 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * The contents of this file are subject to the terms of either the GNU
- * General Public License Version 2 only ("GPL") or the Common Development
- * and Distribution License("CDDL") (collectively, the "License").  You
- * may not use this file except in compliance with the License.  You can
- * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
- * or packager/legal/LICENSE.txt.  See the License for the specific
- * language governing permissions and limitations under the License.
- *
- * When distributing the software, include this License Header Notice in each
- * file and include the License file at packager/legal/LICENSE.txt.
- *
- * GPL Classpath Exception:
- * Oracle designates this particular file as subject to the "Classpath"
- * exception as provided by Oracle in the GPL Version 2 section of the License
- * file that accompanied this code.
- *
- * Modifications:
- * If applicable, add the following below the License Header, with the fields
- * enclosed by brackets [] replaced by your own identifying information:
- * "Portions Copyright [year] [name of copyright owner]"
- *
- * Contributor(s):
- * If you wish your version of this file to be governed by only the CDDL or
- * only the GPL Version 2, indicate your decision by adding "[Contributor]
- * elects to include this software in this distribution under the [CDDL or GPL
- * Version 2] license."  If you don't indicate a single choice of license, a
- * recipient has the option to distribute your version of this file under
- * either the CDDL, the GPL Version 2 or to extend the choice of license to
- * its licensees as provided above.  However, if you add GPL Version 2 code
- * and therefore, elected the GPL Version 2 license, then the option applies
- * only if the new code is made subject to such option by the copyright
- * holder.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.portal.osgi.web.servlet.jsp.compiler.internal;
@@ -104,16 +78,18 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 
 		DiagnosticCollector<JavaFileObject> diagnostics =
 			new DiagnosticCollector<>();
+
 		StandardJavaFileManager stdFileManager = javac.getStandardFileManager(
 			diagnostics, null, null);
 
-		String name = className.substring(className.lastIndexOf('.')+1);
+		String name = className.substring(className.lastIndexOf('.') + 1);
 
 		JavaFileObject[] sourceFiles = {
 			new SimpleJavaFileObject(
-				URI.create("string:///" + name.replace('.','/') +
-					JavaFileObject.
-					Kind.SOURCE.extension), JavaFileObject.Kind.SOURCE) {
+				URI.create(
+					"string:///" + name.replace('.', '/') +
+						JavaFileObject.Kind.SOURCE.extension),
+				JavaFileObject.Kind.SOURCE) {
 
 				public CharSequence getCharContent(boolean ignore) {
 					return source;
@@ -123,25 +99,27 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		};
 
 		try {
-			stdFileManager.setLocation(StandardLocation.CLASS_PATH, this.cpath);
-		} catch (IOException e) {
+			stdFileManager.setLocation(StandardLocation.CLASS_PATH, cpath);
+		}
+		catch (IOException ioe) {
 		}
 
 		JavaFileManager javaFileManager = getJavaFileManager(stdFileManager);
 
-		javax.tools.JavaCompiler.CompilationTask ct =
-			javac.getTask(null, javaFileManager, diagnostics, options, null,
-				Arrays.asList(sourceFiles));
+		javax.tools.JavaCompiler.CompilationTask ct = javac.getTask(
+			null, javaFileManager, diagnostics, options, null,
+			Arrays.asList(sourceFiles));
 
 		try {
 			javaFileManager.close();
-		} catch (IOException ex) {
+		}
+		catch (IOException ioe) {
 		}
 
 		if (ct.call()) {
 			for (BytecodeFile bytecodeFile : classFiles) {
-				rtctxt.setBytecode(bytecodeFile.getClassName(),
-					bytecodeFile.getBytecode());
+				rtctxt.setBytecode(
+					bytecodeFile.getClassName(), bytecodeFile.getBytecode());
 			}
 
 			return null;
@@ -152,16 +130,18 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		ArrayList<JavacErrorDetail> problems = new ArrayList<>();
 
 		for (Diagnostic dm : diagnostics.getDiagnostics()) {
-			problems.add(ErrorDispatcher.createJavacError(
-				javaFileName, pageNodes, new StringBuilder(dm.getMessage(null)),
-				(int)dm.getLineNumber()));
+			problems.add(
+				ErrorDispatcher.createJavacError(
+					javaFileName, pageNodes,
+					new StringBuilder(dm.getMessage(null)),
+					(int)dm.getLineNumber()));
 		}
 
 		return problems.toArray(new JavacErrorDetail[0]);
 	}
 
 	public void doJavaFile(boolean keep) throws JasperException {
-		if (! keep) {
+		if (!keep) {
 			charArrayWriter = null;
 
 			return;
@@ -172,18 +152,22 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 				new FileOutputStream(javaFileName), javaEncoding);
 
 			writer.write(charArrayWriter.toString());
+
 			writer.close();
+
 			charArrayWriter = null;
-		} catch (UnsupportedEncodingException ex) {
-			errDispatcher.jspError("jsp.error.needAlternateJavaEncoding",
-				javaEncoding);
-		} catch (IOException ex) {
-			throw new JasperException(ex);
+		}
+		catch (UnsupportedEncodingException uee) {
+			errDispatcher.jspError(
+				"jsp.error.needAlternateJavaEncoding", javaEncoding);
+		}
+		catch (IOException ioe) {
+			throw new JasperException(ioe);
 		}
 	}
 
 	public long getClassLastModified() {
-		String className = ctxt.getFullClassName();
+		String className = _ctxt.getFullClassName();
 
 		return rtctxt.getBytecodeBirthTime(className);
 	}
@@ -194,22 +178,32 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 	public Writer getJavaWriter(String javaFileName, String javaEncoding) {
 		this.javaFileName = javaFileName;
 		this.javaEncoding = javaEncoding;
-		this.charArrayWriter = new CharArrayWriter();
 
-		return this.charArrayWriter;
+		charArrayWriter = new CharArrayWriter();
+
+		return charArrayWriter;
 	}
 
-	public void init(JspCompilationContext ctxt, ErrorDispatcher errDispatcher,
-					boolean suppressLogging) {
+	public void init(
+		JspCompilationContext ctxt, ErrorDispatcher errDispatcher,
+		boolean suppressLogging) {
 
-		this.ctxt = ctxt;
+		_ctxt = ctxt;
+
 		this.errDispatcher = errDispatcher;
+
 		rtctxt = ctxt.getRuntimeContext();
-		options.add("-proc:none"); // Disable annotation processing
+
+		// Disable annotation processing
+
+		options.add("-proc:none");
 	}
 
 	public void release() {
-		classFiles = null; // release temp bytecodes
+
+		// release temp bytecodes
+
+		classFiles = null;
 	}
 
 	public void saveClassFile(String className, String classFileName) {
@@ -221,8 +215,9 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 
 				// Compute inner class file name
 
-				f = f.substring(0, f.lastIndexOf(File.separator)+1) +
-					c.substring(c.lastIndexOf('.')+1) + ".class";
+				f =
+					f.substring(0, f.lastIndexOf(File.separator) + 1) +
+						c.substring(c.lastIndexOf('.') + 1) + ".class";
 			}
 
 			rtctxt.saveBytecode(c, f);
@@ -241,17 +236,19 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		}
 
 		List<String> files = JspUtil.expandClassPath(paths);
-		this.cpath = new ArrayList<>();
+
+		cpath = new ArrayList<>();
 
 		for (String file : files) {
-			this.cpath.add(new File(file));
+			cpath.add(new File(file));
 		}
 	}
 
 	public void setDebug(boolean debug) {
 		if (debug) {
 			options.add("-g");
-		} else {
+		}
+		else {
 			options.add("-g:none");
 		}
 	}
@@ -273,69 +270,56 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 
 	public static class BytecodeFile extends SimpleJavaFileObject {
 
+		public BytecodeFile(URI uri, String className) {
+			super(uri, JavaFileObject.Kind.CLASS);
+
+			_className = className;
+		}
+
 		public byte[] getBytecode() {
-			return this.bytecode;
+			return _bytecode;
 		}
 
 		public String getClassName() {
-			return this.className;
-		}
-
-		BytecodeFile(URI uri, String className) {
-			super(uri, JavaFileObject.Kind.CLASS);
-
-			this.className = className;
+			return _className;
 		}
 
 		public InputStream openInputStream() {
-			return new ByteArrayInputStream(bytecode);
+			return new ByteArrayInputStream(_bytecode);
 		}
 
 		public OutputStream openOutputStream() {
 			return new ByteArrayOutputStream() {
 
 				public void close() {
-					bytecode = this.toByteArray();
+					_bytecode = toByteArray();
 				}
 
 			};
 		}
 
-		private byte[] bytecode;
-		private String className;
+		private byte[] _bytecode;
+		private final String _className;
 
 	}
 
 	protected JavaFileManager getJavaFileManager(JavaFileManager fm) {
 		return new ForwardingJavaFileManager<JavaFileManager>(fm) {
 
-/* @Override
-			public FileObject getFileForOutput(JavaFileManager.Location location,
-											String packageName,
-											String relativeName,
-											FileObject sibling) {
-
-				System.out.println(" At getFileForOutput: location = " +
-					location + " pachageName = " + packageName +
-					" relativeName = " + relativeName +
-					" sibling = " + sibling);
-
-				return getOutputFile(relativeName, null);
-			}*/
-
 			@Override
-			public JavaFileObject getJavaFileForOutput(JavaFileManager.Location location,
-													String className,
-													JavaFileObject.Kind kind,
-													FileObject sibling) {
+			public JavaFileObject getJavaFileForOutput(
+				JavaFileManager.Location location, String className,
+				JavaFileObject.Kind kind, FileObject sibling) {
 
-				return getOutputFile(className,
-					URI.create("file:///" + className.replace('.','/') + kind));
+				return getOutputFile(
+					className,
+					URI.create(
+						"file:///" + className.replace('.', '/') + kind));
 			}
 
 			@Override
-			public String inferBinaryName(JavaFileManager.Location location,
-										JavaFileObject file) {
+			public String inferBinaryName(
+				JavaFileManager.Location location, JavaFileObject file) {
 
 				if (file instanceof BytecodeFile) {
 					return ((BytecodeFile)file).getClassName();
@@ -345,20 +329,22 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 			}
 
 			@Override
-			public Iterable<JavaFileObject> list(JavaFileManager.Location location,
-												String packageName,
-												Set<JavaFileObject.Kind> kinds,
-												boolean recurse)
+			public Iterable<JavaFileObject> list(
+					JavaFileManager.Location location, String packageName,
+					Set<JavaFileObject.Kind> kinds, boolean recurse)
 				throws IOException {
 
-				if (location == StandardLocation.CLASS_PATH &&
+				if ((location == StandardLocation.CLASS_PATH) &&
 					packageName.startsWith(Constants.JSP_PACKAGE_NAME)) {
 
 					// TODO: Need to handle the case where some of the classes
 					// are on disk
 
-					Map<String, JavaFileObject> packageFiles
-						= rtctxt.getPackageMap().get(packageName);
+					Map<String, Map<String, JavaFileObject>> packageMap =
+						rtctxt.getPackageMap();
+
+					Map<String, JavaFileObject> packageFiles = packageMap.get(
+						packageName);
 
 					if (packageFiles != null) {
 						return packageFiles.values();
@@ -374,24 +360,26 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		};
 	}
 
-	protected JavaFileObject getOutputFile(final String className,
-										final URI uri) {
-
+	protected JavaFileObject getOutputFile(String className, URI uri) {
 		BytecodeFile classFile = new BytecodeFile(uri, className);
 
 		// File the class file away, by its package name
 
 		String packageName = className.substring(0, className.lastIndexOf("."));
+
 		Map<String, Map<String, JavaFileObject>> packageMap =
 			rtctxt.getPackageMap();
+
 		Map<String, JavaFileObject> packageFiles = packageMap.get(packageName);
 
 		if (packageFiles == null) {
 			packageFiles = new HashMap<>();
+
 			packageMap.put(packageName, packageFiles);
 		}
 
 		packageFiles.put(className, classFile);
+
 		classFiles.add(classFile);
 
 		return classFile;
@@ -406,6 +394,6 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 	protected ArrayList<String> options = new ArrayList<>();
 	protected JspRuntimeContext rtctxt;
 
-	private JspCompilationContext ctxt;
+	private JspCompilationContext _ctxt;
 
 }
