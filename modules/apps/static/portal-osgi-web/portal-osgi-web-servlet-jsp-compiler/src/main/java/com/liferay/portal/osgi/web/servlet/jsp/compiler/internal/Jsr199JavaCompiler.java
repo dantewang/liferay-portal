@@ -70,17 +70,19 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		final String source = charArrayWriter.toString();
 		classFiles = new ArrayList<>();
 
-		javax.tools.JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
+		javax.tools.JavaCompiler javaCompiler =
+			ToolProvider.getSystemJavaCompiler();
 
-		if (javac == null) {
-			errDispatcher.jspError("jsp.error.nojdk");
+		if (javaCompiler == null) {
+			errorDispatcher.jspError("jsp.error.nojdk");
 		}
 
-		DiagnosticCollector<JavaFileObject> diagnostics =
+		DiagnosticCollector<JavaFileObject> diagnosticCollector =
 			new DiagnosticCollector<>();
 
-		StandardJavaFileManager stdFileManager = javac.getStandardFileManager(
-			diagnostics, null, null);
+		StandardJavaFileManager standardFileManager =
+			javaCompiler.getStandardFileManager(
+				diagnosticCollector, null, null);
 
 		String name = className.substring(className.lastIndexOf('.') + 1);
 
@@ -99,16 +101,19 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		};
 
 		try {
-			stdFileManager.setLocation(StandardLocation.CLASS_PATH, cpath);
+			standardFileManager.setLocation(
+				StandardLocation.CLASS_PATH, classPath);
 		}
 		catch (IOException ioe) {
 		}
 
-		JavaFileManager javaFileManager = getJavaFileManager(stdFileManager);
+		JavaFileManager javaFileManager = getJavaFileManager(
+			standardFileManager);
 
-		javax.tools.JavaCompiler.CompilationTask ct = javac.getTask(
-			null, javaFileManager, diagnostics, options, null,
-			Arrays.asList(sourceFiles));
+		javax.tools.JavaCompiler.CompilationTask compilationTask =
+			javaCompiler.getTask(
+				null, javaFileManager, diagnosticCollector, options, null,
+				Arrays.asList(sourceFiles));
 
 		try {
 			javaFileManager.close();
@@ -116,9 +121,9 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		catch (IOException ioe) {
 		}
 
-		if (ct.call()) {
+		if (compilationTask.call()) {
 			for (BytecodeFile bytecodeFile : classFiles) {
-				rtctxt.setBytecode(
+				jspRuntimeContext.setBytecode(
 					bytecodeFile.getClassName(), bytecodeFile.getBytecode());
 			}
 
@@ -127,17 +132,17 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 
 		// There are compilation errors!
 
-		ArrayList<JavacErrorDetail> problems = new ArrayList<>();
+		List<JavacErrorDetail> javacErrorDetails = new ArrayList<>();
 
-		for (Diagnostic dm : diagnostics.getDiagnostics()) {
-			problems.add(
+		for (Diagnostic diagnostic : diagnosticCollector.getDiagnostics()) {
+			javacErrorDetails.add(
 				ErrorDispatcher.createJavacError(
 					javaFileName, pageNodes,
-					new StringBuilder(dm.getMessage(null)),
-					(int)dm.getLineNumber()));
+					new StringBuilder(diagnostic.getMessage(null)),
+					(int)diagnostic.getLineNumber()));
 		}
 
-		return problems.toArray(new JavacErrorDetail[0]);
+		return javacErrorDetails.toArray(new JavacErrorDetail[0]);
 	}
 
 	public void doJavaFile(boolean keep) throws JasperException {
@@ -158,7 +163,7 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 			charArrayWriter = null;
 		}
 		catch (UnsupportedEncodingException uee) {
-			errDispatcher.jspError(
+			errorDispatcher.jspError(
 				"jsp.error.needAlternateJavaEncoding", javaEncoding);
 		}
 		catch (IOException ioe) {
@@ -167,9 +172,9 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 	}
 
 	public long getClassLastModified() {
-		String className = _ctxt.getFullClassName();
+		String className = _jspCompilationContext.getFullClassName();
 
-		return rtctxt.getBytecodeBirthTime(className);
+		return jspRuntimeContext.getBytecodeBirthTime(className);
 	}
 
 	// a JSP compilation can produce multiple class files, we need to
@@ -185,14 +190,14 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 	}
 
 	public void init(
-		JspCompilationContext ctxt, ErrorDispatcher errDispatcher,
-		boolean suppressLogging) {
+		JspCompilationContext jspCompilationContext,
+		ErrorDispatcher errorDispatcher, boolean suppressLogging) {
 
-		_ctxt = ctxt;
+		_jspCompilationContext = jspCompilationContext;
 
-		this.errDispatcher = errDispatcher;
+		this.errorDispatcher = errorDispatcher;
 
-		rtctxt = ctxt.getRuntimeContext();
+		jspRuntimeContext = jspCompilationContext.getRuntimeContext();
 
 		// Disable annotation processing
 
@@ -208,39 +213,45 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 
 	public void saveClassFile(String className, String classFileName) {
 		for (BytecodeFile bytecodeFile : classFiles) {
-			String c = bytecodeFile.getClassName();
-			String f = classFileName;
+			String bytecodeFileClassName = bytecodeFile.getClassName();
+			String fileName = classFileName;
 
-			if (!className.equals(c)) {
+			if (!className.equals(bytecodeFileClassName)) {
 
 				// Compute inner class file name
 
-				f =
-					f.substring(0, f.lastIndexOf(File.separator) + 1) +
-						c.substring(c.lastIndexOf('.') + 1) + ".class";
+				fileName = fileName.substring(
+					0, fileName.lastIndexOf(File.separator) + 1);
+
+				fileName = fileName.concat(
+					bytecodeFileClassName.substring(
+						bytecodeFileClassName.lastIndexOf('.') + 1)
+				).concat(
+					".class"
+				);
 			}
 
-			rtctxt.saveBytecode(c, f);
+			jspRuntimeContext.saveBytecode(bytecodeFileClassName, fileName);
 		}
 	}
 
-	public void setClassPath(List<File> path) {
+	public void setClassPath(List<File> classPath) {
 
 		// Jsr199 does not expand jar manifest Class-Path (JDK bug?), we
 		// need to do it here
 
 		List<String> paths = new ArrayList<>();
 
-		for (File f : path) {
-			paths.add(f.toString());
+		for (File file : classPath) {
+			paths.add(file.toString());
 		}
 
-		List<String> files = JspUtil.expandClassPath(paths);
+		List<String> expandedPaths = JspUtil.expandClassPath(paths);
 
-		cpath = new ArrayList<>();
+		this.classPath = new ArrayList<>();
 
-		for (String file : files) {
-			cpath.add(new File(file));
+		for (String path : expandedPaths) {
+			this.classPath.add(new File(path));
 		}
 	}
 
@@ -253,9 +264,9 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		}
 	}
 
-	public void setExtdirs(String exts) {
+	public void setExtdirs(String extdirs) {
 		options.add("-extdirs");
-		options.add(exts);
+		options.add(extdirs);
 	}
 
 	public void setSourceVM(String sourceVM) {
@@ -341,7 +352,7 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 					// are on disk
 
 					Map<String, Map<String, JavaFileObject>> packageMap =
-						rtctxt.getPackageMap();
+						jspRuntimeContext.getPackageMap();
 
 					Map<String, JavaFileObject> packageFiles = packageMap.get(
 						packageName);
@@ -351,10 +362,10 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 					}
 				}
 
-				Iterable<JavaFileObject> lst = super.list(
+				Iterable<JavaFileObject> javaFileObjects = super.list(
 					location, packageName, kinds, recurse);
 
-				return lst;
+				return javaFileObjects;
 			}
 
 		};
@@ -368,7 +379,7 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		String packageName = className.substring(0, className.lastIndexOf("."));
 
 		Map<String, Map<String, JavaFileObject>> packageMap =
-			rtctxt.getPackageMap();
+			jspRuntimeContext.getPackageMap();
 
 		Map<String, JavaFileObject> packageFiles = packageMap.get(packageName);
 
@@ -386,14 +397,14 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 	}
 
 	protected CharArrayWriter charArrayWriter;
-	protected ArrayList<BytecodeFile> classFiles;
-	protected List<File> cpath;
-	protected ErrorDispatcher errDispatcher;
+	protected List<BytecodeFile> classFiles;
+	protected List<File> classPath;
+	protected ErrorDispatcher errorDispatcher;
 	protected String javaEncoding;
 	protected String javaFileName;
-	protected ArrayList<String> options = new ArrayList<>();
-	protected JspRuntimeContext rtctxt;
+	protected JspRuntimeContext jspRuntimeContext;
+	protected List<String> options = new ArrayList<>();
 
-	private JspCompilationContext _ctxt;
+	private JspCompilationContext _jspCompilationContext;
 
 }
