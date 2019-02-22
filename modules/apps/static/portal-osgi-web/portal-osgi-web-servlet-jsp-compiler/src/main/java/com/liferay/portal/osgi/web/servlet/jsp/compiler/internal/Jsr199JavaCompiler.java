@@ -53,7 +53,6 @@ import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.JavaCompiler;
 import org.apache.jasper.compiler.JavacErrorDetail;
 import org.apache.jasper.compiler.JspRuntimeContext;
-import org.apache.jasper.compiler.JspUtil;
 import org.apache.jasper.compiler.Node;
 
 /**
@@ -236,23 +235,7 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 	}
 
 	public void setClassPath(List<File> classPath) {
-
-		// Jsr199 does not expand jar manifest Class-Path (JDK bug?), we
-		// need to do it here
-
-		List<String> paths = new ArrayList<>();
-
-		for (File file : classPath) {
-			paths.add(file.toString());
-		}
-
-		List<String> expandedPaths = JspUtil.expandClassPath(paths);
-
-		this.classPath = new ArrayList<>();
-
-		for (String path : expandedPaths) {
-			this.classPath.add(new File(path));
-		}
+		this.classPath = classPath;
 	}
 
 	public void setDebug(boolean debug) {
