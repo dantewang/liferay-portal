@@ -151,13 +151,10 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 			return;
 		}
 
-		try {
-			Writer writer = new OutputStreamWriter(
-				new FileOutputStream(javaFileName), javaEncoding);
+		try (Writer writer = new OutputStreamWriter(
+				new FileOutputStream(javaFileName), javaEncoding)) {
 
 			writer.write(charArrayWriter.toString());
-
-			writer.close();
 
 			charArrayWriter = null;
 		}
