@@ -88,7 +88,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 
 		if (javaCompiler == null) {
-			errDispatcher.jspError("jsp.error.nojdk");
+			errorDispatcher.jspError("jsp.error.nojdk");
 
 			throw new JasperException("Unable to find Java compiler");
 		}
@@ -126,7 +126,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 			if (compilationTask.call()) {
 				for (BytecodeFile bytecodeFile : classFiles) {
-					rtctxt.setBytecode(
+					jspRuntimeContext.setBytecode(
 						bytecodeFile.getClassName(),
 						bytecodeFile.getBytecode());
 				}
@@ -332,7 +332,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 	@Override
 	protected JavaFileObject getOutputFile(String className, URI uri) {
 		Map<String, Map<String, JavaFileObject>> packageMap =
-			rtctxt.getPackageMap();
+			jspRuntimeContext.getPackageMap();
 
 		String packageName = className.substring(
 			0, className.lastIndexOf(CharPool.PERIOD));
