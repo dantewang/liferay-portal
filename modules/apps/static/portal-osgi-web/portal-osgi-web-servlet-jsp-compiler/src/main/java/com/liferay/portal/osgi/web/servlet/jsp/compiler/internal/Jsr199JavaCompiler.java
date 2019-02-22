@@ -30,10 +30,10 @@ import java.net.URI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -361,11 +361,11 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		Map<String, Map<String, JavaFileObject>> packageMap =
 			jspRuntimeContext.getPackageMap();
 
-		Map<String, JavaFileObject> packageJavaFileObjects =
-			packageMap.get(packageName);
+		Map<String, JavaFileObject> packageJavaFileObjects = packageMap.get(
+			packageName);
 
 		if (packageJavaFileObjects == null) {
-			packageJavaFileObjects = new HashMap<>();
+			packageJavaFileObjects = new ConcurrentHashMap<>();
 
 			packageMap.put(packageName, packageJavaFileObjects);
 		}
