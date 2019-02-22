@@ -29,7 +29,6 @@ import java.io.Writer;
 import java.net.URI;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +41,6 @@ import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.SimpleJavaFileObject;
-import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
@@ -63,64 +61,26 @@ import org.apache.jasper.compiler.Node;
  */
 public class Jsr199JavaCompiler implements JavaCompiler {
 
+	@Override
 	public JavacErrorDetail[] compile(String className, Node.Nodes pageNodes)
 		throws JasperException {
 
-		final String source = charArrayWriter.toString();
 		classFiles = new ArrayList<>();
 
-		javax.tools.JavaCompiler javaCompiler =
-			ToolProvider.getSystemJavaCompiler();
-
-		if (javaCompiler == null) {
+		if (ToolProvider.getSystemJavaCompiler() == null) {
 			errorDispatcher.jspError("jsp.error.nojdk");
+
+			throw new JasperException("Unable to find Java compiler");
 		}
 
 		DiagnosticCollector<JavaFileObject> diagnosticCollector =
 			new DiagnosticCollector<>();
 
-		StandardJavaFileManager standardFileManager =
-			javaCompiler.getStandardFileManager(
-				diagnosticCollector, null, null);
+		if (_jspCompiler.compile(
+				className, charArrayWriter.toString(), options,
+				diagnosticCollector,
+				javaFileManager -> getJavaFileManager(javaFileManager))) {
 
-		String name = className.substring(className.lastIndexOf('.') + 1);
-
-		JavaFileObject[] sourceFiles = {
-			new SimpleJavaFileObject(
-				URI.create(
-					"string:///" + name.replace('.', '/') +
-						JavaFileObject.Kind.SOURCE.extension),
-				JavaFileObject.Kind.SOURCE) {
-
-				public CharSequence getCharContent(boolean ignore) {
-					return source;
-				}
-
-			}
-		};
-
-		try {
-			standardFileManager.setLocation(
-				StandardLocation.CLASS_PATH, classPath);
-		}
-		catch (IOException ioe) {
-		}
-
-		JavaFileManager javaFileManager = getJavaFileManager(
-			standardFileManager);
-
-		javax.tools.JavaCompiler.CompilationTask compilationTask =
-			javaCompiler.getTask(
-				null, javaFileManager, diagnosticCollector, options, null,
-				Arrays.asList(sourceFiles));
-
-		try {
-			javaFileManager.close();
-		}
-		catch (IOException ioe) {
-		}
-
-		if (compilationTask.call()) {
 			for (BytecodeFile bytecodeFile : classFiles) {
 				jspRuntimeContext.setBytecode(
 					bytecodeFile.getClassName(), bytecodeFile.getBytecode());
@@ -129,19 +89,23 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 			return null;
 		}
 
-		// There are compilation errors!
+		List<Diagnostic<? extends JavaFileObject>> diagnostics =
+			diagnosticCollector.getDiagnostics();
 
-		List<JavacErrorDetail> javacErrorDetails = new ArrayList<>();
+		JavacErrorDetail[] javacErrorDetails =
+			new JavacErrorDetail[diagnostics.size()];
 
-		for (Diagnostic diagnostic : diagnosticCollector.getDiagnostics()) {
-			javacErrorDetails.add(
-				ErrorDispatcher.createJavacError(
-					javaFileName, pageNodes,
-					new StringBuilder(diagnostic.getMessage(null)),
-					(int)diagnostic.getLineNumber()));
+		for (int i = 0; i < diagnostics.size(); i++) {
+			Diagnostic<? extends JavaFileObject> diagnostic = diagnostics.get(
+				i);
+
+			javacErrorDetails[i] = ErrorDispatcher.createJavacError(
+				javaFileName, pageNodes,
+				new StringBuilder(diagnostic.getMessage(null)),
+				(int)diagnostic.getLineNumber());
 		}
 
-		return javacErrorDetails.toArray(new JavacErrorDetail[0]);
+		return javacErrorDetails;
 	}
 
 	public void doJavaFile(boolean keep) throws JasperException {
