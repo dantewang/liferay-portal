@@ -120,4 +120,5 @@ public interface JavaCompiler {
      */
     public void release();
 }
-    
+
+/* @generated */
