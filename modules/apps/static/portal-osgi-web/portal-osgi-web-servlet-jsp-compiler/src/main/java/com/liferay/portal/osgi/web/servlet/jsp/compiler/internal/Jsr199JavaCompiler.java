@@ -189,6 +189,8 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		JspCompilationContext jspCompilationContext,
 		ErrorDispatcher errorDispatcher, boolean suppressLogging) {
 
+		_jspCompiler.init(jspCompilationContext);
+
 		_jspCompilationContext = jspCompilationContext;
 
 		this.errorDispatcher = errorDispatcher;
@@ -387,5 +389,6 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 	protected List<String> options = new ArrayList<>();
 
 	private JspCompilationContext _jspCompilationContext;
+	private final JspCompiler _jspCompiler = new JspCompiler();
 
 }
