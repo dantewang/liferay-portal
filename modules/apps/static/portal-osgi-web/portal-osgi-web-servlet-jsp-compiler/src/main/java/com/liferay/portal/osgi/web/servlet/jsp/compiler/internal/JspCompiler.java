@@ -45,7 +45,6 @@ import java.util.function.Function;
 
 import javax.servlet.ServletContext;
 
-import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
@@ -58,9 +57,6 @@ import org.apache.jasper.Constants;
 import org.apache.jasper.JasperException;
 import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.Options;
-import org.apache.jasper.compiler.ErrorDispatcher;
-import org.apache.jasper.compiler.JavacErrorDetail;
-import org.apache.jasper.compiler.Node;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -75,54 +71,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Raymond Augé
  * @author Miguel Pastor
  */
-public class JspCompiler extends Jsr199JavaCompiler {
-
-	@Override
-	public JavacErrorDetail[] compile(String className, Node.Nodes pageNodes)
-		throws JasperException {
-
-		classFiles = new ArrayList<>();
-
-		if (ToolProvider.getSystemJavaCompiler() == null) {
-			errorDispatcher.jspError("jsp.error.nojdk");
-
-			throw new JasperException("Unable to find Java compiler");
-		}
-
-		DiagnosticCollector<JavaFileObject> diagnosticCollector =
-			new DiagnosticCollector<>();
-
-		if (compile(
-				className, charArrayWriter.toString(), options,
-				diagnosticCollector,
-				javaFileManager -> getJavaFileManager(javaFileManager))) {
-
-			for (BytecodeFile bytecodeFile : classFiles) {
-				jspRuntimeContext.setBytecode(
-					bytecodeFile.getClassName(), bytecodeFile.getBytecode());
-			}
-
-			return null;
-		}
-
-		List<Diagnostic<? extends JavaFileObject>> diagnostics =
-			diagnosticCollector.getDiagnostics();
-
-		JavacErrorDetail[] javacErrorDetails =
-			new JavacErrorDetail[diagnostics.size()];
-
-		for (int i = 0; i < diagnostics.size(); i++) {
-			Diagnostic<? extends JavaFileObject> diagnostic = diagnostics.get(
-				i);
-
-			javacErrorDetails[i] = ErrorDispatcher.createJavacError(
-				javaFileName, pageNodes,
-				new StringBuilder(diagnostic.getMessage(null)),
-				(int)diagnostic.getLineNumber());
-		}
-
-		return javacErrorDetails;
-	}
+public class JspCompiler {
 
 	public boolean compile(
 			String className, String sourceCode, List<String> options,
@@ -168,11 +117,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		}
 	}
 
-	@Override
-	public void init(
-		JspCompilationContext jspCompilationContext,
-		ErrorDispatcher errorDispatcher, boolean suppressLogging) {
-
+	public void init(JspCompilationContext jspCompilationContext) {
 		Options options = jspCompilationContext.getOptions();
 
 		_classPath.add(options.getScratchDir());
@@ -248,8 +193,6 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		initClassPath(servletContext);
 		initTLDMappings(
 			servletContext, jspCompilationContext.getTagFileJarUrls());
-
-		super.init(jspCompilationContext, errorDispatcher, suppressLogging);
 	}
 
 	protected void addDependenciesToClassPath() {
