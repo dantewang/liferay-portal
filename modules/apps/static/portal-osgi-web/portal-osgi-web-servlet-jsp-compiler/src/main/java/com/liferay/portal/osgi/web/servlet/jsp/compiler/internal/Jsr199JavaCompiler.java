@@ -352,7 +352,7 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 	}
 
 	protected JavaFileObject getOutputFile(String className, URI uri) {
-		BytecodeFile classFile = new BytecodeFile(uri, className);
+		BytecodeFile bytecodeFile = new BytecodeFile(uri, className);
 
 		// File the class file away, by its package name
 
@@ -361,19 +361,20 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		Map<String, Map<String, JavaFileObject>> packageMap =
 			jspRuntimeContext.getPackageMap();
 
-		Map<String, JavaFileObject> packageFiles = packageMap.get(packageName);
+		Map<String, JavaFileObject> packageJavaFileObjects =
+			packageMap.get(packageName);
 
-		if (packageFiles == null) {
-			packageFiles = new HashMap<>();
+		if (packageJavaFileObjects == null) {
+			packageJavaFileObjects = new HashMap<>();
 
-			packageMap.put(packageName, packageFiles);
+			packageMap.put(packageName, packageJavaFileObjects);
 		}
 
-		packageFiles.put(className, classFile);
+		packageJavaFileObjects.put(className, bytecodeFile);
 
-		classFiles.add(classFile);
+		classFiles.add(bytecodeFile);
 
-		return classFile;
+		return bytecodeFile;
 	}
 
 	protected CharArrayWriter charArrayWriter;
