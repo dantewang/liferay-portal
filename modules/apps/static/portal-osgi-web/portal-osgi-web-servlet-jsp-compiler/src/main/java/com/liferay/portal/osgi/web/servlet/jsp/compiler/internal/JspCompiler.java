@@ -18,7 +18,6 @@ import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.petra.concurrent.ConcurrentReferenceKeyHashMap;
 import com.liferay.petra.concurrent.ConcurrentReferenceValueHashMap;
 import com.liferay.petra.memory.FinalizeManager;
-import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
@@ -28,7 +27,6 @@ import com.liferay.portal.osgi.web.servlet.jsp.compiler.internal.util.ClassPathU
 import java.io.File;
 import java.io.IOException;
 
-import java.net.URI;
 import java.net.URL;
 
 import java.security.AccessController;
@@ -43,7 +41,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 import javax.servlet.ServletContext;
 
@@ -327,31 +325,6 @@ public class JspCompiler extends Jsr199JavaCompiler {
 							0, urlString.length() - resourcePath.length())));
 			}
 		}
-	}
-
-	@Override
-	protected JavaFileObject getOutputFile(String className, URI uri) {
-		Map<String, Map<String, JavaFileObject>> packageMap =
-			jspRuntimeContext.getPackageMap();
-
-		String packageName = className.substring(
-			0, className.lastIndexOf(CharPool.PERIOD));
-
-		// Swap the parent class's packageJavaFileObjects reference from a plain
-		// HashMap to a thread safe ConcurrentHashMap
-
-		Map<String, JavaFileObject> packageJavaFileObjects = packageMap.get(
-			packageName);
-
-		JavaFileObject javaFileObject = super.getOutputFile(className, uri);
-
-		if (packageJavaFileObjects == null) {
-			packageMap.put(
-				packageName,
-				new ConcurrentHashMap<>(packageMap.get(packageName)));
-		}
-
-		return javaFileObject;
 	}
 
 	protected void initClassPath(ServletContext servletContext) {
