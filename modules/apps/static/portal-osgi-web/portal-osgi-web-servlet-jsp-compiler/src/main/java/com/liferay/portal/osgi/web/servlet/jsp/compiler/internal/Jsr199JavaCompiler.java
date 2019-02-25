@@ -28,12 +28,14 @@ import java.io.Writer;
 
 import java.net.URI;
 
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.servlet.ServletContext;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.FileObject;
@@ -162,7 +164,11 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 
 		Options options = jspCompilationContext.getOptions();
 
-		_jspCompiler.init(jspCompilationContext, options.getScratchDir());
+		ServletContext servletContext =
+			jspCompilationContext.getServletContext();
+
+		_jspCompiler.init(
+			jspCompilationContext, servletContext, options.getScratchDir());
 
 		_jspCompilationContext = jspCompilationContext;
 

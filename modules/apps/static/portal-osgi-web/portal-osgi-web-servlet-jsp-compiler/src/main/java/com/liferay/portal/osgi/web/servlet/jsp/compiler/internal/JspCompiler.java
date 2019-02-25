@@ -108,12 +108,10 @@ public class JspCompiler {
 	}
 
 	public void init(
-		JspCompilationContext jspCompilationContext, File scratchDir) {
+		JspCompilationContext jspCompilationContext,
+		ServletContext servletContext, File scratchDir) {
 
 		_classPath.add(scratchDir);
-
-		ServletContext servletContext =
-			jspCompilationContext.getServletContext();
 
 		ClassLoader classLoader = servletContext.getClassLoader();
 
