@@ -27,8 +27,8 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import java.net.URI;
-
 import java.net.URLClassLoader;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +36,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
+
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.FileObject;
@@ -81,9 +82,9 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 
 		try {
 			if (_jspCompiler.compile(
-				className, charArrayWriter.toString(), compilerOptions,
-				diagnosticCollector,
-				javaFileManager -> getJavaFileManager(javaFileManager))) {
+					className, charArrayWriter.toString(), compilerOptions,
+					diagnosticCollector,
+					javaFileManager -> getJavaFileManager(javaFileManager))) {
 
 				for (BytecodeFile bytecodeFile : classFiles) {
 					jspRuntimeContext.setBytecode(
@@ -364,11 +365,11 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 	protected CharArrayWriter charArrayWriter;
 	protected List<BytecodeFile> classFiles;
 	protected List<File> classPath;
+	protected List<String> compilerOptions = new ArrayList<>();
 	protected ErrorDispatcher errorDispatcher;
 	protected String javaEncoding;
 	protected String javaFileName;
 	protected JspRuntimeContext jspRuntimeContext;
-	protected List<String> compilerOptions = new ArrayList<>();
 
 	private JspCompilationContext _jspCompilationContext;
 	private final JspCompiler _jspCompiler = new JspCompiler();
