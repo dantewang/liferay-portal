@@ -170,6 +170,9 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		_jspCompiler.init(
 			jspCompilationContext, servletContext, options.getScratchDir());
 
+		jspCompilationContext.setClassLoader(
+			(URLClassLoader)servletContext.getClassLoader());
+
 		_jspCompilationContext = jspCompilationContext;
 
 		this.errorDispatcher = errorDispatcher;

@@ -176,8 +176,6 @@ public class JspCompiler {
 			_log.info(sb.toString());
 		}
 
-		jspCompilationContext.setClassLoader(jspBundleClassloader);
-
 		initClassPath(servletContext);
 		initTLDMappings(
 			servletContext, jspCompilationContext.getTagFileJarUrls());
