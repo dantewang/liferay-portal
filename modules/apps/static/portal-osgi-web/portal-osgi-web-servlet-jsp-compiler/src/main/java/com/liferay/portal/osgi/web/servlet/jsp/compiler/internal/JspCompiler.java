@@ -54,7 +54,6 @@ import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
 import org.apache.jasper.Constants;
-import org.apache.jasper.JasperException;
 import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.Options;
 
@@ -78,7 +77,7 @@ public class JspCompiler {
 			DiagnosticCollector<JavaFileObject> diagnosticCollector,
 			Function<JavaFileManager, JavaFileManager>
 				javaFileManagerCustomizer)
-		throws JasperException {
+		throws IOException {
 
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 
@@ -86,13 +85,8 @@ public class JspCompiler {
 			javaCompiler.getStandardFileManager(
 				diagnosticCollector, null, null);
 
-		try {
-			standardJavaFileManager.setLocation(
-				StandardLocation.CLASS_PATH, _classPath);
-		}
-		catch (IOException ioe) {
-			_log.error(ioe.getMessage(), ioe);
-		}
+		standardJavaFileManager.setLocation(
+			StandardLocation.CLASS_PATH, _classPath);
 
 		try (JavaFileManager javaFileManager = javaFileManagerCustomizer.apply(
 				new BundleJavaFileManager(
@@ -111,9 +105,6 @@ public class JspCompiler {
 			}
 
 			return compilationTask.call();
-		}
-		catch (IOException ioe) {
-			throw new JasperException(ioe);
 		}
 	}
 

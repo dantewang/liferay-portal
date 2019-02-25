@@ -76,17 +76,23 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		DiagnosticCollector<JavaFileObject> diagnosticCollector =
 			new DiagnosticCollector<>();
 
-		if (_jspCompiler.compile(
+		try {
+			if (_jspCompiler.compile(
 				className, charArrayWriter.toString(), options,
 				diagnosticCollector,
 				javaFileManager -> getJavaFileManager(javaFileManager))) {
 
-			for (BytecodeFile bytecodeFile : classFiles) {
-				jspRuntimeContext.setBytecode(
-					bytecodeFile.getClassName(), bytecodeFile.getBytecode());
-			}
+				for (BytecodeFile bytecodeFile : classFiles) {
+					jspRuntimeContext.setBytecode(
+						bytecodeFile.getClassName(),
+						bytecodeFile.getBytecode());
+				}
 
-			return null;
+				return null;
+			}
+		}
+		catch (IOException ioe) {
+			throw new JasperException(ioe);
 		}
 
 		List<Diagnostic<? extends JavaFileObject>> diagnostics =
