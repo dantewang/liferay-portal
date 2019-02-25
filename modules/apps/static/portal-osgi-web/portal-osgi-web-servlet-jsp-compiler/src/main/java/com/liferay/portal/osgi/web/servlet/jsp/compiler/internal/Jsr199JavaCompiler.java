@@ -47,6 +47,7 @@ import javax.tools.ToolProvider;
 import org.apache.jasper.Constants;
 import org.apache.jasper.JasperException;
 import org.apache.jasper.JspCompilationContext;
+import org.apache.jasper.Options;
 import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.JavaCompiler;
 import org.apache.jasper.compiler.JavacErrorDetail;
@@ -78,7 +79,7 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 
 		try {
 			if (_jspCompiler.compile(
-				className, charArrayWriter.toString(), options,
+				className, charArrayWriter.toString(), compilerOptions,
 				diagnosticCollector,
 				javaFileManager -> getJavaFileManager(javaFileManager))) {
 
@@ -159,7 +160,9 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 		JspCompilationContext jspCompilationContext,
 		ErrorDispatcher errorDispatcher, boolean suppressLogging) {
 
-		_jspCompiler.init(jspCompilationContext);
+		Options options = jspCompilationContext.getOptions();
+
+		_jspCompiler.init(jspCompilationContext, options.getScratchDir());
 
 		_jspCompilationContext = jspCompilationContext;
 
@@ -169,7 +172,7 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 
 		// Disable annotation processing
 
-		options.add("-proc:none");
+		compilerOptions.add("-proc:none");
 	}
 
 	public void release() {
@@ -209,26 +212,26 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 
 	public void setDebug(boolean debug) {
 		if (debug) {
-			options.add("-g");
+			compilerOptions.add("-g");
 		}
 		else {
-			options.add("-g:none");
+			compilerOptions.add("-g:none");
 		}
 	}
 
 	public void setExtdirs(String extdirs) {
-		options.add("-extdirs");
-		options.add(extdirs);
+		compilerOptions.add("-extdirs");
+		compilerOptions.add(extdirs);
 	}
 
 	public void setSourceVM(String sourceVM) {
-		options.add("-source");
-		options.add(sourceVM);
+		compilerOptions.add("-source");
+		compilerOptions.add(sourceVM);
 	}
 
 	public void setTargetVM(String targetVM) {
-		options.add("-target");
-		options.add(targetVM);
+		compilerOptions.add("-target");
+		compilerOptions.add(targetVM);
 	}
 
 	public static class BytecodeFile extends SimpleJavaFileObject {
@@ -356,7 +359,7 @@ public class Jsr199JavaCompiler implements JavaCompiler {
 	protected String javaEncoding;
 	protected String javaFileName;
 	protected JspRuntimeContext jspRuntimeContext;
-	protected List<String> options = new ArrayList<>();
+	protected List<String> compilerOptions = new ArrayList<>();
 
 	private JspCompilationContext _jspCompilationContext;
 	private final JspCompiler _jspCompiler = new JspCompiler();

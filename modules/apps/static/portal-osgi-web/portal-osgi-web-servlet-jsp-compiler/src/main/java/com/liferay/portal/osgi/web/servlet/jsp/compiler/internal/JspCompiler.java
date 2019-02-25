@@ -55,7 +55,6 @@ import javax.tools.ToolProvider;
 
 import org.apache.jasper.Constants;
 import org.apache.jasper.JspCompilationContext;
-import org.apache.jasper.Options;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -108,10 +107,10 @@ public class JspCompiler {
 		}
 	}
 
-	public void init(JspCompilationContext jspCompilationContext) {
-		Options options = jspCompilationContext.getOptions();
+	public void init(
+		JspCompilationContext jspCompilationContext, File scratchDir) {
 
-		_classPath.add(options.getScratchDir());
+		_classPath.add(scratchDir);
 
 		ServletContext servletContext =
 			jspCompilationContext.getServletContext();
