@@ -54,8 +54,6 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
-import org.apache.jasper.Constants;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -160,7 +158,7 @@ public class JspCompiler {
 			sb.append(" has dependent bundle wirings: ");
 
 			for (BundleWiring curBundleWiring :
-				_bundleWiringPackageNames.keySet()) {
+					_bundleWiringPackageNames.keySet()) {
 
 				Bundle currentBundle = curBundleWiring.getBundle();
 

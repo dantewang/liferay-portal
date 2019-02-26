@@ -108,7 +108,6 @@ public class JasperCompiler extends Jsr199JavaCompiler {
 		return javacErrorDetails;
 	}
 
-
 	@Override
 	public void init(
 		JspCompilationContext jspCompilationContext,
@@ -130,11 +129,9 @@ public class JasperCompiler extends Jsr199JavaCompiler {
 		super.init(jspCompilationContext, errorDispatcher, suppressLogging);
 	}
 
-
-
 	protected void collectTLDMappings(
-		Map<String, String[]> tldMappings, Map<String, URL> tagFileJarUrls,
-		Bundle bundle)
+			Map<String, String[]> tldMappings, Map<String, URL> tagFileJarUrls,
+			Bundle bundle)
 		throws IOException {
 
 		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
