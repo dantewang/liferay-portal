@@ -94,11 +94,12 @@ public class JspCompiler extends Jsr199JavaCompiler {
 			throw new JasperException("Unable to find Java compiler");
 		}
 
-		DiagnosticCollector<JavaFileObject> diagnosticCollector =
-			new DiagnosticCollector<>();
+		List<Diagnostic<? extends JavaFileObject>> diagnostics = null;
 
 		try {
-			if (compile(className, javaCompiler, diagnosticCollector)) {
+			diagnostics = compile(className, javaCompiler);
+
+			if (diagnostics == null) {
 				for (BytecodeFile bytecodeFile : classFiles) {
 					rtctxt.setBytecode(
 						bytecodeFile.getClassName(),
@@ -111,9 +112,6 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		catch (IOException ioe) {
 			throw new JasperException(ioe);
 		}
-
-		List<Diagnostic<? extends JavaFileObject>> diagnostics =
-			diagnosticCollector.getDiagnostics();
 
 		JavacErrorDetail[] javacErrorDetails =
 			new JavacErrorDetail[diagnostics.size()];
@@ -131,10 +129,12 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		return javacErrorDetails;
 	}
 
-	public boolean compile(
-			String className, JavaCompiler javaCompiler,
-			DiagnosticCollector<? super JavaFileObject> diagnosticCollector)
+	public List<Diagnostic<? extends JavaFileObject>> compile(
+			String className, JavaCompiler javaCompiler)
 		throws IOException {
+
+		DiagnosticCollector<JavaFileObject> diagnosticCollector =
+			new DiagnosticCollector<>();
 
 		StandardJavaFileManager standardJavaFileManager =
 			javaCompiler.getStandardFileManager(
@@ -159,8 +159,12 @@ public class JspCompiler extends Jsr199JavaCompiler {
 				_log.debug("Compiling JSP: ".concat(className));
 			}
 
-			return compilationTask.call();
+			if (compilationTask.call()) {
+				return null;
+			}
 		}
+
+		return diagnosticCollector.getDiagnostics();
 	}
 
 	@Override
