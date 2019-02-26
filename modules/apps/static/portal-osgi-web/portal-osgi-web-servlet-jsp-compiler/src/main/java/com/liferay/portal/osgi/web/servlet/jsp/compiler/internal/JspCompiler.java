@@ -102,7 +102,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 				new StringJavaFileObject(
 					className.substring(className.lastIndexOf('.') + 1),
 					charArrayWriter.toString()),
-				this::getJavaFileManager);
+				options, this::getJavaFileManager);
 
 			if (diagnostics == null) {
 				for (BytecodeFile bytecodeFile : classFiles) {
@@ -135,7 +135,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 	}
 
 	public List<Diagnostic<? extends JavaFileObject>> compile(
-			JavaFileObject sourceJavaFileObject,
+			JavaFileObject sourceJavaFileObject, List<String> compileOptions,
 			Function<JavaFileManager, JavaFileManager> javaFileManagerFunction)
 		throws IOException {
 
@@ -157,8 +157,8 @@ public class JspCompiler extends Jsr199JavaCompiler {
 				_javaFileObjectResolvers))) {
 
 			JavaCompiler.CompilationTask compilationTask = javaCompiler.getTask(
-				null, javaFileManager, diagnosticCollector, options, null,
-				Arrays.asList(sourceJavaFileObject));
+				null, javaFileManager, diagnosticCollector, compileOptions,
+				null, Arrays.asList(sourceJavaFileObject));
 
 			if (_log.isDebugEnabled()) {
 				_log.debug(
