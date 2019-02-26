@@ -81,6 +81,45 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class JspCompiler extends Jsr199JavaCompiler {
 
+	public List<Diagnostic<? extends JavaFileObject>> compile(
+			JavaFileObject sourceJavaFileObject, List<String> compileOptions,
+			Function<JavaFileManager, JavaFileManager> javaFileManagerFunction)
+		throws IOException {
+
+		DiagnosticCollector<JavaFileObject> diagnosticCollector =
+			new DiagnosticCollector<>();
+
+		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
+
+		StandardJavaFileManager standardJavaFileManager =
+			javaCompiler.getStandardFileManager(
+				diagnosticCollector, null, null);
+
+		standardJavaFileManager.setLocation(
+			StandardLocation.CLASS_PATH, _classPath);
+
+		try (JavaFileManager javaFileManager = javaFileManagerFunction.apply(
+				new BundleJavaFileManager(
+					_classLoader, standardJavaFileManager,
+					_javaFileObjectResolvers))) {
+
+			JavaCompiler.CompilationTask compilationTask = javaCompiler.getTask(
+				null, javaFileManager, diagnosticCollector, compileOptions,
+				null, Arrays.asList(sourceJavaFileObject));
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Compiling JSP: ".concat(sourceJavaFileObject.getName()));
+			}
+
+			if (compilationTask.call()) {
+				return null;
+			}
+		}
+
+		return diagnosticCollector.getDiagnostics();
+	}
+
 	@Override
 	public JavacErrorDetail[] compile(String className, Node.Nodes pageNodes)
 		throws JasperException {
@@ -132,45 +171,6 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		}
 
 		return javacErrorDetails;
-	}
-
-	public List<Diagnostic<? extends JavaFileObject>> compile(
-			JavaFileObject sourceJavaFileObject, List<String> compileOptions,
-			Function<JavaFileManager, JavaFileManager> javaFileManagerFunction)
-		throws IOException {
-
-		DiagnosticCollector<JavaFileObject> diagnosticCollector =
-			new DiagnosticCollector<>();
-
-		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
-
-		StandardJavaFileManager standardJavaFileManager =
-			javaCompiler.getStandardFileManager(
-				diagnosticCollector, null, null);
-
-		standardJavaFileManager.setLocation(
-			StandardLocation.CLASS_PATH, _classPath);
-
-		try (JavaFileManager javaFileManager = javaFileManagerFunction.apply(
-			new BundleJavaFileManager(
-				_classLoader, standardJavaFileManager,
-				_javaFileObjectResolvers))) {
-
-			JavaCompiler.CompilationTask compilationTask = javaCompiler.getTask(
-				null, javaFileManager, diagnosticCollector, compileOptions,
-				null, Arrays.asList(sourceJavaFileObject));
-
-			if (_log.isDebugEnabled()) {
-				_log.debug(
-					"Compiling JSP: ".concat(sourceJavaFileObject.getName()));
-			}
-
-			if (compilationTask.call()) {
-				return null;
-			}
-		}
-
-		return diagnosticCollector.getDiagnostics();
 	}
 
 	@Override
