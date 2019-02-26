@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 
+import java.net.URLClassLoader;
 import java.security.AccessController;
 import java.security.CodeSource;
 import java.security.PrivilegedAction;
@@ -180,10 +181,22 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 		Options options = jspCompilationContext.getOptions();
 
-		_classPath.add(options.getScratchDir());
-
 		ServletContext servletContext =
 			jspCompilationContext.getServletContext();
+
+		init(options.getScratchDir(), servletContext);
+
+		jspCompilationContext.setClassLoader(
+			(URLClassLoader)servletContext.getClassLoader());
+
+		initTLDMappings(
+			servletContext, jspCompilationContext.getTagFileJarUrls());
+
+		super.init(jspCompilationContext, errorDispatcher, suppressLogging);
+	}
+
+	public void init(File scratchDir, ServletContext servletContext) {
+		_classPath.add(scratchDir);
 
 		ClassLoader classLoader = servletContext.getClassLoader();
 
@@ -232,7 +245,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 			sb.append(" has dependent bundle wirings: ");
 
 			for (BundleWiring curBundleWiring :
-					_bundleWiringPackageNames.keySet()) {
+				_bundleWiringPackageNames.keySet()) {
 
 				Bundle currentBundle = curBundleWiring.getBundle();
 
@@ -248,13 +261,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 			_log.info(sb.toString());
 		}
 
-		jspCompilationContext.setClassLoader(jspBundleClassloader);
-
 		initClassPath(servletContext);
-		initTLDMappings(
-			servletContext, jspCompilationContext.getTagFileJarUrls());
-
-		super.init(jspCompilationContext, errorDispatcher, suppressLogging);
 	}
 
 	protected void addDependenciesToClassPath() {
