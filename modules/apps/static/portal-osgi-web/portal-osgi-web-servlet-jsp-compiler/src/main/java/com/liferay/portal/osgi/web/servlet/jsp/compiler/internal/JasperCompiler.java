@@ -15,13 +15,18 @@
 package com.liferay.portal.osgi.web.servlet.jsp.compiler.internal;
 
 import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import java.io.IOException;
 
 import java.net.URI;
+import java.net.URL;
 import java.net.URLClassLoader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,6 +38,7 @@ import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
+import org.apache.jasper.Constants;
 import org.apache.jasper.JasperException;
 import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.Options;
@@ -40,6 +46,9 @@ import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.JavacErrorDetail;
 import org.apache.jasper.compiler.Jsr199JavaCompiler;
 import org.apache.jasper.compiler.Node;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.wiring.BundleWiring;
 
 /**
  * @author Dante Wang
@@ -115,10 +124,50 @@ public class JasperCompiler extends Jsr199JavaCompiler {
 		jspCompilationContext.setClassLoader(
 			(URLClassLoader)servletContext.getClassLoader());
 
-		_jspCompiler.initTLDMappings(
+		initTLDMappings(
 			servletContext, jspCompilationContext.getTagFileJarUrls());
 
 		super.init(jspCompilationContext, errorDispatcher, suppressLogging);
+	}
+
+
+
+	protected void collectTLDMappings(
+		Map<String, String[]> tldMappings, Map<String, URL> tagFileJarUrls,
+		Bundle bundle)
+		throws IOException {
+
+		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
+
+		List<String> resourcePaths = new ArrayList<>(
+			bundleWiring.listResources(
+				"/META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
+
+		resourcePaths.addAll(
+			bundleWiring.listResources(
+				"/WEB-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
+
+		for (String resourcePath : resourcePaths) {
+			URL url = bundle.getResource(resourcePath);
+
+			String uri = TldURIUtil.getTldURI(url);
+
+			if (uri != null) {
+				String absoluteResourcePath = StringPool.SLASH.concat(
+					resourcePath);
+
+				tldMappings.put(
+					uri.trim(), new String[] {absoluteResourcePath, null});
+
+				String urlString = url.toExternalForm();
+
+				tagFileJarUrls.put(
+					absoluteResourcePath,
+					new URL(
+						urlString.substring(
+							0, urlString.length() - resourcePath.length())));
+			}
+		}
 	}
 
 	@Override
@@ -145,6 +194,46 @@ public class JasperCompiler extends Jsr199JavaCompiler {
 
 		return javaFileObject;
 	}
+
+	@SuppressWarnings("unchecked")
+	protected void initTLDMappings(
+		ServletContext servletContext, Map<String, URL> tagFileJarUrls) {
+
+		Map<String, String[]> tldMappings =
+			(Map<String, String[]>)servletContext.getAttribute(
+				Constants.JSP_TLD_URI_TO_LOCATION_MAP);
+
+		if (tldMappings != null) {
+			return;
+		}
+
+		tldMappings = new HashMap<>();
+
+		try {
+			for (Bundle bundle : _jspCompiler.getParticipatingBundles()) {
+				collectTLDMappings(tldMappings, tagFileJarUrls, bundle);
+			}
+		}
+		catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		Map<String, String> map =
+			(Map<String, String>)servletContext.getAttribute(
+				"jsp.taglib.mappings");
+
+		if (map != null) {
+			for (Map.Entry<String, String> entry : map.entrySet()) {
+				tldMappings.put(
+					entry.getKey(), new String[] {entry.getValue(), null});
+			}
+		}
+
+		servletContext.setAttribute(
+			Constants.JSP_TLD_URI_TO_LOCATION_MAP, tldMappings);
+	}
+
+	private static final Log _log = LogFactoryUtil.getLog(JasperCompiler.class);
 
 	private final JspCompiler _jspCompiler = new JspCompiler();
 
