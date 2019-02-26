@@ -97,7 +97,10 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		List<Diagnostic<? extends JavaFileObject>> diagnostics = null;
 
 		try {
-			diagnostics = compile(className);
+			diagnostics = compile(
+				new StringJavaFileObject(
+					className.substring(className.lastIndexOf('.') + 1),
+					charArrayWriter.toString()));
 
 			if (diagnostics == null) {
 				for (BytecodeFile bytecodeFile : classFiles) {
@@ -129,7 +132,8 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		return javacErrorDetails;
 	}
 
-	public List<Diagnostic<? extends JavaFileObject>> compile(String className)
+	public List<Diagnostic<? extends JavaFileObject>> compile(
+			JavaFileObject sourceJavaFileObject)
 		throws IOException {
 
 		DiagnosticCollector<JavaFileObject> diagnosticCollector =
@@ -151,13 +155,11 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 			JavaCompiler.CompilationTask compilationTask = javaCompiler.getTask(
 				null, javaFileManager, diagnosticCollector, options, null,
-				Arrays.asList(
-					new StringJavaFileObject(
-						className.substring(className.lastIndexOf('.') + 1),
-						charArrayWriter.toString())));
+				Arrays.asList(sourceJavaFileObject));
 
 			if (_log.isDebugEnabled()) {
-				_log.debug("Compiling JSP: ".concat(className));
+				_log.debug(
+					"Compiling JSP: ".concat(sourceJavaFileObject.getName()));
 			}
 
 			if (compilationTask.call()) {
