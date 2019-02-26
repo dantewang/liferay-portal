@@ -18,7 +18,6 @@ import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.petra.concurrent.ConcurrentReferenceKeyHashMap;
 import com.liferay.petra.concurrent.ConcurrentReferenceValueHashMap;
 import com.liferay.petra.memory.FinalizeManager;
-import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
@@ -28,10 +27,8 @@ import com.liferay.portal.osgi.web.servlet.jsp.compiler.internal.util.ClassPathU
 import java.io.File;
 import java.io.IOException;
 
-import java.net.URI;
 import java.net.URL;
 
-import java.net.URLClassLoader;
 import java.security.AccessController;
 import java.security.CodeSource;
 import java.security.PrivilegedAction;
@@ -44,7 +41,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import javax.servlet.ServletContext;
@@ -59,13 +55,6 @@ import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
 import org.apache.jasper.Constants;
-import org.apache.jasper.JasperException;
-import org.apache.jasper.JspCompilationContext;
-import org.apache.jasper.Options;
-import org.apache.jasper.compiler.ErrorDispatcher;
-import org.apache.jasper.compiler.JavacErrorDetail;
-import org.apache.jasper.compiler.Jsr199JavaCompiler;
-import org.apache.jasper.compiler.Node;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -80,7 +69,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Raymond Augé
  * @author Miguel Pastor
  */
-public class JspCompiler extends Jsr199JavaCompiler {
+public class JspCompiler {
 
 	public List<Diagnostic<? extends JavaFileObject>> compile(
 			JavaFileObject sourceJavaFileObject, List<String> compileOptions,
@@ -119,80 +108,6 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		}
 
 		return diagnosticCollector.getDiagnostics();
-	}
-
-	@Override
-	public JavacErrorDetail[] compile(String className, Node.Nodes pageNodes)
-		throws JasperException {
-
-		classFiles = new ArrayList<>();
-
-		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
-
-		if (javaCompiler == null) {
-			errDispatcher.jspError("jsp.error.nojdk");
-
-			throw new JasperException("Unable to find Java compiler");
-		}
-
-		List<Diagnostic<? extends JavaFileObject>> diagnostics = null;
-
-		try {
-			diagnostics = compile(
-				new StringJavaFileObject(
-					className.substring(className.lastIndexOf('.') + 1),
-					charArrayWriter.toString()),
-				options, this::getJavaFileManager);
-
-			if (diagnostics == null) {
-				for (BytecodeFile bytecodeFile : classFiles) {
-					rtctxt.setBytecode(
-						bytecodeFile.getClassName(),
-						bytecodeFile.getBytecode());
-				}
-
-				return null;
-			}
-		}
-		catch (IOException ioe) {
-			throw new JasperException(ioe);
-		}
-
-		JavacErrorDetail[] javacErrorDetails =
-			new JavacErrorDetail[diagnostics.size()];
-
-		for (int i = 0; i < diagnostics.size(); i++) {
-			Diagnostic<? extends JavaFileObject> diagnostic = diagnostics.get(
-				i);
-
-			javacErrorDetails[i] = ErrorDispatcher.createJavacError(
-				javaFileName, pageNodes,
-				new StringBuilder(diagnostic.getMessage(null)),
-				(int)diagnostic.getLineNumber());
-		}
-
-		return javacErrorDetails;
-	}
-
-	@Override
-	public void init(
-		JspCompilationContext jspCompilationContext,
-		ErrorDispatcher errorDispatcher, boolean suppressLogging) {
-
-		Options options = jspCompilationContext.getOptions();
-
-		ServletContext servletContext =
-			jspCompilationContext.getServletContext();
-
-		init(options.getScratchDir(), servletContext);
-
-		jspCompilationContext.setClassLoader(
-			(URLClassLoader)servletContext.getClassLoader());
-
-		initTLDMappings(
-			servletContext, jspCompilationContext.getTagFileJarUrls());
-
-		super.init(jspCompilationContext, errorDispatcher, suppressLogging);
 	}
 
 	public void init(File scratchDir, ServletContext servletContext) {
@@ -350,31 +265,6 @@ public class JspCompiler extends Jsr199JavaCompiler {
 							0, urlString.length() - resourcePath.length())));
 			}
 		}
-	}
-
-	@Override
-	protected JavaFileObject getOutputFile(String className, URI uri) {
-		Map<String, Map<String, JavaFileObject>> packageMap =
-			rtctxt.getPackageMap();
-
-		String packageName = className.substring(
-			0, className.lastIndexOf(CharPool.PERIOD));
-
-		// Swap the parent class's packageJavaFileObjects reference from a plain
-		// HashMap to a thread safe ConcurrentHashMap
-
-		Map<String, JavaFileObject> packageJavaFileObjects = packageMap.get(
-			packageName);
-
-		JavaFileObject javaFileObject = super.getOutputFile(className, uri);
-
-		if (packageJavaFileObjects == null) {
-			packageMap.put(
-				packageName,
-				new ConcurrentHashMap<>(packageMap.get(packageName)));
-		}
-
-		return javaFileObject;
 	}
 
 	protected void initClassPath(ServletContext servletContext) {
