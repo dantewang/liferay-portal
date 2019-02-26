@@ -97,7 +97,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		List<Diagnostic<? extends JavaFileObject>> diagnostics = null;
 
 		try {
-			diagnostics = compile(className, javaCompiler);
+			diagnostics = compile(className);
 
 			if (diagnostics == null) {
 				for (BytecodeFile bytecodeFile : classFiles) {
@@ -129,12 +129,13 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		return javacErrorDetails;
 	}
 
-	public List<Diagnostic<? extends JavaFileObject>> compile(
-			String className, JavaCompiler javaCompiler)
+	public List<Diagnostic<? extends JavaFileObject>> compile(String className)
 		throws IOException {
 
 		DiagnosticCollector<JavaFileObject> diagnosticCollector =
 			new DiagnosticCollector<>();
+
+		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 
 		StandardJavaFileManager standardJavaFileManager =
 			javaCompiler.getStandardFileManager(
