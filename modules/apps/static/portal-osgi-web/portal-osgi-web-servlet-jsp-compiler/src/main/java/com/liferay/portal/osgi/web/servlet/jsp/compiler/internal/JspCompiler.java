@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 import javax.servlet.ServletContext;
 
@@ -100,7 +101,8 @@ public class JspCompiler extends Jsr199JavaCompiler {
 			diagnostics = compile(
 				new StringJavaFileObject(
 					className.substring(className.lastIndexOf('.') + 1),
-					charArrayWriter.toString()));
+					charArrayWriter.toString()),
+				this::getJavaFileManager);
 
 			if (diagnostics == null) {
 				for (BytecodeFile bytecodeFile : classFiles) {
@@ -133,7 +135,8 @@ public class JspCompiler extends Jsr199JavaCompiler {
 	}
 
 	public List<Diagnostic<? extends JavaFileObject>> compile(
-			JavaFileObject sourceJavaFileObject)
+			JavaFileObject sourceJavaFileObject,
+			Function<JavaFileManager, JavaFileManager> javaFileManagerFunction)
 		throws IOException {
 
 		DiagnosticCollector<JavaFileObject> diagnosticCollector =
@@ -148,7 +151,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		standardJavaFileManager.setLocation(
 			StandardLocation.CLASS_PATH, _classPath);
 
-		try (JavaFileManager javaFileManager = getJavaFileManager(
+		try (JavaFileManager javaFileManager = javaFileManagerFunction.apply(
 			new BundleJavaFileManager(
 				_classLoader, standardJavaFileManager,
 				_javaFileObjectResolvers))) {
