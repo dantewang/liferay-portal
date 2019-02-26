@@ -97,46 +97,14 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		DiagnosticCollector<JavaFileObject> diagnosticCollector =
 			new DiagnosticCollector<>();
 
-		StandardJavaFileManager standardJavaFileManager =
-			javaCompiler.getStandardFileManager(
-				diagnosticCollector, null, null);
-
-		try {
-			standardJavaFileManager.setLocation(
-				StandardLocation.CLASS_PATH, _classPath);
-		}
-		catch (IOException ioe) {
-			throw new JasperException(ioe);
-		}
-
-		try (JavaFileManager javaFileManager = getJavaFileManager(
-				new BundleJavaFileManager(
-					_classLoader, standardJavaFileManager,
-					_javaFileObjectResolvers))) {
-
-			JavaCompiler.CompilationTask compilationTask = javaCompiler.getTask(
-				null, javaFileManager, diagnosticCollector, options, null,
-				Arrays.asList(
-					new StringJavaFileObject(
-						className.substring(className.lastIndexOf('.') + 1),
-						charArrayWriter.toString())));
-
-			if (_log.isDebugEnabled()) {
-				_log.debug("Compiling JSP: ".concat(className));
+		if (compile(className, javaCompiler, diagnosticCollector)) {
+			for (BytecodeFile bytecodeFile : classFiles) {
+				rtctxt.setBytecode(
+					bytecodeFile.getClassName(),
+					bytecodeFile.getBytecode());
 			}
 
-			if (compilationTask.call()) {
-				for (BytecodeFile bytecodeFile : classFiles) {
-					rtctxt.setBytecode(
-						bytecodeFile.getClassName(),
-						bytecodeFile.getBytecode());
-				}
-
-				return null;
-			}
-		}
-		catch (IOException ioe) {
-			throw new JasperException(ioe);
+			return null;
 		}
 
 		List<Diagnostic<? extends JavaFileObject>> diagnostics =
@@ -156,6 +124,46 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		}
 
 		return javacErrorDetails;
+	}
+
+	public boolean compile(
+			String className, JavaCompiler javaCompiler,
+			DiagnosticCollector<? super JavaFileObject> diagnosticCollector)
+		throws JasperException {
+
+		StandardJavaFileManager standardJavaFileManager =
+			javaCompiler.getStandardFileManager(
+				diagnosticCollector, null, null);
+
+		try {
+			standardJavaFileManager.setLocation(
+				StandardLocation.CLASS_PATH, _classPath);
+		}
+		catch (IOException ioe) {
+			throw new JasperException(ioe);
+		}
+
+		try (JavaFileManager javaFileManager = getJavaFileManager(
+			new BundleJavaFileManager(
+				_classLoader, standardJavaFileManager,
+				_javaFileObjectResolvers))) {
+
+			JavaCompiler.CompilationTask compilationTask = javaCompiler.getTask(
+				null, javaFileManager, diagnosticCollector, options, null,
+				Arrays.asList(
+					new StringJavaFileObject(
+						className.substring(className.lastIndexOf('.') + 1),
+						charArrayWriter.toString())));
+
+			if (_log.isDebugEnabled()) {
+				_log.debug("Compiling JSP: ".concat(className));
+			}
+
+			return compilationTask.call();
+		}
+		catch (IOException ioe) {
+			throw new JasperException(ioe);
+		}
 	}
 
 	@Override
