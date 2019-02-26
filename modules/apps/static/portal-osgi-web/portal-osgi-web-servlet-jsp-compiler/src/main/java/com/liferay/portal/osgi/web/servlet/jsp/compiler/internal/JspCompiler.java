@@ -97,14 +97,19 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		DiagnosticCollector<JavaFileObject> diagnosticCollector =
 			new DiagnosticCollector<>();
 
-		if (compile(className, javaCompiler, diagnosticCollector)) {
-			for (BytecodeFile bytecodeFile : classFiles) {
-				rtctxt.setBytecode(
-					bytecodeFile.getClassName(),
-					bytecodeFile.getBytecode());
-			}
+		try {
+			if (compile(className, javaCompiler, diagnosticCollector)) {
+				for (BytecodeFile bytecodeFile : classFiles) {
+					rtctxt.setBytecode(
+						bytecodeFile.getClassName(),
+						bytecodeFile.getBytecode());
+				}
 
-			return null;
+				return null;
+			}
+		}
+		catch (IOException ioe) {
+			throw new JasperException(ioe);
 		}
 
 		List<Diagnostic<? extends JavaFileObject>> diagnostics =
@@ -129,19 +134,14 @@ public class JspCompiler extends Jsr199JavaCompiler {
 	public boolean compile(
 			String className, JavaCompiler javaCompiler,
 			DiagnosticCollector<? super JavaFileObject> diagnosticCollector)
-		throws JasperException {
+		throws IOException {
 
 		StandardJavaFileManager standardJavaFileManager =
 			javaCompiler.getStandardFileManager(
 				diagnosticCollector, null, null);
 
-		try {
-			standardJavaFileManager.setLocation(
-				StandardLocation.CLASS_PATH, _classPath);
-		}
-		catch (IOException ioe) {
-			throw new JasperException(ioe);
-		}
+		standardJavaFileManager.setLocation(
+			StandardLocation.CLASS_PATH, _classPath);
 
 		try (JavaFileManager javaFileManager = getJavaFileManager(
 			new BundleJavaFileManager(
@@ -160,9 +160,6 @@ public class JspCompiler extends Jsr199JavaCompiler {
 			}
 
 			return compilationTask.call();
-		}
-		catch (IOException ioe) {
-			throw new JasperException(ioe);
 		}
 	}
 
