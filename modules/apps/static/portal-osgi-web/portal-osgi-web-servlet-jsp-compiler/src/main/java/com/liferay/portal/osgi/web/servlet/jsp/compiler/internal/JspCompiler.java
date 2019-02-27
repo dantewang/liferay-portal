@@ -325,7 +325,8 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 				);
 			}
 
-			jspRuntimeContext.saveBytecode(bytecodeFileClassName, outputFileName);
+			jspRuntimeContext.saveBytecode(
+				bytecodeFileClassName, outputFileName);
 		}
 	}
 
@@ -547,8 +548,8 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 	protected ErrorDispatcher errDispatcher;
 	protected String javaEncoding;
 	protected String javaFileName;
-	protected ArrayList<String> options = new ArrayList<>();
 	protected JspRuntimeContext jspRuntimeContext;
+	protected ArrayList<String> options = new ArrayList<>();
 
 	private static Set<String> _collectPackageNames(BundleWiring bundleWiring) {
 		Set<String> packageNames = _bundleWiringPackageNamesCache.get(
