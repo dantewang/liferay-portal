@@ -58,14 +58,14 @@
 
 package org.apache.jasper.compiler;
 
-import org.apache.jasper.JasperException;
-import org.apache.jasper.JspCompilationContext;
-
 import java.io.File;
 import java.io.Writer;
 import java.util.List;
 
-interface JavaCompiler {
+import org.apache.jasper.JasperException;
+import org.apache.jasper.JspCompilationContext;
+
+public interface JavaCompiler {
 
     /**
      * Start Java compilation
@@ -120,4 +120,5 @@ interface JavaCompiler {
      */
     public void release();
 }
-    
+
+/* @generated */
