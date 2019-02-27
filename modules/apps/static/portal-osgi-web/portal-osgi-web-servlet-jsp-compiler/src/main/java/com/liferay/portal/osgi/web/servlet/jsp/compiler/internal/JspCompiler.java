@@ -76,7 +76,6 @@ import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.JavacErrorDetail;
 import org.apache.jasper.compiler.JspRuntimeContext;
 import org.apache.jasper.compiler.JspUtil;
-import org.apache.jasper.compiler.Jsr199JavaCompiler;
 import org.apache.jasper.compiler.Node;
 
 import org.osgi.framework.Bundle;
@@ -92,7 +91,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Raymond Augé
  * @author Miguel Pastor
  */
-public class JspCompiler extends Jsr199JavaCompiler {
+public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 
 	@Override
 	public JavacErrorDetail[] compile(String className, Node.Nodes pageNodes)
@@ -465,7 +464,6 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		}
 	}
 
-	@Override
 	protected JavaFileObject getOutputFile(String className, URI uri) {
 		BytecodeFile classFile = new BytecodeFile(uri, className);
 
