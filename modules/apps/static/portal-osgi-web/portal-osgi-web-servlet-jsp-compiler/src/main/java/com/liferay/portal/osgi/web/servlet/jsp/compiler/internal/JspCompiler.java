@@ -103,14 +103,16 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 		try {
 			standardJavaFileManager.setLocation(
-				StandardLocation.CLASS_PATH, cpath);
+				StandardLocation.CLASS_PATH, _classPath);
 		}
 		catch (IOException ioException) {
 			throw new JasperException(ioException);
 		}
 
 		try (JavaFileManager javaFileManager = getJavaFileManager(
-				standardJavaFileManager)) {
+				new BundleJavaFileManager(
+					_classLoader, standardJavaFileManager,
+					_javaFileObjectResolvers))) {
 
 			JavaCompiler.CompilationTask compilationTask = javaCompiler.getTask(
 				null, javaFileManager, diagnosticCollector, options, null,
@@ -328,30 +330,6 @@ public class JspCompiler extends Jsr199JavaCompiler {
 							0, urlString.length() - resourcePath.length())));
 			}
 		}
-	}
-
-	@Override
-	protected JavaFileManager getJavaFileManager(
-		JavaFileManager javaFileManager) {
-
-		if (javaFileManager instanceof StandardJavaFileManager) {
-			StandardJavaFileManager standardJavaFileManager =
-				(StandardJavaFileManager)javaFileManager;
-
-			try {
-				standardJavaFileManager.setLocation(
-					StandardLocation.CLASS_PATH, _classPath);
-			}
-			catch (IOException ioException) {
-				_log.error(ioException.getMessage(), ioException);
-			}
-
-			javaFileManager = new BundleJavaFileManager(
-				_classLoader, standardJavaFileManager,
-				_javaFileObjectResolvers);
-		}
-
-		return super.getJavaFileManager(javaFileManager);
 	}
 
 	@Override
