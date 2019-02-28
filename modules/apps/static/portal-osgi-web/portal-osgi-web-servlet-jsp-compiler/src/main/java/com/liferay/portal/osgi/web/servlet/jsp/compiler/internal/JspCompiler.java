@@ -464,29 +464,6 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 		}
 	}
 
-	protected JavaFileObject getOutputFile(String className, URI uri) {
-		BytecodeFile classFile = new BytecodeFile(uri, className);
-
-		String packageName = className.substring(0, className.lastIndexOf("."));
-
-		Map<String, Map<String, JavaFileObject>> packageMap =
-			jspRuntimeContext.getPackageMap();
-
-		Map<String, JavaFileObject> packageFiles = packageMap.get(packageName);
-
-		if (packageFiles == null) {
-			packageFiles = new HashMap<>();
-
-			packageMap.put(packageName, packageFiles);
-		}
-
-		packageFiles.put(className, classFile);
-
-		classFiles.add(classFile);
-
-		return classFile;
-	}
-
 	protected void initClassPath(ServletContext servletContext) {
 		if (System.getSecurityManager() != null) {
 			AccessController.doPrivileged(
@@ -688,23 +665,24 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 			String packageName = className.substring(
 				0, className.lastIndexOf(CharPool.PERIOD));
 
-			// Swap the parent class's packageJavaFileObjects reference from a
-			// plain HashMap to a thread safe ConcurrentHashMap
-
 			Map<String, JavaFileObject> packageJavaFileObjects = packageMap.get(
 				packageName);
 
-			JavaFileObject javaFileObject = getOutputFile(
-				className,
-				URI.create("file:///" + className.replace('.', '/') + kind));
+			BytecodeFile bytecodeFile = new BytecodeFile(
+				URI.create("file:///" + className.replace('.', '/') + kind),
+				className);
 
 			if (packageJavaFileObjects == null) {
-				packageMap.put(
-					packageName,
-					new ConcurrentHashMap<>(packageMap.get(packageName)));
+				packageJavaFileObjects = new ConcurrentHashMap<>();
+
+				packageMap.put(packageName, packageJavaFileObjects);
 			}
 
-			return javaFileObject;
+			packageJavaFileObjects.put(className, bytecodeFile);
+
+			classFiles.add(bytecodeFile);
+
+			return bytecodeFile;
 		}
 
 		@Override
