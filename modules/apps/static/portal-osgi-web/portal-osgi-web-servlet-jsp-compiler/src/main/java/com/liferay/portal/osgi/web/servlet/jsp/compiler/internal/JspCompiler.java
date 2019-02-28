@@ -96,12 +96,12 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 	public JavacErrorDetail[] compile(String className, Node.Nodes pageNodes)
 		throws JasperException {
 
-		bytecodeFiles = new ArrayList<>();
+		_bytecodeFiles = new ArrayList<>();
 
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 
 		if (javaCompiler == null) {
-			errorDispatcher.jspError("jsp.error.nojdk");
+			_errorDispatcher.jspError("jsp.error.nojdk");
 
 			throw new JasperException("Unable to find Java compiler");
 		}
@@ -127,20 +127,20 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 					_javaFileObjectResolvers))) {
 
 			JavaCompiler.CompilationTask compilationTask = javaCompiler.getTask(
-				null, javaFileManager, diagnosticCollector, compilerOptions,
+				null, javaFileManager, diagnosticCollector, _compilerOptions,
 				null,
 				Arrays.asList(
 					new StringJavaFileObject(
 						className.substring(className.lastIndexOf('.') + 1),
-						charArrayWriter.toString())));
+						_charArrayWriter.toString())));
 
 			if (_log.isDebugEnabled()) {
 				_log.debug("Compiling JSP: ".concat(className));
 			}
 
 			if (compilationTask.call()) {
-				for (BytecodeFile bytecodeFile : bytecodeFiles) {
-					jspRuntimeContext.setBytecode(
+				for (BytecodeFile bytecodeFile : _bytecodeFiles) {
+					_jspRuntimeContext.setBytecode(
 						bytecodeFile.getClassName(),
 						bytecodeFile.getBytecode());
 				}
@@ -163,7 +163,7 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 				i);
 
 			javacErrorDetails[i] = ErrorDispatcher.createJavacError(
-				javaFileName, pageNodes,
+				_javaFileName, pageNodes,
 				new StringBuilder(diagnostic.getMessage(null)),
 				(int)diagnostic.getLineNumber());
 		}
@@ -174,21 +174,21 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 	@Override
 	public void doJavaFile(boolean keep) throws JasperException {
 		if (!keep) {
-			charArrayWriter = null;
+			_charArrayWriter = null;
 
 			return;
 		}
 
 		try (Writer writer = new OutputStreamWriter(
-				new FileOutputStream(javaFileName), javaEncoding)) {
+				new FileOutputStream(_javaFileName), _javaEncoding)) {
 
-			writer.write(charArrayWriter.toString());
+			writer.write(_charArrayWriter.toString());
 
-			charArrayWriter = null;
+			_charArrayWriter = null;
 		}
 		catch (UnsupportedEncodingException uee) {
-			errorDispatcher.jspError(
-				"jsp.error.needAlternateJavaEncoding", javaEncoding);
+			_errorDispatcher.jspError(
+				"jsp.error.needAlternateJavaEncoding", _javaEncoding);
 		}
 		catch (IOException ioe) {
 			throw new JasperException(ioe);
@@ -199,17 +199,17 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 	public long getClassLastModified() {
 		String className = _jspCompilationContext.getFullClassName();
 
-		return jspRuntimeContext.getBytecodeBirthTime(className);
+		return _jspRuntimeContext.getBytecodeBirthTime(className);
 	}
 
 	@Override
 	public Writer getJavaWriter(String javaFileName, String javaEncoding) {
-		this.javaFileName = javaFileName;
-		this.javaEncoding = javaEncoding;
+		_javaFileName = javaFileName;
+		_javaEncoding = javaEncoding;
 
-		charArrayWriter = new CharArrayWriter();
+		_charArrayWriter = new CharArrayWriter();
 
-		return charArrayWriter;
+		return _charArrayWriter;
 	}
 
 	@Override
@@ -295,21 +295,21 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 
 		_jspCompilationContext = jspCompilationContext;
 
-		this.errorDispatcher = errorDispatcher;
+		_errorDispatcher = errorDispatcher;
 
-		jspRuntimeContext = jspCompilationContext.getRuntimeContext();
+		_jspRuntimeContext = jspCompilationContext.getRuntimeContext();
 
-		this.compilerOptions.add("-proc:none");
+		_compilerOptions.add("-proc:none");
 	}
 
 	@Override
 	public void release() {
-		bytecodeFiles = null;
+		_bytecodeFiles = null;
 	}
 
 	@Override
 	public void saveClassFile(String className, String classFileName) {
-		for (BytecodeFile bytecodeFile : bytecodeFiles) {
+		for (BytecodeFile bytecodeFile : _bytecodeFiles) {
 			String bytecodeFileClassName = bytecodeFile.getClassName();
 			String outputFileName = classFileName;
 
@@ -325,7 +325,7 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 				);
 			}
 
-			jspRuntimeContext.saveBytecode(
+			_jspRuntimeContext.saveBytecode(
 				bytecodeFileClassName, outputFileName);
 		}
 	}
@@ -337,29 +337,29 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 	@Override
 	public void setDebug(boolean debug) {
 		if (debug) {
-			compilerOptions.add("-g");
+			_compilerOptions.add("-g");
 		}
 		else {
-			compilerOptions.add("-g:none");
+			_compilerOptions.add("-g:none");
 		}
 	}
 
 	@Override
 	public void setExtdirs(String exts) {
-		compilerOptions.add("-extdirs");
-		compilerOptions.add(exts);
+		_compilerOptions.add("-extdirs");
+		_compilerOptions.add(exts);
 	}
 
 	@Override
 	public void setSourceVM(String sourceVM) {
-		compilerOptions.add("-source");
-		compilerOptions.add(sourceVM);
+		_compilerOptions.add("-source");
+		_compilerOptions.add(sourceVM);
 	}
 
 	@Override
 	public void setTargetVM(String targetVM) {
-		compilerOptions.add("-target");
-		compilerOptions.add(targetVM);
+		_compilerOptions.add("-target");
+		_compilerOptions.add(targetVM);
 	}
 
 	protected void addDependenciesToClassPath() {
@@ -507,14 +507,6 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 			Constants.JSP_TLD_URI_TO_LOCATION_MAP, tldMappings);
 	}
 
-	protected List<BytecodeFile> bytecodeFiles;
-	protected CharArrayWriter charArrayWriter;
-	protected List<String> compilerOptions = new ArrayList<>();
-	protected ErrorDispatcher errorDispatcher;
-	protected String javaEncoding;
-	protected String javaFileName;
-	protected JspRuntimeContext jspRuntimeContext;
-
 	private static Set<String> _collectPackageNames(BundleWiring bundleWiring) {
 		Set<String> packageNames = _bundleWiringPackageNamesCache.get(
 			bundleWiring);
@@ -589,11 +581,18 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 	private Bundle[] _allParticipatingBundles;
 	private final Map<BundleWiring, Set<String>> _bundleWiringPackageNames =
 		new HashMap<>(_jspBundleWiringPackageNames);
+	private List<BytecodeFile> _bytecodeFiles;
+	private CharArrayWriter _charArrayWriter;
 	private ClassLoader _classLoader;
 	private final List<File> _classPath = new ArrayList<>();
+	private final List<String> _compilerOptions = new ArrayList<>();
+	private ErrorDispatcher _errorDispatcher;
+	private String _javaEncoding;
+	private String _javaFileName;
 	private final List<JavaFileObjectResolver> _javaFileObjectResolvers =
 		new ArrayList<>();
 	private JspCompilationContext _jspCompilationContext;
+	private JspRuntimeContext _jspRuntimeContext;
 
 	private class BytecodeFile extends SimpleJavaFileObject {
 
@@ -645,7 +644,7 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 			FileObject sibling) {
 
 			Map<String, Map<String, JavaFileObject>> packageMap =
-				jspRuntimeContext.getPackageMap();
+				_jspRuntimeContext.getPackageMap();
 
 			String packageName = className.substring(
 				0, className.lastIndexOf(CharPool.PERIOD));
@@ -665,7 +664,7 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 
 			packageJavaFileObjects.put(className, bytecodeFile);
 
-			bytecodeFiles.add(bytecodeFile);
+			_bytecodeFiles.add(bytecodeFile);
 
 			return bytecodeFile;
 		}
@@ -689,7 +688,7 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 				packageName.startsWith(Constants.JSP_PACKAGE_NAME)) {
 
 				Map<String, Map<String, JavaFileObject>> packageMap =
-					jspRuntimeContext.getPackageMap();
+					_jspRuntimeContext.getPackageMap();
 
 				Map<String, JavaFileObject> packageFiles = packageMap.get(
 					packageName);
