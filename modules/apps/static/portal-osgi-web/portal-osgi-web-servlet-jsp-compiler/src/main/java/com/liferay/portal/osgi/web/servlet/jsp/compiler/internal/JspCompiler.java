@@ -706,10 +706,7 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 				}
 			}
 
-			Iterable<JavaFileObject> javaFileObjects = super.list(
-				location, packageName, kinds, recurse);
-
-			return javaFileObjects;
+			return super.list(location, packageName, kinds, recurse);
 		}
 
 	}
