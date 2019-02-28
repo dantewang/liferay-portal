@@ -23,6 +23,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.osgi.web.servlet.jsp.compiler.internal.util.ClassPathUtil;
 
 import java.io.ByteArrayInputStream;
@@ -131,7 +132,8 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 				null,
 				Arrays.asList(
 					new StringJavaFileObject(
-						className.substring(className.lastIndexOf('.') + 1),
+						className.substring(
+							className.lastIndexOf(CharPool.PERIOD) + 1),
 						_charArrayWriter.toString())));
 
 			if (_log.isDebugEnabled()) {
@@ -319,7 +321,7 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 
 				outputFileName = outputFileName.concat(
 					bytecodeFileClassName.substring(
-						bytecodeFileClassName.lastIndexOf('.') + 1)
+						bytecodeFileClassName.lastIndexOf(CharPool.PERIOD) + 1)
 				).concat(
 					".class"
 				);
@@ -653,7 +655,13 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 				packageName);
 
 			BytecodeFile bytecodeFile = new BytecodeFile(
-				URI.create("file:///" + className.replace('.', '/') + kind),
+				URI.create(
+					"file:///".concat(
+						StringUtil.replace(
+							className, CharPool.PERIOD, CharPool.FORWARD_SLASH)
+					).concat(
+						String.valueOf(kind)
+					)),
 				className);
 
 			if (packageJavaFileObjects == null) {
