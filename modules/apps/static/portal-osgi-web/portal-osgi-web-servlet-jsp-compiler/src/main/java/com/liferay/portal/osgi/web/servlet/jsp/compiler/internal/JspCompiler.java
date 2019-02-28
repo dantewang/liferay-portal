@@ -25,8 +25,17 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.osgi.web.servlet.jsp.compiler.internal.util.ClassPathUtil;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.CharArrayWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
 import java.net.URI;
 import java.net.URL;
@@ -54,6 +63,7 @@ import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
+import javax.tools.SimpleJavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
@@ -64,6 +74,8 @@ import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.JavacErrorDetail;
+import org.apache.jasper.compiler.JspRuntimeContext;
+import org.apache.jasper.compiler.JspUtil;
 import org.apache.jasper.compiler.Jsr199JavaCompiler;
 import org.apache.jasper.compiler.Node;
 
@@ -129,7 +141,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 			if (compilationTask.call()) {
 				for (BytecodeFile bytecodeFile : classFiles) {
-					rtctxt.setBytecode(
+					jspRuntimeContext.setBytecode(
 						bytecodeFile.getClassName(),
 						bytecodeFile.getBytecode());
 				}
@@ -161,11 +173,52 @@ public class JspCompiler extends Jsr199JavaCompiler {
 	}
 
 	@Override
+	public void doJavaFile(boolean keep) throws JasperException {
+		if (!keep) {
+			charArrayWriter = null;
+
+			return;
+		}
+
+		try (Writer writer = new OutputStreamWriter(
+				new FileOutputStream(javaFileName), javaEncoding)) {
+
+			writer.write(charArrayWriter.toString());
+
+			charArrayWriter = null;
+		}
+		catch (UnsupportedEncodingException uee) {
+			errDispatcher.jspError(
+				"jsp.error.needAlternateJavaEncoding", javaEncoding);
+		}
+		catch (IOException ioe) {
+			throw new JasperException(ioe);
+		}
+	}
+
+	@Override
+	public long getClassLastModified() {
+		String className = _jspCompilationContext.getFullClassName();
+
+		return jspRuntimeContext.getBytecodeBirthTime(className);
+	}
+
+	@Override
+	public Writer getJavaWriter(String javaFileName, String javaEncoding) {
+		this.javaFileName = javaFileName;
+		this.javaEncoding = javaEncoding;
+
+		charArrayWriter = new CharArrayWriter();
+
+		return charArrayWriter;
+	}
+
+	@Override
 	public void init(
 		JspCompilationContext jspCompilationContext,
 		ErrorDispatcher errorDispatcher, boolean suppressLogging) {
 
-		options.add("-XDuseUnsharedTable");
+		this.options.add("-XDuseUnsharedTable");
 
 		Options options = jspCompilationContext.getOptions();
 
@@ -243,7 +296,85 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		initTLDMappings(
 			servletContext, jspCompilationContext.getTagFileJarUrls());
 
-		super.init(jspCompilationContext, errorDispatcher, suppressLogging);
+		_jspCompilationContext = jspCompilationContext;
+
+		errDispatcher = errorDispatcher;
+
+		jspRuntimeContext = jspCompilationContext.getRuntimeContext();
+
+		this.options.add("-proc:none");
+	}
+
+	@Override
+	public void release() {
+		classFiles = null;
+	}
+
+	@Override
+	public void saveClassFile(String className, String classFileName) {
+		for (BytecodeFile bytecodeFile : classFiles) {
+			String bytecodeFileClassName = bytecodeFile.getClassName();
+			String outputFileName = classFileName;
+
+			if (!className.equals(bytecodeFileClassName)) {
+				outputFileName = outputFileName.substring(
+					0, outputFileName.lastIndexOf(File.separator) + 1);
+
+				outputFileName = outputFileName.concat(
+					bytecodeFileClassName.substring(
+						bytecodeFileClassName.lastIndexOf('.') + 1)
+				).concat(
+					".class"
+				);
+			}
+
+			jspRuntimeContext.saveBytecode(
+				bytecodeFileClassName, outputFileName);
+		}
+	}
+
+	@Override
+	public void setClassPath(List<File> classPath) {
+		List<String> paths = new ArrayList<>();
+
+		for (File file : classPath) {
+			paths.add(file.toString());
+		}
+
+		List<String> files = JspUtil.expandClassPath(paths);
+		this.classPath = new ArrayList<>();
+
+		for (String file : files) {
+			this.classPath.add(new File(file));
+		}
+	}
+
+	@Override
+	public void setDebug(boolean debug) {
+		if (debug) {
+			options.add("-g");
+		}
+		else {
+			options.add("-g:none");
+		}
+	}
+
+	@Override
+	public void setExtdirs(String exts) {
+		options.add("-extdirs");
+		options.add(exts);
+	}
+
+	@Override
+	public void setSourceVM(String sourceVM) {
+		options.add("-source");
+		options.add(sourceVM);
+	}
+
+	@Override
+	public void setTargetVM(String targetVM) {
+		options.add("-target");
+		options.add(targetVM);
 	}
 
 	protected void addDependenciesToClassPath() {
@@ -334,6 +465,30 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		}
 	}
 
+	@Override
+	protected JavaFileObject getOutputFile(String className, URI uri) {
+		BytecodeFile classFile = new BytecodeFile(uri, className);
+
+		String packageName = className.substring(0, className.lastIndexOf("."));
+
+		Map<String, Map<String, JavaFileObject>> packageMap =
+			jspRuntimeContext.getPackageMap();
+
+		Map<String, JavaFileObject> packageFiles = packageMap.get(packageName);
+
+		if (packageFiles == null) {
+			packageFiles = new HashMap<>();
+
+			packageMap.put(packageName, packageFiles);
+		}
+
+		packageFiles.put(className, classFile);
+
+		classFiles.add(classFile);
+
+		return classFile;
+	}
+
 	protected void initClassPath(ServletContext servletContext) {
 		if (System.getSecurityManager() != null) {
 			AccessController.doPrivileged(
@@ -390,6 +545,15 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		servletContext.setAttribute(
 			Constants.JSP_TLD_URI_TO_LOCATION_MAP, tldMappings);
 	}
+
+	protected CharArrayWriter charArrayWriter;
+	protected List<BytecodeFile> classFiles;
+	protected List<File> classPath;
+	protected ErrorDispatcher errDispatcher;
+	protected String javaEncoding;
+	protected String javaFileName;
+	protected JspRuntimeContext jspRuntimeContext;
+	protected List<String> options = new ArrayList<>();
 
 	private static Set<String> _collectPackageNames(BundleWiring bundleWiring) {
 		Set<String> packageNames = _bundleWiringPackageNamesCache.get(
@@ -469,6 +633,44 @@ public class JspCompiler extends Jsr199JavaCompiler {
 	private final List<File> _classPath = new ArrayList<>();
 	private final List<JavaFileObjectResolver> _javaFileObjectResolvers =
 		new ArrayList<>();
+	private JspCompilationContext _jspCompilationContext;
+
+	private class BytecodeFile extends SimpleJavaFileObject {
+
+		public BytecodeFile(URI uri, String className) {
+			super(uri, Kind.CLASS);
+
+			_className = className;
+		}
+
+		public byte[] getBytecode() {
+			return _bytecode;
+		}
+
+		public String getClassName() {
+			return _className;
+		}
+
+		@Override
+		public InputStream openInputStream() {
+			return new ByteArrayInputStream(_bytecode);
+		}
+
+		@Override
+		public OutputStream openOutputStream() {
+			return new ByteArrayOutputStream() {
+
+				public void close() {
+					_bytecode = toByteArray();
+				}
+
+			};
+		}
+
+		private byte[] _bytecode;
+		private final String _className;
+
+	}
 
 	private class JavaFileManagerWrapper
 		extends ForwardingJavaFileManager<JavaFileManager> {
@@ -483,7 +685,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 			FileObject sibling) {
 
 			Map<String, Map<String, JavaFileObject>> packageMap =
-				rtctxt.getPackageMap();
+				jspRuntimeContext.getPackageMap();
 
 			String packageName = className.substring(
 				0, className.lastIndexOf(CharPool.PERIOD));
@@ -526,7 +728,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 				packageName.startsWith(Constants.JSP_PACKAGE_NAME)) {
 
 				Map<String, Map<String, JavaFileObject>> packageMap =
-					rtctxt.getPackageMap();
+					jspRuntimeContext.getPackageMap();
 
 				Map<String, JavaFileObject> packageFiles = packageMap.get(
 					packageName);
