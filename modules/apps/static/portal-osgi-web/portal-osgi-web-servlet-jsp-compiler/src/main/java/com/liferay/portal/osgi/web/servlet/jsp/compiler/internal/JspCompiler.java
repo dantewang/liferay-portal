@@ -75,7 +75,6 @@ import org.apache.jasper.Options;
 import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.JavacErrorDetail;
 import org.apache.jasper.compiler.JspRuntimeContext;
-import org.apache.jasper.compiler.JspUtil;
 import org.apache.jasper.compiler.Node;
 
 import org.osgi.framework.Bundle;
