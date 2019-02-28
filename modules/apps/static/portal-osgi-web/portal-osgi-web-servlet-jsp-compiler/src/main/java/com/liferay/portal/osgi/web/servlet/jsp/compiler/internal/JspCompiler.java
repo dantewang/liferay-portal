@@ -33,7 +33,6 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
-import java.net.URI;
 import java.net.URL;
 
 import java.security.AccessController;
@@ -619,9 +618,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 				packageName);
 
 			BytecodeJavaFileObject bytecodeJavaFileObject =
-				new BytecodeJavaFileObject(
-					URI.create("file:///" + className.replace('.', '/') + kind),
-					className);
+				new BytecodeJavaFileObject(className);
 
 			if (packageJavaFileObjects == null) {
 				packageJavaFileObjects = new ConcurrentHashMap<>();
