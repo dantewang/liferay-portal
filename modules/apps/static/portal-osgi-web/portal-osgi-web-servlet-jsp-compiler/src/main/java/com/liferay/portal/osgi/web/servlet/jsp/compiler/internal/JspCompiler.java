@@ -75,7 +75,6 @@ import org.apache.jasper.Options;
 import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.JavacErrorDetail;
 import org.apache.jasper.compiler.JspRuntimeContext;
-import org.apache.jasper.compiler.JspUtil;
 import org.apache.jasper.compiler.Node;
 
 import org.osgi.framework.Bundle;
@@ -334,18 +333,6 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 
 	@Override
 	public void setClassPath(List<File> classPath) {
-		List<String> paths = new ArrayList<>();
-
-		for (File file : classPath) {
-			paths.add(file.toString());
-		}
-
-		List<String> files = JspUtil.expandClassPath(paths);
-		this.classPath = new ArrayList<>();
-
-		for (String file : files) {
-			this.classPath.add(new File(file));
-		}
 	}
 
 	@Override
@@ -523,7 +510,6 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 
 	protected CharArrayWriter charArrayWriter;
 	protected List<BytecodeFile> classFiles;
-	protected List<File> classPath;
 	protected ErrorDispatcher errDispatcher;
 	protected String javaEncoding;
 	protected String javaFileName;
