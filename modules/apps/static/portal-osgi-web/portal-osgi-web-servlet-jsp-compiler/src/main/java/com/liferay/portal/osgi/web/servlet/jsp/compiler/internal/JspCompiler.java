@@ -23,7 +23,6 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.osgi.web.servlet.jsp.compiler.internal.util.ClassPathUtil;
 
 import java.io.CharArrayWriter;
@@ -34,7 +33,6 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
-import java.net.URI;
 import java.net.URL;
 
 import java.security.AccessController;
@@ -620,11 +618,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 				packageName);
 
 			BytecodeJavaFileObject bytecodeJavaFileObject =
-				new BytecodeJavaFileObject(
-					URI.create(
-						"file:///" + StringUtil.replace(className, '.', '/') +
-							kind),
-					className);
+				new BytecodeJavaFileObject(className);
 
 			if (packageJavaFileObjects == null) {
 				packageJavaFileObjects = new ConcurrentHashMap<>();
