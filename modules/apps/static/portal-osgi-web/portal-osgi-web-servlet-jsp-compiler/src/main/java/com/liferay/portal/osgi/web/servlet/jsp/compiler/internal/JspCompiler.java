@@ -332,18 +332,6 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 
 	@Override
 	public void setClassPath(List<File> classPath) {
-		List<String> paths = new ArrayList<>();
-
-		for (File file : classPath) {
-			paths.add(file.toString());
-		}
-
-		List<String> files = JspUtil.expandClassPath(paths);
-		this.classPath = new ArrayList<>();
-
-		for (String file : files) {
-			this.classPath.add(new File(file));
-		}
 	}
 
 	@Override
@@ -521,7 +509,6 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 
 	protected CharArrayWriter charArrayWriter;
 	protected ArrayList<BytecodeFile> classFiles;
-	protected List<File> classPath;
 	protected ErrorDispatcher errDispatcher;
 	protected String javaEncoding;
 	protected String javaFileName;
