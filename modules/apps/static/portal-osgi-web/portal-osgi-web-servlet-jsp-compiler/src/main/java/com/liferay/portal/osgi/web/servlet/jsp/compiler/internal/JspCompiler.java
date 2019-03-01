@@ -25,10 +25,14 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.osgi.web.servlet.jsp.compiler.internal.util.ClassPathUtil;
 
+import java.io.CharArrayWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
-import java.net.URI;
 import java.net.URL;
 
 import java.security.AccessController;
@@ -49,6 +53,8 @@ import javax.servlet.ServletContext;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
+import javax.tools.FileObject;
+import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
@@ -62,7 +68,7 @@ import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.JavacErrorDetail;
-import org.apache.jasper.compiler.Jsr199JavaCompiler;
+import org.apache.jasper.compiler.JspRuntimeContext;
 import org.apache.jasper.compiler.Node;
 
 import org.osgi.framework.Bundle;
@@ -78,18 +84,18 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Raymond Augé
  * @author Miguel Pastor
  */
-public class JspCompiler extends Jsr199JavaCompiler {
+public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 
 	@Override
 	public JavacErrorDetail[] compile(String className, Node.Nodes pageNodes)
 		throws JasperException {
 
-		classFiles = new ArrayList<>();
+		_bytecodeJavaFileObjects = new ArrayList<>();
 
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 
 		if (javaCompiler == null) {
-			errDispatcher.jspError("jsp.error.nojdk");
+			_errorDispatcher.jspError("jsp.error.nojdk");
 
 			throw new JasperException("Unable to find Java compiler");
 		}
@@ -103,31 +109,37 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 		try {
 			standardJavaFileManager.setLocation(
-				StandardLocation.CLASS_PATH, cpath);
+				StandardLocation.CLASS_PATH, _classPath);
 		}
 		catch (IOException ioe) {
 			throw new JasperException(ioe);
 		}
 
-		try (JavaFileManager javaFileManager = getJavaFileManager(
-				standardJavaFileManager)) {
+		try (JavaFileManager javaFileManager = new JavaFileManagerWrapper(
+				new BundleJavaFileManager(
+					_classLoader, standardJavaFileManager,
+					_javaFileObjectResolvers))) {
 
 			JavaCompiler.CompilationTask compilationTask = javaCompiler.getTask(
-				null, javaFileManager, diagnosticCollector, options, null,
+				null, javaFileManager, diagnosticCollector, _compilerOptions,
+				null,
 				Arrays.asList(
 					new StringJavaFileObject(
-						className.substring(className.lastIndexOf('.') + 1),
-						charArrayWriter.toString())));
+						className.substring(
+							className.lastIndexOf(CharPool.PERIOD) + 1),
+						_charArrayWriter.toString())));
 
 			if (_log.isDebugEnabled()) {
 				_log.debug("Compiling JSP: ".concat(className));
 			}
 
 			if (compilationTask.call()) {
-				for (BytecodeFile bytecodeFile : classFiles) {
-					rtctxt.setBytecode(
-						bytecodeFile.getClassName(),
-						bytecodeFile.getBytecode());
+				for (BytecodeJavaFileObject bytecodeJavaFileObject :
+						_bytecodeJavaFileObjects) {
+
+					_jspRuntimeContext.setBytecode(
+						bytecodeJavaFileObject.getClassName(),
+						bytecodeJavaFileObject.getBytecode());
 				}
 
 				return null;
@@ -148,12 +160,53 @@ public class JspCompiler extends Jsr199JavaCompiler {
 				i);
 
 			javacErrorDetails[i] = ErrorDispatcher.createJavacError(
-				javaFileName, pageNodes,
+				_javaFileName, pageNodes,
 				new StringBuilder(diagnostic.getMessage(null)),
 				(int)diagnostic.getLineNumber());
 		}
 
 		return javacErrorDetails;
+	}
+
+	@Override
+	public void doJavaFile(boolean keep) throws JasperException {
+		if (!keep) {
+			_charArrayWriter = null;
+
+			return;
+		}
+
+		try (Writer writer = new OutputStreamWriter(
+				new FileOutputStream(_javaFileName), _javaEncoding)) {
+
+			writer.write(_charArrayWriter.toString());
+
+			_charArrayWriter = null;
+		}
+		catch (UnsupportedEncodingException uee) {
+			_errorDispatcher.jspError(
+				"jsp.error.needAlternateJavaEncoding", _javaEncoding);
+		}
+		catch (IOException ioe) {
+			throw new JasperException(ioe);
+		}
+	}
+
+	@Override
+	public long getClassLastModified() {
+		String className = _jspCompilationContext.getFullClassName();
+
+		return _jspRuntimeContext.getBytecodeBirthTime(className);
+	}
+
+	@Override
+	public Writer getJavaWriter(String javaFileName, String javaEncoding) {
+		_javaFileName = javaFileName;
+		_javaEncoding = javaEncoding;
+
+		_charArrayWriter = new CharArrayWriter();
+
+		return _charArrayWriter;
 	}
 
 	@Override
@@ -237,7 +290,76 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		initTLDMappings(
 			servletContext, jspCompilationContext.getTagFileJarUrls());
 
-		super.init(jspCompilationContext, errorDispatcher, suppressLogging);
+		_jspCompilationContext = jspCompilationContext;
+
+		_errorDispatcher = errorDispatcher;
+
+		_jspRuntimeContext = jspCompilationContext.getRuntimeContext();
+
+		_compilerOptions.add("-proc:none");
+	}
+
+	@Override
+	public void release() {
+		_bytecodeJavaFileObjects = null;
+	}
+
+	@Override
+	public void saveClassFile(String className, String classFileName) {
+		for (BytecodeJavaFileObject bytecodeJavaFileObject :
+				_bytecodeJavaFileObjects) {
+
+			String bytecodeFileClassName =
+				bytecodeJavaFileObject.getClassName();
+			String outputFileName = classFileName;
+
+			if (!className.equals(bytecodeFileClassName)) {
+				outputFileName = outputFileName.substring(
+					0, outputFileName.lastIndexOf(File.separator) + 1);
+
+				outputFileName = outputFileName.concat(
+					bytecodeFileClassName.substring(
+						bytecodeFileClassName.lastIndexOf(CharPool.PERIOD) + 1)
+				).concat(
+					".class"
+				);
+			}
+
+			_jspRuntimeContext.saveBytecode(
+				bytecodeFileClassName, outputFileName);
+		}
+	}
+
+	@Override
+	public void setClassPath(List<File> classPath) {
+	}
+
+	@Override
+	public void setDebug(boolean debug) {
+		if (debug) {
+			_compilerOptions.add("-g");
+		}
+		else {
+			_compilerOptions.add("-g:none");
+		}
+	}
+
+	@Override
+	public void setExtdirs(String exts) {
+		_compilerOptions.add("-extdirs");
+		_compilerOptions.add(exts);
+	}
+
+	@Override
+	public void setSourceVM(String sourceVM) {
+		_compilerOptions.add("-source");
+		_compilerOptions.add(sourceVM);
+	}
+
+	@Override
+	public void setTargetVM(String targetVM) {
+		_compilerOptions.add("-target");
+		_compilerOptions.add(targetVM);
 	}
 
 	protected void addDependenciesToClassPath() {
@@ -326,55 +448,6 @@ public class JspCompiler extends Jsr199JavaCompiler {
 							0, urlString.length() - resourcePath.length())));
 			}
 		}
-	}
-
-	@Override
-	protected JavaFileManager getJavaFileManager(
-		JavaFileManager javaFileManager) {
-
-		if (javaFileManager instanceof StandardJavaFileManager) {
-			StandardJavaFileManager standardJavaFileManager =
-				(StandardJavaFileManager)javaFileManager;
-
-			try {
-				standardJavaFileManager.setLocation(
-					StandardLocation.CLASS_PATH, _classPath);
-			}
-			catch (IOException ioe) {
-				_log.error(ioe.getMessage(), ioe);
-			}
-
-			javaFileManager = new BundleJavaFileManager(
-				_classLoader, standardJavaFileManager,
-				_javaFileObjectResolvers);
-		}
-
-		return super.getJavaFileManager(javaFileManager);
-	}
-
-	@Override
-	protected JavaFileObject getOutputFile(String className, URI uri) {
-		Map<String, Map<String, JavaFileObject>> packageMap =
-			rtctxt.getPackageMap();
-
-		String packageName = className.substring(
-			0, className.lastIndexOf(CharPool.PERIOD));
-
-		// Swap the parent class's packageJavaFileObjects reference from a plain
-		// HashMap to a thread safe ConcurrentHashMap
-
-		Map<String, JavaFileObject> packageJavaFileObjects = packageMap.get(
-			packageName);
-
-		JavaFileObject javaFileObject = super.getOutputFile(className, uri);
-
-		if (packageJavaFileObjects == null) {
-			packageMap.put(
-				packageName,
-				new ConcurrentHashMap<>(packageMap.get(packageName)));
-		}
-
-		return javaFileObject;
 	}
 
 	protected void initClassPath(ServletContext servletContext) {
@@ -508,9 +581,88 @@ public class JspCompiler extends Jsr199JavaCompiler {
 	private Bundle[] _allParticipatingBundles;
 	private final Map<BundleWiring, Set<String>> _bundleWiringPackageNames =
 		new HashMap<>(_jspBundleWiringPackageNames);
+	private List<BytecodeJavaFileObject> _bytecodeJavaFileObjects;
+	private CharArrayWriter _charArrayWriter;
 	private ClassLoader _classLoader;
 	private final List<File> _classPath = new ArrayList<>();
+	private final List<String> _compilerOptions = new ArrayList<>();
+	private ErrorDispatcher _errorDispatcher;
+	private String _javaEncoding;
+	private String _javaFileName;
 	private final List<JavaFileObjectResolver> _javaFileObjectResolvers =
 		new ArrayList<>();
+	private JspCompilationContext _jspCompilationContext;
+	private JspRuntimeContext _jspRuntimeContext;
+
+	private class JavaFileManagerWrapper
+		extends ForwardingJavaFileManager<JavaFileManager> {
+
+		public JavaFileManagerWrapper(JavaFileManager fileManager) {
+			super(fileManager);
+		}
+
+		@Override
+		public JavaFileObject getJavaFileForOutput(
+			Location location, String className, JavaFileObject.Kind kind,
+			FileObject sibling) {
+
+			Map<String, Map<String, JavaFileObject>> packageMap =
+				_jspRuntimeContext.getPackageMap();
+
+			String packageName = className.substring(
+				0, className.lastIndexOf(CharPool.PERIOD));
+
+			Map<String, JavaFileObject> packageJavaFileObjects = packageMap.get(
+				packageName);
+
+			BytecodeJavaFileObject bytecodeJavaFileObject =
+				new BytecodeJavaFileObject(className);
+
+			if (packageJavaFileObjects == null) {
+				packageJavaFileObjects = new ConcurrentHashMap<>();
+
+				packageMap.put(packageName, packageJavaFileObjects);
+			}
+
+			packageJavaFileObjects.put(className, bytecodeJavaFileObject);
+
+			_bytecodeJavaFileObjects.add(bytecodeJavaFileObject);
+
+			return bytecodeJavaFileObject;
+		}
+
+		@Override
+		public String inferBinaryName(Location location, JavaFileObject file) {
+			if (file instanceof BytecodeJavaFileObject) {
+				return ((BytecodeJavaFileObject)file).getClassName();
+			}
+
+			return super.inferBinaryName(location, file);
+		}
+
+		@Override
+		public Iterable<JavaFileObject> list(
+				Location location, String packageName,
+				Set<JavaFileObject.Kind> kinds, boolean recurse)
+			throws IOException {
+
+			if ((location == StandardLocation.CLASS_PATH) &&
+				packageName.startsWith(Constants.JSP_PACKAGE_NAME)) {
+
+				Map<String, Map<String, JavaFileObject>> packageMap =
+					_jspRuntimeContext.getPackageMap();
+
+				Map<String, JavaFileObject> packageFiles = packageMap.get(
+					packageName);
+
+				if (packageFiles != null) {
+					return packageFiles.values();
+				}
+			}
+
+			return super.list(location, packageName, kinds, recurse);
+		}
+
+	}
 
 }

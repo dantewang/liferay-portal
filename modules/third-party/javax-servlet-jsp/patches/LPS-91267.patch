@@ -1,0 +1,21 @@
+diff --git a/org/apache/jasper/compiler/JavaCompiler.java b/org/apache/jasper/compiler/JavaCompiler.java
+index 1e2cd72c7b6f..889edf748213 100644
+--- a/org/apache/jasper/compiler/JavaCompiler.java
++++ b/org/apache/jasper/compiler/JavaCompiler.java
+@@ -65,7 +65,7 @@ import java.io.File;
+ import java.io.Writer;
+ import java.util.List;
+ 
+-interface JavaCompiler {
++public interface JavaCompiler {
+ 
+     /**
+      * Start Java compilation
+@@ -120,4 +120,5 @@ interface JavaCompiler {
+      */
+     public void release();
+ }
+-    
++
++/* @generated */
+\ No newline at end of file
