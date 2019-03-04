@@ -16,12 +16,9 @@ package com.liferay.portal.kernel.display.context.bundle.basedisplaycontextfacto
 
 import com.liferay.portal.kernel.display.context.TestDisplayContextFactory;
 
-import org.osgi.service.component.annotations.Component;
-
 /**
  * @author Manuel de la Peña
  */
-@Component(immediate = true, service = TestDisplayContextFactory.class)
 public class TestBaseDisplayContextFactoryImpl
 	implements TestDisplayContextFactory {
 }

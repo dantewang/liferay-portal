@@ -15,9 +15,10 @@
 package com.liferay.portal.kernel.display.context;
 
 import com.liferay.portal.kernel.display.context.bundle.basedisplaycontextfactory.TestBaseDisplayContextFactoryImpl;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleRule;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
 import java.util.Iterator;
 
@@ -35,20 +36,25 @@ public class BaseDisplayContextProviderTest {
 
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleRule("bundle.basedisplaycontextfactory"));
+	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
+		new LiferayIntegrationTestRule();
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
 		_baseDisplayContextProvider = new BaseDisplayContextProvider<>(
 			TestDisplayContextFactory.class);
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		_serviceRegistration = registry.registerService(
+			TestDisplayContextFactory.class,
+			new TestBaseDisplayContextFactoryImpl());
 	}
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
 		_baseDisplayContextProvider.destroy();
+		_serviceRegistration.unregister();
 	}
 
 	@Test
@@ -81,5 +87,7 @@ public class BaseDisplayContextProviderTest {
 
 	private static BaseDisplayContextProvider<TestDisplayContextFactory>
 		_baseDisplayContextProvider;
+	private static ServiceRegistration<TestDisplayContextFactory>
+		_serviceRegistration;
 
 }
