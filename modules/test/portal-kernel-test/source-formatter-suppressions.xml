@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<suppressions>
+	<source-check>
+		<suppress checks="JavaLogParametersCheck" files="src/testIntegration/java/com/liferay/portal/kernel/log/test/SanitizerLogWrapperTest\.java" />
+	</source-check>
+</suppressions>

@@ -12,9 +12,14 @@
  * details.
  */
 
-package com.liferay.portal.kernel.log;
+package com.liferay.portal.kernel.log.test;
 
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.string.CharPool;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactory;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.log.SanitizerLogWrapper;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.test.log.CaptureAppender;
@@ -36,10 +41,12 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author Tomas Polesovsky
  */
+@RunWith(Arquillian.class)
 public class SanitizerLogWrapperTest {
 
 	@ClassRule
@@ -159,18 +166,16 @@ public class SanitizerLogWrapperTest {
 			for (LoggingEvent loggingEvent : loggingEvents) {
 				String message = loggingEvent.getRenderedMessage();
 
-				Assert.assertTrue(
-					message.startsWith(SanitizerLogWrapper.CRLF_WARNING));
+				Assert.assertTrue(message.startsWith(_CRLF_WARNING));
 
 				int messageWithCRLFCharsLength =
-					message.length() -
-						SanitizerLogWrapper.CRLF_WARNING.length();
+					message.length() - _CRLF_WARNING.length();
 
 				char[] messageWithCRLFChars =
 					new char[messageWithCRLFCharsLength];
 
 				message.getChars(
-					SanitizerLogWrapper.CRLF_WARNING.length(), message.length(),
+					_CRLF_WARNING.length(), message.length(),
 					messageWithCRLFChars, 0);
 
 				Assert.assertArrayEquals(
@@ -298,6 +303,10 @@ public class SanitizerLogWrapperTest {
 			_captureAppender.close();
 		}
 	}
+
+	private static final String _CRLF_WARNING =
+		ReflectionTestUtil.getFieldValue(
+			SanitizerLogWrapper.class, "CRLF_WARNING");
 
 	private static Log _log;
 
