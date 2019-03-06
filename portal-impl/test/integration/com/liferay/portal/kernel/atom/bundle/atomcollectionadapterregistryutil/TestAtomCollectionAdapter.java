@@ -23,15 +23,9 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
-import org.osgi.service.component.annotations.Component;
-
 /**
  * @author Peter Fellwock
  */
-@Component(
-	immediate = true, property = "service.ranking:Integer=" + Integer.MAX_VALUE,
-	service = AtomCollectionAdapter.class
-)
 public class TestAtomCollectionAdapter
 	implements AtomCollectionAdapter<Object> {
 
