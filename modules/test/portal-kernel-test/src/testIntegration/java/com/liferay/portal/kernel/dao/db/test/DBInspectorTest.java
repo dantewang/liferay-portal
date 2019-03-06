@@ -12,8 +12,10 @@
  * details.
  */
 
-package com.liferay.portal.kernel.dao.db;
+package com.liferay.portal.kernel.dao.db.test;
 
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.portal.kernel.dao.db.DBInspector;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -22,18 +24,19 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 
-import org.eclipse.core.runtime.Assert;
-
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author Alberto Chaparro
  */
+@RunWith(Arquillian.class)
 public class DBInspectorTest {
 
 	@ClassRule
@@ -55,7 +58,7 @@ public class DBInspectorTest {
 
 	@Test
 	public void testHasColumn() throws Exception {
-		Assert.isTrue(
+		Assert.assertTrue(
 			_dbInspector.hasColumn(
 				_TABLE_NAME_EXISTING, _COLUMN_NAME_EXISTING));
 	}
@@ -66,7 +69,7 @@ public class DBInspectorTest {
 
 		Assume.assumeTrue(databaseMetaData.storesLowerCaseIdentifiers());
 
-		Assert.isTrue(
+		Assert.assertTrue(
 			_dbInspector.hasColumn(
 				_TABLE_NAME_EXISTING,
 				StringUtil.toLowerCase(_COLUMN_NAME_EXISTING)));
@@ -74,7 +77,7 @@ public class DBInspectorTest {
 
 	@Test
 	public void testHasColumnNonexisting() throws Exception {
-		Assert.isTrue(
+		Assert.assertTrue(
 			!_dbInspector.hasColumn(
 				_TABLE_NAME_EXISTING, _COLUMN_NAME_NONEXISTING));
 	}
@@ -85,7 +88,7 @@ public class DBInspectorTest {
 
 		Assume.assumeTrue(databaseMetaData.storesUpperCaseIdentifiers());
 
-		Assert.isTrue(
+		Assert.assertTrue(
 			_dbInspector.hasColumn(
 				_TABLE_NAME_EXISTING,
 				StringUtil.toUpperCase(_COLUMN_NAME_EXISTING)));
@@ -93,7 +96,7 @@ public class DBInspectorTest {
 
 	@Test
 	public void testHasTable() throws Exception {
-		Assert.isTrue(_dbInspector.hasTable(_TABLE_NAME_EXISTING));
+		Assert.assertTrue(_dbInspector.hasTable(_TABLE_NAME_EXISTING));
 	}
 
 	@Test
@@ -102,14 +105,14 @@ public class DBInspectorTest {
 
 		Assume.assumeTrue(databaseMetaData.storesLowerCaseIdentifiers());
 
-		Assert.isTrue(
+		Assert.assertTrue(
 			_dbInspector.hasTable(
 				StringUtil.toLowerCase(_TABLE_NAME_EXISTING)));
 	}
 
 	@Test
 	public void testHasTableNonexisting() throws Exception {
-		Assert.isTrue(!_dbInspector.hasTable(_TABLE_NAME_NONEXISTING));
+		Assert.assertTrue(!_dbInspector.hasTable(_TABLE_NAME_NONEXISTING));
 	}
 
 	@Test
@@ -118,7 +121,7 @@ public class DBInspectorTest {
 
 		Assume.assumeTrue(databaseMetaData.storesUpperCaseIdentifiers());
 
-		Assert.isTrue(
+		Assert.assertTrue(
 			_dbInspector.hasTable(
 				StringUtil.toUpperCase(_TABLE_NAME_EXISTING)));
 	}
