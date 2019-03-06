@@ -231,9 +231,11 @@ import com.liferay.wiki.model.impl.WikiPageModelImpl;
 import com.liferay.wiki.model.impl.WikiPageResourceModelImpl;
 import com.liferay.wiki.social.WikiActivityKeys;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -948,7 +950,7 @@ public class DataFactory {
 	}
 
 	public void initContext(Properties properties)
-		throws FileNotFoundException {
+		throws FileNotFoundException, IOException {
 
 		String timeZoneId = properties.getProperty("sample.sql.db.time.zone");
 
@@ -1049,6 +1051,14 @@ public class DataFactory {
 					}
 
 				});
+		}
+
+		TimeZone currentTimeZone = TimeZone.getDefault();
+
+		try (Writer writer = new BufferedWriter(
+				new FileWriter(new File(outputDir, "defaultTimeZone.csv")))) {
+
+			writer.write(currentTimeZone.getID());
 		}
 	}
 
