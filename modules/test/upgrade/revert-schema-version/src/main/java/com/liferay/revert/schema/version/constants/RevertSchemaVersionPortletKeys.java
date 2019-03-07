@@ -19,6 +19,7 @@ package com.liferay.revert.schema.version.constants;
  */
 public class RevertSchemaVersionPortletKeys {
 
-	public static final String REVERT_SCHEMA_VERSION = "revertschemaversion";
+	public static final String REVERT_SCHEMA_VERSION =
+		"com_liferay_revert_schema_version_portlet_RevertSchemaVersionPortlet";
 
 }
