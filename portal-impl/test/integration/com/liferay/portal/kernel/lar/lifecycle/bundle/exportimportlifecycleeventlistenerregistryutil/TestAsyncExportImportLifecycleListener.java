@@ -17,15 +17,9 @@ package com.liferay.portal.kernel.lar.lifecycle.bundle.exportimportlifecycleeven
 import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleEvent;
 import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleListener;
 
-import org.osgi.service.component.annotations.Component;
-
 /**
  * @author Peter Fellwock
  */
-@Component(
-	immediate = true, property = "service.ranking:Integer=" + Integer.MAX_VALUE,
-	service = ExportImportLifecycleListener.class
-)
 public class TestAsyncExportImportLifecycleListener
 	implements ExportImportLifecycleListener {
 
