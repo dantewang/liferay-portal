@@ -21,7 +21,6 @@ import javax.portlet.Portlet;
 
 import org.osgi.service.component.annotations.Component;
 
-
 /**
  * @author liferay
  */
