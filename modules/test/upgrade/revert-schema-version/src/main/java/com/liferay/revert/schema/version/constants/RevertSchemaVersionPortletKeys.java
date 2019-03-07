@@ -12,7 +12,7 @@
  * details.
  */
 
-package revert.schema.version.constants;
+package com.liferay.revert.schema.version.constants;
 
 /**
  * @author liferay

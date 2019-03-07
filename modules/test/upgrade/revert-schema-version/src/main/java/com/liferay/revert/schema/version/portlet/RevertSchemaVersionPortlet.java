@@ -12,7 +12,7 @@
  * details.
  */
 
-package revert.schema.version.portlet;
+package com.liferay.revert.schema.version.portlet;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
@@ -20,7 +20,7 @@ import javax.portlet.Portlet;
 
 import org.osgi.service.component.annotations.Component;
 
-import revert.schema.version.constants.RevertSchemaVersionPortletKeys;
+import com.liferay.revert.schema.version.constants.RevertSchemaVersionPortletKeys;
 
 /**
  * @author liferay
