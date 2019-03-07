@@ -16,15 +16,9 @@ package com.liferay.portal.kernel.lock.bundle.locklistenerregistryutil;
 
 import com.liferay.portal.kernel.lock.LockListener;
 
-import org.osgi.service.component.annotations.Component;
-
 /**
  * @author Peter Fellwock
  */
-@Component(
-	immediate = true, property = "service.ranking:Integer=" + Integer.MAX_VALUE,
-	service = LockListener.class
-)
 public class TestLockListener implements LockListener {
 
 	@Override
