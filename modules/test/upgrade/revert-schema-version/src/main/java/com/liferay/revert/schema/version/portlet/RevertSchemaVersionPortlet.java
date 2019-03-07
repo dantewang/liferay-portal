@@ -15,12 +15,12 @@
 package com.liferay.revert.schema.version.portlet;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.revert.schema.version.constants.RevertSchemaVersionPortletKeys;
 
 import javax.portlet.Portlet;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.revert.schema.version.constants.RevertSchemaVersionPortletKeys;
 
 /**
  * @author liferay
