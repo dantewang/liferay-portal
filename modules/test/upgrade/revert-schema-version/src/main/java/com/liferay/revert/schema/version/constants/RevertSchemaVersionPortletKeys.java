@@ -15,7 +15,7 @@
 package com.liferay.revert.schema.version.constants;
 
 /**
- * @author liferay
+ * @author Ginson Ren
  */
 public class RevertSchemaVersionPortletKeys {
 

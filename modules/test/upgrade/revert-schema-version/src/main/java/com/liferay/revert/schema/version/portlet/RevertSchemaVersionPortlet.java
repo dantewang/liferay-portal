@@ -22,7 +22,7 @@ import javax.portlet.Portlet;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * @author liferay
+ * @author Ginson Ren
  */
 @Component(
 	immediate = true,
