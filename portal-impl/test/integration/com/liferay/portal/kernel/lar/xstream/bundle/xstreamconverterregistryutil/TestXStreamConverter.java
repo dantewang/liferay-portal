@@ -20,15 +20,9 @@ import com.liferay.exportimport.kernel.xstream.XStreamHierarchicalStreamWriter;
 import com.liferay.exportimport.kernel.xstream.XStreamMarshallingContext;
 import com.liferay.exportimport.kernel.xstream.XStreamUnmarshallingContext;
 
-import org.osgi.service.component.annotations.Component;
-
 /**
  * @author Peter Fellwock
  */
-@Component(
-	immediate = true, property = "service.ranking:Integer=" + Integer.MAX_VALUE,
-	service = XStreamConverter.class
-)
 public class TestXStreamConverter implements XStreamConverter {
 
 	@Override
