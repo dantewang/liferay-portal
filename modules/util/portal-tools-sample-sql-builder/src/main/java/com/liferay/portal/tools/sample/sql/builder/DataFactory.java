@@ -1056,7 +1056,7 @@ public class DataFactory {
 		TimeZone currentTimeZone = TimeZone.getDefault();
 
 		try (Writer writer = new BufferedWriter(
-				new FileWriter(new File(outputDir, "defaultTimeZone.csv")))) {
+				new FileWriter(new File(outputDir, "defaultTimeZone")))) {
 
 			writer.write(currentTimeZone.getID());
 		}
