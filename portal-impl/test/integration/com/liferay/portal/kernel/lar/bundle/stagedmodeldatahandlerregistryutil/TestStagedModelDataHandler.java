@@ -22,15 +22,9 @@ import com.liferay.portal.kernel.xml.Element;
 import java.util.List;
 import java.util.Map;
 
-import org.osgi.service.component.annotations.Component;
-
 /**
  * @author Peter Fellwock
  */
-@Component(
-	immediate = true, property = "service.ranking:Integer=" + Integer.MAX_VALUE,
-	service = StagedModelDataHandler.class
-)
 public class TestStagedModelDataHandler
 	implements StagedModelDataHandler<User> {
 
