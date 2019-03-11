@@ -146,7 +146,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 
 		_nestedSetsTreeManager.delete(_nestedSetsTreeEntries[7]);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[7], true);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[7], true);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 10);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 11, 14);
@@ -159,7 +159,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 
 		_nestedSetsTreeManager.delete(_nestedSetsTreeEntries[4]);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[4], true);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[4], true);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 8);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 9, 12);
@@ -171,7 +171,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 
 		_nestedSetsTreeManager.delete(_nestedSetsTreeEntries[0]);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[0], true);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[0], true);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 7, 10);
 		assertLeftAndRight(_nestedSetsTreeEntries[2], 11, 12);
@@ -182,7 +182,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 
 		_nestedSetsTreeManager.delete(_nestedSetsTreeEntries[8]);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[8], true);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[8], true);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 5, 8);
 		assertLeftAndRight(_nestedSetsTreeEntries[2], 9, 10);
@@ -192,7 +192,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 
 		_nestedSetsTreeManager.delete(_nestedSetsTreeEntries[2]);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[2], true);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[2], true);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 5, 8);
 		assertLeftAndRight(_nestedSetsTreeEntries[3], 1, 4);
@@ -201,7 +201,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 
 		_nestedSetsTreeManager.delete(_nestedSetsTreeEntries[5]);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[5], true);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[5], true);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 3, 6);
 		assertLeftAndRight(_nestedSetsTreeEntries[3], 1, 2);
@@ -209,18 +209,18 @@ public class PersistenceNestedSetsTreeManagerTest {
 
 		_nestedSetsTreeManager.delete(_nestedSetsTreeEntries[1]);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[1], true);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[1], true);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[3], 1, 2);
 		assertLeftAndRight(_nestedSetsTreeEntries[6], 3, 4);
 
 		_nestedSetsTreeManager.delete(_nestedSetsTreeEntries[6]);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[6], true);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[6], true);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[3], 1, 2);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[3], true);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[3], true);
 
 		for (NestedSetsTreeEntry nestedSetsTreeEntry : _nestedSetsTreeEntries) {
 			Assert.assertNull(nestedSetsTreeEntry);
@@ -411,7 +411,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 
 		_nestedSetsTreeManager.insert(_nestedSetsTreeEntries[0], null);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[0]);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[0]);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 2);
 
@@ -419,7 +419,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 
 		_nestedSetsTreeManager.insert(_nestedSetsTreeEntries[1], null);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[1]);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[1]);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 2);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 3, 4);
@@ -428,7 +428,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 
 		_nestedSetsTreeManager.insert(_nestedSetsTreeEntries[2], null);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[2]);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[2]);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 2);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 3, 4);
@@ -439,7 +439,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 		_nestedSetsTreeManager.insert(
 			_nestedSetsTreeEntries[3], _nestedSetsTreeEntries[0]);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[3]);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[3]);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 4);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 5, 6);
@@ -451,7 +451,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 		_nestedSetsTreeManager.insert(
 			_nestedSetsTreeEntries[4], _nestedSetsTreeEntries[0]);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[4]);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[4]);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 6);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 7, 8);
@@ -464,7 +464,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 		_nestedSetsTreeManager.insert(
 			_nestedSetsTreeEntries[5], _nestedSetsTreeEntries[3]);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[5]);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[5]);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 8);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 9, 10);
@@ -478,7 +478,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 		_nestedSetsTreeManager.insert(
 			_nestedSetsTreeEntries[6], _nestedSetsTreeEntries[1]);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[6]);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[6]);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 8);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 9, 12);
@@ -493,7 +493,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 		_nestedSetsTreeManager.insert(
 			_nestedSetsTreeEntries[7], _nestedSetsTreeEntries[6]);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[7]);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[7]);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 8);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 9, 14);
@@ -509,7 +509,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 		_nestedSetsTreeManager.insert(
 			_nestedSetsTreeEntries[8], _nestedSetsTreeEntries[4]);
 
-		synchronizeAssetCategories(_nestedSetsTreeEntries[8]);
+		synchronizeNestedSetsTreeEntries(_nestedSetsTreeEntries[8]);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 10);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 11, 16);
@@ -528,7 +528,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 
 		_nestedSetsTreeManager.move(_nestedSetsTreeEntries[4], null, null);
 
-		synchronizeAssetCategories(null);
+		synchronizeNestedSetsTreeEntries(null);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 10);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 11, 16);
@@ -544,7 +544,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 			_nestedSetsTreeEntries[4], _nestedSetsTreeEntries[0],
 			_nestedSetsTreeEntries[0]);
 
-		synchronizeAssetCategories(null);
+		synchronizeNestedSetsTreeEntries(null);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 10);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 11, 16);
@@ -560,7 +560,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 			_nestedSetsTreeEntries[4], _nestedSetsTreeEntries[0],
 			_nestedSetsTreeEntries[2]);
 
-		synchronizeAssetCategories(null);
+		synchronizeNestedSetsTreeEntries(null);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 6);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 7, 12);
@@ -575,7 +575,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 		_nestedSetsTreeManager.move(
 			_nestedSetsTreeEntries[2], null, _nestedSetsTreeEntries[0]);
 
-		synchronizeAssetCategories(null);
+		synchronizeNestedSetsTreeEntries(null);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 12);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 13, 18);
@@ -590,7 +590,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 		_nestedSetsTreeManager.move(
 			_nestedSetsTreeEntries[3], _nestedSetsTreeEntries[0], null);
 
-		synchronizeAssetCategories(null);
+		synchronizeNestedSetsTreeEntries(null);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 8);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 9, 14);
@@ -605,7 +605,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 		_nestedSetsTreeManager.move(
 			_nestedSetsTreeEntries[1], null, _nestedSetsTreeEntries[0]);
 
-		synchronizeAssetCategories(null);
+		synchronizeNestedSetsTreeEntries(null);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 14);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 8, 13);
@@ -620,7 +620,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 		_nestedSetsTreeManager.move(
 			_nestedSetsTreeEntries[3], null, _nestedSetsTreeEntries[1]);
 
-		synchronizeAssetCategories(null);
+		synchronizeNestedSetsTreeEntries(null);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 18);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 8, 17);
@@ -636,7 +636,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 			_nestedSetsTreeEntries[2], _nestedSetsTreeEntries[0],
 			_nestedSetsTreeEntries[3]);
 
-		synchronizeAssetCategories(null);
+		synchronizeNestedSetsTreeEntries(null);
 
 		assertLeftAndRight(_nestedSetsTreeEntries[0], 1, 18);
 		assertLeftAndRight(_nestedSetsTreeEntries[1], 2, 17);
@@ -669,38 +669,40 @@ public class PersistenceNestedSetsTreeManagerTest {
 		NestedSetsTreeEntry nestedSetsTreeEntry,
 		NestedSetsTreeEntry... ancestorNestedSetsTreeEntries) {
 
-		List<NestedSetsTreeEntry> expectedAssetCategories = new ArrayList<>(
-			Arrays.asList(ancestorNestedSetsTreeEntries));
+		List<NestedSetsTreeEntry> expectedNestedSetsTreeEntries =
+			new ArrayList<>(Arrays.asList(ancestorNestedSetsTreeEntries));
 
-		expectedAssetCategories.add(nestedSetsTreeEntry);
+		expectedNestedSetsTreeEntries.add(nestedSetsTreeEntry);
 
-		Collections.sort(expectedAssetCategories);
+		Collections.sort(expectedNestedSetsTreeEntries);
 
-		List<NestedSetsTreeEntry> actualAssetCategories = new ArrayList<>(
+		List<NestedSetsTreeEntry> actualNestedSetsTreeEntries = new ArrayList<>(
 			_nestedSetsTreeManager.getAncestors(nestedSetsTreeEntry));
 
-		Collections.sort(actualAssetCategories);
+		Collections.sort(actualNestedSetsTreeEntries);
 
-		Assert.assertEquals(expectedAssetCategories, actualAssetCategories);
+		Assert.assertEquals(
+			expectedNestedSetsTreeEntries, actualNestedSetsTreeEntries);
 	}
 
 	protected void assertGetDescendants(
 		NestedSetsTreeEntry nestedSetsTreeEntry,
 		NestedSetsTreeEntry... childNestedSetsTreeEntries) {
 
-		List<NestedSetsTreeEntry> expectedAssetCategories = new ArrayList<>(
-			Arrays.asList(childNestedSetsTreeEntries));
+		List<NestedSetsTreeEntry> expectedNestedSetsTreeEntries =
+			new ArrayList<>(Arrays.asList(childNestedSetsTreeEntries));
 
-		expectedAssetCategories.add(nestedSetsTreeEntry);
+		expectedNestedSetsTreeEntries.add(nestedSetsTreeEntry);
 
-		Collections.sort(expectedAssetCategories);
+		Collections.sort(expectedNestedSetsTreeEntries);
 
-		List<NestedSetsTreeEntry> actualAssetCategories = new ArrayList<>(
+		List<NestedSetsTreeEntry> actualNestedSetsTreeEntries = new ArrayList<>(
 			_nestedSetsTreeManager.getDescendants(nestedSetsTreeEntry));
 
-		Collections.sort(actualAssetCategories);
+		Collections.sort(actualNestedSetsTreeEntries);
 
-		Assert.assertEquals(expectedAssetCategories, actualAssetCategories);
+		Assert.assertEquals(
+			expectedNestedSetsTreeEntries, actualNestedSetsTreeEntries);
 	}
 
 	protected void assertLeftAndRight(
@@ -717,13 +719,13 @@ public class PersistenceNestedSetsTreeManagerTest {
 		_nestedSetsTreeEntryPersistence.update(nestedSetsTreeEntry);
 	}
 
-	protected void synchronizeAssetCategories(
+	protected void synchronizeNestedSetsTreeEntries(
 		NestedSetsTreeEntry nestedSetsTreeEntry) {
 
-		synchronizeAssetCategories(nestedSetsTreeEntry, false);
+		synchronizeNestedSetsTreeEntries(nestedSetsTreeEntry, false);
 	}
 
-	protected void synchronizeAssetCategories(
+	protected void synchronizeNestedSetsTreeEntries(
 		NestedSetsTreeEntry nestedSetsTreeEntry, boolean delete) {
 
 		if (nestedSetsTreeEntry != null) {
