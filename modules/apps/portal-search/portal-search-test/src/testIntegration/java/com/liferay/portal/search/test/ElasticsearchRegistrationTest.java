@@ -16,13 +16,10 @@ package com.liferay.portal.search.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.search.SearchEngine;
-import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.Collection;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -36,11 +33,6 @@ import org.osgi.framework.ServiceReference;
  */
 @RunWith(Arquillian.class)
 public class ElasticsearchRegistrationTest {
-
-	@ClassRule
-	@Rule
-	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
-		new LiferayIntegrationTestRule();
 
 	@Test
 	public void testGetSearchEngineService() throws Exception {

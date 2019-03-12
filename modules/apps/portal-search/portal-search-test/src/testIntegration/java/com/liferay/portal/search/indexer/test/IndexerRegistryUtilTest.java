@@ -20,13 +20,9 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
-import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 
 /**
@@ -34,10 +30,6 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 public class IndexerRegistryUtilTest {
-
-	@ClassRule
-	@Rule
-	public static final TestRule testRule = new LiferayIntegrationTestRule();
 
 	@Test
 	public void testGetIndexerByIndexerClassName() throws Exception {
