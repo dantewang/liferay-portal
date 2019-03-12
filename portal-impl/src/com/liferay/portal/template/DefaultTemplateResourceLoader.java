@@ -17,8 +17,10 @@ package com.liferay.portal.template;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
+import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
 import com.liferay.portal.kernel.cache.PortalCacheListener;
 import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
+import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.cache.SingleVMPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -128,9 +130,11 @@ public class DefaultTemplateResourceLoader implements TemplateResourceLoader {
 
 	@Override
 	public void destroy() {
-		_multiVMPool.removePortalCache(
+		PortalCacheHelperUtil.removePortalCache(
+			PortalCacheManagerNames.MULTI_VM,
 			_multiVMPortalCache.getPortalCacheName());
-		_singleVMPool.removePortalCache(
+		PortalCacheHelperUtil.removePortalCache(
+			PortalCacheManagerNames.SINGLE_VM,
 			_singleVMPortalCache.getPortalCacheName());
 	}
 
