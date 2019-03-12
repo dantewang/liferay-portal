@@ -16,6 +16,7 @@ package com.liferay.portal.upgrade.v7_0_0.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.dynamic.data.mapping.kernel.DDMTemplate;
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.model.Group;
@@ -32,6 +33,8 @@ import com.liferay.portal.upgrade.v7_0_0.UpgradePortletDisplayTemplatePreference
 import com.liferay.portal.util.test.LayoutTestUtil;
 import com.liferay.portlet.dynamicdatamapping.util.test.DDMTemplateTestUtil;
 
+import java.lang.reflect.Field;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,8 +50,7 @@ import org.junit.runner.RunWith;
  * @author Eduardo García
  */
 @RunWith(Arquillian.class)
-public class UpgradePortletDisplayTemplatePreferencesTest
-	extends UpgradePortletDisplayTemplatePreferences {
+public class UpgradePortletDisplayTemplatePreferencesTest {
 
 	@ClassRule
 	@Rule
@@ -68,11 +70,21 @@ public class UpgradePortletDisplayTemplatePreferencesTest
 
 		_layout = LayoutTestUtil.addLayout(_group);
 
+		Field field = ReflectionUtil.getDeclaredField(
+			UpgradePortletDisplayTemplatePreferences.class,
+			"DISPLAY_STYLE_PREFIX_6_2");
+
 		setPortletDisplayStyle(
-			"portlet1", DISPLAY_STYLE_PREFIX_6_2 + ddmTemplate.getUuid());
+			"portlet1",
+			String.valueOf(field.get(String.class)) + ddmTemplate.getUuid());
+
 		setPortletDisplayStyle("portlet2", "testDisplayStyle");
 
-		upgrade();
+		UpgradePortletDisplayTemplatePreferences
+			upgradePortletDisplayTemplatePreferences =
+				new UpgradePortletDisplayTemplatePreferences();
+
+		upgradePortletDisplayTemplatePreferences.upgrade();
 
 		CacheRegistryUtil.clear();
 
