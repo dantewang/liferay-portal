@@ -63,6 +63,7 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
@@ -598,6 +599,28 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 			JarUtil.downloadAndInstallJar(
 				new URL(url), PropsValues.LIFERAY_LIB_GLOBAL_DIR, name,
 				(URLClassLoader)classLoader);
+		}
+
+		// LPS-91921
+
+		if (driverClassName.equals("com.mysql.cj.jdbc.Driver") ||
+			driverClassName.equals("com.mysql.jdbc.Driver")) {
+
+			String jdbcUrl = properties.getProperty("url");
+
+			if (jdbcUrl.contains("&serverTimeZone=")) {
+				return;
+			}
+
+			TimeZone timeZone = TimeZone.getDefault();
+
+			properties.setProperty(
+				"url",
+				jdbcUrl.concat(
+					"&serverTimezone="
+				).concat(
+					timeZone.getID()
+				));
 		}
 	}
 
