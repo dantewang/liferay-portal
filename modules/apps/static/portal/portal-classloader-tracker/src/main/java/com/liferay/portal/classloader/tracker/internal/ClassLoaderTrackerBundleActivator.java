@@ -21,6 +21,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
+import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.util.tracker.BundleTracker;
 
@@ -32,7 +33,9 @@ public class ClassLoaderTrackerBundleActivator implements BundleActivator {
 	@Override
 	public void start(BundleContext bundleContext) {
 		_bundleTracker = new BundleTracker<ClassLoader>(
-			bundleContext, Bundle.ACTIVE, null) {
+			bundleContext,
+			Bundle.RESOLVED | Bundle.STARTING | Bundle.ACTIVE | Bundle.STOPPING,
+			null) {
 
 			@Override
 			public ClassLoader addingBundle(
@@ -41,6 +44,20 @@ public class ClassLoaderTrackerBundleActivator implements BundleActivator {
 				BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
 
 				ClassLoader classLoader = bundleWiring.getClassLoader();
+
+				if (classLoader == null) {
+					BundleRevision bundleRevision = bundle.adapt(
+						BundleRevision.class);
+
+					if ((bundleRevision.getTypes() &
+						 BundleRevision.TYPE_FRAGMENT) != 0) {
+
+						return null;
+					}
+
+					throw new IllegalStateException(
+						"Unable to find class loader for bundle " + bundle);
+				}
 
 				ClassLoaderPool.register(
 					_toClassLoaderName(bundle), classLoader);
