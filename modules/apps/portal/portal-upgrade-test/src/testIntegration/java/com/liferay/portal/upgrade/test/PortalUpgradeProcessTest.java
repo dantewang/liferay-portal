@@ -41,7 +41,7 @@ import org.junit.runner.RunWith;
  * @author Alberto Chaparro
  */
 @RunWith(Arquillian.class)
-public class PortalUpgradeProcessTest {
+public class PortalUpgradeProcessTest extends PortalUpgradeProcess {
 
 	@ClassRule
 	@Rule
@@ -58,21 +58,20 @@ public class PortalUpgradeProcessTest {
 
 	@Before
 	public void setUp() throws SQLException {
-		_innerPortalUpgradeProcess = new InnerPortalUpgradeProcess();
+		connection = DataAccess.getConnection();
 	}
 
 	@After
 	public void tearDown() throws SQLException {
-		_innerPortalUpgradeProcess.updateSchemaVersion(_currentSchemaVersion);
+		updateSchemaVersion(_currentSchemaVersion);
 
-		_innerPortalUpgradeProcess.close();
+		connection.close();
 	}
 
 	@Test
 	public void testGetLatestSchemaVersion() {
-		Set<Version> pendingSchemaVersions =
-			_innerPortalUpgradeProcess.getPendingSchemaVersions(
-				_ORIGINAL_SCHEMA_VERSION);
+		Set<Version> pendingSchemaVersions = getPendingSchemaVersions(
+			_ORIGINAL_SCHEMA_VERSION);
 
 		Iterator<Version> itr = pendingSchemaVersions.iterator();
 
@@ -103,8 +102,7 @@ public class PortalUpgradeProcessTest {
 
 	@Test
 	public void testIsInLatestSchemaVersion() throws SQLException {
-		_innerPortalUpgradeProcess.updateSchemaVersion(
-			PortalUpgradeProcess.getLatestSchemaVersion());
+		updateSchemaVersion(PortalUpgradeProcess.getLatestSchemaVersion());
 
 		try (Connection connection = DataAccess.getConnection()) {
 			Assert.assertTrue(
@@ -114,8 +112,7 @@ public class PortalUpgradeProcessTest {
 
 	@Test
 	public void testIsInRequiredSchemaVersion() throws SQLException {
-		_innerPortalUpgradeProcess.updateSchemaVersion(
-			PortalUpgradeProcess.getRequiredSchemaVersion());
+		updateSchemaVersion(PortalUpgradeProcess.getRequiredSchemaVersion());
 
 		try (Connection connection = DataAccess.getConnection()) {
 			Assert.assertTrue(
@@ -125,8 +122,7 @@ public class PortalUpgradeProcessTest {
 
 	@Test
 	public void testIsNotInLatestSchemaVersion() throws SQLException {
-		_innerPortalUpgradeProcess.updateSchemaVersion(
-			_ORIGINAL_SCHEMA_VERSION);
+		updateSchemaVersion(_ORIGINAL_SCHEMA_VERSION);
 
 		try (Connection connection = DataAccess.getConnection()) {
 			Assert.assertFalse(
@@ -136,8 +132,7 @@ public class PortalUpgradeProcessTest {
 
 	@Test
 	public void testIsNotInRequiredSchemaVersion() throws SQLException {
-		_innerPortalUpgradeProcess.updateSchemaVersion(
-			_ORIGINAL_SCHEMA_VERSION);
+		updateSchemaVersion(_ORIGINAL_SCHEMA_VERSION);
 
 		try (Connection connection = DataAccess.getConnection()) {
 			Assert.assertFalse(
@@ -149,8 +144,7 @@ public class PortalUpgradeProcessTest {
 	public void testUpgradeWhenCoreIsInLatestSchemaVersion()
 		throws SQLException {
 
-		_innerPortalUpgradeProcess.updateSchemaVersion(
-			PortalUpgradeProcess.getLatestSchemaVersion());
+		updateSchemaVersion(PortalUpgradeProcess.getLatestSchemaVersion());
 
 		PortalUpgradeProcess portalServiceUpgrade = new PortalUpgradeProcess();
 
@@ -172,8 +166,7 @@ public class PortalUpgradeProcessTest {
 	public void testUpgradeWhenCoreIsInRequiredSchemaVersion()
 		throws SQLException {
 
-		_innerPortalUpgradeProcess.updateSchemaVersion(
-			PortalUpgradeProcess.getRequiredSchemaVersion());
+		updateSchemaVersion(PortalUpgradeProcess.getRequiredSchemaVersion());
 
 		PortalUpgradeProcess portalServiceUpgrade = new PortalUpgradeProcess();
 
@@ -211,20 +204,5 @@ public class PortalUpgradeProcessTest {
 		"0.0.0");
 
 	private static Version _currentSchemaVersion;
-
-	private InnerPortalUpgradeProcess _innerPortalUpgradeProcess;
-
-	private static class InnerPortalUpgradeProcess
-		extends PortalUpgradeProcess {
-
-		public void close() throws SQLException {
-			connection.close();
-		}
-
-		private InnerPortalUpgradeProcess() throws SQLException {
-			connection = DataAccess.getConnection();
-		}
-
-	}
 
 }
