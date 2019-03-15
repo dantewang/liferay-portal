@@ -15,31 +15,26 @@
 package com.liferay.portal.security.auth;
 
 import com.liferay.petra.reflect.ReflectionUtil;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.events.EventsProcessorUtil;
-import com.liferay.portal.internal.servlet.MainServlet;
 import com.liferay.portal.kernel.events.Action;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.jaas.PortalPrincipal;
 import com.liferay.portal.kernel.security.jaas.PortalRole;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
-import com.liferay.portal.kernel.servlet.HttpMethods;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.security.jaas.JAASHelper;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.callback.MainServletTestCallback;
 import com.liferay.portal.util.PropsValues;
 
 import java.lang.reflect.Field;
-
 import java.security.Principal;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,9 +51,9 @@ import javax.security.auth.login.AppConfigurationEntry;
 import javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag;
 import javax.security.auth.login.Configuration;
 import javax.security.auth.login.LoginContext;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -66,7 +61,6 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -132,12 +126,8 @@ public class JAASTest {
 
 			});
 
-		MainServlet mainServlet = MainServletTestCallback.getMainServlet();
-
 		MockHttpServletRequest mockHttpServletRequest =
-			new MockHttpServletRequest(
-				mainServlet.getServletContext(), HttpMethods.GET,
-				StringPool.SLASH);
+			new MockHttpServletRequest();
 
 		mockHttpServletRequest.setRemoteUser(
 			String.valueOf(_user.getScreenName()));
@@ -337,14 +327,10 @@ public class JAASTest {
 
 	@Test
 	public void testProcessLoginEvents() throws Exception {
-		MainServlet mainServlet = MainServletTestCallback.getMainServlet();
-
 		Date lastLoginDate = _user.getLastLoginDate();
 
 		MockHttpServletRequest mockHttpServletRequest =
-			new MockHttpServletRequest(
-				mainServlet.getServletContext(), HttpMethods.GET,
-				StringPool.SLASH);
+			new MockHttpServletRequest();
 
 		mockHttpServletRequest.setRemoteUser(String.valueOf(_user.getUserId()));
 
@@ -357,13 +343,30 @@ public class JAASTest {
 			EventsProcessorUtil.registerEvent(
 				PropsKeys.LOGIN_EVENTS_POST, postJAASAction);
 
-			mainServlet.service(
+			EventsProcessorUtil.process(
+				PropsKeys.LOGIN_EVENTS_PRE,
+				PropsValues.LOGIN_EVENTS_PRE,
+				mockHttpServletRequest, new MockHttpServletResponse());
+
+			_user = UserLocalServiceUtil.updateLastLogin(
+				_user.getUserId(),
+				mockHttpServletRequest.getRemoteAddr());
+
+			HttpSession session = mockHttpServletRequest.getSession();
+
+			session.setAttribute(WebKeys.LOCALE, _user.getLocale());
+			session.setAttribute(WebKeys.USER, _user);
+			session.setAttribute(
+				WebKeys.USER_ID, Long.valueOf(_user.getUserId()));
+
+			session.removeAttribute("j_remoteuser");
+
+			EventsProcessorUtil.process(
+				PropsKeys.LOGIN_EVENTS_POST, PropsValues.LOGIN_EVENTS_POST,
 				mockHttpServletRequest, new MockHttpServletResponse());
 
 			Assert.assertTrue(preJAASAction.isRan());
 			Assert.assertTrue(postJAASAction.isRan());
-
-			_user = UserLocalServiceUtil.getUser(_user.getUserId());
 
 			Assert.assertFalse(lastLoginDate.after(_user.getLastLoginDate()));
 		}
