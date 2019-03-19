@@ -34,6 +34,7 @@ import com.liferay.portal.verify.VerifyUUID;
 import com.liferay.portal.verify.model.AssetTagVerifiableModel;
 import com.liferay.portal.verify.test.util.BaseVerifyProcessTestCase;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import java.util.Collection;
@@ -58,7 +59,14 @@ public class VerifyUUIDTest extends BaseVerifyProcessTestCase {
 
 	@Test
 	public void testVerifyModel() throws Exception {
-		_verifyUUID.doVerify(new AssetTagVerifiableModel());
+		Method doVerifyMethod = ReflectionUtil.getDeclaredMethod(
+			VerifyUUID.class, "doVerify", VerifiableUUIDModel[].class);
+
+		VerifiableUUIDModel[] verifiableUUIDModel = {
+			new AssetTagVerifiableModel()
+		};
+
+		doVerifyMethod.invoke(_verifyUUID, new Object[] {verifiableUUIDModel});
 	}
 
 	@ExpectedLogs(
@@ -104,7 +112,11 @@ public class VerifyUUIDTest extends BaseVerifyProcessTestCase {
 	@Test
 	public void testVerifyModelWithUnknownPKColumnName() {
 		try {
-			_verifyUUID.verifyUUID(
+			Method verifyUUIDMethod = ReflectionUtil.getDeclaredMethod(
+				VerifyUUID.class, "verifyUUID", VerifiableUUIDModel.class);
+
+			verifyUUIDMethod.invoke(
+				_verifyUUID,
 				new VerifiableUUIDModel() {
 
 					@Override
@@ -120,7 +132,13 @@ public class VerifyUUIDTest extends BaseVerifyProcessTestCase {
 				});
 		}
 		catch (Exception e) {
-			_verifyException("testVerifyModelWithUnknownPKColumnName", e);
+			if (e instanceof InvocationTargetException) {
+				InvocationTargetException ite = (InvocationTargetException)e;
+
+				_verifyException(
+					"testVerifyModelWithUnknownPKColumnName",
+					(Exception)ite.getTargetException());
+			}
 		}
 	}
 
@@ -186,11 +204,20 @@ public class VerifyUUIDTest extends BaseVerifyProcessTestCase {
 		}
 
 		try {
-			_verifyUUID.doVerify(verifiableUUIDModels);
+			Method doVerifyMethod = ReflectionUtil.getDeclaredMethod(
+				VerifyUUID.class, "doVerify", VerifiableUUIDModel[].class);
+
+			doVerifyMethod.invoke(
+				_verifyUUID, new Object[] {verifiableUUIDModels});
 		}
 		catch (Exception e) {
-			_verifyException(
-				"testVerifyParallelUnknownModelWithUnknownPKColumnName", e);
+			if (e instanceof InvocationTargetException) {
+				InvocationTargetException ite = (InvocationTargetException)e;
+
+				_verifyException(
+					"testVerifyParallelUnknownModelWithUnknownPKColumnName",
+					(Exception)ite.getTargetException());
+			}
 		}
 	}
 
@@ -235,7 +262,10 @@ public class VerifyUUIDTest extends BaseVerifyProcessTestCase {
 	@Test
 	public void testVerifyUnknownModelWithUnknownPKColumnName() {
 		try {
-			_verifyUUID.doVerify(
+			Method doVerifyMethod = ReflectionUtil.getDeclaredMethod(
+				VerifyUUID.class, "doVerify", VerifiableUUIDModel[].class);
+
+			VerifiableUUIDModel[] verifiableUUIDModel = {
 				new VerifiableUUIDModel() {
 
 					@Override
@@ -248,11 +278,20 @@ public class VerifyUUIDTest extends BaseVerifyProcessTestCase {
 						return _UNKNOWN;
 					}
 
-				});
+				}
+			};
+
+			doVerifyMethod.invoke(
+				_verifyUUID, new Object[] {verifiableUUIDModel});
 		}
 		catch (Exception e) {
-			_verifyException(
-				"testVerifyUnknownModelWithUnknownPKColumnName", e);
+			if (e instanceof InvocationTargetException) {
+				InvocationTargetException ite = (InvocationTargetException)e;
+
+				_verifyException(
+					"testVerifyUnknownModelWithUnknownPKColumnName",
+					(Exception)ite.getTargetException());
+			}
 		}
 	}
 

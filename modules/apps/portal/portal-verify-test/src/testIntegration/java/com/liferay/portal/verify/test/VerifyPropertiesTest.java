@@ -25,6 +25,8 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.verify.VerifyProperties;
 import com.liferay.portal.verify.test.util.BaseVerifyProcessTestCase;
 
+import java.lang.reflect.Method;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -340,10 +342,15 @@ public class VerifyPropertiesTest extends BaseVerifyProcessTestCase {
 		}
 	}
 
-	protected String getFirstPortalPropertyKey() {
+	protected String getFirstPortalPropertyKey() throws Exception {
 		VerifyProperties verifyProperties = getVerifyProcess();
 
-		Properties portalProperties = verifyProperties.loadPortalProperties();
+		Method loadPortalPropertiesMethod = ReflectionTestUtil.getMethod(
+			VerifyProperties.class, "loadPortalProperties", null);
+
+		Properties portalProperties =
+			(Properties)loadPortalPropertiesMethod.invoke(
+				verifyProperties, null);
 
 		Set<String> propertyNames = portalProperties.stringPropertyNames();
 
