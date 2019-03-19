@@ -12,14 +12,21 @@
  * details.
  */
 
-package com.liferay.portal.kernel.dao.orm;
+package com.liferay.portal.dao.orm.test;
 
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
-import com.liferay.portal.kernel.service.persistence.UserUtil;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.orm.SQLQuery;
+import com.liferay.portal.kernel.dao.orm.Session;
+import com.liferay.portal.kernel.dao.orm.SessionFactory;
+import com.liferay.portal.kernel.dao.orm.Type;
+import com.liferay.portal.kernel.service.persistence.UserPersistence;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.TransactionalTestRule;
 
@@ -32,10 +39,12 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author Sampsa Sohlman
  */
+@RunWith(Arquillian.class)
 public class QueryUtilTest {
 
 	@ClassRule
@@ -60,7 +69,7 @@ public class QueryUtilTest {
 	@Before
 	public void setUp() {
 		_sessionFactory = ReflectionTestUtil.getFieldValue(
-			UserUtil.getPersistence(), "_sessionFactory");
+			_userPersistence, "_sessionFactory");
 	}
 
 	@Test
@@ -363,5 +372,8 @@ public class QueryUtilTest {
 	private static DB _db;
 
 	private SessionFactory _sessionFactory;
+
+	@Inject
+	private UserPersistence _userPersistence;
 
 }

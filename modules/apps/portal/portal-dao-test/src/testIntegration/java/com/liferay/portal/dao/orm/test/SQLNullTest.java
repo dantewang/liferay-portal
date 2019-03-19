@@ -12,8 +12,9 @@
  * details.
  */
 
-package com.liferay.portal.dao.orm;
+package com.liferay.portal.dao.orm.test;
 
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
@@ -22,9 +23,10 @@ import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.SessionFactory;
-import com.liferay.portal.kernel.service.persistence.UserUtil;
+import com.liferay.portal.kernel.service.persistence.UserPersistence;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.TransactionalTestRule;
 
@@ -35,6 +37,7 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * This test shows the SQL <code>Null</code> comparison differences across all
@@ -497,6 +500,7 @@ import org.junit.Test;
  *
  * @author Shuyang Zhou
  */
+@RunWith(Arquillian.class)
 public class SQLNullTest {
 
 	@ClassRule
@@ -508,7 +512,7 @@ public class SQLNullTest {
 	@Before
 	public void setUp() {
 		_sessionFactory = ReflectionTestUtil.getFieldValue(
-			UserUtil.getPersistence(), "_sessionFactory");
+			_userPersistence, "_sessionFactory");
 	}
 
 	@Test
@@ -1090,5 +1094,8 @@ public class SQLNullTest {
 		"SELECT DISTINCT 1 FROM Counter WHERE ? NOT LIKE NULL";
 
 	private SessionFactory _sessionFactory;
+
+	@Inject
+	private UserPersistence _userPersistence;
 
 }

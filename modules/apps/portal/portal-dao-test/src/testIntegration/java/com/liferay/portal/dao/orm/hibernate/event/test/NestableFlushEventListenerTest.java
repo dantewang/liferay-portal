@@ -12,18 +12,20 @@
  * details.
  */
 
-package com.liferay.portal.dao.orm.hibernate.event;
+package com.liferay.portal.dao.orm.hibernate.event.test;
 
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.dao.orm.hibernate.SessionFactoryImpl;
 import com.liferay.portal.dao.orm.hibernate.VerifySessionFactoryWrapper;
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.ClassName;
-import com.liferay.portal.kernel.service.persistence.UserUtil;
+import com.liferay.portal.kernel.service.persistence.UserPersistence;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.model.impl.ClassNameImpl;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.List;
@@ -46,10 +48,12 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author Matthew Tambara
  */
+@RunWith(Arquillian.class)
 public class NestableFlushEventListenerTest {
 
 	@ClassRule
@@ -62,7 +66,7 @@ public class NestableFlushEventListenerTest {
 		SessionFactoryImpl sessionFactoryImpl = null;
 
 		Object liferaySessionFactory = ReflectionTestUtil.getFieldValue(
-			UserUtil.getPersistence(), "_sessionFactory");
+			_userPersistence, "_sessionFactory");
 
 		if (liferaySessionFactory instanceof VerifySessionFactoryWrapper) {
 			sessionFactoryImpl = ReflectionTestUtil.getFieldValue(
@@ -271,6 +275,9 @@ public class NestableFlushEventListenerTest {
 	}
 
 	private static org.hibernate.impl.SessionFactoryImpl _sessionFactoryImpl;
+
+	@Inject
+	private static UserPersistence _userPersistence;
 
 	@DeleteAfterTestRun
 	private ClassName _className1;
