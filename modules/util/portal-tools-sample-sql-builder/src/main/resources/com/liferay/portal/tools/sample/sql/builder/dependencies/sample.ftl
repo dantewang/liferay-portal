@@ -12,10 +12,10 @@
 
 <#include "groups.ftl">
 
+<#include "release.ftl">
+
 <#include "roles.ftl">
 
 <#include "counters.ftl">
-
-<#include "release.ftl">
 
 COMMIT_TRANSACTION
