@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.SortedProperties;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.test.rule.LogAssertionTestRule;
@@ -27,6 +28,7 @@ import com.liferay.portal.tools.HypersonicLoader;
 import com.liferay.portal.tools.ToolDependencies;
 
 import java.io.File;
+import java.io.FileInputStream;
 
 import java.net.URL;
 
@@ -34,9 +36,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 
+import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -48,6 +53,25 @@ public class SampleSQLBuilderTest {
 	@ClassRule
 	public static final LogAssertionTestRule logAssertionTestRule =
 		LogAssertionTestRule.INSTANCE;
+
+	@Test
+	public void testFreemarkerTemplateContent() throws Exception {
+		List<String> arrayList = new ArrayList<>();
+
+		_checkFreemarkerTemplate(arrayList);
+
+		StringBundler sb = new StringBundler(arrayList.size() + 2);
+
+		sb.append("These include statements: ");
+
+		for (String line : arrayList) {
+			sb.append(line);
+		}
+
+		sb.append(" shound not be put behind <#include \"counters.ftl\"> \n");
+
+		Assert.assertEquals(sb.toString(), 0, arrayList.size());
+	}
 
 	@Test
 	public void testGenerateAndInsertSampleSQL() throws Exception {
@@ -70,6 +94,40 @@ public class SampleSQLBuilderTest {
 		}
 		finally {
 			FileUtil.deltree(tempDir);
+		}
+	}
+
+	private void _checkFreemarkerTemplate(List<String> arrayList)
+		throws Exception {
+
+		StringBundler sb = new StringBundler(2);
+
+		sb.append("/com/liferay/portal/tools/sample/sql/builder/dependencies");
+		sb.append("/sample.ftl");
+
+		URL resourceURL = getClass().getResource(sb.toString());
+
+		File file = new File(resourceURL.getFile());
+
+		Long fileLength = file.length();
+
+		byte[] filecontent = new byte[fileLength.intValue()];
+
+		try (FileInputStream fileInputStream = new FileInputStream(file)) {
+			fileInputStream.read(filecontent);
+
+			String fileContent = new String(filecontent, "UTF-8");
+
+			if (!fileContent.endsWith(
+					"<#include \"counters.ftl\">\nCOMMIT_TRANSACTION")) {
+
+				int startIndex = fileContent.lastIndexOf(
+					"<#include \"counters.ftl\">");
+
+				int endIndex = fileContent.indexOf("COMMIT_TRANSACTION");
+
+				arrayList.add(fileContent.substring(startIndex + 25, endIndex));
+			}
 		}
 	}
 

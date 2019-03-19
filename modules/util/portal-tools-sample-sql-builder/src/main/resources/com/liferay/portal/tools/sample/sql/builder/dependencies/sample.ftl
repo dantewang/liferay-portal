@@ -16,6 +16,8 @@
 
 <#include "release.ftl">
 
+<#--All the include statements should not be put behind <#include "counters.ftl"> -->
+
 <#include "counters.ftl">
 
 COMMIT_TRANSACTION
