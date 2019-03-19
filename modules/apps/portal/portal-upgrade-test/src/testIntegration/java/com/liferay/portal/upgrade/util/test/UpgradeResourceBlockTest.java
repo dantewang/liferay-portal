@@ -12,8 +12,10 @@
  * details.
  */
 
-package com.liferay.portal.upgrade.util;
+package com.liferay.portal.upgrade.util.test;
 
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.portal.kernel.dao.db.IndexMetadata;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
@@ -22,12 +24,18 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.DBAssertionUtil;
 import com.liferay.portal.kernel.test.util.RoleTestUtil;
+import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.portal.upgrade.util.BaseUpgradeResourceBlock;
+
+import java.io.IOException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Types;
+
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -35,10 +43,12 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author Preston Crary
  */
+@RunWith(Arquillian.class)
 public class UpgradeResourceBlockTest extends BaseUpgradeResourceBlock {
 
 	@ClassRule
@@ -158,6 +168,14 @@ public class UpgradeResourceBlockTest extends BaseUpgradeResourceBlock {
 	@Override
 	protected String getClassName() {
 		return UpgradeResourceBlockTest.class.getName();
+	}
+
+	@Override
+	protected List<ObjectValuePair<String, IndexMetadata>> getIndexesSQL(
+			ClassLoader classLoader, String tableName)
+		throws IOException {
+
+		return null;
 	}
 
 	@Override
