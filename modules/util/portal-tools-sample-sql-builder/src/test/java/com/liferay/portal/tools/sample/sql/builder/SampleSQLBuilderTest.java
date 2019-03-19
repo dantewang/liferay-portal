@@ -20,13 +20,16 @@ import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.SortedProperties;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.test.rule.LogAssertionTestRule;
 import com.liferay.portal.tools.HypersonicLoader;
 import com.liferay.portal.tools.ToolDependencies;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 
 import java.net.URL;
 
@@ -34,9 +37,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -66,10 +71,55 @@ public class SampleSQLBuilderTest {
 		try {
 			new SampleSQLBuilder(properties, new DataFactory(properties));
 
+			ArrayList<String> arrayList = new ArrayList<>();
+
+			_checkFreemarkerTemplate(arrayList);
+
+			StringBundler sb = new StringBundler(arrayList.size() + 2);
+
+			sb.append("These include statements: ");
+
+			for (String line : arrayList) {
+				sb.append(line);
+			}
+
+			sb.append(
+				" shound not be put behind <#include \"counters.ftl\"> \n");
+
+			Assert.assertEquals(sb.toString(), 0, arrayList.size());
+
 			_loadHypersonic("../../../sql", tempDir.getAbsolutePath());
 		}
 		finally {
 			FileUtil.deltree(tempDir);
+		}
+	}
+
+	private void _checkFreemarkerTemplate(ArrayList<String> arrayList)
+		throws Exception {
+
+		StringBundler sb = new StringBundler(3);
+
+		sb.append(System.getProperty("user.dir"));
+		sb.append("/src/main/resources/com/liferay/portal/tools/sample/sql");
+		sb.append("/builder/dependencies/sample.ftl");
+
+		try (BufferedReader bufferedReader = new BufferedReader(
+				new FileReader(sb.toString()))) {
+
+			String line = null;
+			boolean behindCountersFtl = false;
+
+			while ((line = bufferedReader.readLine()) != null) {
+				if (line.length() != 0) {
+					if (line.contains("counters.ftl")) {
+						behindCountersFtl = true;
+					}
+					else if (line.contains("include") && behindCountersFtl) {
+						arrayList.add(line);
+					}
+				}
+			}
 		}
 	}
 
