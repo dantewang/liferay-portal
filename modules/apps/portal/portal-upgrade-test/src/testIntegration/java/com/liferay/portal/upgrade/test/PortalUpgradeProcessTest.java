@@ -66,11 +66,7 @@ public class PortalUpgradeProcessTest {
 
 	@After
 	public void tearDown() throws Exception {
-		Method updateSchemaVersionMethod = ReflectionTestUtil.getMethod(
-			PortalUpgradeProcess.class, "updateSchemaVersion", Version.class);
-
-		updateSchemaVersionMethod.invoke(
-			_innerPortalUpgradeProcess, _currentSchemaVersion);
+		_updateSchemaVersion(_currentSchemaVersion);
 
 		_innerPortalUpgradeProcess.close();
 	}
@@ -114,12 +110,7 @@ public class PortalUpgradeProcessTest {
 
 	@Test
 	public void testIsInLatestSchemaVersion() throws Exception {
-		Method updateSchemaVersionMethod = ReflectionTestUtil.getMethod(
-			PortalUpgradeProcess.class, "updateSchemaVersion", Version.class);
-
-		updateSchemaVersionMethod.invoke(
-			_innerPortalUpgradeProcess,
-			PortalUpgradeProcess.getLatestSchemaVersion());
+		_updateSchemaVersion(PortalUpgradeProcess.getLatestSchemaVersion());
 
 		try (Connection connection = DataAccess.getConnection()) {
 			Assert.assertTrue(
@@ -129,12 +120,7 @@ public class PortalUpgradeProcessTest {
 
 	@Test
 	public void testIsInRequiredSchemaVersion() throws Exception {
-		Method updateSchemaVersionMethod = ReflectionTestUtil.getMethod(
-			PortalUpgradeProcess.class, "updateSchemaVersion", Version.class);
-
-		updateSchemaVersionMethod.invoke(
-			_innerPortalUpgradeProcess,
-			PortalUpgradeProcess.getRequiredSchemaVersion());
+		_updateSchemaVersion(PortalUpgradeProcess.getRequiredSchemaVersion());
 
 		try (Connection connection = DataAccess.getConnection()) {
 			Assert.assertTrue(
@@ -144,11 +130,7 @@ public class PortalUpgradeProcessTest {
 
 	@Test
 	public void testIsNotInLatestSchemaVersion() throws Exception {
-		Method updateSchemaVersionMethod = ReflectionTestUtil.getMethod(
-			PortalUpgradeProcess.class, "updateSchemaVersion", Version.class);
-
-		updateSchemaVersionMethod.invoke(
-			_innerPortalUpgradeProcess, _ORIGINAL_SCHEMA_VERSION);
+		_updateSchemaVersion(_ORIGINAL_SCHEMA_VERSION);
 
 		try (Connection connection = DataAccess.getConnection()) {
 			Assert.assertFalse(
@@ -158,11 +140,7 @@ public class PortalUpgradeProcessTest {
 
 	@Test
 	public void testIsNotInRequiredSchemaVersion() throws Exception {
-		Method updateSchemaVersionMethod = ReflectionTestUtil.getMethod(
-			PortalUpgradeProcess.class, "updateSchemaVersion", Version.class);
-
-		updateSchemaVersionMethod.invoke(
-			_innerPortalUpgradeProcess, _ORIGINAL_SCHEMA_VERSION);
+		_updateSchemaVersion(_ORIGINAL_SCHEMA_VERSION);
 
 		try (Connection connection = DataAccess.getConnection()) {
 			Assert.assertFalse(
@@ -172,12 +150,7 @@ public class PortalUpgradeProcessTest {
 
 	@Test
 	public void testUpgradeWhenCoreIsInLatestSchemaVersion() throws Exception {
-		Method updateSchemaVersionMethod = ReflectionTestUtil.getMethod(
-			PortalUpgradeProcess.class, "updateSchemaVersion", Version.class);
-
-		updateSchemaVersionMethod.invoke(
-			_innerPortalUpgradeProcess,
-			PortalUpgradeProcess.getLatestSchemaVersion());
+		_updateSchemaVersion(PortalUpgradeProcess.getLatestSchemaVersion());
 
 		PortalUpgradeProcess portalServiceUpgrade = new PortalUpgradeProcess();
 
@@ -199,12 +172,7 @@ public class PortalUpgradeProcessTest {
 	public void testUpgradeWhenCoreIsInRequiredSchemaVersion()
 		throws Exception {
 
-		Method updateSchemaVersionMethod = ReflectionTestUtil.getMethod(
-			PortalUpgradeProcess.class, "updateSchemaVersion", Version.class);
-
-		updateSchemaVersionMethod.invoke(
-			_innerPortalUpgradeProcess,
-			PortalUpgradeProcess.getRequiredSchemaVersion());
+		_updateSchemaVersion(PortalUpgradeProcess.getRequiredSchemaVersion());
 
 		PortalUpgradeProcess portalServiceUpgrade = new PortalUpgradeProcess();
 
@@ -236,6 +204,13 @@ public class PortalUpgradeProcessTest {
 						PortalUpgradeProcess.getRequiredSchemaVersion(),
 				PortalUpgradeProcess.isInRequiredSchemaVersion(connection));
 		}
+	}
+
+	private void _updateSchemaVersion(Version version) throws Exception {
+		Method updateSchemaVersionMethod = ReflectionTestUtil.getMethod(
+			PortalUpgradeProcess.class, "updateSchemaVersion", Version.class);
+
+		updateSchemaVersionMethod.invoke(_innerPortalUpgradeProcess, version);
 	}
 
 	private static final Version _ORIGINAL_SCHEMA_VERSION = new Version(
