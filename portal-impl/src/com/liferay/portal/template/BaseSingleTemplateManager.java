@@ -70,7 +70,9 @@ public abstract class BaseSingleTemplateManager extends BaseTemplateManager {
 
 	protected void cacheTemplateResource(
 		TemplateResource templateResource,
-		TemplateResource errorTemplateResource, String templateManagerName) {
+		TemplateResource errorTemplateResource) {
+
+		String templateManagerName = getName();
 
 		if (templateManagerName.equals(TemplateConstants.LANG_TYPE_VM)) {
 			return;
