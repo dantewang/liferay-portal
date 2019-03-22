@@ -62,6 +62,8 @@ public abstract class BaseSingleTemplateManager extends BaseTemplateManager {
 		TemplateResource templateResource,
 		TemplateResource errorTemplateResource, boolean restricted) {
 
+		cacheTemplateResource(templateResource, errorTemplateResource);
+
 		return doGetTemplate(
 			templateResource, errorTemplateResource, restricted,
 			getHelperUtilities(restricted));
