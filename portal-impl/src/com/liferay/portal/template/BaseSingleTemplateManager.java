@@ -164,7 +164,9 @@ public abstract class BaseSingleTemplateManager extends BaseTemplateManager {
 			portalCacheName);
 	}
 
-	protected abstract boolean isCacheEnabled();
+	protected boolean isCacheEnabled() {
+		return false;
+	}
 
 	protected MultiVMPool multiVMPool;
 	protected SingleVMPool singleVMPool;
