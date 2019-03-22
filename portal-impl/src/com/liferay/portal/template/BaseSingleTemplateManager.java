@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
 import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.template.StringTemplateResource;
 import com.liferay.portal.kernel.template.Template;
-import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.template.TemplateResourceLoader;
 import com.liferay.portal.kernel.template.URLTemplateResource;
@@ -72,9 +71,7 @@ public abstract class BaseSingleTemplateManager extends BaseTemplateManager {
 		TemplateResource templateResource,
 		TemplateResource errorTemplateResource) {
 
-		String templateManagerName = getName();
-
-		if (templateManagerName.equals(TemplateConstants.LANG_TYPE_VM)) {
+		if (!isCacheEnabled()) {
 			return;
 		}
 
@@ -89,7 +86,7 @@ public abstract class BaseSingleTemplateManager extends BaseTemplateManager {
 		portalCacheName = portalCacheName.concat(
 			StringPool.PERIOD
 		).concat(
-			templateManagerName
+			getName()
 		);
 
 		PortalCache<String, Serializable> portalCache = getPortalCache(
@@ -102,10 +99,6 @@ public abstract class BaseSingleTemplateManager extends BaseTemplateManager {
 		}
 
 		if (errorTemplateResource == null) {
-			return;
-		}
-
-		if (templateManagerName.equals(TemplateConstants.LANG_TYPE_VM)) {
 			return;
 		}
 
@@ -168,6 +161,8 @@ public abstract class BaseSingleTemplateManager extends BaseTemplateManager {
 		return PortalCacheHelperUtil.getPortalCache(
 			PortalCacheManagerNames.MULTI_VM, portalCacheName);
 	}
+
+	protected abstract boolean isCacheEnabled();
 
 	/**
 	 * @deprecated As of Judson (7.1.x), with no direct replacement
