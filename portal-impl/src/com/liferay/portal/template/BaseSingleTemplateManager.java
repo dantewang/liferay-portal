@@ -15,9 +15,9 @@
 package com.liferay.portal.template;
 
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
-import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
-import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
+import com.liferay.portal.kernel.cache.SingleVMPool;
 import com.liferay.portal.kernel.template.StringTemplateResource;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateResource;
@@ -145,8 +145,8 @@ public abstract class BaseSingleTemplateManager extends BaseTemplateManager {
 		TemplateResource templateResource, String portalCacheName) {
 
 		if (!(templateResource instanceof CacheTemplateResource)) {
-			return PortalCacheHelperUtil.getPortalCache(
-				PortalCacheManagerNames.MULTI_VM, portalCacheName);
+			return (PortalCache<String, Serializable>)
+				multiVMPool.getPortalCache(portalCacheName);
 		}
 
 		CacheTemplateResource cacheTemplateResource =
@@ -156,15 +156,18 @@ public abstract class BaseSingleTemplateManager extends BaseTemplateManager {
 			cacheTemplateResource.getInnerTemplateResource();
 
 		if (innerTemplateResource instanceof URLTemplateResource) {
-			return PortalCacheHelperUtil.getPortalCache(
-				PortalCacheManagerNames.SINGLE_VM, portalCacheName);
+			return (PortalCache<String, Serializable>)
+				singleVMPool.getPortalCache(portalCacheName);
 		}
 
-		return PortalCacheHelperUtil.getPortalCache(
-			PortalCacheManagerNames.MULTI_VM, portalCacheName);
+		return (PortalCache<String, Serializable>)multiVMPool.getPortalCache(
+			portalCacheName);
 	}
 
 	protected abstract boolean isCacheEnabled();
+
+	protected MultiVMPool multiVMPool;
+	protected SingleVMPool singleVMPool;
 
 	/**
 	 * @deprecated As of Judson (7.1.x), with no direct replacement
