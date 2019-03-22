@@ -21,6 +21,7 @@ import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.SingleVMPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -264,7 +265,7 @@ public class FreeMarkerManager extends BaseSingleTemplateManager {
 
 			TemplateCache templateCache = new LiferayTemplateCache(
 				_configuration, _freeMarkerEngineConfiguration,
-				templateResourceLoader, _singleVMPool);
+				templateResourceLoader, singleVMPool);
 
 			field.set(_configuration, templateCache);
 		}
@@ -419,6 +420,15 @@ public class FreeMarkerManager extends BaseSingleTemplateManager {
 				servletContext, freeMarkerBundleClassloader));
 	}
 
+	@Override
+	protected boolean isCacheEnabled() {
+		if (_freeMarkerEngineConfiguration.resourceModificationCheck() != 0) {
+			return true;
+		}
+
+		return false;
+	}
+
 	protected boolean isEnableDebuggerService() {
 		if ((System.getProperty("freemarker.debug.password") != null) &&
 			(System.getProperty("freemarker.debug.port") != null)) {
@@ -430,8 +440,13 @@ public class FreeMarkerManager extends BaseSingleTemplateManager {
 	}
 
 	@Reference(unbind = "-")
+	protected void setMultiVMPool(MultiVMPool multiVMPool) {
+		this.multiVMPool = multiVMPool;
+	}
+
+	@Reference(unbind = "-")
 	protected void setSingleVMPool(SingleVMPool singleVMPool) {
-		_singleVMPool = singleVMPool;
+		this.singleVMPool = singleVMPool;
 	}
 
 	private String _getMacroLibrary() {
@@ -479,7 +494,6 @@ public class FreeMarkerManager extends BaseSingleTemplateManager {
 	private volatile FreeMarkerBundleClassloader _freeMarkerBundleClassloader;
 	private volatile FreeMarkerEngineConfiguration
 		_freeMarkerEngineConfiguration;
-	private SingleVMPool _singleVMPool;
 	private final Map<String, String> _taglibMappings =
 		new ConcurrentHashMap<>();
 	private TemplateClassResolver _templateClassResolver;

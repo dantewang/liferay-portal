@@ -18,6 +18,7 @@ import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.cache.SingleVMPool;
 import com.liferay.portal.kernel.model.Layout;
@@ -225,7 +226,7 @@ public class VelocityManager extends BaseSingleTemplateManager {
 				String.valueOf(!cacheEnabled));
 
 			extendedProperties.setProperty(
-				PortalCacheManagerNames.SINGLE_VM, _singleVMPool);
+				PortalCacheManagerNames.SINGLE_VM, singleVMPool);
 
 			_velocityEngine.setExtendedProperties(extendedProperties);
 
@@ -281,6 +282,27 @@ public class VelocityManager extends BaseSingleTemplateManager {
 		return template;
 	}
 
+	@Override
+	protected boolean isCacheEnabled() {
+		if (_velocityEngineConfiguration.resourceModificationCheckInterval() !=
+				0) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	@Reference(unbind = "-")
+	protected void setMultiVMPool(MultiVMPool multiVMPool) {
+		this.multiVMPool = multiVMPool;
+	}
+
+	@Reference(unbind = "-")
+	protected void setSingleVMPool(SingleVMPool singleVMPool) {
+		this.singleVMPool = singleVMPool;
+	}
+
 	private String _getVelocimacroLibrary(Class<?> clazz) {
 		String contextName = ClassLoaderPool.getContextName(
 			clazz.getClassLoader());
@@ -319,9 +341,6 @@ public class VelocityManager extends BaseSingleTemplateManager {
 			throw new ExceptionInInitializerError(nsme);
 		}
 	}
-
-	@Reference
-	private SingleVMPool _singleVMPool;
 
 	private VelocityEngine _velocityEngine;
 
