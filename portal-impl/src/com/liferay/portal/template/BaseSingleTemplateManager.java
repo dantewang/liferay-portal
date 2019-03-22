@@ -14,8 +14,18 @@
 
 package com.liferay.portal.template;
 
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.cache.PortalCache;
+import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
+import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
+import com.liferay.portal.kernel.template.StringTemplateResource;
 import com.liferay.portal.kernel.template.Template;
+import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateResource;
+import com.liferay.portal.kernel.template.TemplateResourceLoader;
+import com.liferay.portal.kernel.template.URLTemplateResource;
+
+import java.io.Serializable;
 
 import java.util.List;
 import java.util.Map;
@@ -58,6 +68,62 @@ public abstract class BaseSingleTemplateManager extends BaseTemplateManager {
 			getHelperUtilities(restricted));
 	}
 
+	protected void cacheTemplateResource(
+		TemplateResource templateResource,
+		TemplateResource errorTemplateResource, String templateManagerName) {
+
+		if (templateManagerName.equals(TemplateConstants.LANG_TYPE_VM)) {
+			return;
+		}
+
+		if (!(templateResource instanceof CacheTemplateResource) &&
+			!(templateResource instanceof StringTemplateResource)) {
+
+			templateResource = new CacheTemplateResource(templateResource);
+		}
+
+		String portalCacheName = TemplateResourceLoader.class.getName();
+
+		portalCacheName = portalCacheName.concat(
+			StringPool.PERIOD
+		).concat(
+			templateManagerName
+		);
+
+		PortalCache<String, Serializable> portalCache = getPortalCache(
+			templateResource, portalCacheName);
+
+		Object object = portalCache.get(templateResource.getTemplateId());
+
+		if ((object == null) || !templateResource.equals(object)) {
+			portalCache.put(templateResource.getTemplateId(), templateResource);
+		}
+
+		if (errorTemplateResource == null) {
+			return;
+		}
+
+		if (templateManagerName.equals(TemplateConstants.LANG_TYPE_VM)) {
+			return;
+		}
+
+		if (!(errorTemplateResource instanceof CacheTemplateResource) &&
+			!(errorTemplateResource instanceof StringTemplateResource)) {
+
+			errorTemplateResource = new CacheTemplateResource(
+				errorTemplateResource);
+		}
+
+		portalCache = getPortalCache(errorTemplateResource, portalCacheName);
+
+		object = portalCache.get(errorTemplateResource.getTemplateId());
+
+		if ((object == null) || !errorTemplateResource.equals(object)) {
+			portalCache.put(
+				errorTemplateResource.getTemplateId(), errorTemplateResource);
+		}
+	}
+
 	protected abstract Template doGetTemplate(
 		TemplateResource templateResource,
 		TemplateResource errorTemplateResource, boolean restricted,
@@ -76,6 +142,29 @@ public abstract class BaseSingleTemplateManager extends BaseTemplateManager {
 		return doGetTemplate(
 			templateResource, errorTemplateResource, restricted,
 			helperUtilities);
+	}
+
+	protected PortalCache<String, Serializable> getPortalCache(
+		TemplateResource templateResource, String portalCacheName) {
+
+		if (!(templateResource instanceof CacheTemplateResource)) {
+			return PortalCacheHelperUtil.getPortalCache(
+				PortalCacheManagerNames.MULTI_VM, portalCacheName);
+		}
+
+		CacheTemplateResource cacheTemplateResource =
+			(CacheTemplateResource)templateResource;
+
+		TemplateResource innerTemplateResource =
+			cacheTemplateResource.getInnerTemplateResource();
+
+		if (innerTemplateResource instanceof URLTemplateResource) {
+			return PortalCacheHelperUtil.getPortalCache(
+				PortalCacheManagerNames.SINGLE_VM, portalCacheName);
+		}
+
+		return PortalCacheHelperUtil.getPortalCache(
+			PortalCacheManagerNames.MULTI_VM, portalCacheName);
 	}
 
 	/**
