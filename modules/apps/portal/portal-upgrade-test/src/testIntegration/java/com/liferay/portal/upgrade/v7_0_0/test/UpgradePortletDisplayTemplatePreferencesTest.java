@@ -12,8 +12,9 @@
  * details.
  */
 
-package com.liferay.portal.upgrade.v7_0_0;
+package com.liferay.portal.upgrade.v7_0_0.test;
 
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.dynamic.data.mapping.kernel.DDMTemplate;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
@@ -22,13 +23,17 @@ import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.portletdisplaytemplate.PortletDisplayTemplateManager;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.template.TemplateHandlerRegistryUtil;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.portal.upgrade.v7_0_0.UpgradePortletDisplayTemplatePreferences;
 import com.liferay.portal.util.test.LayoutTestUtil;
 import com.liferay.portlet.dynamicdatamapping.util.test.DDMTemplateTestUtil;
+
+import java.lang.reflect.Field;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,12 +44,13 @@ import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author Eduardo García
  */
-public class UpgradePortletDisplayTemplatePreferencesTest
-	extends UpgradePortletDisplayTemplatePreferences {
+@RunWith(Arquillian.class)
+public class UpgradePortletDisplayTemplatePreferencesTest {
 
 	@ClassRule
 	@Rule
@@ -64,11 +70,21 @@ public class UpgradePortletDisplayTemplatePreferencesTest
 
 		_layout = LayoutTestUtil.addLayout(_group);
 
+		Field field = ReflectionTestUtil.getField(
+			UpgradePortletDisplayTemplatePreferences.class,
+			"DISPLAY_STYLE_PREFIX_6_2");
+
 		setPortletDisplayStyle(
-			"portlet1", DISPLAY_STYLE_PREFIX_6_2 + ddmTemplate.getUuid());
+			"portlet1",
+			String.valueOf(field.get(null)) + ddmTemplate.getUuid());
+
 		setPortletDisplayStyle("portlet2", "testDisplayStyle");
 
-		upgrade();
+		UpgradePortletDisplayTemplatePreferences
+			upgradePortletDisplayTemplatePreferences =
+				new UpgradePortletDisplayTemplatePreferences();
+
+		upgradePortletDisplayTemplatePreferences.upgrade();
 
 		CacheRegistryUtil.clear();
 
