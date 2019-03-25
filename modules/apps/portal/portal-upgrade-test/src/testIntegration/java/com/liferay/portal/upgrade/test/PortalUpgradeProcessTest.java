@@ -23,8 +23,6 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upgrade.PortalUpgradeProcess;
 
-import java.lang.reflect.Method;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -73,13 +71,9 @@ public class PortalUpgradeProcessTest {
 
 	@Test
 	public void testGetLatestSchemaVersion() throws Exception {
-		Method getPendingSchemaVersionsMethod = ReflectionTestUtil.getMethod(
-			PortalUpgradeProcess.class, "getPendingSchemaVersions",
-			Version.class);
-
-		Set<Version> pendingSchemaVersions =
-			(Set<Version>)getPendingSchemaVersionsMethod.invoke(
-				_innerPortalUpgradeProcess, _ORIGINAL_SCHEMA_VERSION);
+		Set<Version> pendingSchemaVersions = ReflectionTestUtil.invoke(
+			_innerPortalUpgradeProcess, "getPendingSchemaVersions",
+			new Class<?>[] {Version.class}, _ORIGINAL_SCHEMA_VERSION);
 
 		Iterator<Version> itr = pendingSchemaVersions.iterator();
 
@@ -207,10 +201,9 @@ public class PortalUpgradeProcessTest {
 	}
 
 	private void _updateSchemaVersion(Version version) throws Exception {
-		Method updateSchemaVersionMethod = ReflectionTestUtil.getMethod(
-			PortalUpgradeProcess.class, "updateSchemaVersion", Version.class);
-
-		updateSchemaVersionMethod.invoke(_innerPortalUpgradeProcess, version);
+		ReflectionTestUtil.invoke(
+			_innerPortalUpgradeProcess, "updateSchemaVersion",
+			new Class<?>[] {Version.class}, version);
 	}
 
 	private static final Version _ORIGINAL_SCHEMA_VERSION = new Version(
