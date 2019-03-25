@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.concurrent.ThrowableAwareRunnable;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.db.DBType;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.verify.model.VerifiableUUIDModel;
 import com.liferay.portal.test.rule.ExpectedDBType;
@@ -59,14 +60,12 @@ public class VerifyUUIDTest extends BaseVerifyProcessTestCase {
 
 	@Test
 	public void testVerifyModel() throws Exception {
-		Method doVerifyMethod = ReflectionUtil.getDeclaredMethod(
-			VerifyUUID.class, "doVerify", VerifiableUUIDModel[].class);
-
-		VerifiableUUIDModel[] verifiableUUIDModel = {
-			new AssetTagVerifiableModel()
-		};
-
-		doVerifyMethod.invoke(_verifyUUID, new Object[] {verifiableUUIDModel});
+		ReflectionTestUtil.invoke(
+			_verifyUUID, "doVerify",
+			new Class<?>[] {VerifiableUUIDModel[].class},
+			new Object[] {
+				new VerifiableUUIDModel[] {new AssetTagVerifiableModel()}
+			});
 	}
 
 	@ExpectedLogs(
