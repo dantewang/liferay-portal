@@ -67,7 +67,7 @@ public class PersistenceNestedSetsTreeManagerTest {
 		new AggregateTestRule(
 			new LiferayIntegrationTestRule(),
 			new TransactionalTestRule(
-				Propagation.SUPPORTS,
+				Propagation.REQUIRED,
 				"com.liferay.portal.tools.service.builder.test.service"));
 
 	@Before
