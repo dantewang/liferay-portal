@@ -12,15 +12,14 @@
  * details.
  */
 
-package com.liferay.portal.service.user;
+package com.liferay.users.admin.service.user.test;
 
-import com.liferay.portal.kernel.model.Group;
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
-import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.OrganizationTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -30,13 +29,15 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author Brian Wing Shun Chan
  * @author José Manuel Navarro
  * @author Drew Brokke
  */
-public class UserServiceWhenGroupAdminUnsetsGroupUsersTest {
+@RunWith(Arquillian.class)
+public class UserServiceOrganizationOwnerUnsetsUsersForNonSiteOrganizationTest {
 
 	@ClassRule
 	@Rule
@@ -45,45 +46,10 @@ public class UserServiceWhenGroupAdminUnsetsGroupUsersTest {
 
 	@Before
 	public void setUp() throws Exception {
-		_organization = OrganizationTestUtil.addOrganization(true);
+		_organization = OrganizationTestUtil.addOrganization();
 
-		_group = GroupTestUtil.addGroup();
-
-		_groupAdminUser = UserTestUtil.addGroupAdminUser(_group);
-	}
-
-	@Test
-	public void testShouldUnsetGroupAdmin() throws Exception {
-		User groupAdminUser = UserTestUtil.addGroupAdminUser(_group);
-
-		try {
-			UserServiceTestUtil.unsetGroupUsers(
-				_group.getGroupId(), _groupAdminUser, groupAdminUser);
-
-			Assert.assertTrue(
-				UserLocalServiceUtil.hasGroupUser(
-					_group.getGroupId(), groupAdminUser.getUserId()));
-		}
-		finally {
-			UserLocalServiceUtil.deleteUser(groupAdminUser);
-		}
-	}
-
-	@Test
-	public void testShouldUnsetGroupOwner() throws Exception {
-		User groupOwnerUser = UserTestUtil.addGroupOwnerUser(_group);
-
-		try {
-			UserServiceTestUtil.unsetGroupUsers(
-				_group.getGroupId(), _groupAdminUser, groupOwnerUser);
-
-			Assert.assertTrue(
-				UserLocalServiceUtil.hasGroupUser(
-					_group.getGroupId(), groupOwnerUser.getUserId()));
-		}
-		finally {
-			UserLocalServiceUtil.deleteUser(groupOwnerUser);
-		}
+		_organizationOwnerUser = UserTestUtil.addOrganizationOwnerUser(
+			_organization);
 	}
 
 	@Test
@@ -93,10 +59,10 @@ public class UserServiceWhenGroupAdminUnsetsGroupUsersTest {
 
 		try {
 			UserServiceTestUtil.unsetOrganizationUsers(
-				_organization.getOrganizationId(), _groupAdminUser,
+				_organization.getOrganizationId(), _organizationOwnerUser,
 				organizationAdminUser);
 
-			Assert.assertTrue(
+			Assert.assertFalse(
 				UserLocalServiceUtil.hasOrganizationUser(
 					_organization.getOrganizationId(),
 					organizationAdminUser.getUserId()));
@@ -108,31 +74,28 @@ public class UserServiceWhenGroupAdminUnsetsGroupUsersTest {
 
 	@Test
 	public void testShouldUnsetOrganizationOwner() throws Exception {
-		User organizationOwnerUser = UserTestUtil.addOrganizationOwnerUser(
+		User otherOrganizationOwnerUser = UserTestUtil.addOrganizationOwnerUser(
 			_organization);
 
 		try {
 			UserServiceTestUtil.unsetOrganizationUsers(
-				_organization.getOrganizationId(), _groupAdminUser,
-				organizationOwnerUser);
+				_organization.getOrganizationId(), _organizationOwnerUser,
+				otherOrganizationOwnerUser);
 
-			Assert.assertTrue(
+			Assert.assertFalse(
 				UserLocalServiceUtil.hasOrganizationUser(
 					_organization.getOrganizationId(),
-					organizationOwnerUser.getUserId()));
+					otherOrganizationOwnerUser.getUserId()));
 		}
 		finally {
-			UserLocalServiceUtil.deleteUser(organizationOwnerUser);
+			UserLocalServiceUtil.deleteUser(otherOrganizationOwnerUser);
 		}
 	}
 
 	@DeleteAfterTestRun
-	private Group _group;
-
-	@DeleteAfterTestRun
-	private User _groupAdminUser;
-
-	@DeleteAfterTestRun
 	private Organization _organization;
+
+	@DeleteAfterTestRun
+	private User _organizationOwnerUser;
 
 }

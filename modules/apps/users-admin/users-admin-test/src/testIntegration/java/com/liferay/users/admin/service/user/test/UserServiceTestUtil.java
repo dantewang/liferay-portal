@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.service.user;
+package com.liferay.users.admin.service.user.test;
 
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
