@@ -18,6 +18,9 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.exception.UserEmailAddressException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserServiceUtil;
@@ -68,13 +71,21 @@ public class UserServiceWhenCompanySecurityStrangersWithMXDisabledTest {
 	public void testShouldNotUpdateEmailAddress() throws Exception {
 		String name = PrincipalThreadLocal.getName();
 
+		PropsUtil.set(
+			PropsKeys.COMPANY_SECURITY_STRANGERS_WITH_MX,
+			Boolean.FALSE.toString());
+
+		User user = UserTestUtil.addUser(false);
+
+		PermissionChecker permissionChecker =
+			PermissionCheckerFactoryUtil.create(user);
+
+		PermissionChecker originalPermissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
+		PermissionThreadLocal.setPermissionChecker(permissionChecker);
+
 		try {
-			PropsUtil.set(
-				PropsKeys.COMPANY_SECURITY_STRANGERS_WITH_MX,
-				Boolean.FALSE.toString());
-
-			User user = UserTestUtil.addUser(false);
-
 			PrincipalThreadLocal.setName(user.getUserId());
 
 			String emailAddress =
@@ -85,6 +96,9 @@ public class UserServiceWhenCompanySecurityStrangersWithMXDisabledTest {
 				emailAddress, new ServiceContext());
 		}
 		finally {
+			PermissionThreadLocal.setPermissionChecker(
+				originalPermissionChecker);
+
 			PrincipalThreadLocal.setName(name);
 		}
 	}
@@ -94,6 +108,14 @@ public class UserServiceWhenCompanySecurityStrangersWithMXDisabledTest {
 		String name = PrincipalThreadLocal.getName();
 
 		User user = UserTestUtil.addUser(false);
+
+		PermissionChecker permissionChecker =
+			PermissionCheckerFactoryUtil.create(user);
+
+		PermissionChecker originalPermissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
+		PermissionThreadLocal.setPermissionChecker(permissionChecker);
 
 		try {
 			PropsUtil.set(
@@ -105,6 +127,9 @@ public class UserServiceWhenCompanySecurityStrangersWithMXDisabledTest {
 			UserTestUtil.updateUser(user);
 		}
 		finally {
+			PermissionThreadLocal.setPermissionChecker(
+				originalPermissionChecker);
+
 			PrincipalThreadLocal.setName(name);
 
 			UserLocalServiceUtil.deleteUser(user);
