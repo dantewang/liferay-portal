@@ -30,6 +30,7 @@ definition {
 	@priority = "5"
 	test StartupJDBCPING {
 		property cluster.jdbc.ping = "true";
+		property portal.acceptance = "test";
 		property test.name.skip.portal.instance = "ClusteringConfigs#StartupJDBCPING";
 
 		Clustering.viewClusterStatusInConsole();
