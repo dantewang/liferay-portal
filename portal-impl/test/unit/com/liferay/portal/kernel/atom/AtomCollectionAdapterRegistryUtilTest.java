@@ -18,19 +18,17 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceRegistration;
-
-import java.io.InputStream;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.io.InputStream;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Peter Fellwock
