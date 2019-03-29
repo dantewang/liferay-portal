@@ -14,7 +14,6 @@
 
 package com.liferay.portal.kernel.lock;
 
-import com.liferay.portal.kernel.lock.bundle.locklistenerregistryutil.TestLockListener;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
@@ -67,5 +66,30 @@ public class LockListenerRegistryUtilTest {
 	}
 
 	private static ServiceRegistration<LockListener> _serviceRegistration;
+
+	private static class TestLockListener implements LockListener {
+
+		@Override
+		public String getClassName() {
+			return TestLockListener.class.getName();
+		}
+
+		@Override
+		public void onAfterExpire(String key) {
+		}
+
+		@Override
+		public void onAfterRefresh(String key) {
+		}
+
+		@Override
+		public void onBeforeExpire(String key) {
+		}
+
+		@Override
+		public void onBeforeRefresh(String key) {
+		}
+
+	}
 
 }

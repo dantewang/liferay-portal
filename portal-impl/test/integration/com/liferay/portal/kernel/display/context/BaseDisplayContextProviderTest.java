@@ -14,7 +14,6 @@
 
 package com.liferay.portal.kernel.display.context;
 
-import com.liferay.portal.kernel.display.context.bundle.basedisplaycontextfactory.TestBaseDisplayContextFactoryImpl;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
@@ -89,5 +88,9 @@ public class BaseDisplayContextProviderTest {
 		_baseDisplayContextProvider;
 	private static ServiceRegistration<TestDisplayContextFactory>
 		_serviceRegistration;
+
+	private static class TestBaseDisplayContextFactoryImpl
+		implements TestDisplayContextFactory {
+	}
 
 }

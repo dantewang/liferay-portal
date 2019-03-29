@@ -14,12 +14,14 @@
 
 package com.liferay.portal.kernel.atom;
 
-import com.liferay.portal.kernel.atom.bundle.atomcollectionadapterregistryutil.TestAtomCollectionAdapter;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceRegistration;
 
+import java.io.InputStream;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -86,5 +88,117 @@ public class AtomCollectionAdapterRegistryUtilTest {
 
 	private static ServiceRegistration<AtomCollectionAdapter>
 		_serviceRegistration;
+
+	private static class TestAtomCollectionAdapter
+		implements AtomCollectionAdapter<Object> {
+
+		public static final String COLLECTION_NAME =
+			"TestAtomCollectionAdapter";
+
+		@Override
+		public void deleteEntry(
+			String resourceName, AtomRequestContext atomRequestContext) {
+		}
+
+		@Override
+		public String getCollectionName() {
+			return COLLECTION_NAME;
+		}
+
+		@Override
+		public Object getEntry(
+			String resourceName, AtomRequestContext atomRequestContext) {
+
+			return null;
+		}
+
+		@Override
+		public List<String> getEntryAuthors(Object entry) {
+			return null;
+		}
+
+		@Override
+		public AtomEntryContent getEntryContent(
+			Object entry, AtomRequestContext atomRequestContext) {
+
+			return null;
+		}
+
+		@Override
+		public String getEntryId(Object entry) {
+			return null;
+		}
+
+		@Override
+		public String getEntrySummary(Object entry) {
+			return null;
+		}
+
+		@Override
+		public String getEntryTitle(Object entry) {
+			return null;
+		}
+
+		@Override
+		public Date getEntryUpdated(Object entry) {
+			return null;
+		}
+
+		@Override
+		public Iterable<Object> getFeedEntries(
+			AtomRequestContext atomRequestContext) {
+
+			return null;
+		}
+
+		@Override
+		public String getFeedTitle(AtomRequestContext atomRequestContext) {
+			return null;
+		}
+
+		@Override
+		public String getMediaContentType(Object entry) {
+			return null;
+		}
+
+		@Override
+		public String getMediaName(Object entry) {
+			return null;
+		}
+
+		@Override
+		public InputStream getMediaStream(Object entry) {
+			return null;
+		}
+
+		@Override
+		public Object postEntry(
+			String title, String summary, String content, Date date,
+			AtomRequestContext atomRequestContext) {
+
+			return null;
+		}
+
+		@Override
+		public Object postMedia(
+			String mimeType, String slug, InputStream inputStream,
+			AtomRequestContext atomRequestContext) {
+
+			return null;
+		}
+
+		@Override
+		public void putEntry(
+			Object entry, String title, String summary, String content,
+			Date date, AtomRequestContext atomRequestContext) {
+		}
+
+		@Override
+		public void putMedia(
+			Object entry, String mimeType, String slug, InputStream inputStream,
+			AtomRequestContext atomRequestContext) {
+		}
+
+	}
 
 }
