@@ -17,14 +17,22 @@ package com.liferay.users.admin.service.user.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserServiceUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.portal.util.PropsUtil;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -43,29 +51,55 @@ public class UserServiceWhenGettingUserByEmailAddressTest {
 	public static final AggregateTestRule aggregateTestRule =
 		new LiferayIntegrationTestRule();
 
+	@Before
+	public void setUp() throws Exception {
+		PropsUtil.set(
+			PropsKeys.COMPANY_SECURITY_STRANGERS_WITH_MX,
+			Boolean.TRUE.toString());
+
+		_originalName = PrincipalThreadLocal.getName();
+
+		PrincipalThreadLocal.setName(0);
+
+		_user = UserTestUtil.addUser(true);
+
+		_originalPermissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
+		PermissionThreadLocal.setPermissionChecker(
+			PermissionCheckerFactoryUtil.create(_user));
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		PrincipalThreadLocal.setName(_originalName);
+
+		PermissionThreadLocal.setPermissionChecker(_originalPermissionChecker);
+	}
+
 	@Test(expected = NoSuchUserException.class)
 	public void testShouldFailIfUserDeleted() throws Exception {
-		User user = UserTestUtil.addUser(true);
-
-		UserServiceUtil.deleteUser(user.getUserId());
+		UserServiceUtil.deleteUser(_user.getUserId());
 
 		UserServiceUtil.getUserByEmailAddress(
-			TestPropsValues.getCompanyId(), user.getEmailAddress());
+			TestPropsValues.getCompanyId(), _user.getEmailAddress());
 	}
 
 	@Test
 	public void testShouldReturnUserIfPresent() throws Exception {
-		User user = UserTestUtil.addUser(true);
-
 		try {
 			User retrievedUser = UserServiceUtil.getUserByEmailAddress(
-				TestPropsValues.getCompanyId(), user.getEmailAddress());
+				TestPropsValues.getCompanyId(), _user.getEmailAddress());
 
-			Assert.assertEquals(user, retrievedUser);
+			Assert.assertEquals(_user, retrievedUser);
 		}
 		finally {
-			UserLocalServiceUtil.deleteUser(user);
+			UserLocalServiceUtil.deleteUser(_user);
 		}
 	}
+
+	private String _originalName;
+	private PermissionChecker _originalPermissionChecker;
+	private User _user;
 
 }
