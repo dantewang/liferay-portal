@@ -16,7 +16,7 @@ package com.liferay.portal.kernel.lar.xstream;
 
 import com.liferay.exportimport.kernel.xstream.XStreamConverter;
 import com.liferay.exportimport.kernel.xstream.XStreamConverterRegistryUtil;
-import com.liferay.portal.kernel.lar.xstream.bundle.xstreamconverterregistryutil.TestXStreamConverter;
+import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
@@ -45,8 +45,11 @@ public class XStreamConverterRegistryUtilTest {
 	public static void setUpClass() {
 		Registry registry = RegistryUtil.getRegistry();
 
+		_xStreamConverter = ProxyFactory.newDummyInstance(
+			XStreamConverter.class);
+
 		_serviceRegistration = registry.registerService(
-			XStreamConverter.class, new TestXStreamConverter());
+			XStreamConverter.class, _xStreamConverter);
 	}
 
 	@AfterClass
@@ -59,18 +62,12 @@ public class XStreamConverterRegistryUtilTest {
 		Set<XStreamConverter> xStreamConverters =
 			XStreamConverterRegistryUtil.getXStreamConverters();
 
-		String testClassName = TestXStreamConverter.class.getName();
-
-		Assert.assertTrue(
-			testClassName + " not found in " + xStreamConverters,
-			xStreamConverters.removeIf(
-				xStreamConverter -> {
-					Class<?> clazz = xStreamConverter.getClass();
-
-					return testClassName.equals(clazz.getName());
-				}));
+		Assert.assertEquals(
+			xStreamConverters.toString(), 1, xStreamConverters.size());
+		Assert.assertSame(_xStreamConverter, xStreamConverters.toArray()[0]);
 	}
 
 	private static ServiceRegistration<XStreamConverter> _serviceRegistration;
+	private static XStreamConverter _xStreamConverter;
 
 }

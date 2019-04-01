@@ -16,7 +16,7 @@ package com.liferay.portal.kernel.lar;
 
 import com.liferay.exportimport.kernel.lar.StagedModelDataHandler;
 import com.liferay.exportimport.kernel.lar.StagedModelDataHandlerRegistryUtil;
-import com.liferay.portal.kernel.lar.bundle.stagedmodeldatahandlerregistryutil.TestStagedModelDataHandler;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
@@ -45,8 +45,20 @@ public class StagedModelDataHandlerRegistryUtilTest {
 	public static void setUpClass() {
 		Registry registry = RegistryUtil.getRegistry();
 
+		_stagedModelDataHandler =
+			(StagedModelDataHandler<?>)ProxyUtil.newProxyInstance(
+				StagedModelDataHandlerRegistryUtilTest.class.getClassLoader(),
+				new Class<?>[] {StagedModelDataHandler.class},
+				(proxy, method, args) -> {
+					if ("getClassNames".equals(method.getName())) {
+						return _CLASS_NAMES;
+					}
+
+					return null;
+				});
+
 		_serviceRegistration = registry.registerService(
-			StagedModelDataHandler.class, new TestStagedModelDataHandler());
+			StagedModelDataHandler.class, _stagedModelDataHandler);
 	}
 
 	@AfterClass
@@ -58,12 +70,9 @@ public class StagedModelDataHandlerRegistryUtilTest {
 	public void testGetStagedModelDataHandler() {
 		StagedModelDataHandler<?> stagedModelDataHandler =
 			StagedModelDataHandlerRegistryUtil.getStagedModelDataHandler(
-				TestStagedModelDataHandler.CLASS_NAMES[0]);
+				_CLASS_NAMES[0]);
 
-		Class<?> clazz = stagedModelDataHandler.getClass();
-
-		Assert.assertEquals(
-			TestStagedModelDataHandler.class.getName(), clazz.getName());
+		Assert.assertSame(_stagedModelDataHandler, stagedModelDataHandler);
 	}
 
 	@Test
@@ -71,19 +80,19 @@ public class StagedModelDataHandlerRegistryUtilTest {
 		List<StagedModelDataHandler<?>> stagedModelDataHandlers =
 			StagedModelDataHandlerRegistryUtil.getStagedModelDataHandlers();
 
-		String testClassName = TestStagedModelDataHandler.class.getName();
-
-		Assert.assertTrue(
-			testClassName + " not found in " + stagedModelDataHandlers,
-			stagedModelDataHandlers.removeIf(
-				stagedModelDataHandler -> {
-					Class<?> clazz = stagedModelDataHandler.getClass();
-
-					return testClassName.equals(clazz.getName());
-				}));
+		Assert.assertEquals(
+			stagedModelDataHandlers.toString(), 1,
+			stagedModelDataHandlers.size());
+		Assert.assertSame(
+			_stagedModelDataHandler, stagedModelDataHandlers.get(0));
 	}
+
+	private static final String[] _CLASS_NAMES = {
+		StagedModelDataHandlerRegistryUtilTest.class.getName()
+	};
 
 	private static ServiceRegistration<StagedModelDataHandler>
 		_serviceRegistration;
+	private static StagedModelDataHandler<?> _stagedModelDataHandler;
 
 }
