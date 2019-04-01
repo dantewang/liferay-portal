@@ -14,10 +14,9 @@
 
 package com.liferay.portal.kernel.lar.lifecycle;
 
+import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleEvent;
 import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleEventListenerRegistryUtil;
 import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleListener;
-import com.liferay.portal.kernel.lar.lifecycle.bundle.exportimportlifecycleeventlistenerregistryutil.TestAsyncExportImportLifecycleListener;
-import com.liferay.portal.kernel.lar.lifecycle.bundle.exportimportlifecycleeventlistenerregistryutil.TestSyncExportImportLifecycleListener;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
@@ -127,5 +126,37 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 		_serviceRegistration1;
 	private static ServiceRegistration<ExportImportLifecycleListener>
 		_serviceRegistration2;
+
+	private static class TestAsyncExportImportLifecycleListener
+		implements ExportImportLifecycleListener {
+
+		@Override
+		public boolean isParallel() {
+			return true;
+		}
+
+		@Override
+		public void onExportImportLifecycleEvent(
+				ExportImportLifecycleEvent exportImportLifecycleEvent)
+			throws Exception {
+		}
+
+	}
+
+	private static class TestSyncExportImportLifecycleListener
+		implements ExportImportLifecycleListener {
+
+		@Override
+		public boolean isParallel() {
+			return false;
+		}
+
+		@Override
+		public void onExportImportLifecycleEvent(
+				ExportImportLifecycleEvent exportImportLifecycleEvent)
+			throws Exception {
+		}
+
+	}
 
 }
