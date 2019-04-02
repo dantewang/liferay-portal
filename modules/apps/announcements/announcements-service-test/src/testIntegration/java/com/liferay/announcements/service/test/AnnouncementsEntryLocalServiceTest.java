@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.announcements.service;
+package com.liferay.announcements.service.test;
 
 import com.liferay.announcements.kernel.exception.EntryDisplayDateException;
 import com.liferay.announcements.kernel.exception.EntryExpirationDateException;
