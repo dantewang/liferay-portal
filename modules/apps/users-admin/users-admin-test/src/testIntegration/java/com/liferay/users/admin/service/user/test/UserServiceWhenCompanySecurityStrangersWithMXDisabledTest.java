@@ -22,12 +22,13 @@ import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
-import com.liferay.portal.kernel.service.UserServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PropsUtil;
 
@@ -91,7 +92,7 @@ public class UserServiceWhenCompanySecurityStrangersWithMXDisabledTest {
 			String emailAddress =
 				"UserServiceTest." + RandomTestUtil.nextLong() + "@liferay.com";
 
-			UserServiceUtil.updateEmailAddress(
+			_userService.updateEmailAddress(
 				user.getUserId(), user.getPassword(), emailAddress,
 				emailAddress, new ServiceContext());
 		}
@@ -132,8 +133,14 @@ public class UserServiceWhenCompanySecurityStrangersWithMXDisabledTest {
 
 			PrincipalThreadLocal.setName(name);
 
-			UserLocalServiceUtil.deleteUser(user);
+			_userLocalService.deleteUser(user);
 		}
 	}
+
+	@Inject
+	private UserLocalService _userLocalService;
+
+	@Inject
+	private UserService _userService;
 
 }
