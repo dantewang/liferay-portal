@@ -21,12 +21,13 @@ import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
-import com.liferay.portal.kernel.service.UserServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PropsUtil;
 
@@ -79,27 +80,33 @@ public class UserServiceWhenGettingUserByEmailAddressTest {
 
 	@Test(expected = NoSuchUserException.class)
 	public void testShouldFailIfUserDeleted() throws Exception {
-		UserServiceUtil.deleteUser(_user.getUserId());
+		_userService.deleteUser(_user.getUserId());
 
-		UserServiceUtil.getUserByEmailAddress(
+		_userService.getUserByEmailAddress(
 			TestPropsValues.getCompanyId(), _user.getEmailAddress());
 	}
 
 	@Test
 	public void testShouldReturnUserIfPresent() throws Exception {
 		try {
-			User retrievedUser = UserServiceUtil.getUserByEmailAddress(
+			User retrievedUser = _userService.getUserByEmailAddress(
 				TestPropsValues.getCompanyId(), _user.getEmailAddress());
 
 			Assert.assertEquals(_user, retrievedUser);
 		}
 		finally {
-			UserLocalServiceUtil.deleteUser(_user);
+			_userLocalService.deleteUser(_user);
 		}
 	}
 
 	private String _originalName;
 	private PermissionChecker _originalPermissionChecker;
 	private User _user;
+
+	@Inject
+	private UserLocalService _userLocalService;
+
+	@Inject
+	private UserService _userService;
 
 }
