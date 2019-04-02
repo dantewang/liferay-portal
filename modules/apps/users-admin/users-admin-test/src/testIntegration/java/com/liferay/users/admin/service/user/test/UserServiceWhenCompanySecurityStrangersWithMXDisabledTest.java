@@ -19,15 +19,16 @@ import com.liferay.portal.kernel.exception.UserEmailAddressException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
-import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
-import com.liferay.portal.kernel.service.UserServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PropsUtil;
 
@@ -77,8 +78,8 @@ public class UserServiceWhenCompanySecurityStrangersWithMXDisabledTest {
 
 		User user = UserTestUtil.addUser(false);
 
-		PermissionChecker permissionChecker =
-			PermissionCheckerFactoryUtil.create(user);
+		PermissionChecker permissionChecker = _permissionCheckerFactory.create(
+			user);
 
 		PermissionChecker originalPermissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
@@ -91,7 +92,7 @@ public class UserServiceWhenCompanySecurityStrangersWithMXDisabledTest {
 			String emailAddress =
 				"UserServiceTest." + RandomTestUtil.nextLong() + "@liferay.com";
 
-			UserServiceUtil.updateEmailAddress(
+			_userService.updateEmailAddress(
 				user.getUserId(), user.getPassword(), emailAddress,
 				emailAddress, new ServiceContext());
 		}
@@ -109,8 +110,8 @@ public class UserServiceWhenCompanySecurityStrangersWithMXDisabledTest {
 
 		User user = UserTestUtil.addUser(false);
 
-		PermissionChecker permissionChecker =
-			PermissionCheckerFactoryUtil.create(user);
+		PermissionChecker permissionChecker = _permissionCheckerFactory.create(
+			user);
 
 		PermissionChecker originalPermissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
@@ -132,8 +133,17 @@ public class UserServiceWhenCompanySecurityStrangersWithMXDisabledTest {
 
 			PrincipalThreadLocal.setName(name);
 
-			UserLocalServiceUtil.deleteUser(user);
+			_userLocalService.deleteUser(user);
 		}
 	}
+
+	@Inject
+	private PermissionCheckerFactory _permissionCheckerFactory;
+
+	@Inject
+	private UserLocalService _userLocalService;
+
+	@Inject
+	private UserService _userService;
 
 }
