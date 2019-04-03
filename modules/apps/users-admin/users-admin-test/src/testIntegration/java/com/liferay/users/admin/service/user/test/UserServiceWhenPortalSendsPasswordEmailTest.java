@@ -93,8 +93,7 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 				Localization.class.getClassLoader(),
 				new Class<?>[] {Localization.class},
 				(proxy, method, args) -> {
-					if (Objects.equals(
-						"getLocalizationMap", method.getName()) &&
+					if ("getLocalizationMap".equals(method.getName()) &&
 						(args.length == 3)) {
 
 						return _localization.getLocalizationMap(
