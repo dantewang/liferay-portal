@@ -87,7 +87,34 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 
 		_localization = LocalizationUtil.getLocalization();
 
-		replaceClassLoader(_localization);
+		ReflectionTestUtil.setFieldValue(
+			LocalizationUtil.class, "_localization",
+			ProxyUtil.newProxyInstance(
+				Localization.class.getClassLoader(),
+				new Class<?>[] {Localization.class},
+				new InvocationHandler() {
+
+					@Override
+					public Object invoke(
+						Object proxy, Method method, Object[] args)
+						throws Throwable {
+
+						if (Objects.equals(
+							"getLocalizationMap", method.getName()) &&
+							(args.length == 3)) {
+
+							Class<?> clazz = getClass();
+
+							return _localization.getLocalizationMap(
+								(PortletPreferences)args[0], (String)args[1],
+								(String)args[2], PropsUtil.get((String)args[2]),
+								clazz.getClassLoader());
+						}
+
+						throw new UnsupportedOperationException();
+					}
+
+				}));
 	}
 
 	@AfterClass
@@ -292,37 +319,6 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 		portletPreferences.store();
 
 		return portletPreferences;
-	}
-
-	protected static void replaceClassLoader(Localization localization) {
-		ReflectionTestUtil.setFieldValue(
-			LocalizationUtil.class, "_localization",
-			ProxyUtil.newProxyInstance(
-				Localization.class.getClassLoader(),
-				new Class<?>[] {Localization.class},
-				new InvocationHandler() {
-
-					@Override
-					public Object invoke(
-							Object proxy, Method method, Object[] args)
-						throws Throwable {
-
-						if (Objects.equals(
-								"getLocalizationMap", method.getName()) &&
-							(args.length == 3)) {
-
-							Class<?> clazz = getClass();
-
-							return localization.getLocalizationMap(
-								(PortletPreferences)args[0], (String)args[1],
-								(String)args[2], PropsUtil.get((String)args[2]),
-								clazz.getClassLoader());
-						}
-
-						throw new UnsupportedOperationException();
-					}
-
-				}));
 	}
 
 	protected void restorePortletPreferences(
