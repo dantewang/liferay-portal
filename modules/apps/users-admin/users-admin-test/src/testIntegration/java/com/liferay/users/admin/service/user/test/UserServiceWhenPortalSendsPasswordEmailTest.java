@@ -43,6 +43,7 @@ import java.util.Objects;
 import javax.portlet.PortletPreferences;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -83,13 +84,20 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 			PropsKeys.ADMIN_EMAIL_PASSWORD_SENT_BODY,
 			"com/liferay/users/admin/service/user/test/dependencies" +
 				"/email_password_sent_body.tmpl");
+
+		_localization = LocalizationUtil.getLocalization();
+
+		replaceClassLoader(_localization);
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		ReflectionTestUtil.setFieldValue(
+			LocalizationUtil.class, "_localization", _localization);
 	}
 
 	@Before
 	public void setUp() throws Exception {
-		_localization = LocalizationUtil.getLocalization();
-
-		replaceClassLoader(_localization);
 
 		_user = UserTestUtil.addUser();
 
@@ -101,10 +109,7 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 	}
 
 	@After
-	public void tearDown() throws Exception {
-		ReflectionTestUtil.setFieldValue(
-			LocalizationUtil.class, "_localization", _localization);
-
+	public void tearDown() {
 		ServiceContextThreadLocal.popServiceContext();
 	}
 
@@ -289,7 +294,7 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 		return portletPreferences;
 	}
 
-	protected void replaceClassLoader(Localization localization) {
+	protected static void replaceClassLoader(Localization localization) {
 		ReflectionTestUtil.setFieldValue(
 			LocalizationUtil.class, "_localization",
 			ProxyUtil.newProxyInstance(
@@ -331,7 +336,7 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 		portletPreferences.store();
 	}
 
-	private Localization _localization;
+	private static Localization _localization;
 
 	@DeleteAfterTestRun
 	private User _user;
