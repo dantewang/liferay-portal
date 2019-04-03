@@ -19,7 +19,6 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.UserService;
-import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
@@ -34,11 +33,6 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.SynchronousMailTestRule;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.PropsUtil;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-
-import java.util.Objects;
 
 import javax.portlet.PortletPreferences;
 
@@ -113,7 +107,6 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 
 	@Before
 	public void setUp() throws Exception {
-
 		_user = UserTestUtil.addUser();
 
 		ServiceContext serviceContext =
