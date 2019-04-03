@@ -92,28 +92,19 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 			ProxyUtil.newProxyInstance(
 				Localization.class.getClassLoader(),
 				new Class<?>[] {Localization.class},
-				new InvocationHandler() {
+				(proxy, method, args) -> {
+					if (Objects.equals(
+						"getLocalizationMap", method.getName()) &&
+						(args.length == 3)) {
 
-					@Override
-					public Object invoke(
-						Object proxy, Method method, Object[] args)
-						throws Throwable {
-
-						if (Objects.equals(
-							"getLocalizationMap", method.getName()) &&
-							(args.length == 3)) {
-
-							Class<?> clazz = getClass();
-
-							return _localization.getLocalizationMap(
-								(PortletPreferences)args[0], (String)args[1],
-								(String)args[2], PropsUtil.get((String)args[2]),
-								clazz.getClassLoader());
-						}
-
-						throw new UnsupportedOperationException();
+						return _localization.getLocalizationMap(
+							(PortletPreferences)args[0], (String)args[1],
+							(String)args[2], PropsUtil.get((String)args[2]),
+							UserServiceWhenPortalSendsPasswordEmailTest.class.
+								getClassLoader());
 					}
 
+					throw new UnsupportedOperationException();
 				}));
 	}
 
