@@ -70,7 +70,7 @@ public class PortalUpgradeProcessTest {
 	}
 
 	@Test
-	public void testGetLatestSchemaVersion() throws Exception {
+	public void testGetLatestSchemaVersion() {
 		Set<Version> pendingSchemaVersions = ReflectionTestUtil.invoke(
 			_innerPortalUpgradeProcess, "getPendingSchemaVersions",
 			new Class<?>[] {Version.class}, _ORIGINAL_SCHEMA_VERSION);
@@ -200,7 +200,7 @@ public class PortalUpgradeProcessTest {
 		}
 	}
 
-	private void _updateSchemaVersion(Version version) throws Exception {
+	private void _updateSchemaVersion(Version version) {
 		ReflectionTestUtil.invoke(
 			_innerPortalUpgradeProcess, "updateSchemaVersion",
 			new Class<?>[] {Version.class}, version);
