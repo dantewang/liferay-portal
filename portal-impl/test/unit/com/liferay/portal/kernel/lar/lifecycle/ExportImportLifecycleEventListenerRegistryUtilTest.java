@@ -86,7 +86,7 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 			exportImportLifecycleListeners.size());
 
 		for (ExportImportLifecycleListener exportImportLifecycleListener :
-			exportImportLifecycleListeners) {
+				exportImportLifecycleListeners) {
 
 			Assert.assertSame(
 				expectedExportImportLifecycleListener,
