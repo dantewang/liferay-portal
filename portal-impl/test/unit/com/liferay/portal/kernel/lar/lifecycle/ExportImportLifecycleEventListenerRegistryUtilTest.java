@@ -63,28 +63,23 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 
 	@Test
 	public void testGetAsyncExportImportLifecycleListeners() {
-		Set<ExportImportLifecycleListener> exportImportLifecycleListeners =
+		_assertExportImportLifecycleListeners(
+			_asyncExportImportLifecycleListener,
 			ExportImportLifecycleEventListenerRegistryUtil.
-				getAsyncExportImportLifecycleListeners();
-
-		Assert.assertEquals(
-			exportImportLifecycleListeners.toString(), 1,
-			exportImportLifecycleListeners.size());
-
-		for (ExportImportLifecycleListener exportImportLifecycleListener :
-				exportImportLifecycleListeners) {
-
-			Assert.assertSame(
-				_asyncExportImportLifecycleListener,
-				exportImportLifecycleListener);
-		}
+				getAsyncExportImportLifecycleListeners());
 	}
 
 	@Test
 	public void testGetSyncExportImportLifecycleListeners() {
-		Set<ExportImportLifecycleListener> exportImportLifecycleListeners =
+		_assertExportImportLifecycleListeners(
+			_syncExportImportLifecycleListener,
 			ExportImportLifecycleEventListenerRegistryUtil.
-				getSyncExportImportLifecycleListeners();
+				getSyncExportImportLifecycleListeners());
+	}
+
+	private void _assertExportImportLifecycleListeners(
+		ExportImportLifecycleListener expectedExportImportLifecycleListener,
+		Set<ExportImportLifecycleListener> exportImportLifecycleListeners) {
 
 		Assert.assertEquals(
 			exportImportLifecycleListeners.toString(), 1,
@@ -94,7 +89,7 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 			exportImportLifecycleListeners) {
 
 			Assert.assertSame(
-				_syncExportImportLifecycleListener,
+				expectedExportImportLifecycleListener,
 				exportImportLifecycleListener);
 		}
 	}
