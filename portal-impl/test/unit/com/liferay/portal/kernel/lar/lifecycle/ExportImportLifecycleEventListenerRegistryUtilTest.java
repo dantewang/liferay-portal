@@ -40,13 +40,19 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 
 		Registry registry = RegistryUtil.getRegistry();
 
+		_asyncExportImportLifecycleListener =
+			new TestAsyncExportImportLifecycleListener();
+
 		_serviceRegistration1 = registry.registerService(
 			ExportImportLifecycleListener.class,
-			new TestAsyncExportImportLifecycleListener());
+			_asyncExportImportLifecycleListener);
+
+		_syncExportImportLifecycleListener =
+			new TestSyncExportImportLifecycleListener();
 
 		_serviceRegistration2 = registry.registerService(
 			ExportImportLifecycleListener.class,
-			new TestSyncExportImportLifecycleListener());
+			_syncExportImportLifecycleListener);
 	}
 
 	@AfterClass
@@ -57,70 +63,50 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 
 	@Test
 	public void testGetAsyncExportImportLifecycleListeners() {
-		boolean exists = false;
-
 		Set<ExportImportLifecycleListener> exportImportLifecycleListeners =
 			ExportImportLifecycleEventListenerRegistryUtil.
 				getAsyncExportImportLifecycleListeners();
 
+		Assert.assertEquals(
+			exportImportLifecycleListeners.toString(), 1,
+			exportImportLifecycleListeners.size());
+
 		for (ExportImportLifecycleListener exportImportLifecycleListener :
 				exportImportLifecycleListeners) {
 
-			Class<?> clazz = exportImportLifecycleListener.getClass();
-
-			String className = clazz.getName();
-
-			Assert.assertNotEquals(
-				TestSyncExportImportLifecycleListener.class.getName(),
-				className);
-
-			if (className.equals(
-					TestAsyncExportImportLifecycleListener.class.getName())) {
-
-				exists = true;
-
-				break;
-			}
+			Assert.assertSame(
+				_asyncExportImportLifecycleListener,
+				exportImportLifecycleListener);
 		}
-
-		Assert.assertTrue(exists);
 	}
 
 	@Test
 	public void testGetSyncExportImportLifecycleListeners() {
-		boolean exists = false;
-
 		Set<ExportImportLifecycleListener> exportImportLifecycleListeners =
 			ExportImportLifecycleEventListenerRegistryUtil.
 				getSyncExportImportLifecycleListeners();
 
+		Assert.assertEquals(
+			exportImportLifecycleListeners.toString(), 1,
+			exportImportLifecycleListeners.size());
+
 		for (ExportImportLifecycleListener exportImportLifecycleListener :
-				exportImportLifecycleListeners) {
+			exportImportLifecycleListeners) {
 
-			Class<?> clazz = exportImportLifecycleListener.getClass();
-
-			String className = clazz.getName();
-
-			Assert.assertNotEquals(
-				TestAsyncExportImportLifecycleListener.class.getName(),
-				className);
-
-			if (className.equals(
-					TestSyncExportImportLifecycleListener.class.getName())) {
-
-				exists = true;
-
-				break;
-			}
+			Assert.assertSame(
+				_syncExportImportLifecycleListener,
+				exportImportLifecycleListener);
 		}
-
-		Assert.assertTrue(exists);
 	}
 
+	private static ExportImportLifecycleListener
+		_asyncExportImportLifecycleListener;
 	private static ServiceRegistration<ExportImportLifecycleListener>
 		_serviceRegistration1;
 	private static ServiceRegistration<ExportImportLifecycleListener>
 		_serviceRegistration2;
+	private static ExportImportLifecycleListener
+		_syncExportImportLifecycleListener;
 
 	private static class TestAsyncExportImportLifecycleListener
 		implements ExportImportLifecycleListener {
