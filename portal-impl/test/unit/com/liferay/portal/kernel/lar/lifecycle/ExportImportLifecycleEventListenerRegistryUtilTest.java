@@ -113,8 +113,7 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 
 		@Override
 		public void onExportImportLifecycleEvent(
-				ExportImportLifecycleEvent exportImportLifecycleEvent)
-			throws Exception {
+			ExportImportLifecycleEvent exportImportLifecycleEvent) {
 		}
 
 	}
@@ -129,8 +128,7 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 
 		@Override
 		public void onExportImportLifecycleEvent(
-				ExportImportLifecycleEvent exportImportLifecycleEvent)
-			throws Exception {
+			ExportImportLifecycleEvent exportImportLifecycleEvent) {
 		}
 
 	}
