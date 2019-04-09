@@ -63,11 +63,10 @@ public class StagedModelDataHandlerRegistryUtilTest {
 
 	@Test
 	public void testGetStagedModelDataHandler() {
-		StagedModelDataHandler<?> stagedModelDataHandler =
+		Assert.assertSame(
+			_stagedModelDataHandler,
 			StagedModelDataHandlerRegistryUtil.getStagedModelDataHandler(
-				_CLASS_NAMES[0]);
-
-		Assert.assertSame(_stagedModelDataHandler, stagedModelDataHandler);
+				_CLASS_NAMES[0]));
 	}
 
 	@Test
