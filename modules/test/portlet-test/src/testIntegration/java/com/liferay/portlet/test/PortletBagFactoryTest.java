@@ -45,13 +45,17 @@ public class PortletBagFactoryTest {
 		new LiferayIntegrationTestRule();
 
 	@Test
-	public void testValidate() throws Exception {
-		_testValidate(null, null, null);
+	public void testConcreteInstance() throws Exception {
+		PortletImpl portletImpl = new PortletImpl();
+
+		portletImpl.setPortletApp(new PortletAppImpl(StringPool.BLANK));
 
 		Class<?> clazz = getClass();
 
-		_testValidate(clazz.getClassLoader(), null, null);
-		_testValidate(clazz.getClassLoader(), new MockServletContext(), null);
+		PortletBagFactory portletBagFactory = _createPortletBagFactory(
+			clazz.getClassLoader(), new MockServletContext(), false);
+
+		portletBagFactory.create(portletImpl, new MVCPortlet(), false);
 	}
 
 	@Test
@@ -70,17 +74,13 @@ public class PortletBagFactoryTest {
 	}
 
 	@Test
-	public void testConcreteInstance() throws Exception {
-		PortletImpl portletImpl = new PortletImpl();
-
-		portletImpl.setPortletApp(new PortletAppImpl(StringPool.BLANK));
+	public void testValidate() throws Exception {
+		_testValidate(null, null, null);
 
 		Class<?> clazz = getClass();
 
-		PortletBagFactory portletBagFactory = _createPortletBagFactory(
-			clazz.getClassLoader(), new MockServletContext(), false);
-
-		portletBagFactory.create(portletImpl, new MVCPortlet(), false);
+		_testValidate(clazz.getClassLoader(), null, null);
+		_testValidate(clazz.getClassLoader(), new MockServletContext(), null);
 	}
 
 	private PortletBagFactory _createPortletBagFactory(
