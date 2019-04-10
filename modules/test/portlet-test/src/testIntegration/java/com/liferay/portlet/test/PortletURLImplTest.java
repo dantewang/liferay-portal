@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
@@ -114,13 +115,18 @@ public class PortletURLImplTest {
 
 		Assert.assertEquals(sb.toString(), portletURL.toString());
 
-		liferayPortletURL.clearCache();
+		_invokeClearCache(liferayPortletURL);
 
 		Assert.assertEquals(sb.toString(), portletURL.toString());
 
-		liferayPortletURL.clearCache();
+		_invokeClearCache(liferayPortletURL);
 
 		Assert.assertEquals(sb.toString(), portletURL.toString());
+	}
+
+	private void _invokeClearCache(LiferayPortletURL liferayPortletURL) {
+		ReflectionTestUtil.invoke(
+			liferayPortletURL, "clearCache", new Class<?>[0], new Object[0]);
 	}
 
 	@DeleteAfterTestRun
