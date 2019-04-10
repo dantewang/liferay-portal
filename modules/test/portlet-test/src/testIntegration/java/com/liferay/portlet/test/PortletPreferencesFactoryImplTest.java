@@ -12,8 +12,9 @@
  * details.
  */
 
-package com.liferay.portlet;
+package com.liferay.portlet.test;
 
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.Portlet;
@@ -38,10 +39,12 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author Jorge Ferrer
  */
+@RunWith(Arquillian.class)
 public class PortletPreferencesFactoryImplTest {
 
 	@ClassRule
