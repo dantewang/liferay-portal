@@ -46,48 +46,21 @@ public class PortletBagFactoryTest {
 
 	@Test
 	public void test1() throws Exception {
-		try {
-			PortletBagFactory portletBagFactory = _createPortletBagFactory(
-				null, null, null);
-
-			portletBagFactory.create(new PortletImpl());
-
-			Assert.fail();
-		}
-		catch (IllegalStateException ise) {
-		}
+		_testValidate(null, null, null);
 	}
 
 	@Test
 	public void test2() throws Exception {
-		try {
-			Class<?> clazz = getClass();
+		Class<?> clazz = getClass();
 
-			PortletBagFactory portletBagFactory = _createPortletBagFactory(
-				clazz.getClassLoader(), null, null);
-
-			portletBagFactory.create(new PortletImpl());
-
-			Assert.fail();
-		}
-		catch (IllegalStateException ise) {
-		}
+		_testValidate(clazz.getClassLoader(), null, null);
 	}
 
 	@Test
 	public void test3() throws Exception {
-		try {
-			Class<?> clazz = getClass();
+		Class<?> clazz = getClass();
 
-			PortletBagFactory portletBagFactory = _createPortletBagFactory(
-				clazz.getClassLoader(), new MockServletContext(), null);
-
-			portletBagFactory.create(new PortletImpl());
-
-			Assert.fail();
-		}
-		catch (IllegalStateException ise) {
-		}
+		_testValidate(clazz.getClassLoader(), new MockServletContext(), null);
 	}
 
 	@Test
@@ -133,6 +106,23 @@ public class PortletBagFactoryTest {
 		}
 
 		return portletBagFactory;
+	}
+
+	private void _testValidate(
+			ClassLoader classLoader, ServletContext servletContext,
+			Boolean warFile)
+		throws Exception {
+
+		try {
+			PortletBagFactory portletBagFactory = _createPortletBagFactory(
+				classLoader, servletContext, warFile);
+
+			portletBagFactory.create(new PortletImpl());
+
+			Assert.fail();
+		}
+		catch (IllegalStateException ise) {
+		}
 	}
 
 }
