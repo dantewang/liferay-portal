@@ -15,3 +15,9 @@ dependencies {
 	testCompile group: "com.liferay", name: "com.liferay.portal.cache.test.util", version: "1.0.0"
 	testCompile project(":core:petra:petra-lang")
 }
+
+deployDependencies {
+	from configurations.compile
+
+	include "ehcache-*.jar"
+}
