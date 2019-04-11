@@ -61,7 +61,7 @@ public class UserServiceOrganizationAdminUnsetsUsersForSiteOrganizationTest {
 		User groupAdminUser = UserTestUtil.addGroupAdminUser(_group);
 
 		try {
-			UserServiceTestUtil.unsetGroupUsers(
+			_userServiceTestUtil.unsetGroupUsers(
 				_group.getGroupId(), _organizationAdminUser, groupAdminUser);
 
 			Assert.assertTrue(
@@ -78,7 +78,7 @@ public class UserServiceOrganizationAdminUnsetsUsersForSiteOrganizationTest {
 		User groupOwnerUser = UserTestUtil.addGroupOwnerUser(_group);
 
 		try {
-			UserServiceTestUtil.unsetGroupUsers(
+			_userServiceTestUtil.unsetGroupUsers(
 				_group.getGroupId(), _organizationAdminUser, groupOwnerUser);
 
 			Assert.assertTrue(
@@ -100,5 +100,8 @@ public class UserServiceOrganizationAdminUnsetsUsersForSiteOrganizationTest {
 
 	@Inject
 	private UserLocalService _userLocalService;
+
+	@Inject
+	private UserServiceTestUtil _userServiceTestUtil;
 
 }

@@ -59,7 +59,7 @@ public class UserServiceOrganizationOwnerUnsetsUsersForNonSiteOrganizationTest {
 			_organization);
 
 		try {
-			UserServiceTestUtil.unsetOrganizationUsers(
+			_userServiceTestUtil.unsetOrganizationUsers(
 				_organization.getOrganizationId(), _organizationOwnerUser,
 				organizationAdminUser);
 
@@ -79,7 +79,7 @@ public class UserServiceOrganizationOwnerUnsetsUsersForNonSiteOrganizationTest {
 			_organization);
 
 		try {
-			UserServiceTestUtil.unsetOrganizationUsers(
+			_userServiceTestUtil.unsetOrganizationUsers(
 				_organization.getOrganizationId(), _organizationOwnerUser,
 				otherOrganizationOwnerUser);
 
@@ -101,5 +101,8 @@ public class UserServiceOrganizationOwnerUnsetsUsersForNonSiteOrganizationTest {
 
 	@Inject
 	private UserLocalService _userLocalService;
+
+	@Inject
+	private UserServiceTestUtil _userServiceTestUtil;
 
 }
