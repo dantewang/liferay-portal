@@ -30,6 +30,7 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerTestRule;
 import com.liferay.portal.util.PropsUtil;
 
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -50,15 +51,18 @@ public class UserServiceWhenCompanySecurityStrangersWithMXDisabledTest {
 			new LiferayIntegrationTestRule(),
 			PermissionCheckerTestRule.INSTANCE);
 
+	@BeforeClass
+	public static void setUpClass() {
+		PropsUtil.set(
+			PropsKeys.COMPANY_SECURITY_STRANGERS_WITH_MX,
+			Boolean.FALSE.toString());
+	}
+
 	@Test(expected = UserEmailAddressException.MustNotUseCompanyMx.class)
 	public void testShouldNotAddUser() throws Exception {
 		String name = PrincipalThreadLocal.getName();
 
 		try {
-			PropsUtil.set(
-				PropsKeys.COMPANY_SECURITY_STRANGERS_WITH_MX,
-				Boolean.FALSE.toString());
-
 			PrincipalThreadLocal.setName(0);
 
 			UserTestUtil.addUser(true);
@@ -73,10 +77,6 @@ public class UserServiceWhenCompanySecurityStrangersWithMXDisabledTest {
 		String name = PrincipalThreadLocal.getName();
 
 		try {
-			PropsUtil.set(
-				PropsKeys.COMPANY_SECURITY_STRANGERS_WITH_MX,
-				Boolean.FALSE.toString());
-
 			User user = UserTestUtil.addUser(false);
 
 			PrincipalThreadLocal.setName(user.getUserId());
@@ -100,10 +100,6 @@ public class UserServiceWhenCompanySecurityStrangersWithMXDisabledTest {
 		User user = UserTestUtil.addUser(false);
 
 		try {
-			PropsUtil.set(
-				PropsKeys.COMPANY_SECURITY_STRANGERS_WITH_MX,
-				Boolean.FALSE.toString());
-
 			PrincipalThreadLocal.setName(user.getUserId());
 
 			UserTestUtil.updateUser(user);

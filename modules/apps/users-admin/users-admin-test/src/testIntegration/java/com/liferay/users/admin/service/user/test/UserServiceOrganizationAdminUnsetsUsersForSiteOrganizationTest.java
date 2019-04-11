@@ -60,33 +60,27 @@ public class UserServiceOrganizationAdminUnsetsUsersForSiteOrganizationTest {
 	public void testShouldUnsetSiteAdmin() throws Exception {
 		User groupAdminUser = UserTestUtil.addGroupAdminUser(_group);
 
-		try {
-			_userServiceTestUtil.unsetGroupUsers(
-				_group.getGroupId(), _organizationAdminUser, groupAdminUser);
-
-			Assert.assertTrue(
-				_userLocalService.hasGroupUser(
-					_group.getGroupId(), groupAdminUser.getUserId()));
-		}
-		finally {
-			_userLocalService.deleteUser(groupAdminUser);
-		}
+		_unsetGroupUsers(groupAdminUser);
 	}
 
 	@Test
 	public void testShouldUnsetSiteOwner() throws Exception {
 		User groupOwnerUser = UserTestUtil.addGroupOwnerUser(_group);
 
+		_unsetGroupUsers(groupOwnerUser);
+	}
+
+	private void _unsetGroupUsers(User objectUser) throws Exception {
 		try {
 			_userServiceTestUtil.unsetGroupUsers(
-				_group.getGroupId(), _organizationAdminUser, groupOwnerUser);
+				_group.getGroupId(), _organizationAdminUser, objectUser);
 
 			Assert.assertTrue(
 				_userLocalService.hasGroupUser(
-					_group.getGroupId(), groupOwnerUser.getUserId()));
+					_group.getGroupId(), objectUser.getUserId()));
 		}
 		finally {
-			_userLocalService.deleteUser(groupOwnerUser);
+			_userLocalService.deleteUser(objectUser);
 		}
 	}
 
