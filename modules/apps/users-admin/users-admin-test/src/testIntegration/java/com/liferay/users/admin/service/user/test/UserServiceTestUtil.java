@@ -16,30 +16,34 @@ package com.liferay.users.admin.service.user.test;
 
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
-import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.UserServiceUtil;
+import com.liferay.portal.kernel.service.UserService;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Brian Wing Shun Chan
  * @author José Manuel Navarro
  * @author Drew Brokke
  */
+@Component(immediate = true, service = UserServiceTestUtil.class)
 public class UserServiceTestUtil {
 
 	protected static void unsetGroupUsers(
 			long groupId, User subjectUser, User objectUser)
 		throws Exception {
 
-		PermissionChecker permissionChecker =
-			PermissionCheckerFactoryUtil.create(subjectUser);
+		PermissionChecker permissionChecker = _permissionCheckerFactory.create(
+			subjectUser);
 
 		PermissionThreadLocal.setPermissionChecker(permissionChecker);
 
 		ServiceContext serviceContext = new ServiceContext();
 
-		UserServiceUtil.unsetGroupUsers(
+		_userService.unsetGroupUsers(
 			groupId, new long[] {objectUser.getUserId()}, serviceContext);
 	}
 
@@ -47,13 +51,28 @@ public class UserServiceTestUtil {
 			long organizationId, User subjectUser, User objectUser)
 		throws Exception {
 
-		PermissionChecker permissionChecker =
-			PermissionCheckerFactoryUtil.create(subjectUser);
+		PermissionChecker permissionChecker = _permissionCheckerFactory.create(
+			subjectUser);
 
 		PermissionThreadLocal.setPermissionChecker(permissionChecker);
 
-		UserServiceUtil.unsetOrganizationUsers(
+		_userService.unsetOrganizationUsers(
 			organizationId, new long[] {objectUser.getUserId()});
 	}
+
+	@Reference(unbind = "-")
+	protected void setPermissionCheckerFactory(
+		PermissionCheckerFactory permissionCheckerFactory) {
+
+		_permissionCheckerFactory = permissionCheckerFactory;
+	}
+
+	@Reference(unbind = "-")
+	protected void setUserService(UserService userService) {
+		_userService = userService;
+	}
+
+	private static PermissionCheckerFactory _permissionCheckerFactory;
+	private static UserService _userService;
 
 }
