@@ -16,7 +16,7 @@ dependencies {
 }
 
 deployDependencies {
-	from configurations.compile
+	from configurations.compileOnly
 
 	include "ehcache-*.jar"
 }
