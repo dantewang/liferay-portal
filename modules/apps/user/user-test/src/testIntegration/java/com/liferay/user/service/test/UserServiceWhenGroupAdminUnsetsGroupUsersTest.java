@@ -60,34 +60,14 @@ public class UserServiceWhenGroupAdminUnsetsGroupUsersTest {
 	public void testShouldUnsetGroupAdmin() throws Exception {
 		User groupAdminUser = UserTestUtil.addGroupAdminUser(_group);
 
-		try {
-			UserServiceTestUtil.unsetGroupUsers(
-				_group.getGroupId(), _groupAdminUser, groupAdminUser);
-
-			Assert.assertTrue(
-				_userLocalService.hasGroupUser(
-					_group.getGroupId(), groupAdminUser.getUserId()));
-		}
-		finally {
-			_userLocalService.deleteUser(groupAdminUser);
-		}
+		_unsetUsers(groupAdminUser, false);
 	}
 
 	@Test
 	public void testShouldUnsetGroupOwner() throws Exception {
 		User groupOwnerUser = UserTestUtil.addGroupOwnerUser(_group);
 
-		try {
-			UserServiceTestUtil.unsetGroupUsers(
-				_group.getGroupId(), _groupAdminUser, groupOwnerUser);
-
-			Assert.assertTrue(
-				_userLocalService.hasGroupUser(
-					_group.getGroupId(), groupOwnerUser.getUserId()));
-		}
-		finally {
-			_userLocalService.deleteUser(groupOwnerUser);
-		}
+		_unsetUsers(groupOwnerUser, false);
 	}
 
 	@Test
@@ -95,19 +75,7 @@ public class UserServiceWhenGroupAdminUnsetsGroupUsersTest {
 		User organizationAdminUser = UserTestUtil.addOrganizationAdminUser(
 			_organization);
 
-		try {
-			UserServiceTestUtil.unsetOrganizationUsers(
-				_organization.getOrganizationId(), _groupAdminUser,
-				organizationAdminUser);
-
-			Assert.assertTrue(
-				_userLocalService.hasOrganizationUser(
-					_organization.getOrganizationId(),
-					organizationAdminUser.getUserId()));
-		}
-		finally {
-			_userLocalService.deleteUser(organizationAdminUser);
-		}
+		_unsetUsers(organizationAdminUser, true);
 	}
 
 	@Test
@@ -115,18 +83,34 @@ public class UserServiceWhenGroupAdminUnsetsGroupUsersTest {
 		User organizationOwnerUser = UserTestUtil.addOrganizationOwnerUser(
 			_organization);
 
-		try {
-			UserServiceTestUtil.unsetOrganizationUsers(
-				_organization.getOrganizationId(), _groupAdminUser,
-				organizationOwnerUser);
+		_unsetUsers(organizationOwnerUser, true);
+	}
 
-			Assert.assertTrue(
-				_userLocalService.hasOrganizationUser(
-					_organization.getOrganizationId(),
-					organizationOwnerUser.getUserId()));
+	private void _unsetUsers(User objectUser, boolean organizationSite)
+		throws Exception {
+
+		try {
+			if (organizationSite) {
+				UserServiceTestUtil.unsetOrganizationUsers(
+					_organization.getOrganizationId(), _groupAdminUser,
+					objectUser);
+
+				Assert.assertTrue(
+					_userLocalService.hasOrganizationUser(
+						_organization.getOrganizationId(),
+						objectUser.getUserId()));
+			}
+			else {
+				UserServiceTestUtil.unsetGroupUsers(
+					_group.getGroupId(), _groupAdminUser, objectUser);
+
+				Assert.assertTrue(
+					_userLocalService.hasGroupUser(
+						_group.getGroupId(), objectUser.getUserId()));
+			}
 		}
 		finally {
-			_userLocalService.deleteUser(organizationOwnerUser);
+			_userLocalService.deleteUser(objectUser);
 		}
 	}
 
