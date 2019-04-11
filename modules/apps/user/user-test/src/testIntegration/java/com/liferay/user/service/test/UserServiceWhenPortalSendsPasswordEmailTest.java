@@ -114,6 +114,8 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 				_user.getGroupId(), _user.getUserId());
 
 		ServiceContextThreadLocal.pushServiceContext(serviceContext);
+
+		_initialInboxSize = MailServiceTestUtil.getInboxSize();
 	}
 
 	@After
@@ -129,18 +131,10 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 			givenThatCompanySendsNewPassword();
 
 		try {
-			int initialInboxSize = MailServiceTestUtil.getInboxSize();
-
 			boolean sentPassword = _userService.sendPasswordByEmailAddress(
 				_user.getCompanyId(), _user.getEmailAddress());
 
-			Assert.assertTrue(sentPassword);
-
-			Assert.assertEquals(
-				initialInboxSize + 1, MailServiceTestUtil.getInboxSize());
-			Assert.assertTrue(
-				MailServiceTestUtil.lastMailMessageContains(
-					"email_password_sent_body.tmpl"));
+			_assert(sentPassword, true, "email_password_sent_body.tmpl");
 		}
 		finally {
 			restorePortletPreferences(portletPreferences);
@@ -153,18 +147,10 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 			givenThatCompanySendsNewPassword();
 
 		try {
-			int initialInboxSize = MailServiceTestUtil.getInboxSize();
-
 			boolean sentPassword = _userService.sendPasswordByScreenName(
 				_user.getCompanyId(), _user.getScreenName());
 
-			Assert.assertTrue(sentPassword);
-
-			Assert.assertEquals(
-				initialInboxSize + 1, MailServiceTestUtil.getInboxSize());
-			Assert.assertTrue(
-				MailServiceTestUtil.lastMailMessageContains(
-					"email_password_sent_body.tmpl"));
+			_assert(sentPassword, true, "email_password_sent_body.tmpl");
 		}
 		finally {
 			restorePortletPreferences(portletPreferences);
@@ -177,18 +163,10 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 			givenThatCompanySendsNewPassword();
 
 		try {
-			int initialInboxSize = MailServiceTestUtil.getInboxSize();
-
 			boolean sentPassword = _userService.sendPasswordByUserId(
 				_user.getUserId());
 
-			Assert.assertTrue(sentPassword);
-
-			Assert.assertEquals(
-				initialInboxSize + 1, MailServiceTestUtil.getInboxSize());
-			Assert.assertTrue(
-				MailServiceTestUtil.lastMailMessageContains(
-					"email_password_sent_body.tmpl"));
+			_assert(sentPassword, true, "email_password_sent_body.tmpl");
 		}
 		finally {
 			restorePortletPreferences(portletPreferences);
@@ -201,18 +179,10 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 			givenThatCompanySendsResetPasswordLink();
 
 		try {
-			int initialInboxSize = MailServiceTestUtil.getInboxSize();
-
 			boolean sentPassword = _userService.sendPasswordByEmailAddress(
 				_user.getCompanyId(), _user.getEmailAddress());
 
-			Assert.assertFalse(sentPassword);
-
-			Assert.assertEquals(
-				initialInboxSize + 1, MailServiceTestUtil.getInboxSize());
-			Assert.assertTrue(
-				MailServiceTestUtil.lastMailMessageContains(
-					"email_password_reset_body.tmpl"));
+			_assert(sentPassword, false, "email_password_reset_body.tmpl");
 		}
 		finally {
 			restorePortletPreferences(portletPreferences);
@@ -225,18 +195,10 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 			givenThatCompanySendsResetPasswordLink();
 
 		try {
-			int initialInboxSize = MailServiceTestUtil.getInboxSize();
-
 			boolean sentPassword = _userService.sendPasswordByScreenName(
 				_user.getCompanyId(), _user.getScreenName());
 
-			Assert.assertFalse(sentPassword);
-
-			Assert.assertEquals(
-				initialInboxSize + 1, MailServiceTestUtil.getInboxSize());
-			Assert.assertTrue(
-				MailServiceTestUtil.lastMailMessageContains(
-					"email_password_reset_body.tmpl"));
+			_assert(sentPassword, false, "email_password_reset_body.tmpl");
 		}
 		finally {
 			restorePortletPreferences(portletPreferences);
@@ -249,18 +211,10 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 			givenThatCompanySendsResetPasswordLink();
 
 		try {
-			int initialInboxSize = MailServiceTestUtil.getInboxSize();
-
 			boolean sentPassword = _userService.sendPasswordByUserId(
 				_user.getUserId());
 
-			Assert.assertFalse(sentPassword);
-
-			Assert.assertEquals(
-				initialInboxSize + 1, MailServiceTestUtil.getInboxSize());
-			Assert.assertTrue(
-				MailServiceTestUtil.lastMailMessageContains(
-					"email_password_reset_body.tmpl"));
+			_assert(sentPassword, false, "email_password_reset_body.tmpl");
 		}
 		finally {
 			restorePortletPreferences(portletPreferences);
@@ -313,10 +267,28 @@ public class UserServiceWhenPortalSendsPasswordEmailTest {
 		portletPreferences.store();
 	}
 
+	private void _assert(
+		boolean sentPassword, boolean sendNewPassword, String template) {
+
+		if (sendNewPassword) {
+			Assert.assertTrue(sentPassword);
+		}
+		else {
+			Assert.assertFalse(sentPassword);
+		}
+
+		Assert.assertEquals(
+			_initialInboxSize + 1, MailServiceTestUtil.getInboxSize());
+		Assert.assertTrue(
+			MailServiceTestUtil.lastMailMessageContains(template));
+	}
+
 	private static Localization _localization;
 
 	@Inject
 	private static LocalizationUtil _localizationUtil;
+
+	private int _initialInboxSize;
 
 	@DeleteAfterTestRun
 	private User _user;

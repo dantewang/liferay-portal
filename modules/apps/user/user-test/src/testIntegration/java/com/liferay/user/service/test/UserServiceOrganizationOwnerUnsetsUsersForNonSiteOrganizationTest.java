@@ -58,19 +58,7 @@ public class UserServiceOrganizationOwnerUnsetsUsersForNonSiteOrganizationTest {
 		User organizationAdminUser = UserTestUtil.addOrganizationAdminUser(
 			_organization);
 
-		try {
-			UserServiceTestUtil.unsetOrganizationUsers(
-				_organization.getOrganizationId(), _organizationOwnerUser,
-				organizationAdminUser);
-
-			Assert.assertFalse(
-				_userLocalService.hasOrganizationUser(
-					_organization.getOrganizationId(),
-					organizationAdminUser.getUserId()));
-		}
-		finally {
-			_userLocalService.deleteUser(organizationAdminUser);
-		}
+		_unsetOrganizationUsers(organizationAdminUser);
 	}
 
 	@Test
@@ -78,18 +66,21 @@ public class UserServiceOrganizationOwnerUnsetsUsersForNonSiteOrganizationTest {
 		User otherOrganizationOwnerUser = UserTestUtil.addOrganizationOwnerUser(
 			_organization);
 
+		_unsetOrganizationUsers(otherOrganizationOwnerUser);
+	}
+
+	private void _unsetOrganizationUsers(User objectUser) throws Exception {
 		try {
 			UserServiceTestUtil.unsetOrganizationUsers(
 				_organization.getOrganizationId(), _organizationOwnerUser,
-				otherOrganizationOwnerUser);
+				objectUser);
 
 			Assert.assertFalse(
 				_userLocalService.hasOrganizationUser(
-					_organization.getOrganizationId(),
-					otherOrganizationOwnerUser.getUserId()));
+					_organization.getOrganizationId(), objectUser.getUserId()));
 		}
 		finally {
-			_userLocalService.deleteUser(otherOrganizationOwnerUser);
+			_userLocalService.deleteUser(objectUser);
 		}
 	}
 
