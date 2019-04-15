@@ -12,17 +12,16 @@
  * details.
  */
 
-package com.liferay.portlet;
+package com.liferay.portlet.test;
 
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.reflect.ReflectionUtil;
-import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
-import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
-import com.liferay.portal.kernel.exception.NoSuchPreferencesException;
+import com.liferay.portal.kernel.dao.orm.EntityCache;
+import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
-import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
+import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalServiceUtil;
-import com.liferay.portal.kernel.service.persistence.PortalPreferencesUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
@@ -34,7 +33,9 @@ import com.liferay.portal.spring.aop.AopInvocationHandler;
 import com.liferay.portal.spring.transaction.DefaultTransactionExecutor;
 import com.liferay.portal.spring.transaction.TransactionAttributeAdapter;
 import com.liferay.portal.spring.transaction.TransactionStatusAdapter;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.portlet.PortalPreferencesWrapperCacheUtil;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -51,6 +52,7 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -58,6 +60,7 @@ import org.springframework.transaction.PlatformTransactionManager;
  * @author Matthew Tambara
  * @author Shuyang Zhou
  */
+@RunWith(Arquillian.class)
 public class PortalPreferencesImplTest {
 
 	@ClassRule
@@ -90,8 +93,7 @@ public class PortalPreferencesImplTest {
 		_testOwnerId = RandomTestUtil.nextLong();
 
 		PortalPreferences portalPreferences =
-			PortletPreferencesFactoryUtil.getPortalPreferences(
-				_testOwnerId, true);
+			_portletPreferencesFactory.getPortalPreferences(_testOwnerId, true);
 
 		portalPreferences.setValue(_NAMESPACE, "testKey", "testValue");
 
@@ -106,16 +108,20 @@ public class PortalPreferencesImplTest {
 
 		TransactionInvokerUtil.invoke(
 			builder.build(),
-			new Callable<Void>() {
+			() -> {
+				com.liferay.portal.kernel.model.PortalPreferences
+					portalPreferences =
+						PortalPreferencesLocalServiceUtil.
+							fetchPortalPreferences(
+								_testOwnerId,
+								PortletKeys.PREFS_OWNER_TYPE_USER);
 
-				@Override
-				public Void call() throws NoSuchPreferencesException {
-					PortalPreferencesUtil.removeByO_O(
-						_testOwnerId, PortletKeys.PREFS_OWNER_TYPE_USER);
-
-					return null;
+				if (portalPreferences != null) {
+					PortalPreferencesLocalServiceUtil.deletePortalPreferences(
+						portalPreferences);
 				}
 
+				return null;
 			});
 
 		PortalPreferencesWrapperCacheUtil.remove(
@@ -123,20 +129,15 @@ public class PortalPreferencesImplTest {
 	}
 
 	@Test
-	public void testReset() throws Exception {
-		Callable<Void> callable = new Callable<Void>() {
+	public void testReset() {
+		Callable<Void> callable = () -> {
+			PortalPreferences portalPreferences =
+				_portletPreferencesFactory.getPortalPreferences(
+					_testOwnerId, true);
 
-			@Override
-			public Void call() {
-				PortalPreferences portalPreferences =
-					PortletPreferencesFactoryUtil.getPortalPreferences(
-						_testOwnerId, true);
+			portalPreferences.resetValues(_NAMESPACE);
 
-				portalPreferences.resetValues(_NAMESPACE);
-
-				return null;
-			}
-
+			return null;
 		};
 
 		try {
@@ -154,38 +155,28 @@ public class PortalPreferencesImplTest {
 	}
 
 	@Test
-	public void testSetSameKeyDifferentValues() throws Exception {
+	public void testSetSameKeyDifferentValues() {
 		FutureTask<Void> futureTask1 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						PortletPreferencesFactoryUtil.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValues(
+					_NAMESPACE, _KEY_1, new String[] {null, _VALUE_2});
 
-					portalPreferences.setValues(
-						_NAMESPACE, _KEY_1, new String[] {null, _VALUE_2});
-
-					return null;
-				}
-
+				return null;
 			});
 
 		FutureTask<Void> futureTask2 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						PortletPreferencesFactoryUtil.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_1);
 
-					portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_1);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		try {
@@ -204,42 +195,31 @@ public class PortalPreferencesImplTest {
 	@Test
 	public void testSetValueDifferentKeys() throws Exception {
 		FutureTask<Void> futureTask1 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						PortletPreferencesFactoryUtil.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_1);
 
-					portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_1);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		FutureTask<Void> futureTask2 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						PortletPreferencesFactoryUtil.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValue(_NAMESPACE, _KEY_2, _VALUE_1);
 
-					portalPreferences.setValue(_NAMESPACE, _KEY_2, _VALUE_1);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		updateSynchronously(futureTask1, futureTask2);
 
 		PortalPreferences portalPreferences =
-			PortletPreferencesFactoryUtil.getPortalPreferences(
-				_testOwnerId, true);
+			_portletPreferencesFactory.getPortalPreferences(_testOwnerId, true);
 
 		Assert.assertEquals(
 			_VALUE_1, portalPreferences.getValue(_NAMESPACE, _KEY_1));
@@ -248,37 +228,27 @@ public class PortalPreferencesImplTest {
 	}
 
 	@Test
-	public void testSetValueSameKey() throws Exception {
+	public void testSetValueSameKey() {
 		FutureTask<Void> futureTask1 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						PortletPreferencesFactoryUtil.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_1);
 
-					portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_1);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		FutureTask<Void> futureTask2 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						PortletPreferencesFactoryUtil.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_2);
 
-					portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_2);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		try {
@@ -297,42 +267,31 @@ public class PortalPreferencesImplTest {
 	@Test
 	public void testSetValuesDifferentKeys() throws Exception {
 		FutureTask<Void> futureTask1 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						PortletPreferencesFactoryUtil.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValues(_NAMESPACE, _KEY_1, _VALUES_1);
 
-					portalPreferences.setValues(_NAMESPACE, _KEY_1, _VALUES_1);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		FutureTask<Void> futureTask2 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						PortletPreferencesFactoryUtil.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValues(_NAMESPACE, _KEY_2, _VALUES_1);
 
-					portalPreferences.setValues(_NAMESPACE, _KEY_2, _VALUES_1);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		updateSynchronously(futureTask1, futureTask2);
 
 		PortalPreferences portalPreferences =
-			PortletPreferencesFactoryUtil.getPortalPreferences(
-				_testOwnerId, true);
+			_portletPreferencesFactory.getPortalPreferences(_testOwnerId, true);
 
 		Assert.assertArrayEquals(
 			_VALUES_1, portalPreferences.getValues(_NAMESPACE, _KEY_1));
@@ -341,37 +300,27 @@ public class PortalPreferencesImplTest {
 	}
 
 	@Test
-	public void testSetValuesSameKey() throws Exception {
+	public void testSetValuesSameKey() {
 		FutureTask<Void> futureTask1 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						PortletPreferencesFactoryUtil.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValues(_NAMESPACE, _KEY_1, _VALUES_1);
 
-					portalPreferences.setValues(_NAMESPACE, _KEY_1, _VALUES_1);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		FutureTask<Void> futureTask2 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						PortletPreferencesFactoryUtil.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValues(_NAMESPACE, _KEY_1, _VALUES_2);
 
-					portalPreferences.setValues(_NAMESPACE, _KEY_1, _VALUES_2);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		try {
@@ -410,8 +359,8 @@ public class PortalPreferencesImplTest {
 
 		futureTask2.get();
 
-		EntityCacheUtil.clearLocalCache();
-		FinderCacheUtil.clearLocalCache();
+		_entityCache.clearLocalCache();
+		_finderCache.clearLocalCache();
 	}
 
 	protected static class SynchronizedTransactionExecutor
@@ -489,22 +438,17 @@ public class PortalPreferencesImplTest {
 		private SynchronousInvocationHandler(long testOwnerId) {
 			_cyclicBarrier = new CyclicBarrier(
 				2,
-				new Runnable() {
+				() -> {
+					ReflectionTestUtil.setFieldValue(
+						_aopInvocationHandler, "_transactionExecutor",
+						new SynchronizedTransactionExecutor(testOwnerId));
 
-					@Override
-					public void run() {
-						ReflectionTestUtil.setFieldValue(
-							_aopInvocationHandler, "_transactionExecutor",
-							new SynchronizedTransactionExecutor(testOwnerId));
+					_aopInvocationHandler.setTarget(
+						_aopInvocationHandler.getTarget());
 
-						_aopInvocationHandler.setTarget(
-							_aopInvocationHandler.getTarget());
-
-						ReflectionTestUtil.setFieldValue(
-							PortalPreferencesLocalServiceUtil.class, "_service",
-							_originalPortalPreferencesLocalService);
-					}
-
+					ReflectionTestUtil.setFieldValue(
+						PortalPreferencesLocalServiceUtil.class, "_service",
+						_originalPortalPreferencesLocalService);
 				});
 		}
 
@@ -534,6 +478,15 @@ public class PortalPreferencesImplTest {
 	private static final ThreadLocal<Boolean> _synchronizeThreadLocal =
 		new InheritableThreadLocal<>();
 	private static Method _updatePreferencesMethod;
+
+	@Inject
+	private EntityCache _entityCache;
+
+	@Inject
+	private FinderCache _finderCache;
+
+	@Inject
+	private PortletPreferencesFactory _portletPreferencesFactory;
 
 	private long _testOwnerId;
 

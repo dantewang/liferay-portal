@@ -12,17 +12,21 @@
  * details.
  */
 
-package com.liferay.portlet.internal;
+package com.liferay.portlet.test;
 
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
-import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
+import com.liferay.portal.kernel.portlet.LiferayPortletURL;
+import com.liferay.portal.kernel.portlet.PortletURLFactory;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.test.LayoutTestUtil;
 import com.liferay.portlet.RenderParametersPool;
@@ -38,12 +42,14 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
  * @author Manuel de la Peña
  */
+@RunWith(Arquillian.class)
 public class PortletURLImplTest {
 
 	@ClassRule
@@ -87,13 +93,13 @@ public class PortletURLImplTest {
 		RenderParametersPool.put(
 			mockServletRequest, plid, PortletKeys.LOGIN, renderParameters);
 
-		PortletURL portletURL = PortletURLFactoryUtil.create(
+		PortletURL portletURL = _portletURLFactory.create(
 			mockServletRequest, PortletKeys.LOGIN, plid,
 			PortletRequest.RENDER_PHASE);
 
-		PortletURLImpl portletURLImpl = (PortletURLImpl)portletURL;
+		LiferayPortletURL liferayPortletURL = (LiferayPortletURL)portletURL;
 
-		portletURLImpl.setCopyCurrentRenderParameters(true);
+		liferayPortletURL.setCopyCurrentRenderParameters(true);
 
 		StringBuilder sb = new StringBuilder(10);
 
@@ -110,16 +116,24 @@ public class PortletURLImplTest {
 
 		Assert.assertEquals(sb.toString(), portletURL.toString());
 
-		portletURLImpl.clearCache();
+		_invokeClearCache(liferayPortletURL);
 
 		Assert.assertEquals(sb.toString(), portletURL.toString());
 
-		portletURLImpl.clearCache();
+		_invokeClearCache(liferayPortletURL);
 
 		Assert.assertEquals(sb.toString(), portletURL.toString());
 	}
 
+	private void _invokeClearCache(LiferayPortletURL liferayPortletURL) {
+		ReflectionTestUtil.invoke(
+			liferayPortletURL, "clearCache", new Class<?>[0], new Object[0]);
+	}
+
 	@DeleteAfterTestRun
 	private Group _group;
+
+	@Inject
+	private PortletURLFactory _portletURLFactory;
 
 }
