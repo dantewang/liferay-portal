@@ -17,6 +17,7 @@ package com.liferay.portal.portlet.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
@@ -94,9 +95,9 @@ public class PortletURLImplTest {
 			mockServletRequest, PortletKeys.LOGIN, plid,
 			PortletRequest.RENDER_PHASE);
 
-		PortletURLImpl portletURLImpl = (PortletURLImpl)portletURL;
+		LiferayPortletURL liferayPortletURL = (LiferayPortletURL)portletURL;
 
-		portletURLImpl.setCopyCurrentRenderParameters(true);
+		liferayPortletURL.setCopyCurrentRenderParameters(true);
 
 		StringBuilder sb = new StringBuilder(10);
 
@@ -113,11 +114,11 @@ public class PortletURLImplTest {
 
 		Assert.assertEquals(sb.toString(), portletURL.toString());
 
-		portletURLImpl.clearCache();
+		liferayPortletURL.clearCache();
 
 		Assert.assertEquals(sb.toString(), portletURL.toString());
 
-		portletURLImpl.clearCache();
+		liferayPortletURL.clearCache();
 
 		Assert.assertEquals(sb.toString(), portletURL.toString());
 	}
