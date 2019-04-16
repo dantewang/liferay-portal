@@ -49,9 +49,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -69,6 +72,21 @@ public class PortletPreferencesLocalServiceTest {
 	public static final AggregateTestRule aggregateTestRule =
 		new LiferayIntegrationTestRule();
 
+	@BeforeClass
+	public static void setUpClass() {
+		_portletApp.setServletContext(
+			(ServletContext)ProxyUtil.newProxyInstance(
+				PortletPreferencesLocalServiceTest.class.getClassLoader(),
+				new Class<?>[] {ServletContext.class},
+				(proxy, method, args) -> {
+					if ("getServletContextName".equals(method.getName())) {
+						return StringPool.BLANK;
+					}
+
+					return null;
+				}));
+	}
+
 	@Before
 	public void setUp() throws Exception {
 		_group = GroupTestUtil.addGroup();
@@ -79,12 +97,12 @@ public class PortletPreferencesLocalServiceTest {
 
 		_portlet = PortletLocalServiceUtil.getPortletById(
 			_layout.getCompanyId(), String.valueOf(_PORTLET_ID));
+
+		_portlet.setPortletApp(_portletApp);
 	}
 
 	@After
 	public void tearDown() {
-		_portlet.setPortletApp(_portletApp);
-
 		PortletLocalServiceUtil.destroyPortlet(_portlet);
 	}
 
