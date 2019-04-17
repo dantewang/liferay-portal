@@ -18,12 +18,10 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
-import com.liferay.portal.kernel.exception.NoSuchPreferencesException;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalServiceUtil;
-import com.liferay.portal.kernel.service.persistence.PortalPreferencesUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
@@ -113,9 +111,18 @@ public class PortalPreferencesImplTest {
 			new Callable<Void>() {
 
 				@Override
-				public Void call() throws NoSuchPreferencesException {
-					PortalPreferencesUtil.removeByO_O(
-						_testOwnerId, PortletKeys.PREFS_OWNER_TYPE_USER);
+				public Void call() {
+					com.liferay.portal.kernel.model.PortalPreferences
+						portalPreferences =
+						PortalPreferencesLocalServiceUtil.
+							fetchPortalPreferences(
+								_testOwnerId,
+								PortletKeys.PREFS_OWNER_TYPE_USER);
+
+					if (portalPreferences != null) {
+						PortalPreferencesLocalServiceUtil.
+							deletePortalPreferences(portalPreferences);
+					}
 
 					return null;
 				}
