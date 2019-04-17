@@ -15,18 +15,14 @@
 package com.liferay.users.admin.service.user.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
-import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
-import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
-import com.liferay.portal.kernel.test.util.OrganizationTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,37 +34,27 @@ import org.junit.runner.RunWith;
  * @author Drew Brokke
  */
 @RunWith(Arquillian.class)
-public class UserServiceOrganizationAdminUnsetsUsersForNonSiteOrganizationTest {
+public class UserServiceOrganizationAdminUnsetsUsersForNonSiteOrganizationTest
+	extends BaseUserServiceTestCase {
 
 	@ClassRule
 	@Rule
 	public static final AggregateTestRule aggregateTestRule =
 		new LiferayIntegrationTestRule();
 
-	@Before
-	public void setUp() throws Exception {
-		_organization = OrganizationTestUtil.addOrganization();
-
-		_organizationAdminUser = UserTestUtil.addOrganizationAdminUser(
-			_organization);
-
-		_organizationOwnerUser = UserTestUtil.addOrganizationOwnerUser(
-			_organization);
-	}
-
 	@Test
 	public void testShouldUnsetOrganizationAdmin() throws Exception {
 		User otherOrganizationAdminUser = UserTestUtil.addOrganizationAdminUser(
-			_organization);
+			organization);
 
 		try {
-			UserServiceTestUtil.unsetOrganizationUsers(
-				_organization.getOrganizationId(), _organizationAdminUser,
+			unsetOrganizationUsers(
+				organization.getOrganizationId(), organizationAdminUser,
 				otherOrganizationAdminUser);
 
 			Assert.assertTrue(
 				_userLocalService.hasOrganizationUser(
-					_organization.getOrganizationId(),
+					organization.getOrganizationId(),
 					otherOrganizationAdminUser.getUserId()));
 		}
 		finally {
@@ -78,24 +64,15 @@ public class UserServiceOrganizationAdminUnsetsUsersForNonSiteOrganizationTest {
 
 	@Test
 	public void testShouldUnsetOrganizationOwner() throws Exception {
-		UserServiceTestUtil.unsetOrganizationUsers(
-			_organization.getOrganizationId(), _organizationAdminUser,
-			_organizationOwnerUser);
+		unsetOrganizationUsers(
+			organization.getOrganizationId(), organizationAdminUser,
+			organizationOwnerUser);
 
 		Assert.assertTrue(
 			_userLocalService.hasOrganizationUser(
-				_organization.getOrganizationId(),
-				_organizationOwnerUser.getUserId()));
+				organization.getOrganizationId(),
+				organizationOwnerUser.getUserId()));
 	}
-
-	@DeleteAfterTestRun
-	private Organization _organization;
-
-	@DeleteAfterTestRun
-	private User _organizationAdminUser;
-
-	@DeleteAfterTestRun
-	private User _organizationOwnerUser;
 
 	@Inject
 	private UserLocalService _userLocalService;

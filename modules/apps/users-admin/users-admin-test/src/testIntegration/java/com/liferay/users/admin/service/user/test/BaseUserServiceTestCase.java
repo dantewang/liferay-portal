@@ -14,46 +14,120 @@
 
 package com.liferay.users.admin.service.user.test;
 
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
-import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.UserServiceUtil;
+import com.liferay.portal.kernel.service.UserService;
+import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
+import com.liferay.portal.kernel.test.util.GroupTestUtil;
+import com.liferay.portal.kernel.test.util.OrganizationTestUtil;
+import com.liferay.portal.kernel.test.util.UserTestUtil;
+import com.liferay.portal.test.rule.Inject;
+
+import org.junit.After;
+import org.junit.Before;
 
 /**
  * @author Brian Wing Shun Chan
  * @author José Manuel Navarro
  * @author Drew Brokke
  */
-public class BaseUserServiceTestCase {
+public abstract class BaseUserServiceTestCase {
 
-	protected static void unsetGroupUsers(
+	@Before
+	public void setUp() throws Exception {
+		if (site) {
+			organization = OrganizationTestUtil.addOrganization(true);
+		}
+		else {
+			organization = OrganizationTestUtil.addOrganization();
+		}
+
+		if (regularSite) {
+			group = GroupTestUtil.addGroup();
+
+			groupOwnerUser = UserTestUtil.addGroupOwnerUser(group);
+
+			groupAdminUser = UserTestUtil.addGroupAdminUser(group);
+		}
+		else {
+			group = organization.getGroup();
+
+			organizationAdminUser = UserTestUtil.addOrganizationAdminUser(
+				organization);
+
+			organizationOwnerUser = UserTestUtil.addOrganizationOwnerUser(
+				organization);
+		}
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		if (group.isRegularSite()) {
+			_groupLocalService.deleteGroup(group);
+		}
+	}
+
+	protected void unsetGroupUsers(
 			long groupId, User subjectUser, User objectUser)
 		throws Exception {
 
-		PermissionChecker permissionChecker =
-			PermissionCheckerFactoryUtil.create(subjectUser);
+		PermissionChecker permissionChecker = _permissionCheckerFactory.create(
+			subjectUser);
 
 		PermissionThreadLocal.setPermissionChecker(permissionChecker);
 
 		ServiceContext serviceContext = new ServiceContext();
 
-		UserServiceUtil.unsetGroupUsers(
+		_userService.unsetGroupUsers(
 			groupId, new long[] {objectUser.getUserId()}, serviceContext);
 	}
 
-	protected static void unsetOrganizationUsers(
+	protected void unsetOrganizationUsers(
 			long organizationId, User subjectUser, User objectUser)
 		throws Exception {
 
-		PermissionChecker permissionChecker =
-			PermissionCheckerFactoryUtil.create(subjectUser);
+		PermissionChecker permissionChecker = _permissionCheckerFactory.create(
+			subjectUser);
 
 		PermissionThreadLocal.setPermissionChecker(permissionChecker);
 
-		UserServiceUtil.unsetOrganizationUsers(
+		_userService.unsetOrganizationUsers(
 			organizationId, new long[] {objectUser.getUserId()});
 	}
+
+	protected Group group;
+
+	@DeleteAfterTestRun
+	protected User groupAdminUser;
+
+	@DeleteAfterTestRun
+	protected User groupOwnerUser;
+
+	@DeleteAfterTestRun
+	protected Organization organization;
+
+	@DeleteAfterTestRun
+	protected User organizationAdminUser;
+
+	@DeleteAfterTestRun
+	protected User organizationOwnerUser;
+
+	protected boolean regularSite;
+	protected boolean site;
+
+	@Inject
+	private GroupLocalService _groupLocalService;
+
+	@Inject
+	private PermissionCheckerFactory _permissionCheckerFactory;
+
+	@Inject
+	private UserService _userService;
 
 }
