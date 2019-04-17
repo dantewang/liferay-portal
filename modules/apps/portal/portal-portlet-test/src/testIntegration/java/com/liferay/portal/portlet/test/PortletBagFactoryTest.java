@@ -45,7 +45,7 @@ public class PortletBagFactoryTest {
 		new LiferayIntegrationTestRule();
 
 	@Test
-	public void test1() throws Exception {
+	public void testValidate() throws Exception {
 		_testValidate(null, null, null);
 
 		Class<?> clazz = getClass();
@@ -55,7 +55,7 @@ public class PortletBagFactoryTest {
 	}
 
 	@Test
-	public void test4_initializedInstance() throws Exception {
+	public void testInitializedInstance() throws Exception {
 		PortletImpl portletImpl = new PortletImpl();
 
 		portletImpl.setPortletApp(new PortletAppImpl(StringPool.BLANK));
@@ -70,7 +70,7 @@ public class PortletBagFactoryTest {
 	}
 
 	@Test
-	public void test5_concreteInstance() throws Exception {
+	public void testConcreteInstance() throws Exception {
 		PortletImpl portletImpl = new PortletImpl();
 
 		portletImpl.setPortletApp(new PortletAppImpl(StringPool.BLANK));
