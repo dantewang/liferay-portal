@@ -108,25 +108,20 @@ public class PortalPreferencesImplTest {
 
 		TransactionInvokerUtil.invoke(
 			builder.build(),
-			new Callable<Void>() {
-
-				@Override
-				public Void call() {
-					com.liferay.portal.kernel.model.PortalPreferences
-						portalPreferences =
-							PortalPreferencesLocalServiceUtil.
-								fetchPortalPreferences(
-									_testOwnerId,
-									PortletKeys.PREFS_OWNER_TYPE_USER);
-
-					if (portalPreferences != null) {
+			() -> {
+				com.liferay.portal.kernel.model.PortalPreferences
+					portalPreferences =
 						PortalPreferencesLocalServiceUtil.
-							deletePortalPreferences(portalPreferences);
-					}
+							fetchPortalPreferences(
+								_testOwnerId,
+								PortletKeys.PREFS_OWNER_TYPE_USER);
 
-					return null;
+				if (portalPreferences != null) {
+					PortalPreferencesLocalServiceUtil.deletePortalPreferences(
+						portalPreferences);
 				}
 
+				return null;
 			});
 
 		PortalPreferencesWrapperCacheUtil.remove(
@@ -135,19 +130,14 @@ public class PortalPreferencesImplTest {
 
 	@Test
 	public void testReset() {
-		Callable<Void> callable = new Callable<Void>() {
+		Callable<Void> callable = () -> {
+			PortalPreferences portalPreferences =
+				_portletPreferencesFactory.getPortalPreferences(
+					_testOwnerId, true);
 
-			@Override
-			public Void call() {
-				PortalPreferences portalPreferences =
-					_portletPreferencesFactory.getPortalPreferences(
-						_testOwnerId, true);
+			portalPreferences.resetValues(_NAMESPACE);
 
-				portalPreferences.resetValues(_NAMESPACE);
-
-				return null;
-			}
-
+			return null;
 		};
 
 		try {
@@ -167,36 +157,26 @@ public class PortalPreferencesImplTest {
 	@Test
 	public void testSetSameKeyDifferentValues() {
 		FutureTask<Void> futureTask1 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						_portletPreferencesFactory.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValues(
+					_NAMESPACE, _KEY_1, new String[] {null, _VALUE_2});
 
-					portalPreferences.setValues(
-						_NAMESPACE, _KEY_1, new String[] {null, _VALUE_2});
-
-					return null;
-				}
-
+				return null;
 			});
 
 		FutureTask<Void> futureTask2 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						_portletPreferencesFactory.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_1);
 
-					portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_1);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		try {
@@ -215,35 +195,25 @@ public class PortalPreferencesImplTest {
 	@Test
 	public void testSetValueDifferentKeys() throws Exception {
 		FutureTask<Void> futureTask1 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						_portletPreferencesFactory.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_1);
 
-					portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_1);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		FutureTask<Void> futureTask2 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						_portletPreferencesFactory.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValue(_NAMESPACE, _KEY_2, _VALUE_1);
 
-					portalPreferences.setValue(_NAMESPACE, _KEY_2, _VALUE_1);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		updateSynchronously(futureTask1, futureTask2);
@@ -260,35 +230,25 @@ public class PortalPreferencesImplTest {
 	@Test
 	public void testSetValueSameKey() {
 		FutureTask<Void> futureTask1 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						_portletPreferencesFactory.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_1);
 
-					portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_1);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		FutureTask<Void> futureTask2 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						_portletPreferencesFactory.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_2);
 
-					portalPreferences.setValue(_NAMESPACE, _KEY_1, _VALUE_2);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		try {
@@ -307,35 +267,25 @@ public class PortalPreferencesImplTest {
 	@Test
 	public void testSetValuesDifferentKeys() throws Exception {
 		FutureTask<Void> futureTask1 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						_portletPreferencesFactory.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValues(_NAMESPACE, _KEY_1, _VALUES_1);
 
-					portalPreferences.setValues(_NAMESPACE, _KEY_1, _VALUES_1);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		FutureTask<Void> futureTask2 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						_portletPreferencesFactory.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValues(_NAMESPACE, _KEY_2, _VALUES_1);
 
-					portalPreferences.setValues(_NAMESPACE, _KEY_2, _VALUES_1);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		updateSynchronously(futureTask1, futureTask2);
@@ -352,35 +302,25 @@ public class PortalPreferencesImplTest {
 	@Test
 	public void testSetValuesSameKey() {
 		FutureTask<Void> futureTask1 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						_portletPreferencesFactory.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValues(_NAMESPACE, _KEY_1, _VALUES_1);
 
-					portalPreferences.setValues(_NAMESPACE, _KEY_1, _VALUES_1);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		FutureTask<Void> futureTask2 = new FutureTask<>(
-			new Callable<Void>() {
+			() -> {
+				PortalPreferences portalPreferences =
+					_portletPreferencesFactory.getPortalPreferences(
+						_testOwnerId, true);
 
-				@Override
-				public Void call() {
-					PortalPreferences portalPreferences =
-						_portletPreferencesFactory.getPortalPreferences(
-							_testOwnerId, true);
+				portalPreferences.setValues(_NAMESPACE, _KEY_1, _VALUES_2);
 
-					portalPreferences.setValues(_NAMESPACE, _KEY_1, _VALUES_2);
-
-					return null;
-				}
-
+				return null;
 			});
 
 		try {
@@ -498,22 +438,17 @@ public class PortalPreferencesImplTest {
 		private SynchronousInvocationHandler(long testOwnerId) {
 			_cyclicBarrier = new CyclicBarrier(
 				2,
-				new Runnable() {
+				() -> {
+					ReflectionTestUtil.setFieldValue(
+						_aopInvocationHandler, "_transactionExecutor",
+						new SynchronizedTransactionExecutor(testOwnerId));
 
-					@Override
-					public void run() {
-						ReflectionTestUtil.setFieldValue(
-							_aopInvocationHandler, "_transactionExecutor",
-							new SynchronizedTransactionExecutor(testOwnerId));
+					_aopInvocationHandler.setTarget(
+						_aopInvocationHandler.getTarget());
 
-						_aopInvocationHandler.setTarget(
-							_aopInvocationHandler.getTarget());
-
-						ReflectionTestUtil.setFieldValue(
-							PortalPreferencesLocalServiceUtil.class, "_service",
-							_originalPortalPreferencesLocalService);
-					}
-
+					ReflectionTestUtil.setFieldValue(
+						PortalPreferencesLocalServiceUtil.class, "_service",
+						_originalPortalPreferencesLocalService);
 				});
 		}
 
