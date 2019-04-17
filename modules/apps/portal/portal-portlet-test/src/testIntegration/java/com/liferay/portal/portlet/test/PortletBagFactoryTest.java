@@ -47,19 +47,10 @@ public class PortletBagFactoryTest {
 	@Test
 	public void test1() throws Exception {
 		_testValidate(null, null, null);
-	}
 
-	@Test
-	public void test2() throws Exception {
 		Class<?> clazz = getClass();
 
 		_testValidate(clazz.getClassLoader(), null, null);
-	}
-
-	@Test
-	public void test3() throws Exception {
-		Class<?> clazz = getClass();
-
 		_testValidate(clazz.getClassLoader(), new MockServletContext(), null);
 	}
 
