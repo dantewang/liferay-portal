@@ -37,8 +37,16 @@ public class SSOUtil {
 	public static String getSessionExpirationRedirectURL(
 		long companyId, String defaultSessionExpirationRedirectURL) {
 
-		String ssoSessionExpirationRedirectURL =
-			_instance._getSessionExpirationRedirectURL(companyId);
+		String ssoSessionExpirationRedirectURL = null;
+
+		for (SSO sso : _instance._ssoMap.values()) {
+			String sessionExpirationRedirectURL =
+				sso.getSessionExpirationRedirectUrl(companyId);
+
+			if (sessionExpirationRedirectURL != null) {
+				ssoSessionExpirationRedirectURL = sessionExpirationRedirectURL;
+			}
+		}
 
 		if (_instance._ssoMap.isEmpty() ||
 			Validator.isNull(ssoSessionExpirationRedirectURL)) {
@@ -54,7 +62,15 @@ public class SSOUtil {
 			return null;
 		}
 
-		return _instance._getSignInURL(companyId, defaultSignInURL);
+		for (SSO sso : _instance._ssoMap.values()) {
+			String signInURL = sso.getSignInURL(companyId, defaultSignInURL);
+
+			if (signInURL != null) {
+				return signInURL;
+			}
+		}
+
+		return null;
 	}
 
 	public static boolean isLoginRedirectRequired(long companyId) {
@@ -69,7 +85,13 @@ public class SSOUtil {
 			return false;
 		}
 
-		return _instance._isLoginRedirectRequired(companyId);
+		for (SSO sso : _instance._ssoMap.values()) {
+			if (sso.isLoginRedirectRequired(companyId)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public static boolean isRedirectRequired(long companyId) {
@@ -77,7 +99,13 @@ public class SSOUtil {
 			return false;
 		}
 
-		return _instance._isRedirectRequired(companyId);
+		for (SSO sso : _instance._ssoMap.values()) {
+			if (sso.isRedirectRequired(companyId)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public static boolean isSessionRedirectOnExpire(long companyId) {
@@ -88,7 +116,13 @@ public class SSOUtil {
 			return sessionRedirectOnExpire;
 		}
 
-		return _instance._isSessionRedirectOnExpire(companyId);
+		for (SSO sso : _instance._ssoMap.values()) {
+			if (sso.isSessionRedirectOnExpire(companyId)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private SSOUtil() {
@@ -98,61 +132,6 @@ public class SSOUtil {
 			SSO.class, new SSOServiceTrackerCustomizer());
 
 		_serviceTracker.open();
-	}
-
-	private String _getSessionExpirationRedirectURL(long companyId) {
-		for (SSO sso : _ssoMap.values()) {
-			String sessionExpirationRedirectURL =
-				sso.getSessionExpirationRedirectUrl(companyId);
-
-			if (sessionExpirationRedirectURL != null) {
-				return sessionExpirationRedirectURL;
-			}
-		}
-
-		return null;
-	}
-
-	private String _getSignInURL(long companyId, String defaultSignInURL) {
-		for (SSO sso : _ssoMap.values()) {
-			String signInURL = sso.getSignInURL(companyId, defaultSignInURL);
-
-			if (signInURL != null) {
-				return signInURL;
-			}
-		}
-
-		return null;
-	}
-
-	private boolean _isLoginRedirectRequired(long companyId) {
-		for (SSO sso : _ssoMap.values()) {
-			if (sso.isLoginRedirectRequired(companyId)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private boolean _isRedirectRequired(long companyId) {
-		for (SSO sso : _ssoMap.values()) {
-			if (sso.isRedirectRequired(companyId)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private boolean _isSessionRedirectOnExpire(long companyId) {
-		for (SSO sso : _ssoMap.values()) {
-			if (sso.isSessionRedirectOnExpire(companyId)) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	private static final SSOUtil _instance = new SSOUtil();
