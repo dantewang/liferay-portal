@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 public class SSOUtil {
 
 	public static String getSessionExpirationRedirectURL(
-		long companyId, String sessionExpirationRedirectURL) {
+		long companyId, String defaultSessionExpirationRedirectURL) {
 
 		String ssoSessionExpirationRedirectURL =
 			_instance._getSessionExpirationRedirectURL(companyId);
@@ -43,18 +43,18 @@ public class SSOUtil {
 		if (_instance._ssoMap.isEmpty() ||
 			Validator.isNull(ssoSessionExpirationRedirectURL)) {
 
-			return sessionExpirationRedirectURL;
+			return defaultSessionExpirationRedirectURL;
 		}
 
 		return ssoSessionExpirationRedirectURL;
 	}
 
-	public static String getSignInURL(long companyId, String signInURL) {
+	public static String getSignInURL(long companyId, String defaultSignInURL) {
 		if (_instance._ssoMap.isEmpty()) {
 			return null;
 		}
 
-		return _instance._getSignInURL(companyId, signInURL);
+		return _instance._getSignInURL(companyId, defaultSignInURL);
 	}
 
 	public static boolean isLoginRedirectRequired(long companyId) {
