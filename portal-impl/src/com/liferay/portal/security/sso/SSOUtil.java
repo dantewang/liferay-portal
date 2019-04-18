@@ -37,31 +37,19 @@ public class SSOUtil {
 	public static String getSessionExpirationRedirectURL(
 		long companyId, String defaultSessionExpirationRedirectURL) {
 
-		String ssoSessionExpirationRedirectURL = null;
-
 		for (SSO sso : _ssoMap.values()) {
 			String sessionExpirationRedirectURL =
 				sso.getSessionExpirationRedirectUrl(companyId);
 
-			if (sessionExpirationRedirectURL != null) {
-				ssoSessionExpirationRedirectURL = sessionExpirationRedirectURL;
+			if (Validator.isNull(sessionExpirationRedirectURL)) {
+				return sessionExpirationRedirectURL;
 			}
 		}
 
-		if (_ssoMap.isEmpty() ||
-			Validator.isNull(ssoSessionExpirationRedirectURL)) {
-
-			return defaultSessionExpirationRedirectURL;
-		}
-
-		return ssoSessionExpirationRedirectURL;
+		return defaultSessionExpirationRedirectURL;
 	}
 
 	public static String getSignInURL(long companyId, String defaultSignInURL) {
-		if (_ssoMap.isEmpty()) {
-			return null;
-		}
-
 		for (SSO sso : _ssoMap.values()) {
 			String signInURL = sso.getSignInURL(companyId, defaultSignInURL);
 
@@ -81,10 +69,6 @@ public class SSOUtil {
 			return true;
 		}
 
-		if (_ssoMap.isEmpty()) {
-			return false;
-		}
-
 		for (SSO sso : _ssoMap.values()) {
 			if (sso.isLoginRedirectRequired(companyId)) {
 				return true;
@@ -95,10 +79,6 @@ public class SSOUtil {
 	}
 
 	public static boolean isRedirectRequired(long companyId) {
-		if (_ssoMap.isEmpty()) {
-			return false;
-		}
-
 		for (SSO sso : _ssoMap.values()) {
 			if (sso.isRedirectRequired(companyId)) {
 				return true;
@@ -109,11 +89,8 @@ public class SSOUtil {
 	}
 
 	public static boolean isSessionRedirectOnExpire(long companyId) {
-		boolean sessionRedirectOnExpire =
-			PropsValues.SESSION_TIMEOUT_REDIRECT_ON_EXPIRE;
-
-		if (_ssoMap.isEmpty() || sessionRedirectOnExpire) {
-			return sessionRedirectOnExpire;
+		if (PropsValues.SESSION_TIMEOUT_REDIRECT_ON_EXPIRE) {
+			return PropsValues.SESSION_TIMEOUT_REDIRECT_ON_EXPIRE;
 		}
 
 		for (SSO sso : _ssoMap.values()) {
