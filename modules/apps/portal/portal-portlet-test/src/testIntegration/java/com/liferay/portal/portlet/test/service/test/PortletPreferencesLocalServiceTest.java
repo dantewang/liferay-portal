@@ -35,7 +35,7 @@ import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.model.impl.PortletAppImpl;
-import com.liferay.portal.portlet.test.PortletPreferencesTestUtil;
+import com.liferay.portal.portlet.test.BasePortletPreferencesTestCase;
 import com.liferay.portal.spring.aop.AopInvocationHandler;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.test.LayoutTestUtil;
@@ -63,7 +63,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 public class PortletPreferencesLocalServiceTest
-	extends PortletPreferencesTestUtil {
+	extends BasePortletPreferencesTestCase {
 
 	@ClassRule
 	@Rule
