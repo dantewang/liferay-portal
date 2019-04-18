@@ -52,7 +52,8 @@ public class BaseDisplayContextProvider<T extends DisplayContextFactory>
 
 	private final SortedSet<DisplayContextFactoryReference<T>>
 		_displayContextFactoryReferences = new ConcurrentSkipListSet<>();
-	private final ServiceTracker<T, T> _serviceTracker;
+	private final ServiceTracker<T, DisplayContextFactoryReference<T>>
+		_serviceTracker;
 
 	private static class DisplayContextFactoriesIterable
 		<T extends DisplayContextFactory>
@@ -92,10 +93,13 @@ public class BaseDisplayContextProvider<T extends DisplayContextFactory>
 	}
 
 	private class DisplayContextFactoryServiceTrackerCustomizer
-		implements ServiceTrackerCustomizer<T, T> {
+		implements ServiceTrackerCustomizer
+			<T, DisplayContextFactoryReference<T>> {
 
 		@Override
-		public T addingService(ServiceReference<T> serviceReference) {
+		public DisplayContextFactoryReference<T> addingService(
+			ServiceReference<T> serviceReference) {
+
 			Registry registry = RegistryUtil.getRegistry();
 
 			T displayContextFactory = registry.getService(serviceReference);
@@ -107,19 +111,27 @@ public class BaseDisplayContextProvider<T extends DisplayContextFactory>
 			_displayContextFactoryReferences.add(
 				displayContextFactoryReference);
 
-			return displayContextFactory;
+			return displayContextFactoryReference;
 		}
 
 		@Override
 		public void modifiedService(
-			ServiceReference<T> serviceReference, T displayContextFactory) {
+			ServiceReference<T> serviceReference,
+			DisplayContextFactoryReference<T> displayContextFactoryReference) {
+
+			_displayContextFactoryReferences.remove(
+				displayContextFactoryReference);
 
 			addingService(serviceReference);
 		}
 
 		@Override
 		public void removedService(
-			ServiceReference<T> serviceReference, T displayContextFactory) {
+			ServiceReference<T> serviceReference,
+			DisplayContextFactoryReference<T> displayContextFactoryReference) {
+
+			_displayContextFactoryReferences.remove(
+				displayContextFactoryReference);
 		}
 
 	}
