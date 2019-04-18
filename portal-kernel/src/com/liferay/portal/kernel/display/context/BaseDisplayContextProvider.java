@@ -14,7 +14,6 @@
 
 package com.liferay.portal.kernel.display.context;
 
-import com.liferay.registry.Filter;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
@@ -23,8 +22,6 @@ import com.liferay.registry.ServiceTrackerCustomizer;
 
 import java.util.Iterator;
 import java.util.SortedSet;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
@@ -36,11 +33,10 @@ public class BaseDisplayContextProvider<T extends DisplayContextFactory>
 	public BaseDisplayContextProvider(Class<T> displayContextFactoryClass) {
 		Registry registry = RegistryUtil.getRegistry();
 
-		Filter filter = registry.getFilter(
-			"(objectClass=" + displayContextFactoryClass.getName() + ")");
-
 		_serviceTracker = registry.trackServices(
-			filter, new DisplayContextFactoryServiceTrackerCustomizer());
+			registry.getFilter(
+				"(objectClass=" + displayContextFactoryClass.getName() + ")"),
+			new DisplayContextFactoryServiceTrackerCustomizer());
 
 		_serviceTracker.open();
 	}
@@ -56,8 +52,6 @@ public class BaseDisplayContextProvider<T extends DisplayContextFactory>
 
 	private final SortedSet<DisplayContextFactoryReference<T>>
 		_displayContextFactoryReferences = new ConcurrentSkipListSet<>();
-	private final ConcurrentMap<T, DisplayContextFactoryReference<T>>
-		_displayContextFactoryReferencesMap = new ConcurrentHashMap<>();
 	private final ServiceTracker<T, T> _serviceTracker;
 
 	private static class DisplayContextFactoriesIterable
@@ -113,9 +107,6 @@ public class BaseDisplayContextProvider<T extends DisplayContextFactory>
 			_displayContextFactoryReferences.add(
 				displayContextFactoryReference);
 
-			_displayContextFactoryReferencesMap.put(
-				displayContextFactory, displayContextFactoryReference);
-
 			return displayContextFactory;
 		}
 
@@ -123,26 +114,12 @@ public class BaseDisplayContextProvider<T extends DisplayContextFactory>
 		public void modifiedService(
 			ServiceReference<T> serviceReference, T displayContextFactory) {
 
-			DisplayContextFactoryReference<T> displayContextFactoryReference =
-				_displayContextFactoryReferencesMap.get(displayContextFactory);
-
-			removedService(
-				displayContextFactoryReference.getServiceReference(),
-				displayContextFactoryReference.getDisplayContextFactory());
-
 			addingService(serviceReference);
 		}
 
 		@Override
 		public void removedService(
 			ServiceReference<T> serviceReference, T displayContextFactory) {
-
-			DisplayContextFactoryReference<T> displayContextFactoryReference =
-				_displayContextFactoryReferencesMap.remove(
-					displayContextFactory);
-
-			_displayContextFactoryReferences.remove(
-				displayContextFactoryReference);
 		}
 
 	}
