@@ -204,7 +204,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testDeleteGroupPortletPreferencesByPlid() throws Exception {
+	public void testDeleteGroupPortletPreferencesByPlid() {
 		PortletPreferences portletPreferences =
 			PortletPreferencesTestUtil.addGroupPortletPreferences(
 				_layout, _portlet);
@@ -545,9 +545,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetGroupPortletPreferencesByOwnerAndPlid()
-		throws Exception {
-
+	public void testGetGroupPortletPreferencesByOwnerAndPlid() {
 		PortletPreferencesTestUtil.addGroupPortletPreferences(
 			_layout, _portlet);
 
@@ -602,9 +600,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetGroupPortletPreferencesCountByOwnerAndNotPlidAndPortlet()
-		throws Exception {
-
+	public void testGetGroupPortletPreferencesCountByOwnerAndNotPlidAndPortlet() {
 		Assert.assertEquals(
 			0,
 			_portletPreferencesLocalService.getPortletPreferencesCount(
@@ -624,9 +620,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetGroupPortletPreferencesCountByOwnerAndPlidAndPortlet()
-		throws Exception {
-
+	public void testGetGroupPortletPreferencesCountByOwnerAndPlidAndPortlet() {
 		Assert.assertEquals(
 			0,
 			_portletPreferencesLocalService.getPortletPreferencesCount(
@@ -644,9 +638,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetGroupPortletPreferencesCountByOwnerAndPlidAndPortletExcludeDefault()
-		throws Exception {
-
+	public void testGetGroupPortletPreferencesCountByOwnerAndPlidAndPortletExcludeDefault() {
 		Assert.assertEquals(
 			0,
 			_portletPreferencesLocalService.getPortletPreferencesCount(
@@ -664,9 +656,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetGroupPortletPreferencesCountByOwnerAndPortletId()
-		throws Exception {
-
+	public void testGetGroupPortletPreferencesCountByOwnerAndPortletId() {
 		Assert.assertEquals(
 			0,
 			_portletPreferencesLocalService.getPortletPreferencesCount(
@@ -684,9 +674,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetGroupPortletPreferencesCountByOwnerAndPortletIdExcludeDefault()
-		throws Exception {
-
+	public void testGetGroupPortletPreferencesCountByOwnerAndPortletIdExcludeDefault() {
 		Assert.assertEquals(
 			0,
 			_portletPreferencesLocalService.getPortletPreferencesCount(
@@ -704,9 +692,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetGroupPreferencesByOwnerAndPlidAndPortletIdNotAutoAdded()
-		throws Exception {
-
+	public void testGetGroupPreferencesByOwnerAndPlidAndPortletIdNotAutoAdded() {
 		String singleValuePortletPreferencesXML =
 			PortletPreferencesTestUtil.getPortletPreferencesXML(
 				_NAME, _SINGLE_VALUE);
@@ -730,9 +716,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetGroupPreferencesByOwnerAndPlidAndPortletIdWithoutDefaultAutoAdded()
-		throws Exception {
-
+	public void testGetGroupPreferencesByOwnerAndPlidAndPortletIdWithoutDefaultAutoAdded() {
 		javax.portlet.PortletPreferences jxPortletPreferences =
 			_portletPreferencesLocalService.getPreferences(
 				_group.getCompanyId(), _group.getGroupId(),
@@ -745,9 +729,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetGroupPreferencesByPortletPreferencesIds()
-		throws Exception {
-
+	public void testGetGroupPreferencesByPortletPreferencesIds() {
 		String portletPreferencesXML =
 			PortletPreferencesTestUtil.getPortletPreferencesXML(
 				_NAME, _SINGLE_VALUE);
@@ -770,9 +752,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetGroupreferencesByOwnerAndPlidAndPortletIdWithDefaultXMLAutoAdded()
-		throws Exception {
-
+	public void testGetGroupreferencesByOwnerAndPlidAndPortletIdWithDefaultXMLAutoAdded() {
 		String portletPreferencesXML =
 			PortletPreferencesTestUtil.getPortletPreferencesXML(
 				_NAME, _SINGLE_VALUE);
@@ -910,9 +890,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetLayoutPreferencesByOwnerAndPlidAndPortletIdWithDefaultXMLAutoAdded()
-		throws Exception {
-
+	public void testGetLayoutPreferencesByOwnerAndPlidAndPortletIdWithDefaultXMLAutoAdded() {
 		String portletPreferencesXML =
 			PortletPreferencesTestUtil.getPortletPreferencesXML(
 				_NAME, _SINGLE_VALUE);
@@ -928,9 +906,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetLayoutPreferencesByOwnerAndPlidAndPortletIdWithoutDefaultAutoAdded()
-		throws Exception {
-
+	public void testGetLayoutPreferencesByOwnerAndPlidAndPortletIdWithoutDefaultAutoAdded() {
 		javax.portlet.PortletPreferences jxPortletPreferences =
 			_portletPreferencesLocalService.getPreferences(
 				_layout.getCompanyId(), PortletKeys.PREFS_OWNER_ID_DEFAULT,
@@ -1052,9 +1028,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetOriginalGroupPortletPreferencesByOwnerAndPlid()
-		throws Exception {
-
+	public void testGetOriginalGroupPortletPreferencesByOwnerAndPlid() {
 		PortletPreferencesTestUtil.addGroupPortletPreferences(
 			_layout, _portlet);
 
@@ -1308,7 +1282,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetStrictPreferences() throws Exception {
+	public void testGetStrictPreferences() {
 		javax.portlet.PortletPreferences jxPortletPreferences =
 			_portletPreferencesLocalService.getStrictPreferences(
 				_layout.getCompanyId(), PortletKeys.PREFS_OWNER_ID_DEFAULT,
@@ -1319,9 +1293,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testGetStrictPreferencesByPortletPreferencesIds()
-		throws Exception {
-
+	public void testGetStrictPreferencesByPortletPreferencesIds() {
 		PortletPreferencesIds portletPreferencesIds = new PortletPreferencesIds(
 			_layout.getCompanyId(), PortletKeys.PREFS_OWNER_ID_DEFAULT,
 			PortletKeys.PREFS_OWNER_TYPE_LAYOUT, _layout.getPlid(),
@@ -1391,7 +1363,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	@Test
-	public void testUpdatePreferencesAutoAdd() throws Exception {
+	public void testUpdatePreferencesAutoAdd() {
 		String portletPreferencesXML =
 			PortletPreferencesTestUtil.getPortletPreferencesXML(
 				_NAME, _SINGLE_VALUE);
@@ -1444,8 +1416,7 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	protected void assertEmptyPortletPreferencesMap(
-			javax.portlet.PortletPreferences jxPortletPreferences)
-		throws Exception {
+		javax.portlet.PortletPreferences jxPortletPreferences) {
 
 		PortletPreferencesImpl portletPreferencesImpl =
 			(PortletPreferencesImpl)jxPortletPreferences;
@@ -1494,9 +1465,8 @@ public class PortletPreferencesLocalServiceTest {
 	}
 
 	protected void assertValues(
-			javax.portlet.PortletPreferences jxPortletPreferences, String name,
-			String[] values)
-		throws Exception {
+		javax.portlet.PortletPreferences jxPortletPreferences, String name,
+		String[] values) {
 
 		PortletPreferencesImpl portletPreferencesImpl =
 			(PortletPreferencesImpl)jxPortletPreferences;
