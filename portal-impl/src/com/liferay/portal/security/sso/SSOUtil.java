@@ -39,7 +39,7 @@ public class SSOUtil {
 
 		String ssoSessionExpirationRedirectURL = null;
 
-		for (SSO sso : _instance._ssoMap.values()) {
+		for (SSO sso : _ssoMap.values()) {
 			String sessionExpirationRedirectURL =
 				sso.getSessionExpirationRedirectUrl(companyId);
 
@@ -48,7 +48,7 @@ public class SSOUtil {
 			}
 		}
 
-		if (_instance._ssoMap.isEmpty() ||
+		if (_ssoMap.isEmpty() ||
 			Validator.isNull(ssoSessionExpirationRedirectURL)) {
 
 			return defaultSessionExpirationRedirectURL;
@@ -58,11 +58,11 @@ public class SSOUtil {
 	}
 
 	public static String getSignInURL(long companyId, String defaultSignInURL) {
-		if (_instance._ssoMap.isEmpty()) {
+		if (_ssoMap.isEmpty()) {
 			return null;
 		}
 
-		for (SSO sso : _instance._ssoMap.values()) {
+		for (SSO sso : _ssoMap.values()) {
 			String signInURL = sso.getSignInURL(companyId, defaultSignInURL);
 
 			if (signInURL != null) {
@@ -81,11 +81,11 @@ public class SSOUtil {
 			return true;
 		}
 
-		if (_instance._ssoMap.isEmpty()) {
+		if (_ssoMap.isEmpty()) {
 			return false;
 		}
 
-		for (SSO sso : _instance._ssoMap.values()) {
+		for (SSO sso : _ssoMap.values()) {
 			if (sso.isLoginRedirectRequired(companyId)) {
 				return true;
 			}
@@ -95,11 +95,11 @@ public class SSOUtil {
 	}
 
 	public static boolean isRedirectRequired(long companyId) {
-		if (_instance._ssoMap.isEmpty()) {
+		if (_ssoMap.isEmpty()) {
 			return false;
 		}
 
-		for (SSO sso : _instance._ssoMap.values()) {
+		for (SSO sso : _ssoMap.values()) {
 			if (sso.isRedirectRequired(companyId)) {
 				return true;
 			}
@@ -112,11 +112,11 @@ public class SSOUtil {
 		boolean sessionRedirectOnExpire =
 			PropsValues.SESSION_TIMEOUT_REDIRECT_ON_EXPIRE;
 
-		if (_instance._ssoMap.isEmpty() || sessionRedirectOnExpire) {
+		if (_ssoMap.isEmpty() || sessionRedirectOnExpire) {
 			return sessionRedirectOnExpire;
 		}
 
-		for (SSO sso : _instance._ssoMap.values()) {
+		for (SSO sso : _ssoMap.values()) {
 			if (sso.isSessionRedirectOnExpire(companyId)) {
 				return true;
 			}
@@ -125,22 +125,11 @@ public class SSOUtil {
 		return false;
 	}
 
-	private SSOUtil() {
-		Registry registry = RegistryUtil.getRegistry();
-
-		_serviceTracker = registry.trackServices(
-			SSO.class, new SSOServiceTrackerCustomizer());
-
-		_serviceTracker.open();
-	}
-
-	private static final SSOUtil _instance = new SSOUtil();
-
-	private final ServiceTracker<SSO, SSO> _serviceTracker;
-	private final Map<ServiceReference<SSO>, SSO> _ssoMap =
+	private static final ServiceTracker<SSO, SSO> _serviceTracker;
+	private static final Map<ServiceReference<SSO>, SSO> _ssoMap =
 		new ConcurrentSkipListMap<>(Collections.reverseOrder());
 
-	private class SSOServiceTrackerCustomizer
+	private static class SSOServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer<SSO, SSO> {
 
 		@Override
@@ -170,6 +159,15 @@ public class SSOUtil {
 			_ssoMap.remove(serviceReference);
 		}
 
+	}
+
+	static {
+		Registry registry = RegistryUtil.getRegistry();
+
+		_serviceTracker = registry.trackServices(
+			SSO.class, new SSOServiceTrackerCustomizer());
+
+		_serviceTracker.open();
 	}
 
 }
