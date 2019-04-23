@@ -14,26 +14,42 @@
 
 package com.liferay.portal.struts;
 
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
-import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleClassTestRule;
+import com.liferay.registry.BasicRegistryImpl;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
+import java.util.HashMap;
+
+import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Rule;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * @author Peter Fellwock
+ * @author Leon Chi
  */
 public class AuthPublicPathRegistryTest {
 
-	@ClassRule
-	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleClassTestRule("bundle.authpublicpathregistry"));
+	@BeforeClass
+	public static void setUpClass() {
+		RegistryUtil.setRegistry(new BasicRegistryImpl());
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		_serviceRegistration = registry.registerService(
+			Object.class, new Object(),
+			new HashMap<String, Object>() {
+				{
+					put("auth.public.path", "testAuthPublicPath");
+				}
+			});
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		_serviceRegistration.unregister();
+	}
 
 	@Test
 	public void testContains() {
@@ -42,5 +58,7 @@ public class AuthPublicPathRegistryTest {
 		Assert.assertFalse(
 			AuthPublicPathRegistry.contains("/unregistered/unknown/path"));
 	}
+
+	private static ServiceRegistration<Object> _serviceRegistration;
 
 }
