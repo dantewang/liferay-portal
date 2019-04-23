@@ -18,12 +18,10 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.OrganizationTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
-import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import org.junit.Assert;
@@ -39,7 +37,8 @@ import org.junit.runner.RunWith;
  * @author Drew Brokke
  */
 @RunWith(Arquillian.class)
-public class UserServiceOrganizationAdminUnsetsUsersForSiteOrganizationTest {
+public class UserServiceOrganizationAdminUnsetsUsersForSiteOrganizationTest
+	extends BaseUserServiceTestCase {
 
 	@ClassRule
 	@Rule
@@ -72,15 +71,15 @@ public class UserServiceOrganizationAdminUnsetsUsersForSiteOrganizationTest {
 
 	private void _unsetGroupUsers(User objectUser) throws Exception {
 		try {
-			UserServiceTestUtil.unsetGroupUsers(
+			unsetGroupUsers(
 				_group.getGroupId(), _organizationAdminUser, objectUser);
 
 			Assert.assertTrue(
-				_userLocalService.hasGroupUser(
+				userLocalService.hasGroupUser(
 					_group.getGroupId(), objectUser.getUserId()));
 		}
 		finally {
-			_userLocalService.deleteUser(objectUser);
+			userLocalService.deleteUser(objectUser);
 		}
 	}
 
@@ -91,8 +90,5 @@ public class UserServiceOrganizationAdminUnsetsUsersForSiteOrganizationTest {
 
 	@DeleteAfterTestRun
 	private User _organizationAdminUser;
-
-	@Inject
-	private UserLocalService _userLocalService;
 
 }
