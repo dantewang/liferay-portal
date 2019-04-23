@@ -17,12 +17,10 @@ package com.liferay.user.service.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.OrganizationTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
-import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import org.junit.Assert;
@@ -38,7 +36,8 @@ import org.junit.runner.RunWith;
  * @author Drew Brokke
  */
 @RunWith(Arquillian.class)
-public class UserServiceOrganizationOwnerUnsetsUsersForNonSiteOrganizationTest {
+public class UserServiceOrganizationOwnerUnsetsUsersForNonSiteOrganizationTest
+	extends BaseUserServiceTestCase {
 
 	@ClassRule
 	@Rule
@@ -71,16 +70,16 @@ public class UserServiceOrganizationOwnerUnsetsUsersForNonSiteOrganizationTest {
 
 	private void _unsetOrganizationUsers(User objectUser) throws Exception {
 		try {
-			UserServiceTestUtil.unsetOrganizationUsers(
+			unsetOrganizationUsers(
 				_organization.getOrganizationId(), _organizationOwnerUser,
 				objectUser);
 
 			Assert.assertFalse(
-				_userLocalService.hasOrganizationUser(
+				userLocalService.hasOrganizationUser(
 					_organization.getOrganizationId(), objectUser.getUserId()));
 		}
 		finally {
-			_userLocalService.deleteUser(objectUser);
+			userLocalService.deleteUser(objectUser);
 		}
 	}
 
@@ -89,8 +88,5 @@ public class UserServiceOrganizationOwnerUnsetsUsersForNonSiteOrganizationTest {
 
 	@DeleteAfterTestRun
 	private User _organizationOwnerUser;
-
-	@Inject
-	private UserLocalService _userLocalService;
 
 }
