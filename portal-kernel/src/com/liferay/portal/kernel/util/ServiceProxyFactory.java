@@ -227,6 +227,12 @@ public class ServiceProxyFactory {
 		public Object invoke(Object proxy, Method method, Object[] arguments)
 			throws Throwable {
 
+			if ("_defaultSynchronousMessageSender".equals(_field.getName()) ||
+				"_directSynchronousMessageSender".equals(_field.getName())) {
+
+				System.out.println("#$#$#$#$#$#$#$#$ " + _field.getName() + " via AwaitServiceInvocationHandler");
+			}
+
 			while (true) {
 				_lock.lock();
 

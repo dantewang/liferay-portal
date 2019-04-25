@@ -121,6 +121,12 @@ public class ServiceTrackerFieldUpdaterCustomizer<S, T>
 			T oldService = (T)_serviceField.get(serviceHolder);
 
 			if (newService != oldService) {
+				if ("_defaultSynchronousMessageSender".equals(_serviceField.getName()) ||
+					"_directSynchronousMessageSender".equals(_serviceField.getName())) {
+
+					System.out.println(" ####### Replaced " + _serviceField.getName() + " with " + newService + " [" + newService.getClass() + "]");
+				}
+
 				beforeServiceUpdate(oldService, newService);
 
 				_serviceField.set(serviceHolder, newService);
