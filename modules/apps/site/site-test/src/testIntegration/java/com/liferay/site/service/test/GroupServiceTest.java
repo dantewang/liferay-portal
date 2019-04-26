@@ -18,14 +18,15 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
-import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
-import com.liferay.portal.kernel.service.GroupServiceUtil;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.GroupService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
 
@@ -57,7 +58,7 @@ public class GroupServiceTest {
 		Group parentGroup = GroupTestUtil.addGroup();
 
 		List<Group> allGroups = new ArrayList<>(
-			GroupLocalServiceUtil.getGroups(
+			_groupLocalService.getGroups(
 				TestPropsValues.getCompanyId(),
 				GroupConstants.DEFAULT_PARENT_GROUP_ID, true));
 
@@ -73,7 +74,7 @@ public class GroupServiceTest {
 
 				group.setName(name + i);
 
-				group = GroupLocalServiceUtil.updateGroup(group);
+				group = _groupLocalService.updateGroup(group);
 
 				likeNameChildGroups.add(group);
 			}
@@ -119,7 +120,7 @@ public class GroupServiceTest {
 		long parentGroupId = 0;
 		int size = 5;
 
-		List<Group> groups = GroupServiceUtil.getGtGroups(
+		List<Group> groups = _groupService.getGtGroups(
 			0, TestPropsValues.getCompanyId(), parentGroupId, true, size);
 
 		Assert.assertFalse(groups.isEmpty());
@@ -127,7 +128,7 @@ public class GroupServiceTest {
 
 		Group lastGroup = groups.get(groups.size() - 1);
 
-		groups = GroupServiceUtil.getGtGroups(
+		groups = _groupService.getGtGroups(
 			lastGroup.getGroupId(), TestPropsValues.getCompanyId(),
 			parentGroupId, true, size);
 
@@ -150,7 +151,7 @@ public class GroupServiceTest {
 			List<Group> expectedGroups, long parentGroupId, String nameSearch)
 		throws Exception {
 
-		List<Group> actualGroups = GroupServiceUtil.getGroups(
+		List<Group> actualGroups = _groupService.getGroups(
 			TestPropsValues.getCompanyId(), parentGroupId, nameSearch, true,
 			QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
@@ -162,12 +163,18 @@ public class GroupServiceTest {
 
 		Assert.assertEquals(
 			expectedGroups.size(),
-			GroupServiceUtil.getGroupsCount(
+			_groupService.getGroupsCount(
 				TestPropsValues.getCompanyId(), parentGroupId, nameSearch,
 				true));
 	}
 
+	@Inject
+	private GroupLocalService _groupLocalService;
+
 	@DeleteAfterTestRun
 	private final List<Group> _groups = new ArrayList<>();
+
+	@Inject
+	private GroupService _groupService;
 
 }
