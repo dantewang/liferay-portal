@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.liferay.portal.transaction.test.model.TransactionEntry">
+		<field name="transactionEntryId" type="long" />
+		<field name="value" type="String" />
+	</model>
+</model-hints>
