@@ -1,0 +1,8 @@
+Bundle-Name: Liferay Portal Transaction Test API
+Bundle-SymbolicName: com.liferay.portal.transaction.test.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.liferay.portal.transaction.test.exception,\
+	com.liferay.portal.transaction.test.model,\
+	com.liferay.portal.transaction.test.service,\
+	com.liferay.portal.transaction.test.service.persistence
