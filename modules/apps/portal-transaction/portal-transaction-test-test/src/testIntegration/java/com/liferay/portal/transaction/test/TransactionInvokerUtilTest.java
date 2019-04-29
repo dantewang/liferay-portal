@@ -16,14 +16,15 @@ package com.liferay.portal.transaction.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
-import com.liferay.portal.kernel.model.ClassName;
-import com.liferay.portal.kernel.service.ClassNameLocalServiceUtil;
-import com.liferay.portal.kernel.service.persistence.ClassNameUtil;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.TransactionConfig;
 import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
 import com.liferay.portal.kernel.util.PwdGenerator;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.portal.transaction.test.model.TransactionEntry;
+import com.liferay.portal.transaction.test.service.TransactionEntryLocalService;
+import com.liferay.portal.transaction.test.service.persistence.TransactionEntryPersistence;
 
 import java.util.concurrent.Callable;
 
@@ -46,8 +47,8 @@ public class TransactionInvokerUtilTest {
 
 	@Test
 	public void testCommit() throws Throwable {
-		final long classNameId = CounterLocalServiceUtil.increment();
-		final String classNameValue = PwdGenerator.getPassword();
+		final long transactionEntryId = CounterLocalServiceUtil.increment();
+		final String transactionEntryValue = PwdGenerator.getPassword();
 
 		try {
 			TransactionInvokerUtil.invoke(
@@ -56,31 +57,36 @@ public class TransactionInvokerUtilTest {
 
 					@Override
 					public Void call() throws Exception {
-						ClassName className = ClassNameUtil.create(classNameId);
+						TransactionEntry transactionEntry =
+							_transactionEntryPersistence.create(
+								transactionEntryId);
 
-						className.setValue(classNameValue);
+						transactionEntry.setValue(transactionEntryValue);
 
-						ClassNameUtil.update(className);
+						_transactionEntryPersistence.update(transactionEntry);
 
 						return null;
 					}
 
 				});
 
-			ClassName className = ClassNameLocalServiceUtil.fetchClassName(
-				classNameId);
+			TransactionEntry transactionEntry =
+				_transactionEntryLocalService.fetchTransactionEntry(
+					transactionEntryId);
 
-			Assert.assertNotNull(className);
-			Assert.assertEquals(classNameValue, className.getClassName());
+			Assert.assertNotNull(transactionEntry);
+			Assert.assertEquals(
+				transactionEntryValue, transactionEntry.getValue());
 		}
 		finally {
-			ClassNameLocalServiceUtil.deleteClassName(classNameId);
+			_transactionEntryLocalService.deleteTransactionEntry(
+				transactionEntryId);
 		}
 	}
 
 	@Test
 	public void testRollback() throws Throwable {
-		final long classNameId = CounterLocalServiceUtil.increment();
+		final long transactionEntryId = CounterLocalServiceUtil.increment();
 		final Exception exception = new Exception();
 
 		try {
@@ -90,11 +96,13 @@ public class TransactionInvokerUtilTest {
 
 					@Override
 					public Void call() throws Exception {
-						ClassName className = ClassNameUtil.create(classNameId);
+						TransactionEntry transactionEntry =
+							_transactionEntryPersistence.create(
+								transactionEntryId);
 
-						className.setValue(PwdGenerator.getPassword());
+						transactionEntry.setValue(PwdGenerator.getPassword());
 
-						ClassNameUtil.update(className);
+						_transactionEntryPersistence.update(transactionEntry);
 
 						throw exception;
 					}
@@ -106,14 +114,16 @@ public class TransactionInvokerUtilTest {
 		catch (Throwable throwable) {
 			Assert.assertSame(exception, throwable);
 
-			ClassName className = ClassNameLocalServiceUtil.fetchClassName(
-				classNameId);
+			TransactionEntry transactionEntry =
+				_transactionEntryLocalService.fetchTransactionEntry(
+					transactionEntryId);
 
-			Assert.assertNull(className);
+			Assert.assertNull(transactionEntry);
 		}
 		finally {
 			try {
-				ClassNameLocalServiceUtil.deleteClassName(classNameId);
+				_transactionEntryLocalService.deleteTransactionEntry(
+					transactionEntryId);
 			}
 			catch (Exception e) {
 			}
@@ -130,5 +140,11 @@ public class TransactionInvokerUtilTest {
 
 		_transactionConfig = builder.build();
 	}
+
+	@Inject
+	private TransactionEntryLocalService _transactionEntryLocalService;
+
+	@Inject
+	private TransactionEntryPersistence _transactionEntryPersistence;
 
 }
