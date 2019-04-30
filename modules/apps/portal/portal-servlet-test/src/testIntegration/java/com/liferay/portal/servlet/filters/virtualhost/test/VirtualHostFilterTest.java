@@ -80,7 +80,7 @@ public class VirtualHostFilterTest {
 	}
 
 	@Test
-	public void testProcessFilter1() throws Exception {
+	public void testProcessFilter1() {
 		_pathContext = _PATH_PROXY + _PATH_CONTEXT;
 		_pathProxy = _PATH_PROXY;
 
@@ -94,7 +94,7 @@ public class VirtualHostFilterTest {
 	}
 
 	@Test
-	public void testProcessFilter2() throws Exception {
+	public void testProcessFilter2() {
 		_pathContext = _PATH_PROXY;
 		_pathProxy = _PATH_PROXY;
 
@@ -108,7 +108,7 @@ public class VirtualHostFilterTest {
 	}
 
 	@Test
-	public void testProcessFilter3() throws Exception {
+	public void testProcessFilter3() {
 		_pathContext = _PATH_PROXY;
 		_pathProxy = StringPool.BLANK;
 
@@ -122,9 +122,8 @@ public class VirtualHostFilterTest {
 	}
 
 	protected String getLastPath(
-			MockHttpServletRequest request, MockHttpServletResponse response,
-			MockFilterChain filterChain)
-		throws Exception {
+		MockHttpServletRequest request, MockHttpServletResponse response,
+		MockFilterChain filterChain) {
 
 		_virtualHostFilter.init(_mockFilterConfig);
 
