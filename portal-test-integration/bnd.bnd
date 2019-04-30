@@ -27,6 +27,7 @@ Import-Package: *;resolution:=optional
 Include-Resource:\
 	classes,\
 	@${project.dir}/../lib/development/dumbster.jar,\
+	@${project.dir}/../lib/development/hsql.jar,\
 	@${project.dir}/../lib/portal/commons-compress.jar,\
 	@${project.dir}/../lib/portal/httpclient.jar,\
 	@${project.dir}/../lib/portal/httpcore.jar,\
