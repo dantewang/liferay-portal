@@ -80,45 +80,12 @@ public class VirtualHostFilterTest {
 	}
 
 	@Test
-	public void testProcessFilter1() {
-		_pathContext = _PATH_PROXY + _PATH_CONTEXT;
-		_pathProxy = _PATH_PROXY;
-
-		_mockHttpServletRequest.setRequestURI(_PATH_CONTEXT + _LAST_PATH);
-
-		Assert.assertEquals(
-			_LAST_PATH,
-			getLastPath(
-				_mockHttpServletRequest, _mockHttpServletResponse,
-				_mockFilterChain));
-	}
-
-	@Test
-	public void testProcessFilter2() {
-		_pathContext = _PATH_PROXY;
-		_pathProxy = _PATH_PROXY;
-
-		_mockHttpServletRequest.setRequestURI(_LAST_PATH);
-
-		Assert.assertEquals(
-			_LAST_PATH,
-			getLastPath(
-				_mockHttpServletRequest, _mockHttpServletResponse,
-				_mockFilterChain));
-	}
-
-	@Test
-	public void testProcessFilter3() {
-		_pathContext = _PATH_PROXY;
-		_pathProxy = StringPool.BLANK;
-
-		_mockHttpServletRequest.setRequestURI(_LAST_PATH);
-
-		Assert.assertEquals(
-			_LAST_PATH,
-			getLastPath(
-				_mockHttpServletRequest, _mockHttpServletResponse,
-				_mockFilterChain));
+	public void testProcessFilter() {
+		_testProcessFilter(
+			_PATH_PROXY + _PATH_CONTEXT, _PATH_PROXY,
+			_PATH_CONTEXT + _LAST_PATH);
+		_testProcessFilter(_PATH_PROXY, _PATH_PROXY, _LAST_PATH);
+		_testProcessFilter(_PATH_PROXY, StringPool.BLANK, _LAST_PATH);
 	}
 
 	protected String getLastPath(
@@ -142,6 +109,21 @@ public class VirtualHostFilterTest {
 		}
 
 		return StringPool.BLANK;
+	}
+
+	private void _testProcessFilter(
+		String pathContext, String pathProxy, String requestURI) {
+
+		_pathContext = pathContext;
+		_pathProxy = pathProxy;
+
+		_mockHttpServletRequest.setRequestURI(requestURI);
+
+		Assert.assertEquals(
+			_LAST_PATH,
+			getLastPath(
+				_mockHttpServletRequest, _mockHttpServletResponse,
+				_mockFilterChain));
 	}
 
 	private static final String _LAST_PATH =
