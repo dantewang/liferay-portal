@@ -14,55 +14,56 @@
 
 package com.liferay.portal.util;
 
+import com.liferay.portal.kernel.security.auth.AlwaysAllowDoAsUser;
 import com.liferay.portal.kernel.servlet.PersistentHttpServletRequestWrapper;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
-import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SyntheticBundleClassTestRule;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.upload.LiferayServletRequest;
 import com.liferay.portal.upload.UploadServletRequestImpl;
-import com.liferay.portal.util.bundle.portalimpl.TestAlwaysAllowDoAsUser;
-import com.liferay.portal.util.test.AtomicState;
 import com.liferay.portal.util.test.PortletContainerTestUtil;
+import com.liferay.registry.BasicRegistryImpl;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 
 import java.io.InputStream;
+
+import java.util.Collection;
+import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.portlet.MockPortletRequest;
 
 /**
- * @author Peter Fellwock
+ * @author Leon Chi
  */
 public class PortalImplTest {
 
-	@ClassRule
-	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new SyntheticBundleClassTestRule("bundle.portalimpl"));
-
 	@BeforeClass
 	public static void setUpClass() {
-		_atomicState = new AtomicState();
-	}
+		InitUtil.init();
 
-	@AfterClass
-	public static void tearDownClass() {
-		_atomicState.close();
+		FileUtil fileUtil = new FileUtil();
+
+		fileUtil.setFile(new FileImpl());
+
+		PropsUtil.setProps(new PropsImpl());
+
+		PortalUtil portalUtil = new PortalUtil();
+
+		portalUtil.setPortal(new PortalImpl());
+
+		RegistryUtil.setRegistry(new BasicRegistryImpl());
 	}
 
 	@Test
@@ -70,25 +71,25 @@ public class PortalImplTest {
 		HttpServletRequest request = new MockHttpServletRequest();
 
 		Assert.assertSame(
-			request, PortalUtil.getOriginalServletRequest(request));
+			request, _portalImpl.getOriginalServletRequest(request));
 
 		HttpServletRequestWrapper requestWrapper1 =
 			new HttpServletRequestWrapper(request);
 
 		Assert.assertSame(
-			request, PortalUtil.getOriginalServletRequest(requestWrapper1));
+			request, _portalImpl.getOriginalServletRequest(requestWrapper1));
 
 		HttpServletRequestWrapper requestWrapper2 =
 			new HttpServletRequestWrapper(requestWrapper1);
 
 		Assert.assertSame(
-			request, PortalUtil.getOriginalServletRequest(requestWrapper2));
+			request, _portalImpl.getOriginalServletRequest(requestWrapper2));
 
 		HttpServletRequestWrapper requestWrapper3 =
 			new PersistentHttpServletRequestWrapper1(requestWrapper2);
 
 		HttpServletRequest originalRequest =
-			PortalUtil.getOriginalServletRequest(requestWrapper3);
+			_portalImpl.getOriginalServletRequest(requestWrapper3);
 
 		Assert.assertSame(
 			PersistentHttpServletRequestWrapper1.class,
@@ -99,7 +100,8 @@ public class PortalImplTest {
 		HttpServletRequestWrapper requestWrapper4 =
 			new PersistentHttpServletRequestWrapper2(requestWrapper3);
 
-		originalRequest = PortalUtil.getOriginalServletRequest(requestWrapper4);
+		originalRequest = _portalImpl.getOriginalServletRequest(
+			requestWrapper4);
 
 		Assert.assertSame(
 			PersistentHttpServletRequestWrapper2.class,
@@ -118,7 +120,7 @@ public class PortalImplTest {
 	@Test
 	public void testGetUploadPortletRequestWithInvalidHttpServletRequest() {
 		try {
-			PortalUtil.getUploadPortletRequest(new MockPortletRequest());
+			_portalImpl.getUploadPortletRequest(new MockPortletRequest());
 
 			Assert.fail();
 		}
@@ -145,7 +147,7 @@ public class PortalImplTest {
 				"fileParameterName", FileUtil.getBytes(inputStream));
 
 		UploadServletRequest uploadServletRequest =
-			PortalUtil.getUploadServletRequest(
+			_portalImpl.getUploadServletRequest(
 				(HttpServletRequest)liferayServletRequest.getRequest());
 
 		Assert.assertTrue(
@@ -154,57 +156,58 @@ public class PortalImplTest {
 
 	@Test
 	public void testGetUserId() {
-		_atomicState.reset();
+		Registry registry = RegistryUtil.getRegistry();
 
-		MockHttpServletRequest mockHttpServletRequest =
-			new MockHttpServletRequest();
+		ServiceRegistration<AlwaysAllowDoAsUser> serviceRegistration = null;
 
-		mockHttpServletRequest.setParameter(
-			"_TestAlwaysAllowDoAsUser_actionName",
-			TestAlwaysAllowDoAsUser.ACTION_NAME);
-		mockHttpServletRequest.setParameter(
-			"_TestAlwaysAllowDoAsUser_struts_action",
-			TestAlwaysAllowDoAsUser.STRUTS_ACTION);
-		mockHttpServletRequest.setParameter("doAsUserId", "0");
-		mockHttpServletRequest.setParameter(
-			"p_p_id", "TestAlwaysAllowDoAsUser");
+		try {
+			serviceRegistration = registry.registerService(
+				AlwaysAllowDoAsUser.class, new TestAlwaysAllowDoAsUser());
 
-		long userId = PortalUtil.getUserId(mockHttpServletRequest);
+			MockHttpServletRequest mockHttpServletRequest1 =
+				new MockHttpServletRequest();
 
-		Assert.assertEquals(0, userId);
+			mockHttpServletRequest1.setParameter(
+				"_TestAlwaysAllowDoAsUser_actionName", _ACTION_NAME);
+			mockHttpServletRequest1.setParameter(
+				"_TestAlwaysAllowDoAsUser_struts_action", _STRUTS_ACTION);
+			mockHttpServletRequest1.setParameter("doAsUserId", "0");
+			mockHttpServletRequest1.setParameter(
+				"p_p_id", "TestAlwaysAllowDoAsUser");
 
-		Assert.assertTrue(_atomicState.isSet());
+			_testGetUserId(mockHttpServletRequest1);
 
-		_atomicState.reset();
+			MockHttpServletRequest mockHttpServletRequest2 =
+				new MockHttpServletRequest();
 
-		mockHttpServletRequest = new MockHttpServletRequest();
+			mockHttpServletRequest2.setParameter("doAsUserId", "0");
+			mockHttpServletRequest2.setPathInfo(
+				_PATH + RandomTestUtil.randomString());
 
-		mockHttpServletRequest.setParameter("doAsUserId", "0");
-		mockHttpServletRequest.setPathInfo(
-			"/TestAlwaysAllowDoAsUser/" + RandomTestUtil.randomString());
-
-		userId = PortalUtil.getUserId(mockHttpServletRequest);
-
-		Assert.assertEquals(0, userId);
-
-		Assert.assertTrue(_atomicState.isSet());
+			_testGetUserId(mockHttpServletRequest2);
+		}
+		finally {
+			if (serviceRegistration != null) {
+				serviceRegistration.unregister();
+			}
+		}
 	}
 
 	@Test
 	public void testIsValidResourceId() {
-		Assert.assertTrue(PortalUtil.isValidResourceId("/view.jsp"));
+		Assert.assertTrue(_portalImpl.isValidResourceId("/view.jsp"));
 		Assert.assertFalse(
-			PortalUtil.isValidResourceId("/META-INF/MANIFEST.MF"));
+			_portalImpl.isValidResourceId("/META-INF/MANIFEST.MF"));
 		Assert.assertFalse(
-			PortalUtil.isValidResourceId("/META-INF\\MANIFEST.MF"));
+			_portalImpl.isValidResourceId("/META-INF\\MANIFEST.MF"));
 		Assert.assertFalse(
-			PortalUtil.isValidResourceId("\\META-INF/MANIFEST.MF"));
+			_portalImpl.isValidResourceId("\\META-INF/MANIFEST.MF"));
 		Assert.assertFalse(
-			PortalUtil.isValidResourceId("\\META-INF\\MANIFEST.MF"));
-		Assert.assertFalse(PortalUtil.isValidResourceId("/WEB-INF/web.xml"));
-		Assert.assertFalse(PortalUtil.isValidResourceId("/WEB-INF\\web.xml"));
-		Assert.assertFalse(PortalUtil.isValidResourceId("\\WEB-INF/web.xml"));
-		Assert.assertFalse(PortalUtil.isValidResourceId("\\WEB-INF\\web.xml"));
+			_portalImpl.isValidResourceId("\\META-INF\\MANIFEST.MF"));
+		Assert.assertFalse(_portalImpl.isValidResourceId("/WEB-INF/web.xml"));
+		Assert.assertFalse(_portalImpl.isValidResourceId("/WEB-INF\\web.xml"));
+		Assert.assertFalse(_portalImpl.isValidResourceId("\\WEB-INF/web.xml"));
+		Assert.assertFalse(_portalImpl.isValidResourceId("\\WEB-INF\\web.xml"));
 	}
 
 	protected HttpServletRequest getWrappedRequest(
@@ -216,9 +219,32 @@ public class PortalImplTest {
 		return (HttpServletRequest)requestWrapper.getRequest();
 	}
 
-	private static AtomicState _atomicState;
+	private void _testGetUserId(HttpServletRequest httpServletRequest) {
+		_calledAlwaysAllowDoAsUser = false;
 
-	private static class PersistentHttpServletRequestWrapper1
+		long userId = _portalImpl.getUserId(httpServletRequest);
+
+		Assert.assertEquals(0, userId);
+
+		Assert.assertTrue(
+			"Mock AlwaysAllowDoAsUser not called", _calledAlwaysAllowDoAsUser);
+	}
+
+	private static final String _ACTION_NAME =
+		"/TestAlwaysAllowDoAsUser/action/name";
+
+	private static final String _MVC_RENDER_COMMMAND_NAME =
+		"/TestAlwaysAllowDoAsUser/mvc/render/command/name";
+
+	private static final String _PATH = "/TestAlwaysAllowDoAsUser/";
+
+	private static final String _STRUTS_ACTION =
+		"/TestAlwaysAllowDoAsUser/struts/action";
+
+	private boolean _calledAlwaysAllowDoAsUser;
+	private final PortalImpl _portalImpl = new PortalImpl();
+
+	private class PersistentHttpServletRequestWrapper1
 		extends PersistentHttpServletRequestWrapper {
 
 		private PersistentHttpServletRequestWrapper1(
@@ -229,13 +255,45 @@ public class PortalImplTest {
 
 	}
 
-	private static class PersistentHttpServletRequestWrapper2
+	private class PersistentHttpServletRequestWrapper2
 		extends PersistentHttpServletRequestWrapper {
 
 		private PersistentHttpServletRequestWrapper2(
 			HttpServletRequest request) {
 
 			super(request);
+		}
+
+	}
+
+	private class TestAlwaysAllowDoAsUser implements AlwaysAllowDoAsUser {
+
+		@Override
+		public Collection<String> getActionNames() {
+			_calledAlwaysAllowDoAsUser = true;
+
+			return Collections.singletonList(_ACTION_NAME);
+		}
+
+		@Override
+		public Collection<String> getMVCRenderCommandNames() {
+			_calledAlwaysAllowDoAsUser = true;
+
+			return Collections.singletonList(_MVC_RENDER_COMMMAND_NAME);
+		}
+
+		@Override
+		public Collection<String> getPaths() {
+			_calledAlwaysAllowDoAsUser = true;
+
+			return Collections.singletonList(_PATH);
+		}
+
+		@Override
+		public Collection<String> getStrutsActions() {
+			_calledAlwaysAllowDoAsUser = true;
+
+			return Collections.singletonList(_STRUTS_ACTION);
 		}
 
 	}
