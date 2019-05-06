@@ -242,18 +242,27 @@ public class GroupFinderTest {
 
 		LayoutTestUtil.addLayout(childGroup2, true);
 
-		groups = findByLayouts(GroupConstants.DEFAULT_PARENT_GROUP_ID);
+		try {
+			groups = findByLayouts(GroupConstants.DEFAULT_PARENT_GROUP_ID);
 
-		Assert.assertEquals(
-			groups.toString(), initialGroupCount + 1, groups.size());
+			Assert.assertEquals(
+				groups.toString(), initialGroupCount + 1, groups.size());
 
-		groups = findByLayouts(parentGroup.getGroupId());
+			groups = findByLayouts(parentGroup.getGroupId());
 
-		Assert.assertEquals(groups.toString(), 2, groups.size());
+			Assert.assertEquals(groups.toString(), 2, groups.size());
 
-		groups = findByLayouts(childGroup1.getGroupId());
+			groups = findByLayouts(childGroup1.getGroupId());
 
-		Assert.assertTrue(groups.toString(), groups.isEmpty());
+			Assert.assertTrue(groups.toString(), groups.isEmpty());
+		}
+		finally {
+			GroupLocalServiceUtil.deleteGroup(childGroup1);
+
+			GroupLocalServiceUtil.deleteGroup(childGroup2);
+
+			GroupLocalServiceUtil.deleteGroup(parentGroup);
+		}
 	}
 
 	@Test
@@ -274,29 +283,38 @@ public class GroupFinderTest {
 
 		LayoutTestUtil.addLayout(childGroup2, true);
 
-		GroupLocalServiceUtil.updateGroup(
-			parentGroup.getGroupId(), parentGroup.getParentGroupId(),
-			parentGroup.getNameMap(), parentGroup.getDescriptionMap(),
-			parentGroup.getType(), parentGroup.isManualMembership(),
-			parentGroup.getMembershipRestriction(),
-			parentGroup.getFriendlyURL(), parentGroup.isInheritContent(), false,
-			ServiceContextTestUtil.getServiceContext());
+		try {
+			GroupLocalServiceUtil.updateGroup(
+				parentGroup.getGroupId(), parentGroup.getParentGroupId(),
+				parentGroup.getNameMap(), parentGroup.getDescriptionMap(),
+				parentGroup.getType(), parentGroup.isManualMembership(),
+				parentGroup.getMembershipRestriction(),
+				parentGroup.getFriendlyURL(), parentGroup.isInheritContent(),
+				false, ServiceContextTestUtil.getServiceContext());
 
-		List<Group> groups = GroupFinderUtil.findByLayouts(
-			TestPropsValues.getCompanyId(),
-			GroupConstants.DEFAULT_PARENT_GROUP_ID, true, true,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-			new GroupNameComparator(true));
+			List<Group> groups = GroupFinderUtil.findByLayouts(
+				TestPropsValues.getCompanyId(),
+				GroupConstants.DEFAULT_PARENT_GROUP_ID, true, true,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				new GroupNameComparator(true));
 
-		Assert.assertEquals(
-			groups.toString(), initialGroupCount, groups.size());
+			Assert.assertEquals(
+				groups.toString(), initialGroupCount, groups.size());
 
-		groups = GroupFinderUtil.findByLayouts(
-			TestPropsValues.getCompanyId(), parentGroup.getGroupId(), true,
-			true, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-			new GroupNameComparator(true));
+			groups = GroupFinderUtil.findByLayouts(
+				TestPropsValues.getCompanyId(), parentGroup.getGroupId(), true,
+				true, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				new GroupNameComparator(true));
 
-		Assert.assertEquals(groups.toString(), 2, groups.size());
+			Assert.assertEquals(groups.toString(), 2, groups.size());
+		}
+		finally {
+			GroupLocalServiceUtil.deleteGroup(childGroup1);
+
+			GroupLocalServiceUtil.deleteGroup(childGroup2);
+
+			GroupLocalServiceUtil.deleteGroup(parentGroup);
+		}
 	}
 
 	protected static ResourceAction getModelResourceAction()
