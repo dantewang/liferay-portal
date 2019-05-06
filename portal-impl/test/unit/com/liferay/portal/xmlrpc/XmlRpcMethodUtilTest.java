@@ -21,9 +21,7 @@ import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceRegistration;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -31,47 +29,37 @@ import org.junit.Test;
  */
 public class XmlRpcMethodUtilTest {
 
-	@BeforeClass
-	public static void setUpClass() {
+	@Test
+	public void testNoReturn() {
+		Method xmlRpcMethod = (Method)ProxyUtil.newProxyInstance(
+			Method.class.getClassLoader(), new Class<?>[] {Method.class},
+			(proxy, method, args) -> {
+				if ("getToken".equals(method.getName())) {
+					return _TOKEN;
+				}
+
+				if ("getMethodName".equals(method.getName())) {
+					return _METHOD_NAME;
+				}
+
+				return null;
+			});
+
 		RegistryUtil.setRegistry(new BasicRegistryImpl());
 
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceRegistration = registry.registerService(
-			Method.class,
-			(Method)ProxyUtil.newProxyInstance(
-				Method.class.getClassLoader(), new Class<?>[] {Method.class},
-				(proxy, method, args) -> {
-					if ("getToken".equals(method.getName())) {
-						return _TOKEN;
-					}
-
-					if ("getMethodName".equals(method.getName())) {
-						return _METHOD_NAME;
-					}
-
-					return null;
-				}));
-	}
-
-	@AfterClass
-	public static void tearDownClass() {
-		_serviceRegistration.unregister();
-	}
-
-	@Test
-	public void testNoReturn() {
-		Registry registry = RegistryUtil.getRegistry();
+		ServiceRegistration<Method> serviceRegistration =
+			registry.registerService(Method.class, xmlRpcMethod);
 
 		Assert.assertSame(
-			registry.getService(_serviceRegistration.getServiceReference()),
-			XmlRpcMethodUtil.getMethod(_TOKEN, _METHOD_NAME));
+			xmlRpcMethod, XmlRpcMethodUtil.getMethod(_TOKEN, _METHOD_NAME));
+
+		serviceRegistration.unregister();
 	}
 
 	private static final String _METHOD_NAME = "METHOD_NAME";
 
 	private static final String _TOKEN = "TOKEN";
-
-	private static ServiceRegistration<Method> _serviceRegistration;
 
 }
