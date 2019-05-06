@@ -36,12 +36,7 @@ public class TemplateResourceLoaderUtilTest {
 
 	@BeforeClass
 	public static void setUpClass() {
-		RegistryUtil.setRegistry(new BasicRegistryImpl());
-
-		Registry registry = RegistryUtil.getRegistry();
-
-		_serviceRegistration = registry.registerService(
-			TemplateResourceLoader.class,
+		_templateResourceLoader =
 			(TemplateResourceLoader)ProxyUtil.newProxyInstance(
 				TemplateResourceLoader.class.getClassLoader(),
 				new Class<?>[] {TemplateResourceLoader.class},
@@ -62,7 +57,14 @@ public class TemplateResourceLoaderUtilTest {
 					}
 
 					return null;
-				}));
+				});
+
+		RegistryUtil.setRegistry(new BasicRegistryImpl());
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		_serviceRegistration = registry.registerService(
+			TemplateResourceLoader.class, _templateResourceLoader);
 	}
 
 	@AfterClass
@@ -81,10 +83,8 @@ public class TemplateResourceLoaderUtilTest {
 
 	@Test
 	public void testGetTemplateResourceLoader() throws TemplateException {
-		Registry registry = RegistryUtil.getRegistry();
-
 		Assert.assertSame(
-			registry.getService(_serviceRegistration.getServiceReference()),
+			_templateResourceLoader,
 			TemplateResourceLoaderUtil.getTemplateResourceLoader(
 				_TEST_TEMPLATE_RESOURCE_LOADER_NAME));
 	}
@@ -126,5 +126,6 @@ public class TemplateResourceLoaderUtilTest {
 
 	private static ServiceRegistration<TemplateResourceLoader>
 		_serviceRegistration;
+	private static TemplateResourceLoader _templateResourceLoader;
 
 }
