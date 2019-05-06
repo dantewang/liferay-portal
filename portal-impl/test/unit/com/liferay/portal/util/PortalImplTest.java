@@ -83,9 +83,7 @@ public class PortalImplTest {
 	}
 
 	@Test
-	public void testGetForwardedHostWithCustomXForwardedHostEnabled()
-		throws Exception {
-
+	public void testGetForwardedHostWithCustomXForwardedHostEnabled() {
 		boolean webServerForwardedHostEnabled =
 			PropsValues.WEB_SERVER_FORWARDED_HOST_ENABLED;
 		String webServerForwardedHostHeader =
@@ -118,9 +116,7 @@ public class PortalImplTest {
 	}
 
 	@Test
-	public void testGetForwardedHostWithXForwardedHostDisabled()
-		throws Exception {
-
+	public void testGetForwardedHostWithXForwardedHostDisabled() {
 		boolean webServerForwardedHostEnabled =
 			PropsValues.WEB_SERVER_FORWARDED_HOST_ENABLED;
 
@@ -146,9 +142,7 @@ public class PortalImplTest {
 	}
 
 	@Test
-	public void testGetForwardedHostWithXForwardedHostEnabled()
-		throws Exception {
-
+	public void testGetForwardedHostWithXForwardedHostEnabled() {
 		boolean webServerForwardedHostEnabled =
 			PropsValues.WEB_SERVER_FORWARDED_HOST_ENABLED;
 
@@ -185,9 +179,7 @@ public class PortalImplTest {
 	}
 
 	@Test
-	public void testGetForwardedPortWithCustomXForwardedPort()
-		throws Exception {
-
+	public void testGetForwardedPortWithCustomXForwardedPort() {
 		boolean webServerForwardedPortEnabled =
 			PropsValues.WEB_SERVER_FORWARDED_PORT_ENABLED;
 		String webServerForwardedPortHeader =
@@ -218,9 +210,7 @@ public class PortalImplTest {
 	}
 
 	@Test
-	public void testGetForwardedPortWithXForwardedPortDisabled()
-		throws Exception {
-
+	public void testGetForwardedPortWithXForwardedPortDisabled() {
 		boolean webServerForwardedHostEnabled =
 			PropsValues.WEB_SERVER_FORWARDED_PORT_ENABLED;
 
@@ -244,9 +234,7 @@ public class PortalImplTest {
 	}
 
 	@Test
-	public void testGetForwardedPortWithXForwardedPortEnabled()
-		throws Exception {
-
+	public void testGetForwardedPortWithXForwardedPortEnabled() {
 		boolean webServerForwardedPortEnabled =
 			PropsValues.WEB_SERVER_FORWARDED_PORT_ENABLED;
 
@@ -397,7 +385,7 @@ public class PortalImplTest {
 	}
 
 	@Test
-	public void testIsSecureWithHttpsInitialFalse() throws Exception {
+	public void testIsSecureWithHttpsInitialFalse() {
 		boolean companySecurityAuthRequiresHttps =
 			PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS;
 		boolean sessionEnablePhishingProtection =
@@ -429,9 +417,7 @@ public class PortalImplTest {
 	}
 
 	@Test
-	public void testIsSecureWithHttpsInitialFalseXForwardedHttps()
-		throws Exception {
-
+	public void testIsSecureWithHttpsInitialFalseXForwardedHttps() {
 		boolean companySecurityAuthRequiresHttps =
 			PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS;
 		boolean sessionEnablePhishingProtection =
@@ -470,7 +456,7 @@ public class PortalImplTest {
 	}
 
 	@Test
-	public void testIsSecureWithHttpsInitialTrue() throws Exception {
+	public void testIsSecureWithHttpsInitialTrue() {
 		boolean companySecurityAuthRequiresHttps =
 			PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS;
 		boolean sessionEnablePhishingProtection =
@@ -502,9 +488,7 @@ public class PortalImplTest {
 	}
 
 	@Test
-	public void testIsSecureWithHttpsInitialTrueCustomXForwardedHttps()
-		throws Exception {
-
+	public void testIsSecureWithHttpsInitialTrueCustomXForwardedHttps() {
 		boolean companySecurityAuthRequiresHttps =
 			PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS;
 		boolean sessionEnablePhishingProtection =
@@ -549,9 +533,7 @@ public class PortalImplTest {
 	}
 
 	@Test
-	public void testIsSecureWithHttpsInitialTrueXForwardedHttps()
-		throws Exception {
-
+	public void testIsSecureWithHttpsInitialTrueXForwardedHttps() {
 		boolean companySecurityAuthRequiresHttps =
 			PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS;
 		boolean sessionEnablePhishingProtection =
@@ -657,9 +639,7 @@ public class PortalImplTest {
 		return (HttpServletRequest)requestWrapper.getRequest();
 	}
 
-	protected void setPropsValuesValue(String fieldName, Object value)
-		throws Exception {
-
+	protected void setPropsValuesValue(String fieldName, Object value) {
 		ReflectionTestUtil.setFieldValue(PropsValues.class, fieldName, value);
 	}
 
