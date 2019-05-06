@@ -34,9 +34,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -44,8 +42,8 @@ import org.junit.Test;
  */
 public class AutoLoginFilterTest {
 
-	@BeforeClass
-	public static void setUpClass() {
+	@Test
+	public void testDoFilter() throws IOException, ServletException {
 		PortalUtil portalUtil = new PortalUtil();
 
 		portalUtil.setPortal(new PortalImpl());
@@ -54,30 +52,23 @@ public class AutoLoginFilterTest {
 
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceRegistration = registry.registerService(
-			AutoLogin.class,
-			new BaseAutoLogin() {
+		ServiceRegistration<AutoLogin> serviceRegistration =
+			registry.registerService(
+				AutoLogin.class,
+				new BaseAutoLogin() {
 
-				@Override
-				protected String[] doLogin(
-					HttpServletRequest httpServletRequest,
-					HttpServletResponse httpServletResponse) {
+					@Override
+					protected String[] doLogin(
+						HttpServletRequest httpServletRequest,
+						HttpServletResponse httpServletResponse) {
 
-					_calledLogin = true;
+						_calledLogin = true;
 
-					return null;
-				}
+						return null;
+					}
 
-			});
-	}
+				});
 
-	@AfterClass
-	public static void tearDownClass() {
-		_serviceRegistration.unregister();
-	}
-
-	@Test
-	public void testDoFilter() throws IOException, ServletException {
 		AutoLoginFilter autoLoginFilter = new AutoLoginFilter();
 
 		autoLoginFilter.doFilter(
@@ -98,9 +89,10 @@ public class AutoLoginFilterTest {
 			null, ProxyFactory.newDummyInstance(FilterChain.class));
 
 		Assert.assertTrue(_calledLogin);
+
+		serviceRegistration.unregister();
 	}
 
 	private static boolean _calledLogin;
-	private static ServiceRegistration<AutoLogin> _serviceRegistration;
 
 }
