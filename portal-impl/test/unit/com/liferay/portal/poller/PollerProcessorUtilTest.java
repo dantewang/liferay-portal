@@ -25,9 +25,7 @@ import com.liferay.registry.ServiceRegistration;
 
 import java.util.HashMap;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -35,8 +33,11 @@ import org.junit.Test;
  */
 public class PollerProcessorUtilTest {
 
-	@BeforeClass
-	public static void setUpClass() {
+	@Test
+	public void testGetPollerProcessor() {
+		PollerProcessor pollerProcessor = ProxyFactory.newDummyInstance(
+			PollerProcessor.class);
+
 		SPIRegistryUtil spiRegistryUtil = new SPIRegistryUtil();
 
 		spiRegistryUtil.setSPIRegistry(new SPIRegistryImpl());
@@ -45,29 +46,20 @@ public class PollerProcessorUtilTest {
 
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceRegistration = registry.registerService(
-			PollerProcessor.class, _pollerProcessor,
-			new HashMap<String, Object>() {
-				{
-					put("javax.portlet.name", "PollerProcessorUtilTest");
-				}
-			});
-	}
+		ServiceRegistration<PollerProcessor> serviceRegistration =
+			registry.registerService(
+				PollerProcessor.class, pollerProcessor,
+				new HashMap<String, Object>() {
+					{
+						put("javax.portlet.name", "PollerProcessorUtilTest");
+					}
+				});
 
-	@AfterClass
-	public static void tearDownClass() {
-		_serviceRegistration.unregister();
-	}
-
-	@Test
-	public void testGetPollerProcessor() {
 		Assert.assertSame(
-			_pollerProcessor,
+			pollerProcessor,
 			PollerProcessorUtil.getPollerProcessor("PollerProcessorUtilTest"));
-	}
 
-	private static final PollerProcessor _pollerProcessor =
-		ProxyFactory.newDummyInstance(PollerProcessor.class);
-	private static ServiceRegistration<PollerProcessor> _serviceRegistration;
+		serviceRegistration.unregister();
+	}
 
 }
