@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.config.BaseMessagingConfigurator;
 import com.liferay.portal.kernel.messaging.config.DefaultMessagingConfigurator;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.ArrayList;
@@ -123,10 +122,6 @@ public class BaseMessagingConfiguratorTest {
 
 		_serviceTracker.open();
 
-		while (ArrayUtil.isEmpty(_serviceTracker.getServices())) {
-			Thread.sleep(1000);
-		}
-
 		Object[] services = _serviceTracker.getServices();
 
 		Assert.assertEquals(Arrays.toString(services), 2, services.length);
@@ -200,10 +195,6 @@ public class BaseMessagingConfiguratorTest {
 			null);
 
 		_serviceTracker.open();
-
-		while (ArrayUtil.isEmpty(_serviceTracker.getServices())) {
-			Thread.sleep(1000);
-		}
 
 		Object[] services = _serviceTracker.getServices();
 
