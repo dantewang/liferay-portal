@@ -303,6 +303,8 @@ public class GroupServiceTest {
 		UserLocalServiceUtil.deleteUser(user);
 
 		OrganizationLocalServiceUtil.deleteOrganization(organization);
+
+		RoleLocalServiceUtil.deleteRole(siteRole);
 	}
 
 	@Test
@@ -418,6 +420,8 @@ public class GroupServiceTest {
 
 		Assert.assertEquals(groups.toString(), 1, groups.size());
 		Assert.assertEquals(_group, groups.get(0));
+
+		RoleLocalServiceUtil.deleteRole(roleId);
 	}
 
 	@Test
