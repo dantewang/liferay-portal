@@ -49,7 +49,19 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 		Registry registry = RegistryUtil.getRegistry();
 
 		ExportImportLifecycleListener asyncExportImportLifecycleListener =
-			new TestAsyncExportImportLifecycleListener();
+			new ExportImportLifecycleListener() {
+
+				@Override
+				public boolean isParallel() {
+					return true;
+				}
+
+				@Override
+				public void onExportImportLifecycleEvent(
+					ExportImportLifecycleEvent exportImportLifecycleEvent) {
+				}
+
+			};
 
 		_serviceRegistration = registry.registerService(
 			ExportImportLifecycleListener.class,
@@ -66,7 +78,19 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 		Registry registry = RegistryUtil.getRegistry();
 
 		ExportImportLifecycleListener syncExportImportLifecycleListener =
-			new TestSyncExportImportLifecycleListener();
+			new ExportImportLifecycleListener() {
+
+				@Override
+				public boolean isParallel() {
+					return false;
+				}
+
+				@Override
+				public void onExportImportLifecycleEvent(
+					ExportImportLifecycleEvent exportImportLifecycleEvent) {
+				}
+
+			};
 
 		_serviceRegistration = registry.registerService(
 			ExportImportLifecycleListener.class,
@@ -93,35 +117,5 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 
 	private static ServiceRegistration<ExportImportLifecycleListener>
 		_serviceRegistration;
-
-	private static class TestAsyncExportImportLifecycleListener
-		implements ExportImportLifecycleListener {
-
-		@Override
-		public boolean isParallel() {
-			return true;
-		}
-
-		@Override
-		public void onExportImportLifecycleEvent(
-			ExportImportLifecycleEvent exportImportLifecycleEvent) {
-		}
-
-	}
-
-	private static class TestSyncExportImportLifecycleListener
-		implements ExportImportLifecycleListener {
-
-		@Override
-		public boolean isParallel() {
-			return false;
-		}
-
-		@Override
-		public void onExportImportLifecycleEvent(
-			ExportImportLifecycleEvent exportImportLifecycleEvent) {
-		}
-
-	}
 
 }
