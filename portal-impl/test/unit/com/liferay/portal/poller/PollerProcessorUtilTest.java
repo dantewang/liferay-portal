@@ -51,15 +51,17 @@ public class PollerProcessorUtilTest {
 				PollerProcessor.class, pollerProcessor,
 				new HashMap<String, Object>() {
 					{
-						put("javax.portlet.name", "PollerProcessorUtilTest");
+						put("javax.portlet.name", _TEST_PORTLET_ID);
 					}
 				});
 
 		Assert.assertSame(
 			pollerProcessor,
-			PollerProcessorUtil.getPollerProcessor("PollerProcessorUtilTest"));
+			PollerProcessorUtil.getPollerProcessor(_TEST_PORTLET_ID));
 
 		serviceRegistration.unregister();
 	}
+
+	private static final String _TEST_PORTLET_ID = "TEST_PORTLET_ID";
 
 }
