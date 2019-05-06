@@ -52,6 +52,8 @@ public class AutoLoginFilterTest {
 
 		Registry registry = RegistryUtil.getRegistry();
 
+		boolean[] calledLogin = {false};
+
 		ServiceRegistration<AutoLogin> serviceRegistration =
 			registry.registerService(
 				AutoLogin.class,
@@ -62,7 +64,7 @@ public class AutoLoginFilterTest {
 						HttpServletRequest httpServletRequest,
 						HttpServletResponse httpServletResponse) {
 
-						_calledLogin = true;
+						calledLogin[0] = true;
 
 						return null;
 					}
@@ -88,11 +90,9 @@ public class AutoLoginFilterTest {
 			},
 			null, ProxyFactory.newDummyInstance(FilterChain.class));
 
-		Assert.assertTrue(_calledLogin);
+		Assert.assertTrue("Login method should be invoked", calledLogin[0]);
 
 		serviceRegistration.unregister();
 	}
-
-	private static boolean _calledLogin;
 
 }
