@@ -16,9 +16,9 @@ package com.liferay.portal.servlet.filters.autologin;
 
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.security.auto.login.AutoLogin;
+import com.liferay.portal.kernel.security.auto.login.BaseAutoLogin;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.ProxyFactory;
-import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.util.PortalImpl;
 import com.liferay.registry.BasicRegistryImpl;
 import com.liferay.registry.Registry;
@@ -31,6 +31,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.junit.AfterClass;
@@ -55,20 +56,19 @@ public class AutoLoginFilterTest {
 
 		_serviceRegistration = registry.registerService(
 			AutoLogin.class,
-			(AutoLogin)ProxyUtil.newProxyInstance(
-				AutoLogin.class.getClassLoader(),
-				new Class<?>[] {AutoLogin.class},
-				(proxy, method, args) -> {
-					if ("equals".equals(method.getName())) {
-						return proxy == args[0];
-					}
+			new BaseAutoLogin() {
 
-					if ("login".equals(method.getName())) {
-						_calledLogin = true;
-					}
+				@Override
+				protected String[] doLogin(
+					HttpServletRequest httpServletRequest,
+					HttpServletResponse httpServletResponse) {
+
+					_calledLogin = true;
 
 					return null;
-				}));
+				}
+
+			});
 	}
 
 	@AfterClass
