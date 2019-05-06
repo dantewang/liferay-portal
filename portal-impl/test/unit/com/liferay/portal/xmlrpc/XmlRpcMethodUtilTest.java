@@ -50,10 +50,6 @@ public class XmlRpcMethodUtilTest {
 						return _METHOD_NAME;
 					}
 
-					if ("equals".equals(method.getName())) {
-						return proxy == args[0];
-					}
-
 					return null;
 				}));
 	}
