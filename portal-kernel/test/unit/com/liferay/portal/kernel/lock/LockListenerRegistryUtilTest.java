@@ -20,9 +20,7 @@ import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceRegistration;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -31,42 +29,33 @@ import org.junit.Test;
  */
 public class LockListenerRegistryUtilTest {
 
-	@BeforeClass
-	public static void setUpClass() {
+	@Test
+	public void testGetLockListener() {
+		LockListener lockListener = (LockListener)ProxyUtil.newProxyInstance(
+			LockListener.class.getClassLoader(),
+			new Class<?>[] {LockListener.class},
+			(proxy, method, args) -> {
+				if ("getClassName".equals(method.getName())) {
+					return _CLASS_NAME;
+				}
+
+				return null;
+			});
+
 		RegistryUtil.setRegistry(new BasicRegistryImpl());
 
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceRegistration = registry.registerService(
-			LockListener.class,
-			(LockListener)ProxyUtil.newProxyInstance(
-				LockListener.class.getClassLoader(),
-				new Class<?>[] {LockListener.class},
-				(proxy, method, args) -> {
-					if ("getClassName".equals(method.getName())) {
-						return _CLASS_NAME;
-					}
-
-					return null;
-				}));
-	}
-
-	@AfterClass
-	public static void tearDownClass() {
-		_serviceRegistration.unregister();
-	}
-
-	@Test
-	public void testGetLockListener() {
-		Registry registry = RegistryUtil.getRegistry();
+		ServiceRegistration<LockListener> serviceRegistration =
+			registry.registerService(LockListener.class, lockListener);
 
 		Assert.assertSame(
-			registry.getService(_serviceRegistration.getServiceReference()),
+			lockListener,
 			LockListenerRegistryUtil.getLockListener(_CLASS_NAME));
+
+		serviceRegistration.unregister();
 	}
 
 	private static final String _CLASS_NAME = "TestLockListener";
-
-	private static ServiceRegistration<LockListener> _serviceRegistration;
 
 }
