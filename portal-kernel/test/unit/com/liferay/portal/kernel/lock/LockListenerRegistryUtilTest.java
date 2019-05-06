@@ -47,14 +47,6 @@ public class LockListenerRegistryUtilTest {
 						return _CLASS_NAME;
 					}
 
-					if ("equals".equals(method.getName())) {
-						return proxy == args[0];
-					}
-
-					if ("hashCode".equals(method.getName())) {
-						return _CLASS_NAME.hashCode();
-					}
-
 					return null;
 				}));
 	}
