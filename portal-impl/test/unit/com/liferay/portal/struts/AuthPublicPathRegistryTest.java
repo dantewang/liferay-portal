@@ -21,9 +21,7 @@ import com.liferay.registry.ServiceRegistration;
 
 import java.util.HashMap;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -31,34 +29,27 @@ import org.junit.Test;
  */
 public class AuthPublicPathRegistryTest {
 
-	@BeforeClass
-	public static void setUpClass() {
+	@Test
+	public void testContains() {
 		RegistryUtil.setRegistry(new BasicRegistryImpl());
 
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceRegistration = registry.registerService(
-			Object.class, new Object(),
-			new HashMap<String, Object>() {
-				{
-					put("auth.public.path", "testAuthPublicPath");
-				}
-			});
-	}
+		ServiceRegistration<Object> serviceRegistration =
+			registry.registerService(
+				Object.class, new Object(),
+				new HashMap<String, Object>() {
+					{
+						put("auth.public.path", "testAuthPublicPath");
+					}
+				});
 
-	@AfterClass
-	public static void tearDownClass() {
-		_serviceRegistration.unregister();
-	}
-
-	@Test
-	public void testContains() {
 		Assert.assertTrue(
 			AuthPublicPathRegistry.contains("testAuthPublicPath"));
 		Assert.assertFalse(
 			AuthPublicPathRegistry.contains("/unregistered/unknown/path"));
-	}
 
-	private static ServiceRegistration<Object> _serviceRegistration;
+		serviceRegistration.unregister();
+	}
 
 }
