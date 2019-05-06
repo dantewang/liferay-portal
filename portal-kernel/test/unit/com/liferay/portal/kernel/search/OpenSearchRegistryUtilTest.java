@@ -48,14 +48,6 @@ public class OpenSearchRegistryUtilTest {
 					return _CLASS_NAME;
 				}
 
-				if ("equals".equals(method.getName())) {
-					return proxy == args[0];
-				}
-
-				if ("hashCode".equals(method.getName())) {
-					return _CLASS_NAME.hashCode();
-				}
-
 				return null;
 			});
 
@@ -70,7 +62,7 @@ public class OpenSearchRegistryUtilTest {
 
 	@Test
 	public void testGetOpenSearch() {
-		Assert.assertEquals(
+		Assert.assertSame(
 			_openSearch, OpenSearchRegistryUtil.getOpenSearch(_CLASS_NAME));
 	}
 
