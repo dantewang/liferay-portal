@@ -25,14 +25,14 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
-import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
-import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
-import com.liferay.portal.kernel.service.GroupServiceUtil;
-import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.GroupService;
+import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.UserGroupRoleLocalServiceUtil;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.Sync;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.test.util.RoleTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import org.junit.After;
@@ -67,10 +68,10 @@ public class GroupServicePermissionTest {
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		Role role = RoleLocalServiceUtil.getRole(
+		Role role = _roleLocalService.getRole(
 			TestPropsValues.getCompanyId(), "Subsites Admin");
 
-		RoleLocalServiceUtil.deleteRole(role);
+		_roleLocalService.deleteRole(role);
 	}
 
 	@Before
@@ -86,13 +87,13 @@ public class GroupServicePermissionTest {
 
 	@After
 	public void tearDown() throws Exception {
-		GroupLocalServiceUtil.deleteGroup(_group111);
+		_groupLocalService.deleteGroup(_group111);
 
-		GroupLocalServiceUtil.deleteGroup(_group11);
+		_groupLocalService.deleteGroup(_group11);
 
-		GroupLocalServiceUtil.deleteGroup(_group1);
+		_groupLocalService.deleteGroup(_group1);
 
-		UserLocalServiceUtil.deleteUser(_user);
+		_userLocalService.deleteUser(_user);
 
 		PrincipalThreadLocal.setName(_name);
 	}
@@ -194,17 +195,17 @@ public class GroupServicePermissionTest {
 
 		long[] roleIds = {role.getRoleId()};
 
-		UserGroupRoleLocalServiceUtil.addUserGroupRoles(
+		_userGroupRoleLocalService.addUserGroupRoles(
 			_user.getUserId(), group.getGroupId(), roleIds);
 	}
 
 	protected void giveSiteAdminRole(Group group) throws Exception {
-		Role role = RoleLocalServiceUtil.getRole(
+		Role role = _roleLocalService.getRole(
 			TestPropsValues.getCompanyId(), RoleConstants.SITE_ADMINISTRATOR);
 
 		long[] roleIds = {role.getRoleId()};
 
-		UserGroupRoleLocalServiceUtil.addUserGroupRoles(
+		_userGroupRoleLocalService.addUserGroupRoles(
 			_user.getUserId(), group.getGroupId(), roleIds);
 	}
 
@@ -220,8 +221,8 @@ public class GroupServicePermissionTest {
 			boolean hasManageSubsitePermisionOnGroup111)
 		throws Exception {
 
-		PermissionChecker permissionChecker =
-			PermissionCheckerFactoryUtil.create(_user);
+		PermissionChecker permissionChecker = _permissionCheckerFactory.create(
+			_user);
 
 		PermissionThreadLocal.setPermissionChecker(permissionChecker);
 
@@ -249,7 +250,7 @@ public class GroupServicePermissionTest {
 				hasManageSubsitePermisionOnGroup1 || hasManageSite1);
 
 			if (group != null) {
-				GroupLocalServiceUtil.deleteGroup(group);
+				_groupLocalService.deleteGroup(group);
 			}
 		}
 		catch (PrincipalException pe) {
@@ -267,7 +268,7 @@ public class GroupServicePermissionTest {
 				hasManageSubsitePermisionOnGroup11 || hasManageSite1);
 
 			if (group != null) {
-				GroupLocalServiceUtil.deleteGroup(group);
+				_groupLocalService.deleteGroup(group);
 			}
 		}
 		catch (PrincipalException pe) {
@@ -285,7 +286,7 @@ public class GroupServicePermissionTest {
 				hasManageSubsitePermisionOnGroup111 || hasManageSite1);
 
 			if (group != null) {
-				GroupLocalServiceUtil.deleteGroup(group);
+				_groupLocalService.deleteGroup(group);
 			}
 		}
 		catch (PrincipalException pe) {
@@ -301,13 +302,13 @@ public class GroupServicePermissionTest {
 			boolean hasManageSubsitePermisionOnGroup11)
 		throws Exception {
 
-		PermissionChecker permissionChecker =
-			PermissionCheckerFactoryUtil.create(_user);
+		PermissionChecker permissionChecker = _permissionCheckerFactory.create(
+			_user);
 
 		PermissionThreadLocal.setPermissionChecker(permissionChecker);
 
 		try {
-			GroupServiceUtil.updateGroup(_group1.getGroupId(), "");
+			_groupService.updateGroup(_group1.getGroupId(), "");
 
 			Assert.assertTrue(
 				"The user should not be able to update this site",
@@ -319,7 +320,7 @@ public class GroupServicePermissionTest {
 		}
 
 		try {
-			GroupServiceUtil.updateGroup(_group11.getGroupId(), "");
+			_groupService.updateGroup(_group11.getGroupId(), "");
 
 			Assert.assertTrue(
 				"The user should not be able to update this site",
@@ -334,7 +335,7 @@ public class GroupServicePermissionTest {
 		}
 
 		try {
-			GroupServiceUtil.updateGroup(_group111.getGroupId(), "");
+			_groupService.updateGroup(_group111.getGroupId(), "");
 
 			Assert.assertTrue(
 				"The user should not be able to update this site",
@@ -347,10 +348,30 @@ public class GroupServicePermissionTest {
 		}
 	}
 
+	@Inject
+	private static RoleLocalService _roleLocalService;
+
 	private Group _group1;
 	private Group _group11;
 	private Group _group111;
+
+	@Inject
+	private GroupLocalService _groupLocalService;
+
+	@Inject
+	private GroupService _groupService;
+
 	private String _name;
+
+	@Inject
+	private PermissionCheckerFactory _permissionCheckerFactory;
+
 	private User _user;
+
+	@Inject
+	private UserGroupRoleLocalService _userGroupRoleLocalService;
+
+	@Inject
+	private UserLocalService _userLocalService;
 
 }

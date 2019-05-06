@@ -15,14 +15,14 @@
 package com.liferay.site.service.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
-import com.liferay.asset.kernel.service.AssetTagLocalServiceUtil;
+import com.liferay.asset.kernel.service.AssetTagLocalService;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.GroupFriendlyURLException;
 import com.liferay.portal.kernel.exception.GroupParentException;
 import com.liferay.portal.kernel.exception.LocaleException;
 import com.liferay.portal.kernel.exception.NoSuchResourcePermissionException;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
@@ -36,16 +36,16 @@ import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroupRole;
-import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
-import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
-import com.liferay.portal.kernel.service.GroupServiceUtil;
-import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.kernel.service.CompanyLocalService;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.GroupService;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.PortletPreferencesLocalService;
-import com.liferay.portal.kernel.service.ResourcePermissionLocalServiceUtil;
-import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
+import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
+import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.UserGroupRoleLocalServiceUtil;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.rule.Sync;
@@ -57,9 +57,9 @@ import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
+import com.liferay.portal.kernel.util.FriendlyURLNormalizer;
 import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.test.rule.Inject;
@@ -109,14 +109,14 @@ public class GroupServiceTest {
 
 	@Test
 	public void testAddCompanyStagingGroup() throws Exception {
-		Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
+		Group companyGroup = _groupLocalService.getCompanyGroup(
 			TestPropsValues.getCompanyId());
 
 		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setAttribute("staging", Boolean.TRUE);
 
-		Group companyStagingGroup = GroupServiceUtil.addGroup(
+		Group companyStagingGroup = _groupService.addGroup(
 			GroupConstants.DEFAULT_PARENT_GROUP_ID, companyGroup.getGroupId(),
 			companyGroup.getNameMap(), companyGroup.getDescriptionMap(),
 			companyGroup.getType(), companyGroup.isManualMembership(),
@@ -132,7 +132,7 @@ public class GroupServiceTest {
 				companyStagingGroup.getLiveGroupId());
 		}
 		finally {
-			GroupLocalServiceUtil.deleteGroup(companyStagingGroup);
+			_groupLocalService.deleteGroup(companyStagingGroup);
 		}
 	}
 
@@ -145,7 +145,7 @@ public class GroupServiceTest {
 		try {
 			GroupTestUtil.enableLocalStaging(childGroup);
 
-			childGroup = GroupServiceUtil.updateGroup(
+			childGroup = _groupService.updateGroup(
 				childGroup.getGroupId(), parentGroup.getGroupId(),
 				childGroup.getNameMap(), childGroup.getDescriptionMap(),
 				childGroup.getType(), childGroup.isManualMembership(),
@@ -159,7 +159,7 @@ public class GroupServiceTest {
 				parentGroup.getGroupId(), stagingGroup.getParentGroupId());
 		}
 		finally {
-			GroupLocalServiceUtil.deleteGroup(childGroup);
+			_groupLocalService.deleteGroup(childGroup);
 		}
 	}
 
@@ -174,7 +174,7 @@ public class GroupServiceTest {
 
 			GroupTestUtil.enableLocalStaging(parentGroup);
 
-			childGroup = GroupServiceUtil.updateGroup(
+			childGroup = _groupService.updateGroup(
 				childGroup.getGroupId(), parentGroup.getGroupId(),
 				childGroup.getNameMap(), childGroup.getDescriptionMap(),
 				childGroup.getType(), childGroup.isManualMembership(),
@@ -189,7 +189,7 @@ public class GroupServiceTest {
 				childGroupStagingGroup.getParentGroupId());
 		}
 		finally {
-			GroupLocalServiceUtil.deleteGroup(childGroup);
+			_groupLocalService.deleteGroup(childGroup);
 		}
 	}
 
@@ -206,7 +206,7 @@ public class GroupServiceTest {
 				PortletKeys.PREFS_PLID_SHARED, RandomTestUtil.randomString(),
 				null, null);
 
-		GroupServiceUtil.deleteGroup(group.getGroupId());
+		_groupService.deleteGroup(group.getGroupId());
 
 		Assert.assertNull(
 			"Deleting the group should also delete layout type portlet " +
@@ -225,10 +225,10 @@ public class GroupServiceTest {
 
 		Group stagingGroup = _group.getStagingGroup();
 
-		Role role = RoleLocalServiceUtil.getRole(
+		Role role = _roleLocalService.getRole(
 			stagingGroup.getCompanyId(), RoleConstants.OWNER);
 
-		ResourcePermissionLocalServiceUtil.getResourcePermission(
+		_resourcePermissionLocalService.getResourcePermission(
 			stagingGroup.getCompanyId(), Group.class.getName(),
 			ResourceConstants.SCOPE_INDIVIDUAL,
 			String.valueOf(stagingGroup.getGroupId()), role.getRoleId());
@@ -247,17 +247,17 @@ public class GroupServiceTest {
 		Group stagingGroup = group.getStagingGroup();
 
 		List<UserGroupRole> stagingUserGroupRoles =
-			UserGroupRoleLocalServiceUtil.getUserGroupRolesByGroup(
+			_userGroupRoleLocalService.getUserGroupRolesByGroup(
 				stagingGroup.getGroupId());
 
 		int stagingUserGroupRolesCount = stagingUserGroupRoles.size();
 
 		Assert.assertEquals(1, stagingUserGroupRolesCount);
 
-		GroupServiceUtil.deleteGroup(group.getGroupId());
+		_groupService.deleteGroup(group.getGroupId());
 
 		stagingUserGroupRoles =
-			UserGroupRoleLocalServiceUtil.getUserGroupRolesByGroup(
+			_userGroupRoleLocalService.getUserGroupRolesByGroup(
 				stagingGroup.getGroupId());
 
 		stagingUserGroupRolesCount = stagingUserGroupRoles.size();
@@ -269,42 +269,41 @@ public class GroupServiceTest {
 	public void testDeleteOrganizationSiteOnlyRemovesSiteRoles()
 		throws Exception {
 
-		Organization organization =
-			OrganizationLocalServiceUtil.addOrganization(
-				TestPropsValues.getUserId(),
-				OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID,
-				RandomTestUtil.randomString(), true);
+		Organization organization = _organizationLocalService.addOrganization(
+			TestPropsValues.getUserId(),
+			OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID,
+			RandomTestUtil.randomString(), true);
 
-		Group organizationSite = GroupLocalServiceUtil.getOrganizationGroup(
+		Group organizationSite = _groupLocalService.getOrganizationGroup(
 			TestPropsValues.getCompanyId(), organization.getOrganizationId());
 
 		organizationSite.setManualMembership(true);
 
 		User user = UserTestUtil.addOrganizationOwnerUser(organization);
 
-		UserLocalServiceUtil.addGroupUser(
+		_userLocalService.addGroupUser(
 			organizationSite.getGroupId(), user.getUserId());
-		UserLocalServiceUtil.addOrganizationUsers(
+		_userLocalService.addOrganizationUsers(
 			organization.getOrganizationId(), new long[] {user.getUserId()});
 
 		Role siteRole = RoleTestUtil.addRole(RoleConstants.TYPE_SITE);
 
-		UserGroupRoleLocalServiceUtil.addUserGroupRoles(
+		_userGroupRoleLocalService.addUserGroupRoles(
 			user.getUserId(), organizationSite.getGroupId(),
 			new long[] {siteRole.getRoleId()});
 
-		GroupServiceUtil.deleteGroup(organizationSite.getGroupId());
+		_groupService.deleteGroup(organizationSite.getGroupId());
 
 		Assert.assertEquals(
 			1,
-			UserGroupRoleLocalServiceUtil.getUserGroupRolesCount(
+			_userGroupRoleLocalService.getUserGroupRolesCount(
 				user.getUserId(), organizationSite.getGroupId()));
 
-		UserLocalServiceUtil.deleteUser(user);
+		_userLocalService.deleteUser(user);
 
-		OrganizationLocalServiceUtil.deleteOrganization(organization);
+		_organizationLocalService.deleteOrganization(organization);
 
-		RoleLocalServiceUtil.deleteRole(siteRole);
+		_roleLocalService.deleteRole(siteRole);
 	}
 
 	@Test
@@ -314,29 +313,29 @@ public class GroupServiceTest {
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(group.getGroupId());
 
-		int initialTagsCount = AssetTagLocalServiceUtil.getGroupTagsCount(
+		int initialTagsCount = _assetTagLocalService.getGroupTagsCount(
 			group.getGroupId());
 
-		AssetTagLocalServiceUtil.addTag(
+		_assetTagLocalService.addTag(
 			TestPropsValues.getUserId(), group.getGroupId(),
 			RandomTestUtil.randomString(), serviceContext);
 
 		Assert.assertEquals(
 			initialTagsCount + 1,
-			AssetTagLocalServiceUtil.getGroupTagsCount(group.getGroupId()));
+			_assetTagLocalService.getGroupTagsCount(group.getGroupId()));
 
-		GroupServiceUtil.deleteGroup(group.getGroupId());
+		_groupService.deleteGroup(group.getGroupId());
 
 		Assert.assertEquals(
 			initialTagsCount,
-			AssetTagLocalServiceUtil.getGroupTagsCount(group.getGroupId()));
+			_assetTagLocalService.getGroupTagsCount(group.getGroupId()));
 	}
 
 	@Test
 	public void testFindGroupByDescription() throws Exception {
 		Assert.assertEquals(
 			1,
-			GroupServiceUtil.searchCount(
+			_groupService.searchCount(
 				TestPropsValues.getCompanyId(), null,
 				_group.getDescription(getLocale()),
 				new String[] {
@@ -350,11 +349,11 @@ public class GroupServiceTest {
 			RandomTestUtil.randomString() + StringPool.SPACE +
 				RandomTestUtil.randomString());
 
-		GroupLocalServiceUtil.updateGroup(_group);
+		_groupLocalService.updateGroup(_group);
 
 		Assert.assertEquals(
 			1,
-			GroupServiceUtil.searchCount(
+			_groupService.searchCount(
 				TestPropsValues.getCompanyId(), null,
 				_group.getDescription(getLocale()),
 				new String[] {
@@ -366,7 +365,7 @@ public class GroupServiceTest {
 	public void testFindGroupByName() throws Exception {
 		Assert.assertEquals(
 			1,
-			GroupServiceUtil.searchCount(
+			_groupService.searchCount(
 				TestPropsValues.getCompanyId(), _group.getName(getLocale()),
 				null,
 				new String[] {
@@ -380,11 +379,11 @@ public class GroupServiceTest {
 			RandomTestUtil.randomString() + StringPool.SPACE +
 				RandomTestUtil.randomString());
 
-		GroupLocalServiceUtil.updateGroup(_group);
+		_groupLocalService.updateGroup(_group);
 
 		Assert.assertEquals(
 			1,
-			GroupServiceUtil.searchCount(
+			_groupService.searchCount(
 				TestPropsValues.getCompanyId(), _group.getName(getLocale()),
 				null,
 				new String[] {
@@ -403,32 +402,31 @@ public class GroupServiceTest {
 
 		Assert.assertEquals(
 			1,
-			GroupServiceUtil.searchCount(
+			_groupService.searchCount(
 				TestPropsValues.getCompanyId(), null, null, groupParams));
 
-		List<Group> groups = GroupServiceUtil.search(
+		List<Group> groups = _groupService.search(
 			TestPropsValues.getCompanyId(), null, null, groupParams,
 			QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
 		Assert.assertEquals(groups.toString(), 1, groups.size());
 		Assert.assertEquals(_group, groups.get(0));
 
-		Assert.assertEquals(
-			1, GroupLocalServiceUtil.getRoleGroupsCount(roleId));
+		Assert.assertEquals(1, _groupLocalService.getRoleGroupsCount(roleId));
 
-		groups = GroupLocalServiceUtil.getRoleGroups(roleId);
+		groups = _groupLocalService.getRoleGroups(roleId);
 
 		Assert.assertEquals(groups.toString(), 1, groups.size());
 		Assert.assertEquals(_group, groups.get(0));
 
-		RoleLocalServiceUtil.deleteRole(roleId);
+		_roleLocalService.deleteRole(roleId);
 	}
 
 	@Test
 	public void testFindGuestGroupByCompanyName() throws Exception {
 		Assert.assertEquals(
 			1,
-			GroupServiceUtil.searchCount(
+			_groupService.searchCount(
 				TestPropsValues.getCompanyId(), "liferay%", null,
 				new String[] {
 					"manualMembership:true:boolean", "site:true:boolean"
@@ -439,7 +437,7 @@ public class GroupServiceTest {
 	public void testFindGuestGroupByCompanyNameCapitalized() throws Exception {
 		Assert.assertEquals(
 			1,
-			GroupServiceUtil.searchCount(
+			_groupService.searchCount(
 				TestPropsValues.getCompanyId(), "Liferay%", null,
 				new String[] {
 					"manualMembership:true:boolean", "site:true:boolean"
@@ -450,7 +448,7 @@ public class GroupServiceTest {
 	public void testFindNonexistentGroup() throws Exception {
 		Assert.assertEquals(
 			0,
-			GroupServiceUtil.searchCount(
+			_groupService.searchCount(
 				TestPropsValues.getCompanyId(), "cabina14", null,
 				new String[] {
 					"manualMembership:true:boolean", "site:true:boolean"
@@ -463,43 +461,43 @@ public class GroupServiceTest {
 
 		String defaultNewGroupFriendlyURL =
 			StringPool.SLASH +
-				FriendlyURLNormalizerUtil.normalize(
+				_friendlyURLNormalizer.normalize(
 					_group.getName(LocaleUtil.getDefault()));
 
 		Assert.assertNotNull(
-			GroupLocalServiceUtil.fetchFriendlyURLGroup(
+			_groupLocalService.fetchFriendlyURLGroup(
 				companyId, defaultNewGroupFriendlyURL));
 
-		GroupServiceUtil.updateFriendlyURL(_group.getGroupId(), null);
+		_groupService.updateFriendlyURL(_group.getGroupId(), null);
 
 		Assert.assertNull(
-			GroupLocalServiceUtil.fetchFriendlyURLGroup(
+			_groupLocalService.fetchFriendlyURLGroup(
 				companyId, defaultNewGroupFriendlyURL));
 
 		String defaultFriendlyURL = "/group-" + _group.getGroupId();
 
 		Assert.assertNotNull(
-			GroupLocalServiceUtil.fetchFriendlyURLGroup(
+			_groupLocalService.fetchFriendlyURLGroup(
 				companyId, defaultFriendlyURL));
 
-		GroupServiceUtil.updateFriendlyURL(
+		_groupService.updateFriendlyURL(
 			_group.getGroupId(),
 			StringPool.SLASH + RandomTestUtil.randomString());
 
 		Group group = GroupTestUtil.addGroup();
 
 		try {
-			GroupServiceUtil.updateFriendlyURL(
+			_groupService.updateFriendlyURL(
 				group.getGroupId(), defaultFriendlyURL);
 
-			GroupServiceUtil.updateFriendlyURL(_group.getGroupId(), null);
+			_groupService.updateFriendlyURL(_group.getGroupId(), null);
 
 			Assert.assertNotNull(
-				GroupLocalServiceUtil.fetchFriendlyURLGroup(
+				_groupLocalService.fetchFriendlyURLGroup(
 					companyId, defaultFriendlyURL + "-1"));
 		}
 		finally {
-			GroupLocalServiceUtil.deleteGroup(group);
+			_groupLocalService.deleteGroup(group);
 		}
 	}
 
@@ -507,31 +505,31 @@ public class GroupServiceTest {
 	public void testFriendlyURLSetToGroupId() throws Exception {
 		String friendlyURL = "/" + _group.getGroupId();
 
-		GroupServiceUtil.updateFriendlyURL(_group.getGroupId(), friendlyURL);
+		_groupService.updateFriendlyURL(_group.getGroupId(), friendlyURL);
 	}
 
 	@Test(expected = GroupFriendlyURLException.class)
 	public void testFriendlyURLSetToRandomLong() throws Exception {
 		String friendlyURL = "/" + RandomTestUtil.nextLong();
 
-		GroupServiceUtil.updateFriendlyURL(_group.getGroupId(), friendlyURL);
+		_groupService.updateFriendlyURL(_group.getGroupId(), friendlyURL);
 	}
 
 	@Test
 	public void testGetGlobalSiteDefaultLocale() throws Exception {
-		Company company = CompanyLocalServiceUtil.getCompany(
+		Company company = _companyLocalService.getCompany(
 			_group.getCompanyId());
 
 		Assert.assertEquals(
 			company.getLocale(),
-			PortalUtil.getSiteDefaultLocale(company.getGroupId()));
+			_portal.getSiteDefaultLocale(company.getGroupId()));
 	}
 
 	@Test
 	public void testGetGlobalSiteDefaultLocaleWhenCompanyLocaleModified()
 		throws Exception {
 
-		Company company = CompanyLocalServiceUtil.getCompany(
+		Company company = _companyLocalService.getCompany(
 			_group.getCompanyId());
 
 		User defaultUser = company.getDefaultUser();
@@ -540,18 +538,18 @@ public class GroupServiceTest {
 
 		try {
 			defaultUser.setLanguageId(
-				LanguageUtil.getLanguageId(LocaleUtil.BRAZIL));
+				_language.getLanguageId(LocaleUtil.BRAZIL));
 
-			defaultUser = UserLocalServiceUtil.updateUser(defaultUser);
+			defaultUser = _userLocalService.updateUser(defaultUser);
 
 			Assert.assertEquals(
 				LocaleUtil.BRAZIL,
-				PortalUtil.getSiteDefaultLocale(company.getGroupId()));
+				_portal.getSiteDefaultLocale(company.getGroupId()));
 		}
 		finally {
 			defaultUser.setLanguageId(languageId);
 
-			UserLocalServiceUtil.updateUser(defaultUser);
+			_userLocalService.updateUser(defaultUser);
 		}
 	}
 
@@ -561,7 +559,7 @@ public class GroupServiceTest {
 		Group parentGroup = GroupTestUtil.addGroup();
 
 		List<Group> allGroups = new ArrayList<>(
-			GroupLocalServiceUtil.getGroups(
+			_groupLocalService.getGroups(
 				TestPropsValues.getCompanyId(),
 				GroupConstants.DEFAULT_PARENT_GROUP_ID, true));
 
@@ -577,7 +575,7 @@ public class GroupServiceTest {
 
 				group.setName(name + i);
 
-				group = GroupLocalServiceUtil.updateGroup(group);
+				group = _groupLocalService.updateGroup(group);
 
 				likeNameChildGroups.add(group);
 			}
@@ -623,7 +621,7 @@ public class GroupServiceTest {
 		long parentGroupId = 0;
 		int size = 5;
 
-		List<Group> groups = GroupServiceUtil.getGtGroups(
+		List<Group> groups = _groupService.getGtGroups(
 			0, TestPropsValues.getCompanyId(), parentGroupId, true, size);
 
 		Assert.assertFalse(groups.isEmpty());
@@ -631,7 +629,7 @@ public class GroupServiceTest {
 
 		Group lastGroup = groups.get(groups.size() - 1);
 
-		groups = GroupServiceUtil.getGtGroups(
+		groups = _groupService.getGtGroups(
 			lastGroup.getGroupId(), TestPropsValues.getCompanyId(),
 			parentGroupId, true, size);
 
@@ -652,19 +650,19 @@ public class GroupServiceTest {
 
 	@Test
 	public void testGetSiteDefaultInheritLocale() throws Exception {
-		Company company = CompanyLocalServiceUtil.getCompany(
+		Company company = _companyLocalService.getCompany(
 			_group.getCompanyId());
 
 		Assert.assertEquals(
 			company.getLocale(),
-			PortalUtil.getSiteDefaultLocale(_group.getGroupId()));
+			_portal.getSiteDefaultLocale(_group.getGroupId()));
 	}
 
 	@Test
 	public void testGetSiteDefaultInheritLocaleWhenCompanyLocaleModified()
 		throws Exception {
 
-		Company company = CompanyLocalServiceUtil.getCompany(
+		Company company = _companyLocalService.getCompany(
 			_group.getCompanyId());
 
 		User defaultUser = company.getDefaultUser();
@@ -673,18 +671,18 @@ public class GroupServiceTest {
 
 		try {
 			defaultUser.setLanguageId(
-				LanguageUtil.getLanguageId(LocaleUtil.CHINA));
+				_language.getLanguageId(LocaleUtil.CHINA));
 
-			defaultUser = UserLocalServiceUtil.updateUser(defaultUser);
+			defaultUser = _userLocalService.updateUser(defaultUser);
 
 			Assert.assertEquals(
 				LocaleUtil.CHINA,
-				PortalUtil.getSiteDefaultLocale(_group.getGroupId()));
+				_portal.getSiteDefaultLocale(_group.getGroupId()));
 		}
 		finally {
 			defaultUser.setLanguageId(languageId);
 
-			UserLocalServiceUtil.updateUser(defaultUser);
+			_userLocalService.updateUser(defaultUser);
 		}
 	}
 
@@ -705,7 +703,7 @@ public class GroupServiceTest {
 			scopeDescriptiveName,
 			scopeDescriptiveName.contains("current-page"));
 
-		GroupLocalServiceUtil.deleteGroup(scopeGroup);
+		_groupLocalService.deleteGroup(scopeGroup);
 	}
 
 	@Test
@@ -738,7 +736,7 @@ public class GroupServiceTest {
 		Assert.assertTrue(
 			scopeDescriptiveName, scopeDescriptiveName.contains("default"));
 
-		GroupLocalServiceUtil.deleteGroup(group);
+		_groupLocalService.deleteGroup(group);
 	}
 
 	@Test
@@ -765,7 +763,7 @@ public class GroupServiceTest {
 
 		Assert.assertEquals("child-site", scopeLabel);
 
-		GroupLocalServiceUtil.deleteGroup(subgroup);
+		_groupLocalService.deleteGroup(subgroup);
 	}
 
 	@Test
@@ -783,7 +781,7 @@ public class GroupServiceTest {
 	public void testGroupIsGlobalScopeLabel() throws Exception {
 		ThemeDisplay themeDisplay = new ThemeDisplay();
 
-		Company company = CompanyLocalServiceUtil.getCompany(
+		Company company = _companyLocalService.getCompany(
 			_group.getCompanyId());
 
 		themeDisplay.setCompany(company);
@@ -809,7 +807,7 @@ public class GroupServiceTest {
 
 		Assert.assertEquals("page", scopeLabel);
 
-		GroupLocalServiceUtil.deleteGroup(scopeGroup);
+		_groupLocalService.deleteGroup(scopeGroup);
 	}
 
 	@Test
@@ -824,7 +822,7 @@ public class GroupServiceTest {
 
 		Assert.assertEquals("parent-site", scopeLabel);
 
-		GroupLocalServiceUtil.deleteGroup(subgroup);
+		_groupLocalService.deleteGroup(subgroup);
 	}
 
 	@Test
@@ -839,13 +837,13 @@ public class GroupServiceTest {
 
 		Assert.assertEquals("site", scopeLabel);
 
-		GroupLocalServiceUtil.deleteGroup(group);
+		_groupLocalService.deleteGroup(group);
 	}
 
 	@Test
 	public void testIndividualResourcePermission() throws Exception {
 		int resourcePermissionsCount =
-			ResourcePermissionLocalServiceUtil.getResourcePermissionsCount(
+			_resourcePermissionLocalService.getResourcePermissionsCount(
 				_group.getCompanyId(), Group.class.getName(),
 				ResourceConstants.SCOPE_INDIVIDUAL,
 				String.valueOf(_group.getGroupId()));
@@ -855,10 +853,10 @@ public class GroupServiceTest {
 
 	@Test
 	public void testInheritLocalesByDefault() throws Exception {
-		Assert.assertTrue(LanguageUtil.isInheritLocales(_group.getGroupId()));
+		Assert.assertTrue(_language.isInheritLocales(_group.getGroupId()));
 		Assert.assertEquals(
-			LanguageUtil.getAvailableLocales(),
-			LanguageUtil.getAvailableLocales(_group.getGroupId()));
+			_language.getAvailableLocales(),
+			_language.getAvailableLocales(_group.getGroupId()));
 	}
 
 	@Test
@@ -885,7 +883,7 @@ public class GroupServiceTest {
 		try {
 			GroupTestUtil.enableLocalStaging(childGroup);
 
-			GroupServiceUtil.updateGroup(
+			_groupService.updateGroup(
 				childGroup.getGroupId(), parentGroup.getGroupId(),
 				childGroup.getNameMap(), childGroup.getDescriptionMap(),
 				childGroup.getType(), childGroup.isManualMembership(),
@@ -893,7 +891,7 @@ public class GroupServiceTest {
 				childGroup.getFriendlyURL(), childGroup.isInheritContent(),
 				childGroup.isActive(), null);
 
-			childGroup = GroupServiceUtil.updateGroup(
+			childGroup = _groupService.updateGroup(
 				childGroup.getGroupId(), GroupConstants.DEFAULT_PARENT_GROUP_ID,
 				childGroup.getNameMap(), childGroup.getDescriptionMap(),
 				childGroup.getType(), childGroup.isManualMembership(),
@@ -908,7 +906,7 @@ public class GroupServiceTest {
 				childGroupStagingGroup.getParentGroupId());
 		}
 		finally {
-			GroupLocalServiceUtil.deleteGroup(childGroup);
+			_groupLocalService.deleteGroup(childGroup);
 		}
 	}
 
@@ -923,7 +921,7 @@ public class GroupServiceTest {
 
 			GroupTestUtil.enableLocalStaging(parentGroup);
 
-			GroupServiceUtil.updateGroup(
+			_groupService.updateGroup(
 				childGroup.getGroupId(), parentGroup.getGroupId(),
 				childGroup.getNameMap(), childGroup.getDescriptionMap(),
 				childGroup.getType(), childGroup.isManualMembership(),
@@ -931,7 +929,7 @@ public class GroupServiceTest {
 				childGroup.getFriendlyURL(), childGroup.isInheritContent(),
 				childGroup.isActive(), null);
 
-			childGroup = GroupLocalServiceUtil.updateGroup(
+			childGroup = _groupLocalService.updateGroup(
 				childGroup.getGroupId(), GroupConstants.DEFAULT_PARENT_GROUP_ID,
 				childGroup.getNameMap(), childGroup.getDescriptionMap(),
 				childGroup.getType(), childGroup.isManualMembership(),
@@ -946,7 +944,7 @@ public class GroupServiceTest {
 				childGroupStagingGroup.getParentGroupId());
 		}
 		finally {
-			GroupLocalServiceUtil.deleteGroup(childGroup);
+			_groupLocalService.deleteGroup(childGroup);
 		}
 	}
 
@@ -961,7 +959,7 @@ public class GroupServiceTest {
 		nameMap.put(
 			LocaleUtil.getDefault(), layout.getName(LocaleUtil.getDefault()));
 
-		Group scope = GroupLocalServiceUtil.addGroup(
+		Group scope = _groupLocalService.addGroup(
 			TestPropsValues.getUserId(), GroupConstants.DEFAULT_PARENT_GROUP_ID,
 			Layout.class.getName(), layout.getPlid(),
 			GroupConstants.DEFAULT_LIVE_GROUP_ID, nameMap,
@@ -972,7 +970,7 @@ public class GroupServiceTest {
 		Assert.assertFalse(scope.isRoot());
 		Assert.assertEquals(scope.getParentGroupId(), _group.getGroupId());
 
-		GroupLocalServiceUtil.deleteGroup(scope);
+		_groupLocalService.deleteGroup(scope);
 	}
 
 	@Test
@@ -992,7 +990,7 @@ public class GroupServiceTest {
 		Group group11 = GroupTestUtil.addGroup(group1.getGroupId());
 
 		try {
-			GroupServiceUtil.updateGroup(
+			_groupService.updateGroup(
 				group1.getGroupId(), group11.getGroupId(), group1.getNameMap(),
 				group1.getDescriptionMap(), group1.getType(),
 				group1.isManualMembership(), group1.getMembershipRestriction(),
@@ -1000,7 +998,7 @@ public class GroupServiceTest {
 				group1.isActive(), ServiceContextTestUtil.getServiceContext());
 		}
 		finally {
-			GroupLocalServiceUtil.deleteGroup(group11);
+			_groupLocalService.deleteGroup(group11);
 		}
 	}
 
@@ -1015,7 +1013,7 @@ public class GroupServiceTest {
 		Group group1111 = GroupTestUtil.addGroup(group111.getGroupId());
 
 		try {
-			GroupServiceUtil.updateGroup(
+			_groupService.updateGroup(
 				group1.getGroupId(), group1111.getGroupId(),
 				group1.getNameMap(), group1.getDescriptionMap(),
 				group1.getType(), group1.isManualMembership(),
@@ -1024,11 +1022,11 @@ public class GroupServiceTest {
 				ServiceContextTestUtil.getServiceContext());
 		}
 		finally {
-			GroupLocalServiceUtil.deleteGroup(group1111);
+			_groupLocalService.deleteGroup(group1111);
 
-			GroupLocalServiceUtil.deleteGroup(group111);
+			_groupLocalService.deleteGroup(group111);
 
-			GroupLocalServiceUtil.deleteGroup(group11);
+			_groupLocalService.deleteGroup(group11);
 		}
 	}
 
@@ -1040,7 +1038,7 @@ public class GroupServiceTest {
 
 		Group stagingGroup = _group.getStagingGroup();
 
-		GroupServiceUtil.updateGroup(
+		_groupService.updateGroup(
 			stagingGroup.getGroupId(), _group.getGroupId(),
 			stagingGroup.getNameMap(), stagingGroup.getDescriptionMap(),
 			stagingGroup.getType(), stagingGroup.isManualMembership(),
@@ -1052,7 +1050,7 @@ public class GroupServiceTest {
 
 	@Test(expected = GroupParentException.MustNotBeOwnParent.class)
 	public void testSelectOwnGroupAsParentSite() throws Exception {
-		GroupServiceUtil.updateGroup(
+		_groupService.updateGroup(
 			_group.getGroupId(), _group.getGroupId(), _group.getNameMap(),
 			_group.getDescriptionMap(), _group.getType(),
 			_group.isManualMembership(), _group.getMembershipRestriction(),
@@ -1074,9 +1072,9 @@ public class GroupServiceTest {
 		Assert.assertEquals(group1.getGroupId(), group11.getParentGroupId());
 		Assert.assertEquals(group11.getGroupId(), group111.getParentGroupId());
 
-		GroupLocalServiceUtil.deleteGroup(group111);
+		_groupLocalService.deleteGroup(group111);
 
-		GroupLocalServiceUtil.deleteGroup(group11);
+		_groupLocalService.deleteGroup(group11);
 	}
 
 	@Test
@@ -1089,7 +1087,7 @@ public class GroupServiceTest {
 
 		Assert.assertEquals(
 			new HashSet<>(availableLocales),
-			LanguageUtil.getAvailableLocales(_group.getGroupId()));
+			_language.getAvailableLocales(_group.getGroupId()));
 	}
 
 	@Test
@@ -1099,7 +1097,7 @@ public class GroupServiceTest {
 
 		Assert.assertEquals(
 			LocaleUtil.SPAIN,
-			PortalUtil.getSiteDefaultLocale(_group.getGroupId()));
+			_portal.getSiteDefaultLocale(_group.getGroupId()));
 	}
 
 	@Test
@@ -1115,7 +1113,7 @@ public class GroupServiceTest {
 			GroupTestUtil.enableLocalStaging(parentGroup1);
 			GroupTestUtil.enableLocalStaging(parentGroup2);
 
-			GroupServiceUtil.updateGroup(
+			_groupService.updateGroup(
 				childGroup.getGroupId(), parentGroup1.getGroupId(),
 				childGroup.getNameMap(), childGroup.getDescriptionMap(),
 				childGroup.getType(), childGroup.isManualMembership(),
@@ -1123,7 +1121,7 @@ public class GroupServiceTest {
 				childGroup.getFriendlyURL(), childGroup.isInheritContent(),
 				childGroup.isActive(), null);
 
-			childGroup = GroupServiceUtil.updateGroup(
+			childGroup = _groupService.updateGroup(
 				childGroup.getGroupId(), parentGroup2.getGroupId(),
 				childGroup.getNameMap(), childGroup.getDescriptionMap(),
 				childGroup.getType(), childGroup.isManualMembership(),
@@ -1138,8 +1136,8 @@ public class GroupServiceTest {
 				childGroupStagingGroup.getParentGroupId());
 		}
 		finally {
-			GroupLocalServiceUtil.deleteGroup(childGroup);
-			GroupLocalServiceUtil.deleteGroup(parentGroup1);
+			_groupLocalService.deleteGroup(childGroup);
+			_groupLocalService.deleteGroup(parentGroup1);
 		}
 	}
 
@@ -1165,7 +1163,7 @@ public class GroupServiceTest {
 
 		nameMap.put(LocaleUtil.getDefault(), RandomTestUtil.randomString());
 
-		return GroupLocalServiceUtil.addGroup(
+		return _groupLocalService.addGroup(
 			TestPropsValues.getUserId(), GroupConstants.DEFAULT_PARENT_GROUP_ID,
 			Layout.class.getName(), scopeLayout.getPlid(),
 			GroupConstants.DEFAULT_LIVE_GROUP_ID, nameMap,
@@ -1178,7 +1176,7 @@ public class GroupServiceTest {
 			List<Group> expectedGroups, long parentGroupId, String nameSearch)
 		throws Exception {
 
-		List<Group> actualGroups = GroupServiceUtil.getGroups(
+		List<Group> actualGroups = _groupService.getGroups(
 			TestPropsValues.getCompanyId(), parentGroupId, nameSearch, true,
 			QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
@@ -1190,7 +1188,7 @@ public class GroupServiceTest {
 
 		Assert.assertEquals(
 			expectedGroups.size(),
-			GroupServiceUtil.getGroupsCount(
+			_groupService.getGroupsCount(
 				TestPropsValues.getCompanyId(), parentGroupId, nameSearch,
 				true));
 	}
@@ -1224,7 +1222,7 @@ public class GroupServiceTest {
 
 		params.put("excludedGroupIds", excludedGroupIds);
 
-		List<Group> selectableGroups = GroupServiceUtil.search(
+		List<Group> selectableGroups = _groupService.search(
 			_group.getCompanyId(), null, StringPool.BLANK, params,
 			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 
@@ -1249,7 +1247,7 @@ public class GroupServiceTest {
 			boolean expectFailure)
 		throws Exception {
 
-		Set<Locale> availableLocales = LanguageUtil.getAvailableLocales();
+		Set<Locale> availableLocales = _language.getAvailableLocales();
 
 		CompanyTestUtil.resetCompanyLocales(
 			TestPropsValues.getCompanyId(), portalAvailableLocales,
@@ -1271,13 +1269,49 @@ public class GroupServiceTest {
 		}
 	}
 
+	@Inject
+	private AssetTagLocalService _assetTagLocalService;
+
+	@Inject
+	private CompanyLocalService _companyLocalService;
+
+	@Inject
+	private FriendlyURLNormalizer _friendlyURLNormalizer;
+
 	@DeleteAfterTestRun
 	private Group _group;
+
+	@Inject
+	private GroupLocalService _groupLocalService;
 
 	@DeleteAfterTestRun
 	private final List<Group> _groups = new ArrayList<>();
 
 	@Inject
+	private GroupService _groupService;
+
+	@Inject
+	private Language _language;
+
+	@Inject
+	private OrganizationLocalService _organizationLocalService;
+
+	@Inject
+	private Portal _portal;
+
+	@Inject
 	private PortletPreferencesLocalService _portletPreferencesLocalService;
+
+	@Inject
+	private ResourcePermissionLocalService _resourcePermissionLocalService;
+
+	@Inject
+	private RoleLocalService _roleLocalService;
+
+	@Inject
+	private UserGroupRoleLocalService _userGroupRoleLocalService;
+
+	@Inject
+	private UserLocalService _userLocalService;
 
 }
