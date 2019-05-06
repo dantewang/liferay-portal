@@ -67,10 +67,17 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 			ExportImportLifecycleListener.class,
 			asyncExportImportLifecycleListener);
 
-		_assertExportImportLifecycleListeners(
-			asyncExportImportLifecycleListener,
+		Set<ExportImportLifecycleListener> exportImportLifecycleListeners =
 			ExportImportLifecycleEventListenerRegistryUtil.
-				getAsyncExportImportLifecycleListeners());
+				getAsyncExportImportLifecycleListeners();
+
+		Assert.assertTrue(
+			asyncExportImportLifecycleListener + " not found in " +
+				exportImportLifecycleListeners,
+			exportImportLifecycleListeners.removeIf(
+				exportImportLifecycleListener ->
+					asyncExportImportLifecycleListener ==
+						exportImportLifecycleListener));
 	}
 
 	@Test
@@ -96,22 +103,16 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 			ExportImportLifecycleListener.class,
 			syncExportImportLifecycleListener);
 
-		_assertExportImportLifecycleListeners(
-			syncExportImportLifecycleListener,
+		Set<ExportImportLifecycleListener> exportImportLifecycleListeners =
 			ExportImportLifecycleEventListenerRegistryUtil.
-				getSyncExportImportLifecycleListeners());
-	}
-
-	private void _assertExportImportLifecycleListeners(
-		ExportImportLifecycleListener expectedExportImportLifecycleListener,
-		Set<ExportImportLifecycleListener> exportImportLifecycleListeners) {
+				getSyncExportImportLifecycleListeners();
 
 		Assert.assertTrue(
-			expectedExportImportLifecycleListener + " not found in " +
+			syncExportImportLifecycleListener + " not found in " +
 				exportImportLifecycleListeners,
 			exportImportLifecycleListeners.removeIf(
 				exportImportLifecycleListener ->
-					expectedExportImportLifecycleListener ==
+					syncExportImportLifecycleListener ==
 						exportImportLifecycleListener));
 	}
 
