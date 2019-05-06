@@ -46,7 +46,7 @@ public class StagedModelDataHandlerRegistryUtilTest {
 				new Class<?>[] {StagedModelDataHandler.class},
 				(proxy, method, args) -> {
 					if ("getClassNames".equals(method.getName())) {
-						return _CLASS_NAMES;
+						return new String[] {_CLASS_NAME};
 					}
 
 					return null;
@@ -66,7 +66,7 @@ public class StagedModelDataHandlerRegistryUtilTest {
 		Assert.assertSame(
 			_stagedModelDataHandler,
 			StagedModelDataHandlerRegistryUtil.getStagedModelDataHandler(
-				_CLASS_NAMES[0]));
+				_CLASS_NAME));
 	}
 
 	@Test
@@ -75,13 +75,13 @@ public class StagedModelDataHandlerRegistryUtilTest {
 			StagedModelDataHandlerRegistryUtil.getStagedModelDataHandlers();
 
 		Assert.assertTrue(
-			_CLASS_NAMES[0] + " not found in " + stagedModelDataHandlers,
+			_CLASS_NAME + " not found in " + stagedModelDataHandlers,
 			stagedModelDataHandlers.removeIf(
 				stagedModelDataHandler ->
 					_stagedModelDataHandler == stagedModelDataHandler));
 	}
 
-	private static final String[] _CLASS_NAMES = {"TestStagedModelDataHandler"};
+	private static final String _CLASS_NAME = "TestStagedModelDataHandler";
 
 	private static ServiceRegistration<StagedModelDataHandler>
 		_serviceRegistration;
