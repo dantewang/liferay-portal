@@ -40,16 +40,19 @@ public class AuthPublicPathRegistryTest {
 				Object.class, new Object(),
 				new HashMap<String, Object>() {
 					{
-						put("auth.public.path", "testAuthPublicPath");
+						put("auth.public.path", _TEST_AUTH_PUBLIC_PATH);
 					}
 				});
 
 		Assert.assertTrue(
-			AuthPublicPathRegistry.contains("testAuthPublicPath"));
+			AuthPublicPathRegistry.contains(_TEST_AUTH_PUBLIC_PATH));
 		Assert.assertFalse(
 			AuthPublicPathRegistry.contains("/unregistered/unknown/path"));
 
 		serviceRegistration.unregister();
 	}
+
+	private static final String _TEST_AUTH_PUBLIC_PATH =
+		"TEST_AUTH_PUBLIC_PATH";
 
 }
