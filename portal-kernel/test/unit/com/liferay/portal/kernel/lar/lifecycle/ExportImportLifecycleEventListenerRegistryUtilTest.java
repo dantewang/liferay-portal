@@ -24,7 +24,7 @@ import com.liferay.registry.ServiceRegistration;
 
 import java.util.Set;
 
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,42 +37,43 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 	@BeforeClass
 	public static void setUpClass() {
 		RegistryUtil.setRegistry(new BasicRegistryImpl());
-
-		Registry registry = RegistryUtil.getRegistry();
-
-		_asyncExportImportLifecycleListener =
-			new TestAsyncExportImportLifecycleListener();
-
-		_serviceRegistration1 = registry.registerService(
-			ExportImportLifecycleListener.class,
-			_asyncExportImportLifecycleListener);
-
-		_syncExportImportLifecycleListener =
-			new TestSyncExportImportLifecycleListener();
-
-		_serviceRegistration2 = registry.registerService(
-			ExportImportLifecycleListener.class,
-			_syncExportImportLifecycleListener);
 	}
 
-	@AfterClass
-	public static void tearDownClass() {
-		_serviceRegistration1.unregister();
-		_serviceRegistration2.unregister();
+	@After
+	public void tearDown() {
+		_serviceRegistration.unregister();
 	}
 
 	@Test
 	public void testGetAsyncExportImportLifecycleListeners() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		ExportImportLifecycleListener asyncExportImportLifecycleListener =
+			new TestAsyncExportImportLifecycleListener();
+
+		_serviceRegistration = registry.registerService(
+			ExportImportLifecycleListener.class,
+			asyncExportImportLifecycleListener);
+
 		_assertExportImportLifecycleListeners(
-			_asyncExportImportLifecycleListener,
+			asyncExportImportLifecycleListener,
 			ExportImportLifecycleEventListenerRegistryUtil.
 				getAsyncExportImportLifecycleListeners());
 	}
 
 	@Test
 	public void testGetSyncExportImportLifecycleListeners() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		ExportImportLifecycleListener syncExportImportLifecycleListener =
+			new TestSyncExportImportLifecycleListener();
+
+		_serviceRegistration = registry.registerService(
+			ExportImportLifecycleListener.class,
+			syncExportImportLifecycleListener);
+
 		_assertExportImportLifecycleListeners(
-			_syncExportImportLifecycleListener,
+			syncExportImportLifecycleListener,
 			ExportImportLifecycleEventListenerRegistryUtil.
 				getSyncExportImportLifecycleListeners());
 	}
@@ -90,14 +91,8 @@ public class ExportImportLifecycleEventListenerRegistryUtilTest {
 						exportImportLifecycleListener));
 	}
 
-	private static ExportImportLifecycleListener
-		_asyncExportImportLifecycleListener;
 	private static ServiceRegistration<ExportImportLifecycleListener>
-		_serviceRegistration1;
-	private static ServiceRegistration<ExportImportLifecycleListener>
-		_serviceRegistration2;
-	private static ExportImportLifecycleListener
-		_syncExportImportLifecycleListener;
+		_serviceRegistration;
 
 	private static class TestAsyncExportImportLifecycleListener
 		implements ExportImportLifecycleListener {
