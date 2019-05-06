@@ -23,9 +23,7 @@ import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceRegistration;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -33,37 +31,24 @@ import org.junit.Test;
  */
 public class ModelListenerRegistrationUtilTest {
 
-	@BeforeClass
-	public static void setUpClass() {
+	@Test
+	public void testGetModelListeners() {
+		BaseModelListener<Contact> baseModelListener =
+			new BaseModelListener<Contact>() {
+			};
+
 		RegistryUtil.setRegistry(new BasicRegistryImpl());
 
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceRegistration = registry.registerService(
-			ModelListener.class,
-			new BaseModelListener<Contact>() {
-			});
-	}
-
-	@AfterClass
-	public static void tearDownClass() {
-		_serviceRegistration.unregister();
-	}
-
-	@Test
-	public void testGetModelListeners() {
-		Registry registry = RegistryUtil.getRegistry();
-
-		ModelListener<Contact>[] modelListeners =
-			ModelListenerRegistrationUtil.getModelListeners(Contact.class);
+		ServiceRegistration<ModelListener> serviceRegistration =
+			registry.registerService(ModelListener.class, baseModelListener);
 
 		Assert.assertArrayEquals(
-			new ModelListener[] {
-				registry.getService(_serviceRegistration.getServiceReference())
-			},
-			modelListeners);
-	}
+			new ModelListener[] {baseModelListener},
+			ModelListenerRegistrationUtil.getModelListeners(Contact.class));
 
-	private static ServiceRegistration<ModelListener> _serviceRegistration;
+		serviceRegistration.unregister();
+	}
 
 }
