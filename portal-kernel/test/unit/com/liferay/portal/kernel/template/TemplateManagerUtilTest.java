@@ -38,28 +38,29 @@ public class TemplateManagerUtilTest {
 
 	@BeforeClass
 	public static void setUpClass() {
+		_templateManager = (TemplateManager)ProxyUtil.newProxyInstance(
+			TemplateManager.class.getClassLoader(),
+			new Class<?>[] {TemplateManager.class},
+			(proxy, method, args) -> {
+				if ("getName".equals(method.getName())) {
+					return _TEST_TEMPLATE_MANAGER_NAME;
+				}
+
+				if ("getTemplate".equals(method.getName()) &&
+					(args[0] == _TEMPLATE_RESOURCE)) {
+
+					return _TEMPLATE;
+				}
+
+				return null;
+			});
+
 		RegistryUtil.setRegistry(new BasicRegistryImpl());
 
 		Registry registry = RegistryUtil.getRegistry();
 
 		_serviceRegistration = registry.registerService(
-			TemplateManager.class,
-			(TemplateManager)ProxyUtil.newProxyInstance(
-				TemplateManager.class.getClassLoader(),
-				new Class<?>[] {TemplateManager.class},
-				(proxy, method, args) -> {
-					if ("getName".equals(method.getName())) {
-						return _TEST_TEMPLATE_MANAGER_NAME;
-					}
-
-					if ("getTemplate".equals(method.getName()) &&
-						(args[0] == _TEMPLATE_RESOURCE)) {
-
-						return _TEMPLATE;
-					}
-
-					return null;
-				}),
+			TemplateManager.class, _templateManager,
 			new HashMap() {
 				{
 					put("language.type", "test");
@@ -82,10 +83,8 @@ public class TemplateManagerUtilTest {
 
 	@Test
 	public void testGetTemplateManager() {
-		Registry registry = RegistryUtil.getRegistry();
-
 		Assert.assertSame(
-			registry.getService(_serviceRegistration.getServiceReference()),
+			_templateManager,
 			TemplateManagerUtil.getTemplateManager(
 				_TEST_TEMPLATE_MANAGER_NAME));
 	}
@@ -102,13 +101,11 @@ public class TemplateManagerUtilTest {
 
 	@Test
 	public void testGetTemplateManagers() {
-		Registry registry = RegistryUtil.getRegistry();
-
 		Map<String, TemplateManager> templateManagers =
 			TemplateManagerUtil.getTemplateManagers();
 
 		Assert.assertSame(
-			registry.getService(_serviceRegistration.getServiceReference()),
+			_templateManager,
 			templateManagers.get(_TEST_TEMPLATE_MANAGER_NAME));
 	}
 
@@ -129,5 +126,6 @@ public class TemplateManagerUtilTest {
 		"TEST_TEMPLATE_MANAGER_NAME";
 
 	private static ServiceRegistration<TemplateManager> _serviceRegistration;
+	private static TemplateManager _templateManager;
 
 }
