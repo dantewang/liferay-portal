@@ -57,21 +57,21 @@ public class UserGroupServiceTest {
 			_userGroups.add(UserGroupTestUtil.addUserGroup());
 		}
 
-		long parentUserGroupId = 0;
-		int size = 5;
-
 		List<UserGroup> userGroups = _userGroupService.getGtUserGroups(
-			0, TestPropsValues.getCompanyId(), parentUserGroupId, size);
+			0, TestPropsValues.getCompanyId(), _PARENT_USER_GROUP_ID,
+			_GET_USERGROUPS_SIZE);
 
-		Assert.assertEquals(userGroups.toString(), size, userGroups.size());
+		Assert.assertEquals(
+			userGroups.toString(), _GET_USERGROUPS_SIZE, userGroups.size());
 
 		UserGroup lastUserGroup = userGroups.get(userGroups.size() - 1);
 
 		userGroups = _userGroupService.getGtUserGroups(
 			lastUserGroup.getUserGroupId(), TestPropsValues.getCompanyId(),
-			parentUserGroupId, size);
+			_PARENT_USER_GROUP_ID, _GET_USERGROUPS_SIZE);
 
-		Assert.assertEquals(userGroups.toString(), size, userGroups.size());
+		Assert.assertEquals(
+			userGroups.toString(), _GET_USERGROUPS_SIZE, userGroups.size());
 
 		long previousUserGroupId = 0;
 
@@ -149,6 +149,10 @@ public class UserGroupServiceTest {
 			_userGroupService.getUserGroupsCount(
 				TestPropsValues.getCompanyId(), nameSearch));
 	}
+
+	private static final int _GET_USERGROUPS_SIZE = 5;
+
+	private static final long _PARENT_USER_GROUP_ID = 0;
 
 	@Inject
 	private UserGroupLocalService _userGroupLocalService;
