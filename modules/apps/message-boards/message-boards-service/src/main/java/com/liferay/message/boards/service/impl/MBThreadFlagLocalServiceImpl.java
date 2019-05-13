@@ -120,13 +120,16 @@ public class MBThreadFlagLocalServiceImpl
 	public MBThreadFlag getThreadFlag(long userId, MBThread thread)
 		throws PortalException {
 
-		User user = _userLocalService.getUser(userId);
+		return getThreadFlag(_userLocalService.getUser(userId), thread);
+	}
 
+	public MBThreadFlag getThreadFlag(User user, MBThread thread) {
 		if (user.isDefaultUser()) {
 			return null;
 		}
 
-		return mbThreadFlagPersistence.fetchByU_T(userId, thread.getThreadId());
+		return mbThreadFlagPersistence.fetchByU_T(
+			user.getUserId(), thread.getThreadId());
 	}
 
 	@Override
@@ -135,12 +138,16 @@ public class MBThreadFlagLocalServiceImpl
 
 		User user = _userLocalService.getUser(userId);
 
+		return hasThreadFlag(user, thread);
+	}
+
+	public boolean hasThreadFlag(User user, MBThread thread) {
 		if (user.isDefaultUser()) {
 			return true;
 		}
 
 		MBThreadFlag threadFlag = mbThreadFlagPersistence.fetchByU_T(
-			userId, thread.getThreadId());
+			user.getUserId(), thread.getThreadId());
 
 		if ((threadFlag != null) &&
 			DateUtil.equals(
