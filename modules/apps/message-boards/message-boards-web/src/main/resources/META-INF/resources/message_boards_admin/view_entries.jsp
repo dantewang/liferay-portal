@@ -184,7 +184,7 @@ SearchContainer entriesSearchContainer = (SearchContainer)request.getAttribute("
 								<aui:a href="<%= rowURL.toString() %>">
 									<c:if test="<%= message != null %>">
 										<c:choose>
-											<c:when test="<%= !MBThreadFlagLocalServiceUtil.hasThreadFlag(themeDisplay.getUserId(), thread) %>">
+											<c:when test="<%= !MBThreadFlagLocalServiceUtil.hasThreadFlag(themeDisplay.getUser(), thread) %>">
 												<strong><%= message.getSubject() %></strong>
 											</c:when>
 											<c:otherwise>
