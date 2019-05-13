@@ -123,6 +123,7 @@ public class MBThreadFlagLocalServiceImpl
 		return getThreadFlag(_userLocalService.getUser(userId), thread);
 	}
 
+	@Override
 	public MBThreadFlag getThreadFlag(User user, MBThread thread) {
 		if (user.isDefaultUser()) {
 			return null;
@@ -141,6 +142,7 @@ public class MBThreadFlagLocalServiceImpl
 		return hasThreadFlag(user, thread);
 	}
 
+	@Override
 	public boolean hasThreadFlag(User user, MBThread thread) {
 		if (user.isDefaultUser()) {
 			return true;

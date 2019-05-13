@@ -395,11 +395,27 @@ public class MBThreadFlagLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.message.boards.model.MBThreadFlag getThreadFlag(
+		com.liferay.portal.kernel.model.User user,
+		com.liferay.message.boards.model.MBThread thread) {
+
+		return _mbThreadFlagLocalService.getThreadFlag(user, thread);
+	}
+
+	@Override
 	public boolean hasThreadFlag(
 			long userId, com.liferay.message.boards.model.MBThread thread)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _mbThreadFlagLocalService.hasThreadFlag(userId, thread);
+	}
+
+	@Override
+	public boolean hasThreadFlag(
+		com.liferay.portal.kernel.model.User user,
+		com.liferay.message.boards.model.MBThread thread) {
+
+		return _mbThreadFlagLocalService.hasThreadFlag(user, thread);
 	}
 
 	/**
