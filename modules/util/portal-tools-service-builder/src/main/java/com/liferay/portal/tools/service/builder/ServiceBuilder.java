@@ -4392,6 +4392,9 @@ public class ServiceBuilder {
 		Map<String, Object> context = new HashMap<>();
 
 		context.put("apiPackagePath", _apiPackagePath);
+		context.put(
+			"arquillianTest",
+			_arquillianTestPackagePaths.contains(_packagePath));
 		context.put("author", _author);
 		context.put("beanLocatorUtil", _beanLocatorUtil);
 		context.put("dependencyInjectorDS", _dependencyInjectorDS);
@@ -4401,9 +4404,6 @@ public class ServiceBuilder {
 		context.put("pluginName", _pluginName);
 		context.put("portletShortName", _portletShortName);
 		context.put("propsUtil", _propsUtil);
-		context.put(
-			"runWithArquillian",
-			_arquillianTestPackagePaths.contains(_packagePath));
 		context.put("serviceBuilder", this);
 		context.put("stringUtil", StringUtil_IW.getInstance());
 		//context.put("system", staticModels.get("java.lang.System"));
