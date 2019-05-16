@@ -4402,7 +4402,7 @@ public class ServiceBuilder {
 		context.put("portletShortName", _portletShortName);
 		context.put("propsUtil", _propsUtil);
 		context.put(
-			"runWithArquillian",
+			"arquillianTest",
 			_arquillianTestPackagePaths.contains(_packagePath));
 		context.put("serviceBuilder", this);
 		context.put("stringUtil", StringUtil_IW.getInstance());

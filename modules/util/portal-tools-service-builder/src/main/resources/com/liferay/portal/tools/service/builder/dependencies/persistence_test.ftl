@@ -87,7 +87,7 @@ import org.junit.runner.RunWith;
 	@Deprecated
 </#if>
 
-<#if osgiModule || runWithArquillian>
+<#if osgiModule || arquillianTest>
 	@RunWith(Arquillian.class)
 </#if>
 public class ${entity.name}PersistenceTest {
