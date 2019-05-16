@@ -80,10 +80,10 @@ public class XmlRpcParserTest {
 
 		Tuple tuple = XmlRpcParser.parseMethod(xml);
 
-		String methodName = (String)tuple.getObject(0);
+		Assert.assertEquals("method.name", tuple.getObject(0));
+
 		Object[] arguments = (Object[])tuple.getObject(1);
 
-		Assert.assertEquals("method.name", methodName);
 		Assert.assertEquals(Arrays.toString(arguments), 2, arguments.length);
 		Assert.assertEquals("hello", arguments[0]);
 		Assert.assertEquals("world", arguments[1]);
