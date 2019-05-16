@@ -628,6 +628,11 @@ public class ServiceBuilder {
 				_badTableNames,
 				StringUtil.split(
 					_compatProperties.getProperty("bad.table.names.extra")));
+			Collections.addAll(
+				_arquillianTestPackagePaths,
+				StringUtil.split(
+					_compatProperties.getProperty(
+						"arquillian.test.package.paths")));
 
 			Element rootElement = document.getRootElement();
 
@@ -4396,6 +4401,9 @@ public class ServiceBuilder {
 		context.put("pluginName", _pluginName);
 		context.put("portletShortName", _portletShortName);
 		context.put("propsUtil", _propsUtil);
+		context.put(
+			"runWithArquillian",
+			_arquillianTestPackagePaths.contains(_packagePath));
 		context.put("serviceBuilder", this);
 		context.put("stringUtil", StringUtil_IW.getInstance());
 		//context.put("system", staticModels.get("java.lang.System"));
@@ -7201,6 +7209,7 @@ public class ServiceBuilder {
 
 	private String _apiDirName;
 	private String _apiPackagePath;
+	private Set<String> _arquillianTestPackagePaths = new HashSet<>();
 	private String _author;
 	private boolean _autoImportDefaultReferences;
 	private boolean _autoNamespaceTables;
