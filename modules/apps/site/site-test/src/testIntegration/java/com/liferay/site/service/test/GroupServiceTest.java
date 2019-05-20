@@ -498,18 +498,16 @@ public class GroupServiceTest {
 	public void testFriendlyURLSetToGroupId() throws Exception {
 		_group = GroupTestUtil.addGroup();
 
-		String friendlyURL = "/" + _group.getGroupId();
-
-		_groupService.updateFriendlyURL(_group.getGroupId(), friendlyURL);
+		_groupService.updateFriendlyURL(
+			_group.getGroupId(), "/" + _group.getGroupId());
 	}
 
 	@Test(expected = GroupFriendlyURLException.class)
 	public void testFriendlyURLSetToRandomLong() throws Exception {
 		_group = GroupTestUtil.addGroup();
 
-		String friendlyURL = "/" + RandomTestUtil.nextLong();
-
-		_groupService.updateFriendlyURL(_group.getGroupId(), friendlyURL);
+		_groupService.updateFriendlyURL(
+			_group.getGroupId(), "/" + RandomTestUtil.nextLong());
 	}
 
 	@Test
@@ -535,8 +533,6 @@ public class GroupServiceTest {
 
 		User defaultUser = company.getDefaultUser();
 
-		String languageId = defaultUser.getLanguageId();
-
 		try {
 			defaultUser.setLanguageId(
 				_language.getLanguageId(LocaleUtil.BRAZIL));
@@ -548,7 +544,7 @@ public class GroupServiceTest {
 				_portal.getSiteDefaultLocale(company.getGroupId()));
 		}
 		finally {
-			defaultUser.setLanguageId(languageId);
+			defaultUser.setLanguageId(defaultUser.getLanguageId());
 
 			_userLocalService.updateUser(defaultUser);
 		}
@@ -672,8 +668,6 @@ public class GroupServiceTest {
 
 		User defaultUser = company.getDefaultUser();
 
-		String languageId = defaultUser.getLanguageId();
-
 		try {
 			defaultUser.setLanguageId(
 				_language.getLanguageId(LocaleUtil.CHINA));
@@ -685,7 +679,7 @@ public class GroupServiceTest {
 				_portal.getSiteDefaultLocale(_group.getGroupId()));
 		}
 		finally {
-			defaultUser.setLanguageId(languageId);
+			defaultUser.setLanguageId(defaultUser.getLanguageId());
 
 			_userLocalService.updateUser(defaultUser);
 		}
@@ -782,9 +776,7 @@ public class GroupServiceTest {
 
 		_groups.add(group);
 
-		String scopeLabel = subgroup.getScopeLabel(themeDisplay);
-
-		Assert.assertEquals("child-site", scopeLabel);
+		Assert.assertEquals("child-site", subgroup.getScopeLabel(themeDisplay));
 	}
 
 	@Test
@@ -795,9 +787,7 @@ public class GroupServiceTest {
 
 		themeDisplay.setScopeGroupId(_group.getGroupId());
 
-		String scopeLabel = _group.getScopeLabel(themeDisplay);
-
-		Assert.assertEquals("current-site", scopeLabel);
+		Assert.assertEquals("current-site", _group.getScopeLabel(themeDisplay));
 	}
 
 	@Test
@@ -813,9 +803,7 @@ public class GroupServiceTest {
 
 		Group companyGroup = company.getGroup();
 
-		String scopeLabel = companyGroup.getScopeLabel(themeDisplay);
-
-		Assert.assertEquals("global", scopeLabel);
+		Assert.assertEquals("global", companyGroup.getScopeLabel(themeDisplay));
 	}
 
 	@Test
@@ -836,9 +824,7 @@ public class GroupServiceTest {
 
 		themeDisplay.setScopeGroupId(_group.getGroupId());
 
-		String scopeLabel = scopeGroup.getScopeLabel(themeDisplay);
-
-		Assert.assertEquals("page", scopeLabel);
+		Assert.assertEquals("page", scopeGroup.getScopeLabel(themeDisplay));
 	}
 
 	@Test
@@ -855,9 +841,7 @@ public class GroupServiceTest {
 
 		themeDisplay.setScopeGroupId(subgroup.getGroupId());
 
-		String scopeLabel = group.getScopeLabel(themeDisplay);
-
-		Assert.assertEquals("parent-site", scopeLabel);
+		Assert.assertEquals("parent-site", group.getScopeLabel(themeDisplay));
 	}
 
 	@Test
@@ -872,22 +856,19 @@ public class GroupServiceTest {
 
 		themeDisplay.setScopeGroupId(_group.getGroupId());
 
-		String scopeLabel = group.getScopeLabel(themeDisplay);
-
-		Assert.assertEquals("site", scopeLabel);
+		Assert.assertEquals("site", group.getScopeLabel(themeDisplay));
 	}
 
 	@Test
 	public void testIndividualResourcePermission() throws Exception {
 		_group = GroupTestUtil.addGroup();
 
-		int resourcePermissionsCount =
+		Assert.assertEquals(
+			1,
 			_resourcePermissionLocalService.getResourcePermissionsCount(
 				_group.getCompanyId(), Group.class.getName(),
 				ResourceConstants.SCOPE_INDIVIDUAL,
-				String.valueOf(_group.getGroupId()));
-
-		Assert.assertEquals(1, resourcePermissionsCount);
+				String.valueOf(_group.getGroupId())));
 	}
 
 	@Test
