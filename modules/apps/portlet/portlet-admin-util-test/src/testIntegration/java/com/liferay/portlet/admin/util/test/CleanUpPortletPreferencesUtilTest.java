@@ -46,7 +46,6 @@ import com.liferay.portlet.util.test.PortletKeys;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -62,11 +61,6 @@ public class CleanUpPortletPreferencesUtilTest {
 	@Rule
 	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
 		new LiferayIntegrationTestRule();
-
-	@Before
-	public void setUp() throws Exception {
-		_group = GroupTestUtil.addGroup();
-	}
 
 	@Test
 	public void testCleanUpOrphanePortletPreferences() throws Exception {
@@ -127,6 +121,8 @@ public class CleanUpPortletPreferencesUtilTest {
 	}
 
 	private LayoutRevision _getLayoutRevision() throws Exception {
+		_group = GroupTestUtil.addGroup();
+
 		Layout layout = LayoutTestUtil.addLayout(_group, false);
 
 		ServiceContext serviceContext =
