@@ -541,6 +541,8 @@ public class GroupServiceTest {
 
 		User defaultUser = company.getDefaultUser();
 
+		String languageId = defaultUser.getLanguageId();
+
 		try {
 			defaultUser.setLanguageId(
 				_language.getLanguageId(LocaleUtil.BRAZIL));
@@ -552,7 +554,7 @@ public class GroupServiceTest {
 				_portal.getSiteDefaultLocale(company.getGroupId()));
 		}
 		finally {
-			defaultUser.setLanguageId(defaultUser.getLanguageId());
+			defaultUser.setLanguageId(languageId);
 
 			_userLocalService.updateUser(defaultUser);
 		}
@@ -670,6 +672,8 @@ public class GroupServiceTest {
 
 		User defaultUser = company.getDefaultUser();
 
+		String languageId = defaultUser.getLanguageId();
+
 		try {
 			defaultUser.setLanguageId(
 				_language.getLanguageId(LocaleUtil.CHINA));
@@ -681,7 +685,7 @@ public class GroupServiceTest {
 				_portal.getSiteDefaultLocale(_group.getGroupId()));
 		}
 		finally {
-			defaultUser.setLanguageId(defaultUser.getLanguageId());
+			defaultUser.setLanguageId(languageId);
 
 			_userLocalService.updateUser(defaultUser);
 		}
