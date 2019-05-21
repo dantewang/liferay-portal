@@ -994,8 +994,7 @@ public class GroupServiceTest {
 		Group scopeGroup = _groupLocalService.addGroup(
 			TestPropsValues.getUserId(), GroupConstants.DEFAULT_PARENT_GROUP_ID,
 			Layout.class.getName(), layout.getPlid(),
-			GroupConstants.DEFAULT_LIVE_GROUP_ID, nameMap,
-			(Map<Locale, String>)null, 0, true,
+			GroupConstants.DEFAULT_LIVE_GROUP_ID, nameMap, null, 0, true,
 			GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION, null, false, true,
 			null);
 
@@ -1206,8 +1205,7 @@ public class GroupServiceTest {
 		return _groupLocalService.addGroup(
 			TestPropsValues.getUserId(), GroupConstants.DEFAULT_PARENT_GROUP_ID,
 			Layout.class.getName(), scopeLayout.getPlid(),
-			GroupConstants.DEFAULT_LIVE_GROUP_ID, nameMap,
-			(Map<Locale, String>)null, 0, true,
+			GroupConstants.DEFAULT_LIVE_GROUP_ID, nameMap, null, 0, true,
 			GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION, null, false, true,
 			null);
 	}
