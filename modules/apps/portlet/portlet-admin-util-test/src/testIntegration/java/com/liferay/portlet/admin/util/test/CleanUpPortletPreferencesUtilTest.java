@@ -83,11 +83,9 @@ public class CleanUpPortletPreferencesUtilTest {
 
 		CleanUpPortletPreferencesUtil.cleanUpLayoutRevisionPortletPreferences();
 
-		portletPreferences =
+		Assert.assertNull(
 			_portletPreferencesLocalService.fetchPortletPreferences(
-				portletPreferences.getPortletPreferencesId());
-
-		Assert.assertNull(portletPreferences);
+				portletPreferences.getPortletPreferencesId()));
 	}
 
 	@Test
@@ -123,11 +121,9 @@ public class CleanUpPortletPreferencesUtilTest {
 
 		CleanUpPortletPreferencesUtil.cleanUpLayoutRevisionPortletPreferences();
 
-		portletPreferences =
+		Assert.assertNotNull(
 			_portletPreferencesLocalService.fetchPortletPreferences(
-				portletPreferences.getPortletPreferencesId());
-
-		Assert.assertNotNull(portletPreferences);
+				portletPreferences.getPortletPreferencesId()));
 	}
 
 	protected LayoutRevision getLayoutRevision() throws Exception {
