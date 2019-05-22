@@ -129,6 +129,10 @@ public class WorkflowInstanceLinkLocalServiceImpl
 	public WorkflowInstanceLink fetchWorkflowInstanceLink(
 		long companyId, long groupId, String className, long classPK) {
 
+		if (workflowInstanceLinkPersistence.countAll() == 0) {
+			return null;
+		}
+
 		List<WorkflowInstanceLink> workflowInstanceLinks =
 			getWorkflowInstanceLinks(companyId, groupId, className, classPK);
 
@@ -194,6 +198,10 @@ public class WorkflowInstanceLinkLocalServiceImpl
 	@Override
 	public boolean hasWorkflowInstanceLink(
 		long companyId, long groupId, String className, long classPK) {
+
+		if (workflowInstanceLinkPersistence.countAll() == 0) {
+			return false;
+		}
 
 		WorkflowInstanceLink workflowInstanceLink = fetchWorkflowInstanceLink(
 			companyId, groupId, className, classPK);
