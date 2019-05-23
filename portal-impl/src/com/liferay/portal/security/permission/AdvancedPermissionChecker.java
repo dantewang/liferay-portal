@@ -1469,6 +1469,10 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 			groupId = group.getGroupId();
 		}
 
+		if (isOmniadmin()) {
+			return true;
+		}
+
 		try {
 			boolean hasPermission = doCheckPermission(
 				companyId, groupId, name, primKey, roleIds, actionId,
@@ -1483,10 +1487,6 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 				"Someone may be trying to circumvent the permission checker: " +
 					nsrpe.getMessage(),
 				nsrpe);
-		}
-
-		if (isOmniadmin()) {
-			return true;
 		}
 
 		if (name.equals(Organization.class.getName())) {
