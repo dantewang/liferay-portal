@@ -19,6 +19,8 @@
 <%
 MBMessageDisplay messageDisplay = (MBMessageDisplay)request.getAttribute(WebKeys.MESSAGE_BOARDS_MESSAGE_DISPLAY);
 
+MBTreeWalker mbTreeWalker = messageDisplay.getTreeWalker();
+
 MBMessage message = messageDisplay.getMessage();
 
 MBCategory category = messageDisplay.getCategory();
@@ -77,7 +79,7 @@ if (portletTitleBasedNavigation) {
 							rootMessage = message;
 						}
 						else {
-							rootMessage = MBMessageLocalServiceUtil.getMessage(message.getRootMessageId());
+							rootMessage = mbTreeWalker.getRoot();
 						}
 						%>
 
