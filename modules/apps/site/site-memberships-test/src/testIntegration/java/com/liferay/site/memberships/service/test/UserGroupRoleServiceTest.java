@@ -541,41 +541,15 @@ public class UserGroupRoleServiceTest {
 		_assertFalse(false, _organization.getGroupId(), role.getRoleId());
 	}
 
-	protected void deleteUserGroupRolesByRole(
-			long groupId, long roleId, User subjectUser, User objectUser)
-		throws Exception {
-
-		PermissionChecker permissionChecker = _permissionCheckerFactory.create(
-			subjectUser);
-
-		PermissionThreadLocal.setPermissionChecker(permissionChecker);
-
-		_userGroupRoleService.deleteUserGroupRoles(
-			objectUser.getUserId(), groupId, new long[] {roleId});
-	}
-
-	protected void deleteUserGroupRolesByUser(
-			long groupId, long roleId, User subjectUser, User objectUser)
-		throws Exception {
-
-		PermissionChecker permissionChecker = _permissionCheckerFactory.create(
-			subjectUser);
-
-		PermissionThreadLocal.setPermissionChecker(permissionChecker);
-
-		_userGroupRoleService.deleteUserGroupRoles(
-			new long[] {objectUser.getUserId()}, groupId, roleId);
-	}
-
 	private void _assertFalse(boolean deleteByRoles, long groupId, long roleId)
 		throws Exception {
 
 		if (deleteByRoles) {
-			deleteUserGroupRolesByRole(
+			_deleteUserGroupRolesByRole(
 				groupId, roleId, _subjectUser, _objectUser);
 		}
 		else {
-			deleteUserGroupRolesByUser(
+			_deleteUserGroupRolesByUser(
 				groupId, roleId, _subjectUser, _objectUser);
 		}
 
@@ -589,11 +563,11 @@ public class UserGroupRoleServiceTest {
 
 		try {
 			if (deleteByRoles) {
-				deleteUserGroupRolesByRole(
+				_deleteUserGroupRolesByRole(
 					groupId, roleId, _subjectUser, _objectUser);
 			}
 			else {
-				deleteUserGroupRolesByUser(
+				_deleteUserGroupRolesByUser(
 					groupId, roleId, _subjectUser, _objectUser);
 			}
 
@@ -604,6 +578,32 @@ public class UserGroupRoleServiceTest {
 				_userGroupRoleLocalService.hasUserGroupRole(
 					_objectUser.getUserId(), groupId, roleId));
 		}
+	}
+
+	private void _deleteUserGroupRolesByRole(
+			long groupId, long roleId, User subjectUser, User objectUser)
+		throws Exception {
+
+		PermissionChecker permissionChecker = _permissionCheckerFactory.create(
+			subjectUser);
+
+		PermissionThreadLocal.setPermissionChecker(permissionChecker);
+
+		_userGroupRoleService.deleteUserGroupRoles(
+			objectUser.getUserId(), groupId, new long[] {roleId});
+	}
+
+	private void _deleteUserGroupRolesByUser(
+			long groupId, long roleId, User subjectUser, User objectUser)
+		throws Exception {
+
+		PermissionChecker permissionChecker = _permissionCheckerFactory.create(
+			subjectUser);
+
+		PermissionThreadLocal.setPermissionChecker(permissionChecker);
+
+		_userGroupRoleService.deleteUserGroupRoles(
+			new long[] {objectUser.getUserId()}, groupId, roleId);
 	}
 
 	@DeleteAfterTestRun
