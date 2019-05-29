@@ -609,15 +609,15 @@ public class EditServerMVCActionCommand extends BaseMVCActionCommand {
 			long companyId, long roleId, boolean limitScope)
 		throws Exception {
 
-		List<ResourcePermission> roleResourcePermissions =
-			_resourcePermissionLocalService.getRoleResourcePermissions(roleId);
-
 		Group userPersonalSite = _groupLocalService.getGroup(
 			companyId, GroupConstants.USER_PERSONAL_SITE);
 
 		String groupIdString = String.valueOf(userPersonalSite.getGroupId());
 
-		for (ResourcePermission resourcePermission : roleResourcePermissions) {
+		for (ResourcePermission resourcePermission :
+				_resourcePermissionLocalService.getRoleResourcePermissions(
+					roleId)) {
+
 			if (!resourcePermission.hasActionId(ActionKeys.ADD_TO_PAGE)) {
 				continue;
 			}
@@ -642,10 +642,8 @@ public class EditServerMVCActionCommand extends BaseMVCActionCommand {
 		LayoutTypePortlet layoutTypePortlet =
 			(LayoutTypePortlet)layout.getLayoutType();
 
-		List<Portlet> portlets = layoutTypePortlet.getAllPortlets();
-
 		List<String> portletIds = ListUtil.toList(
-			portlets, Portlet.PORTLET_ID_ACCESSOR);
+			layoutTypePortlet.getAllPortlets(), Portlet.PORTLET_ID_ACCESSOR);
 
 		return portletIds.contains(portletId);
 	}
@@ -672,11 +670,9 @@ public class EditServerMVCActionCommand extends BaseMVCActionCommand {
 			(com.liferay.portal.kernel.model.PortletPreferences
 				portletPreferences) -> {
 
-				long layoutRevisionId = portletPreferences.getPlid();
-
 				LayoutRevision layoutRevision =
 					_layoutRevisionLocalService.getLayoutRevision(
-						layoutRevisionId);
+						portletPreferences.getPlid());
 
 				Layout layout = _layoutLocalService.getLayout(
 					layoutRevision.getPlid());
@@ -696,13 +692,12 @@ public class EditServerMVCActionCommand extends BaseMVCActionCommand {
 
 				layoutStagingHandler.setLayoutRevision(layoutRevision);
 
-				Layout proxiedLayout = (Layout)ProxyUtil.newProxyInstance(
-					PortalClassLoaderUtil.getClassLoader(),
-					new Class<?>[] {Layout.class, ModelWrapper.class},
-					layoutStagingHandler);
-
 				if (_containsPortlet(
-						proxiedLayout, portletPreferences.getPortletId())) {
+						(Layout)ProxyUtil.newProxyInstance(
+							PortalClassLoaderUtil.getClassLoader(),
+							new Class<?>[] {Layout.class, ModelWrapper.class},
+							layoutStagingHandler),
+						portletPreferences.getPortletId())) {
 
 					return;
 				}
