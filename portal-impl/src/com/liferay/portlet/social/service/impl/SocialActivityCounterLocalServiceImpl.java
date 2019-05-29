@@ -510,6 +510,10 @@ public class SocialActivityCounterLocalServiceImpl
 			return;
 		}
 
+		if (socialActivityCounterPersistence.countAll() == 0) {
+			return;
+		}
+
 		List<SocialActivityCounter> activityCounters =
 			socialActivityCounterPersistence.findByC_C(
 				assetEntry.getClassNameId(), classPK);
