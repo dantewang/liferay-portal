@@ -164,6 +164,10 @@ public class JournalContentDisplayContext {
 		}
 
 		if (articleResourcePrimKey == 0) {
+			if (Validator.isBlank(getArticleId())) {
+				return null;
+			}
+
 			JournalArticleResource articleResource =
 				JournalArticleResourceLocalServiceUtil.fetchArticleResource(
 					getArticleGroupId(), getArticleId());
