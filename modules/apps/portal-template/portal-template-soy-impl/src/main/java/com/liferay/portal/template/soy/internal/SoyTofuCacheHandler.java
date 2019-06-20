@@ -42,12 +42,24 @@ public class SoyTofuCacheHandler {
 		SoyTofuCacheBag soyTofuCacheBag = new SoyTofuCacheBag(
 			soyFileSet, soyTofu);
 
+		if (templateResources.size() == _allSoyTemplateResources.size()) {
+			if (templateResources.equals(_allSoyTemplateResources)) {
+				_allSoyTofuCacheBag = soyTofuCacheBag;
+			}
+		}
+
 		_portalCache.put((Serializable)templateResources, soyTofuCacheBag);
 
 		return soyTofuCacheBag;
 	}
 
 	public SoyTofuCacheBag get(List<TemplateResource> templateResources) {
+		if (templateResources.size() == _allSoyTemplateResources.size()) {
+			if (templateResources.equals(_allSoyTemplateResources)) {
+				return _allSoyTofuCacheBag;
+			}
+		}
+
 		return _portalCache.get((Serializable)templateResources);
 	}
 
@@ -58,6 +70,8 @@ public class SoyTofuCacheHandler {
 	}
 
 	public void removeIfAny(List<TemplateResource> templateResources) {
+		_allSoyTofuCacheBag = null;
+
 		for (TemplateResource templateResource : templateResources) {
 			for (Serializable key : _portalCache.getKeys()) {
 				List<TemplateResource> templateResourcesList =
@@ -70,6 +84,14 @@ public class SoyTofuCacheHandler {
 		}
 	}
 
+	protected void setAllSoyTemplateResources(
+		List<TemplateResource> templateResources) {
+
+		_allSoyTemplateResources = templateResources;
+	}
+
+	private List<TemplateResource> _allSoyTemplateResources;
+	private volatile SoyTofuCacheBag _allSoyTofuCacheBag;
 	private final PortalCache<Serializable, SoyTofuCacheBag> _portalCache;
 
 }
