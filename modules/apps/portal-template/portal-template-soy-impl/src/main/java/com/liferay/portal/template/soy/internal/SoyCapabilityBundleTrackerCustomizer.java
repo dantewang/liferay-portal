@@ -51,6 +51,8 @@ public class SoyCapabilityBundleTrackerCustomizer
 		_soyTofuCacheHandler = soyTofuCacheHandler;
 		_soyProviderCapabilityBundleRegister =
 			soyProviderCapabilityBundleRegister;
+
+		_soyTofuCacheHandler.setAllSoyTemplateResources(_templateResources);
 	}
 
 	@Override
