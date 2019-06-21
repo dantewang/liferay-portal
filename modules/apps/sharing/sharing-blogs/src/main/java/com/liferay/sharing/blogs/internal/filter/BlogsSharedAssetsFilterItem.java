@@ -15,14 +15,12 @@
 package com.liferay.sharing.blogs.internal.filter;
 
 import com.liferay.blogs.model.BlogsEntry;
-import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.sharing.filter.SharedAssetsFilterItem;
 
 import java.util.Locale;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alejandro Tardín
@@ -40,10 +38,7 @@ public class BlogsSharedAssetsFilterItem implements SharedAssetsFilterItem {
 
 	@Override
 	public String getLabel(Locale locale) {
-		return _language.get(locale, "blogs");
+		return LanguageUtil.get(locale, "blogs");
 	}
-
-	@Reference
-	private Language _language;
 
 }
