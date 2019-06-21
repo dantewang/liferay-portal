@@ -14,6 +14,7 @@
 
 package com.liferay.asset.test.util;
 
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
@@ -55,6 +56,7 @@ import java.util.Collections;
 /**
  * @author Sergio González
  */
+@RunWith(Arquillian.class)
 public class BaseSharingPermissionSQLContributorTest {
 
 	@ClassRule
