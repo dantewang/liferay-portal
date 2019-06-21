@@ -83,15 +83,11 @@ if (row != null) {
 		/>
 	</c:if>
 
-	<c:if test="<%= BlogsEntrySharingUtil.containsSharePermission(permissionChecker, entry) %>">
-		<liferay-ui:menu-item
-			menuItem="<%= BlogsEntrySharingUtil.createShareMenuItem(entry, request) %>"
-		/>
-	</c:if>
+	<liferay-ui:menu-item
+		menuItem="<%= BlogsEntrySharingUtil.createShareMenuItem(entry, request) %>"
+	/>
 
-	<c:if test="<%= BlogsEntrySharingUtil.containsManageCollaboratorsPermission(permissionChecker, entry) %>">
-		<liferay-ui:menu-item
-			menuItem="<%= BlogsEntrySharingUtil.createManageCollaboratorsMenuItem(entry, request) %>"
-		/>
-	</c:if>
+	<liferay-ui:menu-item
+		menuItem="<%= BlogsEntrySharingUtil.createManageCollaboratorsMenuItem(entry, request) %>"
+	/>
 </liferay-ui:icon-menu>

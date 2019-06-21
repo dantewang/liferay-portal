@@ -99,22 +99,13 @@ public class BlogsEntryActionDropdownItemsProvider {
 					add(_getPublishToLiveEntryActionUnsafeConsumer());
 				}
 
-				if (BlogsEntrySharingUtil.containsSharePermission(
-						_permissionChecker, _blogsEntry)) {
+				add(
+					BlogsEntrySharingUtil.createShareDropdownItem(
+						_blogsEntry, _httpServletRequest));
 
-					add(
-						BlogsEntrySharingUtil.createShareDropdownItem(
-							_blogsEntry, _httpServletRequest));
-				}
-
-				if (BlogsEntrySharingUtil.containsManageCollaboratorsPermission(
-						_permissionChecker, _blogsEntry)) {
-
-					add(
-						BlogsEntrySharingUtil.
-							createManageCollaboratorsDropdownItem(
-								_blogsEntry, _httpServletRequest));
-				}
+				add(
+					BlogsEntrySharingUtil.createManageCollaboratorsDropdownItem(
+						_blogsEntry, _httpServletRequest));
 			}
 		};
 	}
