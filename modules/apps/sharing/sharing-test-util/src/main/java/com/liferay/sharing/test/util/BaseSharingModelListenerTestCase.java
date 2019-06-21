@@ -14,13 +14,19 @@
 
 package com.liferay.sharing.test.util;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.ClassedModel;
+import com.liferay.document.library.kernel.model.DLFileEntry;
+import com.liferay.document.library.kernel.model.DLFolder;
+import com.liferay.document.library.kernel.model.DLFolderConstants;
+import com.liferay.document.library.kernel.service.DLAppLocalService;
+import com.liferay.document.library.kernel.service.DLTrashService;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -29,6 +35,7 @@ import com.liferay.portal.kernel.test.util.CompanyTestUtil;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
@@ -48,7 +55,7 @@ import org.junit.Test;
 /**
  * @author Sergio González
  */
-public abstract class BaseSharingModelListenerTestCase<T extends ClassedModel> {
+public abstract class BaseSharingModelListenerTestCase {
 
 	@ClassRule
 	@Rule
@@ -76,25 +83,35 @@ public abstract class BaseSharingModelListenerTestCase<T extends ClassedModel> {
 
 		serviceContext.setAddGuestPermissions(false);
 		serviceContext.setAddGroupPermissions(false);
+
+		_fileEntry = _dlAppLocalService.addFileEntry(
+			_user.getUserId(), _group.getGroupId(),
+			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
+			StringUtil.randomString(), "text/plain", StringUtil.randomString(),
+			StringUtil.randomString(), StringPool.BLANK, "test".getBytes(),
+			serviceContext);
+
+		_classNameId = _classNameLocalService.getClassNameId(
+			DLFileEntry.class.getName());
+
+		_folder = _dlAppLocalService.addFolder(
+			_user.getUserId(), _group.getGroupId(),
+			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
+			StringUtil.randomString(), StringUtil.randomString(),
+			serviceContext);
 	}
 
 	@Test
-	public void testDeletingSharedModelDeletesSharingEntries()
+	public void testDeletingSharedFileEntryDeletesSharingEntries()
 		throws Exception {
 
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(
 				_group.getGroupId(), _user.getUserId());
 
-		T model = getModel(_user, _group);
-
-		long classNameId = _classNameLocalService.getClassNameId(
-			model.getModelClassName());
-		long classPK = (Long)model.getPrimaryKeyObj();
-
 		_sharingEntryLocalService.addSharingEntry(
-			_user.getUserId(), _groupUser.getUserId(), classNameId, classPK,
-			_group.getGroupId(), true,
+			_user.getUserId(), _groupUser.getUserId(), _classNameId,
+			_fileEntry.getFileEntryId(), _fileEntry.getGroupId(), true,
 			Arrays.asList(SharingEntryAction.UPDATE, SharingEntryAction.VIEW),
 			null, serviceContext);
 
@@ -105,7 +122,7 @@ public abstract class BaseSharingModelListenerTestCase<T extends ClassedModel> {
 		Assert.assertEquals(
 			toUserSharingEntries.toString(), 1, toUserSharingEntries.size());
 
-		delete(model);
+		_dlAppLocalService.deleteFileEntry(_fileEntry.getFileEntryId());
 
 		toUserSharingEntries =
 			_sharingEntryLocalService.getToUserSharingEntries(
@@ -116,34 +133,26 @@ public abstract class BaseSharingModelListenerTestCase<T extends ClassedModel> {
 	}
 
 	@Test
-	public void testDeletingSharedModelDoesNotDeleteOtherSharingEntries()
+	public void testDeletingSharedFileEntryDoesNotDeleteOtherSharingEntries()
 		throws Exception {
 
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(
 				_group.getGroupId(), _user.getUserId());
 
-		T model = getModel(_user, _group);
-
-		long classNameId = _classNameLocalService.getClassNameId(
-			model.getModelClassName());
-		long classPK = (Long)model.getPrimaryKeyObj();
-
 		_sharingEntryLocalService.addSharingEntry(
-			_user.getUserId(), _groupUser.getUserId(), classNameId, classPK,
-			_group.getGroupId(), true,
+			_user.getUserId(), _groupUser.getUserId(), _classNameId,
+			_fileEntry.getFileEntryId(), _fileEntry.getGroupId(), true,
 			Arrays.asList(SharingEntryAction.UPDATE, SharingEntryAction.VIEW),
 			null, serviceContext);
 
-		T model2 = getModel(_user, _group);
-
-		long classNameId2 = _classNameLocalService.getClassNameId(
-			model2.getModelClassName());
-		long classPK2 = (Long)model2.getPrimaryKeyObj();
+		long classNameId = _classNameLocalService.getClassNameId(
+			DLFolder.class.getName());
+		long classPK = _folder.getFolderId();
 
 		SharingEntry sharingEntry = _sharingEntryLocalService.addSharingEntry(
-			_user.getUserId(), _groupUser.getUserId(), classNameId2, classPK2,
-			_group.getGroupId(), true,
+			_user.getUserId(), _groupUser.getUserId(), classNameId, classPK,
+			_fileEntry.getGroupId(), true,
 			Arrays.asList(SharingEntryAction.UPDATE, SharingEntryAction.VIEW),
 			null, serviceContext);
 
@@ -154,7 +163,7 @@ public abstract class BaseSharingModelListenerTestCase<T extends ClassedModel> {
 		Assert.assertEquals(
 			toUserSharingEntries.toString(), 2, toUserSharingEntries.size());
 
-		delete(model);
+		_dlAppLocalService.deleteFileEntry(_fileEntry.getFileEntryId());
 
 		toUserSharingEntries =
 			_sharingEntryLocalService.getToUserSharingEntries(
@@ -166,22 +175,16 @@ public abstract class BaseSharingModelListenerTestCase<T extends ClassedModel> {
 	}
 
 	@Test
-	public void testMovingToRecycleBinSharedModelDoesNotDeleteSharingEntries()
+	public void testMovingToRecycleBinSharedFileEntryDoesNotDeleteSharingEntries()
 		throws Exception {
 
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(
 				_group.getGroupId(), _user.getUserId());
 
-		T model = getModel(_user, _group);
-
-		long classNameId = _classNameLocalService.getClassNameId(
-			model.getModelClassName());
-		long classPK = (Long)model.getPrimaryKeyObj();
-
 		_sharingEntryLocalService.addSharingEntry(
-			_user.getUserId(), _groupUser.getUserId(), classNameId, classPK,
-			_group.getGroupId(), true,
+			_user.getUserId(), _groupUser.getUserId(), _classNameId,
+			_fileEntry.getFileEntryId(), _fileEntry.getGroupId(), true,
 			Arrays.asList(SharingEntryAction.UPDATE, SharingEntryAction.VIEW),
 			null, serviceContext);
 
@@ -192,7 +195,7 @@ public abstract class BaseSharingModelListenerTestCase<T extends ClassedModel> {
 		Assert.assertEquals(
 			toUserSharingEntries.toString(), 1, toUserSharingEntries.size());
 
-		moveToTrash(model);
+		_dlTrashService.moveFileEntryToTrash(_fileEntry.getFileEntryId());
 
 		toUserSharingEntries =
 			_sharingEntryLocalService.getToUserSharingEntries(
@@ -202,12 +205,7 @@ public abstract class BaseSharingModelListenerTestCase<T extends ClassedModel> {
 			toUserSharingEntries.toString(), 1, toUserSharingEntries.size());
 	}
 
-	protected abstract void delete(T model) throws PortalException;
-
-	protected abstract T getModel(User user, Group group)
-		throws PortalException;
-
-	protected abstract void moveToTrash(T model) throws PortalException;
+	private long _classNameId;
 
 	@Inject
 	private ClassNameLocalService _classNameLocalService;
@@ -215,6 +213,14 @@ public abstract class BaseSharingModelListenerTestCase<T extends ClassedModel> {
 	@DeleteAfterTestRun
 	private Company _company;
 
+	@Inject
+	private DLAppLocalService _dlAppLocalService;
+
+	@Inject
+	private DLTrashService _dlTrashService;
+
+	private FileEntry _fileEntry;
+	private Folder _folder;
 	private Group _group;
 	private User _groupUser;
 
