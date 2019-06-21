@@ -55,7 +55,7 @@ import java.util.Collections;
 /**
  * @author Sergio González
  */
-public abstract class BaseSharingPermissionSQLContributorTest {
+public class BaseSharingPermissionSQLContributorTest {
 
 	@ClassRule
 	@Rule
