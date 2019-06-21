@@ -24,7 +24,6 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.sharing.display.context.util.SharingDropdownItemFactory;
 import com.liferay.sharing.display.context.util.SharingMenuItemFactory;
 import com.liferay.sharing.security.permission.SharingPermission;
-import com.liferay.sharing.service.SharingEntryLocalService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -41,17 +40,9 @@ public class BlogsEntrySharingUtil {
 		PermissionChecker permissionChecker, BlogsEntry blogsEntry) {
 
 		try {
-			long classNameId = PortalUtil.getClassNameId(BlogsEntry.class);
-
-			if (_sharingEntryLocalService.getSharingEntriesCount(
-					classNameId, blogsEntry.getEntryId()) == 0) {
-
-				return false;
-			}
-
 			return _sharingPermission.containsManageCollaboratorsPermission(
-				permissionChecker, classNameId, blogsEntry.getEntryId(),
-				blogsEntry.getGroupId());
+				permissionChecker, PortalUtil.getClassNameId(BlogsEntry.class),
+				blogsEntry.getEntryId(), blogsEntry.getGroupId());
 		}
 		catch (PortalException pe) {
 			throw new SystemException(pe);
@@ -132,13 +123,6 @@ public class BlogsEntrySharingUtil {
 	}
 
 	@Reference(unbind = "-")
-	protected void setSharingEntryLocalService(
-		SharingEntryLocalService sharingEntryLocalService) {
-
-		_sharingEntryLocalService = sharingEntryLocalService;
-	}
-
-	@Reference(unbind = "-")
 	protected void setSharingMenuItemFactory(
 		SharingMenuItemFactory sharingMenuItemFactory) {
 
@@ -151,7 +135,6 @@ public class BlogsEntrySharingUtil {
 	}
 
 	private static SharingDropdownItemFactory _sharingDropdownItemFactory;
-	private static SharingEntryLocalService _sharingEntryLocalService;
 	private static SharingMenuItemFactory _sharingMenuItemFactory;
 	private static SharingPermission _sharingPermission;
 
