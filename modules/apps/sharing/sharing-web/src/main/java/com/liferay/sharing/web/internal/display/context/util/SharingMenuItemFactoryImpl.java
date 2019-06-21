@@ -73,6 +73,9 @@ public class SharingMenuItemFactoryImpl
 
 		JavaScriptMenuItem javaScriptMenuItem = new JavaScriptMenuItem();
 
+		javaScriptMenuItem.setJavaScript(
+			_sharingJavaScriptFactory.createManageCollaboratorsJavaScript(
+				httpServletRequest));
 		javaScriptMenuItem.setKey("#manage-collaborators");
 		javaScriptMenuItem.setLabel(
 			LanguageUtil.get(httpServletRequest, "manage-collaborators"));
@@ -92,6 +95,9 @@ public class SharingMenuItemFactoryImpl
 		JavaScriptToolbarItem javaScriptToolbarItem =
 			new JavaScriptToolbarItem();
 
+		javaScriptToolbarItem.setJavaScript(
+			_sharingJavaScriptFactory.createManageCollaboratorsJavaScript(
+				httpServletRequest));
 		javaScriptToolbarItem.setKey("#manage-collaborators");
 		javaScriptToolbarItem.setLabel(
 			LanguageUtil.get(httpServletRequest, "manage-collaborators"));
@@ -128,6 +134,9 @@ public class SharingMenuItemFactoryImpl
 
 		JavaScriptMenuItem javaScriptMenuItem = new JavaScriptMenuItem();
 
+		javaScriptMenuItem.setJavaScript(
+			_sharingJavaScriptFactory.createSharingJavaScript(
+				httpServletRequest));
 		javaScriptMenuItem.setKey("#share");
 		javaScriptMenuItem.setLabel(
 			LanguageUtil.get(httpServletRequest, "share"));
@@ -147,6 +156,9 @@ public class SharingMenuItemFactoryImpl
 		JavaScriptToolbarItem javaScriptToolbarItem =
 			new JavaScriptToolbarItem();
 
+		javaScriptToolbarItem.setJavaScript(
+			_sharingJavaScriptFactory.createSharingJavaScript(
+				httpServletRequest));
 		javaScriptToolbarItem.setKey("#share");
 		javaScriptToolbarItem.setLabel(
 			LanguageUtil.get(httpServletRequest, "share"));
