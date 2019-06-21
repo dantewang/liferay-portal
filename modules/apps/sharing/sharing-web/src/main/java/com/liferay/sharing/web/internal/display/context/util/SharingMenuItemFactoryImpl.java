@@ -62,6 +62,7 @@ public class SharingMenuItemFactoryImpl
 				_sharingJavaScriptFactory.
 					createManageCollaboratorsOnClickMethod(
 						className, classPK, httpServletRequest));
+
 		dropdownItem.setLabel(
 			_getManageCollaboratorsLabel(httpServletRequest.getLocale()));
 
@@ -117,6 +118,7 @@ public class SharingMenuItemFactoryImpl
 			"javascript:" +
 				_sharingJavaScriptFactory.createSharingOnClickMethod(
 					className, classPK, httpServletRequest));
+
 		dropdownItem.setLabel(_getSharingLabel(httpServletRequest.getLocale()));
 
 		return dropdownItem;
