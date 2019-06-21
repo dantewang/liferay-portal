@@ -21,14 +21,10 @@ import com.liferay.portal.kernel.servlet.taglib.ui.JavaScriptMenuItem;
 import com.liferay.portal.kernel.servlet.taglib.ui.JavaScriptToolbarItem;
 import com.liferay.portal.kernel.servlet.taglib.ui.MenuItem;
 import com.liferay.portal.kernel.servlet.taglib.ui.ToolbarItem;
-import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.sharing.display.context.util.SharingDropdownItemFactory;
 import com.liferay.sharing.display.context.util.SharingJavaScriptFactory;
 import com.liferay.sharing.display.context.util.SharingMenuItemFactory;
 import com.liferay.sharing.display.context.util.SharingToolbarItemFactory;
-
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -64,7 +60,7 @@ public class SharingMenuItemFactoryImpl
 						className, classPK, httpServletRequest));
 
 		dropdownItem.setLabel(
-			_getManageCollaboratorsLabel(httpServletRequest.getLocale()));
+			LanguageUtil.get(httpServletRequest, "manage-collaborators"));
 
 		return dropdownItem;
 	}
@@ -79,7 +75,7 @@ public class SharingMenuItemFactoryImpl
 
 		javaScriptMenuItem.setKey("#manage-collaborators");
 		javaScriptMenuItem.setLabel(
-			_getManageCollaboratorsLabel(httpServletRequest.getLocale()));
+			LanguageUtil.get(httpServletRequest, "manage-collaborators"));
 		javaScriptMenuItem.setOnClick(
 			_sharingJavaScriptFactory.createManageCollaboratorsOnClickMethod(
 				className, classPK, httpServletRequest));
@@ -98,7 +94,7 @@ public class SharingMenuItemFactoryImpl
 
 		javaScriptToolbarItem.setKey("#manage-collaborators");
 		javaScriptToolbarItem.setLabel(
-			_getManageCollaboratorsLabel(httpServletRequest.getLocale()));
+			LanguageUtil.get(httpServletRequest, "manage-collaborators"));
 		javaScriptToolbarItem.setOnClick(
 			_sharingJavaScriptFactory.createManageCollaboratorsOnClickMethod(
 				className, classPK, httpServletRequest));
@@ -119,7 +115,7 @@ public class SharingMenuItemFactoryImpl
 				_sharingJavaScriptFactory.createSharingOnClickMethod(
 					className, classPK, httpServletRequest));
 
-		dropdownItem.setLabel(_getSharingLabel(httpServletRequest.getLocale()));
+		dropdownItem.setLabel(LanguageUtil.get(httpServletRequest, "share"));
 
 		return dropdownItem;
 	}
@@ -134,7 +130,7 @@ public class SharingMenuItemFactoryImpl
 
 		javaScriptMenuItem.setKey("#share");
 		javaScriptMenuItem.setLabel(
-			_getSharingLabel(httpServletRequest.getLocale()));
+			LanguageUtil.get(httpServletRequest, "share"));
 		javaScriptMenuItem.setOnClick(
 			_sharingJavaScriptFactory.createSharingOnClickMethod(
 				className, classPK, httpServletRequest));
@@ -153,26 +149,12 @@ public class SharingMenuItemFactoryImpl
 
 		javaScriptToolbarItem.setKey("#share");
 		javaScriptToolbarItem.setLabel(
-			_getSharingLabel(httpServletRequest.getLocale()));
+			LanguageUtil.get(httpServletRequest, "share"));
 		javaScriptToolbarItem.setOnClick(
 			_sharingJavaScriptFactory.createSharingOnClickMethod(
 				className, classPK, httpServletRequest));
 
 		return javaScriptToolbarItem;
-	}
-
-	private String _getManageCollaboratorsLabel(Locale locale) {
-		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
-			locale, SharingJavaScriptFactoryImpl.class);
-
-		return LanguageUtil.get(resourceBundle, "manage-collaborators");
-	}
-
-	private String _getSharingLabel(Locale locale) {
-		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
-			locale, SharingJavaScriptFactoryImpl.class);
-
-		return LanguageUtil.get(resourceBundle, "share");
 	}
 
 	@Reference
