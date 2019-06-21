@@ -28,14 +28,11 @@ import com.liferay.portal.kernel.security.permission.resource.WorkflowedModelPer
 import com.liferay.portal.kernel.security.permission.resource.definition.ModelResourcePermissionDefinition;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.workflow.permission.WorkflowPermission;
-import com.liferay.sharing.security.permission.resource.SharingModelResourcePermissionConfigurator;
 
 import java.util.function.Consumer;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * @author Preston Crary
@@ -78,11 +75,6 @@ public class BlogsEntryModelResourcePermissionDefinition
 			new WorkflowedModelPermissionLogic<>(
 				_workflowPermission, modelResourcePermission,
 				_groupLocalService, BlogsEntry::getEntryId));
-
-		if (_sharingModelResourcePermissionConfigurator != null) {
-			_sharingModelResourcePermissionConfigurator.configure(
-				modelResourcePermission, modelResourcePermissionLogicConsumer);
-		}
 	}
 
 	@Reference
@@ -93,13 +85,6 @@ public class BlogsEntryModelResourcePermissionDefinition
 
 	@Reference(target = "(resource.name=" + BlogsConstants.RESOURCE_NAME + ")")
 	private PortletResourcePermission _portletResourcePermission;
-
-	@Reference(
-		cardinality = ReferenceCardinality.OPTIONAL,
-		policyOption = ReferencePolicyOption.GREEDY
-	)
-	private SharingModelResourcePermissionConfigurator
-		_sharingModelResourcePermissionConfigurator;
 
 	@Reference
 	private StagingPermission _stagingPermission;
