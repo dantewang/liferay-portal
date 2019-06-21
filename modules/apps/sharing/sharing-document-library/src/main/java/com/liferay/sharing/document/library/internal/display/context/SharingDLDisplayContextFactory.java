@@ -30,7 +30,7 @@ import com.liferay.sharing.configuration.SharingConfiguration;
 import com.liferay.sharing.configuration.SharingConfigurationFactory;
 import com.liferay.sharing.display.context.util.SharingMenuItemFactory;
 import com.liferay.sharing.display.context.util.SharingToolbarItemFactory;
-import com.liferay.sharing.security.permission.SharingPermission;
+import com.liferay.sharing.document.library.internal.security.permission.SharingPermissionHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -104,7 +104,7 @@ public class SharingDLDisplayContextFactory implements DLDisplayContextFactory {
 					themeDisplay.getLocale(),
 					SharingDLDisplayContextFactory.class),
 				_sharingMenuItemFactory, _sharingToolbarItemFactory,
-				_sharingPermission, sharingConfiguration);
+				_sharingPermissionHelper, sharingConfiguration);
 		}
 		catch (PortalException pe) {
 			throw new SystemException(
@@ -121,7 +121,7 @@ public class SharingDLDisplayContextFactory implements DLDisplayContextFactory {
 	private SharingMenuItemFactory _sharingMenuItemFactory;
 
 	@Reference
-	private SharingPermission _sharingPermission;
+	private SharingPermissionHelper _sharingPermissionHelper;
 
 	@Reference
 	private SharingToolbarItemFactory _sharingToolbarItemFactory;
