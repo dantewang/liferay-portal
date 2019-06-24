@@ -63,12 +63,6 @@ public class SoyTofuCacheHandler {
 		return _portalCache.get((Serializable)templateResources);
 	}
 
-	public SoyTofu getSoyTofu(List<TemplateResource> templateResources) {
-		SoyTofuCacheBag soyTofuCacheBag = get(templateResources);
-
-		return soyTofuCacheBag.getSoyTofu();
-	}
-
 	public void removeIfAny(List<TemplateResource> templateResources) {
 		_allSoyTofuCacheBag = null;
 
