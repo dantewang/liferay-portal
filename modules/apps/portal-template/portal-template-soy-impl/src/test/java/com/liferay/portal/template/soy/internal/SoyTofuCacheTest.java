@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.util.ProxyFactory;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.After;
@@ -38,6 +39,9 @@ public class SoyTofuCacheTest {
 
 		_soyTofuCacheHandler = new SoyTofuCacheHandler(
 			_soyTestHelper.mockPortalCache());
+
+		_soyTofuCacheHandler.setAllSoyTemplateResources(
+			Collections.emptyList());
 	}
 
 	@After

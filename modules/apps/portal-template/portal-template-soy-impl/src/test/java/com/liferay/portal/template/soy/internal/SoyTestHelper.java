@@ -33,6 +33,7 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -173,6 +174,12 @@ public class SoyTestHelper {
 
 					throw new UnsupportedOperationException(method.toString());
 				}));
+
+		SoyTofuCacheHandler soyTofuCacheHandler =
+			ReflectionTestUtil.getFieldValue(
+				_soyManager, "_soyTofuCacheHandler");
+
+		soyTofuCacheHandler.setAllSoyTemplateResources(Collections.emptyList());
 
 		ReflectionTestUtil.setFieldValue(
 			_soyManager, "_soyTemplateResourceFactory",
