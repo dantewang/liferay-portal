@@ -112,7 +112,11 @@ public class SoyManager extends BaseTemplateManager {
 
 		SoyTemplateResource soyTemplateResource = null;
 
-		if (templateResource instanceof SoyTemplateResource) {
+		if (templateResource == null) {
+			soyTemplateResource =
+				_soyCapabilityBundleTrackerCustomizer.getSoyTemplateResource();
+		}
+		else if (templateResource instanceof SoyTemplateResource) {
 			soyTemplateResource = (SoyTemplateResource)templateResource;
 		}
 		else {

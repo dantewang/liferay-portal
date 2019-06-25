@@ -94,10 +94,7 @@ public class SoyRendererImpl implements SoyRenderer {
 				"Unable to find the Soy template manager");
 		}
 
-		return _templateManager.getTemplate(
-			_soyTemplateResourceFactory.createSoyTemplateResource(
-				_soyTemplateResourcesProvider.getAllTemplateResources()),
-			false);
+		return _templateManager.getTemplate(null, false);
 	}
 
 	@Reference
