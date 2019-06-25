@@ -223,19 +223,21 @@ public class SoyTemplate extends BaseTemplate {
 	}
 
 	protected SoyTofuCacheBag getSoyTofuCacheBag(
-			List<TemplateResource> templateResources)
+			SoyTemplateResource soyTemplateResource)
 		throws Exception {
 
-		SoyTofuCacheBag soyTofuCacheBag = _soyTofuCacheHandler.get(
-			templateResources);
+		String templateId = soyTemplateResource.getTemplateId();
+
+		SoyTofuCacheBag soyTofuCacheBag = _soyTofuCacheHandler.get(templateId);
 
 		if (soyTofuCacheBag == null) {
-			SoyFileSet soyFileSet = getSoyFileSet(templateResources);
+			SoyFileSet soyFileSet = getSoyFileSet(
+				soyTemplateResource.getTemplateResources());
 
 			SoyTofu soyTofu = soyFileSet.compileToTofu();
 
 			soyTofuCacheBag = _soyTofuCacheHandler.add(
-				templateResources, soyFileSet, soyTofu);
+				templateId, soyFileSet, soyTofu);
 		}
 
 		return soyTofuCacheBag;
@@ -299,19 +301,18 @@ public class SoyTemplate extends BaseTemplate {
 			throw new TemplateException("Namespace is not specified");
 		}
 
-		List<TemplateResource> templateResources;
+		SoyTemplateResource soyTemplateResource = null;
 
 		if (templateResource instanceof SoyTemplateResource) {
-			SoyTemplateResource soyTemplateResource =
-				(SoyTemplateResource)templateResource;
-
-			templateResources = soyTemplateResource.getTemplateResources();
+			soyTemplateResource = (SoyTemplateResource)templateResource;
 		}
 		else {
-			templateResources = Collections.singletonList(templateResource);
+			soyTemplateResource = new SoyTemplateResourceImpl(
+				Collections.singletonList(templateResource));
 		}
 
-		SoyTofuCacheBag soyTofuCacheBag = getSoyTofuCacheBag(templateResources);
+		SoyTofuCacheBag soyTofuCacheBag = getSoyTofuCacheBag(
+			soyTemplateResource);
 
 		SoyTofu soyTofu = soyTofuCacheBag.getSoyTofu();
 
@@ -323,7 +324,8 @@ public class SoyTemplate extends BaseTemplate {
 		SoyFileSet soyFileSet = soyTofuCacheBag.getSoyFileSet();
 
 		Optional<SoyMsgBundle> soyMsgBundle = getSoyMsgBundle(
-			templateResources, soyFileSet, soyTofuCacheBag);
+			soyTemplateResource.getTemplateResources(), soyFileSet,
+			soyTofuCacheBag);
 
 		if (soyMsgBundle.isPresent()) {
 			renderer.setMsgBundle(soyMsgBundle.get());
