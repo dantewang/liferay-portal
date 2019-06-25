@@ -213,6 +213,7 @@ BlogsEntry entry = (BlogsEntry)request.getAttribute("view_entry_content.jsp-entr
 				<div class="col-md-8 mx-auto widget-mode-detail">
 
 					<%
+					request.setAttribute("entry_toolbar.jsp-blogsPortletInstanceConfiguration", blogsPortletInstanceConfiguration);
 					request.setAttribute("entry_toolbar.jsp-entry", entry);
 					%>
 

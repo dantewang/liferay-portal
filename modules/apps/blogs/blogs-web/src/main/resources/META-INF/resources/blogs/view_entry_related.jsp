@@ -105,6 +105,7 @@ BlogsEntry blogsEntry = (BlogsEntry)request.getAttribute("view_entry_related.jsp
 				<div class="card-row">
 
 					<%
+					request.setAttribute("entry_toolbar.jsp-blogsPortletInstanceConfiguration", blogsPortletInstanceConfiguration);
 					request.setAttribute("entry_toolbar.jsp-entry", blogsEntry);
 					%>
 

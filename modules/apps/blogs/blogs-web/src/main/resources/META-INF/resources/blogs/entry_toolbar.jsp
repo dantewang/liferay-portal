@@ -14,12 +14,14 @@
  */
 --%>
 
-<%@ include file="/blogs/init.jsp" %>
+<%@ include file="/init.jsp" %>
 
 <%
 BlogsEntry entry = (BlogsEntry)request.getAttribute("entry_toolbar.jsp-entry");
 RatingsEntry ratingsEntry = (RatingsEntry)request.getAttribute("view_entry_content.jsp-ratingsEntry");
 RatingsStats ratingsStats = (RatingsStats)request.getAttribute("view_entry_content.jsp-ratingsStats");
+
+BlogsPortletInstanceConfiguration blogsPortletInstanceConfiguration = (BlogsPortletInstanceConfiguration)request.getAttribute("entry_toolbar.jsp-blogsPortletInstanceConfiguration");
 
 boolean showFlags = ParamUtil.getBoolean(request, "showFlags");
 boolean showOnlyIcons = ParamUtil.getBoolean(request, "showOnlyIcons");
