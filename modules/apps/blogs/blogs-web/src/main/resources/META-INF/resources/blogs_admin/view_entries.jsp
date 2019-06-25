@@ -33,13 +33,15 @@ BlogEntriesManagementToolbarDisplayContext blogEntriesManagementToolbarDisplayCo
 	supportsBulkActions="<%= true %>"
 />
 
-<portlet:actionURL name="/blogs/edit_entry" var="restoreTrashEntriesURL">
-	<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.RESTORE %>" />
-</portlet:actionURL>
+<c:if test="<%= SessionMessages.contains(renderRequest, portletDisplay.getId() + SessionMessages.KEY_SUFFIX_DELETE_SUCCESS_DATA) %>">
+	<portlet:actionURL name="/blogs/edit_entry" var="restoreTrashEntriesURL">
+		<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.RESTORE %>" />
+	</portlet:actionURL>
 
-<liferay-trash:undo
-	portletURL="<%= restoreTrashEntriesURL %>"
-/>
+	<liferay-trash:undo
+		portletURL="<%= restoreTrashEntriesURL %>"
+	/>
+</c:if>
 
 <div class="container-fluid container-fluid-max-xl main-content-body">
 	<aui:form action="<%= portletURL.toString() %>" method="get" name="fm">
