@@ -87,6 +87,7 @@ public class SoyCapabilityBundleTrackerCustomizer
 		_addTemplateResourcesToList(bundle);
 
 		_soyTemplateResource = null;
+		_soyTofuCacheHandler.remove(_TEMPLATE_ID);
 
 		return bundleCapabilities;
 	}
@@ -104,7 +105,7 @@ public class SoyCapabilityBundleTrackerCustomizer
 
 		if (soyTemplateResource == null) {
 			soyTemplateResource = new SoyTemplateResourceImpl(
-				Collections.unmodifiableList(_templateResources));
+				Collections.unmodifiableList(_templateResources), _TEMPLATE_ID);
 		}
 
 		_soyTemplateResource = soyTemplateResource;
@@ -136,6 +137,7 @@ public class SoyCapabilityBundleTrackerCustomizer
 			_removeBundleTemplateResourcesFromList(bundle);
 
 		_soyTemplateResource = null;
+		_soyTofuCacheHandler.remove(_TEMPLATE_ID);
 
 		_soyTofuCacheHandler.removeIfAny(removedTemplateResources);
 
@@ -194,6 +196,9 @@ public class SoyCapabilityBundleTrackerCustomizer
 
 		return removedTemplateResources;
 	}
+
+	private static final String _TEMPLATE_ID =
+		SoyCapabilityBundleTrackerCustomizer.class.getName() + "_ALL";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		SoyCapabilityBundleTrackerCustomizer.class);

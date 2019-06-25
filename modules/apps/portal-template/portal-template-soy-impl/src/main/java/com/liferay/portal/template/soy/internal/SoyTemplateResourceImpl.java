@@ -35,6 +35,13 @@ public class SoyTemplateResourceImpl implements SoyTemplateResource {
 		_templateResources = templateResources;
 	}
 
+	public SoyTemplateResourceImpl(
+		List<TemplateResource> templateResources, String templateId) {
+
+		_templateResources = templateResources;
+		_templateId = templateId;
+	}
+
 	@Override
 	public long getLastModified() {
 		throw new UnsupportedOperationException(
