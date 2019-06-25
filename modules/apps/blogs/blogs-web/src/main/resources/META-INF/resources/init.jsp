@@ -113,6 +113,7 @@ page import="com.liferay.portal.kernel.service.PortletLocalServiceUtil" %><%@
 page import="com.liferay.portal.kernel.service.ServiceContextFunction" %><%@
 page import="com.liferay.portal.kernel.service.UserLocalServiceUtil" %><%@
 page import="com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalServiceUtil" %><%@
+page import="com.liferay.portal.kernel.servlet.SessionMessages" %><%@
 page import="com.liferay.portal.kernel.settings.GroupServiceSettingsLocator" %><%@
 page import="com.liferay.portal.kernel.settings.ParameterMapSettingsLocator" %><%@
 page import="com.liferay.portal.kernel.settings.PortletInstanceSettingsLocator" %><%@
