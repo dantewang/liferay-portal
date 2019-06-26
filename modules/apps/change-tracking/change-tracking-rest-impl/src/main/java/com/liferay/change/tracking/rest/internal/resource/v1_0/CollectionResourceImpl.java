@@ -70,11 +70,9 @@ public class CollectionResourceImpl
 	extends BaseCollectionResourceImpl implements EntityModelResource {
 
 	@Override
-	public Response deleteCollection(Long companyId, Long collectionId)
-		throws Exception {
-
+	public Response deleteCollection(Long collectionId) throws Exception {
 		Optional<CTCollection> ctCollectionOptional =
-			_ctEngineManager.getCTCollectionOptional(companyId, collectionId);
+			_ctEngineManager.getCTCollectionOptional(collectionId);
 
 		if (!ctCollectionOptional.isPresent()) {
 			return Response.status(
@@ -85,7 +83,7 @@ public class CollectionResourceImpl
 		_ctEngineManager.deleteCTCollection(collectionId);
 
 		ctCollectionOptional = _ctEngineManager.getCTCollectionOptional(
-			companyId, collectionId);
+			collectionId);
 
 		if (ctCollectionOptional.isPresent()) {
 			throw new DeleteCollectionException(
@@ -98,11 +96,9 @@ public class CollectionResourceImpl
 	}
 
 	@Override
-	public Collection getCollection(Long companyId, Long collectionId)
-		throws Exception {
-
+	public Collection getCollection(Long collectionId) throws Exception {
 		Optional<CTCollection> ctCollectionOptional =
-			_ctEngineManager.getCTCollectionOptional(companyId, collectionId);
+			_ctEngineManager.getCTCollectionOptional(collectionId);
 
 		return _toCollection(
 			ctCollectionOptional.orElseThrow(
