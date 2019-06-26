@@ -88,7 +88,7 @@
 								<c:if test="<%= blogsPortletInstanceConfiguration.enableViewCount() %>">
 
 									<%
-									assetEntry = _getAssetEntry(request, entry);
+									assetEntry = _getAssetEntry(request, entry, assetEntry);
 									%>
 
 									- <liferay-ui:message arguments="<%= assetEntry.getViewCount() %>" key='<%= (assetEntry.getViewCount() == 1) ? "x-view" : "x-views" %>' />
@@ -156,7 +156,7 @@
 					<div class="entry-links">
 
 						<%
-						assetEntry = _getAssetEntry(request, entry);
+						assetEntry = _getAssetEntry(request, entry, assetEntry);
 						%>
 
 						<liferay-asset:asset-links

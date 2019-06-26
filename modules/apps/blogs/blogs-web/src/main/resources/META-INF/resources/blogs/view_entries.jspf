@@ -112,15 +112,13 @@ private List<BlogsEntry> _convertToBlogEntries(List results) throws PortalExcept
 	return entries;
 }
 
-	private AssetEntry _getAssetEntry(HttpServletRequest request, BlogsEntry entry) throws PortalException, SystemException {
-		AssetEntry assetEntry = (AssetEntry)request.getAttribute("view_entry_content.jsp-assetEntry");
+private AssetEntry _getAssetEntry(HttpServletRequest request, BlogsEntry entry, AssetEntry assetEntry) throws PortalException, SystemException {
+	if (assetEntry == null) {
+		assetEntry = AssetEntryLocalServiceUtil.getEntry(BlogsEntry.class.getName(), entry.getEntryId());
 
-		if (assetEntry == null) {
-			assetEntry = AssetEntryLocalServiceUtil.getEntry(BlogsEntry.class.getName(), entry.getEntryId());
-
-			request.setAttribute("view_entry_content.jsp-assetEntry", assetEntry);
-		}
-
-		return assetEntry;
+		request.setAttribute("view_entry_content.jsp-assetEntry", assetEntry);
 	}
+
+	return assetEntry;
+}
 %>
