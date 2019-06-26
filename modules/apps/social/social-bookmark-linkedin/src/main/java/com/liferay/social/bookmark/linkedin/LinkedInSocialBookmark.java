@@ -16,6 +16,7 @@ package com.liferay.social.bookmark.linkedin;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.URLCodec;
 import com.liferay.social.bookmarks.SocialBookmark;
 
@@ -55,10 +56,9 @@ public class LinkedInSocialBookmark implements SocialBookmark {
 
 	@Override
 	public String getPostURL(String title, String url) {
-		return String.format(
-			"http://www.linkedin.com/shareArticle?&title=%s&mini=true&url=%s" +
-				"&summary=",
-			URLCodec.encodeURL(title), url);
+		return StringBundler.concat(
+			"http://www.linkedin.com/shareArticle?&title=",
+			URLCodec.encodeURL(title), "&mini=true&url=", url, "&summary=");
 	}
 
 	@Override

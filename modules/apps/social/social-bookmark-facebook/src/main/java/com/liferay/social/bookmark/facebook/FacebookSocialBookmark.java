@@ -16,6 +16,7 @@ package com.liferay.social.bookmark.facebook;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.social.bookmarks.SocialBookmark;
 
 import java.io.IOException;
@@ -54,7 +55,8 @@ public class FacebookSocialBookmark implements SocialBookmark {
 
 	@Override
 	public String getPostURL(String title, String url) {
-		return String.format("http://www.facebook.com/sharer.php?u=%s", url);
+		return StringBundler.concat(
+			"http://www.facebook.com/sharer.php?u=", url);
 	}
 
 	@Override
