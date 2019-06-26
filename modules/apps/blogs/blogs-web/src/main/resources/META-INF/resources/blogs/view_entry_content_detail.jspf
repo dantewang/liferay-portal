@@ -116,11 +116,6 @@
 									</c:if>
 
 									<c:if test="<%= blogsPortletInstanceConfiguration.enableViewCount() %>">
-
-										<%
-										AssetEntry assetEntry = _getAssetEntry(request, entry);
-										%>
-
 										- <liferay-ui:message arguments="<%= assetEntry.getViewCount() %>" key='<%= (assetEntry.getViewCount() == 1) ? "x-view" : "x-views" %>' />
 									</c:if>
 								</div>
@@ -217,11 +212,6 @@
 		<c:if test="<%= blogsPortletInstanceConfiguration.enableRelatedAssets() %>">
 			<div class="row">
 				<div class="col-md-8 mx-auto widget-mode-detail">
-
-					<%
-					AssetEntry assetEntry = _getAssetEntry(request, entry);
-					%>
-
 					<div class="entry-links">
 						<liferay-asset:asset-links
 							assetEntryId="<%= (assetEntry != null) ? assetEntry.getEntryId() : 0 %>"
@@ -234,17 +224,3 @@
 		</c:if>
 	</div>
 </c:if>
-
-<%!
-private AssetEntry _getAssetEntry(HttpServletRequest request, BlogsEntry entry) throws PortalException, SystemException {
-	AssetEntry assetEntry = (AssetEntry)request.getAttribute("view_entry_content.jsp-assetEntry");
-
-	if (assetEntry == null) {
-		assetEntry = AssetEntryLocalServiceUtil.getEntry(BlogsEntry.class.getName(), entry.getEntryId());
-
-		request.setAttribute("view_entry_content.jsp-assetEntry", assetEntry);
-	}
-
-	return assetEntry;
-}
-%>
