@@ -54,8 +54,6 @@ if (request.getAttribute(WebKeys.LAYOUT_ASSET_ENTRY) == null) {
 
 request.setAttribute("view_entry_content.jsp-entry", entry);
 
-request.setAttribute("view_entry_content.jsp-assetEntry", assetEntry);
-
 request.setAttribute("view_entry_content.jsp-ratingsEntry", ratingsEntry);
 request.setAttribute("view_entry_content.jsp-ratingsStats", ratingsStats);
 
@@ -76,7 +74,7 @@ if (portletTitleBasedNavigation) {
 	<aui:input name="entryId" type="hidden" value="<%= String.valueOf(entryId) %>" />
 
 	<div class="widget-mode-detail" data-analytics-asset-id="<%= String.valueOf(entryId) %>" data-analytics-asset-title="<%= HtmlUtil.escapeAttribute(entryTitle) %>" data-analytics-asset-type="blog">
-		<liferay-util:include page="/blogs/view_entry_content_detail.jsp" servletContext="<%= application %>" />
+		<%@ include file="/blogs/view_entry_content_detail.jspf" %>
 	</div>
 </aui:form>
 
