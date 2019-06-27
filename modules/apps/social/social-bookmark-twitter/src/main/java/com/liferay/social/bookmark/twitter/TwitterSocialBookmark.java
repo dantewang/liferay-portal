@@ -16,6 +16,7 @@ package com.liferay.social.bookmark.twitter;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.URLCodec;
 import com.liferay.social.bookmarks.SocialBookmark;
 
@@ -55,9 +56,9 @@ public class TwitterSocialBookmark implements SocialBookmark {
 
 	@Override
 	public String getPostURL(String title, String url) {
-		return String.format(
-			"https://twitter.com/intent/tweet?text=%s&tw_p=tweetbutton&url=%s",
-			URLCodec.encodeURL(title), url);
+		return StringBundler.concat(
+			"https://twitter.com/intent/tweet?text=", URLCodec.encodeURL(title),
+			"&tw_p=tweetbutton&url=", url);
 	}
 
 	@Override

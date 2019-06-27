@@ -54,7 +54,7 @@ public class FacebookSocialBookmark implements SocialBookmark {
 
 	@Override
 	public String getPostURL(String title, String url) {
-		return String.format("http://www.facebook.com/sharer.php?u=%s", url);
+		return "http://www.facebook.com/sharer.php?u=".concat(url);
 	}
 
 	@Override
