@@ -16,6 +16,7 @@ package com.liferay.social.bookmarks.taglib.internal.util;
 
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemList;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.social.bookmarks.SocialBookmark;
 
@@ -31,11 +32,21 @@ public class SocialBookmarksTagUtil {
 		String className, long classPK, String type, String postURL,
 		String url) {
 
-		return String.format(
-			"socialBookmarks_handleItemClick(event, '%s', %d, '%s', '%s', " +
-				"'%s');",
-			HtmlUtil.escapeJS(className), classPK, HtmlUtil.escapeJS(type),
-			HtmlUtil.escapeJS(postURL), HtmlUtil.escapeJS(url));
+		StringBundler sb = new StringBundler(11);
+
+		sb.append("socialBookmarks_handleItemClick(event, '");
+		sb.append(HtmlUtil.escapeJS(className));
+		sb.append("', ");
+		sb.append(classPK);
+		sb.append(", '");
+		sb.append(HtmlUtil.escapeJS(type));
+		sb.append("', '");
+		sb.append(HtmlUtil.escapeJS(postURL));
+		sb.append("', '");
+		sb.append(HtmlUtil.escapeJS(url));
+		sb.append("');");
+
+		return sb.toString();
 	}
 
 	public static List<DropdownItem> getDropdownItems(
