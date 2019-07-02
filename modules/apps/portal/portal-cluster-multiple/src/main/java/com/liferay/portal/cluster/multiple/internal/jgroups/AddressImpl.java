@@ -27,6 +27,9 @@ import org.jgroups.Address;
 public class AddressImpl
 	implements com.liferay.portal.kernel.cluster.Address, Externalizable {
 
+	public AddressImpl() {
+	}
+
 	public AddressImpl(Address address) {
 		_address = address;
 	}
@@ -69,6 +72,18 @@ public class AddressImpl
 	public void readExternal(ObjectInput objectInput)
 		throws ClassNotFoundException, IOException {
 
+		Class<Address> clazz = (Class<Address>)objectInput.readObject();
+
+		try {
+			_address = clazz.newInstance();
+		}
+		catch (InstantiationException ie) {
+			throw new IOException(ie);
+		}
+		catch (IllegalAccessException iae) {
+			throw new IOException(iae);
+		}
+
 		_address.readFrom(objectInput);
 	}
 
@@ -79,11 +94,13 @@ public class AddressImpl
 
 	@Override
 	public void writeExternal(ObjectOutput objectOutput) throws IOException {
+		objectOutput.writeObject(_address.getClass());
+
 		_address.writeTo(objectOutput);
 	}
 
 	private static final long serialVersionUID = 7969878022424426497L;
 
-	private final Address _address;
+	private Address _address;
 
 }
