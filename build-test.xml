@@ -7090,18 +7090,6 @@ web.server.display.node=true</echo>
 			<then>
 				<echo append="true" file="portal-impl/src/portal-ext.properties">
 
-cluster.link.channel.system.properties=\
-	cluster.link.bind.addr.control:${cluster.link.bind.addr["cluster-link-control"]},\
-	multicast.group.address.control:${multicast.group.address["cluster-link-control"]},\
-	multicast.group.port.control:${multicast.group.port["cluster-link-control"]},\
-	cluster.link.bind.addr.udp:${cluster.link.bind.addr["cluster-link-udp"]},\
-	multicast.group.address.udp:${multicast.group.address["cluster-link-udp"]},\
-	multicast.group.port.udp:${multicast.group.port["cluster-link-udp"]},\
-	jdbc.default.driverClassName:${jdbc.default.driverClassName},\
-	jdbc.default.url:${jdbc.default.url},\
-	jdbc.default.username:${jdbc.default.username},\
-	jdbc.default.password:${jdbc.default.password}
-
 cluster.link.channel.properties.control=${project.dir}/portal-web/test/functional/com/liferay/portalweb/dependencies/clustering_jdbc_ping.xml</echo>
 			</then>
 		</if>
