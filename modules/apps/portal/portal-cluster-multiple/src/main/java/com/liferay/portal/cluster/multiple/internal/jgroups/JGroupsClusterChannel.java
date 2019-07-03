@@ -68,7 +68,8 @@ public class JGroupsClusterChannel implements ClusterChannel {
 		_clusterReceiver = clusterReceiver;
 
 		try {
-			_jChannel = new JChannel(channelProperties);
+			_jChannel = new JChannel(
+				JGroupsConfiguratorFactory.create(channelProperties));
 
 			if (Validator.isNotNull(channelLogicName)) {
 				_jChannel.setName(channelLogicName);

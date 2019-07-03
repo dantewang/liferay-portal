@@ -4,9 +4,9 @@
 	xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/jgroups-4.1.xsd"
 >
 	<UDP
-		bind_addr="${cluster.link.bind.addr.udp:localhost}"
-		mcast_addr="${multicast.group.address.udp:239.255.0.2}"
-		mcast_port="${multicast.group.port.udp:23302}"
+		bind_addr="${cluster.link.bind.addr[&quot;cluster-link-udp&quot;]}"
+		mcast_addr="${multicast.group.address[&quot;cluster-link-udp&quot;]}"
+		mcast_port="${multicast.group.port[&quot;cluster-link-udp&quot;]}"
 	/>
 	<!--ip_ttl="4"
 	tos="8"
