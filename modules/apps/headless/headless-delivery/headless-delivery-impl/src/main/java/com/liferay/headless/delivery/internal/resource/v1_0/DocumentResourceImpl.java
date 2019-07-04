@@ -372,20 +372,16 @@ public class DocumentResourceImpl
 			multipartBody.getBinaryFile("file")
 		).orElseGet(
 			() -> {
-				BinaryFile result = null;
-
 				try {
-					result = new BinaryFile(
+					return new BinaryFile(
 						existingFileEntry.getMimeType(),
 						existingFileEntry.getFileName(),
 						existingFileEntry.getContentStream(),
 						existingFileEntry.getSize());
 				}
 				catch (PortalException pe) {
-					pe.printStackTrace();
+					throw new RuntimeException(pe);
 				}
-
-				return result;
 			}
 		);
 	}

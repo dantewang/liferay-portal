@@ -223,18 +223,14 @@ public class DefaultAssetDisplayPageFriendlyURLResolver
 				JournalArticle.class.getName(), journalArticle.getPrimaryKey())
 		).orElseGet(
 			() -> {
-				AssetEntry result = null;
-
 				try {
-					result = assetRendererFactory.getAssetEntry(
+					return assetRendererFactory.getAssetEntry(
 						JournalArticle.class.getName(),
 						journalArticle.getResourcePrimKey());
 				}
 				catch (PortalException pe) {
-					pe.printStackTrace();
+					throw new RuntimeException(pe);
 				}
-
-				return result;
 			}
 		);
 
