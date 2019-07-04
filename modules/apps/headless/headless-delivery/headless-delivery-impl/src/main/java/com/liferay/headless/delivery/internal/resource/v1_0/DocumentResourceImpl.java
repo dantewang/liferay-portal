@@ -172,26 +172,8 @@ public class DocumentResourceImpl
 
 		FileEntry existingFileEntry = _dlAppService.getFileEntry(documentId);
 
-		BinaryFile binaryFile = Optional.ofNullable(
-			multipartBody.getBinaryFile("file")
-		).orElseGet(
-			() -> {
-				BinaryFile result = null;
-
-				try {
-					result = new BinaryFile(
-						existingFileEntry.getMimeType(),
-						existingFileEntry.getFileName(),
-						existingFileEntry.getContentStream(),
-						existingFileEntry.getSize());
-				}
-				catch (PortalException pe) {
-					pe.printStackTrace();
-				}
-
-				return result;
-			}
-		);
+		BinaryFile binaryFile = _getBinaryFile(
+			multipartBody, existingFileEntry);
 
 		Optional<Document> documentOptional =
 			multipartBody.getValueAsInstanceOptional(
@@ -285,26 +267,8 @@ public class DocumentResourceImpl
 
 		FileEntry existingFileEntry = _dlAppService.getFileEntry(documentId);
 
-		BinaryFile binaryFile = Optional.ofNullable(
-			multipartBody.getBinaryFile("file")
-		).orElseGet(
-			() -> {
-				BinaryFile result = null;
-
-				try {
-					result = new BinaryFile(
-						existingFileEntry.getMimeType(),
-						existingFileEntry.getFileName(),
-						existingFileEntry.getContentStream(),
-						existingFileEntry.getSize());
-				}
-				catch (PortalException pe) {
-					pe.printStackTrace();
-				}
-
-				return result;
-			}
-		);
+		BinaryFile binaryFile = _getBinaryFile(
+			multipartBody, existingFileEntry);
 
 		return _toDocument(
 			_dlAppService.updateFileEntry(
@@ -399,6 +363,31 @@ public class DocumentResourceImpl
 					).orElseGet(
 						Document.ViewableBy.OWNER::getValue
 					))));
+	}
+
+	private BinaryFile _getBinaryFile(
+		MultipartBody multipartBody, FileEntry existingFileEntry) {
+
+		return Optional.ofNullable(
+			multipartBody.getBinaryFile("file")
+		).orElseGet(
+			() -> {
+				BinaryFile result = null;
+
+				try {
+					result = new BinaryFile(
+						existingFileEntry.getMimeType(),
+						existingFileEntry.getFileName(),
+						existingFileEntry.getContentStream(),
+						existingFileEntry.getSize());
+				}
+				catch (PortalException pe) {
+					pe.printStackTrace();
+				}
+
+				return result;
+			}
+		);
 	}
 
 	private Page<Document> _getDocumentsPage(
