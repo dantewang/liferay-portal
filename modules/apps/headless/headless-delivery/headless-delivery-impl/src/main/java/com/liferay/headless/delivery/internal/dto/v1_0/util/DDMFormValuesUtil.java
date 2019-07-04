@@ -31,7 +31,6 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -59,7 +58,7 @@ public class DDMFormValuesUtil {
 		).map(
 			fields -> _toContentFieldsMap(Stream.of(fields))
 		).orElseGet(
-			HashMap::new
+			Collections::emptyMap
 		);
 
 		return new DDMFormValues(ddmForm) {
