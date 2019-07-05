@@ -19,12 +19,10 @@ import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.petra.process.ProcessCallable;
 import com.liferay.petra.process.ProcessChannel;
 import com.liferay.petra.process.ProcessConfig;
-import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.process.ProcessExecutor;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.cache.key.SimpleCacheKeyGenerator;
 import com.liferay.portal.kernel.cache.key.CacheKeyGeneratorUtil;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.ClassTestRule;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
@@ -229,7 +227,7 @@ public class CounterLocalServiceTest {
 		}
 
 		@Override
-		public Long[] call() throws ProcessException {
+		public Long[] call() {
 			RegistryUtil.setRegistry(new BasicRegistryImpl());
 
 			System.setProperty(
@@ -267,13 +265,8 @@ public class CounterLocalServiceTest {
 
 			List<Long> ids = new ArrayList<>();
 
-			try {
-				for (int i = 0; i < _incrementCount; i++) {
-					ids.add(CounterLocalServiceUtil.increment(_counterName));
-				}
-			}
-			catch (SystemException se) {
-				throw new ProcessException(se);
+			for (int i = 0; i < _incrementCount; i++) {
+				ids.add(CounterLocalServiceUtil.increment(_counterName));
 			}
 
 			return ids.toArray(new Long[0]);
