@@ -20,6 +20,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 import org.jgroups.Address;
+import org.jgroups.util.Util;
 
 /**
  * @author Shuyang Zhou
@@ -72,19 +73,7 @@ public class AddressImpl
 	public void readExternal(ObjectInput objectInput)
 		throws ClassNotFoundException, IOException {
 
-		Class<Address> clazz = (Class<Address>)objectInput.readObject();
-
-		try {
-			_address = clazz.newInstance();
-		}
-		catch (InstantiationException ie) {
-			throw new IOException(ie);
-		}
-		catch (IllegalAccessException iae) {
-			throw new IOException(iae);
-		}
-
-		_address.readFrom(objectInput);
+		_address = Util.readAddress(objectInput);
 	}
 
 	@Override
@@ -94,9 +83,7 @@ public class AddressImpl
 
 	@Override
 	public void writeExternal(ObjectOutput objectOutput) throws IOException {
-		objectOutput.writeObject(_address.getClass());
-
-		_address.writeTo(objectOutput);
+		Util.writeAddress(_address, objectOutput);
 	}
 
 	private static final long serialVersionUID = 7969878022424426497L;
