@@ -641,7 +641,7 @@
 	</category>
 
 	<category name="com.liferay.portal.servlet.filters.virtualhost.VirtualHostFilter">
-		<priority value="ERROR" />
+		<priority value="DEBUG" />
 	</category>
 
 	<category name="com.liferay.portal.setup.SetupWizardSampleDataUtil">
