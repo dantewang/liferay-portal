@@ -793,7 +793,7 @@
 	</category>
 
 	<category name="com.liferay.portal.util.PortalInstances">
-		<priority value="ERROR" />
+		<priority value="INFO" />
 	</category>
 
 	<category name="com.liferay.portal.util.PropsUtil">
