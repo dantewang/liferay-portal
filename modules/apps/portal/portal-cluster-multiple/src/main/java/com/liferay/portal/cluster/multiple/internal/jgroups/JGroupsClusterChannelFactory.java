@@ -38,12 +38,17 @@ import com.liferay.portal.kernel.util.SocketUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.NetworkInterface;
+import java.net.URL;
+
+import java.security.AccessControlException;
 
 import java.util.Map;
 import java.util.Properties;
@@ -51,6 +56,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.jgroups.conf.ConfiguratorFactory;
 import org.jgroups.conf.ProtocolStackConfigurator;
+import org.jgroups.util.Util;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -247,12 +253,37 @@ public class JGroupsClusterChannelFactory implements ClusterChannelFactory {
 		_props = props;
 	}
 
+	private InputStream _getConfigStream(String properties) throws IOException {
+		InputStream configStream = null;
+
+		try {
+			configStream = new FileInputStream(properties);
+		}
+		catch (AccessControlException | FileNotFoundException e) {
+		}
+
+		if (configStream == null) {
+			try {
+				URL url = new URL(properties);
+
+				configStream = url.openStream();
+			}
+			catch (MalformedURLException murle) {
+			}
+		}
+
+		if ((configStream == null) && properties.endsWith("xml")) {
+			configStream = Util.getResourceAsStream(
+				properties, ConfiguratorFactory.class);
+		}
+
+		return configStream;
+	}
+
 	private ProtocolStackConfigurator _parseProperties(String configXMLFile)
 		throws Exception {
 
-		try (InputStream inputStream = ConfiguratorFactory.getConfigStream(
-				configXMLFile)) {
-
+		try (InputStream inputStream = _getConfigStream(configXMLFile)) {
 			if (inputStream == null) {
 				throw new FileNotFoundException(
 					"Config file not found: ".concat(configXMLFile));
