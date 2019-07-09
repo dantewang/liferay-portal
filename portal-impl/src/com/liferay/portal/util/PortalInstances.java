@@ -148,11 +148,15 @@ public class PortalInstances {
 
 		CompanyThreadLocal.setCompanyId(companyId);
 
+		_log.info("############ Before VIRTUAL_HOST_LAYOUT_SET");
+
 		if (Validator.isNotNull(PropsValues.VIRTUAL_HOSTS_DEFAULT_SITE_NAME) &&
 			(httpServletRequest.getAttribute(WebKeys.VIRTUAL_HOST_LAYOUT_SET) ==
 				null)) {
 
 			try {
+				_log.info("############ Inside VIRTUAL_HOST_LAYOUT_SET");
+
 				Group group = GroupLocalServiceUtil.getGroup(
 					companyId, PropsValues.VIRTUAL_HOSTS_DEFAULT_SITE_NAME);
 
@@ -160,6 +164,8 @@ public class PortalInstances {
 					group.getGroupId(), false);
 
 				if (Validator.isNull(layoutSet.getVirtualHostname())) {
+					_log.info("############ Set VIRTUAL_HOST_LAYOUT_SET");
+
 					httpServletRequest.setAttribute(
 						WebKeys.VIRTUAL_HOST_LAYOUT_SET, layoutSet);
 				}
