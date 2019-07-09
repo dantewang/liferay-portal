@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.util.SocketUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -48,8 +49,6 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.NetworkInterface;
 import java.net.URL;
-
-import java.security.AccessControlException;
 
 import java.util.Map;
 import java.util.Properties;
@@ -255,29 +254,30 @@ public class JGroupsClusterChannelFactory implements ClusterChannelFactory {
 	}
 
 	private InputStream _getConfigStream(String properties) throws IOException {
-		InputStream configStream = null;
+		File file = new File(properties);
+
+		if (file.exists()) {
+			try {
+				return new FileInputStream(properties);
+			}
+			catch (SecurityException se) {
+				if (_log.isDebugEnabled()) {
+					_log.debug("Failed to read file due to security ", se);
+				}
+			}
+		}
 
 		try {
-			configStream = new FileInputStream(properties);
-		}
-		catch (AccessControlException | FileNotFoundException e) {
-		}
+			URL url = new URL(properties);
 
-		if (configStream == null) {
-			try {
-				URL url = new URL(properties);
-
-				configStream = url.openStream();
-			}
-			catch (MalformedURLException murle) {
-			}
+			return url.openStream();
+		}
+		catch (MalformedURLException murle) {
 		}
 
-		if (configStream == null) {
-			ClassLoader classLoader = PortalClassLoaderUtil.getClassLoader();
+		ClassLoader classLoader = PortalClassLoaderUtil.getClassLoader();
 
-			configStream = classLoader.getResourceAsStream(properties);
-		}
+		InputStream configStream = classLoader.getResourceAsStream(properties);
 
 		if ((configStream == null) && properties.endsWith("xml")) {
 			configStream = Util.getResourceAsStream(
