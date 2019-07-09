@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Html;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.SocketUtil;
@@ -270,6 +271,12 @@ public class JGroupsClusterChannelFactory implements ClusterChannelFactory {
 			}
 			catch (MalformedURLException murle) {
 			}
+		}
+
+		if (configStream == null) {
+			ClassLoader classLoader = PortalClassLoaderUtil.getClassLoader();
+
+			configStream = classLoader.getResourceAsStream(properties);
 		}
 
 		if ((configStream == null) && properties.endsWith("xml")) {
