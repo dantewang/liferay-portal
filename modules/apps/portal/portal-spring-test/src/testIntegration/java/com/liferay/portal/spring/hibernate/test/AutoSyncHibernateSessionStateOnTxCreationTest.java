@@ -40,6 +40,8 @@ public class AutoSyncHibernateSessionStateOnTxCreationTest {
 		throws Exception {
 
 		_portalService.testAutoSyncHibernateSessionStateOnTxCreation();
+
+		_portalService.testAutoSyncHibernateSessionStateOnTxCreation();
 	}
 
 	@Inject
