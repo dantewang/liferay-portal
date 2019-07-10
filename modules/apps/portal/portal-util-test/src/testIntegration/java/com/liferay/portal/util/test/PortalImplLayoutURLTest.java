@@ -12,8 +12,9 @@
  * details.
  */
 
-package com.liferay.portal.util;
+package com.liferay.portal.util.test;
 
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.layouts.admin.kernel.model.LayoutTypePortletConstants;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Group;
@@ -31,17 +32,19 @@ import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.util.test.LayoutTestUtil;
+import com.liferay.portal.util.PropsValues;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * @author Vilmos Papp
  * @author Akos Thurzo
  */
+@RunWith(Arquillian.class)
 public class PortalImplLayoutURLTest extends BasePortalImplURLTestCase {
 
 	@ClassRule
