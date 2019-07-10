@@ -164,7 +164,7 @@ public class VirtualHostFilterTest {
 	private Portal _portal;
 
 	@Inject
-	private final PortalUtil _portalUtil = new PortalUtil();
+	private PortalUtil _portalUtil;
 
 	private final VirtualHostFilter _virtualHostFilter =
 		new VirtualHostFilter();
