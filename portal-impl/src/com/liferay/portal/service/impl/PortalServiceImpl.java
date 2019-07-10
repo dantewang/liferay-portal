@@ -16,6 +16,7 @@ package com.liferay.portal.service.impl;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
+import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -128,6 +129,8 @@ public class PortalServiceImpl extends PortalServiceBaseImpl {
 					"Entities are not available in Hibernate's first level " +
 						"cache");
 			}
+
+			FinderCacheUtil.clearCache(ClassNameImpl.class.getName());
 
 			ClassName newClassName = new ClassNameImpl();
 
