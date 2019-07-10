@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.util.test;
+package com.liferay.layout.test.util;
 
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
@@ -49,13 +49,9 @@ import java.util.Map;
 import javax.portlet.PortletPreferences;
 
 /**
- * @deprecated As of Mueller (7.2.x), replaced by {@link
- * 	           com.liferay.layout.test.util.LayoutTestUtil)}
- *
  * @author Manuel de la Peña
  * @author Máté Thurzó
  */
-@Deprecated
 public class LayoutTestUtil {
 
 	public static Layout addLayout(Group group) throws Exception {
