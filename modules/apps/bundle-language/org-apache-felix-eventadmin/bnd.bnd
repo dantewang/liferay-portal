@@ -1,0 +1,7 @@
+Bundle-Name: Org Apache Felix EventAdmin Language
+Bundle-SymbolicName: org.apache.felix.eventadmin.language
+Bundle-Version: 1.0.0
+Provide-Capability:\
+liferay.resource.bundle;resource.bundle.base.name="content.Language",\
+liferay.resource.bundle;resource.bundle.aggregate:String="(bundle.symbolic.name=org.apache.felix.eventadmin)";bundle.symbolic.name=org.apache.felix.eventadmin;resource.bundle.base.name="content.Language";service.ranking:Long="2";\
+servlet.context.name=
