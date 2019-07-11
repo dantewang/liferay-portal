@@ -12,22 +12,25 @@
  * details.
  */
 
-package com.liferay.portal.servlet;
+package com.liferay.portal.servlet.test;
 
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
-import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.CompanyTestUtil;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.servlet.I18nServlet;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PropsValues;
 
@@ -43,13 +46,15 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
  * @author Juan González
  */
-public class I18nServletTest {
+@RunWith(Arquillian.class)
+public class I18nServletTest extends I18nServlet {
 
 	@ClassRule
 	@Rule
@@ -58,34 +63,33 @@ public class I18nServletTest {
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		_availableLocales = LanguageUtil.getAvailableLocales();
+		_availableLocales = _language.getAvailableLocales();
 		_defaultLocale = LocaleUtil.getDefault();
 		_localesEnabled = PropsValues.LOCALES_ENABLED;
 
-		LanguageUtil.init();
+		_language.init();
 
 		CompanyTestUtil.resetCompanyLocales(
-			PortalUtil.getDefaultCompanyId(),
+			_portal.getDefaultCompanyId(),
 			Arrays.asList(
 				LocaleUtil.CANADA_FRENCH, LocaleUtil.SPAIN, LocaleUtil.UK,
 				LocaleUtil.US),
 			LocaleUtil.US);
 
 		PropsValues.LOCALES_ENABLED = new String[] {
-			LanguageUtil.getLanguageId(LocaleUtil.CANADA_FRENCH),
-			LanguageUtil.getLanguageId(LocaleUtil.SPAIN),
-			LanguageUtil.getLanguageId(LocaleUtil.UK),
-			LanguageUtil.getLanguageId(LocaleUtil.US)
+			_language.getLanguageId(LocaleUtil.CANADA_FRENCH),
+			_language.getLanguageId(LocaleUtil.SPAIN),
+			_language.getLanguageId(LocaleUtil.UK),
+			_language.getLanguageId(LocaleUtil.US)
 		};
 	}
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		LanguageUtil.init();
+		_language.init();
 
 		CompanyTestUtil.resetCompanyLocales(
-			PortalUtil.getDefaultCompanyId(), _availableLocales,
-			_defaultLocale);
+			_portal.getDefaultCompanyId(), _availableLocales, _defaultLocale);
 
 		PropsValues.LOCALES_ENABLED = _localesEnabled;
 	}
@@ -95,7 +99,7 @@ public class I18nServletTest {
 		_originalLocaleUseDefaultIfNotAvailable =
 			PropsValues.LOCALE_USE_DEFAULT_IF_NOT_AVAILABLE;
 
-		LanguageUtil.init();
+		_language.init();
 
 		_group = GroupTestUtil.addGroup();
 
@@ -107,7 +111,7 @@ public class I18nServletTest {
 
 		_group.setTypeSettingsProperties(typeSettingsProperties);
 
-		GroupLocalServiceUtil.updateGroup(_group);
+		_groupLocalService.updateGroup(_group);
 	}
 
 	@After
@@ -132,7 +136,7 @@ public class I18nServletTest {
 
 	@Test
 	public void testDefaultGroupI18nData() throws Exception {
-		LanguageUtil.resetAvailableGroupLocales(_group.getGroupId());
+		_language.resetAvailableGroupLocales(_group.getGroupId());
 
 		testIsDefaultLocale(_group, LocaleUtil.US);
 		testIsDefaultOrFirstI18nData(_group, LocaleUtil.US);
@@ -157,60 +161,46 @@ public class I18nServletTest {
 		mockHttpServletRequest.setServletPath(
 			StringPool.SLASH + LocaleUtil.CANADA_FRENCH.toLanguageTag());
 
-		I18nServlet.I18nData actualI18nData = _i18nServlet.getI18nData(
-			mockHttpServletRequest);
-
-		I18nServlet.I18nData expectedI18nData = getI18nData(
-			LocaleUtil.CANADA_FRENCH);
-
-		Assert.assertEquals(expectedI18nData, actualI18nData);
+		Assert.assertEquals(
+			getI18nData(LocaleUtil.CANADA_FRENCH),
+			getI18nData(mockHttpServletRequest));
 	}
 
 	@Test
 	public void testI18nNotUseDefaultExistentLocale() throws Exception {
 		PropsValues.LOCALE_USE_DEFAULT_IF_NOT_AVAILABLE = false;
 
-		Locale expectedLocale = LocaleUtil.getDefault();
-
-		testGetI18nData(expectedLocale, getI18nData(expectedLocale));
+		testGetI18nData(
+			LocaleUtil.getDefault(), getI18nData(LocaleUtil.getDefault()));
 	}
 
 	@Test
 	public void testI18nNotUseDefaultNondefaultLocale() throws Exception {
 		PropsValues.LOCALE_USE_DEFAULT_IF_NOT_AVAILABLE = false;
 
-		Locale expectedLocale = LocaleUtil.SPAIN;
-
-		testGetI18nData(expectedLocale, getI18nData(expectedLocale));
+		testGetI18nData(LocaleUtil.SPAIN, getI18nData(LocaleUtil.SPAIN));
 	}
 
 	@Test
 	public void testI18nNotUseDefaultNonexistentLocale() throws Exception {
 		PropsValues.LOCALE_USE_DEFAULT_IF_NOT_AVAILABLE = false;
 
-		Locale expectedLocale = LocaleUtil.CHINA;
-
-		testGetI18nData(expectedLocale, null);
+		testGetI18nData(LocaleUtil.CHINA, null);
 	}
 
 	@Test
 	public void testI18nUseDefault() throws Exception {
 		PropsValues.LOCALE_USE_DEFAULT_IF_NOT_AVAILABLE = true;
 
-		Locale expectedLocale = LocaleUtil.getDefault();
-
-		testGetI18nData(expectedLocale, getI18nData(expectedLocale));
+		testGetI18nData(
+			LocaleUtil.getDefault(), getI18nData(LocaleUtil.getDefault()));
 	}
 
 	@Test
 	public void testI18nUseDefaultNonexistentLocale() throws Exception {
 		PropsValues.LOCALE_USE_DEFAULT_IF_NOT_AVAILABLE = true;
 
-		Locale invalidLocale = LocaleUtil.CHINA;
-
-		Locale defaultLocale = LocaleUtil.getDefault();
-
-		testGetI18nData(invalidLocale, getI18nData(defaultLocale));
+		testGetI18nData(LocaleUtil.CHINA, getI18nData(LocaleUtil.getDefault()));
 	}
 
 	@Test
@@ -234,12 +224,6 @@ public class I18nServletTest {
 		testIsNotDefaultOrFirstI18nData(_group, LocaleUtil.US, LocaleUtil.UK);
 	}
 
-	protected I18nServlet.I18nData getI18nData(Locale locale)
-		throws PortalException {
-
-		return _i18nServlet.getI18nData(locale);
-	}
-
 	protected void testGetI18nData(
 			Locale locale, I18nServlet.I18nData expectedI18nData)
 		throws Exception {
@@ -251,26 +235,19 @@ public class I18nServletTest {
 		mockHttpServletRequest.setServletPath(
 			StringPool.SLASH + LocaleUtil.toLanguageId(locale));
 
-		I18nServlet.I18nData actualI18nData = _i18nServlet.getI18nData(
-			mockHttpServletRequest);
-
-		Assert.assertEquals(expectedI18nData, actualI18nData);
+		Assert.assertEquals(
+			expectedI18nData, getI18nData(mockHttpServletRequest));
 	}
 
 	protected void testIsDefaultLocale(
 			Group group, Locale expectedDefaultLocale)
 		throws Exception {
 
-		Locale actualDefaultLocale = _getDefaultLocale(group);
-
-		Assert.assertEquals(expectedDefaultLocale, actualDefaultLocale);
+		Assert.assertEquals(expectedDefaultLocale, _getDefaultLocale(group));
 	}
 
 	protected void testIsDefaultOrFirstI18nData(Group group, Locale locale)
 		throws Exception {
-
-		I18nServlet.I18nData languageOnlyPath = _getI18nData(
-			group, locale.getLanguage());
 
 		String languageId = LocaleUtil.toLanguageId(locale);
 
@@ -279,20 +256,18 @@ public class I18nServletTest {
 
 		Assert.assertEquals(languageAndLocalePath.getLanguageId(), languageId);
 
-		Assert.assertEquals(languageOnlyPath, languageAndLocalePath);
+		Assert.assertEquals(
+			_getI18nData(group, locale.getLanguage()), languageAndLocalePath);
 	}
 
 	protected void testIsFirstLocale(Group group, Locale expectedFirstLocale)
 		throws Exception {
 
-		Locale actualDefaultLocale = _getDefaultLocale(group);
+		Assert.assertEquals(
+			expectedFirstLocale,
+			_getFirstLocale(group, expectedFirstLocale.getLanguage()));
 
-		Locale actualFirstLocale = _getFirstLocale(
-			group, expectedFirstLocale.getLanguage());
-
-		Assert.assertEquals(expectedFirstLocale, actualFirstLocale);
-
-		Assert.assertNotEquals(expectedFirstLocale, actualDefaultLocale);
+		Assert.assertNotEquals(expectedFirstLocale, _getDefaultLocale(group));
 	}
 
 	protected void testIsNotDefaultOrFirstI18nData(
@@ -321,7 +296,7 @@ public class I18nServletTest {
 
 		Locale defaultLocale = _getDefaultLocale(group);
 
-		if (!LanguageUtil.isSameLanguage(defaultLocale, locale)) {
+		if (!_language.isSameLanguage(defaultLocale, locale)) {
 			defaultLocale = _getFirstLocale(group, locale.getLanguage());
 		}
 
@@ -330,20 +305,18 @@ public class I18nServletTest {
 
 	private Locale _getDefaultLocale(Group group) throws Exception {
 		if (group != null) {
-			return PortalUtil.getSiteDefaultLocale(group);
+			return _portal.getSiteDefaultLocale(group);
 		}
 
 		return LocaleUtil.getDefault();
 	}
 
-	private Locale _getFirstLocale(Group group, String language)
-		throws Exception {
-
+	private Locale _getFirstLocale(Group group, String language) {
 		if (group != null) {
-			return LanguageUtil.getLocale(group.getGroupId(), language);
+			return _language.getLocale(group.getGroupId(), language);
 		}
 
-		return LanguageUtil.getLocale(language);
+		return _language.getLocale(language);
 	}
 
 	private I18nServlet.I18nData _getI18nData(Group group, String path)
@@ -363,7 +336,7 @@ public class I18nServletTest {
 
 		mockHttpServletRequest.setServletPath(StringPool.SLASH + path);
 
-		return _i18nServlet.getI18nData(mockHttpServletRequest);
+		return getI18nData(mockHttpServletRequest);
 	}
 
 	private static Set<Locale> _availableLocales;
@@ -372,9 +345,17 @@ public class I18nServletTest {
 	@DeleteAfterTestRun
 	private static Group _group;
 
+	@Inject
+	private static Language _language;
+
 	private static String[] _localesEnabled;
 
-	private final I18nServlet _i18nServlet = new I18nServlet();
+	@Inject
+	private static Portal _portal;
+
+	@Inject
+	private GroupLocalService _groupLocalService;
+
 	private boolean _originalLocaleUseDefaultIfNotAvailable;
 
 }
