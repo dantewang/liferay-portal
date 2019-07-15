@@ -26,7 +26,7 @@ import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.PortalUtil;
-import com.liferay.portal.util.test.LayoutTestUtil;
+import com.liferay.layout.test.util.LayoutTestUtil;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;

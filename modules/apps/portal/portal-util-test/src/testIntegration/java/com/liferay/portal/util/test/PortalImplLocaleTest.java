@@ -34,7 +34,7 @@ import com.liferay.portal.servlet.I18nServlet;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PortalImpl;
 import com.liferay.portal.util.PropsValues;
-import com.liferay.portal.util.test.LayoutTestUtil;
+import com.liferay.layout.test.util.LayoutTestUtil;
 
 import java.io.IOException;
 

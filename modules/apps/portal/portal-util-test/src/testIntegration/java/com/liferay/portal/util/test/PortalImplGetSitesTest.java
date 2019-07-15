@@ -28,7 +28,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.util.test.LayoutTestUtil;
+import com.liferay.layout.test.util.LayoutTestUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
