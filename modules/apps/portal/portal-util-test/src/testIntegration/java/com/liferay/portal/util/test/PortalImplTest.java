@@ -68,7 +68,7 @@ public class PortalImplTest {
 		Class<?> clazz = getClass();
 
 		InputStream inputStream = clazz.getResourceAsStream(
-			"/com/liferay/portal/util/dependencies/test.txt");
+			"/com/liferay/portal/util/test/dependencies/test.txt");
 
 		LiferayServletRequest liferayServletRequest =
 			PortletContainerTestUtil.getMultipartRequest(
