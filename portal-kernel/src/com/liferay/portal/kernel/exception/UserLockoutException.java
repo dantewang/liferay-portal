@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.exception;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.model.PasswordPolicy;
 import com.liferay.portal.kernel.model.User;
 
@@ -26,9 +27,9 @@ public class UserLockoutException extends PortalException {
 
 		public LDAPLockout(String fullUserDN, String ldapMessage) {
 			super(
-				String.format(
-					"User %s is locked out of a required LDAP server: %s",
-					fullUserDN, ldapMessage));
+				StringBundler.concat(
+					"User ", fullUserDN,
+					" is locked out of a required LDAP server: ", ldapMessage));
 
 			this.fullUserDN = fullUserDN;
 			this.ldapMessage = ldapMessage;
@@ -43,11 +44,11 @@ public class UserLockoutException extends PortalException {
 
 		public PasswordPolicyLockout(User user, PasswordPolicy passwordPolicy) {
 			super(
-				String.format(
-					"User %s was locked on %s by password policy %s and will " +
-						"be automatically unlocked on %s",
-					user.getUserId(), user.getLockoutDate(),
+				StringBundler.concat(
+					"User ", user.getUserId(), " was locked on ",
+					user.getLockoutDate(), " by password policy ",
 					passwordPolicy.getName(),
+					" and will be automatically unlocked on ",
 					user.getUnlockDate(passwordPolicy)));
 
 			this.user = user;

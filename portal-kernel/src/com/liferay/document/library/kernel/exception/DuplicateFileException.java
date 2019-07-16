@@ -14,6 +14,7 @@
 
 package com.liferay.document.library.kernel.exception;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.exception.PortalException;
 
 /**
@@ -28,18 +29,18 @@ public class DuplicateFileException extends PortalException {
 		long companyId, long repositoryId, String fileName) {
 
 		super(
-			String.format(
-				"{companyId=%s, repositoryId=%s, fileName=%s}", companyId,
-				repositoryId, fileName));
+			StringBundler.concat(
+				"{companyId=", companyId, ", repositoryId=", repositoryId,
+				", fileName=", fileName, "}"));
 	}
 
 	public DuplicateFileException(
 		long companyId, long repositoryId, String fileName, String version) {
 
 		super(
-			String.format(
-				"{companyId=%s, repositoryId=%s, fileName=%s, version=%s}",
-				companyId, repositoryId, fileName, version));
+			StringBundler.concat(
+				"{companyId=", companyId, ", repositoryId=", repositoryId,
+				", fileName=", fileName, ", version=", version, "}"));
 	}
 
 	public DuplicateFileException(
@@ -47,10 +48,10 @@ public class DuplicateFileException extends PortalException {
 		Throwable cause) {
 
 		super(
-			String.format(
-				"{companyId=%s, repositoryId=%s, fileName=%s, version=%s, " +
-					"cause=%s}",
-				companyId, repositoryId, fileName, version, cause),
+			StringBundler.concat(
+				"{companyId=", companyId, ", repositoryId=", repositoryId,
+				", fileName=", fileName, ", version=", version, ", cause=",
+				cause, "}"),
 			cause);
 	}
 
@@ -58,9 +59,9 @@ public class DuplicateFileException extends PortalException {
 		long companyId, long repositoryId, String fileName, Throwable cause) {
 
 		super(
-			String.format(
-				"{companyId=%s, repositoryId=%s, fileName=%s, cause=%s}",
-				companyId, repositoryId, fileName, cause),
+			StringBundler.concat(
+				"{companyId=", companyId, ", repositoryId=", repositoryId,
+				", fileName=", fileName, ", cause=", cause, "}"),
 			cause);
 	}
 

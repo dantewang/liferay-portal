@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.exception;
 
+import com.liferay.petra.string.StringBundler;
+
 /**
  * @author Pei-Jung Lan
  */
@@ -23,10 +25,9 @@ public class PortletPreferencesException extends PortalException {
 
 		public MustBeStrict(String portletId) {
 			super(
-				String.format(
-					"Portlet preferences for portlet %s must be an instance " +
-						"of StrictPortletPreferencesImpl",
-					portletId));
+				StringBundler.concat(
+					"Portlet preferences for portlet ", portletId,
+					" must be an instance of StrictPortletPreferencesImpl"));
 
 			this.portletId = portletId;
 		}

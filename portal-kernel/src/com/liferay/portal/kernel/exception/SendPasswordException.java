@@ -26,10 +26,8 @@ public class SendPasswordException extends PortalException {
 
 		public MustBeEnabled(Company company) {
 			super(
-				String.format(
-					"Password Reset Link notification must be enabled for " +
-						"company %s",
-					company));
+				"Password Reset Link notification must be enabled for company ".
+					concat(String.valueOf(company)));
 
 			this.company = company;
 		}

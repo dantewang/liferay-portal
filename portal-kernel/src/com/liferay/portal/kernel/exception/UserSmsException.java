@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.exception;
 
+import com.liferay.petra.string.StringBundler;
+
 /**
  * @author Brian Wing Shun Chan
  */
@@ -22,7 +24,9 @@ public class UserSmsException extends PortalException {
 	public static class MustBeEmailAddress extends UserSmsException {
 
 		public MustBeEmailAddress(String smsSn) {
-			super(String.format("SMS %s must be an email address", smsSn));
+			super(
+				StringBundler.concat(
+					"SMS ", smsSn, " must be an email address"));
 
 			this.smsSn = smsSn;
 		}

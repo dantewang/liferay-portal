@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.exception;
 
+import com.liferay.petra.string.StringBundler;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Isaac Obrist
@@ -25,10 +27,10 @@ public class RequiredGroupException extends PortalException {
 
 		public MustNotDeleteCurrentGroup(long groupId) {
 			super(
-				String.format(
-					"Site %s cannot be deleted because it is currently being " +
-						"accessed",
-					groupId));
+				StringBundler.concat(
+					"Site ", groupId,
+					" cannot be deleted because it is currently being " +
+						"accessed"));
 
 			this.groupId = groupId;
 		}
@@ -42,9 +44,9 @@ public class RequiredGroupException extends PortalException {
 
 		public MustNotDeleteGroupThatHasChild(long groupId) {
 			super(
-				String.format(
-					"Site %s cannot be deleted because it has child sites",
-					groupId));
+				StringBundler.concat(
+					"Site ", groupId,
+					" cannot be deleted because it has child sites"));
 
 			this.groupId = groupId;
 		}
@@ -58,10 +60,9 @@ public class RequiredGroupException extends PortalException {
 
 		public MustNotDeleteSystemGroup(long groupId) {
 			super(
-				String.format(
-					"Site %s cannot be deleted because it is a system " +
-						"required site",
-					groupId));
+				StringBundler.concat(
+					"Site ", groupId,
+					" cannot be deleted because it is a system required site"));
 
 			this.groupId = groupId;
 		}

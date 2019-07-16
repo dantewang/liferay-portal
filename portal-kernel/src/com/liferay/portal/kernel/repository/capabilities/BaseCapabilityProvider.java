@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.repository.capabilities;
 
+import com.liferay.petra.string.StringBundler;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,18 +33,18 @@ public abstract class BaseCapabilityProvider implements CapabilityProvider {
 
 			if (capability == null) {
 				throw new IllegalArgumentException(
-					String.format(
-						"Capability %s is not supported by provider %s",
-						capabilityClass.getName(), getProviderKey()));
+					StringBundler.concat(
+						"Capability ", capabilityClass.getName(),
+						" is not supported by provider ", getProviderKey()));
 			}
 
 			return (S)capability;
 		}
 
 		throw new IllegalArgumentException(
-			String.format(
-				"Capability %s is not exported by provider %s",
-				capabilityClass.getName(), getProviderKey()));
+			StringBundler.concat(
+				"Capability ", capabilityClass.getName(),
+				" is not exported by provider ", getProviderKey()));
 	}
 
 	@Override

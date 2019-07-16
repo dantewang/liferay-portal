@@ -50,8 +50,7 @@ public class ContactNameException extends PortalException {
 
 		public MustHaveValidFullName(FullNameValidator fullNameValidator) {
 			super(
-				String.format(
-					"Contact full name must validate with %s",
+				"Contact full name must validate with ".concat(
 					ClassUtil.getClassName(fullNameValidator)));
 
 			this.fullNameValidator = fullNameValidator;

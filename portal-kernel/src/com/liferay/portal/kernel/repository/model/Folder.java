@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.repository.model;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.capabilities.Capability;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -83,9 +84,9 @@ public interface Folder extends RepositoryEntry, RepositoryModel<Folder> {
 		Class<T> capabilityClass) {
 
 		throw new IllegalArgumentException(
-			String.format(
-				"Capability %s is not exported by repository %d",
-				capabilityClass.getName(), getRepositoryId()));
+			StringBundler.concat(
+				"Capability ", capabilityClass.getName(),
+				" is not exported by repository ", getRepositoryId()));
 	}
 
 	public long getRepositoryId();

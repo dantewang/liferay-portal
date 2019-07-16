@@ -19,6 +19,7 @@ import com.liferay.document.library.kernel.model.DLVersionNumberIncrease;
 import com.liferay.document.library.kernel.service.DLAppHelperLocalService;
 import com.liferay.document.library.kernel.service.DLFolderLocalService;
 import com.liferay.document.library.kernel.util.DL;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.exception.NoSuchRepositoryEntryException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -152,9 +153,9 @@ public abstract class BaseRepositoryImpl
 	@Override
 	public <T extends Capability> T getCapability(Class<T> capabilityClass) {
 		throw new IllegalArgumentException(
-			String.format(
-				"Capability %s is not supported by repository %s",
-				capabilityClass.getName(), getRepositoryId()));
+			StringBundler.concat(
+				"Capability ", capabilityClass.getName(),
+				" is not supported by repository ", getRepositoryId()));
 	}
 
 	public long getCompanyId() {

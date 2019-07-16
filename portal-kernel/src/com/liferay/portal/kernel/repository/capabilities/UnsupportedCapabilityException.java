@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.repository.capabilities;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.exception.SystemException;
 
 /**
@@ -26,8 +27,8 @@ public class UnsupportedCapabilityException extends SystemException {
 		String providerDescription) {
 
 		super(
-			String.format(
-				"%s does not support capability %s", providerDescription,
+			StringBundler.concat(
+				providerDescription, " does not support capability ",
 				capabilityClass.getName()));
 	}
 

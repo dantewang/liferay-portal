@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.exception;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.security.auth.ScreenNameValidator;
 import com.liferay.portal.kernel.util.ClassUtil;
@@ -30,10 +31,10 @@ public class UserScreenNameException extends PortalException {
 
 		public MustNotBeDuplicate(long userId, String screenName) {
 			super(
-				String.format(
-					"Screen name %s must not be duplicate but is already " +
-						"used by user %s",
-					screenName, userId));
+				StringBundler.concat(
+					"Screen name ", screenName,
+					" must not be duplicate but is already used by user ",
+					userId));
 
 			this.userId = userId;
 			this.screenName = screenName;
@@ -52,14 +53,13 @@ public class UserScreenNameException extends PortalException {
 
 		public MustNotBeNull(long userId) {
 			super(
-				String.format(
-					"Screen name must not be null for user %s", userId));
+				"Screen name must not be null for user ".concat(
+					String.valueOf(userId)));
 		}
 
 		public MustNotBeNull(String fullName) {
 			super(
-				String.format(
-					"Screen name must not be null for the full name %s",
+				"Screen name must not be null for the full name ".concat(
 					fullName));
 		}
 
@@ -69,11 +69,11 @@ public class UserScreenNameException extends PortalException {
 
 		public MustNotBeNumeric(long userId, String screenName) {
 			super(
-				String.format(
-					"Screen name %s for user %s must not be numeric because " +
-						"the portal property \"%s\" is disabled",
-					screenName, userId,
-					PropsKeys.USERS_SCREEN_NAME_ALLOW_NUMERIC));
+				StringBundler.concat(
+					"Screen name ", screenName, " for user ", userId,
+					"must not be numeric because the portal property \"",
+					PropsKeys.USERS_SCREEN_NAME_ALLOW_NUMERIC,
+					"\" is disabled"));
 
 			this.userId = userId;
 			this.screenName = screenName;
@@ -90,10 +90,10 @@ public class UserScreenNameException extends PortalException {
 			long userId, String screenName, String[] reservedScreenNames) {
 
 			super(
-				String.format(
-					"Screen name %s for user %s must not be a reserved name " +
-						"such as: %s",
-					screenName, userId, StringUtil.merge(reservedScreenNames)));
+				StringBundler.concat(
+					"Screen name ", screenName, " for user ", userId,
+					" must not be a reserved name such as: ",
+					StringUtil.merge(reservedScreenNames)));
 
 			this.userId = userId;
 			this.screenName = screenName;
@@ -113,10 +113,10 @@ public class UserScreenNameException extends PortalException {
 			long userId, String screenName, String[] reservedScreenNames) {
 
 			super(
-				String.format(
-					"Screen name %s for user %s must not be a reserved name " +
-						"for anonymous users such as: %s",
-					screenName, userId, StringUtil.merge(reservedScreenNames)));
+				StringBundler.concat(
+					"Screen name ", screenName, " for user ", userId,
+					" must not be a reserved name for anonymous users such ",
+					"as: ", StringUtil.merge(reservedScreenNames)));
 
 			this.userId = userId;
 			this.screenName = screenName;
@@ -135,9 +135,9 @@ public class UserScreenNameException extends PortalException {
 			long userId, String screenName, Group group) {
 
 			super(
-				String.format(
-					"Screen name %s for user %s must not be used by group %s",
-					screenName, userId, group.getGroupId()));
+				StringBundler.concat(
+					"Screen name ", screenName, " for user ", userId,
+					" must not be used by group ", group.getGroupId()));
 
 			this.userId = userId;
 			this.screenName = screenName;
@@ -157,10 +157,9 @@ public class UserScreenNameException extends PortalException {
 			long userId, String screenName, int exceptionType) {
 
 			super(
-				String.format(
-					"Screen name %s for user %s must produce a valid " +
-						"friendly URL",
-					screenName, userId),
+				StringBundler.concat(
+					"Screen name ", screenName, " for user ", userId,
+					" must produce a valid friendly URL"),
 				new GroupFriendlyURLException(exceptionType));
 
 			this.userId = userId;
@@ -181,10 +180,10 @@ public class UserScreenNameException extends PortalException {
 			ScreenNameValidator screenNameValidator) {
 
 			super(
-				String.format(
-					"Screen name %s for user %s must validate with %s: %s",
-					screenName, userId,
-					ClassUtil.getClassName(screenNameValidator),
+				StringBundler.concat(
+					"Screen name ", screenName, " for user ", userId,
+					" must validate with ",
+					ClassUtil.getClassName(screenNameValidator), ": ",
 					screenNameValidator.getDescription(
 						LocaleUtil.getDefault())));
 

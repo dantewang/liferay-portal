@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.exception;
 
+import com.liferay.petra.string.StringBundler;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Isaac Obrist
@@ -24,8 +26,8 @@ public class GroupParentException extends PortalException {
 
 		public MustNotBeOwnParent(long groupId) {
 			super(
-				String.format(
-					"Site %s cannot be its own parent site", groupId));
+				StringBundler.concat(
+					"Site ", groupId, " cannot be its own parent site"));
 
 			this.groupId = groupId;
 		}
@@ -38,9 +40,9 @@ public class GroupParentException extends PortalException {
 
 		public MustNotHaveChildParent(long groupId, long parentGroupId) {
 			super(
-				String.format(
-					"Site %s cannot have a child site %s as its parent site",
-					groupId, parentGroupId));
+				StringBundler.concat(
+					"Site ", groupId, " cannot have a child site ",
+					parentGroupId, " as its parent site"));
 
 			this.groupId = groupId;
 			this.parentGroupId = parentGroupId;
@@ -55,9 +57,9 @@ public class GroupParentException extends PortalException {
 
 		public MustNotHaveStagingParent(long groupId, long parentGroupId) {
 			super(
-				String.format(
-					"Site %s cannot have a staging site %s as its parent site",
-					groupId, parentGroupId));
+				StringBundler.concat(
+					"Site ", groupId, " cannot have a staging site ",
+					parentGroupId, " as its parent site"));
 
 			this.groupId = groupId;
 			this.parentGroupId = parentGroupId;

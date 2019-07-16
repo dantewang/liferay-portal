@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.security.auth;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -57,7 +58,9 @@ public class PrincipalException extends PortalException {
 		}
 
 		public MustBeAuthenticated(String login, Throwable cause) {
-			super(String.format("User %s must be authenticated", login), cause);
+			super(
+				StringBundler.concat("User ", login, " must be authenticated"),
+				cause);
 
 			this.login = login;
 		}
@@ -70,10 +73,10 @@ public class PrincipalException extends PortalException {
 
 		public MustBeCompanyAdmin(long userId) {
 			super(
-				String.format(
-					"User %s must be the company administrator to perform " +
-						"the action",
-					userId));
+				StringBundler.concat(
+					"User ", userId,
+					" must be the company administrator to perform the " +
+						"action"));
 
 			this.userId = userId;
 		}
@@ -90,9 +93,9 @@ public class PrincipalException extends PortalException {
 
 		public MustBeEnabled(long companyId, String... resourceName) {
 			super(
-				String.format(
-					"%s must be enabled for company %s",
-					StringUtil.merge(resourceName, ","), companyId));
+				StringBundler.concat(
+					StringUtil.merge(resourceName, ","),
+					" must be enabled for company ", companyId));
 
 			this.companyId = companyId;
 			this.resourceName = resourceName;
@@ -106,7 +109,9 @@ public class PrincipalException extends PortalException {
 	public static class MustBeInvokedUsingPost extends PrincipalException {
 
 		public MustBeInvokedUsingPost(String url) {
-			super(String.format("URL %s must be invoked using POST", url));
+			super(
+				StringBundler.concat(
+					"URL ", url, " must be invoked using POST"));
 
 			this.url = url;
 		}
@@ -119,10 +124,10 @@ public class PrincipalException extends PortalException {
 
 		public MustBeOmniadmin(long userId) {
 			super(
-				String.format(
-					"User %s must be a universal administrator to perform " +
-						"the action",
-					userId));
+				StringBundler.concat(
+					"User ", userId,
+					" must be a universal administrator to perform the " +
+						"action"));
 
 			this.userId = userId;
 		}
@@ -139,9 +144,9 @@ public class PrincipalException extends PortalException {
 
 		public MustBePortletStrutsPath(String strutsPath, String portletId) {
 			super(
-				String.format(
-					"Struts path %s must be struts path of portlet %s",
-					strutsPath, portletId));
+				StringBundler.concat(
+					"Struts path ", strutsPath,
+					" must be struts path of portlet ", portletId));
 
 			this.strutsPath = strutsPath;
 			this.portletId = portletId;
@@ -170,10 +175,10 @@ public class PrincipalException extends PortalException {
 			String... actionIds) {
 
 			super(
-				String.format(
-					"User %s must have %s permission for %s %s", userId,
-					StringUtil.merge(actionIds, ","), resourceName,
-					(resourceId == 0) ? "" : resourceId),
+				StringBundler.concat(
+					"User ", userId, " must have ",
+					StringUtil.merge(actionIds, ","), " permission for ",
+					resourceName, " ", (resourceId == 0) ? "" : resourceId),
 				cause);
 
 			this.userId = userId;
@@ -237,8 +242,8 @@ public class PrincipalException extends PortalException {
 			long userId, String origin, Throwable cause) {
 
 			super(
-				String.format(
-					"User %s did not provide a valid CSRF token for %s", userId,
+				StringBundler.concat(
+					"User ", userId, " did not provide a valid CSRF token for ",
 					origin),
 				cause);
 

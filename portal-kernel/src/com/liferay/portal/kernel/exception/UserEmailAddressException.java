@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.exception;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.EmailAddressValidator;
 import com.liferay.portal.kernel.util.ClassUtil;
@@ -31,10 +32,10 @@ public class UserEmailAddressException extends PortalException {
 			User user, String emailAddress1, String emailAddress2) {
 
 			super(
-				String.format(
-					"Email address 1 %s and email address 2 %s for user %s " +
-						"must be equal",
-					emailAddress1, emailAddress2, user.getUserId()));
+				StringBundler.concat(
+					"Email address 1 ", emailAddress1, " and email address 2 ",
+					emailAddress2, " for user ", user.getUserId(),
+					" must be equal"));
 
 			this.user = user;
 			this.emailAddress1 = emailAddress1;
@@ -53,10 +54,11 @@ public class UserEmailAddressException extends PortalException {
 			long companyId, long userId, String emailAddress) {
 
 			super(
-				String.format(
-					"User %s cannot be created because a user with company " +
-						"%s and email address %s is already in use",
-					userId, emailAddress, companyId));
+				StringBundler.concat(
+					"User ", userId,
+					" cannot be created because a user with company ",
+					emailAddress, " and email address ", companyId,
+					" is already in use"));
 
 			this.companyId = companyId;
 			this.userId = userId;
@@ -65,10 +67,9 @@ public class UserEmailAddressException extends PortalException {
 
 		public MustNotBeDuplicate(long companyId, String emailAddress) {
 			super(
-				String.format(
-					"A user with company %s and email address %s is already " +
-						"in use",
-					companyId, emailAddress));
+				StringBundler.concat(
+					"A user with company ", companyId, " and email address ",
+					emailAddress, " is already in use"));
 
 			this.companyId = companyId;
 			this.emailAddress = emailAddress;
@@ -89,8 +90,7 @@ public class UserEmailAddressException extends PortalException {
 
 		public MustNotBeNull(String fullName) {
 			super(
-				String.format(
-					"Email address must not be null for the full name %s",
+				"Email address must not be null for the full name ".concat(
 					fullName));
 		}
 
@@ -100,10 +100,9 @@ public class UserEmailAddressException extends PortalException {
 
 		public MustNotBePOP3User(String emailAddress) {
 			super(
-				String.format(
-					"Email address %s must not be the one used to connect to " +
-						"the POP3 server",
-					emailAddress));
+				StringBundler.concat(
+					"Email address ", emailAddress,
+					" must not be the one used to connect to the POP3 server"));
 
 			this.emailAddress = emailAddress;
 		}
@@ -118,9 +117,10 @@ public class UserEmailAddressException extends PortalException {
 			String emailAddress, String[] reservedEmailAddresses) {
 
 			super(
-				String.format(
-					"Email address %s must not be a reserved one such as: %s",
-					emailAddress, StringUtil.merge(reservedEmailAddresses)));
+				StringBundler.concat(
+					"Email address ", emailAddress,
+					" must not be a reserved one such as: ",
+					StringUtil.merge(reservedEmailAddresses)));
 
 			this.emailAddress = emailAddress;
 			this.reservedEmailAddresses = reservedEmailAddresses;
@@ -135,10 +135,10 @@ public class UserEmailAddressException extends PortalException {
 
 		public MustNotUseCompanyMx(String emailAddress) {
 			super(
-				String.format(
-					"Email address %s must not use the MX of the company or " +
-						"one of the associated mail host names",
-					emailAddress));
+				StringBundler.concat(
+					"Email address ", emailAddress,
+					" must not use the MX of the company or one of the " +
+						"associated mail host names"));
 
 			this.emailAddress = emailAddress;
 		}
@@ -153,8 +153,8 @@ public class UserEmailAddressException extends PortalException {
 			String emailAddress, EmailAddressValidator emailAddressValidator) {
 
 			super(
-				String.format(
-					"Email name address %s must validate with %s", emailAddress,
+				StringBundler.concat(
+					"Email name address ", emailAddress, " must validate with ",
 					ClassUtil.getClassName(emailAddressValidator)));
 
 			this.emailAddress = emailAddress;

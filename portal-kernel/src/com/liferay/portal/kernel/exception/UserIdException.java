@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.exception;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 
 /**
@@ -34,8 +35,8 @@ public class UserIdException extends PortalException {
 
 		public MustNotBeReserved(long userId, String[] reservedUserIds) {
 			super(
-				String.format(
-					"User ID %s must not be a reserved one such as: %s", userId,
+				StringBundler.concat(
+					"User ID ", userId, " must not be a reserved one such as: ",
 					StringUtil.merge(reservedUserIds)));
 
 			this.userId = userId;
