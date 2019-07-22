@@ -291,7 +291,7 @@ public class JGroupsClusterChannelFactory implements ClusterChannelFactory {
 				String propertyKey = configXML.substring(
 					startIndex + 2, endIndex);
 
-				Object value = _props.get(_html.escapeAttribute(propertyKey));
+				Object value = _props.get(_html.fromInputSafe(propertyKey));
 
 				if (value instanceof String) {
 					sb.append(configXML.substring(index, startIndex));
