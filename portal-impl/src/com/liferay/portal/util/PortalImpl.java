@@ -5720,25 +5720,34 @@ public class PortalImpl implements Portal {
 			String remoteUser = httpServletRequest.getRemoteUser();
 
 			if ((remoteUser == null) && !PropsValues.PORTAL_JAAS_ENABLE) {
+				System.out.println(" ### remoteUser = j_remoteuser");
+
 				HttpSession session = httpServletRequest.getSession();
 
 				remoteUser = (String)session.getAttribute("j_remoteuser");
 			}
 
 			if (remoteUser == null) {
+				System.out.println(" ### remoteUser null");
+
 				return null;
 			}
 
 			if (PropsValues.PORTAL_JAAS_ENABLE) {
+				System.out.println(" ### remoteUser: " + remoteUser);
+				System.out.println(" ### JAAS_ENABLE: " + PropsValues.PORTAL_JAAS_ENABLE);
+
 				long companyId = getCompanyId(httpServletRequest);
+
+				System.out.println(" ### After getCompanyId");
 
 				try {
 					userId = JAASHelper.getJaasUserId(companyId, remoteUser);
+
+					System.out.println(" ### After JAASHelper");
 				}
 				catch (Exception e) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(e, e);
-					}
+					_log.error(e, e);
 				}
 			}
 			else {
