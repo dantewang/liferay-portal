@@ -5712,12 +5712,17 @@ public class PortalImpl implements Portal {
 
 		if (userId <= 0) {
 
+			_log.error(" ### userId < 0 ");
+
 			// Portlet WARs may have the correct remote user and not have the
 			// correct user id because the user id is saved in the session and
 			// may not be accessible by the portlet WAR's session. This behavior
 			// is inconsistent across different application servers.
 
 			String remoteUser = httpServletRequest.getRemoteUser();
+
+			_log.error(" ### remoteUser: " + remoteUser);
+			_log.error(" ### JAAS_ENABLE: " + PropsValues.PORTAL_JAAS_ENABLE);
 
 			if ((remoteUser == null) && !PropsValues.PORTAL_JAAS_ENABLE) {
 				HttpSession session = httpServletRequest.getSession();
@@ -5730,15 +5735,17 @@ public class PortalImpl implements Portal {
 			}
 
 			if (PropsValues.PORTAL_JAAS_ENABLE) {
+				_log.error(" ### Call JAASHelper 1");
+
 				long companyId = getCompanyId(httpServletRequest);
+
+				_log.error(" ### Call JAASHelper 2");
 
 				try {
 					userId = JAASHelper.getJaasUserId(companyId, remoteUser);
 				}
 				catch (Exception e) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(e, e);
-					}
+					_log.error(e, e);
 				}
 			}
 			else {
