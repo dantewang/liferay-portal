@@ -20,13 +20,14 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.SynchronousMailTestRule;
 import com.liferay.subscription.test.util.BaseSubscriptionAuthorTestCase;
 import com.liferay.wiki.model.WikiNode;
 import com.liferay.wiki.model.WikiPage;
-import com.liferay.wiki.service.WikiNodeLocalServiceUtil;
-import com.liferay.wiki.service.WikiPageLocalServiceUtil;
+import com.liferay.wiki.service.WikiNodeLocalService;
+import com.liferay.wiki.service.WikiPageLocalService;
 import com.liferay.wiki.util.test.WikiTestUtil;
 
 import org.junit.ClassRule;
@@ -71,14 +72,14 @@ public class WikiSubscriptionAuthorTest extends BaseSubscriptionAuthorTestCase {
 	protected void addSubscription(long userId, long containerModelId)
 		throws Exception {
 
-		WikiNodeLocalServiceUtil.subscribeNode(userId, containerModelId);
+		_wikiNodeLocalService.subscribeNode(userId, containerModelId);
 	}
 
 	@Override
 	protected void updateBaseModel(long userId, long baseModelId)
 		throws Exception {
 
-		WikiPage page = WikiPageLocalServiceUtil.getPage(baseModelId, true);
+		WikiPage page = _wikiPageLocalService.getPage(baseModelId, true);
 
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(page.getGroupId(), userId);
@@ -90,5 +91,11 @@ public class WikiSubscriptionAuthorTest extends BaseSubscriptionAuthorTestCase {
 			page, userId, page.getTitle(), RandomTestUtil.randomString(), true,
 			serviceContext);
 	}
+
+	@Inject
+	private WikiNodeLocalService _wikiNodeLocalService;
+
+	@Inject
+	private WikiPageLocalService _wikiPageLocalService;
 
 }

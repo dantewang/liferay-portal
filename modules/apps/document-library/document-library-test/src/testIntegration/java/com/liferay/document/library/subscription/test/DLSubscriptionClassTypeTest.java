@@ -19,8 +19,8 @@ import com.liferay.document.library.kernel.model.DLFileEntryMetadata;
 import com.liferay.document.library.kernel.model.DLFileEntryType;
 import com.liferay.document.library.kernel.model.DLFileEntryTypeConstants;
 import com.liferay.document.library.kernel.model.DLVersionNumberIncrease;
-import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
-import com.liferay.document.library.kernel.service.DLFileEntryTypeLocalServiceUtil;
+import com.liferay.document.library.kernel.service.DLAppLocalService;
+import com.liferay.document.library.kernel.service.DLFileEntryTypeLocalService;
 import com.liferay.dynamic.data.mapping.kernel.DDMStructure;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.test.util.TestDataConstants;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.SynchronousMailTestRule;
 import com.liferay.portlet.documentlibrary.util.test.DLAppTestUtil;
@@ -70,7 +71,7 @@ public class DLSubscriptionClassTypeTest
 			serviceContext, Constants.ADD);
 		DLAppTestUtil.populateServiceContext(serviceContext, classTypeId);
 
-		FileEntry fileEntry = DLAppLocalServiceUtil.addFileEntry(
+		FileEntry fileEntry = _dlAppLocalService.addFileEntry(
 			TestPropsValues.getUserId(), group.getGroupId(), containerModelId,
 			RandomTestUtil.randomString() + ".txt", ContentTypes.TEXT_PLAIN,
 			TestDataConstants.TEST_BYTE_ARRAY, serviceContext);
@@ -88,7 +89,7 @@ public class DLSubscriptionClassTypeTest
 				group.getGroupId(), TestPropsValues.getUserId());
 
 		DLFileEntryType fileEntryType =
-			DLFileEntryTypeLocalServiceUtil.addFileEntryType(
+			_dlFileEntryTypeLocalService.addFileEntryType(
 				TestPropsValues.getUserId(), group.getGroupId(),
 				RandomTestUtil.randomString(), RandomTestUtil.randomString(),
 				new long[] {ddmStructure.getStructureId()}, serviceContext);
@@ -98,7 +99,7 @@ public class DLSubscriptionClassTypeTest
 
 	@Override
 	protected void addSubscriptionClassType(long classTypeId) throws Exception {
-		DLAppLocalServiceUtil.subscribeFileEntryType(
+		_dlAppLocalService.subscribeFileEntryType(
 			user.getUserId(), group.getGroupId(), classTypeId);
 	}
 
@@ -106,14 +107,14 @@ public class DLSubscriptionClassTypeTest
 	protected void deleteSubscriptionClassType(long classTypeId)
 		throws Exception {
 
-		DLAppLocalServiceUtil.unsubscribeFileEntryType(
+		_dlAppLocalService.unsubscribeFileEntryType(
 			user.getUserId(), group.getGroupId(), classTypeId);
 	}
 
 	@Override
 	protected Long getDefaultClassTypeId() throws Exception {
 		DLFileEntryType basicEntryType =
-			DLFileEntryTypeLocalServiceUtil.getDLFileEntryType(
+			_dlFileEntryTypeLocalService.getDLFileEntryType(
 				DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
 
 		Assert.assertNotNull(basicEntryType);
@@ -132,11 +133,17 @@ public class DLSubscriptionClassTypeTest
 		DLAppTestUtil.populateNotificationsServiceContext(
 			serviceContext, Constants.UPDATE);
 
-		DLAppLocalServiceUtil.updateFileEntry(
+		_dlAppLocalService.updateFileEntry(
 			userId, baseModelId, RandomTestUtil.randomString(),
 			ContentTypes.TEXT_PLAIN, RandomTestUtil.randomString(),
 			StringPool.BLANK, StringPool.BLANK, DLVersionNumberIncrease.MINOR,
 			TestDataConstants.TEST_BYTE_ARRAY, serviceContext);
 	}
+
+	@Inject
+	private DLAppLocalService _dlAppLocalService;
+
+	@Inject
+	private DLFileEntryTypeLocalService _dlFileEntryTypeLocalService;
 
 }

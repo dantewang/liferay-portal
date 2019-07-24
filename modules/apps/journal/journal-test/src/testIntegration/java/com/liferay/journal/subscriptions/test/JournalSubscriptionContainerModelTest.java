@@ -17,11 +17,12 @@ package com.liferay.journal.subscriptions.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalFolder;
-import com.liferay.journal.service.JournalArticleLocalServiceUtil;
-import com.liferay.journal.service.JournalFolderLocalServiceUtil;
+import com.liferay.journal.service.JournalArticleLocalService;
+import com.liferay.journal.service.JournalFolderLocalService;
 import com.liferay.journal.test.util.JournalTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.SynchronousMailTestRule;
 import com.liferay.subscription.test.util.BaseSubscriptionContainerModelTestCase;
@@ -69,7 +70,7 @@ public class JournalSubscriptionContainerModelTest
 	protected void addSubscriptionContainerModel(long containerModelId)
 		throws Exception {
 
-		JournalFolderLocalServiceUtil.subscribe(
+		_journalFolderLocalService.subscribe(
 			user.getUserId(), group.getGroupId(), containerModelId);
 	}
 
@@ -77,10 +78,16 @@ public class JournalSubscriptionContainerModelTest
 	protected void updateBaseModel(long userId, long baseModelId)
 		throws Exception {
 
-		JournalArticle article =
-			JournalArticleLocalServiceUtil.getLatestArticle(baseModelId);
+		JournalArticle article = _journalArticleLocalService.getLatestArticle(
+			baseModelId);
 
 		JournalTestUtil.updateArticleWithWorkflow(userId, article, true);
 	}
+
+	@Inject
+	private JournalArticleLocalService _journalArticleLocalService;
+
+	@Inject
+	private JournalFolderLocalService _journalFolderLocalService;
 
 }

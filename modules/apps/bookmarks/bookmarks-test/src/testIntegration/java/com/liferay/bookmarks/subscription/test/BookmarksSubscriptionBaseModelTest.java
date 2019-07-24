@@ -17,8 +17,8 @@ package com.liferay.bookmarks.subscription.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.bookmarks.model.BookmarksEntry;
 import com.liferay.bookmarks.model.BookmarksFolder;
-import com.liferay.bookmarks.service.BookmarksEntryLocalServiceUtil;
-import com.liferay.bookmarks.service.BookmarksFolderLocalServiceUtil;
+import com.liferay.bookmarks.service.BookmarksEntryLocalService;
+import com.liferay.bookmarks.service.BookmarksFolderLocalService;
 import com.liferay.bookmarks.test.util.BookmarksTestUtil;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.role.RoleConstants;
@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.RoleTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.SynchronousMailTestRule;
 import com.liferay.subscription.test.util.BaseSubscriptionBaseModelTestCase;
@@ -61,7 +62,7 @@ public class BookmarksSubscriptionBaseModelTest
 		BookmarksTestUtil.populateNotificationsServiceContext(
 			serviceContext, Constants.ADD);
 
-		BookmarksEntry entry = BookmarksEntryLocalServiceUtil.addEntry(
+		BookmarksEntry entry = _bookmarksEntryLocalService.addEntry(
 			userId, group.getGroupId(), containerModelId,
 			RandomTestUtil.randomString(), "http://www.liferay.com",
 			RandomTestUtil.randomString(), serviceContext);
@@ -77,7 +78,7 @@ public class BookmarksSubscriptionBaseModelTest
 			ServiceContextTestUtil.getServiceContext(
 				group.getGroupId(), userId);
 
-		_folder = BookmarksFolderLocalServiceUtil.addFolder(
+		_folder = _bookmarksFolderLocalService.addFolder(
 			userId, containerModelId, RandomTestUtil.randomString(),
 			RandomTestUtil.randomString(), serviceContext);
 
@@ -86,7 +87,7 @@ public class BookmarksSubscriptionBaseModelTest
 
 	@Override
 	protected void addSubscriptionBaseModel(long baseModelId) throws Exception {
-		BookmarksEntryLocalServiceUtil.subscribeEntry(
+		_bookmarksEntryLocalService.subscribeEntry(
 			user.getUserId(), baseModelId);
 	}
 
@@ -109,7 +110,7 @@ public class BookmarksSubscriptionBaseModelTest
 	protected void updateBaseModel(long userId, long baseModelId)
 		throws Exception {
 
-		BookmarksEntry entry = BookmarksEntryLocalServiceUtil.getEntry(
+		BookmarksEntry entry = _bookmarksEntryLocalService.getEntry(
 			baseModelId);
 
 		ServiceContext serviceContext =
@@ -119,11 +120,17 @@ public class BookmarksSubscriptionBaseModelTest
 		BookmarksTestUtil.populateNotificationsServiceContext(
 			serviceContext, Constants.UPDATE);
 
-		BookmarksEntryLocalServiceUtil.updateEntry(
+		_bookmarksEntryLocalService.updateEntry(
 			userId, entry.getEntryId(), entry.getGroupId(), entry.getFolderId(),
 			RandomTestUtil.randomString(), entry.getUrl(),
 			entry.getDescription(), serviceContext);
 	}
+
+	@Inject
+	private BookmarksEntryLocalService _bookmarksEntryLocalService;
+
+	@Inject
+	private BookmarksFolderLocalService _bookmarksFolderLocalService;
 
 	private BookmarksFolder _folder;
 

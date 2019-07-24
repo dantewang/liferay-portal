@@ -18,16 +18,17 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.journal.constants.JournalConstants;
 import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
-import com.liferay.journal.service.JournalArticleLocalServiceUtil;
-import com.liferay.journal.service.JournalFolderLocalServiceUtil;
+import com.liferay.journal.service.JournalArticleLocalService;
+import com.liferay.journal.service.JournalFolderLocalService;
 import com.liferay.journal.test.util.JournalTestUtil;
-import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
-import com.liferay.portal.kernel.service.PortletPreferencesLocalServiceUtil;
+import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
+import com.liferay.portal.kernel.service.PortletPreferencesLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.SynchronousMailTestRule;
 import com.liferay.subscription.test.util.BaseSubscriptionLocalizedContentTestCase;
@@ -75,7 +76,7 @@ public class JournalSubscriptionLocalizedContentTest
 	protected void addSubscriptionContainerModel(long containerModelId)
 		throws Exception {
 
-		JournalFolderLocalServiceUtil.subscribe(
+		_journalFolderLocalService.subscribe(
 			user.getUserId(), group.getGroupId(), containerModelId);
 	}
 
@@ -105,7 +106,7 @@ public class JournalSubscriptionLocalizedContentTest
 		throws Exception {
 
 		PortletPreferences portletPreferences =
-			PortletPreferencesFactoryUtil.getStrictPortletSetup(
+			_portletPreferencesFactory.getStrictPortletSetup(
 				layout, getServiceName());
 
 		LocalizationUtil.setPreferencesValue(
@@ -115,7 +116,7 @@ public class JournalSubscriptionLocalizedContentTest
 			portletPreferences, bodyPreferenceName,
 			LocaleUtil.toLanguageId(LocaleUtil.SPAIN), SPANISH_BODY);
 
-		PortletPreferencesLocalServiceUtil.updatePreferences(
+		_portletPreferencesLocalService.updatePreferences(
 			group.getGroupId(), PortletKeys.PREFS_OWNER_TYPE_GROUP,
 			PortletKeys.PREFS_PLID_SHARED, getServiceName(),
 			portletPreferences);
@@ -125,10 +126,22 @@ public class JournalSubscriptionLocalizedContentTest
 	protected void updateBaseModel(long userId, long baseModelId)
 		throws Exception {
 
-		JournalArticle article =
-			JournalArticleLocalServiceUtil.getLatestArticle(baseModelId);
+		JournalArticle article = _journalArticleLocalService.getLatestArticle(
+			baseModelId);
 
 		JournalTestUtil.updateArticleWithWorkflow(userId, article, true);
 	}
+
+	@Inject
+	private JournalArticleLocalService _journalArticleLocalService;
+
+	@Inject
+	private JournalFolderLocalService _journalFolderLocalService;
+
+	@Inject
+	private PortletPreferencesFactory _portletPreferencesFactory;
+
+	@Inject
+	private PortletPreferencesLocalService _portletPreferencesLocalService;
 
 }

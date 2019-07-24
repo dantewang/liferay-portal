@@ -17,8 +17,8 @@ package com.liferay.message.boards.subscription.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.message.boards.model.MBCategory;
 import com.liferay.message.boards.model.MBMessage;
-import com.liferay.message.boards.service.MBCategoryLocalServiceUtil;
-import com.liferay.message.boards.service.MBMessageLocalServiceUtil;
+import com.liferay.message.boards.service.MBCategoryLocalService;
+import com.liferay.message.boards.service.MBMessageLocalService;
 import com.liferay.message.boards.test.util.MBTestUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.SynchronousMailTestRule;
 import com.liferay.subscription.test.util.BaseSubscriptionContainerModelTestCase;
@@ -58,7 +59,7 @@ public class MBSubscriptionContainerModelTest
 		MBTestUtil.populateNotificationsServiceContext(
 			serviceContext, Constants.ADD);
 
-		MBMessage message = MBMessageLocalServiceUtil.addMessage(
+		MBMessage message = _mbMessageLocalService.addMessage(
 			userId, RandomTestUtil.randomString(), group.getGroupId(),
 			containerModelId, RandomTestUtil.randomString(),
 			RandomTestUtil.randomString(), serviceContext);
@@ -77,7 +78,7 @@ public class MBSubscriptionContainerModelTest
 		MBTestUtil.populateNotificationsServiceContext(
 			serviceContext, Constants.ADD);
 
-		MBCategory category = MBCategoryLocalServiceUtil.addCategory(
+		MBCategory category = _mbCategoryLocalService.addCategory(
 			userId, containerModelId, RandomTestUtil.randomString(),
 			StringPool.BLANK, serviceContext);
 
@@ -88,7 +89,7 @@ public class MBSubscriptionContainerModelTest
 	protected void addSubscriptionContainerModel(long containerModelId)
 		throws Exception {
 
-		MBCategoryLocalServiceUtil.subscribeCategory(
+		_mbCategoryLocalService.subscribeCategory(
 			user.getUserId(), group.getGroupId(), containerModelId);
 	}
 
@@ -96,7 +97,7 @@ public class MBSubscriptionContainerModelTest
 	protected void updateBaseModel(long userId, long baseModelId)
 		throws Exception {
 
-		MBMessage message = MBMessageLocalServiceUtil.getMessage(baseModelId);
+		MBMessage message = _mbMessageLocalService.getMessage(baseModelId);
 
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(
@@ -105,9 +106,15 @@ public class MBSubscriptionContainerModelTest
 		MBTestUtil.populateNotificationsServiceContext(
 			serviceContext, Constants.UPDATE);
 
-		MBMessageLocalServiceUtil.updateMessage(
+		_mbMessageLocalService.updateMessage(
 			userId, message.getMessageId(), RandomTestUtil.randomString(),
 			serviceContext);
 	}
+
+	@Inject
+	private MBCategoryLocalService _mbCategoryLocalService;
+
+	@Inject
+	private MBMessageLocalService _mbMessageLocalService;
 
 }

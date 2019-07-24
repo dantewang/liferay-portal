@@ -16,7 +16,7 @@ package com.liferay.document.library.subscription.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.document.library.kernel.model.DLVersionNumberIncrease;
-import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestDataConstants;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.SynchronousMailTestRule;
 import com.liferay.portlet.documentlibrary.util.test.DLAppTestUtil;
@@ -59,7 +60,7 @@ public class DLSubscriptionAuthorTest extends BaseSubscriptionAuthorTestCase {
 		DLAppTestUtil.populateNotificationsServiceContext(
 			serviceContext, Constants.ADD);
 
-		FileEntry fileEntry = DLAppLocalServiceUtil.addFileEntry(
+		FileEntry fileEntry = _dlAppLocalService.addFileEntry(
 			userId, group.getGroupId(), containerModelId,
 			RandomTestUtil.randomString() + ".txt", ContentTypes.TEXT_PLAIN,
 			TestDataConstants.TEST_BYTE_ARRAY, serviceContext);
@@ -75,7 +76,7 @@ public class DLSubscriptionAuthorTest extends BaseSubscriptionAuthorTestCase {
 			ServiceContextTestUtil.getServiceContext(
 				group.getGroupId(), userId);
 
-		Folder folder = DLAppLocalServiceUtil.addFolder(
+		Folder folder = _dlAppLocalService.addFolder(
 			userId, group.getGroupId(), containerModelId,
 			RandomTestUtil.randomString(), RandomTestUtil.randomString(),
 			serviceContext);
@@ -87,7 +88,7 @@ public class DLSubscriptionAuthorTest extends BaseSubscriptionAuthorTestCase {
 	protected void addSubscription(long userId, long containerModelId)
 		throws Exception {
 
-		DLAppLocalServiceUtil.subscribeFolder(
+		_dlAppLocalService.subscribeFolder(
 			userId, group.getGroupId(), containerModelId);
 	}
 
@@ -102,11 +103,14 @@ public class DLSubscriptionAuthorTest extends BaseSubscriptionAuthorTestCase {
 		DLAppTestUtil.populateNotificationsServiceContext(
 			serviceContext, Constants.UPDATE);
 
-		DLAppLocalServiceUtil.updateFileEntry(
+		_dlAppLocalService.updateFileEntry(
 			userId, baseModelId, RandomTestUtil.randomString(),
 			ContentTypes.TEXT_PLAIN, RandomTestUtil.randomString(),
 			StringPool.BLANK, StringPool.BLANK, DLVersionNumberIncrease.MINOR,
 			TestDataConstants.TEST_BYTE_ARRAY, serviceContext);
 	}
+
+	@Inject
+	private DLAppLocalService _dlAppLocalService;
 
 }
