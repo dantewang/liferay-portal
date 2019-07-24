@@ -21,9 +21,11 @@ import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleLocalService;
 import com.liferay.journal.service.JournalFolderLocalService;
 import com.liferay.journal.test.util.JournalTestUtil;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.service.PortletPreferencesLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
@@ -59,7 +61,7 @@ public class JournalSubscriptionLocalizedContentTest
 	public void setUp() throws Exception {
 		super.setUp();
 
-		user = UserTestUtil.addOmniAdminUser();
+		_user = UserTestUtil.addOmniAdminUser();
 	}
 
 	@Override
@@ -77,7 +79,7 @@ public class JournalSubscriptionLocalizedContentTest
 		throws Exception {
 
 		_journalFolderLocalService.subscribe(
-			user.getUserId(), group.getGroupId(), containerModelId);
+			_user.getUserId(), group.getGroupId(), containerModelId);
 	}
 
 	@Override
@@ -143,5 +145,8 @@ public class JournalSubscriptionLocalizedContentTest
 
 	@Inject
 	private PortletPreferencesLocalService _portletPreferencesLocalService;
+
+	@DeleteAfterTestRun
+	private User _user;
 
 }
