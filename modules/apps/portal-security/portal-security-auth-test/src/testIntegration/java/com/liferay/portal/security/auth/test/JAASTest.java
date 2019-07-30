@@ -147,6 +147,10 @@ public class JAASTest {
 			String.valueOf(_user.getScreenName()));
 
 		try {
+			System.out.println(
+				" #### JAASTest.testGetUser() PORTAL_JAAS_ENABLE: " +
+					PropsValues.PORTAL_JAAS_ENABLE);
+
 			User user = PortalUtil.getUser(mockHttpServletRequest);
 
 			Assert.assertEquals(1, counter.getValue());
