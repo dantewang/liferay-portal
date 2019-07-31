@@ -5710,6 +5710,26 @@ public class PortalImpl implements Portal {
 
 		long userId = getUserId(httpServletRequest);
 
+		StackTraceElement[] stackTraceElements =
+			Thread.currentThread().getStackTrace();
+
+		if(stackTraceElements.length > 3) {
+			String content = stackTraceElements[3].toString();
+
+			if(content.startsWith(
+					"com.liferay.portal.security.auth.test.JAASTest." +
+						"testGetUser")) {
+
+				System.out.println(" ###### userId: " + userId);
+				System.out.println(
+					" ###### remoteUser: " +
+						httpServletRequest.getRemoteUser());
+				System.out.println(
+					" ###### PORTAL_JAAS_ENABLE: " +
+						PropsValues.PORTAL_JAAS_ENABLE);
+			}
+		}
+
 		if (userId <= 0) {
 
 			// Portlet WARs may have the correct remote user and not have the

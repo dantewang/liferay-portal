@@ -12,19 +12,20 @@
  * details.
  */
 
-package com.liferay.portal.security.auth;
+package com.liferay.portal.security.auth.test;
 
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.events.EventsProcessorUtil;
-import com.liferay.portal.internal.servlet.MainServlet;
 import com.liferay.portal.kernel.events.Action;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.jaas.PortalPrincipal;
 import com.liferay.portal.kernel.security.jaas.PortalRole;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.servlet.HttpMethods;
+import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -32,8 +33,9 @@ import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.security.jaas.JAASHelper;
+import com.liferay.portal.servlet.filters.absoluteredirects.AbsoluteRedirectsResponse;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.MainServletClassTestRule;
 import com.liferay.portal.util.PropsValues;
 
 import java.lang.reflect.Field;
@@ -57,6 +59,8 @@ import javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag;
 import javax.security.auth.login.Configuration;
 import javax.security.auth.login.LoginContext;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -66,6 +70,7 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -73,6 +78,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 /**
  * @author Raymond Augé
  */
+@RunWith(Arquillian.class)
 public class JAASTest {
 
 	@ClassRule
@@ -132,17 +138,19 @@ public class JAASTest {
 
 			});
 
-		MainServlet mainServlet = MainServletClassTestRule.getMainServlet();
-
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest(
-				mainServlet.getServletContext(), HttpMethods.GET,
+				ServletContextPool.get(StringPool.BLANK), HttpMethods.GET,
 				StringPool.SLASH);
 
 		mockHttpServletRequest.setRemoteUser(
 			String.valueOf(_user.getScreenName()));
 
 		try {
+			System.out.println(
+				" #### JAASTest.testGetUser() PORTAL_JAAS_ENABLE: " +
+					PropsValues.PORTAL_JAAS_ENABLE);
+
 			User user = PortalUtil.getUser(mockHttpServletRequest);
 
 			Assert.assertEquals(1, counter.getValue());
@@ -162,31 +170,31 @@ public class JAASTest {
 	public void testLoginEmailAddressWithEmailAddress() throws Exception {
 		_jaasAuthTypeField.set(null, "emailAddress");
 
-		LoginContext loginContext = getLoginContext(
+		LoginContext loginContext = _getLoginContext(
 			_user.getEmailAddress(), _user.getPassword());
 
 		loginContext.login();
 
-		validateSubject(loginContext.getSubject(), _user.getEmailAddress());
+		_validateSubject(loginContext.getSubject(), _user.getEmailAddress());
 	}
 
 	@Test
 	public void testLoginEmailAddressWithLogin() throws Exception {
 		_jaasAuthTypeField.set(null, "login");
 
-		LoginContext loginContext = getLoginContext(
+		LoginContext loginContext = _getLoginContext(
 			_user.getEmailAddress(), _user.getPassword());
 
 		loginContext.login();
 
-		validateSubject(loginContext.getSubject(), _user.getEmailAddress());
+		_validateSubject(loginContext.getSubject(), _user.getEmailAddress());
 	}
 
 	@Test
 	public void testLoginEmailAddressWithScreenName() throws Exception {
 		_jaasAuthTypeField.set(null, "screenName");
 
-		LoginContext loginContext = getLoginContext(
+		LoginContext loginContext = _getLoginContext(
 			_user.getEmailAddress(), _user.getPassword());
 
 		try {
@@ -202,7 +210,7 @@ public class JAASTest {
 	public void testLoginEmailAddressWithUserId() throws Exception {
 		_jaasAuthTypeField.set(null, "userId");
 
-		LoginContext loginContext = getLoginContext(
+		LoginContext loginContext = _getLoginContext(
 			_user.getEmailAddress(), _user.getPassword());
 
 		try {
@@ -218,7 +226,7 @@ public class JAASTest {
 	public void testLoginScreenNameWithEmailAddress() throws Exception {
 		_jaasAuthTypeField.set(null, "emailAddress");
 
-		LoginContext loginContext = getLoginContext(
+		LoginContext loginContext = _getLoginContext(
 			_user.getScreenName(), _user.getPassword());
 
 		try {
@@ -234,7 +242,7 @@ public class JAASTest {
 	public void testLoginScreenNameWithLogin() throws Exception {
 		_jaasAuthTypeField.set(null, "login");
 
-		LoginContext loginContext = getLoginContext(
+		LoginContext loginContext = _getLoginContext(
 			_user.getScreenName(), _user.getPassword());
 
 		try {
@@ -250,19 +258,19 @@ public class JAASTest {
 	public void testLoginScreenNameWithScreenName() throws Exception {
 		_jaasAuthTypeField.set(null, "screenName");
 
-		LoginContext loginContext = getLoginContext(
+		LoginContext loginContext = _getLoginContext(
 			_user.getScreenName(), _user.getPassword());
 
 		loginContext.login();
 
-		validateSubject(loginContext.getSubject(), _user.getScreenName());
+		_validateSubject(loginContext.getSubject(), _user.getScreenName());
 	}
 
 	@Test
 	public void testLoginScreenNameWithUserId() throws Exception {
 		_jaasAuthTypeField.set(null, "userId");
 
-		LoginContext loginContext = getLoginContext(
+		LoginContext loginContext = _getLoginContext(
 			_user.getScreenName(), _user.getPassword());
 
 		try {
@@ -278,7 +286,7 @@ public class JAASTest {
 	public void testLoginUserIdWithEmailAddress() throws Exception {
 		_jaasAuthTypeField.set(null, "emailAddress");
 
-		LoginContext loginContext = getLoginContext(
+		LoginContext loginContext = _getLoginContext(
 			String.valueOf(_user.getUserId()), _user.getPassword());
 
 		try {
@@ -294,7 +302,7 @@ public class JAASTest {
 	public void testLoginUserIdWithLogin() throws Exception {
 		_jaasAuthTypeField.set(null, "login");
 
-		LoginContext loginContext = getLoginContext(
+		LoginContext loginContext = _getLoginContext(
 			String.valueOf(_user.getUserId()), _user.getPassword());
 
 		try {
@@ -310,7 +318,7 @@ public class JAASTest {
 	public void testLoginUserIdWithScreenName() throws Exception {
 		_jaasAuthTypeField.set(null, "screenName");
 
-		LoginContext loginContext = getLoginContext(
+		LoginContext loginContext = _getLoginContext(
 			String.valueOf(_user.getUserId()), _user.getPassword());
 
 		try {
@@ -326,27 +334,32 @@ public class JAASTest {
 	public void testLoginUserIdWithUserId() throws Exception {
 		_jaasAuthTypeField.set(null, "userId");
 
-		LoginContext loginContext = getLoginContext(
+		LoginContext loginContext = _getLoginContext(
 			String.valueOf(_user.getUserId()), _user.getPassword());
 
 		loginContext.login();
 
-		validateSubject(
+		_validateSubject(
 			loginContext.getSubject(), String.valueOf(_user.getUserId()));
 	}
 
 	@Test
 	public void testProcessLoginEvents() throws Exception {
-		MainServlet mainServlet = MainServletClassTestRule.getMainServlet();
-
 		Date lastLoginDate = _user.getLastLoginDate();
+
+		ServletContext servletContext = ServletContextPool.get(
+			StringPool.BLANK);
 
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest(
-				mainServlet.getServletContext(), HttpMethods.GET,
-				StringPool.SLASH);
+				servletContext, HttpMethods.GET, StringPool.SLASH);
+
+		MockHttpServletResponse mockHttpServletResponse =
+			new MockHttpServletResponse();
 
 		mockHttpServletRequest.setRemoteUser(String.valueOf(_user.getUserId()));
+		mockHttpServletRequest.setAttribute(
+			AbsoluteRedirectsResponse.class.getName(), new Object());
 
 		JAASAction preJAASAction = new JAASAction();
 		JAASAction postJAASAction = new JAASAction();
@@ -357,13 +370,16 @@ public class JAASTest {
 			EventsProcessorUtil.registerEvent(
 				PropsKeys.LOGIN_EVENTS_POST, postJAASAction);
 
-			mainServlet.service(
-				mockHttpServletRequest, new MockHttpServletResponse());
+			RequestDispatcher requestDispatcher =
+				servletContext.getRequestDispatcher("/c");
+
+			requestDispatcher.include(
+				mockHttpServletRequest, mockHttpServletResponse);
 
 			Assert.assertTrue(preJAASAction.isRan());
 			Assert.assertTrue(postJAASAction.isRan());
 
-			_user = UserLocalServiceUtil.getUser(_user.getUserId());
+			_user = _userLocalService.getUser(_user.getUserId());
 
 			Assert.assertFalse(lastLoginDate.after(_user.getLastLoginDate()));
 		}
@@ -375,14 +391,14 @@ public class JAASTest {
 		}
 	}
 
-	protected LoginContext getLoginContext(String name, String password)
+	private LoginContext _getLoginContext(String name, String password)
 		throws Exception {
 
 		return new LoginContext(
 			"PortalRealm", new JAASCallbackHandler(name, password));
 	}
 
-	protected void validateSubject(Subject subject, String userIdString) {
+	private void _validateSubject(Subject subject, String userIdString) {
 		Assert.assertNotNull(subject);
 
 		Set<Principal> userPrincipals = subject.getPrincipals();
@@ -414,6 +430,9 @@ public class JAASTest {
 	private Boolean _jaasEnabled;
 	private Field _jaasEnabledField;
 	private User _user;
+
+	@Inject
+	private UserLocalService _userLocalService;
 
 	private static class JAASAction extends Action {
 
