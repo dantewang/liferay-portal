@@ -88,6 +88,27 @@ public class JAASTest {
 
 	@Before
 	public void setUp() throws Exception {
+		_user = TestPropsValues.getUser();
+
+		long total = 0;
+		for (int i = 0 ; i < 1000000; ++i) {
+			MockHttpServletRequest mockHttpServletRequest =
+				new MockHttpServletRequest(
+					ServletContextPool.get(StringPool.BLANK), HttpMethods.GET,
+					StringPool.SLASH);
+
+			mockHttpServletRequest.setRemoteUser(
+				String.valueOf(_user.getScreenName()));
+
+			User user = PortalUtil.getUser(mockHttpServletRequest);
+
+			if (user != null) {
+				total += user.getUserId();
+			}
+		}
+
+		System.out.println(total);
+
 		_jaasAuthTypeField = ReflectionUtil.getDeclaredField(
 			PropsValues.class, "PORTAL_JAAS_AUTH_TYPE");
 
@@ -101,8 +122,6 @@ public class JAASTest {
 		_jaasEnabledField.set(null, true);
 
 		Configuration.setConfiguration(new JAASConfiguration());
-
-		_user = TestPropsValues.getUser();
 	}
 
 	@After
