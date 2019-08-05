@@ -21,10 +21,7 @@ import com.liferay.exportimport.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.exportimport.kernel.lar.StagedModelType;
 import com.liferay.mobile.device.rules.model.MDRRuleGroupInstance;
 import com.liferay.mobile.device.rules.service.MDRRuleGroupInstanceLocalService;
-import com.liferay.mobile.device.rules.service.persistence.MDRActionPersistence;
-import com.liferay.mobile.device.rules.service.persistence.MDRRuleGroupFinder;
 import com.liferay.mobile.device.rules.service.persistence.MDRRuleGroupInstancePersistence;
-import com.liferay.mobile.device.rules.service.persistence.MDRRuleGroupPersistence;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
@@ -587,15 +584,6 @@ public abstract class MDRRuleGroupInstanceLocalServiceBaseImpl
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService
 		counterLocalService;
-
-	@Reference
-	protected MDRActionPersistence mdrActionPersistence;
-
-	@Reference
-	protected MDRRuleGroupPersistence mdrRuleGroupPersistence;
-
-	@Reference
-	protected MDRRuleGroupFinder mdrRuleGroupFinder;
 
 	@Reference
 	protected com.liferay.portal.kernel.service.ClassNameLocalService
