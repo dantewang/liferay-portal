@@ -27,7 +27,6 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.ClassTestRule;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.test.rule.HypersonicServerClassTestRule;
 import com.liferay.portal.test.rule.Inject;
@@ -204,7 +203,8 @@ public class CounterLocalServiceTest {
 		}
 	}
 
-	private static final String _COUNTER_NAME = StringUtil.randomString();
+	private static final String _COUNTER_NAME =
+		CounterLocalServiceTest.class.getName();
 
 	private static final int _INCREMENT_COUNT = 10000;
 
