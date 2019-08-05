@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.service.BaseServiceImpl;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.site.navigation.model.SiteNavigationMenu;
 import com.liferay.site.navigation.service.SiteNavigationMenuService;
-import com.liferay.site.navigation.service.persistence.SiteNavigationMenuItemPersistence;
 import com.liferay.site.navigation.service.persistence.SiteNavigationMenuPersistence;
 
 import javax.sql.DataSource;
@@ -130,9 +129,5 @@ public abstract class SiteNavigationMenuServiceBaseImpl
 
 	@Reference
 	protected com.liferay.portal.kernel.service.UserService userService;
-
-	@Reference
-	protected SiteNavigationMenuItemPersistence
-		siteNavigationMenuItemPersistence;
 
 }
