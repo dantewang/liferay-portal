@@ -14,7 +14,10 @@
 
 package com.liferay.segments.service.impl;
 
+import com.liferay.portal.aop.AopService;
 import com.liferay.segments.service.base.SegmentsExperimentRelServiceBaseImpl;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * The implementation of the segments experiment rel remote service.
@@ -29,6 +32,13 @@ import com.liferay.segments.service.base.SegmentsExperimentRelServiceBaseImpl;
  * @author Eduardo García
  * @see SegmentsExperimentRelServiceBaseImpl
  */
+@Component(
+	property = {
+		"json.web.service.context.name=segments",
+		"json.web.service.context.path=SegmentsExperimentRel"
+	},
+	service = AopService.class
+)
 public class SegmentsExperimentRelServiceImpl
 	extends SegmentsExperimentRelServiceBaseImpl {
 
