@@ -29,12 +29,12 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.model.UserGroupGroupRole;
 import com.liferay.portal.kernel.model.UserGroupRole;
-import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
-import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
-import com.liferay.portal.kernel.service.UserGroupGroupRoleLocalServiceUtil;
-import com.liferay.portal.kernel.service.UserGroupLocalServiceUtil;
-import com.liferay.portal.kernel.service.UserGroupRoleLocalServiceUtil;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.RoleLocalService;
+import com.liferay.portal.kernel.service.UserGroupGroupRoleLocalService;
+import com.liferay.portal.kernel.service.UserGroupLocalService;
+import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CalendarUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -58,9 +58,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 /**
  * @author Michael C. Han
  */
+@Component(service = KaleoTaskInstanceTokenFinder.class)
 public class KaleoTaskInstanceTokenFinderImpl
 	extends KaleoTaskInstanceTokenFinderBaseImpl
 	implements KaleoTaskInstanceTokenFinder {
@@ -70,6 +74,9 @@ public class KaleoTaskInstanceTokenFinderImpl
 
 	public static final String FIND_BY_C_KTAI =
 		KaleoTaskInstanceTokenFinder.class.getName() + ".findByC_KTAI";
+
+	public KaleoTaskInstanceTokenFinderImpl() {
+	}
 
 	@Override
 	public int countKaleoTaskInstanceTokens(
@@ -554,26 +561,25 @@ public class KaleoTaskInstanceTokenFinderImpl
 		List<Long> roleIds = RoleUtil.getRoleIds(
 			kaleoTaskInstanceTokenQuery.getServiceContext());
 
-		User user = UserLocalServiceUtil.getUserById(
+		User user = _userLocalService.getUserById(
 			kaleoTaskInstanceTokenQuery.getUserId());
 
 		List<Group> groups = new ArrayList<>();
 
 		groups.addAll(user.getGroups());
 		groups.addAll(
-			GroupLocalServiceUtil.getOrganizationsGroups(
+			_groupLocalService.getOrganizationsGroups(user.getOrganizations()));
+		groups.addAll(
+			_groupLocalService.getOrganizationsRelatedGroups(
 				user.getOrganizations()));
 		groups.addAll(
-			GroupLocalServiceUtil.getOrganizationsRelatedGroups(
-				user.getOrganizations()));
+			_groupLocalService.getUserGroupsGroups(user.getUserGroups()));
 		groups.addAll(
-			GroupLocalServiceUtil.getUserGroupsGroups(user.getUserGroups()));
-		groups.addAll(
-			GroupLocalServiceUtil.getUserGroupsRelatedGroups(
+			_groupLocalService.getUserGroupsRelatedGroups(
 				user.getUserGroups()));
 
 		for (Group group : groups) {
-			List<Role> roles = RoleLocalServiceUtil.getGroupRoles(
+			List<Role> roles = _roleLocalService.getGroupRoles(
 				group.getGroupId());
 
 			for (Role role : roles) {
@@ -602,7 +608,7 @@ public class KaleoTaskInstanceTokenFinderImpl
 			Map<Long, Set<Long>> roleIdGroupIdsMap = new HashMap<>();
 
 			List<UserGroupRole> userGroupRoles =
-				UserGroupRoleLocalServiceUtil.getUserGroupRoles(
+				_userGroupRoleLocalService.getUserGroupRoles(
 					kaleoTaskInstanceTokenQuery.getUserId());
 
 			for (UserGroupRole userGroupRole : userGroupRoles) {
@@ -754,12 +760,12 @@ public class KaleoTaskInstanceTokenFinderImpl
 
 		List<UserGroupGroupRole> userGroupGroupRoles = new ArrayList<>();
 
-		List<UserGroup> userGroups =
-			UserGroupLocalServiceUtil.getUserUserGroups(userId);
+		List<UserGroup> userGroups = _userGroupLocalService.getUserUserGroups(
+			userId);
 
 		for (UserGroup userGroup : userGroups) {
 			userGroupGroupRoles.addAll(
-				UserGroupGroupRoleLocalServiceUtil.getUserGroupGroupRoles(
+				_userGroupGroupRoleLocalService.getUserGroupGroupRoles(
 					userGroup.getUserGroupId()));
 		}
 
@@ -941,5 +947,23 @@ public class KaleoTaskInstanceTokenFinderImpl
 
 	@ServiceReference(type = CustomSQL.class)
 	private CustomSQL _customSQL;
+
+	@Reference
+	private GroupLocalService _groupLocalService;
+
+	@Reference
+	private RoleLocalService _roleLocalService;
+
+	@Reference
+	private UserGroupGroupRoleLocalService _userGroupGroupRoleLocalService;
+
+	@Reference
+	private UserGroupLocalService _userGroupLocalService;
+
+	@Reference
+	private UserGroupRoleLocalService _userGroupRoleLocalService;
+
+	@Reference
+	private UserLocalService _userLocalService;
 
 }
