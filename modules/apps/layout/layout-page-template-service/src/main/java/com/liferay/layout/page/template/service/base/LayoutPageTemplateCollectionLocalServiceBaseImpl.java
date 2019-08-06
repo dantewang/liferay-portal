@@ -22,7 +22,6 @@ import com.liferay.exportimport.kernel.lar.StagedModelType;
 import com.liferay.layout.page.template.model.LayoutPageTemplateCollection;
 import com.liferay.layout.page.template.service.LayoutPageTemplateCollectionLocalService;
 import com.liferay.layout.page.template.service.persistence.LayoutPageTemplateCollectionPersistence;
-import com.liferay.layout.page.template.service.persistence.LayoutPageTemplateEntryPersistence;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
@@ -588,9 +587,5 @@ public abstract class LayoutPageTemplateCollectionLocalServiceBaseImpl
 	@Reference
 	protected com.liferay.portal.kernel.service.UserLocalService
 		userLocalService;
-
-	@Reference
-	protected LayoutPageTemplateEntryPersistence
-		layoutPageTemplateEntryPersistence;
 
 }

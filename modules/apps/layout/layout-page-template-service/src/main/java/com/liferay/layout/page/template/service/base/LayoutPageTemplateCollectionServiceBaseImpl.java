@@ -17,7 +17,6 @@ package com.liferay.layout.page.template.service.base;
 import com.liferay.layout.page.template.model.LayoutPageTemplateCollection;
 import com.liferay.layout.page.template.service.LayoutPageTemplateCollectionService;
 import com.liferay.layout.page.template.service.persistence.LayoutPageTemplateCollectionPersistence;
-import com.liferay.layout.page.template.service.persistence.LayoutPageTemplateEntryPersistence;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
@@ -136,9 +135,5 @@ public abstract class LayoutPageTemplateCollectionServiceBaseImpl
 
 	@Reference
 	protected com.liferay.portal.kernel.service.UserService userService;
-
-	@Reference
-	protected LayoutPageTemplateEntryPersistence
-		layoutPageTemplateEntryPersistence;
 
 }
