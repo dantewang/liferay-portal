@@ -16,6 +16,7 @@ package com.liferay.segments.service.impl;
 
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Property;
@@ -32,15 +33,14 @@ import com.liferay.segments.constants.SegmentsExperimentConstants;
 import com.liferay.segments.exception.NoSuchExperimentException;
 import com.liferay.segments.exception.SegmentsExperimentNameException;
 import com.liferay.segments.exception.SegmentsExperimentStatusException;
+import com.liferay.segments.model.SegmentsExperience;
 import com.liferay.segments.model.SegmentsExperiment;
-import com.liferay.segments.service.SegmentsExperienceLocalService;
 import com.liferay.segments.service.base.SegmentsExperimentLocalServiceBaseImpl;
 
 import java.util.Date;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Eduardo García
@@ -242,14 +242,12 @@ public class SegmentsExperimentLocalServiceImpl
 		return classPK;
 	}
 
-	@Reference
-	private SegmentsExperienceLocalService _segmentsExperienceLocalService;
-
 	private DynamicQuery _getSegmentsExperienceIdsDynamicQuery(
 		long segmentsEntryId) {
 
-		DynamicQuery dynamicQuery =
-			_segmentsExperienceLocalService.dynamicQuery();
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			SegmentsExperience.class,
+			SegmentsExperimentLocalServiceImpl.class.getClassLoader());
 
 		Property segmentsEntryIdProperty = PropertyFactoryUtil.forName(
 			"segmentsEntryId");
