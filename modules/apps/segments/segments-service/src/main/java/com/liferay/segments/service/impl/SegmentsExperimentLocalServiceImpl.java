@@ -33,12 +33,14 @@ import com.liferay.segments.exception.NoSuchExperimentException;
 import com.liferay.segments.exception.SegmentsExperimentNameException;
 import com.liferay.segments.exception.SegmentsExperimentStatusException;
 import com.liferay.segments.model.SegmentsExperiment;
+import com.liferay.segments.service.SegmentsExperienceLocalService;
 import com.liferay.segments.service.base.SegmentsExperimentLocalServiceBaseImpl;
 
 import java.util.Date;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Eduardo García
@@ -240,11 +242,14 @@ public class SegmentsExperimentLocalServiceImpl
 		return classPK;
 	}
 
+	@Reference
+	private SegmentsExperienceLocalService _segmentsExperienceLocalService;
+
 	private DynamicQuery _getSegmentsExperienceIdsDynamicQuery(
 		long segmentsEntryId) {
 
 		DynamicQuery dynamicQuery =
-			segmentsExperienceLocalService.dynamicQuery();
+			_segmentsExperienceLocalService.dynamicQuery();
 
 		Property segmentsEntryIdProperty = PropertyFactoryUtil.forName(
 			"segmentsEntryId");
