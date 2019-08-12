@@ -17,16 +17,15 @@ package com.liferay.wiki.service.impl;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.settings.GroupServiceSettingsLocator;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
@@ -44,7 +43,6 @@ import com.liferay.rss.model.SyndModelFactory;
 import com.liferay.rss.util.RSSUtil;
 import com.liferay.subscription.service.SubscriptionLocalService;
 import com.liferay.wiki.configuration.WikiGroupServiceOverriddenConfiguration;
-import com.liferay.wiki.constants.WikiConstants;
 import com.liferay.wiki.constants.WikiPortletKeys;
 import com.liferay.wiki.engine.WikiEngineRenderer;
 import com.liferay.wiki.exception.NoSuchPageException;
@@ -63,8 +61,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 /**
@@ -77,6 +78,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Raymond Augé
  */
 @Component(
+	configurationPid = "com.liferay.wiki.configuration.WikiGroupServiceOverriddenConfiguration",
 	property = {
 		"json.web.service.context.name=wiki",
 		"json.web.service.context.path=WikiPage"
@@ -806,6 +808,14 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			format, parentTitle, redirectTitle, serviceContext);
 	}
 
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		_wikiGroupServiceOverriddenConfiguration =
+			ConfigurableUtil.createConfigurable(
+				WikiGroupServiceOverriddenConfiguration.class, properties);
+	}
+
 	protected String exportToRSS(
 			String name, String description, String type, double version,
 			String displayStyle, String feedURL, String entryURL,
@@ -886,17 +896,9 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 				String value = null;
 
 				if (displayStyle.equals(RSSUtil.DISPLAY_STYLE_ABSTRACT)) {
-					WikiGroupServiceOverriddenConfiguration
-						wikiGroupServiceOverriddenConfiguration =
-							_configurationProvider.getConfiguration(
-								WikiGroupServiceOverriddenConfiguration.class,
-								new GroupServiceSettingsLocator(
-									page.getGroupId(),
-									WikiConstants.SERVICE_NAME));
-
 					value = StringUtil.shorten(
 						HtmlUtil.extractText(page.getContent()),
-						wikiGroupServiceOverriddenConfiguration.
+						_wikiGroupServiceOverriddenConfiguration.
 							rssAbstractLength(),
 						StringPool.BLANK);
 				}
@@ -957,9 +959,6 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 	}
 
 	@Reference
-	private ConfigurationProvider _configurationProvider;
-
-	@Reference
 	private Portal _portal;
 
 	@Reference
@@ -973,6 +972,9 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 
 	@Reference
 	private WikiEngineRenderer _wikiEngineRenderer;
+
+	private volatile WikiGroupServiceOverriddenConfiguration
+		_wikiGroupServiceOverriddenConfiguration;
 
 	@Reference
 	private WikiNodeLocalService _wikiNodeLocalService;

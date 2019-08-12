@@ -26,6 +26,7 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.comment.CommentManager;
@@ -42,7 +43,6 @@ import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.SystemEventConstants;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.notifications.UserNotificationDefinition;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portletfilerepository.PortletFileRepositoryUtil;
@@ -53,7 +53,6 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
-import com.liferay.portal.kernel.settings.GroupServiceSettingsLocator;
 import com.liferay.portal.kernel.settings.LocalizedValuesMap;
 import com.liferay.portal.kernel.social.SocialActivityManagerUtil;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
@@ -168,13 +167,19 @@ import org.osgi.service.component.annotations.Reference;
  * @author Roberto Díaz
  */
 @Component(
+	configurationPid = {
+		"com.liferay.wiki.configuration.WikiFileUploadConfiguration",
+		"com.liferay.wiki.configuration.WikiGroupServiceOverriddenConfiguration"
+	},
 	property = "model.class.name=com.liferay.wiki.model.WikiPage",
 	service = AopService.class
 )
 public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 
 	@Activate
-	public void activate(BundleContext bundleContext) {
+	public void activate(
+		BundleContext bundleContext, Map<String, Object> properties) {
+
 		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
 			bundleContext, WikiPageRenameContentProcessor.class,
 			"wiki.format.name");
@@ -182,6 +187,13 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 		_portalCache =
 			(PortalCache<String, Serializable>)_multiVMPool.getPortalCache(
 				WikiPageDisplay.class.getName());
+
+		_wikiGroupServiceOverriddenConfiguration =
+			ConfigurableUtil.createConfigurable(
+				WikiGroupServiceOverriddenConfiguration.class, properties);
+
+		_wikiFileUploadConfiguration = ConfigurableUtil.createConfigurable(
+			WikiFileUploadConfiguration.class, properties);
 	}
 
 	@Override
@@ -280,16 +292,8 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 
 		double version = WikiPageConstants.VERSION_DEFAULT;
 
-		WikiNode node = wikiNodePersistence.findByPrimaryKey(nodeId);
-
-		WikiGroupServiceOverriddenConfiguration
-			wikiGroupServiceOverriddenConfiguration =
-				_configurationProvider.getConfiguration(
-					WikiGroupServiceOverriddenConfiguration.class,
-					new GroupServiceSettingsLocator(
-						node.getGroupId(), WikiConstants.SERVICE_NAME));
-
-		String format = wikiGroupServiceOverriddenConfiguration.defaultFormat();
+		String format =
+			_wikiGroupServiceOverriddenConfiguration.defaultFormat();
 
 		boolean head = false;
 		String parentTitle = null;
@@ -306,12 +310,8 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 			String mimeType)
 		throws PortalException {
 
-		WikiFileUploadConfiguration wikiFileUploadConfiguration =
-			_configurationProvider.getSystemConfiguration(
-				WikiFileUploadConfiguration.class);
-
 		List<String> wikiAttachmentMimeTypes = ListUtil.toList(
-			wikiFileUploadConfiguration.attachmentMimeTypes());
+			_wikiFileUploadConfiguration.attachmentMimeTypes());
 
 		if (ListUtil.isNull(wikiAttachmentMimeTypes) ||
 			(!wikiAttachmentMimeTypes.contains(StringPool.STAR) &&
@@ -2209,16 +2209,9 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 
 			// Social
 
-			WikiGroupServiceOverriddenConfiguration
-				wikiGroupServiceOverriddenConfiguration =
-					_configurationProvider.getConfiguration(
-						WikiGroupServiceOverriddenConfiguration.class,
-						new GroupServiceSettingsLocator(
-							page.getGroupId(), WikiConstants.SERVICE_NAME));
-
 			if ((oldStatus != WorkflowConstants.STATUS_IN_TRASH) &&
 				(!page.isMinorEdit() ||
-				 wikiGroupServiceOverriddenConfiguration.
+				 _wikiGroupServiceOverriddenConfiguration.
 					 pageMinorEditAddSocialActivity())) {
 
 				JSONObject extraDataJSONObject = JSONUtil.put(
@@ -2241,7 +2234,7 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 
 			if (NotificationThreadLocal.isEnabled() &&
 				(!page.isMinorEdit() ||
-				 wikiGroupServiceOverriddenConfiguration.
+				 _wikiGroupServiceOverriddenConfiguration.
 					 pageMinorEditSendEmail())) {
 
 				_notifySubscribers(
@@ -2963,13 +2956,6 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 			return;
 		}
 
-		WikiGroupServiceOverriddenConfiguration
-			wikiGroupServiceOverriddenConfiguration =
-				_configurationProvider.getConfiguration(
-					WikiGroupServiceOverriddenConfiguration.class,
-					new GroupServiceSettingsLocator(
-						page.getGroupId(), WikiConstants.SERVICE_NAME));
-
 		boolean update = false;
 
 		if (page.getVersion() > WikiPageConstants.VERSION_DEFAULT) {
@@ -2977,10 +2963,10 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 		}
 
 		if (!update &&
-			wikiGroupServiceOverriddenConfiguration.emailPageAddedEnabled()) {
+			_wikiGroupServiceOverriddenConfiguration.emailPageAddedEnabled()) {
 		}
 		else if (update &&
-				 wikiGroupServiceOverriddenConfiguration.
+				 _wikiGroupServiceOverriddenConfiguration.
 					 emailPageUpdatedEnabled()) {
 		}
 		else {
@@ -3025,25 +3011,26 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 		String pageTitle = page.getTitle();
 
 		String fromName =
-			wikiGroupServiceOverriddenConfiguration.emailFromName();
+			_wikiGroupServiceOverriddenConfiguration.emailFromName();
 		String fromAddress =
-			wikiGroupServiceOverriddenConfiguration.emailFromAddress();
+			_wikiGroupServiceOverriddenConfiguration.emailFromAddress();
 
 		LocalizedValuesMap subjectLocalizedValuesMap = null;
 		LocalizedValuesMap bodyLocalizedValuesMap = null;
 
 		if (update) {
 			subjectLocalizedValuesMap =
-				wikiGroupServiceOverriddenConfiguration.
+				_wikiGroupServiceOverriddenConfiguration.
 					emailPageUpdatedSubject();
 			bodyLocalizedValuesMap =
-				wikiGroupServiceOverriddenConfiguration.emailPageUpdatedBody();
+				_wikiGroupServiceOverriddenConfiguration.emailPageUpdatedBody();
 		}
 		else {
 			subjectLocalizedValuesMap =
-				wikiGroupServiceOverriddenConfiguration.emailPageAddedSubject();
+				_wikiGroupServiceOverriddenConfiguration.
+					emailPageAddedSubject();
 			bodyLocalizedValuesMap =
-				wikiGroupServiceOverriddenConfiguration.emailPageAddedBody();
+				_wikiGroupServiceOverriddenConfiguration.emailPageAddedBody();
 		}
 
 		SubscriptionSender subscriptionSender = new SubscriptionSender();
@@ -3408,9 +3395,6 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 	private CommentManager _commentManager;
 
 	@Reference
-	private ConfigurationProvider _configurationProvider;
-
-	@Reference
 	private MultiVMPool _multiVMPool;
 
 	@Reference
@@ -3434,6 +3418,10 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 
 	@Reference
 	private WikiEngineRenderer _wikiEngineRenderer;
+
+	private volatile WikiFileUploadConfiguration _wikiFileUploadConfiguration;
+	private volatile WikiGroupServiceOverriddenConfiguration
+		_wikiGroupServiceOverriddenConfiguration;
 
 	@Reference
 	private WikiPageResourceLocalService _wikiPageResourceLocalService;
