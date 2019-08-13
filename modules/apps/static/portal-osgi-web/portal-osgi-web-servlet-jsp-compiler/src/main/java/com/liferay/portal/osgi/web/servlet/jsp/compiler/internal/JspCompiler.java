@@ -96,7 +96,7 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 	public JavacErrorDetail[] compile(String className, Node.Nodes pageNodes)
 		throws JasperException {
 
-		_bytecodeFiles = new ArrayList<>();
+		_bytecodeJavaFileObjects = new ArrayList<>();
 
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 
@@ -139,10 +139,12 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 			}
 
 			if (compilationTask.call()) {
-				for (BytecodeFile bytecodeFile : _bytecodeFiles) {
+				for (BytecodeJavaFileObject bytecodeJavaFileObject :
+						_bytecodeJavaFileObjects) {
+
 					_jspRuntimeContext.setBytecode(
-						bytecodeFile.getClassName(),
-						bytecodeFile.getBytecode());
+						bytecodeJavaFileObject.getClassName(),
+						bytecodeJavaFileObject.getBytecode());
 				}
 
 				return null;
@@ -306,13 +308,16 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 
 	@Override
 	public void release() {
-		_bytecodeFiles = null;
+		_bytecodeJavaFileObjects = null;
 	}
 
 	@Override
 	public void saveClassFile(String className, String classFileName) {
-		for (BytecodeFile bytecodeFile : _bytecodeFiles) {
-			String bytecodeFileClassName = bytecodeFile.getClassName();
+		for (BytecodeJavaFileObject bytecodeJavaFileObject :
+				_bytecodeJavaFileObjects) {
+
+			String bytecodeFileClassName =
+				bytecodeJavaFileObject.getClassName();
 			String outputFileName = classFileName;
 
 			if (!className.equals(bytecodeFileClassName)) {
@@ -583,7 +588,7 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 	private Bundle[] _allParticipatingBundles;
 	private final Map<BundleWiring, Set<String>> _bundleWiringPackageNames =
 		new HashMap<>(_jspBundleWiringPackageNames);
-	private List<BytecodeFile> _bytecodeFiles;
+	private List<BytecodeJavaFileObject> _bytecodeJavaFileObjects;
 	private CharArrayWriter _charArrayWriter;
 	private ClassLoader _classLoader;
 	private final List<File> _classPath = new ArrayList<>();
@@ -596,9 +601,9 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 	private JspCompilationContext _jspCompilationContext;
 	private JspRuntimeContext _jspRuntimeContext;
 
-	private class BytecodeFile extends SimpleJavaFileObject {
+	private class BytecodeJavaFileObject extends SimpleJavaFileObject {
 
-		public BytecodeFile(URI uri, String className) {
+		public BytecodeJavaFileObject(URI uri, String className) {
 			super(uri, Kind.CLASS);
 
 			_className = className;
@@ -654,9 +659,10 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 			Map<String, JavaFileObject> packageJavaFileObjects = packageMap.get(
 				packageName);
 
-			BytecodeFile bytecodeFile = new BytecodeFile(
-				URI.create("file:///" + className.replace('.', '/') + kind),
-				className);
+			BytecodeJavaFileObject bytecodeJavaFileObject =
+				new BytecodeJavaFileObject(
+					URI.create("file:///" + className.replace('.', '/') + kind),
+					className);
 
 			if (packageJavaFileObjects == null) {
 				packageJavaFileObjects = new ConcurrentHashMap<>();
@@ -664,17 +670,17 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 				packageMap.put(packageName, packageJavaFileObjects);
 			}
 
-			packageJavaFileObjects.put(className, bytecodeFile);
+			packageJavaFileObjects.put(className, bytecodeJavaFileObject);
 
-			_bytecodeFiles.add(bytecodeFile);
+			_bytecodeJavaFileObjects.add(bytecodeJavaFileObject);
 
-			return bytecodeFile;
+			return bytecodeJavaFileObject;
 		}
 
 		@Override
 		public String inferBinaryName(Location location, JavaFileObject file) {
-			if (file instanceof BytecodeFile) {
-				return ((BytecodeFile)file).getClassName();
+			if (file instanceof BytecodeJavaFileObject) {
+				return ((BytecodeJavaFileObject)file).getClassName();
 			}
 
 			return super.inferBinaryName(location, file);
