@@ -25,14 +25,10 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.osgi.web.servlet.jsp.compiler.internal.util.ClassPathUtil;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
@@ -63,7 +59,6 @@ import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
-import javax.tools.SimpleJavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
@@ -601,43 +596,6 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		new ArrayList<>();
 	private JspCompilationContext _jspCompilationContext;
 	private JspRuntimeContext _jspRuntimeContext;
-
-	private class BytecodeJavaFileObject extends SimpleJavaFileObject {
-
-		public BytecodeJavaFileObject(URI uri, String className) {
-			super(uri, Kind.CLASS);
-
-			_className = className;
-		}
-
-		public byte[] getBytecode() {
-			return _bytecode;
-		}
-
-		public String getClassName() {
-			return _className;
-		}
-
-		@Override
-		public InputStream openInputStream() {
-			return new ByteArrayInputStream(_bytecode);
-		}
-
-		@Override
-		public OutputStream openOutputStream() {
-			return new ByteArrayOutputStream() {
-
-				public void close() {
-					_bytecode = toByteArray();
-				}
-
-			};
-		}
-
-		private byte[] _bytecode;
-		private final String _className;
-
-	}
 
 	private class JavaFileManagerWrapper
 		extends ForwardingJavaFileManager<JavaFileManager> {
