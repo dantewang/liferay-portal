@@ -34,25 +34,14 @@ import java.net.URLConnection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.jasper.JasperException;
-import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.Compiler;
 import org.apache.jasper.compiler.JspRuntimeContext;
-import org.apache.jasper.servlet.JspServletWrapper;
 
 /**
  * @author Matthew Tambara
  */
 public class CompilerWrapper extends Compiler {
-
-	public CompilerWrapper(
-			JspCompilationContext jspCompilationContext,
-			JspServletWrapper jspServletWrapper, boolean jspcMode)
-		throws JasperException {
-
-		super(jspCompilationContext, jspServletWrapper, jspcMode);
-	}
 
 	@Override
 	public void compile(boolean compileClass) throws Exception {
