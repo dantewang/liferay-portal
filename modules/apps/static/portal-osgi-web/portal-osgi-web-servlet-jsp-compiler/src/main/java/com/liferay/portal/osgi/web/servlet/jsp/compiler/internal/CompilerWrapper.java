@@ -15,6 +15,8 @@
 package com.liferay.portal.osgi.web.servlet.jsp.compiler.internal;
 
 import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -34,6 +36,8 @@ import java.net.URLConnection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.servlet.jsp.tagext.TagInfo;
+
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.Compiler;
 import org.apache.jasper.compiler.JspRuntimeContext;
@@ -45,7 +49,7 @@ public class CompilerWrapper extends Compiler {
 
 	@Override
 	public void compile(boolean compileClass) throws Exception {
-		String className = ctxt.getFullClassName();
+		String className = _getFullClassName();
 
 		JSPClassInfo jspClassInfo = _jspClassInfos.get(className);
 
@@ -62,7 +66,7 @@ public class CompilerWrapper extends Compiler {
 
 	@Override
 	public boolean isOutDated() {
-		String className = ctxt.getFullClassName();
+		String className = _getFullClassName();
 
 		URL url = _getClassURL(className);
 
@@ -154,6 +158,18 @@ public class CompilerWrapper extends Compiler {
 		}
 
 		return url;
+	}
+
+	private String _getFullClassName() {
+		if (ctxt.isTagFile()) {
+			TagInfo tagInfo = ctxt.getTagInfo();
+
+			return tagInfo.getTagClassName();
+		}
+
+		return StringBundler.concat(
+			ctxt.getServletPackageName(), StringPool.PERIOD,
+			ctxt.getServletClassName());
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
