@@ -911,8 +911,6 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 	private final Set<ServiceRegistration<Destination>>
 		_destinationServiceRegistrations = new HashSet<>();
 	private JSONFactory _jsonFactory;
-	private final Map<String, ServiceRegistration<MessageListener>>
-		_messageListenerServiceRegistrations = new ConcurrentHashMap<>();
 
 	@Reference
 	private Portal _portal;
@@ -1000,41 +998,6 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				schedule(
 					schedulerEntry.getTrigger(), storageType,
 					schedulerEntry.getDescription(), destinationName, null, 0);
-
-				ServiceRegistration<MessageListener> serviceRegistration =
-					_messageListenerServiceRegistrations.get(
-						schedulerEntry.getEventListenerClass());
-
-				if (serviceRegistration != null) {
-					ServiceReference<MessageListener> oldServiceReference =
-						serviceRegistration.getReference();
-
-					MessageListener messageListener = bundleContext.getService(
-						oldServiceReference);
-
-					SchedulerEventMessageListenerWrapper
-						schedulerEventMessageListenerWrapper =
-							(SchedulerEventMessageListenerWrapper)
-								messageListener;
-
-					schedulerEventMessageListenerWrapper.setSchedulerEntry(
-						schedulerEntry);
-
-					return null;
-				}
-
-				Dictionary<String, Object> properties =
-					new HashMapDictionary<>();
-
-				properties.put("destination.name", destinationName);
-
-				serviceRegistration = bundleContext.registerService(
-					MessageListener.class, schedulerEventMessageListener,
-					properties);
-
-				_messageListenerServiceRegistrations.put(
-					schedulerEntry.getEventListenerClass(),
-					serviceRegistration);
 
 				return schedulerEventMessageListener;
 			}
@@ -1127,13 +1090,6 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				ClusterableContextThreadLocal.putThreadLocalContext(
 					SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, true);
 			}
-
-			ServiceRegistration<MessageListener>
-				messageListenerServiceRegistration =
-					_messageListenerServiceRegistrations.remove(
-						schedulerEntry.getEventListenerClass());
-
-			messageListenerServiceRegistration.unregister();
 		}
 
 	}
