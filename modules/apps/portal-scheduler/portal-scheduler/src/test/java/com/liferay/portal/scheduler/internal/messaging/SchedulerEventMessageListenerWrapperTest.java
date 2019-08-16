@@ -17,6 +17,7 @@ package com.liferay.portal.scheduler.internal.messaging;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerAdapter;
 import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
 import com.liferay.portal.kernel.test.util.PropsTestUtil;
@@ -69,12 +70,19 @@ public class SchedulerEventMessageListenerWrapperTest {
 		PropsTestUtil.setProps(
 			PropsKeys.SCHEDULER_EVENT_MESSAGE_LISTENER_LOCK_TIMEOUT, "0");
 
+		SchedulerEventMessageListenerAdapter
+			schedulerEventMessageListenerAdapter =
+				new SchedulerEventMessageListenerAdapter();
+
+		schedulerEventMessageListenerAdapter.setMessageListener(
+			_testMessageListener);
+
 		SchedulerEventMessageListenerWrapper
 			schedulerEventMessageListenerWrapper =
 				new SchedulerEventMessageListenerWrapper();
 
-		schedulerEventMessageListenerWrapper.setMessageListener(
-			_testMessageListener);
+		schedulerEventMessageListenerWrapper.setSchedulerEventMessageListener(
+			schedulerEventMessageListenerAdapter);
 
 		FutureTask<Void> futureTask1 = _createFutureTask(
 			schedulerEventMessageListenerWrapper, _testMessage1);
@@ -114,12 +122,19 @@ public class SchedulerEventMessageListenerWrapperTest {
 		PropsTestUtil.setProps(
 			PropsKeys.SCHEDULER_EVENT_MESSAGE_LISTENER_LOCK_TIMEOUT, "1000");
 
+		SchedulerEventMessageListenerAdapter
+			schedulerEventMessageListenerAdapter =
+				new SchedulerEventMessageListenerAdapter();
+
+		schedulerEventMessageListenerAdapter.setMessageListener(
+			_testMessageListener);
+
 		SchedulerEventMessageListenerWrapper
 			schedulerEventMessageListenerWrapper =
 				new SchedulerEventMessageListenerWrapper();
 
-		schedulerEventMessageListenerWrapper.setMessageListener(
-			_testMessageListener);
+		schedulerEventMessageListenerWrapper.setSchedulerEventMessageListener(
+			schedulerEventMessageListenerAdapter);
 
 		Registry registry = RegistryUtil.getRegistry();
 
@@ -170,12 +185,19 @@ public class SchedulerEventMessageListenerWrapperTest {
 			PropsKeys.SCHEDULER_EVENT_MESSAGE_LISTENER_LOCK_TIMEOUT,
 			String.valueOf(Integer.MAX_VALUE));
 
+		SchedulerEventMessageListenerAdapter
+			schedulerEventMessageListenerAdapter =
+				new SchedulerEventMessageListenerAdapter();
+
+		schedulerEventMessageListenerAdapter.setMessageListener(
+			_testMessageListener);
+
 		SchedulerEventMessageListenerWrapper
 			schedulerEventMessageListenerWrapper =
 				new SchedulerEventMessageListenerWrapper();
 
-		schedulerEventMessageListenerWrapper.setMessageListener(
-			_testMessageListener);
+		schedulerEventMessageListenerWrapper.setSchedulerEventMessageListener(
+			schedulerEventMessageListenerAdapter);
 
 		FutureTask<Void> futureTask1 = _createFutureTask(
 			schedulerEventMessageListenerWrapper, _testMessage1);
