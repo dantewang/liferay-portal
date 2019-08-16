@@ -40,6 +40,7 @@ import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
 
 import org.apache.jasper.JasperException;
+import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.Compiler;
 import org.apache.jasper.compiler.ErrorDispatcher;
@@ -54,9 +55,23 @@ import org.apache.jasper.compiler.SmapUtil;
  */
 public class CompilerWrapper extends Compiler {
 
+	public static String getFullClassName(
+		JspCompilationContext jspCompilationContext) {
+
+		if (jspCompilationContext.isTagFile()) {
+			TagInfo tagInfo = jspCompilationContext.getTagInfo();
+
+			return tagInfo.getTagClassName();
+		}
+
+		return StringBundler.concat(
+			jspCompilationContext.getServletPackageName(), StringPool.PERIOD,
+			jspCompilationContext.getServletClassName());
+	}
+
 	@Override
 	public void compile(boolean compileClass) throws Exception {
-		String className = _getFullClassName();
+		String className = getFullClassName(ctxt);
 
 		JSPClassInfo jspClassInfo = _jspClassInfos.get(className);
 
@@ -69,7 +84,7 @@ public class CompilerWrapper extends Compiler {
 
 	@Override
 	public boolean isOutDated() {
-		String className = _getFullClassName();
+		String className = getFullClassName(ctxt);
 
 		URL url = _getClassURL(className);
 
@@ -198,18 +213,6 @@ public class CompilerWrapper extends Compiler {
 		}
 
 		return url;
-	}
-
-	private String _getFullClassName() {
-		if (ctxt.isTagFile()) {
-			TagInfo tagInfo = ctxt.getTagInfo();
-
-			return tagInfo.getTagClassName();
-		}
-
-		return StringBundler.concat(
-			ctxt.getServletPackageName(), StringPool.PERIOD,
-			ctxt.getServletClassName());
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

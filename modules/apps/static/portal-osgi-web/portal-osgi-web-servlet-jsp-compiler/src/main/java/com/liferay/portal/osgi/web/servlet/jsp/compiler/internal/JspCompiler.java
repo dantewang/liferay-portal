@@ -131,13 +131,11 @@ public class JspCompiler {
 			}
 
 			if (compilationTask.call()) {
-				for (BytecodeJavaFileObject bytecodeJavaFileObject :
-						_bytecodeJavaFileObjects) {
+				saveClassFile(
+					CompilerWrapper.getFullClassName(_jspCompilationContext),
+					_jspCompilationContext.getClassFileName());
 
-					_jspRuntimeContext.setBytecode(
-						bytecodeJavaFileObject.getClassName(),
-						bytecodeJavaFileObject.getBytecode());
-				}
+				_bytecodeJavaFileObjects = null;
 
 				return null;
 			}
