@@ -85,9 +85,8 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Raymond Augé
  * @author Miguel Pastor
  */
-public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
+public class JspCompiler {
 
-	@Override
 	public JavacErrorDetail[] compile(String className, Node.Nodes pageNodes)
 		throws JasperException {
 
@@ -169,7 +168,6 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 		return javacErrorDetails;
 	}
 
-	@Override
 	public void doJavaFile(boolean keep) throws JasperException {
 		if (!keep) {
 			_charArrayWriter = null;
@@ -193,13 +191,11 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 		}
 	}
 
-	@Override
 	public long getClassLastModified() {
 		return _jspRuntimeContext.getBytecodeBirthTime(
 			_jspCompilationContext.getFullClassName());
 	}
 
-	@Override
 	public Writer getJavaWriter(String javaFileName, String javaEncoding) {
 		_javaFileName = javaFileName;
 		_javaEncoding = javaEncoding;
@@ -209,7 +205,6 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 		return _charArrayWriter;
 	}
 
-	@Override
 	public void init(
 		JspCompilationContext jspCompilationContext,
 		ErrorDispatcher errorDispatcher, boolean suppressLogging) {
@@ -301,12 +296,10 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 		_compilerOptions.add("-proc:none");
 	}
 
-	@Override
 	public void release() {
 		_bytecodeJavaFileObjects = null;
 	}
 
-	@Override
 	public void saveClassFile(String className, String classFileName) {
 		for (BytecodeJavaFileObject bytecodeJavaFileObject :
 				_bytecodeJavaFileObjects) {
@@ -342,11 +335,9 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 		}
 	}
 
-	@Override
 	public void setClassPath(List<File> classPath) {
 	}
 
-	@Override
 	public void setDebug(boolean debug) {
 		if (debug) {
 			_compilerOptions.add("-g");
@@ -356,19 +347,16 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 		}
 	}
 
-	@Override
 	public void setExtdirs(String exts) {
 		_compilerOptions.add("-extdirs");
 		_compilerOptions.add(exts);
 	}
 
-	@Override
 	public void setSourceVM(String sourceVM) {
 		_compilerOptions.add("-source");
 		_compilerOptions.add(sourceVM);
 	}
 
-	@Override
 	public void setTargetVM(String targetVM) {
 		_compilerOptions.add("-target");
 		_compilerOptions.add(targetVM);
@@ -610,7 +598,6 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 			super(fileManager);
 		}
 
-		@Override
 		public JavaFileObject getJavaFileForOutput(
 			Location location, String className, JavaFileObject.Kind kind,
 			FileObject sibling) {
@@ -639,7 +626,6 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 			return bytecodeJavaFileObject;
 		}
 
-		@Override
 		public String inferBinaryName(
 			Location location, JavaFileObject javaFileObject) {
 
@@ -653,7 +639,6 @@ public class JspCompiler implements org.apache.jasper.compiler.JavaCompiler {
 			return super.inferBinaryName(location, javaFileObject);
 		}
 
-		@Override
 		public Iterable<JavaFileObject> list(
 				Location location, String packageName,
 				Set<JavaFileObject.Kind> kinds, boolean recurse)
