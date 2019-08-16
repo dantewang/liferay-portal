@@ -175,7 +175,25 @@ public class JspCompiler {
 
 		_compilerOptions.add("-XDuseUnsharedTable");
 
+		_compilerOptions.add("-proc:none");
+
+		_compilerOptions.add("-extdirs");
+		_compilerOptions.add(System.getProperty("java.ext.dirs"));
+
 		Options options = jspCompilationContext.getOptions();
+
+		if (options.getClassDebugInfo()) {
+			_compilerOptions.add("-g");
+		}
+		else {
+			_compilerOptions.add("-g:none");
+		}
+
+		_compilerOptions.add("-source");
+		_compilerOptions.add(options.getCompilerSourceVM());
+
+		_compilerOptions.add("-target");
+		_compilerOptions.add(options.getCompilerTargetVM());
 
 		_classPath.add(options.getScratchDir());
 
@@ -256,8 +274,6 @@ public class JspCompiler {
 		_errorDispatcher = errorDispatcher;
 
 		_jspRuntimeContext = jspCompilationContext.getRuntimeContext();
-
-		_compilerOptions.add("-proc:none");
 	}
 
 	public void release() {
@@ -300,30 +316,6 @@ public class JspCompiler {
 	}
 
 	public void setClassPath(List<File> classPath) {
-	}
-
-	public void setDebug(boolean debug) {
-		if (debug) {
-			_compilerOptions.add("-g");
-		}
-		else {
-			_compilerOptions.add("-g:none");
-		}
-	}
-
-	public void setExtdirs(String exts) {
-		_compilerOptions.add("-extdirs");
-		_compilerOptions.add(exts);
-	}
-
-	public void setSourceVM(String sourceVM) {
-		_compilerOptions.add("-source");
-		_compilerOptions.add(sourceVM);
-	}
-
-	public void setTargetVM(String targetVM) {
-		_compilerOptions.add("-target");
-		_compilerOptions.add(targetVM);
 	}
 
 	protected void addDependenciesToClassPath() {
