@@ -17,7 +17,6 @@ package com.liferay.portal.scheduler.internal.messaging;
 import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerAdapter;
-import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerWrapper;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 
 import java.util.Dictionary;
