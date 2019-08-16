@@ -145,11 +145,6 @@ public class JspCompiler {
 		return diagnosticCollector;
 	}
 
-	public long getClassLastModified() {
-		return _jspRuntimeContext.getBytecodeBirthTime(
-			_jspCompilationContext.getFullClassName());
-	}
-
 	public void init(
 		JspCompilationContext jspCompilationContext,
 		ErrorDispatcher errorDispatcher, boolean suppressLogging) {
@@ -257,10 +252,6 @@ public class JspCompiler {
 		_jspRuntimeContext = jspCompilationContext.getRuntimeContext();
 	}
 
-	public void release() {
-		_bytecodeJavaFileObjects = null;
-	}
-
 	public void saveClassFile(String className, String classFileName) {
 		for (BytecodeJavaFileObject bytecodeJavaFileObject :
 				_bytecodeJavaFileObjects) {
@@ -294,9 +285,6 @@ public class JspCompiler {
 				servletContext.log("Unable to save class file", ioe);
 			}
 		}
-	}
-
-	public void setClassPath(List<File> classPath) {
 	}
 
 	protected void addDependenciesToClassPath() {
