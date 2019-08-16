@@ -562,6 +562,10 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 		_schedulerEngine.pause(jobName, groupName, storageType);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public void register(
 		MessageListener messageListener, SchedulerEntry schedulerEntry,
@@ -673,6 +677,10 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 		_schedulerEngine.suppressError(jobName, groupName, storageType);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public void unregister(MessageListener messageListener) {
 		Class<?> messageListenerClass = messageListener.getClass();
