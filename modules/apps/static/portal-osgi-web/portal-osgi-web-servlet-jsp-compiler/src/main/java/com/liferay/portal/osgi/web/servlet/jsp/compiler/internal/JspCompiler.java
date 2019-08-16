@@ -52,7 +52,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 
-import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
@@ -68,9 +67,7 @@ import org.apache.jasper.JasperException;
 import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.ErrorDispatcher;
-import org.apache.jasper.compiler.JavacErrorDetail;
 import org.apache.jasper.compiler.JspRuntimeContext;
-import org.apache.jasper.compiler.Node;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -87,7 +84,7 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class JspCompiler {
 
-	public JavacErrorDetail[] compile(String className, Node.Nodes pageNodes)
+	public DiagnosticCollector<JavaFileObject> compile(String className)
 		throws JasperException {
 
 		_bytecodeJavaFileObjects = new ArrayList<>();
@@ -149,23 +146,7 @@ public class JspCompiler {
 			throw new JasperException(ioe);
 		}
 
-		List<Diagnostic<? extends JavaFileObject>> diagnostics =
-			diagnosticCollector.getDiagnostics();
-
-		JavacErrorDetail[] javacErrorDetails =
-			new JavacErrorDetail[diagnostics.size()];
-
-		for (int i = 0; i < diagnostics.size(); i++) {
-			Diagnostic<? extends JavaFileObject> diagnostic = diagnostics.get(
-				i);
-
-			javacErrorDetails[i] = ErrorDispatcher.createJavacError(
-				_javaFileName, pageNodes,
-				new StringBuilder(diagnostic.getMessage(null)),
-				(int)diagnostic.getLineNumber());
-		}
-
-		return javacErrorDetails;
+		return diagnosticCollector;
 	}
 
 	public void doJavaFile(boolean keep) throws JasperException {

@@ -29,14 +29,20 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.jsp.tagext.TagInfo;
 
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaFileObject;
+
 import org.apache.jasper.JasperException;
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.Compiler;
+import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.JavacErrorDetail;
 import org.apache.jasper.compiler.JspRuntimeContext;
 import org.apache.jasper.compiler.Localizer;
@@ -106,8 +112,24 @@ public class CompilerWrapper extends Compiler {
 
 		jspCompiler.init(ctxt, errDispatcher, false);
 
-		JavacErrorDetail[] javacErrorDetails = jspCompiler.compile(
-			ctxt.getClassFileName(), pageNodes);
+		DiagnosticCollector<JavaFileObject> diagnosticCollector =
+			jspCompiler.compile(ctxt.getClassFileName());
+
+		List<Diagnostic<? extends JavaFileObject>> diagnostics =
+			diagnosticCollector.getDiagnostics();
+
+		JavacErrorDetail[] javacErrorDetails =
+			new JavacErrorDetail[diagnostics.size()];
+
+		for (int i = 0; i < diagnostics.size(); i++) {
+			Diagnostic<? extends JavaFileObject> diagnostic = diagnostics.get(
+				i);
+
+			javacErrorDetails[i] = ErrorDispatcher.createJavacError(
+				ctxt.getServletJavaFileName(), pageNodes,
+				new StringBuilder(diagnostic.getMessage(null)),
+				(int)diagnostic.getLineNumber());
+		}
 
 		if (!ctxt.keepGenerated()) {
 			File javaFile = new File(ctxt.getServletJavaFileName());
