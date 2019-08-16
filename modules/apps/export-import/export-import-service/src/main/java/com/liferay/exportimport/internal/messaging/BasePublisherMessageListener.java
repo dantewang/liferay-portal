@@ -17,10 +17,9 @@ package com.liferay.exportimport.internal.messaging;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.messaging.BaseMessageStatusMessageListener;
-import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerWrapper;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerAdapter;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -56,15 +55,15 @@ public abstract class BasePublisherMessageListener
 		Dictionary<String, Object> properties =
 			componentContext.getProperties();
 
-		SchedulerEventMessageListenerWrapper
-			schedulerEventMessageListenerWrapper =
-				new SchedulerEventMessageListenerWrapper();
+		SchedulerEventMessageListenerAdapter
+			schedulerEventMessageListenerAdapter =
+				new SchedulerEventMessageListenerAdapter();
 
-		schedulerEventMessageListenerWrapper.setMessageListener(this);
+		schedulerEventMessageListenerAdapter.setMessageListener(this);
 
 		serviceRegistration = bundleContext.registerService(
-			MessageListener.class, schedulerEventMessageListenerWrapper,
-			properties);
+			SchedulerEventMessageListenerAdapter.class,
+			schedulerEventMessageListenerAdapter, properties);
 	}
 
 	protected void initThreadLocals(
@@ -129,6 +128,7 @@ public abstract class BasePublisherMessageListener
 		ServiceContextThreadLocal.popServiceContext();
 	}
 
-	protected ServiceRegistration<MessageListener> serviceRegistration;
+	protected ServiceRegistration<SchedulerEventMessageListenerAdapter>
+		serviceRegistration;
 
 }

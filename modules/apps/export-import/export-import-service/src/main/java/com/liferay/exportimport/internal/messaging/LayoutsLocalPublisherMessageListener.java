@@ -48,6 +48,7 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true,
 	property = {
 		"destination.name=" + DestinationNames.LAYOUTS_LOCAL_PUBLISHER,
+		"event.listener.classname=com.liferay.exportimport.internal.messaging.LayoutsLocalPublisherMessageListener",
 		"message.status.destination.name=" + DestinationNames.MESSAGE_BUS_MESSAGE_STATUS
 	},
 	service = LayoutsLocalPublisherMessageListener.class

@@ -50,6 +50,7 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true,
 	property = {
 		"destination.name=" + DestinationNames.LAYOUTS_REMOTE_PUBLISHER,
+		"event.listener.classname=com.liferay.exportimport.internal.messaging.LayoutsRemotePublisherMessageListener",
 		"message.status.destination.name=" + DestinationNames.MESSAGE_BUS_MESSAGE_STATUS
 	},
 	service = LayoutsRemotePublisherMessageListener.class

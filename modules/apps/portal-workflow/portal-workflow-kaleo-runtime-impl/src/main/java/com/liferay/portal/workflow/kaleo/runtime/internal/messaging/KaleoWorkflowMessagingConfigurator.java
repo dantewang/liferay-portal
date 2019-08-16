@@ -26,7 +26,7 @@ import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.proxy.ProxyMessageListener;
-import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerWrapper;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerAdapter;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.workflow.WorkflowDefinitionManager;
 import com.liferay.portal.kernel.workflow.WorkflowEngineManager;
@@ -150,11 +150,11 @@ public class KaleoWorkflowMessagingConfigurator {
 	}
 
 	protected void registerSchedulerEventMessageListener() {
-		SchedulerEventMessageListenerWrapper
-			schedulerEventMessageListenerWrapper =
-				new SchedulerEventMessageListenerWrapper();
+		SchedulerEventMessageListenerAdapter
+			schedulerEventMessageListenerAdapter =
+				new SchedulerEventMessageListenerAdapter();
 
-		schedulerEventMessageListenerWrapper.setMessageListener(
+		schedulerEventMessageListenerAdapter.setMessageListener(
 			_timerMessageListener);
 
 		Dictionary<String, Object> properties = new HashMapDictionary<>();
@@ -162,10 +162,14 @@ public class KaleoWorkflowMessagingConfigurator {
 		properties.put(
 			"destination.name", KaleoRuntimeDestinationNames.WORKFLOW_TIMER);
 
+		Class<?> clazz = _timerMessageListener.getClass();
+
+		properties.put("event.listener.classname", clazz.getName());
+
 		_schedulerEventMessageListenerServiceRegistration =
 			_bundleContext.registerService(
-				MessageListener.class, schedulerEventMessageListenerWrapper,
-				properties);
+				SchedulerEventMessageListenerAdapter.class,
+				schedulerEventMessageListenerAdapter, properties);
 	}
 
 	protected void registerWorkflowDefinitionLinkDestination() {
@@ -327,7 +331,7 @@ public class KaleoWorkflowMessagingConfigurator {
 
 	private final Map<String, MessageListener> _proxyMessageListeners =
 		new HashMap<>();
-	private ServiceRegistration<MessageListener>
+	private ServiceRegistration<SchedulerEventMessageListenerAdapter>
 		_schedulerEventMessageListenerServiceRegistration;
 	private final Map<String, ServiceRegistration<Destination>>
 		_serviceRegistrations = new HashMap<>();
