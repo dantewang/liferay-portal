@@ -34,9 +34,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.jsp.tagext.TagInfo;
 
+import org.apache.jasper.JasperException;
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.Compiler;
+import org.apache.jasper.compiler.JavacErrorDetail;
 import org.apache.jasper.compiler.JspRuntimeContext;
+import org.apache.jasper.compiler.Localizer;
+import org.apache.jasper.compiler.SmapStratum;
+import org.apache.jasper.compiler.SmapUtil;
 
 /**
  * @author Matthew Tambara
@@ -91,6 +96,40 @@ public class CompilerWrapper extends Compiler {
 		}
 
 		return super.isOutDated();
+	}
+
+	@Override
+	protected void generateClass(Map<String, SmapStratum> smaps)
+		throws Exception {
+
+		JspCompiler jspCompiler = new JspCompiler();
+
+		jspCompiler.init(ctxt, errDispatcher, false);
+
+		JavacErrorDetail[] javacErrorDetails = jspCompiler.compile(
+			ctxt.getClassFileName(), pageNodes);
+
+		if (!ctxt.keepGenerated()) {
+			File javaFile = new File(ctxt.getServletJavaFileName());
+
+			if (!javaFile.delete()) {
+				throw new JasperException(
+					Localizer.getMessage(
+						"jsp.warning.compiler.javafile.delete.fail", javaFile));
+			}
+		}
+
+		if (javacErrorDetails != null) {
+			errDispatcher.javacError(javacErrorDetails);
+		}
+
+		if (ctxt.isPrototypeMode()) {
+			return;
+		}
+
+		if (!options.isSmapSuppressed()) {
+			SmapUtil.installSmap(smaps);
+		}
 	}
 
 	private URL _getClassURL(String className) {
