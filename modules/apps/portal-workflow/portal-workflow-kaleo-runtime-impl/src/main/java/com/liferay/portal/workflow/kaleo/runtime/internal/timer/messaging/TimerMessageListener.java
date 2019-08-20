@@ -20,11 +20,14 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelperUtil;
+import com.liferay.portal.kernel.scheduler.SchedulerEntry;
 import com.liferay.portal.kernel.scheduler.StorageType;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken;
 import com.liferay.portal.workflow.kaleo.runtime.WorkflowEngine;
+import com.liferay.portal.workflow.kaleo.runtime.constants.KaleoRuntimeDestinationNames;
 import com.liferay.portal.workflow.kaleo.runtime.util.SchedulerUtil;
 import com.liferay.portal.workflow.kaleo.runtime.util.WorkflowContextUtil;
 import com.liferay.portal.workflow.kaleo.service.KaleoTimerInstanceTokenLocalService;
@@ -39,8 +42,18 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Marcellus Tavares
  */
-@Component(immediate = true, service = TimerMessageListener.class)
-public class TimerMessageListener extends BaseMessageListener {
+@Component(
+	immediate = true,
+	property = "destination.name=" + KaleoRuntimeDestinationNames.WORKFLOW_TIMER,
+	service = {SchedulerEventMessageListener.class, TimerMessageListener.class}
+)
+public class TimerMessageListener
+	extends BaseMessageListener implements SchedulerEventMessageListener {
+
+	@Override
+	public SchedulerEntry getSchedulerEntry() {
+		return null;
+	}
 
 	@Override
 	protected void doReceive(Message message) throws Exception {

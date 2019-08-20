@@ -20,7 +20,8 @@ import com.liferay.portal.kernel.messaging.BaseMessageStatusMessageListener;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerWrapper;
+import com.liferay.portal.kernel.scheduler.SchedulerEntry;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -34,37 +35,23 @@ import com.liferay.portal.kernel.util.PortalUtil;
 
 import java.io.Serializable;
 
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.component.ComponentContext;
 
 /**
  * @author Levente Hudák
  */
 @ProviderType
 public abstract class BasePublisherMessageListener
-	extends BaseMessageStatusMessageListener {
+	extends BaseMessageStatusMessageListener
+	implements SchedulerEventMessageListener {
 
-	protected void initialize(ComponentContext componentContext) {
-		BundleContext bundleContext = componentContext.getBundleContext();
-
-		Dictionary<String, Object> properties =
-			componentContext.getProperties();
-
-		SchedulerEventMessageListenerWrapper
-			schedulerEventMessageListenerWrapper =
-				new SchedulerEventMessageListenerWrapper();
-
-		schedulerEventMessageListenerWrapper.setMessageListener(this);
-
-		serviceRegistration = bundleContext.registerService(
-			MessageListener.class, schedulerEventMessageListenerWrapper,
-			properties);
+	@Override
+	public SchedulerEntry getSchedulerEntry() {
+		return null;
 	}
 
 	protected void initThreadLocals(
