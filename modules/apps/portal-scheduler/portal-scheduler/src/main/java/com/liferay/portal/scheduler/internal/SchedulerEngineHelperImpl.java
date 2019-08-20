@@ -765,12 +765,18 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			_bundleContext, DestinationConfiguration.DESTINATION_TYPE_PARALLEL,
 			DestinationNames.SCHEDULER_SCRIPTING);
 
+		SchedulerEventMessageListenerImpl schedulerEventMessageListenerImpl =
+			new SchedulerEventMessageListenerImpl();
+
+		schedulerEventMessageListenerImpl.setMessageListener(
+			new ScriptingMessageListener());
+
 		SchedulerEventMessageListenerWrapper
 			schedulerEventMessageListenerWrapper =
 				new SchedulerEventMessageListenerWrapper();
 
-		schedulerEventMessageListenerWrapper.setMessageListener(
-			new ScriptingMessageListener());
+		schedulerEventMessageListenerWrapper.setSchedulerEventMessageListener(
+			schedulerEventMessageListenerImpl);
 
 		scriptingDestination.register(schedulerEventMessageListenerWrapper);
 
