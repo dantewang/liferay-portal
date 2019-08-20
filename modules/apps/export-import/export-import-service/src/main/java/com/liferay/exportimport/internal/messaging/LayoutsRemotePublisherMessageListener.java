@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageStatus;
 import com.liferay.portal.kernel.model.Release;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -36,10 +37,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
-import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 /**
@@ -52,23 +50,11 @@ import org.osgi.service.component.annotations.Reference;
 		"destination.name=" + DestinationNames.LAYOUTS_REMOTE_PUBLISHER,
 		"message.status.destination.name=" + DestinationNames.MESSAGE_BUS_MESSAGE_STATUS
 	},
-	service = LayoutsRemotePublisherMessageListener.class
+	service = SchedulerEventMessageListener.class
 )
 @ProviderType
 public class LayoutsRemotePublisherMessageListener
 	extends BasePublisherMessageListener {
-
-	@Activate
-	protected void activate(ComponentContext componentContext) {
-		initialize(componentContext);
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		if (serviceRegistration != null) {
-			serviceRegistration.unregister();
-		}
-	}
 
 	@Override
 	protected void doReceive(Message message, MessageStatus messageStatus)
