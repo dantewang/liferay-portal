@@ -125,7 +125,7 @@ public class CompilerWrapper extends Compiler {
 
 		JspCompiler jspCompiler = new JspCompiler();
 
-		jspCompiler.init(ctxt, errDispatcher, false);
+		jspCompiler.init(ctxt, errDispatcher);
 
 		DiagnosticCollector<JavaFileObject> diagnosticCollector =
 			jspCompiler.compile(ctxt.getClassFileName());
