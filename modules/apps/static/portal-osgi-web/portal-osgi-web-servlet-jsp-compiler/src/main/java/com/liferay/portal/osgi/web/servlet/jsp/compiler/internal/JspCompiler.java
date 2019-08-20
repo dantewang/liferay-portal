@@ -165,7 +165,7 @@ public class JspCompiler {
 
 	public void init(
 		JspCompilationContext jspCompilationContext,
-		ErrorDispatcher errorDispatcher, boolean suppressLogging) {
+		ErrorDispatcher errorDispatcher) {
 
 		_compilerOptions.add("-XDuseUnsharedTable");
 
