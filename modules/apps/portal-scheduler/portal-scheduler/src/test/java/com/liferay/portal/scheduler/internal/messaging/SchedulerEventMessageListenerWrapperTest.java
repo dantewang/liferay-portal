@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.kernel.scheduler.messaging;
+package com.liferay.portal.kernel.scheduler.internal.messaging;
 
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
