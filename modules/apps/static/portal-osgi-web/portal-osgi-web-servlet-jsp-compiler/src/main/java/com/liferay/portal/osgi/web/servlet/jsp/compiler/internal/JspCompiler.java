@@ -66,7 +66,6 @@ import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.JavacErrorDetail;
-import org.apache.jasper.compiler.JspRuntimeContext;
 import org.apache.jasper.compiler.Node;
 
 import org.osgi.framework.Bundle;
@@ -164,14 +163,9 @@ public class JspCompiler {
 		return javacErrorDetails;
 	}
 
-	public long getClassLastModified() {
-		return _jspRuntimeContext.getBytecodeBirthTime(
-			_jspCompilationContext.getFullClassName());
-	}
-
 	public void init(
 		JspCompilationContext jspCompilationContext,
-		ErrorDispatcher errorDispatcher, boolean suppressLogging) {
+		ErrorDispatcher errorDispatcher) {
 
 		_compilerOptions.add("-XDuseUnsharedTable");
 
@@ -276,12 +270,6 @@ public class JspCompiler {
 		_jspCompilationContext = jspCompilationContext;
 
 		_errorDispatcher = errorDispatcher;
-
-		_jspRuntimeContext = jspCompilationContext.getRuntimeContext();
-	}
-
-	public void release() {
-		_bytecodeJavaFileObjects = null;
 	}
 
 	public void saveClassFile(String className, String classFileName) {
@@ -317,9 +305,6 @@ public class JspCompiler {
 				servletContext.log("Unable to save class file", ioe);
 			}
 		}
-	}
-
-	public void setClassPath(List<File> classPath) {
 	}
 
 	protected void addDependenciesToClassPath() {
@@ -544,7 +529,6 @@ public class JspCompiler {
 	private final List<JavaFileObjectResolver> _javaFileObjectResolvers =
 		new ArrayList<>();
 	private JspCompilationContext _jspCompilationContext;
-	private JspRuntimeContext _jspRuntimeContext;
 	private final Map<String, Map<String, JavaFileObject>> _packageMap =
 		new ConcurrentHashMap<>();
 
