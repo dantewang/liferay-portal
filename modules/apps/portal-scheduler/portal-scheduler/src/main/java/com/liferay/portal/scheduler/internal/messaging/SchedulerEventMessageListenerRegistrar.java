@@ -110,10 +110,8 @@ public class SchedulerEventMessageListenerRegistrar {
 
 			SchedulerEventMessageListenerWrapper
 				schedulerEventMessageListenerWrapper =
-					new SchedulerEventMessageListenerWrapper();
-
-			schedulerEventMessageListenerWrapper.
-				setSchedulerEventMessageListener(schedulerEventMessageListener);
+					new SchedulerEventMessageListenerWrapper(
+						schedulerEventMessageListener);
 
 			serviceRegistration = bundleContext.registerService(
 				MessageListener.class, schedulerEventMessageListenerWrapper,

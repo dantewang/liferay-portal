@@ -46,6 +46,12 @@ import java.util.concurrent.locks.ReentrantLock;
 public class SchedulerEventMessageListenerWrapper
 	implements SchedulerEventMessageListener {
 
+	public SchedulerEventMessageListenerWrapper(
+		SchedulerEventMessageListener schedulerEventMessageListener) {
+
+		_schedulerEventMessageListener = schedulerEventMessageListener;
+	}
+
 	@Override
 	public SchedulerEntry getSchedulerEntry() {
 		return _schedulerEventMessageListener.getSchedulerEntry();
@@ -123,12 +129,6 @@ public class SchedulerEventMessageListenerWrapper
 	@Deprecated
 	public void setSchedulerEntry(SchedulerEntry schedulerEntry) {
 		_schedulerEntry = schedulerEntry;
-	}
-
-	public void setSchedulerEventMessageListener(
-		SchedulerEventMessageListener schedulerEventMessageListener) {
-
-		_schedulerEventMessageListener = schedulerEventMessageListener;
 	}
 
 	protected void handleException(Message message, Exception exception) {
@@ -226,6 +226,6 @@ public class SchedulerEventMessageListenerWrapper
 	@SuppressWarnings("unused")
 	private volatile SchedulerEntry _schedulerEntry;
 
-	private SchedulerEventMessageListener _schedulerEventMessageListener;
+	private final SchedulerEventMessageListener _schedulerEventMessageListener;
 
 }
