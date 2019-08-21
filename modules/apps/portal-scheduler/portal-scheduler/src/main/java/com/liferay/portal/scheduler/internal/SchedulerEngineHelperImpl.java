@@ -575,28 +575,31 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			_serviceRegistrations.get(messageListenerClass.getName());
 
 		if (serviceRegistration != null) {
-			SchedulerEventMessageListenerImpl
-				schedulerEventMessageListenerImpl =
-					(SchedulerEventMessageListenerImpl)
+			SchedulerEventMessageListenerAdapter
+				schedulerEventMessageListenerAdapter =
+					(SchedulerEventMessageListenerAdapter)
 						_bundleContext.getService(
 							serviceRegistration.getReference());
 
-			schedulerEventMessageListenerImpl.setSchedulerEntry(schedulerEntry);
+			schedulerEventMessageListenerAdapter.setSchedulerEntry(
+				schedulerEntry);
 
 			serviceRegistration.setProperties(properties);
 
 			return;
 		}
 
-		SchedulerEventMessageListenerImpl schedulerEventMessageListenerImpl =
-			new SchedulerEventMessageListenerImpl();
+		SchedulerEventMessageListenerAdapter
+			schedulerEventMessageListenerAdapter =
+				new SchedulerEventMessageListenerAdapter();
 
-		schedulerEventMessageListenerImpl.setMessageListener(messageListener);
-		schedulerEventMessageListenerImpl.setSchedulerEntry(schedulerEntry);
+		schedulerEventMessageListenerAdapter.setMessageListener(
+			messageListener);
+		schedulerEventMessageListenerAdapter.setSchedulerEntry(schedulerEntry);
 
 		serviceRegistration = _bundleContext.registerService(
 			SchedulerEventMessageListener.class,
-			schedulerEventMessageListenerImpl, properties);
+			schedulerEventMessageListenerAdapter, properties);
 
 		_serviceRegistrations.put(
 			messageListenerClass.getName(), serviceRegistration);
@@ -904,7 +907,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 		<SchedulerEventMessageListener, SchedulerEventMessageListener>
 			_serviceTracker;
 
-	private class SchedulerEventMessageListenerImpl
+	private class SchedulerEventMessageListenerAdapter
 		implements SchedulerEventMessageListener {
 
 		@Override
