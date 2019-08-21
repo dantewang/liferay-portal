@@ -777,10 +777,8 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 		SchedulerEventMessageListenerWrapper
 			schedulerEventMessageListenerWrapper =
-				new SchedulerEventMessageListenerWrapper();
-
-		schedulerEventMessageListenerWrapper.setSchedulerEventMessageListener(
-			schedulerEventMessageListenerAdapter);
+				new SchedulerEventMessageListenerWrapper(
+					schedulerEventMessageListenerAdapter);
 
 		scriptingDestination.register(schedulerEventMessageListenerWrapper);
 

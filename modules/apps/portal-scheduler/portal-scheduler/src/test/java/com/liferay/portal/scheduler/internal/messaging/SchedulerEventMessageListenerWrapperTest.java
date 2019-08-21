@@ -74,24 +74,22 @@ public class SchedulerEventMessageListenerWrapperTest {
 
 		SchedulerEventMessageListenerWrapper
 			schedulerEventMessageListenerWrapper =
-				new SchedulerEventMessageListenerWrapper();
+				new SchedulerEventMessageListenerWrapper(
+					new SchedulerEventMessageListener() {
 
-		schedulerEventMessageListenerWrapper.setSchedulerEventMessageListener(
-			new SchedulerEventMessageListener() {
+						@Override
+						public SchedulerEntry getSchedulerEntry() {
+							return null;
+						}
 
-				@Override
-				public SchedulerEntry getSchedulerEntry() {
-					return null;
-				}
+						@Override
+						public void receive(Message message)
+							throws MessageListenerException {
 
-				@Override
-				public void receive(Message message)
-					throws MessageListenerException {
+							_testMessageListener.receive(message);
+						}
 
-					_testMessageListener.receive(message);
-				}
-
-			});
+					});
 
 		FutureTask<Void> futureTask1 = _createFutureTask(
 			schedulerEventMessageListenerWrapper, _testMessage1);
@@ -133,24 +131,22 @@ public class SchedulerEventMessageListenerWrapperTest {
 
 		SchedulerEventMessageListenerWrapper
 			schedulerEventMessageListenerWrapper =
-				new SchedulerEventMessageListenerWrapper();
+				new SchedulerEventMessageListenerWrapper(
+					new SchedulerEventMessageListener() {
 
-		schedulerEventMessageListenerWrapper.setSchedulerEventMessageListener(
-			new SchedulerEventMessageListener() {
+						@Override
+						public SchedulerEntry getSchedulerEntry() {
+							return null;
+						}
 
-				@Override
-				public SchedulerEntry getSchedulerEntry() {
-					return null;
-				}
+						@Override
+						public void receive(Message message)
+							throws MessageListenerException {
 
-				@Override
-				public void receive(Message message)
-					throws MessageListenerException {
+							_testMessageListener.receive(message);
+						}
 
-					_testMessageListener.receive(message);
-				}
-
-			});
+					});
 
 		Registry registry = RegistryUtil.getRegistry();
 
@@ -203,24 +199,22 @@ public class SchedulerEventMessageListenerWrapperTest {
 
 		SchedulerEventMessageListenerWrapper
 			schedulerEventMessageListenerWrapper =
-				new SchedulerEventMessageListenerWrapper();
+				new SchedulerEventMessageListenerWrapper(
+					new SchedulerEventMessageListener() {
 
-		schedulerEventMessageListenerWrapper.setSchedulerEventMessageListener(
-			new SchedulerEventMessageListener() {
+						@Override
+						public SchedulerEntry getSchedulerEntry() {
+							return null;
+						}
 
-				@Override
-				public SchedulerEntry getSchedulerEntry() {
-					return null;
-				}
+						@Override
+						public void receive(Message message)
+							throws MessageListenerException {
 
-				@Override
-				public void receive(Message message)
-					throws MessageListenerException {
+							_testMessageListener.receive(message);
+						}
 
-					_testMessageListener.receive(message);
-				}
-
-			});
+					});
 
 		FutureTask<Void> futureTask1 = _createFutureTask(
 			schedulerEventMessageListenerWrapper, _testMessage1);
