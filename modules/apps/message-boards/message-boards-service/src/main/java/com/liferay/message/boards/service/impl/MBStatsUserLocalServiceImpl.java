@@ -14,12 +14,17 @@
 
 package com.liferay.message.boards.service.impl;
 
+import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.model.MBStatsUser;
 import com.liferay.message.boards.model.MBThread;
 import com.liferay.message.boards.service.base.MBStatsUserLocalServiceBaseImpl;
+import com.liferay.message.boards.service.persistence.MBMessagePersistence;
+import com.liferay.message.boards.service.persistence.MBThreadPersistence;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.orm.Disjunction;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Property;
@@ -36,9 +41,16 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import java.util.Date;
 import java.util.List;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 /**
  * @author Brian Wing Shun Chan
  */
+@Component(
+	property = "model.class.name=com.liferay.message.boards.model.MBStatsUser",
+	service = AopService.class
+)
 public class MBStatsUserLocalServiceImpl
 	extends MBStatsUserLocalServiceBaseImpl {
 
@@ -108,7 +120,10 @@ public class MBStatsUserLocalServiceImpl
 
 	@Override
 	public Date getLastPostDateByUserId(long groupId, long userId) {
-		DynamicQuery dynamicQuery = mbThreadLocalService.dynamicQuery();
+		Class<?> clazz = getClass();
+
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			MBThread.class, clazz.getClassLoader());
 
 		Projection projection = ProjectionFactoryUtil.max("lastPostDate");
 
@@ -125,8 +140,19 @@ public class MBStatsUserLocalServiceImpl
 		QueryDefinition<MBThread> queryDefinition = new QueryDefinition<>(
 			WorkflowConstants.STATUS_IN_TRASH);
 
-		List<MBThread> threads = mbThreadLocalService.getGroupThreads(
-			groupId, queryDefinition);
+		List<MBThread> threads = null;
+
+		if (queryDefinition.isExcludeStatus()) {
+			threads = _mbThreadPersistence.findByG_NotC_NotS(
+				groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID,
+				queryDefinition.getStatus(), queryDefinition.getStart(),
+				queryDefinition.getEnd());
+		}
+
+		threads = _mbThreadPersistence.findByG_NotC_S(
+			groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID,
+			queryDefinition.getStatus(), queryDefinition.getStart(),
+			queryDefinition.getEnd());
 
 		for (MBThread thread : threads) {
 			disjunction.add(threadIdProperty.ne(thread.getThreadId()));
@@ -134,7 +160,8 @@ public class MBStatsUserLocalServiceImpl
 
 		dynamicQuery.add(disjunction);
 
-		List<Date> results = mbThreadLocalService.dynamicQuery(dynamicQuery);
+		List<Date> results = _mbThreadPersistence.findWithDynamicQuery(
+			dynamicQuery);
 
 		return results.get(0);
 	}
@@ -235,8 +262,15 @@ public class MBStatsUserLocalServiceImpl
 	public MBStatsUser updateStatsUser(
 		long groupId, long userId, Date lastPostDate) {
 
-		int messageCount = mbMessageLocalService.getGroupMessagesCount(
-			groupId, userId, WorkflowConstants.STATUS_APPROVED);
+		int messageCount;
+
+		if (WorkflowConstants.STATUS_APPROVED == WorkflowConstants.STATUS_ANY) {
+			messageCount = _mbMessagePersistence.countByG_U(groupId, userId);
+		}
+		else {
+			messageCount = _mbMessagePersistence.countByG_U_S(
+				groupId, userId, WorkflowConstants.STATUS_APPROVED);
+		}
 
 		return updateStatsUser(groupId, userId, messageCount, lastPostDate);
 	}
@@ -260,5 +294,11 @@ public class MBStatsUserLocalServiceImpl
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		MBStatsUserLocalServiceImpl.class);
+
+	@Reference
+	private MBMessagePersistence _mbMessagePersistence;
+
+	@Reference
+	private MBThreadPersistence _mbThreadPersistence;
 
 }
