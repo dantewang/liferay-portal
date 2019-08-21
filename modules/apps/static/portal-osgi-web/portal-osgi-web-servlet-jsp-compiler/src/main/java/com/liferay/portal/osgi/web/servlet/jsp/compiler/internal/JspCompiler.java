@@ -250,9 +250,6 @@ public class JspCompiler {
 		initClassPath();
 		initTLDMappings(servletContext, options);
 
-		servletContext.setAttribute(InstanceManager.class.getName(),
-			new SimpleInstanceManager());
-
 		_jspCompilationContext = jspCompilationContext;
 	}
 
