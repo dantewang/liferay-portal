@@ -15,17 +15,30 @@
 package com.liferay.portal.scheduler.internal.messaging.config;
 
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
+import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.scheduler.SchedulerEngine;
+import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
+import com.liferay.portal.kernel.scheduler.SchedulerEntry;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.portal.kernel.scripting.ScriptingUtil;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 /**
  * @author Tina Tian
  */
-public class ScriptingMessageListener extends BaseMessageListener {
+@Component(
+	immediate = true,
+	property = "destination.name=" + DestinationNames.SCHEDULER_SCRIPTING,
+	service = SchedulerEventMessageListener.class
+)
+public class ScriptingMessageListener
+	extends BaseMessageListener implements SchedulerEventMessageListener {
 
 	@Override
 	public void doReceive(Message message) throws Exception {
@@ -36,5 +49,13 @@ public class ScriptingMessageListener extends BaseMessageListener {
 
 		ScriptingUtil.eval(null, inputObjects, null, language, script);
 	}
+
+	@Override
+	public SchedulerEntry getSchedulerEntry() {
+		return null;
+	}
+
+	@Reference
+	private SchedulerEngineHelper _schedulerEngineHelper;
 
 }

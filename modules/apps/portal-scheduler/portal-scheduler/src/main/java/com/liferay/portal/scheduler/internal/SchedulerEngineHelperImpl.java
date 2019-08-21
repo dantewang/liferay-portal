@@ -54,8 +54,6 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.scheduler.internal.configuration.SchedulerEngineHelperConfiguration;
-import com.liferay.portal.scheduler.internal.messaging.SchedulerEventMessageListenerWrapper;
-import com.liferay.portal.scheduler.internal.messaging.config.ScriptingMessageListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -764,23 +762,9 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			_bundleContext, DestinationConfiguration.DESTINATION_TYPE_PARALLEL,
 			DestinationNames.SCHEDULER_DISPATCH);
 
-		Destination scriptingDestination = registerDestination(
+		registerDestination(
 			_bundleContext, DestinationConfiguration.DESTINATION_TYPE_PARALLEL,
 			DestinationNames.SCHEDULER_SCRIPTING);
-
-		SchedulerEventMessageListenerAdapter
-			schedulerEventMessageListenerAdapter =
-				new SchedulerEventMessageListenerAdapter();
-
-		schedulerEventMessageListenerAdapter.setMessageListener(
-			new ScriptingMessageListener());
-
-		SchedulerEventMessageListenerWrapper
-			schedulerEventMessageListenerWrapper =
-				new SchedulerEventMessageListenerWrapper(
-					schedulerEventMessageListenerAdapter);
-
-		scriptingDestination.register(schedulerEventMessageListenerWrapper);
 
 		_serviceTracker = ServiceTrackerFactory.open(
 			_bundleContext,
