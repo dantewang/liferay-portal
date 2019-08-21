@@ -55,23 +55,9 @@ import org.apache.jasper.compiler.SmapUtil;
  */
 public class CompilerWrapper extends Compiler {
 
-	public static String getFullClassName(
-		JspCompilationContext jspCompilationContext) {
-
-		if (jspCompilationContext.isTagFile()) {
-			TagInfo tagInfo = jspCompilationContext.getTagInfo();
-
-			return tagInfo.getTagClassName();
-		}
-
-		return StringBundler.concat(
-			jspCompilationContext.getServletPackageName(), StringPool.PERIOD,
-			jspCompilationContext.getServletClassName());
-	}
-
 	@Override
 	public void compile(boolean compileClass) throws Exception {
-		String className = getFullClassName(ctxt);
+		String className = ctxt.getFQCN();
 
 		JSPClassInfo jspClassInfo = _jspClassInfos.get(className);
 
@@ -88,7 +74,7 @@ public class CompilerWrapper extends Compiler {
 
 	@Override
 	public boolean isOutDated() {
-		String className = getFullClassName(ctxt);
+		String className = ctxt.getFQCN();
 
 		URL url = _getClassURL(className);
 

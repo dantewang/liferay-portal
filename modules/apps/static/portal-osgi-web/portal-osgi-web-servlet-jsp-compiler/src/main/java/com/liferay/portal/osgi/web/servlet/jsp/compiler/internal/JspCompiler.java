@@ -139,7 +139,7 @@ public class JspCompiler {
 
 			if (compilationTask.call()) {
 				saveClassFile(
-					CompilerWrapper.getFullClassName(_jspCompilationContext),
+					_jspCompilationContext.getFQCN(),
 					_jspCompilationContext.getClassFileName());
 
 				_bytecodeJavaFileObjects = null;
