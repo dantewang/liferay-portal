@@ -128,23 +128,7 @@ public class CompilerWrapper extends Compiler {
 		throws Exception {
 
 		DiagnosticCollector<JavaFileObject> diagnosticCollector =
-			_jspCompiler.compile(ctxt.getClassFileName(), errDispatcher);
-
-		List<Diagnostic<? extends JavaFileObject>> diagnostics =
-			diagnosticCollector.getDiagnostics();
-
-		JavacErrorDetail[] javacErrorDetails =
-			new JavacErrorDetail[diagnostics.size()];
-
-		for (int i = 0; i < diagnostics.size(); i++) {
-			Diagnostic<? extends JavaFileObject> diagnostic = diagnostics.get(
-				i);
-
-			javacErrorDetails[i] = ErrorDispatcher.createJavacError(
-				ctxt.getServletJavaFileName(), pageNodes,
-				new StringBuilder(diagnostic.getMessage(null)),
-				(int)diagnostic.getLineNumber());
-		}
+			_jspCompiler.compile(ctxt.getServletClassName(), errDispatcher);
 
 		if (!ctxt.keepGenerated()) {
 			File javaFile = new File(ctxt.getServletJavaFileName());
@@ -156,8 +140,26 @@ public class CompilerWrapper extends Compiler {
 			}
 		}
 
-		if (javacErrorDetails != null) {
+		if (diagnosticCollector != null) {
+			List<Diagnostic<? extends JavaFileObject>> diagnostics =
+				diagnosticCollector.getDiagnostics();
+
+			JavacErrorDetail[] javacErrorDetails =
+				new JavacErrorDetail[diagnostics.size()];
+
+			for (int i = 0; i < diagnostics.size(); i++) {
+				Diagnostic<? extends JavaFileObject> diagnostic =
+					diagnostics.get(i);
+
+				javacErrorDetails[i] = ErrorDispatcher.createJavacError(
+					ctxt.getServletJavaFileName(), pageNodes,
+					new StringBuilder(diagnostic.getMessage(null)),
+					(int) diagnostic.getLineNumber());
+			}
+
 			errDispatcher.javacError(javacErrorDetails);
+
+			return;
 		}
 
 		if (ctxt.isPrototypeMode()) {
