@@ -79,6 +79,10 @@ public class CompilerWrapper extends Compiler {
 			return;
 		}
 
+		_jspCompiler = new JspCompiler();
+
+		_jspCompiler.init(ctxt);
+
 		super.compile(compileClass);
 	}
 
@@ -123,12 +127,8 @@ public class CompilerWrapper extends Compiler {
 	protected void generateClass(Map<String, SmapStratum> smaps)
 		throws Exception {
 
-		JspCompiler jspCompiler = new JspCompiler();
-
-		jspCompiler.init(ctxt);
-
 		DiagnosticCollector<JavaFileObject> diagnosticCollector =
-			jspCompiler.compile(ctxt.getClassFileName(), errDispatcher);
+			_jspCompiler.compile(ctxt.getClassFileName(), errDispatcher);
 
 		List<Diagnostic<? extends JavaFileObject>> diagnostics =
 			diagnosticCollector.getDiagnostics();
@@ -220,6 +220,7 @@ public class CompilerWrapper extends Compiler {
 
 	private final Map<String, JSPClassInfo> _jspClassInfos =
 		new ConcurrentHashMap<>();
+	private JspCompiler _jspCompiler;
 
 	private class JSPClassInfo {
 
