@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.scheduler.JobState;
 import com.liferay.portal.kernel.scheduler.SchedulerEngine;
@@ -115,22 +114,6 @@ public class SchedulerEventMessageListenerWrapper
 		}
 	}
 
-	/**
-	 * @deprecated As of Mueller (7.2.x), with no direct replacement
-	 */
-	@Deprecated
-	public void setMessageListener(MessageListener messageListener) {
-		_messageListener = messageListener;
-	}
-
-	/**
-	 * @deprecated As of Mueller (7.2.x), with no direct replacement
-	 */
-	@Deprecated
-	public void setSchedulerEntry(SchedulerEntry schedulerEntry) {
-		_schedulerEntry = schedulerEntry;
-	}
-
 	protected void handleException(Message message, Exception exception) {
 		JobState jobState = (JobState)message.get(SchedulerEngine.JOB_STATE);
 
@@ -211,21 +194,6 @@ public class SchedulerEventMessageListenerWrapper
 		SchedulerEventMessageListenerWrapper.class);
 
 	private final Lock _lock = new ReentrantLock();
-
-	/**
-	 * @deprecated As of Mueller (7.2.x), with no direct replacement
-	 */
-	@Deprecated
-	@SuppressWarnings("unused")
-	private MessageListener _messageListener;
-
-	/**
-	 * @deprecated As of Mueller (7.2.x), with no direct replacement
-	 */
-	@Deprecated
-	@SuppressWarnings("unused")
-	private volatile SchedulerEntry _schedulerEntry;
-
 	private final SchedulerEventMessageListener _schedulerEventMessageListener;
 
 }
