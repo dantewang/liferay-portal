@@ -65,7 +65,6 @@ import org.apache.jasper.JasperException;
 import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.ErrorDispatcher;
-import org.apache.jasper.compiler.JspRuntimeContext;
 import org.apache.jasper.compiler.TldCache;
 import org.apache.tomcat.util.descriptor.tld.TaglibXml;
 import org.apache.tomcat.util.descriptor.tld.TldParser;
@@ -250,8 +249,6 @@ public class JspCompiler {
 		initTLDMappings(servletContext, options);
 
 		_jspCompilationContext = jspCompilationContext;
-
-		_jspRuntimeContext = jspCompilationContext.getRuntimeContext();
 	}
 
 	public void saveClassFile(String className, String classFileName) {
@@ -533,7 +530,6 @@ public class JspCompiler {
 	private final List<JavaFileObjectResolver> _javaFileObjectResolvers =
 		new ArrayList<>();
 	private JspCompilationContext _jspCompilationContext;
-	private JspRuntimeContext _jspRuntimeContext;
 	private final Map<String, Map<String, JavaFileObject>> _packageMap =
 		new ConcurrentHashMap<>();
 
