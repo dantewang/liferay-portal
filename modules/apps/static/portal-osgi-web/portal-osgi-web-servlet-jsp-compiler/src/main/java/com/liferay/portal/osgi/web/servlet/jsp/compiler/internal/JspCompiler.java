@@ -88,7 +88,8 @@ import org.xml.sax.SAXException;
  */
 public class JspCompiler {
 
-	public DiagnosticCollector<JavaFileObject> compile(String className)
+	public DiagnosticCollector<JavaFileObject> compile(
+			String className, ErrorDispatcher errorDispatcher)
 		throws JasperException {
 
 		_bytecodeJavaFileObjects = new ArrayList<>();
@@ -96,7 +97,7 @@ public class JspCompiler {
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 
 		if (javaCompiler == null) {
-			_errorDispatcher.jspError("jsp.error.nojdk");
+			errorDispatcher.jspError("jsp.error.nojdk");
 
 			throw new JasperException("Unable to find Java compiler");
 		}
@@ -152,10 +153,7 @@ public class JspCompiler {
 		return diagnosticCollector;
 	}
 
-	public void init(
-		JspCompilationContext jspCompilationContext,
-		ErrorDispatcher errorDispatcher) {
-
+	public void init(JspCompilationContext jspCompilationContext) {
 		_compilerOptions.add("-XDuseUnsharedTable");
 
 		_compilerOptions.add("-proc:none");
@@ -252,8 +250,6 @@ public class JspCompiler {
 		initTLDMappings(servletContext, options);
 
 		_jspCompilationContext = jspCompilationContext;
-
-		_errorDispatcher = errorDispatcher;
 
 		_jspRuntimeContext = jspCompilationContext.getRuntimeContext();
 	}
@@ -534,7 +530,6 @@ public class JspCompiler {
 	private ClassLoader _classLoader;
 	private final List<File> _classPath = new ArrayList<>();
 	private final List<String> _compilerOptions = new ArrayList<>();
-	private ErrorDispatcher _errorDispatcher;
 	private final List<JavaFileObjectResolver> _javaFileObjectResolvers =
 		new ArrayList<>();
 	private JspCompilationContext _jspCompilationContext;
