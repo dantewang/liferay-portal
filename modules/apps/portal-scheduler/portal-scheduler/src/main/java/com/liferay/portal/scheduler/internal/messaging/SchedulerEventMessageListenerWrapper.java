@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.scheduler.JobState;
 import com.liferay.portal.kernel.scheduler.SchedulerEngine;
@@ -48,7 +47,11 @@ public class SchedulerEventMessageListenerWrapper
 
 	@Override
 	public SchedulerEntry getSchedulerEntry() {
-		return _schedulerEntry;
+		return _schedulerEventMessageListener.getSchedulerEntry();
+	}
+
+	public SchedulerEventMessageListener getSchedulerEventMessageListener() {
+		return _schedulerEventMessageListener;
 	}
 
 	@Override
@@ -59,7 +62,9 @@ public class SchedulerEventMessageListenerWrapper
 		String groupName = message.getString(SchedulerEngine.GROUP_NAME);
 
 		if (destinationName.equals(DestinationNames.SCHEDULER_DISPATCH)) {
-			Trigger trigger = _schedulerEntry.getTrigger();
+			SchedulerEntry schedulerEntry = getSchedulerEntry();
+
+			Trigger trigger = schedulerEntry.getTrigger();
 
 			if (!jobName.equals(trigger.getJobName()) ||
 				!groupName.equals(trigger.getGroupName())) {
@@ -103,12 +108,10 @@ public class SchedulerEventMessageListenerWrapper
 		}
 	}
 
-	public void setMessageListener(MessageListener messageListener) {
-		_messageListener = messageListener;
-	}
+	public void setSchedulerEventMessageListener(
+		SchedulerEventMessageListener schedulerEventMessageListener) {
 
-	public void setSchedulerEntry(SchedulerEntry schedulerEntry) {
-		_schedulerEntry = schedulerEntry;
+		_schedulerEventMessageListener = schedulerEventMessageListener;
 	}
 
 	protected void handleException(Message message, Exception exception) {
@@ -125,7 +128,7 @@ public class SchedulerEventMessageListenerWrapper
 		throws MessageListenerException {
 
 		try {
-			_messageListener.receive(message);
+			_schedulerEventMessageListener.receive(message);
 		}
 		catch (Exception e) {
 			handleException(message, e);
@@ -191,7 +194,6 @@ public class SchedulerEventMessageListenerWrapper
 		SchedulerEventMessageListenerWrapper.class);
 
 	private final Lock _lock = new ReentrantLock();
-	private MessageListener _messageListener;
-	private volatile SchedulerEntry _schedulerEntry;
+	private SchedulerEventMessageListener _schedulerEventMessageListener;
 
 }
