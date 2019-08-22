@@ -56,10 +56,6 @@ public class SchedulerEventMessageListenerWrapper
 		return _schedulerEventMessageListener.getSchedulerEntry();
 	}
 
-	public SchedulerEventMessageListener getSchedulerEventMessageListener() {
-		return _schedulerEventMessageListener;
-	}
-
 	@Override
 	public void receive(Message message) throws MessageListenerException {
 		String destinationName = GetterUtil.getString(
