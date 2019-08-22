@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.kernel.scheduler.messaging;
+package com.liferay.portal.scheduler.internal.messaging;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.scheduler.SchedulerException;
 import com.liferay.portal.kernel.scheduler.StorageType;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerState;
+import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListener;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -41,11 +42,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Shuyang Zhou
- * @deprecated As of Athanasius (7.3.x), replaced by {@link
- *             com.liferay.portal.scheduler.internal.messaging.
- *             SchedulerEventMessageListenerWrapper}
  */
-@Deprecated
 public class SchedulerEventMessageListenerWrapper
 	implements SchedulerEventMessageListener {
 
