@@ -28,17 +28,23 @@ import java.net.URI;
 import java.net.URL;
 
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jasper.JasperException;
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.Compiler;
+import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.JavacErrorDetail;
 import org.apache.jasper.compiler.JspRuntimeContext;
 import org.apache.jasper.compiler.Localizer;
 import org.apache.jasper.compiler.SmapStratum;
 import org.apache.jasper.compiler.SmapUtil;
+
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaFileObject;
 
 /**
  * @author Matthew Tambara
@@ -57,7 +63,7 @@ public class CompilerWrapper extends Compiler {
 
 		_jspCompiler = new JspCompiler();
 
-		_jspCompiler.init(ctxt, errDispatcher);
+		_jspCompiler.init(ctxt);
 
 		super.compile(compileClass);
 	}
@@ -103,8 +109,8 @@ public class CompilerWrapper extends Compiler {
 	protected void generateClass(Map<String, SmapStratum> smaps)
 		throws Exception {
 
-		JavacErrorDetail[] javacErrorDetails = _jspCompiler.compile(
-			ctxt.getClassFileName(), pageNodes);
+		DiagnosticCollector<JavaFileObject> diagnosticCollector =
+			_jspCompiler.compile(ctxt.getServletClassName(), errDispatcher);
 
 		if (!ctxt.keepGenerated()) {
 			File javaFile = new File(ctxt.getServletJavaFileName());
@@ -116,8 +122,26 @@ public class CompilerWrapper extends Compiler {
 			}
 		}
 
-		if (javacErrorDetails != null) {
+		if (diagnosticCollector != null) {
+			List<Diagnostic<? extends JavaFileObject>> diagnostics =
+				diagnosticCollector.getDiagnostics();
+
+			JavacErrorDetail[] javacErrorDetails =
+				new JavacErrorDetail[diagnostics.size()];
+
+			for (int i = 0; i < diagnostics.size(); i++) {
+				Diagnostic<? extends JavaFileObject> diagnostic =
+					diagnostics.get(i);
+
+				javacErrorDetails[i] = ErrorDispatcher.createJavacError(
+					ctxt.getServletJavaFileName(), pageNodes,
+					new StringBuilder(diagnostic.getMessage(null)),
+					(int) diagnostic.getLineNumber());
+			}
+
 			errDispatcher.javacError(javacErrorDetails);
+
+			return;
 		}
 
 		if (ctxt.isPrototypeMode()) {
