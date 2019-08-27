@@ -31,6 +31,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaFileObject;
+
 import org.apache.jasper.JasperException;
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.Compiler;
@@ -40,10 +44,6 @@ import org.apache.jasper.compiler.JspRuntimeContext;
 import org.apache.jasper.compiler.Localizer;
 import org.apache.jasper.compiler.SmapStratum;
 import org.apache.jasper.compiler.SmapUtil;
-
-import javax.tools.Diagnostic;
-import javax.tools.DiagnosticCollector;
-import javax.tools.JavaFileObject;
 
 /**
  * @author Matthew Tambara
@@ -135,7 +135,7 @@ public class CompilerWrapper extends Compiler {
 				javacErrorDetails[i] = ErrorDispatcher.createJavacError(
 					ctxt.getServletJavaFileName(), pageNodes,
 					new StringBuilder(diagnostic.getMessage(null)),
-					(int) diagnostic.getLineNumber());
+					(int)diagnostic.getLineNumber());
 			}
 
 			errDispatcher.javacError(javacErrorDetails);
