@@ -149,8 +149,8 @@ public class JspServlet extends HttpServlet {
 
 		final ServletContext servletContext = servletConfig.getServletContext();
 
-		servletContext.setAttribute(InstanceManager.class.getName(),
-			new SimpleInstanceManager());
+		servletContext.setAttribute(
+			InstanceManager.class.getName(), new SimpleInstanceManager());
 
 		ClassLoader classLoader = servletContext.getClassLoader();
 
