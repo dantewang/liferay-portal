@@ -45,7 +45,7 @@ public class CompilerWrapper extends Compiler {
 
 	@Override
 	public void compile(boolean compileClass) throws Exception {
-		String className = ctxt.getFullClassName();
+		String className = ctxt.getFQCN();
 
 		JSPClassInfo jspClassInfo = _jspClassInfos.get(className);
 
@@ -62,7 +62,7 @@ public class CompilerWrapper extends Compiler {
 
 	@Override
 	public boolean isOutDated() {
-		String className = ctxt.getFullClassName();
+		String className = ctxt.getFQCN();
 
 		URL url = _getClassURL(className);
 
