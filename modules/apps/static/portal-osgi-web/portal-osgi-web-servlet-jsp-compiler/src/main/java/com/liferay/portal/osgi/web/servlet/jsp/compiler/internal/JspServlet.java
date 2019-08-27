@@ -69,6 +69,8 @@ import javax.servlet.jsp.JspFactory;
 
 import org.apache.jasper.runtime.JspFactoryImpl;
 import org.apache.jasper.runtime.TagHandlerPool;
+import org.apache.tomcat.InstanceManager;
+import org.apache.tomcat.SimpleInstanceManager;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
@@ -150,6 +152,9 @@ public class JspServlet extends HttpServlet {
 		throws ServletException {
 
 		final ServletContext servletContext = servletConfig.getServletContext();
+
+		servletContext.setAttribute(
+			InstanceManager.class.getName(), new SimpleInstanceManager());
 
 		ClassLoader classLoader = servletContext.getClassLoader();
 
