@@ -27,16 +27,12 @@ public class DataProviderConfigurationCategory
 
 	@Override
 	public String getCategoryKey() {
-		return _CATEGORY_KEY;
+		return "data-providers";
 	}
 
 	@Override
 	public String getCategorySection() {
-		return _CATEGORY_SECTION;
+		return "content-and-data";
 	}
-
-	private static final String _CATEGORY_KEY = "data-providers";
-
-	private static final String _CATEGORY_SECTION = "content-and-data";
 
 }
