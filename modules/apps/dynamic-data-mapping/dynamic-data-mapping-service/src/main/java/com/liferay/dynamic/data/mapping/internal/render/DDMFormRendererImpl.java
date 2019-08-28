@@ -17,7 +17,7 @@ package com.liferay.dynamic.data.mapping.internal.render;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.render.DDMFormFieldRenderer;
-import com.liferay.dynamic.data.mapping.render.DDMFormFieldRendererRegistryUtil;
+import com.liferay.dynamic.data.mapping.render.DDMFormFieldRendererRegistry;
 import com.liferay.dynamic.data.mapping.render.DDMFormFieldRenderingContext;
 import com.liferay.dynamic.data.mapping.render.DDMFormRenderer;
 import com.liferay.dynamic.data.mapping.storage.Fields;
@@ -30,6 +30,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Marcellus Tavares
@@ -55,7 +56,7 @@ public class DDMFormRendererImpl implements DDMFormRenderer {
 			}
 
 			DDMFormFieldRenderer ddmFormFieldRenderer =
-				DDMFormFieldRendererRegistryUtil.getDDMFormFieldRenderer(
+				_ddmFormFieldRendererRegistry.getDDMFormFieldRenderer(
 					ddmFormField.getType());
 
 			sb.append(
@@ -114,5 +115,8 @@ public class DDMFormRendererImpl implements DDMFormRenderer {
 
 		return true;
 	}
+
+	@Reference
+	private DDMFormFieldRendererRegistry _ddmFormFieldRendererRegistry;
 
 }
