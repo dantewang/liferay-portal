@@ -27,7 +27,6 @@
 						<id>org.eclipse.ui.ide.multiFilter</id>
 					</matcher>
 					<matcher>
-						<arguments>1.0-name-matches-false-false-.gradle</arguments>
 						<id>org.eclipse.ui.ide.multiFilter</id>
 					</matcher>
 					<matcher>
