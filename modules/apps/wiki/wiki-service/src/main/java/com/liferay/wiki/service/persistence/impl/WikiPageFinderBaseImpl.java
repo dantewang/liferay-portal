@@ -86,4 +86,13 @@ public abstract class WikiPageFinderBaseImpl
 	private static final Log _log = LogFactoryUtil.getLog(
 		WikiPageFinderBaseImpl.class);
 
+	static {
+		try {
+			Class.forName(WikiPersistenceConstants.class.getName());
+		}
+		catch (ClassNotFoundException cnfe) {
+			throw new ExceptionInInitializerError(cnfe);
+		}
+	}
+
 }
