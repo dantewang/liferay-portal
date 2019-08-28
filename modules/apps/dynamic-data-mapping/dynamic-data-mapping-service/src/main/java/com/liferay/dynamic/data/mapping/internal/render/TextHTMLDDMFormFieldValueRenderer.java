@@ -24,9 +24,12 @@ import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.Locale;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Marcellus Tavares
  */
+@Component(immediate = true, service = BaseTextDDMFormFieldValueRenderer.class)
 public class TextHTMLDDMFormFieldValueRenderer
 	extends BaseTextDDMFormFieldValueRenderer {
 

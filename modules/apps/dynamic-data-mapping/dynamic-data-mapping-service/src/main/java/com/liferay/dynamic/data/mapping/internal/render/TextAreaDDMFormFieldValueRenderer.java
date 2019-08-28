@@ -21,9 +21,12 @@ import com.liferay.petra.string.StringPool;
 import java.util.List;
 import java.util.Locale;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Marcellus Tavares
  */
+@Component(immediate = true, service = BaseTextDDMFormFieldValueRenderer.class)
 public class TextAreaDDMFormFieldValueRenderer
 	extends BaseTextDDMFormFieldValueRenderer {
 

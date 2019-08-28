@@ -15,7 +15,7 @@
 package com.liferay.dynamic.data.mapping.internal.storage;
 
 import com.liferay.document.library.kernel.exception.NoSuchFileEntryException;
-import com.liferay.document.library.kernel.service.DLAppServiceUtil;
+import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.dynamic.data.mapping.storage.BaseFieldRenderer;
 import com.liferay.dynamic.data.mapping.storage.Field;
 import com.liferay.petra.string.StringPool;
@@ -36,9 +36,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 /**
  * @author Bruno Basto
  */
+@Component(
+	immediate = true, property = "key=document-library",
+	service = BaseFieldRenderer.class
+)
 public class DocumentLibraryFieldRenderer extends BaseFieldRenderer {
 
 	@Override
@@ -87,7 +94,7 @@ public class DocumentLibraryFieldRenderer extends BaseFieldRenderer {
 		String fileEntryUUID = jsonObject.getString("uuid");
 
 		try {
-			FileEntry fileEntry = DLAppServiceUtil.getFileEntryByUuidAndGroupId(
+			FileEntry fileEntry = _dlAppService.getFileEntryByUuidAndGroupId(
 				fileEntryUUID, fileEntryGroupId);
 
 			return fileEntry.getTitle();
@@ -106,5 +113,8 @@ public class DocumentLibraryFieldRenderer extends BaseFieldRenderer {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		DocumentLibraryFieldRenderer.class);
+
+	@Reference
+	private DLAppService _dlAppService;
 
 }

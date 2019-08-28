@@ -14,6 +14,10 @@
 
 package com.liferay.dynamic.data.mapping.render;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
+
 /**
  * @author Pablo Carvalho
  */
@@ -29,15 +33,26 @@ public class DDMFormFieldRendererRegistryUtil {
 	public static DDMFormFieldRendererRegistry
 		getDDMFormFieldRendererRegistry() {
 
-		return _ddmFormFieldRendererRegistry;
+		return _serviceTracker.getService();
 	}
 
-	public void setDDMFormFieldRendererRegistry(
-		DDMFormFieldRendererRegistry ddmFormFieldRendererRegistry) {
+	private static final ServiceTracker
+		<DDMFormFieldRendererRegistry, DDMFormFieldRendererRegistry>
+			_serviceTracker;
 
-		_ddmFormFieldRendererRegistry = ddmFormFieldRendererRegistry;
+	static {
+		Bundle bundle = FrameworkUtil.getBundle(
+			DDMFormFieldRendererRegistry.class);
+
+		ServiceTracker
+			<DDMFormFieldRendererRegistry, DDMFormFieldRendererRegistry>
+				serviceTracker = new ServiceTracker<>(
+					bundle.getBundleContext(),
+					DDMFormFieldRendererRegistry.class, null);
+
+		serviceTracker.open();
+
+		_serviceTracker = serviceTracker;
 	}
-
-	private static DDMFormFieldRendererRegistry _ddmFormFieldRendererRegistry;
 
 }

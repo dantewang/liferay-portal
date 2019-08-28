@@ -35,9 +35,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Bruno Basto
  */
+@Component(
+	immediate = true, property = "key=string", service = BaseFieldRenderer.class
+)
 public class StringFieldRenderer extends BaseFieldRenderer {
 
 	@Override

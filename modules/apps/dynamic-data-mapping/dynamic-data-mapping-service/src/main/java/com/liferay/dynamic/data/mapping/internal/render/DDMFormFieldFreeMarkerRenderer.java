@@ -50,7 +50,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -71,9 +71,13 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 /**
  * @author Pablo Carvalho
  */
+@Component(immediate = true, service = DDMFormFieldRenderer.class)
 public class DDMFormFieldFreeMarkerRenderer implements DDMFormFieldRenderer {
 
 	public DDMFormFieldFreeMarkerRenderer() {
@@ -542,7 +546,7 @@ public class DDMFormFieldFreeMarkerRenderer implements DDMFormFieldRenderer {
 		try {
 			String itemSelectorAuthToken = AuthTokenUtil.getToken(
 				httpServletRequest,
-				PortalUtil.getControlPanelPlid(themeDisplay.getCompanyId()),
+				_portal.getControlPanelPlid(themeDisplay.getCompanyId()),
 				PortletKeys.ITEM_SELECTOR);
 
 			freeMarkerContext.put(
@@ -719,5 +723,8 @@ public class DDMFormFieldFreeMarkerRenderer implements DDMFormFieldRenderer {
 
 	private final TemplateResource _defaultReadOnlyTemplateResource;
 	private final TemplateResource _defaultTemplateResource;
+
+	@Reference
+	private Portal _portal;
 
 }

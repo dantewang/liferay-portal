@@ -31,10 +31,13 @@ import java.text.NumberFormat;
 
 import java.util.Locale;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Sergio González
  * @author Marcellus Tavares
  */
+@Component(immediate = true, service = BaseDDMFormFieldValueRenderer.class)
 public class GeolocationDDMFormFieldValueRenderer
 	extends BaseDDMFormFieldValueRenderer {
 

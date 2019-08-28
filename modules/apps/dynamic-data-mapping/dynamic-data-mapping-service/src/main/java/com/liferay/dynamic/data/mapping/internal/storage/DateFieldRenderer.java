@@ -30,10 +30,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Bruno Basto
  * @author Manuel de la Peña
  */
+@Component(
+	immediate = true, property = "key=date", service = BaseFieldRenderer.class
+)
 public class DateFieldRenderer extends BaseFieldRenderer {
 
 	@Override

@@ -28,9 +28,12 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Locale;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Marcellus Tavares
  */
+@Component(immediate = true, service = BaseDDMFormFieldValueRenderer.class)
 public class RadioDDMFormFieldValueRenderer
 	extends BaseDDMFormFieldValueRenderer {
 

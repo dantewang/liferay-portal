@@ -14,7 +14,7 @@
 
 package com.liferay.dynamic.data.mapping.internal.render;
 
-import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldType;
 import com.liferay.dynamic.data.mapping.model.Value;
 import com.liferay.dynamic.data.mapping.render.BaseDDMFormFieldValueRenderer;
@@ -31,10 +31,14 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Locale;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 /**
  * @author Bruno Basto
  * @author Marcellus Tavares
  */
+@Component(immediate = true, service = BaseDDMFormFieldValueRenderer.class)
 public class DocumentLibraryDDMFormFieldValueRenderer
 	extends BaseDDMFormFieldValueRenderer {
 
@@ -63,7 +67,7 @@ public class DocumentLibraryDDMFormFieldValueRenderer
 
 				try {
 					FileEntry fileEntry =
-						DLAppLocalServiceUtil.getFileEntryByUuidAndGroupId(
+						_dlAppLocalService.getFileEntryByUuidAndGroupId(
 							uuid, groupId);
 
 					return fileEntry.getTitle();
@@ -85,5 +89,8 @@ public class DocumentLibraryDDMFormFieldValueRenderer
 
 		};
 	}
+
+	@Reference
+	private DLAppLocalService _dlAppLocalService;
 
 }

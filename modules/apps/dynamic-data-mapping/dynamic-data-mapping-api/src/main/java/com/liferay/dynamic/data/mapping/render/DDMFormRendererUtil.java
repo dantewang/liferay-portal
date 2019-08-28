@@ -17,13 +17,17 @@ package com.liferay.dynamic.data.mapping.render;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.portal.kernel.exception.PortalException;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
+
 /**
  * @author Marcellus Tavares
  */
 public class DDMFormRendererUtil {
 
 	public static DDMFormRenderer getDDMFormRenderer() {
-		return _ddmFormRenderer;
+		return _serviceTracker.getService();
 	}
 
 	public static String render(
@@ -35,10 +39,19 @@ public class DDMFormRendererUtil {
 			ddmForm, ddmFormFieldRenderingContext);
 	}
 
-	public void setDDMFormRenderer(DDMFormRenderer ddmFormRenderer) {
-		_ddmFormRenderer = ddmFormRenderer;
-	}
+	private static final ServiceTracker<DDMFormRenderer, DDMFormRenderer>
+		_serviceTracker;
 
-	private static DDMFormRenderer _ddmFormRenderer;
+	static {
+		Bundle bundle = FrameworkUtil.getBundle(DDMFormRenderer.class);
+
+		ServiceTracker<DDMFormRenderer, DDMFormRenderer> serviceTracker =
+			new ServiceTracker<>(
+				bundle.getBundleContext(), DDMFormRenderer.class, null);
+
+		serviceTracker.open();
+
+		_serviceTracker = serviceTracker;
+	}
 
 }

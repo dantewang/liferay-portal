@@ -14,7 +14,11 @@
 
 package com.liferay.dynamic.data.mapping.storage;
 
-import java.util.Map;
+import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
+import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 /**
  * @author Bruno Basto
@@ -22,19 +26,23 @@ import java.util.Map;
 public class FieldRendererFactory {
 
 	public static FieldRenderer getFieldRenderer(String dataType) {
-		FieldRenderer fieldRenderer = _fieldRenderers.get(dataType);
+		FieldRenderer fieldRenderer = _fieldRenderers.getService(dataType);
 
 		if (fieldRenderer == null) {
-			fieldRenderer = _fieldRenderers.get(FieldConstants.STRING);
+			fieldRenderer = _fieldRenderers.getService(FieldConstants.STRING);
 		}
 
 		return fieldRenderer;
 	}
 
-	public void setFieldRenderers(Map<String, FieldRenderer> fieldRenderers) {
-		_fieldRenderers = fieldRenderers;
-	}
+	private static final ServiceTrackerMap<String, FieldRenderer>
+		_fieldRenderers;
 
-	private static Map<String, FieldRenderer> _fieldRenderers;
+	static {
+		Bundle bundle = FrameworkUtil.getBundle(BaseFieldRenderer.class);
+
+		_fieldRenderers = ServiceTrackerMapFactory.openSingleValueMap(
+			bundle.getBundleContext(), FieldRenderer.class, "key");
+	}
 
 }

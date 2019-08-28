@@ -35,9 +35,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Sergio González
  */
+@Component(
+	immediate = true, property = "key=geolocation",
+	service = BaseFieldRenderer.class
+)
 public class GeolocationFieldRenderer extends BaseFieldRenderer {
 
 	@Override

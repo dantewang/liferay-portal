@@ -25,7 +25,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
-import com.liferay.portal.kernel.service.LayoutServiceUtil;
+import com.liferay.portal.kernel.service.LayoutService;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -35,9 +35,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 /**
  * @author Bruno Basto
  */
+@Component(
+	immediate = true, property = "key=link-to-page",
+	service = BaseFieldRenderer.class
+)
 public class LinkToPageFieldRenderer extends BaseFieldRenderer {
 
 	@Override
@@ -87,7 +94,7 @@ public class LinkToPageFieldRenderer extends BaseFieldRenderer {
 		long layoutId = jsonObject.getLong("layoutId");
 
 		try {
-			return LayoutServiceUtil.getLayoutName(
+			return _layoutService.getLayoutName(
 				groupId, privateLayout, layoutId,
 				LanguageUtil.getLanguageId(locale));
 		}
@@ -105,5 +112,8 @@ public class LinkToPageFieldRenderer extends BaseFieldRenderer {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		LinkToPageFieldRenderer.class);
+
+	@Reference
+	private LayoutService _layoutService;
 
 }

@@ -23,9 +23,12 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 
 import java.util.Locale;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Marcellus Tavares
  */
+@Component(immediate = true, service = BaseDDMFormFieldValueRenderer.class)
 public class CheckboxDDMFormFieldValueRenderer
 	extends BaseDDMFormFieldValueRenderer {
 

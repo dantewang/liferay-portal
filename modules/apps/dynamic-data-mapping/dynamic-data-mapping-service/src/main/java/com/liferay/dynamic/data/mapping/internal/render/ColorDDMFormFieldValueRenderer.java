@@ -16,9 +16,12 @@ package com.liferay.dynamic.data.mapping.internal.render;
 
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldType;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Pavel Savinov
  */
+@Component(immediate = true, service = BaseTextDDMFormFieldValueRenderer.class)
 public class ColorDDMFormFieldValueRenderer
 	extends BaseTextDDMFormFieldValueRenderer {
 

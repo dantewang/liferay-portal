@@ -30,10 +30,13 @@ import java.io.Serializable;
 
 import java.util.Locale;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Bruno Basto
  * @author Marcellus Tavares
  */
+@Component(immediate = true, service = BaseDDMFormFieldValueRenderer.class)
 public class DateDDMFormFieldValueRenderer
 	extends BaseDDMFormFieldValueRenderer {
 

@@ -29,9 +29,12 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Marcellus Tavares
  */
+@Component(immediate = true, service = DDMFormRenderer.class)
 public class DDMFormRendererImpl implements DDMFormRenderer {
 
 	@Override

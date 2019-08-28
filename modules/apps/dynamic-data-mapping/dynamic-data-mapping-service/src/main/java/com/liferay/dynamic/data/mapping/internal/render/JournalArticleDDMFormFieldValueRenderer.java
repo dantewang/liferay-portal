@@ -15,7 +15,7 @@
 package com.liferay.dynamic.data.mapping.internal.render;
 
 import com.liferay.asset.kernel.model.AssetEntry;
-import com.liferay.asset.kernel.service.AssetEntryLocalServiceUtil;
+import com.liferay.asset.kernel.service.AssetEntryLocalService;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldType;
 import com.liferay.dynamic.data.mapping.model.Value;
 import com.liferay.dynamic.data.mapping.render.BaseDDMFormFieldValueRenderer;
@@ -31,9 +31,13 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Locale;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 /**
  * @author Marcellus Tavares
  */
+@Component(immediate = true, service = BaseDDMFormFieldValueRenderer.class)
 public class JournalArticleDDMFormFieldValueRenderer
 	extends BaseDDMFormFieldValueRenderer {
 
@@ -61,7 +65,7 @@ public class JournalArticleDDMFormFieldValueRenderer
 				}
 
 				try {
-					AssetEntry assetEntry = AssetEntryLocalServiceUtil.getEntry(
+					AssetEntry assetEntry = _assetEntryLocalService.getEntry(
 						className, classPK);
 
 					return assetEntry.getTitle(locale);
@@ -83,5 +87,8 @@ public class JournalArticleDDMFormFieldValueRenderer
 
 		};
 	}
+
+	@Reference
+	private AssetEntryLocalService _assetEntryLocalService;
 
 }

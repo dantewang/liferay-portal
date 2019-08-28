@@ -28,12 +28,14 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.annotations.Component;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author Marcellus Tavares
  */
+@Component(immediate = true, service = DDMFormFieldValueRendererRegistry.class)
 public class DDMFormFieldValueRendererRegistryImpl
 	implements DDMFormFieldValueRendererRegistry {
 
@@ -67,18 +69,6 @@ public class DDMFormFieldValueRendererRegistryImpl
 
 		return ddmFormFieldValueRenderers.get(
 			ddmFormFieldValueRenderers.size() - 1);
-	}
-
-	public void setDefaultDDMFormFieldValueRenderers(
-		List<DDMFormFieldValueRenderer> ddmFormFieldValueRenderers) {
-
-		for (DDMFormFieldValueRenderer ddmFormFieldValueRenderer :
-				ddmFormFieldValueRenderers) {
-
-			_bundleContext.registerService(
-				DDMFormFieldValueRenderer.class, ddmFormFieldValueRenderer,
-				null);
-		}
 	}
 
 	private final BundleContext _bundleContext;
