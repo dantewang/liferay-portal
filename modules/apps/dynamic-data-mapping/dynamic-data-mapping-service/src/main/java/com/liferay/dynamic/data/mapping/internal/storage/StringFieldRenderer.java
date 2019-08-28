@@ -21,6 +21,7 @@ import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 import com.liferay.dynamic.data.mapping.storage.BaseFieldRenderer;
 import com.liferay.dynamic.data.mapping.storage.Field;
+import com.liferay.dynamic.data.mapping.storage.FieldRenderer;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -41,7 +42,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Bruno Basto
  */
 @Component(
-	immediate = true, property = "key=string", service = BaseFieldRenderer.class
+	immediate = true, property = "key=string", service = FieldRenderer.class
 )
 public class StringFieldRenderer extends BaseFieldRenderer {
 

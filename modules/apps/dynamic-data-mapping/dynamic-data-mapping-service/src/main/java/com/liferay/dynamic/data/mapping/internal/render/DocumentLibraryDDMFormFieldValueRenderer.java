@@ -18,6 +18,7 @@ import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldType;
 import com.liferay.dynamic.data.mapping.model.Value;
 import com.liferay.dynamic.data.mapping.render.BaseDDMFormFieldValueRenderer;
+import com.liferay.dynamic.data.mapping.render.DDMFormFieldValueRenderer;
 import com.liferay.dynamic.data.mapping.render.ValueAccessor;
 import com.liferay.dynamic.data.mapping.render.ValueAccessorException;
 import com.liferay.dynamic.data.mapping.storage.DDMFormFieldValue;
@@ -38,7 +39,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Bruno Basto
  * @author Marcellus Tavares
  */
-@Component(immediate = true, service = BaseDDMFormFieldValueRenderer.class)
+@Component(immediate = true, service = DDMFormFieldValueRenderer.class)
 public class DocumentLibraryDDMFormFieldValueRenderer
 	extends BaseDDMFormFieldValueRenderer {
 

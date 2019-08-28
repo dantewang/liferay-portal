@@ -15,6 +15,7 @@
 package com.liferay.dynamic.data.mapping.internal.render;
 
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldType;
+import com.liferay.dynamic.data.mapping.render.DDMFormFieldValueRenderer;
 import com.liferay.dynamic.data.mapping.storage.DDMFormFieldValue;
 import com.liferay.petra.string.StringPool;
 
@@ -26,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Marcellus Tavares
  */
-@Component(immediate = true, service = BaseTextDDMFormFieldValueRenderer.class)
+@Component(immediate = true, service = DDMFormFieldValueRenderer.class)
 public class TextAreaDDMFormFieldValueRenderer
 	extends BaseTextDDMFormFieldValueRenderer {
 

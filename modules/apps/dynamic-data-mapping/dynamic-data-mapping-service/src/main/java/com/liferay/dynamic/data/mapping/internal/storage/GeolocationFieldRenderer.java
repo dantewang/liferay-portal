@@ -16,6 +16,7 @@ package com.liferay.dynamic.data.mapping.internal.storage;
 
 import com.liferay.dynamic.data.mapping.storage.BaseFieldRenderer;
 import com.liferay.dynamic.data.mapping.storage.Field;
+import com.liferay.dynamic.data.mapping.storage.FieldRenderer;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONException;
@@ -42,7 +43,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	immediate = true, property = "key=geolocation",
-	service = BaseFieldRenderer.class
+	service = FieldRenderer.class
 )
 public class GeolocationFieldRenderer extends BaseFieldRenderer {
 

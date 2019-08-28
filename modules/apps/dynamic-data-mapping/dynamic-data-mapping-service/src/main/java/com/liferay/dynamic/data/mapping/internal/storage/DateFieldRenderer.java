@@ -16,6 +16,7 @@ package com.liferay.dynamic.data.mapping.internal.storage;
 
 import com.liferay.dynamic.data.mapping.storage.BaseFieldRenderer;
 import com.liferay.dynamic.data.mapping.storage.Field;
+import com.liferay.dynamic.data.mapping.storage.FieldRenderer;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -37,7 +38,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Manuel de la Peña
  */
 @Component(
-	immediate = true, property = "key=date", service = BaseFieldRenderer.class
+	immediate = true, property = "key=date", service = FieldRenderer.class
 )
 public class DateFieldRenderer extends BaseFieldRenderer {
 
