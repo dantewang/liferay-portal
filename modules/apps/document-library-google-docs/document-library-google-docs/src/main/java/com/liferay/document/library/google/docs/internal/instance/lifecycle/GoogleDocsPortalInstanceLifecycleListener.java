@@ -16,7 +16,7 @@ package com.liferay.document.library.google.docs.internal.instance.lifecycle;
 
 import com.liferay.document.library.google.docs.internal.util.GoogleDocsDLFileEntryTypeHelper;
 import com.liferay.document.library.kernel.service.DLFileEntryTypeLocalService;
-import com.liferay.dynamic.data.mapping.io.DDMFormDeserializerTracker;
+import com.liferay.dynamic.data.mapping.io.DDMFormDeserializer;
 import com.liferay.dynamic.data.mapping.kernel.DDMStructureManager;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMStructureVersionLocalService;
@@ -46,7 +46,7 @@ public class GoogleDocsPortalInstanceLifecycleListener
 			GoogleDocsDLFileEntryTypeHelper googleDocsDLFileEntryTypeHelper =
 				new GoogleDocsDLFileEntryTypeHelper(
 					company, _classNameLocalService, _ddm,
-					_ddmFormDeserializerTracker, _ddmStructureLocalService,
+					_xsdDDMFormDeserializer, _ddmStructureLocalService,
 					_dlFileEntryTypeLocalService, _userLocalService);
 
 			googleDocsDLFileEntryTypeHelper.addGoogleDocsDLFileEntryType();
@@ -76,9 +76,6 @@ public class GoogleDocsPortalInstanceLifecycleListener
 	private DDM _ddm;
 
 	@Reference
-	private DDMFormDeserializerTracker _ddmFormDeserializerTracker;
-
-	@Reference
 	private DDMStructureLocalService _ddmStructureLocalService;
 
 	@Reference
@@ -89,5 +86,8 @@ public class GoogleDocsPortalInstanceLifecycleListener
 
 	@Reference
 	private UserLocalService _userLocalService;
+
+	@Reference(target = "(ddm.form.deserializer.type=xsd)")
+	private DDMFormDeserializer _xsdDDMFormDeserializer;
 
 }
