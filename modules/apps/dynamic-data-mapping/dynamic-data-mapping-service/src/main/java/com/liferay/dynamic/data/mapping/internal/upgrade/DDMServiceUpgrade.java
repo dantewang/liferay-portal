@@ -45,7 +45,6 @@ import com.liferay.dynamic.data.mapping.internal.upgrade.v3_0_0.util.DDMTemplate
 import com.liferay.dynamic.data.mapping.internal.upgrade.v3_0_0.util.DDMTemplateVersionTable;
 import com.liferay.dynamic.data.mapping.internal.upgrade.v3_1_0.UpgradeDDMStructureLayout;
 import com.liferay.dynamic.data.mapping.io.DDMFormDeserializer;
-import com.liferay.dynamic.data.mapping.io.DDMFormDeserializerTracker;
 import com.liferay.dynamic.data.mapping.io.DDMFormLayoutSerializer;
 import com.liferay.dynamic.data.mapping.io.DDMFormLayoutSerializerTracker;
 import com.liferay.dynamic.data.mapping.io.DDMFormSerializer;
@@ -272,7 +271,7 @@ public class DDMServiceUpgrade implements UpgradeStepRegistrator {
 	}
 
 	protected DDMFormDeserializer getDDMFormJSONDeserializer() {
-		return _ddmFormDeserializerTracker.getDDMFormDeserializer("json");
+		return _jsonDDMFormDeserializer;
 	}
 
 	protected DDMFormLayoutSerializer getDDMFormLayoutSerializer() {
@@ -295,7 +294,7 @@ public class DDMServiceUpgrade implements UpgradeStepRegistrator {
 	}
 
 	protected DDMFormDeserializer getDDMFormXSDDeserializer() {
-		return _ddmFormDeserializerTracker.getDDMFormDeserializer("xsd");
+		return _xsdDDMFormDeserializer;
 	}
 
 	@Reference
@@ -315,9 +314,6 @@ public class DDMServiceUpgrade implements UpgradeStepRegistrator {
 
 	@Reference
 	private DDMExpressionFactory _ddmExpressionFactory;
-
-	@Reference
-	private DDMFormDeserializerTracker _ddmFormDeserializerTracker;
 
 	@Reference
 	private DDMFormLayoutSerializerTracker _ddmFormLayoutSerializerTracker;
@@ -349,6 +345,9 @@ public class DDMServiceUpgrade implements UpgradeStepRegistrator {
 	@Reference
 	private ExpandoValueLocalService _expandoValueLocalService;
 
+	@Reference(target = "(ddm.form.deserializer.type=json)")
+	private DDMFormDeserializer _jsonDDMFormDeserializer;
+
 	@Reference
 	private JSONFactory _jsonFactory;
 
@@ -366,5 +365,8 @@ public class DDMServiceUpgrade implements UpgradeStepRegistrator {
 
 	@Reference(target = "(dl.store.upgrade=true)")
 	private Store _store;
+
+	@Reference(target = "(ddm.form.deserializer.type=xsd)")
+	private DDMFormDeserializer _xsdDDMFormDeserializer;
 
 }
