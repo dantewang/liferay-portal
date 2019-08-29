@@ -46,6 +46,10 @@ public class ParallelDestination extends BaseAsyncDestination {
 
 				@Override
 				public void run() {
+					if (lock.isLocked()) {
+						return;
+					}
+
 					try {
 						populateThreadLocalsFromMessage(message);
 

@@ -51,6 +51,10 @@ public class SerialDestination extends BaseAsyncDestination {
 			@Override
 			public void run() {
 				try {
+					if (lock.isLocked()) {
+						return;
+					}
+
 					populateThreadLocalsFromMessage(message);
 
 					for (MessageListener messageListener : messageListeners) {

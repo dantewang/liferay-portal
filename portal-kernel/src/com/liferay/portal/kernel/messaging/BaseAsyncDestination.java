@@ -43,6 +43,7 @@ import com.liferay.registry.ServiceTrackerCustomizer;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Michael C. Han
@@ -79,9 +80,16 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 
 	@Override
 	public void destroy() {
-		super.destroy();
+		lock.lock();
 
-		serviceTracker.close();
+		try {
+			super.destroy();
+
+			serviceTracker.close();
+		}
+		finally {
+			lock.unlock();
+		}
 	}
 
 	@Override
@@ -354,6 +362,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		}
 	}
 
+	protected ReentrantLock lock = new ReentrantLock();
 	protected volatile PortalExecutorManager portalExecutorManager;
 	protected ServiceTracker<PortalExecutorManager, PortalExecutorManager>
 		serviceTracker;
