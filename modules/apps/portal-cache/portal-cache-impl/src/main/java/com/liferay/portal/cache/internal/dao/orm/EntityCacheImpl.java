@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCacheManagerListener;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
+import com.liferay.portal.kernel.dao.orm.ORMException;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.SessionFactory;
 import com.liferay.portal.kernel.log.Log;
@@ -239,6 +240,11 @@ public class EntityCacheImpl
 					session = sessionFactory.openSession();
 
 					loadResult = (Serializable)session.load(clazz, primaryKey);
+				}
+				catch (ORMException orme) {
+					if (_log.isWarnEnabled()) {
+						_log.warn(orme, orme);
+					}
 				}
 				finally {
 					if (loadResult == null) {
