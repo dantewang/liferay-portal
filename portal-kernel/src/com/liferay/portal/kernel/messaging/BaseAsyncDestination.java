@@ -75,6 +75,12 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		else {
 			_threadPoolExecutor.shutdown();
 		}
+
+		try {
+			while (!_threadPoolExecutor.awaitTermination(1, TimeUnit.SECONDS));
+		}
+		catch (InterruptedException e) {
+		}
 	}
 
 	@Override
