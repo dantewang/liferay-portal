@@ -44,6 +44,10 @@ public interface PortalCache<K extends Serializable, V> {
 	@Id
 	public String getPortalCacheName();
 
+	public default boolean isAlive() {
+		return true;
+	}
+
 	public boolean isBlocking();
 
 	public boolean isMVCC();
