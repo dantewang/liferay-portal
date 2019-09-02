@@ -29,6 +29,7 @@ import java.util.Set;
 
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
+import net.sf.ehcache.Status;
 import net.sf.ehcache.event.CacheEventListener;
 import net.sf.ehcache.event.NotificationScope;
 import net.sf.ehcache.event.RegisteredEventListeners;
@@ -70,6 +71,15 @@ public class EhcachePortalCache<K extends Serializable, V>
 	@Override
 	public String getPortalCacheName() {
 		return ehcache.getName();
+	}
+
+	@Override
+	public boolean isAlive() {
+		if (ehcache.getStatus() == Status.STATUS_ALIVE) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override

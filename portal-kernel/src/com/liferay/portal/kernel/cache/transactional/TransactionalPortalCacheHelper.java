@@ -22,6 +22,8 @@ import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
 import com.liferay.portal.kernel.cache.SkipReplicationThreadLocal;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.TransactionAttribute;
 import com.liferay.portal.kernel.transaction.TransactionDefinition;
@@ -301,6 +303,9 @@ public class TransactionalPortalCacheHelper {
 	private static final ValueEntry _NULL_HOLDER_VALUE_ENTRY = new ValueEntry(
 		_NULL_HOLDER, PortalCache.DEFAULT_TIME_TO_LIVE, false);
 
+	private static final Log _log = LogFactoryUtil.getLog(
+		TransactionalPortalCacheHelper.class);
+
 	private static final ThreadLocal<List<List<PortalCacheMap>>>
 		_backupPortalCacheMapsThreadLocal = new CentralizedThreadLocal<>(
 			TransactionalPortalCacheHelper.class.getName() +
@@ -413,27 +418,41 @@ public class TransactionalPortalCacheHelper {
 		}
 
 		protected void doCommit() {
-			if (_removeAll) {
-				if (_skipReplicator) {
-					PortalCacheHelperUtil.removeAllWithoutReplicator(
-						_portalCache);
+			try {
+				if (_removeAll) {
+					if (_skipReplicator) {
+						PortalCacheHelperUtil.removeAllWithoutReplicator(
+							_portalCache);
+					}
+					else {
+						_portalCache.removeAll();
+					}
 				}
-				else {
-					_portalCache.removeAll();
+
+				for (Map.Entry<? extends Serializable, ValueEntry> entry :
+						_uncommittedMap.entrySet()) {
+
+					ValueEntry valueEntry = entry.getValue();
+
+					if (commitByRemove) {
+						valueEntry.commitToByRemove(
+							_portalCache, entry.getKey());
+					}
+					else {
+						valueEntry.commitTo(_portalCache, entry.getKey());
+					}
 				}
 			}
+			catch (IllegalStateException ise) {
+				if (!_portalCache.isAlive()) {
+					if (_log.isDebugEnabled()) {
+						_log.debug(ise, ise);
+					}
 
-			for (Map.Entry<? extends Serializable, ValueEntry> entry :
-					_uncommittedMap.entrySet()) {
-
-				ValueEntry valueEntry = entry.getValue();
-
-				if (commitByRemove) {
-					valueEntry.commitToByRemove(_portalCache, entry.getKey());
+					return;
 				}
-				else {
-					valueEntry.commitTo(_portalCache, entry.getKey());
-				}
+
+				throw ise;
 			}
 		}
 
