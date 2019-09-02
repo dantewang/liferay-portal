@@ -23,6 +23,8 @@ import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
 import com.liferay.portal.kernel.cache.transactional.TransactionalPortalCacheHelper;
 import com.liferay.portal.kernel.model.MVCCModel;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
+import com.liferay.portal.kernel.test.CaptureHandler;
+import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.util.PropsTestUtil;
@@ -38,6 +40,8 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.FutureTask;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -88,6 +92,97 @@ public class TransactionalPortalCacheTest {
 
 		_portalCache.registerPortalCacheListener(_testCacheListener);
 		_portalCache.registerPortalCacheListener(_testCacheReplicator);
+	}
+
+	@Test
+	public void testCommitWithIllegalStateException() {
+		_setEnableTransactionalCache(true);
+
+		boolean[] alive = {true};
+		boolean[] throwException = {false};
+
+		_portalCache = new TestPortalCache<String, String>(
+			"Test Portal Cache") {
+
+			@Override
+			public boolean isAlive() {
+				return alive[0];
+			}
+
+			@Override
+			protected void doPut(String key, String value, int timeToLive) {
+				if (throwException[0]) {
+					throw new IllegalStateException("doPut");
+				}
+
+				super.doPut(key, value, timeToLive);
+			}
+
+		};
+
+		TransactionalPortalCache<String, String> transactionalPortalCache =
+			new TransactionalPortalCache<>(_portalCache, false);
+
+		// Test 1: IllegalStateException thrown when portal cache is alive
+
+		TransactionalPortalCacheHelper.begin();
+
+		transactionalPortalCache.put(_KEY_1, _VALUE_1);
+
+		throwException[0] = true;
+
+		try {
+			TransactionalPortalCacheHelper.commit(false);
+
+			Assert.fail();
+		}
+		catch (IllegalStateException ise) {
+			Assert.assertEquals("doPut", ise.getMessage());
+		}
+
+		// Test 2: IllegalStateException thrown when portal cache is not alive
+
+		alive[0] = false;
+
+		throwException[0] = false;
+
+		TransactionalPortalCacheHelper.begin();
+
+		transactionalPortalCache.put(_KEY_1, _VALUE_1);
+
+		throwException[0] = true;
+
+		TransactionalPortalCacheHelper.commit(false);
+
+		// Test 3: Logger
+
+		throwException[0] = false;
+
+		TransactionalPortalCacheHelper.begin();
+
+		transactionalPortalCache.put(_KEY_1, _VALUE_1);
+
+		throwException[0] = true;
+
+		try (CaptureHandler captureHandler =
+				JDKLoggerTestUtil.configureJDKLogger(
+					TransactionalPortalCacheHelper.class.getName(),
+					Level.FINE)) {
+
+			TransactionalPortalCacheHelper.commit(false);
+
+			List<LogRecord> logRecords = captureHandler.getLogRecords();
+
+			Assert.assertEquals(logRecords.toString(), 1, logRecords.size());
+
+			LogRecord logRecord = logRecords.get(0);
+
+			Throwable throwable = logRecord.getThrown();
+
+			Assert.assertEquals(
+				IllegalStateException.class, throwable.getClass());
+			Assert.assertEquals("doPut", throwable.getMessage());
+		}
 	}
 
 	@Test
