@@ -257,6 +257,15 @@ public class EhcachePortalCacheTest {
 	}
 
 	@Test
+	public void testIsAlive() {
+		Assert.assertTrue(_ehcachePortalCache.isAlive());
+
+		_cacheManager.removeCache(_ehcachePortalCache.getPortalCacheName());
+
+		Assert.assertFalse(_ehcachePortalCache.isAlive());
+	}
+
+	@Test
 	public void testPut() {
 		Assert.assertEquals(_VALUE_1, _ehcachePortalCache.get(_KEY_1));
 		Assert.assertNull(_ehcachePortalCache.get(_KEY_2));
