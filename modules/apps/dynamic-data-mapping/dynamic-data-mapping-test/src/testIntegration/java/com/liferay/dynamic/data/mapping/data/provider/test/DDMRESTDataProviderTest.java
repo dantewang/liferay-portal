@@ -19,6 +19,7 @@ import com.liferay.dynamic.data.mapping.data.provider.DDMDataProvider;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderException;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderRequest;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderResponse;
+import com.liferay.dynamic.data.mapping.data.provider.configuration.DDMDataProviderConfiguration;
 import com.liferay.dynamic.data.mapping.model.DDMDataProviderInstance;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.service.DDMDataProviderInstanceLocalService;
@@ -39,6 +40,7 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.test.util.ResourcePermissionTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.KeyValuePair;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -53,12 +55,17 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 
 /**
  * @author Marcellus Tavares
@@ -70,6 +77,29 @@ public class DDMRESTDataProviderTest {
 	@Rule
 	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
 		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		_configuration = _configurationAdmin.getConfiguration(
+			DDMDataProviderConfiguration.class.getName(), StringPool.QUESTION);
+
+		_configuration.update(
+			new HashMapDictionary() {
+				{
+					put("accessLocalNetwork", true);
+				}
+			});
+	}
+
+	@AfterClass
+	public static void tearDownClass() throws Exception {
+		_configuration.update(
+			new HashMapDictionary() {
+				{
+					put("accessLocalNetwork", false);
+				}
+			});
+	}
 
 	@Before
 	public void setUp() throws Exception {
@@ -508,6 +538,11 @@ public class DDMRESTDataProviderTest {
 		_originalPermissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
 	}
+
+	private static Configuration _configuration;
+
+	@Inject
+	private static ConfigurationAdmin _configurationAdmin;
 
 	@Inject(
 		filter = "ddm.data.provider.type=rest", type = DDMDataProvider.class
