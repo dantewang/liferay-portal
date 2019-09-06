@@ -17,6 +17,7 @@ package com.liferay.portal.osgi.web.servlet.jsp.compiler.internal;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.taglib.servlet.JspFactorySwapper;
 
@@ -161,6 +162,10 @@ public class JspServlet extends HttpServlet {
 		Thread currentThread = Thread.currentThread();
 
 		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+
+		SystemProperties.set(
+			"org.apache.jasper.runtime.JspFactoryImpl.USE_POOL",
+			Boolean.FALSE.toString());
 
 		try {
 			currentThread.setContextClassLoader(classLoader);
