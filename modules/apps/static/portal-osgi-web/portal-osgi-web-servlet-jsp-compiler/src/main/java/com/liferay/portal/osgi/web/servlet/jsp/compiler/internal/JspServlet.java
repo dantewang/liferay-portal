@@ -220,13 +220,7 @@ public class JspServlet extends HttpServlet {
 		sb.append(StringPool.DASH);
 		sb.append(_bundle.getVersion());
 
-		String scratchDir = sb.toString();
-
-		File file = new File(scratchDir);
-
-		file.mkdirs();
-
-		defaults.put(_INIT_PARAMETER_NAME_SCRATCH_DIR, scratchDir);
+		defaults.put(_INIT_PARAMETER_NAME_SCRATCH_DIR, sb.toString());
 
 		defaults.put(
 			TagHandlerPool.OPTION_TAGPOOL, JspTagHandlerPool.class.getName());
