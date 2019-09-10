@@ -207,6 +207,7 @@ public class JspServlet extends HttpServlet {
 		defaults.put("keepgenerated", "false");
 		defaults.put("logVerbosityLevel", "NONE");
 		defaults.put("saveBytecode", "true");
+		defaults.put("strictQuoteEscaping", "false");
 
 		StringBundler sb = new StringBundler(4);
 
