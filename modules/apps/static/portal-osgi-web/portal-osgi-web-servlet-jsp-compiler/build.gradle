@@ -9,7 +9,7 @@ classes {
 }
 
 dependencies {
-	compileInclude group: "com.liferay", name: "tomcat-jasper", version: "9.0.17.LIFERAY-PATCHED-1"
+	compileInclude group: "com.liferay", name: "tomcat-jasper", version: "9.0.17.LIFERAY-PATCHED-2"
 	compileInclude group: "org.apache.tomcat", name: "tomcat-api", version: "9.0.17"
 	compileInclude group: "org.apache.tomcat", name: "tomcat-el-api", version: "9.0.17"
 	compileInclude group: "org.apache.tomcat", name: "tomcat-jasper-el", version: "9.0.17"
