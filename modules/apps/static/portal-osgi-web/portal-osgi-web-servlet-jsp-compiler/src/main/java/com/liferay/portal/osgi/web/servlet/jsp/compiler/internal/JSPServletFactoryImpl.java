@@ -20,6 +20,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.osgi.web.servlet.JSPServletFactory;
 import com.liferay.portal.util.PropsValues;
 
@@ -53,6 +54,10 @@ public class JSPServletFactoryImpl implements JSPServletFactory {
 
 	@Activate
 	public void activate(BundleContext bundleContext) {
+		SystemProperties.set(
+			"org.apache.jasper.runtime.JspFactoryImpl.USE_POOL",
+			Boolean.FALSE.toString());
+
 		_bundleTracker = new BundleTracker<>(
 			bundleContext, Bundle.RESOLVED,
 			new JspFragmentBundleTrackerCustomizer(bundleContext));
