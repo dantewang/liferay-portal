@@ -1,0 +1,68 @@
+diff --git a/org/apache/jasper/runtime/JspApplicationContextImpl.java b/org/apache/jasper/runtime/JspApplicationContextImpl.java
+index f779b1bbdb1c..13f3ae914fe8 100644
+--- a/org/apache/jasper/runtime/JspApplicationContextImpl.java
++++ b/org/apache/jasper/runtime/JspApplicationContextImpl.java
+@@ -19,6 +19,9 @@ package org.apache.jasper.runtime;
+ import java.security.AccessController;
+ import java.security.PrivilegedAction;
+ import java.util.ArrayList;
++import java.util.Map;
++import java.util.Collections;
++import java.util.HashMap;
+ import java.util.List;
+ 
+ import javax.el.CompositeELResolver;
+@@ -45,6 +48,10 @@ public class JspApplicationContextImpl implements JspApplicationContext {
+ 
+     private static final String KEY = JspApplicationContextImpl.class.getName();
+ 
++    private static Map<ServletContext, JspApplicationContextImpl> map =
++    	Collections.synchronizedMap(
++    		new HashMap<ServletContext, JspApplicationContextImpl>());
++
+     private final ExpressionFactory expressionFactory =
+             ExpressionFactory.newInstance();
+ 
+@@ -72,15 +79,18 @@ public class JspApplicationContextImpl implements JspApplicationContext {
+         if (context == null) {
+             throw new IllegalArgumentException(Localizer.getMessage("jsp.error.nullArgument"));
+         }
+-        JspApplicationContextImpl impl = (JspApplicationContextImpl) context
+-                .getAttribute(KEY);
++        JspApplicationContextImpl impl = map.get(context);
+         if (impl == null) {
+-            impl = new JspApplicationContextImpl();
+-            context.setAttribute(KEY, impl);
++        	impl = new JspApplicationContextImpl();
++            map.put(context, impl);
+         }
+         return impl;
+     }
+ 
++    public static void removeJspApplicationContext(ServletContext context) {
++        map.remove(context);
++    }
++
+     public ELContextImpl createELContext(JspContext context) {
+         if (context == null) {
+             throw new IllegalArgumentException(Localizer.getMessage("jsp.error.nullArgument"));
+diff --git a/org/apache/jasper/servlet/JspServlet.java b/org/apache/jasper/servlet/JspServlet.java
+index baba19725243..51ca09d1672f 100644
+--- a/org/apache/jasper/servlet/JspServlet.java
++++ b/org/apache/jasper/servlet/JspServlet.java
+@@ -39,6 +39,7 @@ import org.apache.jasper.Options;
+ import org.apache.jasper.compiler.JspRuntimeContext;
+ import org.apache.jasper.compiler.Localizer;
+ import org.apache.jasper.runtime.ExceptionUtils;
++import org.apache.jasper.runtime.JspApplicationContextImpl;
+ import org.apache.jasper.security.SecurityUtil;
+ import org.apache.juli.logging.Log;
+ import org.apache.juli.logging.LogFactory;
+@@ -346,6 +347,7 @@ public class JspServlet extends HttpServlet implements PeriodicEventListener {
+             log.debug("JspServlet.destroy()");
+         }
+ 
++        JspApplicationContextImpl.removeJspApplicationContext(context);
+         rctxt.destroy();
+     }
+ 
