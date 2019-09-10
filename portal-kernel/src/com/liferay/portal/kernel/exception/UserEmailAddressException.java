@@ -136,9 +136,8 @@ public class UserEmailAddressException extends PortalException {
 		public MustNotUseCompanyMx(String emailAddress) {
 			super(
 				StringBundler.concat(
-					"Email address ", emailAddress,
-					" must not use the MX of the company or one of the " +
-						"associated mail host names"));
+					"Email address ", emailAddress, " must not use the MX of ",
+					"the company or one of the associated mail host names"));
 
 			this.emailAddress = emailAddress;
 		}

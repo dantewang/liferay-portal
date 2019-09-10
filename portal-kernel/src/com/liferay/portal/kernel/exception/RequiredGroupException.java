@@ -28,9 +28,8 @@ public class RequiredGroupException extends PortalException {
 		public MustNotDeleteCurrentGroup(long groupId) {
 			super(
 				StringBundler.concat(
-					"Site ", groupId,
-					" cannot be deleted because it is currently being " +
-						"accessed"));
+					"Site ", groupId, " cannot be deleted because it is ",
+					"currently being accessed"));
 
 			this.groupId = groupId;
 		}

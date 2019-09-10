@@ -74,9 +74,8 @@ public class PrincipalException extends PortalException {
 		public MustBeCompanyAdmin(long userId) {
 			super(
 				StringBundler.concat(
-					"User ", userId,
-					" must be the company administrator to perform the " +
-						"action"));
+					"User ", userId, " must be the company administrator to ",
+					"perform the action"));
 
 			this.userId = userId;
 		}
@@ -125,9 +124,8 @@ public class PrincipalException extends PortalException {
 		public MustBeOmniadmin(long userId) {
 			super(
 				StringBundler.concat(
-					"User ", userId,
-					" must be a universal administrator to perform the " +
-						"action"));
+					"User ", userId, " must be a universal administrator to ",
+					"perform the action"));
 
 			this.userId = userId;
 		}
