@@ -214,6 +214,8 @@ public class JspServlet extends HttpServlet {
 			"logVerbosityLevel", "NONE"
 		).put(
 			"saveBytecode", "true"
+		).put(
+			"strictQuoteEscaping", "false"
 		).build();
 
 		StringBundler sb = new StringBundler(4);
