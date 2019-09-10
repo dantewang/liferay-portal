@@ -223,6 +223,8 @@ public class JspServlet extends HttpServlet {
 			"saveBytecode", "true"
 		).put(
 			_INIT_PARAMETER_NAME_SCRATCH_DIR, sb.toString()
+		).put(
+			"strictQuoteEscaping", "false"
 		).build();
 
 		String symbolicName = _bundle.getSymbolicName();
