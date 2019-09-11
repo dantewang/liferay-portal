@@ -418,16 +418,20 @@ public class JspCompiler {
 		if (map != null) {
 			for (Map.Entry<String, String> entry : map.entrySet()) {
 				try {
-					TldResourcePath tldResourcePath = new TldResourcePath(
-						new URL(entry.getKey()), entry.getValue());
+					URL url = servletContext.getResource(entry.getValue());
 
-					uriTldResourcePathMap.put(
-						entry.getValue(), tldResourcePath);
+					if (url != null) {
+						TldResourcePath tldResourcePath = new TldResourcePath(
+							url, entry.getValue());
 
-					TldParser tldParser = new TldParser(true, false, true);
+						uriTldResourcePathMap.put(
+							entry.getValue(), tldResourcePath);
 
-					tldResourcePathTaglibXmlMap.put(
-						tldResourcePath, tldParser.parse(tldResourcePath));
+						TldParser tldParser = new TldParser(true, false, true);
+
+						tldResourcePathTaglibXmlMap.put(
+							tldResourcePath, tldParser.parse(tldResourcePath));
+					}
 				}
 				catch (Exception e) {
 					_log.error(e, e);
