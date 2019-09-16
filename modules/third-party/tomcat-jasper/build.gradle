@@ -21,6 +21,7 @@ patch {
 
 	fileNames "**/org/apache/jasper/JspCompilationContext.java"
 	fileNames "**/org/apache/jasper/runtime/JspApplicationContextImpl.java"
+	fileNames "**/org/apache/jasper/servlet/JasperLoader.java"
 	fileNames "**/org/apache/jasper/servlet/JspServlet.java"
 
 	originalLibModuleName = "tomcat-jasper"
