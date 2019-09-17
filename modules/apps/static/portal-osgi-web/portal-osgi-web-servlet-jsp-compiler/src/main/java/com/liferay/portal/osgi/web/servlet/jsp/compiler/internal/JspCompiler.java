@@ -157,8 +157,12 @@ public class JspCompiler {
 
 		_compilerOptions.add("-proc:none");
 
-		_compilerOptions.add("-extdirs");
-		_compilerOptions.add(System.getProperty("java.ext.dirs"));
+		String extDirs = System.getProperty("java.ext.dirs");
+
+		if (extDirs != null) {
+			_compilerOptions.add("-extdirs");
+			_compilerOptions.add(extDirs);
+		}
 
 		Options options = jspCompilationContext.getOptions();
 
