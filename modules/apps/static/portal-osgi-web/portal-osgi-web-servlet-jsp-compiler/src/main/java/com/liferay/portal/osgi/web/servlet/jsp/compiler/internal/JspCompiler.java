@@ -132,7 +132,8 @@ public class JspCompiler {
 							_jspCompilationContext.getServletJavaFileName()))));
 
 			if (_log.isDebugEnabled()) {
-				_log.debug("Compiling JSP: ".concat(className));
+				_log.debug(
+					"Compiling JSP: ".concat(_jspCompilationContext.getFQCN()));
 			}
 
 			if (compilationTask.call()) {
