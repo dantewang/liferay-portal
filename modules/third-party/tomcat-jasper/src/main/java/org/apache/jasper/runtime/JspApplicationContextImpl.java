@@ -19,6 +19,9 @@ package org.apache.jasper.runtime;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.el.CompositeELResolver;
@@ -44,6 +47,10 @@ import org.apache.jasper.el.JasperELResolver;
 public class JspApplicationContextImpl implements JspApplicationContext {
 
     private static final String KEY = JspApplicationContextImpl.class.getName();
+
+    private static Map<ServletContext, JspApplicationContextImpl> map =
+    	Collections.synchronizedMap(
+    		new HashMap<ServletContext, JspApplicationContextImpl>());
 
     private final ExpressionFactory expressionFactory =
             ExpressionFactory.newInstance();
@@ -72,13 +79,16 @@ public class JspApplicationContextImpl implements JspApplicationContext {
         if (context == null) {
             throw new IllegalArgumentException(Localizer.getMessage("jsp.error.nullArgument"));
         }
-        JspApplicationContextImpl impl = (JspApplicationContextImpl) context
-                .getAttribute(KEY);
+        JspApplicationContextImpl impl = map.get(context);
         if (impl == null) {
-            impl = new JspApplicationContextImpl();
-            context.setAttribute(KEY, impl);
+        	impl = new JspApplicationContextImpl();
+            map.put(context, impl);
         }
         return impl;
+    }
+
+    public static void removeJspApplicationContext(ServletContext context) {
+        map.remove(context);
     }
 
     public ELContextImpl createELContext(JspContext context) {
@@ -142,3 +152,4 @@ public class JspApplicationContextImpl implements JspApplicationContext {
     }
 
 }
+/* @generated */
