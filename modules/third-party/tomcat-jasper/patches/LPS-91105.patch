@@ -1,0 +1,269 @@
+diff --git a/org/apache/jasper/JspCompilationContext.java b/org/apache/jasper/JspCompilationContext.java
+index 9f602be3207a..966a953d90c2 100644
+--- a/org/apache/jasper/JspCompilationContext.java
++++ b/org/apache/jasper/JspCompilationContext.java
+@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
+ import java.io.IOException;
+ import java.net.JarURLConnection;
+ import java.net.MalformedURLException;
++import java.net.URI;
+ import java.net.URL;
+ import java.net.URLClassLoader;
+ import java.net.URLConnection;
+@@ -175,11 +176,30 @@ public class JspCompilationContext {
+     }
+ 
+     public ClassLoader getJspLoader() {
++        if (baseUrl == null) {
++            File file = options.getScratchDir();
++
++            URI uri = file.toURI();
++            String baseUri = uri.toString();
++            if (!baseUri.endsWith("/")) {
++                baseUri = baseUri.concat("/");
++            }
++
++            try {
++                baseUrl = new URL(baseUri);
++            }
++            catch (MalformedURLException murle) {
++                throw new IllegalArgumentException(
++                    "Unable to use " + file, murle);
++            }
++        }
++
+         if( jspLoader == null ) {
+             jspLoader = new JasperLoader
+                     (new URL[] {baseUrl},
+                             getClassLoader(),
+-                            rctxt.getPermissionCollection());
++                            rctxt.getPermissionCollection(),
++                            rctxt.getCodeSource());
+         }
+         return jspLoader;
+     }
+@@ -688,7 +708,12 @@ public class JspCompilationContext {
+         // Append servlet or tag handler path to scratch dir
+         try {
+             File base = options.getScratchDir();
+-            baseUrl = base.toURI().toURL();
++            URI uri = base.toURI();
++            String baseUri = uri.toString();
++            if (!baseUri.endsWith("/")) {
++                baseUri = baseUri.concat("/");
++            }
++            baseUrl = new URL(baseUri);
+             outputDir = base.getAbsolutePath() + File.separator + path +
+                     File.separator;
+             if (!makeOutputDir()) {
+@@ -768,3 +793,4 @@ public class JspCompilationContext {
+     }
+ }
+ 
++/* @generated */
+\ No newline at end of file
+diff --git a/org/apache/jasper/runtime/JspApplicationContextImpl.java b/org/apache/jasper/runtime/JspApplicationContextImpl.java
+index f779b1bbdb1c..2be2fe5c4920 100644
+--- a/org/apache/jasper/runtime/JspApplicationContextImpl.java
++++ b/org/apache/jasper/runtime/JspApplicationContextImpl.java
+@@ -19,6 +19,9 @@ package org.apache.jasper.runtime;
+ import java.security.AccessController;
+ import java.security.PrivilegedAction;
+ import java.util.ArrayList;
++import java.util.Map;
++import java.util.Collections;
++import java.util.HashMap;
+ import java.util.List;
+ 
+ import javax.el.CompositeELResolver;
+@@ -45,6 +48,10 @@ public class JspApplicationContextImpl implements JspApplicationContext {
+ 
+     private static final String KEY = JspApplicationContextImpl.class.getName();
+ 
++    private static Map<ServletContext, JspApplicationContextImpl> map =
++    	Collections.synchronizedMap(
++    		new HashMap<ServletContext, JspApplicationContextImpl>());
++
+     private final ExpressionFactory expressionFactory =
+             ExpressionFactory.newInstance();
+ 
+@@ -72,15 +79,18 @@ public class JspApplicationContextImpl implements JspApplicationContext {
+         if (context == null) {
+             throw new IllegalArgumentException(Localizer.getMessage("jsp.error.nullArgument"));
+         }
+-        JspApplicationContextImpl impl = (JspApplicationContextImpl) context
+-                .getAttribute(KEY);
++        JspApplicationContextImpl impl = map.get(context);
+         if (impl == null) {
+-            impl = new JspApplicationContextImpl();
+-            context.setAttribute(KEY, impl);
++        	impl = new JspApplicationContextImpl();
++            map.put(context, impl);
+         }
+         return impl;
+     }
+ 
++    public static void removeJspApplicationContext(ServletContext context) {
++        map.remove(context);
++    }
++
+     public ELContextImpl createELContext(JspContext context) {
+         if (context == null) {
+             throw new IllegalArgumentException(Localizer.getMessage("jsp.error.nullArgument"));
+@@ -142,3 +152,4 @@ public class JspApplicationContextImpl implements JspApplicationContext {
+     }
+ 
+ }
++/* @generated */
+\ No newline at end of file
+diff --git a/org/apache/jasper/servlet/JasperLoader.java b/org/apache/jasper/servlet/JasperLoader.java
+index 4f379392f2a2..c34de7064803 100644
+--- a/org/apache/jasper/servlet/JasperLoader.java
++++ b/org/apache/jasper/servlet/JasperLoader.java
+@@ -17,14 +17,19 @@
+ 
+ package org.apache.jasper.servlet;
+ 
++import java.io.ByteArrayOutputStream;
+ import java.io.IOException;
+ import java.io.InputStream;
+ import java.net.URL;
+ import java.net.URLClassLoader;
++import java.security.AccessController;
+ import java.security.CodeSource;
+ import java.security.PermissionCollection;
++import java.security.PrivilegedAction;
++import java.security.ProtectionDomain;
+ 
+ import org.apache.jasper.Constants;
++import org.apache.jasper.security.SecurityUtil;
+ 
+ /**
+  * Class loader for loading servlet class files (corresponding to JSP files)
+@@ -37,12 +42,15 @@ public class JasperLoader extends URLClassLoader {
+ 
+     private final PermissionCollection permissionCollection;
+     private final SecurityManager securityManager;
++    private final CodeSource _codeSource;
+ 
+     public JasperLoader(URL[] urls, ClassLoader parent,
+-                        PermissionCollection permissionCollection) {
++                        PermissionCollection permissionCollection,
++                        CodeSource codeSource) {
+         super(urls, parent);
+         this.permissionCollection = permissionCollection;
+         this.securityManager = System.getSecurityManager();
++        _codeSource = codeSource;
+     }
+ 
+     /**
+@@ -125,9 +133,77 @@ public class JasperLoader extends URLClassLoader {
+             return clazz;
+         }
+ 
++        String path = name.replace('.', '/') + ".class";
++
++        if (findResource(path) == null) {
++            return _loadFromParent(name, path);
++        }
++
+         return findClass(name);
+     }
+ 
++    private Class<?> _loadFromParent(String className, String path)
++        throws ClassNotFoundException {
++
++        byte[] classBytes;
++
++        InputStream inputStream = null;
++
++        if (SecurityUtil.isPackageProtectionEnabled()){
++            inputStream = AccessController.doPrivileged(
++                (PrivilegedAction<InputStream>)
++                    () -> getParent().getResourceAsStream(path));
++        }
++        else {
++            inputStream = getParent().getResourceAsStream(path);
++        }
++
++        if (inputStream == null) {
++            throw new ClassNotFoundException(className);
++        }
++
++        try {
++            try (ByteArrayOutputStream byteArrayOutputStream =
++                new ByteArrayOutputStream()) {
++
++                byte buf[] = new byte[1024];
++
++                for (int i = 0; (i = inputStream.read(buf)) != -1; ) {
++                    byteArrayOutputStream.write(buf, 0, i);
++                }
++
++                classBytes = byteArrayOutputStream.toByteArray();
++            }
++        }
++        catch (Exception e) {
++            throw new ClassNotFoundException(className, e);
++        }
++        finally {
++            if (inputStream != null) {
++                try {
++                    inputStream.close();
++                }
++                catch (IOException ioe) {
++                }
++            }
++        }
++
++        Class clazz;
++
++        if (securityManager != null) {
++            ProtectionDomain pd = new ProtectionDomain(
++                _codeSource, permissionCollection);
++
++            clazz = defineClass(
++                className, classBytes, 0, classBytes.length, pd);
++        }
++        else {
++            clazz = defineClass(className, classBytes, 0, classBytes.length);
++        }
++
++        return clazz;
++    }
++
+ 
+     /**
+      * Delegate to parent
+@@ -166,3 +242,4 @@ public class JasperLoader extends URLClassLoader {
+         return permissionCollection;
+     }
+ }
++/* @generated */
+\ No newline at end of file
+diff --git a/org/apache/jasper/servlet/JspServlet.java b/org/apache/jasper/servlet/JspServlet.java
+index baba19725243..c80b90268639 100644
+--- a/org/apache/jasper/servlet/JspServlet.java
++++ b/org/apache/jasper/servlet/JspServlet.java
+@@ -39,6 +39,7 @@ import org.apache.jasper.Options;
+ import org.apache.jasper.compiler.JspRuntimeContext;
+ import org.apache.jasper.compiler.Localizer;
+ import org.apache.jasper.runtime.ExceptionUtils;
++import org.apache.jasper.runtime.JspApplicationContextImpl;
+ import org.apache.jasper.security.SecurityUtil;
+ import org.apache.juli.logging.Log;
+ import org.apache.juli.logging.LogFactory;
+@@ -346,6 +347,7 @@ public class JspServlet extends HttpServlet implements PeriodicEventListener {
+             log.debug("JspServlet.destroy()");
+         }
+ 
++        JspApplicationContextImpl.removeJspApplicationContext(context);
+         rctxt.destroy();
+     }
+ 
+@@ -418,3 +420,4 @@ public class JspServlet extends HttpServlet implements PeriodicEventListener {
+ 
+ 
+ }
++/* @generated */
+\ No newline at end of file
