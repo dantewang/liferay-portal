@@ -1,0 +1,28 @@
+import com.liferay.gradle.plugins.patcher.PatchTask
+
+apply plugin: "com.liferay.patcher"
+
+task patch(type: PatchTask)
+
+dependencies {
+	compileOnly group: "org.apache.tomcat", name: "tomcat-api", version: "9.0.17"
+	compileOnly group: "org.apache.tomcat", name: "tomcat-el-api", version: "9.0.17"
+	compileOnly group: "org.apache.tomcat", name: "tomcat-jasper", version: "9.0.17"
+	compileOnly group: "org.apache.tomcat", name: "tomcat-jasper-el", version: "9.0.17"
+	compileOnly group: "org.apache.tomcat", name: "tomcat-juli", version: "9.0.17"
+	compileOnly group: "org.apache.tomcat", name: "tomcat-util", version: "9.0.17"
+	compileOnly group: "org.apache.tomcat", name: "tomcat-util-scan", version: "9.0.17"
+}
+
+patch {
+	ext {
+		autoClean = false
+	}
+
+	fileNames "**/org/apache/jasper/JspCompilationContext.java"
+	fileNames "**/org/apache/jasper/runtime/JspApplicationContextImpl.java"
+	fileNames "**/org/apache/jasper/servlet/JasperLoader.java"
+	fileNames "**/org/apache/jasper/servlet/JspServlet.java"
+
+	originalLibModuleName = "tomcat-jasper"
+}
