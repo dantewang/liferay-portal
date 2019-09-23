@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
@@ -175,11 +176,30 @@ public class JspCompilationContext {
     }
 
     public ClassLoader getJspLoader() {
+        if (baseUrl == null) {
+            File file = options.getScratchDir();
+
+            URI uri = file.toURI();
+            String baseUri = uri.toString();
+            if (!baseUri.endsWith("/")) {
+                baseUri = baseUri.concat("/");
+            }
+
+            try {
+                baseUrl = new URL(baseUri);
+            }
+            catch (MalformedURLException murle) {
+                throw new IllegalArgumentException(
+                    "Unable to use " + file, murle);
+            }
+        }
+
         if( jspLoader == null ) {
             jspLoader = new JasperLoader
                     (new URL[] {baseUrl},
                             getClassLoader(),
-                            rctxt.getPermissionCollection());
+                            rctxt.getPermissionCollection(),
+                            rctxt.getCodeSource());
         }
         return jspLoader;
     }
@@ -688,7 +708,12 @@ public class JspCompilationContext {
         // Append servlet or tag handler path to scratch dir
         try {
             File base = options.getScratchDir();
-            baseUrl = base.toURI().toURL();
+            URI uri = base.toURI();
+            String baseUri = uri.toString();
+            if (!baseUri.endsWith("/")) {
+                baseUri = baseUri.concat("/");
+            }
+            baseUrl = new URL(baseUri);
             outputDir = base.getAbsolutePath() + File.separator + path +
                     File.separator;
             if (!makeOutputDir()) {
@@ -768,3 +793,4 @@ public class JspCompilationContext {
     }
 }
 
+/* @generated */
