@@ -49,7 +49,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.petra.string.StringBundler;
 
 import java.io.Serializable;
 
@@ -241,8 +241,8 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 			return map;
 		}
 
-		com.liferay.petra.string.StringBundler query =
-			new com.liferay.petra.string.StringBundler(
+		StringBundler query =
+			new StringBundler(
 				2 * uncachedPrimaryKeys.size() + 4);
 
 		query.append(getSelectSQL());
@@ -578,14 +578,14 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 	}
 
 	protected void appendOrderByComparator(
-		com.liferay.petra.string.StringBundler sb, String entityAlias,
+		StringBundler sb, String entityAlias,
 		OrderByComparator<T> orderByComparator) {
 
 		appendOrderByComparator(sb, entityAlias, orderByComparator, false);
 	}
 
 	protected void appendOrderByComparator(
-		com.liferay.petra.string.StringBundler sb, String entityAlias,
+		StringBundler sb, String entityAlias,
 		OrderByComparator<T> orderByComparator, boolean sqlQuery) {
 
 		sb.append(ORDER_BY_CLAUSE);
