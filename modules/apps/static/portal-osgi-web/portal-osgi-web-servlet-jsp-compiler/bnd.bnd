@@ -76,9 +76,7 @@ Provide-Capability:\
 -includeresource:\
 	@taglibs-standard-impl-[0-9]*.jar!/META-INF/*.tld,\
 	@tomcat-api-[0-9]*.jar,\
-	@tomcat-el-api-[0-9]*.jar,\
 	@tomcat-jasper-[0-9]*.jar,\
-	@tomcat-jasper-el-[0-9]*.jar,\
 	@tomcat-juli-[0-9]*.jar,\
 	@tomcat-util-[0-9]*.jar,\
 	@tomcat-util-scan-[0-9]*.jar
