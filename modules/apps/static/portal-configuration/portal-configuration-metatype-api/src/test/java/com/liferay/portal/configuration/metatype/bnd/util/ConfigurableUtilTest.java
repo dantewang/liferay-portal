@@ -30,7 +30,6 @@ import java.lang.reflect.Field;
 
 import java.util.Collections;
 import java.util.Dictionary;
-import java.util.concurrent.FutureTask;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -100,11 +99,12 @@ public class ConfigurableUtilTest {
 	public void testCreateConfigurablewithDefinedSnapshotClass()
 		throws Exception {
 
-		FutureTask<Void> futureTask1 = _createFutureTask();
-
-		_startThread(futureTask1, "thread1");
-
-		futureTask1.get();
+		_assertTestConfiguration(
+			ConfigurableUtil.createConfigurable(
+				TestConfiguration.class,
+				Collections.singletonMap(
+					"testReqiredString", "testReqiredString")),
+			"testReqiredString");
 
 		Field field = ReflectionUtil.getDeclaredField(
 			ConfigurableUtil.class, "_findLoadedClassMethod");
@@ -116,11 +116,12 @@ public class ConfigurableUtilTest {
 			ReflectionUtil.getDeclaredMethod(
 				ClassLoader.class, "findBootstrapClass", String.class));
 
-		FutureTask<Void> futureTask2 = _createFutureTask();
-
-		_startThread(futureTask2, "thread2");
-
-		futureTask2.get();
+		_assertTestConfiguration(
+			ConfigurableUtil.createConfigurable(
+				TestConfiguration.class,
+				Collections.singletonMap(
+					"testReqiredString", "testReqiredString")),
+			"testReqiredString");
 
 		field.set(null, value);
 	}
@@ -192,26 +193,6 @@ public class ConfigurableUtilTest {
 		TestClass testClass = testConfiguration.testClass();
 
 		Assert.assertEquals("test.class", testClass.getName());
-	}
-
-	private FutureTask<Void> _createFutureTask() {
-		return new FutureTask<>(
-			() -> {
-				_assertTestConfiguration(
-					ConfigurableUtil.createConfigurable(
-						TestConfiguration.class,
-						Collections.singletonMap(
-							"testReqiredString", "testReqiredString")),
-					"testReqiredString");
-
-				return null;
-			});
-	}
-
-	private void _startThread(FutureTask<Void> futureTask, String threadName) {
-		Thread thread = new Thread(futureTask, threadName);
-
-		thread.start();
 	}
 
 	private void _testBigString(int length) {
