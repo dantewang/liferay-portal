@@ -16,6 +16,7 @@ package com.liferay.portal.configuration.metatype.bnd.util;
 
 import aQute.bnd.annotation.metatype.Meta;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
@@ -24,6 +25,8 @@ import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.test.aspects.ReflectionUtilAdvice;
 import com.liferay.portal.test.rule.AdviseWith;
 import com.liferay.portal.test.rule.AspectJNewEnvTestRule;
+
+import java.lang.reflect.Field;
 
 import java.util.Collections;
 import java.util.Dictionary;
@@ -90,6 +93,37 @@ public class ConfigurableUtilTest {
 				Collections.singletonMap(
 					"testReqiredString", "testReqiredString2")),
 			"testReqiredString2");
+	}
+
+	@Test
+	public void testCreateConfigurablewithDefinedSnapshotClass()
+		throws Exception {
+
+		_assertTestConfiguration(
+			ConfigurableUtil.createConfigurable(
+				TestConfiguration.class,
+				Collections.singletonMap(
+					"testReqiredString", "testReqiredString")),
+			"testReqiredString");
+
+		Field field = ReflectionUtil.getDeclaredField(
+			ConfigurableUtil.class, "_findLoadedClassMethod");
+
+		Object value = field.get(null);
+
+		field.set(
+			null,
+			ReflectionUtil.getDeclaredMethod(
+				ClassLoader.class, "findBootstrapClass", String.class));
+
+		_assertTestConfiguration(
+			ConfigurableUtil.createConfigurable(
+				TestConfiguration.class,
+				Collections.singletonMap(
+					"testReqiredString", "testReqiredString")),
+			"testReqiredString");
+
+		field.set(null, value);
 	}
 
 	@Test
