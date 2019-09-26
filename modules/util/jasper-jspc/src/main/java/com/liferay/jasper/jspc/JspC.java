@@ -28,8 +28,6 @@ import java.net.URLClassLoader;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.jasper.JasperException;
-
 /**
  * @author Shuyang Zhou
  */
@@ -69,10 +67,8 @@ public class JspC extends org.apache.jasper.JspC {
 
 				noDieLevelField.setAccessible(true);
 
-				int dieLevel = jspC.getDieLevel();
-
-				if (dieLevel != (Integer)noDieLevelField.get(null)) {
-					System.exit(dieLevel);
+				if (jspC.dieLevel != (Integer)noDieLevelField.get(null)) {
+					System.exit(jspC.dieLevel);
 				}
 			}
 			catch (Exception exception2) {
@@ -102,8 +98,8 @@ public class JspC extends org.apache.jasper.JspC {
 	}
 
 	@Override
-	public void scanFiles(File baseDir) throws JasperException {
-		super.scanFiles(baseDir);
+	public void scanFiles() {
+		super.scanFiles();
 
 		Iterator<String> iterator = _pages.iterator();
 
