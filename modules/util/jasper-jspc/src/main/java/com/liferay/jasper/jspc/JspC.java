@@ -36,7 +36,7 @@ import java.util.List;
 public class JspC extends org.apache.jasper.JspC {
 
 	public static void main(String[] args) {
-		List<String> argList = new ArrayList<String>(Arrays.asList(args));
+		List<String> argList = new ArrayList<>(Arrays.asList(args));
 
 		argList.add("-no-strictQuoteEscaping");
 

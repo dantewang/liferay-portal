@@ -1,5 +1,5 @@
-sourceCompatibility = "1.6"
-targetCompatibility = "1.6"
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
 
 dependencies {
 	compile group: "com.liferay", name: "com.liferay.portal.osgi.web.servlet.jsp.compiler", version: "5.0.0"
