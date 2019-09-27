@@ -6,33 +6,39 @@
 package com.liferay.portal.osgi.web.servlet.jsp.compiler.internal;
 
 import com.liferay.petra.string.CharPool;
-import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.URLUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.net.URLConnection;
 
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaFileObject;
 
 import org.apache.jasper.EmbeddedServletOptions;
 import org.apache.jasper.JasperException;
 import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.Compiler;
+import org.apache.jasper.compiler.ErrorDispatcher;
+import org.apache.jasper.compiler.JavacErrorDetail;
 import org.apache.jasper.compiler.JspRuntimeContext;
+import org.apache.jasper.compiler.Localizer;
+import org.apache.jasper.compiler.SmapStratum;
+import org.apache.jasper.compiler.SmapUtil;
 import org.apache.jasper.servlet.JspServletWrapper;
 
 /**
@@ -40,25 +46,13 @@ import org.apache.jasper.servlet.JspServletWrapper;
  */
 public class CompilerWrapper extends Compiler {
 
-	public CompilerWrapper(
-			JspCompilationContext jspCompilationContext,
-			JspServletWrapper jspServletWrapper, boolean jspcMode)
-		throws JasperException {
-
-		super(jspCompilationContext, jspServletWrapper, jspcMode);
-	}
-
 	@Override
 	public void compile(boolean compileClass) throws Exception {
-		String className = ctxt.getFullClassName();
+		String className = ctxt.getFQCN();
 
 		JSPClassInfo jspClassInfo = _jspClassInfos.get(className);
 
 		if (jspClassInfo != null) {
-			JspRuntimeContext jspRuntimeContext = ctxt.getRuntimeContext();
-
-			jspRuntimeContext.setBytecode(className, jspClassInfo.getBytes());
-
 			return;
 		}
 
@@ -66,8 +60,20 @@ public class CompilerWrapper extends Compiler {
 	}
 
 	@Override
+	public void init(
+		JspCompilationContext jspCompilationContext,
+		JspServletWrapper jspServletWrapper) {
+
+		super.init(jspCompilationContext, jspServletWrapper);
+
+		_jspCompiler = new JspCompiler();
+
+		_jspCompiler.init(jspCompilationContext);
+	}
+
+	@Override
 	public boolean isOutDated() {
-		String className = ctxt.getFullClassName();
+		String className = ctxt.getFQCN();
 
 		URL url = _getClassURL(className);
 
@@ -86,26 +92,13 @@ public class CompilerWrapper extends Compiler {
 				return false;
 			}
 
-			URLConnection urlConnection = url.openConnection();
+			String protocol = url.getProtocol();
 
-			try (InputStream inputStream = urlConnection.getInputStream();
-				UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
-					new UnsyncByteArrayOutputStream()) {
+			_jspClassInfos.put(
+				className,
+				new JSPClassInfo(protocol.equals("file"), lastModified));
 
-				StreamUtil.transfer(
-					inputStream, unsyncByteArrayOutputStream, false);
-
-				byte[] bytes = unsyncByteArrayOutputStream.toByteArray();
-
-				String protocol = url.getProtocol();
-
-				_jspClassInfos.put(
-					className,
-					new JSPClassInfo(
-						bytes, protocol.equals("file"), lastModified));
-
-				return true;
-			}
+			return true;
 		}
 		catch (IOException ioException) {
 			_log.error(
@@ -114,6 +107,65 @@ public class CompilerWrapper extends Compiler {
 		}
 
 		return super.isOutDated();
+	}
+
+	@Override
+	public void removeGeneratedFiles() {
+		JSPClassInfo jspClassInfo = _jspClassInfos.get(ctxt.getFQCN());
+
+		if (jspClassInfo != null) {
+			return;
+		}
+
+		super.removeGeneratedFiles();
+	}
+
+	@Override
+	protected void generateClass(Map<String, SmapStratum> smaps)
+		throws Exception {
+
+		DiagnosticCollector<JavaFileObject> diagnosticCollector =
+			_jspCompiler.compile(ctxt.getServletClassName(), errDispatcher);
+
+		if (!ctxt.keepGenerated()) {
+			File javaFile = new File(ctxt.getServletJavaFileName());
+
+			if (!javaFile.delete()) {
+				throw new JasperException(
+					Localizer.getMessage(
+						"jsp.warning.compiler.javafile.delete.fail", javaFile));
+			}
+		}
+
+		if (diagnosticCollector != null) {
+			List<Diagnostic<? extends JavaFileObject>> diagnostics =
+				diagnosticCollector.getDiagnostics();
+
+			JavacErrorDetail[] javacErrorDetails =
+				new JavacErrorDetail[diagnostics.size()];
+
+			for (int i = 0; i < diagnostics.size(); i++) {
+				Diagnostic<? extends JavaFileObject> diagnostic =
+					diagnostics.get(i);
+
+				javacErrorDetails[i] = ErrorDispatcher.createJavacError(
+					ctxt.getServletJavaFileName(), pageNodes,
+					new StringBuilder(diagnostic.getMessage(null)),
+					(int)diagnostic.getLineNumber());
+			}
+
+			errDispatcher.javacError(javacErrorDetails);
+
+			return;
+		}
+
+		if (ctxt.isPrototypeMode()) {
+			return;
+		}
+
+		if (!options.isSmapSuppressed()) {
+			SmapUtil.installSmap(smaps);
+		}
 	}
 
 	private URL _getClassURL(String className) {
@@ -191,12 +243,9 @@ public class CompilerWrapper extends Compiler {
 
 	private final Map<String, JSPClassInfo> _jspClassInfos =
 		new ConcurrentHashMap<>();
+	private JspCompiler _jspCompiler;
 
 	private class JSPClassInfo {
-
-		public byte[] getBytes() {
-			return _bytes;
-		}
 
 		public long getLastModified() {
 			return _lastModified;
@@ -206,15 +255,11 @@ public class CompilerWrapper extends Compiler {
 			return _override;
 		}
 
-		private JSPClassInfo(
-			byte[] bytes, boolean override, long lastModified) {
-
-			_bytes = bytes;
+		private JSPClassInfo(boolean override, long lastModified) {
 			_override = override;
 			_lastModified = lastModified;
 		}
 
-		private final byte[] _bytes;
 		private final long _lastModified;
 		private final boolean _override;
 

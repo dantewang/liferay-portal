@@ -13,6 +13,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.taglib.servlet.JspFactorySwapper;
 
@@ -34,6 +35,8 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,8 +58,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspFactory;
 
+import org.apache.jasper.EmbeddedServletOptions;
+import org.apache.jasper.runtime.JspApplicationContextImpl;
 import org.apache.jasper.runtime.JspFactoryImpl;
 import org.apache.jasper.runtime.TagHandlerPool;
+import org.apache.juli.logging.LogFactory;
+import org.apache.tomcat.InstanceManager;
+import org.apache.tomcat.SimpleInstanceManager;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
@@ -140,6 +148,9 @@ public class JspServlet extends HttpServlet {
 
 		final ServletContext servletContext = servletConfig.getServletContext();
 
+		servletContext.setAttribute(
+			InstanceManager.class.getName(), new SimpleInstanceManager());
+
 		ClassLoader classLoader = servletContext.getClassLoader();
 
 		if (!(classLoader instanceof BundleReference)) {
@@ -181,7 +192,7 @@ public class JspServlet extends HttpServlet {
 		).put(
 			"compilerClassName",
 			"com.liferay.portal.osgi.web.servlet.jsp.compiler.internal." +
-				"JspCompiler"
+				"CompilerWrapper"
 		).put(
 			"compilerSourceVM", "1.8"
 		).put(
@@ -191,15 +202,13 @@ public class JspServlet extends HttpServlet {
 		).put(
 			"httpMethods", "GET,POST,HEAD"
 		).put(
-			"jspCompilerClassName",
-			"com.liferay.portal.osgi.web.servlet.jsp.compiler.internal." +
-				"CompilerWrapper"
-		).put(
 			"keepgenerated", "false"
 		).put(
 			"logVerbosityLevel", "NONE"
 		).put(
 			"saveBytecode", "true"
+		).put(
+			"strictQuoteEscaping", "false"
 		).build();
 
 		if (_fragmentHosts.contains(_bundle.getSymbolicName())) {
@@ -354,6 +363,9 @@ public class JspServlet extends HttpServlet {
 
 	private static final String _INIT_PARAMETER_NAME_SCRATCH_DIR = "scratchdir";
 
+	private static final String _KEY =
+		JspApplicationContextImpl.class.getName();
+
 	private static final String _WORK_DIR = StringBundler.concat(
 		PropsValues.LIFERAY_HOME, File.separator, "work", File.separator);
 
@@ -365,8 +377,18 @@ public class JspServlet extends HttpServlet {
 		JspServlet.class);
 	private static final Pattern _originalJspPattern = Pattern.compile(
 		"^(?<file>.*)(\\.(portal|original))(?<extension>\\.(jsp|jspf))$");
+	private static volatile String _prefixedKey;
 	private static final Bundle _utilTaglibBundle = FrameworkUtil.getBundle(
 		JspFactorySwapper.class);
+
+	static {
+		if (!ServerDetector.isTomcat()) {
+			Logger logger = Logger.getLogger(
+				EmbeddedServletOptions.class.getName());
+
+			logger.setLevel(Level.OFF);
+		}
+	}
 
 	private Bundle[] _allParticipatingBundles;
 	private Bundle _bundle;
@@ -483,6 +505,10 @@ public class JspServlet extends HttpServlet {
 
 		@Override
 		public Object getAttribute(String name) {
+			if (Objects.equals(_KEY, name)) {
+				return _servletContext.getAttribute(_getPrefixedKey());
+			}
+
 			return _servletContext.getAttribute(name);
 		}
 
@@ -769,6 +795,12 @@ public class JspServlet extends HttpServlet {
 
 		@Override
 		public void setAttribute(String name, Object value) {
+			if (Objects.equals(_KEY, name)) {
+				_servletContext.setAttribute(_getPrefixedKey(), value);
+
+				return;
+			}
+
 			_servletContext.setAttribute(name, value);
 		}
 
@@ -815,6 +847,16 @@ public class JspServlet extends HttpServlet {
 			List<URL> urls = Collections.list(enumeration);
 
 			return urls.get(urls.size() - 1);
+		}
+
+		private String _getPrefixedKey() {
+			if (_prefixedKey == null) {
+				_prefixedKey = StringBundler.concat(
+					_bundle.getSymbolicName(), StringPool.DASH,
+					_bundle.getVersion(), StringPool.DASH, _KEY);
+			}
+
+			return _prefixedKey;
 		}
 
 		private final String _contextPath;
