@@ -384,7 +384,9 @@ public class JspCompiler {
 
 			String uri = TldURIUtil.getTldURI(url);
 
-			if (uri != null) {
+			if ((uri != null) &&
+				!uriTldResourcePathMap.containsKey(uri.trim())) {
+
 				try {
 					String absoluteResourcePath = StringPool.SLASH.concat(
 						resourcePath);
@@ -392,7 +394,38 @@ public class JspCompiler {
 					TldResourcePath tldResourcePath = new TldResourcePath(
 						url, absoluteResourcePath);
 
-					uriTldResourcePathMap.put(uri, tldResourcePath);
+					uriTldResourcePathMap.put(uri.trim(), tldResourcePath);
+
+					TldParser tldParser = new TldParser(true, false, true);
+
+					tldResourcePathTaglibXmlMap.put(
+						tldResourcePath, tldParser.parse(tldResourcePath));
+				}
+				catch (SAXException saxe) {
+					_log.error(saxe, saxe);
+				}
+			}
+		}
+
+		List<URL> urls = new ArrayList<>(
+			bundleWiring.findEntries(
+				"/META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
+
+		urls.addAll(
+			bundleWiring.findEntries(
+				"/WEB-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
+
+		for (URL url : urls) {
+			String uri = TldURIUtil.getTldURI(url);
+
+			if ((uri != null) &&
+				!uriTldResourcePathMap.containsKey(uri.trim())) {
+
+				try {
+					TldResourcePath tldResourcePath = new TldResourcePath(
+						url, url.getPath());
+
+					uriTldResourcePathMap.put(uri.trim(), tldResourcePath);
 
 					TldParser tldParser = new TldParser(true, false, true);
 
