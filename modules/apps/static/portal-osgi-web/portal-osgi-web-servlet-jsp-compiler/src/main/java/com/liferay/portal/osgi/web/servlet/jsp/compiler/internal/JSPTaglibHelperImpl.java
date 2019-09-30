@@ -24,6 +24,7 @@ import java.io.InputStream;
 
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -55,12 +56,13 @@ public class JSPTaglibHelperImpl implements JSPTaglibHelper {
 
 		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
 
-		Collection<String> resources = bundleWiring.listResources(
-			"META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE);
+		Collection<String> resources = new ArrayList<>(
+			bundleWiring.listResources(
+				"META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
 
-		if (resources == null) {
-			return;
-		}
+		resources.addAll(
+			bundleWiring.listResources(
+				"WEB-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
 
 		for (String resource : resources) {
 			URL url = bundle.getResource(resource);
@@ -80,7 +82,43 @@ public class JSPTaglibHelperImpl implements JSPTaglibHelper {
 					String listenerClassName = listenerElement.elementText(
 						"listener-class");
 
-					if (Validator.isNull(listenerClassName)) {
+					if (Validator.isNull(listenerClassName) ||
+						listenerClassNames.contains(listenerClassName)) {
+
+						continue;
+					}
+
+					listenerClassNames.add(listenerClassName);
+				}
+			}
+			catch (Exception e) {
+				servletContext.log(e.getMessage(), e);
+			}
+		}
+
+		Collection<URL> urls = new ArrayList<>(
+			bundleWiring.findEntries(
+				"META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
+
+		urls.addAll(
+			bundleWiring.findEntries(
+				"WEB-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
+
+		for (URL url : urls) {
+			try (InputStream inputStream = url.openStream()) {
+				Document document = SAXReaderUtil.read(inputStream);
+
+				Element rootElement = document.getRootElement();
+
+				for (Element listenerElement :
+						rootElement.elements("listener")) {
+
+					String listenerClassName = listenerElement.elementText(
+						"listener-class");
+
+					if (Validator.isNull(listenerClassName) ||
+						listenerClassNames.contains(listenerClassName)) {
+
 						continue;
 					}
 
