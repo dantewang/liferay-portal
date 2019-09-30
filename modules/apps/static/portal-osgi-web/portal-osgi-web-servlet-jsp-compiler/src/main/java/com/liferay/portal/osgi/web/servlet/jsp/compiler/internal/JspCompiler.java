@@ -382,29 +382,9 @@ public class JspCompiler {
 		for (String resourcePath : resourcePaths) {
 			URL url = bundle.getResource(resourcePath);
 
-			String uri = TldURIUtil.getTldURI(url);
-
-			if ((uri != null) &&
-				!uriTldResourcePathMap.containsKey(uri.trim())) {
-
-				try {
-					String absoluteResourcePath = StringPool.SLASH.concat(
-						resourcePath);
-
-					TldResourcePath tldResourcePath = new TldResourcePath(
-						url, absoluteResourcePath);
-
-					uriTldResourcePathMap.put(uri.trim(), tldResourcePath);
-
-					TldParser tldParser = new TldParser(true, false, true);
-
-					tldResourcePathTaglibXmlMap.put(
-						tldResourcePath, tldParser.parse(tldResourcePath));
-				}
-				catch (SAXException saxe) {
-					_log.error(saxe, saxe);
-				}
-			}
+			_populateTldMappings(
+				uriTldResourcePathMap, tldResourcePathTaglibXmlMap,
+				StringPool.SLASH.concat(resourcePath), url);
 		}
 
 		List<URL> urls = new ArrayList<>(
@@ -416,26 +396,9 @@ public class JspCompiler {
 				"/WEB-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
 
 		for (URL url : urls) {
-			String uri = TldURIUtil.getTldURI(url);
-
-			if ((uri != null) &&
-				!uriTldResourcePathMap.containsKey(uri.trim())) {
-
-				try {
-					TldResourcePath tldResourcePath = new TldResourcePath(
-						url, url.getPath());
-
-					uriTldResourcePathMap.put(uri.trim(), tldResourcePath);
-
-					TldParser tldParser = new TldParser(true, false, true);
-
-					tldResourcePathTaglibXmlMap.put(
-						tldResourcePath, tldParser.parse(tldResourcePath));
-				}
-				catch (SAXException saxe) {
-					_log.error(saxe, saxe);
-				}
-			}
+			_populateTldMappings(
+				uriTldResourcePathMap, tldResourcePathTaglibXmlMap,
+				url.getPath(), url);
 		}
 	}
 
@@ -540,6 +503,34 @@ public class JspCompiler {
 		_bundleWiringPackageNamesCache.put(bundleWiring, packageNames);
 
 		return packageNames;
+	}
+
+	private void _populateTldMappings(
+			Map<String, TldResourcePath> uriTldResourcePathMap,
+			Map<TldResourcePath, TaglibXml> tldResourcePathTaglibXmlMap,
+			String absoluteResourcePath, URL url)
+		throws IOException {
+
+		String uri = TldURIUtil.getTldURI(url);
+
+		uri = uri.trim();
+
+		if ((uri != null) && !uriTldResourcePathMap.containsKey(uri)) {
+			try {
+				TldResourcePath tldResourcePath = new TldResourcePath(
+					url, absoluteResourcePath);
+
+				uriTldResourcePathMap.put(uri, tldResourcePath);
+
+				TldParser tldParser = new TldParser(true, false, true);
+
+				tldResourcePathTaglibXmlMap.put(
+					tldResourcePath, tldParser.parse(tldResourcePath));
+			}
+			catch (SAXException saxe) {
+				_log.error(saxe, saxe);
+			}
+		}
 	}
 
 	private static final String[] _JSP_COMPILER_DEPENDENCIES = {

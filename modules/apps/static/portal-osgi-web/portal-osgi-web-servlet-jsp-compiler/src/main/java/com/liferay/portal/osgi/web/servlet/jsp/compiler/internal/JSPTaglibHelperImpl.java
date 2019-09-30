@@ -71,29 +71,7 @@ public class JSPTaglibHelperImpl implements JSPTaglibHelper {
 				continue;
 			}
 
-			try (InputStream inputStream = url.openStream()) {
-				Document document = SAXReaderUtil.read(inputStream);
-
-				Element rootElement = document.getRootElement();
-
-				for (Element listenerElement :
-						rootElement.elements("listener")) {
-
-					String listenerClassName = listenerElement.elementText(
-						"listener-class");
-
-					if (Validator.isNull(listenerClassName) ||
-						listenerClassNames.contains(listenerClassName)) {
-
-						continue;
-					}
-
-					listenerClassNames.add(listenerClassName);
-				}
-			}
-			catch (Exception e) {
-				servletContext.log(e.getMessage(), e);
-			}
+			_addListenerClassNames(servletContext, listenerClassNames, url);
 		}
 
 		Collection<URL> urls = new ArrayList<>(
@@ -105,29 +83,34 @@ public class JSPTaglibHelperImpl implements JSPTaglibHelper {
 				"WEB-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
 
 		for (URL url : urls) {
-			try (InputStream inputStream = url.openStream()) {
-				Document document = SAXReaderUtil.read(inputStream);
+			_addListenerClassNames(servletContext, listenerClassNames, url);
+		}
+	}
 
-				Element rootElement = document.getRootElement();
+	private void _addListenerClassNames(
+		ServletContext servletContext, List<String> listenerClassNames,
+		URL url) {
 
-				for (Element listenerElement :
-						rootElement.elements("listener")) {
+		try (InputStream inputStream = url.openStream()) {
+			Document document = SAXReaderUtil.read(inputStream);
 
-					String listenerClassName = listenerElement.elementText(
-						"listener-class");
+			Element rootElement = document.getRootElement();
 
-					if (Validator.isNull(listenerClassName) ||
-						listenerClassNames.contains(listenerClassName)) {
+			for (Element listenerElement : rootElement.elements("listener")) {
+				String listenerClassName = listenerElement.elementText(
+					"listener-class");
 
-						continue;
-					}
+				if (Validator.isNull(listenerClassName) ||
+					listenerClassNames.contains(listenerClassName)) {
 
-					listenerClassNames.add(listenerClassName);
+					continue;
 				}
+
+				listenerClassNames.add(listenerClassName);
 			}
-			catch (Exception e) {
-				servletContext.log(e.getMessage(), e);
-			}
+		}
+		catch (Exception e) {
+			servletContext.log(e.getMessage(), e);
 		}
 	}
 
