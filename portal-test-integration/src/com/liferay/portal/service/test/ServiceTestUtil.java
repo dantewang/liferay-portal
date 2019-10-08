@@ -78,7 +78,10 @@ import java.util.function.Function;
  * @author Michael Young
  * @author Alexander Chow
  * @author Manuel de la Peña
+ * @deprecated As of Mueller (7.2.x), replaced by {@link
+ *             com.liferay.portal.kernel.service.test.ServiceTestUtil}
  */
+@Deprecated
 public class ServiceTestUtil {
 
 	public static final int RETRY_COUNT = 10;
