@@ -18,7 +18,10 @@ import com.liferay.portal.kernel.dao.db.DBType;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             ExpectedDBType}
  */
+@Deprecated
 public enum ExpectedDBType {
 
 	DB2(DBType.DB2), HYPERSONIC(DBType.HYPERSONIC), MARIADB(DBType.MARIADB),

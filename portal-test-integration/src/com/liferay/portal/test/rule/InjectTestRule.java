@@ -20,7 +20,10 @@ import org.junit.runner.Description;
 
 /**
  * @author Preston Crary
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             InjectTestRule}
  */
+@Deprecated
 public class InjectTestRule
 	extends AbstractTestRule<InjectTestBag, InjectTestBag> {
 

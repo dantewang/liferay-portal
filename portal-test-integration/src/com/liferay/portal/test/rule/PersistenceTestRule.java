@@ -29,7 +29,10 @@ import org.junit.runner.Description;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             PersistenceTestRule}
  */
+@Deprecated
 public class PersistenceTestRule extends AbstractTestRule<Object, Object> {
 
 	public static final PersistenceTestRule INSTANCE =

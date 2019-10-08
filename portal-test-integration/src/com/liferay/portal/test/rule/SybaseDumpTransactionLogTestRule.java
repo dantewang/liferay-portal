@@ -29,7 +29,10 @@ import org.junit.runner.Description;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             SybaseDumpTransactionLogTestRule}
  */
+@Deprecated
 public class SybaseDumpTransactionLogTestRule
 	extends AbstractTestRule<Void, Void> {
 

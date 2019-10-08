@@ -33,7 +33,10 @@ import org.apache.tika.sax.WriteOutContentHandler;
 
 /**
  * @author Matthew Tambara
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             TikaSafeRandomizerBumper}
  */
+@Deprecated
 public class TikaSafeRandomizerBumper implements RandomizerBumper<byte[]> {
 
 	public static final TikaSafeRandomizerBumper INSTANCE =

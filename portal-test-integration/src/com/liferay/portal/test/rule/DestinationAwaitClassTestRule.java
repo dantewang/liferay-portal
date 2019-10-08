@@ -30,7 +30,10 @@ import org.junit.runner.Description;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             DestinationAwaitClassTestRule}
  */
+@Deprecated
 public class DestinationAwaitClassTestRule
 	extends ClassTestRule<Set<CountDownLatch>> {
 

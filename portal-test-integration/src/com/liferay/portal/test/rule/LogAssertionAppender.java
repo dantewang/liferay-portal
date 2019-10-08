@@ -23,7 +23,10 @@ import org.apache.log4j.spi.ThrowableInformation;
 
 /**
  * @author William Newbury
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             LogAssertionAppender}
  */
+@Deprecated
 public class LogAssertionAppender extends AppenderSkeleton {
 
 	public static final LogAssertionAppender INSTANCE =

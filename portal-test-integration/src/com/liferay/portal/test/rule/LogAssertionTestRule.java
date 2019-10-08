@@ -39,7 +39,10 @@ import org.junit.runner.Description;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             LogAssertionTestRule}
  */
+@Deprecated
 public class LogAssertionTestRule
 	extends AbstractTestRule<List<CaptureAppender>, List<CaptureAppender>> {
 

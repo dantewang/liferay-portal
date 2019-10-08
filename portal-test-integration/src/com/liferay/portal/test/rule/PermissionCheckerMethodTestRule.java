@@ -25,7 +25,10 @@ import org.junit.runner.Description;
 
 /**
  * @author Tom Wang
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             PermissionCheckerMethodTestRule}
  */
+@Deprecated
 public class PermissionCheckerMethodTestRule extends MethodTestRule<Void> {
 
 	public static final PermissionCheckerMethodTestRule INSTANCE =

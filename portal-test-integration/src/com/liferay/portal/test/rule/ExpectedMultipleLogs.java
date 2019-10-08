@@ -22,7 +22,10 @@ import java.lang.annotation.Target;
 
 /**
  * @author Matthew Tambara
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             ExpectedMultipleLogs}
  */
+@Deprecated
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

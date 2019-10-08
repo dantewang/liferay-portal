@@ -16,7 +16,10 @@ package com.liferay.portal.test.rule;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             com.liferay.portal.test.rule.ExpectedType}
  */
+@Deprecated
 public enum ExpectedType {
 
 	CONTAINS, EXACT, POSTFIX, PREFIX

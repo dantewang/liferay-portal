@@ -37,7 +37,10 @@ import java.util.stream.Stream;
 
 /**
  * @author Preston Crary
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             InjectTestBag}
  */
+@Deprecated
 public class InjectTestBag {
 
 	public InjectTestBag(Class<?> testClass) throws Exception {

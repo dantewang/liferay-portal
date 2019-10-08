@@ -22,7 +22,10 @@ import com.liferay.portal.model.impl.LayoutImpl;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             FriendlyURLRandomizerBumper}
  */
+@Deprecated
 public class FriendlyURLRandomizerBumper implements RandomizerBumper<String> {
 
 	public static final FriendlyURLRandomizerBumper INSTANCE =

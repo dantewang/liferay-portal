@@ -23,7 +23,10 @@ import java.lang.annotation.Target;
 
 /**
  * @author Matthew Tambara
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             SybaseDumpTransactionLog}
  */
+@Deprecated
 @Documented
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)

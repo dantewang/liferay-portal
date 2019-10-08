@@ -16,7 +16,10 @@ package com.liferay.portal.test.rule;
 
 /**
  * @author Matthew Tambara
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             com.liferay.portal.test.rule.SybaseDump}
  */
+@Deprecated
 public enum SybaseDump {
 
 	CLASS, METHOD, NONE

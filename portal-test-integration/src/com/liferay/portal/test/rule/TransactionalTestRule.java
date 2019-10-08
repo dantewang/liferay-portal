@@ -51,7 +51,10 @@ import org.junit.runners.model.Statement;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             TransactionalTestRule}
  */
+@Deprecated
 public class TransactionalTestRule implements TestRule {
 
 	public static final TransactionalTestRule INSTANCE =

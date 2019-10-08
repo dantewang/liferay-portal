@@ -32,7 +32,10 @@ import org.apache.log4j.spi.LoggingEvent;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             CaptureAppender}
  */
+@Deprecated
 public class CaptureAppender extends AppenderSkeleton implements Closeable {
 
 	public CaptureAppender(Logger logger) {

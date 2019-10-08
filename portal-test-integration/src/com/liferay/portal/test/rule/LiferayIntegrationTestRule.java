@@ -27,7 +27,10 @@ import org.junit.rules.TestRule;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             LiferayIntegrationTestRule}
  */
+@Deprecated
 public class LiferayIntegrationTestRule extends AggregateTestRule {
 
 	public LiferayIntegrationTestRule() {

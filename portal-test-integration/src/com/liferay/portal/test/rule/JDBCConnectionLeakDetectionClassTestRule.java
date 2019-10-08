@@ -30,7 +30,10 @@ import org.junit.runner.Description;
 
 /**
  * @author Tom Wang
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             JDBCConnectionLeakDetectionClassTestRule}
  */
+@Deprecated
 public class JDBCConnectionLeakDetectionClassTestRule
 	extends ClassTestRule<Collection<ServiceReference<ConnectionPoolMetrics>>> {
 

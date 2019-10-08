@@ -24,7 +24,10 @@ import org.apache.log4j.Logger;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             Log4JLoggerTestUtil}
  */
+@Deprecated
 public class Log4JLoggerTestUtil {
 
 	public static CaptureAppender configureLog4JLogger(
