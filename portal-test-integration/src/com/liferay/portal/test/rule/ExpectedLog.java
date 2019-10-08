@@ -22,7 +22,10 @@ import java.lang.annotation.Target;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Mueller (7.2.x), replaced by {@link
+ *             ExpectedLog}
  */
+@Deprecated
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

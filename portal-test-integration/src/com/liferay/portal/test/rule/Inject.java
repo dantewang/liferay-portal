@@ -21,7 +21,10 @@ import java.lang.annotation.Target;
 
 /**
  * @author Preston Crary
+ * @deprecated As of Mueller (7.2.x), replaced by {@link
+ *             Inject}
  */
+@Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Inject {

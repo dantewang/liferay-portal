@@ -24,7 +24,10 @@ import org.junit.runner.Description;
  * @author Manuel de la Peña
  * @author Roberto Díaz
  * @author Shuyang Zhou
+ * @deprecated As of Mueller (7.2.x), replaced by {@link
+ *             SynchronousMailTestRule}
  */
+@Deprecated
 public class SynchronousMailTestRule extends SynchronousDestinationTestRule {
 
 	public static final SynchronousMailTestRule INSTANCE =

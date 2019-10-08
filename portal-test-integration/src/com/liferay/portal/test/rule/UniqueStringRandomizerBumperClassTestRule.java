@@ -21,7 +21,10 @@ import org.junit.runner.Description;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Mueller (7.2.x), replaced by {@link
+ *             UniqueStringRandomizerBumperClassTestRule}
  */
+@Deprecated
 public class UniqueStringRandomizerBumperClassTestRule
 	extends ClassTestRule<Void> {
 

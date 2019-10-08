@@ -19,7 +19,10 @@ import com.liferay.petra.string.StringPool;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Mueller (7.2.x), replaced by {@link
+ *             LogAssertionUncaughtExceptionHandler}
  */
+@Deprecated
 public class LogAssertionUncaughtExceptionHandler
 	implements Thread.UncaughtExceptionHandler {
 

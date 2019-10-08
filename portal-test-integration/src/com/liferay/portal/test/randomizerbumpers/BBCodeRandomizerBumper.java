@@ -19,7 +19,10 @@ import com.liferay.portal.kernel.test.randomizerbumpers.RandomizerBumper;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Mueller (7.2.x), replaced by {@link
+ *             BBCodeRandomizerBumper}
  */
+@Deprecated
 public class BBCodeRandomizerBumper implements RandomizerBumper<String> {
 
 	public static final BBCodeRandomizerBumper INSTANCE =

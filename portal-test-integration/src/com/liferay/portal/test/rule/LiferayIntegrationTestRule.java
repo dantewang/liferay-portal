@@ -27,7 +27,10 @@ import org.junit.rules.TestRule;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Mueller (7.2.x), replaced by {@link
+ *             LiferayIntegrationTestRule}
  */
+@Deprecated
 public class LiferayIntegrationTestRule extends AggregateTestRule {
 
 	public LiferayIntegrationTestRule() {
