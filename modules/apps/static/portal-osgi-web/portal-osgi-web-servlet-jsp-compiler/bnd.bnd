@@ -76,7 +76,7 @@ Provide-Capability:\
 -includeresource:\
 	@javax.servlet.jsp.jstl-[0-9.]*.jar!/META-INF/*.tld,\
 	@tomcat-api-[0-9.]*.jar,\
-	@tomcat-jasper-[0-9.]*.jar,\
+	@tomcat-jasper-*.jar,\
 	@tomcat-juli-[0-9.]*.jar,\
 	@tomcat-util-[0-9.]*.jar,\
 	@tomcat-util-scan-[0-9.]*.jar
