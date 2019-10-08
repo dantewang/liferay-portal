@@ -13,6 +13,7 @@
 	<path id="portal.test.classpath">
 		<pathelement location="${project.dir}/portal-kernel/classes" />
 		<pathelement location="${project.dir}/portal-impl/classes" />
+		<pathelement location="${project.dir}/util-java/classes" />
 		<path refid="lib.classpath" />
 		<path refid="lib.pre.classpath" />
 		<pathelement location="${project.dir}/modules/core/registry-api/classes" />
