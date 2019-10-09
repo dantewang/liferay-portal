@@ -16,15 +16,12 @@ package com.liferay.portal.test.mail;
 
 import java.util.Iterator;
 
-import org.osgi.annotation.versioning.ProviderType;
-
 /**
  * @author Adam Brandizzi
  * @deprecated As of Athanasius (7.3.x), replaced by {@link
  *             MailMessage}
  */
 @Deprecated
-@ProviderType
 public interface MailMessage {
 
 	public String getBody();
