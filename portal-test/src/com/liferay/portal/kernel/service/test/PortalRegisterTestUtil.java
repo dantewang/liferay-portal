@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.service.test;
+package com.liferay.portal.kernel.service.test;
 
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
