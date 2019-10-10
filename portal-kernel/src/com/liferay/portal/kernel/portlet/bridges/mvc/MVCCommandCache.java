@@ -76,20 +76,6 @@ public class MVCCommandCache<T extends MVCCommand> {
 		}
 	}
 
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             #MVCCommandCache(MVCCommand, String, String, Class, String)}
-	 */
-	@Deprecated
-	public MVCCommandCache(
-		T emptyMVCCommand, String packagePrefix, String portletName,
-		String mvcCommandClassName, String mvcCommandPostFix) {
-
-		this(
-			emptyMVCCommand, packagePrefix, portletName,
-			_getMVCCommandClass(mvcCommandClassName), mvcCommandPostFix);
-	}
-
 	public void close() {
 		ServiceTrackerMap<String, T> serviceTrackerMap = _serviceTrackerMap;
 
