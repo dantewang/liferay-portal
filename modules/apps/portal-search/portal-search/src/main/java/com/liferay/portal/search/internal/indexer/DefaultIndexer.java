@@ -140,11 +140,6 @@ public class DefaultIndexer<T extends BaseModel<?>> implements Indexer<T> {
 	}
 
 	@Override
-	public String getSortField(String orderByCol, int sortType) {
-		return StringPool.BLANK;
-	}
-
-	@Override
 	public Summary getSummary(
 			Document document, String snippet, PortletRequest portletRequest,
 			PortletResponse portletResponse)
@@ -205,13 +200,6 @@ public class DefaultIndexer<T extends BaseModel<?>> implements Indexer<T> {
 	@Override
 	public boolean isVisible(long classPK, int status) throws Exception {
 		return _indexerPermissionPostFilter.isVisible(classPK, status);
-	}
-
-	@Override
-	public boolean isVisibleRelatedEntry(long classPK, int status)
-		throws Exception {
-
-		return true;
 	}
 
 	@Override

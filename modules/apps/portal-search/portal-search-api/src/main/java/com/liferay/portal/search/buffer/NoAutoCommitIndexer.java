@@ -112,11 +112,6 @@ public class NoAutoCommitIndexer<T> implements Indexer<T> {
 	}
 
 	@Override
-	public String getSortField(String orderByCol, int sortType) {
-		return _indexer.getSortField(orderByCol, sortType);
-	}
-
-	@Override
 	public Summary getSummary(
 			Document document, String snippet, PortletRequest portletRequest,
 			PortletResponse portletResponse)
@@ -169,13 +164,6 @@ public class NoAutoCommitIndexer<T> implements Indexer<T> {
 	@Override
 	public boolean isVisible(long classPK, int status) throws Exception {
 		return _indexer.isVisible(classPK, status);
-	}
-
-	@Override
-	public boolean isVisibleRelatedEntry(long classPK, int status)
-		throws Exception {
-
-		return _indexer.isVisibleRelatedEntry(classPK, status);
 	}
 
 	@Override

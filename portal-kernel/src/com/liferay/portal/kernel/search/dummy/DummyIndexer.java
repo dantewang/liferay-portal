@@ -86,11 +86,6 @@ public class DummyIndexer implements Indexer<Object> {
 	}
 
 	@Override
-	public String getSortField(String orderByCol, int sortType) {
-		return StringPool.BLANK;
-	}
-
-	@Override
 	public Summary getSummary(
 		Document document, String snippet, PortletRequest portletRequest,
 		PortletResponse portletResponse) {
@@ -133,13 +128,6 @@ public class DummyIndexer implements Indexer<Object> {
 
 	@Override
 	public boolean isVisible(long classPK, int status) throws Exception {
-		return true;
-	}
-
-	@Override
-	public boolean isVisibleRelatedEntry(long classPK, int status)
-		throws Exception {
-
 		return true;
 	}
 

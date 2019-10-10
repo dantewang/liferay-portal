@@ -58,15 +58,6 @@ public class SearchEngineProxyWrapper implements SearchEngine {
 		return _searchEngine;
 	}
 
-	/**
-	 * @deprecated As of Wilberforce (7.0.x)
-	 */
-	@Deprecated
-	@Override
-	public TermQueryFactory getTermQueryFactory() {
-		return _searchEngine.getTermQueryFactory();
-	}
-
 	@Override
 	public String getVendor() {
 		return _searchEngine.getVendor();

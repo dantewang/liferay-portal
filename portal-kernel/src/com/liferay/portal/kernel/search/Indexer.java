@@ -60,13 +60,6 @@ public interface Indexer<T> {
 	@Deprecated
 	public String getSortField(String orderByCol);
 
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             com.liferay.portal.sort.SortFieldBuilder}
-	 */
-	@Deprecated
-	public String getSortField(String orderByCol, int sortType);
-
 	public Summary getSummary(
 			Document document, String snippet, PortletRequest portletRequest,
 			PortletResponse portletResponse)
@@ -105,18 +98,6 @@ public interface Indexer<T> {
 	public boolean isStagingAware();
 
 	public boolean isVisible(long classPK, int status) throws Exception;
-
-	/**
-	 * @param      classPK
-	 * @param      status
-	 * @return
-	 * @throws     Exception
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             RelatedEntryIndexer.isVisibleRelatedEntry(long, int)}
-	 */
-	@Deprecated
-	public boolean isVisibleRelatedEntry(long classPK, int status)
-		throws Exception;
 
 	public void postProcessContextBooleanFilter(
 			BooleanFilter contextBooleanFilter, SearchContext searchContext)

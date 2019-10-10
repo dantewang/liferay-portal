@@ -17,7 +17,6 @@ package com.liferay.portal.kernel.search;
 import com.liferay.portal.kernel.search.dummy.DummyIndexSearcher;
 import com.liferay.portal.kernel.search.dummy.DummyIndexWriter;
 import com.liferay.portal.kernel.search.generic.BooleanQueryFactoryImpl;
-import com.liferay.portal.kernel.search.generic.TermQueryFactoryImpl;
 
 /**
  * @author Bruno Farache
@@ -57,19 +56,6 @@ public class BaseSearchEngine implements SearchEngine {
 	@Override
 	public IndexWriter getIndexWriter() {
 		return _indexWriter;
-	}
-
-	/**
-	 * @deprecated As of Wilberforce (7.0.x)
-	 */
-	@Deprecated
-	@Override
-	public TermQueryFactory getTermQueryFactory() {
-		if (_termQueryFactory == null) {
-			_termQueryFactory = new TermQueryFactoryImpl();
-		}
-
-		return _termQueryFactory;
 	}
 
 	@Override
@@ -118,10 +104,6 @@ public class BaseSearchEngine implements SearchEngine {
 
 	private IndexSearcher _indexSearcher = new DummyIndexSearcher();
 	private IndexWriter _indexWriter = new DummyIndexWriter();
-
-	@SuppressWarnings("deprecation")
-	private TermQueryFactory _termQueryFactory;
-
 	private String _vendor;
 
 }

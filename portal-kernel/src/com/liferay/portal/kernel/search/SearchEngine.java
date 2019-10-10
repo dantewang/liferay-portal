@@ -33,12 +33,6 @@ public interface SearchEngine {
 
 	public IndexWriter getIndexWriter();
 
-	/**
-	 * @deprecated As of Wilberforce (7.0.x)
-	 */
-	@Deprecated
-	public TermQueryFactory getTermQueryFactory();
-
 	public String getVendor();
 
 	public void initialize(long companyId);

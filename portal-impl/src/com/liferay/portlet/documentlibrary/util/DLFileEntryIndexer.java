@@ -175,7 +175,6 @@ public class DLFileEntryIndexer
 		return isVisible(fileVersion.getStatus(), status);
 	}
 
-	@Override
 	public boolean isVisibleRelatedEntry(long classPK, int status)
 		throws Exception {
 
