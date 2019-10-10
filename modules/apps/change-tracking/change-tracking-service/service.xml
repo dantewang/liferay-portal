@@ -13,7 +13,6 @@
 
 		<column name="companyId" type="long" />
 		<column name="userId" type="long" />
-		<column name="userName" type="String" uad-anonymize-field-name="fullName" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
 
@@ -23,7 +22,6 @@
 		<column name="description" type="String" />
 		<column name="status" type="int" />
 		<column name="statusByUserId" type="long" />
-		<column name="statusByUserName" type="String" uad-anonymize-field-name="fullName" />
 		<column name="statusDate" type="Date" />
 
 		<!-- Order -->
@@ -51,7 +49,6 @@
 		<reference entity="CTEntry" package-path="com.liferay.change.tracking" />
 		<reference entity="CTPreferences" package-path="com.liferay.change.tracking" />
 		<reference entity="CTProcess" package-path="com.liferay.change.tracking" />
-		<reference entity="User" package-path="com.liferay.portal" />
 	</entity>
 	<entity local-service="true" name="CTEntry" remote-service="false" trash-enabled="false" uuid="false">
 
@@ -72,10 +69,7 @@
 		<column name="modelClassNameId" type="long" />
 		<column name="modelClassPK" type="long" />
 		<column name="modelMvccVersion" type="long" />
-		<column name="modelResourcePrimKey" type="long" />
 		<column name="changeType" type="int" />
-		<column name="collision" type="boolean" />
-		<column name="status" type="int" />
 
 		<!-- Finder methods -->
 
@@ -86,28 +80,10 @@
 			<finder-column name="ctCollectionId" />
 			<finder-column name="modelClassNameId" />
 		</finder>
-		<finder name="C_MRPK" return-type="Collection">
-			<finder-column name="ctCollectionId" />
-			<finder-column name="modelResourcePrimKey" />
-		</finder>
-		<finder name="C_S" return-type="Collection">
-			<finder-column name="ctCollectionId" />
-			<finder-column name="status" />
-		</finder>
 		<finder name="C_MCNI_MCPK" return-type="CTEntry" unique="true">
 			<finder-column name="ctCollectionId" />
 			<finder-column name="modelClassNameId" />
 			<finder-column name="modelClassPK" />
-		</finder>
-		<finder name="C_MCNI_S" return-type="Collection">
-			<finder-column name="ctCollectionId" />
-			<finder-column name="modelClassNameId" />
-			<finder-column name="status" />
-		</finder>
-		<finder name="C_MRPK_S" return-type="Collection">
-			<finder-column name="ctCollectionId" />
-			<finder-column name="modelResourcePrimKey" />
-			<finder-column name="status" />
 		</finder>
 
 		<!-- References -->
@@ -157,13 +133,16 @@
 		<column name="ctCollectionId" type="long" />
 		<column name="backgroundTaskId" type="long" />
 
+		<!-- Order -->
+
+		<order by="desc">
+			<order-column name="createDate" />
+		</order>
+
 		<!-- Finder methods -->
 
 		<finder name="CompanyId" return-type="Collection">
 			<finder-column name="companyId" />
-		</finder>
-		<finder name="UserId" return-type="Collection">
-			<finder-column name="userId" />
 		</finder>
 		<finder name="CollectionId" return-type="Collection">
 			<finder-column name="ctCollectionId" />
@@ -173,7 +152,6 @@
 
 		<reference entity="CTCollection" package-path="com.liferay.change.tracking" />
 		<reference entity="Company" package-path="com.liferay.portal" />
-		<reference entity="User" package-path="com.liferay.portal" />
 	</entity>
 	<exceptions>
 		<exception>CTCollectionDescription</exception>

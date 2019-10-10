@@ -22,10 +22,11 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.Website;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.base.WebsiteLocalServiceBaseImpl;
 
 import java.util.List;
+
+import org.apache.commons.validator.routines.UrlValidator;
 
 /**
  * @author Brian Wing Shun Chan
@@ -150,7 +151,9 @@ public class WebsiteLocalServiceImpl extends WebsiteLocalServiceBaseImpl {
 			String url, long typeId, boolean primary)
 		throws PortalException {
 
-		if (!Validator.isUrl(url)) {
+		UrlValidator urlValidator = new UrlValidator();
+
+		if (!urlValidator.isValid(url)) {
 			throw new WebsiteURLException();
 		}
 

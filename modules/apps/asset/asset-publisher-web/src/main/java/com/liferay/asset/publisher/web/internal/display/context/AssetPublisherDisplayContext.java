@@ -246,6 +246,33 @@ public class AssetPublisherDisplayContext {
 		return _allAssetTagNames;
 	}
 
+	public String[] getAllKeywords() {
+		if (_allKeywords != null) {
+			return _allKeywords;
+		}
+
+		_allKeywords = new String[0];
+
+		String keyword = ParamUtil.getString(_httpServletRequest, "keyword");
+
+		String selectionStyle = getSelectionStyle();
+
+		if (selectionStyle.equals("dynamic")) {
+			_allKeywords = _assetPublisherHelper.getKeywords(
+				_portletPreferences);
+		}
+
+		if (Validator.isNotNull(keyword) &&
+			!ArrayUtil.contains(_allKeywords, keyword)) {
+
+			_allKeywords = ArrayUtil.append(_allKeywords, keyword);
+		}
+
+		_allKeywords = ArrayUtil.distinct(_allKeywords, new StringComparator());
+
+		return _allKeywords;
+	}
+
 	public long getAssetCategoryId() {
 		if (_assetCategoryId != null) {
 			return _assetCategoryId;
@@ -335,7 +362,7 @@ public class AssetPublisherDisplayContext {
 			_assetEntryQuery = _assetPublisherHelper.getAssetEntryQuery(
 				_portletPreferences, _themeDisplay.getScopeGroupId(),
 				_themeDisplay.getLayout(), getAllAssetCategoryIds(),
-				getAllAssetTagNames());
+				getAllKeywords(), getAllAssetTagNames());
 		}
 
 		_assetEntryQuery.setEnablePermissions(isEnablePermissions());
@@ -547,6 +574,30 @@ public class AssetPublisherDisplayContext {
 
 				ruleJSONObject.put("selectedItems", selectedItems);
 			}
+			else if (Objects.equals(queryName, "keywords")) {
+				queryValues = ParamUtil.getString(
+					_httpServletRequest, "keywords" + queryLogicIndex,
+					queryValues);
+
+				String[] keywords = StringUtil.split(queryValues, " ");
+
+				if (ArrayUtil.isEmpty(keywords)) {
+					continue;
+				}
+
+				List<Map<String, String>> selectedItems = new ArrayList<>();
+
+				for (String keyword : keywords) {
+					Map<String, String> selectedCategory = new HashMap<>();
+
+					selectedCategory.put("label", keyword);
+					selectedCategory.put("value", keyword);
+
+					selectedItems.add(selectedCategory);
+				}
+
+				ruleJSONObject.put("selectedItems", selectedItems);
+			}
 			else {
 				queryValues = ParamUtil.getString(
 					_httpServletRequest, "queryCategoryIds" + queryLogicIndex,
@@ -559,10 +610,10 @@ public class AssetPublisherDisplayContext {
 					continue;
 				}
 
-				List<HashMap<String, Object>> selectedItems = new ArrayList<>();
+				List<Map<String, Object>> selectedItems = new ArrayList<>();
 
 				for (AssetCategory category : categories) {
-					HashMap<String, Object> selectedCategory = new HashMap<>();
+					Map<String, Object> selectedCategory = new HashMap<>();
 
 					selectedCategory.put(
 						"label", category.getTitle(_themeDisplay.getLocale()));
@@ -1089,9 +1140,9 @@ public class AssetPublisherDisplayContext {
 			}
 
 			portletURL.setParameter(
-				"eventName", _portletResponse.getNamespace() + "selectTag");
-			portletURL.setParameter(
 				"groupIds", StringUtil.merge(getGroupIds()));
+			portletURL.setParameter(
+				"eventName", _portletResponse.getNamespace() + "selectTag");
 			portletURL.setParameter("selectedTagNames", "{selectedTagNames}");
 			portletURL.setWindowState(LiferayWindowState.POP_UP);
 
@@ -1891,6 +1942,7 @@ public class AssetPublisherDisplayContext {
 	private Integer _abstractLength;
 	private long[] _allAssetCategoryIds;
 	private String[] _allAssetTagNames;
+	private String[] _allKeywords;
 	private Boolean _anyAssetType;
 	private Long _assetCategoryId;
 	private final AssetEntryActionRegistry _assetEntryActionRegistry;

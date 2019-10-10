@@ -705,6 +705,10 @@ public class StagedLayoutSetStagedModelDataHandler
 			boolean privateLayout)
 		throws PortalException {
 
+		if (ExportImportThreadLocal.isInitialLayoutStagingInProcess()) {
+			return;
+		}
+
 		Map<Long, Layout> layouts =
 			(Map<Long, Layout>)portletDataContext.getNewPrimaryKeysMap(
 				Layout.class + ".layout");

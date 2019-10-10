@@ -18,6 +18,9 @@
 
 <%
 String productMenuState = SessionClicks.get(request, "com.liferay.product.navigation.product.menu.web_productMenuState", "closed");
+String pagesTreeState = SessionClicks.get(request, "com.liferay.product.navigation.product.menu.web_pagesTreeState", "closed");
+
+String panelName = GetterUtil.getString(request.getAttribute(ProductNavigationProductMenuWebKeys.PANEL_NAME));
 %>
 
 <div class="lfr-product-menu-sidebar" id="productMenuSidebar">
@@ -42,9 +45,14 @@ String productMenuState = SessionClicks.get(request, "com.liferay.product.naviga
 	</div>
 
 	<div class="sidebar-body">
-		<c:if test='<%= Objects.equals(productMenuState, "open") %>'>
-			<liferay-util:include page="/portlet/product_menu.jsp" servletContext="<%= application %>" />
-		</c:if>
+		<c:choose>
+			<c:when test='<%= Objects.equals(productMenuState, "open") && Objects.equals(panelName, ProductNavigationProductMenuWebKeys.PRODUCT_MENU) %>'>
+				<liferay-util:include page="/portlet/product_menu.jsp" servletContext="<%= application %>" />
+			</c:when>
+			<c:when test='<%= Objects.equals(pagesTreeState, "open") && Objects.equals(panelName, ProductNavigationProductMenuWebKeys.PAGES_TREE) %>'>
+				<liferay-util:include page="/portlet/pages_tree.jsp" servletContext="<%= application %>" />
+			</c:when>
+		</c:choose>
 	</div>
 </div>
 
@@ -56,6 +64,7 @@ String productMenuState = SessionClicks.get(request, "com.liferay.product.naviga
 	Liferay.once(
 		'screenLoad',
 		function() {
+			Liferay.SideNavigation.destroy(pagesTreeSidenavToggle);
 			Liferay.SideNavigation.destroy(sidenavToggle);
 		}
 	);
@@ -71,10 +80,41 @@ String productMenuState = SessionClicks.get(request, "com.liferay.product.naviga
 		'open.lexicon.sidenav',
 		function(event) {
 			Liferay.Util.Session.set('com.liferay.product.navigation.product.menu.web_productMenuState', 'open');
+
+			if (Liferay.Util.Session.set('com.liferay.product.navigation.product.menu.web_pagesTreeState') === 'open') {
+				pagesTreeSidenavInstance.hideSimpleSidenav();
+				Liferay.Util.Session.set('com.liferay.product.navigation.product.menu.web_pagesTreeState', 'closed');
+			}
 		}
 	);
 
+	var pagesTreeSidenavToggle = document.getElementById('<portlet:namespace />pagesTreeSidenavToggleId');
+
+	if (pagesTreeSidenavToggle) {
+		var pagesTreeSidenavInstance = Liferay.SideNavigation.initialize(pagesTreeSidenavToggle);
+
+		pagesTreeSidenavInstance.on(
+			'closed.lexicon.sidenav',
+			function(event) {
+				Liferay.Util.Session.set('com.liferay.product.navigation.product.menu.web_pagesTreeState', 'closed');
+			}
+		);
+
+		pagesTreeSidenavInstance.on(
+			'open.lexicon.sidenav',
+			function(event) {
+				Liferay.Util.Session.set('com.liferay.product.navigation.product.menu.web_pagesTreeState', 'open');
+
+				if (Liferay.Util.Session.set('com.liferay.product.navigation.product.menu.web_productMenuState') === 'open') {
+					sidenavInstance.hideSimpleSidenav();
+					Liferay.Util.Session.set('com.liferay.product.navigation.product.menu.web_productMenuState', 'closed');
+				}
+			}
+		);
+	}
+
 	if (Liferay.Util.isPhone() && (document.body.classList.contains('open'))) {
 		Liferay.SideNavigation.hide(sidenavToggle);
+		Liferay.SideNavigation.hide(pagesTreeSidenavToggle);
 	}
 </aui:script>

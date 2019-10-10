@@ -12,40 +12,100 @@
  * details.
  */
 
-import 'clay-dropdown';
-import 'clay-label';
-import 'metal';
-import Component from 'metal-component';
-import Soy from 'metal-soy';
+import ClayButton from '@clayui/button';
+import ClayDropDown from '@clayui/drop-down';
+import ClayIcon from '@clayui/icon';
+import ClayLabel from '@clayui/label';
+import PropTypes from 'prop-types';
+import React, {useState, useCallback} from 'react';
 
-import templates from './ChangeDefaultLanguage.soy';
+function ChangeDefaultLanguage(props) {
+	const [active, setActive] = useState(false);
 
-/**
- * ChangeDefaultLanguage
- */
+	const [selectedDefaultLanguage, setSelectedDefaultLanguage] = useState(
+		props.defaultLanguage
+	);
 
-class ChangeDefaultLanguage extends Component {
-	_itemClicked(event) {
-		const defaultLanguage = event.data.item.label;
-
-		this.defaultLanguage = defaultLanguage;
-		this.languages = this.languages.map(language => {
-			return Object.assign({}, language, {
-				checked: language.label === defaultLanguage
-			});
-		});
-
-		const dropdown = event.target.refs.dropdown.refs.portal.element;
-		const item = dropdown.querySelector(
-			`li[data-value="${defaultLanguage}"]`
-		);
+	const onItemClick = useCallback((event, language) => {
+		setSelectedDefaultLanguage(language);
+		setActive(false);
 
 		Liferay.fire('inputLocalized:defaultLocaleChanged', {
-			item
+			item: event.currentTarget
 		});
-	}
+	}, []);
+
+	return (
+		<div className="article-default-language">
+			<p className="mb-0">
+				<b>{`${Liferay.Language.get(
+					'web-content-default-language'
+				)}: `}</b>
+				{props.strings[selectedDefaultLanguage]}
+			</p>
+
+			<ClayDropDown
+				active={active}
+				className="mt-2"
+				onActiveChange={setActive}
+				trigger={
+					<ClayButton
+						aria-expanded={active}
+						aria-haspopup="true"
+						className="dropdown-toggle"
+						displayType="secondary"
+					>
+						<strong>{Liferay.Language.get('change')}</strong>
+						<ClayIcon
+							className="inline-item inline-item-after"
+							symbol="caret-bottom"
+						/>
+					</ClayButton>
+				}
+			>
+				<ClayDropDown.ItemList>
+					{props.languages.map(item => (
+						<ClayDropDown.Item
+							className="autofit-row"
+							data-value={item.label}
+							key={item.label}
+							onClick={event => onItemClick(event, item.label)}
+							title={item.label}
+						>
+							<span className="autofit-col autofit-col-expand">
+								<span className="autofit-section">
+									<span className="inline-item inline-item-before">
+										<ClayIcon symbol={item.icon}></ClayIcon>
+									</span>
+									{item.label}
+								</span>
+							</span>
+
+							{item.label === selectedDefaultLanguage && (
+								<span className="autofit-col">
+									<ClayLabel displayType="info">
+										{Liferay.Language.get('default')}
+									</ClayLabel>
+								</span>
+							)}
+						</ClayDropDown.Item>
+					))}
+				</ClayDropDown.ItemList>
+			</ClayDropDown>
+		</div>
+	);
 }
 
-Soy.register(ChangeDefaultLanguage, templates);
+ChangeDefaultLanguage.propTypes = {
+	languages: PropTypes.arrayOf(
+		PropTypes.shape({
+			icon: PropTypes.string,
+			label: PropTypes.string
+		})
+	).isRequired,
+	strings: PropTypes.object.isRequired
+};
 
-export default ChangeDefaultLanguage;
+export default function(props) {
+	return <ChangeDefaultLanguage {...props} />;
+}

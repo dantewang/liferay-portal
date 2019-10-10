@@ -101,6 +101,12 @@ public class XLSBatchEngineTaskItemReader implements BatchEngineTaskItemReader {
 			else {
 				String value = cell.getStringCellValue();
 
+				value = value.trim();
+
+				if (value.isEmpty()) {
+					value = null;
+				}
+
 				int lastDelimiterIndex = columnName.lastIndexOf('_');
 
 				if (lastDelimiterIndex == -1) {

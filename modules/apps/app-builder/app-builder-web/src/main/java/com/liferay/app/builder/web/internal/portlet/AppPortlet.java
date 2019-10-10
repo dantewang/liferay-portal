@@ -58,7 +58,6 @@ public class AppPortlet extends MVCPortlet {
 					put(
 						"javax.portlet.security-role-ref",
 						"administrator,guest,power-user,user");
-					put("javax.portlet.supports.mime-type", "text/html");
 				}
 			};
 

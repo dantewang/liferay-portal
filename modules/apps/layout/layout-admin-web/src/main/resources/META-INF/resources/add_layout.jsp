@@ -34,6 +34,8 @@ List<SiteNavigationMenu> autoSiteNavigationMenus = layoutsAdminDisplayContext.ge
 
 			<c:choose>
 				<c:when test="<%= autoSiteNavigationMenus.size() > 1 %>">
+					<div class="h3 sheet-subtitle"><liferay-ui:message key="navigation-menus" /></div>
+
 					<liferay-ui:message key="add-this-page-to-the-following-menus" />
 
 					<div class="auto-site-navigation-menus container my-3">
@@ -67,6 +69,18 @@ List<SiteNavigationMenu> autoSiteNavigationMenus = layoutsAdminDisplayContext.ge
 					</div>
 				</c:when>
 			</c:choose>
+
+			<c:if test="<%= layoutsAdminDisplayContext.isShowCategorization() %>">
+				<aui:fieldset cssClass="mb-4">
+					<div class="h3 sheet-subtitle"><liferay-ui:message key="categorization" /></div>
+
+					<liferay-asset:asset-categories-selector
+						className="<%= Layout.class.getName() %>"
+						classPK="<%= 0 %>"
+						showOnlyRequiredVocabularies="<%= true %>"
+					/>
+				</aui:fieldset>
+			</c:if>
 		</liferay-frontend:edit-form-body>
 
 		<liferay-frontend:edit-form-footer>
@@ -77,7 +91,7 @@ List<SiteNavigationMenu> autoSiteNavigationMenus = layoutsAdminDisplayContext.ge
 	</liferay-frontend:edit-form>
 </div>
 
-<aui:script>
+<aui:script use="liferay-alert">
 	var form = document.<portlet:namespace />fm;
 
 	form.addEventListener(

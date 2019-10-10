@@ -30,7 +30,6 @@ import com.liferay.journal.service.JournalFolderLocalServiceUtil;
 import com.liferay.journal.util.JournalConverter;
 import com.liferay.journal.web.internal.security.permission.resource.JournalArticlePermission;
 import com.liferay.journal.web.internal.security.permission.resource.JournalFolderPermission;
-import com.liferay.journal.web.internal.util.JournalChangeTrackingHelperUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.bean.BeanParamUtil;
@@ -109,62 +108,49 @@ public class JournalEditArticleDisplayContext {
 		return _availableLocales;
 	}
 
-	public Map<String, Object> getChangeDefaultLanguageSoyContext() {
-		Map<String, Object> context = new HashMap<>();
+	public Map<String, Object> getChangeDefaultLanguageData() {
+		Map<String, Object> data = new HashMap<>();
 
-		context.put("defaultLanguage", getDefaultArticleLanguageId());
+		data.put("defaultLanguage", getDefaultArticleLanguageId());
+
+		List<Map<String, Object>> languages = new ArrayList<>();
 
 		LinkedHashSet<String> uniqueLanguageIds = new LinkedHashSet<>();
 
 		uniqueLanguageIds.add(getDefaultLanguageId());
 
-		Map<String, Object> strings = new HashMap<>();
-
-		strings.put(
-			"change",
-			LanguageUtil.format(_httpServletRequest, "change", "content"));
-		strings.put(
-			"default",
-			LanguageUtil.format(_httpServletRequest, "default", "content"));
-
 		for (Locale availableLocale : getAvailableLocales()) {
-			String curLanguageId = LocaleUtil.toLanguageId(availableLocale);
-
-			strings.put(
-				curLanguageId,
-				StringBundler.concat(
-					availableLocale.getDisplayLanguage(), StringPool.SPACE,
-					StringPool.OPEN_PARENTHESIS, availableLocale.getCountry(),
-					StringPool.CLOSE_PARENTHESIS));
-
-			uniqueLanguageIds.add(curLanguageId);
+			uniqueLanguageIds.add(LocaleUtil.toLanguageId(availableLocale));
 		}
 
-		List<Map<String, Object>> languages = new ArrayList<>();
-
-		for (String curLanguageId : uniqueLanguageIds) {
+		for (String languageId : uniqueLanguageIds) {
 			Map<String, Object> language = new HashMap<>();
 
 			language.put(
-				"checked",
-				Objects.equals(getDefaultLanguageId(), curLanguageId));
-			language.put(
 				"icon",
 				StringUtil.toLowerCase(
-					StringUtil.replace(curLanguageId, '_', '-')));
-			language.put("label", curLanguageId);
+					StringUtil.replace(languageId, '_', '-')));
+			language.put("label", languageId);
 
 			languages.add(language);
 		}
 
-		context.put("languages", languages);
-		context.put("namespace", _liferayPortletResponse.getNamespace());
-		context.put(
-			"spritemap",
-			_themeDisplay.getPathThemeImages() + "/lexicon/icons.svg");
-		context.put("strings", strings);
+		data.put("languages", languages);
 
-		return context;
+		Map<String, Object> strings = new HashMap<>();
+
+		for (Locale availableLocale : getAvailableLocales()) {
+			strings.put(
+				LocaleUtil.toLanguageId(availableLocale),
+				StringBundler.concat(
+					availableLocale.getDisplayLanguage(), StringPool.SPACE,
+					StringPool.OPEN_PARENTHESIS, availableLocale.getCountry(),
+					StringPool.CLOSE_PARENTHESIS));
+		}
+
+		data.put("strings", strings);
+
+		return data;
 	}
 
 	public long getClassNameId() {
@@ -458,12 +444,6 @@ public class JournalEditArticleDisplayContext {
 	}
 
 	public String getPublishButtonLabel() throws PortalException {
-		if (JournalChangeTrackingHelperUtil.hasActiveCTCollection(
-				_themeDisplay.getCompanyId(), _themeDisplay.getUserId())) {
-
-			return "publish-to-change-list";
-		}
-
 		if (getClassNameId() > JournalArticleConstants.CLASSNAME_ID_DEFAULT) {
 			return "save";
 		}

@@ -14,6 +14,8 @@
 
 package com.liferay.journal.internal.util;
 
+import com.liferay.change.tracking.constants.CTConstants;
+import com.liferay.change.tracking.listener.CTEventListener;
 import com.liferay.exportimport.kernel.lar.ExportImportThreadLocal;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleDisplay;
@@ -27,6 +29,7 @@ import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.index.IndexEncoder;
 import com.liferay.portal.kernel.cache.index.PortalCacheIndexer;
+import com.liferay.portal.kernel.change.tracking.CTCollectionThreadLocal;
 import com.liferay.portal.kernel.cluster.ClusterInvokeAcceptor;
 import com.liferay.portal.kernel.cluster.ClusterInvokeThreadLocal;
 import com.liferay.portal.kernel.cluster.ClusterableInvokerUtil;
@@ -67,9 +70,14 @@ import org.osgi.service.component.annotations.Reference;
  * @author Raymond Augé
  * @author Michael Young
  */
-@Component(service = {IdentifiableOSGiService.class, JournalContent.class})
+@Component(
+	service = {
+		CTEventListener.class, IdentifiableOSGiService.class,
+		JournalContent.class
+	}
+)
 public class JournalContentImpl
-	implements IdentifiableOSGiService, JournalContent {
+	implements CTEventListener, IdentifiableOSGiService, JournalContent {
 
 	@Activate
 	public void activate() {
@@ -256,8 +264,13 @@ public class JournalContentImpl
 			groupId, articleId, version, ddmTemplateKey, layoutSetId, viewMode,
 			languageId, page, secure);
 
-		JournalArticleDisplay articleDisplay = _portalCache.get(
-			journalContentKey);
+		JournalArticleDisplay articleDisplay = null;
+
+		long ctCollectionId = CTCollectionThreadLocal.getCTCollectionId();
+
+		if (ctCollectionId == CTConstants.CT_COLLECTION_ID_PRODUCTION) {
+			articleDisplay = _portalCache.get(journalContentKey);
+		}
 
 		if ((articleDisplay == null) || !lifecycleRender) {
 			articleDisplay = getArticleDisplay(
@@ -268,7 +281,11 @@ public class JournalContentImpl
 				lifecycleRender) {
 
 				try {
-					_portalCache.put(journalContentKey, articleDisplay);
+					if (ctCollectionId ==
+							CTConstants.CT_COLLECTION_ID_PRODUCTION) {
+
+						_portalCache.put(journalContentKey, articleDisplay);
+					}
 				}
 				catch (ClassCastException cce) {
 					if (_log.isWarnEnabled()) {
@@ -382,6 +399,11 @@ public class JournalContentImpl
 	@Override
 	public String getOSGiServiceIdentifier() {
 		return JournalContent.class.getName();
+	}
+
+	@Override
+	public void onAfterPublish(long ctCollectionId) {
+		_portalCache.removeAll();
 	}
 
 	protected JournalArticleDisplay getArticleDisplay(

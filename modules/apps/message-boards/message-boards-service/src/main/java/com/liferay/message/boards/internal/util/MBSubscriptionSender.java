@@ -73,7 +73,7 @@ public class MBSubscriptionSender
 			setSMTPAccount(smtpAccount);
 		}
 
-		setSubject(getMailingListSubject(subject, mailId));
+		setSubject(_getMailingListSubject(subject, mailId));
 
 		addRuntimeSubscribers(
 			mailingList.getEmailAddress(), mailingList.getEmailAddress());
@@ -85,17 +85,6 @@ public class MBSubscriptionSender
 
 	public void setFullName(String fullName) {
 		_fullName = fullName;
-	}
-
-	protected String getMailingListSubject(String subject, String mailId) {
-		subject = GetterUtil.getString(subject);
-		mailId = GetterUtil.getString(mailId);
-
-		return subject.concat(
-			StringPool.SPACE
-		).concat(
-			mailId
-		);
 	}
 
 	@Override
@@ -112,7 +101,9 @@ public class MBSubscriptionSender
 	}
 
 	@Override
-	protected void sendNotification(User user) throws Exception {
+	protected void sendNotification(User user, boolean notifyImmediately)
+		throws Exception {
+
 		sendEmailNotification(user);
 
 		if (currentUserId == user.getUserId()) {
@@ -123,7 +114,18 @@ public class MBSubscriptionSender
 			return;
 		}
 
-		sendUserNotification(user);
+		sendUserNotification(user, notifyImmediately);
+	}
+
+	private String _getMailingListSubject(String subject, String mailId) {
+		subject = GetterUtil.getString(subject);
+		mailId = GetterUtil.getString(mailId);
+
+		return subject.concat(
+			StringPool.SPACE
+		).concat(
+			mailId
+		);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

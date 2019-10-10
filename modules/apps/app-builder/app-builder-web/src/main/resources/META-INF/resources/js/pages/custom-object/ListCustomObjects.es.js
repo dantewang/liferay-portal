@@ -155,7 +155,7 @@ export default ({history}) => {
 						name: 'divider'
 					},
 					{
-						callback: confirmDelete(
+						action: confirmDelete(
 							'/o/data-engine/v1.0/data-definitions/'
 						),
 						name: Liferay.Language.get('delete')

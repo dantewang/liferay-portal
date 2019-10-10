@@ -203,11 +203,38 @@ definition {
 	}
 
 	macro configureFragment {
-		if (isSet(align)) {
+		if (isSet(alignment)) {
 			Select(
 				key_fieldLabel = "Align",
 				locator1 = "Select#GENERIC_SELECT_FIELD",
-				value1 = "${align}");
+				value1 = "${alignment}");
+		}
+
+		if (isSet(borderColor)) {
+			Click(
+				key_paletteItem = "${borderColor}",
+				locator1 = "Button#PALETTE_ITEM");
+		}
+
+		if (isSet(borderRadius)) {
+			Select(
+				key_fieldLabel = "Border Radius",
+				locator1 = "Select#GENERIC_SELECT_FIELD",
+				value1 = "${borderRadius}");
+		}
+
+		if (isSet(bottomSpacing)) {
+			Select(
+				key_fieldLabel = "Bottom Spacing",
+				locator1 = "Select#GENERIC_SELECT_FIELD",
+				value1 = "${bottomSpacing}");
+		}
+
+		if (isSet(boxShadow)) {
+			Select(
+				key_fieldLabel = "Box Shadow",
+				locator1 = "Select#GENERIC_SELECT_FIELD",
+				value1 = "${boxShadow}");
 		}
 
 		if (isSet(headingLevel)) {
@@ -215,6 +242,20 @@ definition {
 				key_fieldLabel = "Heading Level",
 				locator1 = "Select#GENERIC_SELECT_FIELD",
 				value1 = "${headingLevel}");
+		}
+
+		if (isSet(height)) {
+			Select(
+				key_fieldLabel = "Height",
+				locator1 = "Select#GENERIC_SELECT_FIELD",
+				value1 = "${height}");
+		}
+
+		if (isSet(imageSize)) {
+			Select(
+				key_fieldLabel = "Image Size",
+				locator1 = "Select#GENERIC_SELECT_FIELD",
+				value1 = "${imageSize}");
 		}
 
 		if (isSet(size)) {
@@ -235,6 +276,13 @@ definition {
 				key_fieldLabel = "Type",
 				locator1 = "Select#GENERIC_SELECT_FIELD",
 				value1 = "${type}");
+		}
+
+		if (isSet(verticalSpace)) {
+			Select(
+				key_fieldLabel = "Vertical Space",
+				locator1 = "Select#GENERIC_SELECT_FIELD",
+				value1 = "${verticalSpace}");
 		}
 
 		PageEditor.waitForAutoSave();
@@ -269,6 +317,22 @@ definition {
 			value1 = "${fragmentCommentEdit}");
 
 		Click(locator1 = "Button#UPDATE");
+	}
+
+	macro editFragmentHTML {
+		PageEditor.gotoEditableFieldEdit(
+			fragmentName = "${fragmentName}",
+			id = "${editableId}");
+
+		var content = TestCase.getFileContent(fileName = "${fileName}");
+
+		Type.typeAceEditorNoError(
+			locator1 = "Fragment#EDITABLE_HTML_FRAGMENT_FIELD",
+			value1 = "${content}");
+
+		Click(locator1 = "Button#SAVE");
+
+		PageEditor.waitForAutoSave();
 	}
 
 	macro editFragmentImage {
@@ -681,11 +745,52 @@ definition {
 				locator1 = "Fragment#FRAGMENT_CONFIGURATION_ALIGNMENT");
 		}
 
+		if (isSet(borderColor)) {
+			AssertElementPresent(
+				key_borderColor = "${borderColor}",
+				key_fragmentName = "${fragmentName}",
+				locator1 = "Fragment#FRAGMENT_CONFIGURATION_BORDER_COLOR");
+		}
+
+		if (isSet(borderRadius)) {
+			AssertElementPresent(
+				key_borderRadius = "${borderRadius}",
+				key_fragmentName = "${fragmentName}",
+				locator1 = "Fragment#FRAGMENT_CONFIGURATION_BORDER_RADIUS");
+		}
+
+		if (isSet(bottomSpacing)) {
+			AssertElementPresent(
+				key_bottomSpacing = "${bottomSpacing}",
+				key_fragmentName = "${fragmentName}",
+				locator1 = "Fragment#FRAGMENT_CONFIGURATION_BOTTOM_SPACING");
+		}
+
+		if (isSet(boxShadow)) {
+			AssertElementPresent(
+				key_boxShadow = "${boxShadow}",
+				key_fragmentName = "${fragmentName}",
+				locator1 = "Fragment#FRAGMENT_CONFIGURATION_BOX_SHADOW");
+		}
+
 		if (isSet(headingLevel)) {
 			AssertElementPresent(
 				key_fragmentName = "${fragmentName}",
 				key_headingLevel = "${headingLevel}",
 				locator1 = "Fragment#FRAGMENT_CONFIGURATION_HEADER_H2");
+		}
+
+		if (isSet(height)) {
+			AssertElementPresent(
+				key_height = "${height}",
+				locator1 = "Fragment#FRAGMENT_CONFIGURATION_HEIGHT");
+		}
+
+		if (isSet(imageSize)) {
+			AssertElementPresent(
+				key_fragmentName = "${fragmentName}",
+				key_imageSize = "${imageSize}",
+				locator1 = "Fragment#FRAGMENT_CONFIGURATION_IMAGE_SIZE");
 		}
 
 		if (isSet(size)) {
@@ -707,6 +812,13 @@ definition {
 				key_fragmentName = "${fragmentName}",
 				key_type = "${type}",
 				locator1 = "Fragment#FRAGMENT_CONFIGURATION_TYPE");
+		}
+
+		if (isSet(verticalSpace)) {
+			AssertElementPresent(
+				key_fragmentName = "${fragmentName}",
+				key_verticalSpace = "${verticalSpace}",
+				locator1 = "Fragment#FRAGMENT_CONFIGURATION_VERTICAL_SPACE");
 		}
 	}
 

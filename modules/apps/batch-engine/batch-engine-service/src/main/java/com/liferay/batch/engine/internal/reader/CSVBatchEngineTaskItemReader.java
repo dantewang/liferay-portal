@@ -32,16 +32,18 @@ import java.util.Map;
 public class CSVBatchEngineTaskItemReader implements BatchEngineTaskItemReader {
 
 	public CSVBatchEngineTaskItemReader(
-			InputStream inputStream, Class<?> itemClass)
+			String delimiter, InputStream inputStream, Class<?> itemClass)
 		throws IOException {
 
+		_delimiter = delimiter;
 		_inputStream = inputStream;
 		_itemClass = itemClass;
 
 		_unsyncBufferedReader = new UnsyncBufferedReader(
 			new InputStreamReader(_inputStream));
 
-		_columnNames = StringUtil.split(_unsyncBufferedReader.readLine());
+		_columnNames = StringUtil.split(
+			_unsyncBufferedReader.readLine(), delimiter);
 	}
 
 	@Override
@@ -59,7 +61,7 @@ public class CSVBatchEngineTaskItemReader implements BatchEngineTaskItemReader {
 
 		Map<String, Object> columnValues = new HashMap<>();
 
-		String[] values = StringUtil.split(line);
+		String[] values = StringUtil.split(line, _delimiter);
 
 		for (int i = 0; i < values.length; i++) {
 			String columnName = _columnNames[i];
@@ -69,6 +71,10 @@ public class CSVBatchEngineTaskItemReader implements BatchEngineTaskItemReader {
 			}
 
 			String value = values[i].trim();
+
+			if (value.isEmpty()) {
+				value = null;
+			}
 
 			int lastDelimiterIndex = columnName.lastIndexOf('_');
 
@@ -87,6 +93,7 @@ public class CSVBatchEngineTaskItemReader implements BatchEngineTaskItemReader {
 	private static final ObjectMapper _objectMapper = new ObjectMapper();
 
 	private final String[] _columnNames;
+	private final String _delimiter;
 	private final InputStream _inputStream;
 	private final Class<?> _itemClass;
 	private final UnsyncBufferedReader _unsyncBufferedReader;

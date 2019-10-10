@@ -22,39 +22,6 @@
 
 <link href="<%= BrowserSnifferUtil.isIe(request) ? StringPool.BLANK : themeDisplay.getPathThemeImages() %>/<%= PropsValues.THEME_SHORTCUT_ICON %>" rel="icon" />
 
-<%-- Available Translations --%>
-
-<%
-if (!themeDisplay.isSignedIn() && layout.isPublicLayout()) {
-	String completeURL = PortalUtil.getCurrentCompleteURL(request);
-
-	String canonicalURL = PortalUtil.getCanonicalURL(completeURL, themeDisplay, layout, false, false);
-
-	Map<Locale, String> alternateURLs = Collections.emptyMap();
-
-	Set<Locale> availableLocales = LanguageUtil.getAvailableLocales(themeDisplay.getSiteGroupId());
-
-	if (availableLocales.size() > 1) {
-		alternateURLs = PortalUtil.getAlternateURLs(canonicalURL, themeDisplay, layout);
-	}
-
-	for (LayoutSEOLink layoutSEOLink : LayoutSEOLinkManagerUtil.getLocalizedLayoutSEOLinks(layout, PortalUtil.getLocale(request), canonicalURL, alternateURLs)) {
-%>
-
-		<c:choose>
-			<c:when test="<%= Validator.isNotNull(layoutSEOLink.getHrefLang()) %>">
-				<link data-senna-track="temporary" href="<%= layoutSEOLink.getHref() %>" hreflang="<%= layoutSEOLink.getHrefLang() %>" rel="<%= layoutSEOLink.getRelationship() %>" />
-			</c:when>
-			<c:otherwise>
-				<link data-senna-track="temporary" href="<%= layoutSEOLink.getHref() %>" rel="<%= layoutSEOLink.getRelationship() %>" />
-			</c:otherwise>
-		</c:choose>
-
-<%
-	}
-}
-%>
-
 <%-- Portal CSS --%>
 
 <link class="lfr-css-file" data-senna-track="temporary" href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getPathThemeCss() + "/clay.css")) %>" id="liferayAUICSS" rel="stylesheet" type="text/css" />

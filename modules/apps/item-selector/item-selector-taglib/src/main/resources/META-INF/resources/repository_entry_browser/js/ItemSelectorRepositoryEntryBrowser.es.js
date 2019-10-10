@@ -18,6 +18,11 @@ import {EventHandler} from 'metal-events';
 import {Config} from 'metal-state';
 import {PortletBase} from 'frontend-js-web';
 
+import ItemSelectorPreview from '../../item_selector_preview/js/ItemSelectorPreview.es';
+import {render} from 'frontend-js-react-web';
+
+import React from 'react';
+
 const STR_DRAG_LEAVE = 'dragleave';
 const STR_DRAG_OVER = 'dragover';
 const STR_DROP = 'drop';
@@ -48,13 +53,6 @@ class ItemSelectorRepositoryEntryBrowser extends PortletBase {
 			'liferay-item-selector-uploader',
 			'liferay-item-viewer',
 			A => {
-				this._itemViewer = new A.LiferayItemViewer({
-					btnCloseCaption: this.closeCaption,
-					editItemURL: this.editItemURL,
-					links: '',
-					uploadItemURL: this.uploadItemURL
-				});
-
 				this._uploadItemViewer = new A.LiferayItemViewer({
 					btnCloseCaption: this.closeCaption,
 					links: '',
@@ -69,6 +67,46 @@ class ItemSelectorRepositoryEntryBrowser extends PortletBase {
 				this._renderUI();
 			}
 		);
+
+		this.attachItemSelectorPreviewComponent();
+	}
+
+	attachItemSelectorPreviewComponent() {
+		const itemsNodes = Array.from(this.all('.item-preview'));
+
+		const items = itemsNodes.map(node => node.dataset);
+
+		const clicableItems = Array.from(this.all('.icon-view'));
+
+		if (items.length === clicableItems.length) {
+			clicableItems.forEach((clicableItem, index) => {
+				clicableItem.addEventListener('click', e => {
+					e.preventDefault();
+					e.stopPropagation();
+
+					const container = this.one(
+						'.item-selector-preview-container'
+					);
+
+					const data = {
+						container,
+						currentIndex: index,
+						editItemURL: this.editItemURL,
+						handleSelectedItem: this._onItemSelected.bind(this),
+						headerTitle: this.closeCaption,
+						items,
+						uploadItemReturnType: this.uploadItemReturnType,
+						uploadItemURL: this.uploadItemURL
+					};
+
+					render(
+						props => <ItemSelectorPreview {...props} />,
+						data,
+						container
+					);
+				});
+			});
+		}
 	}
 
 	/**
@@ -77,7 +115,6 @@ class ItemSelectorRepositoryEntryBrowser extends PortletBase {
 	detached() {
 		super.detached();
 
-		this._itemViewer.destroy();
 		this._uploadItemViewer.destroy();
 		this._itemSelectorUploader.destroy();
 
@@ -92,7 +129,7 @@ class ItemSelectorRepositoryEntryBrowser extends PortletBase {
 	_bindEvents() {
 		this._eventHandler.add(
 			dom.delegate(this.rootNode, 'click', '.item-preview', event =>
-				this._onItemSelected(event.delegateTarget)
+				this._onItemSelected(event.delegateTarget.dataset)
 			)
 		);
 
@@ -119,12 +156,10 @@ class ItemSelectorRepositoryEntryBrowser extends PortletBase {
 						itemData
 					);
 
-					const domNode = document.createElement('div');
-
-					domNode.dataset.returntype = this.uploadItemReturnType;
-					domNode.dataset.value = updatedImage.getData('value');
-
-					this._onItemSelected(domNode);
+					this._onItemSelected({
+						returntype: this.uploadItemReturnType,
+						value: updatedImage.getData('value')
+					});
 				}),
 				itemSelectorUploader.after(
 					'itemUploadError',
@@ -321,8 +356,8 @@ class ItemSelectorRepositoryEntryBrowser extends PortletBase {
 	_onItemSelected(item) {
 		this.emit('selectedItem', {
 			data: {
-				returnType: item.dataset.returntype,
-				value: item.dataset.value
+				returnType: item.returntype,
+				value: item.value
 			}
 		});
 	}
@@ -366,7 +401,6 @@ class ItemSelectorRepositoryEntryBrowser extends PortletBase {
 	_renderUI() {
 		const rootNode = this.rootNode;
 
-		this._itemViewer.render(rootNode);
 		this._uploadItemViewer.render(rootNode);
 	}
 

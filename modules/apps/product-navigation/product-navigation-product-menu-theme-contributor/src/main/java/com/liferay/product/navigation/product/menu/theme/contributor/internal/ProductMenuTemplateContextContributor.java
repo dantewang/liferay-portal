@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,13 +58,23 @@ public class ProductMenuTemplateContextContributor
 
 		String cssClass = GetterUtil.getString(
 			contextObjects.get("bodyCssClass"));
+		String pagesTreeState = SessionClicks.get(
+			httpServletRequest,
+			"com.liferay.product.navigation.product.menu.web_pagesTreeState",
+			"closed");
 		String productMenuState = SessionClicks.get(
 			httpServletRequest,
 			"com.liferay.product.navigation.product.menu.web_productMenuState",
 			"closed");
 
-		contextObjects.put(
-			"bodyCssClass", cssClass + StringPool.SPACE + productMenuState);
+		if (Objects.equals(pagesTreeState, "open")) {
+			cssClass += StringPool.SPACE + "open pages-tree-open";
+		}
+		else if (Objects.equals(productMenuState, "open")) {
+			cssClass += StringPool.SPACE + "open product-menu-open";
+		}
+
+		contextObjects.put("bodyCssClass", cssClass);
 
 		contextObjects.put("liferay_product_menu_state", productMenuState);
 	}

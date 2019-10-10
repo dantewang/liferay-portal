@@ -173,6 +173,24 @@ public class OAuth2Manager {
 		}
 	}
 
+	public void setAccessToken(long companyId, long userId, String accessToken)
+		throws IOException, PortalException {
+
+		GoogleAuthorizationCodeFlow googleAuthorizationCodeFlow =
+			_getGoogleAuthorizationCodeFlow(companyId);
+
+		if (googleAuthorizationCodeFlow != null) {
+			DataStore<StoredCredential> credentialDataStore =
+				googleAuthorizationCodeFlow.getCredentialDataStore();
+
+			StoredCredential storedCredential = new StoredCredential();
+
+			storedCredential.setAccessToken(accessToken);
+
+			credentialDataStore.set(String.valueOf(userId), storedCredential);
+		}
+	}
+
 	@Deactivate
 	protected void deactivate() {
 		_googleAuthorizationCodeFlows.clear();

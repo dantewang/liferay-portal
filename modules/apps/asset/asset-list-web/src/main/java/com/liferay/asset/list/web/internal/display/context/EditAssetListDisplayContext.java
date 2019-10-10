@@ -276,6 +276,30 @@ public class EditAssetListDisplayContext {
 
 				ruleJSONObject.put("selectedItems", selectedItems);
 			}
+			else if (Objects.equals(queryName, "keywords")) {
+				queryValues = ParamUtil.getString(
+					_httpServletRequest, "keywords" + queryLogicIndex,
+					queryValues);
+
+				String[] keywords = StringUtil.split(queryValues, " ");
+
+				if (ArrayUtil.isEmpty(keywords)) {
+					continue;
+				}
+
+				List<HashMap<String, String>> selectedItems = new ArrayList<>();
+
+				for (String keyword : keywords) {
+					HashMap<String, String> selectedCategory = new HashMap<>();
+
+					selectedCategory.put("label", keyword);
+					selectedCategory.put("value", keyword);
+
+					selectedItems.add(selectedCategory);
+				}
+
+				ruleJSONObject.put("selectedItems", selectedItems);
+			}
 			else {
 				queryValues = ParamUtil.getString(
 					_httpServletRequest, "queryCategoryIds" + queryLogicIndex,
@@ -908,7 +932,6 @@ public class EditAssetListDisplayContext {
 
 			portletURL.setParameter(
 				"groupIds", String.valueOf(_themeDisplay.getScopeGroupId()));
-
 			portletURL.setParameter(
 				"eventName", _portletResponse.getNamespace() + "selectTag");
 			portletURL.setParameter("selectedTagNames", "{selectedTagNames}");

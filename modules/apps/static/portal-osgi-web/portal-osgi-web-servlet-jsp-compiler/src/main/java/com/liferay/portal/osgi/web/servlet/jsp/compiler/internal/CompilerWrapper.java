@@ -37,6 +37,7 @@ import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
 
+import org.apache.jasper.EmbeddedServletOptions;
 import org.apache.jasper.JasperException;
 import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.Options;
@@ -181,11 +182,10 @@ public class CompilerWrapper extends Compiler {
 
 		classNamePath = classNamePath.concat(".class");
 
+		Options options = ctxt.getOptions();
 		URL url = null;
 
 		if (PropsValues.WORK_DIR_OVERRIDE_ENABLED) {
-			Options options = ctxt.getOptions();
-
 			File scratchDir = options.getScratchDir();
 
 			File classFile = new File(scratchDir, classNamePath);
@@ -205,6 +205,15 @@ public class CompilerWrapper extends Compiler {
 		}
 
 		if (url == null) {
+			EmbeddedServletOptions embeddedServletOptions =
+				(EmbeddedServletOptions)options;
+
+			if (Boolean.valueOf(
+					embeddedServletOptions.getProperty("hasFragment"))) {
+
+				return null;
+			}
+
 			JSPClassInfo jspClassInfo = _jspClassInfos.get(className);
 
 			if ((jspClassInfo != null) && jspClassInfo.isOverride()) {

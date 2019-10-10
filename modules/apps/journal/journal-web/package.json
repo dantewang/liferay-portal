@@ -1,18 +1,24 @@
 {
 	"dependencies": {
+		"@clayui/button": "3.0.0",
+		"@clayui/drop-down": "3.0.0",
+		"@clayui/icon": "3.0.0",
+		"@clayui/label": "3.0.0",
 		"clay-dropdown": "2.18.1",
 		"clay-label": "2.18.1",
 		"frontend-js-web": "*",
 		"metal": "2.16.8",
 		"metal-dom": "2.16.8",
 		"metal-soy": "2.16.8",
-		"metal-state": "2.16.8"
+		"metal-state": "2.16.8",
+		"prop-types": "15.7.2"
 	},
 	"name": "journal-web",
 	"scripts": {
 		"build": "liferay-npm-scripts build",
 		"checkFormat": "liferay-npm-scripts check",
-		"format": "liferay-npm-scripts fix"
+		"format": "liferay-npm-scripts fix",
+		"test": "liferay-npm-scripts test"
 	},
 	"version": "4.0.0"
 }

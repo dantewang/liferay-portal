@@ -7,11 +7,15 @@
 	{@param? activeSegmentsExperienceName: string }
 	{@param? availableSegmentsExperiences: list<[
 		segmentsExperienceId: string,
-		hasSegmentsExperiment: bool,
+		hasLockedSegmentsExperiment: bool,
 		name: string,
 		priority: int,
 		segmentsEntryName: string,
-		segmentsEntryId: string
+		segmentsEntryId: string,
+		segmentsExperimentStatus: [
+			label: string,
+			value: number
+		]
 	]>}
 	{@param? hasEditSegmentsEntryPermission: bool }
 	{@param? defaultSegmentsExperienceId: string }
@@ -186,17 +190,38 @@
 
 											<span class="audience d-block truncate-text">
 												<span class="text-secondary">
-													{msg desc=""}audience{/msg}
-													{sp}-{sp}
+													{msg desc=""}audience{/msg}{sp}
 												</span>
 
 												{$experience.segmentsEntryName}
 											</span>
+											{if $experience.segmentsExperimentStatus}
+												<div>
+													<span class="font-weight-normal text-secondary">
+														{msg desc=""}test{/msg}{sp}
+													</span>
+
+													{call com.liferay.layout.content.page.editor.web.ExperimentsLabel.render}
+														{param label: $experience.segmentsExperimentStatus.label /}
+														{param value: $experience.segmentsExperimentStatus.value /}
+													{/call}
+												</div>
+											{/if}
 										</span>
+
+										{if $experience.hasLockedSegmentsExperiment}
+											<div class="d-flex align-self-center dropdown-menu__experience--btn-group px-2">
+												{call ClayIcon.render}
+													{param elementClasses: 'mx-1' /}
+													{param spritemap: $spritemap /}
+													{param symbol: 'test' /}
+												{/call}
+											</div>
+										{/if}
 									</button>
 								</span>
 
-								{if ($defaultSegmentsExperienceId != $experience.segmentsExperienceId) and not $experience.hasSegmentsExperiment}
+								{if ($defaultSegmentsExperienceId != $experience.segmentsExperienceId) and not $experience.hasLockedSegmentsExperiment}
 									<div class="align-items-center d-flex dropdown-menu__experience--btn-group">
 										{let $disbledMoveUp: (isFirst($experience)) /}
 										{let $disbledMoveDown: ($notDefaultExperienceLength == index($experience)) /}
@@ -290,6 +315,7 @@
 										{/call}
 									</div>
 								{/if}
+
 							</li>
 						{/foreach}
 					</ul>

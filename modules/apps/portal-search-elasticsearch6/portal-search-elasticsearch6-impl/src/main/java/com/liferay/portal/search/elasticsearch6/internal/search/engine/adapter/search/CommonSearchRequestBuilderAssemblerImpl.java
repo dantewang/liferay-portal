@@ -30,6 +30,7 @@ import com.liferay.portal.search.filter.ComplexQueryBuilderFactory;
 import com.liferay.portal.search.filter.ComplexQueryPart;
 import com.liferay.portal.search.query.BooleanQuery;
 import com.liferay.portal.search.query.Query;
+import com.liferay.portal.search.rescore.Rescore;
 import com.liferay.portal.search.stats.StatsRequest;
 
 import java.util.ArrayList;
@@ -350,15 +351,41 @@ public class CommonSearchRequestBuilderAssemblerImpl
 		SearchRequestBuilder searchRequestBuilder,
 		BaseSearchRequest baseSearchRequest) {
 
-		Query query = baseSearchRequest.getRescoreQuery();
+		setRescorers(searchRequestBuilder, baseSearchRequest.getRescores());
+
+		setRescorerQuery(
+			searchRequestBuilder, baseSearchRequest.getRescoreQuery());
+	}
+
+	protected void setRescorerQuery(
+		SearchRequestBuilder searchRequestBuilder, Query query) {
 
 		if (query == null) {
 			return;
 		}
 
-		searchRequestBuilder.setRescorer(
+		searchRequestBuilder.addRescorer(
 			new QueryRescorerBuilder(
 				_queryToQueryBuilderTranslator.translate(query)));
+	}
+
+	protected void setRescorers(
+		SearchRequestBuilder searchRequestBuilder, List<Rescore> rescores) {
+
+		if (rescores == null) {
+			return;
+		}
+
+		for (Rescore rescore : rescores) {
+			QueryRescorerBuilder queryRescorerBuilder =
+				new QueryRescorerBuilder(
+					_queryToQueryBuilderTranslator.translate(
+						rescore.getQuery()));
+
+			queryRescorerBuilder.windowSize(rescore.getWindowSize());
+
+			searchRequestBuilder.addRescorer(queryRescorerBuilder);
+		}
 	}
 
 	protected void setStatsRequests(

@@ -1,0 +1,15 @@
+{
+	"dependencies": {
+		"@clayui/loading-indicator": "3.0.0",
+		"frontend-js-web": "*",
+		"react": "16.9.0",
+		"react-dom": "16.9.0"
+	},
+	"name": "product-navigation-control-menu-web",
+	"scripts": {
+		"build": "liferay-npm-scripts build",
+		"checkFormat": "liferay-npm-scripts check",
+		"format": "liferay-npm-scripts fix"
+	},
+	"version": "5.0.0"
+}

@@ -47,9 +47,11 @@ import com.liferay.portal.search.internal.highlight.HighlightsImpl;
 import com.liferay.portal.search.internal.legacy.searcher.SearchRequestBuilderImpl;
 import com.liferay.portal.search.internal.legacy.searcher.SearchResponseBuilderImpl;
 import com.liferay.portal.search.internal.query.QueriesImpl;
+import com.liferay.portal.search.internal.rescore.RescoreBuilderFactoryImpl;
 import com.liferay.portal.search.internal.script.ScriptsImpl;
 import com.liferay.portal.search.internal.sort.SortsImpl;
 import com.liferay.portal.search.query.Queries;
+import com.liferay.portal.search.rescore.RescoreBuilderFactory;
 import com.liferay.portal.search.script.Scripts;
 import com.liferay.portal.search.searcher.SearchRequestBuilder;
 import com.liferay.portal.search.searcher.SearchResponse;
@@ -293,6 +295,8 @@ public abstract class BaseIndexingTestCase {
 	protected final GeoBuilders geoBuilders = new GeoBuildersImpl();
 	protected final Highlights highlights = new HighlightsImpl();
 	protected final Queries queries = new QueriesImpl();
+	protected final RescoreBuilderFactory rescoreBuilderFactory =
+		new RescoreBuilderFactoryImpl();
 	protected final Scripts scripts = new ScriptsImpl();
 	protected final Sorts sorts = new SortsImpl();
 

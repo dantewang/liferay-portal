@@ -29,7 +29,7 @@ import com.liferay.fragment.service.FragmentEntryLocalService;
 import com.liferay.layout.content.page.editor.constants.ContentPageEditorPortletKeys;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
@@ -85,6 +85,11 @@ public class FragmentEntryLinkAssetRendererFactory
 		return TYPE;
 	}
 
+	@Override
+	public String getTypeName(Locale locale) {
+		return _language.get(locale, "fragment");
+	}
+
 	public class FragmentEntryLinkAssetRenderer
 		extends BaseAssetRenderer<FragmentEntryLink> {
 
@@ -132,7 +137,7 @@ public class FragmentEntryLinkAssetRendererFactory
 				return fragmentEntryLinkTitle;
 			}
 
-			return LanguageUtil.format(
+			return _language.format(
 				locale, "x-in-x",
 				new String[] {
 					fragmentEntryLinkTitle, fragmentEntryLinkContextTitle
@@ -184,7 +189,7 @@ public class FragmentEntryLinkAssetRendererFactory
 				ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 					locale, getClass());
 
-				return LanguageUtil.format(
+				return _language.format(
 					resourceBundle, "the-x-x",
 					new String[] {
 						assetRenderer.getTitle(locale),
@@ -254,5 +259,8 @@ public class FragmentEntryLinkAssetRendererFactory
 
 	@Reference
 	private FragmentRendererTracker _fragmentRendererTracker;
+
+	@Reference
+	private Language _language;
 
 }

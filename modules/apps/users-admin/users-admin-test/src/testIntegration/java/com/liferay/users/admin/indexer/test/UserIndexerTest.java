@@ -20,8 +20,10 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroup;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
@@ -34,6 +36,7 @@ import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.search.highlight.HighlightUtil;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -45,6 +48,7 @@ import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserGroupTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -52,6 +56,7 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -410,6 +415,31 @@ public class UserIndexerTest {
 	}
 
 	@Test
+	public void testUserInRole() throws Exception {
+		_expectedUser = UserTestUtil.addUser();
+
+		Role siteAdministratorRole = _roleLocalService.getRole(
+			TestPropsValues.getCompanyId(), RoleConstants.SITE_ADMINISTRATOR);
+
+		_userLocalService.addRoleUser(
+			siteAdministratorRole.getRoleId(), _expectedUser.getUserId());
+
+		assertSearch(
+			Collections.singletonList(siteAdministratorRole), _expectedUser);
+		assertSearch(
+			new ArrayList<Role>() {
+				{
+					add(siteAdministratorRole);
+					add(
+						_roleLocalService.getRole(
+							TestPropsValues.getCompanyId(),
+							RoleConstants.SITE_CONTENT_REVIEWER));
+				}
+			},
+			_expectedUser);
+	}
+
+	@Test
 	public void testUserNotInGroupViaOrganization() throws Exception {
 		_expectedUser = UserTestUtil.addUser();
 
@@ -473,12 +503,35 @@ public class UserIndexerTest {
 		assertNoHits(organizationGroup, _expectedUser.getFullName());
 	}
 
+	@Test
+	public void testUserNotInRole() throws Exception {
+		_expectedUser = UserTestUtil.addUser();
+
+		Role siteAdministratorRole = _roleLocalService.getRole(
+			TestPropsValues.getCompanyId(), RoleConstants.SITE_ADMINISTRATOR);
+
+		_userLocalService.addRoleUser(
+			siteAdministratorRole.getRoleId(), _expectedUser.getUserId());
+
+		assertNoHits(
+			Collections.singletonList(
+				_roleLocalService.getRole(
+					TestPropsValues.getCompanyId(),
+					RoleConstants.SITE_CONTENT_REVIEWER)));
+	}
+
 	protected void assertLength(Hits hits, int length) {
 		Assert.assertEquals(hits.toString(), length, hits.getLength());
 	}
 
 	protected void assertNoHits(Group group, String keywords) throws Exception {
 		Hits hits = search(group, keywords);
+
+		assertLength(hits, 0);
+	}
+
+	protected void assertNoHits(List<Role> roles) throws Exception {
+		Hits hits = search(roles);
 
 		assertLength(hits, 0);
 	}
@@ -520,6 +573,14 @@ public class UserIndexerTest {
 		}
 
 		return actualUsers;
+	}
+
+	protected List<User> assertSearch(List<Role> roles, User... expectedUsers)
+		throws Exception {
+
+		Hits hits = search(roles);
+
+		return assertSearch(hits, expectedUsers);
 	}
 
 	protected List<User> assertSearch(String keywords, User... expectedUsers)
@@ -645,6 +706,26 @@ public class UserIndexerTest {
 		return search(searchContext);
 	}
 
+	protected Hits search(List<Role> roles) throws Exception {
+		SearchContext searchContext = getSearchContext();
+
+		LinkedHashMap<String, Object> params = new LinkedHashMap<>(1);
+
+		if (roles.size() == 1) {
+			Role role = roles.get(0);
+
+			params.put("usersRoles", role.getRoleId());
+		}
+		else {
+			params.put(
+				"usersRoles", ListUtil.toArray(roles, Role.ROLE_ID_ACCESSOR));
+		}
+
+		searchContext.setAttribute("params", params);
+
+		return search(searchContext);
+	}
+
 	protected Hits search(SearchContext searchContext) throws Exception {
 		return _indexer.search(searchContext);
 	}
@@ -717,6 +798,9 @@ public class UserIndexerTest {
 
 	@Inject
 	private static OrganizationLocalService _organizationLocalService;
+
+	@Inject
+	private static RoleLocalService _roleLocalService;
 
 	@Inject
 	private static UserGroupLocalService _userGroupLocalService;

@@ -104,6 +104,10 @@ public class LiferaySourceOrSink
 		}
 
 		if (!_responseHandler.isApplicationJsonContentType(response)) {
+			if (response.getStatus() == 204) {
+				return null;
+			}
+
 			throw new ResponseContentClientException(
 				"Unable to decode response content type " +
 					_responseHandler.getContentType(response),
@@ -202,8 +206,8 @@ public class LiferaySourceOrSink
 	}
 
 	@Override
-	public JsonObject getOASJsonObject(String oasURL) {
-		return doGetRequest(null, oasURL);
+	public JsonObject getOASJsonObject() {
+		return doGetRequest((String)null);
 	}
 
 	public RESTClient getRestClient(RuntimeContainer runtimeContainer) {

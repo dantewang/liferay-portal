@@ -19,6 +19,9 @@ import com.liferay.asset.kernel.model.BaseJSPAssetRenderer;
 import com.liferay.bookmarks.constants.BookmarksPortletKeys;
 import com.liferay.bookmarks.constants.BookmarksWebKeys;
 import com.liferay.bookmarks.model.BookmarksEntry;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
@@ -31,7 +34,6 @@ import com.liferay.portal.kernel.trash.TrashRenderer;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
-import java.util.Date;
 import java.util.Locale;
 
 import javax.portlet.PortletRequest;
@@ -71,15 +73,6 @@ public class BookmarksEntryAssetRenderer
 	@Override
 	public long getClassPK() {
 		return _entry.getEntryId();
-	}
-
-	/**
-	 * @deprecated As of Judson (7.1.x), with no direct replacement
-	 */
-	@Deprecated
-	@Override
-	public Date getDisplayDate() {
-		return _entry.getModifiedDate();
 	}
 
 	@Override
@@ -130,9 +123,8 @@ public class BookmarksEntryAssetRenderer
 
 	@Override
 	public PortletURL getURLEdit(
-			LiferayPortletRequest liferayPortletRequest,
-			LiferayPortletResponse liferayPortletResponse)
-		throws Exception {
+		LiferayPortletRequest liferayPortletRequest,
+		LiferayPortletResponse liferayPortletResponse) {
 
 		Group group = GroupLocalServiceUtil.fetchGroup(_entry.getGroupId());
 
@@ -160,9 +152,8 @@ public class BookmarksEntryAssetRenderer
 
 	@Override
 	public String getURLView(
-			LiferayPortletResponse liferayPortletResponse,
-			WindowState windowState)
-		throws Exception {
+		LiferayPortletResponse liferayPortletResponse,
+		WindowState windowState) {
 
 		return PortalUtil.getPathMain() + "/bookmarks/open_entry?entryId=" +
 			_entry.getEntryId();
@@ -200,10 +191,13 @@ public class BookmarksEntryAssetRenderer
 			return _bookmarksEntryModelResourcePermission.contains(
 				permissionChecker, _entry, ActionKeys.UPDATE);
 		}
-		catch (Exception e) {
-		}
+		catch (PortalException pe) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(pe, pe);
+			}
 
-		return false;
+			return false;
+		}
 	}
 
 	@Override
@@ -212,10 +206,13 @@ public class BookmarksEntryAssetRenderer
 			return _bookmarksEntryModelResourcePermission.contains(
 				permissionChecker, _entry, ActionKeys.VIEW);
 		}
-		catch (Exception e) {
-		}
+		catch (PortalException pe) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(pe, pe);
+			}
 
-		return true;
+			return false;
+		}
 	}
 
 	@Override
@@ -234,6 +231,9 @@ public class BookmarksEntryAssetRenderer
 	public boolean isPrintable() {
 		return true;
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		BookmarksEntryAssetRenderer.class);
 
 	private final ModelResourcePermission<BookmarksEntry>
 		_bookmarksEntryModelResourcePermission;

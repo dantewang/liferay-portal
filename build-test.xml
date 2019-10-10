@@ -7292,6 +7292,22 @@ custom.sql.function.isnotnull=CONVERT(VARCHAR,?) IS NOT NULL</echo>
 		</if>
 
 		<if>
+			<and>
+				<isset property="google.drive.integration.client.id.1" />
+				<isset property="google.drive.integration.client.refresh.token.1" />
+				<isset property="google.drive.integration.client.secret.1" />
+			</and>
+			<then>
+				<echo append="true" file="portal-impl/src/portal-ext.properties">
+google.drive.integration.client.id.1=${google.drive.integration.client.id.1}
+
+google.drive.integration.client.refresh.token.1=${google.drive.integration.client.refresh.token.1}
+
+google.drive.integration.client.secret.1=${google.drive.integration.client.secret.1}</echo>
+			</then>
+		</if>
+
+		<if>
 			<equals arg1="${hot.deploy.dependency.management.enabled}" arg2="false" />
 			<then>
 				<echo append="true" file="portal-impl/src/portal-ext.properties">

@@ -42,6 +42,8 @@ public class OrganizationEntityModel implements EntityModel {
 				locale -> Field.getSortableFieldName(Field.MODIFIED_DATE),
 				locale -> Field.MODIFIED_DATE),
 			new IdEntityField(
+				"assetTagIds", locale -> Field.ASSET_TAG_IDS, String::valueOf),
+			new IdEntityField(
 				"classPK", locale -> Field.ORGANIZATION_ID, String::valueOf),
 			new IdEntityField(
 				"companyId", locale -> Field.COMPANY_ID, String::valueOf),
@@ -51,11 +53,13 @@ public class OrganizationEntityModel implements EntityModel {
 			new IdEntityField(
 				"parentOrganizationId", locale -> "parentOrganizationId",
 				String::valueOf),
+			new StringEntityField("country", locale -> "country"),
 			new StringEntityField(
 				"name", locale -> Field.getSortableFieldName(Field.NAME)),
 			new StringEntityField(
 				"nameTreePath",
 				locale -> Field.getSortableFieldName("nameTreePath_String")),
+			new StringEntityField("region", locale -> "region"),
 			new StringEntityField("type", locale -> Field.TYPE));
 	}
 

@@ -76,12 +76,16 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 				public ObjectValuePair<String, MessageListener> addingService(
 					ServiceReference<MessageListener> serviceReference) {
 
-					MessageListener messageListener = bundleContext.getService(
-						serviceReference);
-
 					String destinationName =
 						(String)serviceReference.getProperty(
 							"destination.name");
+
+					if (destinationName == null) {
+						return null;
+					}
+
+					MessageListener messageListener = bundleContext.getService(
+						serviceReference);
 
 					Thread currentThread = Thread.currentThread();
 
@@ -144,7 +148,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	@Deprecated
 	@Override
 	public synchronized void addDestination(Destination destination) {
-		doAddDestination(destination);
+		_addDestination(destination);
 	}
 
 	@Override
@@ -251,7 +255,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	public synchronized Destination removeDestination(
 		String destinationName, boolean closeOnRemove) {
 
-		return _removeDestination(destinationName, closeOnRemove);
+		return _removeDestination(destinationName);
 	}
 
 	@Override
@@ -278,14 +282,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	public synchronized void replace(
 		Destination destination, boolean closeOnRemove) {
 
-		Destination oldDestination = _destinations.get(destination.getName());
-
-		oldDestination.copyDestinationEventListeners(destination);
-		oldDestination.copyMessageListeners(destination);
-
-		removeDestination(oldDestination.getName(), closeOnRemove);
-
-		doAddDestination(destination);
+		_addDestination(destination);
 	}
 
 	@Override
@@ -374,37 +371,6 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		_destinations.clear();
 	}
 
-	protected void doAddDestination(Destination destination) {
-		destination.open();
-
-		_destinations.put(destination.getName(), destination);
-
-		for (MessageBusEventListener messageBusEventListener :
-				_messageBusEventListeners) {
-
-			messageBusEventListener.destinationAdded(destination);
-		}
-
-		List<MessageListener> messageListeners = _queuedMessageListeners.remove(
-			destination.getName());
-
-		if (ListUtil.isEmpty(messageListeners)) {
-			return;
-		}
-
-		if (_log.isDebugEnabled()) {
-			_log.debug(
-				StringBundler.concat(
-					"Registering ", messageListeners.size(),
-					" queued message listeners for destination ",
-					destination.getName()));
-		}
-
-		for (MessageListener messageListener : messageListeners) {
-			destination.register(messageListener);
-		}
-	}
-
 	@Reference(
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.DYNAMIC,
@@ -424,12 +390,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 			baseDestination.afterPropertiesSet();
 		}
 
-		if (_destinations.containsKey(destination.getName())) {
-			replace(destination);
-		}
-		else {
-			doAddDestination(destination);
-		}
+		_addDestination(destination);
 
 		DestinationWorkerConfiguration destinationWorkerConfiguration =
 			_destinationWorkerConfigurations.get(destinationName);
@@ -479,9 +440,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	protected synchronized void unregisterDestination(
 		Destination destination, Map<String, Object> properties) {
 
-		_removeDestination(destination.getName(), true);
-
-		destination.destroy();
+		_removeDestination(destination.getName());
 	}
 
 	protected synchronized void unregisterDestinationEventListener(
@@ -533,22 +492,61 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		}
 	}
 
-	private Destination _removeDestination(
-		String destinationName, boolean closeOnRemove) {
+	private void _addDestination(Destination destination) {
+		Destination oldDestination = _destinations.get(destination.getName());
 
+		if (oldDestination != null) {
+			oldDestination.copyDestinationEventListeners(destination);
+			oldDestination.copyMessageListeners(destination);
+		}
+		else {
+			List<MessageListener> messageListeners =
+				_queuedMessageListeners.remove(destination.getName());
+
+			if (!ListUtil.isEmpty(messageListeners)) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(
+						StringBundler.concat(
+							"Registering ", messageListeners.size(),
+							" queued message listeners for destination ",
+							destination.getName()));
+				}
+
+				for (MessageListener messageListener : messageListeners) {
+					destination.register(messageListener);
+				}
+			}
+		}
+
+		destination.open();
+
+		_destinations.put(destination.getName(), destination);
+
+		if (oldDestination != null) {
+			oldDestination.destroy();
+
+			for (MessageBusEventListener messageBusEventListener :
+					_messageBusEventListeners) {
+
+				messageBusEventListener.destinationRemoved(oldDestination);
+			}
+		}
+
+		for (MessageBusEventListener messageBusEventListener :
+				_messageBusEventListeners) {
+
+			messageBusEventListener.destinationAdded(destination);
+		}
+	}
+
+	private Destination _removeDestination(String destinationName) {
 		Destination destination = _destinations.remove(destinationName);
 
 		if (destination == null) {
 			return null;
 		}
 
-		if (closeOnRemove) {
-			destination.close(true);
-		}
-
-		destination.removeDestinationEventListeners();
-
-		destination.unregisterMessageListeners();
+		destination.destroy();
 
 		for (MessageBusEventListener messageBusEventListener :
 				_messageBusEventListeners) {
@@ -562,7 +560,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	private static final Log _log = LogFactoryUtil.getLog(
 		DefaultMessageBus.class);
 
-	private final Map<String, Destination> _destinations = new HashMap<>();
+	private final Map<String, Destination> _destinations =
+		new ConcurrentHashMap<>();
 	private final Map<String, DestinationWorkerConfiguration>
 		_destinationWorkerConfigurations = new ConcurrentHashMap<>();
 	private final Map<String, String> _factoryPidsToDestinationName =

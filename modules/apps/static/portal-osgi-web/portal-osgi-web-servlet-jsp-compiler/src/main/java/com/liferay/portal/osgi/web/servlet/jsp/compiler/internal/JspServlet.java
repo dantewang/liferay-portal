@@ -29,6 +29,7 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.EventListener;
 import java.util.HashMap;
@@ -72,13 +73,16 @@ import org.apache.tomcat.InstanceManager;
 import org.apache.tomcat.SimpleInstanceManager;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleReference;
+import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.util.tracker.BundleTracker;
 
 /**
  * @author Raymond Augé
@@ -217,6 +221,40 @@ public class JspServlet extends HttpServlet {
 		sb.append(_bundle.getVersion());
 
 		defaults.put(_INIT_PARAMETER_NAME_SCRATCH_DIR, sb.toString());
+
+		String symbolicName = _bundle.getSymbolicName();
+
+		BundleTracker<Bundle> bundleTracker = new BundleTracker(
+			_bundle.getBundleContext(), ~Bundle.UNINSTALLED, null) {
+
+			@Override
+			public Bundle addingBundle(Bundle bundle, BundleEvent bundleEvent) {
+				Dictionary<String, String> dictionary = bundle.getHeaders(
+					StringPool.BLANK);
+
+				String fragmentHost = dictionary.get(Constants.FRAGMENT_HOST);
+
+				if ((fragmentHost != null) &&
+					fragmentHost.equals(symbolicName)) {
+
+					Enumeration<URL> enumeration = bundle.findEntries(
+						"META-INF/resources", "*.jsp", true);
+
+					if (enumeration != null) {
+						defaults.put("hasFragment", "true");
+
+						close();
+					}
+				}
+
+				return bundle;
+			}
+
+		};
+
+		bundleTracker.open();
+
+		bundleTracker.close();
 
 		defaults.put(
 			TagHandlerPool.OPTION_TAGPOOL, JspTagHandlerPool.class.getName());

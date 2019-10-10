@@ -21,10 +21,14 @@ import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.account.service.AccountEntryUserRelLocalService;
 import com.liferay.account.service.test.AccountEntryTestUtil;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
@@ -33,6 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,11 +54,14 @@ public class AccountUserRetrieverTest {
 	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
 		new LiferayIntegrationTestRule();
 
-	@Test
-	public void testGetAccountUsers() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		_accountEntry = AccountEntryTestUtil.addAccountEntry(
 			_accountEntryLocalService);
+	}
 
+	@Test
+	public void testGetAccountUsers() throws Exception {
 		_users.add(UserTestUtil.addUser());
 		_users.add(UserTestUtil.addUser());
 		_users.add(UserTestUtil.addUser());
@@ -78,6 +86,123 @@ public class AccountUserRetrieverTest {
 		Arrays.sort(actualUserIds);
 
 		Assert.assertArrayEquals(expectedUserIds, actualUserIds);
+	}
+
+	@Test
+	public void testSearchAccountUsers() throws Exception {
+
+		// Add a user that is part of the account but will not hit a keyword
+		// search
+
+		_users.add(UserTestUtil.addUser());
+
+		// Add a user that is part of the account and will hit a keyword search
+
+		String keywords = RandomTestUtil.randomString();
+
+		_users.add(
+			UserTestUtil.addUser(
+				keywords + RandomTestUtil.randomString(), null));
+
+		for (User user : _users) {
+			_accountEntryUserRels.add(
+				_accountEntryUserRelLocalService.addAccountEntryUserRel(
+					_accountEntry.getAccountEntryId(), user.getUserId()));
+		}
+
+		// Assert that null keyword search hits only account users
+
+		_assertSearch(null, 2);
+
+		// Assert that non-null keyword search hits only account users that
+		// match
+
+		_assertSearch(keywords, 1);
+	}
+
+	@Test
+	public void testSearchAccountUsersWithNoAccountUsers() throws Exception {
+
+		// Add a user that is not part of the account
+
+		_users.add(UserTestUtil.addUser());
+
+		// Assert that null keyword search does not hit non-account users
+
+		_assertSearch(null, 0);
+	}
+
+	@Test
+	public void testSearchAccountUsersWithPagination() throws Exception {
+		String keywords = RandomTestUtil.randomString();
+
+		_users.add(UserTestUtil.addUser(keywords + 1, null));
+		_users.add(UserTestUtil.addUser(keywords + 2, null));
+		_users.add(UserTestUtil.addUser(keywords + 3, null));
+		_users.add(UserTestUtil.addUser(keywords + 4, null));
+
+		for (User user : _users) {
+			_accountEntryUserRels.add(
+				_accountEntryUserRelLocalService.addAccountEntryUserRel(
+					_accountEntry.getAccountEntryId(), user.getUserId()));
+		}
+
+		// Assert unpaginated search
+
+		BaseModelSearchResult<User> baseModelSearchResult = _searchAccountUsers(
+			keywords, 0, 4, false);
+
+		Assert.assertEquals(4, baseModelSearchResult.getLength());
+
+		List<User> users = baseModelSearchResult.getBaseModels();
+
+		Assert.assertEquals(users.toString(), 4, users.size());
+		Assert.assertEquals(_users.get(0), users.get(0));
+
+		// Test paginated search has a partial list, but full count
+
+		baseModelSearchResult = _searchAccountUsers(keywords, 1, 2, false);
+
+		Assert.assertEquals(4, baseModelSearchResult.getLength());
+
+		users = baseModelSearchResult.getBaseModels();
+
+		Assert.assertEquals(users.toString(), 2, users.size());
+		Assert.assertEquals(_users.get(1), users.get(0));
+
+		// Test reversed sorting
+
+		baseModelSearchResult = _searchAccountUsers(keywords, 0, 4, true);
+
+		Assert.assertEquals(4, baseModelSearchResult.getLength());
+
+		users = baseModelSearchResult.getBaseModels();
+
+		Assert.assertEquals(users.toString(), 4, users.size());
+		Assert.assertEquals(_users.get(3), users.get(0));
+	}
+
+	private void _assertSearch(String keywords, int expectedSize)
+		throws Exception {
+
+		BaseModelSearchResult<User> baseModelSearchResult = _searchAccountUsers(
+			keywords, QueryUtil.ALL_POS, QueryUtil.ALL_POS, false);
+
+		Assert.assertEquals(expectedSize, baseModelSearchResult.getLength());
+
+		List<User> users = baseModelSearchResult.getBaseModels();
+
+		Assert.assertEquals(users.toString(), expectedSize, users.size());
+	}
+
+	private BaseModelSearchResult<User> _searchAccountUsers(
+			String keywords, int cur, int delta, boolean reverse)
+		throws Exception {
+
+		return _accountUserRetriever.searchAccountUsers(
+			_accountEntry.getAccountEntryId(), keywords,
+			WorkflowConstants.STATUS_APPROVED, cur, delta, "screenName",
+			reverse);
 	}
 
 	@DeleteAfterTestRun

@@ -342,6 +342,10 @@ SideNavigation.prototype = {
 		const sidebar = element.querySelector('.sidebar-body');
 
 		if (!instance._fetchPromise && sidebar) {
+			while (sidebar.firstChild) {
+				sidebar.removeChild(sidebar.firstChild);
+			}
+
 			const loading = document.createElement('div');
 			addClass(loading, 'sidenav-loading');
 			loading.innerHTML = instance.options.loadingIndicatorTPL;

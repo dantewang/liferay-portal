@@ -27,12 +27,13 @@ DDMStructure ddmStructure = journalEditArticleDisplayContext.getDDMStructure();
 <aui:input name="ddmStructureKey" type="hidden" value="<%= ddmStructure.getStructureKey() %>" />
 
 <c:if test="<%= journalWebConfiguration.changeableDefaultLanguage() %>">
-	<soy:component-renderer
-		context="<%= journalEditArticleDisplayContext.getChangeDefaultLanguageSoyContext() %>"
-		module="js/ChangeDefaultLanguage.es"
-		servletContext="<%= application %>"
-		templateNamespace="com.liferay.journal.web.ChangeDefaultLanguage.render"
-	/>
+	<div id="<%= renderResponse.getNamespace() + "-change-default-language" %>">
+		<react:component
+			data="<%= journalEditArticleDisplayContext.getChangeDefaultLanguageData() %>"
+			module="js/ChangeDefaultLanguage.es"
+			servletContext="<%= application %>"
+		/>
+	</div>
 </c:if>
 
 <p class="article-structure">

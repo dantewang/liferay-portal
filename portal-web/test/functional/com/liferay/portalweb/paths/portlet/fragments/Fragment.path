@@ -69,6 +69,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>EDITABLE_HTML_FRAGMENT_FIELD</td>
+	<td>//div[contains(@class,'source-panel')]//div[contains(@class,'lfr-source-editor-code')]//textarea</td>
+	<td></td>
+</tr>
+<tr>
 	<td></td>
 	<td></td>
 	<td></td>
@@ -91,8 +96,38 @@
 	<td></td>
 </tr>
 <tr>
+	<td>FRAGMENT_CONFIGURATION_BORDER_COLOR</td>
+	<td>//div[contains(@class,'component-${key_fragmentName}')]//hr[contains(@style,'border-color:rgb(${key_borderColor})')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_CONFIGURATION_BORDER_RADIUS</td>
+	<td>//*[contains(@class,'component-${key_fragmentName}')]//div[contains(@style,'border-radius: ${key_borderRadius}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_CONFIGURATION_BOTTOM_SPACING</td>
+	<td>//*[contains(@class,'component-${key_fragmentName}')][contains(@class,'pb-${key_bottomSpacing}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_CONFIGURATION_BOX_SHADOW</td>
+	<td>//*[contains(@class,'component-${key_fragmentName}')]//div[contains(@class,'shadow-${key_boxShadow}')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>FRAGMENT_CONFIGURATION_HEADER_H2</td>
 	<td>//h2[contains(@class,'component-${key_fragmentName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_CONFIGURATION_HEIGHT</td>
+	<td>//div[contains(@class,'fragment-entry-link-content')]//div//div[contains(@class,'py-${key_height}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_CONFIGURATION_IMAGE_SIZE</td>
+	<td>//div[contains(@class,'component-${key_fragmentName}')]//img[contains(@class,'w-${key_imageSize}')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -108,6 +143,11 @@
 <tr>
 	<td>FRAGMENT_CONFIGURATION_TYPE</td>
 	<td>//div[contains(@class,'component-${key_fragmentName}')]//a[contains(@class,'-${key_type}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_CONFIGURATION_VERTICAL_SPACE</td>
+	<td>//div[contains(@class,'component-${key_fragmentName}')]//hr[contains(@class,'mb-${key_verticalSpace}')]</td>
 	<td></td>
 </tr>
 <!--FRAGMENT_HEADER-->

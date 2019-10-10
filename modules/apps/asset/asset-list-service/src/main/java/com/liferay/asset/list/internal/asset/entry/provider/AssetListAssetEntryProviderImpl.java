@@ -205,9 +205,10 @@ public class AssetListAssetEntryProviderImpl
 
 		properties.fastLoad(assetListEntry.getTypeSettings(segmentsEntryId));
 
-		_setCategoriesAndTags(
+		_setCategoriesAndTagsAndKeywords(
 			assetListEntry, assetEntryQuery, properties,
-			_getAssetCategoryIds(properties), _getAssetTagNames(properties));
+			_getAssetCategoryIds(properties), _getAssetTagNames(properties),
+			_getKeywords(properties));
 
 		long[] groupIds = GetterUtil.getLongValues(
 			StringUtil.split(
@@ -367,6 +368,35 @@ public class AssetListAssetEntryProviderImpl
 		}
 
 		return allAssetTagNames;
+	}
+
+	private static String[] _getKeywords(UnicodeProperties properties) {
+		String[] allKeywords = new String[0];
+
+		for (int i = 0; true; i++) {
+			String[] queryValues = StringUtil.split(
+				properties.getProperty("queryValues" + i, null));
+
+			if (ArrayUtil.isEmpty(queryValues)) {
+				break;
+			}
+
+			boolean queryContains = GetterUtil.getBoolean(
+				properties.getProperty("queryContains" + i, StringPool.BLANK));
+			boolean queryAndOperator = GetterUtil.getBoolean(
+				properties.getProperty(
+					"queryAndOperator" + i, StringPool.BLANK));
+			String queryName = properties.getProperty(
+				"queryName" + i, StringPool.BLANK);
+
+			if (!Objects.equals(queryName, "keywords") && queryContains &&
+				(queryAndOperator || (queryValues.length == 1))) {
+
+				allKeywords = queryValues;
+			}
+		}
+
+		return allKeywords;
 	}
 
 	private long[] _filterAssetCategoryIds(long[] assetCategoryIds) {
@@ -593,10 +623,10 @@ public class AssetListAssetEntryProviderImpl
 		return Collections.emptyList();
 	}
 
-	private void _setCategoriesAndTags(
+	private void _setCategoriesAndTagsAndKeywords(
 		AssetListEntry assetListEntry, AssetEntryQuery assetEntryQuery,
 		UnicodeProperties properties, long[] overrideAllAssetCategoryIds,
-		String[] overrideAllAssetTagNames) {
+		String[] overrideAllAssetTagNames, String[] overrideAllKeywords) {
 
 		long[] allAssetCategoryIds = new long[0];
 		long[] anyAssetCategoryIds = new long[0];
@@ -607,6 +637,11 @@ public class AssetListAssetEntryProviderImpl
 		String[] anyAssetTagNames = new String[0];
 		String[] notAllAssetTagNames = new String[0];
 		String[] notAnyAssetTagNames = new String[0];
+
+		String[] allKeywords = new String[0];
+		String[] anyKeywords = new String[0];
+		String[] notAllKeywords = new String[0];
+		String[] notAnyKeywords = new String[0];
 
 		for (int i = 0; true; i++) {
 			String[] queryValues = StringUtil.split(
@@ -640,6 +675,20 @@ public class AssetListAssetEntryProviderImpl
 					notAnyAssetCategoryIds = assetCategoryIds;
 				}
 			}
+			else if (Objects.equals(queryName, "keywords")) {
+				if (queryContains && queryAndOperator) {
+					allKeywords = queryValues;
+				}
+				else if (queryContains && !queryAndOperator) {
+					anyKeywords = queryValues;
+				}
+				else if (!queryContains && queryAndOperator) {
+					notAllKeywords = queryValues;
+				}
+				else {
+					notAnyKeywords = queryValues;
+				}
+			}
 			else {
 				if (queryContains && queryAndOperator) {
 					allAssetTagNames = queryValues;
@@ -664,6 +713,12 @@ public class AssetListAssetEntryProviderImpl
 
 		assetEntryQuery.setAllCategoryIds(allAssetCategoryIds);
 
+		if (overrideAllKeywords != null) {
+			allKeywords = overrideAllKeywords;
+		}
+
+		assetEntryQuery.setAllKeywords(allKeywords);
+
 		if (overrideAllAssetTagNames != null) {
 			allAssetTagNames = overrideAllAssetTagNames;
 		}
@@ -677,7 +732,11 @@ public class AssetListAssetEntryProviderImpl
 			assetEntryQuery.addAllTagIdsArray(allAssetTagIds);
 		}
 
+		anyAssetCategoryIds = _filterAssetCategoryIds(anyAssetCategoryIds);
+
 		assetEntryQuery.setAnyCategoryIds(anyAssetCategoryIds);
+
+		assetEntryQuery.setAnyKeywords(anyKeywords);
 
 		long[] anyAssetTagIds = _assetTagLocalService.getTagIds(
 			siteGroupId, anyAssetTagNames);
@@ -685,6 +744,7 @@ public class AssetListAssetEntryProviderImpl
 		assetEntryQuery.setAnyTagIds(anyAssetTagIds);
 
 		assetEntryQuery.setNotAllCategoryIds(notAllAssetCategoryIds);
+		assetEntryQuery.setNotAllKeywords(notAllKeywords);
 
 		for (String assetTagName : notAllAssetTagNames) {
 			long[] notAllAssetTagIds = _assetTagLocalService.getTagIds(
@@ -694,6 +754,7 @@ public class AssetListAssetEntryProviderImpl
 		}
 
 		assetEntryQuery.setNotAnyCategoryIds(notAnyAssetCategoryIds);
+		assetEntryQuery.setNotAnyKeywords(notAnyKeywords);
 
 		long[] notAnyAssetTagIds = _assetTagLocalService.getTagIds(
 			siteGroupId, notAnyAssetTagNames);
