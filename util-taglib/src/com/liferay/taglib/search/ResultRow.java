@@ -635,33 +635,6 @@ public class ResultRow
 		_state = state;
 	}
 
-	/**
-	 * @deprecated As of Judson (7.1.x)
-	 */
-	@Deprecated
-	private void addJSP(int index, String path) {
-		addJSP(
-			index, SearchEntry.DEFAULT_ALIGN, SearchEntry.DEFAULT_VALIGN,
-			SearchEntry.DEFAULT_COLSPAN, path);
-	}
-
-	/**
-	 * @deprecated As of Judson (7.1.x)
-	 */
-	@Deprecated
-	private void addJSP(
-		int index, String align, String valign, int colspan, String path) {
-
-		JSPSearchEntry jspSearchEntry = new JSPSearchEntry();
-
-		jspSearchEntry.setAlign(align);
-		jspSearchEntry.setColspan(colspan);
-		jspSearchEntry.setPath(path);
-		jspSearchEntry.setValign(valign);
-
-		_searchEntries.add(index, jspSearchEntry);
-	}
-
 	private boolean _bold;
 	private String _classHoverName;
 	private String _className;
