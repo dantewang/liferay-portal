@@ -601,8 +601,6 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		new ArrayList<>();
 	private JspCompilationContext _jspCompilationContext;
 	private JspRuntimeContext _jspRuntimeContext;
-	private final Map<String, Map<String, JavaFileObject>> _packageMap =
-		new ConcurrentHashMap<>();
 
 	private class JavaFileManagerWrapper
 		extends ForwardingJavaFileManager<JavaFileManager> {
@@ -676,6 +674,9 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 			return super.list(location, packageName, kinds, recurse);
 		}
+
+		private final Map<String, Map<String, JavaFileObject>> _packageMap =
+			new ConcurrentHashMap<>();
 
 	}
 
