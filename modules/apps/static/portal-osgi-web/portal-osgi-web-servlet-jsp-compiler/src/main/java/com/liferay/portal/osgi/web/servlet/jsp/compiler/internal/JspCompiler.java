@@ -57,13 +57,17 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
-import org.apache.jasper.Constants;
+import org.apache.jasper.EmbeddedServletOptions;
 import org.apache.jasper.JasperException;
 import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.JavacErrorDetail;
 import org.apache.jasper.compiler.Node;
+import org.apache.jasper.compiler.TldCache;
+import org.apache.tomcat.util.descriptor.tld.TaglibXml;
+import org.apache.tomcat.util.descriptor.tld.TldParser;
+import org.apache.tomcat.util.descriptor.tld.TldResourcePath;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -73,6 +77,8 @@ import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.util.tracker.ServiceTracker;
+
+import org.xml.sax.SAXException;
 
 /**
  * @author Raymond Augé
@@ -260,8 +266,7 @@ public class JspCompiler {
 		jspCompilationContext.setClassLoader(jspBundleClassloader);
 
 		_initClassPath();
-		_initTLDMappings(
-			servletContext, jspCompilationContext.getTagFileJarUrls());
+		_initTLDMappings(servletContext, options);
 
 		_jspCompilationContext = jspCompilationContext;
 
@@ -383,7 +388,8 @@ public class JspCompiler {
 	}
 
 	private void _collectTLDMappings(
-			Map<String, String[]> tldMappings, Map<String, URL> tagFileJarUrls,
+			Map<String, TldResourcePath> uriTldResourcePathMap,
+			Map<TldResourcePath, TaglibXml> tldResourcePathTaglibXmlMap,
 			Bundle bundle)
 		throws IOException {
 
@@ -403,19 +409,23 @@ public class JspCompiler {
 			String uri = TldURIUtil.getTldURI(url);
 
 			if (uri != null) {
-				String absoluteResourcePath = StringPool.SLASH.concat(
-					resourcePath);
+				try {
+					String absoluteResourcePath = StringPool.SLASH.concat(
+						resourcePath);
 
-				tldMappings.put(
-					uri.trim(), new String[] {absoluteResourcePath, null});
+					TldResourcePath tldResourcePath = new TldResourcePath(
+						url, absoluteResourcePath);
 
-				String urlString = url.toExternalForm();
+					uriTldResourcePathMap.put(uri, tldResourcePath);
 
-				tagFileJarUrls.put(
-					absoluteResourcePath,
-					new URL(
-						urlString.substring(
-							0, urlString.length() - resourcePath.length())));
+					TldParser tldParser = new TldParser(true, false, true);
+
+					tldResourcePathTaglibXmlMap.put(
+						tldResourcePath, tldParser.parse(tldResourcePath));
+				}
+				catch (SAXException saxe) {
+					_log.error(saxe, saxe);
+				}
 			}
 		}
 	}
@@ -436,21 +446,16 @@ public class JspCompiler {
 
 	@SuppressWarnings("unchecked")
 	private void _initTLDMappings(
-		ServletContext servletContext, Map<String, URL> tagFileJarUrls) {
+		ServletContext servletContext, Options options) {
 
-		Map<String, String[]> tldMappings =
-			(Map<String, String[]>)servletContext.getAttribute(
-				Constants.JSP_TLD_URI_TO_LOCATION_MAP);
-
-		if (tldMappings != null) {
-			return;
-		}
-
-		tldMappings = new HashMap<>();
+		Map<String, TldResourcePath> uriTldResourcePathMap = new HashMap<>();
+		Map<TldResourcePath, TaglibXml> tldResourcePathTaglibXmlMap =
+			new HashMap<>();
 
 		try {
 			for (Bundle bundle : _allParticipatingBundles) {
-				_collectTLDMappings(tldMappings, tagFileJarUrls, bundle);
+				_collectTLDMappings(
+					uriTldResourcePathMap, tldResourcePathTaglibXmlMap, bundle);
 			}
 		}
 		catch (Exception exception) {
@@ -463,13 +468,40 @@ public class JspCompiler {
 
 		if (map != null) {
 			for (Map.Entry<String, String> entry : map.entrySet()) {
-				tldMappings.put(
-					entry.getKey(), new String[] {entry.getValue(), null});
+				try {
+					URL url = servletContext.getResource(entry.getValue());
+
+					if (url != null) {
+						TldResourcePath tldResourcePath = new TldResourcePath(
+							url, entry.getValue());
+
+						uriTldResourcePathMap.put(
+							entry.getValue(), tldResourcePath);
+
+						TldParser tldParser = new TldParser(true, false, true);
+
+						tldResourcePathTaglibXmlMap.put(
+							tldResourcePath, tldParser.parse(tldResourcePath));
+					}
+				}
+				catch (Exception e) {
+					_log.error(e, e);
+				}
 			}
 		}
 
+		TldCache tldCache = new TldCache(
+			servletContext, uriTldResourcePathMap, tldResourcePathTaglibXmlMap);
+
 		servletContext.setAttribute(
-			Constants.JSP_TLD_URI_TO_LOCATION_MAP, tldMappings);
+			TldCache.SERVLET_CONTEXT_ATTRIBUTE_NAME, tldCache);
+
+		if (options instanceof EmbeddedServletOptions) {
+			EmbeddedServletOptions embeddedServletOptions =
+				(EmbeddedServletOptions)options;
+
+			embeddedServletOptions.setTldCache(tldCache);
+		}
 	}
 
 	private static final String[] _JSP_COMPILER_DEPENDENCIES = {
