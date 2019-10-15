@@ -25,13 +25,13 @@ import com.liferay.message.boards.service.MBMessageLocalServiceUtil;
 import com.liferay.message.boards.service.MBThreadLocalServiceUtil;
 import com.liferay.portal.kernel.model.StagedModel;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.test.ServiceTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
-import com.liferay.portal.service.test.ServiceTestUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.Date;
