@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.test.ServiceTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
@@ -42,7 +43,6 @@ import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.LongWrapper;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.service.test.ServiceTestUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.Collection;

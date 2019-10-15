@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.test.ServiceTestUtil;
 import com.liferay.portal.kernel.test.AssertUtils;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
@@ -36,7 +37,6 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.service.test.ServiceTestUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.Arrays;

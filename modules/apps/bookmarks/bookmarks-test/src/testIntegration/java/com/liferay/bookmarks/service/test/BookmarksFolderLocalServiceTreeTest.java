@@ -21,11 +21,11 @@ import com.liferay.bookmarks.service.BookmarksFolderLocalServiceUtil;
 import com.liferay.bookmarks.service.BookmarksFolderServiceUtil;
 import com.liferay.bookmarks.test.util.BookmarksTestUtil;
 import com.liferay.portal.kernel.model.TreeModel;
+import com.liferay.portal.kernel.service.test.ServiceTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.local.service.tree.test.util.BaseLocalServiceTreeTestCase;
-import com.liferay.portal.service.test.ServiceTestUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.ArrayList;

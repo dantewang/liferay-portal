@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.test.ServiceTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
@@ -40,7 +41,6 @@ import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.service.test.ServiceTestUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 

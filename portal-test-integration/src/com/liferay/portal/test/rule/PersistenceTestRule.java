@@ -17,10 +17,10 @@ package com.liferay.portal.test.rule;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.model.ModelListener;
 import com.liferay.portal.kernel.model.ModelListenerRegistrationUtil;
+import com.liferay.portal.kernel.service.test.ServiceTestUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AbstractTestRule;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
-import com.liferay.portal.service.test.ServiceTestUtil;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;

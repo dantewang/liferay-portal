@@ -22,12 +22,12 @@ import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ResourceLocalService;
+import com.liferay.portal.kernel.service.test.ServiceTestUtil;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.security.permission.DoAsUserThread;
-import com.liferay.portal.service.test.ServiceTestUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
