@@ -285,8 +285,8 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 		jspCompilationContext.setClassLoader(jspBundleClassloader);
 
-		initClassPath();
-		initTLDMappings(
+		_initClassPath();
+		_initTLDMappings(
 			servletContext, jspCompilationContext.getTagFileJarUrls());
 
 		_jspCompilationContext = jspCompilationContext;
@@ -371,7 +371,36 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		_compilerOptions.add(targetVM);
 	}
 
-	protected void addDependenciesToClassPath() {
+	private static Set<String> _collectPackageNames(BundleWiring bundleWiring) {
+		Set<String> packageNames = _bundleWiringPackageNamesCache.get(
+			bundleWiring);
+
+		if (packageNames != null) {
+			return packageNames;
+		}
+
+		packageNames = new HashSet<>();
+
+		for (BundleCapability bundleCapability :
+				bundleWiring.getCapabilities(
+					BundleRevision.PACKAGE_NAMESPACE)) {
+
+			Map<String, Object> attributes = bundleCapability.getAttributes();
+
+			Object packageName = attributes.get(
+				BundleRevision.PACKAGE_NAMESPACE);
+
+			if (packageName != null) {
+				packageNames.add((String)packageName);
+			}
+		}
+
+		_bundleWiringPackageNamesCache.put(bundleWiring, packageNames);
+
+		return packageNames;
+	}
+
+	private void _addDependenciesToClassPath() {
 		ClassLoader frameworkClassLoader = Bundle.class.getClassLoader();
 
 		for (String className : _JSP_COMPILER_DEPENDENCIES) {
@@ -379,7 +408,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 				Class<?> clazz = Class.forName(
 					className, true, frameworkClassLoader);
 
-				addDependencyToClassPath(clazz);
+				_addDependencyToClassPath(clazz);
 			}
 			catch (ClassNotFoundException classNotFoundException) {
 				_log.error(
@@ -389,7 +418,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		}
 	}
 
-	protected void addDependencyToClassPath(Class<?> clazz) {
+	private void _addDependencyToClassPath(Class<?> clazz) {
 		ProtectionDomain protectionDomain = clazz.getProtectionDomain();
 
 		if (protectionDomain == null) {
@@ -421,7 +450,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		}
 	}
 
-	protected void collectTLDMappings(
+	private void _collectTLDMappings(
 			Map<String, String[]> tldMappings, Map<String, URL> tagFileJarUrls,
 			Bundle bundle)
 		throws IOException {
@@ -459,22 +488,22 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		}
 	}
 
-	protected void initClassPath() {
+	private void _initClassPath() {
 		if (System.getSecurityManager() != null) {
 			AccessController.doPrivileged(
 				(PrivilegedAction<Void>)() -> {
-					addDependenciesToClassPath();
+					_addDependenciesToClassPath();
 
 					return null;
 				});
 		}
 		else {
-			addDependenciesToClassPath();
+			_addDependenciesToClassPath();
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void initTLDMappings(
+	private void _initTLDMappings(
 		ServletContext servletContext, Map<String, URL> tagFileJarUrls) {
 
 		Map<String, String[]> tldMappings =
@@ -489,7 +518,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 		try {
 			for (Bundle bundle : _allParticipatingBundles) {
-				collectTLDMappings(tldMappings, tagFileJarUrls, bundle);
+				_collectTLDMappings(tldMappings, tagFileJarUrls, bundle);
 			}
 		}
 		catch (Exception exception) {
@@ -509,35 +538,6 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 		servletContext.setAttribute(
 			Constants.JSP_TLD_URI_TO_LOCATION_MAP, tldMappings);
-	}
-
-	private static Set<String> _collectPackageNames(BundleWiring bundleWiring) {
-		Set<String> packageNames = _bundleWiringPackageNamesCache.get(
-			bundleWiring);
-
-		if (packageNames != null) {
-			return packageNames;
-		}
-
-		packageNames = new HashSet<>();
-
-		for (BundleCapability bundleCapability :
-				bundleWiring.getCapabilities(
-					BundleRevision.PACKAGE_NAMESPACE)) {
-
-			Map<String, Object> attributes = bundleCapability.getAttributes();
-
-			Object packageName = attributes.get(
-				BundleRevision.PACKAGE_NAMESPACE);
-
-			if (packageName != null) {
-				packageNames.add((String)packageName);
-			}
-		}
-
-		_bundleWiringPackageNamesCache.put(bundleWiring, packageNames);
-
-		return packageNames;
 	}
 
 	private static final String[] _JSP_COMPILER_DEPENDENCIES = {
