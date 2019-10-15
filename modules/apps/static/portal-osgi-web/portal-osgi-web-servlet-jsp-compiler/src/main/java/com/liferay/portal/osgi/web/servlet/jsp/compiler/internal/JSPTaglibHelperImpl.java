@@ -24,6 +24,7 @@ import java.io.InputStream;
 
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -55,20 +56,15 @@ public class JSPTaglibHelperImpl implements JSPTaglibHelper {
 
 		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
 
-		Collection<String> resources = bundleWiring.listResources(
-			"META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE);
+		Collection<URL> urls = new ArrayList<>(
+			bundleWiring.findEntries(
+				"META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
 
-		if (resources == null) {
-			return;
-		}
+		urls.addAll(
+			bundleWiring.findEntries(
+				"WEB-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
 
-		for (String resource : resources) {
-			URL url = bundle.getResource(resource);
-
-			if (url == null) {
-				continue;
-			}
-
+		for (URL url : urls) {
 			try (InputStream inputStream = url.openStream()) {
 				Document document = SAXReaderUtil.read(inputStream);
 
@@ -80,7 +76,9 @@ public class JSPTaglibHelperImpl implements JSPTaglibHelper {
 					String listenerClassName = listenerElement.elementText(
 						"listener-class");
 
-					if (Validator.isNull(listenerClassName)) {
+					if (Validator.isNull(listenerClassName) ||
+						listenerClassNames.contains(listenerClassName)) {
+
 						continue;
 					}
 
