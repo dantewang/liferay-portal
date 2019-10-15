@@ -126,7 +126,8 @@ public class JspCompiler extends Jsr199JavaCompiler {
 				null,
 				Arrays.asList(
 					new StringJavaFileObject(
-						className.substring(className.lastIndexOf('.') + 1),
+						className.substring(
+							className.lastIndexOf(CharPool.PERIOD) + 1),
 						_charArrayWriter.toString())));
 
 			if (_log.isDebugEnabled()) {
@@ -194,9 +195,8 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 	@Override
 	public long getClassLastModified() {
-		String className = _jspCompilationContext.getFullClassName();
-
-		return _jspRuntimeContext.getBytecodeBirthTime(className);
+		return _jspRuntimeContext.getBytecodeBirthTime(
+			_jspCompilationContext.getFullClassName());
 	}
 
 	@Override
@@ -288,7 +288,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 		jspCompilationContext.setClassLoader(jspBundleClassloader);
 
-		initClassPath(servletContext);
+		initClassPath();
 		initTLDMappings(
 			servletContext, jspCompilationContext.getTagFileJarUrls());
 
@@ -321,7 +321,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 				outputFileName = outputFileName.concat(
 					bytecodeFileClassName.substring(
-						bytecodeFileClassName.lastIndexOf('.') + 1)
+						bytecodeFileClassName.lastIndexOf(CharPool.PERIOD) + 1)
 				).concat(
 					".class"
 				);
@@ -452,18 +452,13 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		}
 	}
 
-	protected void initClassPath(ServletContext servletContext) {
+	protected void initClassPath() {
 		if (System.getSecurityManager() != null) {
 			AccessController.doPrivileged(
-				new PrivilegedAction<Void>() {
+				(PrivilegedAction<Void>)() -> {
+					addDependenciesToClassPath();
 
-					@Override
-					public Void run() {
-						addDependenciesToClassPath();
-
-						return null;
-					}
-
+					return null;
 				});
 		}
 		else {
@@ -634,15 +629,17 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		}
 
 		@Override
-		public String inferBinaryName(Location location, JavaFileObject file) {
-			if (file instanceof BytecodeJavaFileObject) {
+		public String inferBinaryName(
+			Location location, JavaFileObject javaFileObject) {
+
+			if (javaFileObject instanceof BytecodeJavaFileObject) {
 				BytecodeJavaFileObject bytecodeJavaFileObject =
-					(BytecodeJavaFileObject)file;
+					(BytecodeJavaFileObject)javaFileObject;
 
 				return bytecodeJavaFileObject.getClassName();
 			}
 
-			return super.inferBinaryName(location, file);
+			return super.inferBinaryName(location, javaFileObject);
 		}
 
 		@Override
