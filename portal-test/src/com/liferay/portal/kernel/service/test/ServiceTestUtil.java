@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.service.test;
+package com.liferay.portal.kernel.service.test;
 
 import com.liferay.petra.executor.PortalExecutorManager;
 import com.liferay.petra.reflect.ReflectionUtil;
