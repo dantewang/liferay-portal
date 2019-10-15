@@ -396,28 +396,25 @@ public class JspCompiler {
 
 		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
 
-		List<String> resourcePaths = new ArrayList<>(
-			bundleWiring.listResources(
+		List<URL> urls = new ArrayList<>(
+			bundleWiring.findEntries(
 				"/META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
 
-		resourcePaths.addAll(
-			bundleWiring.listResources(
+		urls.addAll(
+			bundleWiring.findEntries(
 				"/WEB-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
 
-		for (String resourcePath : resourcePaths) {
-			URL url = bundle.getResource(resourcePath);
-
+		for (URL url : urls) {
 			String uri = TldURIUtil.getTldURI(url);
 
-			if (uri != null) {
+			if ((uri != null) &&
+				!uriTldResourcePathMap.containsKey(uri.trim())) {
+
 				try {
-					String absoluteResourcePath = StringPool.SLASH.concat(
-						resourcePath);
-
 					TldResourcePath tldResourcePath = new TldResourcePath(
-						url, absoluteResourcePath);
+						url, url.getPath());
 
-					uriTldResourcePathMap.put(uri, tldResourcePath);
+					uriTldResourcePathMap.put(uri.trim(), tldResourcePath);
 
 					TldParser tldParser = new TldParser(true, false, true);
 
