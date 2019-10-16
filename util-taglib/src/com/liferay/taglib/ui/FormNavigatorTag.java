@@ -75,22 +75,6 @@ public class FormNavigatorTag extends IncludeTag {
 		_backURL = backURL;
 	}
 
-	/**
-	 * @deprecated As of Wilberforce (7.0.x)
-	 */
-	@Deprecated
-	public void setCategoryNames(String[] categoryNames) {
-		_categoryNames = categoryNames;
-	}
-
-	/**
-	 * @deprecated As of Wilberforce (7.0.x)
-	 */
-	@Deprecated
-	public void setCategorySections(String[][] categorySections) {
-		_categorySections = categorySections;
-	}
-
 	public void setDisplayStyle(String displayStyle) {
 		_displayStyle = displayStyle;
 	}
@@ -115,14 +99,6 @@ public class FormNavigatorTag extends IncludeTag {
 		_id = id;
 	}
 
-	/**
-	 * @deprecated As of Wilberforce (7.0.x)
-	 */
-	@Deprecated
-	public void setJspPath(String jspPath) {
-		_jspPath = jspPath;
-	}
-
 	public void setMarkupView(String markupView) {
 		_markupView = markupView;
 	}
@@ -136,32 +112,21 @@ public class FormNavigatorTag extends IncludeTag {
 		super.cleanUp();
 
 		_backURL = null;
-		_categoryNames = null;
-		_categorySections = null;
 		_displayStyle = "form";
 		_formModelBean = null;
 		_formName = "fm";
 		_htmlBottom = null;
 		_htmlTop = null;
 		_id = null;
-		_jspPath = null;
 		_markupView = null;
 		_showButtons = true;
 	}
 
 	protected String[] getCategoryKeys() {
-		if (_categoryNames != null) {
-			return _categoryNames;
-		}
-
 		return FormNavigatorCategoryUtil.getKeys(_id);
 	}
 
 	protected String[] getCategoryLabels() {
-		if (_categoryNames != null) {
-			return _categoryNames;
-		}
-
 		HttpServletRequest httpServletRequest = getRequest();
 
 		ThemeDisplay themeDisplay =
@@ -173,10 +138,6 @@ public class FormNavigatorTag extends IncludeTag {
 	}
 
 	protected String[][] getCategorySectionKeys() {
-		if (_categorySections != null) {
-			return _categorySections;
-		}
-
 		HttpServletRequest httpServletRequest = getRequest();
 
 		ThemeDisplay themeDisplay =
@@ -198,10 +159,6 @@ public class FormNavigatorTag extends IncludeTag {
 	}
 
 	protected String[][] getCategorySectionLabels() {
-		if (_categorySections != null) {
-			return _categorySections;
-		}
-
 		HttpServletRequest httpServletRequest = getRequest();
 
 		ThemeDisplay themeDisplay =
@@ -224,18 +181,7 @@ public class FormNavigatorTag extends IncludeTag {
 	}
 
 	protected String[] getDeprecatedCategorySections() {
-		if (_categorySections == null) {
-			return new String[0];
-		}
-
-		String[] deprecatedCategorySections = new String[0];
-
-		for (String[] categorySection : _categorySections) {
-			deprecatedCategorySections = ArrayUtil.append(
-				deprecatedCategorySections, categorySection);
-		}
-
-		return deprecatedCategorySections;
+		return new String[0];
 	}
 
 	@Override
@@ -277,22 +223,17 @@ public class FormNavigatorTag extends IncludeTag {
 			"liferay-ui:form-navigator:htmlTop", _htmlTop);
 		httpServletRequest.setAttribute("liferay-ui:form-navigator:id", _id);
 		httpServletRequest.setAttribute(
-			"liferay-ui:form-navigator:jspPath", _jspPath);
-		httpServletRequest.setAttribute(
 			"liferay-ui:form-navigator:showButtons",
 			String.valueOf(_showButtons));
 	}
 
 	private String _backURL;
-	private String[] _categoryNames;
-	private String[][] _categorySections;
 	private String _displayStyle = "form";
 	private Object _formModelBean;
 	private String _formName = "fm";
 	private String _htmlBottom;
 	private String _htmlTop;
 	private String _id;
-	private String _jspPath;
 	private String _markupView;
 	private boolean _showButtons = true;
 

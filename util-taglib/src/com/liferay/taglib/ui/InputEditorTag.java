@@ -220,15 +220,6 @@ public class InputEditorTag extends BaseValidatorTagSupport {
 		_height = height;
 	}
 
-	/**
-	 * @deprecated As of Wilberforce (7.0.x), replaced by {@link
-	 *             #setContents(String)}
-	 */
-	@Deprecated
-	public void setInitMethod(String initMethod) {
-		_initMethod = initMethod;
-	}
-
 	public void setInlineEdit(boolean inlineEdit) {
 		_inlineEdit = inlineEdit;
 	}
@@ -300,7 +291,6 @@ public class InputEditorTag extends BaseValidatorTagSupport {
 		_editorName = null;
 		_fileBrowserParams = null;
 		_height = null;
-		_initMethod = "initEditor";
 		_inlineEdit = false;
 		_inlineEditSaveURL = null;
 		_name = "editor";
@@ -504,8 +494,6 @@ public class InputEditorTag extends BaseValidatorTagSupport {
 		httpServletRequest.setAttribute(
 			"liferay-ui:input-editor:height", _height);
 		httpServletRequest.setAttribute(
-			"liferay-ui:input-editor:initMethod", _initMethod);
-		httpServletRequest.setAttribute(
 			"liferay-ui:input-editor:inlineEdit", String.valueOf(_inlineEdit));
 		httpServletRequest.setAttribute(
 			"liferay-ui:input-editor:inlineEditSaveURL", _inlineEditSaveURL);
@@ -586,7 +574,6 @@ public class InputEditorTag extends BaseValidatorTagSupport {
 	private String _editorName;
 	private Map<String, String> _fileBrowserParams;
 	private String _height;
-	private String _initMethod = "initEditor";
 	private boolean _inlineEdit;
 	private String _inlineEditSaveURL;
 	private String _name = "editor";
