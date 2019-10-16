@@ -22,7 +22,10 @@ import java.util.concurrent.CyclicBarrier;
 /**
  * @author Matthew Tambara
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             com.liferay.portal.kernel.service.test.SynchronousInvocationHandler}
  */
+@Deprecated
 public class SynchronousInvocationHandler implements InvocationHandler {
 
 	public static void disable() {
