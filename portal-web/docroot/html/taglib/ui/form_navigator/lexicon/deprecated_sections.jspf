@@ -20,7 +20,7 @@
 	String section = deprecatedCategorySections[0];
 
 	String sectionId = namespace + _getSectionId(section);
-	String sectionJsp = jspPath + _getSectionJsp(section) + ".jsp";
+	String sectionJsp = _getSectionJsp(section) + ".jsp";
 	%>
 
 	<!-- Begin fragment <%= sectionId %> -->
@@ -36,7 +36,7 @@
 		section = deprecatedCategorySections[i];
 
 		sectionId = namespace + _getSectionId(section);
-		sectionJsp = jspPath + _getSectionJsp(section) + ".jsp";
+		sectionJsp = _getSectionJsp(section) + ".jsp";
 	%>
 
 		<!-- Begin fragment <%= sectionId %> -->

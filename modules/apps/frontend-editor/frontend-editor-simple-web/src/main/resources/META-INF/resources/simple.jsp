@@ -22,7 +22,6 @@ String portletId = portletDisplay.getRootPortletId();
 boolean autoCreate = GetterUtil.getBoolean((String)request.getAttribute(SimpleEditorConstants.ATTRIBUTE_NAMESPACE + ":autoCreate"));
 String contents = (String)request.getAttribute(SimpleEditorConstants.ATTRIBUTE_NAMESPACE + ":contents");
 String cssClass = GetterUtil.getString((String)request.getAttribute(SimpleEditorConstants.ATTRIBUTE_NAMESPACE + ":cssClass"));
-String initMethod = (String)request.getAttribute(SimpleEditorConstants.ATTRIBUTE_NAMESPACE + ":initMethod");
 String name = namespace + GetterUtil.getString((String)request.getAttribute(SimpleEditorConstants.ATTRIBUTE_NAMESPACE + ":name"));
 
 String onChangeMethod = (String)request.getAttribute(SimpleEditorConstants.ATTRIBUTE_NAMESPACE + ":onChangeMethod");
@@ -72,16 +71,7 @@ name = HtmlUtil.escapeJS(name);
 	};
 
 	var getInitialContent = function() {
-		var data;
-
-		if (window['<%= HtmlUtil.escapeJS(namespace + initMethod) %>']) {
-			data = <%= HtmlUtil.escapeJS(namespace + initMethod) %>();
-		} else {
-			data =
-				'<%= (contents != null) ? HtmlUtil.escapeJS(contents) : StringPool.BLANK %>';
-		}
-
-		return data;
+		return '<%= (contents != null) ? HtmlUtil.escapeJS(contents) : StringPool.BLANK %>';
 	};
 
 	window['<%= name %>'] = {
@@ -152,16 +142,6 @@ name = HtmlUtil.escapeJS(name);
 		},
 
 		initEditor: function() {
-			<c:if test="<%= (contents == null) && Validator.isNotNull(initMethod) %>">
-
-				var initEditorFunction =
-					window['<%= HtmlUtil.escapeJS(namespace + initMethod) %>'];
-
-				if (typeof initEditorFunction === 'function') {
-					<%= name %>.setHTML(initEditorFunction());
-				}
-			</c:if>
-
 			<c:if test="<%= Validator.isNotNull(onChangeMethod) %>">
 				onInputHandle = A.one('#<%= name %>').on(
 					'input',
