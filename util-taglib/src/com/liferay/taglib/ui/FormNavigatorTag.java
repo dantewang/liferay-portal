@@ -180,10 +180,6 @@ public class FormNavigatorTag extends IncludeTag {
 		return categorySectionLabels;
 	}
 
-	protected String[] getDeprecatedCategorySections() {
-		return new String[0];
-	}
-
 	@Override
 	protected String getPage() {
 		if (Validator.isNotNull(_markupView)) {
@@ -210,7 +206,7 @@ public class FormNavigatorTag extends IncludeTag {
 			getCategorySectionLabels());
 		httpServletRequest.setAttribute(
 			"liferay-ui:form-navigator:deprecatedCategorySections",
-			getDeprecatedCategorySections());
+			new String[0]);
 		httpServletRequest.setAttribute(
 			"liferay-ui:form-navigator:displayStyle", _displayStyle);
 		httpServletRequest.setAttribute(
