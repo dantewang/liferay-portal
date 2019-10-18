@@ -60,7 +60,7 @@ String emailBody = PrefsParamUtil.getString(portletPreferences, request, emailBo
 
 		<aui:field-wrapper label="body">
 			<liferay-ui:input-editor
-				editorImpl="ckeditor"
+				editorName="ckeditor"
 			/>
 
 			<aui:input name='<%= "preferences--" + emailBodyParam + "--" %>' type="hidden" value="<%= emailBody %>" />
