@@ -4182,11 +4182,6 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>imageCssClass</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
 			<name>markupView</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -4268,11 +4263,6 @@
 		<body-content>JSP</body-content>
 		<attribute>
 			<name>cssClass</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>imageCssClass</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>

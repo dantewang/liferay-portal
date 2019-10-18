@@ -20,7 +20,6 @@
 	var="html"
 >
 	<liferay-ui:user-portrait
-		imageCssClass="<%= imageCssClass %>"
 		user="<%= userDisplay %>"
 		userName="<%= (userDisplay != null) ? userDisplay.getFullName() : userName %>"
 	/>

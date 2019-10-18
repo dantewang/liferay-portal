@@ -156,14 +156,6 @@ public class UserPortraitTag extends IncludeTag {
 		_cssClass = cssClass;
 	}
 
-	/**
-	 * @deprecated As of Judson (7.1.x), with no direct replacement
-	 */
-	@Deprecated
-	@SuppressWarnings("unused")
-	public void setImageCssClass(String imageCssClass) {
-	}
-
 	public void setSize(String size) {
 		_size = size;
 	}
