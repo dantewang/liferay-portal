@@ -99,14 +99,6 @@ public class FormNavigatorTag extends IncludeTag {
 		_id = id;
 	}
 
-	/**
-	 * @deprecated As of Wilberforce (7.0.x)
-	 */
-	@Deprecated
-	public void setJspPath(String jspPath) {
-		_jspPath = jspPath;
-	}
-
 	public void setMarkupView(String markupView) {
 		_markupView = markupView;
 	}
@@ -126,7 +118,6 @@ public class FormNavigatorTag extends IncludeTag {
 		_htmlBottom = null;
 		_htmlTop = null;
 		_id = null;
-		_jspPath = null;
 		_markupView = null;
 		_showButtons = true;
 	}
@@ -214,9 +205,6 @@ public class FormNavigatorTag extends IncludeTag {
 			"liferay-ui:form-navigator:categorySectionLabels",
 			getCategorySectionLabels());
 		httpServletRequest.setAttribute(
-			"liferay-ui:form-navigator:deprecatedCategorySections",
-			new String[0]);
-		httpServletRequest.setAttribute(
 			"liferay-ui:form-navigator:displayStyle", _displayStyle);
 		httpServletRequest.setAttribute(
 			"liferay-ui:form-navigator:formModelBean", _formModelBean);
@@ -227,8 +215,6 @@ public class FormNavigatorTag extends IncludeTag {
 		httpServletRequest.setAttribute(
 			"liferay-ui:form-navigator:htmlTop", _htmlTop);
 		httpServletRequest.setAttribute("liferay-ui:form-navigator:id", _id);
-		httpServletRequest.setAttribute(
-			"liferay-ui:form-navigator:jspPath", _jspPath);
 		httpServletRequest.setAttribute(
 			"liferay-ui:form-navigator:showButtons",
 			String.valueOf(_showButtons));
@@ -241,7 +227,6 @@ public class FormNavigatorTag extends IncludeTag {
 	private String _htmlBottom;
 	private String _htmlTop;
 	private String _id;
-	private String _jspPath;
 	private String _markupView;
 	private boolean _showButtons = true;
 

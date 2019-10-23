@@ -24,14 +24,12 @@ String[][] categorySectionKeys = (String[][])request.getAttribute("liferay-ui:fo
 String[][] categorySectionLabels = (String[][])request.getAttribute("liferay-ui:form-navigator:categorySectionLabels");
 String[] categoryKeys = (String[])request.getAttribute("liferay-ui:form-navigator:categoryKeys");
 String[] categoryLabels = (String[])request.getAttribute("liferay-ui:form-navigator:categoryLabels");
-String[] deprecatedCategorySections = (String[])request.getAttribute("liferay-ui:form-navigator:deprecatedCategorySections");
 String displayStyle = (String)request.getAttribute("liferay-ui:form-navigator:displayStyle");
 Object formModelBean = request.getAttribute("liferay-ui:form-navigator:formModelBean");
 String formName = GetterUtil.getString((String)request.getAttribute("liferay-ui:form-navigator:formName"));
 String htmlBottom = (String)request.getAttribute("liferay-ui:form-navigator:htmlBottom");
 String htmlTop = (String)request.getAttribute("liferay-ui:form-navigator:htmlTop");
 String id = (String)request.getAttribute("liferay-ui:form-navigator:id");
-String jspPath = (String)request.getAttribute("liferay-ui:form-navigator:jspPath");
 boolean showButtons = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:form-navigator:showButtons"));
 
 if (Validator.isNull(backURL)) {
