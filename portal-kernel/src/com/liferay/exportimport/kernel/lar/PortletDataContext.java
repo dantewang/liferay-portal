@@ -374,13 +374,6 @@ public interface PortletDataContext extends Serializable {
 
 	public boolean isMissingReference(Element referenceElement);
 
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             #isModelCounted(String, Serializable)}
-	 */
-	@Deprecated
-	public boolean isModelCounted(String className, long classPK);
-
 	public boolean isModelCounted(String className, Serializable classPK);
 
 	public boolean isPathExportedInScope(String path);

@@ -300,7 +300,7 @@ public class JournalArticleStagedModelDataHandler
 
 		return !portletDataContext.isModelCounted(
 			JournalArticleResource.class.getName(),
-			article.getResourcePrimKey());
+			Long.valueOf(article.getResourcePrimKey()));
 	}
 
 	@Override
