@@ -17,7 +17,7 @@ package com.liferay.saml.persistence.internal.upgrade.v1_1_4;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LoggingTimer;
-import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.saml.runtime.configuration.SamlProviderConfiguration;
 

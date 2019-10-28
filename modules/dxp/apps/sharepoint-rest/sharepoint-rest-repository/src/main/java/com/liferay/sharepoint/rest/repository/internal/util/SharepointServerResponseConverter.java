@@ -28,7 +28,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
-import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.sharepoint.rest.repository.internal.document.library.repository.external.model.SharepointFileEntry;
 import com.liferay.sharepoint.rest.repository.internal.document.library.repository.external.model.SharepointFileVersion;
