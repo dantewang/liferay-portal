@@ -169,7 +169,7 @@ public class AssetCategoryStagedModelDataHandler
 			PortletDataContext.REFERENCE_TYPE_DEPENDENCY, false);
 
 		portletDataContext.addPermissions(
-			AssetCategory.class, category.getCategoryId());
+			AssetCategory.class, Long.valueOf(category.getCategoryId()));
 
 		portletDataContext.addZipEntry(categoryPath, category);
 	}

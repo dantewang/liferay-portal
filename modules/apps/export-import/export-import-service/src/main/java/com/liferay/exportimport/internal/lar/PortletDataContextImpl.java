@@ -301,16 +301,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 		_locksMap.put(getPrimaryKeyString(className, (Serializable)key), lock);
 	}
 
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             #addPermissions(Class, Serializable)}
-	 */
-	@Deprecated
-	@Override
-	public void addPermissions(Class<?> clazz, long classPK) {
-		addPermissions(clazz.getName(), Long.valueOf(classPK));
-	}
-
 	@Override
 	public void addPermissions(Class<?> clazz, Serializable classPK) {
 		addPermissions(clazz.getName(), GetterUtil.getLong(classPK));

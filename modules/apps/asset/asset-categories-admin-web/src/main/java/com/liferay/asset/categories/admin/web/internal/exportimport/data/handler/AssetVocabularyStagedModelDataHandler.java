@@ -166,7 +166,7 @@ public class AssetVocabularyStagedModelDataHandler
 			PortletDataContext.REFERENCE_TYPE_DEPENDENCY, false);
 
 		portletDataContext.addPermissions(
-			AssetVocabulary.class, vocabulary.getVocabularyId());
+			AssetVocabulary.class, Long.valueOf(vocabulary.getVocabularyId()));
 
 		portletDataContext.addZipEntry(vocabularyPath, vocabulary);
 	}
