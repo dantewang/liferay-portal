@@ -627,16 +627,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 		return _xStream.fromXML(xml);
 	}
 
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             #getAssetCategoryIds(Class, Serializable)}
-	 */
-	@Deprecated
-	@Override
-	public long[] getAssetCategoryIds(Class<?> clazz, long classPK) {
-		return getAssetCategoryIds(clazz, Long.valueOf(classPK));
-	}
-
 	@Override
 	public long[] getAssetCategoryIds(Class<?> clazz, Serializable classPK) {
 		long[] assetCategoryIds = _assetCategoryIdsMap.get(
@@ -652,16 +642,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 	@Override
 	public Set<Long> getAssetLinkIds() {
 		return _assetLinkIds;
-	}
-
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             #getAssetTagNames(Class, Serializable)}
-	 */
-	@Deprecated
-	@Override
-	public String[] getAssetTagNames(Class<?> clazz, long classPK) {
-		return getAssetTagNames(clazz, Long.valueOf(classPK));
 	}
 
 	@Override

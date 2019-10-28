@@ -158,23 +158,9 @@ public interface PortletDataContext extends Serializable {
 
 	public Object fromXML(String xml);
 
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             #getAssetCategoryIds(Class, Serializable)}
-	 */
-	@Deprecated
-	public long[] getAssetCategoryIds(Class<?> clazz, long classPK);
-
 	public long[] getAssetCategoryIds(Class<?> clazz, Serializable classPK);
 
 	public Set<Long> getAssetLinkIds();
-
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             #getAssetTagNames(Class, Serializable)}
-	 */
-	@Deprecated
-	public String[] getAssetTagNames(Class<?> clazz, long classPK);
 
 	public String[] getAssetTagNames(Class<?> clazz, Serializable classPK);
 
