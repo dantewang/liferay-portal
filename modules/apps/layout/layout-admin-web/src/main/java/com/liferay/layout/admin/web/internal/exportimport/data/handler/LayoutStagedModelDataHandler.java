@@ -646,7 +646,6 @@ public class LayoutStagedModelDataHandler
 		layouts.put(oldLayoutId, importedLayout);
 
 		portletDataContext.setPlid(importedLayout.getPlid());
-		portletDataContext.setOldPlid(layout.getPlid());
 
 		long parentPlid = layout.getParentPlid();
 		long parentLayoutId = layout.getParentLayoutId();
@@ -661,7 +660,6 @@ public class LayoutStagedModelDataHandler
 		if ((parentLayoutId != LayoutConstants.DEFAULT_PARENT_LAYOUT_ID) &&
 			(parentLayoutElement != null)) {
 
-			long originalOldPlid = portletDataContext.getOldPlid();
 			long originalPlid = portletDataContext.getPlid();
 
 			try {
@@ -669,7 +667,6 @@ public class LayoutStagedModelDataHandler
 					portletDataContext, parentLayoutElement);
 			}
 			finally {
-				portletDataContext.setOldPlid(originalOldPlid);
 				portletDataContext.setPlid(originalPlid);
 			}
 
@@ -878,7 +875,6 @@ public class LayoutStagedModelDataHandler
 			String scopeLayoutUuid = (String)portletIdsEntry.getValue()[3];
 
 			portletDataContext.setPlid(layout.getPlid());
-			portletDataContext.setOldPlid(layout.getPlid());
 			portletDataContext.setPortletId(portletId);
 			portletDataContext.setScopeGroupId(scopeGroupId);
 			portletDataContext.setScopeType(scopeType);
@@ -1430,7 +1426,6 @@ public class LayoutStagedModelDataHandler
 			return;
 		}
 
-		long originalOldPlid = portletDataContext.getOldPlid();
 		long originalPlid = portletDataContext.getPlid();
 		String originalPortletId = portletDataContext.getPortletId();
 
@@ -1459,11 +1454,6 @@ public class LayoutStagedModelDataHandler
 			}
 
 			portletDataContext.setPlid(layout.getPlid());
-
-			long oldPlid = GetterUtil.getLong(
-				portletElement.attributeValue("old-plid"));
-
-			portletDataContext.setOldPlid(oldPlid);
 
 			portletDataContext.setPortletId(portletId);
 
@@ -1632,7 +1622,6 @@ public class LayoutStagedModelDataHandler
 			}
 		}
 
-		portletDataContext.setOldPlid(originalOldPlid);
 		portletDataContext.setPlid(originalPlid);
 		portletDataContext.setPortletId(originalPortletId);
 	}
