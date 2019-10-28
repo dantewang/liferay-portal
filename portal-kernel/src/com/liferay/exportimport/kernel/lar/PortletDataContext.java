@@ -350,14 +350,6 @@ public interface PortletDataContext extends Serializable {
 	public void importLocks(Class<?> clazz, String key, String newKey)
 		throws PortalException;
 
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             #importPermissions(Class, Serializable, Serializable)}
-	 */
-	@Deprecated
-	public void importPermissions(Class<?> clazz, long classPK, long newClassPK)
-		throws PortalException;
-
 	public void importPermissions(
 			Class<?> clazz, Serializable classPK, Serializable newClassPK)
 		throws PortalException;

@@ -1361,19 +1361,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 			lock.isInheritable(), expirationTime);
 	}
 
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             #importPermissions(Class, Serializable, Serializable)}
-	 */
-	@Deprecated
-	@Override
-	public void importPermissions(Class<?> clazz, long classPK, long newClassPK)
-		throws PortalException {
-
-		importPermissions(
-			clazz, Long.valueOf(classPK), Long.valueOf(newClassPK));
-	}
-
 	@Override
 	public void importPermissions(
 			Class<?> clazz, Serializable classPK, Serializable newClassPK)

@@ -281,8 +281,8 @@ public class AssetCategoryStagedModelDataHandler
 		categoryUuids.put(category.getUuid(), importedCategory.getUuid());
 
 		portletDataContext.importPermissions(
-			AssetCategory.class, category.getCategoryId(),
-			importedCategory.getCategoryId());
+			AssetCategory.class, Long.valueOf(category.getCategoryId()),
+			Long.valueOf(importedCategory.getCategoryId()));
 	}
 
 	protected String getCategoryName(
