@@ -283,8 +283,8 @@ public class MBMessageLocalServiceTest {
 		MBMessageLocalServiceUtil.updateMessage(
 			TestPropsValues.getUserId(), message.getMessageId(),
 			RandomTestUtil.randomString(), RandomTestUtil.randomString(),
-			Collections.<ObjectValuePair<String, InputStream>>emptyList(),
-			Collections.<String>emptyList(), 0, false, serviceContext);
+			Collections.<ObjectValuePair<String, InputStream>>emptyList(), 0,
+			false, serviceContext);
 
 		Assert.assertEquals(
 			0,
@@ -305,8 +305,8 @@ public class MBMessageLocalServiceTest {
 		MBMessageLocalServiceUtil.updateMessage(
 			TestPropsValues.getUserId(), message.getMessageId(),
 			RandomTestUtil.randomString(), RandomTestUtil.randomString(),
-			Collections.<ObjectValuePair<String, InputStream>>emptyList(),
-			Collections.<String>emptyList(), 0, false, serviceContext);
+			Collections.<ObjectValuePair<String, InputStream>>emptyList(), 0,
+			false, serviceContext);
 
 		List<FileEntry> fileEntries =
 			PortletFileRepositoryUtil.getPortletFileEntries(
