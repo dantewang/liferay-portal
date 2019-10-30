@@ -1,8 +1,21 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.jar.Attributes
 import java.util.jar.JarFile
 
 import org.gradle.util.VersionNumber
 
+task getServiceJar
 task writeReleases
 
 baseline {
@@ -21,6 +34,7 @@ baseline {
 
 classes {
 	dependsOn writeReleases
+	dependsOn getServiceJar
 }
 
 dependencies {
@@ -106,4 +120,114 @@ writeReleases {
 			}
 		}
 	}
+}
+
+getServiceJar{
+	doLast{
+		int endIndex = String.valueOf(rootDir).indexOf("modules");
+
+		String gradleCacheDir = String.valueOf(rootDir).substring(0, endIndex) + ".gradle/caches";
+
+		List<String> moduleNames = Arrays.asList("com.liferay.commerce.currency.service", "com.liferay.commerce.product.service");
+
+		try{
+			File destDir = new File(buildDir, "serviceJars");
+			destDir.mkdirs();
+			for(String moduleName : moduleNames){
+				String targetVersion = _getModuleVersion(String.valueOf(projectDir) + "/build.gradle", moduleName);
+				String targetPath = _checkVersion(targetVersion, _findJars(gradleCacheDir, moduleName));
+				File source = new File(targetPath);
+				File dest = new File(destDir, moduleName + ".jar");
+
+				Files.copy(source.toPath(), dest.toPath());
+
+				String from = dest.toString();
+
+				String to = destDir.toString() + "/" + moduleName;
+
+				ant.unjar(src: from, dest: to)
+
+			}
+		}catch(IOException ioe){}
+	}
+}
+
+private String _getModuleVersion(String gradleFile, String moduleName) {
+	File buildFile = new File(gradleFile);
+
+	String line = null;
+
+	String version = null;
+
+	try{
+		BufferedReader reader =
+		Files.newBufferedReader(buildFile.toPath())
+		while ((line = reader.readLine()) != null) {
+			if (line.contains(moduleName)) {
+				break;
+			}
+		}
+		reader.close();
+	}
+	catch (IOException ioe) {
+	}
+
+	if(line != null){
+		version = line.substring(line.lastIndexOf("version") + 10, line.length() - 1);
+	}
+
+	return version;
+}
+
+private List<Path> _findJars(String portalGradleCachesPath, String moduleName) {
+	File baseDir = new File(portalGradleCachesPath);
+
+	if (!baseDir.exists() || !baseDir.isDirectory()) {
+		_LOGGER.log(
+			Level.WARNING, "{0} dose not exists or it is not a directoy!",
+			baseDir);
+	}
+
+	List<Path> targetPath = new ArrayList<>();
+
+	try {
+		Files.walkFileTree(
+			baseDir.toPath(),
+			new SimpleFileVisitor<Path>() {
+
+				@Override
+				public FileVisitResult visitFile(
+					Path path, BasicFileAttributes basicFileAttributes)
+				throws IOException {
+
+					Path fileNamePath = path.getFileName();
+
+					String fileName = fileNamePath.toString();
+
+					if (fileName.contains(moduleName) &&
+						fileName.contains(".jar")) {
+
+						targetPath.add(path.toAbsolutePath());
+					}
+
+					return FileVisitResult.CONTINUE;
+				}
+
+			});
+	}
+	catch (IOException ioe) {
+	}
+
+	return targetPath;
+}
+
+private String _checkVersion(String targetVersion, List<Path> paths){
+	String targetPath = null;
+
+	for(Path path : paths){
+		if(path.toString().contains(targetVersion)){
+			targetPath = path.toString();
+		}
+	}
+	return targetPath;
 }
