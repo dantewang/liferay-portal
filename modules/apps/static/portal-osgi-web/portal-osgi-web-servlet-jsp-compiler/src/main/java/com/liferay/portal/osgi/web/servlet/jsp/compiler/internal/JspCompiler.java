@@ -246,8 +246,7 @@ public class JspCompiler {
 		jspCompilationContext.setClassLoader(jspBundleClassloader);
 
 		_initClassPath();
-		_initTLDMappings(
-			servletContext, jspCompilationContext.getTagFileJarUrls());
+		_initTLDMappings(servletContext, options);
 
 		_jspCompilationContext = jspCompilationContext;
 	}
