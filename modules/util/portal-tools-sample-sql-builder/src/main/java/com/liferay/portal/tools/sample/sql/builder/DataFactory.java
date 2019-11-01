@@ -559,7 +559,7 @@ public class DataFactory {
 		return classNameModel.getClassNameId();
 	}
 
-	public Collection<ClassNameModel> getClassNameModels() {
+	public Collection<ClassNameModel> getClassNameModelValues() {
 		return _classNameModels.values();
 	}
 
