@@ -1,7 +1,7 @@
-${dataFactory.toInsertSQL(dataFactory.defaultDLFileEntryTypeModel)}
+${resourcePermissionDataFactory.toInsertSQL(dLDataFactory.defaultDLFileEntryTypeModel)}
 
 <@insertDDMStructure
-	_ddmStructureLayoutModel=dataFactory.defaultDLDDMStructureLayoutModel
-	_ddmStructureModel=dataFactory.defaultDLDDMStructureModel
-	_ddmStructureVersionModel=dataFactory.defaultDLDDMStructureVersionModel
+	_ddmStructureLayoutModel=dLDataFactory.defaultDLDDMStructureLayoutModel
+	_ddmStructureModel=dLDataFactory.defaultDLDDMStructureModel
+	_ddmStructureVersionModel=dLDataFactory.defaultDLDDMStructureVersionModel
 />
