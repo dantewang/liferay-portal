@@ -56,6 +56,19 @@ public class JSPTaglibHelperImpl implements JSPTaglibHelper {
 
 		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
 
+		Collection<String> resources = bundleWiring.listResources(
+			"META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE);
+
+		for (String resource : resources) {
+			URL url = bundle.getResource(resource);
+
+			if (url == null) {
+				continue;
+			}
+
+			_parseTLD(url, servletContext, listenerClassNames);
+		}
+
 		Collection<URL> urls = new ArrayList<>(
 			bundleWiring.findEntries(
 				"META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
@@ -65,29 +78,34 @@ public class JSPTaglibHelperImpl implements JSPTaglibHelper {
 				"WEB-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
 
 		for (URL url : urls) {
-			try (InputStream inputStream = url.openStream()) {
-				Document document = SAXReaderUtil.read(inputStream);
+			_parseTLD(url, servletContext, listenerClassNames);
+		}
+	}
 
-				Element rootElement = document.getRootElement();
+	private void _parseTLD(
+		URL url, ServletContext servletContext,
+		List<String> listenerClassNames) {
 
-				for (Element listenerElement :
-						rootElement.elements("listener")) {
+		try (InputStream inputStream = url.openStream()) {
+			Document document = SAXReaderUtil.read(inputStream);
 
-					String listenerClassName = listenerElement.elementText(
-						"listener-class");
+			Element rootElement = document.getRootElement();
 
-					if (Validator.isNull(listenerClassName) ||
-						listenerClassNames.contains(listenerClassName)) {
+			for (Element listenerElement : rootElement.elements("listener")) {
+				String listenerClassName = listenerElement.elementText(
+					"listener-class");
 
-						continue;
-					}
+				if (Validator.isNull(listenerClassName) ||
+					listenerClassNames.contains(listenerClassName)) {
 
-					listenerClassNames.add(listenerClassName);
+					continue;
 				}
+
+				listenerClassNames.add(listenerClassName);
 			}
-			catch (Exception e) {
-				servletContext.log(e.getMessage(), e);
-			}
+		}
+		catch (Exception e) {
+			servletContext.log(e.getMessage(), e);
 		}
 	}
 

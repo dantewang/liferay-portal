@@ -373,6 +373,26 @@ public class JspCompiler {
 
 		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
 
+		List<String> resourcePaths = new ArrayList<>(
+			bundleWiring.listResources(
+				"/META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
+
+		resourcePaths.addAll(
+			bundleWiring.listResources(
+				"/WEB-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
+
+		for (String resourcePath : resourcePaths) {
+			URL url = bundle.getResource(resourcePath);
+
+			if (url == null) {
+				continue;
+			}
+
+			_populateTldMappings(
+				uriTldResourcePathMap, tldResourcePathTaglibXmlMap,
+				StringPool.SLASH.concat(resourcePath), url);
+		}
+
 		List<URL> urls = new ArrayList<>(
 			bundleWiring.findEntries(
 				"/META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
@@ -382,26 +402,9 @@ public class JspCompiler {
 				"/WEB-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
 
 		for (URL url : urls) {
-			String uri = TldURIUtil.getTldURI(url);
-
-			if ((uri != null) &&
-				!uriTldResourcePathMap.containsKey(uri.trim())) {
-
-				try {
-					TldResourcePath tldResourcePath = new TldResourcePath(
-						url, url.getPath());
-
-					uriTldResourcePathMap.put(uri.trim(), tldResourcePath);
-
-					TldParser tldParser = new TldParser(true, false, true);
-
-					tldResourcePathTaglibXmlMap.put(
-						tldResourcePath, tldParser.parse(tldResourcePath));
-				}
-				catch (SAXException saxe) {
-					_log.error(saxe, saxe);
-				}
-			}
+			_populateTldMappings(
+				uriTldResourcePathMap, tldResourcePathTaglibXmlMap,
+				url.getPath(), url);
 		}
 	}
 
@@ -476,6 +479,34 @@ public class JspCompiler {
 				(EmbeddedServletOptions)options;
 
 			embeddedServletOptions.setTldCache(tldCache);
+		}
+	}
+
+	private void _populateTldMappings(
+			Map<String, TldResourcePath> uriTldResourcePathMap,
+			Map<TldResourcePath, TaglibXml> tldResourcePathTaglibXmlMap,
+			String absoluteResourcePath, URL url)
+		throws IOException {
+
+		String uri = TldURIUtil.getTldURI(url);
+
+		uri = uri.trim();
+
+		if ((uri != null) && !uriTldResourcePathMap.containsKey(uri)) {
+			try {
+				TldResourcePath tldResourcePath = new TldResourcePath(
+					url, absoluteResourcePath);
+
+				uriTldResourcePathMap.put(uri, tldResourcePath);
+
+				TldParser tldParser = new TldParser(true, false, true);
+
+				tldResourcePathTaglibXmlMap.put(
+					tldResourcePath, tldParser.parse(tldResourcePath));
+			}
+			catch (SAXException saxe) {
+				_log.error(saxe, saxe);
+			}
 		}
 	}
 
