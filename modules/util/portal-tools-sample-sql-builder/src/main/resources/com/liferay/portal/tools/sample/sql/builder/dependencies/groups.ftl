@@ -1,18 +1,18 @@
-<#assign layoutModel = dataFactory.newLayoutModel(dataFactory.guestGroupModel.groupId, "welcome", "com_liferay_login_web_portlet_LoginPortlet,", "com_liferay_hello_world_web_portlet_HelloWorldPortlet,") />
+<#assign layoutModel = layoutDataFactory.newLayoutModel(userDataFactory.guestGroupModel.groupId, "welcome", "com_liferay_login_web_portlet_LoginPortlet,", "com_liferay_hello_world_web_portlet_HelloWorldPortlet,") />
 
 <@insertLayout _layoutModel=layoutModel />
 
-<@insertGroup _groupModel=dataFactory.commerceCatalogGroupModel />
+<@insertGroup _groupModel=commerceDataFactory.commerceCatalogGroupModel />
 
-<@insertGroup _groupModel=dataFactory.commerceChannelGroupModel />
+<@insertGroup _groupModel=commerceDataFactory.commerceChannelGroupModel />
 
-<@insertGroup _groupModel=dataFactory.globalGroupModel />
+<@insertGroup _groupModel=userDataFactory.globalGroupModel />
 
-<@insertGroup _groupModel=dataFactory.guestGroupModel />
+<@insertGroup _groupModel=userDataFactory.guestGroupModel />
 
-<@insertGroup _groupModel=dataFactory.userPersonalSiteGroupModel />
+<@insertGroup _groupModel=userDataFactory.userPersonalSiteGroupModel />
 
-<#list dataFactory.groupModels as groupModel>
+<#list userDataFactory.groupModels as groupModel>
 	<#assign groupId = groupModel.groupId />
 
 	<#include "asset_publisher.ftl">
@@ -30,13 +30,13 @@
 	<#include "wiki.ftl">
 
 	<@insertDLFolder
-		_ddmStructureId=dataFactory.defaultDLDDMStructureId
+		_ddmStructureId=dLDataFactory.defaultDLDDMStructureId
 		_dlFolderDepth=1
 		_groupId=groupId
 		_parentDLFolderId=0
 	/>
 
-	<#assign publicLayoutModels = dataFactory.newPublicLayoutModels(groupId) />
+	<#assign publicLayoutModels = layoutDataFactory.newPublicLayoutModels(groupId) />
 
 	<#list publicLayoutModels as publicLayoutModel>
 		<@insertLayout _layoutModel=publicLayoutModel />
@@ -44,5 +44,5 @@
 
 	<@insertGroup _groupModel=groupModel />
 
-	${dataFactory.getCSVWriter("repository").write(groupId + ", " + groupModel.name + "\n")}
+	${initContext.getCSVWriter("repository").write(groupId + ", " + groupModel.name + "\n")}
 </#list>
