@@ -406,27 +406,27 @@ public class JspCompiler {
 		for (String resourcePath : resourcePaths) {
 			URL url = bundle.getResource(resourcePath);
 
-			String uri = TldURIUtil.getTldURI(url);
-
-			if (uri != null) {
-				try {
-					String absoluteResourcePath = StringPool.SLASH.concat(
-						resourcePath);
-
-					TldResourcePath tldResourcePath = new TldResourcePath(
-						url, absoluteResourcePath);
-
-					uriTldResourcePathMap.put(uri, tldResourcePath);
-
-					TldParser tldParser = new TldParser(true, false, true);
-
-					tldResourcePathTaglibXmlMap.put(
-						tldResourcePath, tldParser.parse(tldResourcePath));
-				}
-				catch (SAXException saxe) {
-					_log.error(saxe, saxe);
-				}
+			if (url == null) {
+				continue;
 			}
+
+			_populateTldMappings(
+				uriTldResourcePathMap, tldResourcePathTaglibXmlMap,
+				StringPool.SLASH.concat(resourcePath), url);
+		}
+
+		List<URL> urls = new ArrayList<>(
+			bundleWiring.findEntries(
+				"/META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
+
+		urls.addAll(
+			bundleWiring.findEntries(
+				"/WEB-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
+
+		for (URL url : urls) {
+			_populateTldMappings(
+				uriTldResourcePathMap, tldResourcePathTaglibXmlMap,
+				url.getPath(), url);
 		}
 	}
 
@@ -501,6 +501,34 @@ public class JspCompiler {
 				(EmbeddedServletOptions)options;
 
 			embeddedServletOptions.setTldCache(tldCache);
+		}
+	}
+
+	private void _populateTldMappings(
+			Map<String, TldResourcePath> uriTldResourcePathMap,
+			Map<TldResourcePath, TaglibXml> tldResourcePathTaglibXmlMap,
+			String absoluteResourcePath, URL url)
+		throws IOException {
+
+		String uri = TldURIUtil.getTldURI(url);
+
+		uri = uri.trim();
+
+		if ((uri != null) && !uriTldResourcePathMap.containsKey(uri)) {
+			try {
+				TldResourcePath tldResourcePath = new TldResourcePath(
+					url, absoluteResourcePath);
+
+				uriTldResourcePathMap.put(uri, tldResourcePath);
+
+				TldParser tldParser = new TldParser(true, false, true);
+
+				tldResourcePathTaglibXmlMap.put(
+					tldResourcePath, tldParser.parse(tldResourcePath));
+			}
+			catch (SAXException saxe) {
+				_log.error(saxe, saxe);
+			}
 		}
 	}
 
