@@ -25,6 +25,8 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,6 +36,12 @@ import java.util.List;
 public class JspC extends org.apache.jasper.JspC {
 
 	public static void main(String[] args) {
+		List<String> argList = new ArrayList<>(Arrays.asList(args));
+
+		argList.add("-no-strictQuoteEscaping");
+
+		args = argList.toArray(new String[0]);
+
 		try {
 			BufferedReader bufferedReader = new BufferedReader(
 				new InputStreamReader(System.in));
