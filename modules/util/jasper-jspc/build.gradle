@@ -2,13 +2,18 @@ sourceCompatibility = "1.6"
 targetCompatibility = "1.6"
 
 dependencies {
-	compile(group: "com.liferay", name: "com.liferay.portal.servlet.jsp.compiler", version: "1.0.5") {
-		exclude group: "com.liferay.portal"
-		exclude group: "javax.servlet"
-		exclude group: "javax.servlet.jsp", module: "jsp-api"
-	}
-
+	compile group: "com.liferay", name: "tomcat-jasper", version: "9.0.17.LIFERAY-PATCHED-1"
+	compile group: "javax.servlet.jsp", name: "javax.servlet.jsp-api", version: "2.3.2-b01"
+	compile group: "javax.servlet.jsp.jstl", name: "javax.servlet.jsp.jstl-api", version: "1.2.1"
 	compile group: "org.apache.ant", name: "ant", version: "1.9.14"
+	compile group: "org.apache.tomcat", name: "tomcat-api", version: "9.0.17"
+	compile group: "org.apache.tomcat", name: "tomcat-juli", version: "9.0.17"
+	compile group: "org.apache.tomcat", name: "tomcat-util", version: "9.0.17"
+	compile group: "org.apache.tomcat", name: "tomcat-util-scan", version: "9.0.17"
+	compile group: "org.glassfish", name: "javax.el", version: "3.0.1-b05"
+	compile group: "org.glassfish", name: "javax.servlet", version: "3.2-b06"
+	compile group: "org.glassfish.web", name: "javax.servlet.jsp.jstl", version: "1.2.3"
+	compile group: "org.osgi", name: "osgi.core", version: "6.0.0"
 }
 
 liferay {
