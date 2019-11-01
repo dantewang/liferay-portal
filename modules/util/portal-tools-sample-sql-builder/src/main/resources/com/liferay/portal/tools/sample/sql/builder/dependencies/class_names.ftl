@@ -1,3 +1,3 @@
-<#list dataFactory.classNameModels as classNameModel>
+<#list dataFactory.classNameModelValues as classNameModel>
 	${dataFactory.toInsertSQL(classNameModel)}
 </#list>
