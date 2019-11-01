@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowInstance;
 import com.liferay.portal.kernel.workflow.WorkflowInstanceManagerUtil;
@@ -33,8 +32,6 @@ import com.liferay.portal.workflow.web.internal.request.prepocessor.WorkflowPrep
 
 import java.util.Map;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -76,18 +73,6 @@ public class WorkflowInstancePortletTab extends BaseWorkflowPortletTab {
 		renderRequest.setAttribute(
 			WorkflowInstanceWebConfiguration.class.getName(),
 			workflowInstanceWebConfiguration);
-	}
-
-	@Override
-	public void prepareProcessAction(
-		ActionRequest actionRequest, ActionResponse actionResponse) {
-
-		String actionName = ParamUtil.getString(
-			actionRequest, ActionRequest.ACTION_NAME);
-
-		if (StringUtil.equalsIgnoreCase(actionName, "invokeTaglibDiscussion")) {
-			workflowPreprocessorHelper.hideDefaultSuccessMessage(actionRequest);
-		}
 	}
 
 	@Override

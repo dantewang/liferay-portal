@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowException;
 import com.liferay.portal.kernel.workflow.WorkflowTask;
@@ -81,13 +80,6 @@ public class MyWorkflowTaskPortlet extends MVCPortlet {
 		throws IOException, PortletException {
 
 		super.processAction(actionRequest, actionResponse);
-
-		String actionName = ParamUtil.getString(
-			actionRequest, ActionRequest.ACTION_NAME);
-
-		if (StringUtil.equalsIgnoreCase(actionName, "invokeTaglibDiscussion")) {
-			hideDefaultSuccessMessage(actionRequest);
-		}
 	}
 
 	@Override
