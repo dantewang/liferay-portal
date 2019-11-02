@@ -108,6 +108,7 @@ import com.liferay.friendly.url.model.FriendlyURLEntryModel;
 import com.liferay.friendly.url.model.impl.FriendlyURLEntryLocalizationModelImpl;
 import com.liferay.friendly.url.model.impl.FriendlyURLEntryMappingModelImpl;
 import com.liferay.friendly.url.model.impl.FriendlyURLEntryModelImpl;
+import com.liferay.hello.world.web.internal.constants.HelloWorldPortletKeys;
 import com.liferay.journal.constants.JournalActivityKeys;
 import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
@@ -2751,7 +2752,7 @@ public class DataFactory {
 		layoutModels.add(
 			newLayoutModel(
 				groupId, "welcome", LoginPortletKeys.LOGIN + ",",
-				"com_liferay_hello_world_web_portlet_HelloWorldPortlet,"));
+				HelloWorldPortletKeys.HELLO_WORLD + ","));
 		layoutModels.add(
 			newLayoutModel(groupId, "blogs", "", BlogsPortletKeys.BLOGS + ","));
 		layoutModels.add(
