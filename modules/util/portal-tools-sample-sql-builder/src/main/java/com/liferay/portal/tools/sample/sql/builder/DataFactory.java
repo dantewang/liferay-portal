@@ -25,36 +25,31 @@ public class DataFactory {
 	public DataFactory(InitContext initContext) throws Exception {
 		_userDataFactory = new UserDataFactory(initContext);
 
-		_journalDataFactory = new JournalDataFactory(
-			initContext, _userDataFactory);
-
 		_assetDataFactory = new AssetDataFactory(initContext, _userDataFactory);
 
 		_commerceDataFactory = new CommerceDataFactory(
 			initContext, _assetDataFactory, _userDataFactory);
 
-		_blogDataFactory = new BlogDataFactory(initContext);
-		_counterDataFactory = new CounterDataFactory(initContext);
+		_journalDataFactory = new JournalDataFactory(
+			initContext, _userDataFactory);
 
-		_releaseDataFactory = new ReleaseDataFactory(initContext);
 		_dLDataFactory = new DLDataFactory(initContext, _userDataFactory);
+
 		_dDLDDMDataFactory = new DDLDDMDataFactory(
 			initContext, _userDataFactory);
-		_layoutDataFactory = new LayoutDataFactory(initContext);
+
 		_messageBoardDataFactory = new MessageBoardDataFactory(
 			initContext, _userDataFactory);
-
-		_portletPreferenceDataFactory = new PortletPreferenceDataFactory(
-			initContext);
-
-		_portletPreferenceDataFactory.setAssetDataFactory(_assetDataFactory);
 
 		_resourcePermissionDataFactory = new ResourcePermissionDataFactory(
 			initContext, _userDataFactory);
 
-		_resourcePermissionDataFactory.setCommerceDataFactory(
-			_commerceDataFactory);
-
+		_blogDataFactory = new BlogDataFactory(initContext);
+		_counterDataFactory = new CounterDataFactory(initContext);
+		_layoutDataFactory = new LayoutDataFactory(initContext);
+		_portletPreferenceDataFactory = new PortletPreferenceDataFactory(
+			initContext);
+		_releaseDataFactory = new ReleaseDataFactory(initContext);
 		_socialActivityDataFactory = new SocialActivityDataFactory(initContext);
 		_subscriptionDataFactory = new SubscriptionDataFactory(initContext);
 		_wikiDataFactory = new WikiDataFactory(initContext);
@@ -64,6 +59,9 @@ public class DataFactory {
 			_resourcePermissionDataFactory);
 		_counterDataFactory.setSocialActivityDataFactory(
 			_socialActivityDataFactory);
+		_portletPreferenceDataFactory.setAssetDataFactory(_assetDataFactory);
+		_resourcePermissionDataFactory.setCommerceDataFactory(
+			_commerceDataFactory);
 
 		_dataFactories.put("assetDataFactory", _assetDataFactory);
 		_dataFactories.put("blogDataFactory", _blogDataFactory);
