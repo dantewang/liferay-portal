@@ -30,12 +30,12 @@ import java.util.List;
  */
 public class CounterDataFactory extends BaseDataFactory {
 
-	public CounterDataFactory(InitContext initContext) {
-		super(initContext);
+	public CounterDataFactory(DataFactoryContext dataFactoryContext) {
+		super(dataFactoryContext);
 	}
 
 	public long getCounterNext() {
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		return counter.get();
 	}
@@ -57,7 +57,7 @@ public class CounterDataFactory extends BaseDataFactory {
 
 		CounterModel counterModel = new CounterModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 		SimpleCounter resourcePermissionCounter =
 			_resourcePermissionDataFactory.getResourcePermissionCounter();
 		SimpleCounter socialActivityCounter =

@@ -52,10 +52,11 @@ import java.util.Map;
 public class DLDataFactory extends DDLDDMBaseDataFactory {
 
 	public DLDataFactory(
-			InitContext initContext, UserDataFactory userDataFactory)
+			DataFactoryContext dataFactoryContext,
+			UserDataFactory userDataFactory)
 		throws Exception {
 
-		super(initContext);
+		super(dataFactoryContext);
 
 		_userDataFactory = userDataFactory;
 		_initDLDDMStructureContent();
@@ -84,13 +85,13 @@ public class DLDataFactory extends DDLDDMBaseDataFactory {
 
 	public long getDLFileEntryClassNameId() {
 		return getClassNameId(
-			DLFileEntry.class, initContext.getClassNameModels());
+			DLFileEntry.class, dataFactoryContext.getClassNameModels());
 	}
 
 	public DDMContentModel newDDMContentModel(
 		DLFileEntryModel dlFileEntryModel) {
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		StringBundler sb = new StringBundler(6);
 
@@ -114,7 +115,8 @@ public class DLDataFactory extends DDLDDMBaseDataFactory {
 		ddmStorageLinkModel.setUuid(SequentialUUID.generate());
 		ddmStorageLinkModel.setStorageLinkId(ddmStorageLinkId);
 		ddmStorageLinkModel.setClassNameId(
-			getClassNameId(DDMContent.class, initContext.getClassNameModels()));
+			getClassNameId(
+				DDMContent.class, dataFactoryContext.getClassNameModels()));
 		ddmStorageLinkModel.setClassPK(ddmContentModel.getContentId());
 		ddmStorageLinkModel.setStructureId(structureId);
 		ddmStorageLinkModel.setStructureVersionId(
@@ -130,7 +132,7 @@ public class DLDataFactory extends DDLDDMBaseDataFactory {
 		DLFileEntryMetadataModel dlFileEntryMetadataModel =
 			new DLFileEntryMetadataModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		dlFileEntryMetadataModel.setUuid(SequentialUUID.generate());
 		dlFileEntryMetadataModel.setFileEntryMetadataId(counter.get());
@@ -147,7 +149,7 @@ public class DLDataFactory extends DDLDDMBaseDataFactory {
 	public List<DLFileEntryModel> newDlFileEntryModels(
 		DLFolderModel dlFolderModel) {
 
-		int maxDLFileEntryCount = initContext.getMaxDLFileEntryCount();
+		int maxDLFileEntryCount = dataFactoryContext.getMaxDLFileEntryCount();
 
 		List<DLFileEntryModel> dlFileEntryModels = new ArrayList<>(
 			maxDLFileEntryCount);
@@ -164,9 +166,10 @@ public class DLDataFactory extends DDLDDMBaseDataFactory {
 
 		DLFileVersionModel dlFileVersionModel = new DLFileVersionModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		SimpleCounter futureDateCounter = initContext.getFutureDateCounter();
+		SimpleCounter futureDateCounter =
+			dataFactoryContext.getFutureDateCounter();
 
 		Date createDate = nextFutureDate(futureDateCounter);
 		Date modifiedDate = nextFutureDate(futureDateCounter);
@@ -175,8 +178,8 @@ public class DLDataFactory extends DDLDDMBaseDataFactory {
 		dlFileVersionModel.setUuid(SequentialUUID.generate());
 		dlFileVersionModel.setFileVersionId(counter.get());
 		dlFileVersionModel.setGroupId(dlFileEntryModel.getGroupId());
-		dlFileVersionModel.setCompanyId(initContext.getCompanyId());
-		dlFileVersionModel.setUserId(initContext.getSampleUserId());
+		dlFileVersionModel.setCompanyId(dataFactoryContext.getCompanyId());
+		dlFileVersionModel.setUserId(dataFactoryContext.getSampleUserId());
 		dlFileVersionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		dlFileVersionModel.setCreateDate(createDate);
 		dlFileVersionModel.setModifiedDate(modifiedDate);
@@ -199,7 +202,7 @@ public class DLDataFactory extends DDLDDMBaseDataFactory {
 	public List<DLFolderModel> newDLFolderModels(
 		long groupId, long parentFolderId) {
 
-		int maxDLFolderCount = initContext.getMaxDLFolderCount();
+		int maxDLFolderCount = dataFactoryContext.getMaxDLFolderCount();
 
 		List<DLFolderModel> dlFolderModels = new ArrayList<>(maxDLFolderCount);
 
@@ -218,17 +221,18 @@ public class DLDataFactory extends DDLDDMBaseDataFactory {
 	}
 
 	private void _initDLFileEntryTypeModel() {
-		SimpleCounter futureDateCounter = initContext.getFutureDateCounter();
+		SimpleCounter futureDateCounter =
+			dataFactoryContext.getFutureDateCounter();
 
 		Date createDate = nextFutureDate(futureDateCounter);
 		Date lastPublishDate = nextFutureDate(futureDateCounter);
 		Date modifiedDate = nextFutureDate(futureDateCounter);
 
 		long groupId = _userDataFactory.getGlobalGroupId();
-		long userId = initContext.getDefaultUserId();
+		long userId = dataFactoryContext.getDefaultUserId();
 
 		Map<String, ClassNameModel> classNameModels =
-			initContext.getClassNameModels();
+			dataFactoryContext.getClassNameModels();
 
 		_defaultDLFileEntryTypeModel = new DLFileEntryTypeModelImpl();
 
@@ -270,9 +274,10 @@ public class DLDataFactory extends DDLDDMBaseDataFactory {
 
 		DLFileEntryModel dlFileEntryModel = new DLFileEntryModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		SimpleCounter futureDateCounter = initContext.getFutureDateCounter();
+		SimpleCounter futureDateCounter =
+			dataFactoryContext.getFutureDateCounter();
 
 		Date createDate = nextFutureDate(futureDateCounter);
 		Date modifiedDate = nextFutureDate(futureDateCounter);
@@ -285,8 +290,8 @@ public class DLDataFactory extends DDLDDMBaseDataFactory {
 		dlFileEntryModel.setUuid(SequentialUUID.generate());
 		dlFileEntryModel.setFileEntryId(counter.get());
 		dlFileEntryModel.setGroupId(dlFolderModel.getGroupId());
-		dlFileEntryModel.setCompanyId(initContext.getCompanyId());
-		dlFileEntryModel.setUserId(initContext.getSampleUserId());
+		dlFileEntryModel.setCompanyId(dataFactoryContext.getCompanyId());
+		dlFileEntryModel.setUserId(dataFactoryContext.getSampleUserId());
 		dlFileEntryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		dlFileEntryModel.setCreateDate(createDate);
 		dlFileEntryModel.setModifiedDate(modifiedDate);
@@ -300,7 +305,7 @@ public class DLDataFactory extends DDLDDMBaseDataFactory {
 		dlFileEntryModel.setFileEntryTypeId(
 			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
 		dlFileEntryModel.setVersion(DLFileEntryConstants.VERSION_DEFAULT);
-		dlFileEntryModel.setSize(initContext.getMaxDLFileEntrySize());
+		dlFileEntryModel.setSize(dataFactoryContext.getMaxDLFileEntrySize());
 		dlFileEntryModel.setLastPublishDate(lastPublishDate);
 
 		return dlFileEntryModel;
@@ -311,9 +316,10 @@ public class DLDataFactory extends DDLDDMBaseDataFactory {
 
 		DLFolderModel dlFolderModel = new DLFolderModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		SimpleCounter futureDateCounter = initContext.getFutureDateCounter();
+		SimpleCounter futureDateCounter =
+			dataFactoryContext.getFutureDateCounter();
 
 		Date createDate = nextFutureDate(futureDateCounter);
 		Date modifiedDate = nextFutureDate(futureDateCounter);
@@ -324,8 +330,8 @@ public class DLDataFactory extends DDLDDMBaseDataFactory {
 		dlFolderModel.setUuid(SequentialUUID.generate());
 		dlFolderModel.setFolderId(counter.get());
 		dlFolderModel.setGroupId(groupId);
-		dlFolderModel.setCompanyId(initContext.getCompanyId());
-		dlFolderModel.setUserId(initContext.getSampleUserId());
+		dlFolderModel.setCompanyId(dataFactoryContext.getCompanyId());
+		dlFolderModel.setUserId(dataFactoryContext.getSampleUserId());
 		dlFolderModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		dlFolderModel.setCreateDate(createDate);
 		dlFolderModel.setModifiedDate(modifiedDate);

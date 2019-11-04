@@ -4,7 +4,7 @@
 	${resourcePermissionDataFactory.toInsertSQL(mbCategoryModel)}
 	${resourcePermissionDataFactory.toInsertSQL(messageBoardDataFactory.newMBMailingListModel(mbCategoryModel))}
 
-	${initContext.getCSVWriter("mbCategory").write(mbCategoryModel.categoryId + "," + mbCategoryModel.name + "\n")}
+	${dataFactoryContext.getCSVWriter("mbCategory").write(mbCategoryModel.categoryId + "," + mbCategoryModel.name + "\n")}
 
 	<#assign mbThreadModels = messageBoardDataFactory.newMBThreadModels(mbCategoryModel) />
 
@@ -25,6 +25,6 @@
 			${resourcePermissionDataFactory.toInsertSQL(socialActivityDataFactory.newSocialActivityModel(mbMessageModel))}
 		</#list>
 
-		${initContext.getCSVWriter("mbThread").write(mbCategoryModel.categoryId + "," + mbThreadModel.threadId + "," + mbThreadModel.rootMessageId + "\n")}
+		${dataFactoryContext.getCSVWriter("mbThread").write(mbCategoryModel.categoryId + "," + mbThreadModel.threadId + "," + mbThreadModel.rootMessageId + "\n")}
 	</#list>
 </#list>

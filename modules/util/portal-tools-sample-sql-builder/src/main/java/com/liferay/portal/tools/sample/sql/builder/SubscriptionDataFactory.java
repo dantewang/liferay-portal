@@ -32,27 +32,30 @@ import java.util.Date;
  */
 public class SubscriptionDataFactory extends BaseDataFactory {
 
-	public SubscriptionDataFactory(InitContext initContext) {
-		super(initContext);
+	public SubscriptionDataFactory(DataFactoryContext dataFactoryContext) {
+		super(dataFactoryContext);
 	}
 
 	public SubscriptionModel newSubscriptionModel(
 		BlogsEntryModel blogsEntryModel) {
 
 		return _newSubscriptionModel(
-			getClassNameId(BlogsEntry.class, initContext.getClassNameModels()),
+			getClassNameId(
+				BlogsEntry.class, dataFactoryContext.getClassNameModels()),
 			blogsEntryModel.getEntryId());
 	}
 
 	public SubscriptionModel newSubscriptionModel(MBThreadModel mBThreadModel) {
 		return _newSubscriptionModel(
-			getClassNameId(MBThread.class, initContext.getClassNameModels()),
+			getClassNameId(
+				MBThread.class, dataFactoryContext.getClassNameModels()),
 			mBThreadModel.getThreadId());
 	}
 
 	public SubscriptionModel newSubscriptionModel(WikiPageModel wikiPageModel) {
 		return _newSubscriptionModel(
-			getClassNameId(WikiPage.class, initContext.getClassNameModels()),
+			getClassNameId(
+				WikiPage.class, dataFactoryContext.getClassNameModels()),
 			wikiPageModel.getResourcePrimKey());
 	}
 
@@ -61,12 +64,12 @@ public class SubscriptionDataFactory extends BaseDataFactory {
 
 		SubscriptionModel subscriptionModel = new SubscriptionModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		subscriptionModel.setSubscriptionId(counter.get());
 
-		subscriptionModel.setCompanyId(initContext.getCompanyId());
-		subscriptionModel.setUserId(initContext.getSampleUserId());
+		subscriptionModel.setCompanyId(dataFactoryContext.getCompanyId());
+		subscriptionModel.setUserId(dataFactoryContext.getSampleUserId());
 		subscriptionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		subscriptionModel.setCreateDate(new Date());
 		subscriptionModel.setModifiedDate(new Date());
