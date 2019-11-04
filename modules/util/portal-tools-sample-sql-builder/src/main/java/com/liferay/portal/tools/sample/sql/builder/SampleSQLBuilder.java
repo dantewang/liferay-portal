@@ -69,9 +69,7 @@ public class SampleSQLBuilder {
 			DataFactoryContext dataFactoryContext = new DataFactoryContext(
 				properties);
 
-			DataFactory dataFactory = new DataFactory(dataFactoryContext);
-
-			new SampleSQLBuilder(properties, dataFactory, dataFactoryContext);
+			new SampleSQLBuilder(properties, dataFactoryContext);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -89,8 +87,7 @@ public class SampleSQLBuilder {
 	}
 
 	public SampleSQLBuilder(
-			Properties properties, DataFactory dataFactory,
-			DataFactoryContext dataFactoryContext)
+			Properties properties, DataFactoryContext dataFactoryContext)
 		throws Exception {
 
 		_dbType = DBType.valueOf(
@@ -102,7 +99,6 @@ public class SampleSQLBuilder {
 		_outputDir = properties.getProperty("sample.sql.output.dir");
 		_script = properties.getProperty("sample.sql.script");
 
-		_dataFactory = dataFactory;
 		_dataFactoryContext = dataFactoryContext;
 
 		// Generic
@@ -311,12 +307,9 @@ public class SampleSQLBuilder {
 						createUnsyncBufferedWriter(charPipe.getWriter()),
 						createFileWriter(new File(_outputDir, "sample.sql")));
 
-					Map<String, Object> context =
-						_dataFactory.getDataFactories();
-
-					context.put("dataFactoryContext", _dataFactoryContext);
-
-					FreeMarkerUtil.process(_script, context, sampleSQLWriter);
+					FreeMarkerUtil.process(
+						_script, DataFactory.createContext(_dataFactoryContext),
+						sampleSQLWriter);
 				}
 				catch (Throwable t) {
 					_freeMarkerThrowable = t;
@@ -413,7 +406,6 @@ public class SampleSQLBuilder {
 
 	private static final int _WRITER_BUFFER_SIZE = 16 * 1024;
 
-	private final DataFactory _dataFactory;
 	private final DataFactoryContext _dataFactoryContext;
 	private final DBType _dbType;
 	private volatile Throwable _freeMarkerThrowable;
