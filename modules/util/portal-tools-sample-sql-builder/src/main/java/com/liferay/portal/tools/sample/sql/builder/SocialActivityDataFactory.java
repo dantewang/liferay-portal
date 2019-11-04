@@ -41,8 +41,8 @@ import com.liferay.wiki.social.WikiActivityKeys;
  */
 public class SocialActivityDataFactory extends BaseDataFactory {
 
-	public SocialActivityDataFactory(InitContext initContext) {
-		super(initContext);
+	public SocialActivityDataFactory(DataFactoryContext dataFactoryContext) {
+		super(dataFactoryContext);
 	}
 
 	public SimpleCounter getSocialActivityCounter() {
@@ -54,7 +54,8 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 
 		return _newSocialActivityModel(
 			blogsEntryModel.getGroupId(),
-			getClassNameId(BlogsEntry.class, initContext.getClassNameModels()),
+			getClassNameId(
+				BlogsEntry.class, dataFactoryContext.getClassNameModels()),
 			blogsEntryModel.getEntryId(), BlogsActivityKeys.ADD_ENTRY,
 			"{\"title\":\"" + blogsEntryModel.getTitle() + "\"}");
 	}
@@ -64,7 +65,8 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 
 		return _newSocialActivityModel(
 			dlFileEntryModel.getGroupId(),
-			getClassNameId(DLFileEntry.class, initContext.getClassNameModels()),
+			getClassNameId(
+				DLFileEntry.class, dataFactoryContext.getClassNameModels()),
 			dlFileEntryModel.getFileEntryId(), DLActivityKeys.ADD_FILE_ENTRY,
 			StringPool.BLANK);
 	}
@@ -83,7 +85,7 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 		return _newSocialActivityModel(
 			journalArticleModel.getGroupId(),
 			getClassNameId(
-				JournalArticle.class, initContext.getClassNameModels()),
+				JournalArticle.class, dataFactoryContext.getClassNameModels()),
 			journalArticleModel.getResourcePrimKey(), type,
 			"{\"title\":\"" + journalArticleModel.getUrlTitle() + "\"}");
 	}
@@ -98,7 +100,7 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 		String extraData = null;
 
 		if (classNameId == getClassNameId(
-				WikiPage.class, initContext.getClassNameModels())) {
+				WikiPage.class, dataFactoryContext.getClassNameModels())) {
 
 			extraData = "{\"version\":1}";
 
@@ -110,7 +112,7 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 			type = MBActivityKeys.ADD_MESSAGE;
 
 			classNameId = getClassNameId(
-				MBMessage.class, initContext.getClassNameModels());
+				MBMessage.class, dataFactoryContext.getClassNameModels());
 
 			classPK = mbMessageModel.getMessageId();
 		}
@@ -140,8 +142,8 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 
 		socialActivityModel.setActivityId(_socialActivityCounter.get());
 		socialActivityModel.setGroupId(groupId);
-		socialActivityModel.setCompanyId(initContext.getCompanyId());
-		socialActivityModel.setUserId(initContext.getSampleUserId());
+		socialActivityModel.setCompanyId(dataFactoryContext.getCompanyId());
+		socialActivityModel.setUserId(dataFactoryContext.getSampleUserId());
 		socialActivityModel.setCreateDate(_CURRENT_TIME + _timeCounter.get());
 		socialActivityModel.setClassNameId(classNameId);
 		socialActivityModel.setClassPK(classPK);

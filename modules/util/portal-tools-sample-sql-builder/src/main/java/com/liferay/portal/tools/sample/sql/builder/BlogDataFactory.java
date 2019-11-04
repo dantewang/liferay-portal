@@ -38,17 +38,17 @@ import java.util.List;
  */
 public class BlogDataFactory extends BaseDataFactory {
 
-	public BlogDataFactory(InitContext initContext) {
-		super(initContext);
+	public BlogDataFactory(DataFactoryContext dataFactoryContext) {
+		super(dataFactoryContext);
 	}
 
 	public long getBlogsEntryClassNameId() {
 		return getClassNameId(
-			BlogsEntry.class, initContext.getClassNameModels());
+			BlogsEntry.class, dataFactoryContext.getClassNameModels());
 	}
 
 	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
-		int maxBlogsEntryCount = initContext.getMaxBlogsEntryCount();
+		int maxBlogsEntryCount = dataFactoryContext.getMaxBlogsEntryCount();
 
 		List<BlogsEntryModel> blogEntryModels = new ArrayList<>(
 			maxBlogsEntryCount);
@@ -68,7 +68,7 @@ public class BlogDataFactory extends BaseDataFactory {
 		FriendlyURLEntryLocalizationModel friendlyURLEntryLocalizationModel =
 			new FriendlyURLEntryLocalizationModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		friendlyURLEntryLocalizationModel.setFriendlyURLEntryLocalizationId(
 			counter.get());
@@ -101,7 +101,7 @@ public class BlogDataFactory extends BaseDataFactory {
 		FriendlyURLEntryMappingModel friendlyURLEntryMappingModel =
 			new FriendlyURLEntryMappingModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		friendlyURLEntryMappingModel.setFriendlyURLEntryMappingId(
 			counter.get());
@@ -122,18 +122,19 @@ public class BlogDataFactory extends BaseDataFactory {
 		FriendlyURLEntryModel friendlyURLEntryModel =
 			new FriendlyURLEntryModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		friendlyURLEntryModel.setDefaultLanguageId(
 			DataFactoryConstants.LANGUAGE_ID);
 		friendlyURLEntryModel.setUuid(SequentialUUID.generate());
 		friendlyURLEntryModel.setFriendlyURLEntryId(counter.get());
 		friendlyURLEntryModel.setGroupId(blogsEntryModel.getGroupId());
-		friendlyURLEntryModel.setCompanyId(initContext.getCompanyId());
+		friendlyURLEntryModel.setCompanyId(dataFactoryContext.getCompanyId());
 		friendlyURLEntryModel.setCreateDate(new Date());
 		friendlyURLEntryModel.setModifiedDate(new Date());
 		friendlyURLEntryModel.setClassNameId(
-			getClassNameId(BlogsEntry.class, initContext.getClassNameModels()));
+			getClassNameId(
+				BlogsEntry.class, dataFactoryContext.getClassNameModels()));
 		friendlyURLEntryModel.setClassPK(blogsEntryModel.getEntryId());
 
 		return friendlyURLEntryModel;
@@ -145,13 +146,15 @@ public class BlogDataFactory extends BaseDataFactory {
 		UserNotificationDeliveryModel userNotificationDeliveryModel =
 			new UserNotificationDeliveryModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		userNotificationDeliveryModel.setUserNotificationDeliveryId(
 			counter.get());
 
-		userNotificationDeliveryModel.setCompanyId(initContext.getCompanyId());
-		userNotificationDeliveryModel.setUserId(initContext.getSampleUserId());
+		userNotificationDeliveryModel.setCompanyId(
+			dataFactoryContext.getCompanyId());
+		userNotificationDeliveryModel.setUserId(
+			dataFactoryContext.getSampleUserId());
 		userNotificationDeliveryModel.setPortletId(portletId);
 		userNotificationDeliveryModel.setDeliveryType(
 			UserNotificationDeliveryConstants.TYPE_WEBSITE);
@@ -163,13 +166,13 @@ public class BlogDataFactory extends BaseDataFactory {
 	private BlogsEntryModel _newBlogsEntryModel(long groupId, int index) {
 		BlogsEntryModel blogsEntryModel = new BlogsEntryModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		blogsEntryModel.setUuid(SequentialUUID.generate());
 		blogsEntryModel.setEntryId(counter.get());
 		blogsEntryModel.setGroupId(groupId);
-		blogsEntryModel.setCompanyId(initContext.getCompanyId());
-		blogsEntryModel.setUserId(initContext.getSampleUserId());
+		blogsEntryModel.setCompanyId(dataFactoryContext.getCompanyId());
+		blogsEntryModel.setUserId(dataFactoryContext.getSampleUserId());
 		blogsEntryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		blogsEntryModel.setCreateDate(new Date());
 		blogsEntryModel.setModifiedDate(new Date());
@@ -183,7 +186,7 @@ public class BlogDataFactory extends BaseDataFactory {
 			DataFactoryConstants.BLOG_CONTENT_PREFIX + index + ".");
 		blogsEntryModel.setDisplayDate(new Date());
 		blogsEntryModel.setLastPublishDate(new Date());
-		blogsEntryModel.setStatusByUserId(initContext.getSampleUserId());
+		blogsEntryModel.setStatusByUserId(dataFactoryContext.getSampleUserId());
 		blogsEntryModel.setStatusDate(new Date());
 
 		return blogsEntryModel;

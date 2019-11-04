@@ -36,7 +36,7 @@
 <@insertGroup _groupModel=userGroupModel />
 
 <#assign
-	groupIds = counterDataFactory.getSequence(initContext.maxGroupCount)
+	groupIds = counterDataFactory.getSequence(dataFactoryContext.maxGroupCount)
 	roleIds = [userDataFactory.administratorRoleModel.roleId, userDataFactory.powerUserRoleModel.roleId, userDataFactory.userRoleModel.roleId]
 />
 

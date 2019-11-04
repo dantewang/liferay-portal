@@ -45,22 +45,24 @@ import java.util.Date;
 public class DDLDDMDataFactory extends DDLDDMBaseDataFactory {
 
 	public DDLDDMDataFactory(
-		InitContext initContext, UserDataFactory userDataFactory) {
+		DataFactoryContext dataFactoryContext,
+		UserDataFactory userDataFactory) {
 
-		super(initContext);
+		super(dataFactoryContext);
 
 		_userDataFactory = userDataFactory;
 	}
 
 	public long getDDLRecordSetClassNameId() {
 		return getClassNameId(
-			DDLRecordSet.class, initContext.getClassNameModels());
+			DDLRecordSet.class, dataFactoryContext.getClassNameModels());
 	}
 
 	public DDMStructureLayoutModel newDDLDDMStructureLayoutModel(
 		long groupId, DDMStructureVersionModel ddmStructureVersionModel) {
 
-		int maxDDLCustomFieldCount = initContext.getMaxDDLCustomFieldCount();
+		int maxDDLCustomFieldCount =
+			dataFactoryContext.getMaxDDLCustomFieldCount();
 
 		StringBundler sb = new StringBundler(3 + maxDDLCustomFieldCount * 4);
 
@@ -82,12 +84,14 @@ public class DDLDDMDataFactory extends DDLDDMBaseDataFactory {
 		sb.append("\"single-page\"}");
 
 		return newDDMStructureLayoutModel(
-			_userDataFactory.getGlobalGroupId(), initContext.getDefaultUserId(),
+			_userDataFactory.getGlobalGroupId(),
+			dataFactoryContext.getDefaultUserId(),
 			ddmStructureVersionModel.getStructureVersionId(), sb.toString());
 	}
 
 	public DDMStructureModel newDDLDDMStructureModel(long groupId) {
-		int maxDDLCustomFieldCount = initContext.getMaxDDLCustomFieldCount();
+		int maxDDLCustomFieldCount =
+			dataFactoryContext.getMaxDDLCustomFieldCount();
 
 		StringBundler sb = new StringBundler(3 + maxDDLCustomFieldCount * 9);
 
@@ -113,9 +117,9 @@ public class DDLDDMDataFactory extends DDLDDMBaseDataFactory {
 		sb.append("]}");
 
 		return newDDMStructureModel(
-			groupId, initContext.getSampleUserId(),
+			groupId, dataFactoryContext.getSampleUserId(),
 			getClassNameId(
-				DDLRecordSet.class, initContext.getClassNameModels()),
+				DDLRecordSet.class, dataFactoryContext.getClassNameModels()),
 			"Test DDM Structure", sb.toString());
 	}
 
@@ -124,16 +128,16 @@ public class DDLDDMDataFactory extends DDLDDMBaseDataFactory {
 
 		DDLRecordModel ddlRecordModel = new DDLRecordModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		ddlRecordModel.setUuid(SequentialUUID.generate());
 		ddlRecordModel.setRecordId(counter.get());
 
 		ddlRecordModel.setGroupId(dDLRecordSetModel.getGroupId());
-		ddlRecordModel.setCompanyId(initContext.getCompanyId());
-		ddlRecordModel.setUserId(initContext.getSampleUserId());
+		ddlRecordModel.setCompanyId(dataFactoryContext.getCompanyId());
+		ddlRecordModel.setUserId(dataFactoryContext.getSampleUserId());
 		ddlRecordModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		ddlRecordModel.setVersionUserId(initContext.getSampleUserId());
+		ddlRecordModel.setVersionUserId(dataFactoryContext.getSampleUserId());
 		ddlRecordModel.setVersionUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		ddlRecordModel.setCreateDate(new Date());
@@ -154,14 +158,14 @@ public class DDLDDMDataFactory extends DDLDDMBaseDataFactory {
 
 		DDLRecordSetModel ddlRecordSetModel = new DDLRecordSetModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		ddlRecordSetModel.setUuid(SequentialUUID.generate());
 		ddlRecordSetModel.setRecordSetId(counter.get());
 
 		ddlRecordSetModel.setGroupId(ddmStructureModel.getGroupId());
-		ddlRecordSetModel.setCompanyId(initContext.getCompanyId());
-		ddlRecordSetModel.setUserId(initContext.getSampleUserId());
+		ddlRecordSetModel.setCompanyId(dataFactoryContext.getCompanyId());
+		ddlRecordSetModel.setUserId(dataFactoryContext.getSampleUserId());
 		ddlRecordSetModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		ddlRecordSetModel.setCreateDate(new Date());
 		ddlRecordSetModel.setModifiedDate(new Date());
@@ -194,13 +198,13 @@ public class DDLDDMDataFactory extends DDLDDMBaseDataFactory {
 		DDLRecordVersionModel ddlRecordVersionModel =
 			new DDLRecordVersionModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		ddlRecordVersionModel.setRecordVersionId(counter.get());
 
 		ddlRecordVersionModel.setGroupId(dDLRecordModel.getGroupId());
-		ddlRecordVersionModel.setCompanyId(initContext.getCompanyId());
-		ddlRecordVersionModel.setUserId(initContext.getSampleUserId());
+		ddlRecordVersionModel.setCompanyId(dataFactoryContext.getCompanyId());
+		ddlRecordVersionModel.setUserId(dataFactoryContext.getSampleUserId());
 		ddlRecordVersionModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		ddlRecordVersionModel.setCreateDate(dDLRecordModel.getModifiedDate());
@@ -218,7 +222,8 @@ public class DDLDDMDataFactory extends DDLDDMBaseDataFactory {
 	public DDMContentModel newDDMContentModel(
 		DDLRecordModel ddlRecordModel, int currentIndex) {
 
-		int maxDDLCustomFieldCount = initContext.getMaxDDLCustomFieldCount();
+		int maxDDLCustomFieldCount =
+			dataFactoryContext.getMaxDDLCustomFieldCount();
 
 		StringBundler sb = new StringBundler(3 + maxDDLCustomFieldCount * 7);
 
@@ -251,7 +256,7 @@ public class DDLDDMDataFactory extends DDLDDMBaseDataFactory {
 
 		return _newDDMStructureLinkModel(
 			getClassNameId(
-				DDLRecordSet.class, initContext.getClassNameModels()),
+				DDLRecordSet.class, dataFactoryContext.getClassNameModels()),
 			ddlRecordSetModel.getRecordSetId(),
 			ddlRecordSetModel.getDDMStructureId());
 	}
@@ -261,7 +266,8 @@ public class DDLDDMDataFactory extends DDLDDMBaseDataFactory {
 
 		return _newDDMStructureLinkModel(
 			getClassNameId(
-				DLFileEntryMetadata.class, initContext.getClassNameModels()),
+				DLFileEntryMetadata.class,
+				dataFactoryContext.getClassNameModels()),
 			dLFileEntryMetadataModel.getFileEntryMetadataId(),
 			dLFileEntryMetadataModel.getDDMStructureId());
 	}
@@ -272,7 +278,7 @@ public class DDLDDMDataFactory extends DDLDDMBaseDataFactory {
 		DDMStructureLinkModel ddmStructureLinkModel =
 			new DDMStructureLinkModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		ddmStructureLinkModel.setStructureLinkId(counter.get());
 

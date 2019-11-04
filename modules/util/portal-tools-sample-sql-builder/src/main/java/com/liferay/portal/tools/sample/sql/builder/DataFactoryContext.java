@@ -52,9 +52,9 @@ import java.util.TimeZone;
 /**
  * @author Lily Chi
  */
-public class InitContext {
+public class DataFactoryContext {
 
-	public InitContext(Properties properties) throws Exception {
+	public DataFactoryContext(Properties properties) throws Exception {
 		_initContextValue(properties);
 
 		_counter = new SimpleCounter(_maxGroupsCount + 1);
