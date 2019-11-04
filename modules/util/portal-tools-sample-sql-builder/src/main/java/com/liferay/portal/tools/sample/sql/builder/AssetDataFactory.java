@@ -67,18 +67,21 @@ import java.util.Map;
 public class AssetDataFactory extends BaseDataFactory {
 
 	public AssetDataFactory(
-			InitContext initContext, UserDataFactory userDataFactory)
+			DataFactoryContext dataFactoryContext,
+			UserDataFactory userDataFactory)
 		throws Exception {
 
-		super(initContext);
+		super(dataFactoryContext);
 
 		_userDataFactory = userDataFactory;
 
 		_assetClassNameIds = new long[] {
-			getClassNameId(BlogsEntry.class, initContext.getClassNameModels()),
 			getClassNameId(
-				JournalArticle.class, initContext.getClassNameModels()),
-			getClassNameId(WikiPage.class, initContext.getClassNameModels())
+				BlogsEntry.class, dataFactoryContext.getClassNameModels()),
+			getClassNameId(
+				JournalArticle.class, dataFactoryContext.getClassNameModels()),
+			getClassNameId(
+				WikiPage.class, dataFactoryContext.getClassNameModels())
 		};
 
 		_initAssetCategoryModels();
@@ -106,7 +109,7 @@ public class AssetDataFactory extends BaseDataFactory {
 		if (_assetCategoryCounters == null) {
 			_assetCategoryCounters =
 				(Map<Long, SimpleCounter>[])
-					new HashMap<?, ?>[initContext.getMaxGroupCount()];
+					new HashMap<?, ?>[dataFactoryContext.getMaxGroupCount()];
 		}
 
 		SimpleCounter counter = _getSimpleCounter(
@@ -114,7 +117,7 @@ public class AssetDataFactory extends BaseDataFactory {
 			assetEntryModel.getClassNameId());
 
 		int maxAssetEntryToAssetCategoryCount =
-			initContext.getMaxAssetEntryToAssetCategoryCount();
+			dataFactoryContext.getMaxAssetEntryToAssetCategoryCount();
 
 		List<Long> assetCategoryIds = new ArrayList<>(
 			maxAssetEntryToAssetCategoryCount);
@@ -173,7 +176,7 @@ public class AssetDataFactory extends BaseDataFactory {
 		if (_assetTagCounters == null) {
 			_assetTagCounters =
 				(Map<Long, SimpleCounter>[])
-					new HashMap<?, ?>[initContext.getMaxGroupCount()];
+					new HashMap<?, ?>[dataFactoryContext.getMaxGroupCount()];
 		}
 
 		SimpleCounter counter = _getSimpleCounter(
@@ -181,7 +184,7 @@ public class AssetDataFactory extends BaseDataFactory {
 			assetEntryModel.getClassNameId());
 
 		int maxAssetEntryToAssetTagCount =
-			initContext.getMaxAssetEntryToAssetTagCount();
+			dataFactoryContext.getMaxAssetEntryToAssetTagCount();
 
 		List<Long> assetTagIds = new ArrayList<>(maxAssetEntryToAssetTagCount);
 
@@ -252,7 +255,8 @@ public class AssetDataFactory extends BaseDataFactory {
 		return newAssetEntryModel(
 			blogsEntryModel.getGroupId(), blogsEntryModel.getCreateDate(),
 			blogsEntryModel.getModifiedDate(),
-			getClassNameId(BlogsEntry.class, initContext.getClassNameModels()),
+			getClassNameId(
+				BlogsEntry.class, dataFactoryContext.getClassNameModels()),
 			blogsEntryModel.getEntryId(), blogsEntryModel.getUuid(), 0, true,
 			true, ContentTypes.TEXT_HTML, blogsEntryModel.getTitle());
 	}
@@ -263,7 +267,8 @@ public class AssetDataFactory extends BaseDataFactory {
 		return newAssetEntryModel(
 			dLFileEntryModel.getGroupId(), dLFileEntryModel.getCreateDate(),
 			dLFileEntryModel.getModifiedDate(),
-			getClassNameId(DLFileEntry.class, initContext.getClassNameModels()),
+			getClassNameId(
+				DLFileEntry.class, dataFactoryContext.getClassNameModels()),
 			dLFileEntryModel.getFileEntryId(), dLFileEntryModel.getUuid(),
 			dLFileEntryModel.getFileEntryTypeId(), true, true,
 			dLFileEntryModel.getMimeType(), dLFileEntryModel.getTitle());
@@ -273,7 +278,8 @@ public class AssetDataFactory extends BaseDataFactory {
 		return newAssetEntryModel(
 			dLFolderModel.getGroupId(), dLFolderModel.getCreateDate(),
 			dLFolderModel.getModifiedDate(),
-			getClassNameId(DLFolder.class, initContext.getClassNameModels()),
+			getClassNameId(
+				DLFolder.class, dataFactoryContext.getClassNameModels()),
 			dLFolderModel.getFolderId(), dLFolderModel.getUuid(), 0, true, true,
 			null, dLFolderModel.getName());
 	}
@@ -285,9 +291,10 @@ public class AssetDataFactory extends BaseDataFactory {
 
 		AssetEntryModel assetEntryModel = new AssetEntryModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		SimpleCounter futureDateCounter = initContext.getFutureDateCounter();
+		SimpleCounter futureDateCounter =
+			dataFactoryContext.getFutureDateCounter();
 
 		Date endDate = nextFutureDate(futureDateCounter);
 
@@ -295,8 +302,8 @@ public class AssetDataFactory extends BaseDataFactory {
 
 		assetEntryModel.setEntryId(counter.get());
 		assetEntryModel.setGroupId(groupId);
-		assetEntryModel.setCompanyId(initContext.getCompanyId());
-		assetEntryModel.setUserId(initContext.getSampleUserId());
+		assetEntryModel.setCompanyId(dataFactoryContext.getCompanyId());
+		assetEntryModel.setUserId(dataFactoryContext.getSampleUserId());
 		assetEntryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		assetEntryModel.setCreateDate(createDate);
 		assetEntryModel.setModifiedDate(modifiedDate);
@@ -324,11 +331,11 @@ public class AssetDataFactory extends BaseDataFactory {
 				MBCategoryConstants.DISCUSSION_CATEGORY_ID) {
 
 			classNameId = getClassNameId(
-				MBDiscussion.class, initContext.getClassNameModels());
+				MBDiscussion.class, dataFactoryContext.getClassNameModels());
 		}
 		else {
 			classNameId = getClassNameId(
-				MBMessage.class, initContext.getClassNameModels());
+				MBMessage.class, dataFactoryContext.getClassNameModels());
 			visible = true;
 		}
 
@@ -343,7 +350,8 @@ public class AssetDataFactory extends BaseDataFactory {
 		return newAssetEntryModel(
 			mbThreadModel.getGroupId(), mbThreadModel.getCreateDate(),
 			mbThreadModel.getModifiedDate(),
-			getClassNameId(MBThread.class, initContext.getClassNameModels()),
+			getClassNameId(
+				MBThread.class, dataFactoryContext.getClassNameModels()),
 			mbThreadModel.getThreadId(), mbThreadModel.getUuid(), 0, true,
 			false, StringPool.BLANK,
 			String.valueOf(mbThreadModel.getRootMessageId()));
@@ -372,7 +380,7 @@ public class AssetDataFactory extends BaseDataFactory {
 			journalArticleModel.getCreateDate(),
 			journalArticleModel.getModifiedDate(),
 			getClassNameId(
-				JournalArticle.class, initContext.getClassNameModels()),
+				JournalArticle.class, dataFactoryContext.getClassNameModels()),
 			resourcePrimKey, resourceUUID,
 			defaultJournalDDMStructureModel.getStructureId(),
 			journalArticleModel.isIndexable(), true, ContentTypes.TEXT_HTML,
@@ -383,7 +391,8 @@ public class AssetDataFactory extends BaseDataFactory {
 		return newAssetEntryModel(
 			wikiPageModel.getGroupId(), wikiPageModel.getCreateDate(),
 			wikiPageModel.getModifiedDate(),
-			getClassNameId(WikiPage.class, initContext.getClassNameModels()),
+			getClassNameId(
+				WikiPage.class, dataFactoryContext.getClassNameModels()),
 			wikiPageModel.getResourcePrimKey(), wikiPageModel.getUuid(), 0,
 			true, true, ContentTypes.TEXT_HTML, wikiPageModel.getTitle());
 	}
@@ -392,10 +401,11 @@ public class AssetDataFactory extends BaseDataFactory {
 		BlogsEntryModel blogsEntryModel) {
 
 		Map<String, ClassNameModel> classNameModels =
-			initContext.getClassNameModels();
+			dataFactoryContext.getClassNameModels();
 
 		ClassNameModel classNameModel = classNameModels.get(
-			initContext.getMBDiscussionCombinedClassName(BlogsEntry.class));
+			dataFactoryContext.getMBDiscussionCombinedClassName(
+				BlogsEntry.class));
 
 		return newAssetEntryModel(
 			blogsEntryModel.getGroupId(), blogsEntryModel.getCreateDate(),
@@ -408,10 +418,11 @@ public class AssetDataFactory extends BaseDataFactory {
 		WikiPageModel wikiPageModel) {
 
 		Map<String, ClassNameModel> classNameModels =
-			initContext.getClassNameModels();
+			dataFactoryContext.getClassNameModels();
 
 		ClassNameModel classNameModel = classNameModels.get(
-			initContext.getMBDiscussionCombinedClassName(WikiPage.class));
+			dataFactoryContext.getMBDiscussionCombinedClassName(
+				WikiPage.class));
 
 		return newAssetEntryModel(
 			wikiPageModel.getGroupId(), wikiPageModel.getCreateDate(),
@@ -449,9 +460,11 @@ public class AssetDataFactory extends BaseDataFactory {
 	}
 
 	private void _initAssetCategoryModels() {
-		int maxGroupsCount = initContext.getMaxGroupCount();
-		int maxAssetVocabularyCount = initContext.getMaxAssetVocabularyCount();
-		int maxAssetCategoryCount = initContext.getMaxAssetCategoryCount();
+		int maxGroupsCount = dataFactoryContext.getMaxGroupCount();
+		int maxAssetVocabularyCount =
+			dataFactoryContext.getMaxAssetVocabularyCount();
+		int maxAssetCategoryCount =
+			dataFactoryContext.getMaxAssetCategoryCount();
 
 		_assetCategoryModelsArray =
 			(List<AssetCategoryModel>[])new List<?>[maxGroupsCount];
@@ -461,8 +474,9 @@ public class AssetDataFactory extends BaseDataFactory {
 		_assetVocabularyModelsArray =
 			(List<AssetVocabularyModel>[])new List<?>[maxGroupsCount];
 		_defaultAssetVocabularyModel = _newAssetVocabularyModel(
-			_userDataFactory.getGlobalGroupId(), initContext.getDefaultUserId(),
-			null, PropsValues.ASSET_VOCABULARY_DEFAULT);
+			_userDataFactory.getGlobalGroupId(),
+			dataFactoryContext.getDefaultUserId(), null,
+			PropsValues.ASSET_VOCABULARY_DEFAULT);
 
 		StringBundler sb = new StringBundler(4);
 
@@ -482,7 +496,7 @@ public class AssetDataFactory extends BaseDataFactory {
 
 				AssetVocabularyModel assetVocabularyModel =
 					_newAssetVocabularyModel(
-						i, initContext.getSampleUserId(),
+						i, dataFactoryContext.getSampleUserId(),
 						DataFactoryConstants.SAMPLE_USER_NAME, sb.toString());
 
 				assetVocabularyModels.add(assetVocabularyModel);
@@ -542,15 +556,15 @@ public class AssetDataFactory extends BaseDataFactory {
 	}
 
 	private void _initAssetTagModels() {
-		int maxGroupsCount = initContext.getMaxGroupCount();
-		SimpleCounter counter = initContext.getCounter();
+		int maxGroupsCount = dataFactoryContext.getMaxGroupCount();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		_assetTagModelsArray =
 			(List<AssetTagModel>[])new List<?>[maxGroupsCount];
 		_assetTagModelsMaps =
 			(Map<Long, List<AssetTagModel>>[])new HashMap<?, ?>[maxGroupsCount];
 
-		int maxAssetTagCount = initContext.getMaxAssetTagCount();
+		int maxAssetTagCount = dataFactoryContext.getMaxAssetTagCount();
 
 		for (int i = 1; i <= maxGroupsCount; i++) {
 			List<AssetTagModel> assetTagModels = new ArrayList<>(
@@ -562,8 +576,8 @@ public class AssetDataFactory extends BaseDataFactory {
 				assetTagModel.setUuid(SequentialUUID.generate());
 				assetTagModel.setTagId(counter.get());
 				assetTagModel.setGroupId(i);
-				assetTagModel.setCompanyId(initContext.getCompanyId());
-				assetTagModel.setUserId(initContext.getSampleUserId());
+				assetTagModel.setCompanyId(dataFactoryContext.getCompanyId());
+				assetTagModel.setUserId(dataFactoryContext.getSampleUserId());
 				assetTagModel.setUserName(
 					DataFactoryConstants.SAMPLE_USER_NAME);
 				assetTagModel.setCreateDate(new Date());
@@ -606,13 +620,13 @@ public class AssetDataFactory extends BaseDataFactory {
 
 		AssetCategoryModel assetCategoryModel = new AssetCategoryModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		assetCategoryModel.setUuid(SequentialUUID.generate());
 		assetCategoryModel.setCategoryId(counter.get());
 		assetCategoryModel.setGroupId(groupId);
-		assetCategoryModel.setCompanyId(initContext.getCompanyId());
-		assetCategoryModel.setUserId(initContext.getSampleUserId());
+		assetCategoryModel.setCompanyId(dataFactoryContext.getCompanyId());
+		assetCategoryModel.setUserId(dataFactoryContext.getSampleUserId());
 		assetCategoryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		assetCategoryModel.setCreateDate(new Date());
 		assetCategoryModel.setModifiedDate(new Date());
@@ -643,12 +657,12 @@ public class AssetDataFactory extends BaseDataFactory {
 		AssetVocabularyModel assetVocabularyModel =
 			new AssetVocabularyModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		assetVocabularyModel.setUuid(SequentialUUID.generate());
 		assetVocabularyModel.setVocabularyId(counter.get());
 		assetVocabularyModel.setGroupId(grouId);
-		assetVocabularyModel.setCompanyId(initContext.getCompanyId());
+		assetVocabularyModel.setCompanyId(dataFactoryContext.getCompanyId());
 		assetVocabularyModel.setUserId(userId);
 		assetVocabularyModel.setUserName(userName);
 		assetVocabularyModel.setCreateDate(new Date());

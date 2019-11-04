@@ -4,4 +4,4 @@ ${resourcePermissionDataFactory.toInsertSQL(userDataFactory.accountModel)}
 
 ${resourcePermissionDataFactory.toInsertSQL(userDataFactory.virtualHostModel)}
 
-${initContext.getCSVWriter("company").write(userDataFactory.companyModel.companyId + "\n")}
+${dataFactoryContext.getCSVWriter("company").write(userDataFactory.companyModel.companyId + "\n")}
