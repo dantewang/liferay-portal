@@ -30,8 +30,15 @@ import java.util.List;
  */
 public class CounterDataFactory extends BaseDataFactory {
 
-	public CounterDataFactory(DataFactoryContext dataFactoryContext) {
+	public CounterDataFactory(
+		DataFactoryContext dataFactoryContext,
+		ResourcePermissionDataFactory resourcePermissionDataFactory,
+		SocialActivityDataFactory socialActivityDataFactory) {
+
 		super(dataFactoryContext);
+
+		_resourcePermissionDataFactory = resourcePermissionDataFactory;
+		_socialActivityDataFactory = socialActivityDataFactory;
 	}
 
 	public long getCounterNext() {
@@ -98,19 +105,7 @@ public class CounterDataFactory extends BaseDataFactory {
 		return counterModels;
 	}
 
-	public void setResourcePermissionDataFactory(
-		ResourcePermissionDataFactory resourcePermissionDataFactory) {
-
-		_resourcePermissionDataFactory = resourcePermissionDataFactory;
-	}
-
-	public void setSocialActivityDataFactory(
-		SocialActivityDataFactory socialActivityDataFactory) {
-
-		_socialActivityDataFactory = socialActivityDataFactory;
-	}
-
-	private ResourcePermissionDataFactory _resourcePermissionDataFactory;
-	private SocialActivityDataFactory _socialActivityDataFactory;
+	private final ResourcePermissionDataFactory _resourcePermissionDataFactory;
+	private final SocialActivityDataFactory _socialActivityDataFactory;
 
 }
