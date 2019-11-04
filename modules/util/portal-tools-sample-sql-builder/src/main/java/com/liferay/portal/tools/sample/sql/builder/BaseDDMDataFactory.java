@@ -37,9 +37,9 @@ import java.util.List;
 /**
  * @author Lily Chi
  */
-public abstract class DDLDDMBaseDataFactory extends BaseDataFactory {
+public abstract class BaseDDMDataFactory extends BaseDataFactory {
 
-	public DDLDDMBaseDataFactory(DataFactoryContext dataFactoryContext) {
+	public BaseDDMDataFactory(DataFactoryContext dataFactoryContext) {
 		super(dataFactoryContext);
 	}
 
