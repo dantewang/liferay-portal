@@ -53,7 +53,7 @@ import java.util.Map;
 /**
  * @author Lily Chi
  */
-public class JournalDataFactory extends DDLDDMBaseDataFactory {
+public class JournalDataFactory extends BaseDDMDataFactory {
 
 	public JournalDataFactory(
 			DataFactoryContext dataFactoryContext,

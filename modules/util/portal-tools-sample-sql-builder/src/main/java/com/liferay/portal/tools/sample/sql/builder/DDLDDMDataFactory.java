@@ -42,7 +42,7 @@ import java.util.Date;
 /**
  * @author Lily Chi
  */
-public class DDLDDMDataFactory extends DDLDDMBaseDataFactory {
+public class DDLDDMDataFactory extends BaseDDMDataFactory {
 
 	public DDLDDMDataFactory(
 		DataFactoryContext dataFactoryContext,
