@@ -68,11 +68,13 @@ public class AssetDataFactory extends BaseDataFactory {
 
 	public AssetDataFactory(
 			DataFactoryContext dataFactoryContext,
+			JournalDataFactory journalDataFactory,
 			UserDataFactory userDataFactory)
 		throws Exception {
 
 		super(dataFactoryContext);
 
+		_journalDataFactory = journalDataFactory;
 		_userDataFactory = userDataFactory;
 
 		_assetClassNameIds = new long[] {
@@ -431,10 +433,6 @@ public class AssetDataFactory extends BaseDataFactory {
 			String.valueOf(wikiPageModel.getGroupId()));
 	}
 
-	public void setJournalDataFactory(JournalDataFactory journalDataFactory) {
-		_journalDataFactory = journalDataFactory;
-	}
-
 	private SimpleCounter _getSimpleCounter(
 		Map<Long, SimpleCounter>[] simpleCountersArray, long groupId,
 		long classNameId) {
@@ -695,7 +693,7 @@ public class AssetDataFactory extends BaseDataFactory {
 	private List<AssetVocabularyModel>[] _assetVocabularyModelsArray;
 	private PortletPreferencesImpl _defaultAssetPublisherPortletPreferencesImpl;
 	private AssetVocabularyModel _defaultAssetVocabularyModel;
-	private JournalDataFactory _journalDataFactory;
+	private final JournalDataFactory _journalDataFactory;
 	private final PortletPreferencesFactory _portletPreferencesFactory =
 		new PortletPreferencesFactoryImpl();
 	private final UserDataFactory _userDataFactory;
