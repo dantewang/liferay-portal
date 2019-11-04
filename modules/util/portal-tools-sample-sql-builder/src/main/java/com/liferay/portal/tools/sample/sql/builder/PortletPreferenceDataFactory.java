@@ -45,8 +45,8 @@ import javax.portlet.PortletPreferences;
  */
 public class PortletPreferenceDataFactory extends BaseDataFactory {
 
-	public PortletPreferenceDataFactory(InitContext initContext) {
-		super(initContext);
+	public PortletPreferenceDataFactory(DataFactoryContext dataFactoryContext) {
+		super(dataFactoryContext);
 	}
 
 	public List<PortletPreferencesModel>
@@ -248,7 +248,7 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 			List<AssetCategoryModel> assetCategoryModels, int index) {
 
 		int maxAssetEntryToAssetCategoryCount =
-			initContext.getMaxAssetEntryToAssetCategoryCount();
+			dataFactoryContext.getMaxAssetEntryToAssetCategoryCount();
 
 		AssetCategoryModel assetCategoryModel0 = assetCategoryModels.get(
 			index % assetCategoryModels.size());
@@ -281,7 +281,7 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 			List<AssetTagModel> assetTagModels, int index) {
 
 		int maxAssetEntryToAssetTagCount =
-			initContext.getMaxAssetEntryToAssetTagCount();
+			dataFactoryContext.getMaxAssetEntryToAssetTagCount();
 
 		AssetTagModel assetTagModel0 = assetTagModels.get(
 			index % assetTagModels.size());
@@ -324,9 +324,9 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 		PortletPreferencesModel portletPreferencesModel =
 			new PortletPreferencesModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		portletPreferencesModel.setCompanyId(initContext.getCompanyId());
+		portletPreferencesModel.setCompanyId(dataFactoryContext.getCompanyId());
 		portletPreferencesModel.setPortletPreferencesId(counter.get());
 		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
 		portletPreferencesModel.setOwnerType(
