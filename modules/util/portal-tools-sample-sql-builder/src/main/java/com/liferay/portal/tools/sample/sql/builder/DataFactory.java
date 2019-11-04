@@ -24,15 +24,14 @@ public class DataFactory {
 
 	public DataFactory(DataFactoryContext dataFactoryContext) throws Exception {
 		_userDataFactory = new UserDataFactory(dataFactoryContext);
-
-		_assetDataFactory = new AssetDataFactory(
-			dataFactoryContext, _userDataFactory);
-
-		_commerceDataFactory = new CommerceDataFactory(
-			dataFactoryContext, _assetDataFactory, _userDataFactory);
-
-		_journalDataFactory = new JournalDataFactory(
-			dataFactoryContext, _userDataFactory);
+		_blogDataFactory = new BlogDataFactory(dataFactoryContext);
+		_layoutDataFactory = new LayoutDataFactory(dataFactoryContext);
+		_releaseDataFactory = new ReleaseDataFactory(dataFactoryContext);
+		_socialActivityDataFactory = new SocialActivityDataFactory(
+			dataFactoryContext);
+		_subscriptionDataFactory = new SubscriptionDataFactory(
+			dataFactoryContext);
+		_wikiDataFactory = new WikiDataFactory(dataFactoryContext);
 
 		_dLDataFactory = new DLDataFactory(
 			dataFactoryContext, _userDataFactory);
@@ -43,29 +42,24 @@ public class DataFactory {
 		_messageBoardDataFactory = new MessageBoardDataFactory(
 			dataFactoryContext, _userDataFactory);
 
-		_resourcePermissionDataFactory = new ResourcePermissionDataFactory(
+		_journalDataFactory = new JournalDataFactory(
 			dataFactoryContext, _userDataFactory);
 
-		_blogDataFactory = new BlogDataFactory(dataFactoryContext);
-		_counterDataFactory = new CounterDataFactory(dataFactoryContext);
-		_layoutDataFactory = new LayoutDataFactory(dataFactoryContext);
-		_portletPreferenceDataFactory = new PortletPreferenceDataFactory(
-			dataFactoryContext);
-		_releaseDataFactory = new ReleaseDataFactory(dataFactoryContext);
-		_socialActivityDataFactory = new SocialActivityDataFactory(
-			dataFactoryContext);
-		_subscriptionDataFactory = new SubscriptionDataFactory(
-			dataFactoryContext);
-		_wikiDataFactory = new WikiDataFactory(dataFactoryContext);
+		_assetDataFactory = new AssetDataFactory(
+			dataFactoryContext, _journalDataFactory, _userDataFactory);
 
-		_assetDataFactory.setJournalDataFactory(_journalDataFactory);
-		_counterDataFactory.setResourcePermissionDataFactory(
-			_resourcePermissionDataFactory);
-		_counterDataFactory.setSocialActivityDataFactory(
+		_portletPreferenceDataFactory = new PortletPreferenceDataFactory(
+			dataFactoryContext, _assetDataFactory);
+
+		_commerceDataFactory = new CommerceDataFactory(
+			dataFactoryContext, _assetDataFactory, _userDataFactory);
+
+		_resourcePermissionDataFactory = new ResourcePermissionDataFactory(
+			dataFactoryContext, _commerceDataFactory, _userDataFactory);
+
+		_counterDataFactory = new CounterDataFactory(
+			dataFactoryContext, _resourcePermissionDataFactory,
 			_socialActivityDataFactory);
-		_portletPreferenceDataFactory.setAssetDataFactory(_assetDataFactory);
-		_resourcePermissionDataFactory.setCommerceDataFactory(
-			_commerceDataFactory);
 
 		_dataFactories.put("assetDataFactory", _assetDataFactory);
 		_dataFactories.put("blogDataFactory", _blogDataFactory);

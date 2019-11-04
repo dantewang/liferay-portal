@@ -83,10 +83,12 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 
 	public ResourcePermissionDataFactory(
 		DataFactoryContext dataFactoryContext,
+		CommerceDataFactory commerceDataFactory,
 		UserDataFactory userDataFactory) {
 
 		super(dataFactoryContext);
 
+		_commerceDataFactory = commerceDataFactory;
 		_userDataFactory = userDataFactory;
 	}
 
@@ -346,12 +348,6 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 			dataFactoryContext.getSampleUserId());
 	}
 
-	public void setCommerceDataFactory(
-		CommerceDataFactory commerceDataFactory) {
-
-		_commerceDataFactory = commerceDataFactory;
-	}
-
 	public String toInsertSQL(BaseModel<?> baseModel) {
 		try {
 			StringBundler sb = new StringBundler();
@@ -533,7 +529,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 		}
 	}
 
-	private CommerceDataFactory _commerceDataFactory;
+	private final CommerceDataFactory _commerceDataFactory;
 	private final SimpleCounter _resourcePermissionCounter =
 		new SimpleCounter();
 	private final UserDataFactory _userDataFactory;
