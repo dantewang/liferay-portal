@@ -85,10 +85,12 @@ public class SampleSQLBuilderTest {
 		_initProperties(properties, tempDir.getAbsolutePath());
 
 		try {
-			InitContext initContext = new InitContext(properties);
+			DataFactoryContext dataFactoryContext = new DataFactoryContext(
+				properties);
 
 			new SampleSQLBuilder(
-				properties, new DataFactory(initContext), initContext);
+				properties, new DataFactory(dataFactoryContext),
+				dataFactoryContext);
 
 			_loadHypersonic("../../../sql", tempDir.getAbsolutePath());
 		}

@@ -35,8 +35,8 @@ import java.util.List;
  */
 public class ReleaseDataFactory extends BaseDataFactory {
 
-	public ReleaseDataFactory(InitContext initContext) {
-		super(initContext);
+	public ReleaseDataFactory(DataFactoryContext dataFactoryContext) {
+		super(dataFactoryContext);
 	}
 
 	public List<ReleaseModel> newReleaseModels() throws IOException {
@@ -72,7 +72,7 @@ public class ReleaseDataFactory extends BaseDataFactory {
 
 		ReleaseModelImpl releaseModelImpl = new ReleaseModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		releaseModelImpl.setReleaseId(counter.get());
 
