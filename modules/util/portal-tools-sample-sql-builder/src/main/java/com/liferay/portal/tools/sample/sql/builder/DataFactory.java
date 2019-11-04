@@ -25,37 +25,12 @@ public class DataFactory {
 	public DataFactory(DataFactoryContext dataFactoryContext) throws Exception {
 		UserDataFactory userDataFactory = new UserDataFactory(
 			dataFactoryContext);
-		BlogDataFactory blogDataFactory = new BlogDataFactory(
-			dataFactoryContext);
-		LayoutDataFactory layoutDataFactory = new LayoutDataFactory(
-			dataFactoryContext);
-		ReleaseDataFactory releaseDataFactory = new ReleaseDataFactory(
-			dataFactoryContext);
-		SocialActivityDataFactory socialActivityDataFactory =
-			new SocialActivityDataFactory(dataFactoryContext);
-		SubscriptionDataFactory subscriptionDataFactory =
-			new SubscriptionDataFactory(dataFactoryContext);
-		WikiDataFactory wikiDataFactory = new WikiDataFactory(
-			dataFactoryContext);
-
-		DLDataFactory dLDataFactory = new DLDataFactory(
-			dataFactoryContext, userDataFactory);
-
-		DDLDDMDataFactory dDLDDMDataFactory = new DDLDDMDataFactory(
-			dataFactoryContext, userDataFactory);
-
-		MessageBoardDataFactory messageBoardDataFactory =
-			new MessageBoardDataFactory(dataFactoryContext, userDataFactory);
 
 		JournalDataFactory journalDataFactory = new JournalDataFactory(
 			dataFactoryContext, userDataFactory);
 
 		AssetDataFactory assetDataFactory = new AssetDataFactory(
 			dataFactoryContext, journalDataFactory, userDataFactory);
-
-		PortletPreferenceDataFactory portletPreferenceDataFactory =
-			new PortletPreferenceDataFactory(
-				dataFactoryContext, assetDataFactory);
 
 		CommerceDataFactory commerceDataFactory = new CommerceDataFactory(
 			dataFactoryContext, assetDataFactory, userDataFactory);
@@ -64,29 +39,46 @@ public class DataFactory {
 			new ResourcePermissionDataFactory(
 				dataFactoryContext, commerceDataFactory, userDataFactory);
 
-		CounterDataFactory counterDataFactory = new CounterDataFactory(
-			dataFactoryContext, resourcePermissionDataFactory,
-			socialActivityDataFactory);
+		SocialActivityDataFactory socialActivityDataFactory =
+			new SocialActivityDataFactory(dataFactoryContext);
 
 		_dataFactories.put("assetDataFactory", assetDataFactory);
-		_dataFactories.put("blogDataFactory", blogDataFactory);
-		_dataFactories.put("commerceDataFactory", commerceDataFactory);
-		_dataFactories.put("counterDataFactory", counterDataFactory);
-		_dataFactories.put("dDLDDMDataFactory", dDLDDMDataFactory);
-		_dataFactories.put("dLDataFactory", dLDataFactory);
-		_dataFactories.put("journalDataFactory", journalDataFactory);
-		_dataFactories.put("layoutDataFactory", layoutDataFactory);
-		_dataFactories.put("messageBoardDataFactory", messageBoardDataFactory);
 		_dataFactories.put(
-			"portletPreferenceDataFactory", portletPreferenceDataFactory);
-		_dataFactories.put("releaseDataFactory", releaseDataFactory);
+			"blogDataFactory", new BlogDataFactory(dataFactoryContext));
+		_dataFactories.put("commerceDataFactory", commerceDataFactory);
+		_dataFactories.put(
+			"counterDataFactory",
+			new CounterDataFactory(
+				dataFactoryContext, resourcePermissionDataFactory,
+				socialActivityDataFactory));
+		_dataFactories.put(
+			"dDLDDMDataFactory",
+			new DDLDDMDataFactory(dataFactoryContext, userDataFactory));
+		_dataFactories.put(
+			"dLDataFactory",
+			new DLDataFactory(dataFactoryContext, userDataFactory));
+		_dataFactories.put("journalDataFactory", journalDataFactory);
+		_dataFactories.put(
+			"layoutDataFactory", new LayoutDataFactory(dataFactoryContext));
+		_dataFactories.put(
+			"messageBoardDataFactory",
+			new MessageBoardDataFactory(dataFactoryContext, userDataFactory));
+		_dataFactories.put(
+			"portletPreferenceDataFactory",
+			new PortletPreferenceDataFactory(
+				dataFactoryContext, assetDataFactory));
+		_dataFactories.put(
+			"releaseDataFactory", new ReleaseDataFactory(dataFactoryContext));
 		_dataFactories.put(
 			"resourcePermissionDataFactory", resourcePermissionDataFactory);
 		_dataFactories.put(
 			"socialActivityDataFactory", socialActivityDataFactory);
-		_dataFactories.put("subscriptionDataFactory", subscriptionDataFactory);
+		_dataFactories.put(
+			"subscriptionDataFactory",
+			new SubscriptionDataFactory(dataFactoryContext));
 		_dataFactories.put("userDataFactory", userDataFactory);
-		_dataFactories.put("wikiDataFactory", wikiDataFactory);
+		_dataFactories.put(
+			"wikiDataFactory", new WikiDataFactory(dataFactoryContext));
 	}
 
 	public Map<String, Object> getDataFactories() {
