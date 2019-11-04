@@ -389,6 +389,8 @@ public class DataFactoryContext {
 			properties.getProperty("sample.sql.max.wiki.page.comment.count"));
 		_maxWikiPageCount = GetterUtil.getInteger(
 			properties.getProperty("sample.sql.max.wiki.page.count"));
+		_virtualHostname = properties.getProperty(
+			"sample.sql.virtual.hostname");
 
 		File outputDir = new File(
 			properties.getProperty("sample.sql.output.dir"));
