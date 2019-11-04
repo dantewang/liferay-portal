@@ -60,7 +60,7 @@
 	_groupId
 	_parentDLFolderId
 >
-	<#if _dlFolderDepth <= initContext.maxDLFolderDepth>
+	<#if _dlFolderDepth <= dataFactoryContext.maxDLFolderDepth>
 		<#local dlFolderModels = dLDataFactory.newDLFolderModels(_groupId, _parentDLFolderId)>
 
 		<#list dlFolderModels as dlFolderModel>
@@ -104,7 +104,7 @@
 
 				${resourcePermissionDataFactory.toInsertSQL(dDLDDMDataFactory.newDDMStructureLinkModel(dlFileEntryMetadataModel))}
 
-				${initContext.getCSVWriter("documentLibrary").write(dlFileEntryModel.uuid + "," + dlFolderModel.folderId + "," + dlFileEntryModel.name + "," + dlFileEntryModel.fileEntryId + "," + initContext.getDateLong(dlFileEntryModel.createDate) + "," + initContext.getDateLong(dlFolderModel.createDate) + "\n")}
+				${dataFactoryContext.getCSVWriter("documentLibrary").write(dlFileEntryModel.uuid + "," + dlFolderModel.folderId + "," + dlFileEntryModel.name + "," + dlFileEntryModel.fileEntryId + "," + dataFactoryContext.getDateLong(dlFileEntryModel.createDate) + "," + dataFactoryContext.getDateLong(dlFolderModel.createDate) + "\n")}
 			</#list>
 
 			<@insertDLFolder

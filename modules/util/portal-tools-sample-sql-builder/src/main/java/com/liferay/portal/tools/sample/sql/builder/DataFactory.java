@@ -22,37 +22,41 @@ import java.util.Map;
  */
 public class DataFactory {
 
-	public DataFactory(InitContext initContext) throws Exception {
-		_userDataFactory = new UserDataFactory(initContext);
+	public DataFactory(DataFactoryContext dataFactoryContext) throws Exception {
+		_userDataFactory = new UserDataFactory(dataFactoryContext);
 
-		_assetDataFactory = new AssetDataFactory(initContext, _userDataFactory);
+		_assetDataFactory = new AssetDataFactory(
+			dataFactoryContext, _userDataFactory);
 
 		_commerceDataFactory = new CommerceDataFactory(
-			initContext, _assetDataFactory, _userDataFactory);
+			dataFactoryContext, _assetDataFactory, _userDataFactory);
 
 		_journalDataFactory = new JournalDataFactory(
-			initContext, _userDataFactory);
+			dataFactoryContext, _userDataFactory);
 
-		_dLDataFactory = new DLDataFactory(initContext, _userDataFactory);
+		_dLDataFactory = new DLDataFactory(
+			dataFactoryContext, _userDataFactory);
 
 		_dDLDDMDataFactory = new DDLDDMDataFactory(
-			initContext, _userDataFactory);
+			dataFactoryContext, _userDataFactory);
 
 		_messageBoardDataFactory = new MessageBoardDataFactory(
-			initContext, _userDataFactory);
+			dataFactoryContext, _userDataFactory);
 
 		_resourcePermissionDataFactory = new ResourcePermissionDataFactory(
-			initContext, _userDataFactory);
+			dataFactoryContext, _userDataFactory);
 
-		_blogDataFactory = new BlogDataFactory(initContext);
-		_counterDataFactory = new CounterDataFactory(initContext);
-		_layoutDataFactory = new LayoutDataFactory(initContext);
+		_blogDataFactory = new BlogDataFactory(dataFactoryContext);
+		_counterDataFactory = new CounterDataFactory(dataFactoryContext);
+		_layoutDataFactory = new LayoutDataFactory(dataFactoryContext);
 		_portletPreferenceDataFactory = new PortletPreferenceDataFactory(
-			initContext);
-		_releaseDataFactory = new ReleaseDataFactory(initContext);
-		_socialActivityDataFactory = new SocialActivityDataFactory(initContext);
-		_subscriptionDataFactory = new SubscriptionDataFactory(initContext);
-		_wikiDataFactory = new WikiDataFactory(initContext);
+			dataFactoryContext);
+		_releaseDataFactory = new ReleaseDataFactory(dataFactoryContext);
+		_socialActivityDataFactory = new SocialActivityDataFactory(
+			dataFactoryContext);
+		_subscriptionDataFactory = new SubscriptionDataFactory(
+			dataFactoryContext);
+		_wikiDataFactory = new WikiDataFactory(dataFactoryContext);
 
 		_assetDataFactory.setJournalDataFactory(_journalDataFactory);
 		_counterDataFactory.setResourcePermissionDataFactory(

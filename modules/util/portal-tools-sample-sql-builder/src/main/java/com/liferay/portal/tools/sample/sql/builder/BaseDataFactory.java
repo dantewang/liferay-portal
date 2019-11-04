@@ -47,11 +47,11 @@ public abstract class BaseDataFactory {
 		return new Date(_FUTURE_TIME + (futureDateCounter.get() * Time.SECOND));
 	}
 
-	protected BaseDataFactory(InitContext initContext) {
-		this.initContext = initContext;
+	protected BaseDataFactory(DataFactoryContext dataFactoryContext) {
+		this.dataFactoryContext = dataFactoryContext;
 	}
 
-	protected final InitContext initContext;
+	protected final DataFactoryContext dataFactoryContext;
 
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";

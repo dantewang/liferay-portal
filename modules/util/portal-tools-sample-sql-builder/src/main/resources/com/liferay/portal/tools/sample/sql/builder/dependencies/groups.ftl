@@ -44,5 +44,5 @@
 
 	<@insertGroup _groupModel=groupModel />
 
-	${initContext.getCSVWriter("repository").write(groupId + ", " + groupModel.name + "\n")}
+	${dataFactoryContext.getCSVWriter("repository").write(groupId + ", " + groupModel.name + "\n")}
 </#list>
