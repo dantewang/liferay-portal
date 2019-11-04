@@ -46,12 +46,13 @@ import java.util.Map;
  */
 public class LayoutDataFactory extends BaseDataFactory {
 
-	public LayoutDataFactory(InitContext initContext) {
-		super(initContext);
+	public LayoutDataFactory(DataFactoryContext dataFactoryContext) {
+		super(dataFactoryContext);
 	}
 
 	public long getLayoutClassNameId() {
-		return getClassNameId(Layout.class, initContext.getClassNameModels());
+		return getClassNameId(
+			Layout.class, dataFactoryContext.getClassNameModels());
 	}
 
 	public LayoutFriendlyURLModel newLayoutFriendlyURLModel(
@@ -60,13 +61,15 @@ public class LayoutDataFactory extends BaseDataFactory {
 		LayoutFriendlyURLModel layoutFriendlyURLEntryModel =
 			new LayoutFriendlyURLModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		layoutFriendlyURLEntryModel.setUuid(SequentialUUID.generate());
 		layoutFriendlyURLEntryModel.setLayoutFriendlyURLId(counter.get());
 		layoutFriendlyURLEntryModel.setGroupId(layoutModel.getGroupId());
-		layoutFriendlyURLEntryModel.setCompanyId(initContext.getCompanyId());
-		layoutFriendlyURLEntryModel.setUserId(initContext.getSampleUserId());
+		layoutFriendlyURLEntryModel.setCompanyId(
+			dataFactoryContext.getCompanyId());
+		layoutFriendlyURLEntryModel.setUserId(
+			dataFactoryContext.getSampleUserId());
 		layoutFriendlyURLEntryModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		layoutFriendlyURLEntryModel.setCreateDate(new Date());
@@ -86,7 +89,7 @@ public class LayoutDataFactory extends BaseDataFactory {
 
 		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		if (simpleCounter == null) {
 			simpleCounter = new SimpleCounter();
@@ -103,8 +106,8 @@ public class LayoutDataFactory extends BaseDataFactory {
 		layoutModel.setPlid(plid);
 
 		layoutModel.setGroupId(groupId);
-		layoutModel.setCompanyId(initContext.getCompanyId());
-		layoutModel.setUserId(initContext.getSampleUserId());
+		layoutModel.setCompanyId(dataFactoryContext.getCompanyId());
+		layoutModel.setUserId(dataFactoryContext.getSampleUserId());
 		layoutModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		layoutModel.setCreateDate(new Date());
 		layoutModel.setModifiedDate(new Date());
@@ -177,14 +180,14 @@ public class LayoutDataFactory extends BaseDataFactory {
 
 		LayoutSetModel layoutSetModel = new LayoutSetModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		long layoutSetId = counter.get();
 
 		layoutSetModel.setLayoutSetId(layoutSetId);
 
 		layoutSetModel.setGroupId(groupId);
-		layoutSetModel.setCompanyId(initContext.getCompanyId());
+		layoutSetModel.setCompanyId(dataFactoryContext.getCompanyId());
 		layoutSetModel.setCreateDate(new Date());
 		layoutSetModel.setModifiedDate(new Date());
 		layoutSetModel.setPrivateLayout(privateLayout);

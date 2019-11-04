@@ -39,8 +39,8 @@ import java.util.List;
  */
 public abstract class DDLDDMBaseDataFactory extends BaseDataFactory {
 
-	public DDLDDMBaseDataFactory(InitContext initContext) {
-		super(initContext);
+	public DDLDDMBaseDataFactory(DataFactoryContext dataFactoryContext) {
+		super(dataFactoryContext);
 	}
 
 	public String getResource(String resourceName) throws Exception {
@@ -56,10 +56,11 @@ public abstract class DDLDDMBaseDataFactory extends BaseDataFactory {
 
 		DDMContentModel ddmContentModel = new DDMContentModelImpl();
 
-		long companyId = initContext.getCompanyId();
-		long sampleUserId = initContext.getSampleUserId();
+		long companyId = dataFactoryContext.getCompanyId();
+		long sampleUserId = dataFactoryContext.getSampleUserId();
 
-		SimpleCounter futureDateCounter = initContext.getFutureDateCounter();
+		SimpleCounter futureDateCounter =
+			dataFactoryContext.getFutureDateCounter();
 
 		Date createDate = nextFutureDate(futureDateCounter);
 		Date modifiedDate = nextFutureDate(futureDateCounter);
@@ -84,9 +85,10 @@ public abstract class DDLDDMBaseDataFactory extends BaseDataFactory {
 		DDMStructureLayoutModel ddmStructureLayoutModel =
 			new DDMStructureLayoutModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		SimpleCounter futureDateCounter = initContext.getFutureDateCounter();
+		SimpleCounter futureDateCounter =
+			dataFactoryContext.getFutureDateCounter();
 
 		Date createDate = nextFutureDate(futureDateCounter);
 
@@ -95,7 +97,7 @@ public abstract class DDLDDMBaseDataFactory extends BaseDataFactory {
 		ddmStructureLayoutModel.setUuid(SequentialUUID.generate());
 		ddmStructureLayoutModel.setStructureLayoutId(counter.get());
 		ddmStructureLayoutModel.setGroupId(groupId);
-		ddmStructureLayoutModel.setCompanyId(initContext.getCompanyId());
+		ddmStructureLayoutModel.setCompanyId(dataFactoryContext.getCompanyId());
 		ddmStructureLayoutModel.setUserId(userId);
 		ddmStructureLayoutModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
@@ -115,9 +117,10 @@ public abstract class DDLDDMBaseDataFactory extends BaseDataFactory {
 
 		DDMStructureModel ddmStructureModel = new DDMStructureModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		SimpleCounter futureDateCounter = initContext.getFutureDateCounter();
+		SimpleCounter futureDateCounter =
+			dataFactoryContext.getFutureDateCounter();
 
 		Date createDate = nextFutureDate(futureDateCounter);
 		Date lastPublishDate = nextFutureDate(futureDateCounter);
@@ -126,7 +129,7 @@ public abstract class DDLDDMBaseDataFactory extends BaseDataFactory {
 		ddmStructureModel.setUuid(SequentialUUID.generate());
 		ddmStructureModel.setStructureId(counter.get());
 		ddmStructureModel.setGroupId(groupId);
-		ddmStructureModel.setCompanyId(initContext.getCompanyId());
+		ddmStructureModel.setCompanyId(dataFactoryContext.getCompanyId());
 		ddmStructureModel.setUserId(userId);
 		ddmStructureModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		ddmStructureModel.setVersionUserId(userId);
@@ -160,16 +163,18 @@ public abstract class DDLDDMBaseDataFactory extends BaseDataFactory {
 		DDMStructureVersionModel ddmStructureVersionModel =
 			new DDMStructureVersionModelImpl();
 
-		SimpleCounter counter = initContext.getCounter();
+		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		SimpleCounter futureDateCounter = initContext.getFutureDateCounter();
+		SimpleCounter futureDateCounter =
+			dataFactoryContext.getFutureDateCounter();
 
 		Date createDate = nextFutureDate(futureDateCounter);
 		Date statusDate = nextFutureDate(futureDateCounter);
 
 		ddmStructureVersionModel.setStructureVersionId(counter.get());
 		ddmStructureVersionModel.setGroupId(ddmStructureModel.getGroupId());
-		ddmStructureVersionModel.setCompanyId(initContext.getCompanyId());
+		ddmStructureVersionModel.setCompanyId(
+			dataFactoryContext.getCompanyId());
 		ddmStructureVersionModel.setUserId(ddmStructureModel.getUserId());
 		ddmStructureVersionModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);

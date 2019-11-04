@@ -28,11 +28,11 @@
 			_classNameId=wikiDataFactory.wikiPageClassNameId
 			_classPK=wikiPageModel.resourcePrimKey
 			_groupId=groupId
-			_maxCommentCount=initContext.maxWikiPageCommentCount
+			_maxCommentCount=dataFactoryContext.maxWikiPageCommentCount
 			_mbRootMessageId=mbRootMessageId
 			_mbThreadId=mbThreadId
 		/>
 
-		${initContext.getCSVWriter("wiki").write(wikiNodeModel.nodeId + "," + wikiNodeModel.name + "," + wikiPageModel.resourcePrimKey + "," + wikiPageModel.title + "," + mbThreadId + "," + mbRootMessageId + "\n")}
+		${dataFactoryContext.getCSVWriter("wiki").write(wikiNodeModel.nodeId + "," + wikiNodeModel.name + "," + wikiPageModel.resourcePrimKey + "," + wikiPageModel.title + "," + mbThreadId + "," + mbRootMessageId + "\n")}
 	</#list>
 </#list>
