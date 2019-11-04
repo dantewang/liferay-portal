@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DataFactory {
+public class TemplateContextFactory {
 
 	public static Map<String, Object> createContext(
 			DataFactoryContext dataFactoryContext)
