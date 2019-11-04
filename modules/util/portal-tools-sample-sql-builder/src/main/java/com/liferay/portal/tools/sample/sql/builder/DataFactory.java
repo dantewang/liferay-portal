@@ -23,85 +23,76 @@ import java.util.Map;
 public class DataFactory {
 
 	public DataFactory(DataFactoryContext dataFactoryContext) throws Exception {
-		_userDataFactory = new UserDataFactory(dataFactoryContext);
-		_blogDataFactory = new BlogDataFactory(dataFactoryContext);
-		_layoutDataFactory = new LayoutDataFactory(dataFactoryContext);
-		_releaseDataFactory = new ReleaseDataFactory(dataFactoryContext);
-		_socialActivityDataFactory = new SocialActivityDataFactory(
+		UserDataFactory userDataFactory = new UserDataFactory(
 			dataFactoryContext);
-		_subscriptionDataFactory = new SubscriptionDataFactory(
+		BlogDataFactory blogDataFactory = new BlogDataFactory(
 			dataFactoryContext);
-		_wikiDataFactory = new WikiDataFactory(dataFactoryContext);
+		LayoutDataFactory layoutDataFactory = new LayoutDataFactory(
+			dataFactoryContext);
+		ReleaseDataFactory releaseDataFactory = new ReleaseDataFactory(
+			dataFactoryContext);
+		SocialActivityDataFactory socialActivityDataFactory =
+			new SocialActivityDataFactory(dataFactoryContext);
+		SubscriptionDataFactory subscriptionDataFactory =
+			new SubscriptionDataFactory(dataFactoryContext);
+		WikiDataFactory wikiDataFactory = new WikiDataFactory(
+			dataFactoryContext);
 
-		_dLDataFactory = new DLDataFactory(
-			dataFactoryContext, _userDataFactory);
+		DLDataFactory dLDataFactory = new DLDataFactory(
+			dataFactoryContext, userDataFactory);
 
-		_dDLDDMDataFactory = new DDLDDMDataFactory(
-			dataFactoryContext, _userDataFactory);
+		DDLDDMDataFactory dDLDDMDataFactory = new DDLDDMDataFactory(
+			dataFactoryContext, userDataFactory);
 
-		_messageBoardDataFactory = new MessageBoardDataFactory(
-			dataFactoryContext, _userDataFactory);
+		MessageBoardDataFactory messageBoardDataFactory =
+			new MessageBoardDataFactory(dataFactoryContext, userDataFactory);
 
-		_journalDataFactory = new JournalDataFactory(
-			dataFactoryContext, _userDataFactory);
+		JournalDataFactory journalDataFactory = new JournalDataFactory(
+			dataFactoryContext, userDataFactory);
 
-		_assetDataFactory = new AssetDataFactory(
-			dataFactoryContext, _journalDataFactory, _userDataFactory);
+		AssetDataFactory assetDataFactory = new AssetDataFactory(
+			dataFactoryContext, journalDataFactory, userDataFactory);
 
-		_portletPreferenceDataFactory = new PortletPreferenceDataFactory(
-			dataFactoryContext, _assetDataFactory);
+		PortletPreferenceDataFactory portletPreferenceDataFactory =
+			new PortletPreferenceDataFactory(
+				dataFactoryContext, assetDataFactory);
 
-		_commerceDataFactory = new CommerceDataFactory(
-			dataFactoryContext, _assetDataFactory, _userDataFactory);
+		CommerceDataFactory commerceDataFactory = new CommerceDataFactory(
+			dataFactoryContext, assetDataFactory, userDataFactory);
 
-		_resourcePermissionDataFactory = new ResourcePermissionDataFactory(
-			dataFactoryContext, _commerceDataFactory, _userDataFactory);
+		ResourcePermissionDataFactory resourcePermissionDataFactory =
+			new ResourcePermissionDataFactory(
+				dataFactoryContext, commerceDataFactory, userDataFactory);
 
-		_counterDataFactory = new CounterDataFactory(
-			dataFactoryContext, _resourcePermissionDataFactory,
-			_socialActivityDataFactory);
+		CounterDataFactory counterDataFactory = new CounterDataFactory(
+			dataFactoryContext, resourcePermissionDataFactory,
+			socialActivityDataFactory);
 
-		_dataFactories.put("assetDataFactory", _assetDataFactory);
-		_dataFactories.put("blogDataFactory", _blogDataFactory);
-		_dataFactories.put("commerceDataFactory", _commerceDataFactory);
-		_dataFactories.put("counterDataFactory", _counterDataFactory);
-		_dataFactories.put("dDLDDMDataFactory", _dDLDDMDataFactory);
-		_dataFactories.put("dLDataFactory", _dLDataFactory);
-		_dataFactories.put("journalDataFactory", _journalDataFactory);
-		_dataFactories.put("layoutDataFactory", _layoutDataFactory);
-		_dataFactories.put("messageBoardDataFactory", _messageBoardDataFactory);
+		_dataFactories.put("assetDataFactory", assetDataFactory);
+		_dataFactories.put("blogDataFactory", blogDataFactory);
+		_dataFactories.put("commerceDataFactory", commerceDataFactory);
+		_dataFactories.put("counterDataFactory", counterDataFactory);
+		_dataFactories.put("dDLDDMDataFactory", dDLDDMDataFactory);
+		_dataFactories.put("dLDataFactory", dLDataFactory);
+		_dataFactories.put("journalDataFactory", journalDataFactory);
+		_dataFactories.put("layoutDataFactory", layoutDataFactory);
+		_dataFactories.put("messageBoardDataFactory", messageBoardDataFactory);
 		_dataFactories.put(
-			"portletPreferenceDataFactory", _portletPreferenceDataFactory);
-		_dataFactories.put("releaseDataFactory", _releaseDataFactory);
+			"portletPreferenceDataFactory", portletPreferenceDataFactory);
+		_dataFactories.put("releaseDataFactory", releaseDataFactory);
 		_dataFactories.put(
-			"resourcePermissionDataFactory", _resourcePermissionDataFactory);
+			"resourcePermissionDataFactory", resourcePermissionDataFactory);
 		_dataFactories.put(
-			"socialActivityDataFactory", _socialActivityDataFactory);
-		_dataFactories.put("subscriptionDataFactory", _subscriptionDataFactory);
-		_dataFactories.put("userDataFactory", _userDataFactory);
-		_dataFactories.put("wikiDataFactory", _wikiDataFactory);
+			"socialActivityDataFactory", socialActivityDataFactory);
+		_dataFactories.put("subscriptionDataFactory", subscriptionDataFactory);
+		_dataFactories.put("userDataFactory", userDataFactory);
+		_dataFactories.put("wikiDataFactory", wikiDataFactory);
 	}
 
 	public Map<String, Object> getDataFactories() {
 		return _dataFactories;
 	}
 
-	private final AssetDataFactory _assetDataFactory;
-	private final BlogDataFactory _blogDataFactory;
-	private final CommerceDataFactory _commerceDataFactory;
-	private final CounterDataFactory _counterDataFactory;
 	private final Map<String, Object> _dataFactories = new HashMap<>();
-	private final DDLDDMDataFactory _dDLDDMDataFactory;
-	private final DLDataFactory _dLDataFactory;
-	private final JournalDataFactory _journalDataFactory;
-	private final LayoutDataFactory _layoutDataFactory;
-	private final MessageBoardDataFactory _messageBoardDataFactory;
-	private final PortletPreferenceDataFactory _portletPreferenceDataFactory;
-	private final ReleaseDataFactory _releaseDataFactory;
-	private final ResourcePermissionDataFactory _resourcePermissionDataFactory;
-	private final SocialActivityDataFactory _socialActivityDataFactory;
-	private final SubscriptionDataFactory _subscriptionDataFactory;
-	private final UserDataFactory _userDataFactory;
-	private final WikiDataFactory _wikiDataFactory;
 
 }
