@@ -22,7 +22,10 @@ import java.util.Map;
  */
 public class DataFactory {
 
-	public DataFactory(DataFactoryContext dataFactoryContext) throws Exception {
+	public static Map<String, Object> createContext(
+			DataFactoryContext dataFactoryContext)
+		throws Exception {
+
 		UserDataFactory userDataFactory = new UserDataFactory(
 			dataFactoryContext);
 
@@ -42,49 +45,46 @@ public class DataFactory {
 		SocialActivityDataFactory socialActivityDataFactory =
 			new SocialActivityDataFactory(dataFactoryContext);
 
-		_dataFactories.put("assetDataFactory", assetDataFactory);
-		_dataFactories.put(
-			"blogDataFactory", new BlogDataFactory(dataFactoryContext));
-		_dataFactories.put("commerceDataFactory", commerceDataFactory);
-		_dataFactories.put(
+		Map<String, Object> context = new HashMap<>();
+
+		context.put("assetDataFactory", assetDataFactory);
+		context.put("blogDataFactory", new BlogDataFactory(dataFactoryContext));
+		context.put("commerceDataFactory", commerceDataFactory);
+		context.put(
 			"counterDataFactory",
 			new CounterDataFactory(
 				dataFactoryContext, resourcePermissionDataFactory,
 				socialActivityDataFactory));
-		_dataFactories.put(
+		context.put(
 			"dDLDDMDataFactory",
 			new DDLDDMDataFactory(dataFactoryContext, userDataFactory));
-		_dataFactories.put(
+		context.put(
 			"dLDataFactory",
 			new DLDataFactory(dataFactoryContext, userDataFactory));
-		_dataFactories.put("journalDataFactory", journalDataFactory);
-		_dataFactories.put(
+		context.put("journalDataFactory", journalDataFactory);
+		context.put(
 			"layoutDataFactory", new LayoutDataFactory(dataFactoryContext));
-		_dataFactories.put(
+		context.put(
 			"messageBoardDataFactory",
 			new MessageBoardDataFactory(dataFactoryContext, userDataFactory));
-		_dataFactories.put(
+		context.put(
 			"portletPreferenceDataFactory",
 			new PortletPreferenceDataFactory(
 				dataFactoryContext, assetDataFactory));
-		_dataFactories.put(
+		context.put(
 			"releaseDataFactory", new ReleaseDataFactory(dataFactoryContext));
-		_dataFactories.put(
+		context.put(
 			"resourcePermissionDataFactory", resourcePermissionDataFactory);
-		_dataFactories.put(
-			"socialActivityDataFactory", socialActivityDataFactory);
-		_dataFactories.put(
+		context.put("socialActivityDataFactory", socialActivityDataFactory);
+		context.put(
 			"subscriptionDataFactory",
 			new SubscriptionDataFactory(dataFactoryContext));
-		_dataFactories.put("userDataFactory", userDataFactory);
-		_dataFactories.put(
-			"wikiDataFactory", new WikiDataFactory(dataFactoryContext));
-	}
+		context.put("userDataFactory", userDataFactory);
+		context.put("wikiDataFactory", new WikiDataFactory(dataFactoryContext));
 
-	public Map<String, Object> getDataFactories() {
-		return _dataFactories;
-	}
+		context.put("dataFactoryContext", dataFactoryContext);
 
-	private final Map<String, Object> _dataFactories = new HashMap<>();
+		return context;
+	}
 
 }
