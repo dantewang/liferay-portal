@@ -308,7 +308,9 @@ public class SampleSQLBuilder {
 						createFileWriter(new File(_outputDir, "sample.sql")));
 
 					FreeMarkerUtil.process(
-						_script, DataFactory.createContext(_dataFactoryContext),
+						_script,
+						TemplateContextFactory.createContext(
+							_dataFactoryContext),
 						sampleSQLWriter);
 				}
 				catch (Throwable t) {
