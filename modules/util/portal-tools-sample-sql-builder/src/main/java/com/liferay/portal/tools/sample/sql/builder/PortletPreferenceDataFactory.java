@@ -45,8 +45,13 @@ import javax.portlet.PortletPreferences;
  */
 public class PortletPreferenceDataFactory extends BaseDataFactory {
 
-	public PortletPreferenceDataFactory(DataFactoryContext dataFactoryContext) {
+	public PortletPreferenceDataFactory(
+		DataFactoryContext dataFactoryContext,
+		AssetDataFactory assetDataFactory) {
+
 		super(dataFactoryContext);
+
+		_assetDataFactory = assetDataFactory;
 	}
 
 	public List<PortletPreferencesModel>
@@ -239,10 +244,6 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 			portletPreferencesFactory.toXML(jxPortletPreferences));
 	}
 
-	public void setAssetDataFactory(AssetDataFactory assetDataFactory) {
-		_assetDataFactory = assetDataFactory;
-	}
-
 	protected ObjectValuePair<String[], Integer>
 		getAssetPublisherAssetCategoriesQueryValues(
 			List<AssetCategoryModel> assetCategoryModels, int index) {
@@ -340,7 +341,7 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 
 	private final Map<Long, Integer> _assetClassNameIdsIndexes =
 		new HashMap<>();
-	private AssetDataFactory _assetDataFactory;
+	private final AssetDataFactory _assetDataFactory;
 	private final Map<Long, Integer> _assetPublisherQueryStartIndexes =
 		new HashMap<>();
 
