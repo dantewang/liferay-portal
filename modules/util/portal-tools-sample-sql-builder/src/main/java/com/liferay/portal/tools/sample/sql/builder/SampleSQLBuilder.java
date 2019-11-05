@@ -308,9 +308,7 @@ public class SampleSQLBuilder {
 						createFileWriter(new File(_outputDir, "sample.sql")));
 
 					FreeMarkerUtil.process(
-						_script,
-						TemplateContextFactory.createContext(
-							_dataFactoryContext),
+						_script, _createContext(_dataFactoryContext),
 						sampleSQLWriter);
 				}
 				catch (Throwable t) {
@@ -402,6 +400,71 @@ public class SampleSQLBuilder {
 		}
 
 		insertSQLWriter.write(insertSQL);
+	}
+
+	private Map<String, Object> _createContext(
+			DataFactoryContext dataFactoryContext)
+		throws Exception {
+
+		UserDataFactory userDataFactory = new UserDataFactory(
+			dataFactoryContext);
+
+		JournalDataFactory journalDataFactory = new JournalDataFactory(
+			dataFactoryContext, userDataFactory);
+
+		AssetDataFactory assetDataFactory = new AssetDataFactory(
+			dataFactoryContext, journalDataFactory, userDataFactory);
+
+		CommerceDataFactory commerceDataFactory = new CommerceDataFactory(
+			dataFactoryContext, assetDataFactory, userDataFactory);
+
+		ResourcePermissionDataFactory resourcePermissionDataFactory =
+			new ResourcePermissionDataFactory(
+				dataFactoryContext, commerceDataFactory, userDataFactory);
+
+		SocialActivityDataFactory socialActivityDataFactory =
+			new SocialActivityDataFactory(dataFactoryContext);
+
+		Map<String, Object> context = new HashMap<>();
+
+		context.put("assetDataFactory", assetDataFactory);
+		context.put("blogDataFactory", new BlogDataFactory(dataFactoryContext));
+		context.put("commerceDataFactory", commerceDataFactory);
+		context.put(
+			"counterDataFactory",
+			new CounterDataFactory(
+				dataFactoryContext, resourcePermissionDataFactory,
+				socialActivityDataFactory));
+		context.put(
+			"dDLDDMDataFactory",
+			new DDLDDMDataFactory(dataFactoryContext, userDataFactory));
+		context.put(
+			"dLDataFactory",
+			new DLDataFactory(dataFactoryContext, userDataFactory));
+		context.put("journalDataFactory", journalDataFactory);
+		context.put(
+			"layoutDataFactory", new LayoutDataFactory(dataFactoryContext));
+		context.put(
+			"messageBoardDataFactory",
+			new MessageBoardDataFactory(dataFactoryContext, userDataFactory));
+		context.put(
+			"portletPreferenceDataFactory",
+			new PortletPreferenceDataFactory(
+				dataFactoryContext, assetDataFactory));
+		context.put(
+			"releaseDataFactory", new ReleaseDataFactory(dataFactoryContext));
+		context.put(
+			"resourcePermissionDataFactory", resourcePermissionDataFactory);
+		context.put("socialActivityDataFactory", socialActivityDataFactory);
+		context.put(
+			"subscriptionDataFactory",
+			new SubscriptionDataFactory(dataFactoryContext));
+		context.put("userDataFactory", userDataFactory);
+		context.put("wikiDataFactory", new WikiDataFactory(dataFactoryContext));
+
+		context.put("dataFactoryContext", dataFactoryContext);
+
+		return context;
 	}
 
 	private static final int _PIPE_BUFFER_SIZE = 16 * 1024 * 1024;
