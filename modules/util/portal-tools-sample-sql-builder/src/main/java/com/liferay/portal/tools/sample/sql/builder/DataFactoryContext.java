@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.io.unsync.UnsyncBufferedWriter;
 import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.model.UserPersonalSite;
-import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -37,12 +36,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 
-import java.text.Format;
-
 import java.time.ZoneId;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,14 +93,6 @@ public class DataFactoryContext {
 		}
 
 		return writer;
-	}
-
-	public String getDateString(Date date) {
-		if (date == null) {
-			return null;
-		}
-
-		return _simpleDateFormat.format(date);
 	}
 
 	public long getDefaultUserId() {
@@ -249,10 +237,6 @@ public class DataFactoryContext {
 		return _sampleUserId;
 	}
 
-	public Format getSimpleDateFormat() {
-		return _simpleDateFormat;
-	}
-
 	public String getVirtualHostname() {
 		return _virtualHostname;
 	}
@@ -285,21 +269,18 @@ public class DataFactoryContext {
 	private void _initContextValue(Properties properties)
 		throws FileNotFoundException {
 
-		TimeZone timeZone = TimeZone.getDefault();
-
 		String timeZoneId = properties.getProperty("sample.sql.db.time.zone");
 
 		if (Validator.isNotNull(timeZoneId)) {
-			timeZone = TimeZone.getTimeZone(ZoneId.of(timeZoneId));
-
-			TimeZone.setDefault(timeZone);
+			TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of(timeZoneId)));
 		}
 		else {
-			properties.setProperty("sample.sql.db.time.zone", timeZone.getID());
-		}
+			TimeZone timeZone = TimeZone.getDefault();
 
-		_simpleDateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss", timeZone);
+			timeZoneId = timeZone.getID();
+
+			properties.setProperty("sample.sql.db.time.zone", timeZoneId);
+		}
 
 		_maxAssetCategoryCount = GetterUtil.getInteger(
 			properties.getProperty("sample.sql.max.asset.category.count"));
@@ -441,8 +422,6 @@ public class DataFactoryContext {
 	private int _maxWikiPageCommentCount;
 	private int _maxWikiPageCount;
 	private final long _sampleUserId;
-	private Format _simpleDateFormat =
-		FastDateFormatFactoryUtil.getSimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private String _virtualHostname;
 
 }
