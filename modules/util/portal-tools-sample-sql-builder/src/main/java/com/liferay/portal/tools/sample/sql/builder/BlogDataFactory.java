@@ -43,8 +43,7 @@ public class BlogDataFactory extends BaseDataFactory {
 	}
 
 	public long getBlogsEntryClassNameId() {
-		return getClassNameId(
-			BlogsEntry.class, dataFactoryContext.getClassNameModels());
+		return getClassNameId(BlogsEntry.class);
 	}
 
 	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
@@ -132,9 +131,7 @@ public class BlogDataFactory extends BaseDataFactory {
 		friendlyURLEntryModel.setCompanyId(dataFactoryContext.getCompanyId());
 		friendlyURLEntryModel.setCreateDate(new Date());
 		friendlyURLEntryModel.setModifiedDate(new Date());
-		friendlyURLEntryModel.setClassNameId(
-			getClassNameId(
-				BlogsEntry.class, dataFactoryContext.getClassNameModels()));
+		friendlyURLEntryModel.setClassNameId(getClassNameId(BlogsEntry.class));
 		friendlyURLEntryModel.setClassPK(blogsEntryModel.getEntryId());
 
 		return friendlyURLEntryModel;

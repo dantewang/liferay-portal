@@ -111,8 +111,7 @@ public class UserDataFactory extends BaseDataFactory {
 	}
 
 	public long getGroupClassNameId() {
-		return getClassNameId(
-			Group.class, dataFactoryContext.getClassNameModels());
+		return getClassNameId(Group.class);
 	}
 
 	public List<GroupModel> getGroupModels() {
@@ -225,9 +224,7 @@ public class UserDataFactory extends BaseDataFactory {
 
 		contactModel.setCreateDate(new Date());
 		contactModel.setModifiedDate(new Date());
-		contactModel.setClassNameId(
-			getClassNameId(
-				User.class, dataFactoryContext.getClassNameModels()));
+		contactModel.setClassNameId(getClassNameId(User.class));
 		contactModel.setClassPK(userModel.getUserId());
 		contactModel.setAccountId(_accountId);
 		contactModel.setParentContactId(
@@ -245,9 +242,8 @@ public class UserDataFactory extends BaseDataFactory {
 		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		return newGroupModel(
-			counter.get(),
-			getClassNameId(User.class, dataFactoryContext.getClassNameModels()),
-			userModel.getUserId(), userModel.getScreenName(), false);
+			counter.get(), getClassNameId(User.class), userModel.getUserId(),
+			userModel.getScreenName(), false);
 	}
 
 	public MBStatsUserModel newMBStatsUserModel(long groupId) {
@@ -406,9 +402,7 @@ public class UserDataFactory extends BaseDataFactory {
 		int maxGroupsCount = dataFactoryContext.getMaxGroupCount();
 
 		_globalGroupModel = _initGroupModel(
-			_globalGroupId,
-			getClassNameId(
-				Company.class, dataFactoryContext.getClassNameModels()),
+			_globalGroupId, getClassNameId(Company.class),
 			dataFactoryContext.getCompanyId(), GroupConstants.GLOBAL, false);
 
 		_guestGroupModel = _initGroupModel(
@@ -416,10 +410,7 @@ public class UserDataFactory extends BaseDataFactory {
 			GroupConstants.GUEST, true);
 
 		_userPersonalSiteGroupModel = newGroupModel(
-			_userPersonalSiteGroupId,
-			getClassNameId(
-				UserPersonalSite.class,
-				dataFactoryContext.getClassNameModels()),
+			_userPersonalSiteGroupId, getClassNameId(UserPersonalSite.class),
 			dataFactoryContext.getDefaultUserId(),
 			GroupConstants.USER_PERSONAL_SITE, false);
 
@@ -581,9 +572,6 @@ public class UserDataFactory extends BaseDataFactory {
 
 		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		long classNameId = getClassNameId(
-			Role.class, dataFactoryContext.getClassNameModels());
-
 		roleModel.setUuid(SequentialUUID.generate());
 		roleModel.setRoleId(counter.get());
 		roleModel.setCompanyId(dataFactoryContext.getCompanyId());
@@ -591,7 +579,7 @@ public class UserDataFactory extends BaseDataFactory {
 		roleModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		roleModel.setCreateDate(new Date());
 		roleModel.setModifiedDate(new Date());
-		roleModel.setClassNameId(classNameId);
+		roleModel.setClassNameId(getClassNameId(Role.class));
 		roleModel.setClassPK(roleModel.getRoleId());
 		roleModel.setName(name);
 		roleModel.setType(type);

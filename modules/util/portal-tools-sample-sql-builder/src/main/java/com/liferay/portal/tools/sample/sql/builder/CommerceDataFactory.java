@@ -38,7 +38,6 @@ import com.liferay.commerce.product.model.impl.CProductModelImpl;
 import com.liferay.commerce.product.model.impl.CommerceCatalogModelImpl;
 import com.liferay.commerce.product.model.impl.CommerceChannelModelImpl;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -51,7 +50,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Lily Chi
@@ -134,10 +132,7 @@ public class CommerceDataFactory extends BaseDataFactory {
 		CProductModel cProductModel) {
 
 		return _newCPFriendlyURLEntryModel(
-			0,
-			getClassNameId(
-				CProduct.class, dataFactoryContext.getClassNameModels()),
-			cProductModel.getCProductId(),
+			0, getClassNameId(CProduct.class), cProductModel.getCProductId(),
 			FriendlyURLNormalizerUtil.normalizeWithPeriodsAndSlashes(
 				"Definition " + cProductModel.getPublishedCPDefinitionId()));
 	}
@@ -225,18 +220,13 @@ public class CommerceDataFactory extends BaseDataFactory {
 	}
 
 	private void _initCommerceGroupModle() throws Exception {
-		Map<String, ClassNameModel> classNameModels =
-			dataFactoryContext.getClassNameModels();
-
 		_commerceChannelGroupModel = _userDataFactory.newGroupModel(
-			_commerceChannelGroupId,
-			getClassNameId(CommerceChannel.class, classNameModels),
+			_commerceChannelGroupId, getClassNameId(CommerceChannel.class),
 			_commerceChannelModel.getCommerceChannelId(),
 			_commerceChannelModel.getName(), false);
 
 		_commerceCatalogGroupModel = _userDataFactory.newGroupModel(
-			_commerceCatalogGroupId,
-			getClassNameId(CommerceCatalog.class, classNameModels),
+			_commerceCatalogGroupId, getClassNameId(CommerceCatalog.class),
 			_commerceCatalogModel.getCommerceCatalogId(),
 			_commerceCatalogModel.getName(), false);
 	}
@@ -302,11 +292,8 @@ public class CommerceDataFactory extends BaseDataFactory {
 				_assetEntryModels.add(
 					_assetDataFactory.newAssetEntryModel(
 						_commerceCatalogGroupId, new Date(), new Date(),
-						getClassNameId(
-							CPDefinition.class,
-							dataFactoryContext.getClassNameModels()),
-						cpDefinitionId, SequentialUUID.generate(), 0, true,
-						true, "text/plain",
+						getClassNameId(CPDefinition.class), cpDefinitionId,
+						SequentialUUID.generate(), 0, true, true, "text/plain",
 						cpDefinitionLocalizationModel.getName()));
 
 				_cpFriendlyURLEntryModels.add(
