@@ -39,8 +39,7 @@ public class WikiDataFactory extends BaseDataFactory {
 	}
 
 	public long getWikiPageClassNameId() {
-		return getClassNameId(
-			WikiPage.class, dataFactoryContext.getClassNameModels());
+		return getClassNameId(WikiPage.class);
 	}
 
 	public List<WikiNodeModel> newWikiNodeModels(long groupId) {

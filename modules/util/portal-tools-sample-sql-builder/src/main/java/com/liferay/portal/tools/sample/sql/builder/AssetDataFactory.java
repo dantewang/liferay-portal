@@ -78,12 +78,8 @@ public class AssetDataFactory extends BaseDataFactory {
 		_userDataFactory = userDataFactory;
 
 		_assetClassNameIds = new long[] {
-			getClassNameId(
-				BlogsEntry.class, dataFactoryContext.getClassNameModels()),
-			getClassNameId(
-				JournalArticle.class, dataFactoryContext.getClassNameModels()),
-			getClassNameId(
-				WikiPage.class, dataFactoryContext.getClassNameModels())
+			getClassNameId(BlogsEntry.class),
+			getClassNameId(JournalArticle.class), getClassNameId(WikiPage.class)
 		};
 
 		_initAssetCategoryModels();
@@ -256,9 +252,7 @@ public class AssetDataFactory extends BaseDataFactory {
 	public AssetEntryModel newAssetEntryModel(BlogsEntryModel blogsEntryModel) {
 		return newAssetEntryModel(
 			blogsEntryModel.getGroupId(), blogsEntryModel.getCreateDate(),
-			blogsEntryModel.getModifiedDate(),
-			getClassNameId(
-				BlogsEntry.class, dataFactoryContext.getClassNameModels()),
+			blogsEntryModel.getModifiedDate(), getClassNameId(BlogsEntry.class),
 			blogsEntryModel.getEntryId(), blogsEntryModel.getUuid(), 0, true,
 			true, ContentTypes.TEXT_HTML, blogsEntryModel.getTitle());
 	}
@@ -269,8 +263,7 @@ public class AssetDataFactory extends BaseDataFactory {
 		return newAssetEntryModel(
 			dLFileEntryModel.getGroupId(), dLFileEntryModel.getCreateDate(),
 			dLFileEntryModel.getModifiedDate(),
-			getClassNameId(
-				DLFileEntry.class, dataFactoryContext.getClassNameModels()),
+			getClassNameId(DLFileEntry.class),
 			dLFileEntryModel.getFileEntryId(), dLFileEntryModel.getUuid(),
 			dLFileEntryModel.getFileEntryTypeId(), true, true,
 			dLFileEntryModel.getMimeType(), dLFileEntryModel.getTitle());
@@ -279,9 +272,7 @@ public class AssetDataFactory extends BaseDataFactory {
 	public AssetEntryModel newAssetEntryModel(DLFolderModel dLFolderModel) {
 		return newAssetEntryModel(
 			dLFolderModel.getGroupId(), dLFolderModel.getCreateDate(),
-			dLFolderModel.getModifiedDate(),
-			getClassNameId(
-				DLFolder.class, dataFactoryContext.getClassNameModels()),
+			dLFolderModel.getModifiedDate(), getClassNameId(DLFolder.class),
 			dLFolderModel.getFolderId(), dLFolderModel.getUuid(), 0, true, true,
 			null, dLFolderModel.getName());
 	}
@@ -332,12 +323,10 @@ public class AssetDataFactory extends BaseDataFactory {
 		if (mbMessageModel.getCategoryId() ==
 				MBCategoryConstants.DISCUSSION_CATEGORY_ID) {
 
-			classNameId = getClassNameId(
-				MBDiscussion.class, dataFactoryContext.getClassNameModels());
+			classNameId = getClassNameId(MBDiscussion.class);
 		}
 		else {
-			classNameId = getClassNameId(
-				MBMessage.class, dataFactoryContext.getClassNameModels());
+			classNameId = getClassNameId(MBMessage.class);
 			visible = true;
 		}
 
@@ -351,9 +340,7 @@ public class AssetDataFactory extends BaseDataFactory {
 	public AssetEntryModel newAssetEntryModel(MBThreadModel mbThreadModel) {
 		return newAssetEntryModel(
 			mbThreadModel.getGroupId(), mbThreadModel.getCreateDate(),
-			mbThreadModel.getModifiedDate(),
-			getClassNameId(
-				MBThread.class, dataFactoryContext.getClassNameModels()),
+			mbThreadModel.getModifiedDate(), getClassNameId(MBThread.class),
 			mbThreadModel.getThreadId(), mbThreadModel.getUuid(), 0, true,
 			false, StringPool.BLANK,
 			String.valueOf(mbThreadModel.getRootMessageId()));
@@ -381,9 +368,7 @@ public class AssetDataFactory extends BaseDataFactory {
 			journalArticleModel.getGroupId(),
 			journalArticleModel.getCreateDate(),
 			journalArticleModel.getModifiedDate(),
-			getClassNameId(
-				JournalArticle.class, dataFactoryContext.getClassNameModels()),
-			resourcePrimKey, resourceUUID,
+			getClassNameId(JournalArticle.class), resourcePrimKey, resourceUUID,
 			defaultJournalDDMStructureModel.getStructureId(),
 			journalArticleModel.isIndexable(), true, ContentTypes.TEXT_HTML,
 			journalArticleLocalizationModel.getTitle());
@@ -392,9 +377,7 @@ public class AssetDataFactory extends BaseDataFactory {
 	public AssetEntryModel newAssetEntryModel(WikiPageModel wikiPageModel) {
 		return newAssetEntryModel(
 			wikiPageModel.getGroupId(), wikiPageModel.getCreateDate(),
-			wikiPageModel.getModifiedDate(),
-			getClassNameId(
-				WikiPage.class, dataFactoryContext.getClassNameModels()),
+			wikiPageModel.getModifiedDate(), getClassNameId(WikiPage.class),
 			wikiPageModel.getResourcePrimKey(), wikiPageModel.getUuid(), 0,
 			true, true, ContentTypes.TEXT_HTML, wikiPageModel.getTitle());
 	}

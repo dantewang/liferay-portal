@@ -28,8 +28,9 @@ import java.util.Map;
  */
 public abstract class BaseDataFactory {
 
-	public long getClassNameId(
-		Class<?> clazz, Map<String, ClassNameModel> classNameModels) {
+	public long getClassNameId(Class<?> clazz) {
+		Map<String, ClassNameModel> classNameModels =
+			dataFactoryContext.getClassNameModels();
 
 		ClassNameModel classNameModel = classNameModels.get(clazz.getName());
 
