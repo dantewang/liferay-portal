@@ -384,7 +384,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 
 	protected String getClassName(long classNameId) {
 		for (ClassNameModel classNameModel :
-				dataFactoryContext.getClassNameModelValues()) {
+				dataFactoryContext.getClassNameModels()) {
 
 			if (classNameModel.getClassNameId() == classNameId) {
 				return classNameModel.getValue();
