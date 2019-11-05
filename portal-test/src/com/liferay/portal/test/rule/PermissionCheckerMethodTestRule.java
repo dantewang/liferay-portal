@@ -19,7 +19,7 @@ import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.test.rule.MethodTestRule;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
-import com.liferay.portal.security.permission.SimplePermissionChecker;
+import com.liferay.portal.kernel.util.ProxyUtil;
 
 import org.junit.runner.Description;
 
@@ -54,21 +54,26 @@ public class PermissionCheckerMethodTestRule extends MethodTestRule<Void> {
 		_originalPermissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
 
-		PermissionThreadLocal.setPermissionChecker(
-			new SimplePermissionChecker() {
-				{
-					init(TestPropsValues.getUser());
-				}
+		Class<?> clazz = Class.forName(
+			"com.liferay.portal.security.permission.SimplePermissionChecker");
 
-				@Override
-				public boolean hasOwnerPermission(
-					long companyId, String name, String primKey, long ownerId,
-					String actionId) {
+		PermissionChecker permissionCheckerProxy =
+			(PermissionChecker)ProxyUtil.newProxyInstance(
+				PermissionChecker.class.getClassLoader(),
+				new Class<?>[] {PermissionChecker.class},
+				(proxy, method, args) -> {
+					String methodName = method.getName();
 
-					return true;
-				}
+					if (methodName.equals("hasOwnerPermission")) {
+						return true;
+					}
 
-			});
+					return method.invoke(clazz.newInstance(), args);
+				});
+
+		permissionCheckerProxy.init(TestPropsValues.getUser());
+
+		PermissionThreadLocal.setPermissionChecker(permissionCheckerProxy);
 	}
 
 	protected void setUpPrincipalThreadLocal() throws Exception {
