@@ -99,10 +99,6 @@ public class DataFactoryContext {
 		return writer;
 	}
 
-	public String getDateLong(Date date) {
-		return String.valueOf(date.getTime());
-	}
-
 	public String getDateString(Date date) {
 		if (date == null) {
 			return null;
