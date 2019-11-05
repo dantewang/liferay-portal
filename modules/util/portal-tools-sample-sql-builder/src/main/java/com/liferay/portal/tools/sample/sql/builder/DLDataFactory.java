@@ -30,7 +30,6 @@ import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureVersionModel;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
 import com.liferay.portal.kernel.metadata.RawMetadataProcessor;
-import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -44,7 +43,6 @@ import com.liferay.util.SimpleCounter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Lily Chi
@@ -84,8 +82,7 @@ public class DLDataFactory extends BaseDDMDataFactory {
 	}
 
 	public long getDLFileEntryClassNameId() {
-		return getClassNameId(
-			DLFileEntry.class, dataFactoryContext.getClassNameModels());
+		return getClassNameId(DLFileEntry.class);
 	}
 
 	public DDMContentModel newDDMContentModel(
@@ -114,9 +111,7 @@ public class DLDataFactory extends BaseDDMDataFactory {
 
 		ddmStorageLinkModel.setUuid(SequentialUUID.generate());
 		ddmStorageLinkModel.setStorageLinkId(ddmStorageLinkId);
-		ddmStorageLinkModel.setClassNameId(
-			getClassNameId(
-				DDMContent.class, dataFactoryContext.getClassNameModels()));
+		ddmStorageLinkModel.setClassNameId(getClassNameId(DDMContent.class));
 		ddmStorageLinkModel.setClassPK(ddmContentModel.getContentId());
 		ddmStorageLinkModel.setStructureId(structureId);
 		ddmStorageLinkModel.setStructureVersionId(
@@ -231,9 +226,6 @@ public class DLDataFactory extends BaseDDMDataFactory {
 		long groupId = _userDataFactory.getGlobalGroupId();
 		long userId = dataFactoryContext.getDefaultUserId();
 
-		Map<String, ClassNameModel> classNameModels =
-			dataFactoryContext.getClassNameModels();
-
 		_defaultDLFileEntryTypeModel = new DLFileEntryTypeModelImpl();
 
 		_defaultDLFileEntryTypeModel.setUuid(SequentialUUID.generate());
@@ -257,7 +249,7 @@ public class DLDataFactory extends BaseDDMDataFactory {
 		_defaultDLFileEntryTypeModel.setLastPublishDate(lastPublishDate);
 
 		_defaultDLDDMStructureModel = newDDMStructureModel(
-			groupId, userId, getClassNameId(DLFileEntry.class, classNameModels),
+			groupId, userId, getClassNameId(DLFileEntry.class),
 			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent);
 
 		_defaultDLDDMStructureVersionModel = newDDMStructureVersionModel(
