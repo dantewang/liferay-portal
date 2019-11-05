@@ -68,6 +68,11 @@ public class CommerceDataFactory extends BaseDataFactory {
 		_assetDataFactory = assetDataFactory;
 		_userDataFactory = userDataFactory;
 
+		SimpleCounter counter = dataFactoryContext.getCounter();
+
+		_commerceCatalogGroupId = counter.get();
+		_commerceChannelGroupId = counter.get();
+
 		_initCommerceCurrencyModel();
 		_initCommerceCatalogModel();
 		_initCommerceChannelModel();
@@ -220,22 +225,17 @@ public class CommerceDataFactory extends BaseDataFactory {
 	}
 
 	private void _initCommerceGroupModle() throws Exception {
-		long commerceChannelGroupId =
-			dataFactoryContext.getCommerceChannelGroupId();
-		long commerceCatalogGroupId =
-			dataFactoryContext.getCommerceCatalogGroupId();
-
 		Map<String, ClassNameModel> classNameModels =
 			dataFactoryContext.getClassNameModels();
 
 		_commerceChannelGroupModel = _userDataFactory.newGroupModel(
-			commerceChannelGroupId,
+			_commerceChannelGroupId,
 			getClassNameId(CommerceChannel.class, classNameModels),
 			_commerceChannelModel.getCommerceChannelId(),
 			_commerceChannelModel.getName(), false);
 
 		_commerceCatalogGroupModel = _userDataFactory.newGroupModel(
-			commerceCatalogGroupId,
+			_commerceCatalogGroupId,
 			getClassNameId(CommerceCatalog.class, classNameModels),
 			_commerceCatalogModel.getCommerceCatalogId(),
 			_commerceCatalogModel.getName(), false);
@@ -248,9 +248,6 @@ public class CommerceDataFactory extends BaseDataFactory {
 		int maxCProductCount = dataFactoryContext.getMaxCProductCount();
 		int maxCPDefinitionCount = dataFactoryContext.getMaxCPDefinitionCount();
 		int maxCPInstanceCount = dataFactoryContext.getMaxCPInstanceCount();
-
-		long commerceCatalogGroupId =
-			dataFactoryContext.getCommerceCatalogGroupId();
 
 		SimpleCounter counter = dataFactoryContext.getCounter();
 
@@ -279,7 +276,7 @@ public class CommerceDataFactory extends BaseDataFactory {
 			long cProductId = counter.get();
 
 			CProductModel cProductModel = _newCProductModel(
-				commerceCatalogGroupId, cProductId,
+				_commerceCatalogGroupId, cProductId,
 				cpDefinitionIds[maxCPDefinitionCount - 1]);
 
 			_cProductModels.add(cProductModel);
@@ -296,7 +293,7 @@ public class CommerceDataFactory extends BaseDataFactory {
 					cpDefinitionLocalizationModel);
 
 				CPDefinitionModel cpDefinitionModel = _newCPDefinitionModel(
-					commerceCatalogGroupId, cpDefinitionId, cProductId,
+					_commerceCatalogGroupId, cpDefinitionId, cProductId,
 					cpTaxCategoryModel.getCPTaxCategoryId(),
 					definitionIndex + 1);
 
@@ -304,7 +301,7 @@ public class CommerceDataFactory extends BaseDataFactory {
 
 				_assetEntryModels.add(
 					_assetDataFactory.newAssetEntryModel(
-						commerceCatalogGroupId, new Date(), new Date(),
+						_commerceCatalogGroupId, new Date(), new Date(),
 						getClassNameId(
 							CPDefinition.class,
 							dataFactoryContext.getClassNameModels()),
@@ -320,7 +317,7 @@ public class CommerceDataFactory extends BaseDataFactory {
 
 					_cpInstanceModels.add(
 						_newCPInstanceModel(
-							commerceCatalogGroupId, cpDefinitionId,
+							_commerceCatalogGroupId, cpDefinitionId,
 							instanceIndex));
 				}
 			}
@@ -533,8 +530,10 @@ public class CommerceDataFactory extends BaseDataFactory {
 
 	private final AssetDataFactory _assetDataFactory;
 	private List<AssetEntryModel> _assetEntryModels;
+	private final long _commerceCatalogGroupId;
 	private GroupModel _commerceCatalogGroupModel;
 	private CommerceCatalogModel _commerceCatalogModel;
+	private final long _commerceChannelGroupId;
 	private GroupModel _commerceChannelGroupModel;
 	private CommerceChannelModel _commerceChannelModel;
 	private CommerceCurrencyModel _commerceCurrencyModel;
