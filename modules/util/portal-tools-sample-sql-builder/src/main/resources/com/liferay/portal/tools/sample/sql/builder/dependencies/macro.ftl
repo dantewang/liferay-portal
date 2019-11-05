@@ -104,7 +104,7 @@
 
 				${resourcePermissionDataFactory.toInsertSQL(dDLDDMDataFactory.newDDMStructureLinkModel(dlFileEntryMetadataModel))}
 
-				${dataFactoryContext.getCSVWriter("documentLibrary").write(dlFileEntryModel.uuid + "," + dlFolderModel.folderId + "," + dlFileEntryModel.name + "," + dlFileEntryModel.fileEntryId + "," + dataFactoryContext.getDateLong(dlFileEntryModel.createDate) + "," + dataFactoryContext.getDateLong(dlFolderModel.createDate) + "\n")}
+				${dataFactoryContext.getCSVWriter("documentLibrary").write(dlFileEntryModel.uuid + "," + dlFolderModel.folderId + "," + dlFileEntryModel.name + "," + dlFileEntryModel.fileEntryId + "\n")}
 			</#list>
 
 			<@insertDLFolder
