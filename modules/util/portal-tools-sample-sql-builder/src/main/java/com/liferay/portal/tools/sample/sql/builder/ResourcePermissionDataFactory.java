@@ -55,6 +55,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.TextFormatter;
@@ -70,11 +71,14 @@ import java.lang.reflect.Method;
 
 import java.sql.Types;
 
+import java.text.Format;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * @author Lily Chi
@@ -90,6 +94,9 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 
 		_commerceDataFactory = commerceDataFactory;
 		_userDataFactory = userDataFactory;
+
+		_simpleDateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
+			"yyyy-MM-dd HH:mm:ss", TimeZone.getDefault());
 	}
 
 	public ResourcePermissionModel commerceCatalogResourcePermission() {
@@ -495,7 +502,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 					}
 					else {
 						sb.append("'");
-						sb.append(dataFactoryContext.getDateString(date));
+						sb.append(_simpleDateFormat.format(date));
 						sb.append("'");
 					}
 				}
@@ -532,6 +539,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 	private final CommerceDataFactory _commerceDataFactory;
 	private final SimpleCounter _resourcePermissionCounter =
 		new SimpleCounter();
+	private final Format _simpleDateFormat;
 	private final UserDataFactory _userDataFactory;
 
 }
