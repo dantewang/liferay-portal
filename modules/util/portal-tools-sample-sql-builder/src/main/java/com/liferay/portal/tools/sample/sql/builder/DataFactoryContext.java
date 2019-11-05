@@ -61,9 +61,6 @@ public class DataFactoryContext {
 
 		_classNameModels = _initClassNameModels();
 
-		_accountId = _counter.get();
-		_commerceCatalogGroupId = _counter.get();
-		_commerceChannelGroupId = _counter.get();
 		_companyId = _counter.get();
 		_defaultUserId = _counter.get();
 		_sampleUserId = _counter.get();
@@ -75,24 +72,12 @@ public class DataFactoryContext {
 		}
 	}
 
-	public long getAccountId() {
-		return _accountId;
-	}
-
 	public Map<String, ClassNameModel> getClassNameModels() {
 		return _classNameModels;
 	}
 
 	public Collection<ClassNameModel> getClassNameModelValues() {
 		return _classNameModels.values();
-	}
-
-	public long getCommerceCatalogGroupId() {
-		return _commerceCatalogGroupId;
-	}
-
-	public long getCommerceChannelGroupId() {
-		return _commerceChannelGroupId;
 	}
 
 	public long getCompanyId() {
@@ -422,10 +407,7 @@ public class DataFactoryContext {
 
 	private static final int _WRITER_BUFFER_SIZE = 16 * 1024;
 
-	private final long _accountId;
 	private final Map<String, ClassNameModel> _classNameModels;
-	private final long _commerceCatalogGroupId;
-	private final long _commerceChannelGroupId;
 	private final long _companyId;
 	private final SimpleCounter _counter;
 	private final Map<String, Writer> _csvWriters = new HashMap<>();
