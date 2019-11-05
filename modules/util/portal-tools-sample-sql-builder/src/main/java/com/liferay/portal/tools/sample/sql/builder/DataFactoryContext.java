@@ -72,8 +72,8 @@ public class DataFactoryContext {
 		}
 	}
 
-	public Map<String, ClassNameModel> getClassNameModels() {
-		return _classNameModels;
+	public ClassNameModel getClassNameModel(String className) {
+		return _classNameModels.get(className);
 	}
 
 	public Collection<ClassNameModel> getClassNameModelValues() {

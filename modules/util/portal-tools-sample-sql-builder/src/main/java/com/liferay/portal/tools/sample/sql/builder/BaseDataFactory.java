@@ -21,7 +21,6 @@ import com.liferay.util.SimpleCounter;
 import java.io.InputStream;
 
 import java.util.Date;
-import java.util.Map;
 
 /**
  * @author Lily Chi
@@ -29,10 +28,8 @@ import java.util.Map;
 public abstract class BaseDataFactory {
 
 	public long getClassNameId(Class<?> clazz) {
-		Map<String, ClassNameModel> classNameModels =
-			dataFactoryContext.getClassNameModels();
-
-		ClassNameModel classNameModel = classNameModels.get(clazz.getName());
+		ClassNameModel classNameModel = dataFactoryContext.getClassNameModel(
+			clazz.getName());
 
 		return classNameModel.getClassNameId();
 	}
