@@ -40,23 +40,17 @@ public class SubscriptionDataFactory extends BaseDataFactory {
 		BlogsEntryModel blogsEntryModel) {
 
 		return _newSubscriptionModel(
-			getClassNameId(
-				BlogsEntry.class, dataFactoryContext.getClassNameModels()),
-			blogsEntryModel.getEntryId());
+			getClassNameId(BlogsEntry.class), blogsEntryModel.getEntryId());
 	}
 
 	public SubscriptionModel newSubscriptionModel(MBThreadModel mBThreadModel) {
 		return _newSubscriptionModel(
-			getClassNameId(
-				MBThread.class, dataFactoryContext.getClassNameModels()),
-			mBThreadModel.getThreadId());
+			getClassNameId(MBThread.class), mBThreadModel.getThreadId());
 	}
 
 	public SubscriptionModel newSubscriptionModel(WikiPageModel wikiPageModel) {
 		return _newSubscriptionModel(
-			getClassNameId(
-				WikiPage.class, dataFactoryContext.getClassNameModels()),
-			wikiPageModel.getResourcePrimKey());
+			getClassNameId(WikiPage.class), wikiPageModel.getResourcePrimKey());
 	}
 
 	private SubscriptionModel _newSubscriptionModel(
