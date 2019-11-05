@@ -76,7 +76,7 @@ public class DataFactoryContext {
 		return _classNameModels.get(className);
 	}
 
-	public Collection<ClassNameModel> getClassNameModelValues() {
+	public Collection<ClassNameModel> getClassNameModels() {
 		return _classNameModels.values();
 	}
 
