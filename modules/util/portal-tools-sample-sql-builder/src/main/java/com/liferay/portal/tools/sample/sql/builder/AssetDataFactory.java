@@ -36,7 +36,6 @@ import com.liferay.message.boards.model.MBMessageModel;
 import com.liferay.message.boards.model.MBThread;
 import com.liferay.message.boards.model.MBThreadModel;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -385,16 +384,9 @@ public class AssetDataFactory extends BaseDataFactory {
 	public AssetEntryModel newMBDiscussionAssetEntryModel(
 		BlogsEntryModel blogsEntryModel) {
 
-		Map<String, ClassNameModel> classNameModels =
-			dataFactoryContext.getClassNameModels();
-
-		ClassNameModel classNameModel = classNameModels.get(
-			dataFactoryContext.getMBDiscussionCombinedClassName(
-				BlogsEntry.class));
-
 		return newAssetEntryModel(
 			blogsEntryModel.getGroupId(), blogsEntryModel.getCreateDate(),
-			blogsEntryModel.getModifiedDate(), classNameModel.getClassNameId(),
+			blogsEntryModel.getModifiedDate(), getClassNameId(BlogsEntry.class),
 			blogsEntryModel.getEntryId(), "", 0, true, false, "",
 			String.valueOf(blogsEntryModel.getGroupId()));
 	}
@@ -402,16 +394,9 @@ public class AssetDataFactory extends BaseDataFactory {
 	public AssetEntryModel newMBDiscussionAssetEntryModel(
 		WikiPageModel wikiPageModel) {
 
-		Map<String, ClassNameModel> classNameModels =
-			dataFactoryContext.getClassNameModels();
-
-		ClassNameModel classNameModel = classNameModels.get(
-			dataFactoryContext.getMBDiscussionCombinedClassName(
-				WikiPage.class));
-
 		return newAssetEntryModel(
 			wikiPageModel.getGroupId(), wikiPageModel.getCreateDate(),
-			wikiPageModel.getModifiedDate(), classNameModel.getClassNameId(),
+			wikiPageModel.getModifiedDate(), getClassNameId(WikiPage.class),
 			wikiPageModel.getResourcePrimKey(), "", 0, true, false, "",
 			String.valueOf(wikiPageModel.getGroupId()));
 	}
