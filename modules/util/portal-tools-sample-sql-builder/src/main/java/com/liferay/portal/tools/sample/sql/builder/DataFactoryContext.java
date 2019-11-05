@@ -227,18 +227,18 @@ public class DataFactoryContext {
 		return _maxWikiPageCount;
 	}
 
-	public String getMBDiscussionCombinedClassName(Class<?> clazz) {
-		return StringBundler.concat(
-			MBDiscussion.class.getName(), StringPool.UNDERLINE,
-			clazz.getName());
-	}
-
 	public long getSampleUserId() {
 		return _sampleUserId;
 	}
 
 	public String getVirtualHostname() {
 		return _virtualHostname;
+	}
+
+	private String _getMBDiscussionCombinedClassName(Class<?> clazz) {
+		return StringBundler.concat(
+			MBDiscussion.class.getName(), StringPool.UNDERLINE,
+			clazz.getName());
 	}
 
 	private Map<String, ClassNameModel> _initClassNameModels() {
@@ -248,8 +248,8 @@ public class DataFactoryContext {
 
 		models.add(UserPersonalSite.class.getName());
 
-		models.add(getMBDiscussionCombinedClassName(BlogsEntry.class));
-		models.add(getMBDiscussionCombinedClassName(WikiPage.class));
+		models.add(_getMBDiscussionCombinedClassName(BlogsEntry.class));
+		models.add(_getMBDiscussionCombinedClassName(WikiPage.class));
 
 		for (String model : models) {
 			ClassNameModel classNameModel = new ClassNameModelImpl();
