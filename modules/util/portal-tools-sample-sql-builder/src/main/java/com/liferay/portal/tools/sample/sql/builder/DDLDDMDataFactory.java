@@ -54,8 +54,7 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 	}
 
 	public long getDDLRecordSetClassNameId() {
-		return getClassNameId(
-			DDLRecordSet.class, dataFactoryContext.getClassNameModels());
+		return getClassNameId(DDLRecordSet.class);
 	}
 
 	public DDMStructureLayoutModel newDDLDDMStructureLayoutModel(
@@ -118,9 +117,8 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 
 		return newDDMStructureModel(
 			groupId, dataFactoryContext.getSampleUserId(),
-			getClassNameId(
-				DDLRecordSet.class, dataFactoryContext.getClassNameModels()),
-			"Test DDM Structure", sb.toString());
+			getClassNameId(DDLRecordSet.class), "Test DDM Structure",
+			sb.toString());
 	}
 
 	public DDLRecordModel newDDLRecordModel(
@@ -255,8 +253,7 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 		DDLRecordSetModel ddlRecordSetModel) {
 
 		return _newDDMStructureLinkModel(
-			getClassNameId(
-				DDLRecordSet.class, dataFactoryContext.getClassNameModels()),
+			getClassNameId(DDLRecordSet.class),
 			ddlRecordSetModel.getRecordSetId(),
 			ddlRecordSetModel.getDDMStructureId());
 	}
@@ -265,9 +262,7 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 		DLFileEntryMetadataModel dLFileEntryMetadataModel) {
 
 		return _newDDMStructureLinkModel(
-			getClassNameId(
-				DLFileEntryMetadata.class,
-				dataFactoryContext.getClassNameModels()),
+			getClassNameId(DLFileEntryMetadata.class),
 			dLFileEntryMetadataModel.getFileEntryMetadataId(),
 			dLFileEntryMetadataModel.getDDMStructureId());
 	}

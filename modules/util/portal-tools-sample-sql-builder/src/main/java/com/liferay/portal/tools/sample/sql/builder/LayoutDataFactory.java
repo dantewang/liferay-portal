@@ -51,8 +51,7 @@ public class LayoutDataFactory extends BaseDataFactory {
 	}
 
 	public long getLayoutClassNameId() {
-		return getClassNameId(
-			Layout.class, dataFactoryContext.getClassNameModels());
+		return getClassNameId(Layout.class);
 	}
 
 	public LayoutFriendlyURLModel newLayoutFriendlyURLModel(
