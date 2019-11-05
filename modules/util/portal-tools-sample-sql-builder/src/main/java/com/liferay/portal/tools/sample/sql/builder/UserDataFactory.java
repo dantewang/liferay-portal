@@ -67,6 +67,7 @@ public class UserDataFactory extends BaseDataFactory {
 
 		SimpleCounter counter = dataFactoryContext.getCounter();
 
+		_accountId = counter.get();
 		_globalGroupId = counter.get();
 		_guestGroupId = counter.get();
 		_userPersonalSiteGroupId = counter.get();
@@ -228,7 +229,7 @@ public class UserDataFactory extends BaseDataFactory {
 			getClassNameId(
 				User.class, dataFactoryContext.getClassNameModels()));
 		contactModel.setClassPK(userModel.getUserId());
-		contactModel.setAccountId(dataFactoryContext.getAccountId());
+		contactModel.setAccountId(_accountId);
 		contactModel.setParentContactId(
 			ContactConstants.DEFAULT_PARENT_CONTACT_ID);
 		contactModel.setEmailAddress(userModel.getEmailAddress());
@@ -375,7 +376,7 @@ public class UserDataFactory extends BaseDataFactory {
 	private void _initAccountModel() {
 		_accountModel = new AccountModelImpl();
 
-		_accountModel.setAccountId(dataFactoryContext.getAccountId());
+		_accountModel.setAccountId(_accountId);
 		_accountModel.setCompanyId(dataFactoryContext.getCompanyId());
 		_accountModel.setCreateDate(new Date());
 		_accountModel.setModifiedDate(new Date());
@@ -387,7 +388,7 @@ public class UserDataFactory extends BaseDataFactory {
 		_companyModel = new CompanyModelImpl();
 
 		_companyModel.setCompanyId(dataFactoryContext.getCompanyId());
-		_companyModel.setAccountId(dataFactoryContext.getAccountId());
+		_companyModel.setAccountId(_accountId);
 		_companyModel.setWebId(DataFactoryConstants.COMPANY_WEBID);
 		_companyModel.setMx(DataFactoryConstants.COMPANY_WEBID);
 		_companyModel.setActive(true);
@@ -598,6 +599,7 @@ public class UserDataFactory extends BaseDataFactory {
 		return roleModel;
 	}
 
+	private final long _accountId;
 	private AccountModel _accountModel;
 	private RoleModel _administratorRoleModel;
 	private CompanyModel _companyModel;
