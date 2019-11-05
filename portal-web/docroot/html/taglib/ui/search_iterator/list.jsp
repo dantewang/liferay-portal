@@ -54,7 +54,7 @@ if (iteratorURL != null) {
 </c:if>
 
 <div class="lfr-search-container lfr-search-container-wrapper <%= resultRows.isEmpty() ? "hide" : StringPool.BLANK %> <%= searchContainer.getCssClass() %>">
-	<c:if test="<%= PropsValues.SEARCH_CONTAINER_SHOW_PAGINATION_TOP && (resultRows.size() > PropsValues.SEARCH_CONTAINER_SHOW_PAGINATION_TOP_DELTA) && paginate %>">
+	<c:if test="<%= (resultRows.size() > 10) && paginate %>">
 		<div class="taglib-search-iterator-page-iterator-top">
 			<liferay-ui:search-paginator
 				id='<%= id + "PageIteratorTop" %>'
@@ -328,7 +328,7 @@ if (iteratorURL != null) {
 		</table>
 	</div>
 
-	<c:if test="<%= PropsValues.SEARCH_CONTAINER_SHOW_PAGINATION_BOTTOM && paginate %>">
+	<c:if test="<%= paginate %>">
 		<div class="taglib-search-iterator-page-iterator-bottom">
 			<liferay-ui:search-paginator
 				id='<%= id + "PageIteratorBottom" %>'
