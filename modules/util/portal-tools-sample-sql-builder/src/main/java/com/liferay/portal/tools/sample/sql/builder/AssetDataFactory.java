@@ -282,8 +282,8 @@ public class AssetDataFactory extends BaseDataFactory {
 		assetEntryModel.setEntryId(counter.get());
 
 		assetEntryModel.setGroupId(groupId);
-		assetEntryModel.setCompanyId(companyId);
-		assetEntryModel.setUserId(sampleUserId);
+		assetEntryModel.setCompanyId(COMPANY_ID);
+		assetEntryModel.setUserId(SAMPLE_USER_ID);
 		assetEntryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		assetEntryModel.setCreateDate(createDate);
 		assetEntryModel.setModifiedDate(modifiedDate);
@@ -426,7 +426,7 @@ public class AssetDataFactory extends BaseDataFactory {
 		_assetVocabularyModelsArray =
 			(List<AssetVocabularyModel>[])new List<?>[maxGroupsCount];
 		_defaultAssetVocabularyModel = _newAssetVocabularyModel(
-			_userDataFactory.getGlobalGroupId(), defaultUserId, null,
+			_userDataFactory.getGlobalGroupId(), DEFAULT_USER_ID, null,
 			com.liferay.portal.util.PropsValues.ASSET_VOCABULARY_DEFAULT);
 
 		StringBundler sb = new StringBundler(4);
@@ -447,8 +447,8 @@ public class AssetDataFactory extends BaseDataFactory {
 
 				AssetVocabularyModel assetVocabularyModel =
 					_newAssetVocabularyModel(
-						i, sampleUserId, DataFactoryConstants.SAMPLE_USER_NAME,
-						sb.toString());
+						i, SAMPLE_USER_ID,
+						DataFactoryConstants.SAMPLE_USER_NAME, sb.toString());
 
 				assetVocabularyModels.add(assetVocabularyModel);
 
@@ -526,8 +526,8 @@ public class AssetDataFactory extends BaseDataFactory {
 				assetTagModel.setUuid(SequentialUUID.generate());
 				assetTagModel.setTagId(counter.get());
 				assetTagModel.setGroupId(i);
-				assetTagModel.setCompanyId(companyId);
-				assetTagModel.setUserId(sampleUserId);
+				assetTagModel.setCompanyId(COMPANY_ID);
+				assetTagModel.setUserId(SAMPLE_USER_ID);
 				assetTagModel.setUserName(
 					DataFactoryConstants.SAMPLE_USER_NAME);
 				assetTagModel.setCreateDate(new Date());
@@ -573,8 +573,8 @@ public class AssetDataFactory extends BaseDataFactory {
 		assetCategoryModel.setUuid(SequentialUUID.generate());
 		assetCategoryModel.setCategoryId(counter.get());
 		assetCategoryModel.setGroupId(groupId);
-		assetCategoryModel.setCompanyId(companyId);
-		assetCategoryModel.setUserId(sampleUserId);
+		assetCategoryModel.setCompanyId(COMPANY_ID);
+		assetCategoryModel.setUserId(SAMPLE_USER_ID);
 		assetCategoryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		assetCategoryModel.setCreateDate(new Date());
 		assetCategoryModel.setModifiedDate(new Date());
@@ -608,7 +608,7 @@ public class AssetDataFactory extends BaseDataFactory {
 		assetVocabularyModel.setUuid(SequentialUUID.generate());
 		assetVocabularyModel.setVocabularyId(counter.get());
 		assetVocabularyModel.setGroupId(grouId);
-		assetVocabularyModel.setCompanyId(companyId);
+		assetVocabularyModel.setCompanyId(COMPANY_ID);
 		assetVocabularyModel.setUserId(userId);
 		assetVocabularyModel.setUserName(userName);
 		assetVocabularyModel.setCreateDate(new Date());

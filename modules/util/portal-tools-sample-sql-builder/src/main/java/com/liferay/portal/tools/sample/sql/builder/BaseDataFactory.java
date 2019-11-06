@@ -130,11 +130,14 @@ public abstract class BaseDataFactory {
 		return new Date(_FUTURE_TIME + (_FUTURE_COUNTER.get() * Time.SECOND));
 	}
 
+	protected static final long COMPANY_ID;
+
+	protected static final long DEFAULT_USER_ID;
+
+	protected static final long SAMPLE_USER_ID;
+
 	protected static final Map<String, ClassNameModel> classNameModels;
-	protected static final long companyId;
 	protected static final SimpleCounter counter;
-	protected static final long defaultUserId;
-	protected static final long sampleUserId;
 
 	private static String _getMBDiscussionCombinedClassName(Class<?> clazz) {
 		return StringBundler.concat(
@@ -177,45 +180,47 @@ public abstract class BaseDataFactory {
 
 	private static final int _WRITER_BUFFER_SIZE = 16 * 1024;
 
-	private static final Map<String, Writer> _csvWriters = new HashMap<>();
+	private static final Map<String, Writer> _csvWriters =
+		new HashMap<String, Writer>() {
+			{
+				File outputDir = new File(PropsValues.OUTPUT_DIR);
+
+				outputDir.mkdirs();
+
+				for (String csvFileName : PropsValues.CSV_NAMES) {
+					try {
+						_csvWriters.put(
+							csvFileName,
+							new UnsyncBufferedWriter(
+								new OutputStreamWriter(
+									new FileOutputStream(
+										new File(
+											outputDir,
+											csvFileName.concat(".csv")))),
+								_WRITER_BUFFER_SIZE) {
+
+								@Override
+								public void flush() {
+
+									// Disable FreeMarker from flushing
+
+								}
+
+							});
+					}
+					catch (FileNotFoundException fnfe) {
+						fnfe.printStackTrace();
+					}
+				}
+			}
+		};
 
 	static {
-		File outputDir = new File(PropsValues.OUTPUT_DIR);
-
-		outputDir.mkdirs();
-
-		String[] csvFileNames = PropsValues.CSV_NAMES;
-
-		for (String csvFileName : csvFileNames) {
-			try {
-				_csvWriters.put(
-					csvFileName,
-					new UnsyncBufferedWriter(
-						new OutputStreamWriter(
-							new FileOutputStream(
-								new File(
-									outputDir, csvFileName.concat(".csv")))),
-						_WRITER_BUFFER_SIZE) {
-
-						@Override
-						public void flush() {
-
-							// Disable FreeMarker from flushing
-
-						}
-
-					});
-			}
-			catch (FileNotFoundException fnfe) {
-				fnfe.printStackTrace();
-			}
-		}
-
 		counter = new SimpleCounter(PropsValues.MAX_GROUP_COUNT + 1);
 		classNameModels = _initClassNameModels();
-		companyId = counter.get();
-		defaultUserId = counter.get();
-		sampleUserId = counter.get();
+		COMPANY_ID = counter.get();
+		DEFAULT_USER_ID = counter.get();
+		SAMPLE_USER_ID = counter.get();
 	}
 
 }

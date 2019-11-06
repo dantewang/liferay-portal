@@ -53,8 +53,8 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 		ddmContentModel.setUuid(SequentialUUID.generate());
 		ddmContentModel.setContentId(contentId);
 		ddmContentModel.setGroupId(groupId);
-		ddmContentModel.setCompanyId(companyId);
-		ddmContentModel.setUserId(sampleUserId);
+		ddmContentModel.setCompanyId(COMPANY_ID);
+		ddmContentModel.setUserId(SAMPLE_USER_ID);
 		ddmContentModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		ddmContentModel.setCreateDate(nextFutureDate());
 		ddmContentModel.setModifiedDate(nextFutureDate());
@@ -73,7 +73,7 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 		ddmStructureLayoutModel.setUuid(SequentialUUID.generate());
 		ddmStructureLayoutModel.setStructureLayoutId(counter.get());
 		ddmStructureLayoutModel.setGroupId(groupId);
-		ddmStructureLayoutModel.setCompanyId(companyId);
+		ddmStructureLayoutModel.setCompanyId(COMPANY_ID);
 		ddmStructureLayoutModel.setUserId(userId);
 		ddmStructureLayoutModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
@@ -96,7 +96,7 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 		ddmStructureModel.setUuid(SequentialUUID.generate());
 		ddmStructureModel.setStructureId(counter.get());
 		ddmStructureModel.setGroupId(groupId);
-		ddmStructureModel.setCompanyId(companyId);
+		ddmStructureModel.setCompanyId(COMPANY_ID);
 		ddmStructureModel.setUserId(userId);
 		ddmStructureModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		ddmStructureModel.setVersionUserId(userId);
@@ -133,7 +133,7 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 		ddmStructureVersionModel.setStructureVersionId(counter.get());
 
 		ddmStructureVersionModel.setGroupId(ddmStructureModel.getGroupId());
-		ddmStructureVersionModel.setCompanyId(companyId);
+		ddmStructureVersionModel.setCompanyId(COMPANY_ID);
 		ddmStructureVersionModel.setUserId(ddmStructureModel.getUserId());
 		ddmStructureVersionModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);

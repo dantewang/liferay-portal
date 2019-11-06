@@ -153,8 +153,8 @@ public class DLDataFactory extends BaseDDMDataFactory {
 		dlFileVersionModel.setUuid(SequentialUUID.generate());
 		dlFileVersionModel.setFileVersionId(counter.get());
 		dlFileVersionModel.setGroupId(dlFileEntryModel.getGroupId());
-		dlFileVersionModel.setCompanyId(companyId);
-		dlFileVersionModel.setUserId(sampleUserId);
+		dlFileVersionModel.setCompanyId(COMPANY_ID);
+		dlFileVersionModel.setUserId(SAMPLE_USER_ID);
 		dlFileVersionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		dlFileVersionModel.setCreateDate(nextFutureDate());
 		dlFileVersionModel.setModifiedDate(nextFutureDate());
@@ -221,14 +221,14 @@ public class DLDataFactory extends BaseDDMDataFactory {
 		_defaultDLFileEntryTypeModel.setLastPublishDate(nextFutureDate());
 
 		_defaultDLDDMStructureModel = newDDMStructureModel(
-			groupId, defaultUserId, getClassNameId(DLFileEntry.class),
+			groupId, DEFAULT_USER_ID, getClassNameId(DLFileEntry.class),
 			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent);
 
 		_defaultDLDDMStructureVersionModel = newDDMStructureVersionModel(
 			_defaultDLDDMStructureModel);
 
 		_defaultDLDDMStructureLayoutModel = newDDMStructureLayoutModel(
-			groupId, defaultUserId,
+			groupId, DEFAULT_USER_ID,
 			_defaultDLDDMStructureVersionModel.getStructureVersionId(),
 			_dlDDMStructureLayoutContent);
 	}
@@ -245,8 +245,8 @@ public class DLDataFactory extends BaseDDMDataFactory {
 		dlFileEntryModel.setUuid(SequentialUUID.generate());
 		dlFileEntryModel.setFileEntryId(counter.get());
 		dlFileEntryModel.setGroupId(dlFolderModel.getGroupId());
-		dlFileEntryModel.setCompanyId(companyId);
-		dlFileEntryModel.setUserId(sampleUserId);
+		dlFileEntryModel.setCompanyId(COMPANY_ID);
+		dlFileEntryModel.setUserId(SAMPLE_USER_ID);
 		dlFileEntryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		dlFileEntryModel.setCreateDate(nextFutureDate());
 		dlFileEntryModel.setModifiedDate(nextFutureDate());
@@ -274,8 +274,8 @@ public class DLDataFactory extends BaseDDMDataFactory {
 		dlFolderModel.setUuid(SequentialUUID.generate());
 		dlFolderModel.setFolderId(counter.get());
 		dlFolderModel.setGroupId(groupId);
-		dlFolderModel.setCompanyId(companyId);
-		dlFolderModel.setUserId(sampleUserId);
+		dlFolderModel.setCompanyId(COMPANY_ID);
+		dlFolderModel.setUserId(SAMPLE_USER_ID);
 		dlFolderModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		dlFolderModel.setCreateDate(nextFutureDate());
 		dlFolderModel.setModifiedDate(nextFutureDate());
