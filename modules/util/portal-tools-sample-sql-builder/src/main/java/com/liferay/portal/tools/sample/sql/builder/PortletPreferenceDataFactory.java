@@ -319,7 +319,7 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 		PortletPreferencesModel portletPreferencesModel =
 			new PortletPreferencesModelImpl();
 
-		portletPreferencesModel.setCompanyId(companyId);
+		portletPreferencesModel.setCompanyId(COMPANY_ID);
 		portletPreferencesModel.setPortletPreferencesId(counter.get());
 		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
 		portletPreferencesModel.setOwnerType(

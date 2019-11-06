@@ -76,7 +76,7 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 		sb.append("\"single-page\"}");
 
 		return newDDMStructureLayoutModel(
-			_userDataFactory.getGlobalGroupId(), defaultUserId,
+			_userDataFactory.getGlobalGroupId(), DEFAULT_USER_ID,
 			ddmStructureVersionModel.getStructureVersionId(), sb.toString());
 	}
 
@@ -107,7 +107,7 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 		sb.append("]}");
 
 		return newDDMStructureModel(
-			groupId, sampleUserId, getClassNameId(DDLRecordSet.class),
+			groupId, SAMPLE_USER_ID, getClassNameId(DDLRecordSet.class),
 			"Test DDM Structure", sb.toString());
 	}
 
@@ -120,10 +120,10 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 		ddlRecordModel.setRecordId(counter.get());
 
 		ddlRecordModel.setGroupId(dDLRecordSetModel.getGroupId());
-		ddlRecordModel.setCompanyId(companyId);
-		ddlRecordModel.setUserId(sampleUserId);
+		ddlRecordModel.setCompanyId(COMPANY_ID);
+		ddlRecordModel.setUserId(SAMPLE_USER_ID);
 		ddlRecordModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		ddlRecordModel.setVersionUserId(sampleUserId);
+		ddlRecordModel.setVersionUserId(SAMPLE_USER_ID);
 		ddlRecordModel.setVersionUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		ddlRecordModel.setCreateDate(new Date());
@@ -148,8 +148,8 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 		ddlRecordSetModel.setRecordSetId(counter.get());
 
 		ddlRecordSetModel.setGroupId(ddmStructureModel.getGroupId());
-		ddlRecordSetModel.setCompanyId(companyId);
-		ddlRecordSetModel.setUserId(sampleUserId);
+		ddlRecordSetModel.setCompanyId(COMPANY_ID);
+		ddlRecordSetModel.setUserId(SAMPLE_USER_ID);
 		ddlRecordSetModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		ddlRecordSetModel.setCreateDate(new Date());
 		ddlRecordSetModel.setModifiedDate(new Date());
@@ -185,8 +185,8 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 		ddlRecordVersionModel.setRecordVersionId(counter.get());
 
 		ddlRecordVersionModel.setGroupId(dDLRecordModel.getGroupId());
-		ddlRecordVersionModel.setCompanyId(companyId);
-		ddlRecordVersionModel.setUserId(sampleUserId);
+		ddlRecordVersionModel.setCompanyId(COMPANY_ID);
+		ddlRecordVersionModel.setUserId(SAMPLE_USER_ID);
 		ddlRecordVersionModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		ddlRecordVersionModel.setCreateDate(dDLRecordModel.getModifiedDate());
