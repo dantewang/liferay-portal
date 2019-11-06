@@ -29,7 +29,6 @@ import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
-import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.constants.WikiPortletKeys;
 
 import java.util.ArrayList;
@@ -45,12 +44,7 @@ import javax.portlet.PortletPreferences;
  */
 public class PortletPreferenceDataFactory extends BaseDataFactory {
 
-	public PortletPreferenceDataFactory(
-		DataFactoryContext dataFactoryContext,
-		AssetDataFactory assetDataFactory) {
-
-		super(dataFactoryContext);
-
+	public PortletPreferenceDataFactory(AssetDataFactory assetDataFactory) {
 		_assetDataFactory = assetDataFactory;
 	}
 
@@ -249,7 +243,7 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 			List<AssetCategoryModel> assetCategoryModels, int index) {
 
 		int maxAssetEntryToAssetCategoryCount =
-			dataFactoryContext.getMaxAssetEntryToAssetCategoryCount();
+			PropsValues.MAX_ASSET_ENTRY_TO_ASSET_CATEGORY_COUNT;
 
 		AssetCategoryModel assetCategoryModel0 = assetCategoryModels.get(
 			index % assetCategoryModels.size());
@@ -282,7 +276,7 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 			List<AssetTagModel> assetTagModels, int index) {
 
 		int maxAssetEntryToAssetTagCount =
-			dataFactoryContext.getMaxAssetEntryToAssetTagCount();
+			PropsValues.MAX_ASSET_ENTRY_TO_ASSET_TAG_COUNT;
 
 		AssetTagModel assetTagModel0 = assetTagModels.get(
 			index % assetTagModels.size());
@@ -325,9 +319,7 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 		PortletPreferencesModel portletPreferencesModel =
 			new PortletPreferencesModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
-		portletPreferencesModel.setCompanyId(dataFactoryContext.getCompanyId());
+		portletPreferencesModel.setCompanyId(companyId);
 		portletPreferencesModel.setPortletPreferencesId(counter.get());
 		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
 		portletPreferencesModel.setOwnerType(

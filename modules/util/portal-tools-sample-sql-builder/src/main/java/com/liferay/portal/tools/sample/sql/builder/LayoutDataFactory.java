@@ -46,10 +46,6 @@ import java.util.Map;
  */
 public class LayoutDataFactory extends BaseDataFactory {
 
-	public LayoutDataFactory(DataFactoryContext dataFactoryContext) {
-		super(dataFactoryContext);
-	}
-
 	public long getLayoutClassNameId() {
 		return getClassNameId(Layout.class);
 	}
@@ -60,15 +56,11 @@ public class LayoutDataFactory extends BaseDataFactory {
 		LayoutFriendlyURLModel layoutFriendlyURLEntryModel =
 			new LayoutFriendlyURLModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		layoutFriendlyURLEntryModel.setUuid(SequentialUUID.generate());
 		layoutFriendlyURLEntryModel.setLayoutFriendlyURLId(counter.get());
 		layoutFriendlyURLEntryModel.setGroupId(layoutModel.getGroupId());
-		layoutFriendlyURLEntryModel.setCompanyId(
-			dataFactoryContext.getCompanyId());
-		layoutFriendlyURLEntryModel.setUserId(
-			dataFactoryContext.getSampleUserId());
+		layoutFriendlyURLEntryModel.setCompanyId(companyId);
+		layoutFriendlyURLEntryModel.setUserId(sampleUserId);
 		layoutFriendlyURLEntryModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		layoutFriendlyURLEntryModel.setCreateDate(new Date());
@@ -88,8 +80,6 @@ public class LayoutDataFactory extends BaseDataFactory {
 
 		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		if (simpleCounter == null) {
 			simpleCounter = new SimpleCounter();
 
@@ -105,8 +95,8 @@ public class LayoutDataFactory extends BaseDataFactory {
 		layoutModel.setPlid(plid);
 
 		layoutModel.setGroupId(groupId);
-		layoutModel.setCompanyId(dataFactoryContext.getCompanyId());
-		layoutModel.setUserId(dataFactoryContext.getSampleUserId());
+		layoutModel.setCompanyId(companyId);
+		layoutModel.setUserId(sampleUserId);
 		layoutModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		layoutModel.setCreateDate(new Date());
 		layoutModel.setModifiedDate(new Date());
@@ -179,14 +169,12 @@ public class LayoutDataFactory extends BaseDataFactory {
 
 		LayoutSetModel layoutSetModel = new LayoutSetModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		long layoutSetId = counter.get();
 
 		layoutSetModel.setLayoutSetId(layoutSetId);
 
 		layoutSetModel.setGroupId(groupId);
-		layoutSetModel.setCompanyId(dataFactoryContext.getCompanyId());
+		layoutSetModel.setCompanyId(companyId);
 		layoutSetModel.setCreateDate(new Date());
 		layoutSetModel.setModifiedDate(new Date());
 		layoutSetModel.setPrivateLayout(privateLayout);
