@@ -19,7 +19,6 @@ import com.liferay.petra.process.ProcessCallable;
 import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.aspectj.WeavingClassLoader;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
@@ -35,7 +34,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import java.net.MalformedURLException;
+import java.net.URL;
 
 import java.util.List;
 
@@ -124,12 +127,33 @@ public class AspectJNewEnvTestRule extends NewEnvTestRule {
 			));
 
 		try {
-			return new WeavingClassLoader(
+			Class<?> clazz = Class.forName(
+				"com.liferay.portal.aspectj.WeavingClassLoader");
+
+			Constructor constructor = clazz.getConstructor(
+				new Class<?>[] {URL[].class, Class[].class, File.class});
+
+			return (ClassLoader)constructor.newInstance(
 				ClassPathUtil.getClassPathURLs(CLASS_PATH), adviceClasses,
 				dumpDir);
 		}
+		catch (ClassNotFoundException cnfe) {
+			throw new RuntimeException(cnfe);
+		}
+		catch (IllegalAccessException iae) {
+			throw new RuntimeException(iae);
+		}
+		catch (InstantiationException ie) {
+			throw new RuntimeException(ie);
+		}
+		catch (InvocationTargetException ite) {
+			throw new RuntimeException(ite);
+		}
 		catch (MalformedURLException murle) {
 			throw new RuntimeException(murle);
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new RuntimeException(nsme);
 		}
 	}
 
@@ -200,10 +224,17 @@ public class AspectJNewEnvTestRule extends NewEnvTestRule {
 						aspectClassNames[i]);
 				}
 
-				WeavingClassLoader weavingClassLoader = new WeavingClassLoader(
-					ClassPathUtil.getClassPathURLs(
-						ClassPathUtil.getJVMClassPath(true)),
-					aspectClasses, _dumpDir);
+				Class<?> clazz = Class.forName(
+					"com.liferay.portal.aspectj.WeavingClassLoader");
+
+				Constructor constructor = clazz.getConstructor(
+					new Class<?>[] {URL[].class, Class[].class, File.class});
+
+				ClassLoader weavingClassLoader =
+					(ClassLoader)constructor.newInstance(
+						ClassPathUtil.getClassPathURLs(
+							ClassPathUtil.getJVMClassPath(true)),
+						aspectClasses, _dumpDir);
 
 				currentThread.setContextClassLoader(weavingClassLoader);
 
@@ -217,6 +248,12 @@ public class AspectJNewEnvTestRule extends NewEnvTestRule {
 						objectInputStream.readObject(), "call",
 						new Class<?>[0]);
 				}
+			}
+			catch (ClassNotFoundException cnfe) {
+				throw new RuntimeException(cnfe);
+			}
+			catch (NoSuchMethodException nsme) {
+				throw new RuntimeException(nsme);
 			}
 			catch (Exception e) {
 				throw new ProcessException(e);
