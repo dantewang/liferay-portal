@@ -35,7 +35,9 @@ public abstract class BaseDataFactory {
 	}
 
 	public InputStream getResourceInputStream(String resourceName) {
-		ClassLoader classLoader = _clazz.getClassLoader();
+		Class<?> clazz = getClass();
+
+		ClassLoader classLoader = clazz.getClassLoader();
 
 		return classLoader.getResourceAsStream(
 			_DEPENDENCIES_DIR + resourceName);
@@ -56,7 +58,5 @@ public abstract class BaseDataFactory {
 
 	private static final long _FUTURE_TIME =
 		System.currentTimeMillis() + Time.YEAR;
-
-	private final Class<?> _clazz = getClass();
 
 }
