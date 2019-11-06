@@ -17,8 +17,11 @@ package com.liferay.portal.test.randomizerbumpers;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.LayoutFriendlyURLException;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.randomizerbumpers.RandomizerBumper;
-import com.liferay.portal.model.impl.LayoutImpl;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * @author Shuyang Zhou
@@ -38,17 +41,41 @@ public class FriendlyURLRandomizerBumper implements RandomizerBumper<String> {
 			randomValue = StringPool.SLASH.concat(randomValue);
 		}
 
-		if (LayoutImpl.validateFriendlyURL(randomValue) != -1) {
-			return false;
-		}
-
 		try {
-			LayoutImpl.validateFriendlyURLKeyword(randomValue);
+			Class<?> clazz = Class.forName(
+				"com.liferay.portal.model.impl.LayoutImpl");
+
+			if ((Integer)ReflectionTestUtil.invoke(
+					clazz, "validateFriendlyURL", new Class<?>[] {String.class},
+					randomValue) != -1) {
+
+				return false;
+			}
+
+			Method method = ReflectionTestUtil.getMethod(
+				clazz, "validateFriendlyURLKeyword",
+				new Class<?>[] {String.class});
+
+			method.invoke(clazz, randomValue);
 
 			return true;
 		}
-		catch (LayoutFriendlyURLException lfurle) {
-			return false;
+		catch (ClassNotFoundException cnfe) {
+			throw new RuntimeException(cnfe);
+		}
+		catch (IllegalAccessException iae) {
+			throw new RuntimeException(iae);
+		}
+		catch (InvocationTargetException ite) {
+			Throwable targetException = ite.getTargetException();
+
+			if (targetException.getClass() ==
+					LayoutFriendlyURLException.class) {
+
+				return false;
+			}
+
+			throw new RuntimeException(ite);
 		}
 	}
 
