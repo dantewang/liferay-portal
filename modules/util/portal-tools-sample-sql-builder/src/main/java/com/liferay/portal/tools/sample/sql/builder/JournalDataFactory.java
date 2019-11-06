@@ -159,21 +159,14 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 
 		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		Date createDate = nextFutureDate(
-			dataFactoryContext.getFutureDateCounter());
-		Date lastPublishDate = nextFutureDate(
-			dataFactoryContext.getFutureDateCounter());
-		Date modifiedDate = nextFutureDate(
-			dataFactoryContext.getFutureDateCounter());
-
 		ddmTemplateModel.setUuid(SequentialUUID.generate());
 		ddmTemplateModel.setTemplateId(counter.get());
 
 		ddmTemplateModel.setGroupId(groupId);
 		ddmTemplateModel.setCompanyId(dataFactoryContext.getCompanyId());
 		ddmTemplateModel.setUserId(userId);
-		ddmTemplateModel.setCreateDate(createDate);
-		ddmTemplateModel.setModifiedDate(modifiedDate);
+		ddmTemplateModel.setCreateDate(nextFutureDate());
+		ddmTemplateModel.setModifiedDate(nextFutureDate());
 		ddmTemplateModel.setClassNameId(getClassNameId(DDMStructure.class));
 		ddmTemplateModel.setClassPK(structureId);
 		ddmTemplateModel.setResourceClassNameId(sourceClassNameId);
@@ -198,7 +191,7 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		ddmTemplateModel.setScript("${content.getData()}");
 		ddmTemplateModel.setCacheable(true);
 		ddmTemplateModel.setSmallImage(false);
-		ddmTemplateModel.setLastPublishDate(lastPublishDate);
+		ddmTemplateModel.setLastPublishDate(nextFutureDate());
 
 		return ddmTemplateModel;
 	}
@@ -211,19 +204,13 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 
 		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		Date createDate = nextFutureDate(
-			dataFactoryContext.getFutureDateCounter());
-
-		Date statusDate = nextFutureDate(
-			dataFactoryContext.getFutureDateCounter());
-
 		ddmTemplateVersionModelImpl.setTemplateVersionId(counter.get());
 
 		ddmTemplateVersionModelImpl.setGroupId(ddmTemplateModel.getGroupId());
 		ddmTemplateVersionModelImpl.setCompanyId(
 			dataFactoryContext.getCompanyId());
 		ddmTemplateVersionModelImpl.setUserId(ddmTemplateModel.getUserId());
-		ddmTemplateVersionModelImpl.setCreateDate(createDate);
+		ddmTemplateVersionModelImpl.setCreateDate(nextFutureDate());
 		ddmTemplateVersionModelImpl.setTemplateId(
 			ddmTemplateModel.getTemplateId());
 		ddmTemplateVersionModelImpl.setClassPK(ddmTemplateModel.getClassPK());
@@ -243,7 +230,7 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 
 		ddmTemplateVersionModelImpl.setStatusByUserId(
 			ddmTemplateModel.getUserId());
-		ddmTemplateVersionModelImpl.setStatusDate(statusDate);
+		ddmTemplateVersionModelImpl.setStatusDate(nextFutureDate());
 
 		return ddmTemplateVersionModelImpl;
 	}
@@ -285,9 +272,6 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 
 		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		Date expirationDate = nextFutureDate(
-			dataFactoryContext.getFutureDateCounter());
-
 		journalArticleModel.setUuid(SequentialUUID.generate());
 		journalArticleModel.setId(counter.get());
 		journalArticleModel.setResourcePrimKey(
@@ -325,7 +309,7 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		journalArticleModel.setDDMTemplateKey(
 			_defaultJournalDDMTemplateModel.getTemplateKey());
 		journalArticleModel.setDisplayDate(new Date());
-		journalArticleModel.setExpirationDate(expirationDate);
+		journalArticleModel.setExpirationDate(nextFutureDate());
 		journalArticleModel.setReviewDate(new Date());
 		journalArticleModel.setIndexable(true);
 		journalArticleModel.setLastPublishDate(new Date());
