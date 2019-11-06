@@ -28,6 +28,7 @@ import com.liferay.portal.tools.HypersonicLoader;
 import com.liferay.portal.tools.ToolDependencies;
 
 import java.io.File;
+import java.io.FileWriter;
 
 import java.net.URL;
 
@@ -84,11 +85,13 @@ public class SampleSQLBuilderTest {
 
 		_initProperties(properties, tempDir.getAbsolutePath());
 
-		try {
-			DataFactoryContext dataFactoryContext = new DataFactoryContext(
-				properties);
+		File tempPropertiesFile = File.createTempFile("test", ".properties");
 
-			new SampleSQLBuilder(properties, dataFactoryContext);
+		try (FileWriter fileWriter = new FileWriter(tempPropertiesFile)) {
+			properties.store(fileWriter, null);
+
+			SampleSQLBuilder.main(
+				new String[] {tempPropertiesFile.getAbsolutePath()});
 
 			_loadHypersonic("../../../sql", tempDir.getAbsolutePath());
 		}
