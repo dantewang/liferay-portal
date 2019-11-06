@@ -17,7 +17,7 @@ package com.liferay.portal.test.log;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.log.LogWrapper;
-import com.liferay.portal.log.Log4jLogImpl;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -34,14 +34,21 @@ public class Log4JLoggerTestUtil {
 
 		Log log = logWrapper.getWrappedLog();
 
-		if (!(log instanceof Log4jLogImpl)) {
-			throw new IllegalStateException(
-				"Log " + name + " is not a Log4j logger");
+		try {
+			Class<?> clazz = Class.forName(
+				"com.liferay.portal.log.Log4jLogImpl");
+
+			if (!clazz.isInstance(log)) {
+				throw new IllegalStateException(
+					"Log " + name + " is not a Log4j logger");
+			}
+		}
+		catch (ClassNotFoundException cnfe) {
+			throw new RuntimeException(cnfe);
 		}
 
-		Log4jLogImpl log4jLogImpl = (Log4jLogImpl)log;
-
-		Logger logger = log4jLogImpl.getWrappedLogger();
+		Logger logger = ReflectionTestUtil.invoke(
+			log, "getWrappedLogger", new Class<?>[0]);
 
 		CaptureAppender captureAppender = new CaptureAppender(logger);
 
@@ -57,14 +64,21 @@ public class Log4JLoggerTestUtil {
 
 		Log log = logWrapper.getWrappedLog();
 
-		if (!(log instanceof Log4jLogImpl)) {
-			throw new IllegalStateException(
-				"Log " + name + " is not a Log4j logger");
+		try {
+			Class<?> clazz = Class.forName(
+				"com.liferay.portal.log.Log4jLogImpl");
+
+			if (!clazz.isInstance(log)) {
+				throw new IllegalStateException(
+					"Log " + name + " is not a Log4j logger");
+			}
+		}
+		catch (ClassNotFoundException cnfe) {
+			throw new RuntimeException(cnfe);
 		}
 
-		Log4jLogImpl log4jLogImpl = (Log4jLogImpl)log;
-
-		Logger logger = log4jLogImpl.getWrappedLogger();
+		Logger logger = ReflectionTestUtil.invoke(
+			log, "getWrappedLogger", new Class<?>[0]);
 
 		Level oldLevel = logger.getLevel();
 
