@@ -130,27 +130,19 @@ public abstract class BaseDataFactory {
 		return new Date(_FUTURE_TIME + (_FUTURE_COUNTER.get() * Time.SECOND));
 	}
 
-	protected BaseDataFactory() {
-		counter = new SimpleCounter(PropsValues.MAX_GROUP_COUNT + 1);
-		classNameModels = _initClassNameModels();
-		companyId = counter.get();
-		defaultUserId = counter.get();
-		sampleUserId = counter.get();
-	}
+	protected static final Map<String, ClassNameModel> classNameModels;
+	protected static final long companyId;
+	protected static final SimpleCounter counter;
+	protected static final long defaultUserId;
+	protected static final long sampleUserId;
 
-	protected final Map<String, ClassNameModel> classNameModels;
-	protected final long companyId;
-	protected final SimpleCounter counter;
-	protected final long defaultUserId;
-	protected final long sampleUserId;
-
-	private String _getMBDiscussionCombinedClassName(Class<?> clazz) {
+	private static String _getMBDiscussionCombinedClassName(Class<?> clazz) {
 		return StringBundler.concat(
 			MBDiscussion.class.getName(), StringPool.UNDERLINE,
 			clazz.getName());
 	}
 
-	private Map<String, ClassNameModel> _initClassNameModels() {
+	private static Map<String, ClassNameModel> _initClassNameModels() {
 		Map<String, ClassNameModel> classNameModels = new HashMap<>();
 
 		List<String> models = ModelHintsUtil.getModels();
@@ -218,6 +210,12 @@ public abstract class BaseDataFactory {
 				fnfe.printStackTrace();
 			}
 		}
+
+		counter = new SimpleCounter(PropsValues.MAX_GROUP_COUNT + 1);
+		classNameModels = _initClassNameModels();
+		companyId = counter.get();
+		defaultUserId = counter.get();
+		sampleUserId = counter.get();
 	}
 
 }
