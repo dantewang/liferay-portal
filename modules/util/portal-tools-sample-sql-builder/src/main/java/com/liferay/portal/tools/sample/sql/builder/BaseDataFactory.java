@@ -189,7 +189,7 @@ public abstract class BaseDataFactory {
 
 				for (String csvFileName : PropsValues.CSV_NAMES) {
 					try {
-						_csvWriters.put(
+						put(
 							csvFileName,
 							new UnsyncBufferedWriter(
 								new OutputStreamWriter(
