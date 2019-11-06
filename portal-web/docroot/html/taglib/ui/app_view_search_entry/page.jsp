@@ -26,7 +26,6 @@ String cssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:
 String description = (String)request.getAttribute("liferay-ui:app-view-search-entry:description");
 boolean escape = GetterUtil.getBoolean(request.getAttribute("liferay-ui:app-view-search-entry:escape"));
 List<RelatedSearchResult<FileEntry>> fileEntryRelatedSearchResults = (List<RelatedSearchResult<FileEntry>>)request.getAttribute("liferay-ui:app-view-search-entry:fileEntryRelatedSearchResults");
-boolean highlightEnabled = GetterUtil.getBoolean(request.getAttribute("liferay-ui:app-view-search-entry:highlightEnabled"));
 boolean locked = GetterUtil.getBoolean(request.getAttribute("liferay-ui:app-view-search-entry:locked"));
 String[] queryTerms = (String[])request.getAttribute("liferay-ui:app-view-search-entry:queryTerms");
 String rowCheckerId = (String)request.getAttribute("liferay-ui:app-view-search-entry:rowCheckerId");
@@ -47,7 +46,6 @@ if (Validator.isNotNull(description)) {
 Summary summary = new Summary(title, description);
 
 summary.setEscape(escape);
-summary.setHighlight(highlightEnabled);
 summary.setQueryTerms(queryTerms);
 %>
 
@@ -114,7 +112,6 @@ summary.setQueryTerms(queryTerms);
 
 			summary = fileEntryRelatedSearchResult.getSummary();
 
-			summary.setHighlight(highlightEnabled);
 			summary.setQueryTerms(queryTerms);
 		%>
 
@@ -161,7 +158,6 @@ summary.setQueryTerms(queryTerms);
 
 			summary = commentRelatedSearchResult.getSummary();
 
-			summary.setHighlight(highlightEnabled);
 			summary.setQueryTerms(queryTerms);
 		%>
 

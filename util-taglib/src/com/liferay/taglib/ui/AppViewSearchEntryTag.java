@@ -17,9 +17,6 @@ package com.liferay.taglib.ui;
 import com.liferay.portal.kernel.comment.Comment;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.RelatedSearchResult;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.taglib.util.IncludeTag;
 
 import java.util.List;
@@ -104,10 +101,6 @@ public class AppViewSearchEntryTag extends IncludeTag {
 		return _escape;
 	}
 
-	public boolean isHighlightEnabled() {
-		return _highlightEnabled;
-	}
-
 	public boolean isLocked() {
 		return _locked;
 	}
@@ -156,10 +149,6 @@ public class AppViewSearchEntryTag extends IncludeTag {
 		List<RelatedSearchResult<FileEntry>> fileEntryRelatedSearchResults) {
 
 		_fileEntryRelatedSearchResults = fileEntryRelatedSearchResults;
-	}
-
-	public void setHighlightEnabled(boolean highlightEnabled) {
-		_highlightEnabled = highlightEnabled;
 	}
 
 	public void setLocked(boolean locked) {
@@ -215,7 +204,6 @@ public class AppViewSearchEntryTag extends IncludeTag {
 		_description = null;
 		_escape = true;
 		_fileEntryRelatedSearchResults = null;
-		_highlightEnabled = _HIGHLIGHT_ENABLED;
 		_locked = false;
 		_queryTerms = null;
 		_rowCheckerId = null;
@@ -270,9 +258,6 @@ public class AppViewSearchEntryTag extends IncludeTag {
 			"liferay-ui:app-view-search-entry:fileEntryRelatedSearchResults",
 			_fileEntryRelatedSearchResults);
 		httpServletRequest.setAttribute(
-			"liferay-ui:app-view-search-entry:highlightEnabled",
-			_highlightEnabled);
-		httpServletRequest.setAttribute(
 			"liferay-ui:app-view-search-entry:locked", _locked);
 		httpServletRequest.setAttribute(
 			"liferay-ui:app-view-search-entry:queryTerms", _queryTerms);
@@ -296,9 +281,6 @@ public class AppViewSearchEntryTag extends IncludeTag {
 
 	private static final boolean _CLEAN_UP_SET_ATTRIBUTES = true;
 
-	private static final boolean _HIGHLIGHT_ENABLED = GetterUtil.getBoolean(
-		PropsUtil.get(PropsKeys.INDEX_SEARCH_HIGHLIGHT_ENABLED));
-
 	private static final String _PAGE =
 		"/html/taglib/ui/app_view_search_entry/page.jsp";
 
@@ -311,7 +293,6 @@ public class AppViewSearchEntryTag extends IncludeTag {
 	private String _description;
 	private boolean _escape = true;
 	private List<RelatedSearchResult<FileEntry>> _fileEntryRelatedSearchResults;
-	private boolean _highlightEnabled = _HIGHLIGHT_ENABLED;
 	private boolean _locked;
 	private String[] _queryTerms;
 	private String _rowCheckerId;
