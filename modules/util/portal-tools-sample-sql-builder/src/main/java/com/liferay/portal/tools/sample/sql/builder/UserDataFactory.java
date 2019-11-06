@@ -189,8 +189,8 @@ public class UserDataFactory extends BaseDataFactory {
 		blogsStatsUserModel.setStatsUserId(counter.get());
 
 		blogsStatsUserModel.setGroupId(groupId);
-		blogsStatsUserModel.setCompanyId(companyId);
-		blogsStatsUserModel.setUserId(sampleUserId);
+		blogsStatsUserModel.setCompanyId(COMPANY_ID);
+		blogsStatsUserModel.setUserId(SAMPLE_USER_ID);
 		blogsStatsUserModel.setEntryCount(
 			PropsValues.MAX_BLOGS_ENTRY_COMMENT_COUNT);
 		blogsStatsUserModel.setLastPostDate(new Date());
@@ -246,7 +246,7 @@ public class UserDataFactory extends BaseDataFactory {
 		mbStatsUserModel.setStatsUserId(counter.get());
 
 		mbStatsUserModel.setGroupId(groupId);
-		mbStatsUserModel.setUserId(sampleUserId);
+		mbStatsUserModel.setUserId(SAMPLE_USER_ID);
 		mbStatsUserModel.setMessageCount(
 			maxMBCategoryCount * maxMBThreadCount * maxMBMessageCount);
 		mbStatsUserModel.setLastPostDate(new Date());
@@ -280,8 +280,8 @@ public class UserDataFactory extends BaseDataFactory {
 
 		groupModel.setUuid(SequentialUUID.generate());
 		groupModel.setGroupId(groupId);
-		groupModel.setCompanyId(companyId);
-		groupModel.setCreatorUserId(sampleUserId);
+		groupModel.setCompanyId(COMPANY_ID);
+		groupModel.setCreatorUserId(SAMPLE_USER_ID);
 		groupModel.setClassNameId(classNameId);
 		groupModel.setClassPK(classPK);
 		groupModel.setTreePath(
@@ -316,7 +316,7 @@ public class UserDataFactory extends BaseDataFactory {
 
 		userModel.setUuid(SequentialUUID.generate());
 		userModel.setUserId(userId);
-		userModel.setCompanyId(companyId);
+		userModel.setCompanyId(COMPANY_ID);
 		userModel.setCreateDate(new Date());
 		userModel.setModifiedDate(new Date());
 		userModel.setDefaultUser(defaultUser);
@@ -357,7 +357,7 @@ public class UserDataFactory extends BaseDataFactory {
 		_accountModel = new AccountModelImpl();
 
 		_accountModel.setAccountId(_accountId);
-		_accountModel.setCompanyId(companyId);
+		_accountModel.setCompanyId(COMPANY_ID);
 		_accountModel.setCreateDate(new Date());
 		_accountModel.setModifiedDate(new Date());
 		_accountModel.setName(DataFactoryConstants.ACCOUNT_NAME);
@@ -367,7 +367,7 @@ public class UserDataFactory extends BaseDataFactory {
 	private void _initCompanyModel() {
 		_companyModel = new CompanyModelImpl();
 
-		_companyModel.setCompanyId(companyId);
+		_companyModel.setCompanyId(COMPANY_ID);
 		_companyModel.setAccountId(_accountId);
 		_companyModel.setWebId(DataFactoryConstants.COMPANY_WEBID);
 		_companyModel.setMx(DataFactoryConstants.COMPANY_WEBID);
@@ -386,7 +386,7 @@ public class UserDataFactory extends BaseDataFactory {
 		int maxGroupsCount = PropsValues.MAX_GROUP_COUNT;
 
 		_globalGroupModel = _initGroupModel(
-			_globalGroupId, getClassNameId(Company.class), companyId,
+			_globalGroupId, getClassNameId(Company.class), COMPANY_ID,
 			GroupConstants.GLOBAL, false);
 
 		_guestGroupModel = _initGroupModel(
@@ -395,7 +395,7 @@ public class UserDataFactory extends BaseDataFactory {
 
 		_userPersonalSiteGroupModel = newGroupModel(
 			_userPersonalSiteGroupId, getClassNameId(UserPersonalSite.class),
-			defaultUserId, GroupConstants.USER_PERSONAL_SITE, false);
+			DEFAULT_USER_ID, GroupConstants.USER_PERSONAL_SITE, false);
 
 		_groupModels = new ArrayList<>(maxGroupsCount);
 
@@ -524,14 +524,14 @@ public class UserDataFactory extends BaseDataFactory {
 
 	private void _initUserModels() {
 		_defaultUserModel = newUserModel(
-			defaultUserId, StringPool.BLANK, StringPool.BLANK, StringPool.BLANK,
-			true);
+			DEFAULT_USER_ID, StringPool.BLANK, StringPool.BLANK,
+			StringPool.BLANK, true);
 
 		_guestUserModel = newUserModel(
 			counter.get(), "Test", "Test", "Test", false);
 
 		_sampleUserModel = newUserModel(
-			sampleUserId, DataFactoryConstants.SAMPLE_USER_NAME,
+			SAMPLE_USER_ID, DataFactoryConstants.SAMPLE_USER_NAME,
 			DataFactoryConstants.SAMPLE_USER_NAME,
 			DataFactoryConstants.SAMPLE_USER_NAME, false);
 	}
@@ -541,7 +541,7 @@ public class UserDataFactory extends BaseDataFactory {
 
 		_virtualHostModel.setVirtualHostId(counter.get());
 
-		_virtualHostModel.setCompanyId(companyId);
+		_virtualHostModel.setCompanyId(COMPANY_ID);
 		_virtualHostModel.setHostname(PropsValues.VIRTUAL_HOST_NAME);
 	}
 
@@ -550,8 +550,8 @@ public class UserDataFactory extends BaseDataFactory {
 
 		roleModel.setUuid(SequentialUUID.generate());
 		roleModel.setRoleId(counter.get());
-		roleModel.setCompanyId(companyId);
-		roleModel.setUserId(sampleUserId);
+		roleModel.setCompanyId(COMPANY_ID);
+		roleModel.setUserId(SAMPLE_USER_ID);
 		roleModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		roleModel.setCreateDate(new Date());
 		roleModel.setModifiedDate(new Date());

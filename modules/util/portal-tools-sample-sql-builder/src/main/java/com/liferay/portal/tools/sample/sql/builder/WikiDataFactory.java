@@ -82,8 +82,8 @@ public class WikiDataFactory extends BaseDataFactory {
 		wikiNodeModel.setUuid(SequentialUUID.generate());
 		wikiNodeModel.setNodeId(counter.get());
 		wikiNodeModel.setGroupId(groupId);
-		wikiNodeModel.setCompanyId(companyId);
-		wikiNodeModel.setUserId(sampleUserId);
+		wikiNodeModel.setCompanyId(COMPANY_ID);
+		wikiNodeModel.setUserId(SAMPLE_USER_ID);
 		wikiNodeModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		wikiNodeModel.setCreateDate(new Date());
 		wikiNodeModel.setModifiedDate(new Date());
@@ -105,8 +105,8 @@ public class WikiDataFactory extends BaseDataFactory {
 		wikiPageModel.setPageId(counter.get());
 		wikiPageModel.setResourcePrimKey(counter.get());
 		wikiPageModel.setGroupId(wikiNodeModel.getGroupId());
-		wikiPageModel.setCompanyId(companyId);
-		wikiPageModel.setUserId(sampleUserId);
+		wikiPageModel.setCompanyId(COMPANY_ID);
+		wikiPageModel.setUserId(SAMPLE_USER_ID);
 		wikiPageModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		wikiPageModel.setCreateDate(new Date());
 		wikiPageModel.setModifiedDate(new Date());

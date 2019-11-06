@@ -64,8 +64,8 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		mbDiscussionModel.setUuid(SequentialUUID.generate());
 		mbDiscussionModel.setDiscussionId(counter.get());
 		mbDiscussionModel.setGroupId(groupId);
-		mbDiscussionModel.setCompanyId(companyId);
-		mbDiscussionModel.setUserId(sampleUserId);
+		mbDiscussionModel.setCompanyId(COMPANY_ID);
+		mbDiscussionModel.setUserId(SAMPLE_USER_ID);
 		mbDiscussionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		mbDiscussionModel.setCreateDate(new Date());
 		mbDiscussionModel.setModifiedDate(new Date());
@@ -88,8 +88,8 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		mbMailingListModel.setMailingListId(counter.get());
 
 		mbMailingListModel.setGroupId(mbCategoryModel.getGroupId());
-		mbMailingListModel.setCompanyId(companyId);
-		mbMailingListModel.setUserId(sampleUserId);
+		mbMailingListModel.setCompanyId(COMPANY_ID);
+		mbMailingListModel.setUserId(SAMPLE_USER_ID);
 		mbMailingListModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		mbMailingListModel.setCreateDate(new Date());
 		mbMailingListModel.setModifiedDate(new Date());
@@ -183,8 +183,8 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		mbThreadFlagModel.setThreadFlagId(counter.get());
 
 		mbThreadFlagModel.setGroupId(mbThreadModel.getGroupId());
-		mbThreadFlagModel.setCompanyId(companyId);
-		mbThreadFlagModel.setUserId(sampleUserId);
+		mbThreadFlagModel.setCompanyId(COMPANY_ID);
+		mbThreadFlagModel.setUserId(SAMPLE_USER_ID);
 		mbThreadFlagModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		mbThreadFlagModel.setCreateDate(new Date());
 		mbThreadFlagModel.setModifiedDate(new Date());
@@ -236,8 +236,8 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		mbCategoryModel.setCategoryId(counter.get());
 
 		mbCategoryModel.setGroupId(groupId);
-		mbCategoryModel.setCompanyId(companyId);
-		mbCategoryModel.setUserId(sampleUserId);
+		mbCategoryModel.setCompanyId(COMPANY_ID);
+		mbCategoryModel.setUserId(SAMPLE_USER_ID);
 		mbCategoryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		mbCategoryModel.setCreateDate(new Date());
 		mbCategoryModel.setModifiedDate(new Date());
@@ -266,8 +266,8 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		mBMessageModel.setUuid(SequentialUUID.generate());
 		mBMessageModel.setMessageId(messageId);
 		mBMessageModel.setGroupId(groupId);
-		mBMessageModel.setCompanyId(companyId);
-		mBMessageModel.setUserId(sampleUserId);
+		mBMessageModel.setCompanyId(COMPANY_ID);
+		mBMessageModel.setUserId(SAMPLE_USER_ID);
 		mBMessageModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		mBMessageModel.setCreateDate(new Date());
 		mBMessageModel.setModifiedDate(new Date());
@@ -295,16 +295,16 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		mbThreadModel.setUuid(SequentialUUID.generate());
 		mbThreadModel.setThreadId(threadId);
 		mbThreadModel.setGroupId(groupId);
-		mbThreadModel.setCompanyId(companyId);
-		mbThreadModel.setUserId(sampleUserId);
+		mbThreadModel.setCompanyId(COMPANY_ID);
+		mbThreadModel.setUserId(SAMPLE_USER_ID);
 		mbThreadModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		mbThreadModel.setCreateDate(new Date());
 		mbThreadModel.setModifiedDate(new Date());
 		mbThreadModel.setCategoryId(categoryId);
 		mbThreadModel.setRootMessageId(rootMessageId);
-		mbThreadModel.setRootMessageUserId(sampleUserId);
+		mbThreadModel.setRootMessageUserId(SAMPLE_USER_ID);
 		mbThreadModel.setMessageCount(messageCount);
-		mbThreadModel.setLastPostByUserId(sampleUserId);
+		mbThreadModel.setLastPostByUserId(SAMPLE_USER_ID);
 		mbThreadModel.setLastPostDate(new Date());
 		mbThreadModel.setLastPublishDate(new Date());
 		mbThreadModel.setStatusDate(new Date());

@@ -135,7 +135,7 @@ public class CommerceDataFactory extends BaseDataFactory {
 		_commerceCatalogModel = new CommerceCatalogModelImpl();
 
 		_commerceCatalogModel.setCommerceCatalogId(counter.get());
-		_commerceCatalogModel.setCompanyId(companyId);
+		_commerceCatalogModel.setCompanyId(COMPANY_ID);
 		_commerceCatalogModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		_commerceCatalogModel.setCreateDate(new Date());
@@ -151,14 +151,14 @@ public class CommerceDataFactory extends BaseDataFactory {
 		_commerceChannelModel = new CommerceChannelModelImpl();
 
 		_commerceChannelModel.setCommerceChannelId(counter.get());
-		_commerceChannelModel.setCompanyId(companyId);
-		_commerceChannelModel.setUserId(sampleUserId);
+		_commerceChannelModel.setCompanyId(COMPANY_ID);
+		_commerceChannelModel.setUserId(SAMPLE_USER_ID);
 		_commerceChannelModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		_commerceChannelModel.setCreateDate(new Date());
 		_commerceChannelModel.setModifiedDate(new Date());
 		_commerceChannelModel.setSiteGroupId(1);
-		_commerceChannelModel.setName(sampleUserId + " Channel");
+		_commerceChannelModel.setName(SAMPLE_USER_ID + " Channel");
 		_commerceChannelModel.setType("site");
 		_commerceChannelModel.setTypeSettings(
 			String.valueOf(_userDataFactory.getGuestGroupId()));
@@ -171,8 +171,8 @@ public class CommerceDataFactory extends BaseDataFactory {
 
 		_commerceCurrencyModel.setUuid(SequentialUUID.generate());
 		_commerceCurrencyModel.setCommerceCurrencyId(counter.get());
-		_commerceCurrencyModel.setCompanyId(companyId);
-		_commerceCurrencyModel.setUserId(sampleUserId);
+		_commerceCurrencyModel.setCompanyId(COMPANY_ID);
+		_commerceCurrencyModel.setUserId(SAMPLE_USER_ID);
 		_commerceCurrencyModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		_commerceCurrencyModel.setCreateDate(new Date());
@@ -303,7 +303,7 @@ public class CommerceDataFactory extends BaseDataFactory {
 		cpDefinitionLocalizationModel.setCpDefinitionLocalizationId(
 			counter.get());
 
-		cpDefinitionLocalizationModel.setCompanyId(companyId);
+		cpDefinitionLocalizationModel.setCompanyId(COMPANY_ID);
 		cpDefinitionLocalizationModel.setCPDefinitionId(cpDefinitionId);
 		cpDefinitionLocalizationModel.setLanguageId("en_US");
 		cpDefinitionLocalizationModel.setName("Definition " + cpDefinitionId);
@@ -331,8 +331,8 @@ public class CommerceDataFactory extends BaseDataFactory {
 		cpDefinitionModel.setUuid(SequentialUUID.generate());
 		cpDefinitionModel.setCPDefinitionId(cpDefinitionId);
 		cpDefinitionModel.setGroupId(groupId);
-		cpDefinitionModel.setCompanyId(companyId);
-		cpDefinitionModel.setUserId(sampleUserId);
+		cpDefinitionModel.setCompanyId(COMPANY_ID);
+		cpDefinitionModel.setUserId(SAMPLE_USER_ID);
 		cpDefinitionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		cpDefinitionModel.setCreateDate(new Date());
 		cpDefinitionModel.setModifiedDate(new Date());
@@ -363,7 +363,7 @@ public class CommerceDataFactory extends BaseDataFactory {
 		cpDefinitionModel.setMaxSubscriptionCycles(0);
 		cpDefinitionModel.setVersion(version);
 		cpDefinitionModel.setStatus(WorkflowConstants.STATUS_APPROVED);
-		cpDefinitionModel.setStatusByUserId(sampleUserId);
+		cpDefinitionModel.setStatusByUserId(SAMPLE_USER_ID);
 		cpDefinitionModel.setStatusByUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		cpDefinitionModel.setStatusDate(new Date());
@@ -380,8 +380,8 @@ public class CommerceDataFactory extends BaseDataFactory {
 		cpFriendlyURLEntryModel.setUuid(SequentialUUID.generate());
 		cpFriendlyURLEntryModel.setCPFriendlyURLEntryId(counter.get());
 		cpFriendlyURLEntryModel.setGroupId(groupId);
-		cpFriendlyURLEntryModel.setCompanyId(companyId);
-		cpFriendlyURLEntryModel.setUserId(sampleUserId);
+		cpFriendlyURLEntryModel.setCompanyId(COMPANY_ID);
+		cpFriendlyURLEntryModel.setUserId(SAMPLE_USER_ID);
 		cpFriendlyURLEntryModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		cpFriendlyURLEntryModel.setCreateDate(new Date());
@@ -403,8 +403,8 @@ public class CommerceDataFactory extends BaseDataFactory {
 		cpInstanceModel.setUuid(SequentialUUID.generate());
 		cpInstanceModel.setCPInstanceId(counter.get());
 		cpInstanceModel.setGroupId(groupId);
-		cpInstanceModel.setCompanyId(companyId);
-		cpInstanceModel.setUserId(sampleUserId);
+		cpInstanceModel.setCompanyId(COMPANY_ID);
+		cpInstanceModel.setUserId(SAMPLE_USER_ID);
 		cpInstanceModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		cpInstanceModel.setCreateDate(new Date());
 		cpInstanceModel.setModifiedDate(new Date());
@@ -437,7 +437,7 @@ public class CommerceDataFactory extends BaseDataFactory {
 		cpInstanceModel.setSubscriptionTypeSettings(null);
 		cpInstanceModel.setMaxSubscriptionCycles(0);
 		cpInstanceModel.setStatus(WorkflowConstants.STATUS_APPROVED);
-		cpInstanceModel.setStatusByUserId(sampleUserId);
+		cpInstanceModel.setStatusByUserId(SAMPLE_USER_ID);
 		cpInstanceModel.setStatusByUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		cpInstanceModel.setStatusDate(new Date());
@@ -453,8 +453,8 @@ public class CommerceDataFactory extends BaseDataFactory {
 		cProductModel.setUuid(SequentialUUID.generate());
 		cProductModel.setCProductId(cProductId);
 		cProductModel.setGroupId(groupId);
-		cProductModel.setCompanyId(companyId);
-		cProductModel.setUserId(sampleUserId);
+		cProductModel.setCompanyId(COMPANY_ID);
+		cProductModel.setUserId(SAMPLE_USER_ID);
 		cProductModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		cProductModel.setCreateDate(new Date());
 		cProductModel.setModifiedDate(new Date());
@@ -469,8 +469,8 @@ public class CommerceDataFactory extends BaseDataFactory {
 
 		cpTaxCategoryModel.setCPTaxCategoryId(counter.get());
 
-		cpTaxCategoryModel.setCompanyId(companyId);
-		cpTaxCategoryModel.setUserId(sampleUserId);
+		cpTaxCategoryModel.setCompanyId(COMPANY_ID);
+		cpTaxCategoryModel.setUserId(SAMPLE_USER_ID);
 		cpTaxCategoryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		cpTaxCategoryModel.setCreateDate(new Date());
 		cpTaxCategoryModel.setModifiedDate(new Date());
