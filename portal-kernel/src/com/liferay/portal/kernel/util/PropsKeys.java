@@ -2954,12 +2954,6 @@ public interface PropsKeys {
 	public static final String SOCIAL_ACTIVITY_SETS_SELECTOR =
 		"social.activity.sets.selector";
 
-	/**
-	 * @deprecated As of Judson (7.1.x), with no direct replacement
-	 */
-	@Deprecated
-	public static final String SOCIAL_BOOKMARK_ICON = "social.bookmark.icon";
-
 	public static final String SOURCE_FORGE_MIRRORS = "source.forge.mirrors";
 
 	public static final String SPRING_CONFIGS = "spring.configs";

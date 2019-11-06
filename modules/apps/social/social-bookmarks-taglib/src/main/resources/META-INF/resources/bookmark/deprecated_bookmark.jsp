@@ -17,7 +17,7 @@
 <%@ include file="/bookmark/init.jsp" %>
 
 <%
-String icon = PropsUtil.get(PropsKeys.SOCIAL_BOOKMARK_ICON, new Filter(type));
+String icon = PropsUtil.get("social.bookmark.icon", new Filter(type));
 %>
 
 <liferay-ui:icon
