@@ -52,7 +52,7 @@ public class SampleSQLBuilder {
 	public static void main(String[] args) throws Exception {
 		ToolDependencies.wireBasic();
 
-		PropsValues.init(args[0]);
+		System.setProperty("properties.file.path", args[0]);
 
 		new SampleSQLBuilder();
 	}
