@@ -23,10 +23,7 @@ import com.liferay.portal.kernel.io.OutputStreamWriter;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedWriter;
 import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.SortedProperties;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.tools.ToolDependencies;
 import com.liferay.portal.tools.sample.sql.builder.io.CharPipe;
 import com.liferay.portal.tools.sample.sql.builder.io.UnsyncTeeWriter;
@@ -34,7 +31,6 @@ import com.liferay.portal.tools.sample.sql.builder.io.UnsyncTeeWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
@@ -46,7 +42,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author Brian Wing Shun Chan
@@ -57,47 +52,16 @@ public class SampleSQLBuilder {
 	public static void main(String[] args) throws Exception {
 		ToolDependencies.wireBasic();
 
-		Reader reader = null;
+		System.setProperty("properties.file.path", args[0]);
 
-		try {
-			Properties properties = new SortedProperties();
-
-			reader = new FileReader(args[0]);
-
-			properties.load(reader);
-
-			System.setProperties(properties);
-
-			new SampleSQLBuilder(properties);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				}
-				catch (IOException ioe) {
-					ioe.printStackTrace();
-				}
-			}
-		}
+		new SampleSQLBuilder();
 	}
 
-	public SampleSQLBuilder(Properties properties) throws Exception {
-		_dbType = DBType.valueOf(
-			StringUtil.toUpperCase(
-				properties.getProperty("sample.sql.db.type")));
-
-		_optimizeBufferSize = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.optimize.buffer.size"));
-		_outputDir = properties.getProperty("sample.sql.output.dir");
-		_script = properties.getProperty("sample.sql.script");
+	public SampleSQLBuilder() throws Exception {
 
 		// Generic
 
-		File tempDir = new File(_outputDir, "temp");
+		File tempDir = new File(PropsValues.OUTPUT_DIR, "temp");
 
 		tempDir.mkdirs();
 
@@ -111,19 +75,17 @@ public class SampleSQLBuilder {
 
 			// Merge
 
-			boolean outputMerge = GetterUtil.getBoolean(
-				properties.getProperty("sample.sql.output.merge"));
-
-			if (outputMerge) {
+			if (PropsValues.OUTPUT_MERGE) {
 				File sqlFile = new File(
-					_outputDir, "sample-" + _dbType + ".sql");
+					PropsValues.OUTPUT_DIR,
+					"sample-" + PropsValues.DB_TYPE + ".sql");
 
 				FileUtil.delete(sqlFile);
 
 				mergeSQL(tempDir, sqlFile);
 			}
 			else {
-				File outputDir = new File(_outputDir, "output");
+				File outputDir = new File(PropsValues.OUTPUT_DIR, "output");
 
 				FileUtil.deltree(outputDir);
 
@@ -140,24 +102,9 @@ public class SampleSQLBuilder {
 			FileUtil.deltree(tempDir);
 		}
 
-		StringBundler sb = new StringBundler();
-
-		for (String key : properties.stringPropertyNames()) {
-			if (!key.startsWith("sample.sql")) {
-				continue;
-			}
-
-			String value = properties.getProperty(key);
-
-			sb.append(key);
-			sb.append(StringPool.EQUAL);
-			sb.append(value);
-			sb.append(StringPool.NEW_LINE);
-		}
-
 		FileUtil.write(
-			new File(_outputDir, "benchmarks-actual.properties"),
-			sb.toString());
+			new File(PropsValues.OUTPUT_DIR, "benchmarks-actual.properties"),
+			PropsValues.getActualProperties());
 	}
 
 	protected void compressSQL(
@@ -188,7 +135,7 @@ public class SampleSQLBuilder {
 
 		sb.append(values);
 
-		if (sb.index() >= _optimizeBufferSize) {
+		if (sb.index() >= PropsValues.OPTIMIZE_BUFFER_SIZE) {
 			sb.append(";\n");
 
 			insertSQL = db.buildSQL(sb.toString());
@@ -201,9 +148,11 @@ public class SampleSQLBuilder {
 	}
 
 	protected void compressSQL(Reader reader, File dir) throws Exception {
-		DB db = DBManagerUtil.getDB(_dbType, null);
+		DB db = DBManagerUtil.getDB(PropsValues.DB_TYPE, null);
 
-		if ((_dbType == DBType.MARIADB) || (_dbType == DBType.MYSQL)) {
+		if ((PropsValues.DB_TYPE == DBType.MARIADB) ||
+			(PropsValues.DB_TYPE == DBType.MYSQL)) {
+
 			db = new SampleMySQLDB(db.getMajorVersion(), db.getMinorVersion());
 		}
 
@@ -299,10 +248,11 @@ public class SampleSQLBuilder {
 				try {
 					sampleSQLWriter = new UnsyncTeeWriter(
 						createUnsyncBufferedWriter(charPipe.getWriter()),
-						createFileWriter(new File(_outputDir, "sample.sql")));
+						createFileWriter(
+							new File(PropsValues.OUTPUT_DIR, "sample.sql")));
 
 					FreeMarkerUtil.process(
-						_script, _createContext(), sampleSQLWriter);
+						PropsValues.SCRIPT, _createContext(), sampleSQLWriter);
 				}
 				catch (Throwable t) {
 					_freeMarkerThrowable = t;
@@ -449,10 +399,6 @@ public class SampleSQLBuilder {
 
 	private static final int _WRITER_BUFFER_SIZE = 16 * 1024;
 
-	private final DBType _dbType;
 	private volatile Throwable _freeMarkerThrowable;
-	private final int _optimizeBufferSize;
-	private final String _outputDir;
-	private final String _script;
 
 }
