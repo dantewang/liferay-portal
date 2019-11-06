@@ -801,11 +801,6 @@ public class LayoutImportController implements ImportController {
 
 			portletDataContext.setPlid(plid);
 
-			long oldPlid = GetterUtil.getLong(
-				portletElement.attributeValue("old-plid"));
-
-			portletDataContext.setOldPlid(oldPlid);
-
 			portletDataContext.setPortletId(portletId);
 
 			if (BackgroundTaskThreadLocal.hasBackgroundTask()) {
@@ -842,6 +837,7 @@ public class LayoutImportController implements ImportController {
 				_exportImportLifecycleManager.fireExportImportLifecycleEvent(
 					ExportImportLifecycleConstants.EVENT_PORTLET_IMPORT_STARTED,
 					getProcessFlag(),
+					portletDataContext.getExportImportProcessId(),
 					_portletDataContextFactory.clonePortletDataContext(
 						portletDataContext));
 
@@ -872,6 +868,7 @@ public class LayoutImportController implements ImportController {
 					ExportImportLifecycleConstants.
 						EVENT_PORTLET_IMPORT_SUCCEEDED,
 					getProcessFlag(),
+					portletDataContext.getExportImportProcessId(),
 					_portletDataContextFactory.clonePortletDataContext(
 						portletDataContext));
 			}
@@ -879,6 +876,7 @@ public class LayoutImportController implements ImportController {
 				_exportImportLifecycleManager.fireExportImportLifecycleEvent(
 					ExportImportLifecycleConstants.EVENT_PORTLET_IMPORT_FAILED,
 					getProcessFlag(),
+					portletDataContext.getExportImportProcessId(),
 					_portletDataContextFactory.clonePortletDataContext(
 						portletDataContext),
 					t);

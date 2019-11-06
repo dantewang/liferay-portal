@@ -597,20 +597,6 @@ public class PortletImportControllerImpl implements PortletImportController {
 							processImportPortletPreferences(
 								portletDataContext, jxPortletPreferences);
 					}
-					else {
-						PortletDataHandler portletDataHandler =
-							_portletDataHandlerProvider.provide(
-								portletDataContext.getCompanyId(),
-								curPortletId);
-
-						if (portletDataHandler != null) {
-							jxPortletPreferences =
-								portletDataHandler.
-									processImportPortletPreferences(
-										portletDataContext, curPortletId,
-										jxPortletPreferences);
-						}
-					}
 				}
 				finally {
 					portletDataContext.setImportDataRootElement(
@@ -755,7 +741,8 @@ public class PortletImportControllerImpl implements PortletImportController {
 					expandoColumn.getColumnId(), typeSettings);
 
 				portletDataContext.importPermissions(
-					ExpandoColumn.class, columnId, expandoColumn.getColumnId());
+					ExpandoColumn.class, Long.valueOf(columnId),
+					Long.valueOf(expandoColumn.getColumnId()));
 			}
 		}
 	}
@@ -1172,7 +1159,6 @@ public class PortletImportControllerImpl implements PortletImportController {
 		portletDataContext.setExportImportProcessId(
 			String.valueOf(
 				exportImportConfiguration.getExportImportConfigurationId()));
-		portletDataContext.setOldPlid(targetPlid);
 		portletDataContext.setPlid(targetPlid);
 		portletDataContext.setPortletId(portletId);
 		portletDataContext.setPrivateLayout(layout.isPrivateLayout());

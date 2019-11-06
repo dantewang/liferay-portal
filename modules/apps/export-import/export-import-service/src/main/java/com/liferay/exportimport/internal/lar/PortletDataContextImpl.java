@@ -301,16 +301,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 		_locksMap.put(getPrimaryKeyString(className, (Serializable)key), lock);
 	}
 
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             #addPermissions(Class, Serializable)}
-	 */
-	@Deprecated
-	@Override
-	public void addPermissions(Class<?> clazz, long classPK) {
-		addPermissions(clazz.getName(), Long.valueOf(classPK));
-	}
-
 	@Override
 	public void addPermissions(Class<?> clazz, Serializable classPK) {
 		addPermissions(clazz.getName(), GetterUtil.getLong(classPK));
@@ -637,16 +627,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 		return _xStream.fromXML(xml);
 	}
 
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             #getAssetCategoryIds(Class, Serializable)}
-	 */
-	@Deprecated
-	@Override
-	public long[] getAssetCategoryIds(Class<?> clazz, long classPK) {
-		return getAssetCategoryIds(clazz, Long.valueOf(classPK));
-	}
-
 	@Override
 	public long[] getAssetCategoryIds(Class<?> clazz, Serializable classPK) {
 		long[] assetCategoryIds = _assetCategoryIdsMap.get(
@@ -662,16 +642,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 	@Override
 	public Set<Long> getAssetLinkIds() {
 		return _assetLinkIds;
-	}
-
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             #getAssetTagNames(Class, Serializable)}
-	 */
-	@Deprecated
-	@Override
-	public String[] getAssetTagNames(Class<?> clazz, long classPK) {
-		return getAssetTagNames(clazz, Long.valueOf(classPK));
 	}
 
 	@Override
@@ -976,15 +946,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 	@Override
 	public Map<String, Map<?, ?>> getNewPrimaryKeysMaps() {
 		return _newPrimaryKeysMaps;
-	}
-
-	/**
-	 * @deprecated As of Judson (7.1.x), with no direct replacement
-	 */
-	@Deprecated
-	@Override
-	public long getOldPlid() {
-		return _oldPlid;
 	}
 
 	@Override
@@ -1400,19 +1361,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 			lock.isInheritable(), expirationTime);
 	}
 
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             #importPermissions(Class, Serializable, Serializable)}
-	 */
-	@Deprecated
-	@Override
-	public void importPermissions(Class<?> clazz, long classPK, long newClassPK)
-		throws PortalException {
-
-		importPermissions(
-			clazz, Long.valueOf(classPK), Long.valueOf(newClassPK));
-	}
-
 	@Override
 	public void importPermissions(
 			Class<?> clazz, Serializable classPK, Serializable newClassPK)
@@ -1620,16 +1568,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 		return _missingReferences.contains(referenceKey);
 	}
 
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             #isModelCounted(String, Serializable)}
-	 */
-	@Deprecated
-	@Override
-	public boolean isModelCounted(String className, long classPK) {
-		return isModelCounted(className, Long.valueOf(classPK));
-	}
-
 	@Override
 	public boolean isModelCounted(String className, Serializable classPK) {
 		String modelCountedPrimaryKey = className.concat(
@@ -1774,11 +1712,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 	@Override
 	public void setNewLayouts(List<Layout> newLayouts) {
 		_newLayouts = newLayouts;
-	}
-
-	@Override
-	public void setOldPlid(long oldPlid) {
-		_oldPlid = oldPlid;
 	}
 
 	@Override
@@ -2773,7 +2706,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 	private transient List<Layout> _newLayouts;
 	private final Map<String, Map<?, ?>> _newPrimaryKeysMaps = new HashMap<>();
 	private final Set<String> _notUniquePerLayout = new HashSet<>();
-	private long _oldPlid;
 	private Map<String, String[]> _parameterMap;
 	private final Map<String, List<KeyValuePair>> _permissionsMap =
 		new HashMap<>();
