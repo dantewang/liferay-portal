@@ -99,10 +99,6 @@ public class DataFactoryContext {
 		return _defaultUserId;
 	}
 
-	public SimpleCounter getFutureDateCounter() {
-		return _futureDateCounter;
-	}
-
 	public int getMaxAssetCategoryCount() {
 		return _maxAssetCategoryCount;
 	}
@@ -389,7 +385,6 @@ public class DataFactoryContext {
 	private final SimpleCounter _counter;
 	private final Map<String, Writer> _csvWriters = new HashMap<>();
 	private final long _defaultUserId;
-	private final SimpleCounter _futureDateCounter = new SimpleCounter();
 	private int _maxAssetCategoryCount;
 	private int _maxAssetEntryToAssetCategoryCount;
 	private int _maxAssetEntryToAssetTagCount;
