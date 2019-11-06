@@ -1,4 +1,4 @@
-<#assign pageCounts = counterDataFactory.getSequence(dataFactoryContext.maxAssetPublisherPageCount) />
+<#assign pageCounts = counterDataFactory.getSequence(assetDataFactory.maxAssetPublisherPageCount) />
 
 <#list pageCounts as pageCount>
 	<#assign
@@ -7,7 +7,7 @@
 		layoutModel = layoutDataFactory.newLayoutModel(groupId, groupId + "_asset_publisher_" + pageCount, "", portletId)
 	/>
 
-	${dataFactoryContext.getCSVWriter("assetPublisher").write(layoutModel.friendlyURL + "\n")}
+	${assetDataFactory.getCSVWriter("assetPublisher").write(layoutModel.friendlyURL + "\n")}
 
 	<@insertLayout _layoutModel=layoutModel />
 

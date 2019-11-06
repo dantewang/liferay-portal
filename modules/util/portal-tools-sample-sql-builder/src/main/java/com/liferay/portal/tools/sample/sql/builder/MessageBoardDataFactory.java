@@ -29,7 +29,6 @@ import com.liferay.message.boards.model.impl.MBMessageModelImpl;
 import com.liferay.message.boards.model.impl.MBThreadFlagModelImpl;
 import com.liferay.message.boards.model.impl.MBThreadModelImpl;
 import com.liferay.portal.kernel.model.UserModel;
-import com.liferay.util.SimpleCounter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,17 +39,12 @@ import java.util.List;
  */
 public class MessageBoardDataFactory extends BaseDataFactory {
 
-	public MessageBoardDataFactory(
-		DataFactoryContext dataFactoryContext,
-		UserDataFactory userDataFactory) {
-
-		super(dataFactoryContext);
-
+	public MessageBoardDataFactory(UserDataFactory userDataFactory) {
 		_userDataFactory = userDataFactory;
 	}
 
 	public List<MBCategoryModel> newMBCategoryModels(long groupId) {
-		int maxMBCategoryCount = dataFactoryContext.getMaxMBCategoryCount();
+		int maxMBCategoryCount = PropsValues.MAX_MB_CATEGORY_COUNT;
 
 		List<MBCategoryModel> mbCategoryModels = new ArrayList<>(
 			maxMBCategoryCount);
@@ -67,13 +61,11 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 
 		MBDiscussionModel mbDiscussionModel = new MBDiscussionModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		mbDiscussionModel.setUuid(SequentialUUID.generate());
 		mbDiscussionModel.setDiscussionId(counter.get());
 		mbDiscussionModel.setGroupId(groupId);
-		mbDiscussionModel.setCompanyId(dataFactoryContext.getCompanyId());
-		mbDiscussionModel.setUserId(dataFactoryContext.getSampleUserId());
+		mbDiscussionModel.setCompanyId(companyId);
+		mbDiscussionModel.setUserId(sampleUserId);
 		mbDiscussionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		mbDiscussionModel.setCreateDate(new Date());
 		mbDiscussionModel.setModifiedDate(new Date());
@@ -90,16 +82,14 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 
 		MBMailingListModel mbMailingListModel = new MBMailingListModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		UserModel sampleUserModel = _userDataFactory.getSampleUserModel();
 
 		mbMailingListModel.setUuid(SequentialUUID.generate());
 		mbMailingListModel.setMailingListId(counter.get());
 
 		mbMailingListModel.setGroupId(mbCategoryModel.getGroupId());
-		mbMailingListModel.setCompanyId(dataFactoryContext.getCompanyId());
-		mbMailingListModel.setUserId(dataFactoryContext.getSampleUserId());
+		mbMailingListModel.setCompanyId(companyId);
+		mbMailingListModel.setUserId(sampleUserId);
 		mbMailingListModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		mbMailingListModel.setCreateDate(new Date());
 		mbMailingListModel.setModifiedDate(new Date());
@@ -122,8 +112,6 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		long parentMessageId = 0;
 		String subject = null;
 		String body = null;
-
-		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		if (index == 0) {
 			messageId = mbThreadModel.getRootMessageId();
@@ -148,9 +136,7 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 	public List<MBMessageModel> newMBMessageModels(
 		MBThreadModel mbThreadModel) {
 
-		int maxMBMessageCount = dataFactoryContext.getMaxMBMessageCount();
-
-		SimpleCounter counter = dataFactoryContext.getCounter();
+		int maxMBMessageCount = PropsValues.MAX_MB_MESSAGE_COUNT;
 
 		List<MBMessageModel> mbMessageModels = new ArrayList<>(
 			maxMBMessageCount);
@@ -193,14 +179,12 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 	public MBThreadFlagModel newMBThreadFlagModel(MBThreadModel mbThreadModel) {
 		MBThreadFlagModel mbThreadFlagModel = new MBThreadFlagModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		mbThreadFlagModel.setUuid(SequentialUUID.generate());
 		mbThreadFlagModel.setThreadFlagId(counter.get());
 
 		mbThreadFlagModel.setGroupId(mbThreadModel.getGroupId());
-		mbThreadFlagModel.setCompanyId(dataFactoryContext.getCompanyId());
-		mbThreadFlagModel.setUserId(dataFactoryContext.getSampleUserId());
+		mbThreadFlagModel.setCompanyId(companyId);
+		mbThreadFlagModel.setUserId(sampleUserId);
 		mbThreadFlagModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		mbThreadFlagModel.setCreateDate(new Date());
 		mbThreadFlagModel.setModifiedDate(new Date());
@@ -225,11 +209,9 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 	public List<MBThreadModel> newMBThreadModels(
 		MBCategoryModel mbCategoryModel) {
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
+		int maxMBThreadCount = PropsValues.MAX_MB_THREAD_COUNT;
 
-		int maxMBThreadCount = dataFactoryContext.getMaxMBThreadCount();
-
-		int maxMBMessageCount = dataFactoryContext.getMaxMBMessageCount();
+		int maxMBMessageCount = PropsValues.MAX_MB_MESSAGE_COUNT;
 
 		List<MBThreadModel> mbThreadModels = new ArrayList<>(maxMBThreadCount);
 
@@ -247,17 +229,15 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 	protected MBCategoryModel newMBCategoryModel(long groupId, int index) {
 		MBCategoryModel mbCategoryModel = new MBCategoryModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
-		int maxMBThreadCount = dataFactoryContext.getMaxMBThreadCount();
-		int maxMBMessageCount = dataFactoryContext.getMaxMBMessageCount();
+		int maxMBThreadCount = PropsValues.MAX_MB_THREAD_COUNT;
+		int maxMBMessageCount = PropsValues.MAX_MB_MESSAGE_COUNT;
 
 		mbCategoryModel.setUuid(SequentialUUID.generate());
 		mbCategoryModel.setCategoryId(counter.get());
 
 		mbCategoryModel.setGroupId(groupId);
-		mbCategoryModel.setCompanyId(dataFactoryContext.getCompanyId());
-		mbCategoryModel.setUserId(dataFactoryContext.getSampleUserId());
+		mbCategoryModel.setCompanyId(companyId);
+		mbCategoryModel.setUserId(sampleUserId);
 		mbCategoryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		mbCategoryModel.setCreateDate(new Date());
 		mbCategoryModel.setModifiedDate(new Date());
@@ -286,8 +266,8 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		mBMessageModel.setUuid(SequentialUUID.generate());
 		mBMessageModel.setMessageId(messageId);
 		mBMessageModel.setGroupId(groupId);
-		mBMessageModel.setCompanyId(dataFactoryContext.getCompanyId());
-		mBMessageModel.setUserId(dataFactoryContext.getSampleUserId());
+		mBMessageModel.setCompanyId(companyId);
+		mBMessageModel.setUserId(sampleUserId);
 		mBMessageModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		mBMessageModel.setCreateDate(new Date());
 		mBMessageModel.setModifiedDate(new Date());
@@ -315,17 +295,16 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		mbThreadModel.setUuid(SequentialUUID.generate());
 		mbThreadModel.setThreadId(threadId);
 		mbThreadModel.setGroupId(groupId);
-		mbThreadModel.setCompanyId(dataFactoryContext.getCompanyId());
-		mbThreadModel.setUserId(dataFactoryContext.getSampleUserId());
+		mbThreadModel.setCompanyId(companyId);
+		mbThreadModel.setUserId(sampleUserId);
 		mbThreadModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		mbThreadModel.setCreateDate(new Date());
 		mbThreadModel.setModifiedDate(new Date());
 		mbThreadModel.setCategoryId(categoryId);
 		mbThreadModel.setRootMessageId(rootMessageId);
-		mbThreadModel.setRootMessageUserId(
-			dataFactoryContext.getSampleUserId());
+		mbThreadModel.setRootMessageUserId(sampleUserId);
 		mbThreadModel.setMessageCount(messageCount);
-		mbThreadModel.setLastPostByUserId(dataFactoryContext.getSampleUserId());
+		mbThreadModel.setLastPostByUserId(sampleUserId);
 		mbThreadModel.setLastPostDate(new Date());
 		mbThreadModel.setLastPublishDate(new Date());
 		mbThreadModel.setStatusDate(new Date());

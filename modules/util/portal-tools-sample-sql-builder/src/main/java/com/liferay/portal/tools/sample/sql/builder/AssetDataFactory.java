@@ -42,7 +42,6 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
@@ -66,12 +65,9 @@ import java.util.Map;
 public class AssetDataFactory extends BaseDataFactory {
 
 	public AssetDataFactory(
-			DataFactoryContext dataFactoryContext,
 			JournalDataFactory journalDataFactory,
 			UserDataFactory userDataFactory)
 		throws Exception {
-
-		super(dataFactoryContext);
 
 		_journalDataFactory = journalDataFactory;
 		_userDataFactory = userDataFactory;
@@ -106,7 +102,7 @@ public class AssetDataFactory extends BaseDataFactory {
 		if (_assetCategoryCounters == null) {
 			_assetCategoryCounters =
 				(Map<Long, SimpleCounter>[])
-					new HashMap<?, ?>[dataFactoryContext.getMaxGroupCount()];
+					new HashMap<?, ?>[PropsValues.MAX_GROUP_COUNT];
 		}
 
 		SimpleCounter counter = _getSimpleCounter(
@@ -114,7 +110,7 @@ public class AssetDataFactory extends BaseDataFactory {
 			assetEntryModel.getClassNameId());
 
 		int maxAssetEntryToAssetCategoryCount =
-			dataFactoryContext.getMaxAssetEntryToAssetCategoryCount();
+			PropsValues.MAX_ASSET_ENTRY_TO_ASSET_CATEGORY_COUNT;
 
 		List<Long> assetCategoryIds = new ArrayList<>(
 			maxAssetEntryToAssetCategoryCount);
@@ -173,7 +169,7 @@ public class AssetDataFactory extends BaseDataFactory {
 		if (_assetTagCounters == null) {
 			_assetTagCounters =
 				(Map<Long, SimpleCounter>[])
-					new HashMap<?, ?>[dataFactoryContext.getMaxGroupCount()];
+					new HashMap<?, ?>[PropsValues.MAX_GROUP_COUNT];
 		}
 
 		SimpleCounter counter = _getSimpleCounter(
@@ -181,7 +177,7 @@ public class AssetDataFactory extends BaseDataFactory {
 			assetEntryModel.getClassNameId());
 
 		int maxAssetEntryToAssetTagCount =
-			dataFactoryContext.getMaxAssetEntryToAssetTagCount();
+			PropsValues.MAX_ASSET_ENTRY_TO_ASSET_TAG_COUNT;
 
 		List<Long> assetTagIds = new ArrayList<>(maxAssetEntryToAssetTagCount);
 
@@ -283,13 +279,11 @@ public class AssetDataFactory extends BaseDataFactory {
 
 		AssetEntryModel assetEntryModel = new AssetEntryModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		assetEntryModel.setEntryId(counter.get());
 
 		assetEntryModel.setGroupId(groupId);
-		assetEntryModel.setCompanyId(dataFactoryContext.getCompanyId());
-		assetEntryModel.setUserId(dataFactoryContext.getSampleUserId());
+		assetEntryModel.setCompanyId(companyId);
+		assetEntryModel.setUserId(sampleUserId);
 		assetEntryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		assetEntryModel.setCreateDate(createDate);
 		assetEntryModel.setModifiedDate(modifiedDate);
@@ -420,11 +414,9 @@ public class AssetDataFactory extends BaseDataFactory {
 	}
 
 	private void _initAssetCategoryModels() {
-		int maxGroupsCount = dataFactoryContext.getMaxGroupCount();
-		int maxAssetVocabularyCount =
-			dataFactoryContext.getMaxAssetVocabularyCount();
-		int maxAssetCategoryCount =
-			dataFactoryContext.getMaxAssetCategoryCount();
+		int maxGroupsCount = PropsValues.MAX_GROUP_COUNT;
+		int maxAssetVocabularyCount = PropsValues.MAX_ASSET_VUCABULARY_COUNT;
+		int maxAssetCategoryCount = PropsValues.MAX_ASSET_CATEGORY_COUNT;
 
 		_assetCategoryModelsArray =
 			(List<AssetCategoryModel>[])new List<?>[maxGroupsCount];
@@ -434,9 +426,8 @@ public class AssetDataFactory extends BaseDataFactory {
 		_assetVocabularyModelsArray =
 			(List<AssetVocabularyModel>[])new List<?>[maxGroupsCount];
 		_defaultAssetVocabularyModel = _newAssetVocabularyModel(
-			_userDataFactory.getGlobalGroupId(),
-			dataFactoryContext.getDefaultUserId(), null,
-			PropsValues.ASSET_VOCABULARY_DEFAULT);
+			_userDataFactory.getGlobalGroupId(), defaultUserId, null,
+			com.liferay.portal.util.PropsValues.ASSET_VOCABULARY_DEFAULT);
 
 		StringBundler sb = new StringBundler(4);
 
@@ -456,8 +447,8 @@ public class AssetDataFactory extends BaseDataFactory {
 
 				AssetVocabularyModel assetVocabularyModel =
 					_newAssetVocabularyModel(
-						i, dataFactoryContext.getSampleUserId(),
-						DataFactoryConstants.SAMPLE_USER_NAME, sb.toString());
+						i, sampleUserId, DataFactoryConstants.SAMPLE_USER_NAME,
+						sb.toString());
 
 				assetVocabularyModels.add(assetVocabularyModel);
 
@@ -516,15 +507,14 @@ public class AssetDataFactory extends BaseDataFactory {
 	}
 
 	private void _initAssetTagModels() {
-		int maxGroupsCount = dataFactoryContext.getMaxGroupCount();
-		SimpleCounter counter = dataFactoryContext.getCounter();
+		int maxGroupsCount = PropsValues.MAX_GROUP_COUNT;
 
 		_assetTagModelsArray =
 			(List<AssetTagModel>[])new List<?>[maxGroupsCount];
 		_assetTagModelsMaps =
 			(Map<Long, List<AssetTagModel>>[])new HashMap<?, ?>[maxGroupsCount];
 
-		int maxAssetTagCount = dataFactoryContext.getMaxAssetTagCount();
+		int maxAssetTagCount = PropsValues.MAX_ASSET_TAG_COUNT;
 
 		for (int i = 1; i <= maxGroupsCount; i++) {
 			List<AssetTagModel> assetTagModels = new ArrayList<>(
@@ -536,8 +526,8 @@ public class AssetDataFactory extends BaseDataFactory {
 				assetTagModel.setUuid(SequentialUUID.generate());
 				assetTagModel.setTagId(counter.get());
 				assetTagModel.setGroupId(i);
-				assetTagModel.setCompanyId(dataFactoryContext.getCompanyId());
-				assetTagModel.setUserId(dataFactoryContext.getSampleUserId());
+				assetTagModel.setCompanyId(companyId);
+				assetTagModel.setUserId(sampleUserId);
 				assetTagModel.setUserName(
 					DataFactoryConstants.SAMPLE_USER_NAME);
 				assetTagModel.setCreateDate(new Date());
@@ -580,13 +570,11 @@ public class AssetDataFactory extends BaseDataFactory {
 
 		AssetCategoryModel assetCategoryModel = new AssetCategoryModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		assetCategoryModel.setUuid(SequentialUUID.generate());
 		assetCategoryModel.setCategoryId(counter.get());
 		assetCategoryModel.setGroupId(groupId);
-		assetCategoryModel.setCompanyId(dataFactoryContext.getCompanyId());
-		assetCategoryModel.setUserId(dataFactoryContext.getSampleUserId());
+		assetCategoryModel.setCompanyId(companyId);
+		assetCategoryModel.setUserId(sampleUserId);
 		assetCategoryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		assetCategoryModel.setCreateDate(new Date());
 		assetCategoryModel.setModifiedDate(new Date());
@@ -617,12 +605,10 @@ public class AssetDataFactory extends BaseDataFactory {
 		AssetVocabularyModel assetVocabularyModel =
 			new AssetVocabularyModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		assetVocabularyModel.setUuid(SequentialUUID.generate());
 		assetVocabularyModel.setVocabularyId(counter.get());
 		assetVocabularyModel.setGroupId(grouId);
-		assetVocabularyModel.setCompanyId(dataFactoryContext.getCompanyId());
+		assetVocabularyModel.setCompanyId(companyId);
 		assetVocabularyModel.setUserId(userId);
 		assetVocabularyModel.setUserName(userName);
 		assetVocabularyModel.setCreateDate(new Date());
