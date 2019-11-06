@@ -19,7 +19,6 @@ import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.model.ReleaseModel;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.ReleaseModelImpl;
-import com.liferay.util.SimpleCounter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,10 +33,6 @@ import java.util.List;
  * @author Lily Chi
  */
 public class ReleaseDataFactory extends BaseDataFactory {
-
-	public ReleaseDataFactory(DataFactoryContext dataFactoryContext) {
-		super(dataFactoryContext);
-	}
 
 	public List<ReleaseModel> newReleaseModels() throws IOException {
 		List<ReleaseModel> releases = new ArrayList<>();
@@ -71,8 +66,6 @@ public class ReleaseDataFactory extends BaseDataFactory {
 		throws IOException {
 
 		ReleaseModelImpl releaseModelImpl = new ReleaseModelImpl();
-
-		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		releaseModelImpl.setReleaseId(counter.get());
 
