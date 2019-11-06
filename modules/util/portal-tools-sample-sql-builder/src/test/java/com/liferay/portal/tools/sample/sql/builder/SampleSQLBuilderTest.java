@@ -85,7 +85,7 @@ public class SampleSQLBuilderTest {
 
 		_initProperties(properties, tempDir.getAbsolutePath());
 
-		File tempPropertiesFile = new File(tempDir, "temp.properties");
+		File tempPropertiesFile = File.createTempFile("test", ".properties");
 
 		try (FileWriter fileWriter = new FileWriter(tempPropertiesFile)) {
 			properties.store(fileWriter, null);
