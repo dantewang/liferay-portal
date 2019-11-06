@@ -59,8 +59,8 @@ public class LayoutDataFactory extends BaseDataFactory {
 		layoutFriendlyURLEntryModel.setUuid(SequentialUUID.generate());
 		layoutFriendlyURLEntryModel.setLayoutFriendlyURLId(counter.get());
 		layoutFriendlyURLEntryModel.setGroupId(layoutModel.getGroupId());
-		layoutFriendlyURLEntryModel.setCompanyId(companyId);
-		layoutFriendlyURLEntryModel.setUserId(sampleUserId);
+		layoutFriendlyURLEntryModel.setCompanyId(COMPANY_ID);
+		layoutFriendlyURLEntryModel.setUserId(SAMPLE_USER_ID);
 		layoutFriendlyURLEntryModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		layoutFriendlyURLEntryModel.setCreateDate(new Date());
@@ -95,8 +95,8 @@ public class LayoutDataFactory extends BaseDataFactory {
 		layoutModel.setPlid(plid);
 
 		layoutModel.setGroupId(groupId);
-		layoutModel.setCompanyId(companyId);
-		layoutModel.setUserId(sampleUserId);
+		layoutModel.setCompanyId(COMPANY_ID);
+		layoutModel.setUserId(SAMPLE_USER_ID);
 		layoutModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		layoutModel.setCreateDate(new Date());
 		layoutModel.setModifiedDate(new Date());
@@ -174,7 +174,7 @@ public class LayoutDataFactory extends BaseDataFactory {
 		layoutSetModel.setLayoutSetId(layoutSetId);
 
 		layoutSetModel.setGroupId(groupId);
-		layoutSetModel.setCompanyId(companyId);
+		layoutSetModel.setCompanyId(COMPANY_ID);
 		layoutSetModel.setCreateDate(new Date());
 		layoutSetModel.setModifiedDate(new Date());
 		layoutSetModel.setPrivateLayout(privateLayout);

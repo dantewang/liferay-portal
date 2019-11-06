@@ -117,7 +117,7 @@ public class BlogDataFactory extends BaseDataFactory {
 		friendlyURLEntryModel.setUuid(SequentialUUID.generate());
 		friendlyURLEntryModel.setFriendlyURLEntryId(counter.get());
 		friendlyURLEntryModel.setGroupId(blogsEntryModel.getGroupId());
-		friendlyURLEntryModel.setCompanyId(companyId);
+		friendlyURLEntryModel.setCompanyId(COMPANY_ID);
 		friendlyURLEntryModel.setCreateDate(new Date());
 		friendlyURLEntryModel.setModifiedDate(new Date());
 		friendlyURLEntryModel.setClassNameId(getClassNameId(BlogsEntry.class));
@@ -135,8 +135,8 @@ public class BlogDataFactory extends BaseDataFactory {
 		userNotificationDeliveryModel.setUserNotificationDeliveryId(
 			counter.get());
 
-		userNotificationDeliveryModel.setCompanyId(companyId);
-		userNotificationDeliveryModel.setUserId(sampleUserId);
+		userNotificationDeliveryModel.setCompanyId(COMPANY_ID);
+		userNotificationDeliveryModel.setUserId(SAMPLE_USER_ID);
 		userNotificationDeliveryModel.setPortletId(portletId);
 		userNotificationDeliveryModel.setDeliveryType(
 			UserNotificationDeliveryConstants.TYPE_WEBSITE);
@@ -151,8 +151,8 @@ public class BlogDataFactory extends BaseDataFactory {
 		blogsEntryModel.setUuid(SequentialUUID.generate());
 		blogsEntryModel.setEntryId(counter.get());
 		blogsEntryModel.setGroupId(groupId);
-		blogsEntryModel.setCompanyId(companyId);
-		blogsEntryModel.setUserId(sampleUserId);
+		blogsEntryModel.setCompanyId(COMPANY_ID);
+		blogsEntryModel.setUserId(SAMPLE_USER_ID);
 		blogsEntryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		blogsEntryModel.setCreateDate(new Date());
 		blogsEntryModel.setModifiedDate(new Date());
@@ -166,7 +166,7 @@ public class BlogDataFactory extends BaseDataFactory {
 			DataFactoryConstants.BLOG_CONTENT_PREFIX + index + ".");
 		blogsEntryModel.setDisplayDate(new Date());
 		blogsEntryModel.setLastPublishDate(new Date());
-		blogsEntryModel.setStatusByUserId(sampleUserId);
+		blogsEntryModel.setStatusByUserId(SAMPLE_USER_ID);
 		blogsEntryModel.setStatusDate(new Date());
 
 		return blogsEntryModel;
