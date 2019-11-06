@@ -31,7 +31,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.util.SimpleCounter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,20 +58,14 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 		long companyId = dataFactoryContext.getCompanyId();
 		long sampleUserId = dataFactoryContext.getSampleUserId();
 
-		SimpleCounter futureDateCounter =
-			dataFactoryContext.getFutureDateCounter();
-
-		Date createDate = nextFutureDate(futureDateCounter);
-		Date modifiedDate = nextFutureDate(futureDateCounter);
-
 		ddmContentModel.setUuid(SequentialUUID.generate());
 		ddmContentModel.setContentId(contentId);
 		ddmContentModel.setGroupId(groupId);
 		ddmContentModel.setCompanyId(companyId);
 		ddmContentModel.setUserId(sampleUserId);
 		ddmContentModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		ddmContentModel.setCreateDate(createDate);
-		ddmContentModel.setModifiedDate(modifiedDate);
+		ddmContentModel.setCreateDate(nextFutureDate());
+		ddmContentModel.setModifiedDate(nextFutureDate());
 		ddmContentModel.setName(DDMStorageLink.class.getName());
 		ddmContentModel.setData(data);
 
@@ -87,13 +80,6 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 
 		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		SimpleCounter futureDateCounter =
-			dataFactoryContext.getFutureDateCounter();
-
-		Date createDate = nextFutureDate(futureDateCounter);
-
-		Date modifiedDate = nextFutureDate(futureDateCounter);
-
 		ddmStructureLayoutModel.setUuid(SequentialUUID.generate());
 		ddmStructureLayoutModel.setStructureLayoutId(counter.get());
 		ddmStructureLayoutModel.setGroupId(groupId);
@@ -101,8 +87,8 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 		ddmStructureLayoutModel.setUserId(userId);
 		ddmStructureLayoutModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
-		ddmStructureLayoutModel.setCreateDate(createDate);
-		ddmStructureLayoutModel.setModifiedDate(modifiedDate);
+		ddmStructureLayoutModel.setCreateDate(nextFutureDate());
+		ddmStructureLayoutModel.setModifiedDate(nextFutureDate());
 		ddmStructureLayoutModel.setStructureLayoutKey(
 			String.valueOf(counter.get()));
 		ddmStructureLayoutModel.setStructureVersionId(structureVersionId);
@@ -119,13 +105,6 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 
 		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		SimpleCounter futureDateCounter =
-			dataFactoryContext.getFutureDateCounter();
-
-		Date createDate = nextFutureDate(futureDateCounter);
-		Date lastPublishDate = nextFutureDate(futureDateCounter);
-		Date modifiedDate = nextFutureDate(futureDateCounter);
-
 		ddmStructureModel.setUuid(SequentialUUID.generate());
 		ddmStructureModel.setStructureId(counter.get());
 		ddmStructureModel.setGroupId(groupId);
@@ -135,8 +114,8 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 		ddmStructureModel.setVersionUserId(userId);
 		ddmStructureModel.setVersionUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
-		ddmStructureModel.setCreateDate(createDate);
-		ddmStructureModel.setModifiedDate(modifiedDate);
+		ddmStructureModel.setCreateDate(nextFutureDate());
+		ddmStructureModel.setModifiedDate(nextFutureDate());
 		ddmStructureModel.setClassNameId(classNameId);
 		ddmStructureModel.setStructureKey(structureKey);
 		ddmStructureModel.setVersion(DDMStructureConstants.VERSION_DEFAULT);
@@ -152,7 +131,7 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 
 		ddmStructureModel.setDefinition(definition);
 		ddmStructureModel.setStorageType(StorageType.JSON.toString());
-		ddmStructureModel.setLastPublishDate(lastPublishDate);
+		ddmStructureModel.setLastPublishDate(nextFutureDate());
 
 		return ddmStructureModel;
 	}
@@ -165,20 +144,15 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 
 		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		SimpleCounter futureDateCounter =
-			dataFactoryContext.getFutureDateCounter();
-
-		Date createDate = nextFutureDate(futureDateCounter);
-		Date statusDate = nextFutureDate(futureDateCounter);
-
 		ddmStructureVersionModel.setStructureVersionId(counter.get());
+
 		ddmStructureVersionModel.setGroupId(ddmStructureModel.getGroupId());
 		ddmStructureVersionModel.setCompanyId(
 			dataFactoryContext.getCompanyId());
 		ddmStructureVersionModel.setUserId(ddmStructureModel.getUserId());
 		ddmStructureVersionModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
-		ddmStructureVersionModel.setCreateDate(createDate);
+		ddmStructureVersionModel.setCreateDate(nextFutureDate());
 		ddmStructureVersionModel.setStructureId(
 			ddmStructureModel.getStructureId());
 		ddmStructureVersionModel.setVersion(
@@ -200,7 +174,7 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 			ddmStructureModel.getUserId());
 		ddmStructureVersionModel.setStatusByUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
-		ddmStructureVersionModel.setStatusDate(statusDate);
+		ddmStructureVersionModel.setStatusDate(nextFutureDate());
 
 		return ddmStructureVersionModel;
 	}

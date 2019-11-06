@@ -41,7 +41,6 @@ import com.liferay.portlet.documentlibrary.model.impl.DLFolderModelImpl;
 import com.liferay.util.SimpleCounter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -163,21 +162,14 @@ public class DLDataFactory extends BaseDDMDataFactory {
 
 		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		SimpleCounter futureDateCounter =
-			dataFactoryContext.getFutureDateCounter();
-
-		Date createDate = nextFutureDate(futureDateCounter);
-		Date modifiedDate = nextFutureDate(futureDateCounter);
-		Date lastPublishDate = nextFutureDate(futureDateCounter);
-
 		dlFileVersionModel.setUuid(SequentialUUID.generate());
 		dlFileVersionModel.setFileVersionId(counter.get());
 		dlFileVersionModel.setGroupId(dlFileEntryModel.getGroupId());
 		dlFileVersionModel.setCompanyId(dataFactoryContext.getCompanyId());
 		dlFileVersionModel.setUserId(dataFactoryContext.getSampleUserId());
 		dlFileVersionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		dlFileVersionModel.setCreateDate(createDate);
-		dlFileVersionModel.setModifiedDate(modifiedDate);
+		dlFileVersionModel.setCreateDate(nextFutureDate());
+		dlFileVersionModel.setModifiedDate(nextFutureDate());
 		dlFileVersionModel.setRepositoryId(dlFileEntryModel.getRepositoryId());
 		dlFileVersionModel.setFolderId(dlFileEntryModel.getFolderId());
 		dlFileVersionModel.setFileEntryId(dlFileEntryModel.getFileEntryId());
@@ -189,7 +181,7 @@ public class DLDataFactory extends BaseDDMDataFactory {
 			dlFileEntryModel.getFileEntryTypeId());
 		dlFileVersionModel.setVersion(dlFileEntryModel.getVersion());
 		dlFileVersionModel.setSize(dlFileEntryModel.getSize());
-		dlFileVersionModel.setLastPublishDate(lastPublishDate);
+		dlFileVersionModel.setLastPublishDate(nextFutureDate());
 
 		return dlFileVersionModel;
 	}
@@ -216,13 +208,6 @@ public class DLDataFactory extends BaseDDMDataFactory {
 	}
 
 	private void _initDLFileEntryTypeModel() {
-		SimpleCounter futureDateCounter =
-			dataFactoryContext.getFutureDateCounter();
-
-		Date createDate = nextFutureDate(futureDateCounter);
-		Date lastPublishDate = nextFutureDate(futureDateCounter);
-		Date modifiedDate = nextFutureDate(futureDateCounter);
-
 		long groupId = _userDataFactory.getGlobalGroupId();
 		long userId = dataFactoryContext.getDefaultUserId();
 
@@ -231,8 +216,8 @@ public class DLDataFactory extends BaseDDMDataFactory {
 		_defaultDLFileEntryTypeModel.setUuid(SequentialUUID.generate());
 		_defaultDLFileEntryTypeModel.setFileEntryTypeId(
 			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
-		_defaultDLFileEntryTypeModel.setCreateDate(createDate);
-		_defaultDLFileEntryTypeModel.setModifiedDate(modifiedDate);
+		_defaultDLFileEntryTypeModel.setCreateDate(nextFutureDate());
+		_defaultDLFileEntryTypeModel.setModifiedDate(nextFutureDate());
 		_defaultDLFileEntryTypeModel.setFileEntryTypeKey(
 			StringUtil.toUpperCase(
 				DLFileEntryTypeConstants.NAME_BASIC_DOCUMENT));
@@ -246,7 +231,7 @@ public class DLDataFactory extends BaseDDMDataFactory {
 
 		_defaultDLFileEntryTypeModel.setName(sb.toString());
 
-		_defaultDLFileEntryTypeModel.setLastPublishDate(lastPublishDate);
+		_defaultDLFileEntryTypeModel.setLastPublishDate(nextFutureDate());
 
 		_defaultDLDDMStructureModel = newDDMStructureModel(
 			groupId, userId, getClassNameId(DLFileEntry.class),
@@ -268,13 +253,6 @@ public class DLDataFactory extends BaseDDMDataFactory {
 
 		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		SimpleCounter futureDateCounter =
-			dataFactoryContext.getFutureDateCounter();
-
-		Date createDate = nextFutureDate(futureDateCounter);
-		Date modifiedDate = nextFutureDate(futureDateCounter);
-		Date lastPublishDate = nextFutureDate(futureDateCounter);
-
 		String name = DataFactoryConstants.DL_ENTRY_NAME_PREFIX + index;
 
 		String fileName = name + "." + DataFactoryConstants.DL_EXTENSION;
@@ -285,8 +263,8 @@ public class DLDataFactory extends BaseDDMDataFactory {
 		dlFileEntryModel.setCompanyId(dataFactoryContext.getCompanyId());
 		dlFileEntryModel.setUserId(dataFactoryContext.getSampleUserId());
 		dlFileEntryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		dlFileEntryModel.setCreateDate(createDate);
-		dlFileEntryModel.setModifiedDate(modifiedDate);
+		dlFileEntryModel.setCreateDate(nextFutureDate());
+		dlFileEntryModel.setModifiedDate(nextFutureDate());
 		dlFileEntryModel.setRepositoryId(dlFolderModel.getRepositoryId());
 		dlFileEntryModel.setFolderId(dlFolderModel.getFolderId());
 		dlFileEntryModel.setName(name);
@@ -298,7 +276,7 @@ public class DLDataFactory extends BaseDDMDataFactory {
 			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
 		dlFileEntryModel.setVersion(DLFileEntryConstants.VERSION_DEFAULT);
 		dlFileEntryModel.setSize(dataFactoryContext.getMaxDLFileEntrySize());
-		dlFileEntryModel.setLastPublishDate(lastPublishDate);
+		dlFileEntryModel.setLastPublishDate(nextFutureDate());
 
 		return dlFileEntryModel;
 	}
@@ -310,32 +288,23 @@ public class DLDataFactory extends BaseDDMDataFactory {
 
 		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		SimpleCounter futureDateCounter =
-			dataFactoryContext.getFutureDateCounter();
-
-		Date createDate = nextFutureDate(futureDateCounter);
-		Date modifiedDate = nextFutureDate(futureDateCounter);
-		Date lastPublishDate = nextFutureDate(futureDateCounter);
-		Date lastPostDate = nextFutureDate(futureDateCounter);
-		Date statusDate = nextFutureDate(futureDateCounter);
-
 		dlFolderModel.setUuid(SequentialUUID.generate());
 		dlFolderModel.setFolderId(counter.get());
 		dlFolderModel.setGroupId(groupId);
 		dlFolderModel.setCompanyId(dataFactoryContext.getCompanyId());
 		dlFolderModel.setUserId(dataFactoryContext.getSampleUserId());
 		dlFolderModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
-		dlFolderModel.setCreateDate(createDate);
-		dlFolderModel.setModifiedDate(modifiedDate);
+		dlFolderModel.setCreateDate(nextFutureDate());
+		dlFolderModel.setModifiedDate(nextFutureDate());
 		dlFolderModel.setRepositoryId(groupId);
 		dlFolderModel.setParentFolderId(parentFolderId);
 		dlFolderModel.setName(
 			DataFactoryConstants.DL_FOLDER_NAME_PREFIX + index);
-		dlFolderModel.setLastPostDate(lastPostDate);
+		dlFolderModel.setLastPostDate(nextFutureDate());
 		dlFolderModel.setDefaultFileEntryTypeId(
 			_defaultDLFileEntryTypeModel.getFileEntryTypeId());
-		dlFolderModel.setLastPublishDate(lastPublishDate);
-		dlFolderModel.setStatusDate(statusDate);
+		dlFolderModel.setLastPublishDate(nextFutureDate());
+		dlFolderModel.setStatusDate(nextFutureDate());
 
 		return dlFolderModel;
 	}

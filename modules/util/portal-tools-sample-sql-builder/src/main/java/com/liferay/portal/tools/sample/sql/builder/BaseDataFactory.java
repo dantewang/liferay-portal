@@ -43,8 +43,8 @@ public abstract class BaseDataFactory {
 			_DEPENDENCIES_DIR + resourceName);
 	}
 
-	public Date nextFutureDate(SimpleCounter futureDateCounter) {
-		return new Date(_FUTURE_TIME + (futureDateCounter.get() * Time.SECOND));
+	public Date nextFutureDate() {
+		return new Date(_FUTURE_TIME + (_FUTURE_COUNTER.get() * Time.SECOND));
 	}
 
 	protected BaseDataFactory(DataFactoryContext dataFactoryContext) {
@@ -55,6 +55,8 @@ public abstract class BaseDataFactory {
 
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/";
+
+	private static final SimpleCounter _FUTURE_COUNTER = new SimpleCounter();
 
 	private static final long _FUTURE_TIME =
 		System.currentTimeMillis() + Time.YEAR;

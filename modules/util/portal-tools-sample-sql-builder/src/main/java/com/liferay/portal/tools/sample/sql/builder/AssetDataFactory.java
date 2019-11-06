@@ -285,14 +285,8 @@ public class AssetDataFactory extends BaseDataFactory {
 
 		SimpleCounter counter = dataFactoryContext.getCounter();
 
-		SimpleCounter futureDateCounter =
-			dataFactoryContext.getFutureDateCounter();
-
-		Date endDate = nextFutureDate(futureDateCounter);
-
-		Date expirationDate = nextFutureDate(futureDateCounter);
-
 		assetEntryModel.setEntryId(counter.get());
+
 		assetEntryModel.setGroupId(groupId);
 		assetEntryModel.setCompanyId(dataFactoryContext.getCompanyId());
 		assetEntryModel.setUserId(dataFactoryContext.getSampleUserId());
@@ -306,9 +300,9 @@ public class AssetDataFactory extends BaseDataFactory {
 		assetEntryModel.setListable(listable);
 		assetEntryModel.setVisible(visible);
 		assetEntryModel.setStartDate(createDate);
-		assetEntryModel.setEndDate(endDate);
+		assetEntryModel.setEndDate(nextFutureDate());
 		assetEntryModel.setPublishDate(createDate);
-		assetEntryModel.setExpirationDate(expirationDate);
+		assetEntryModel.setExpirationDate(nextFutureDate());
 		assetEntryModel.setMimeType(mimeType);
 		assetEntryModel.setTitle(title);
 
