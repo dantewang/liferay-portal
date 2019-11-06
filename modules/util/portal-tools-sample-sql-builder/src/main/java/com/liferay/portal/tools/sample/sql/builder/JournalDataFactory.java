@@ -43,7 +43,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.util.SimpleCounter;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -54,16 +53,12 @@ import java.util.Map;
  */
 public class JournalDataFactory extends BaseDDMDataFactory {
 
-	public JournalDataFactory(
-			DataFactoryContext dataFactoryContext,
-			UserDataFactory userDataFactory)
+	public JournalDataFactory(UserDataFactory userDataFactory)
 		throws Exception {
 
-		super(dataFactoryContext);
-
 		_userDataFactory = userDataFactory;
-		_initJournalArticleContent(
-			dataFactoryContext.getMaxJournalArticleSize());
+
+		_initJournalArticleContent(PropsValues.MAX_JOURNAL_ARTICLE_SIZE);
 		_initJournalDDMStructureContent();
 		_initJournalTypeModel();
 	}
@@ -95,8 +90,7 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 	}
 
 	public String getJournalArticleLayoutColumn(String portletPrefix) {
-		int maxJournalArticleCount =
-			dataFactoryContext.getMaxJournalArticleCount();
+		int maxJournalArticleCount = PropsValues.MAX_JOURNAL_ARTICLE_COUNT;
 
 		StringBundler sb = new StringBundler(3 * maxJournalArticleCount);
 
@@ -118,8 +112,6 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 
 		DDMStorageLinkModel ddmStorageLinkModel = new DDMStorageLinkModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		ddmStorageLinkModel.setUuid(SequentialUUID.generate());
 		ddmStorageLinkModel.setStorageLinkId(counter.get());
 
@@ -139,9 +131,7 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		DDMTemplateLinkModel ddmTemplateLinkModel =
 			new DDMTemplateLinkModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
-		ddmTemplateLinkModel.setCompanyId(dataFactoryContext.getCompanyId());
+		ddmTemplateLinkModel.setCompanyId(companyId);
 		ddmTemplateLinkModel.setTemplateLinkId(counter.get());
 
 		ddmTemplateLinkModel.setClassNameId(
@@ -157,13 +147,11 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 
 		DDMTemplateModel ddmTemplateModel = new DDMTemplateModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		ddmTemplateModel.setUuid(SequentialUUID.generate());
 		ddmTemplateModel.setTemplateId(counter.get());
 
 		ddmTemplateModel.setGroupId(groupId);
-		ddmTemplateModel.setCompanyId(dataFactoryContext.getCompanyId());
+		ddmTemplateModel.setCompanyId(companyId);
 		ddmTemplateModel.setUserId(userId);
 		ddmTemplateModel.setCreateDate(nextFutureDate());
 		ddmTemplateModel.setModifiedDate(nextFutureDate());
@@ -202,13 +190,10 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		DDMTemplateVersionModelImpl ddmTemplateVersionModelImpl =
 			new DDMTemplateVersionModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		ddmTemplateVersionModelImpl.setTemplateVersionId(counter.get());
 
 		ddmTemplateVersionModelImpl.setGroupId(ddmTemplateModel.getGroupId());
-		ddmTemplateVersionModelImpl.setCompanyId(
-			dataFactoryContext.getCompanyId());
+		ddmTemplateVersionModelImpl.setCompanyId(companyId);
 		ddmTemplateVersionModelImpl.setUserId(ddmTemplateModel.getUserId());
 		ddmTemplateVersionModelImpl.setCreateDate(nextFutureDate());
 		ddmTemplateVersionModelImpl.setTemplateId(
@@ -242,8 +227,6 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		JournalArticleLocalizationModel journalArticleLocalizationModel =
 			new JournalArticleLocalizationModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		StringBundler sb = new StringBundler(4);
 
 		sb.append(DataFactoryConstants.JOURNAL_ARTICLE_TITLE_PREFIX);
@@ -270,16 +253,14 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 
 		JournalArticleModel journalArticleModel = new JournalArticleModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		journalArticleModel.setUuid(SequentialUUID.generate());
 		journalArticleModel.setId(counter.get());
 		journalArticleModel.setResourcePrimKey(
 			journalArticleResourceModel.getResourcePrimKey());
 		journalArticleModel.setGroupId(
 			journalArticleResourceModel.getGroupId());
-		journalArticleModel.setCompanyId(dataFactoryContext.getCompanyId());
-		journalArticleModel.setUserId(dataFactoryContext.getSampleUserId());
+		journalArticleModel.setCompanyId(companyId);
+		journalArticleModel.setUserId(sampleUserId);
 		journalArticleModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		journalArticleModel.setCreateDate(new Date());
 		journalArticleModel.setModifiedDate(new Date());
@@ -324,13 +305,10 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		JournalArticleResourceModel journalArticleResourceModel =
 			new JournalArticleResourceModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		journalArticleResourceModel.setUuid(SequentialUUID.generate());
 		journalArticleResourceModel.setResourcePrimKey(counter.get());
 		journalArticleResourceModel.setGroupId(groupId);
-		journalArticleResourceModel.setCompanyId(
-			dataFactoryContext.getCompanyId());
+		journalArticleResourceModel.setCompanyId(companyId);
 		journalArticleResourceModel.setArticleId(String.valueOf(counter.get()));
 
 		_journalArticleResourceUUIDs.put(
@@ -346,13 +324,10 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		JournalContentSearchModel journalContentSearchModel =
 			new JournalContentSearchModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		journalContentSearchModel.setContentSearchId(counter.get());
 
 		journalContentSearchModel.setGroupId(journalArticleModel.getGroupId());
-		journalContentSearchModel.setCompanyId(
-			dataFactoryContext.getCompanyId());
+		journalContentSearchModel.setCompanyId(companyId);
 		journalContentSearchModel.setLayoutId(layoutId);
 		journalContentSearchModel.setPortletId(
 			DataFactoryConstants.JOURNAL_CONTENT_PORTLET_ID);
@@ -400,10 +375,9 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 
 	private void _initJournalTypeModel() {
 		long groupId = _userDataFactory.getGlobalGroupId();
-		long userId = dataFactoryContext.getDefaultUserId();
 
 		_defaultJournalDDMStructureModel = newDDMStructureModel(
-			groupId, userId, getClassNameId(JournalArticle.class),
+			groupId, defaultUserId, getClassNameId(JournalArticle.class),
 			DataFactoryConstants.JOURNAL_STRUCTURE_KEY,
 			_journalDDMStructureContent);
 
@@ -411,12 +385,13 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 			_defaultJournalDDMStructureModel);
 
 		_defaultJournalDDMStructureLayoutModel = newDDMStructureLayoutModel(
-			groupId, userId,
+			groupId, defaultUserId,
 			_defaultJournalDDMStructureVersionModel.getStructureVersionId(),
 			_journalDDMStructureLayoutContent);
 
 		_defaultJournalDDMTemplateModel = newDDMTemplateModel(
-			groupId, userId, _defaultJournalDDMStructureModel.getStructureId(),
+			groupId, defaultUserId,
+			_defaultJournalDDMStructureModel.getStructureId(),
 			getClassNameId(JournalArticle.class));
 
 		_defaultJournalDDMTemplateVersionModel = newDDMTemplateVersionModel(

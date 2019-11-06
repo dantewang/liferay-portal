@@ -21,7 +21,6 @@ import com.liferay.message.boards.model.MBThreadModel;
 import com.liferay.subscription.model.SubscriptionConstants;
 import com.liferay.subscription.model.SubscriptionModel;
 import com.liferay.subscription.model.impl.SubscriptionModelImpl;
-import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.model.WikiPageModel;
 
@@ -31,10 +30,6 @@ import java.util.Date;
  * @author Lily Chi
  */
 public class SubscriptionDataFactory extends BaseDataFactory {
-
-	public SubscriptionDataFactory(DataFactoryContext dataFactoryContext) {
-		super(dataFactoryContext);
-	}
 
 	public SubscriptionModel newSubscriptionModel(
 		BlogsEntryModel blogsEntryModel) {
@@ -58,12 +53,10 @@ public class SubscriptionDataFactory extends BaseDataFactory {
 
 		SubscriptionModel subscriptionModel = new SubscriptionModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		subscriptionModel.setSubscriptionId(counter.get());
 
-		subscriptionModel.setCompanyId(dataFactoryContext.getCompanyId());
-		subscriptionModel.setUserId(dataFactoryContext.getSampleUserId());
+		subscriptionModel.setCompanyId(companyId);
+		subscriptionModel.setUserId(sampleUserId);
 		subscriptionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		subscriptionModel.setCreateDate(new Date());
 		subscriptionModel.setModifiedDate(new Date());

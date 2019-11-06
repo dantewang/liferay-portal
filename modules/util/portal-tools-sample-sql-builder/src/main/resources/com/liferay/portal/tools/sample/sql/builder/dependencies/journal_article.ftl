@@ -15,7 +15,7 @@ ${resourcePermissionDataFactory.toInsertSQL(ddmTemplateModel)}
 ${resourcePermissionDataFactory.toInsertSQL(ddmTemplateVersionModel)}
 
 <#assign
-	journalArticlePageCounts = counterDataFactory.getSequence(dataFactoryContext.maxJournalArticlePageCount)
+	journalArticlePageCounts = counterDataFactory.getSequence(journalDataFactory.maxJournalArticlePageCount)
 
 	resourcePermissionModels = resourcePermissionDataFactory.newResourcePermissionModels("com.liferay.journal", groupId)
 />
@@ -31,7 +31,7 @@ ${resourcePermissionDataFactory.toInsertSQL(ddmTemplateVersionModel)}
 		layoutModel = layoutDataFactory.newLayoutModel(groupId, groupId + "_journal_article_" + journalArticlePageCount, "", journalDataFactory.getJournalArticleLayoutColumn(portletIdPrefix))
 	/>
 
-	${dataFactoryContext.getCSVWriter("layout").write(layoutModel.friendlyURL + "\n")}
+	${journalDataFactory.getCSVWriter("layout").write(layoutModel.friendlyURL + "\n")}
 
 	<@insertLayout _layoutModel=layoutModel />
 
@@ -41,14 +41,14 @@ ${resourcePermissionDataFactory.toInsertSQL(ddmTemplateVersionModel)}
 		${resourcePermissionDataFactory.toInsertSQL(portletPreferencesModel)}
 	</#list>
 
-	<#assign journalArticleCounts = counterDataFactory.getSequence(dataFactoryContext.maxJournalArticleCount) />
+	<#assign journalArticleCounts = counterDataFactory.getSequence(journalDataFactory.maxJournalArticleCount) />
 
 	<#list journalArticleCounts as journalArticleCount>
 		<#assign journalArticleResourceModel = journalDataFactory.newJournalArticleResourceModel(groupId) />
 
 		${resourcePermissionDataFactory.toInsertSQL(journalArticleResourceModel)}
 
-		<#assign versionCounts = counterDataFactory.getSequence(dataFactoryContext.maxJournalArticleVersionCount) />
+		<#assign versionCounts = counterDataFactory.getSequence(journalDataFactory.maxJournalArticleVersionCount) />
 
 		<#list versionCounts as versionCount>
 			<#assign journalArticleModel = journalDataFactory.newJournalArticleModel(journalArticleResourceModel, journalArticleCount, versionCount) />
@@ -65,7 +65,7 @@ ${resourcePermissionDataFactory.toInsertSQL(ddmTemplateVersionModel)}
 
 			${resourcePermissionDataFactory.toInsertSQL(socialActivityDataFactory.newSocialActivityModel(journalArticleModel))}
 
-			<#if versionCount = dataFactoryContext.maxJournalArticleVersionCount>
+			<#if versionCount = journalDataFactory.maxJournalArticleVersionCount>
 				<@insertAssetEntry
 					_categoryAndTag=true
 					_entry=journalDataFactory.newObjectValuePair(journalArticleModel, journalArticleLocalizationModel)
