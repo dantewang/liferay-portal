@@ -193,8 +193,7 @@ public class PropsValues {
 
 					TimeZone timeZone = TimeZone.getDefault();
 
-					String timeZoneId = getProperty(
-						"sample.sql.db.time.zone");
+					String timeZoneId = getProperty("sample.sql.db.time.zone");
 
 					if (Validator.isNotNull(timeZoneId)) {
 						timeZone = TimeZone.getTimeZone(ZoneId.of(timeZoneId));
