@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.randomizerbumpers.RandomizerBumper;
-import com.liferay.portal.util.FileImpl;
 
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.metadata.Metadata;
@@ -108,12 +107,13 @@ public class TikaSafeRandomizerBumper implements RandomizerBumper<byte[]> {
 	private static final TikaConfig _tikaConfig;
 
 	static {
-		ClassLoader classLoader = FileImpl.class.getClassLoader();
+		ClassLoader classLoader =
+			TikaSafeRandomizerBumper.class.getClassLoader();
 
 		try {
 			_tikaConfig = ReflectionTestUtil.getFieldValue(
 				classLoader.loadClass(
-					FileImpl.class.getName() + "$TikaConfigHolder"),
+					"com.liferay.portal.util.FileImpl$TikaConfigHolder"),
 				"_tikaConfig");
 		}
 		catch (Exception e) {
