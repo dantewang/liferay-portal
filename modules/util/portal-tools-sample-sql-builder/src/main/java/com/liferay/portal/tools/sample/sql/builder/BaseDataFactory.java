@@ -64,13 +64,9 @@ public abstract class BaseDataFactory {
 	}
 
 	public long getClassNameId(Class<?> clazz) {
-		ClassNameModel classNameModel = getClassNameModel(clazz.getName());
+		ClassNameModel classNameModel = classNameModels.get(clazz.getName());
 
 		return classNameModel.getClassNameId();
-	}
-
-	public ClassNameModel getClassNameModel(String className) {
-		return classNameModels.get(className);
 	}
 
 	public Collection<ClassNameModel> getClassNameModels() {
