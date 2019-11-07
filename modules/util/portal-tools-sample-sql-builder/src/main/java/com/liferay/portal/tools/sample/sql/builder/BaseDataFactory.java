@@ -69,6 +69,12 @@ public abstract class BaseDataFactory {
 		return classNameModel.getClassNameId();
 	}
 
+	public long getClassNameId(String className) {
+		ClassNameModel classNameModel = classNameModels.get(className);
+
+		return classNameModel.getClassNameId();
+	}
+
 	public Collection<ClassNameModel> getClassNameModels() {
 		return classNameModels.values();
 	}
@@ -126,6 +132,12 @@ public abstract class BaseDataFactory {
 		return new Date(_FUTURE_TIME + (_FUTURE_COUNTER.get() * Time.SECOND));
 	}
 
+	protected static String getMBDiscussionCombinedClassName(Class<?> clazz) {
+		return StringBundler.concat(
+			MBDiscussion.class.getName(), StringPool.UNDERLINE,
+			clazz.getName());
+	}
+
 	protected static final long COMPANY_ID;
 
 	protected static final long DEFAULT_USER_ID;
@@ -135,12 +147,6 @@ public abstract class BaseDataFactory {
 	protected static final Map<String, ClassNameModel> classNameModels;
 	protected static final SimpleCounter counter;
 
-	private static String _getMBDiscussionCombinedClassName(Class<?> clazz) {
-		return StringBundler.concat(
-			MBDiscussion.class.getName(), StringPool.UNDERLINE,
-			clazz.getName());
-	}
-
 	private static Map<String, ClassNameModel> _initClassNameModels() {
 		Map<String, ClassNameModel> classNameModels = new HashMap<>();
 
@@ -148,8 +154,8 @@ public abstract class BaseDataFactory {
 
 		models.add(UserPersonalSite.class.getName());
 
-		models.add(_getMBDiscussionCombinedClassName(BlogsEntry.class));
-		models.add(_getMBDiscussionCombinedClassName(WikiPage.class));
+		models.add(getMBDiscussionCombinedClassName(BlogsEntry.class));
+		models.add(getMBDiscussionCombinedClassName(WikiPage.class));
 
 		for (String model : models) {
 			ClassNameModel classNameModel = new ClassNameModelImpl();
