@@ -23,7 +23,7 @@ definition {
 
 		var pattern = StringUtil.split("**/${fileNamePattern}");
 		var filePath = FileUtil.getIncludedResourceURLs("${pattern}", "${tempDir}");
-		var filePath = StringUtil.valueOf("${filePath}");
+		var filePath = String.valueOf("${filePath}");
 		var filePath = RegexUtil.replace("${filePath}", "\[(.*)\]", "1");
 		var filePath = StringUtil.replace("${filePath}", "file:/", "");
 		var fileName = FileUtil.getFileName("${filePath}");
