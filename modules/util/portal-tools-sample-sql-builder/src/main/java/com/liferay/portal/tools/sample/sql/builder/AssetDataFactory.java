@@ -374,7 +374,8 @@ public class AssetDataFactory extends BaseDataFactory {
 
 		return newAssetEntryModel(
 			blogsEntryModel.getGroupId(), blogsEntryModel.getCreateDate(),
-			blogsEntryModel.getModifiedDate(), getClassNameId(BlogsEntry.class),
+			blogsEntryModel.getModifiedDate(),
+			getClassNameId(getMBDiscussionCombinedClassName(BlogsEntry.class)),
 			blogsEntryModel.getEntryId(), "", 0, true, false, "",
 			String.valueOf(blogsEntryModel.getGroupId()));
 	}
@@ -384,7 +385,8 @@ public class AssetDataFactory extends BaseDataFactory {
 
 		return newAssetEntryModel(
 			wikiPageModel.getGroupId(), wikiPageModel.getCreateDate(),
-			wikiPageModel.getModifiedDate(), getClassNameId(WikiPage.class),
+			wikiPageModel.getModifiedDate(),
+			getClassNameId(getMBDiscussionCombinedClassName(WikiPage.class)),
 			wikiPageModel.getResourcePrimKey(), "", 0, true, false, "",
 			String.valueOf(wikiPageModel.getGroupId()));
 	}
