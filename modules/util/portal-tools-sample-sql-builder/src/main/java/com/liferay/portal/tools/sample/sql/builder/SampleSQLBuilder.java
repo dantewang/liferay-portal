@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.io.OutputStreamWriter;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedWriter;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.tools.ToolDependencies;
 import com.liferay.portal.tools.sample.sql.builder.io.CharPipe;
@@ -364,35 +365,43 @@ public class SampleSQLBuilder {
 		SocialActivityDataFactory socialActivityDataFactory =
 			new SocialActivityDataFactory();
 
-		Map<String, Object> context = new HashMap<>();
-
-		context.put("assetDataFactory", assetDataFactory);
-		context.put("blogDataFactory", new BlogDataFactory());
-		context.put("commerceDataFactory", commerceDataFactory);
-		context.put(
+		return HashMapBuilder.<String, Object>put(
+			"assetDataFactory", assetDataFactory
+		).put(
+			"blogDataFactory", new BlogDataFactory()
+		).put(
+			"commerceDataFactory", commerceDataFactory
+		).put(
 			"counterDataFactory",
 			new CounterDataFactory(
-				resourcePermissionDataFactory, socialActivityDataFactory));
-		context.put(
-			"dDLDDMDataFactory", new DDLDDMDataFactory(userDataFactory));
-		context.put("dLDataFactory", new DLDataFactory(userDataFactory));
-		context.put("journalDataFactory", journalDataFactory);
-		context.put("layoutDataFactory", new LayoutDataFactory());
-		context.put(
+				resourcePermissionDataFactory, socialActivityDataFactory)
+		).put(
+			"dDLDDMDataFactory", new DDLDDMDataFactory(userDataFactory)
+		).put(
+			"dLDataFactory", new DLDataFactory(userDataFactory)
+		).put(
+			"journalDataFactory", journalDataFactory
+		).put(
+			"layoutDataFactory", new LayoutDataFactory()
+		).put(
 			"messageBoardDataFactory",
-			new MessageBoardDataFactory(userDataFactory));
-		context.put(
+			new MessageBoardDataFactory(userDataFactory)
+		).put(
 			"portletPreferenceDataFactory",
-			new PortletPreferenceDataFactory(assetDataFactory));
-		context.put("releaseDataFactory", new ReleaseDataFactory());
-		context.put(
-			"resourcePermissionDataFactory", resourcePermissionDataFactory);
-		context.put("socialActivityDataFactory", socialActivityDataFactory);
-		context.put("subscriptionDataFactory", new SubscriptionDataFactory());
-		context.put("userDataFactory", userDataFactory);
-		context.put("wikiDataFactory", new WikiDataFactory());
-
-		return context;
+			new PortletPreferenceDataFactory(assetDataFactory)
+		).put(
+			"releaseDataFactory", new ReleaseDataFactory()
+		).put(
+			"resourcePermissionDataFactory", resourcePermissionDataFactory
+		).put(
+			"socialActivityDataFactory", socialActivityDataFactory
+		).put(
+			"subscriptionDataFactory", new SubscriptionDataFactory()
+		).put(
+			"userDataFactory", userDataFactory
+		).put(
+			"wikiDataFactory", new WikiDataFactory()
+		).build();
 	}
 
 	private static final int _PIPE_BUFFER_SIZE = 16 * 1024 * 1024;
