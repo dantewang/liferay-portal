@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.WindowStateFactory;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
-import com.liferay.portal.kernel.struts.BaseStrutsAction;
 import com.liferay.portal.kernel.struts.StrutsAction;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Http;
@@ -53,7 +52,7 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true, property = "path=" + OAuthConstants.PUBLIC_PATH_AUTHORIZE,
 	service = StrutsAction.class
 )
-public class OAuthAuthorizeAction extends BaseStrutsAction {
+public class OAuthAuthorizeAction implements StrutsAction {
 
 	@Override
 	public String execute(
