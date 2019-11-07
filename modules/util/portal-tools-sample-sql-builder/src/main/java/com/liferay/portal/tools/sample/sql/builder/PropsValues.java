@@ -189,11 +189,11 @@ public class PropsValues {
 					reader = new FileReader(
 						System.getProperty("properties.file.path"));
 
-					_properties.load(reader);
+					load(reader);
 
 					TimeZone timeZone = TimeZone.getDefault();
 
-					String timeZoneId = _properties.getProperty(
+					String timeZoneId = getProperty(
 						"sample.sql.db.time.zone");
 
 					if (Validator.isNotNull(timeZoneId)) {
@@ -202,7 +202,7 @@ public class PropsValues {
 						TimeZone.setDefault(timeZone);
 					}
 					else {
-						_properties.setProperty(
+						setProperty(
 							"sample.sql.db.time.zone", timeZone.getID());
 					}
 				}
