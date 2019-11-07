@@ -19,8 +19,6 @@ package com.liferay.portal.tools.sample.sql.builder;
  */
 public interface PropsKeys {
 
-	public static final String CSV_NAMES = "sample.sql.output.csv.file.names";
-
 	public static final String DB_TYPE = "sample.sql.db.type";
 
 	public static final String MAX_ASSET_CATEGORY_COUNT =
@@ -47,22 +45,22 @@ public interface PropsKeys {
 	public static final String MAX_BLOGS_ENTRY_COUNT =
 		"sample.sql.max.blogs.entry.count";
 
-	public static final String MAX_CP_DEFINITION_COUNT =
+	public static final String MAX_COMMERCE_PRODUCT_COUNT =
+		"sample.sql.max.commerce.product.count";
+
+	public static final String MAX_COMMERCE_PRODUCT_DEFINITION_COUNT =
 		"sample.sql.max.commerce.product.definition.count";
 
-	public static final String MAX_CPINSTANCE_COUNT =
+	public static final String MAX_COMMERCE_PRODUCT_INSTANCE_COUNT =
 		"sample.sql.max.commerce.product.instance.count";
-
-	public static final String MAX_CPRODUCT_COUNT =
-		"sample.sql.max.commerce.product.count";
 
 	public static final String MAX_DDL_CUSTOM_FIELD_COUNT =
 		"sample.sql.max.ddl.custom.field.count";
 
-	public static final String MAX_DDL_RECORDER_COUNT =
+	public static final String MAX_DDL_RECORD_COUNT =
 		"sample.sql.max.ddl.record.count";
 
-	public static final String MAX_DDL_RECORDER_SET_COUNT =
+	public static final String MAX_DDL_RECORD_SET_COUNT =
 		"sample.sql.max.ddl.record.set.count";
 
 	public static final String MAX_DL_FILE_ENTRY_COUNT =
@@ -116,6 +114,9 @@ public interface PropsKeys {
 
 	public static final String OPTIMIZE_BUFFER_SIZE =
 		"sample.sql.optimize.buffer.size";
+
+	public static final String OUTPUT_CSV_FILE_NAMES =
+		"sample.sql.output.csv.file.names";
 
 	public static final String OUTPUT_DIR = "sample.sql.output.dir";
 

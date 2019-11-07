@@ -88,11 +88,11 @@ public abstract class BaseDataFactory {
 	}
 
 	public int getMaxDDLRecordCount() {
-		return PropsValues.MAX_DDL_RECORDER_COUNT;
+		return PropsValues.MAX_DDL_RECORD_COUNT;
 	}
 
 	public int getMaxDDLRecordSetCount() {
-		return PropsValues.MAX_DDL_RECORDER_SET_COUNT;
+		return PropsValues.MAX_DDL_RECORD_SET_COUNT;
 	}
 
 	public int getMaxDLFolderDepth() {
@@ -189,7 +189,7 @@ public abstract class BaseDataFactory {
 
 				outputDir.mkdirs();
 
-				for (String csvFileName : PropsValues.CSV_NAMES) {
+				for (String csvFileName : PropsValues.OUTPUT_CSV_FILE_NAMES) {
 					try {
 						put(
 							csvFileName,
