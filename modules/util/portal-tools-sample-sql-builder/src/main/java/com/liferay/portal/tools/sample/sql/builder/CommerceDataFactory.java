@@ -220,9 +220,11 @@ public class CommerceDataFactory extends BaseDataFactory {
 		CPTaxCategoryModel cpTaxCategoryModel = _newCPTaxCategoryModel(
 			"Normal Product");
 
-		int maxCProductCount = PropsValues.MAX_CPRODUCT_COUNT;
-		int maxCPDefinitionCount = PropsValues.MAX_CP_DEFINITION_COUNT;
-		int maxCPInstanceCount = PropsValues.MAX_CPINSTANCE_COUNT;
+		int maxCProductCount = PropsValues.MAX_COMMERCE_PRODUCT_COUNT;
+		int maxCPDefinitionCount =
+			PropsValues.MAX_COMMERCE_PRODUCT_DEFINITION_COUNT;
+		int maxCPInstanceCount =
+			PropsValues.MAX_COMMERCE_PRODUCT_INSTANCE_COUNT;
 
 		_cpTaxCategoryModels = Collections.singletonList(cpTaxCategoryModel);
 
@@ -459,7 +461,8 @@ public class CommerceDataFactory extends BaseDataFactory {
 		cProductModel.setCreateDate(new Date());
 		cProductModel.setModifiedDate(new Date());
 		cProductModel.setPublishedCPDefinitionId(publishedCPDefinitionId);
-		cProductModel.setLatestVersion(PropsValues.MAX_CP_DEFINITION_COUNT);
+		cProductModel.setLatestVersion(
+			PropsValues.MAX_COMMERCE_PRODUCT_DEFINITION_COUNT);
 
 		return cProductModel;
 	}

@@ -132,12 +132,12 @@ public class SampleSQLBuilderTest {
 		properties.put(PropsKeys.MAX_ASSET_VUCABULARY_COUNT, "1");
 		properties.put(PropsKeys.MAX_BLOGS_ENTRY_COMMENT_COUNT, "1");
 		properties.put(PropsKeys.MAX_BLOGS_ENTRY_COUNT, "1");
-		properties.put(PropsKeys.MAX_CPRODUCT_COUNT, "1");
-		properties.put(PropsKeys.MAX_CP_DEFINITION_COUNT, "1");
-		properties.put(PropsKeys.MAX_CPINSTANCE_COUNT, "1");
+		properties.put(PropsKeys.MAX_COMMERCE_PRODUCT_COUNT, "1");
+		properties.put(PropsKeys.MAX_COMMERCE_PRODUCT_DEFINITION_COUNT, "1");
+		properties.put(PropsKeys.MAX_COMMERCE_PRODUCT_INSTANCE_COUNT, "1");
 		properties.put(PropsKeys.MAX_DDL_CUSTOM_FIELD_COUNT, "1");
-		properties.put(PropsKeys.MAX_DDL_RECORDER_COUNT, "1");
-		properties.put(PropsKeys.MAX_DDL_RECORDER_SET_COUNT, "1");
+		properties.put(PropsKeys.MAX_DDL_RECORD_COUNT, "1");
+		properties.put(PropsKeys.MAX_DDL_RECORD_SET_COUNT, "1");
 		properties.put(PropsKeys.MAX_DL_FILE_ENTRY_COUNT, "1");
 		properties.put(PropsKeys.MAX_DL_FILE_ENTRY_SIZE, "1");
 		properties.put(PropsKeys.MAX_DL_FOLDER_COUNT, "1");
@@ -157,7 +157,7 @@ public class SampleSQLBuilderTest {
 		properties.put(PropsKeys.MAX_WIKI_PAGE_COUNT, "1");
 		properties.put(PropsKeys.OPTIMIZE_BUFFER_SIZE, "8192");
 		properties.put(
-			PropsKeys.CSV_NAMES,
+			PropsKeys.OUTPUT_CSV_FILE_NAMES,
 			"assetPublisher,blog,company,cpFriendlyURLEntry,documentLibrary," +
 				"dynamicDataList,layout,mbCategory,mbThread,repository,wiki");
 		properties.put(PropsKeys.OUTPUT_DIR, outputDir);
