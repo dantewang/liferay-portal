@@ -68,8 +68,8 @@ public abstract class BaseDataFactory {
 
 		return classNameModel.getClassNameId();
 	}
-	
-	public long getClassNameId(String className){
+
+	public long getClassNameId(String className) {
 		ClassNameModel classNameModel = classNameModels.get(className);
 
 		return classNameModel.getClassNameId();
@@ -132,6 +132,12 @@ public abstract class BaseDataFactory {
 		return new Date(_FUTURE_TIME + (_FUTURE_COUNTER.get() * Time.SECOND));
 	}
 
+	protected static String getMBDiscussionCombinedClassName(Class<?> clazz) {
+		return StringBundler.concat(
+			MBDiscussion.class.getName(), StringPool.UNDERLINE,
+			clazz.getName());
+	}
+
 	protected static final long COMPANY_ID;
 
 	protected static final long DEFAULT_USER_ID;
@@ -140,12 +146,6 @@ public abstract class BaseDataFactory {
 
 	protected static final Map<String, ClassNameModel> classNameModels;
 	protected static final SimpleCounter counter;
-
-	protected static String getMBDiscussionCombinedClassName(Class<?> clazz) {
-		return StringBundler.concat(
-			MBDiscussion.class.getName(), StringPool.UNDERLINE,
-			clazz.getName());
-	}
 
 	private static Map<String, ClassNameModel> _initClassNameModels() {
 		Map<String, ClassNameModel> classNameModels = new HashMap<>();
