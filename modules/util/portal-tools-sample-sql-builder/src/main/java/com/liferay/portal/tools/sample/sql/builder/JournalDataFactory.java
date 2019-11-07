@@ -27,6 +27,7 @@ import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateVersionModelImpl;
+import com.liferay.journal.constants.JournalContentPortletKeys;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleConstants;
 import com.liferay.journal.model.JournalArticleLocalizationModel;
@@ -330,7 +331,7 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		journalContentSearchModel.setCompanyId(COMPANY_ID);
 		journalContentSearchModel.setLayoutId(layoutId);
 		journalContentSearchModel.setPortletId(
-			DataFactoryConstants.JOURNAL_CONTENT_PORTLET_ID);
+			JournalContentPortletKeys.JOURNAL_CONTENT);
 		journalContentSearchModel.setArticleId(
 			journalArticleModel.getArticleId());
 
