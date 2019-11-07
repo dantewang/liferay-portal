@@ -19,7 +19,6 @@ import com.liferay.petra.process.ProcessCallable;
 import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.aspectj.WeavingClassLoader;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
@@ -28,6 +27,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.ProtectedClassLoaderObjectInputStream;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.test.aspects.WeavingClassLoader;
 
 import java.io.File;
 import java.io.IOException;
