@@ -36,9 +36,6 @@ import java.util.TimeZone;
  */
 public class PropsValues {
 
-	public static final String[] CSV_NAMES = StringUtil.split(
-		PropertiesLoader.get(PropsKeys.CSV_NAMES));
-
 	public static final DBType DB_TYPE = DBType.valueOf(
 		StringUtil.toUpperCase(PropertiesLoader.get(PropsKeys.DB_TYPE)));
 
@@ -71,23 +68,27 @@ public class PropsValues {
 	public static final int MAX_BLOGS_ENTRY_COUNT = GetterUtil.getInteger(
 		PropertiesLoader.get(PropsKeys.MAX_BLOGS_ENTRY_COUNT));
 
-	public static final int MAX_CP_DEFINITION_COUNT = GetterUtil.getInteger(
-		PropertiesLoader.get(PropsKeys.MAX_CP_DEFINITION_COUNT));
+	public static final int MAX_COMMERCE_PRODUCT_COUNT = GetterUtil.getInteger(
+		PropertiesLoader.get(PropsKeys.MAX_COMMERCE_PRODUCT_COUNT));
 
-	public static final int MAX_CPINSTANCE_COUNT = GetterUtil.getInteger(
-		PropertiesLoader.get(PropsKeys.MAX_CPINSTANCE_COUNT));
+	public static final int MAX_COMMERCE_PRODUCT_DEFINITION_COUNT =
+		GetterUtil.getInteger(
+			PropertiesLoader.get(
+				PropsKeys.MAX_COMMERCE_PRODUCT_DEFINITION_COUNT));
 
-	public static final int MAX_CPRODUCT_COUNT = GetterUtil.getInteger(
-		PropertiesLoader.get(PropsKeys.MAX_CPRODUCT_COUNT));
+	public static final int MAX_COMMERCE_PRODUCT_INSTANCE_COUNT =
+		GetterUtil.getInteger(
+			PropertiesLoader.get(
+				PropsKeys.MAX_COMMERCE_PRODUCT_INSTANCE_COUNT));
 
 	public static final int MAX_DDL_CUSTOM_FIELD_COUNT = GetterUtil.getInteger(
 		PropertiesLoader.get(PropsKeys.MAX_DDL_CUSTOM_FIELD_COUNT));
 
-	public static final int MAX_DDL_RECORDER_COUNT = GetterUtil.getInteger(
-		PropertiesLoader.get(PropsKeys.MAX_DDL_RECORDER_COUNT));
+	public static final int MAX_DDL_RECORD_COUNT = GetterUtil.getInteger(
+		PropertiesLoader.get(PropsKeys.MAX_DDL_RECORD_COUNT));
 
-	public static final int MAX_DDL_RECORDER_SET_COUNT = GetterUtil.getInteger(
-		PropertiesLoader.get(PropsKeys.MAX_DDL_RECORDER_SET_COUNT));
+	public static final int MAX_DDL_RECORD_SET_COUNT = GetterUtil.getInteger(
+		PropertiesLoader.get(PropsKeys.MAX_DDL_RECORD_SET_COUNT));
 
 	public static final int MAX_DL_FILE_ENTRY_COUNT = GetterUtil.getInteger(
 		PropertiesLoader.get(PropsKeys.MAX_DL_FILE_ENTRY_COUNT));
@@ -144,6 +145,9 @@ public class PropsValues {
 
 	public static final int OPTIMIZE_BUFFER_SIZE = GetterUtil.getInteger(
 		PropertiesLoader.get(PropsKeys.OPTIMIZE_BUFFER_SIZE));
+
+	public static final String[] OUTPUT_CSV_FILE_NAMES = StringUtil.split(
+		PropertiesLoader.get(PropsKeys.OUTPUT_CSV_FILE_NAMES));
 
 	public static final String OUTPUT_DIR = PropertiesLoader.get(
 		PropsKeys.OUTPUT_DIR);
