@@ -20,14 +20,19 @@ import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aspectj.WeavingClassLoader;
+import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
+import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.MethodKey;
+import com.liferay.portal.kernel.util.ProtectedClassLoaderObjectInputStream;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.util.SerializableUtil;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import java.net.MalformedURLException;
@@ -158,8 +163,20 @@ public class AspectJNewEnvTestRule extends NewEnvTestRule {
 
 			_dumpDir = dumpDir;
 
-			_encodedProcessCallable = SerializableUtil.serialize(
-				processCallable);
+			UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
+				new UnsyncByteArrayOutputStream();
+
+			try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+					unsyncByteArrayOutputStream)) {
+
+				objectOutputStream.writeObject(processCallable);
+			}
+			catch (IOException ioe) {
+				throw new RuntimeException(ioe);
+			}
+
+			_encodedProcessCallable = unsyncByteArrayOutputStream.toByteArray();
+
 			_toString = processCallable.toString();
 		}
 
@@ -190,10 +207,16 @@ public class AspectJNewEnvTestRule extends NewEnvTestRule {
 
 				currentThread.setContextClassLoader(weavingClassLoader);
 
-				return ReflectionTestUtil.invoke(
-					SerializableUtil.deserialize(
-						_encodedProcessCallable, weavingClassLoader),
-					"call", new Class<?>[0]);
+				try (ObjectInputStream objectInputStream =
+						new ProtectedClassLoaderObjectInputStream(
+							new UnsyncByteArrayInputStream(
+								_encodedProcessCallable),
+							weavingClassLoader)) {
+
+					return ReflectionTestUtil.invoke(
+						objectInputStream.readObject(), "call",
+						new Class<?>[0]);
+				}
 			}
 			catch (Exception e) {
 				throw new ProcessException(e);
