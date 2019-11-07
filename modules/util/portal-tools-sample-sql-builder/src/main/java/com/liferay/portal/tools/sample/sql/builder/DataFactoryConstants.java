@@ -76,9 +76,6 @@ public interface DataFactoryConstants {
 	public static final String JOURNAL_ARTICLE_TITLE_PREFIX =
 		"TestJournalArticle_";
 
-	public static final String JOURNAL_CONTENT_PORTLET_ID =
-		"com_liferay_journal_content_web_portlet_JournalContentPortlet";
-
 	public static final String JOURNAL_DDM_STRUCTURE_CONTENT =
 		"ddm_structure_basic_web_content.json";
 
