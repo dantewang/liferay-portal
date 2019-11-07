@@ -191,8 +191,7 @@ public class UserDataFactory extends BaseDataFactory {
 		blogsStatsUserModel.setGroupId(groupId);
 		blogsStatsUserModel.setCompanyId(COMPANY_ID);
 		blogsStatsUserModel.setUserId(SAMPLE_USER_ID);
-		blogsStatsUserModel.setEntryCount(
-			PropsValues.MAX_BLOGS_ENTRY_COMMENT_COUNT);
+		blogsStatsUserModel.setEntryCount(PropsValues.MAX_BLOGS_ENTRY_COUNT);
 		blogsStatsUserModel.setLastPostDate(new Date());
 
 		return blogsStatsUserModel;

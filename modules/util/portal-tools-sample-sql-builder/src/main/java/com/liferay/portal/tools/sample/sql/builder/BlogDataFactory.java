@@ -42,7 +42,7 @@ public class BlogDataFactory extends BaseDataFactory {
 	}
 
 	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
-		int maxBlogsEntryCount = PropsValues.MAX_BLOGS_ENTRY_COMMENT_COUNT;
+		int maxBlogsEntryCount = PropsValues.MAX_BLOGS_ENTRY_COUNT;
 
 		List<BlogsEntryModel> blogEntryModels = new ArrayList<>(
 			maxBlogsEntryCount);
