@@ -19,8 +19,9 @@ import com.liferay.oauth.model.OAuthApplication;
 import com.liferay.oauth.model.OAuthUser;
 import com.liferay.oauth.service.OAuthApplicationLocalServiceUtil;
 import com.liferay.oauth.service.OAuthUserLocalServiceUtil;
+import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.portal.kernel.cache.PortalCache;
-import com.liferay.portal.kernel.cache.SingleVMPoolUtil;
+import com.liferay.portal.kernel.cache.SingleVMPool;
 import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterRequest;
 import com.liferay.portal.kernel.cluster.FutureClusterResponses;
@@ -54,6 +55,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.oauth.server.OAuthServlet;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
+
 /**
  * @author Ivica Cardic
  * @author Raymond Augé
@@ -63,6 +71,14 @@ public class V10aOAuth implements OAuth {
 
 	public V10aOAuth(OAuthValidator oAuthValidator) {
 		_oAuthValidator = oAuthValidator;
+
+		Bundle bundle = FrameworkUtil.getBundle(V10aOAuth.class);
+
+		_bundleContext = bundle.getBundleContext();
+
+		_serviceTracker = ServiceTrackerFactory.open(
+			_bundleContext, SingleVMPool.class,
+			new SingleVMPoolServiceTrackerCustomizer());
 
 		if (_log.isDebugEnabled()) {
 			_portalCache.registerPortalCacheListener(
@@ -328,13 +344,6 @@ public class V10aOAuth implements OAuth {
 		return byteBuffer.array();
 	}
 
-	@SuppressWarnings("unused")
-	private static void _put(String key, byte[] bytes) {
-		OAuthAccessor oAuthAccessor = deserialize(bytes);
-
-		_portalCache.put(key, oAuthAccessor);
-	}
-
 	private void _notifyCluster(String key, OAuthAccessor oAuthAccessor)
 		throws Exception {
 
@@ -369,11 +378,51 @@ public class V10aOAuth implements OAuth {
 
 	private static final Log _log = LogFactoryUtil.getLog(V10aOAuth.class);
 
-	private static final PortalCache<Serializable, Object> _portalCache =
-		SingleVMPoolUtil.getPortalCache(V10aOAuth.class.getName());
 	private static final MethodKey _putMethodKey = new MethodKey(
 		V10aOAuth.class, "_put", String.class, byte[].class);
 
+	private final BundleContext _bundleContext;
 	private final OAuthValidator _oAuthValidator;
+	private PortalCache<Serializable, Object> _portalCache;
+	private final ServiceTracker<SingleVMPool, SingleVMPool> _serviceTracker;
+
+	private class SingleVMPoolServiceTrackerCustomizer
+		implements ServiceTrackerCustomizer<SingleVMPool, SingleVMPool> {
+
+		@Override
+		public SingleVMPool addingService(
+			ServiceReference<SingleVMPool> serviceReference) {
+
+			SingleVMPool singleVMPool = _bundleContext.getService(
+				serviceReference);
+
+			_portalCache =
+				(PortalCache<Serializable, Object>)singleVMPool.getPortalCache(
+					V10aOAuth.class.getName());
+
+			return singleVMPool;
+		}
+
+		@Override
+		public void modifiedService(
+			ServiceReference<SingleVMPool> serviceReference,
+			SingleVMPool singleVMPool) {
+
+			removedService(serviceReference, singleVMPool);
+
+			addingService(serviceReference);
+		}
+
+		@Override
+		public void removedService(
+			ServiceReference<SingleVMPool> serviceReference,
+			SingleVMPool singleVMPool) {
+
+			_bundleContext.ungetService(serviceReference);
+
+			_portalCache = null;
+		}
+
+	}
 
 }
