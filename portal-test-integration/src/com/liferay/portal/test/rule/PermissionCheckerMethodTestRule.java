@@ -19,7 +19,7 @@ import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.test.rule.MethodTestRule;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
-import com.liferay.portal.security.permission.SimplePermissionChecker;
+import com.liferay.portal.kernel.util.ProxyUtil;
 
 import org.junit.runner.Description;
 
@@ -54,21 +54,11 @@ public class PermissionCheckerMethodTestRule extends MethodTestRule<Void> {
 		_originalPermissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
 
-		PermissionThreadLocal.setPermissionChecker(
-			new SimplePermissionChecker() {
-				{
-					init(TestPropsValues.getUser());
-				}
+		PermissionChecker permissionChecker = _permissionChecker.clone();
 
-				@Override
-				public boolean hasOwnerPermission(
-					long companyId, String name, String primKey, long ownerId,
-					String actionId) {
+		permissionChecker.init(TestPropsValues.getUser());
 
-					return true;
-				}
-
-			});
+		PermissionThreadLocal.setPermissionChecker(permissionChecker);
 	}
 
 	protected void setUpPrincipalThreadLocal() throws Exception {
@@ -78,9 +68,31 @@ public class PermissionCheckerMethodTestRule extends MethodTestRule<Void> {
 	}
 
 	private PermissionCheckerMethodTestRule() {
+		try {
+			Class<?> clazz = Class.forName(
+				"com.liferay.portal.security.permission." +
+					"SimplePermissionChecker");
+
+			_permissionChecker = (PermissionChecker)ProxyUtil.newProxyInstance(
+				PermissionChecker.class.getClassLoader(),
+				new Class<?>[] {PermissionChecker.class},
+				(proxy, method, args) -> {
+					String methodName = method.getName();
+
+					if (methodName.equals("hasOwnerPermission")) {
+						return true;
+					}
+
+					return method.invoke(clazz.newInstance(), args);
+				});
+		}
+		catch (ClassNotFoundException cnfe) {
+			throw new RuntimeException(cnfe);
+		}
 	}
 
 	private String _originalName;
 	private PermissionChecker _originalPermissionChecker;
+	private final PermissionChecker _permissionChecker;
 
 }
