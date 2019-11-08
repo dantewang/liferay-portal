@@ -13,7 +13,10 @@ Export-Package:\
 	com.liferay.portlet.documentlibrary.util.test,\
 	com.liferay.portlet.notifications.test,\
 	com.liferay.portlet.social.test
-Import-Package: *;resolution:=optional
+Import-Package:\
+	com.liferay.portal.security.permission,\
+	\
+	*;resolution:=optional
 Include-Resource:\
 	classes,\
 	@${project.dir}/../lib/development/dumbster.jar,\
