@@ -28,7 +28,6 @@ import com.liferay.dynamic.data.mapping.storage.StorageType;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.util.SimpleCounter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +36,6 @@ import java.util.List;
  * @author Lily Chi
  */
 public abstract class BaseDDMDataFactory extends BaseDataFactory {
-
-	public BaseDDMDataFactory(DataFactoryContext dataFactoryContext) {
-		super(dataFactoryContext);
-	}
 
 	public String getResource(String resourceName) throws Exception {
 		List<String> lines = new ArrayList<>();
@@ -54,9 +49,6 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 		long contentId, long groupId, String data) {
 
 		DDMContentModel ddmContentModel = new DDMContentModelImpl();
-
-		long companyId = dataFactoryContext.getCompanyId();
-		long sampleUserId = dataFactoryContext.getSampleUserId();
 
 		ddmContentModel.setUuid(SequentialUUID.generate());
 		ddmContentModel.setContentId(contentId);
@@ -78,12 +70,10 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 		DDMStructureLayoutModel ddmStructureLayoutModel =
 			new DDMStructureLayoutModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		ddmStructureLayoutModel.setUuid(SequentialUUID.generate());
 		ddmStructureLayoutModel.setStructureLayoutId(counter.get());
 		ddmStructureLayoutModel.setGroupId(groupId);
-		ddmStructureLayoutModel.setCompanyId(dataFactoryContext.getCompanyId());
+		ddmStructureLayoutModel.setCompanyId(companyId);
 		ddmStructureLayoutModel.setUserId(userId);
 		ddmStructureLayoutModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
@@ -103,12 +93,10 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 
 		DDMStructureModel ddmStructureModel = new DDMStructureModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		ddmStructureModel.setUuid(SequentialUUID.generate());
 		ddmStructureModel.setStructureId(counter.get());
 		ddmStructureModel.setGroupId(groupId);
-		ddmStructureModel.setCompanyId(dataFactoryContext.getCompanyId());
+		ddmStructureModel.setCompanyId(companyId);
 		ddmStructureModel.setUserId(userId);
 		ddmStructureModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		ddmStructureModel.setVersionUserId(userId);
@@ -142,13 +130,10 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 		DDMStructureVersionModel ddmStructureVersionModel =
 			new DDMStructureVersionModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		ddmStructureVersionModel.setStructureVersionId(counter.get());
 
 		ddmStructureVersionModel.setGroupId(ddmStructureModel.getGroupId());
-		ddmStructureVersionModel.setCompanyId(
-			dataFactoryContext.getCompanyId());
+		ddmStructureVersionModel.setCompanyId(companyId);
 		ddmStructureVersionModel.setUserId(ddmStructureModel.getUserId());
 		ddmStructureVersionModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);

@@ -42,7 +42,6 @@ import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.util.SimpleCounter;
 
 import java.math.BigDecimal;
 
@@ -57,16 +56,11 @@ import java.util.List;
 public class CommerceDataFactory extends BaseDataFactory {
 
 	public CommerceDataFactory(
-			DataFactoryContext dataFactoryContext,
 			AssetDataFactory assetDataFactory, UserDataFactory userDataFactory)
 		throws Exception {
 
-		super(dataFactoryContext);
-
 		_assetDataFactory = assetDataFactory;
 		_userDataFactory = userDataFactory;
-
-		SimpleCounter counter = dataFactoryContext.getCounter();
 
 		_commerceCatalogGroupId = counter.get();
 		_commerceChannelGroupId = counter.get();
@@ -140,11 +134,8 @@ public class CommerceDataFactory extends BaseDataFactory {
 	private void _initCommerceCatalogModel() {
 		_commerceCatalogModel = new CommerceCatalogModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		_commerceCatalogModel.setCommerceCatalogId(counter.get());
-
-		_commerceCatalogModel.setCompanyId(dataFactoryContext.getCompanyId());
+		_commerceCatalogModel.setCompanyId(companyId);
 		_commerceCatalogModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		_commerceCatalogModel.setCreateDate(new Date());
@@ -159,19 +150,15 @@ public class CommerceDataFactory extends BaseDataFactory {
 	private void _initCommerceChannelModel() {
 		_commerceChannelModel = new CommerceChannelModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		_commerceChannelModel.setCommerceChannelId(counter.get());
-
-		_commerceChannelModel.setCompanyId(dataFactoryContext.getCompanyId());
-		_commerceChannelModel.setUserId(dataFactoryContext.getSampleUserId());
+		_commerceChannelModel.setCompanyId(companyId);
+		_commerceChannelModel.setUserId(sampleUserId);
 		_commerceChannelModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		_commerceChannelModel.setCreateDate(new Date());
 		_commerceChannelModel.setModifiedDate(new Date());
 		_commerceChannelModel.setSiteGroupId(1);
-		_commerceChannelModel.setName(
-			dataFactoryContext.getSampleUserId() + " Channel");
+		_commerceChannelModel.setName(sampleUserId + " Channel");
 		_commerceChannelModel.setType("site");
 		_commerceChannelModel.setTypeSettings(
 			String.valueOf(_userDataFactory.getGuestGroupId()));
@@ -182,12 +169,10 @@ public class CommerceDataFactory extends BaseDataFactory {
 	private void _initCommerceCurrencyModel() {
 		_commerceCurrencyModel = new CommerceCurrencyModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		_commerceCurrencyModel.setUuid(SequentialUUID.generate());
 		_commerceCurrencyModel.setCommerceCurrencyId(counter.get());
-		_commerceCurrencyModel.setCompanyId(dataFactoryContext.getCompanyId());
-		_commerceCurrencyModel.setUserId(dataFactoryContext.getSampleUserId());
+		_commerceCurrencyModel.setCompanyId(companyId);
+		_commerceCurrencyModel.setUserId(sampleUserId);
 		_commerceCurrencyModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		_commerceCurrencyModel.setCreateDate(new Date());
@@ -235,11 +220,9 @@ public class CommerceDataFactory extends BaseDataFactory {
 		CPTaxCategoryModel cpTaxCategoryModel = _newCPTaxCategoryModel(
 			"Normal Product");
 
-		int maxCProductCount = dataFactoryContext.getMaxCProductCount();
-		int maxCPDefinitionCount = dataFactoryContext.getMaxCPDefinitionCount();
-		int maxCPInstanceCount = dataFactoryContext.getMaxCPInstanceCount();
-
-		SimpleCounter counter = dataFactoryContext.getCounter();
+		int maxCProductCount = PropsValues.MAX_CPRODUCT_COUNT;
+		int maxCPDefinitionCount = PropsValues.MAX_CP_DEFINITION_COUNT;
+		int maxCPInstanceCount = PropsValues.MAX_CPINSTANCE_COUNT;
 
 		_cpTaxCategoryModels = Collections.singletonList(cpTaxCategoryModel);
 
@@ -317,13 +300,10 @@ public class CommerceDataFactory extends BaseDataFactory {
 		CPDefinitionLocalizationModel cpDefinitionLocalizationModel =
 			new CPDefinitionLocalizationModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		cpDefinitionLocalizationModel.setCpDefinitionLocalizationId(
 			counter.get());
 
-		cpDefinitionLocalizationModel.setCompanyId(
-			dataFactoryContext.getCompanyId());
+		cpDefinitionLocalizationModel.setCompanyId(companyId);
 		cpDefinitionLocalizationModel.setCPDefinitionId(cpDefinitionId);
 		cpDefinitionLocalizationModel.setLanguageId("en_US");
 		cpDefinitionLocalizationModel.setName("Definition " + cpDefinitionId);
@@ -351,8 +331,8 @@ public class CommerceDataFactory extends BaseDataFactory {
 		cpDefinitionModel.setUuid(SequentialUUID.generate());
 		cpDefinitionModel.setCPDefinitionId(cpDefinitionId);
 		cpDefinitionModel.setGroupId(groupId);
-		cpDefinitionModel.setCompanyId(dataFactoryContext.getCompanyId());
-		cpDefinitionModel.setUserId(dataFactoryContext.getSampleUserId());
+		cpDefinitionModel.setCompanyId(companyId);
+		cpDefinitionModel.setUserId(sampleUserId);
 		cpDefinitionModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		cpDefinitionModel.setCreateDate(new Date());
 		cpDefinitionModel.setModifiedDate(new Date());
@@ -383,8 +363,7 @@ public class CommerceDataFactory extends BaseDataFactory {
 		cpDefinitionModel.setMaxSubscriptionCycles(0);
 		cpDefinitionModel.setVersion(version);
 		cpDefinitionModel.setStatus(WorkflowConstants.STATUS_APPROVED);
-		cpDefinitionModel.setStatusByUserId(
-			dataFactoryContext.getSampleUserId());
+		cpDefinitionModel.setStatusByUserId(sampleUserId);
 		cpDefinitionModel.setStatusByUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		cpDefinitionModel.setStatusDate(new Date());
@@ -398,13 +377,11 @@ public class CommerceDataFactory extends BaseDataFactory {
 		CPFriendlyURLEntryModel cpFriendlyURLEntryModel =
 			new CPFriendlyURLEntryModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		cpFriendlyURLEntryModel.setUuid(SequentialUUID.generate());
 		cpFriendlyURLEntryModel.setCPFriendlyURLEntryId(counter.get());
 		cpFriendlyURLEntryModel.setGroupId(groupId);
-		cpFriendlyURLEntryModel.setCompanyId(dataFactoryContext.getCompanyId());
-		cpFriendlyURLEntryModel.setUserId(dataFactoryContext.getSampleUserId());
+		cpFriendlyURLEntryModel.setCompanyId(companyId);
+		cpFriendlyURLEntryModel.setUserId(sampleUserId);
 		cpFriendlyURLEntryModel.setUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		cpFriendlyURLEntryModel.setCreateDate(new Date());
@@ -423,13 +400,11 @@ public class CommerceDataFactory extends BaseDataFactory {
 
 		CPInstanceModel cpInstanceModel = new CPInstanceModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		cpInstanceModel.setUuid(SequentialUUID.generate());
 		cpInstanceModel.setCPInstanceId(counter.get());
 		cpInstanceModel.setGroupId(groupId);
-		cpInstanceModel.setCompanyId(dataFactoryContext.getCompanyId());
-		cpInstanceModel.setUserId(dataFactoryContext.getSampleUserId());
+		cpInstanceModel.setCompanyId(companyId);
+		cpInstanceModel.setUserId(sampleUserId);
 		cpInstanceModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		cpInstanceModel.setCreateDate(new Date());
 		cpInstanceModel.setModifiedDate(new Date());
@@ -462,7 +437,7 @@ public class CommerceDataFactory extends BaseDataFactory {
 		cpInstanceModel.setSubscriptionTypeSettings(null);
 		cpInstanceModel.setMaxSubscriptionCycles(0);
 		cpInstanceModel.setStatus(WorkflowConstants.STATUS_APPROVED);
-		cpInstanceModel.setStatusByUserId(dataFactoryContext.getSampleUserId());
+		cpInstanceModel.setStatusByUserId(sampleUserId);
 		cpInstanceModel.setStatusByUserName(
 			DataFactoryConstants.SAMPLE_USER_NAME);
 		cpInstanceModel.setStatusDate(new Date());
@@ -478,14 +453,13 @@ public class CommerceDataFactory extends BaseDataFactory {
 		cProductModel.setUuid(SequentialUUID.generate());
 		cProductModel.setCProductId(cProductId);
 		cProductModel.setGroupId(groupId);
-		cProductModel.setCompanyId(dataFactoryContext.getCompanyId());
-		cProductModel.setUserId(dataFactoryContext.getSampleUserId());
+		cProductModel.setCompanyId(companyId);
+		cProductModel.setUserId(sampleUserId);
 		cProductModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		cProductModel.setCreateDate(new Date());
 		cProductModel.setModifiedDate(new Date());
 		cProductModel.setPublishedCPDefinitionId(publishedCPDefinitionId);
-		cProductModel.setLatestVersion(
-			dataFactoryContext.getMaxCPDefinitionCount());
+		cProductModel.setLatestVersion(PropsValues.MAX_CP_DEFINITION_COUNT);
 
 		return cProductModel;
 	}
@@ -493,12 +467,10 @@ public class CommerceDataFactory extends BaseDataFactory {
 	private CPTaxCategoryModel _newCPTaxCategoryModel(String name) {
 		CPTaxCategoryModel cpTaxCategoryModel = new CPTaxCategoryModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		cpTaxCategoryModel.setCPTaxCategoryId(counter.get());
 
-		cpTaxCategoryModel.setCompanyId(dataFactoryContext.getCompanyId());
-		cpTaxCategoryModel.setUserId(dataFactoryContext.getSampleUserId());
+		cpTaxCategoryModel.setCompanyId(companyId);
+		cpTaxCategoryModel.setUserId(sampleUserId);
 		cpTaxCategoryModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		cpTaxCategoryModel.setCreateDate(new Date());
 		cpTaxCategoryModel.setModifiedDate(new Date());
