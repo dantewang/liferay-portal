@@ -52,17 +52,6 @@ public abstract class BaseDataFactory {
 		}
 	}
 
-	public static Writer getCSVWriter(String csvFileName) {
-		Writer writer = _csvWriters.get(csvFileName);
-
-		if (writer == null) {
-			throw new IllegalArgumentException(
-				"Unknown CSV file name: " + csvFileName);
-		}
-
-		return writer;
-	}
-
 	public long getClassNameId(Class<?> clazz) {
 		ClassNameModel classNameModel = classNameModels.get(clazz.getName());
 
@@ -77,6 +66,17 @@ public abstract class BaseDataFactory {
 
 	public Collection<ClassNameModel> getClassNameModels() {
 		return classNameModels.values();
+	}
+
+	public Writer getCSVWriter(String csvFileName) {
+		Writer writer = _csvWriters.get(csvFileName);
+
+		if (writer == null) {
+			throw new IllegalArgumentException(
+				"Unknown CSV file name: " + csvFileName);
+		}
+
+		return writer;
 	}
 
 	public int getMaxAssetPublisherPageCount() {
