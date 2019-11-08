@@ -33,6 +33,10 @@ import java.util.List;
  */
 public class WikiDataFactory extends BaseDataFactory {
 
+	public int getMaxWikiPageCommentCount() {
+		return PropsValues.MAX_WIKI_PAGE_COMMENT_COUNT;
+	}
+
 	public long getWikiPageClassNameId() {
 		return getClassNameId(WikiPage.class);
 	}

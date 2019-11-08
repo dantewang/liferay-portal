@@ -51,6 +51,14 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 		return getClassNameId(DDLRecordSet.class);
 	}
 
+	public int getMaxDDLRecordCount() {
+		return PropsValues.MAX_DDL_RECORD_COUNT;
+	}
+
+	public int getMaxDDLRecordSetCount() {
+		return PropsValues.MAX_DDL_RECORD_SET_COUNT;
+	}
+
 	public DDMStructureLayoutModel newDDLDDMStructureLayoutModel(
 		long groupId, DDMStructureVersionModel ddmStructureVersionModel) {
 

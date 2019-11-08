@@ -78,6 +78,10 @@ public class DLDataFactory extends BaseDDMDataFactory {
 		return getClassNameId(DLFileEntry.class);
 	}
 
+	public int getMaxDLFolderDepth() {
+		return PropsValues.MAX_DL_FOLDER_DEPTH;
+	}
+
 	public DDMContentModel newDDMContentModel(
 		DLFileEntryModel dlFileEntryModel) {
 

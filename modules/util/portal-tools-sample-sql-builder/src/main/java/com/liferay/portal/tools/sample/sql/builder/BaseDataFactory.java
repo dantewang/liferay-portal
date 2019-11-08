@@ -79,46 +79,6 @@ public abstract class BaseDataFactory {
 		return writer;
 	}
 
-	public int getMaxAssetPublisherPageCount() {
-		return PropsValues.MAX_ASSETPUBLISHER_PAGE_COUNT;
-	}
-
-	public int getMaxBlogsEntryCommentCount() {
-		return PropsValues.MAX_BLOGS_ENTRY_COMMENT_COUNT;
-	}
-
-	public int getMaxDDLRecordCount() {
-		return PropsValues.MAX_DDL_RECORD_COUNT;
-	}
-
-	public int getMaxDDLRecordSetCount() {
-		return PropsValues.MAX_DDL_RECORD_SET_COUNT;
-	}
-
-	public int getMaxDLFolderDepth() {
-		return PropsValues.MAX_DL_FOLDER_DEPTH;
-	}
-
-	public int getMaxGroupCount() {
-		return PropsValues.MAX_GROUP_COUNT;
-	}
-
-	public int getMaxJournalArticleCount() {
-		return PropsValues.MAX_JOURNAL_ARTICLE_COUNT;
-	}
-
-	public int getMaxJournalArticlePageCount() {
-		return PropsValues.MAX_JOURNAL_ARTICLE_PAGE_COUNT;
-	}
-
-	public int getMaxJournalArticleVersionCount() {
-		return PropsValues.MAX_JOURNAL_ARTICLE_VERSION_COUNT;
-	}
-
-	public int getMaxWikiPageCommentCount() {
-		return PropsValues.MAX_WIKI_PAGE_COMMENT_COUNT;
-	}
-
 	public InputStream getResourceInputStream(String resourceName) {
 		Class<?> clazz = getClass();
 

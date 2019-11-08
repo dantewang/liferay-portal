@@ -132,6 +132,10 @@ public class UserDataFactory extends BaseDataFactory {
 		return _lastNames;
 	}
 
+	public int getMaxGroupCount() {
+		return PropsValues.MAX_GROUP_COUNT;
+	}
+
 	public List<Long> getNewUserGroupIds(long groupId) {
 		int maxUserToGroupCount = PropsValues.MAX_USER_TO_GROUP_COUNT;
 		int maxGroupsCount = PropsValues.MAX_GROUP_COUNT;

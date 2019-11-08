@@ -41,6 +41,10 @@ public class BlogDataFactory extends BaseDataFactory {
 		return getClassNameId(BlogsEntry.class);
 	}
 
+	public int getMaxBlogsEntryCommentCount() {
+		return PropsValues.MAX_BLOGS_ENTRY_COMMENT_COUNT;
+	}
+
 	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
 		int maxBlogsEntryCount = PropsValues.MAX_BLOGS_ENTRY_COUNT;
 

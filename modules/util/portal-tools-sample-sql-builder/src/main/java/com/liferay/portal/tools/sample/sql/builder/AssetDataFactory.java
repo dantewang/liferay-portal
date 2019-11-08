@@ -236,6 +236,10 @@ public class AssetDataFactory extends BaseDataFactory {
 		return _defaultAssetVocabularyModel;
 	}
 
+	public int getMaxAssetPublisherPageCount() {
+		return PropsValues.MAX_ASSETPUBLISHER_PAGE_COUNT;
+	}
+
 	public String getPortletId(String portletPrefix) {
 		return portletPrefix.concat(PortletIdCodec.generateInstanceId());
 	}

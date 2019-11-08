@@ -108,6 +108,18 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		return _journalArticleResourceUUIDs;
 	}
 
+	public int getMaxJournalArticleCount() {
+		return PropsValues.MAX_JOURNAL_ARTICLE_COUNT;
+	}
+
+	public int getMaxJournalArticlePageCount() {
+		return PropsValues.MAX_JOURNAL_ARTICLE_PAGE_COUNT;
+	}
+
+	public int getMaxJournalArticleVersionCount() {
+		return PropsValues.MAX_JOURNAL_ARTICLE_VERSION_COUNT;
+	}
+
 	public DDMStorageLinkModel newDDMStorageLinkModel(
 		JournalArticleModel journalArticleModel, long structureId) {
 
