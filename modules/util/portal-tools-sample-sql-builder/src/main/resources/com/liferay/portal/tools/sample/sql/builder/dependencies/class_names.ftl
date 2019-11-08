@@ -1,3 +1,3 @@
-<#list dataFactory.classNameModels as classNameModel>
-	${dataFactory.toInsertSQL(classNameModel)}
+<#list resourcePermissionDataFactory.classNameModels as classNameModel>
+	${resourcePermissionDataFactory.toInsertSQL(classNameModel)}
 </#list>
