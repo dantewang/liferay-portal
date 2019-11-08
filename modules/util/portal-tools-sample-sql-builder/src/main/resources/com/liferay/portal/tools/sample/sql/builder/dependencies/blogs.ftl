@@ -33,7 +33,7 @@ ${resourcePermissionDataFactory.toInsertSQL(userNotificationDeliveryModel)}
 		_classNameId=blogDataFactory.blogsEntryClassNameId
 		_classPK=blogsEntryModel.entryId
 		_groupId=groupId
-		_maxCommentCount=dataFactoryContext.maxBlogsEntryCommentCount
+		_maxCommentCount=blogDataFactory.maxBlogsEntryCommentCount
 		_mbRootMessageId=mbRootMessageId
 		_mbThreadId=mbThreadId
 	/>
@@ -42,5 +42,5 @@ ${resourcePermissionDataFactory.toInsertSQL(userNotificationDeliveryModel)}
 
 	${resourcePermissionDataFactory.toInsertSQL(socialActivityDataFactory.newSocialActivityModel(blogsEntryModel))}
 
-	${dataFactoryContext.getCSVWriter("blog").write(blogsEntryModel.entryId + "," + blogsEntryModel.urlTitle + "," + mbThreadId + "," + mbRootMessageId + "\n")}
+	${blogDataFactory.getCSVWriter("blog").write(blogsEntryModel.entryId + "," + blogsEntryModel.urlTitle + "," + mbThreadId + "," + mbRootMessageId + "\n")}
 </#list>

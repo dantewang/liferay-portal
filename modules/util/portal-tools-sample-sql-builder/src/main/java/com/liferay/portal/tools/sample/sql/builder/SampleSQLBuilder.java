@@ -54,7 +54,7 @@ import java.util.Properties;
  */
 public class SampleSQLBuilder {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		ToolDependencies.wireBasic();
 
 		Reader reader = null;
@@ -66,10 +66,9 @@ public class SampleSQLBuilder {
 
 			properties.load(reader);
 
-			DataFactoryContext dataFactoryContext = new DataFactoryContext(
-				properties);
+			System.setProperties(properties);
 
-			new SampleSQLBuilder(properties, dataFactoryContext);
+			new SampleSQLBuilder(properties);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -86,10 +85,7 @@ public class SampleSQLBuilder {
 		}
 	}
 
-	public SampleSQLBuilder(
-			Properties properties, DataFactoryContext dataFactoryContext)
-		throws Exception {
-
+	public SampleSQLBuilder(Properties properties) throws Exception {
 		_dbType = DBType.valueOf(
 			StringUtil.toUpperCase(
 				properties.getProperty("sample.sql.db.type")));
@@ -98,8 +94,6 @@ public class SampleSQLBuilder {
 			properties.getProperty("sample.sql.optimize.buffer.size"));
 		_outputDir = properties.getProperty("sample.sql.output.dir");
 		_script = properties.getProperty("sample.sql.script");
-
-		_dataFactoryContext = dataFactoryContext;
 
 		// Generic
 
@@ -308,15 +302,14 @@ public class SampleSQLBuilder {
 						createFileWriter(new File(_outputDir, "sample.sql")));
 
 					FreeMarkerUtil.process(
-						_script, _createContext(_dataFactoryContext),
-						sampleSQLWriter);
+						_script, _createContext(), sampleSQLWriter);
 				}
 				catch (Throwable t) {
 					_freeMarkerThrowable = t;
 				}
 				finally {
 					try {
-						_dataFactoryContext.closeCSVWriters();
+						BaseDataFactory.closeCSVWriters();
 					}
 					catch (IOException ioe) {
 						ioe.printStackTrace();
@@ -402,67 +395,52 @@ public class SampleSQLBuilder {
 		insertSQLWriter.write(insertSQL);
 	}
 
-	private Map<String, Object> _createContext(
-			DataFactoryContext dataFactoryContext)
-		throws Exception {
-
-		UserDataFactory userDataFactory = new UserDataFactory(
-			dataFactoryContext);
+	private Map<String, Object> _createContext() throws Exception {
+		UserDataFactory userDataFactory = new UserDataFactory();
 
 		JournalDataFactory journalDataFactory = new JournalDataFactory(
-			dataFactoryContext, userDataFactory);
+			userDataFactory);
 
 		AssetDataFactory assetDataFactory = new AssetDataFactory(
-			dataFactoryContext, journalDataFactory, userDataFactory);
+			journalDataFactory, userDataFactory);
 
 		CommerceDataFactory commerceDataFactory = new CommerceDataFactory(
-			dataFactoryContext, assetDataFactory, userDataFactory);
+			assetDataFactory, userDataFactory);
 
 		ResourcePermissionDataFactory resourcePermissionDataFactory =
 			new ResourcePermissionDataFactory(
-				dataFactoryContext, commerceDataFactory, userDataFactory);
+				commerceDataFactory, userDataFactory);
 
 		SocialActivityDataFactory socialActivityDataFactory =
-			new SocialActivityDataFactory(dataFactoryContext);
+			new SocialActivityDataFactory();
 
 		Map<String, Object> context = new HashMap<>();
 
 		context.put("assetDataFactory", assetDataFactory);
-		context.put("blogDataFactory", new BlogDataFactory(dataFactoryContext));
+		context.put("blogDataFactory", new BlogDataFactory());
 		context.put("commerceDataFactory", commerceDataFactory);
 		context.put(
 			"counterDataFactory",
 			new CounterDataFactory(
-				dataFactoryContext, resourcePermissionDataFactory,
-				socialActivityDataFactory));
+				resourcePermissionDataFactory, socialActivityDataFactory));
 		context.put(
-			"dDLDDMDataFactory",
-			new DDLDDMDataFactory(dataFactoryContext, userDataFactory));
-		context.put(
-			"dLDataFactory",
-			new DLDataFactory(dataFactoryContext, userDataFactory));
+			"dDLDDMDataFactory", new DDLDDMDataFactory(userDataFactory));
+		context.put("dLDataFactory", new DLDataFactory(userDataFactory));
 		context.put("journalDataFactory", journalDataFactory);
-		context.put(
-			"layoutDataFactory", new LayoutDataFactory(dataFactoryContext));
+		context.put("layoutDataFactory", new LayoutDataFactory());
 		context.put(
 			"messageBoardDataFactory",
-			new MessageBoardDataFactory(dataFactoryContext, userDataFactory));
+			new MessageBoardDataFactory(userDataFactory));
 		context.put(
 			"portletPreferenceDataFactory",
-			new PortletPreferenceDataFactory(
-				dataFactoryContext, assetDataFactory));
-		context.put(
-			"releaseDataFactory", new ReleaseDataFactory(dataFactoryContext));
+			new PortletPreferenceDataFactory(assetDataFactory));
+		context.put("releaseDataFactory", new ReleaseDataFactory());
 		context.put(
 			"resourcePermissionDataFactory", resourcePermissionDataFactory);
 		context.put("socialActivityDataFactory", socialActivityDataFactory);
-		context.put(
-			"subscriptionDataFactory",
-			new SubscriptionDataFactory(dataFactoryContext));
+		context.put("subscriptionDataFactory", new SubscriptionDataFactory());
 		context.put("userDataFactory", userDataFactory);
-		context.put("wikiDataFactory", new WikiDataFactory(dataFactoryContext));
-
-		context.put("dataFactoryContext", dataFactoryContext);
+		context.put("wikiDataFactory", new WikiDataFactory());
 
 		return context;
 	}
@@ -471,7 +449,6 @@ public class SampleSQLBuilder {
 
 	private static final int _WRITER_BUFFER_SIZE = 16 * 1024;
 
-	private final DataFactoryContext _dataFactoryContext;
 	private final DBType _dbType;
 	private volatile Throwable _freeMarkerThrowable;
 	private final int _optimizeBufferSize;

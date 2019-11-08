@@ -41,10 +41,6 @@ import com.liferay.wiki.social.WikiActivityKeys;
  */
 public class SocialActivityDataFactory extends BaseDataFactory {
 
-	public SocialActivityDataFactory(DataFactoryContext dataFactoryContext) {
-		super(dataFactoryContext);
-	}
-
 	public SimpleCounter getSocialActivityCounter() {
 		return _socialActivityCounter;
 	}
@@ -134,8 +130,8 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 
 		socialActivityModel.setActivityId(_socialActivityCounter.get());
 		socialActivityModel.setGroupId(groupId);
-		socialActivityModel.setCompanyId(dataFactoryContext.getCompanyId());
-		socialActivityModel.setUserId(dataFactoryContext.getSampleUserId());
+		socialActivityModel.setCompanyId(companyId);
+		socialActivityModel.setUserId(sampleUserId);
 		socialActivityModel.setCreateDate(_CURRENT_TIME + _timeCounter.get());
 		socialActivityModel.setClassNameId(classNameId);
 		socialActivityModel.setClassPK(classPK);

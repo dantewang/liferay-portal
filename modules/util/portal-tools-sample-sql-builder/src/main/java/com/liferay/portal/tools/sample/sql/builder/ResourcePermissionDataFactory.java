@@ -86,11 +86,8 @@ import java.util.TimeZone;
 public class ResourcePermissionDataFactory extends BaseDataFactory {
 
 	public ResourcePermissionDataFactory(
-		DataFactoryContext dataFactoryContext,
 		CommerceDataFactory commerceDataFactory,
 		UserDataFactory userDataFactory) {
-
-		super(dataFactoryContext);
 
 		_commerceDataFactory = commerceDataFactory;
 		_userDataFactory = userDataFactory;
@@ -108,7 +105,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 		return _newResourcePermissionModel(
 			CommerceCatalog.class.getName(),
 			String.valueOf(commerceCatalogModel.getCommerceCatalogId()),
-			guestRoleModel.getRoleId(), dataFactoryContext.getSampleUserId());
+			guestRoleModel.getRoleId(), sampleUserId);
 	}
 
 	public SimpleCounter getResourcePermissionCounter() {
@@ -120,14 +117,12 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 
 		return newResourcePermissionModels(
 			AssetCategory.class.getName(),
-			String.valueOf(assetCategoryModel.getCategoryId()),
-			dataFactoryContext.getSampleUserId());
+			String.valueOf(assetCategoryModel.getCategoryId()), sampleUserId);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		AssetVocabularyModel assetVocabularyModel) {
 
-		long defaultUserId = dataFactoryContext.getDefaultUserId();
 		RoleModel ownerRoleModel = _userDataFactory.getOwnerRoleModel();
 
 		if (assetVocabularyModel.getUserId() == defaultUserId) {
@@ -141,7 +136,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 		return newResourcePermissionModels(
 			AssetVocabulary.class.getName(),
 			String.valueOf(assetVocabularyModel.getVocabularyId()),
-			dataFactoryContext.getSampleUserId());
+			sampleUserId);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -149,8 +144,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 
 		return newResourcePermissionModels(
 			BlogsEntry.class.getName(),
-			String.valueOf(blogsEntryModel.getEntryId()),
-			dataFactoryContext.getSampleUserId());
+			String.valueOf(blogsEntryModel.getEntryId()), sampleUserId);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -162,8 +156,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 			_newResourcePermissionModel(
 				DDLRecordSet.class.getName(),
 				String.valueOf(ddlRecordSetModel.getRecordSetId()),
-				ownerRoleModel.getRoleId(),
-				dataFactoryContext.getDefaultUserId()));
+				ownerRoleModel.getRoleId(), defaultUserId));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -229,8 +222,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 
 		return newResourcePermissionModels(
 			DLFileEntry.class.getName(),
-			String.valueOf(dlFileEntryModel.getFileEntryId()),
-			dataFactoryContext.getSampleUserId());
+			String.valueOf(dlFileEntryModel.getFileEntryId()), sampleUserId);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -238,8 +230,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 
 		return newResourcePermissionModels(
 			DLFolder.class.getName(),
-			String.valueOf(dlFolderModel.getFolderId()),
-			dataFactoryContext.getSampleUserId());
+			String.valueOf(dlFolderModel.getFolderId()), sampleUserId);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -250,8 +241,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 		return Collections.singletonList(
 			_newResourcePermissionModel(
 				Group.class.getName(), String.valueOf(groupModel.getGroupId()),
-				ownerRoleModel.getRoleId(),
-				dataFactoryContext.getSampleUserId()));
+				ownerRoleModel.getRoleId(), sampleUserId));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -260,7 +250,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 		return newResourcePermissionModels(
 			JournalArticle.class.getName(),
 			String.valueOf(journalArticleResourceModel.getResourcePrimKey()),
-			dataFactoryContext.getSampleUserId());
+			sampleUserId);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -275,8 +265,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 
 		return newResourcePermissionModels(
 			MBCategory.class.getName(),
-			String.valueOf(mbCategoryModel.getCategoryId()),
-			dataFactoryContext.getSampleUserId());
+			String.valueOf(mbCategoryModel.getCategoryId()), sampleUserId);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -284,8 +273,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 
 		return newResourcePermissionModels(
 			MBMessage.class.getName(),
-			String.valueOf(mbMessageModel.getMessageId()),
-			dataFactoryContext.getSampleUserId());
+			String.valueOf(mbMessageModel.getMessageId()), sampleUserId);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -315,16 +303,14 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 		return Collections.singletonList(
 			_newResourcePermissionModel(
 				Role.class.getName(), String.valueOf(roleModel.getRoleId()),
-				ownerRoleModel.getRoleId(),
-				dataFactoryContext.getSampleUserId()));
+				ownerRoleModel.getRoleId(), sampleUserId));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
 		String name, long primKey) {
 
 		return newResourcePermissionModels(
-			name, String.valueOf(primKey),
-			dataFactoryContext.getSampleUserId());
+			name, String.valueOf(primKey), sampleUserId);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -343,7 +329,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 
 		return newResourcePermissionModels(
 			WikiNode.class.getName(), String.valueOf(wikiNodeModel.getNodeId()),
-			dataFactoryContext.getSampleUserId());
+			sampleUserId);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -351,8 +337,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 
 		return newResourcePermissionModels(
 			WikiPage.class.getName(),
-			String.valueOf(wikiPageModel.getResourcePrimKey()),
-			dataFactoryContext.getSampleUserId());
+			String.valueOf(wikiPageModel.getResourcePrimKey()), sampleUserId);
 	}
 
 	public String toInsertSQL(BaseModel<?> baseModel) {
@@ -390,9 +375,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 	}
 
 	protected String getClassName(long classNameId) {
-		for (ClassNameModel classNameModel :
-				dataFactoryContext.getClassNameModels()) {
-
+		for (ClassNameModel classNameModel : getClassNameModels()) {
 			if (classNameModel.getClassNameId() == classNameId) {
 				return classNameModel.getValue();
 			}
@@ -453,7 +436,7 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 
 		resourcePermissionModel.setResourcePermissionId(
 			_resourcePermissionCounter.get());
-		resourcePermissionModel.setCompanyId(dataFactoryContext.getCompanyId());
+		resourcePermissionModel.setCompanyId(companyId);
 		resourcePermissionModel.setName(name);
 		resourcePermissionModel.setScope(ResourceConstants.SCOPE_INDIVIDUAL);
 		resourcePermissionModel.setPrimKey(primKey);

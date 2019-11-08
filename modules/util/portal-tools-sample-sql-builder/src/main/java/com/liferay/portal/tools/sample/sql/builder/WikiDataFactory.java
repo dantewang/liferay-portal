@@ -15,7 +15,6 @@
 package com.liferay.portal.tools.sample.sql.builder;
 
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.model.WikiNodeModel;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.model.WikiPageConstants;
@@ -34,16 +33,12 @@ import java.util.List;
  */
 public class WikiDataFactory extends BaseDataFactory {
 
-	public WikiDataFactory(DataFactoryContext dataFactoryContext) {
-		super(dataFactoryContext);
-	}
-
 	public long getWikiPageClassNameId() {
 		return getClassNameId(WikiPage.class);
 	}
 
 	public List<WikiNodeModel> newWikiNodeModels(long groupId) {
-		int maxWikiNodeCount = dataFactoryContext.getMaxWikiNodeCount();
+		int maxWikiNodeCount = PropsValues.MAX_WIKI_NODE_COUNT;
 
 		List<WikiNodeModel> wikiNodeModels = new ArrayList<>(maxWikiNodeCount);
 
@@ -55,7 +50,7 @@ public class WikiDataFactory extends BaseDataFactory {
 	}
 
 	public List<WikiPageModel> newWikiPageModels(WikiNodeModel wikiNodeModel) {
-		int maxWikiPageCount = dataFactoryContext.getMaxWikiPageCount();
+		int maxWikiPageCount = PropsValues.MAX_WIKI_PAGE_COUNT;
 
 		List<WikiPageModel> wikiPageModels = new ArrayList<>(maxWikiPageCount);
 
@@ -84,13 +79,11 @@ public class WikiDataFactory extends BaseDataFactory {
 	private WikiNodeModel _newWikiNodeModel(long groupId, int index) {
 		WikiNodeModel wikiNodeModel = new WikiNodeModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		wikiNodeModel.setUuid(SequentialUUID.generate());
 		wikiNodeModel.setNodeId(counter.get());
 		wikiNodeModel.setGroupId(groupId);
-		wikiNodeModel.setCompanyId(dataFactoryContext.getCompanyId());
-		wikiNodeModel.setUserId(dataFactoryContext.getSampleUserId());
+		wikiNodeModel.setCompanyId(companyId);
+		wikiNodeModel.setUserId(sampleUserId);
 		wikiNodeModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		wikiNodeModel.setCreateDate(new Date());
 		wikiNodeModel.setModifiedDate(new Date());
@@ -108,14 +101,12 @@ public class WikiDataFactory extends BaseDataFactory {
 
 		WikiPageModel wikiPageModel = new WikiPageModelImpl();
 
-		SimpleCounter counter = dataFactoryContext.getCounter();
-
 		wikiPageModel.setUuid(SequentialUUID.generate());
 		wikiPageModel.setPageId(counter.get());
 		wikiPageModel.setResourcePrimKey(counter.get());
 		wikiPageModel.setGroupId(wikiNodeModel.getGroupId());
-		wikiPageModel.setCompanyId(dataFactoryContext.getCompanyId());
-		wikiPageModel.setUserId(dataFactoryContext.getSampleUserId());
+		wikiPageModel.setCompanyId(companyId);
+		wikiPageModel.setUserId(sampleUserId);
 		wikiPageModel.setUserName(DataFactoryConstants.SAMPLE_USER_NAME);
 		wikiPageModel.setCreateDate(new Date());
 		wikiPageModel.setModifiedDate(new Date());
