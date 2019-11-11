@@ -367,8 +367,10 @@ public class DataFactory {
 		initCommerceCatalogModel();
 		initCommerceChannelModel();
 		initCommerceProductModels();
+		initCommerceGroupModle();
 		initCompanyModel();
 		initDLFileEntryTypeModel();
+		initJournalTypeModel();
 		initGroupModels();
 
 		initJournalArticleContent();
@@ -1018,6 +1020,18 @@ public class DataFactory {
 		_commerceCurrencyModel.setLastPublishDate(new Date());
 	}
 
+	public void initCommerceGroupModle() throws Exception {
+		_commerceChannelGroupModel = newGroupModel(
+			_commerceChannelGroupId, getClassNameId(CommerceChannel.class),
+			_commerceChannelModel.getCommerceChannelId(),
+			_commerceChannelModel.getName(), false);
+
+		_commerceCatalogGroupModel = newGroupModel(
+			_commerceCatalogGroupId, getClassNameId(CommerceCatalog.class),
+			_commerceCatalogModel.getCommerceCatalogId(),
+			_commerceCatalogModel.getName(), false);
+	}
+
 	public void initCommerceProductModels() {
 		CPTaxCategoryModel cpTaxCategoryModel = newCPTaxCategoryModel(
 			"Normal Product");
@@ -1266,41 +1280,10 @@ public class DataFactory {
 			_globalGroupId, _defaultUserId,
 			_defaultDLDDMStructureVersionModel.getStructureVersionId(),
 			_dlDDMStructureLayoutContent);
-
-		_defaultJournalDDMStructureModel = newDDMStructureModel(
-			_globalGroupId, _defaultUserId,
-			getClassNameId(JournalArticle.class), "BASIC-WEB-CONTENT",
-			_journalDDMStructureContent);
-
-		_defaultJournalDDMStructureVersionModel = newDDMStructureVersionModel(
-			_defaultJournalDDMStructureModel);
-
-		_defaultJournalDDMStructureLayoutModel = newDDMStructureLayoutModel(
-			_globalGroupId, _defaultUserId,
-			_defaultJournalDDMStructureVersionModel.getStructureVersionId(),
-			_journalDDMStructureLayoutContent);
-
-		_defaultJournalDDMTemplateModel = newDDMTemplateModel(
-			_globalGroupId, _defaultUserId,
-			_defaultJournalDDMStructureModel.getStructureId(),
-			getClassNameId(JournalArticle.class));
-
-		_defaultJournalDDMTemplateVersionModel = newDDMTemplateVersionModel(
-			_defaultJournalDDMTemplateModel);
 	}
 
 	public void initGroupModels() throws Exception {
 		long groupClassNameId = getClassNameId(Group.class);
-
-		_commerceChannelGroupModel = newGroupModel(
-			_commerceChannelGroupId, getClassNameId(CommerceChannel.class),
-			_commerceChannelModel.getCommerceChannelId(),
-			_commerceChannelModel.getName(), false);
-
-		_commerceCatalogGroupModel = newGroupModel(
-			_commerceCatalogGroupId, getClassNameId(CommerceCatalog.class),
-			_commerceCatalogModel.getCommerceCatalogId(),
-			_commerceCatalogModel.getName(), false);
 
 		_globalGroupModel = newGroupModel(
 			_globalGroupId, getClassNameId(Company.class), _companyId,
@@ -1347,6 +1330,29 @@ public class DataFactory {
 		sb.append("]]></dynamic-content></dynamic-element></root>");
 
 		_journalArticleContent = sb.toString();
+	}
+
+	public void initJournalTypeModel() {
+		_defaultJournalDDMStructureModel = newDDMStructureModel(
+			_globalGroupId, _defaultUserId,
+			getClassNameId(JournalArticle.class), "BASIC-WEB-CONTENT",
+			_journalDDMStructureContent);
+
+		_defaultJournalDDMStructureVersionModel = newDDMStructureVersionModel(
+			_defaultJournalDDMStructureModel);
+
+		_defaultJournalDDMStructureLayoutModel = newDDMStructureLayoutModel(
+			_globalGroupId, _defaultUserId,
+			_defaultJournalDDMStructureVersionModel.getStructureVersionId(),
+			_journalDDMStructureLayoutContent);
+
+		_defaultJournalDDMTemplateModel = newDDMTemplateModel(
+			_globalGroupId, _defaultUserId,
+			_defaultJournalDDMStructureModel.getStructureId(),
+			getClassNameId(JournalArticle.class));
+
+		_defaultJournalDDMTemplateVersionModel = newDDMTemplateVersionModel(
+			_defaultJournalDDMTemplateModel);
 	}
 
 	public void initRoleModels() {
