@@ -351,12 +351,11 @@ public class DataFactory {
 		_journalDDMStructureLayoutContent = getResource(
 			"ddm_structure_layout_basic_web_content.json", lines);
 
-		String defaultAssetPublisherPreference = StringUtil.read(
-			getResourceInputStream("default_asset_publisher_preference.xml"));
-
 		_defaultAssetPublisherPortletPreferencesImpl =
 			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
-				defaultAssetPublisherPreference);
+				StringUtil.read(
+					getResourceInputStream(
+						"default_asset_publisher_preference.xml")));
 
 		initAssetCategoryModels();
 		initAssetTagModels();
