@@ -193,7 +193,6 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.PortletKeys;
@@ -586,10 +585,6 @@ public class DataFactory {
 		return _companyModel;
 	}
 
-	public SimpleCounter getCounter() {
-		return _counter;
-	}
-
 	public long getCounterNext() {
 		return _counter.get();
 	}
@@ -629,22 +624,6 @@ public class DataFactory {
 		}
 
 		return writer;
-	}
-
-	public String getDateLong(Date date) {
-		return String.valueOf(date.getTime());
-	}
-
-	public String getDateString(Date date) {
-		if (date == null) {
-			return null;
-		}
-
-		return _simpleDateFormat.format(date);
-	}
-
-	public long getDDLRecordSetClassNameId() {
-		return getClassNameId(DDLRecordSet.class);
 	}
 
 	public long getDefaultDLDDMStructureId() {
@@ -701,10 +680,6 @@ public class DataFactory {
 		return _globalGroupModel;
 	}
 
-	public long getGroupClassNameId() {
-		return getClassNameId(Group.class);
-	}
-
 	public List<GroupModel> getGroupModels() {
 		return _groupModels;
 	}
@@ -731,10 +706,6 @@ public class DataFactory {
 		}
 
 		return sb.toString();
-	}
-
-	public long getLayoutClassNameId() {
-		return getClassNameId(Layout.class);
 	}
 
 	public int getMaxAssetPublisherPageCount() {
@@ -1317,7 +1288,7 @@ public class DataFactory {
 	}
 
 	public void initGroupModels() throws Exception {
-		long groupClassNameId = getGroupClassNameId();
+		long groupClassNameId = getClassNameId(Group.class);
 
 		_commerceChannelGroupModel = newGroupModel(
 			_commerceChannelGroupId, getClassNameId(CommerceChannel.class),
@@ -2204,10 +2175,6 @@ public class DataFactory {
 		return newGroupModel(
 			_counter.get(), getClassNameId(User.class), userModel.getUserId(),
 			userModel.getScreenName(), false);
-	}
-
-	public IntegerWrapper newInteger() {
-		return new IntegerWrapper();
 	}
 
 	public JournalArticleLocalizationModel newJournalArticleLocalizationModel(
@@ -4214,7 +4181,7 @@ public class DataFactory {
 					}
 					else {
 						sb.append("'");
-						sb.append(getDateString(date));
+						sb.append(_simpleDateFormat.format(date));
 						sb.append("'");
 					}
 				}
