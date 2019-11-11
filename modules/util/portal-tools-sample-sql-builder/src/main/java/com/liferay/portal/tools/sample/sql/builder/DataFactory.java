@@ -389,16 +389,12 @@ public class DataFactory {
 		initDLFileEntryTypeModel();
 		initGroupModels();
 
-		int maxJournalArticleSize = GetterUtil.getInteger(
-			properties.getProperty("sample.sql.max.journal.article.size"));
-
-		initJournalArticleContent(maxJournalArticleSize);
+		initJournalArticleContent();
 
 		initRoleModels();
 		initUserNames();
 		initUserModels();
-		initVirtualHostModel(
-			properties.getProperty("sample.sql.virtual.hostname"));
+		initVirtualHostModel(_virtualHostName);
 	}
 
 	public void closeCSVWriters() throws IOException {
@@ -1190,6 +1186,8 @@ public class DataFactory {
 		_maxJournalArticlePageCount = GetterUtil.getInteger(
 			properties.getProperty(
 				"sample.sql.max.journal.article.page.count"));
+		_maxJournalArticleSize = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.journal.article.size"));
 		_maxJournalArticleVersionCount = GetterUtil.getInteger(
 			properties.getProperty(
 				"sample.sql.max.journal.article.version.count"));
@@ -1210,13 +1208,17 @@ public class DataFactory {
 		_maxWikiPageCount = GetterUtil.getInteger(
 			properties.getProperty("sample.sql.max.wiki.page.count"));
 
-		File outputDir = new File(
-			properties.getProperty("sample.sql.output.dir"));
+		_virtualHostName = properties.getProperty(
+			"sample.sql.virtual.hostname");
+		_outputDir = properties.getProperty("sample.sql.output.dir");
+		_outputCsvFileNames = properties.getProperty(
+			"sample.sql.output.csv.file.names");
+
+		File outputDir = new File(_outputDir);
 
 		outputDir.mkdirs();
 
-		String[] csvFileNames = StringUtil.split(
-			properties.getProperty("sample.sql.output.csv.file.names"));
+		String[] csvFileNames = StringUtil.split(_outputCsvFileNames);
 
 		for (String csvFileName : csvFileNames) {
 			_csvWriters.put(
@@ -1330,7 +1332,7 @@ public class DataFactory {
 		}
 	}
 
-	public void initJournalArticleContent(int maxJournalArticleSize) {
+	public void initJournalArticleContent() {
 		StringBundler sb = new StringBundler(6);
 
 		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
@@ -1338,13 +1340,13 @@ public class DataFactory {
 		sb.append("\" type=\"text_area\" index-type=\"keyword\" index=\"0\">");
 		sb.append("<dynamic-content language-id=\"en_US\"><![CDATA[");
 
-		if (maxJournalArticleSize <= 0) {
-			maxJournalArticleSize = 1;
+		if (_maxJournalArticleSize <= 0) {
+			_maxJournalArticleSize = 1;
 		}
 
-		char[] chars = new char[maxJournalArticleSize];
+		char[] chars = new char[_maxJournalArticleSize];
 
-		for (int i = 0; i < maxJournalArticleSize; i++) {
+		for (int i = 0; i < _maxJournalArticleSize; i++) {
 			chars[i] = (char)(CharPool.LOWER_CASE_A + (i % 26));
 		}
 
@@ -4346,6 +4348,7 @@ public class DataFactory {
 	private int _maxGroupCount;
 	private int _maxJournalArticleCount;
 	private int _maxJournalArticlePageCount;
+	private int _maxJournalArticleSize;
 	private int _maxJournalArticleVersionCount;
 	private int _maxMBCategoryCount;
 	private int _maxMBMessageCount;
@@ -4355,6 +4358,8 @@ public class DataFactory {
 	private int _maxWikiNodeCount;
 	private int _maxWikiPageCommentCount;
 	private int _maxWikiPageCount;
+	private String _outputCsvFileNames;
+	private String _outputDir;
 	private RoleModel _ownerRoleModel;
 	private RoleModel _powerUserRoleModel;
 	private final SimpleCounter _resourcePermissionCounter;
@@ -4370,5 +4375,6 @@ public class DataFactory {
 	private RoleModel _userRoleModel;
 	private final SimpleCounter _userScreenNameCounter;
 	private VirtualHostModel _virtualHostModel;
+	private String _virtualHostName;
 
 }
