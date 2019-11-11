@@ -343,39 +343,17 @@ public class DataFactory {
 
 		List<String> lines = new ArrayList<>();
 
-		StringUtil.readLines(
-			getResourceInputStream("ddm_structure_basic_document.json"), lines);
+		_dlDDMStructureContent = getResource(
+			"ddm_structure_basic_document.json", lines);
 
-		_dlDDMStructureContent = StringUtil.merge(lines, StringPool.SPACE);
+		_dlDDMStructureLayoutContent = getResource(
+			"ddm_structure_layout_basic_document.json", lines);
 
-		lines.clear();
+		_journalDDMStructureContent = getResource(
+			"ddm_structure_basic_web_content.json", lines);
 
-		StringUtil.readLines(
-			getResourceInputStream("ddm_structure_layout_basic_document.json"),
-			lines);
-
-		_dlDDMStructureLayoutContent = StringUtil.merge(
-			lines, StringPool.SPACE);
-
-		lines.clear();
-
-		StringUtil.readLines(
-			getResourceInputStream("ddm_structure_basic_web_content.json"),
-			lines);
-
-		_journalDDMStructureContent = StringUtil.merge(lines, StringPool.SPACE);
-
-		lines.clear();
-
-		StringUtil.readLines(
-			getResourceInputStream(
-				"ddm_structure_layout_basic_web_content.json"),
-			lines);
-
-		_journalDDMStructureLayoutContent = StringUtil.merge(
-			lines, StringPool.SPACE);
-
-		lines.clear();
+		_journalDDMStructureLayoutContent = getResource(
+			"ddm_structure_layout_basic_web_content.json", lines);
 
 		_defaultAssetPublisherPortletPreferencesImpl =
 			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
@@ -794,6 +772,16 @@ public class DataFactory {
 
 	public RoleModel getPowerUserRoleModel() {
 		return _powerUserRoleModel;
+	}
+
+	public String getResource(String resourceName, List<String> lines)
+		throws Exception {
+
+		lines.clear();
+
+		StringUtil.readLines(getResourceInputStream(resourceName), lines);
+
+		return StringUtil.merge(lines, StringPool.SPACE);
 	}
 
 	public List<RoleModel> getRoleModels() {
