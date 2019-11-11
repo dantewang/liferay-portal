@@ -3117,16 +3117,6 @@ public class DataFactory {
 		return wikiPageResourceModel;
 	}
 
-	public String[] nextUserName(long index) {
-		String[] userName = new String[2];
-
-		userName[0] = _firstNames.get(
-			(int)(index / _lastNames.size()) % _firstNames.size());
-		userName[1] = _lastNames.get((int)(index % _lastNames.size()));
-
-		return userName;
-	}
-
 	public String toInsertSQL(BaseModel<?> baseModel) {
 		try {
 			StringBundler sb = new StringBundler();
@@ -4133,6 +4123,16 @@ public class DataFactory {
 	protected Date nextFutureDate() {
 		return new Date(
 			_FUTURE_TIME + (_futureDateCounter.get() * Time.SECOND));
+	}
+
+	protected String[] nextUserName(long index) {
+		String[] userName = new String[2];
+
+		userName[0] = _firstNames.get(
+			(int)(index / _lastNames.size()) % _firstNames.size());
+		userName[1] = _lastNames.get((int)(index % _lastNames.size()));
+
+		return userName;
 	}
 
 	protected void toInsertSQL(StringBundler sb, BaseModel<?> baseModel) {
