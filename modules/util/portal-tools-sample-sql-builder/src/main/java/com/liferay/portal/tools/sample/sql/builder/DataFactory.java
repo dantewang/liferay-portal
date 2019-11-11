@@ -294,6 +294,7 @@ public class DataFactory {
 
 	public DataFactory(Properties properties) throws Exception {
 		initContext(properties);
+		initCsvWriters();
 
 		_counter = new SimpleCounter(_maxGroupCount + 1);
 		_timeCounter = new SimpleCounter();
@@ -1119,24 +1120,22 @@ public class DataFactory {
 		_accountModel.setLegalName("Liferay, Inc.");
 	}
 
-	public void initContext(Properties properties)
-		throws FileNotFoundException {
-
-		TimeZone timeZone = TimeZone.getDefault();
-
+	public void initContext(Properties properties) {
 		String timeZoneId = properties.getProperty("sample.sql.db.time.zone");
 
 		if (Validator.isNotNull(timeZoneId)) {
-			timeZone = TimeZone.getTimeZone(ZoneId.of(timeZoneId));
-
-			TimeZone.setDefault(timeZone);
+			TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of(timeZoneId)));
 		}
 		else {
-			properties.setProperty("sample.sql.db.time.zone", timeZone.getID());
+			TimeZone timeZone = TimeZone.getDefault();
+
+			timeZoneId = timeZone.getID();
+
+			properties.setProperty("sample.sql.db.time.zone", timeZoneId);
 		}
 
 		_simpleDateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss", timeZone);
+			"yyyy-MM-dd HH:mm:ss", TimeZone.getDefault());
 
 		_maxAssetCategoryCount = GetterUtil.getInteger(
 			properties.getProperty("sample.sql.max.asset.category.count"));
@@ -1213,7 +1212,9 @@ public class DataFactory {
 		_outputDir = properties.getProperty("sample.sql.output.dir");
 		_outputCsvFileNames = properties.getProperty(
 			"sample.sql.output.csv.file.names");
+	}
 
+	public void initCsvWriters() throws FileNotFoundException {
 		File outputDir = new File(_outputDir);
 
 		outputDir.mkdirs();
