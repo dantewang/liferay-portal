@@ -229,6 +229,10 @@ public interface PropsKeys {
 	public static final String AUTH_TOKEN_SHARED_SECRET =
 		"auth.token.shared.secret";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String AUTH_USER_UUID_STORE_ENABLED =
 		"auth.user.uuid.store.enabled";
 

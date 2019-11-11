@@ -33,7 +33,6 @@ import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserTracker;
 import com.liferay.portal.kernel.security.auth.AuthException;
-import com.liferay.portal.kernel.security.auth.AuthenticatedUserUUIDStoreUtil;
 import com.liferay.portal.kernel.security.auth.Authenticator;
 import com.liferay.portal.kernel.security.auth.session.AuthenticatedSessionManager;
 import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
@@ -286,35 +285,6 @@ public class AuthenticatedSessionManagerImpl
 			CookieKeys.addCookie(
 				httpServletRequest, httpServletResponse, screenNameCookie,
 				secure);
-		}
-
-		if (PropsValues.AUTH_USER_UUID_STORE_ENABLED) {
-			String userUUID = userIdString.concat(
-				StringPool.PERIOD
-			).concat(
-				String.valueOf(System.nanoTime())
-			);
-
-			Cookie userUUIDCookie = new Cookie(
-				CookieKeys.USER_UUID,
-				Encryptor.encrypt(company.getKeyObj(), userUUID));
-
-			userUUIDCookie.setPath(StringPool.SLASH);
-
-			session.setAttribute(CookieKeys.USER_UUID, userUUID);
-
-			if (rememberMe) {
-				userUUIDCookie.setMaxAge(loginMaxAge);
-			}
-			else {
-				userUUIDCookie.setMaxAge(-1);
-			}
-
-			CookieKeys.addCookie(
-				httpServletRequest, httpServletResponse, userUUIDCookie,
-				secure);
-
-			AuthenticatedUserUUIDStoreUtil.register(userUUID);
 		}
 	}
 

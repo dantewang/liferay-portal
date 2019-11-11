@@ -240,6 +240,10 @@ public class PropsValues {
 	public static final String AUTH_TOKEN_SHARED_SECRET = PropsUtil.get(
 		PropsKeys.AUTH_TOKEN_SHARED_SECRET);
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final boolean AUTH_USER_UUID_STORE_ENABLED =
 		GetterUtil.getBoolean(
 			PropsUtil.get(PropsKeys.AUTH_USER_UUID_STORE_ENABLED));

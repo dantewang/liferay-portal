@@ -18,23 +18,7 @@ import com.google.inject.Injector;
 
 import com.liferay.opensocial.shindig.util.HttpServletRequestThreadLocal;
 import com.liferay.opensocial.shindig.util.ShindigUtil;
-import com.liferay.petra.encryptor.Encryptor;
-import com.liferay.petra.encryptor.EncryptorException;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Company;
-import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.security.auth.AuthenticatedUserUUIDStoreUtil;
-import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
-import com.liferay.portal.kernel.security.permission.PermissionChecker;
-import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
-import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
-import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
-import com.liferay.portal.kernel.util.CookieKeys;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
 
@@ -74,13 +58,6 @@ public class ShindigFilter extends InjectedFilter {
 			_init(session.getServletContext());
 		}
 
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
-
-		if (permissionChecker == null) {
-			setPermissionChecker(servletRequest);
-		}
-
 		ShindigUtil.setScheme(servletRequest.getScheme());
 
 		String serverName = servletRequest.getServerName();
@@ -111,72 +88,6 @@ public class ShindigFilter extends InjectedFilter {
 		injector = null;
 	}
 
-	protected boolean setPermissionChecker(ServletRequest servletRequest) {
-		String companyIdString = CookieKeys.getCookie(
-			(HttpServletRequest)servletRequest, CookieKeys.COMPANY_ID);
-
-		if (Validator.isNull(companyIdString)) {
-			return false;
-		}
-
-		long companyId = GetterUtil.getLong(companyIdString);
-
-		String userUUID = StringPool.BLANK;
-
-		try {
-			Company company = CompanyLocalServiceUtil.fetchCompany(companyId);
-
-			if (company == null) {
-				return false;
-			}
-
-			String userUUIDString = CookieKeys.getCookie(
-				(HttpServletRequest)servletRequest, CookieKeys.USER_UUID);
-
-			if (Validator.isNull(userUUIDString)) {
-				return false;
-			}
-
-			userUUID = GetterUtil.getString(
-				Encryptor.decrypt(company.getKeyObj(), userUUIDString));
-		}
-		catch (EncryptorException ee) {
-			return false;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			return false;
-		}
-
-		if (!AuthenticatedUserUUIDStoreUtil.exists(userUUID)) {
-			return false;
-		}
-
-		String userIdString = userUUID.substring(
-			0, userUUID.indexOf(StringPool.PERIOD));
-
-		long userId = GetterUtil.getLong(userIdString);
-
-		try {
-			User user = UserLocalServiceUtil.getUserById(userId);
-
-			PrincipalThreadLocal.setName(userIdString);
-
-			PermissionChecker permissionChecker =
-				PermissionCheckerFactoryUtil.create(user);
-
-			PermissionThreadLocal.setPermissionChecker(permissionChecker);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			return false;
-		}
-
-		return true;
-	}
-
 	private void _init(ServletContext servletContext) throws ServletException {
 		injector = (Injector)servletContext.getAttribute(
 			GuiceServletContextListener.INJECTOR_ATTRIBUTE);
@@ -194,7 +105,5 @@ public class ShindigFilter extends InjectedFilter {
 
 		injector.injectMembers(this);
 	}
-
-	private static final Log _log = LogFactoryUtil.getLog(ShindigFilter.class);
 
 }
