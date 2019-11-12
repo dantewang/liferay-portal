@@ -185,20 +185,6 @@ public class NoAutoCommitIndexer<T> implements Indexer<T> {
 			searchQuery, fullQueryBooleanFilter, searchContext);
 	}
 
-	/**
-	 * @deprecated As of Wilberforce (7.0.x), replaced by {@link
-	 *             #postProcessSearchQuery(BooleanQuery, BooleanFilter,
-	 *             SearchContext)}
-	 */
-	@Deprecated
-	@Override
-	public void postProcessSearchQuery(
-			BooleanQuery searchQuery, SearchContext searchContext)
-		throws Exception {
-
-		_indexer.postProcessSearchQuery(searchQuery, searchContext);
-	}
-
 	@Override
 	public void registerIndexerPostProcessor(
 		IndexerPostProcessor indexerPostProcessor) {
