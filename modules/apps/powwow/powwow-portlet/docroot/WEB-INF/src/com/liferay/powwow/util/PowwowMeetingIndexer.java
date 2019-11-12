@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.Summary;
+import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.generic.BooleanQueryImpl;
 import com.liferay.portal.kernel.search.generic.QueryTermImpl;
 import com.liferay.portal.kernel.search.generic.TermQueryImpl;
@@ -64,10 +65,9 @@ public class PowwowMeetingIndexer extends BaseIndexer {
 
 	@Override
 	public void postProcessSearchQuery(
-			BooleanQuery searchQuery, SearchContext searchContext)
+			BooleanQuery searchQuery, BooleanFilter fullQueryBooleanFilter,
+			SearchContext searchContext)
 		throws Exception {
-
-		super.postProcessSearchQuery(searchQuery, searchContext);
 
 		BooleanQuery participantTypeBooleanQuery = new BooleanQueryImpl();
 
