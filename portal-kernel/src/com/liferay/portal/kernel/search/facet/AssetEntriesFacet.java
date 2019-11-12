@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.BooleanClause;
 import com.liferay.portal.kernel.search.BooleanClauseFactoryUtil;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
-import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerPostProcessor;
@@ -33,8 +32,6 @@ import com.liferay.portal.kernel.search.SearchPermissionChecker;
 import com.liferay.portal.kernel.search.facet.config.FacetConfiguration;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
-import com.liferay.portal.kernel.search.filter.QueryFilter;
-import com.liferay.portal.kernel.search.generic.BooleanQueryImpl;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -108,9 +105,6 @@ public class AssetEntriesFacet extends MultiValueFacet {
 					indexerPostProcessor.postProcessContextBooleanFilter(
 						entityBooleanFilter, searchContext);
 				}
-
-				postProcessContextQuery(
-					entityBooleanFilter, searchContext, indexer);
 
 				if (indexer.isStagingAware()) {
 					if (!searchContext.isIncludeLiveGroups() &&
@@ -193,28 +187,6 @@ public class AssetEntriesFacet extends MultiValueFacet {
 		}
 
 		searchContext.setEntryClassNames(entryClassNames);
-	}
-
-	/**
-	 * @deprecated As of Wilberforce (7.0.x), added strictly to support
-	 *             backwards compatibility of {@link
-	 *             Indexer#postProcessContextQuery(BooleanQuery, SearchContext)}
-	 */
-	@Deprecated
-	protected void postProcessContextQuery(
-			BooleanFilter entityFilter, SearchContext searchContext,
-			Indexer<?> indexer)
-		throws Exception {
-
-		BooleanQuery entityBooleanQuery = new BooleanQueryImpl();
-
-		indexer.postProcessContextQuery(entityBooleanQuery, searchContext);
-
-		if (entityBooleanQuery.hasClauses()) {
-			QueryFilter queryFilter = new QueryFilter(entityBooleanQuery);
-
-			entityFilter.add(queryFilter, BooleanClauseOccur.MUST);
-		}
 	}
 
 	private BooleanFilter _getFacetBooleanFilter(
