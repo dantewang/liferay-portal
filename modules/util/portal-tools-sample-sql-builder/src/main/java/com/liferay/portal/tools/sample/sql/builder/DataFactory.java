@@ -374,12 +374,11 @@ public class DataFactory {
 
 		lines.clear();
 
-		String defaultAssetPublisherPreference = StringUtil.read(
-			getResourceInputStream("default_asset_publisher_preference.xml"));
-
 		_defaultAssetPublisherPortletPreferencesImpl =
 			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
-				defaultAssetPublisherPreference);
+				StringUtil.read(
+					getResourceInputStream(
+						"default_asset_publisher_preference.xml")));
 
 		initAssetCategoryModels();
 		initAssetTagModels();
@@ -639,14 +638,6 @@ public class DataFactory {
 		return String.valueOf(date.getTime());
 	}
 
-	public String getDateString(Date date) {
-		if (date == null) {
-			return null;
-		}
-
-		return _simpleDateFormat.format(date);
-	}
-
 	public long getDDLRecordSetClassNameId() {
 		return getClassNameId(DDLRecordSet.class);
 	}
@@ -703,10 +694,6 @@ public class DataFactory {
 
 	public GroupModel getGlobalGroupModel() {
 		return _globalGroupModel;
-	}
-
-	public long getGroupClassNameId() {
-		return getClassNameId(Group.class);
 	}
 
 	public List<GroupModel> getGroupModels() {
@@ -1321,7 +1308,7 @@ public class DataFactory {
 	}
 
 	public void initGroupModels() throws Exception {
-		long groupClassNameId = getGroupClassNameId();
+		long groupClassNameId = getClassNameId(Group.class);
 
 		_commerceChannelGroupModel = newGroupModel(
 			_commerceChannelGroupId, getClassNameId(CommerceChannel.class),
@@ -4240,7 +4227,7 @@ public class DataFactory {
 					}
 					else {
 						sb.append("'");
-						sb.append(getDateString(date));
+						sb.append(_simpleDateFormat.format(date));
 						sb.append("'");
 					}
 				}
