@@ -89,19 +89,6 @@ public abstract class BaseSearcher extends BaseIndexer<Object> {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * @deprecated As of Wilberforce (7.0.x), added strictly to support
-	 *             backwards compatibility of {@link
-	 *             Indexer#postProcessSearchQuery(BooleanQuery, SearchContext)}
-	 */
-	@Deprecated
-	@Override
-	protected void doPostProcessSearchQuery(
-			Indexer<?> indexer, BooleanQuery searchQuery,
-			SearchContext searchContext)
-		throws Exception {
-	}
-
 	@Override
 	protected void doReindex(Object obj) throws Exception {
 		throw new UnsupportedOperationException();
