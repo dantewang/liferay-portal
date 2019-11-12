@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.HitsImpl;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
+import com.liferay.portal.kernel.service.permission.ModelPermissionsFactory;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.util.LocalizationImpl;
@@ -85,22 +86,30 @@ public class JSONSerializerTest {
 	public void testSerializeServiceContext() {
 		ServiceContext serviceContext = new ServiceContext();
 
+		serviceContext.setModelPermissions(
+			ModelPermissionsFactory.createWithDefaultPermissions(null));
+
 		String[] groupPermissions = {"VIEW"};
 
 		serviceContext.setAttribute("groupPermissions", groupPermissions);
-		serviceContext.setGroupPermissions(groupPermissions);
+
+		ModelPermissions modelPermissions1 =
+			serviceContext.getModelPermissions();
+
+		modelPermissions1.addRolePermissions(
+			RoleConstants.PLACEHOLDER_DEFAULT_GROUP_ROLE, groupPermissions);
 
 		String json = JSONFactoryUtil.serialize(serviceContext);
 
 		ServiceContext deserializedServiceContext =
 			(ServiceContext)JSONFactoryUtil.deserialize(json);
 
-		ModelPermissions modelPermissions =
+		ModelPermissions modelPermissions2 =
 			deserializedServiceContext.getModelPermissions();
 
 		Assert.assertArrayEquals(
 			groupPermissions,
-			modelPermissions.getActionIds(
+			modelPermissions2.getActionIds(
 				RoleConstants.PLACEHOLDER_DEFAULT_GROUP_ROLE));
 	}
 
@@ -108,10 +117,18 @@ public class JSONSerializerTest {
 	public void testSerializeTwice() {
 		ServiceContext serviceContext = new ServiceContext();
 
+		serviceContext.setModelPermissions(
+			ModelPermissionsFactory.createWithDefaultPermissions(null));
+
 		String[] groupPermissions = {"VIEW"};
 
 		serviceContext.setAttribute("groupPermissions", groupPermissions);
-		serviceContext.setGroupPermissions(groupPermissions);
+
+		ModelPermissions modelPermissions =
+			serviceContext.getModelPermissions();
+
+		modelPermissions.addRolePermissions(
+			RoleConstants.PLACEHOLDER_DEFAULT_GROUP_ROLE, groupPermissions);
 
 		String json1 = JSONFactoryUtil.serialize(serviceContext);
 
