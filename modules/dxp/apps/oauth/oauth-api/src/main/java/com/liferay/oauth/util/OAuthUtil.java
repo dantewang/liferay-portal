@@ -15,7 +15,7 @@
 package com.liferay.oauth.util;
 
 import com.liferay.oauth.constants.OAuthConstants;
-import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.petra.string.StringPool;
 
 /**
  * @author Ivica Cardic
