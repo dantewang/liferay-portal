@@ -143,19 +143,6 @@ public class DummyIndexer implements Indexer<Object> {
 		SearchContext searchContext) {
 	}
 
-	/**
-	 * @deprecated As of Wilberforce (7.0.x), replaced by {@link
-	 *             #postProcessSearchQuery(BooleanQuery, BooleanFilter,
-	 *             SearchContext)}
-	 */
-	@Deprecated
-	@Override
-	public void postProcessSearchQuery(
-		BooleanQuery searchQuery, SearchContext searchContext) {
-
-		throw new UnsupportedOperationException();
-	}
-
 	@Override
 	public void registerIndexerPostProcessor(
 		IndexerPostProcessor indexerPostProcessor) {
