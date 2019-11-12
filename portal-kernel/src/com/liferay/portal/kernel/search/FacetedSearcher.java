@@ -147,8 +147,6 @@ public class FacetedSearcher extends BaseSearcher {
 				indexerPostProcessor.postProcessSearchQuery(
 					searchQuery, fullQueryBooleanFilter, searchContext);
 			}
-
-			doPostProcessSearchQuery(indexer, searchQuery, searchContext);
 		}
 
 		Map<String, Facet> facets = searchContext.getFacets();
