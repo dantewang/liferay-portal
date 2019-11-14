@@ -30,8 +30,8 @@ public @interface ExpectedLogs {
 
 	public ExpectedLog[] expectedLogs();
 
-	public String level();
+	public String level() default "";
 
-	public Class<?> loggerClass();
+	public Class<?> loggerClass() default Object.class;
 
 }
