@@ -102,6 +102,8 @@ processExternalDependencies {
 	dependsOn configurations.external
 
 	doLast {
+		project.delete("$buildDir/lib")
+
 		configurations.external.resolvedConfiguration.resolvedArtifacts.each { artifact ->
 			project.copy {
 				from artifact.file
