@@ -23,6 +23,12 @@ classes {
 	dependsOn writeReleases
 }
 
+configurations {
+	external
+	external.transitive = false
+	compile.extendsFrom(external)
+}
+
 dependencies {
 	compile group: "com.liferay.portal", name: "com.liferay.util.java", version: "default"
 	compile group: "javax.portlet", name: "portlet-api", transitive: false, version: "3.0.1"
@@ -53,17 +59,17 @@ dependencies {
 	compile project(":apps:wiki:wiki-api")
 	compile project(":apps:wiki:wiki-service")
 
-	compileInclude group: "com.liferay.commerce", name: "com.liferay.commerce.currency.api", version: "2.0.0"
-	compileInclude group: "com.liferay.commerce", name: "com.liferay.commerce.currency.service", version: "1.0.13"
-	compileInclude group: "com.liferay.commerce", name: "com.liferay.commerce.product.api", version: "10.0.0"
-	compileInclude group: "com.liferay.commerce", name: "com.liferay.commerce.product.service", version: "2.0.0"
-
 	compileOnly group: "com.liferay", name: "org.freemarker", version: "2.3.23.LIFERAY-PATCHED-4"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "default"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
 	compileOnly project(":core:petra:petra-function")
 	compileOnly project(":core:petra:petra-reflect")
 	compileOnly project(":core:petra:petra-string")
+
+	external group: "com.liferay.commerce", name: "com.liferay.commerce.currency.api", version: "2.0.0"
+	external group: "com.liferay.commerce", name: "com.liferay.commerce.currency.service", version: "1.0.13"
+	external group: "com.liferay.commerce", name: "com.liferay.commerce.product.api", version: "10.0.0"
+	external group: "com.liferay.commerce", name: "com.liferay.commerce.product.service", version: "2.0.0"
 
 	testCompile classifier: "jdk6debug", group: "org.hsqldb", name: "hsqldb", version: "2.3.3"
 	testCompile group: "com.liferay", name: "com.ibm.icu4j", version: "54.1.1.LIFERAY-PATCHED-2"
