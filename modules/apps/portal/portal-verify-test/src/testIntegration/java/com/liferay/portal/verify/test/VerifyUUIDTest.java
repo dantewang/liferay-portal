@@ -17,7 +17,6 @@ package com.liferay.portal.verify.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.reflect.ReflectionUtil;
-import com.liferay.portal.kernel.concurrent.ThrowableAwareRunnable;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.db.DBType;
@@ -99,8 +98,7 @@ public class VerifyUUIDTest extends BaseVerifyProcessTestCase {
 				expectedLog = "Invalid column name 'Unknown'.",
 				expectedType = ExpectedType.PREFIX
 			)
-		},
-		level = "ERROR", loggerClass = ThrowableAwareRunnable.class
+		}
 	)
 	@Test
 	public void testVerifyModelWithUnknownPKColumnName() {
@@ -162,8 +160,7 @@ public class VerifyUUIDTest extends BaseVerifyProcessTestCase {
 				expectedLog = "Unknown not found.",
 				expectedType = ExpectedType.PREFIX
 			)
-		},
-		level = "ERROR", loggerClass = ThrowableAwareRunnable.class
+		}
 	)
 	@Test
 	public void testVerifyParallelUnknownModelWithUnknownPKColumnName() {
@@ -232,8 +229,7 @@ public class VerifyUUIDTest extends BaseVerifyProcessTestCase {
 				expectedLog = "Unknown not found.",
 				expectedType = ExpectedType.PREFIX
 			)
-		},
-		level = "ERROR", loggerClass = ThrowableAwareRunnable.class
+		}
 	)
 	@Test
 	public void testVerifyUnknownModelWithUnknownPKColumnName() {
