@@ -144,6 +144,10 @@ public class LogAssertionTestRule
 		for (ExpectedLogs expectedLogs : expectedLogsList) {
 			Class<?> clazz = expectedLogs.loggerClass();
 
+			if (clazz.equals(Object.class)) {
+				continue;
+			}
+
 			captureAppenders.add(
 				Log4JLoggerTestUtil.configureLog4JLogger(
 					clazz.getName(), Level.toLevel(expectedLogs.level())));
