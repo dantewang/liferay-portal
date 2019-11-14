@@ -3,6 +3,7 @@ import java.util.jar.JarFile
 
 import org.gradle.util.VersionNumber
 
+task processExternalDependencies
 task writeReleases
 
 baseline {
@@ -93,6 +94,32 @@ dependencies {
 	testCompile project(":core:registry-api")
 }
 
+jar {
+	dependsOn processExternalDependencies
+}
+
+processExternalDependencies {
+	dependsOn configurations.external
+
+	doLast {
+		configurations.external.resolvedConfiguration.resolvedArtifacts.each { artifact ->
+			project.copy {
+				from artifact.file
+				into "$buildDir/lib"
+			}
+
+			if (artifact.name.contains("service")) {
+				project.copy {
+					from zipTree(artifact.file).matching {
+						include "META-INF/sql/*.sql"
+					}
+					into "$buildDir/lib/${artifact.name}"
+				}
+			}
+		}
+	}
+}
+
 writeReleases {
 	dependsOn configurations.compile
 
@@ -101,7 +128,7 @@ writeReleases {
 
 		List<String> lines = []
 
-		(configurations.compile + configurations.compileInclude).each {
+		configurations.compile.each {
 			JarFile jarFile = new JarFile(it)
 
 			Attributes mainAttributes = jarFile.manifest.mainAttributes
