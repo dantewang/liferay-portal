@@ -73,15 +73,6 @@ public interface DocumentRepository extends CapabilityProvider {
 			DLVersionNumberIncrease dlVersionNumberIncrease, String changeLog,
 			ServiceContext serviceContext)
 		throws PortalException {
-
-		boolean majorVersion = false;
-
-		if (dlVersionNumberIncrease == DLVersionNumberIncrease.MAJOR) {
-			majorVersion = true;
-		}
-
-		checkInFileEntry(
-			userId, fileEntryId, majorVersion, changeLog, serviceContext);
 	}
 
 	public void checkInFileEntry(
@@ -241,15 +232,7 @@ public interface DocumentRepository extends CapabilityProvider {
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		boolean majorVersion = false;
-
-		if (dlVersionNumberIncrease == DLVersionNumberIncrease.MAJOR) {
-			majorVersion = true;
-		}
-
-		return updateFileEntry(
-			userId, fileEntryId, sourceFileName, mimeType, title, description,
-			changeLog, majorVersion, file, serviceContext);
+		return null;
 	}
 
 	public default FileEntry updateFileEntry(
@@ -259,15 +242,7 @@ public interface DocumentRepository extends CapabilityProvider {
 			long size, ServiceContext serviceContext)
 		throws PortalException {
 
-		boolean majorVersion = false;
-
-		if (dlVersionNumberIncrease == DLVersionNumberIncrease.MAJOR) {
-			majorVersion = true;
-		}
-
-		return updateFileEntry(
-			userId, fileEntryId, sourceFileName, mimeType, title, description,
-			changeLog, majorVersion, is, size, serviceContext);
+		return null;
 	}
 
 	public FileShortcut updateFileShortcut(
