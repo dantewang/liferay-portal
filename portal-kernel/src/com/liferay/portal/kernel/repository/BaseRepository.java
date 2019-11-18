@@ -30,14 +30,6 @@ public interface BaseRepository extends Repository {
 
 	public LocalRepository getLocalRepository();
 
-	/**
-	 * @deprecated As of Wilberforce (7.0.x), replaced by {@link
-	 *             com.liferay.portal.kernel.repository.registry.RepositoryDefiner#getSupportedParameters(
-	 *             )}
-	 */
-	@Deprecated
-	public String[][] getSupportedParameters();
-
 	public void initRepository() throws PortalException;
 
 	public void setAssetEntryLocalService(
