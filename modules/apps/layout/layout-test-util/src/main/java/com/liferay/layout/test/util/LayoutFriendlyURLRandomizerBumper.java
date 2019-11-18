@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.test.randomizerbumpers;
+package com.liferay.layout.test.util;
 
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
@@ -22,14 +22,12 @@ import com.liferay.portal.model.impl.LayoutImpl;
 
 /**
  * @author Shuyang Zhou
- * @deprecated As of Athanasius (7.3.x), replaced by {@link
- *			 com.liferay.layout.test.util.LayoutFriendlyURLRandomizerBumper}
  */
-@Deprecated
-public class FriendlyURLRandomizerBumper implements RandomizerBumper<String> {
+public class LayoutFriendlyURLRandomizerBumper
+	implements RandomizerBumper<String> {
 
-	public static final FriendlyURLRandomizerBumper INSTANCE =
-		new FriendlyURLRandomizerBumper();
+	public static final LayoutFriendlyURLRandomizerBumper INSTANCE =
+		new LayoutFriendlyURLRandomizerBumper();
 
 	@Override
 	public boolean accept(String randomValue) {
