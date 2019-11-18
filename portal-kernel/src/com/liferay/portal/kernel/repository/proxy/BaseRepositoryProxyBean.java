@@ -581,15 +581,6 @@ public class BaseRepositoryProxyBean
 		return _baseRepository.getSubfolderIds(folderId, recurse);
 	}
 
-	/**
-	 * @deprecated As of Wilberforce (7.0.x)
-	 */
-	@Deprecated
-	@Override
-	public String[][] getSupportedParameters() {
-		return _baseRepository.getSupportedParameters();
-	}
-
 	@Override
 	public void initRepository() throws PortalException {
 		_baseRepository.initRepository();

@@ -711,11 +711,6 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 	}
 
 	@Override
-	public String[][] getSupportedParameters() {
-		return _extRepository.getSupportedParameters();
-	}
-
-	@Override
 	public void initRepository() throws PortalException {
 		try {
 			CredentialsProvider credentialsProvider =

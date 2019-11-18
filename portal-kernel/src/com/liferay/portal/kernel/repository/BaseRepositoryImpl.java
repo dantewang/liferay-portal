@@ -285,15 +285,6 @@ public abstract class BaseRepositoryImpl
 		return _repositoryId;
 	}
 
-	/**
-	 * @deprecated As of Wilberforce (7.0.x)
-	 */
-	@Deprecated
-	@Override
-	public String[][] getSupportedParameters() {
-		return _SUPPORTED_PARAMETERS;
-	}
-
 	public UnicodeProperties getTypeSettingsProperties() {
 		return _typeSettingsProperties;
 	}
@@ -486,8 +477,6 @@ public abstract class BaseRepositoryImpl
 	protected DLFolderLocalService dlFolderLocalService;
 	protected RepositoryEntryLocalService repositoryEntryLocalService;
 	protected UserLocalService userLocalService;
-
-	private static final String[][] _SUPPORTED_PARAMETERS = {};
 
 	private long _companyId;
 	private long _groupId;
