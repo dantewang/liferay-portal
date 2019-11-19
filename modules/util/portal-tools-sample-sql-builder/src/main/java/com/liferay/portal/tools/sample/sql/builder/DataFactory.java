@@ -547,6 +547,12 @@ public class DataFactory {
 		return classNameModel.getClassNameId();
 	}
 
+	public long getClassNameId(String className) {
+		ClassNameModel classNameModel = _classNameModels.get(className);
+
+		return classNameModel.getClassNameId();
+	}
+
 	public Collection<ClassNameModel> getClassNameModels() {
 		return _classNameModels.values();
 	}
@@ -893,8 +899,7 @@ public class DataFactory {
 		_assetTagModelsArray =
 			(List<AssetTagModel>[])new List<?>[_maxGroupCount];
 		_assetTagModelsMaps =
-			(Map<Long, List<AssetTagModel>>[])
-				new HashMap<?, ?>[_maxGroupCount];
+			(Map<Long, List<AssetTagModel>>[])new HashMap<?, ?>[_maxGroupCount];
 
 		for (int i = 1; i <= _maxGroupCount; i++) {
 			List<AssetTagModel> assetTagModels = new ArrayList<>(
@@ -2612,12 +2617,10 @@ public class DataFactory {
 	public AssetEntryModel newMBDiscussionAssetEntryModel(
 		BlogsEntryModel blogsEntryModel) {
 
-		ClassNameModel classNameModel = _classNameModels.get(
-			_getMBDiscussionCombinedClassName(BlogsEntry.class));
-
 		return newAssetEntryModel(
 			blogsEntryModel.getGroupId(), blogsEntryModel.getCreateDate(),
-			blogsEntryModel.getModifiedDate(), classNameModel.getClassNameId(),
+			blogsEntryModel.getModifiedDate(),
+			getClassNameId(_getMBDiscussionCombinedClassName(BlogsEntry.class)),
 			blogsEntryModel.getEntryId(), "", 0, true, false, "",
 			String.valueOf(blogsEntryModel.getGroupId()));
 	}
@@ -2625,12 +2628,10 @@ public class DataFactory {
 	public AssetEntryModel newMBDiscussionAssetEntryModel(
 		WikiPageModel wikiPageModel) {
 
-		ClassNameModel classNameModel = _classNameModels.get(
-			_getMBDiscussionCombinedClassName(WikiPage.class));
-
 		return newAssetEntryModel(
 			wikiPageModel.getGroupId(), wikiPageModel.getCreateDate(),
-			wikiPageModel.getModifiedDate(), classNameModel.getClassNameId(),
+			wikiPageModel.getModifiedDate(),
+			getClassNameId(_getMBDiscussionCombinedClassName(WikiPage.class)),
 			wikiPageModel.getResourcePrimKey(), "", 0, true, false, "",
 			String.valueOf(wikiPageModel.getGroupId()));
 	}
