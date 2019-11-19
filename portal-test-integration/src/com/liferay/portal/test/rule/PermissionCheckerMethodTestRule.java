@@ -55,6 +55,37 @@ public class PermissionCheckerMethodTestRule extends MethodTestRule<Void> {
 		_originalPermissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
 
+		if (_permissionChecker == null) {
+			try {
+				ClassLoader portalClassloader =
+					PortalClassLoaderUtil.getClassLoader();
+
+				Class<?> simplePermissionCheckerClass =
+					portalClassloader.loadClass(
+						"com.liferay.portal.security.permission." +
+							"SimplePermissionChecker");
+
+				_permissionChecker =
+					(PermissionChecker)ProxyUtil.newProxyInstance(
+						PermissionChecker.class.getClassLoader(),
+						new Class<?>[] {PermissionChecker.class},
+						(proxy, method, args) -> {
+							String methodName = method.getName();
+
+							if (methodName.equals("hasOwnerPermission")) {
+								return true;
+							}
+
+							return method.invoke(
+								simplePermissionCheckerClass.newInstance(),
+								args);
+						});
+			}
+			catch (ClassNotFoundException cnfe) {
+				throw new RuntimeException(cnfe);
+			}
+		}
+
 		PermissionChecker permissionChecker = _permissionChecker.clone();
 
 		permissionChecker.init(TestPropsValues.getUser());
@@ -69,44 +100,10 @@ public class PermissionCheckerMethodTestRule extends MethodTestRule<Void> {
 	}
 
 	private PermissionCheckerMethodTestRule() {
-		try {
-			ClassLoader portalClassloader =
-				PortalClassLoaderUtil.getClassLoader();
-
-			if (portalClassloader == null) {
-
-				// Arquillian client side initialization, skip
-
-				_permissionChecker = null;
-
-				return;
-			}
-
-			Class<?> simplePermissionCheckerClass = portalClassloader.loadClass(
-				"com.liferay.portal.security.permission." +
-					"SimplePermissionChecker");
-
-			_permissionChecker = (PermissionChecker)ProxyUtil.newProxyInstance(
-				PermissionChecker.class.getClassLoader(),
-				new Class<?>[] {PermissionChecker.class},
-				(proxy, method, args) -> {
-					String methodName = method.getName();
-
-					if (methodName.equals("hasOwnerPermission")) {
-						return true;
-					}
-
-					return method.invoke(
-						simplePermissionCheckerClass.newInstance(), args);
-				});
-		}
-		catch (ClassNotFoundException cnfe) {
-			throw new RuntimeException(cnfe);
-		}
 	}
 
 	private String _originalName;
 	private PermissionChecker _originalPermissionChecker;
-	private final PermissionChecker _permissionChecker;
+	private PermissionChecker _permissionChecker;
 
 }
