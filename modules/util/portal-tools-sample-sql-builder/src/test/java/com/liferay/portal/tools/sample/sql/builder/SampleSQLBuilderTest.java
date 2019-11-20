@@ -38,8 +38,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -86,6 +89,8 @@ public class SampleSQLBuilderTest {
 
 		try {
 			new SampleSQLBuilder(properties, new DataFactory(properties));
+
+			_verifyCSVFiles(tempDir);
 
 			_loadHypersonic("../../../sql", tempDir.getAbsolutePath());
 		}
@@ -152,11 +157,6 @@ public class SampleSQLBuilderTest {
 		properties.put("sample.sql.max.wiki.page.comment.count", "1");
 		properties.put("sample.sql.max.wiki.page.count", "1");
 		properties.put("sample.sql.optimize.buffer.size", "8192");
-		properties.put(
-			"sample.sql.output.csv.file.names",
-			"assetPublisher,blog,company,cpFriendlyURLEntry,documentLibrary," +
-				"dynamicDataList,fragment,layout,mbCategory,mbThread," +
-					"repository,wiki");
 		properties.put("sample.sql.output.dir", outputDir);
 		properties.put("sample.sql.output.merge", "true");
 		properties.put(
@@ -221,6 +221,30 @@ public class SampleSQLBuilderTest {
 
 		db.runSQLTemplateString(connection, sql, false, true);
 	}
+
+	private void _verifyCSVFiles(File tempDir) {
+		Set<String> csvNames = new HashSet<>(
+			Arrays.asList(StringUtil.split(_CSV_FILE_NAMES)));
+
+		String[] csvFileNames = tempDir.list(
+			(dir, fileName) -> fileName.endsWith(".csv"));
+
+		Assert.assertEquals(
+			"Created csv file count does not match length of expected csv " +
+				"file list",
+			csvNames.size(), csvFileNames.length);
+
+		for (String csvFileName : csvFileNames) {
+			Assert.assertTrue(
+				csvNames.contains(
+					csvFileName.substring(0, csvFileName.indexOf(".csv"))));
+		}
+	}
+
+	private static final String _CSV_FILE_NAMES =
+		"assetPublisher,blog,company,cpFriendlyURLEntry,documentLibrary," +
+			"dynamicDataList,fragment,layout,mbCategory,mbThread,repository," +
+				"wiki";
 
 	private static final String _SAMPLE_FTL_END =
 		"<#include \"counters.ftl\">\n\nCOMMIT_TRANSACTION";
