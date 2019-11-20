@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.sender.SingleDestinationMessageSenderFactoryUtil;
 import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
 import com.liferay.portal.kernel.model.ClassName;
 import com.liferay.portal.kernel.service.PortalService;
@@ -35,12 +34,38 @@ import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.model.impl.ClassNameImpl;
 import com.liferay.portal.service.base.PortalServiceBaseImpl;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.registry.Filter;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 /**
  * @author Brian Wing Shun Chan
  */
 @JSONWebService(mode = JSONWebServiceMode.MANUAL)
 public class PortalServiceImpl extends PortalServiceBaseImpl {
+
+	@Override
+	public void afterPropertiesSet() {
+		super.afterPropertiesSet();
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Filter filter = registry.getFilter(
+			"(&(objectClass=" + SynchronousMessageSender.class.getName() +
+				")(mode=DIRECT))");
+
+		_serviceTracker = registry.trackServices(filter);
+
+		_serviceTracker.open();
+	}
+
+	@Override
+	public void destroy() {
+		super.destroy();
+
+		_serviceTracker.close();
+	}
 
 	@Override
 	public String getAutoDeployDirectory() {
@@ -230,9 +255,7 @@ public class PortalServiceImpl extends PortalServiceBaseImpl {
 			message.put("text", transactionPortletBarText);
 
 			SynchronousMessageSender synchronousMessageSender =
-				SingleDestinationMessageSenderFactoryUtil.
-					getSynchronousMessageSender(
-						SynchronousMessageSender.Mode.DIRECT);
+				_serviceTracker.getService();
 
 			synchronousMessageSender.send(
 				DestinationNames.TEST_TRANSACTION, message);
@@ -244,5 +267,8 @@ public class PortalServiceImpl extends PortalServiceBaseImpl {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		PortalServiceImpl.class);
+
+	private ServiceTracker<SynchronousMessageSender, SynchronousMessageSender>
+		_serviceTracker;
 
 }
