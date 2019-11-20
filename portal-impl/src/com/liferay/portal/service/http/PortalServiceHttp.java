@@ -55,7 +55,7 @@ public class PortalServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				PortalServiceUtil.class, "getAutoDeployDirectory",
-				_getAutoDeployDirectoryParameterTypes0);
+				_getAutoDeployDirectoryParameterTypes2);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey);
 
@@ -82,7 +82,7 @@ public class PortalServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				PortalServiceUtil.class, "getBuildNumber",
-				_getBuildNumberParameterTypes1);
+				_getBuildNumberParameterTypes3);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey);
 
@@ -109,7 +109,7 @@ public class PortalServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				PortalServiceUtil.class, "getVersion",
-				_getVersionParameterTypes2);
+				_getVersionParameterTypes4);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey);
 
@@ -138,7 +138,7 @@ public class PortalServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				PortalServiceUtil.class, "testAddClassName_Rollback",
-				_testAddClassName_RollbackParameterTypes3);
+				_testAddClassName_RollbackParameterTypes5);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, classNameValue);
@@ -164,7 +164,7 @@ public class PortalServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				PortalServiceUtil.class, "testAddClassName_Success",
-				_testAddClassName_SuccessParameterTypes4);
+				_testAddClassName_SuccessParameterTypes6);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, classNameValue);
@@ -192,7 +192,7 @@ public class PortalServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				PortalServiceUtil.class,
 				"testAddClassNameAndTestTransactionPortletBar_PortalRollback",
-				_testAddClassNameAndTestTransactionPortletBar_PortalRollbackParameterTypes5);
+				_testAddClassNameAndTestTransactionPortletBar_PortalRollbackParameterTypes7);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, transactionPortletBarText);
@@ -220,7 +220,7 @@ public class PortalServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				PortalServiceUtil.class,
 				"testAddClassNameAndTestTransactionPortletBar_PortletRollback",
-				_testAddClassNameAndTestTransactionPortletBar_PortletRollbackParameterTypes6);
+				_testAddClassNameAndTestTransactionPortletBar_PortletRollbackParameterTypes8);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, transactionPortletBarText);
@@ -247,7 +247,7 @@ public class PortalServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				PortalServiceUtil.class,
 				"testAddClassNameAndTestTransactionPortletBar_Success",
-				_testAddClassNameAndTestTransactionPortletBar_SuccessParameterTypes7);
+				_testAddClassNameAndTestTransactionPortletBar_SuccessParameterTypes9);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, transactionPortletBarText);
@@ -274,7 +274,7 @@ public class PortalServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				PortalServiceUtil.class,
 				"testAutoSyncHibernateSessionStateOnTxCreation",
-				_testAutoSyncHibernateSessionStateOnTxCreationParameterTypes8);
+				_testAutoSyncHibernateSessionStateOnTxCreationParameterTypes10);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey);
 
@@ -299,7 +299,7 @@ public class PortalServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				PortalServiceUtil.class, "testDeleteClassName",
-				_testDeleteClassNameParameterTypes9);
+				_testDeleteClassNameParameterTypes11);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey);
 
@@ -329,7 +329,7 @@ public class PortalServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				PortalServiceUtil.class, "testGetBuildNumber",
-				_testGetBuildNumberParameterTypes10);
+				_testGetBuildNumberParameterTypes12);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey);
 
@@ -356,7 +356,7 @@ public class PortalServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				PortalServiceUtil.class, "testGetUserId",
-				_testGetUserIdParameterTypes11);
+				_testGetUserIdParameterTypes13);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey);
 
@@ -379,7 +379,7 @@ public class PortalServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				PortalServiceUtil.class, "testHasClassName",
-				_testHasClassNameParameterTypes12);
+				_testHasClassNameParameterTypes14);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey);
 
@@ -404,34 +404,34 @@ public class PortalServiceHttp {
 
 	private static Log _log = LogFactoryUtil.getLog(PortalServiceHttp.class);
 
-	private static final Class<?>[] _getAutoDeployDirectoryParameterTypes0 =
+	private static final Class<?>[] _getAutoDeployDirectoryParameterTypes2 =
 		new Class[] {};
-	private static final Class<?>[] _getBuildNumberParameterTypes1 =
+	private static final Class<?>[] _getBuildNumberParameterTypes3 =
 		new Class[] {};
-	private static final Class<?>[] _getVersionParameterTypes2 = new Class[] {};
-	private static final Class<?>[] _testAddClassName_RollbackParameterTypes3 =
+	private static final Class<?>[] _getVersionParameterTypes4 = new Class[] {};
+	private static final Class<?>[] _testAddClassName_RollbackParameterTypes5 =
 		new Class[] {String.class};
-	private static final Class<?>[] _testAddClassName_SuccessParameterTypes4 =
+	private static final Class<?>[] _testAddClassName_SuccessParameterTypes6 =
 		new Class[] {String.class};
 	private static final Class<?>[]
-		_testAddClassNameAndTestTransactionPortletBar_PortalRollbackParameterTypes5 =
+		_testAddClassNameAndTestTransactionPortletBar_PortalRollbackParameterTypes7 =
 			new Class[] {String.class};
 	private static final Class<?>[]
-		_testAddClassNameAndTestTransactionPortletBar_PortletRollbackParameterTypes6 =
+		_testAddClassNameAndTestTransactionPortletBar_PortletRollbackParameterTypes8 =
 			new Class[] {String.class};
 	private static final Class<?>[]
-		_testAddClassNameAndTestTransactionPortletBar_SuccessParameterTypes7 =
+		_testAddClassNameAndTestTransactionPortletBar_SuccessParameterTypes9 =
 			new Class[] {String.class};
 	private static final Class<?>[]
-		_testAutoSyncHibernateSessionStateOnTxCreationParameterTypes8 =
+		_testAutoSyncHibernateSessionStateOnTxCreationParameterTypes10 =
 			new Class[] {};
-	private static final Class<?>[] _testDeleteClassNameParameterTypes9 =
+	private static final Class<?>[] _testDeleteClassNameParameterTypes11 =
 		new Class[] {};
-	private static final Class<?>[] _testGetBuildNumberParameterTypes10 =
+	private static final Class<?>[] _testGetBuildNumberParameterTypes12 =
 		new Class[] {};
-	private static final Class<?>[] _testGetUserIdParameterTypes11 =
+	private static final Class<?>[] _testGetUserIdParameterTypes13 =
 		new Class[] {};
-	private static final Class<?>[] _testHasClassNameParameterTypes12 =
+	private static final Class<?>[] _testHasClassNameParameterTypes14 =
 		new Class[] {};
 
 }
