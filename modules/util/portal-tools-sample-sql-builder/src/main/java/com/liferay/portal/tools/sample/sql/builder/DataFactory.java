@@ -603,14 +603,31 @@ public class DataFactory {
 	}
 
 	public Writer getCSVWriter(String csvFileName) {
-		Writer writer = _csvWriters.get(csvFileName);
+		return _csvWriters.computeIfAbsent(
+			csvFileName,
+			newCSVFileName -> {
+				try {
+					return new UnsyncBufferedWriter(
+						new OutputStreamWriter(
+							new FileOutputStream(
+								new File(
+									_outputDir,
+									newCSVFileName.concat(".csv")))),
+						_WRITER_BUFFER_SIZE) {
 
-		if (writer == null) {
-			throw new IllegalArgumentException(
-				"Unknown CSV file name: " + csvFileName);
-		}
+						@Override
+						public void flush() {
 
-		return writer;
+							// Disable FreeMarker from flushing
+
+						}
+
+					};
+				}
+				catch (FileNotFoundException fnfe) {
+					throw new RuntimeException(fnfe);
+				}
+			});
 	}
 
 	public long getDefaultDLDDMStructureId() {
@@ -1098,9 +1115,7 @@ public class DataFactory {
 		_accountModel.setLegalName("Liferay, Inc.");
 	}
 
-	public void initContext(Properties properties)
-		throws FileNotFoundException {
-
+	public void initContext(Properties properties) {
 		TimeZone timeZone = TimeZone.getDefault();
 
 		String timeZoneId = properties.getProperty("sample.sql.db.time.zone");
@@ -1187,32 +1202,11 @@ public class DataFactory {
 		_maxWikiPageCount = GetterUtil.getInteger(
 			properties.getProperty("sample.sql.max.wiki.page.count"));
 
-		File outputDir = new File(
-			properties.getProperty("sample.sql.output.dir"));
+		_outputDir = properties.getProperty("sample.sql.output.dir");
+
+		File outputDir = new File(_outputDir);
 
 		outputDir.mkdirs();
-
-		String[] csvFileNames = StringUtil.split(
-			properties.getProperty("sample.sql.output.csv.file.names"));
-
-		for (String csvFileName : csvFileNames) {
-			_csvWriters.put(
-				csvFileName,
-				new UnsyncBufferedWriter(
-					new OutputStreamWriter(
-						new FileOutputStream(
-							new File(outputDir, csvFileName.concat(".csv")))),
-					_WRITER_BUFFER_SIZE) {
-
-					@Override
-					public void flush() {
-
-						// Disable FreeMarker from flushing
-
-					}
-
-				});
-		}
 	}
 
 	public void initDLFileEntryTypeModel() {
@@ -4575,6 +4569,7 @@ public class DataFactory {
 	private int _maxWikiNodeCount;
 	private int _maxWikiPageCommentCount;
 	private int _maxWikiPageCount;
+	private String _outputDir;
 	private RoleModel _ownerRoleModel;
 	private RoleModel _powerUserRoleModel;
 	private final SimpleCounter _resourcePermissionCounter;
