@@ -14,7 +14,10 @@
 
 package com.liferay.portal.tools.sample.sql.builder;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.SortedProperties;
+import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -29,6 +32,25 @@ public class PropsUtil {
 
 	public static String get(String key) {
 		return _properties.getProperty(key);
+	}
+
+	public static String getActualPropertiesContent() {
+		StringBundler sb = new StringBundler();
+
+		for (String key : _properties.stringPropertyNames()) {
+			if (!key.startsWith("sample.sql")) {
+				continue;
+			}
+
+			String value = _properties.getProperty(key);
+
+			sb.append(key);
+			sb.append(StringPool.EQUAL);
+			sb.append(value);
+			sb.append(StringPool.NEW_LINE);
+		}
+
+		return sb.toString();
 	}
 
 	private static final Properties _properties = new SortedProperties() {
