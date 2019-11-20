@@ -14,9 +14,12 @@
 
 package com.liferay.portal.kernel.messaging;
 
-import com.liferay.portal.kernel.messaging.sender.SingleDestinationMessageSenderFactoryUtil;
 import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
 import com.liferay.portal.kernel.util.ServiceProxyFactory;
+import com.liferay.registry.Filter;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 /**
  * @author Michael C. Han
@@ -50,6 +53,10 @@ public class MessageBusUtil {
 		responseMessage.setPayload(payload);
 
 		return responseMessage;
+	}
+
+	public static void destroy() {
+		_serviceTracker.close();
 	}
 
 	public static Destination getDestination(String destinationName) {
@@ -94,22 +101,15 @@ public class MessageBusUtil {
 			String destinationName, Message message)
 		throws MessageBusException {
 
-		SynchronousMessageSender synchronousMessageSender =
-			SingleDestinationMessageSenderFactoryUtil.
-				getSynchronousMessageSender(_synchronousMessageSenderMode);
-
-		return synchronousMessageSender.send(destinationName, message);
+		return _synchronousMessageSender.send(destinationName, message);
 	}
 
 	public static Object sendSynchronousMessage(
 			String destinationName, Message message, long timeout)
 		throws MessageBusException {
 
-		SynchronousMessageSender synchronousMessageSender =
-			SingleDestinationMessageSenderFactoryUtil.
-				getSynchronousMessageSender(_synchronousMessageSenderMode);
-
-		return synchronousMessageSender.send(destinationName, message, timeout);
+		return _synchronousMessageSender.send(
+			destinationName, message, timeout);
 	}
 
 	public static Object sendSynchronousMessage(
@@ -171,11 +171,41 @@ public class MessageBusUtil {
 		SynchronousMessageSender.Mode synchronousMessageSenderMode) {
 
 		_synchronousMessageSenderMode = synchronousMessageSenderMode;
+
+		_setSynchronousMessageSender();
+	}
+
+	private void _setSynchronousMessageSender() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		Filter filter = null;
+
+		if (_synchronousMessageSenderMode ==
+				SynchronousMessageSender.Mode.DEFAULT) {
+
+			filter = registry.getFilter(
+				"(&(objectClass=" + SynchronousMessageSender.class.getName() +
+					")(mode=DEFAULT))");
+		}
+		else {
+			filter = registry.getFilter(
+				"(&(objectClass=" + SynchronousMessageSender.class.getName() +
+					")(mode=DIRECT))");
+		}
+
+		_serviceTracker = registry.trackServices(filter);
+
+		_serviceTracker.open();
+
+		_synchronousMessageSender = _serviceTracker.getService();
 	}
 
 	private static volatile MessageBus _messageBus =
 		ServiceProxyFactory.newServiceTrackedInstance(
 			MessageBus.class, MessageBusUtil.class, "_messageBus", true);
+	private static ServiceTracker
+		<SynchronousMessageSender, SynchronousMessageSender> _serviceTracker;
+	private static SynchronousMessageSender _synchronousMessageSender;
 	private static SynchronousMessageSender.Mode _synchronousMessageSenderMode;
 
 }
