@@ -12,6 +12,8 @@
 
 <#include "default_user.ftl">
 
+<#include "ddm.ftl">
+
 <#include "groups.ftl">
 
 <#include "roles.ftl">
