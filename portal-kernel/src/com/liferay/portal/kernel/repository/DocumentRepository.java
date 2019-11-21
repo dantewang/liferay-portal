@@ -57,12 +57,11 @@ public interface DocumentRepository extends CapabilityProvider {
 			ServiceContext serviceContext)
 		throws PortalException;
 
-	public default void checkInFileEntry(
+	public void checkInFileEntry(
 			long userId, long fileEntryId,
 			DLVersionNumberIncrease dlVersionNumberIncrease, String changeLog,
 			ServiceContext serviceContext)
-		throws PortalException {
-	}
+		throws PortalException;
 
 	public void checkInFileEntry(
 			long userId, long fileEntryId, String lockUuid,
