@@ -394,13 +394,6 @@ public class DataFactory {
 		}
 	}
 
-	public ResourcePermissionModel commerceCatalogResourcePermission() {
-		return newResourcePermissionModel(
-			CommerceCatalog.class.getName(),
-			String.valueOf(_commerceCatalogModel.getCommerceCatalogId()),
-			_guestRoleModel.getRoleId(), _sampleUserId);
-	}
-
 	public AccountModel getAccountModel() {
 		return _accountModel;
 	}
@@ -2969,6 +2962,15 @@ public class DataFactory {
 		}
 
 		return releases;
+	}
+
+	public ResourcePermissionModel newResourcePermissionModel(
+		CommerceCatalogModel commerceCatalogModel) {
+
+		return newResourcePermissionModel(
+			CommerceCatalog.class.getName(),
+			String.valueOf(commerceCatalogModel.getCommerceCatalogId()),
+			_guestRoleModel.getRoleId(), _sampleUserId);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
