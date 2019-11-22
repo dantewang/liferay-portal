@@ -298,22 +298,6 @@ public class JournalConverterUtilTest {
 	}
 
 	@Test
-	public void testGetDDMXSD() throws Exception {
-		String expectedXSD = read("test-ddm-structure-all-fields.xml");
-
-		DDMForm expectedDDMForm = deserialize(expectedXSD);
-
-		String actualXSD = _journalConverter.getDDMXSD(
-			read("test-journal-structure-all-fields.xml"));
-
-		validateDDMXSD(actualXSD);
-
-		DDMForm actualDDMForm = deserialize(actualXSD);
-
-		assertEquals(expectedDDMForm, actualDDMForm);
-	}
-
-	@Test
 	public void testGetFieldsFromContentWithBooleanElement() throws Exception {
 		Fields expectedFields = new Fields();
 
