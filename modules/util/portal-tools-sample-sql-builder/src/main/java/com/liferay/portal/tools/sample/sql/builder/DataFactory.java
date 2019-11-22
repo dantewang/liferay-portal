@@ -368,14 +368,14 @@ public class DataFactory {
 
 		_commerceCatalogModel = newCommerceCatalogModel();
 
+		_commerceChannelModel = newCommerceChannelModel();
+
 		initAssetCategoryModels();
 		initAssetTagModels();
-		initCommerceChannelModel();
 		initCommerceProductModels();
 		initCompanyModel();
 		initDLFileEntryTypeModel();
 		initGroupModels();
-
 
 		initJournalArticleContent(
 			GetterUtil.getInteger(
@@ -934,23 +934,6 @@ public class DataFactory {
 
 			_assetTagModelsMaps[i - 1] = assetTagModelsMap;
 		}
-	}
-
-	public void initCommerceChannelModel() {
-		_commerceChannelModel = new CommerceChannelModelImpl();
-
-		_commerceChannelModel.setCommerceChannelId(_counter.get());
-		_commerceChannelModel.setCompanyId(_companyId);
-		_commerceChannelModel.setUserId(_sampleUserId);
-		_commerceChannelModel.setUserName(_SAMPLE_USER_NAME);
-		_commerceChannelModel.setCreateDate(new Date());
-		_commerceChannelModel.setModifiedDate(new Date());
-		_commerceChannelModel.setSiteGroupId(1);
-		_commerceChannelModel.setName(_SAMPLE_USER_NAME + " Channel");
-		_commerceChannelModel.setType("site");
-		_commerceChannelModel.setTypeSettings(String.valueOf(_guestGroupId));
-		_commerceChannelModel.setCommerceCurrencyCode(
-			_commerceCurrencyModel.getCode());
 	}
 
 	public void initCommerceProductModels() {
@@ -1544,6 +1527,26 @@ public class DataFactory {
 		commerceCatalogModel.setSystem(true);
 
 		return commerceCatalogModel;
+	}
+
+	public CommerceChannelModel newCommerceChannelModel() {
+		CommerceChannelModel commerceChannelModel =
+			new CommerceChannelModelImpl();
+
+		commerceChannelModel.setCommerceChannelId(_counter.get());
+		commerceChannelModel.setCompanyId(_companyId);
+		commerceChannelModel.setUserId(_sampleUserId);
+		commerceChannelModel.setUserName(_SAMPLE_USER_NAME);
+		commerceChannelModel.setCreateDate(new Date());
+		commerceChannelModel.setModifiedDate(new Date());
+		commerceChannelModel.setSiteGroupId(1);
+		commerceChannelModel.setName(_SAMPLE_USER_NAME + " Channel");
+		commerceChannelModel.setType("site");
+		commerceChannelModel.setTypeSettings(String.valueOf(_guestGroupId));
+		commerceChannelModel.setCommerceCurrencyCode(
+			_commerceCurrencyModel.getCode());
+
+		return commerceChannelModel;
 	}
 
 	public CommerceCurrencyModel newCommerceCurrencyModel() {
