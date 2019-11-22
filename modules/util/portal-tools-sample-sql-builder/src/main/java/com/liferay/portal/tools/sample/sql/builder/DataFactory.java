@@ -366,14 +366,16 @@ public class DataFactory {
 
 		_commerceCurrencyModel = newCommerceCurrencyModel();
 
+		_commerceCatalogModel = newCommerceCatalogModel();
+
 		initAssetCategoryModels();
 		initAssetTagModels();
-		initCommerceCatalogModel();
 		initCommerceChannelModel();
 		initCommerceProductModels();
 		initCompanyModel();
 		initDLFileEntryTypeModel();
 		initGroupModels();
+
 
 		initJournalArticleContent(
 			GetterUtil.getInteger(
@@ -932,21 +934,6 @@ public class DataFactory {
 
 			_assetTagModelsMaps[i - 1] = assetTagModelsMap;
 		}
-	}
-
-	public void initCommerceCatalogModel() {
-		_commerceCatalogModel = new CommerceCatalogModelImpl();
-
-		_commerceCatalogModel.setCommerceCatalogId(_counter.get());
-		_commerceCatalogModel.setCompanyId(_companyId);
-		_commerceCatalogModel.setUserName(_SAMPLE_USER_NAME);
-		_commerceCatalogModel.setCreateDate(new Date());
-		_commerceCatalogModel.setModifiedDate(new Date());
-		_commerceCatalogModel.setName("Master");
-		_commerceCatalogModel.setCommerceCurrencyCode(
-			_commerceCurrencyModel.getCode());
-		_commerceCatalogModel.setCatalogDefaultLanguageId("en_US");
-		_commerceCatalogModel.setSystem(true);
 	}
 
 	public void initCommerceChannelModel() {
@@ -1539,6 +1526,24 @@ public class DataFactory {
 		blogsStatsUserModel.setLastPostDate(new Date());
 
 		return blogsStatsUserModel;
+	}
+
+	public CommerceCatalogModel newCommerceCatalogModel() {
+		CommerceCatalogModel commerceCatalogModel =
+			new CommerceCatalogModelImpl();
+
+		commerceCatalogModel.setCommerceCatalogId(_counter.get());
+		commerceCatalogModel.setCompanyId(_companyId);
+		commerceCatalogModel.setUserName(_SAMPLE_USER_NAME);
+		commerceCatalogModel.setCreateDate(new Date());
+		commerceCatalogModel.setModifiedDate(new Date());
+		commerceCatalogModel.setName("Master");
+		commerceCatalogModel.setCommerceCurrencyCode(
+			_commerceCurrencyModel.getCode());
+		commerceCatalogModel.setCatalogDefaultLanguageId("en_US");
+		commerceCatalogModel.setSystem(true);
+
+		return commerceCatalogModel;
 	}
 
 	public CommerceCurrencyModel newCommerceCurrencyModel() {
