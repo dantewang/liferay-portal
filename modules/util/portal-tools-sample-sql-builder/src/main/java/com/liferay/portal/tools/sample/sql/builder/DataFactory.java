@@ -366,9 +366,9 @@ public class DataFactory {
 
 		_commerceCurrencyModel = newCommerceCurrencyModel();
 
-		_commerceCatalogModel = newCommerceCatalogModel();
+		_commerceCatalogModel = newCommerceCatalogModel(_commerceCurrencyModel);
 
-		_commerceChannelModel = newCommerceChannelModel();
+		_commerceChannelModel = newCommerceChannelModel(_commerceCurrencyModel);
 
 		initAssetCategoryModels();
 		initAssetTagModels();
@@ -1504,7 +1504,9 @@ public class DataFactory {
 		return blogsStatsUserModel;
 	}
 
-	public CommerceCatalogModel newCommerceCatalogModel() {
+	public CommerceCatalogModel newCommerceCatalogModel(
+		CommerceCurrencyModel commerceCurrencyModel) {
+
 		CommerceCatalogModel commerceCatalogModel =
 			new CommerceCatalogModelImpl();
 
@@ -1515,14 +1517,16 @@ public class DataFactory {
 		commerceCatalogModel.setModifiedDate(new Date());
 		commerceCatalogModel.setName("Master");
 		commerceCatalogModel.setCommerceCurrencyCode(
-			_commerceCurrencyModel.getCode());
+			commerceCurrencyModel.getCode());
 		commerceCatalogModel.setCatalogDefaultLanguageId("en_US");
 		commerceCatalogModel.setSystem(true);
 
 		return commerceCatalogModel;
 	}
 
-	public CommerceChannelModel newCommerceChannelModel() {
+	public CommerceChannelModel newCommerceChannelModel(
+		CommerceCurrencyModel commerceCurrencyModel) {
+
 		CommerceChannelModel commerceChannelModel =
 			new CommerceChannelModelImpl();
 
@@ -1537,7 +1541,7 @@ public class DataFactory {
 		commerceChannelModel.setType("site");
 		commerceChannelModel.setTypeSettings(String.valueOf(_guestGroupId));
 		commerceChannelModel.setCommerceCurrencyCode(
-			_commerceCurrencyModel.getCode());
+			commerceCurrencyModel.getCode());
 
 		return commerceChannelModel;
 	}
@@ -4510,11 +4514,11 @@ public class DataFactory {
 		new HashMap<>();
 	private final long _commerceCatalogGroupId;
 	private GroupModel _commerceCatalogGroupModel;
-	private CommerceCatalogModel _commerceCatalogModel;
+	private final CommerceCatalogModel _commerceCatalogModel;
 	private final long _commerceChannelGroupId;
 	private GroupModel _commerceChannelGroupModel;
-	private CommerceChannelModel _commerceChannelModel;
-	private CommerceCurrencyModel _commerceCurrencyModel;
+	private final CommerceChannelModel _commerceChannelModel;
+	private final CommerceCurrencyModel _commerceCurrencyModel;
 	private final long _companyId;
 	private final SimpleCounter _counter;
 	private List<CPDefinitionLocalizationModel> _cpDefinitionLocalizationModels;
