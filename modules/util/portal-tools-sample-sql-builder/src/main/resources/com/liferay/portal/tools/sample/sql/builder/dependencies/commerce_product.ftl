@@ -7,15 +7,29 @@
 
 	commerceCatalogModel=dataFactory.newCommerceCatalogModel(commerceCurrencyModel)
 
+	commerceCurrencyModel=dataFactory.newCommerceCurrencyModel()
+
+	commerceCatalogModel=dataFactory.newCommerceCatalogModel(commerceCurrencyModel)
+
 	commerceChannelModel=dataFactory.newCommerceChannelModel(commerceCurrencyModel)
 
 	commerceCatalogGroupModel=dataFactory.newCommerceCatalogGroupModel(commerceCatalogModel)
 
 	commerceChannelGroupModel=dataFactory.newCommerceChannelGroupModel(commerceChannelModel)
-	
+
 	cPDefinitionLocalizationModels=dataFactory.newCPDefinitionLocalizationModels()
 
 	assetEntryModels=dataFactory.newAssetEntryModels(cPDefinitionLocalizationModels)
+
+	cProductModels=dataFactory.newCProductModels()
+
+	cpTaxCategoryModel=dataFactory.newCPTaxCategoryModel("Normal Product")
+
+	cpDefinitionModels=dataFactory.newCPDefinitionModels(cpTaxCategoryModel, cProductModels)
+
+	cpFriendlyURLEntryModels=dataFactory.newCPFriendlyURLEntryModels(cProductModels)
+
+	cpInstanceModels=dataFactory.newCPInstanceModels()
 />
 
 <#list assetEntryModels as assetEntryModel>
@@ -34,25 +48,25 @@ ${dataFactory.toInsertSQL(commerceCurrencyModel)}
 	${dataFactory.toInsertSQL(cpDefinitionLocalizationModel)}
 </#list>
 
-<#list dataFactory.CPDefinitionModels as cpDefinitionModel>
+<#list cpDefinitionModels as cpDefinitionModel>
 	${dataFactory.toInsertSQL(cpDefinitionModel)}
 </#list>
 
-<#list dataFactory.CPFriendlyURLEntryModels as cpFriendlyURLEntryModel>
+<#list cpFriendlyURLEntryModels as cpFriendlyURLEntryModel>
 	${dataFactory.toInsertSQL(cpFriendlyURLEntryModel)}
 
 	${dataFactory.getCSVWriter("cpFriendlyURLEntry").write(cpFriendlyURLEntryModel.urlTitle + "\n")}
 </#list>
 
-<#list dataFactory.CPInstanceModels as cpInstanceModel>
+<#list cpInstanceModels as cpInstanceModel>
 	${dataFactory.toInsertSQL(cpInstanceModel)}
 </#list>
 
-<#list dataFactory.CProductModels as cProductModel>
+<#list cProductModels as cProductModel>
 	${dataFactory.toInsertSQL(cProductModel)}
 </#list>
 
-${dataFactory.toInsertSQL(dataFactory.CPTaxCategoryModel)}
+${dataFactory.toInsertSQL(cpTaxCategoryModel)}
 
 <@insertGroup _groupModel=commerceCatalogGroupModel />
 
