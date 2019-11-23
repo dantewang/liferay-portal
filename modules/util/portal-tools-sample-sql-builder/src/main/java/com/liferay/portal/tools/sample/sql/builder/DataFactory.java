@@ -901,7 +901,9 @@ public class DataFactory {
 
 		int cpDefinitionCount = _maxCProductCount * _maxCPDefinitionCount;
 
-		_cpDefinitionModels = new ArrayList<>(cpDefinitionCount);
+		_cpDefinitionModels = newCPDefinitionModels(
+			_cpTaxCategoryModel, _cProductModels);
+
 		_cpFriendlyURLEntryModels = new ArrayList<>(cpDefinitionCount);
 		_cpInstanceModels = new ArrayList<>(
 			cpDefinitionCount * _maxCPInstanceCount);
@@ -918,13 +920,6 @@ public class DataFactory {
 				long cpDefinitionId = cpDefinitionIds[definitionIndex];
 
 				CProductModel cProductModel = _cProductModels.get(productIndex);
-
-				_cpDefinitionModels.add(
-					newCPDefinitionModel(
-						_commerceCatalogGroupId, cpDefinitionId,
-						cProductModel.getCProductId(),
-						_cpTaxCategoryModel.getCPTaxCategoryId(),
-						definitionIndex + 1));
 
 				_cpFriendlyURLEntryModels.add(
 					newCPFriendlyURLEntryModel(cProductModel));
@@ -1739,6 +1734,38 @@ public class DataFactory {
 		}
 
 		return cpDefinitionLocalizationModels;
+	}
+
+	public List<CPDefinitionModel> newCPDefinitionModels(
+		CPTaxCategoryModel cpTaxCategoryModel,
+		List<CProductModel> cProductModels) {
+
+		List<CPDefinitionModel> cpDefinitionModels = new ArrayList<>(
+			_maxCProductCount * _maxCPDefinitionCount);
+
+		for (int productIndex = 0; productIndex < _maxCProductCount;
+			 productIndex++) {
+
+			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
+				productIndex);
+
+			CProductModel cProductModel = cProductModels.get(productIndex);
+
+			for (int definitionIndex = 0;
+				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
+
+				long cpDefinitionId = cpDefinitionIds[definitionIndex];
+
+				cpDefinitionModels.add(
+					newCPDefinitionModel(
+						_commerceCatalogGroupId, cpDefinitionId,
+						cProductModel.getCProductId(),
+						cpTaxCategoryModel.getCPTaxCategoryId(),
+						definitionIndex + 1));
+			}
+		}
+
+		return cpDefinitionModels;
 	}
 
 	public List<CProductModel> newCProductModels() {
