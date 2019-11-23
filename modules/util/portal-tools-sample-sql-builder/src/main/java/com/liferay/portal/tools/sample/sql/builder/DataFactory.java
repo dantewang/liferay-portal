@@ -364,12 +364,15 @@ public class DataFactory {
 			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
 				_readFile("default_asset_publisher_preference.xml"));
 
+		_guestGroupModel = newGroupModel(
+			_guestGroupId, getClassNameId(Group.class), _guestGroupId,
+			GroupConstants.GUEST, true);
+
 		initAssetCategoryModels();
 		initAssetTagModels();
 		initCPDefinitionIdList();
 		initCompanyModel();
 		initDLFileEntryTypeModel();
-		initGroupModels();
 
 		initJournalArticleContent(
 			GetterUtil.getInteger(
@@ -1060,14 +1063,6 @@ public class DataFactory {
 
 		_defaultJournalDDMTemplateVersionModel = newDDMTemplateVersionModel(
 			_defaultJournalDDMTemplateModel);
-	}
-
-	public void initGroupModels() {
-		long groupClassNameId = getClassNameId(Group.class);
-
-		_guestGroupModel = newGroupModel(
-			_guestGroupId, groupClassNameId, _guestGroupId,
-			GroupConstants.GUEST, true);
 	}
 
 	public void initJournalArticleContent(int maxJournalArticleSize) {
@@ -4585,7 +4580,7 @@ public class DataFactory {
 	private final SimpleCounter _futureDateCounter;
 	private final long _globalGroupId;
 	private final long _guestGroupId;
-	private GroupModel _guestGroupModel;
+	private final GroupModel _guestGroupModel;
 	private RoleModel _guestRoleModel;
 	private UserModel _guestUserModel;
 	private String _journalArticleContent;
