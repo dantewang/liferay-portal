@@ -2,13 +2,21 @@
 	${dataFactory.toInsertSQL(assetEntryModel)}
 </#list>
 
-${dataFactory.toInsertSQL(dataFactory.commerceCatalogModel)}
+<#assign
+	commerceCurrencyModel=dataFactory.newCommerceCurrencyModel()
 
-${dataFactory.toInsertSQL(dataFactory.commerceCatalogResourcePermission())}
+	commerceCatalogModel=dataFactory.newCommerceCatalogModel(commerceCurrencyModel)
 
-${dataFactory.toInsertSQL(dataFactory.commerceChannelModel)}
+	commerceChannelModel=dataFactory.newCommerceChannelModel(commerceCurrencyModel)
+/>
 
-${dataFactory.toInsertSQL(dataFactory.commerceCurrencyModel)}
+${dataFactory.toInsertSQL(commerceCatalogModel)}
+
+${dataFactory.toInsertSQL(dataFactory.newResourcePermissionModel(commerceCatalogModel))}
+
+${dataFactory.toInsertSQL(commerceChannelModel)}
+
+${dataFactory.toInsertSQL(commerceCurrencyModel)}
 
 <#list dataFactory.CPDefinitionLocalizationModels as cpDefinitionLocalizationModel>
 	${dataFactory.toInsertSQL(cpDefinitionLocalizationModel)}
