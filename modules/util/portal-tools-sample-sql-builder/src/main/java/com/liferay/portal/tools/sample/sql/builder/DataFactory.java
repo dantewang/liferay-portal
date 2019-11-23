@@ -599,14 +599,6 @@ public class DataFactory {
 		return getClassNameId(DLFileEntry.class);
 	}
 
-	public GroupModel getGlobalGroupModel() {
-		return _globalGroupModel;
-	}
-
-	public List<GroupModel> getGroupModels() {
-		return _groupModels;
-	}
-
 	public GroupModel getGuestGroupModel() {
 		return _guestGroupModel;
 	}
@@ -726,10 +718,6 @@ public class DataFactory {
 		}
 
 		return sequence;
-	}
-
-	public GroupModel getUserPersonalSiteGroupModel() {
-		return _userPersonalSiteGroupModel;
 	}
 
 	public RoleModel getUserRoleModel() {
@@ -1077,26 +1065,9 @@ public class DataFactory {
 	public void initGroupModels() {
 		long groupClassNameId = getClassNameId(Group.class);
 
-		_globalGroupModel = newGroupModel(
-			_globalGroupId, getClassNameId(Company.class), _companyId,
-			GroupConstants.GLOBAL, false);
-
 		_guestGroupModel = newGroupModel(
 			_guestGroupId, groupClassNameId, _guestGroupId,
 			GroupConstants.GUEST, true);
-
-		_userPersonalSiteGroupModel = newGroupModel(
-			_userPersonalSiteGroupId, getClassNameId(UserPersonalSite.class),
-			_defaultUserId, GroupConstants.USER_PERSONAL_SITE, false);
-
-		_groupModels = new ArrayList<>(_maxGroupCount);
-
-		for (int i = 1; i <= _maxGroupCount; i++) {
-			GroupModel groupModel = newGroupModel(
-				i, groupClassNameId, i, "Site " + i, true);
-
-			_groupModels.add(groupModel);
-		}
 	}
 
 	public void initJournalArticleContent(int maxJournalArticleSize) {
@@ -2355,10 +2326,28 @@ public class DataFactory {
 		return friendlyURLEntryModel;
 	}
 
+	public GroupModel newGlobalGroupModel() {
+		return newGroupModel(
+			_globalGroupId, getClassNameId(Company.class), _companyId,
+			GroupConstants.GLOBAL, false);
+	}
+
 	public GroupModel newGroupModel(UserModel userModel) {
 		return newGroupModel(
 			_counter.get(), getClassNameId(User.class), userModel.getUserId(),
 			userModel.getScreenName(), false);
+	}
+
+	public List<GroupModel> newGroupModels() {
+		List<GroupModel> groupModels = new ArrayList<>(_maxGroupCount);
+
+		for (int i = 1; i <= _maxGroupCount; i++) {
+			groupModels.add(
+				newGroupModel(
+					i, getClassNameId(Group.class), i, "Site " + i, true));
+		}
+
+		return groupModels;
 	}
 
 	public JournalArticleLocalizationModel newJournalArticleLocalizationModel(
@@ -3385,6 +3374,12 @@ public class DataFactory {
 		userNotificationDeliveryModel.setDeliver(true);
 
 		return userNotificationDeliveryModel;
+	}
+
+	public GroupModel newUserPersonalSiteGroupModel() {
+		return newGroupModel(
+			_userPersonalSiteGroupId, getClassNameId(UserPersonalSite.class),
+			_defaultUserId, GroupConstants.USER_PERSONAL_SITE, false);
 	}
 
 	public ViewCountEntryModel newViewCountEntryModel(
@@ -4589,8 +4584,6 @@ public class DataFactory {
 	private List<String> _firstNames;
 	private final SimpleCounter _futureDateCounter;
 	private final long _globalGroupId;
-	private GroupModel _globalGroupModel;
-	private List<GroupModel> _groupModels;
 	private final long _guestGroupId;
 	private GroupModel _guestGroupModel;
 	private RoleModel _guestRoleModel;
@@ -4644,7 +4637,6 @@ public class DataFactory {
 	private final SimpleCounter _socialActivityCounter;
 	private final SimpleCounter _timeCounter;
 	private final long _userPersonalSiteGroupId;
-	private GroupModel _userPersonalSiteGroupModel;
 	private RoleModel _userRoleModel;
 	private final SimpleCounter _userScreenNameCounter;
 	private VirtualHostModel _virtualHostModel;
