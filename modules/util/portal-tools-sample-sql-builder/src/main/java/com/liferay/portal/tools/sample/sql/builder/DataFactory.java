@@ -364,12 +364,6 @@ public class DataFactory {
 			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
 				_readFile("default_asset_publisher_preference.xml"));
 
-		_commerceCurrencyModel = newCommerceCurrencyModel();
-
-		_commerceCatalogModel = newCommerceCatalogModel(_commerceCurrencyModel);
-
-		_commerceChannelModel = newCommerceChannelModel(_commerceCurrencyModel);
-
 		initAssetCategoryModels();
 		initAssetTagModels();
 		initCommerceProductModels();
@@ -542,26 +536,6 @@ public class DataFactory {
 
 	public Collection<ClassNameModel> getClassNameModels() {
 		return _classNameModels.values();
-	}
-
-	public GroupModel getCommerceCatalogGroupModel() {
-		return _commerceCatalogGroupModel;
-	}
-
-	public CommerceCatalogModel getCommerceCatalogModel() {
-		return _commerceCatalogModel;
-	}
-
-	public GroupModel getCommerceChannelGroupModel() {
-		return _commerceChannelGroupModel;
-	}
-
-	public CommerceChannelModel getCommerceChannelModel() {
-		return _commerceChannelModel;
-	}
-
-	public CommerceCurrencyModel getCommerceCurrencyModel() {
-		return _commerceCurrencyModel;
 	}
 
 	public long getCounterNext() {
@@ -1189,12 +1163,6 @@ public class DataFactory {
 
 	public void initGroupModels() {
 		long groupClassNameId = getClassNameId(Group.class);
-
-		_commerceChannelGroupModel = newCommerceChannelGroupModel(
-			_commerceChannelModel);
-
-		_commerceCatalogGroupModel = newCommerceCatalogGroupModel(
-			_commerceCatalogModel);
 
 		_globalGroupModel = newGroupModel(
 			_globalGroupId, getClassNameId(Company.class), _companyId,
@@ -4526,12 +4494,7 @@ public class DataFactory {
 	private final Map<String, ClassNameModel> _classNameModels =
 		new HashMap<>();
 	private final long _commerceCatalogGroupId;
-	private GroupModel _commerceCatalogGroupModel;
-	private final CommerceCatalogModel _commerceCatalogModel;
 	private final long _commerceChannelGroupId;
-	private GroupModel _commerceChannelGroupModel;
-	private final CommerceChannelModel _commerceChannelModel;
-	private final CommerceCurrencyModel _commerceCurrencyModel;
 	private final long _companyId;
 	private final SimpleCounter _counter;
 	private List<CPDefinitionLocalizationModel> _cpDefinitionLocalizationModels;
