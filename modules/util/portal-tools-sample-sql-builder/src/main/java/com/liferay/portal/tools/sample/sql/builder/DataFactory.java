@@ -1190,10 +1190,8 @@ public class DataFactory {
 	public void initGroupModels() {
 		long groupClassNameId = getClassNameId(Group.class);
 
-		_commerceChannelGroupModel = newGroupModel(
-			_commerceChannelGroupId, getClassNameId(CommerceChannel.class),
-			_commerceChannelModel.getCommerceChannelId(),
-			_commerceChannelModel.getName(), false);
+		_commerceChannelGroupModel = newCommerceChannelGroupModel(
+			_commerceChannelModel);
 
 		_commerceCatalogGroupModel = newGroupModel(
 			_commerceCatalogGroupId, getClassNameId(CommerceCatalog.class),
@@ -1522,6 +1520,15 @@ public class DataFactory {
 		commerceCatalogModel.setSystem(true);
 
 		return commerceCatalogModel;
+	}
+
+	public GroupModel newCommerceChannelGroupModel(
+		CommerceChannelModel commerceChannelModel) {
+
+		return newGroupModel(
+			_commerceChannelGroupId, getClassNameId(CommerceChannel.class),
+			commerceChannelModel.getCommerceChannelId(),
+			commerceChannelModel.getName(), false);
 	}
 
 	public CommerceChannelModel newCommerceChannelModel(
