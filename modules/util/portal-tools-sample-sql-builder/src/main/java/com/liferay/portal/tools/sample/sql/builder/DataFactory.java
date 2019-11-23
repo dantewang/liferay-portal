@@ -366,6 +366,7 @@ public class DataFactory {
 
 		initAssetCategoryModels();
 		initAssetTagModels();
+		initCPDefinitionIdList();
 		initCommerceProductModels();
 		initCompanyModel();
 		initDLFileEntryTypeModel();
@@ -923,11 +924,8 @@ public class DataFactory {
 		for (int productIndex = 0; productIndex < _maxCProductCount;
 			 productIndex++) {
 
-			long[] cpDefinitionIds = new long[_maxCPDefinitionCount];
-
-			for (int i = 0; i < _maxCPDefinitionCount; i++) {
-				cpDefinitionIds[i] = _counter.get();
-			}
+			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
+				productIndex);
 
 			long cProductId = _counter.get();
 
@@ -1101,6 +1099,22 @@ public class DataFactory {
 					}
 
 				});
+		}
+	}
+
+	public void initCPDefinitionIdList() {
+		_cpDefinitionIdList = new ArrayList<>(_maxCProductCount);
+
+		for (int productIndex = 0; productIndex < _maxCProductCount;
+			 productIndex++) {
+
+			long[] cpDefinitionIds = new long[_maxCPDefinitionCount];
+
+			for (int i = 0; i < _maxCPDefinitionCount; i++) {
+				cpDefinitionIds[i] = _counter.get();
+			}
+
+			_cpDefinitionIdList.add(cpDefinitionIds);
 		}
 	}
 
@@ -4497,6 +4511,7 @@ public class DataFactory {
 	private final long _commerceChannelGroupId;
 	private final long _companyId;
 	private final SimpleCounter _counter;
+	private List _cpDefinitionIdList;
 	private List<CPDefinitionLocalizationModel> _cpDefinitionLocalizationModels;
 	private List<CPDefinitionModel> _cpDefinitionModels;
 	private List<CPFriendlyURLEntryModel> _cpFriendlyURLEntryModels;
