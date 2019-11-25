@@ -369,8 +369,6 @@ public class DataFactory {
 		initCPDefinitionIdList();
 		initDLFileEntryTypeModel();
 
-		initJournalArticleContent();
-
 		initRoleModels();
 		initUserNames();
 	}
@@ -1027,7 +1025,7 @@ public class DataFactory {
 			_defaultJournalDDMTemplateModel);
 	}
 
-	public void initJournalArticleContent() {
+	public String initJournalArticleContent() {
 		StringBundler sb = new StringBundler(6);
 
 		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
@@ -1049,7 +1047,7 @@ public class DataFactory {
 
 		sb.append("]]></dynamic-content></dynamic-element></root>");
 
-		_journalArticleContent = sb.toString();
+		return sb.toString();
 	}
 
 	public void initRoleModels() {
@@ -2378,7 +2376,7 @@ public class DataFactory {
 
 		journalArticleModel.setUrlTitle(sb.toString());
 
-		journalArticleModel.setContent(_journalArticleContent);
+		journalArticleModel.setContent(initJournalArticleContent());
 		journalArticleModel.setDefaultLanguageId("en_US");
 		journalArticleModel.setDDMStructureKey(
 			_defaultJournalDDMStructureModel.getStructureKey());
@@ -4567,7 +4565,6 @@ public class DataFactory {
 	private final long _globalGroupId;
 	private final long _guestGroupId;
 	private RoleModel _guestRoleModel;
-	private String _journalArticleContent;
 	private final Map<Long, String> _journalArticleResourceUUIDs =
 		new HashMap<>();
 	private final String _journalDDMStructureContent;
