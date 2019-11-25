@@ -369,9 +369,7 @@ public class DataFactory {
 		initCPDefinitionIdList();
 		initDLFileEntryTypeModel();
 
-		initJournalArticleContent(
-			GetterUtil.getInteger(
-				properties.getProperty("sample.sql.max.journal.article.size")));
+		initJournalArticleContent();
 
 		initRoleModels();
 		initUserNames();
@@ -903,6 +901,8 @@ public class DataFactory {
 		_maxJournalArticlePageCount = GetterUtil.getInteger(
 			properties.getProperty(
 				"sample.sql.max.journal.article.page.count"));
+		_maxJournalArticleSize = GetterUtil.getInteger(
+			properties.getProperty("sample.sql.max.journal.article.size"));
 		_maxJournalArticleVersionCount = GetterUtil.getInteger(
 			properties.getProperty(
 				"sample.sql.max.journal.article.version.count"));
@@ -1027,7 +1027,7 @@ public class DataFactory {
 			_defaultJournalDDMTemplateModel);
 	}
 
-	public void initJournalArticleContent(int maxJournalArticleSize) {
+	public void initJournalArticleContent() {
 		StringBundler sb = new StringBundler(6);
 
 		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
@@ -1035,13 +1035,13 @@ public class DataFactory {
 		sb.append("\" type=\"text_area\" index-type=\"keyword\" index=\"0\">");
 		sb.append("<dynamic-content language-id=\"en_US\"><![CDATA[");
 
-		if (maxJournalArticleSize <= 0) {
-			maxJournalArticleSize = 1;
+		if (_maxJournalArticleSize <= 0) {
+			_maxJournalArticleSize = 1;
 		}
 
-		char[] chars = new char[maxJournalArticleSize];
+		char[] chars = new char[_maxJournalArticleSize];
 
-		for (int i = 0; i < maxJournalArticleSize; i++) {
+		for (int i = 0; i < _maxJournalArticleSize; i++) {
 			chars[i] = (char)(CharPool.LOWER_CASE_A + (i % 26));
 		}
 
@@ -4596,6 +4596,7 @@ public class DataFactory {
 	private int _maxGroupCount;
 	private int _maxJournalArticleCount;
 	private int _maxJournalArticlePageCount;
+	private int _maxJournalArticleSize;
 	private int _maxJournalArticleVersionCount;
 	private int _maxMBCategoryCount;
 	private int _maxMBMessageCount;
