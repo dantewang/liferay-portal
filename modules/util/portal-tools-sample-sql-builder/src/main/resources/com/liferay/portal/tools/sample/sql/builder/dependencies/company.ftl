@@ -2,12 +2,14 @@
 	accountModel = dataFactory.newAccountModel()
 
 	companyModel = dataFactory.newCompanyModel()
+
+	virtualHostModel =  dataFactory.newVirtualHostModel()
 />
 
 ${dataFactory.toInsertSQL(companyModel)}
 
 ${dataFactory.toInsertSQL(accountModel)}
 
-${dataFactory.toInsertSQL(dataFactory.virtualHostModel)}
+${dataFactory.toInsertSQL(virtualHostModel)}
 
 ${dataFactory.getCSVWriter("company").write(companyModel.companyId + "\n")}

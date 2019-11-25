@@ -376,8 +376,6 @@ public class DataFactory {
 		initRoleModels();
 		initUserNames();
 		initUserModels();
-		initVirtualHostModel(
-			properties.getProperty("sample.sql.virtual.hostname"));
 	}
 
 	public void closeCSVWriters() throws IOException {
@@ -716,10 +714,6 @@ public class DataFactory {
 		return _userRoleModel;
 	}
 
-	public VirtualHostModel getVirtualHostModel() {
-		return _virtualHostModel;
-	}
-
 	public long getWikiPageClassNameId() {
 		return getClassNameId(WikiPage.class);
 	}
@@ -941,6 +935,9 @@ public class DataFactory {
 			properties.getProperty("sample.sql.max.wiki.page.comment.count"));
 		_maxWikiPageCount = GetterUtil.getInteger(
 			properties.getProperty("sample.sql.max.wiki.page.count"));
+
+		_virtualHostName = properties.getProperty(
+			"sample.sql.virtual.hostname");
 
 		File outputDir = new File(
 			properties.getProperty("sample.sql.output.dir"));
@@ -1181,14 +1178,6 @@ public class DataFactory {
 		}
 
 		unsyncBufferedReader.close();
-	}
-
-	public void initVirtualHostModel(String hostname) {
-		_virtualHostModel = new VirtualHostModelImpl();
-
-		_virtualHostModel.setVirtualHostId(_counter.get());
-		_virtualHostModel.setCompanyId(_companyId);
-		_virtualHostModel.setHostname(hostname);
 	}
 
 	public AccountModel newAccountModel() {
@@ -3382,6 +3371,16 @@ public class DataFactory {
 			assetEntryModel.getPrimaryKey(), 0);
 	}
 
+	public VirtualHostModel newVirtualHostModel() {
+		VirtualHostModel virtualHostModel = new VirtualHostModelImpl();
+
+		virtualHostModel.setVirtualHostId(_counter.get());
+		virtualHostModel.setCompanyId(_companyId);
+		virtualHostModel.setHostname(_virtualHostName);
+
+		return virtualHostModel;
+	}
+
 	public List<WikiNodeModel> newWikiNodeModels(long groupId) {
 		List<WikiNodeModel> wikiNodeModels = new ArrayList<>(_maxWikiNodeCount);
 
@@ -4629,6 +4628,6 @@ public class DataFactory {
 	private final long _userPersonalSiteGroupId;
 	private RoleModel _userRoleModel;
 	private final SimpleCounter _userScreenNameCounter;
-	private VirtualHostModel _virtualHostModel;
+	private String _virtualHostName;
 
 }
