@@ -379,6 +379,31 @@ public class DataFactory {
 		}
 	}
 
+	public String createJournalArticleContent() {
+		StringBundler sb = new StringBundler(6);
+
+		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\"><dynamic-element name=\"content");
+		sb.append("\" type=\"text_area\" index-type=\"keyword\" index=\"0\">");
+		sb.append("<dynamic-content language-id=\"en_US\"><![CDATA[");
+
+		if (_maxJournalArticleSize <= 0) {
+			_maxJournalArticleSize = 1;
+		}
+
+		char[] chars = new char[_maxJournalArticleSize];
+
+		for (int i = 0; i < _maxJournalArticleSize; i++) {
+			chars[i] = (char)(CharPool.LOWER_CASE_A + (i % 26));
+		}
+
+		sb.append(new String(chars));
+
+		sb.append("]]></dynamic-content></dynamic-element></root>");
+
+		return sb.toString();
+	}
+
 	public RoleModel getAdministratorRoleModel() {
 		return _administratorRoleModel;
 	}
@@ -1023,31 +1048,6 @@ public class DataFactory {
 
 		_defaultJournalDDMTemplateVersionModel = newDDMTemplateVersionModel(
 			_defaultJournalDDMTemplateModel);
-	}
-
-	public String initJournalArticleContent() {
-		StringBundler sb = new StringBundler(6);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><dynamic-element name=\"content");
-		sb.append("\" type=\"text_area\" index-type=\"keyword\" index=\"0\">");
-		sb.append("<dynamic-content language-id=\"en_US\"><![CDATA[");
-
-		if (_maxJournalArticleSize <= 0) {
-			_maxJournalArticleSize = 1;
-		}
-
-		char[] chars = new char[_maxJournalArticleSize];
-
-		for (int i = 0; i < _maxJournalArticleSize; i++) {
-			chars[i] = (char)(CharPool.LOWER_CASE_A + (i % 26));
-		}
-
-		sb.append(new String(chars));
-
-		sb.append("]]></dynamic-content></dynamic-element></root>");
-
-		return sb.toString();
 	}
 
 	public void initRoleModels() {
@@ -2376,7 +2376,7 @@ public class DataFactory {
 
 		journalArticleModel.setUrlTitle(sb.toString());
 
-		journalArticleModel.setContent(initJournalArticleContent());
+		journalArticleModel.setContent(createJournalArticleContent());
 		journalArticleModel.setDefaultLanguageId("en_US");
 		journalArticleModel.setDDMStructureKey(
 			_defaultJournalDDMStructureModel.getStructureKey());
