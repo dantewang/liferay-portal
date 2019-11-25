@@ -577,10 +577,6 @@ public class DataFactory {
 		return _defaultDLDDMStructureVersionModel;
 	}
 
-	public DLFileEntryTypeModel getDefaultDLFileEntryTypeModel() {
-		return _defaultDLFileEntryTypeModel;
-	}
-
 	public DDMStructureLayoutModel getDefaultJournalDDMStructureLayoutModel() {
 		return _defaultJournalDDMStructureLayoutModel;
 	}
