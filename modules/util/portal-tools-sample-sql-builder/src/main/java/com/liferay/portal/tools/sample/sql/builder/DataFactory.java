@@ -364,10 +364,6 @@ public class DataFactory {
 			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
 				_readFile("default_asset_publisher_preference.xml"));
 
-		_guestGroupModel = newGroupModel(
-			_guestGroupId, getClassNameId(Group.class), _guestGroupId,
-			GroupConstants.GUEST, true);
-
 		initAssetCategoryModels();
 		initAssetTagModels();
 		initCPDefinitionIdList();
@@ -602,10 +598,6 @@ public class DataFactory {
 		return getClassNameId(DLFileEntry.class);
 	}
 
-	public GroupModel getGuestGroupModel() {
-		return _guestGroupModel;
-	}
-
 	public UserModel getGuestUserModel() {
 		return _guestUserModel;
 	}
@@ -666,10 +658,12 @@ public class DataFactory {
 		return _maxWikiPageCommentCount;
 	}
 
-	public List<Long> getNewUserGroupIds(long groupId) {
+	public List<Long> getNewUserGroupIds(
+		long groupId, GroupModel guestGroupModel) {
+
 		List<Long> groupIds = new ArrayList<>(_maxUserToGroupCount + 1);
 
-		groupIds.add(_guestGroupModel.getGroupId());
+		groupIds.add(guestGroupModel.getGroupId());
 
 		if ((groupId + _maxUserToGroupCount) > _maxGroupCount) {
 			groupId = groupId - _maxUserToGroupCount + 1;
@@ -2343,6 +2337,12 @@ public class DataFactory {
 		}
 
 		return groupModels;
+	}
+
+	public GroupModel newGuestGroupModel() {
+		return newGroupModel(
+			_guestGroupId, getClassNameId(Group.class), _guestGroupId,
+			GroupConstants.GUEST, true);
 	}
 
 	public JournalArticleLocalizationModel newJournalArticleLocalizationModel(
@@ -4580,7 +4580,6 @@ public class DataFactory {
 	private final SimpleCounter _futureDateCounter;
 	private final long _globalGroupId;
 	private final long _guestGroupId;
-	private final GroupModel _guestGroupModel;
 	private RoleModel _guestRoleModel;
 	private UserModel _guestUserModel;
 	private String _journalArticleContent;
