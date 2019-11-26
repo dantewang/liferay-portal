@@ -983,10 +983,8 @@ public class DataFactory {
 			newDefaultJournalDDMStructureLayoutModel(
 				_defaultJournalDDMStructureVersionModel);
 
-		_defaultJournalDDMTemplateModel = newDDMTemplateModel(
-			_globalGroupId, _defaultUserId,
-			_defaultJournalDDMStructureModel.getStructureId(),
-			getClassNameId(JournalArticle.class));
+		_defaultJournalDDMTemplateModel = newDefaultJournalDDMTemplateModel(
+			_defaultJournalDDMStructureModel);
 
 		_defaultJournalDDMTemplateVersionModel = newDDMTemplateVersionModel(
 			_defaultJournalDDMTemplateModel);
@@ -2035,6 +2033,15 @@ public class DataFactory {
 			_globalGroupId, _defaultUserId,
 			getClassNameId(JournalArticle.class), "BASIC-WEB-CONTENT",
 			_journalDDMStructureContent);
+	}
+
+	public DDMTemplateModel newDefaultJournalDDMTemplateModel(
+		DDMStructureModel defaultJournalDDMStructureModel) {
+
+		return newDDMTemplateModel(
+			_globalGroupId, _defaultUserId,
+			defaultJournalDDMStructureModel.getStructureId(),
+			getClassNameId(JournalArticle.class));
 	}
 
 	public UserModel newDefaultUserModel() {
