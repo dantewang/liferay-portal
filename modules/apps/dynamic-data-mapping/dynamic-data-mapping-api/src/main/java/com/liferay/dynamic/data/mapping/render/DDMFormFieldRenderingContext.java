@@ -34,14 +34,6 @@ public class DDMFormFieldRenderingContext {
 		setReturnFullContext(true);
 	}
 
-	/**
-	 * @deprecated As of Judson (7.1.x), with no direct replacement
-	 */
-	@Deprecated
-	public String getChildElementsHTML() {
-		return _childElementsHTML;
-	}
-
 	public Fields getFields() {
 		return _fields;
 	}
@@ -204,7 +196,6 @@ public class DDMFormFieldRenderingContext {
 		_properties.put("visible", visible);
 	}
 
-	private String _childElementsHTML;
 	private Fields _fields;
 	private HttpServletRequest _httpServletRequest;
 	private HttpServletResponse _httpServletResponse;
