@@ -1107,35 +1107,42 @@ public class DataFactory {
 		return accountModel;
 	}
 
-	public AssetEntryModel newAssetEntryModel(BlogsEntryModel blogsEntryModel) {
+	public AssetEntryModel newAssetEntryModel(
+		BlogsEntryModel blogsEntryModel, long classTypeId) {
+
 		return newAssetEntryModel(
 			blogsEntryModel.getGroupId(), blogsEntryModel.getCreateDate(),
 			blogsEntryModel.getModifiedDate(), getClassNameId(BlogsEntry.class),
-			blogsEntryModel.getEntryId(), blogsEntryModel.getUuid(), 0, true,
-			true, ContentTypes.TEXT_HTML, blogsEntryModel.getTitle());
+			blogsEntryModel.getEntryId(), blogsEntryModel.getUuid(),
+			classTypeId, true, true, ContentTypes.TEXT_HTML,
+			blogsEntryModel.getTitle());
 	}
 
 	public AssetEntryModel newAssetEntryModel(
-		DLFileEntryModel dLFileEntryModel) {
+		DLFileEntryModel dLFileEntryModel, long classTypeId) {
 
 		return newAssetEntryModel(
 			dLFileEntryModel.getGroupId(), dLFileEntryModel.getCreateDate(),
 			dLFileEntryModel.getModifiedDate(),
 			getClassNameId(DLFileEntry.class),
 			dLFileEntryModel.getFileEntryId(), dLFileEntryModel.getUuid(),
-			dLFileEntryModel.getFileEntryTypeId(), true, true,
-			dLFileEntryModel.getMimeType(), dLFileEntryModel.getTitle());
+			classTypeId, true, true, dLFileEntryModel.getMimeType(),
+			dLFileEntryModel.getTitle());
 	}
 
-	public AssetEntryModel newAssetEntryModel(DLFolderModel dLFolderModel) {
+	public AssetEntryModel newAssetEntryModel(
+		DLFolderModel dLFolderModel, long classTypeId) {
+
 		return newAssetEntryModel(
 			dLFolderModel.getGroupId(), dLFolderModel.getCreateDate(),
 			dLFolderModel.getModifiedDate(), getClassNameId(DLFolder.class),
-			dLFolderModel.getFolderId(), dLFolderModel.getUuid(), 0, true, true,
-			null, dLFolderModel.getName());
+			dLFolderModel.getFolderId(), dLFolderModel.getUuid(), classTypeId,
+			true, true, null, dLFolderModel.getName());
 	}
 
-	public AssetEntryModel newAssetEntryModel(MBMessageModel mbMessageModel) {
+	public AssetEntryModel newAssetEntryModel(
+		MBMessageModel mbMessageModel, long classTypeId) {
+
 		long classNameId = 0;
 		boolean visible = false;
 
@@ -1152,11 +1159,14 @@ public class DataFactory {
 		return newAssetEntryModel(
 			mbMessageModel.getGroupId(), mbMessageModel.getCreateDate(),
 			mbMessageModel.getModifiedDate(), classNameId,
-			mbMessageModel.getMessageId(), mbMessageModel.getUuid(), 0, true,
-			visible, ContentTypes.TEXT_HTML, mbMessageModel.getSubject());
+			mbMessageModel.getMessageId(), mbMessageModel.getUuid(),
+			classTypeId, true, visible, ContentTypes.TEXT_HTML,
+			mbMessageModel.getSubject());
 	}
 
-	public AssetEntryModel newAssetEntryModel(MBThreadModel mbThreadModel) {
+	public AssetEntryModel newAssetEntryModel(
+		MBThreadModel mbThreadModel, long classTypeId) {
+
 		return newAssetEntryModel(
 			mbThreadModel.getGroupId(), mbThreadModel.getCreateDate(),
 			mbThreadModel.getModifiedDate(), getClassNameId(MBThread.class),
@@ -1167,7 +1177,8 @@ public class DataFactory {
 
 	public AssetEntryModel newAssetEntryModel(
 		ObjectValuePair<JournalArticleModel, JournalArticleLocalizationModel>
-			objectValuePair) {
+			objectValuePair,
+		long classTypeId) {
 
 		JournalArticleModel journalArticleModel = objectValuePair.getKey();
 		JournalArticleLocalizationModel journalArticleLocalizationModel =
@@ -1182,17 +1193,19 @@ public class DataFactory {
 			journalArticleModel.getCreateDate(),
 			journalArticleModel.getModifiedDate(),
 			getClassNameId(JournalArticle.class), resourcePrimKey, resourceUUID,
-			_defaultJournalDDMStructureModel.getStructureId(),
-			journalArticleModel.isIndexable(), true, ContentTypes.TEXT_HTML,
-			journalArticleLocalizationModel.getTitle());
+			classTypeId, journalArticleModel.isIndexable(), true,
+			ContentTypes.TEXT_HTML, journalArticleLocalizationModel.getTitle());
 	}
 
-	public AssetEntryModel newAssetEntryModel(WikiPageModel wikiPageModel) {
+	public AssetEntryModel newAssetEntryModel(
+		WikiPageModel wikiPageModel, long classTypeId) {
+
 		return newAssetEntryModel(
 			wikiPageModel.getGroupId(), wikiPageModel.getCreateDate(),
 			wikiPageModel.getModifiedDate(), getClassNameId(WikiPage.class),
-			wikiPageModel.getResourcePrimKey(), wikiPageModel.getUuid(), 0,
-			true, true, ContentTypes.TEXT_HTML, wikiPageModel.getTitle());
+			wikiPageModel.getResourcePrimKey(), wikiPageModel.getUuid(),
+			classTypeId, true, true, ContentTypes.TEXT_HTML,
+			wikiPageModel.getTitle());
 	}
 
 	public List<AssetEntryModel> newAssetEntryModels(

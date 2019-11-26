@@ -68,6 +68,7 @@ ${dataFactory.toInsertSQL(ddmTemplateVersionModel)}
 			<#if versionCount = dataFactory.maxJournalArticleVersionCount>
 				<@insertAssetEntry
 					_categoryAndTag=true
+					_classTypeId=ddmStructureModel.structureId
 					_entry=dataFactory.newObjectValuePair(journalArticleModel, journalArticleLocalizationModel)
 				/>
 			</#if>
