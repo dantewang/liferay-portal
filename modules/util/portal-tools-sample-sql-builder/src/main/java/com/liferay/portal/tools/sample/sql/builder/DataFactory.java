@@ -367,7 +367,6 @@ public class DataFactory {
 		initAssetCategoryModels();
 		initAssetTagModels();
 		initCPDefinitionIdList();
-		initDLFileEntryTypeModel();
 
 		initRoleModels();
 		initUserNames();
@@ -559,28 +558,6 @@ public class DataFactory {
 		}
 
 		return writer;
-	}
-
-	public DDMStructureLayoutModel getDefaultJournalDDMStructureLayoutModel() {
-		return _defaultJournalDDMStructureLayoutModel;
-	}
-
-	public DDMStructureModel getDefaultJournalDDMStructureModel() {
-		return _defaultJournalDDMStructureModel;
-	}
-
-	public DDMStructureVersionModel
-		getDefaultJournalDDMStructureVersionModel() {
-
-		return _defaultJournalDDMStructureVersionModel;
-	}
-
-	public DDMTemplateModel getDefaultJournalDDMTemplateModel() {
-		return _defaultJournalDDMTemplateModel;
-	}
-
-	public DDMTemplateVersionModel getDefaultJournalDDMTemplateVersionModel() {
-		return _defaultJournalDDMTemplateVersionModel;
 	}
 
 	public long getDLFileEntryClassNameId() {
@@ -971,23 +948,6 @@ public class DataFactory {
 
 			_cpDefinitionIdList.add(cpDefinitionIds);
 		}
-	}
-
-	public void initDLFileEntryTypeModel() {
-		_defaultJournalDDMStructureModel = newDefaultJournalDDMStructureModel();
-
-		_defaultJournalDDMStructureVersionModel = newDDMStructureVersionModel(
-			_defaultJournalDDMStructureModel);
-
-		_defaultJournalDDMStructureLayoutModel =
-			newDefaultJournalDDMStructureLayoutModel(
-				_defaultJournalDDMStructureVersionModel);
-
-		_defaultJournalDDMTemplateModel = newDefaultJournalDDMTemplateModel(
-			_defaultJournalDDMStructureModel);
-
-		_defaultJournalDDMTemplateVersionModel = newDDMTemplateVersionModel(
-			_defaultJournalDDMTemplateModel);
 	}
 
 	public void initRoleModels() {
@@ -4572,11 +4532,6 @@ public class DataFactory {
 		_defaultAssetPublisherPortletPreferencesImpl;
 	private AssetVocabularyModel _defaultAssetVocabularyModel;
 	private String _defaultJournalArticleId;
-	private DDMStructureLayoutModel _defaultJournalDDMStructureLayoutModel;
-	private DDMStructureModel _defaultJournalDDMStructureModel;
-	private DDMStructureVersionModel _defaultJournalDDMStructureVersionModel;
-	private DDMTemplateModel _defaultJournalDDMTemplateModel;
-	private DDMTemplateVersionModel _defaultJournalDDMTemplateVersionModel;
 	private final long _defaultUserId;
 	private final String _dlDDMStructureContent;
 	private final String _dlDDMStructureLayoutContent;
