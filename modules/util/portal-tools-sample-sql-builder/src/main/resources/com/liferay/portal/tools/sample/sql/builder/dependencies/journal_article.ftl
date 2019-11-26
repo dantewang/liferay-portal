@@ -51,7 +51,7 @@ ${dataFactory.toInsertSQL(ddmTemplateVersionModel)}
 		<#assign versionCounts = dataFactory.getSequence(dataFactory.maxJournalArticleVersionCount) />
 
 		<#list versionCounts as versionCount>
-			<#assign journalArticleModel = dataFactory.newJournalArticleModel(journalArticleResourceModel, journalArticleCount, versionCount) />
+			<#assign journalArticleModel = dataFactory.newJournalArticleModel(journalArticleResourceModel, journalArticleCount, versionCount, ddmStructureModel.structureKey) />
 
 			${dataFactory.toInsertSQL(journalArticleModel)}
 
