@@ -566,12 +566,17 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 					"Unable to install JAR because the system class loader " +
 						"is not an instance of URLClassLoader");
 
-				return;
+				throw cnfe;
 			}
 
-			JarUtil.downloadAndInstallJar(
-				new URL(url), PropsValues.LIFERAY_LIB_GLOBAL_DIR, name,
-				(URLClassLoader)classLoader);
+			try {
+				JarUtil.downloadAndInstallJar(
+					new URL(url), PropsValues.LIFERAY_LIB_GLOBAL_DIR, name,
+					(URLClassLoader)classLoader);
+			}
+			catch (Exception e) {
+				throw cnfe;
+			}
 		}
 	}
 

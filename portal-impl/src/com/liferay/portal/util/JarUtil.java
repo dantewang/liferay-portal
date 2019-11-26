@@ -19,6 +19,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Http;
+import com.liferay.portal.kernel.util.OSDetector;
 import com.liferay.portal.kernel.util.PortalRunMode;
 import com.liferay.portal.kernel.util.StringUtil;
 
@@ -83,6 +84,12 @@ public class JarUtil {
 
 		if (_log.isInfoEnabled()) {
 			_log.info(StringBundler.concat("Downloading ", url, " to ", path));
+		}
+
+		if (OSDetector.isWindows() && file.exists()) {
+			_log.error(
+				"Unable to install JAR because the JAR is existed and used " +
+					"in Windows system");
 		}
 
 		try (InputStream inputStream = url.openStream()) {
