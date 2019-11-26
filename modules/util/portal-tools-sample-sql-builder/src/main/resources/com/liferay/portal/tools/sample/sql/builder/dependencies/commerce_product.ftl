@@ -1,35 +1,35 @@
 <#assign
-	commerceCurrencyModel=dataFactory.newCommerceCurrencyModel()
+	commerceCurrencyModel = dataFactory.newCommerceCurrencyModel()
 
-	commerceCatalogModel=dataFactory.newCommerceCatalogModel(commerceCurrencyModel)
+	commerceCatalogModel = dataFactory.newCommerceCatalogModel(commerceCurrencyModel)
 
-	commerceCurrencyModel=dataFactory.newCommerceCurrencyModel()
+	commerceCurrencyModel = dataFactory.newCommerceCurrencyModel()
 
-	commerceCatalogModel=dataFactory.newCommerceCatalogModel(commerceCurrencyModel)
+	commerceCatalogModel = dataFactory.newCommerceCatalogModel(commerceCurrencyModel)
 
-	commerceCurrencyModel=dataFactory.newCommerceCurrencyModel()
+	commerceCurrencyModel = dataFactory.newCommerceCurrencyModel()
 
-	commerceCatalogModel=dataFactory.newCommerceCatalogModel(commerceCurrencyModel)
+	commerceCatalogModel = dataFactory.newCommerceCatalogModel(commerceCurrencyModel)
 
-	commerceChannelModel=dataFactory.newCommerceChannelModel(commerceCurrencyModel)
+	commerceChannelModel = dataFactory.newCommerceChannelModel(commerceCurrencyModel)
 
-	commerceCatalogGroupModel=dataFactory.newCommerceCatalogGroupModel(commerceCatalogModel)
+	commerceCatalogGroupModel = dataFactory.newCommerceCatalogGroupModel(commerceCatalogModel)
 
-	commerceChannelGroupModel=dataFactory.newCommerceChannelGroupModel(commerceChannelModel)
+	commerceChannelGroupModel = dataFactory.newCommerceChannelGroupModel(commerceChannelModel)
 
-	cPDefinitionLocalizationModels=dataFactory.newCPDefinitionLocalizationModels()
+	cPDefinitionLocalizationModels = dataFactory.newCPDefinitionLocalizationModels()
 
-	assetEntryModels=dataFactory.newAssetEntryModels(cPDefinitionLocalizationModels)
+	assetEntryModels = dataFactory.newAssetEntryModels(cPDefinitionLocalizationModels)
 
-	cProductModels=dataFactory.newCProductModels()
+	cProductModels = dataFactory.newCProductModels()
 
-	cpTaxCategoryModel=dataFactory.newCPTaxCategoryModel("Normal Product")
+	cpTaxCategoryModel = dataFactory.newCPTaxCategoryModel("Normal Product")
 
-	cpDefinitionModels=dataFactory.newCPDefinitionModels(cpTaxCategoryModel, cProductModels)
+	cpDefinitionModels = dataFactory.newCPDefinitionModels(cpTaxCategoryModel, cProductModels)
 
-	cpFriendlyURLEntryModels=dataFactory.newCPFriendlyURLEntryModels(cProductModels)
+	cpFriendlyURLEntryModels = dataFactory.newCPFriendlyURLEntryModels(cProductModels)
 
-	cpInstanceModels=dataFactory.newCPInstanceModels()
+	cpInstanceModels = dataFactory.newCPInstanceModels()
 />
 
 <#list assetEntryModels as assetEntryModel>
