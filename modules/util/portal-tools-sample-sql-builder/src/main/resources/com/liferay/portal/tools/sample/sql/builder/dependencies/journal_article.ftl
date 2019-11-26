@@ -1,9 +1,13 @@
-<#assign ddmStructureModel = dataFactory.defaultJournalDDMStructureModel />
+<#assign
+	ddmStructureModel = dataFactory.defaultJournalDDMStructureModel
+
+	ddmStructureVersionModel = dataFactory.defaultJournalDDMStructureVersionModel
+/>
 
 <@insertDDMStructure
 	_ddmStructureLayoutModel=dataFactory.defaultJournalDDMStructureLayoutModel
 	_ddmStructureModel=ddmStructureModel
-	_ddmStructureVersionModel=dataFactory.defaultJournalDDMStructureVersionModel
+	_ddmStructureVersionModel=dataFactory.ddmStructureVersionModel
 />
 
 <#assign ddmTemplateModel = dataFactory.defaultJournalDDMTemplateModel />
@@ -61,7 +65,7 @@ ${dataFactory.toInsertSQL(ddmTemplateVersionModel)}
 
 			${dataFactory.toInsertSQL(dataFactory.newDDMTemplateLinkModel(journalArticleModel, ddmTemplateModel.templateId))}
 
-			${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(journalArticleModel, ddmStructureModel.structureId))}
+			${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(journalArticleModel, ddmStructureModel.structureId, ddmStructureVersionModel.structureVersionId))}
 
 			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(journalArticleModel))}
 
