@@ -33,6 +33,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.UnknownHostException;
 
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -87,6 +88,14 @@ public class JarUtil {
 
 		try (InputStream inputStream = url.openStream()) {
 			Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+		}
+		catch (FileSystemException fse) {
+			_log.error(
+				StringBundler.concat(
+					"Unable to replace ", path, " because file system ",
+					"operation failed."));
+
+			throw fse;
 		}
 
 		if (_log.isInfoEnabled()) {
