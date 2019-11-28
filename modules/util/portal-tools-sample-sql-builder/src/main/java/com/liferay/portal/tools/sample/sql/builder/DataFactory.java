@@ -1153,9 +1153,7 @@ public class DataFactory {
 	}
 
 	public void initDLFileEntryTypeModel() {
-		_defaultDLDDMStructureModel = newDDMStructureModel(
-			_globalGroupId, _defaultUserId, getClassNameId(DLFileEntry.class),
-			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent);
+		_defaultDLDDMStructureModel = newDefaultDLDDMStructureModel();
 
 		_defaultDLDDMStructureVersionModel = newDDMStructureVersionModel(
 			_defaultDLDDMStructureModel);
@@ -1956,6 +1954,12 @@ public class DataFactory {
 		ddmTemplateVersionModelImpl.setStatusDate(nextFutureDate());
 
 		return ddmTemplateVersionModelImpl;
+	}
+
+	public DDMStructureModel newDefaultDLDDMStructureModel() {
+		return newDDMStructureModel(
+			_globalGroupId, _defaultUserId, getClassNameId(DLFileEntry.class),
+			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent);
 	}
 
 	public UserModel newDefaultUserModel() {
