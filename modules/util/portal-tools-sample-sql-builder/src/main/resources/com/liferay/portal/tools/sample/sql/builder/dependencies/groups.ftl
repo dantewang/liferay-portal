@@ -37,7 +37,8 @@
 
 	<@insertDLFolder
 		_dLFileEntryTypeModel=dLFileEntryTypeModel
-		_ddmStructureId=dataFactory.defaultDLDDMStructureId
+		_ddmStructureId=defaultDLDDMStructureModel.structureId
+		_dlDDMStructureVersionModel=defaultDLDDMStructureVersionModel
 		_dlFolderDepth=1
 		_groupId=groupId
 		_parentDLFolderId=0
