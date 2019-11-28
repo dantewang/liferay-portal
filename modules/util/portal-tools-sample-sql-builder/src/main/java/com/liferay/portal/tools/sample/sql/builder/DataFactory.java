@@ -369,7 +369,6 @@ public class DataFactory {
 		initCommerceCatalogModel();
 		initCommerceChannelModel();
 		initCommerceProductModels();
-		initDLFileEntryTypeModel();
 		initGroupModels();
 
 		initJournalArticleContent();
@@ -596,28 +595,6 @@ public class DataFactory {
 		}
 
 		return writer;
-	}
-
-	public DDMStructureLayoutModel getDefaultJournalDDMStructureLayoutModel() {
-		return _defaultJournalDDMStructureLayoutModel;
-	}
-
-	public DDMStructureModel getDefaultJournalDDMStructureModel() {
-		return _defaultJournalDDMStructureModel;
-	}
-
-	public DDMStructureVersionModel
-		getDefaultJournalDDMStructureVersionModel() {
-
-		return _defaultJournalDDMStructureVersionModel;
-	}
-
-	public DDMTemplateModel getDefaultJournalDDMTemplateModel() {
-		return _defaultJournalDDMTemplateModel;
-	}
-
-	public DDMTemplateVersionModel getDefaultJournalDDMTemplateVersionModel() {
-		return _defaultJournalDDMTemplateVersionModel;
 	}
 
 	public long getDLFileEntryClassNameId() {
@@ -1134,23 +1111,6 @@ public class DataFactory {
 
 				});
 		}
-	}
-
-	public void initDLFileEntryTypeModel() {
-		_defaultJournalDDMStructureModel = newDefaultJournalDDMStructureModel();
-
-		_defaultJournalDDMStructureVersionModel = newDDMStructureVersionModel(
-			_defaultJournalDDMStructureModel);
-
-		_defaultJournalDDMStructureLayoutModel =
-			newDefaultJournalDDMStructureLayoutModel(
-				_defaultJournalDDMStructureVersionModel);
-
-		_defaultJournalDDMTemplateModel = newDefaultJournalDDMTemplateModel(
-			_defaultJournalDDMStructureModel);
-
-		_defaultJournalDDMTemplateVersionModel = newDDMTemplateVersionModel(
-			_defaultJournalDDMTemplateModel);
 	}
 
 	public void initGroupModels() {
@@ -1785,7 +1745,8 @@ public class DataFactory {
 	}
 
 	public DDMStorageLinkModel newDDMStorageLinkModel(
-		JournalArticleModel journalArticleModel, long structureId) {
+		JournalArticleModel journalArticleModel, long structureId,
+		long structureVersionId) {
 
 		DDMStorageLinkModel ddmStorageLinkModel = new DDMStorageLinkModelImpl();
 
@@ -1795,8 +1756,7 @@ public class DataFactory {
 			getClassNameId(JournalArticle.class));
 		ddmStorageLinkModel.setClassPK(journalArticleModel.getId());
 		ddmStorageLinkModel.setStructureId(structureId);
-		ddmStorageLinkModel.setStructureVersionId(
-			_defaultJournalDDMStructureVersionModel.getStructureVersionId());
+		ddmStorageLinkModel.setStructureVersionId(structureVersionId);
 
 		return ddmStorageLinkModel;
 	}
@@ -2274,7 +2234,8 @@ public class DataFactory {
 
 	public JournalArticleModel newJournalArticleModel(
 			JournalArticleResourceModel journalArticleResourceModel,
-			int articleIndex, int versionIndex)
+			int articleIndex, int versionIndex, String ddmStructureKey,
+			String ddmTemplateKey)
 		throws PortalException {
 
 		JournalArticleModel journalArticleModel = new JournalArticleModelImpl();
@@ -2308,10 +2269,8 @@ public class DataFactory {
 
 		journalArticleModel.setContent(_journalArticleContent);
 		journalArticleModel.setDefaultLanguageId("en_US");
-		journalArticleModel.setDDMStructureKey(
-			_defaultJournalDDMStructureModel.getStructureKey());
-		journalArticleModel.setDDMTemplateKey(
-			_defaultJournalDDMTemplateModel.getTemplateKey());
+		journalArticleModel.setDDMStructureKey(ddmStructureKey);
+		journalArticleModel.setDDMTemplateKey(ddmTemplateKey);
 		journalArticleModel.setDisplayDate(new Date());
 		journalArticleModel.setExpirationDate(nextFutureDate());
 		journalArticleModel.setReviewDate(new Date());
@@ -4501,11 +4460,6 @@ public class DataFactory {
 		_defaultAssetPublisherPortletPreferencesImpl;
 	private AssetVocabularyModel _defaultAssetVocabularyModel;
 	private String _defaultJournalArticleId;
-	private DDMStructureLayoutModel _defaultJournalDDMStructureLayoutModel;
-	private DDMStructureModel _defaultJournalDDMStructureModel;
-	private DDMStructureVersionModel _defaultJournalDDMStructureVersionModel;
-	private DDMTemplateModel _defaultJournalDDMTemplateModel;
-	private DDMTemplateVersionModel _defaultJournalDDMTemplateVersionModel;
 	private final long _defaultUserId;
 	private final String _dlDDMStructureContent;
 	private final String _dlDDMStructureLayoutContent;
