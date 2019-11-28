@@ -441,10 +441,6 @@ public class DataFactory {
 		return allAssetCategoryModels;
 	}
 
-	public List<AssetEntryModel> getAssetEntryModels() {
-		return new ArrayList<>(_assetEntryModels);
-	}
-
 	public List<Long> getAssetTagIds(AssetEntryModel assetEntryModel) {
 		Map<Long, List<AssetTagModel>> assetTagModelsMap =
 			_assetTagModelsMaps[(int)assetEntryModel.getGroupId() - 1];
@@ -528,12 +524,6 @@ public class DataFactory {
 
 	public long getCounterNext() {
 		return _counter.get();
-	}
-
-	public List<CPDefinitionLocalizationModel>
-		getCPDefinitionLocalizationModels() {
-
-		return new ArrayList<>(_cpDefinitionLocalizationModels);
 	}
 
 	public List<CPDefinitionModel> getCPDefinitionModels() {
@@ -829,9 +819,6 @@ public class DataFactory {
 
 		int cpDefinitionCount = _maxCProductCount * _maxCPDefinitionCount;
 
-		_assetEntryModels = new ArrayList<>(cpDefinitionCount);
-
-		_cpDefinitionLocalizationModels = newCPDefinitionLocalizationModels();
 		_cpDefinitionModels = new ArrayList<>(cpDefinitionCount);
 		_cpFriendlyURLEntryModels = new ArrayList<>(cpDefinitionCount);
 		_cpInstanceModels = new ArrayList<>(
@@ -856,21 +843,11 @@ public class DataFactory {
 
 				long cpDefinitionId = cpDefinitionIds[definitionIndex];
 
-				CPDefinitionLocalizationModel cpDefinitionLocalizationModel =
-					_cpDefinitionLocalizationModels.get(definitionIndex);
-
 				_cpDefinitionModels.add(
 					newCPDefinitionModel(
 						_commerceCatalogGroupId, cpDefinitionId, cProductId,
 						cpTaxCategoryModel.getCPTaxCategoryId(),
 						definitionIndex + 1));
-
-				_assetEntryModels.add(
-					newAssetEntryModel(
-						_commerceCatalogGroupId, new Date(), new Date(),
-						getClassNameId(CPDefinition.class), cpDefinitionId,
-						SequentialUUID.generate(), 0, true, true, "text/plain",
-						cpDefinitionLocalizationModel.getName()));
 
 				_cpFriendlyURLEntryModels.add(
 					newCPFriendlyURLEntryModel(cProductModel));
@@ -1253,6 +1230,38 @@ public class DataFactory {
 			wikiPageModel.getModifiedDate(), getClassNameId(WikiPage.class),
 			wikiPageModel.getResourcePrimKey(), wikiPageModel.getUuid(), 0,
 			true, true, ContentTypes.TEXT_HTML, wikiPageModel.getTitle());
+	}
+
+	public List<AssetEntryModel> newAssetEntryModels(
+		List<CPDefinitionLocalizationModel> cpDefinitionLocalizationModels) {
+
+		List<AssetEntryModel> assetEntryModels = new ArrayList<>(
+			_maxCProductCount * _maxCPDefinitionCount);
+
+		for (int productIndex = 0; productIndex < _maxCProductCount;
+			 productIndex++) {
+
+			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
+				productIndex);
+
+			for (int definitionIndex = 0;
+				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
+
+				long cpDefinitionId = cpDefinitionIds[definitionIndex];
+
+				CPDefinitionLocalizationModel cpDefinitionLocalizationModel =
+					cpDefinitionLocalizationModels.get(definitionIndex);
+
+				assetEntryModels.add(
+					newAssetEntryModel(
+						_commerceCatalogGroupId, new Date(), new Date(),
+						getClassNameId(CPDefinition.class), cpDefinitionId,
+						SequentialUUID.generate(), 0, true, true, "text/plain",
+						cpDefinitionLocalizationModel.getName()));
+			}
+		}
+
+		return assetEntryModels;
 	}
 
 	public List<PortletPreferencesModel>
@@ -4464,7 +4473,6 @@ public class DataFactory {
 	private final long[] _assetClassNameIds;
 	private final Map<Long, Integer> _assetClassNameIdsIndexes =
 		new HashMap<>();
-	private List<AssetEntryModel> _assetEntryModels;
 	private final Map<Long, Integer> _assetPublisherQueryStartIndexes =
 		new HashMap<>();
 	private Map<Long, SimpleCounter>[] _assetTagCounters;
@@ -4478,7 +4486,6 @@ public class DataFactory {
 	private final long _companyId;
 	private final SimpleCounter _counter;
 	private List _cpDefinitionIdList;
-	private List<CPDefinitionLocalizationModel> _cpDefinitionLocalizationModels;
 	private List<CPDefinitionModel> _cpDefinitionModels;
 	private List<CPFriendlyURLEntryModel> _cpFriendlyURLEntryModels;
 	private List<CPInstanceModel> _cpInstanceModels;
