@@ -377,7 +377,10 @@ public class DataFactory {
 
 		initRoleModels();
 		initUserNames();
-		initUserModels();
+
+		_defaultUserModel = newDefaultUserModel();
+		_guestUserModel = newGuestUserModel();
+		_sampleUserModel = newSampleUserModel();
 	}
 
 	public void closeCSVWriters() throws IOException {
@@ -1342,17 +1345,6 @@ public class DataFactory {
 		_roleModels.add(_userRoleModel);
 	}
 
-	public void initUserModels() {
-		_defaultUserModel = newUserModel(
-			_defaultUserId, StringPool.BLANK, StringPool.BLANK,
-			StringPool.BLANK, true);
-		_guestUserModel = newUserModel(
-			_counter.get(), "Test", "Test", "Test", false);
-		_sampleUserModel = newUserModel(
-			_sampleUserId, _SAMPLE_USER_NAME, _SAMPLE_USER_NAME,
-			_SAMPLE_USER_NAME, false);
-	}
-
 	public void initUserNames() throws IOException {
 		_firstNames = new ArrayList<>();
 
@@ -2009,6 +2001,12 @@ public class DataFactory {
 		return ddmTemplateVersionModelImpl;
 	}
 
+	public UserModel newDefaultUserModel() {
+		return newUserModel(
+			_defaultUserId, StringPool.BLANK, StringPool.BLANK,
+			StringPool.BLANK, true);
+	}
+
 	public DLFileEntryMetadataModel newDLFileEntryMetadataModel(
 		long ddmStorageLinkId, long ddmStructureId,
 		DLFileVersionModel dlFileVersionModel) {
@@ -2249,6 +2247,10 @@ public class DataFactory {
 		return newGroupModel(
 			_guestGroupId, getClassNameId(Group.class), _guestGroupId,
 			GroupConstants.GUEST, true);
+	}
+
+	public UserModel newGuestUserModel() {
+		return newUserModel(_counter.get(), "Test", "Test", "Test", false);
 	}
 
 	public JournalArticleLocalizationModel newJournalArticleLocalizationModel(
@@ -3140,6 +3142,12 @@ public class DataFactory {
 		return newResourcePermissionModels(
 			WikiPage.class.getName(),
 			String.valueOf(wikiPageModel.getResourcePrimKey()), _sampleUserId);
+	}
+
+	public UserModel newSampleUserModel() {
+		return newUserModel(
+			_sampleUserId, _SAMPLE_USER_NAME, _SAMPLE_USER_NAME,
+			_SAMPLE_USER_NAME, false);
 	}
 
 	public SocialActivityModel newSocialActivityModel(
