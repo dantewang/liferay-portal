@@ -1,7 +1,3 @@
-<#list dataFactory.assetEntryModels as assetEntryModel>
-	${dataFactory.toInsertSQL(assetEntryModel)}
-</#list>
-
 <#assign
 	commerceCurrencyModel = dataFactory.newCommerceCurrencyModel()
 
@@ -12,7 +8,15 @@
 	commerceCatalogGroupModel = dataFactory.newCommerceCatalogGroupModel(commerceCatalogModel)
 
 	commerceChannelGroupModel = dataFactory.newCommerceChannelGroupModel(commerceChannelModel)
+
+	cPDefinitionLocalizationModels = dataFactory.newCPDefinitionLocalizationModels()
+
+	assetEntryModels = dataFactory.newAssetEntryModels(cPDefinitionLocalizationModels)
 />
+
+<#list assetEntryModels as assetEntryModel>
+	${dataFactory.toInsertSQL(assetEntryModel)}
+</#list>
 
 ${dataFactory.toInsertSQL(commerceCatalogModel)}
 
@@ -22,7 +26,7 @@ ${dataFactory.toInsertSQL(commerceChannelModel)}
 
 ${dataFactory.toInsertSQL(commerceCurrencyModel)}
 
-<#list dataFactory.CPDefinitionLocalizationModels as cpDefinitionLocalizationModel>
+<#list cPDefinitionLocalizationModels as cpDefinitionLocalizationModel>
 	${dataFactory.toInsertSQL(cpDefinitionLocalizationModel)}
 </#list>
 
