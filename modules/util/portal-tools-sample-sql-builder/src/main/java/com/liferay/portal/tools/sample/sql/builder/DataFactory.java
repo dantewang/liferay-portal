@@ -814,38 +814,13 @@ public class DataFactory {
 
 		_cProductModels = newCProductModels();
 
-		int cpDefinitionCount = _maxCProductCount * _maxCPDefinitionCount;
-
 		_cpDefinitionModels = newCPDefinitionModels(
 			_cpTaxCategoryModel, _cProductModels);
 
 		_cpFriendlyURLEntryModels = newCPFriendlyURLEntryModels(
 			_cProductModels);
 
-		_cpInstanceModels = new ArrayList<>(
-			cpDefinitionCount * _maxCPInstanceCount);
-
-		for (int productIndex = 0; productIndex < _maxCProductCount;
-			 productIndex++) {
-
-			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
-				productIndex);
-
-			for (int definitionIndex = 0;
-				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
-
-				long cpDefinitionId = cpDefinitionIds[definitionIndex];
-
-				for (int instanceIndex = 0; instanceIndex < _maxCPInstanceCount;
-					 instanceIndex++) {
-
-					_cpInstanceModels.add(
-						newCPInstanceModel(
-							_commerceCatalogGroupId, cpDefinitionId,
-							instanceIndex));
-				}
-			}
-		}
+		_cpInstanceModels = newCPInstanceModels();
 	}
 
 	public void initContext(Properties properties)
@@ -1606,6 +1581,35 @@ public class DataFactory {
 		}
 
 		return cpFriendlyURLEntryModels;
+	}
+
+	public List<CPInstanceModel> newCPInstanceModels() {
+		List<CPInstanceModel> cpInstanceModels = new ArrayList<>(
+			_maxCProductCount * _maxCPDefinitionCount * _maxCPInstanceCount);
+
+		for (int productIndex = 0; productIndex < _maxCProductCount;
+			 productIndex++) {
+
+			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
+				productIndex);
+
+			for (int definitionIndex = 0;
+				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
+
+				long cpDefinitionId = cpDefinitionIds[definitionIndex];
+
+				for (int instanceIndex = 0; instanceIndex < _maxCPInstanceCount;
+					 instanceIndex++) {
+
+					cpInstanceModels.add(
+						newCPInstanceModel(
+							_commerceCatalogGroupId, cpDefinitionId,
+							instanceIndex));
+				}
+			}
+		}
+
+		return cpInstanceModels;
 	}
 
 	public List<CProductModel> newCProductModels() {
