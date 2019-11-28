@@ -1,20 +1,24 @@
 <#assign
-	ddmStructureModel = dataFactory.defaultJournalDDMStructureModel
+	ddmStructureModel = dataFactory.newDefaultJournalDDMStructureModel()
 
-	ddmStructureVersionModel = dataFactory.defaultJournalDDMStructureVersionModel
+	ddmStructureVersionModel = dataFactory.newDDMStructureVersionModel(ddmStructureModel)
+
+	ddmStructureLayoutModel = dataFactory.newDefaultJournalDDMStructureLayoutModel(ddmStructureVersionModel)
 />
 
 <@insertDDMStructure
-	_ddmStructureLayoutModel=dataFactory.defaultJournalDDMStructureLayoutModel
+	_ddmStructureLayoutModel=ddmStructureLayoutModel
 	_ddmStructureModel=ddmStructureModel
-	_ddmStructureVersionModel=dataFactory.ddmStructureVersionModel
+	_ddmStructureVersionModel=ddmStructureVersionModel
 />
 
-<#assign ddmTemplateModel = dataFactory.defaultJournalDDMTemplateModel />
+<#assign
+	ddmTemplateModel = dataFactory.newDefaultJournalDDMTemplateModel(ddmStructureModel)
+
+	ddmTemplateVersionModel = dataFactory.newDDMTemplateVersionModel(ddmTemplateModel)
+/>
 
 ${dataFactory.toInsertSQL(ddmTemplateModel)}
-
-<#assign ddmTemplateVersionModel = dataFactory.defaultJournalDDMTemplateVersionModel />
 
 ${dataFactory.toInsertSQL(ddmTemplateVersionModel)}
 
