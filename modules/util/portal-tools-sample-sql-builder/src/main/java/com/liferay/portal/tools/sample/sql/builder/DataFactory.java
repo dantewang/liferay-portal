@@ -363,9 +363,10 @@ public class DataFactory {
 			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
 				_readFile("default_asset_publisher_preference.xml"));
 
+		_commerceCurrencyModel = newCommerceCurrencyModel();
+
 		initAssetCategoryModels();
 		initAssetTagModels();
-		initCommerceCurrencyModel();
 		initCommerceCatalogModel();
 		initCommerceChannelModel();
 		initCommerceProductModels();
@@ -881,43 +882,6 @@ public class DataFactory {
 			_commerceCurrencyModel.getCode());
 	}
 
-	public void initCommerceCurrencyModel() {
-		_commerceCurrencyModel = new CommerceCurrencyModelImpl();
-
-		_commerceCurrencyModel.setUuid(SequentialUUID.generate());
-		_commerceCurrencyModel.setCommerceCurrencyId(_counter.get());
-		_commerceCurrencyModel.setCompanyId(_companyId);
-		_commerceCurrencyModel.setUserId(_sampleUserId);
-		_commerceCurrencyModel.setUserName(_SAMPLE_USER_NAME);
-		_commerceCurrencyModel.setCreateDate(new Date());
-		_commerceCurrencyModel.setModifiedDate(new Date());
-		_commerceCurrencyModel.setCode("USD");
-
-		String name = StringBundler.concat(
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root available-locales",
-			"=\"en_US\" default-locale=\"en_US\"><Name language-id=\"en_US\">",
-			"US Dollar</Name></root>");
-
-		_commerceCurrencyModel.setName(name);
-
-		_commerceCurrencyModel.setRate(BigDecimal.valueOf(1));
-
-		String formatPattern = StringBundler.concat(
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root available-locales",
-			"=\"en_US\" default-locale=\"en_US\"><FormatPattern language-id",
-			"=\"en_US\">$###,##0.00</FormatPattern></root>");
-
-		_commerceCurrencyModel.setFormatPattern(formatPattern);
-
-		_commerceCurrencyModel.setMaxFractionDigits(2);
-		_commerceCurrencyModel.setMinFractionDigits(2);
-		_commerceCurrencyModel.setRoundingMode("HALF_EVEN");
-		_commerceCurrencyModel.setPrimary(true);
-		_commerceCurrencyModel.setPriority(1);
-		_commerceCurrencyModel.setActive(true);
-		_commerceCurrencyModel.setLastPublishDate(new Date());
-	}
-
 	public void initCommerceProductModels() {
 		CPTaxCategoryModel cpTaxCategoryModel = newCPTaxCategoryModel(
 			"Normal Product");
@@ -1413,6 +1377,46 @@ public class DataFactory {
 			_commerceChannelGroupId, getClassNameId(CommerceChannel.class),
 			commerceChannelModel.getCommerceChannelId(),
 			commerceChannelModel.getName(), false);
+	}
+
+	public CommerceCurrencyModel newCommerceCurrencyModel() {
+		CommerceCurrencyModel commerceCurrencyModel =
+			new CommerceCurrencyModelImpl();
+
+		commerceCurrencyModel.setUuid(SequentialUUID.generate());
+		commerceCurrencyModel.setCommerceCurrencyId(_counter.get());
+		commerceCurrencyModel.setCompanyId(_companyId);
+		commerceCurrencyModel.setUserId(_sampleUserId);
+		commerceCurrencyModel.setUserName(_SAMPLE_USER_NAME);
+		commerceCurrencyModel.setCreateDate(new Date());
+		commerceCurrencyModel.setModifiedDate(new Date());
+		commerceCurrencyModel.setCode("USD");
+
+		String name = StringBundler.concat(
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root available-locales",
+			"=\"en_US\" default-locale=\"en_US\"><Name language-id=\"en_US\">",
+			"US Dollar</Name></root>");
+
+		commerceCurrencyModel.setName(name);
+
+		commerceCurrencyModel.setRate(BigDecimal.valueOf(1));
+
+		String formatPattern = StringBundler.concat(
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root available-locales",
+			"=\"en_US\" default-locale=\"en_US\"><FormatPattern language-id",
+			"=\"en_US\">$###,##0.00</FormatPattern></root>");
+
+		commerceCurrencyModel.setFormatPattern(formatPattern);
+
+		commerceCurrencyModel.setMaxFractionDigits(2);
+		commerceCurrencyModel.setMinFractionDigits(2);
+		commerceCurrencyModel.setRoundingMode("HALF_EVEN");
+		commerceCurrencyModel.setPrimary(true);
+		commerceCurrencyModel.setPriority(1);
+		commerceCurrencyModel.setActive(true);
+		commerceCurrencyModel.setLastPublishDate(new Date());
+
+		return commerceCurrencyModel;
 	}
 
 	public CompanyModel newCompanyModel() {
@@ -4460,7 +4464,7 @@ public class DataFactory {
 	private final long _commerceChannelGroupId;
 	private GroupModel _commerceChannelGroupModel;
 	private CommerceChannelModel _commerceChannelModel;
-	private CommerceCurrencyModel _commerceCurrencyModel;
+	private final CommerceCurrencyModel _commerceCurrencyModel;
 	private final long _companyId;
 	private final SimpleCounter _counter;
 	private List<CPDefinitionLocalizationModel> _cpDefinitionLocalizationModels;
