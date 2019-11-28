@@ -1137,10 +1137,7 @@ public class DataFactory {
 	}
 
 	public void initDLFileEntryTypeModel() {
-		_defaultJournalDDMStructureModel = newDDMStructureModel(
-			_globalGroupId, _defaultUserId,
-			getClassNameId(JournalArticle.class), "BASIC-WEB-CONTENT",
-			_journalDDMStructureContent);
+		_defaultJournalDDMStructureModel = newDefaultJournalDDMStructureModel();
 
 		_defaultJournalDDMStructureVersionModel = newDDMStructureVersionModel(
 			_defaultJournalDDMStructureModel);
@@ -1944,6 +1941,13 @@ public class DataFactory {
 		return newDDMStructureModel(
 			_globalGroupId, _defaultUserId, getClassNameId(DLFileEntry.class),
 			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent);
+	}
+
+	public DDMStructureModel newDefaultJournalDDMStructureModel() {
+		return newDDMStructureModel(
+			_globalGroupId, _defaultUserId,
+			getClassNameId(JournalArticle.class), "BASIC-WEB-CONTENT",
+			_journalDDMStructureContent);
 	}
 
 	public UserModel newDefaultUserModel() {
