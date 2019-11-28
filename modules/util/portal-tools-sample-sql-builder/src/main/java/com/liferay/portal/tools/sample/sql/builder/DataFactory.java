@@ -1158,10 +1158,8 @@ public class DataFactory {
 		_defaultDLDDMStructureVersionModel = newDDMStructureVersionModel(
 			_defaultDLDDMStructureModel);
 
-		_defaultDLDDMStructureLayoutModel = newDDMStructureLayoutModel(
-			_globalGroupId, _defaultUserId,
-			_defaultDLDDMStructureVersionModel.getStructureVersionId(),
-			_dlDDMStructureLayoutContent);
+		_defaultDLDDMStructureLayoutModel = newDefaultDLDDMStructureLayoutModel(
+			_defaultDLDDMStructureVersionModel);
 
 		_defaultJournalDDMStructureModel = newDDMStructureModel(
 			_globalGroupId, _defaultUserId,
@@ -1954,6 +1952,15 @@ public class DataFactory {
 		ddmTemplateVersionModelImpl.setStatusDate(nextFutureDate());
 
 		return ddmTemplateVersionModelImpl;
+	}
+
+	public DDMStructureLayoutModel newDefaultDLDDMStructureLayoutModel(
+		DDMStructureVersionModel defaultDLDDMStructureVersionModel) {
+
+		return newDDMStructureLayoutModel(
+			_globalGroupId, _defaultUserId,
+			defaultDLDDMStructureVersionModel.getStructureVersionId(),
+			_dlDDMStructureLayoutContent);
 	}
 
 	public DDMStructureModel newDefaultDLDDMStructureModel() {
