@@ -830,7 +830,8 @@ public class DataFactory {
 		int cpDefinitionCount = _maxCProductCount * _maxCPDefinitionCount;
 
 		_assetEntryModels = new ArrayList<>(cpDefinitionCount);
-		_cpDefinitionLocalizationModels = new ArrayList<>(cpDefinitionCount);
+
+		_cpDefinitionLocalizationModels = newCPDefinitionLocalizationModels();
 		_cpDefinitionModels = new ArrayList<>(cpDefinitionCount);
 		_cpFriendlyURLEntryModels = new ArrayList<>(cpDefinitionCount);
 		_cpInstanceModels = new ArrayList<>(
@@ -856,10 +857,7 @@ public class DataFactory {
 				long cpDefinitionId = cpDefinitionIds[definitionIndex];
 
 				CPDefinitionLocalizationModel cpDefinitionLocalizationModel =
-					newCPDefinitionLocalizationModel(cpDefinitionId);
-
-				_cpDefinitionLocalizationModels.add(
-					cpDefinitionLocalizationModel);
+					_cpDefinitionLocalizationModels.get(definitionIndex);
 
 				_cpDefinitionModels.add(
 					newCPDefinitionModel(
@@ -1537,6 +1535,30 @@ public class DataFactory {
 		counterModels.add(counterModel);
 
 		return counterModels;
+	}
+
+	public List<CPDefinitionLocalizationModel>
+		newCPDefinitionLocalizationModels() {
+
+		List<CPDefinitionLocalizationModel> cpDefinitionLocalizationModels =
+			new ArrayList<>(_maxCProductCount * _maxCPDefinitionCount);
+
+		for (int productIndex = 0; productIndex < _maxCProductCount;
+			 productIndex++) {
+
+			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
+				productIndex);
+
+			for (int definitionIndex = 0;
+				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
+
+				cpDefinitionLocalizationModels.add(
+					newCPDefinitionLocalizationModel(
+						cpDefinitionIds[definitionIndex]));
+			}
+		}
+
+		return cpDefinitionLocalizationModels;
 	}
 
 	public DDMStructureLayoutModel newDDLDDMStructureLayoutModel(
