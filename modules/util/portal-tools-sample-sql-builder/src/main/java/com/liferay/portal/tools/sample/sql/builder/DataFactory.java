@@ -2288,7 +2288,8 @@ public class DataFactory {
 
 	public JournalArticleModel newJournalArticleModel(
 			JournalArticleResourceModel journalArticleResourceModel,
-			int articleIndex, int versionIndex, String ddmStructureKey)
+			int articleIndex, int versionIndex, String ddmStructureKey,
+			String ddmTemplateKey)
 		throws PortalException {
 
 		JournalArticleModel journalArticleModel = new JournalArticleModelImpl();
@@ -2323,8 +2324,7 @@ public class DataFactory {
 		journalArticleModel.setContent(initJournalArticleContent());
 		journalArticleModel.setDefaultLanguageId("en_US");
 		journalArticleModel.setDDMStructureKey(ddmStructureKey);
-		journalArticleModel.setDDMTemplateKey(
-			_defaultJournalDDMTemplateModel.getTemplateKey());
+		journalArticleModel.setDDMTemplateKey(ddmTemplateKey);
 		journalArticleModel.setDisplayDate(new Date());
 		journalArticleModel.setExpirationDate(nextFutureDate());
 		journalArticleModel.setReviewDate(new Date());
