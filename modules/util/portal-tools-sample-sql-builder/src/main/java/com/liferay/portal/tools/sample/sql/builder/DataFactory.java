@@ -601,8 +601,8 @@ public class DataFactory {
 		return new ArrayList<>(_cProductModels);
 	}
 
-	public List<CPTaxCategoryModel> getCPTaxCategoryModels() {
-		return new ArrayList<>(_cpTaxCategoryModels);
+	public CPTaxCategoryModel getCPTaxCategoryModel() {
+		return _cpTaxCategoryModel;
 	}
 
 	public Writer getCSVWriter(String csvFileName) {
@@ -892,10 +892,7 @@ public class DataFactory {
 	}
 
 	public void initCommerceProductModels() {
-		CPTaxCategoryModel cpTaxCategoryModel = newCPTaxCategoryModel(
-			"Normal Product");
-
-		_cpTaxCategoryModels = Collections.singletonList(cpTaxCategoryModel);
+		_cpTaxCategoryModel = newCPTaxCategoryModel("Normal Product");
 
 		_cProductModels = new ArrayList<>(
 			BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT);
@@ -955,7 +952,7 @@ public class DataFactory {
 				_cpDefinitionModels.add(
 					newCPDefinitionModel(
 						_commerceCatalogGroupId, cpDefinitionId, cProductId,
-						cpTaxCategoryModel.getCPTaxCategoryId(),
+						_cpTaxCategoryModel.getCPTaxCategoryId(),
 						definitionIndex + 1));
 
 				_assetEntryModels.add(
@@ -4466,7 +4463,7 @@ public class DataFactory {
 	private List<CPFriendlyURLEntryModel> _cpFriendlyURLEntryModels;
 	private List<CPInstanceModel> _cpInstanceModels;
 	private List<CProductModel> _cProductModels;
-	private List<CPTaxCategoryModel> _cpTaxCategoryModels;
+	private CPTaxCategoryModel _cpTaxCategoryModel;
 	private final Map<String, Writer> _csvWriters = new HashMap<>();
 	private final PortletPreferencesImpl
 		_defaultAssetPublisherPortletPreferencesImpl;
