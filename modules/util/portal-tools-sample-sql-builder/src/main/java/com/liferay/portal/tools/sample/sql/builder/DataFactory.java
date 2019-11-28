@@ -812,7 +812,7 @@ public class DataFactory {
 	public void initCommerceProductModels() {
 		_cpTaxCategoryModel = newCPTaxCategoryModel("Normal Product");
 
-		_cProductModels = new ArrayList<>(_maxCProductCount);
+		_cProductModels = newCProductModels();
 
 		int cpDefinitionCount = _maxCProductCount * _maxCPDefinitionCount;
 
@@ -827,22 +827,17 @@ public class DataFactory {
 			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
 				productIndex);
 
-			long cProductId = _counter.get();
-
-			CProductModel cProductModel = newCProductModel(
-				_commerceCatalogGroupId, cProductId,
-				cpDefinitionIds[_maxCPDefinitionCount - 1]);
-
-			_cProductModels.add(cProductModel);
-
 			for (int definitionIndex = 0;
 				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
 
 				long cpDefinitionId = cpDefinitionIds[definitionIndex];
 
+				CProductModel cProductModel = _cProductModels.get(productIndex);
+
 				_cpDefinitionModels.add(
 					newCPDefinitionModel(
-						_commerceCatalogGroupId, cpDefinitionId, cProductId,
+						_commerceCatalogGroupId, cpDefinitionId,
+						cProductModel.getCProductId(),
 						_cpTaxCategoryModel.getCPTaxCategoryId(),
 						definitionIndex + 1));
 
@@ -1565,6 +1560,25 @@ public class DataFactory {
 		}
 
 		return cpDefinitionLocalizationModels;
+	}
+
+	public List<CProductModel> newCProductModels() {
+		List<CProductModel> cProductModels = new ArrayList<>(_maxCProductCount);
+
+		for (int productIndex = 0; productIndex < _maxCProductCount;
+			 productIndex++) {
+
+			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
+				productIndex);
+
+			CProductModel cProductModel = newCProductModel(
+				_commerceCatalogGroupId, _counter.get(),
+				cpDefinitionIds[_maxCPDefinitionCount - 1]);
+
+			cProductModels.add(cProductModel);
+		}
+
+		return cProductModels;
 	}
 
 	public DDMStructureLayoutModel newDDLDDMStructureLayoutModel(
