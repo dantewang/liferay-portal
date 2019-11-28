@@ -366,7 +366,6 @@ public class DataFactory {
 		initAssetCategoryModels();
 		initAssetTagModels();
 		initCPDefinitionIdList();
-		initCommerceProductModels();
 
 		initJournalArticleContent();
 
@@ -524,26 +523,6 @@ public class DataFactory {
 
 	public long getCounterNext() {
 		return _counter.get();
-	}
-
-	public List<CPDefinitionModel> getCPDefinitionModels() {
-		return new ArrayList<>(_cpDefinitionModels);
-	}
-
-	public List<CPFriendlyURLEntryModel> getCPFriendlyURLEntryModels() {
-		return new ArrayList<>(_cpFriendlyURLEntryModels);
-	}
-
-	public List<CPInstanceModel> getCPInstanceModels() {
-		return new ArrayList<>(_cpInstanceModels);
-	}
-
-	public List<CProductModel> getCProductModels() {
-		return new ArrayList<>(_cProductModels);
-	}
-
-	public CPTaxCategoryModel getCPTaxCategoryModel() {
-		return _cpTaxCategoryModel;
 	}
 
 	public Writer getCSVWriter(String csvFileName) {
@@ -807,20 +786,6 @@ public class DataFactory {
 
 			_assetTagModelsMaps[i - 1] = assetTagModelsMap;
 		}
-	}
-
-	public void initCommerceProductModels() {
-		_cpTaxCategoryModel = newCPTaxCategoryModel("Normal Product");
-
-		_cProductModels = newCProductModels();
-
-		_cpDefinitionModels = newCPDefinitionModels(
-			_cpTaxCategoryModel, _cProductModels);
-
-		_cpFriendlyURLEntryModels = newCPFriendlyURLEntryModels(
-			_cProductModels);
-
-		_cpInstanceModels = newCPInstanceModels();
 	}
 
 	public void initContext(Properties properties)
@@ -1629,6 +1594,27 @@ public class DataFactory {
 		}
 
 		return cProductModels;
+	}
+
+	public CPTaxCategoryModel newCPTaxCategoryModel(String name) {
+		CPTaxCategoryModel cpTaxCategoryModel = new CPTaxCategoryModelImpl();
+
+		cpTaxCategoryModel.setCPTaxCategoryId(_counter.get());
+		cpTaxCategoryModel.setCompanyId(_companyId);
+		cpTaxCategoryModel.setUserId(_sampleUserId);
+		cpTaxCategoryModel.setUserName(_SAMPLE_USER_NAME);
+		cpTaxCategoryModel.setCreateDate(new Date());
+		cpTaxCategoryModel.setModifiedDate(new Date());
+
+		cpTaxCategoryModel.setName(
+			StringBundler.concat(
+				"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root ",
+				"available-locales=\"en_US\" default-locale=\"en_US\"><Name ",
+				"language-id=\"en_US\">", name, "</Name></root>"));
+
+		cpTaxCategoryModel.setDescription(null);
+
+		return cpTaxCategoryModel;
 	}
 
 	public DDMStructureLayoutModel newDDLDDMStructureLayoutModel(
@@ -3825,26 +3811,6 @@ public class DataFactory {
 		return cProductModel;
 	}
 
-	protected CPTaxCategoryModel newCPTaxCategoryModel(String name) {
-		CPTaxCategoryModel cpTaxCategoryModel = new CPTaxCategoryModelImpl();
-
-		cpTaxCategoryModel.setCPTaxCategoryId(_counter.get());
-		cpTaxCategoryModel.setCompanyId(_companyId);
-		cpTaxCategoryModel.setUserId(_sampleUserId);
-		cpTaxCategoryModel.setUserName(_SAMPLE_USER_NAME);
-		cpTaxCategoryModel.setCreateDate(new Date());
-		cpTaxCategoryModel.setModifiedDate(new Date());
-		cpTaxCategoryModel.setName(
-			StringBundler.concat(
-				"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root ",
-				"available-locales=\"en_US\" default-locale=\"en_US\"><Name ",
-				"language-id=\"en_US\">", name, "</Name></root>"));
-
-		cpTaxCategoryModel.setDescription(null);
-
-		return cpTaxCategoryModel;
-	}
-
 	protected DDMContentModel newDDMContentModel(
 		long contentId, long groupId, String data) {
 
@@ -4547,11 +4513,6 @@ public class DataFactory {
 	private final long _companyId;
 	private final SimpleCounter _counter;
 	private List _cpDefinitionIdList;
-	private List<CPDefinitionModel> _cpDefinitionModels;
-	private List<CPFriendlyURLEntryModel> _cpFriendlyURLEntryModels;
-	private List<CPInstanceModel> _cpInstanceModels;
-	private List<CProductModel> _cProductModels;
-	private CPTaxCategoryModel _cpTaxCategoryModel;
 	private final Map<String, Writer> _csvWriters = new HashMap<>();
 	private final PortletPreferencesImpl
 		_defaultAssetPublisherPortletPreferencesImpl;
