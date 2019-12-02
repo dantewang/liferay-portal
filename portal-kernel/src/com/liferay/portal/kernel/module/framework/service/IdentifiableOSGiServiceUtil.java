@@ -84,9 +84,18 @@ public class IdentifiableOSGiServiceUtil {
 			ServiceReference<IdentifiableOSGiService> serviceReference,
 			IdentifiableOSGiService identifiableOSGiService) {
 
-			_identifiableOSGiServices.put(
-				identifiableOSGiService.getOSGiServiceIdentifier(),
-				identifiableOSGiService);
+			try {
+				_identifiableOSGiServices.put(
+					identifiableOSGiService.getOSGiServiceIdentifier(),
+					identifiableOSGiService);
+			}
+			catch (UnsupportedOperationException uoe) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(uoe, uoe);
+				}
+
+				return;
+			}
 		}
 
 		@Override
@@ -98,8 +107,17 @@ public class IdentifiableOSGiServiceUtil {
 
 			registry.ungetService(serviceReference);
 
-			_identifiableOSGiServices.remove(
-				identifiableOSGiService.getOSGiServiceIdentifier());
+			try {
+				_identifiableOSGiServices.remove(
+					identifiableOSGiService.getOSGiServiceIdentifier());
+			}
+			catch (UnsupportedOperationException uoe) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(uoe, uoe);
+				}
+
+				return;
+			}
 		}
 
 	}
