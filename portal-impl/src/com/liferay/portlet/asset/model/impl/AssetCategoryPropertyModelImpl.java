@@ -16,13 +16,11 @@ package com.liferay.portlet.asset.model.impl;
 
 import com.liferay.asset.kernel.model.AssetCategoryProperty;
 import com.liferay.asset.kernel.model.AssetCategoryPropertyModel;
-import com.liferay.asset.kernel.model.AssetCategoryPropertySoap;
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.expando.kernel.util.ExpandoBridgeFactoryUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.ModelWrapper;
 import com.liferay.portal.kernel.model.User;
@@ -39,12 +37,10 @@ import java.lang.reflect.InvocationHandler;
 
 import java.sql.Types;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -62,7 +58,6 @@ import java.util.function.Function;
  * @generated
  */
 @Deprecated
-@JSON(strict = true)
 public class AssetCategoryPropertyModelImpl
 	extends BaseModelImpl<AssetCategoryProperty>
 	implements AssetCategoryPropertyModel {
@@ -138,59 +133,6 @@ public class AssetCategoryPropertyModelImpl
 	public static final long COMPANYID_COLUMN_BITMASK = 2L;
 
 	public static final long KEY_COLUMN_BITMASK = 4L;
-
-	/**
-	 * Converts the soap model instance into a normal model instance.
-	 *
-	 * @param soapModel the soap model instance to convert
-	 * @return the normal model instance
-	 */
-	public static AssetCategoryProperty toModel(
-		AssetCategoryPropertySoap soapModel) {
-
-		if (soapModel == null) {
-			return null;
-		}
-
-		AssetCategoryProperty model = new AssetCategoryPropertyImpl();
-
-		model.setMvccVersion(soapModel.getMvccVersion());
-		model.setCtCollectionId(soapModel.getCtCollectionId());
-		model.setCategoryPropertyId(soapModel.getCategoryPropertyId());
-		model.setCompanyId(soapModel.getCompanyId());
-		model.setUserId(soapModel.getUserId());
-		model.setUserName(soapModel.getUserName());
-		model.setCreateDate(soapModel.getCreateDate());
-		model.setModifiedDate(soapModel.getModifiedDate());
-		model.setCategoryId(soapModel.getCategoryId());
-		model.setKey(soapModel.getKey());
-		model.setValue(soapModel.getValue());
-
-		return model;
-	}
-
-	/**
-	 * Converts the soap model instances into normal model instances.
-	 *
-	 * @param soapModels the soap model instances to convert
-	 * @return the normal model instances
-	 */
-	public static List<AssetCategoryProperty> toModels(
-		AssetCategoryPropertySoap[] soapModels) {
-
-		if (soapModels == null) {
-			return null;
-		}
-
-		List<AssetCategoryProperty> models =
-			new ArrayList<AssetCategoryProperty>(soapModels.length);
-
-		for (AssetCategoryPropertySoap soapModel : soapModels) {
-			models.add(toModel(soapModel));
-		}
-
-		return models;
-	}
 
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(
 		com.liferay.portal.util.PropsUtil.get(
@@ -397,7 +339,6 @@ public class AssetCategoryPropertyModelImpl
 			(Map)attributeSetterBiConsumers);
 	}
 
-	@JSON
 	@Override
 	public long getMvccVersion() {
 		return _mvccVersion;
@@ -408,7 +349,6 @@ public class AssetCategoryPropertyModelImpl
 		_mvccVersion = mvccVersion;
 	}
 
-	@JSON
 	@Override
 	public long getCtCollectionId() {
 		return _ctCollectionId;
@@ -419,7 +359,6 @@ public class AssetCategoryPropertyModelImpl
 		_ctCollectionId = ctCollectionId;
 	}
 
-	@JSON
 	@Override
 	public long getCategoryPropertyId() {
 		return _categoryPropertyId;
@@ -430,7 +369,6 @@ public class AssetCategoryPropertyModelImpl
 		_categoryPropertyId = categoryPropertyId;
 	}
 
-	@JSON
 	@Override
 	public long getCompanyId() {
 		return _companyId;
@@ -453,7 +391,6 @@ public class AssetCategoryPropertyModelImpl
 		return _originalCompanyId;
 	}
 
-	@JSON
 	@Override
 	public long getUserId() {
 		return _userId;
@@ -480,7 +417,6 @@ public class AssetCategoryPropertyModelImpl
 	public void setUserUuid(String userUuid) {
 	}
 
-	@JSON
 	@Override
 	public String getUserName() {
 		if (_userName == null) {
@@ -496,7 +432,6 @@ public class AssetCategoryPropertyModelImpl
 		_userName = userName;
 	}
 
-	@JSON
 	@Override
 	public Date getCreateDate() {
 		return _createDate;
@@ -507,7 +442,6 @@ public class AssetCategoryPropertyModelImpl
 		_createDate = createDate;
 	}
 
-	@JSON
 	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
@@ -524,7 +458,6 @@ public class AssetCategoryPropertyModelImpl
 		_modifiedDate = modifiedDate;
 	}
 
-	@JSON
 	@Override
 	public long getCategoryId() {
 		return _categoryId;
@@ -547,7 +480,6 @@ public class AssetCategoryPropertyModelImpl
 		return _originalCategoryId;
 	}
 
-	@JSON
 	@Override
 	public String getKey() {
 		if (_key == null) {
@@ -573,7 +505,6 @@ public class AssetCategoryPropertyModelImpl
 		return GetterUtil.getString(_originalKey);
 	}
 
-	@JSON
 	@Override
 	public String getValue() {
 		if (_value == null) {
