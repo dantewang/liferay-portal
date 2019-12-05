@@ -101,7 +101,7 @@
 		<reference entity="AssetEntry" package-path="com.liferay.portlet.asset" />
 		<reference entity="AssetVocabulary" package-path="com.liferay.portlet.asset" />
 	</entity>
-	<entity deprecated="true" local-service="true" name="AssetCategoryProperty" remote-service="true">
+	<entity deprecated="true" local-service="true" name="AssetCategoryProperty" remote-service="false">
 
 		<!-- PK fields -->
 
