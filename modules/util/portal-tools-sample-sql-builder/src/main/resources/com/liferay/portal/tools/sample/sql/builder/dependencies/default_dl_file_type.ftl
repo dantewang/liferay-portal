@@ -4,14 +4,12 @@
 	defaultDLDDMStructureModel = dataFactory.newDefaultDLDDMStructureModel()
 
 	defaultDLDDMStructureVersionModel = dataFactory.newDDMStructureVersionModel(defaultDLDDMStructureModel)
-
-	defaultDLDDMStructureLayoutModel = dataFactory.newDefaultDLDDMStructureLayoutModel(defaultDLDDMStructureVersionModel)
 />
 
 ${dataFactory.toInsertSQL(dLFileEntryTypeModel)}
 
 <@insertDDMStructure
-	_ddmStructureLayoutModel=defaultDLDDMStructureLayoutModel
+	_ddmStructureLayoutModel=dataFactory.newDefaultDLDDMStructureLayoutModel(defaultDLDDMStructureVersionModel)
 	_ddmStructureModel=defaultDLDDMStructureModel
 	_ddmStructureVersionModel=defaultDLDDMStructureVersionModel
 />
