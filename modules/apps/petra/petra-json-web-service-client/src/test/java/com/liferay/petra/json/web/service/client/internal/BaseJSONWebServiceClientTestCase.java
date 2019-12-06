@@ -17,7 +17,12 @@ package com.liferay.petra.json.web.service.client.internal;
 import com.liferay.petra.json.web.service.client.server.simulator.HTTPServerSimulator;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 /**
  * @author Igor Beslic
@@ -32,6 +37,30 @@ public abstract class BaseJSONWebServiceClientTestCase {
 		properties.put("protocol", "http");
 
 		return properties;
+	}
+
+	protected List<NameValuePair> toNameValuePairs(
+		Map<String, String> parameters) {
+
+		List<NameValuePair> nameValuePairs = new LinkedList<NameValuePair>();
+
+		for (Map.Entry<String, String> entry : parameters.entrySet()) {
+			String key = entry.getKey();
+
+			String value = entry.getValue();
+
+			if (value == null) {
+				key = "-" + key;
+
+				value = "";
+			}
+
+			NameValuePair nameValuePair = new BasicNameValuePair(key, value);
+
+			nameValuePairs.add(nameValuePair);
+		}
+
+		return nameValuePairs;
 	}
 
 }

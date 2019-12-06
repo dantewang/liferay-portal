@@ -56,7 +56,7 @@ public class JSONWebServiceClientImplPutTest
 		jsonWebServiceClientImpl.activate(properties);
 
 		jsonWebServiceClientImpl.doPut(
-			"/", Collections.<String, String>emptyMap());
+			"/", toNameValuePairs(Collections.<String, String>emptyMap()));
 	}
 
 	@Test
@@ -79,7 +79,8 @@ public class JSONWebServiceClientImplPutTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		String json = jsonWebServiceClientImpl.doPut("/testPut/", params);
+		String json = jsonWebServiceClientImpl.doPut(
+			"/testPut/", toNameValuePairs(params));
 
 		Assert.assertTrue(
 			json,
@@ -111,7 +112,7 @@ public class JSONWebServiceClientImplPutTest
 		params.put("parameter3", "parameter3");
 
 		ResponseBody responseBody = jsonWebServiceClientImpl.doPutToObject(
-			ResponseBody.class, "/testPut/", params);
+			ResponseBody.class, "/testPut/", toNameValuePairs(params));
 
 		Assert.assertEquals("parameter1", responseBody.getParameter1());
 		Assert.assertEquals("parameter2", responseBody.getParameter2());
@@ -165,9 +166,10 @@ public class JSONWebServiceClientImplPutTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		String json = jsonWebServiceClientImpl.doPost("/testPut/", params);
-
-		Assert.assertEquals(SimulatorConstants.RESPONSE_SUCCESS_IN_JSON, json);
+		Assert.assertEquals(
+			SimulatorConstants.RESPONSE_SUCCESS_IN_JSON,
+			jsonWebServiceClientImpl.doPost(
+				"/testPut/", toNameValuePairs(params)));
 	}
 
 	@Test
@@ -190,9 +192,9 @@ public class JSONWebServiceClientImplPutTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		String json = jsonWebServiceClientImpl.doPost("/testPut/", params);
-
-		Assert.assertNull(json);
+		Assert.assertNull(
+			jsonWebServiceClientImpl.doPost(
+				"/testPut/", toNameValuePairs(params)));
 	}
 
 }

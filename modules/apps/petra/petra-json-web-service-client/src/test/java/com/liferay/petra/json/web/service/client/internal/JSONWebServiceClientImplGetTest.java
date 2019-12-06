@@ -63,7 +63,7 @@ public class JSONWebServiceClientImplGetTest
 		jsonWebServiceClientImpl.activate(properties);
 
 		jsonWebServiceClientImpl.doGet(
-			"/", Collections.<String, String>emptyMap());
+			"/", toNameValuePairs(Collections.<String, String>emptyMap()));
 	}
 
 	@Test(
@@ -81,7 +81,7 @@ public class JSONWebServiceClientImplGetTest
 		jsonWebServiceClientImpl.activate(properties);
 
 		jsonWebServiceClientImpl.doGet(
-			"/testGet/", new HashMap<String, String>());
+			"/testGet/", toNameValuePairs(new HashMap<String, String>()));
 	}
 
 	@Test
@@ -104,7 +104,8 @@ public class JSONWebServiceClientImplGetTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		String json = jsonWebServiceClientImpl.doGet("/testGet/", params);
+		String json = jsonWebServiceClientImpl.doGet(
+			"/testGet/", toNameValuePairs(params));
 
 		Assert.assertTrue(
 			json,
@@ -167,7 +168,8 @@ public class JSONWebServiceClientImplGetTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		String json = jsonWebServiceClientImpl.doGet("/testGet/", params);
+		String json = jsonWebServiceClientImpl.doGet(
+			"/testGet/", toNameValuePairs(params));
 
 		Assert.assertTrue(
 			json,
@@ -195,9 +197,10 @@ public class JSONWebServiceClientImplGetTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		String json = jsonWebServiceClientImpl.doGet("/testGet/", params);
-
-		Assert.assertEquals(SimulatorConstants.RESPONSE_SUCCESS_IN_JSON, json);
+		Assert.assertEquals(
+			SimulatorConstants.RESPONSE_SUCCESS_IN_JSON,
+			jsonWebServiceClientImpl.doGet(
+				"/testGet/", toNameValuePairs(params)));
 	}
 
 	@Test(expected = JSONWebServiceInvocationException.class)
@@ -220,7 +223,7 @@ public class JSONWebServiceClientImplGetTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		jsonWebServiceClientImpl.doGet("/testGet/", params);
+		jsonWebServiceClientImpl.doGet("/testGet/", toNameValuePairs(params));
 	}
 
 }

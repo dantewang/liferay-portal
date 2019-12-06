@@ -47,7 +47,8 @@ public class JSONWebServiceClientImplSSLGetTest
 
 		HTTPSServerSimulator.start("TLSv1.1");
 
-		String json = jsonWebServiceClientImpl.doGet("/testGet/", params);
+		String json = jsonWebServiceClientImpl.doGet(
+			"/testGet/", toNameValuePairs(params));
 
 		HTTPSServerSimulator.stop();
 
@@ -71,7 +72,8 @@ public class JSONWebServiceClientImplSSLGetTest
 
 		HTTPSServerSimulator.start("TLSv1.2");
 
-		String json = jsonWebServiceClientImpl.doGet("/testGet/", params);
+		String json = jsonWebServiceClientImpl.doGet(
+			"/testGet/", toNameValuePairs(params));
 
 		HTTPSServerSimulator.stop();
 
@@ -98,7 +100,8 @@ public class JSONWebServiceClientImplSSLGetTest
 		HTTPSServerSimulator.start("TLSv1");
 
 		try {
-			String json = jsonWebServiceClientImpl.doGet("/testGet/", params);
+			String json = jsonWebServiceClientImpl.doGet(
+				"/testGet/", toNameValuePairs(params));
 
 			Assert.assertTrue(
 				json,

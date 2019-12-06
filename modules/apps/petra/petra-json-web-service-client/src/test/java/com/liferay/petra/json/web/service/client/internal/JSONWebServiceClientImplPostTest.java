@@ -65,7 +65,8 @@ public class JSONWebServiceClientImplPostTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		String json = jsonWebServiceClientImpl.doPost("/testPost/", params);
+		String json = jsonWebServiceClientImpl.doPost(
+			"/testPost/", toNameValuePairs(params));
 
 		Assert.assertTrue(
 			json,
@@ -130,7 +131,8 @@ public class JSONWebServiceClientImplPostTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		String json = jsonWebServiceClientImpl.doPost("/testPost/", params);
+		String json = jsonWebServiceClientImpl.doPost(
+			"/testPost/", toNameValuePairs(params));
 
 		Assert.assertTrue(
 			json,
@@ -158,9 +160,10 @@ public class JSONWebServiceClientImplPostTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		String json = jsonWebServiceClientImpl.doPost("/testPost/", params);
-
-		Assert.assertEquals(SimulatorConstants.RESPONSE_SUCCESS_IN_JSON, json);
+		Assert.assertEquals(
+			SimulatorConstants.RESPONSE_SUCCESS_IN_JSON,
+			jsonWebServiceClientImpl.doPost(
+				"/testPost/", toNameValuePairs(params)));
 	}
 
 	@Test
@@ -183,9 +186,9 @@ public class JSONWebServiceClientImplPostTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		String json = jsonWebServiceClientImpl.doPost("/testPost/", params);
-
-		Assert.assertNull(json);
+		Assert.assertNull(
+			jsonWebServiceClientImpl.doPost(
+				"/testPost/", toNameValuePairs(params)));
 	}
 
 	@Test(expected = JSONWebServiceInvocationException.class)
@@ -200,7 +203,7 @@ public class JSONWebServiceClientImplPostTest
 		jsonWebServiceClientImpl.activate(properties);
 
 		jsonWebServiceClientImpl.doPost(
-			"/", Collections.<String, String>emptyMap());
+			"/", toNameValuePairs(Collections.<String, String>emptyMap()));
 	}
 
 	@Test(
@@ -225,7 +228,7 @@ public class JSONWebServiceClientImplPostTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		jsonWebServiceClientImpl.doPost("/testPost/", params);
+		jsonWebServiceClientImpl.doPost("/testPost/", toNameValuePairs(params));
 	}
 
 }

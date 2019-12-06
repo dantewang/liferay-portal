@@ -55,7 +55,7 @@ public class JSONWebServiceClientImplDeleteTest
 		jsonWebServiceClientImpl.activate(properties);
 
 		jsonWebServiceClientImpl.doDelete(
-			"/", Collections.<String, String>emptyMap());
+			"/", toNameValuePairs(Collections.<String, String>emptyMap()));
 	}
 
 	@Test
@@ -78,7 +78,8 @@ public class JSONWebServiceClientImplDeleteTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		String json = jsonWebServiceClientImpl.doDelete("/testDelete/", params);
+		String json = jsonWebServiceClientImpl.doDelete(
+			"/testDelete/", toNameValuePairs(params));
 
 		Assert.assertTrue(
 			json,
@@ -106,9 +107,10 @@ public class JSONWebServiceClientImplDeleteTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		String json = jsonWebServiceClientImpl.doDelete("/testDelete/", params);
-
-		Assert.assertEquals(SimulatorConstants.RESPONSE_SUCCESS_IN_JSON, json);
+		Assert.assertEquals(
+			SimulatorConstants.RESPONSE_SUCCESS_IN_JSON,
+			jsonWebServiceClientImpl.doDelete(
+				"/testDelete/", toNameValuePairs(params)));
 	}
 
 	@Test
@@ -131,9 +133,9 @@ public class JSONWebServiceClientImplDeleteTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		String json = jsonWebServiceClientImpl.doDelete("/testDelete/", params);
-
-		Assert.assertNull(json);
+		Assert.assertNull(
+			jsonWebServiceClientImpl.doDelete(
+				"/testDelete/", toNameValuePairs(params)));
 	}
 
 	@Test(expected = JSONWebServiceInvocationException.class)
@@ -156,9 +158,9 @@ public class JSONWebServiceClientImplDeleteTest
 		params.put(
 			SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON, "true");
 
-		String json = jsonWebServiceClientImpl.doDelete("/testDelete/", params);
-
-		Assert.assertNull(json);
+		Assert.assertNull(
+			jsonWebServiceClientImpl.doDelete(
+				"/testDelete/", toNameValuePairs(params)));
 	}
 
 }
