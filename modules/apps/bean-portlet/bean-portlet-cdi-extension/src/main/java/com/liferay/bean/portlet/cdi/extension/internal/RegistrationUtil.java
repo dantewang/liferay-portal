@@ -96,7 +96,8 @@ public class RegistrationUtil {
 
 	public static ServiceRegistration<Portlet> registerBeanPortlet(
 		BundleContext bundleContext, BeanApp beanApp, BeanPortlet beanPortlet,
-		ServletContext servletContext, List<String> beanPortletIds) {
+		ServletContext servletContext, List<String> beanPortletIds,
+		InjectionTargetWrapper<?> injectionTargetWrapper) {
 
 		try {
 			String portletId = _getPortletId(
@@ -115,7 +116,8 @@ public class RegistrationUtil {
 			ServiceRegistration<Portlet> portletServiceRegistration =
 				bundleContext.registerService(
 					Portlet.class,
-					new BeanPortletInvokerPortlet(beanPortlet.getBeanMethods()),
+					new BeanPortletInvokerPortlet(
+						beanPortlet.getBeanMethods(), injectionTargetWrapper),
 					dictionary);
 
 			beanPortletIds.add(portletId);

@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.portlet.ActionParameters;
 import javax.portlet.ActionRequest;
@@ -62,9 +63,12 @@ import javax.portlet.ResourceResponse;
 public class BeanPortletInvokerPortlet implements InvokerPortlet {
 
 	public BeanPortletInvokerPortlet(
-		Map<MethodType, List<BeanMethod>> beanMethods) {
+		Map<MethodType, List<BeanMethod>> beanMethods,
+		InjectionTargetWrapper<?> injectionTargetWrapper) {
 
 		_beanMethods = beanMethods;
+
+		injectionTargetWrapper.setCallback(this::destroy);
 
 		boolean facesPortlet = false;
 
@@ -91,11 +95,18 @@ public class BeanPortletInvokerPortlet implements InvokerPortlet {
 
 	@Override
 	public void destroy() {
+		if (_destroyed.get()) {
+			return;
+		}
+
 		try {
 			_invokeBeanMethods(_beanMethods.get(MethodType.DESTROY));
 		}
 		catch (PortletException pe) {
 			_log.error(pe, pe);
+		}
+		finally {
+			_destroyed.set(true);
 		}
 	}
 
@@ -401,6 +412,7 @@ public class BeanPortletInvokerPortlet implements InvokerPortlet {
 		BeanPortletInvokerPortlet.class);
 
 	private final Map<MethodType, List<BeanMethod>> _beanMethods;
+	private final AtomicBoolean _destroyed = new AtomicBoolean(false);
 	private final boolean _facesPortlet;
 	private PortletConfig _portletConfig;
 

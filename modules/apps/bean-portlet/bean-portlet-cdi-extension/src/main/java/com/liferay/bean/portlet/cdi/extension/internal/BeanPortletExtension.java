@@ -63,6 +63,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
+import javax.annotation.PreDestroy;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.Destroyed;
@@ -78,6 +80,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
+import javax.enterprise.inject.spi.ProcessInjectionTarget;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletAsyncListener;
@@ -273,6 +276,35 @@ public class BeanPortletExtension implements Extension {
 		}
 	}
 
+	public <T> void step2ProcessInjectionTarget(
+			@Observes ProcessInjectionTarget<T> processInjectionTarget)
+		throws NoSuchMethodException {
+
+		AnnotatedType<T> annotatedType =
+			processInjectionTarget.getAnnotatedType();
+
+		Class<T> portletClass = annotatedType.getJavaClass();
+
+		if (!Portlet.class.isAssignableFrom(portletClass)) {
+			return;
+		}
+
+		Method destroyMethod = portletClass.getMethod("destroy");
+
+		if (destroyMethod.isAnnotationPresent(PreDestroy.class)) {
+			return;
+		}
+
+		InjectionTargetWrapper<T> injectionTargetWrapper =
+			new InjectionTargetWrapper<>(
+				processInjectionTarget.getInjectionTarget());
+
+		processInjectionTarget.setInjectionTarget(injectionTargetWrapper);
+
+		_injectionTargetWrappers.put(
+			portletClass.getName(), injectionTargetWrapper);
+	}
+
 	public void step3AfterBeanDiscovery(
 		@Observes AfterBeanDiscovery afterBeanDiscovery) {
 
@@ -367,10 +399,13 @@ public class BeanPortletExtension implements Extension {
 		}
 
 		for (BeanPortlet beanPortlet : _beanPortlets.values()) {
+			InjectionTargetWrapper<?> injectionTargetWrapper =
+				_injectionTargetWrappers.get(beanPortlet.getPortletClassName());
+
 			ServiceRegistration<Portlet> portletServiceRegistration =
 				RegistrationUtil.registerBeanPortlet(
 					bundleContext, _beanApp, beanPortlet, servletContext,
-					beanPortletIds);
+					beanPortletIds, injectionTargetWrapper);
 
 			if (portletServiceRegistration != null) {
 				_serviceRegistrations.add(portletServiceRegistration);
@@ -1471,6 +1506,8 @@ public class BeanPortletExtension implements Extension {
 		new ArrayList<>();
 	private final Map<String, BeanPortlet> _beanPortlets = new HashMap<>();
 	private final List<Class<?>> _discoveredClasses = new ArrayList<>();
+	private final Map<String, InjectionTargetWrapper<?>>
+		_injectionTargetWrappers = new HashMap<>();
 	private Class<?> _portletApplicationClass;
 	private final List<ServiceRegistration<?>> _serviceRegistrations =
 		new ArrayList<>();
