@@ -82,9 +82,10 @@
 	_dlFolderDepth
 	_groupId
 	_parentDLFolderId
+	_dLFileEntryTypeModel
 >
 	<#if _dlFolderDepth <= dataFactory.maxDLFolderDepth>
-		<#local dlFolderModels = dataFactory.newDLFolderModels(_groupId, _parentDLFolderId)>
+		<#local dlFolderModels = dataFactory.newDLFolderModels(_groupId, _parentDLFolderId, _dLFileEntryTypeModel)>
 
 		<#list dlFolderModels as dlFolderModel>
 			${dataFactory.toInsertSQL(dlFolderModel)}
@@ -131,6 +132,7 @@
 			</#list>
 
 			<@insertDLFolder
+				_dLFileEntryTypeModel=_dLFileEntryTypeModel
 				_ddmStructureId=_ddmStructureId
 				_dlFolderDepth=_dlFolderDepth + 1
 				_groupId=groupId
