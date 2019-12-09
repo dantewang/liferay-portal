@@ -2,9 +2,10 @@
 
 <#macro insertAssetEntry
 	_entry
+	_classTypeId = 0
 	_categoryAndTag = false
 >
-	<#local assetEntryModel = dataFactory.newAssetEntryModel(_entry)>
+	<#local assetEntryModel = dataFactory.newAssetEntryModel(_entry, _classTypeId)>
 
 	${dataFactory.toInsertSQL(assetEntryModel)}
 
@@ -51,6 +52,7 @@
 <#macro insertDDMContent
 	_ddmStorageLinkId
 	_ddmStructureId
+	_ddmtructureVersionModel
 	_entry
 	_currentIndex = -1
 >
@@ -62,7 +64,7 @@
 
 	${dataFactory.toInsertSQL(ddmContentModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(_ddmStorageLinkId, ddmContentModel, _ddmStructureId))}
+	${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(_ddmStorageLinkId, ddmContentModel, _ddmStructureId, _ddmtructureVersionModel))}
 </#macro>
 
 <#macro insertDDMStructure
@@ -79,12 +81,14 @@
 
 <#macro insertDLFolder
 	_ddmStructureId
+	_dlDDMStructureVersionModel
 	_dlFolderDepth
 	_groupId
 	_parentDLFolderId
+	_dLFileEntryTypeModel
 >
 	<#if _dlFolderDepth <= dataFactory.maxDLFolderDepth>
-		<#local dlFolderModels = dataFactory.newDLFolderModels(_groupId, _parentDLFolderId)>
+		<#local dlFolderModels = dataFactory.newDLFolderModels(_groupId, _parentDLFolderId, _dLFileEntryTypeModel)>
 
 		<#list dlFolderModels as dlFolderModel>
 			${dataFactory.toInsertSQL(dlFolderModel)}
@@ -100,13 +104,17 @@
 
 				${dataFactory.toInsertSQL(dlFileVersionModel)}
 
-				<@insertAssetEntry _entry=dlFileEntryModel />
+				<@insertAssetEntry
+					_classTypeId=dlFileEntryModel.fileEntryTypeId
+					_entry=dlFileEntryModel
+				/>
 
 				<#local ddmStorageLinkId = dataFactory.getCounterNext()>
 
 				<@insertDDMContent
 					_ddmStorageLinkId=ddmStorageLinkId
 					_ddmStructureId=_ddmStructureId
+					_ddmtructureVersionModel=_dlDDMStructureVersionModel
 					_entry=dlFileEntryModel
 				/>
 
@@ -130,8 +138,13 @@
 				${dataFactory.getCSVWriter("documentLibrary").write(dlFileEntryModel.uuid + "," + dlFolderModel.folderId + "," + dlFileEntryModel.name + "," + dlFileEntryModel.fileEntryId + "\n")}
 			</#list>
 
+			<#local dlDDMStructureVersionModel = _dlDDMStructureVersionModel>
+			<#local dLFileEntryTypeModel = _dLFileEntryTypeModel>
+
 			<@insertDLFolder
+				_dLFileEntryTypeModel=dLFileEntryTypeModel
 				_ddmStructureId=_ddmStructureId
+				_dlDDMStructureVersionModel=dlDDMStructureVersionModel
 				_dlFolderDepth=_dlFolderDepth + 1
 				_groupId=groupId
 				_parentDLFolderId=dlFolderModel.folderId

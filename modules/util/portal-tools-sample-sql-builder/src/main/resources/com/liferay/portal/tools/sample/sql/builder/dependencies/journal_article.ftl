@@ -1,16 +1,24 @@
-<#assign ddmStructureModel = dataFactory.defaultJournalDDMStructureModel />
+<#assign
+	ddmStructureModel = dataFactory.newDefaultJournalDDMStructureModel()
 
-<@insertDDMStructure
-	_ddmStructureLayoutModel=dataFactory.defaultJournalDDMStructureLayoutModel
-	_ddmStructureModel=ddmStructureModel
-	_ddmStructureVersionModel=dataFactory.defaultJournalDDMStructureVersionModel
+	ddmStructureVersionModel = dataFactory.newDDMStructureVersionModel(ddmStructureModel)
+
+	ddmStructureLayoutModel = dataFactory.newDefaultJournalDDMStructureLayoutModel(ddmStructureVersionModel)
 />
 
-<#assign ddmTemplateModel = dataFactory.defaultJournalDDMTemplateModel />
+<@insertDDMStructure
+	_ddmStructureLayoutModel=ddmStructureLayoutModel
+	_ddmStructureModel=ddmStructureModel
+	_ddmStructureVersionModel=ddmStructureVersionModel
+/>
+
+<#assign
+	ddmTemplateModel = dataFactory.newDefaultJournalDDMTemplateModel(ddmStructureModel)
+
+	ddmTemplateVersionModel = dataFactory.newDDMTemplateVersionModel(ddmTemplateModel)
+/>
 
 ${dataFactory.toInsertSQL(ddmTemplateModel)}
-
-<#assign ddmTemplateVersionModel = dataFactory.defaultJournalDDMTemplateVersionModel />
 
 ${dataFactory.toInsertSQL(ddmTemplateVersionModel)}
 
@@ -51,7 +59,7 @@ ${dataFactory.toInsertSQL(ddmTemplateVersionModel)}
 		<#assign versionCounts = dataFactory.getSequence(dataFactory.maxJournalArticleVersionCount) />
 
 		<#list versionCounts as versionCount>
-			<#assign journalArticleModel = dataFactory.newJournalArticleModel(journalArticleResourceModel, journalArticleCount, versionCount) />
+			<#assign journalArticleModel = dataFactory.newJournalArticleModel(journalArticleResourceModel, journalArticleCount, versionCount, ddmStructureModel.structureKey, ddmTemplateModel.templateKey) />
 
 			${dataFactory.toInsertSQL(journalArticleModel)}
 
@@ -61,13 +69,14 @@ ${dataFactory.toInsertSQL(ddmTemplateVersionModel)}
 
 			${dataFactory.toInsertSQL(dataFactory.newDDMTemplateLinkModel(journalArticleModel, ddmTemplateModel.templateId))}
 
-			${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(journalArticleModel, ddmStructureModel.structureId))}
+			${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(journalArticleModel, ddmStructureModel.structureId, ddmStructureVersionModel.structureVersionId))}
 
 			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(journalArticleModel))}
 
 			<#if versionCount = dataFactory.maxJournalArticleVersionCount>
 				<@insertAssetEntry
 					_categoryAndTag=true
+					_classTypeId=ddmStructureModel.structureId
 					_entry=dataFactory.newObjectValuePair(journalArticleModel, journalArticleLocalizationModel)
 				/>
 			</#if>
