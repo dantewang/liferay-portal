@@ -2,9 +2,14 @@
 
 <#macro insertAssetEntry
 	_entry
+	_classTypeId = -1
 	_categoryAndTag = false
 >
-	<#local assetEntryModel = dataFactory.newAssetEntryModel(_entry)>
+	<#if _classTypeId = -1>
+		<#local assetEntryModel = dataFactory.newAssetEntryModel(_entry)>
+	<#else>
+		<#local assetEntryModel = dataFactory.newAssetEntryModel(_entry, _classTypeId)>
+	</#if>
 
 	${dataFactory.toInsertSQL(assetEntryModel)}
 
@@ -103,7 +108,10 @@
 
 				${dataFactory.toInsertSQL(dlFileVersionModel)}
 
-				<@insertAssetEntry _entry=dlFileEntryModel />
+				<@insertAssetEntry
+					_classTypeId=dlFileEntryModel.fileEntryTypeId
+					_entry=dlFileEntryModel
+				/>
 
 				<#local ddmStorageLinkId = dataFactory.getCounterNext()>
 
