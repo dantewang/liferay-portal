@@ -1316,15 +1316,15 @@ public class DataFactory {
 	}
 
 	public AssetEntryModel newAssetEntryModel(
-		DLFileEntryModel dLFileEntryModel) {
+		DLFileEntryModel dLFileEntryModel, long classTypeId) {
 
 		return newAssetEntryModel(
 			dLFileEntryModel.getGroupId(), dLFileEntryModel.getCreateDate(),
 			dLFileEntryModel.getModifiedDate(),
 			getClassNameId(DLFileEntry.class),
 			dLFileEntryModel.getFileEntryId(), dLFileEntryModel.getUuid(),
-			dLFileEntryModel.getFileEntryTypeId(), true, true,
-			dLFileEntryModel.getMimeType(), dLFileEntryModel.getTitle());
+			classTypeId, true, true, dLFileEntryModel.getMimeType(),
+			dLFileEntryModel.getTitle());
 	}
 
 	public AssetEntryModel newAssetEntryModel(DLFolderModel dLFolderModel) {
@@ -1367,7 +1367,8 @@ public class DataFactory {
 
 	public AssetEntryModel newAssetEntryModel(
 		ObjectValuePair<JournalArticleModel, JournalArticleLocalizationModel>
-			objectValuePair) {
+			objectValuePair,
+		long classTypeId) {
 
 		JournalArticleModel journalArticleModel = objectValuePair.getKey();
 		JournalArticleLocalizationModel journalArticleLocalizationModel =
@@ -1382,9 +1383,8 @@ public class DataFactory {
 			journalArticleModel.getCreateDate(),
 			journalArticleModel.getModifiedDate(),
 			getClassNameId(JournalArticle.class), resourcePrimKey, resourceUUID,
-			_defaultJournalDDMStructureModel.getStructureId(),
-			journalArticleModel.isIndexable(), true, ContentTypes.TEXT_HTML,
-			journalArticleLocalizationModel.getTitle());
+			classTypeId, journalArticleModel.isIndexable(), true,
+			ContentTypes.TEXT_HTML, journalArticleLocalizationModel.getTitle());
 	}
 
 	public AssetEntryModel newAssetEntryModel(WikiPageModel wikiPageModel) {
