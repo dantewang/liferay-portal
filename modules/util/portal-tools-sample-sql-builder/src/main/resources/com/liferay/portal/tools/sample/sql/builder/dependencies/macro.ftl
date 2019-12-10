@@ -51,6 +51,7 @@
 <#macro insertDDMContent
 	_ddmStorageLinkId
 	_ddmStructureId
+	_ddmtructureVersionModel
 	_entry
 	_currentIndex = -1
 >
@@ -62,7 +63,7 @@
 
 	${dataFactory.toInsertSQL(ddmContentModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(_ddmStorageLinkId, ddmContentModel, _ddmStructureId))}
+	${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(_ddmStorageLinkId, ddmContentModel, _ddmStructureId, _ddmtructureVersionModel))}
 </#macro>
 
 <#macro insertDDMStructure
@@ -79,6 +80,7 @@
 
 <#macro insertDLFolder
 	_ddmStructureId
+	_dlDDMStructureVersionModel
 	_dlFolderDepth
 	_groupId
 	_parentDLFolderId
@@ -108,6 +110,7 @@
 				<@insertDDMContent
 					_ddmStorageLinkId=ddmStorageLinkId
 					_ddmStructureId=_ddmStructureId
+					_ddmtructureVersionModel=_dlDDMStructureVersionModel
 					_entry=dlFileEntryModel
 				/>
 
@@ -134,6 +137,7 @@
 			<@insertDLFolder
 				_dLFileEntryTypeModel=_dLFileEntryTypeModel
 				_ddmStructureId=_ddmStructureId
+				_dlDDMStructureVersionModel=_dlDDMStructureVersionModel
 				_dlFolderDepth=_dlFolderDepth + 1
 				_groupId=groupId
 				_parentDLFolderId=dlFolderModel.folderId
