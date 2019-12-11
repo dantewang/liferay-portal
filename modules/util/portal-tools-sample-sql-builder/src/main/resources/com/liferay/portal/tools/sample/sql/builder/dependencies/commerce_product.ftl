@@ -2,13 +2,25 @@
 	${dataFactory.toInsertSQL(assetEntryModel)}
 </#list>
 
-${dataFactory.toInsertSQL(dataFactory.commerceCatalogModel)}
+<#assign
+	commerceCurrencyModel = dataFactory.newCommerceCurrencyModel()
 
-${dataFactory.toInsertSQL(dataFactory.commerceCatalogResourcePermission())}
+	commerceCatalogModel = dataFactory.newCommerceCatalogModel(commerceCurrencyModel)
 
-${dataFactory.toInsertSQL(dataFactory.commerceChannelModel)}
+	commerceChannelModel = dataFactory.newCommerceChannelModel(commerceCurrencyModel)
 
-${dataFactory.toInsertSQL(dataFactory.commerceCurrencyModel)}
+	commerceCatalogGroupModel = dataFactory.newCommerceCatalogGroupModel(commerceCatalogModel)
+
+	commerceChannelGroupModel = dataFactory.newCommerceChannelGroupModel(commerceChannelModel)
+/>
+
+${dataFactory.toInsertSQL(commerceCatalogModel)}
+
+${dataFactory.toInsertSQL(dataFactory.newResourcePermissionModel(commerceCatalogModel))}
+
+${dataFactory.toInsertSQL(commerceChannelModel)}
+
+${dataFactory.toInsertSQL(commerceCurrencyModel)}
 
 <#list dataFactory.CPDefinitionLocalizationModels as cpDefinitionLocalizationModel>
 	${dataFactory.toInsertSQL(cpDefinitionLocalizationModel)}
@@ -36,6 +48,6 @@ ${dataFactory.toInsertSQL(dataFactory.commerceCurrencyModel)}
 	${dataFactory.toInsertSQL(cpTaxCategoryModel)}
 </#list>
 
-<@insertGroup _groupModel=dataFactory.commerceCatalogGroupModel />
+<@insertGroup _groupModel=commerceCatalogGroupModel />
 
-<@insertGroup _groupModel=dataFactory.commerceChannelGroupModel />
+<@insertGroup _groupModel=commerceChannelGroupModel />
