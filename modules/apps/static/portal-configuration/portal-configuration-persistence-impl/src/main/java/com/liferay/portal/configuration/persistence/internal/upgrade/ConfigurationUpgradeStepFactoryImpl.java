@@ -15,11 +15,13 @@
 package com.liferay.portal.configuration.persistence.internal.upgrade;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.persistence.upgrade.ConfigurationUpgradeStepFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeException;
 import com.liferay.portal.kernel.upgrade.UpgradeStep;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
@@ -31,6 +33,11 @@ import java.util.Dictionary;
 
 import org.apache.felix.cm.PersistenceManager;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
+
 /**
  * @author Preston Crary
  */
@@ -38,8 +45,9 @@ public class ConfigurationUpgradeStepFactoryImpl
 	implements ConfigurationUpgradeStepFactory {
 
 	public ConfigurationUpgradeStepFactoryImpl(
-		PersistenceManager persistenceManager) {
+		BundleContext bundleContext, PersistenceManager persistenceManager) {
 
+		_bundleContext = bundleContext;
 		_persistenceManager = persistenceManager;
 	}
 
@@ -65,6 +73,84 @@ public class ConfigurationUpgradeStepFactoryImpl
 			}
 			catch (IOException ioe) {
 				throw new UpgradeException(ioe);
+			}
+		};
+	}
+
+	@Override
+	public UpgradeStep createUpgradeStep(
+		String oldPid, String newPid, boolean factory) {
+
+		return dbProcessContext -> {
+			ServiceReference<ConfigurationAdmin> serviceReference =
+				_bundleContext.getServiceReference(ConfigurationAdmin.class);
+
+			ConfigurationAdmin configurationAdmin = _bundleContext.getService(
+				serviceReference);
+
+			String filter = StringBundler.concat(
+				StringPool.OPEN_PARENTHESIS,
+				ConfigurationAdmin.SERVICE_FACTORYPID, StringPool.EQUAL, oldPid,
+				StringPool.CLOSE_PARENTHESIS);
+
+			try {
+				Configuration[] configurations =
+					configurationAdmin.listConfigurations(filter);
+
+				if (configurations.length == 0) {
+					if (_log.isWarnEnabled()) {
+						_log.warn(
+							StringBundler.concat(
+								"Unable to upgrade the oldPid ", oldPid,
+								" because the related data not exist in the ",
+								"Configuration_ table"));
+					}
+
+					return;
+				}
+
+				for (Configuration configuration : configurations) {
+					Dictionary<String, Object> dictionary =
+						configuration.getProperties();
+
+					dictionary.remove("service.factoryPid");
+
+					dictionary.put("service.factoryPid", newPid);
+
+					String oldServicePid = (String)dictionary.get(
+						"service.pid");
+
+					String newServicePid = StringUtil.replace(
+						oldServicePid, oldPid, newPid);
+
+					dictionary.remove("service.pid");
+
+					dictionary.put("service.pid", newServicePid);
+
+					String oldFileName = (String)dictionary.get(
+						"felix.fileinstall.filename");
+
+					dictionary.remove("felix.fileinstall.filename");
+
+					dictionary.put(
+						"felix.fileinstall.filename",
+						StringUtil.replace(oldFileName, oldPid, newPid));
+
+					_persistenceManager.store(newServicePid, dictionary);
+
+					_persistenceManager.delete(oldServicePid);
+
+					_renameConfigurationFile(
+						oldServicePid, newServicePid, "cfg");
+					_renameConfigurationFile(
+						oldServicePid, newServicePid, "config");
+				}
+			}
+			catch (Exception e) {
+				throw new UpgradeException(e);
+			}
+			finally {
+				_bundleContext.ungetService(serviceReference);
 			}
 		};
 	}
@@ -105,6 +191,7 @@ public class ConfigurationUpgradeStepFactoryImpl
 	private static final Log _log = LogFactoryUtil.getLog(
 		ConfigurationUpgradeStepFactoryImpl.class);
 
+	private final BundleContext _bundleContext;
 	private final PersistenceManager _persistenceManager;
 
 }

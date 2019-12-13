@@ -23,4 +23,7 @@ public interface ConfigurationUpgradeStepFactory {
 
 	public UpgradeStep createUpgradeStep(String oldPid, String newPid);
 
+	public UpgradeStep createUpgradeStep(
+		String oldPid, String newPid, boolean factory);
+
 }
