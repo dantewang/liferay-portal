@@ -21,6 +21,8 @@ import com.liferay.portal.kernel.upgrade.UpgradeStep;
  */
 public interface ConfigurationUpgradeStepFactory {
 
+	public UpgradeStep createFactoryUpgradeStep(String oldPid, String newPid);
+
 	public UpgradeStep createUpgradeStep(String oldPid, String newPid);
 
 }
