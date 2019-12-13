@@ -1,6 +1,4 @@
-<#assign dLFileEntryTypeModel = dataFactory.newDLFileEntryTypeModel() />
-
-${dataFactory.toInsertSQL(dLFileEntryTypeModel)}
+${dataFactory.toInsertSQL(dataFactory.newDLFileEntryTypeModel())}
 
 <@insertDDMStructure
 	_ddmStructureLayoutModel=dataFactory.defaultDLDDMStructureLayoutModel
