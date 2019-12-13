@@ -21,6 +21,11 @@ import com.liferay.portal.kernel.upgrade.UpgradeStep;
  */
 public interface ConfigurationUpgradeStepFactory {
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #createUpgradeStep(String, String, Boolean)}
+	 */
+	@Deprecated
 	public UpgradeStep createUpgradeStep(String oldPid, String newPid);
 
 	public UpgradeStep createUpgradeStep(

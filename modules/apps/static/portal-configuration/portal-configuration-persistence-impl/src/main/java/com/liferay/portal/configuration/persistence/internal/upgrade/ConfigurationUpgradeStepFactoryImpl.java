@@ -51,8 +51,96 @@ public class ConfigurationUpgradeStepFactoryImpl
 		_persistenceManager = persistenceManager;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #createUpgradeStep(String, String, Boolean)}
+	 */
+	@Deprecated
 	@Override
 	public UpgradeStep createUpgradeStep(String oldPid, String newPid) {
+		return createUpgradeStep(oldPid, newPid, false);
+	}
+
+	@Override
+	public UpgradeStep createUpgradeStep(
+		String oldPid, String newPid, boolean factory) {
+
+		if (factory) {
+			return dbProcessContext -> {
+				ServiceReference<ConfigurationAdmin> serviceReference =
+					_bundleContext.getServiceReference(
+						ConfigurationAdmin.class);
+
+				ConfigurationAdmin configurationAdmin =
+					_bundleContext.getService(serviceReference);
+
+				String filter = StringBundler.concat(
+					StringPool.OPEN_PARENTHESIS,
+					ConfigurationAdmin.SERVICE_FACTORYPID, StringPool.EQUAL,
+					oldPid, StringPool.CLOSE_PARENTHESIS);
+
+				try {
+					Configuration[] configurations =
+						configurationAdmin.listConfigurations(filter);
+
+					if (configurations == null) {
+						if (_log.isWarnEnabled()) {
+							_log.warn(
+								StringBundler.concat(
+									"Unable to upgrade the oldPid ", oldPid,
+									" because the related data not exist in ",
+									"the Configuration_ table"));
+						}
+
+						return;
+					}
+
+					for (Configuration configuration : configurations) {
+						Dictionary<String, Object> dictionary =
+							configuration.getProperties();
+
+						dictionary.remove("service.factoryPid");
+
+						dictionary.put("service.factoryPid", newPid);
+
+						String oldServicePid = (String)dictionary.get(
+							"service.pid");
+
+						String newServicePid = StringUtil.replace(
+							oldServicePid, oldPid, newPid);
+
+						dictionary.remove("service.pid");
+
+						dictionary.put("service.pid", newServicePid);
+
+						String oldFileName = (String)dictionary.get(
+							"felix.fileinstall.filename");
+
+						dictionary.remove("felix.fileinstall.filename");
+
+						dictionary.put(
+							"felix.fileinstall.filename",
+							StringUtil.replace(oldFileName, oldPid, newPid));
+
+						_persistenceManager.store(newServicePid, dictionary);
+
+						_persistenceManager.delete(oldServicePid);
+
+						_renameConfigurationFile(
+							oldServicePid, newServicePid, "cfg");
+						_renameConfigurationFile(
+							oldServicePid, newServicePid, "config");
+					}
+				}
+				catch (Exception e) {
+					throw new UpgradeException(e);
+				}
+				finally {
+					_bundleContext.ungetService(serviceReference);
+				}
+			};
+		}
+
 		return dbProcessContext -> {
 			try {
 				if (_persistenceManager.exists(oldPid)) {
@@ -73,84 +161,6 @@ public class ConfigurationUpgradeStepFactoryImpl
 			}
 			catch (IOException ioe) {
 				throw new UpgradeException(ioe);
-			}
-		};
-	}
-
-	@Override
-	public UpgradeStep createUpgradeStep(
-		String oldPid, String newPid, boolean factory) {
-
-		return dbProcessContext -> {
-			ServiceReference<ConfigurationAdmin> serviceReference =
-				_bundleContext.getServiceReference(ConfigurationAdmin.class);
-
-			ConfigurationAdmin configurationAdmin = _bundleContext.getService(
-				serviceReference);
-
-			String filter = StringBundler.concat(
-				StringPool.OPEN_PARENTHESIS,
-				ConfigurationAdmin.SERVICE_FACTORYPID, StringPool.EQUAL, oldPid,
-				StringPool.CLOSE_PARENTHESIS);
-
-			try {
-				Configuration[] configurations =
-					configurationAdmin.listConfigurations(filter);
-
-				if (configurations.length == 0) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(
-							StringBundler.concat(
-								"Unable to upgrade the oldPid ", oldPid,
-								" because the related data not exist in the ",
-								"Configuration_ table"));
-					}
-
-					return;
-				}
-
-				for (Configuration configuration : configurations) {
-					Dictionary<String, Object> dictionary =
-						configuration.getProperties();
-
-					dictionary.remove("service.factoryPid");
-
-					dictionary.put("service.factoryPid", newPid);
-
-					String oldServicePid = (String)dictionary.get(
-						"service.pid");
-
-					String newServicePid = StringUtil.replace(
-						oldServicePid, oldPid, newPid);
-
-					dictionary.remove("service.pid");
-
-					dictionary.put("service.pid", newServicePid);
-
-					String oldFileName = (String)dictionary.get(
-						"felix.fileinstall.filename");
-
-					dictionary.remove("felix.fileinstall.filename");
-
-					dictionary.put(
-						"felix.fileinstall.filename",
-						StringUtil.replace(oldFileName, oldPid, newPid));
-
-					_persistenceManager.store(newServicePid, dictionary);
-
-					_persistenceManager.delete(oldServicePid);
-
-					_renameConfigurationFile(
-						oldServicePid, newServicePid, "cfg");
-					_renameConfigurationFile(
-						oldServicePid, newServicePid, "config");
-				}
-			}
-			catch (Exception e) {
-				throw new UpgradeException(e);
-			}
-			finally {
-				_bundleContext.ungetService(serviceReference);
 			}
 		};
 	}
