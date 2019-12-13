@@ -36,11 +36,11 @@ public class PortalRemoteSoapExtenderImplUpgrade
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.portal.remote.soap.extender.configuration." +
 					"SoapExtenderConfiguration",
-				SoapExtenderConfiguration.class.getName()),
+				SoapExtenderConfiguration.class.getName(), false),
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.portal.remote.soap.extender.configuration." +
 					"JaxWsApiConfiguration",
-				JaxWsApiConfiguration.class.getName()));
+				JaxWsApiConfiguration.class.getName(), false));
 	}
 
 	@Reference

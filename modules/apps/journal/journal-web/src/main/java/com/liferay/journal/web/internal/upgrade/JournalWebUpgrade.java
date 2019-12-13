@@ -49,7 +49,7 @@ public class JournalWebUpgrade implements UpgradeStepRegistrator {
 			"1.0.0", "1.0.1",
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.journal.web.configuration.JournalWebConfiguration",
-				JournalWebConfiguration.class.getName()));
+				JournalWebConfiguration.class.getName(), false));
 	}
 
 	@Reference

@@ -53,11 +53,11 @@ public class WikiWebUpgrade implements UpgradeStepRegistrator {
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.wiki.configuration." +
 					"WikiPortletInstanceConfiguration",
-				WikiPortletInstanceConfiguration.class.getName()),
+				WikiPortletInstanceConfiguration.class.getName(), false),
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.wiki.web.configuration." +
 					"WikiPortletInstanceConfiguration",
-				WikiPortletInstanceConfiguration.class.getName()));
+				WikiPortletInstanceConfiguration.class.getName(), false));
 	}
 
 	@Reference

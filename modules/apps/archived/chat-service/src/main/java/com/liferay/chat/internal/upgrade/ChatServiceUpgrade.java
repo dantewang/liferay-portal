@@ -36,7 +36,7 @@ public class ChatServiceUpgrade implements UpgradeStepRegistrator {
 			"1.0.0", "1.0.1",
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.chat.configuration.ChatGroupServiceConfiguration",
-				ChatGroupServiceConfiguration.class.getName()));
+				ChatGroupServiceConfiguration.class.getName(), false));
 	}
 
 	@Reference

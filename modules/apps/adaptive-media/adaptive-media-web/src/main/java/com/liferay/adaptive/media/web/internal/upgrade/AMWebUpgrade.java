@@ -41,7 +41,7 @@ public class AMWebUpgrade implements UpgradeStepRegistrator {
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.adaptive.media.internal.configuration." +
 					"AMConfiguration",
-				AMConfiguration.class.getName()));
+				AMConfiguration.class.getName(), false));
 
 		registry.register(
 			"1.0.1", "1.0.2",

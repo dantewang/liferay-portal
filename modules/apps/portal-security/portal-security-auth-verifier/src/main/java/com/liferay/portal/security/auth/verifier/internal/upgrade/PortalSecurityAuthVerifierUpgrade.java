@@ -41,30 +41,33 @@ public class PortalSecurityAuthVerifierUpgrade
 				"com.liferay.portal.security.auth.verifier.basic.auth.header." +
 					"module.configuration." +
 						"BasicAuthHeaderAuthVerifierConfiguration",
-				BasicAuthHeaderAuthVerifierConfiguration.class.getName()),
+				BasicAuthHeaderAuthVerifierConfiguration.class.getName(),
+				false),
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.portal.security.auth.verifier.module." +
 					"configuration.BaseAuthVerifierConfiguration",
-				BaseAuthVerifierConfiguration.class.getName()),
+				BaseAuthVerifierConfiguration.class.getName(), false),
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.portal.security.auth.verifier.digest." +
 					"authentication.module.configuration." +
 						"DigestAuthenticationAuthVerifierConfiguration",
-				DigestAuthenticationAuthVerifierConfiguration.class.getName()),
+				DigestAuthenticationAuthVerifierConfiguration.class.getName(),
+				false),
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.portal.security.auth.verifier.portal.session." +
 					"module.configuration." +
 						"PortalSessionAuthVerifierConfiguration",
-				PortalSessionAuthVerifierConfiguration.class.getName()),
+				PortalSessionAuthVerifierConfiguration.class.getName(), false),
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.portal.security.auth.verifier.request.parameter." +
 					"module.configuration." +
 						"RequestParameterAuthVerifierConfiguration",
-				RequestParameterAuthVerifierConfiguration.class.getName()),
+				RequestParameterAuthVerifierConfiguration.class.getName(),
+				false),
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.portal.security.auth.verifier.tunnel.module." +
 					"configuration.TunnelAuthVerifierConfiguration",
-				TunnelAuthVerifierConfiguration.class.getName()));
+				TunnelAuthVerifierConfiguration.class.getName(), false));
 	}
 
 	@Reference

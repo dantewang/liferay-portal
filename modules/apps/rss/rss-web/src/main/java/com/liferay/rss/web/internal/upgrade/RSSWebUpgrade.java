@@ -73,10 +73,10 @@ public class RSSWebUpgrade implements UpgradeStepRegistrator {
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.rss.web.configuration." +
 					"RSSPortletInstanceConfiguration",
-				RSSPortletInstanceConfiguration.class.getName()),
+				RSSPortletInstanceConfiguration.class.getName(), false),
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.rss.web.configuration.RSSWebCacheConfiguration",
-				RSSWebCacheConfiguration.class.getName()));
+				RSSWebCacheConfiguration.class.getName(), false));
 	}
 
 	@Reference

@@ -34,7 +34,7 @@ public class PortalMonitoringUpgrade implements UpgradeStepRegistrator {
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.portal.monitoring.configuration." +
 					"MonitoringConfiguration",
-				MonitoringConfiguration.class.getName()));
+				MonitoringConfiguration.class.getName(), false));
 	}
 
 	@Reference

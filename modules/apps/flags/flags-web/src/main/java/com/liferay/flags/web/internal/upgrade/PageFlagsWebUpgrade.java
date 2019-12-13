@@ -40,7 +40,7 @@ public class PageFlagsWebUpgrade implements UpgradeStepRegistrator {
 			"1.0.0", "1.0.1",
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.flags.configuration.FlagsConfiguration",
-				FlagsGroupServiceConfiguration.class.getName()));
+				FlagsGroupServiceConfiguration.class.getName(), false));
 	}
 
 	@Reference

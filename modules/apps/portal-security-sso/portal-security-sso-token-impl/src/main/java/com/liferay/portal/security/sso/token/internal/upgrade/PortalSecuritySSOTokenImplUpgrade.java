@@ -36,7 +36,8 @@ public class PortalSecuritySSOTokenImplUpgrade
 				"com.liferay.portal.security.sso.token.configuration." +
 					"TokenConfiguration",
 				"com.liferay.portal.security.sso.token.internal." +
-					"configuration.TokenConfiguration"));
+					"configuration.TokenConfiguration",
+				false));
 
 		registry.register("1.0.0", "1.0.1", new UpgradeTokenConfiguration());
 
@@ -46,7 +47,8 @@ public class PortalSecuritySSOTokenImplUpgrade
 				"com.liferay.portal.security.sso.token.internal." +
 					"configuration.TokenConfiguration",
 				"com.liferay.portal.security.sso.token.configuration." +
-					"TokenConfiguration"));
+					"TokenConfiguration",
+				false));
 	}
 
 	@Reference

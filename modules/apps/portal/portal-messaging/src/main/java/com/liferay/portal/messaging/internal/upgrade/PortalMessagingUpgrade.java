@@ -34,7 +34,7 @@ public class PortalMessagingUpgrade implements UpgradeStepRegistrator {
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.portal.messaging.configuration." +
 					"DestinationWorkerConfiguration",
-				DestinationWorkerConfiguration.class.getName()));
+				DestinationWorkerConfiguration.class.getName(), false));
 	}
 
 	@Reference

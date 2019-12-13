@@ -34,7 +34,7 @@ public class PortalTemplateSoyImplUpgrade implements UpgradeStepRegistrator {
 			_configurationUpgradeStepFactory.createUpgradeStep(
 				"com.liferay.portal.template.soy.configuration." +
 					"SoyTemplateEngineConfiguration",
-				SoyTemplateEngineConfiguration.class.getName()));
+				SoyTemplateEngineConfiguration.class.getName(), false));
 	}
 
 	@Reference
