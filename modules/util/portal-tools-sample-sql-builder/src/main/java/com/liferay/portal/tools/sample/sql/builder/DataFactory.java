@@ -380,7 +380,6 @@ public class DataFactory {
 		initCommerceCatalogModel();
 		initCommerceChannelModel();
 		initCommerceProductModels();
-		initGroupModels();
 
 		initJournalArticleContent();
 
@@ -547,16 +546,8 @@ public class DataFactory {
 		return _classNameModels.values();
 	}
 
-	public GroupModel getCommerceCatalogGroupModel() {
-		return _commerceCatalogGroupModel;
-	}
-
 	public CommerceCatalogModel getCommerceCatalogModel() {
 		return _commerceCatalogModel;
-	}
-
-	public GroupModel getCommerceChannelGroupModel() {
-		return _commerceChannelGroupModel;
 	}
 
 	public CommerceChannelModel getCommerceChannelModel() {
@@ -1125,14 +1116,6 @@ public class DataFactory {
 
 				});
 		}
-	}
-
-	public void initGroupModels() {
-		_commerceChannelGroupModel = newCommerceChannelGroupModel(
-			_commerceChannelModel);
-
-		_commerceCatalogGroupModel = newCommerceCatalogGroupModel(
-			_commerceCatalogModel);
 	}
 
 	public void initJournalArticleContent() {
@@ -4522,10 +4505,8 @@ public class DataFactory {
 	private final Map<String, ClassNameModel> _classNameModels =
 		new HashMap<>();
 	private final long _commerceCatalogGroupId;
-	private GroupModel _commerceCatalogGroupModel;
 	private CommerceCatalogModel _commerceCatalogModel;
 	private final long _commerceChannelGroupId;
-	private GroupModel _commerceChannelGroupModel;
 	private CommerceChannelModel _commerceChannelModel;
 	private CommerceCurrencyModel _commerceCurrencyModel;
 	private final long _companyId;
