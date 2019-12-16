@@ -27,7 +27,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.util.PortalClassPathUtil;
-import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,12 +50,14 @@ import java.util.Map;
 public class ElasticsearchBootstrap {
 
 	public ElasticsearchBootstrap(
-			ProcessExecutor processExecutor, String hostname)
+			ProcessExecutor processExecutor, File esHome,
+			List<String> additionalArguments, String hostname)
 		throws Exception {
 
 		_processExecutor = processExecutor;
 
-		_processConfig = _createProcessConfig(hostname);
+		_processConfig = _createProcessConfig(
+			esHome, additionalArguments, hostname);
 	}
 
 	public void start() throws Exception {
@@ -130,16 +131,17 @@ public class ElasticsearchBootstrap {
 		return sb.toString();
 	}
 
-	private ProcessConfig _createProcessConfig(String hostname)
+	private ProcessConfig _createProcessConfig(
+			File esHome, List<String> additionalArguments, String hostname)
 		throws Exception {
 
 		// ES ENV: ES_CLASSPATH = $ES_HOME/lib/*
 
-		File esClasspath = new File(_ES_HOME, "lib");
+		File esClasspath = new File(esHome, "lib");
 
 		// ES ENV: ES_PATH_CONF = $ES_HOME/config
 
-		File esPathConf = new File(_ES_HOME, "config");
+		File esPathConf = new File(esHome, "config");
 
 		// Java executable, use the same one as portal
 
@@ -152,18 +154,14 @@ public class ElasticsearchBootstrap {
 
 		_parseJVMArguments(
 			arguments, javaExecutable, new File(esPathConf, "jvm.options"),
-			esClasspath);
+			esClasspath, esHome);
 
 		// Arguments in bin/elasticsearch script
 
-		arguments.add("-Des.path.home=".concat(_ES_HOME.getAbsolutePath()));
+		arguments.add("-Des.path.home=".concat(esHome.getAbsolutePath()));
 		arguments.add("-Des.path.conf=".concat(esPathConf.getAbsolutePath()));
 
-		// TODO: Hard coded values from bin/elasticsearch
-
-		arguments.add("-Des.distribution.flavor=default");
-		arguments.add("-Des.distribution.type=tar");
-		arguments.add("-Des.bundled_jdk=true");
+		arguments.addAll(additionalArguments);
 
 		// Environments
 
@@ -252,7 +250,7 @@ public class ElasticsearchBootstrap {
 
 	private void _parseJVMArguments(
 			List<String> arguments, String javaExecutable, File jvmOptionsFile,
-			File esClasspath)
+			File esClasspath, File esHome)
 		throws Exception {
 
 		// TODO: inline ES jvm.options logic instead of starting a process
@@ -274,7 +272,7 @@ public class ElasticsearchBootstrap {
 		ProcessBuilder processBuilder = new ProcessBuilder();
 
 		processBuilder.command(command);
-		processBuilder.directory(_ES_HOME);
+		processBuilder.directory(esHome);
 
 		Process process = null;
 
@@ -312,11 +310,6 @@ public class ElasticsearchBootstrap {
 			}
 		}
 	}
-
-	// TODO: ES_HOME is hard coded
-
-	private static final File _ES_HOME = new File(
-		PropsValues.LIFERAY_HOME, "elasticsearch-7.4.1-1");
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ElasticsearchBootstrap.class);

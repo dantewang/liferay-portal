@@ -17,6 +17,12 @@ package com.liferay.portal.search.elasticsearch7.internal;
 import com.liferay.petra.process.ProcessExecutor;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.search.elasticsearch.sidecar.ElasticsearchBootstrap;
+import com.liferay.portal.util.PropsValues;
+
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -30,8 +36,16 @@ public class Elasticsearch {
 
 	@Activate
 	protected void activate() throws Exception {
+		List<String> additionalArguments = new ArrayList<>();
+
+		additionalArguments.add("-Des.distribution.flavor=default");
+		additionalArguments.add("-Des.distribution.type=tar");
+		additionalArguments.add("-Des.bundled_jdk=true");
+
 		_elasticBootstrap = new ElasticsearchBootstrap(
-			_processExecutor, _portal.getComputerName());
+			_processExecutor,
+			new File(PropsValues.LIFERAY_HOME, "elasticsearch-7.4.1-1"),
+			additionalArguments, _portal.getComputerName());
 
 		_elasticBootstrap.start();
 	}
