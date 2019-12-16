@@ -373,6 +373,7 @@ public class DataFactory {
 		initGroupModels();
 
 		initJournalArticleContent();
+		initJournalFileEntryTypeModel();
 
 		initRoleModels();
 		initUserNames();
@@ -1164,27 +1165,6 @@ public class DataFactory {
 			_globalGroupId, _defaultUserId,
 			_defaultDLDDMStructureVersionModel.getStructureVersionId(),
 			_dlDDMStructureLayoutContent);
-
-		_defaultJournalDDMStructureModel = newDDMStructureModel(
-			_globalGroupId, _defaultUserId,
-			getClassNameId(JournalArticle.class), "BASIC-WEB-CONTENT",
-			_journalDDMStructureContent);
-
-		_defaultJournalDDMStructureVersionModel = newDDMStructureVersionModel(
-			_defaultJournalDDMStructureModel);
-
-		_defaultJournalDDMStructureLayoutModel = newDDMStructureLayoutModel(
-			_globalGroupId, _defaultUserId,
-			_defaultJournalDDMStructureVersionModel.getStructureVersionId(),
-			_journalDDMStructureLayoutContent);
-
-		_defaultJournalDDMTemplateModel = newDDMTemplateModel(
-			_globalGroupId, _defaultUserId,
-			_defaultJournalDDMStructureModel.getStructureId(),
-			getClassNameId(JournalArticle.class));
-
-		_defaultJournalDDMTemplateVersionModel = newDDMTemplateVersionModel(
-			_defaultJournalDDMTemplateModel);
 	}
 
 	public void initGroupModels() {
@@ -1222,6 +1202,29 @@ public class DataFactory {
 		sb.append("]]></dynamic-content></dynamic-element></root>");
 
 		_journalArticleContent = sb.toString();
+	}
+
+	public void initJournalFileEntryTypeModel() {
+		_defaultJournalDDMStructureModel = newDDMStructureModel(
+			_globalGroupId, _defaultUserId,
+			getClassNameId(JournalArticle.class), "BASIC-WEB-CONTENT",
+			_journalDDMStructureContent);
+
+		_defaultJournalDDMStructureVersionModel = newDDMStructureVersionModel(
+			_defaultJournalDDMStructureModel);
+
+		_defaultJournalDDMStructureLayoutModel = newDDMStructureLayoutModel(
+			_globalGroupId, _defaultUserId,
+			_defaultJournalDDMStructureVersionModel.getStructureVersionId(),
+			_journalDDMStructureLayoutContent);
+
+		_defaultJournalDDMTemplateModel = newDDMTemplateModel(
+			_globalGroupId, _defaultUserId,
+			_defaultJournalDDMStructureModel.getStructureId(),
+			getClassNameId(JournalArticle.class));
+
+		_defaultJournalDDMTemplateVersionModel = newDDMTemplateVersionModel(
+			_defaultJournalDDMTemplateModel);
 	}
 
 	public void initRoleModels() {
