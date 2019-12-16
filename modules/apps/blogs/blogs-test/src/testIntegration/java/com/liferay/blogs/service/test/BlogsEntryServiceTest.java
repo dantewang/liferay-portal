@@ -143,7 +143,7 @@ public class BlogsEntryServiceTest {
 		}
 	}
 
-	@Test(expected = PrincipalException.MustHavePermission.class)
+	@Test
 	public void testAddEntryWithoutAddEntryPermission1() throws Exception {
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(
@@ -160,10 +160,16 @@ public class BlogsEntryServiceTest {
 				RandomTestUtil.randomString(), RandomTestUtil.randomString(), 1,
 				1, 1990, 1, 1, true, false, new String[0],
 				RandomTestUtil.randomString(), null, null, serviceContext);
+
+			Assert.fail();
+		}
+		catch (PrincipalException pe) {
+			Assert.assertTrue(
+				pe instanceof PrincipalException.MustHavePermission);
 		}
 	}
 
-	@Test(expected = PrincipalException.MustHavePermission.class)
+	@Test
 	public void testAddEntryWithoutAddEntryPermission2() throws Exception {
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(
@@ -181,6 +187,12 @@ public class BlogsEntryServiceTest {
 				RandomTestUtil.randomString(), 1, 1, 1990, 1, 1, true, false,
 				new String[0], RandomTestUtil.randomString(), null, null,
 				serviceContext);
+
+			Assert.fail();
+		}
+		catch (PrincipalException pe) {
+			Assert.assertTrue(
+				pe instanceof PrincipalException.MustHavePermission);
 		}
 	}
 
@@ -211,7 +223,7 @@ public class BlogsEntryServiceTest {
 		}
 	}
 
-	@Test(expected = PrincipalException.MustHavePermission.class)
+	@Test
 	public void testDeleteEntryWithoutDeletePermission() throws Exception {
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(_group, _user.getUserId());
@@ -227,6 +239,12 @@ public class BlogsEntryServiceTest {
 				_groupUser, permissionChecker)) {
 
 			BlogsEntryServiceUtil.deleteEntry(entry.getEntryId());
+
+			Assert.fail();
+		}
+		catch (PrincipalException pe) {
+			Assert.assertTrue(
+				pe instanceof PrincipalException.MustHavePermission);
 		}
 	}
 
@@ -636,7 +654,7 @@ public class BlogsEntryServiceTest {
 			prevAndNext[2]);
 	}
 
-	@Test(expected = PrincipalException.MustHavePermission.class)
+	@Test
 	public void testGetEntriesPrevAndNextWithoutEntryViewPermission()
 		throws Exception {
 
@@ -673,6 +691,12 @@ public class BlogsEntryServiceTest {
 				_groupUser, permissionChecker)) {
 
 			BlogsEntryServiceUtil.getEntriesPrevAndNext(entry2.getEntryId());
+
+			Assert.fail();
+		}
+		catch (PrincipalException pe) {
+			Assert.assertTrue(
+				pe instanceof PrincipalException.MustHavePermission);
 		}
 	}
 
@@ -793,7 +817,7 @@ public class BlogsEntryServiceTest {
 		}
 	}
 
-	@Test(expected = PrincipalException.MustHavePermission.class)
+	@Test
 	public void testGetEntryWithoutViewPermission() throws Exception {
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(_group, _user.getUserId());
@@ -825,9 +849,13 @@ public class BlogsEntryServiceTest {
 
 			BlogsEntryServiceUtil.getEntry(entry.getEntryId());
 		}
+		catch (PrincipalException pe) {
+			Assert.assertTrue(
+				pe instanceof PrincipalException.MustHavePermission);
+		}
 	}
 
-	@Test(expected = PrincipalException.MustHavePermission.class)
+	@Test
 	public void testGetEntryWithoutViewPermission2() throws Exception {
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(_group, _user.getUserId());
@@ -859,6 +887,12 @@ public class BlogsEntryServiceTest {
 
 			BlogsEntryServiceUtil.getEntry(
 				entry.getGroupId(), entry.getUrlTitle());
+
+			Assert.fail();
+		}
+		catch (PrincipalException pe) {
+			Assert.assertTrue(
+				pe instanceof PrincipalException.MustHavePermission);
 		}
 	}
 
@@ -1211,7 +1245,7 @@ public class BlogsEntryServiceTest {
 		}
 	}
 
-	@Test(expected = PrincipalException.MustHavePermission.class)
+	@Test
 	public void testMoveEntryToTrashWithoutDeletePermission() throws Exception {
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(_group, _user.getUserId());
@@ -1227,6 +1261,12 @@ public class BlogsEntryServiceTest {
 				_groupUser, permissionChecker)) {
 
 			BlogsEntryServiceUtil.moveEntryToTrash(entry.getEntryId());
+
+			Assert.fail();
+		}
+		catch (PrincipalException pe) {
+			Assert.assertTrue(
+				pe instanceof PrincipalException.MustHavePermission);
 		}
 	}
 
@@ -1352,7 +1392,7 @@ public class BlogsEntryServiceTest {
 		}
 	}
 
-	@Test(expected = PrincipalException.MustHavePermission.class)
+	@Test
 	public void testRestoreEntryFromTrashWithoutDeletePermission()
 		throws Exception {
 
@@ -1372,10 +1412,16 @@ public class BlogsEntryServiceTest {
 				_groupUser, permissionChecker)) {
 
 			BlogsEntryServiceUtil.restoreEntryFromTrash(entry.getEntryId());
+
+			Assert.fail();
+		}
+		catch (PrincipalException pe) {
+			Assert.assertTrue(
+				pe instanceof PrincipalException.MustHavePermission);
 		}
 	}
 
-	@Test(expected = PrincipalException.MustHavePermission.class)
+	@Test
 	public void testSubscribeEntryWithoutSubscribePermission()
 		throws Exception {
 
@@ -1388,6 +1434,12 @@ public class BlogsEntryServiceTest {
 				user, permissionChecker)) {
 
 			BlogsEntryServiceUtil.subscribe(_group.getGroupId());
+
+			Assert.fail();
+		}
+		catch (PrincipalException pe) {
+			Assert.assertTrue(
+				pe instanceof PrincipalException.MustHavePermission);
 		}
 	}
 
@@ -1403,7 +1455,7 @@ public class BlogsEntryServiceTest {
 		}
 	}
 
-	@Test(expected = PrincipalException.MustHavePermission.class)
+	@Test
 	public void testUnsubscribeEntryWithoutSubscribePermission()
 		throws Exception {
 
@@ -1416,6 +1468,12 @@ public class BlogsEntryServiceTest {
 				user, permissionChecker)) {
 
 			BlogsEntryServiceUtil.unsubscribe(_group.getGroupId());
+
+			Assert.fail();
+		}
+		catch (PrincipalException pe) {
+			Assert.assertTrue(
+				pe instanceof PrincipalException.MustHavePermission);
 		}
 	}
 
@@ -1431,7 +1489,7 @@ public class BlogsEntryServiceTest {
 		}
 	}
 
-	@Test(expected = PrincipalException.MustHavePermission.class)
+	@Test
 	public void testUpdateEntryWithoutUpdatePermission1() throws Exception {
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(_group, _user.getUserId());
@@ -1455,10 +1513,16 @@ public class BlogsEntryServiceTest {
 				RandomTestUtil.randomString(), 1, 1, 1990, 1, 1, true, false,
 				new String[0], RandomTestUtil.randomString(), null, null,
 				serviceContext);
+
+			Assert.fail();
+		}
+		catch (PrincipalException pe) {
+			Assert.assertTrue(
+				pe instanceof PrincipalException.MustHavePermission);
 		}
 	}
 
-	@Test(expected = PrincipalException.MustHavePermission.class)
+	@Test
 	public void testUpdateEntryWithoutUpdatePermission2() throws Exception {
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(_group, _user.getUserId());
@@ -1482,6 +1546,12 @@ public class BlogsEntryServiceTest {
 				RandomTestUtil.randomString(), RandomTestUtil.randomString(), 1,
 				1, 1990, 1, 1, true, false, new String[0],
 				RandomTestUtil.randomString(), null, null, serviceContext);
+
+			Assert.fail();
+		}
+		catch (PrincipalException pe) {
+			Assert.assertTrue(
+				pe instanceof PrincipalException.MustHavePermission);
 		}
 	}
 
