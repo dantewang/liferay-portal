@@ -369,7 +369,9 @@ public class DataFactory {
 		initAssetCategoryModels();
 		initAssetTagModels();
 		_commerceCurrencyModel = newCommerceCurrencyModel();
-		initCommerceCatalogModel();
+
+		_commerceCatalogModel = newCommerceCatalogModel(_commerceCurrencyModel);
+
 		initCommerceChannelModel();
 		initCommerceProductModels();
 
@@ -858,21 +860,6 @@ public class DataFactory {
 		}
 	}
 
-	public void initCommerceCatalogModel() {
-		_commerceCatalogModel = new CommerceCatalogModelImpl();
-
-		_commerceCatalogModel.setCommerceCatalogId(_counter.get());
-		_commerceCatalogModel.setCompanyId(_companyId);
-		_commerceCatalogModel.setUserName(_SAMPLE_USER_NAME);
-		_commerceCatalogModel.setCreateDate(new Date());
-		_commerceCatalogModel.setModifiedDate(new Date());
-		_commerceCatalogModel.setName("Master");
-		_commerceCatalogModel.setCommerceCurrencyCode(
-			_commerceCurrencyModel.getCode());
-		_commerceCatalogModel.setCatalogDefaultLanguageId("en_US");
-		_commerceCatalogModel.setSystem(true);
-	}
-
 	public void initCommerceChannelModel() {
 		_commerceChannelModel = new CommerceChannelModelImpl();
 
@@ -1269,6 +1256,26 @@ public class DataFactory {
 			_commerceCatalogGroupId, getClassNameId(CommerceCatalog.class),
 			commerceCatalogModel.getCommerceCatalogId(),
 			commerceCatalogModel.getName(), false);
+	}
+
+	public CommerceCatalogModel newCommerceCatalogModel(
+		CommerceCurrencyModel commerceCurrencyModel) {
+
+		CommerceCatalogModel commerceCatalogModel =
+			new CommerceCatalogModelImpl();
+
+		commerceCatalogModel.setCommerceCatalogId(_counter.get());
+		commerceCatalogModel.setCompanyId(_companyId);
+		commerceCatalogModel.setUserName(_SAMPLE_USER_NAME);
+		commerceCatalogModel.setCreateDate(new Date());
+		commerceCatalogModel.setModifiedDate(new Date());
+		commerceCatalogModel.setName("Master");
+		commerceCatalogModel.setCommerceCurrencyCode(
+			commerceCurrencyModel.getCode());
+		commerceCatalogModel.setCatalogDefaultLanguageId("en_US");
+		commerceCatalogModel.setSystem(true);
+
+		return commerceCatalogModel;
 	}
 
 	public GroupModel newCommerceChannelGroupModel(
@@ -4416,7 +4423,7 @@ public class DataFactory {
 	private final Map<String, ClassNameModel> _classNameModels =
 		new HashMap<>();
 	private final long _commerceCatalogGroupId;
-	private CommerceCatalogModel _commerceCatalogModel;
+	private final CommerceCatalogModel _commerceCatalogModel;
 	private final long _commerceChannelGroupId;
 	private CommerceChannelModel _commerceChannelModel;
 	private final CommerceCurrencyModel _commerceCurrencyModel;
