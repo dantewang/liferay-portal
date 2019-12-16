@@ -16,7 +16,7 @@ package com.liferay.portal.search.elasticsearch7.internal;
 
 import com.liferay.petra.process.ProcessExecutor;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.search.elasticsearch7.internal.bootstrap.ElasticsearchBootstrap;
+import com.liferay.portal.search.elasticsearch.sidecar.ElasticsearchBootstrap;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
