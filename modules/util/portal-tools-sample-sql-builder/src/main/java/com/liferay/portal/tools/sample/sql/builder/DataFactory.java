@@ -380,8 +380,6 @@ public class DataFactory {
 		initGroupModels();
 
 		initJournalArticleContent();
-		initJournalFileEntryTypeModel();
-
 		initRoleModels();
 		initUserNames();
 	}
@@ -612,24 +610,6 @@ public class DataFactory {
 
 	public long getDefaultDLDDMStructureId() {
 		return _defaultDLDDMStructureId;
-	}
-
-	public DDMStructureLayoutModel getDefaultJournalDDMStructureLayoutModel() {
-		return _defaultJournalDDMStructureLayoutModel;
-	}
-
-	public DDMStructureModel getDefaultJournalDDMStructureModel() {
-		return _defaultJournalDDMStructureModel;
-	}
-
-	public DDMStructureVersionModel
-		getDefaultJournalDDMStructureVersionModel() {
-
-		return _defaultJournalDDMStructureVersionModel;
-	}
-
-	public DDMTemplateModel getDefaultJournalDDMTemplateModel() {
-		return _defaultJournalDDMTemplateModel;
 	}
 
 	public DDMTemplateVersionModel getDefaultJournalDDMTemplateVersionModel() {
@@ -1187,29 +1167,6 @@ public class DataFactory {
 		sb.append("]]></dynamic-content></dynamic-element></root>");
 
 		_journalArticleContent = sb.toString();
-	}
-
-	public void initJournalFileEntryTypeModel() {
-		_defaultJournalDDMStructureModel = newDDMStructureModel(
-			_globalGroupId, _defaultUserId,
-			getClassNameId(JournalArticle.class),
-			_DEFAULT_JOURNAL_DDMSTRUCTUREKEY, _journalDDMStructureContent,
-			_defaultJournalDDMStructureId);
-
-		_defaultJournalDDMStructureVersionModel = newDDMStructureVersionModel(
-			_defaultJournalDDMStructureModel,
-			_defaultJournalDDMStructureVersionId);
-
-		_defaultJournalDDMStructureLayoutModel = newDDMStructureLayoutModel(
-			_globalGroupId, _defaultUserId,
-			_defaultJournalDDMStructureVersionId,
-			_journalDDMStructureLayoutContent);
-
-		_defaultJournalDDMTemplateModel = newDDMTemplateModel(
-			_globalGroupId, _defaultUserId, _defaultJournalDDMStructureId,
-			getClassNameId(JournalArticle.class), _defaultJournalDDMTemplateId);
-
-		_defaultJournalDDMTemplateVersionModel = newDDMTemplateVersionModel();
 	}
 
 	public void initRoleModels() {
@@ -1960,6 +1917,34 @@ public class DataFactory {
 
 		return newDDMStructureVersionModel(
 			ddmStructureModel, _defaultDLDDMStructureVersionId);
+	}
+
+	public DDMStructureLayoutModel newDefaultJournalDDMStructureLayoutModel() {
+		return newDDMStructureLayoutModel(
+			_globalGroupId, _defaultUserId,
+			_defaultJournalDDMStructureVersionId,
+			_journalDDMStructureLayoutContent);
+	}
+
+	public DDMStructureModel newDefaultJournalDDMStructureModel() {
+		return newDDMStructureModel(
+			_globalGroupId, _defaultUserId,
+			getClassNameId(JournalArticle.class),
+			_DEFAULT_JOURNAL_DDMSTRUCTUREKEY, _journalDDMStructureContent,
+			_defaultJournalDDMStructureId);
+	}
+
+	public DDMStructureVersionModel newDefaultJournalDDMStructureVersionModel(
+		DDMStructureModel ddmStructureModel) {
+
+		return newDDMStructureVersionModel(
+			ddmStructureModel, _defaultJournalDDMStructureVersionId);
+	}
+
+	public DDMTemplateModel newDefaultJournalDDMTemplateModel() {
+		return newDDMTemplateModel(
+			_globalGroupId, _defaultUserId, _defaultJournalDDMStructureId,
+			getClassNameId(JournalArticle.class), _defaultJournalDDMTemplateId);
 	}
 
 	public UserModel newDefaultUserModel() {
@@ -4502,12 +4487,8 @@ public class DataFactory {
 		DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT;
 	private String _defaultJournalArticleId;
 	private final long _defaultJournalDDMStructureId;
-	private DDMStructureLayoutModel _defaultJournalDDMStructureLayoutModel;
-	private DDMStructureModel _defaultJournalDDMStructureModel;
 	private final long _defaultJournalDDMStructureVersionId;
-	private DDMStructureVersionModel _defaultJournalDDMStructureVersionModel;
 	private final long _defaultJournalDDMTemplateId;
-	private DDMTemplateModel _defaultJournalDDMTemplateModel;
 	private DDMTemplateVersionModel _defaultJournalDDMTemplateVersionModel;
 	private final long _defaultUserId;
 	private final String _dlDDMStructureContent;
