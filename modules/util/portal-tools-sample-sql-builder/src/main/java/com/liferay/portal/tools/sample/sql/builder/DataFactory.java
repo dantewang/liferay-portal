@@ -372,7 +372,8 @@ public class DataFactory {
 
 		_commerceCatalogModel = newCommerceCatalogModel(_commerceCurrencyModel);
 
-		initCommerceChannelModel();
+		_commerceChannelModel = newCommerceChannelModel(_commerceCurrencyModel);
+
 		initCommerceProductModels();
 
 		initJournalArticleContent();
@@ -860,23 +861,6 @@ public class DataFactory {
 		}
 	}
 
-	public void initCommerceChannelModel() {
-		_commerceChannelModel = new CommerceChannelModelImpl();
-
-		_commerceChannelModel.setCommerceChannelId(_counter.get());
-		_commerceChannelModel.setCompanyId(_companyId);
-		_commerceChannelModel.setUserId(_sampleUserId);
-		_commerceChannelModel.setUserName(_SAMPLE_USER_NAME);
-		_commerceChannelModel.setCreateDate(new Date());
-		_commerceChannelModel.setModifiedDate(new Date());
-		_commerceChannelModel.setSiteGroupId(1);
-		_commerceChannelModel.setName(_SAMPLE_USER_NAME + " Channel");
-		_commerceChannelModel.setType("site");
-		_commerceChannelModel.setTypeSettings(String.valueOf(_guestGroupId));
-		_commerceChannelModel.setCommerceCurrencyCode(
-			_commerceCurrencyModel.getCode());
-	}
-
 	public void initCommerceProductModels() {
 		CPTaxCategoryModel cpTaxCategoryModel = newCPTaxCategoryModel(
 			"Normal Product");
@@ -1285,6 +1269,28 @@ public class DataFactory {
 			_commerceChannelGroupId, getClassNameId(CommerceChannel.class),
 			commerceChannelModel.getCommerceChannelId(),
 			commerceChannelModel.getName(), false);
+	}
+
+	public CommerceChannelModel newCommerceChannelModel(
+		CommerceCurrencyModel commerceCurrencyModel) {
+
+		CommerceChannelModel commerceChannelModel =
+			new CommerceChannelModelImpl();
+
+		commerceChannelModel.setCommerceChannelId(_counter.get());
+		commerceChannelModel.setCompanyId(_companyId);
+		commerceChannelModel.setUserId(_sampleUserId);
+		commerceChannelModel.setUserName(_SAMPLE_USER_NAME);
+		commerceChannelModel.setCreateDate(new Date());
+		commerceChannelModel.setModifiedDate(new Date());
+		commerceChannelModel.setSiteGroupId(1);
+		commerceChannelModel.setName(_SAMPLE_USER_NAME + " Channel");
+		commerceChannelModel.setType("site");
+		commerceChannelModel.setTypeSettings(String.valueOf(_guestGroupId));
+		commerceChannelModel.setCommerceCurrencyCode(
+			commerceCurrencyModel.getCode());
+
+		return commerceChannelModel;
 	}
 
 	public CommerceCurrencyModel newCommerceCurrencyModel() {
@@ -4425,7 +4431,7 @@ public class DataFactory {
 	private final long _commerceCatalogGroupId;
 	private final CommerceCatalogModel _commerceCatalogModel;
 	private final long _commerceChannelGroupId;
-	private CommerceChannelModel _commerceChannelModel;
+	private final CommerceChannelModel _commerceChannelModel;
 	private final CommerceCurrencyModel _commerceCurrencyModel;
 	private final long _companyId;
 	private final SimpleCounter _counter;
