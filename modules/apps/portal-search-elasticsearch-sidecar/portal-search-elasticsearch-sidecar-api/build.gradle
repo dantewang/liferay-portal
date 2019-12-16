@@ -1,0 +1,8 @@
+dependencies {
+	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "default"
+	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
+	compileOnly project(":core:petra:petra-concurrent")
+	compileOnly project(":core:petra:petra-io")
+	compileOnly project(":core:petra:petra-process")
+	compileOnly project(":core:petra:petra-string")
+}
