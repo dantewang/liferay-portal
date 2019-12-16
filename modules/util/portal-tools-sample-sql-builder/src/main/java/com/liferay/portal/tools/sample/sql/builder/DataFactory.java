@@ -365,6 +365,9 @@ public class DataFactory {
 
 		_defaultDLDDMStructureId = _counter.get();
 		_defaultJournalDDMStructureId = _counter.get();
+		_defaultDLDDMStructureVersionId = _counter.get();
+		_defaultJournalDDMStructureVersionId = _counter.get();
+		_ddlDDMStructureVersionId = _counter.get();
 
 		initAssetCategoryModels();
 		initAssetTagModels();
@@ -600,6 +603,10 @@ public class DataFactory {
 		}
 
 		return writer;
+	}
+
+	public long getDdlDDMStructureVersionId() {
+		return _ddlDDMStructureVersionId;
 	}
 
 	public long getDefaultDLDDMStructureId() {
@@ -1163,11 +1170,10 @@ public class DataFactory {
 			_defaultDLDDMStructureId);
 
 		_defaultDLDDMStructureVersionModel = newDDMStructureVersionModel(
-			_defaultDLDDMStructureModel);
+			_defaultDLDDMStructureModel, _defaultDLDDMStructureVersionId);
 
 		_defaultDLDDMStructureLayoutModel = newDDMStructureLayoutModel(
-			_globalGroupId, _defaultUserId,
-			_defaultDLDDMStructureVersionModel.getStructureVersionId(),
+			_globalGroupId, _defaultUserId, _defaultDLDDMStructureVersionId,
 			_dlDDMStructureLayoutContent);
 	}
 
@@ -1216,11 +1222,12 @@ public class DataFactory {
 			_defaultJournalDDMStructureId);
 
 		_defaultJournalDDMStructureVersionModel = newDDMStructureVersionModel(
-			_defaultJournalDDMStructureModel);
+			_defaultJournalDDMStructureModel,
+			_defaultJournalDDMStructureVersionId);
 
 		_defaultJournalDDMStructureLayoutModel = newDDMStructureLayoutModel(
 			_globalGroupId, _defaultUserId,
-			_defaultJournalDDMStructureVersionModel.getStructureVersionId(),
+			_defaultJournalDDMStructureVersionId,
 			_journalDDMStructureLayoutContent);
 
 		_defaultJournalDDMTemplateModel = newDDMTemplateModel(
@@ -1837,7 +1844,7 @@ public class DataFactory {
 		ddmStorageLinkModel.setClassPK(journalArticleModel.getId());
 		ddmStorageLinkModel.setStructureId(structureId);
 		ddmStorageLinkModel.setStructureVersionId(
-			_defaultJournalDDMStructureVersionModel.getStructureVersionId());
+			_defaultJournalDDMStructureVersionId);
 
 		return ddmStorageLinkModel;
 	}
@@ -1854,7 +1861,7 @@ public class DataFactory {
 		ddmStorageLinkModel.setClassPK(ddmContentModel.getContentId());
 		ddmStorageLinkModel.setStructureId(structureId);
 		ddmStorageLinkModel.setStructureVersionId(
-			_defaultDLDDMStructureVersionModel.getStructureVersionId());
+			_defaultDLDDMStructureVersionId);
 
 		return ddmStorageLinkModel;
 	}
@@ -1878,12 +1885,12 @@ public class DataFactory {
 	}
 
 	public DDMStructureVersionModel newDDMStructureVersionModel(
-		DDMStructureModel ddmStructureModel) {
+		DDMStructureModel ddmStructureModel, long structureVersionId) {
 
 		DDMStructureVersionModel ddmStructureVersionModel =
 			new DDMStructureVersionModelImpl();
 
-		ddmStructureVersionModel.setStructureVersionId(_counter.get());
+		ddmStructureVersionModel.setStructureVersionId(structureVersionId);
 		ddmStructureVersionModel.setGroupId(ddmStructureModel.getGroupId());
 		ddmStructureVersionModel.setCompanyId(_companyId);
 		ddmStructureVersionModel.setUserId(ddmStructureModel.getUserId());
@@ -4495,12 +4502,14 @@ public class DataFactory {
 	private List<CProductModel> _cProductModels;
 	private List<CPTaxCategoryModel> _cpTaxCategoryModels;
 	private final Map<String, Writer> _csvWriters = new HashMap<>();
+	private final long _ddlDDMStructureVersionId;
 	private final PortletPreferencesImpl
 		_defaultAssetPublisherPortletPreferencesImpl;
 	private AssetVocabularyModel _defaultAssetVocabularyModel;
 	private final long _defaultDLDDMStructureId;
 	private DDMStructureLayoutModel _defaultDLDDMStructureLayoutModel;
 	private DDMStructureModel _defaultDLDDMStructureModel;
+	private final long _defaultDLDDMStructureVersionId;
 	private DDMStructureVersionModel _defaultDLDDMStructureVersionModel;
 	private long _defaultDLFileEntryTypeId =
 		DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT;
@@ -4508,6 +4517,7 @@ public class DataFactory {
 	private final long _defaultJournalDDMStructureId;
 	private DDMStructureLayoutModel _defaultJournalDDMStructureLayoutModel;
 	private DDMStructureModel _defaultJournalDDMStructureModel;
+	private final long _defaultJournalDDMStructureVersionId;
 	private DDMStructureVersionModel _defaultJournalDDMStructureVersionModel;
 	private DDMTemplateModel _defaultJournalDDMTemplateModel;
 	private DDMTemplateVersionModel _defaultJournalDDMTemplateVersionModel;
