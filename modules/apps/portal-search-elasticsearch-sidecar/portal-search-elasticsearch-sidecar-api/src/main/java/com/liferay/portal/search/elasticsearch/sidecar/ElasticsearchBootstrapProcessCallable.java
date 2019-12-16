@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.search.elasticsearch7.internal.bootstrap;
+package com.liferay.portal.search.elasticsearch.sidecar;
 
 import com.liferay.petra.process.ProcessCallable;
 import com.liferay.petra.process.ProcessException;

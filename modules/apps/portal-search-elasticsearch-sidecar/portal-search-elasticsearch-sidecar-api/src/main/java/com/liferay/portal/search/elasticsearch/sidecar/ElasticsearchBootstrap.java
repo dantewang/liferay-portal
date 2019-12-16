@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.search.elasticsearch7.internal.bootstrap;
+package com.liferay.portal.search.elasticsearch.sidecar;
 
 import com.liferay.petra.concurrent.NoticeableFuture;
 import com.liferay.petra.io.StreamUtil;
