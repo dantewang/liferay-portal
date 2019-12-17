@@ -397,6 +397,8 @@ public class DataFactory {
 		_commerceCatalogId = _counter.get();
 		_commerceChannelId = _counter.get();
 
+		_cPTaxCategoryId = _counter.get();
+
 		initAssetCategoryModels();
 		initAssetTagModels();
 
@@ -892,7 +894,7 @@ public class DataFactory {
 	}
 
 	public void initCommerceProductModels() {
-		_cpTaxCategoryModel = newCPTaxCategoryModel("Normal Product");
+		_cpTaxCategoryModel = newCPTaxCategoryModel();
 
 		_cProductModels = new ArrayList<>(
 			BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT);
@@ -926,12 +928,13 @@ public class DataFactory {
 			}
 
 			long cProductId = _counter.get();
-
-			CProductModel cProductModel = newCProductModel(
-				_commerceCatalogGroupId, cProductId,
+			long publishedCPDefinitionId =
 				cpDefinitionIds
 					[BenchmarksPropsValues.
-						MAX_COMMERCE_PRODUCT_DEFINITION_COUNT - 1]);
+						MAX_COMMERCE_PRODUCT_DEFINITION_COUNT - 1];
+
+			CProductModel cProductModel = newCProductModel(
+				cProductId, publishedCPDefinitionId);
 
 			_cProductModels.add(cProductModel);
 
@@ -951,8 +954,7 @@ public class DataFactory {
 
 				_cpDefinitionModels.add(
 					newCPDefinitionModel(
-						_commerceCatalogGroupId, cpDefinitionId, cProductId,
-						_cpTaxCategoryModel.getCPTaxCategoryId(),
+						cpDefinitionId, cProductId, _cPTaxCategoryId,
 						definitionIndex + 1));
 
 				_assetEntryModels.add(
@@ -963,7 +965,8 @@ public class DataFactory {
 						cpDefinitionLocalizationModel.getName()));
 
 				_cpFriendlyURLEntryModels.add(
-					newCPFriendlyURLEntryModel(cProductModel));
+					newCPFriendlyURLEntryModel(
+						cProductId, publishedCPDefinitionId));
 
 				for (int instanceIndex = 0;
 					 instanceIndex <
@@ -972,9 +975,7 @@ public class DataFactory {
 					 instanceIndex++) {
 
 					_cpInstanceModels.add(
-						newCPInstanceModel(
-							_commerceCatalogGroupId, cpDefinitionId,
-							instanceIndex));
+						newCPInstanceModel(cpDefinitionId, instanceIndex));
 				}
 			}
 		}
@@ -3578,14 +3579,14 @@ public class DataFactory {
 	}
 
 	protected CPDefinitionModel newCPDefinitionModel(
-		long groupId, long cpDefinitionId, long cProductId,
-		long cpTaxCategoryId, int version) {
+		long cpDefinitionId, long cProductId, long cpTaxCategoryId,
+		int version) {
 
 		CPDefinitionModel cpDefinitionModel = new CPDefinitionModelImpl();
 
 		cpDefinitionModel.setUuid(SequentialUUID.generate());
 		cpDefinitionModel.setCPDefinitionId(cpDefinitionId);
-		cpDefinitionModel.setGroupId(groupId);
+		cpDefinitionModel.setGroupId(_commerceCatalogGroupId);
 		cpDefinitionModel.setCompanyId(_companyId);
 		cpDefinitionModel.setUserId(_sampleUserId);
 		cpDefinitionModel.setUserName(_SAMPLE_USER_NAME);
@@ -3626,12 +3627,12 @@ public class DataFactory {
 	}
 
 	protected CPFriendlyURLEntryModel newCPFriendlyURLEntryModel(
-		CProductModel cProductModel) {
+		long cProductId, long publishedCPDefinitionId) {
 
 		return newCPFriendlyURLEntryModel(
-			0, getClassNameId(CProduct.class), cProductModel.getCProductId(),
+			0, getClassNameId(CProduct.class), cProductId,
 			FriendlyURLNormalizerUtil.normalizeWithPeriodsAndSlashes(
-				"Definition " + cProductModel.getPublishedCPDefinitionId()));
+				"Definition " + publishedCPDefinitionId));
 	}
 
 	protected CPFriendlyURLEntryModel newCPFriendlyURLEntryModel(
@@ -3658,13 +3659,13 @@ public class DataFactory {
 	}
 
 	protected CPInstanceModel newCPInstanceModel(
-		long groupId, long cpDefinitionId, int index) {
+		long cpDefinitionId, int index) {
 
 		CPInstanceModel cpInstanceModel = new CPInstanceModelImpl();
 
 		cpInstanceModel.setUuid(SequentialUUID.generate());
 		cpInstanceModel.setCPInstanceId(_counter.get());
-		cpInstanceModel.setGroupId(groupId);
+		cpInstanceModel.setGroupId(_commerceCatalogGroupId);
 		cpInstanceModel.setCompanyId(_companyId);
 		cpInstanceModel.setUserId(_sampleUserId);
 		cpInstanceModel.setUserName(_SAMPLE_USER_NAME);
@@ -3707,13 +3708,13 @@ public class DataFactory {
 	}
 
 	protected CProductModel newCProductModel(
-		long groupId, long cProductId, long publishedCPDefinitionId) {
+		long cProductId, long publishedCPDefinitionId) {
 
 		CProductModel cProductModel = new CProductModelImpl();
 
 		cProductModel.setUuid(SequentialUUID.generate());
 		cProductModel.setCProductId(cProductId);
-		cProductModel.setGroupId(groupId);
+		cProductModel.setGroupId(_commerceCatalogGroupId);
 		cProductModel.setCompanyId(_companyId);
 		cProductModel.setUserId(_sampleUserId);
 		cProductModel.setUserName(_SAMPLE_USER_NAME);
@@ -3726,10 +3727,10 @@ public class DataFactory {
 		return cProductModel;
 	}
 
-	protected CPTaxCategoryModel newCPTaxCategoryModel(String name) {
+	protected CPTaxCategoryModel newCPTaxCategoryModel() {
 		CPTaxCategoryModel cpTaxCategoryModel = new CPTaxCategoryModelImpl();
 
-		cpTaxCategoryModel.setCPTaxCategoryId(_counter.get());
+		cpTaxCategoryModel.setCPTaxCategoryId(_cPTaxCategoryId);
 		cpTaxCategoryModel.setCompanyId(_companyId);
 		cpTaxCategoryModel.setUserId(_sampleUserId);
 		cpTaxCategoryModel.setUserName(_SAMPLE_USER_NAME);
@@ -3739,7 +3740,7 @@ public class DataFactory {
 			StringBundler.concat(
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root ",
 				"available-locales=\"en_US\" default-locale=\"en_US\"><Name ",
-				"language-id=\"en_US\">", name, "</Name></root>"));
+				"language-id=\"en_US\"> Normal Product </Name></root>"));
 
 		cpTaxCategoryModel.setDescription(null);
 
@@ -4463,6 +4464,7 @@ public class DataFactory {
 	private List<CPFriendlyURLEntryModel> _cpFriendlyURLEntryModels;
 	private List<CPInstanceModel> _cpInstanceModels;
 	private List<CProductModel> _cProductModels;
+	private final long _cPTaxCategoryId;
 	private CPTaxCategoryModel _cpTaxCategoryModel;
 	private final Map<String, Writer> _csvWriters = new HashMap<>();
 	private final PortletPreferencesImpl
