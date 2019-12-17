@@ -545,10 +545,6 @@ public class DataFactory {
 		return _counter.get();
 	}
 
-	public List<CPDefinitionModel> getCPDefinitionModels() {
-		return new ArrayList<>(_cpDefinitionModels);
-	}
-
 	public List<CPFriendlyURLEntryModel> getCPFriendlyURLEntryModels() {
 		return new ArrayList<>(_cpFriendlyURLEntryModels);
 	}
@@ -856,7 +852,6 @@ public class DataFactory {
 	}
 
 	public void initCommerceProductModels() {
-		_cpDefinitionModels = new ArrayList<>(_cpDefinitionCount);
 		_cpFriendlyURLEntryModels = new ArrayList<>(_cpDefinitionCount);
 		_cpInstanceModels = new ArrayList<>(
 			_cpDefinitionCount * _maxCPInstanceCount);
@@ -871,11 +866,6 @@ public class DataFactory {
 				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
 
 				long cpDefinitionId = cpDefinitionIds[definitionIndex];
-
-				_cpDefinitionModels.add(
-					newCPDefinitionModel(
-						cpDefinitionId, _cProductIds.get(productIndex),
-						_cPTaxCategoryId, definitionIndex + 1));
 
 				_cpFriendlyURLEntryModels.add(
 					newCPFriendlyURLEntryModel(
@@ -1566,6 +1556,31 @@ public class DataFactory {
 		}
 
 		return cpDefinitionLocalizationModels;
+	}
+
+	public List<CPDefinitionModel> newCPDefinitionModels() {
+		List<CPDefinitionModel> cpDefinitionModels = new ArrayList<>(
+			_cpDefinitionCount);
+
+		for (int productIndex = 0; productIndex < _maxCProductCount;
+			 productIndex++) {
+
+			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
+				productIndex);
+
+			for (int definitionIndex = 0;
+				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
+
+				long cpDefinitionId = cpDefinitionIds[definitionIndex];
+
+				cpDefinitionModels.add(
+					newCPDefinitionModel(
+						cpDefinitionId, _cProductIds.get(productIndex),
+						_cPTaxCategoryId, definitionIndex + 1));
+			}
+		}
+
+		return cpDefinitionModels;
 	}
 
 	public List<CProductModel> newCProductModels() {
@@ -4505,7 +4520,6 @@ public class DataFactory {
 	private List _cpDefinitionIdList;
 	private final Map<Long, String> _cpDefinitionLocalizationNames =
 		new HashMap<>();
-	private List<CPDefinitionModel> _cpDefinitionModels;
 	private List<CPFriendlyURLEntryModel> _cpFriendlyURLEntryModels;
 	private List<CPInstanceModel> _cpInstanceModels;
 	private final List<Long> _cProductIds = new ArrayList<>();
