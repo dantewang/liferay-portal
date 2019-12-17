@@ -885,22 +885,18 @@ public class DataFactory {
 			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
 				productIndex);
 
-			CProductModel cProductModel = newCProductModel(
-				_cProductIds.get(productIndex),
-				_publishedCPDefinitionIds.get(productIndex));
-
-			_cProductModels.add(cProductModel);
+			_cProductModels.add(
+				newCProductModel(
+					_cProductIds.get(productIndex),
+					_publishedCPDefinitionIds.get(productIndex)));
 
 			for (int definitionIndex = 0;
 				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
 
 				long cpDefinitionId = cpDefinitionIds[definitionIndex];
 
-				CPDefinitionLocalizationModel cpDefinitionLocalizationModel =
-					newCPDefinitionLocalizationModel(cpDefinitionId);
-
 				_cpDefinitionLocalizationModels.add(
-					cpDefinitionLocalizationModel);
+					newCPDefinitionLocalizationModel(cpDefinitionId));
 
 				_cpDefinitionModels.add(
 					newCPDefinitionModel(
