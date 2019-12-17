@@ -193,7 +193,7 @@ public class JSONWebServiceClientImplPostTest
 			jsonWebServiceClientImpl.doPost("/testPost/", params));
 	}
 
-	@Test(expected = JSONWebServiceInvocationException.class)
+	@Test
 	public void testResponse400OnPost() throws Exception {
 		JSONWebServiceClientImpl jsonWebServiceClientImpl =
 			new JSONWebServiceClientImpl();
@@ -204,13 +204,19 @@ public class JSONWebServiceClientImplPostTest
 
 		jsonWebServiceClientImpl.activate(properties);
 
-		jsonWebServiceClientImpl.doPost(
-			"/", Collections.<NameValuePair>emptyList());
+		try {
+			jsonWebServiceClientImpl.doPost(
+				"/", Collections.<NameValuePair>emptyList());
+
+			Assert.fail();
+		}
+		catch (JSONWebServiceInvocationException jsonwsie) {
+			Assert.assertSame(
+				JSONWebServiceInvocationException.class, jsonwsie.getClass());
+		}
 	}
 
-	@Test(
-		expected = JSONWebServiceTransportException.AuthenticationFailure.class
-	)
+	@Test
 	public void testResponse401OnPost() throws Exception {
 		JSONWebServiceClientImpl jsonWebServiceClientImpl =
 			new JSONWebServiceClientImpl();
@@ -233,7 +239,16 @@ public class JSONWebServiceClientImplPostTest
 				SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON,
 				"true"));
 
-		jsonWebServiceClientImpl.doPost("/testPost/", params);
+		try {
+			jsonWebServiceClientImpl.doPost("/testPost/", params);
+
+			Assert.fail();
+		}
+		catch (JSONWebServiceTransportException jsonwste) {
+			Assert.assertSame(
+				JSONWebServiceTransportException.AuthenticationFailure.class,
+				jsonwste.getClass());
+		}
 	}
 
 }

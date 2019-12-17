@@ -48,7 +48,7 @@ public class JSONWebServiceClientImplPutTest
 		HTTPServerSimulator.stop();
 	}
 
-	@Test(expected = JSONWebServiceInvocationException.class)
+	@Test
 	public void testBadRequestOnPut() throws Exception {
 		JSONWebServiceClientImpl jsonWebServiceClientImpl =
 			new JSONWebServiceClientImpl();
@@ -59,8 +59,16 @@ public class JSONWebServiceClientImplPutTest
 
 		jsonWebServiceClientImpl.activate(properties);
 
-		jsonWebServiceClientImpl.doPut(
-			"/", Collections.<NameValuePair>emptyList());
+		try {
+			jsonWebServiceClientImpl.doPut(
+				"/", Collections.<NameValuePair>emptyList());
+
+			Assert.fail();
+		}
+		catch (JSONWebServiceInvocationException jsonwsie) {
+			Assert.assertSame(
+				JSONWebServiceInvocationException.class, jsonwsie.getClass());
+		}
 	}
 
 	@Test
