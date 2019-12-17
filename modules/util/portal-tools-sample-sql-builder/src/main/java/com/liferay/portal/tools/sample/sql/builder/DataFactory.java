@@ -373,9 +373,9 @@ public class DataFactory {
 		initAssetTagModels();
 		_commerceCurrencyModel = newCommerceCurrencyModel();
 
-		_commerceCatalogModel = newCommerceCatalogModel(_commerceCurrencyModel);
+		_commerceCatalogModel = newCommerceCatalogModel();
 
-		_commerceChannelModel = newCommerceChannelModel(_commerceCurrencyModel);
+		_commerceChannelModel = newCommerceChannelModel();
 
 		initCommerceProductModels();
 
@@ -1241,9 +1241,7 @@ public class DataFactory {
 			_commerceCatalogId, _COMMERCE_CATALOG_NAME, false);
 	}
 
-	public CommerceCatalogModel newCommerceCatalogModel(
-		CommerceCurrencyModel commerceCurrencyModel) {
-
+	public CommerceCatalogModel newCommerceCatalogModel() {
 		CommerceCatalogModel commerceCatalogModel =
 			new CommerceCatalogModelImpl();
 
@@ -1253,8 +1251,7 @@ public class DataFactory {
 		commerceCatalogModel.setCreateDate(new Date());
 		commerceCatalogModel.setModifiedDate(new Date());
 		commerceCatalogModel.setName(_COMMERCE_CATALOG_NAME);
-		commerceCatalogModel.setCommerceCurrencyCode(
-			commerceCurrencyModel.getCode());
+		commerceCatalogModel.setCommerceCurrencyCode(_COMMERCE_CURRENCY_CODE);
 		commerceCatalogModel.setCatalogDefaultLanguageId("en_US");
 		commerceCatalogModel.setSystem(true);
 
@@ -1267,9 +1264,7 @@ public class DataFactory {
 			_commerceChannelId, _COMMERCE_CHANNEL_NAME, false);
 	}
 
-	public CommerceChannelModel newCommerceChannelModel(
-		CommerceCurrencyModel commerceCurrencyModel) {
-
+	public CommerceChannelModel newCommerceChannelModel() {
 		CommerceChannelModel commerceChannelModel =
 			new CommerceChannelModelImpl();
 
@@ -1283,8 +1278,7 @@ public class DataFactory {
 		commerceChannelModel.setName(_COMMERCE_CHANNEL_NAME);
 		commerceChannelModel.setType("site");
 		commerceChannelModel.setTypeSettings(String.valueOf(_guestGroupId));
-		commerceChannelModel.setCommerceCurrencyCode(
-			commerceCurrencyModel.getCode());
+		commerceChannelModel.setCommerceCurrencyCode(_COMMERCE_CURRENCY_CODE);
 
 		return commerceChannelModel;
 	}
@@ -1300,7 +1294,7 @@ public class DataFactory {
 		commerceCurrencyModel.setUserName(_SAMPLE_USER_NAME);
 		commerceCurrencyModel.setCreateDate(new Date());
 		commerceCurrencyModel.setModifiedDate(new Date());
-		commerceCurrencyModel.setCode("USD");
+		commerceCurrencyModel.setCode(_COMMERCE_CURRENCY_CODE);
 
 		String name = StringBundler.concat(
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root available-locales",
@@ -4395,6 +4389,8 @@ public class DataFactory {
 
 	private static final String _COMMERCE_CHANNEL_NAME =
 		DataFactory._SAMPLE_USER_NAME + " Channel";
+
+	private static final String _COMMERCE_CURRENCY_CODE = "USD";
 
 	private static final long _CURRENT_TIME = System.currentTimeMillis();
 
