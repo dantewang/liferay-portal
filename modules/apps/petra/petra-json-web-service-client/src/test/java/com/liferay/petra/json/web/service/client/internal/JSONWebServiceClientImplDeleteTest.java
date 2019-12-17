@@ -47,7 +47,7 @@ public class JSONWebServiceClientImplDeleteTest
 		HTTPServerSimulator.stop();
 	}
 
-	@Test(expected = JSONWebServiceInvocationException.class)
+	@Test
 	public void testBadRequestOnDelete() throws Exception {
 		JSONWebServiceClientImpl jsonWebServiceClientImpl =
 			new JSONWebServiceClientImpl();
@@ -58,8 +58,16 @@ public class JSONWebServiceClientImplDeleteTest
 
 		jsonWebServiceClientImpl.activate(properties);
 
-		jsonWebServiceClientImpl.doDelete(
-			"/", Collections.<NameValuePair>emptyList());
+		try {
+			jsonWebServiceClientImpl.doDelete(
+				"/", Collections.<NameValuePair>emptyList());
+
+			Assert.fail();
+		}
+		catch (JSONWebServiceInvocationException jsonwsie) {
+			Assert.assertSame(
+				JSONWebServiceInvocationException.class, jsonwsie.getClass());
+		}
 	}
 
 	@Test
@@ -148,7 +156,7 @@ public class JSONWebServiceClientImplDeleteTest
 			jsonWebServiceClientImpl.doDelete("/testDelete/", params));
 	}
 
-	@Test(expected = JSONWebServiceInvocationException.class)
+	@Test
 	public void testResponse405OnDelete() throws Exception {
 		JSONWebServiceClientImpl jsonWebServiceClientImpl =
 			new JSONWebServiceClientImpl();
@@ -171,8 +179,15 @@ public class JSONWebServiceClientImplDeleteTest
 				SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON,
 				"true"));
 
-		Assert.assertNull(
-			jsonWebServiceClientImpl.doDelete("/testDelete/", params));
+		try {
+			jsonWebServiceClientImpl.doDelete("/testDelete/", params);
+
+			Assert.fail();
+		}
+		catch (JSONWebServiceInvocationException jsonwsie) {
+			Assert.assertSame(
+				JSONWebServiceInvocationException.class, jsonwsie.getClass());
+		}
 	}
 
 }

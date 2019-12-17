@@ -14,7 +14,7 @@
 
 package com.liferay.petra.json.web.service.client.internal;
 
-import com.liferay.petra.json.web.service.client.JSONWebServiceException;
+import com.liferay.petra.json.web.service.client.JSONWebServiceTransportException;
 import com.liferay.petra.json.web.service.client.keystore.KeyStoreLoader;
 import com.liferay.petra.json.web.service.client.server.simulator.HTTPSServerSimulator;
 import com.liferay.petra.json.web.service.client.server.simulator.SimulatorConstants;
@@ -91,7 +91,7 @@ public class JSONWebServiceClientImplSSLGetTest
 				SimulatorConstants.HTTP_PARAMETER_RESPOND_WITH_STATUS));
 	}
 
-	@Test(expected = JSONWebServiceException.class)
+	@Test
 	public void testJSONWebServiceExceptionOnGetIfTLS10() throws Exception {
 		System.setProperty("https.protocols", "TLSv1.1");
 
@@ -111,12 +111,14 @@ public class JSONWebServiceClientImplSSLGetTest
 		HTTPSServerSimulator.start("TLSv1");
 
 		try {
-			String json = jsonWebServiceClientImpl.doGet("/testGet/", params);
+			jsonWebServiceClientImpl.doGet("/testGet/", params);
 
-			Assert.assertTrue(
-				json,
-				json.contains(
-					SimulatorConstants.HTTP_PARAMETER_RESPOND_WITH_STATUS));
+			Assert.fail();
+		}
+		catch (JSONWebServiceTransportException jsonwste) {
+			Assert.assertSame(
+				JSONWebServiceTransportException.CommunicationFailure.class,
+				jsonwste.getClass());
 		}
 		finally {
 			HTTPSServerSimulator.stop();
