@@ -48,7 +48,7 @@ public class JSONWebServiceClientImplGetTest
 		HTTPServerSimulator.stop();
 	}
 
-	@Test(expected = JSONWebServiceInvocationException.class)
+	@Test
 	public void testBadRequestOnGet() throws Exception {
 		JSONWebServiceClientImpl jsonWebServiceClientImpl =
 			new JSONWebServiceClientImpl();
@@ -61,13 +61,19 @@ public class JSONWebServiceClientImplGetTest
 
 		jsonWebServiceClientImpl.activate(properties);
 
-		jsonWebServiceClientImpl.doGet(
-			"/", Collections.<NameValuePair>emptyList());
+		try {
+			jsonWebServiceClientImpl.doGet(
+				"/", Collections.<NameValuePair>emptyList());
+
+			Assert.fail();
+		}
+		catch (JSONWebServiceInvocationException jsonwsie) {
+			Assert.assertTrue(
+				jsonwsie instanceof JSONWebServiceInvocationException);
+		}
 	}
 
-	@Test(
-		expected = JSONWebServiceTransportException.CommunicationFailure.class
-	)
+	@Test
 	public void testCommunicationFailureOnGetWithRetryable() throws Exception {
 		JSONWebServiceClientImpl jsonWebServiceClientImpl =
 			new JSONWebServiceClientImpl();
@@ -79,8 +85,17 @@ public class JSONWebServiceClientImplGetTest
 
 		jsonWebServiceClientImpl.activate(properties);
 
-		jsonWebServiceClientImpl.doGet(
-			"/testGet/", Collections.<NameValuePair>emptyList());
+		try {
+			jsonWebServiceClientImpl.doGet(
+				"/testGet/", Collections.<NameValuePair>emptyList());
+
+			Assert.fail();
+		}
+		catch (JSONWebServiceTransportException jsonwste) {
+			Assert.assertTrue(
+				jsonwste instanceof
+					JSONWebServiceTransportException.CommunicationFailure);
+		}
 	}
 
 	@Test
@@ -208,7 +223,7 @@ public class JSONWebServiceClientImplGetTest
 			jsonWebServiceClientImpl.doGet("/testGet/", params));
 	}
 
-	@Test(expected = JSONWebServiceInvocationException.class)
+	@Test
 	public void testResponse204OnGet() throws Exception {
 		JSONWebServiceClientImpl jsonWebServiceClientImpl =
 			new JSONWebServiceClientImpl();
@@ -231,7 +246,15 @@ public class JSONWebServiceClientImplGetTest
 				SimulatorConstants.HTTP_PARAMETER_RETURN_PARMS_IN_JSON,
 				"true"));
 
-		jsonWebServiceClientImpl.doGet("/testGet/", params);
+		try {
+			jsonWebServiceClientImpl.doGet("/testGet/", params);
+
+			Assert.fail();
+		}
+		catch (JSONWebServiceInvocationException jsonwsie) {
+			Assert.assertTrue(
+				jsonwsie instanceof JSONWebServiceInvocationException);
+		}
 	}
 
 }
