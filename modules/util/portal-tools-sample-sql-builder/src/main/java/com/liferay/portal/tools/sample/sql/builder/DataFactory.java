@@ -570,10 +570,6 @@ public class DataFactory {
 		return new ArrayList<>(_cProductModels);
 	}
 
-	public CPTaxCategoryModel getCPTaxCategoryModel() {
-		return _cpTaxCategoryModel;
-	}
-
 	public long getDefaultDLDDMStructureId() {
 		return _defaultDLDDMStructureId;
 	}
@@ -883,8 +879,6 @@ public class DataFactory {
 	}
 
 	public void initCommerceProductModels() {
-		_cpTaxCategoryModel = newCPTaxCategoryModel();
-
 		_cProductModels = new ArrayList<>(
 			BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT);
 
@@ -4440,7 +4434,6 @@ public class DataFactory {
 	private final List<Long> _cProductIds = new ArrayList<>();
 	private List<CProductModel> _cProductModels;
 	private final long _cPTaxCategoryId;
-	private CPTaxCategoryModel _cpTaxCategoryModel;
 	private final PortletPreferencesImpl
 		_defaultAssetPublisherPortletPreferencesImpl;
 	private AssetVocabularyModel _defaultAssetVocabularyModel;
