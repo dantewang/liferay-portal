@@ -545,12 +545,6 @@ public class DataFactory {
 		return _counter.get();
 	}
 
-	public List<CPDefinitionLocalizationModel>
-		getCPDefinitionLocalizationModels() {
-
-		return new ArrayList<>(_cpDefinitionLocalizationModels);
-	}
-
 	public List<CPDefinitionModel> getCPDefinitionModels() {
 		return new ArrayList<>(_cpDefinitionModels);
 	}
@@ -854,7 +848,6 @@ public class DataFactory {
 	}
 
 	public void initCommerceProductModels() {
-		_cpDefinitionLocalizationModels = new ArrayList<>(_cpDefinitionCount);
 		_cpDefinitionModels = new ArrayList<>(_cpDefinitionCount);
 		_cpFriendlyURLEntryModels = new ArrayList<>(_cpDefinitionCount);
 		_cpInstanceModels = new ArrayList<>(
@@ -870,9 +863,6 @@ public class DataFactory {
 				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
 
 				long cpDefinitionId = cpDefinitionIds[definitionIndex];
-
-				_cpDefinitionLocalizationModels.add(
-					newCPDefinitionLocalizationModel(cpDefinitionId));
 
 				_cpDefinitionModels.add(
 					newCPDefinitionModel(
@@ -1543,6 +1533,31 @@ public class DataFactory {
 		counterModels.add(counterModel);
 
 		return counterModels;
+	}
+
+	public List<CPDefinitionLocalizationModel>
+		newCPDefinitionLocalizationModels() {
+
+		List<CPDefinitionLocalizationModel> cpDefinitionLocalizationModels =
+			new ArrayList<>(_cpDefinitionCount);
+
+		for (int productIndex = 0; productIndex < _maxCProductCount;
+			 productIndex++) {
+
+			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
+				productIndex);
+
+			for (int definitionIndex = 0;
+				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
+
+				long cpDefinitionId = cpDefinitionIds[definitionIndex];
+
+				cpDefinitionLocalizationModels.add(
+					newCPDefinitionLocalizationModel(cpDefinitionId));
+			}
+		}
+
+		return cpDefinitionLocalizationModels;
 	}
 
 	public List<CProductModel> newCProductModels() {
@@ -4487,7 +4502,6 @@ public class DataFactory {
 	private final SimpleCounter _counter;
 	private int _cpDefinitionCount;
 	private List _cpDefinitionIdList;
-	private List<CPDefinitionLocalizationModel> _cpDefinitionLocalizationModels;
 	private final Map<Long, String> _cpDefinitionLocalizationNames =
 		new HashMap<>();
 	private List<CPDefinitionModel> _cpDefinitionModels;
