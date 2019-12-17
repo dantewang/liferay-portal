@@ -571,10 +571,6 @@ public class DataFactory {
 		return new ArrayList<>(_cProductModels);
 	}
 
-	public CPTaxCategoryModel getCPTaxCategoryModel() {
-		return _cpTaxCategoryModel;
-	}
-
 	public Writer getCSVWriter(String csvFileName) {
 		Writer writer = _csvWriters.get(csvFileName);
 
@@ -866,8 +862,6 @@ public class DataFactory {
 	}
 
 	public void initCommerceProductModels() {
-		_cpTaxCategoryModel = newCPTaxCategoryModel();
-
 		_cProductModels = new ArrayList<>(_maxCProductCount);
 
 		int cpDefinitionCount = _maxCProductCount * _maxCPDefinitionCount;
@@ -4483,7 +4477,6 @@ public class DataFactory {
 	private final List<Long> _cProductIds = new ArrayList<>();
 	private List<CProductModel> _cProductModels;
 	private final long _cPTaxCategoryId;
-	private CPTaxCategoryModel _cpTaxCategoryModel;
 	private final Map<String, Writer> _csvWriters = new HashMap<>();
 	private final PortletPreferencesImpl
 		_defaultAssetPublisherPortletPreferencesImpl;
