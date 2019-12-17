@@ -858,14 +858,12 @@ public class DataFactory {
 	}
 
 	public void initCommerceProductModels() {
-		int cpDefinitionCount = _maxCProductCount * _maxCPDefinitionCount;
-
-		_assetEntryModels = new ArrayList<>(cpDefinitionCount);
-		_cpDefinitionLocalizationModels = new ArrayList<>(cpDefinitionCount);
-		_cpDefinitionModels = new ArrayList<>(cpDefinitionCount);
-		_cpFriendlyURLEntryModels = new ArrayList<>(cpDefinitionCount);
+		_assetEntryModels = new ArrayList<>(_cpDefinitionCount);
+		_cpDefinitionLocalizationModels = new ArrayList<>(_cpDefinitionCount);
+		_cpDefinitionModels = new ArrayList<>(_cpDefinitionCount);
+		_cpFriendlyURLEntryModels = new ArrayList<>(_cpDefinitionCount);
 		_cpInstanceModels = new ArrayList<>(
-			cpDefinitionCount * _maxCPInstanceCount);
+			_cpDefinitionCount * _maxCPInstanceCount);
 
 		for (int productIndex = 0; productIndex < _maxCProductCount;
 			 productIndex++) {
@@ -998,6 +996,8 @@ public class DataFactory {
 			properties.getProperty("sample.sql.max.wiki.page.comment.count"));
 		_maxWikiPageCount = GetterUtil.getInteger(
 			properties.getProperty("sample.sql.max.wiki.page.count"));
+
+		_cpDefinitionCount = _maxCProductCount * _maxCPDefinitionCount;
 
 		_virtualHostName = properties.getProperty(
 			"sample.sql.virtual.hostname");
@@ -4471,6 +4471,7 @@ public class DataFactory {
 	private final long _commerceChannelId;
 	private final long _companyId;
 	private final SimpleCounter _counter;
+	private int _cpDefinitionCount;
 	private List _cpDefinitionIdList;
 	private List<CPDefinitionLocalizationModel> _cpDefinitionLocalizationModels;
 	private final Map<Long, String> _cpDefinitionLocalizationNames =
