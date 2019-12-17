@@ -379,7 +379,6 @@ public class DataFactory {
 		initAssetTagModels();
 
 		initCommerceIds();
-		initCommerceProductModels();
 
 		initJournalArticleContent();
 
@@ -543,10 +542,6 @@ public class DataFactory {
 
 	public long getCounterNext() {
 		return _counter.get();
-	}
-
-	public List<CPInstanceModel> getCPInstanceModels() {
-		return new ArrayList<>(_cpInstanceModels);
 	}
 
 	public Writer getCSVWriter(String csvFileName) {
@@ -836,31 +831,6 @@ public class DataFactory {
 				cpDefinitionIds[_maxCPDefinitionCount - 1]);
 
 			_cpDefinitionIdList.add(cpDefinitionIds);
-		}
-	}
-
-	public void initCommerceProductModels() {
-		_cpInstanceModels = new ArrayList<>(
-			_cpDefinitionCount * _maxCPInstanceCount);
-
-		for (int productIndex = 0; productIndex < _maxCProductCount;
-			 productIndex++) {
-
-			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
-				productIndex);
-
-			for (int definitionIndex = 0;
-				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
-
-				long cpDefinitionId = cpDefinitionIds[definitionIndex];
-
-				for (int instanceIndex = 0; instanceIndex < _maxCPInstanceCount;
-					 instanceIndex++) {
-
-					_cpInstanceModels.add(
-						newCPInstanceModel(cpDefinitionId, instanceIndex));
-				}
-			}
 		}
 	}
 
@@ -1583,6 +1553,33 @@ public class DataFactory {
 		}
 
 		return cpFriendlyURLEntryModels;
+	}
+
+	public List<CPInstanceModel> newCPInstanceModels() {
+		List<CPInstanceModel> cpInstanceModels = new ArrayList<>(
+			_cpDefinitionCount * _maxCPInstanceCount);
+
+		for (int productIndex = 0; productIndex < _maxCProductCount;
+			 productIndex++) {
+
+			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
+				productIndex);
+
+			for (int definitionIndex = 0;
+				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
+
+				long cpDefinitionId = cpDefinitionIds[definitionIndex];
+
+				for (int instanceIndex = 0; instanceIndex < _maxCPInstanceCount;
+					 instanceIndex++) {
+
+					cpInstanceModels.add(
+						newCPInstanceModel(cpDefinitionId, instanceIndex));
+				}
+			}
+		}
+
+		return cpInstanceModels;
 	}
 
 	public List<CProductModel> newCProductModels() {
@@ -4529,7 +4526,6 @@ public class DataFactory {
 	private List _cpDefinitionIdList;
 	private final Map<Long, String> _cpDefinitionLocalizationNames =
 		new HashMap<>();
-	private List<CPInstanceModel> _cpInstanceModels;
 	private final List<Long> _cProductIds = new ArrayList<>();
 	private final long _cPTaxCategoryId;
 	private final Map<String, Writer> _csvWriters = new HashMap<>();
