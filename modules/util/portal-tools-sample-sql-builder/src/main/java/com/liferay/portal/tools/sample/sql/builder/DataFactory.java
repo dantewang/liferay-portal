@@ -545,10 +545,6 @@ public class DataFactory {
 		return _counter.get();
 	}
 
-	public List<CPFriendlyURLEntryModel> getCPFriendlyURLEntryModels() {
-		return new ArrayList<>(_cpFriendlyURLEntryModels);
-	}
-
 	public List<CPInstanceModel> getCPInstanceModels() {
 		return new ArrayList<>(_cpInstanceModels);
 	}
@@ -844,7 +840,6 @@ public class DataFactory {
 	}
 
 	public void initCommerceProductModels() {
-		_cpFriendlyURLEntryModels = new ArrayList<>(_cpDefinitionCount);
 		_cpInstanceModels = new ArrayList<>(
 			_cpDefinitionCount * _maxCPInstanceCount);
 
@@ -858,11 +853,6 @@ public class DataFactory {
 				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
 
 				long cpDefinitionId = cpDefinitionIds[definitionIndex];
-
-				_cpFriendlyURLEntryModels.add(
-					newCPFriendlyURLEntryModel(
-						_cProductIds.get(productIndex),
-						_publishedCPDefinitionIds.get(productIndex)));
 
 				for (int instanceIndex = 0; instanceIndex < _maxCPInstanceCount;
 					 instanceIndex++) {
@@ -1573,6 +1563,26 @@ public class DataFactory {
 		}
 
 		return cpDefinitionModels;
+	}
+
+	public List<CPFriendlyURLEntryModel> newCPFriendlyURLEntryModels() {
+		List<CPFriendlyURLEntryModel> cpFriendlyURLEntryModels =
+			new ArrayList<>(_cpDefinitionCount);
+
+		for (int productIndex = 0; productIndex < _maxCProductCount;
+			 productIndex++) {
+
+			for (int definitionIndex = 0;
+				 definitionIndex < _maxCPDefinitionCount; definitionIndex++) {
+
+				cpFriendlyURLEntryModels.add(
+					newCPFriendlyURLEntryModel(
+						_cProductIds.get(productIndex),
+						_publishedCPDefinitionIds.get(productIndex)));
+			}
+		}
+
+		return cpFriendlyURLEntryModels;
 	}
 
 	public List<CProductModel> newCProductModels() {
@@ -4519,7 +4529,6 @@ public class DataFactory {
 	private List _cpDefinitionIdList;
 	private final Map<Long, String> _cpDefinitionLocalizationNames =
 		new HashMap<>();
-	private List<CPFriendlyURLEntryModel> _cpFriendlyURLEntryModels;
 	private List<CPInstanceModel> _cpInstanceModels;
 	private final List<Long> _cProductIds = new ArrayList<>();
 	private final long _cPTaxCategoryId;
