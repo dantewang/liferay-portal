@@ -50,8 +50,6 @@ public class SerialDestinationPrototype implements DestinationPrototype {
 		serialDestination.setPermissionCheckerFactory(
 			_permissionCheckerFactory);
 		serialDestination.setPortalExecutorManager(_portalExecutorManager);
-		serialDestination.setRejectedExecutionHandler(
-			destinationConfiguration.getRejectedExecutionHandler());
 		serialDestination.setUserLocalService(_userLocalService);
 		serialDestination.setWorkersCoreSize(_WORKERS_CORE_SIZE);
 		serialDestination.setWorkersMaxSize(_WORKERS_MAX_SIZE);
