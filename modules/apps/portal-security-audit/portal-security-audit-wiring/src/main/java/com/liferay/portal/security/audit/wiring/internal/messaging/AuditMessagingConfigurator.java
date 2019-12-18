@@ -15,11 +15,6 @@
 package com.liferay.portal.security.audit.wiring.internal.messaging;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
-import com.liferay.portal.kernel.concurrent.CallerRunsPolicy;
-import com.liferay.portal.kernel.concurrent.RejectedExecutionHandler;
-import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.DestinationConfiguration;
 import com.liferay.portal.kernel.messaging.DestinationFactory;
@@ -65,28 +60,6 @@ public class AuditMessagingConfigurator {
 		destinationConfiguration.setMaximumQueueSize(
 			auditConfiguration.auditMessageMaxQueueSize());
 
-		RejectedExecutionHandler rejectedExecutionHandler =
-			new CallerRunsPolicy() {
-
-				@Override
-				public void rejectedExecution(
-					Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
-
-					if (_log.isWarnEnabled()) {
-						_log.warn(
-							"The current thread will handle the request " +
-								"because the audit router's task queue is at " +
-									"its maximum capacity");
-					}
-
-					super.rejectedExecution(runnable, threadPoolExecutor);
-				}
-
-			};
-
-		destinationConfiguration.setRejectedExecutionHandler(
-			rejectedExecutionHandler);
-
 		Destination destination = _destinationFactory.createDestination(
 			destinationConfiguration);
 
@@ -121,9 +94,6 @@ public class AuditMessagingConfigurator {
 
 		activate(componentContext);
 	}
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		AuditMessagingConfigurator.class);
 
 	private volatile BundleContext _bundleContext;
 

@@ -14,11 +14,6 @@
 
 package com.liferay.portal.workflow.kaleo.runtime.internal.messaging;
 
-import com.liferay.portal.kernel.concurrent.CallerRunsPolicy;
-import com.liferay.portal.kernel.concurrent.RejectedExecutionHandler;
-import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.DestinationConfiguration;
 import com.liferay.portal.kernel.messaging.DestinationFactory;
@@ -107,28 +102,6 @@ public class KaleoWorkflowMessagingConfigurator {
 				KaleoRuntimeDestinationNames.KALEO_GRAPH_WALKER);
 
 		destinationConfiguration.setMaximumQueueSize(_MAXIMUM_QUEUE_SIZE);
-
-		RejectedExecutionHandler rejectedExecutionHandler =
-			new CallerRunsPolicy() {
-
-				@Override
-				public void rejectedExecution(
-					Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
-
-					if (_log.isWarnEnabled()) {
-						_log.warn(
-							"The current thread will handle the request " +
-								"because the graph walker's task queue is at " +
-									"its maximum capacity");
-					}
-
-					super.rejectedExecution(runnable, threadPoolExecutor);
-				}
-
-			};
-
-		destinationConfiguration.setRejectedExecutionHandler(
-			rejectedExecutionHandler);
 
 		registerDestination(destinationConfiguration);
 	}
@@ -244,28 +217,6 @@ public class KaleoWorkflowMessagingConfigurator {
 
 		destinationConfiguration.setMaximumQueueSize(_MAXIMUM_QUEUE_SIZE);
 
-		RejectedExecutionHandler rejectedExecutionHandler =
-			new CallerRunsPolicy() {
-
-				@Override
-				public void rejectedExecution(
-					Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
-
-					if (_log.isWarnEnabled()) {
-						_log.warn(
-							"The current thread will handle the request " +
-								"because the workflow timer task queue is at " +
-									"its maximum capacity");
-					}
-
-					super.rejectedExecution(runnable, threadPoolExecutor);
-				}
-
-			};
-
-		destinationConfiguration.setRejectedExecutionHandler(
-			rejectedExecutionHandler);
-
 		registerDestination(destinationConfiguration);
 	}
 
@@ -311,9 +262,6 @@ public class KaleoWorkflowMessagingConfigurator {
 	}
 
 	private static final int _MAXIMUM_QUEUE_SIZE = 200;
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		KaleoWorkflowMessagingConfigurator.class);
 
 	private BundleContext _bundleContext;
 	private DefaultWorkflowDestinationEventListener

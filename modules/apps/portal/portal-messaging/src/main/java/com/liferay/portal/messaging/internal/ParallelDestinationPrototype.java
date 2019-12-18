@@ -50,8 +50,6 @@ public class ParallelDestinationPrototype implements DestinationPrototype {
 		parallelDestination.setPermissionCheckerFactory(
 			_permissionCheckerFactory);
 		parallelDestination.setPortalExecutorManager(_portalExecutorManager);
-		parallelDestination.setRejectedExecutionHandler(
-			destinationConfiguration.getRejectedExecutionHandler());
 		parallelDestination.setUserLocalService(_userLocalService);
 		parallelDestination.setWorkersCoreSize(
 			destinationConfiguration.getWorkersCoreSize());
