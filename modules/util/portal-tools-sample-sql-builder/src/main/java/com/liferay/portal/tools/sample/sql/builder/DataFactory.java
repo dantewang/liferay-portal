@@ -1882,7 +1882,7 @@ public class DataFactory {
 
 		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
 		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append(ddmTemplateModel.getTemplateKey());
+		sb.append(_DEFAULT_JOURNAL_DDMSTRUCTUREKEY);
 		sb.append("</name></root>");
 
 		ddmTemplateVersionModelImpl.setName(sb.toString());
@@ -2240,8 +2240,7 @@ public class DataFactory {
 		journalArticleModel.setDefaultLanguageId("en_US");
 		journalArticleModel.setDDMStructureKey(
 			_DEFAULT_JOURNAL_DDMSTRUCTUREKEY);
-		journalArticleModel.setDDMTemplateKey(
-			_defaultJournalDDMTemplateModel.getTemplateKey());
+		journalArticleModel.setDDMTemplateKey(_DEFAULT_JOURNAL_DDMSTRUCTUREKEY);
 		journalArticleModel.setDisplayDate(new Date());
 		journalArticleModel.setExpirationDate(nextFutureDate());
 		journalArticleModel.setReviewDate(new Date());
@@ -3851,7 +3850,7 @@ public class DataFactory {
 		ddmTemplateModel.setClassNameId(getClassNameId(DDMStructure.class));
 		ddmTemplateModel.setClassPK(structureId);
 		ddmTemplateModel.setResourceClassNameId(sourceClassNameId);
-		ddmTemplateModel.setTemplateKey("BASIC-WEB-CONTENT");
+		ddmTemplateModel.setTemplateKey(_DEFAULT_JOURNAL_DDMSTRUCTUREKEY);
 		ddmTemplateModel.setVersion(DDMTemplateConstants.VERSION_DEFAULT);
 		ddmTemplateModel.setVersionUserId(userId);
 		ddmTemplateModel.setVersionUserName(_SAMPLE_USER_NAME);
