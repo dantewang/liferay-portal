@@ -19,7 +19,6 @@ import com.liferay.petra.concurrent.NoticeableThreadPoolExecutor;
 import com.liferay.petra.concurrent.ThreadPoolHandlerAdapter;
 import com.liferay.petra.executor.PortalExecutorManager;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.concurrent.RejectedExecutionHandler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseDestination;
@@ -177,16 +176,6 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		_portalExecutorManager = portalExecutorManager;
 	}
 
-	/**
-	 * @deprecated As of Judson (7.1.x), with no direct replacement
-	 */
-	@Deprecated
-	public void setRejectedExecutionHandler(
-		RejectedExecutionHandler rejectedExecutionHandler) {
-
-		_rejectedExecutionHandler = rejectedExecutionHandler;
-	}
-
 	public void setUserLocalService(UserLocalService userLocalService) {
 		this.userLocalService = userLocalService;
 	}
@@ -227,7 +216,6 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 	private int _maximumQueueSize = Integer.MAX_VALUE;
 	private NoticeableThreadPoolExecutor _noticeableThreadPoolExecutor;
 	private PortalExecutorManager _portalExecutorManager;
-	private RejectedExecutionHandler _rejectedExecutionHandler;
 	private int _workersCoreSize = _WORKERS_CORE_SIZE;
 	private int _workersMaxSize = _WORKERS_MAX_SIZE;
 
