@@ -359,6 +359,9 @@ public class DataFactory {
 			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
 				_readFile("default_asset_publisher_preference.xml"));
 
+		_defaultDLDDMStructureId = _counter.get();
+		_defaultJournalDDMStructureId = _counter.get();
+
 		initAssetCategoryModels();
 		initAssetTagModels();
 		initCommerceCurrencyModel();
@@ -587,7 +590,7 @@ public class DataFactory {
 	}
 
 	public long getDefaultDLDDMStructureId() {
-		return _defaultDLDDMStructureModel.getStructureId();
+		return _defaultDLDDMStructureId;
 	}
 
 	public DDMStructureLayoutModel getDefaultDLDDMStructureLayoutModel() {
@@ -1065,7 +1068,8 @@ public class DataFactory {
 	public void initDLFileEntryTypeModel() {
 		_defaultDLDDMStructureModel = newDDMStructureModel(
 			_globalGroupId, _defaultUserId, getClassNameId(DLFileEntry.class),
-			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent);
+			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent,
+			_defaultDLDDMStructureId);
 
 		_defaultDLDDMStructureVersionModel = newDDMStructureVersionModel(
 			_defaultDLDDMStructureModel);
@@ -1078,8 +1082,8 @@ public class DataFactory {
 		_defaultJournalDDMStructureModel = newDDMStructureModel(
 			_globalGroupId, _defaultUserId,
 			getClassNameId(JournalArticle.class),
-			DataFactoryConstants.JOURNAL_STRUCTURE_KEY,
-			_journalDDMStructureContent);
+			DataFactoryConstants.JOURNAL_STRUCTURE_KEY, _journalDDMStructureContent,
+			_defaultJournalDDMStructureId);
 
 		_defaultJournalDDMStructureVersionModel = newDDMStructureVersionModel(
 			_defaultJournalDDMStructureModel);
@@ -1090,8 +1094,7 @@ public class DataFactory {
 			_journalDDMStructureLayoutContent);
 
 		_defaultJournalDDMTemplateModel = newDDMTemplateModel(
-			_globalGroupId, _defaultUserId,
-			_defaultJournalDDMStructureModel.getStructureId(),
+			_globalGroupId, _defaultUserId, _defaultJournalDDMStructureId,
 			getClassNameId(JournalArticle.class));
 
 		_defaultJournalDDMTemplateVersionModel = newDDMTemplateVersionModel(
@@ -1330,8 +1333,8 @@ public class DataFactory {
 			journalArticleModel.getCreateDate(),
 			journalArticleModel.getModifiedDate(),
 			getClassNameId(JournalArticle.class), resourcePrimKey, resourceUUID,
-			_defaultJournalDDMStructureModel.getStructureId(),
-			journalArticleModel.isIndexable(), true, ContentTypes.TEXT_HTML,
+			_defaultJournalDDMStructureId, journalArticleModel.isIndexable(),
+			true, ContentTypes.TEXT_HTML,
 			journalArticleLocalizationModel.getTitle());
 	}
 
@@ -1591,7 +1594,7 @@ public class DataFactory {
 
 		return newDDMStructureModel(
 			groupId, _sampleUserId, getClassNameId(DDLRecordSet.class),
-			"Test DDM Structure", sb.toString());
+			"Test DDM Structure", sb.toString(), _counter.get());
 	}
 
 	public List<PortletPreferencesModel> newDDLPortletPreferencesModels(
@@ -2247,7 +2250,7 @@ public class DataFactory {
 		journalArticleModel.setDefaultLanguageId(
 			DataFactoryConstants.LANGUAGE_ID);
 		journalArticleModel.setDDMStructureKey(
-			_defaultJournalDDMStructureModel.getStructureKey());
+			DataFactoryConstants.JOURNAL_STRUCTURE_KEY);
 		journalArticleModel.setDDMTemplateKey(
 			_defaultJournalDDMTemplateModel.getTemplateKey());
 		journalArticleModel.setDisplayDate(new Date());
@@ -3824,12 +3827,12 @@ public class DataFactory {
 
 	protected DDMStructureModel newDDMStructureModel(
 		long groupId, long userId, long classNameId, String structureKey,
-		String definition) {
+		String definition, long structureId) {
 
 		DDMStructureModel ddmStructureModel = new DDMStructureModelImpl();
 
 		ddmStructureModel.setUuid(SequentialUUID.generate());
-		ddmStructureModel.setStructureId(_counter.get());
+		ddmStructureModel.setStructureId(structureId);
 		ddmStructureModel.setGroupId(groupId);
 		ddmStructureModel.setCompanyId(_companyId);
 		ddmStructureModel.setUserId(userId);
@@ -4482,12 +4485,14 @@ public class DataFactory {
 	private final PortletPreferencesImpl
 		_defaultAssetPublisherPortletPreferencesImpl;
 	private AssetVocabularyModel _defaultAssetVocabularyModel;
+	private final long _defaultDLDDMStructureId;
 	private DDMStructureLayoutModel _defaultDLDDMStructureLayoutModel;
 	private DDMStructureModel _defaultDLDDMStructureModel;
 	private DDMStructureVersionModel _defaultDLDDMStructureVersionModel;
 	private long _defaultDLFileEntryTypeId =
 		DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT;
 	private String _defaultJournalArticleId;
+	private final long _defaultJournalDDMStructureId;
 	private DDMStructureLayoutModel _defaultJournalDDMStructureLayoutModel;
 	private DDMStructureModel _defaultJournalDDMStructureModel;
 	private DDMStructureVersionModel _defaultJournalDDMStructureVersionModel;
