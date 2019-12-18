@@ -14,12 +14,6 @@
 
 package com.liferay.portal.kernel.search;
 
-import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.concurrent.CallerRunsPolicy;
-import com.liferay.portal.kernel.concurrent.RejectedExecutionHandler;
-import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.DestinationConfiguration;
 import com.liferay.portal.kernel.messaging.DestinationFactory;
@@ -170,33 +164,6 @@ public abstract class BaseSearchEngineConfigurator
 		if (_INDEX_SEARCH_WRITER_MAX_QUEUE_SIZE > 0) {
 			destinationConfiguration.setMaximumQueueSize(
 				_INDEX_SEARCH_WRITER_MAX_QUEUE_SIZE);
-
-			RejectedExecutionHandler rejectedExecutionHandler =
-				new CallerRunsPolicy() {
-
-					@Override
-					public void rejectedExecution(
-						Runnable runnable,
-						ThreadPoolExecutor threadPoolExecutor) {
-
-						if (_log.isWarnEnabled()) {
-							StringBundler sb = new StringBundler(4);
-
-							sb.append("The search index writer's task queue ");
-							sb.append("is at its maximum capacity. The ");
-							sb.append("current thread will handle the ");
-							sb.append("request.");
-
-							_log.warn(sb.toString());
-						}
-
-						super.rejectedExecution(runnable, threadPoolExecutor);
-					}
-
-				};
-
-			destinationConfiguration.setRejectedExecutionHandler(
-				rejectedExecutionHandler);
 		}
 
 		return DestinationFactoryUtil.createDestination(
@@ -476,9 +443,6 @@ public abstract class BaseSearchEngineConfigurator
 	private static final int _INDEX_SEARCH_WRITER_MAX_QUEUE_SIZE =
 		GetterUtil.getInteger(
 			PropsUtil.get(PropsKeys.INDEX_SEARCH_WRITER_MAX_QUEUE_SIZE));
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		BaseSearchEngineConfigurator.class);
 
 	private final Map<String, ServiceRegistrar<Destination>>
 		_destinationServiceRegistrars = new ConcurrentHashMap<>();

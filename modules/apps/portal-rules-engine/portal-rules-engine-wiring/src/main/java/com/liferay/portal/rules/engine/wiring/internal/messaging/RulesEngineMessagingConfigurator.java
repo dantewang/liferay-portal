@@ -14,11 +14,6 @@
 
 package com.liferay.portal.rules.engine.wiring.internal.messaging;
 
-import com.liferay.portal.kernel.concurrent.CallerRunsPolicy;
-import com.liferay.portal.kernel.concurrent.RejectedExecutionHandler;
-import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.DestinationConfiguration;
 import com.liferay.portal.kernel.messaging.DestinationFactory;
@@ -50,28 +45,6 @@ public class RulesEngineMessagingConfigurator {
 
 		destinationConfiguration.setMaximumQueueSize(_MAXIMUM_QUEUE_SIZE);
 
-		RejectedExecutionHandler rejectedExecutionHandler =
-			new CallerRunsPolicy() {
-
-				@Override
-				public void rejectedExecution(
-					Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
-
-					if (_log.isWarnEnabled()) {
-						_log.warn(
-							"The current thread will handle the request " +
-								"because the rules engine's task queue is at " +
-									"its maximum capacity");
-					}
-
-					super.rejectedExecution(runnable, threadPoolExecutor);
-				}
-
-			};
-
-		destinationConfiguration.setRejectedExecutionHandler(
-			rejectedExecutionHandler);
-
 		Destination destination = _destinationFactory.createDestination(
 			destinationConfiguration);
 
@@ -101,9 +74,6 @@ public class RulesEngineMessagingConfigurator {
 	}
 
 	private static final int _MAXIMUM_QUEUE_SIZE = 20;
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		RulesEngineMessagingConfigurator.class);
 
 	private BundleContext _bundleContext;
 
