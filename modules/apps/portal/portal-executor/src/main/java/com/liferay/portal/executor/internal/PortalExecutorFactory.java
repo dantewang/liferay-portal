@@ -14,10 +14,13 @@
 
 package com.liferay.portal.executor.internal;
 
+import com.liferay.petra.concurrent.ThreadPoolHandlerAdapter;
+import com.liferay.petra.executor.PortalExecutorConfig;
+import com.liferay.petra.lang.CentralizedThreadLocal;
 import com.liferay.portal.kernel.concurrent.AbortPolicy;
 import com.liferay.portal.kernel.concurrent.ClearThreadLocalThreadPoolHandler;
 import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
-import com.liferay.portal.kernel.executor.PortalExecutorConfig;
+import com.liferay.portal.kernel.util.NamedThreadFactory;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -46,12 +49,10 @@ public class PortalExecutorFactory {
 			portalExecutorConfig.getCorePoolSize(),
 			portalExecutorConfig.getMaxPoolSize(),
 			portalExecutorConfig.getKeepAliveTime(),
-			portalExecutorConfig.getTimeUnit(),
-			portalExecutorConfig.isAllowCoreThreadTimeout(),
-			portalExecutorConfig.getMaxQueueSize(),
-			portalExecutorConfig.getRejectedExecutionHandler(),
+			portalExecutorConfig.getTimeUnit(), true,
+			portalExecutorConfig.getMaxQueueSize(), new AbortPolicy(),
 			portalExecutorConfig.getThreadFactory(),
-			portalExecutorConfig.getThreadPoolHandler());
+			new ClearThreadLocalThreadPoolHandler());
 	}
 
 	@Reference(
@@ -92,10 +93,22 @@ public class PortalExecutorFactory {
 
 	private final PortalExecutorConfig _defaultPortalExecutorConfig =
 		new PortalExecutorConfig(
-			DEFAULT_CONFIG_NAME, 0, 10, 60, TimeUnit.SECONDS, true,
-			Integer.MAX_VALUE, new AbortPolicy(),
-			new ClearThreadLocalThreadPoolHandler(), Thread.NORM_PRIORITY,
-			PortalClassLoaderUtil.getClassLoader());
+			DEFAULT_CONFIG_NAME, 0, 10, 60, TimeUnit.SECONDS, Integer.MAX_VALUE,
+			new NamedThreadFactory(
+				DEFAULT_CONFIG_NAME, Thread.NORM_PRIORITY,
+				PortalClassLoaderUtil.getClassLoader()),
+			new java.util.concurrent.ThreadPoolExecutor.AbortPolicy(),
+			new ThreadPoolHandlerAdapter() {
+
+				@Override
+				public void afterExecute(
+					Runnable runnable, Throwable throwable) {
+
+					CentralizedThreadLocal.clearShortLivedThreadLocals();
+				}
+
+			});
+
 	private final ConcurrentMap<String, PortalExecutorConfig>
 		_portalExecutorConfigs = new ConcurrentHashMap<>();
 
