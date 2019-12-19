@@ -48,6 +48,7 @@ public class PortalImplUnitTest {
 	@BeforeClass
 	public static void setUpClass() {
 		RegistryUtil.setRegistry(new BasicRegistryImpl());
+
 		HttpUtil httpUtil = new HttpUtil();
 
 		httpUtil.setHttp(new HttpImpl());
