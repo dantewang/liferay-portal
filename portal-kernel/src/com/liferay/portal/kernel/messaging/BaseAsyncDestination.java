@@ -21,7 +21,6 @@ import com.liferay.petra.executor.PortalExecutorManager;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.cluster.ClusterInvokeThreadLocal;
 import com.liferay.portal.kernel.concurrent.RejectedExecutionHandler;
-import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
@@ -45,6 +44,7 @@ import com.liferay.registry.ServiceTrackerCustomizer;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -142,7 +142,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 				new NamedThreadFactory(
 					getName(), Thread.NORM_PRIORITY,
 					PortalClassLoaderUtil.getClassLoader()),
-				new java.util.concurrent.ThreadPoolExecutor.AbortPolicy(),
+				new ThreadPoolExecutor.AbortPolicy(),
 				new ThreadPoolHandlerAdapter());
 
 		NoticeableExecutorService oldNoticeableExecutorService =
@@ -232,14 +232,6 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 
 	protected NoticeableThreadPoolExecutor getNoticeableThreadPoolExecutor() {
 		return _noticeableThreadPoolExecutor;
-	}
-
-	/**
-	 * @deprecated As of Judson (7.1.x), with no direct replacement
-	 */
-	@Deprecated
-	protected ThreadPoolExecutor getThreadPoolExecutor() {
-		return _threadPoolExecutor;
 	}
 
 	protected void populateMessageFromThreadLocals(Message message) {
@@ -369,7 +361,6 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 	private int _maximumQueueSize = Integer.MAX_VALUE;
 	private NoticeableThreadPoolExecutor _noticeableThreadPoolExecutor;
 	private RejectedExecutionHandler _rejectedExecutionHandler;
-	private ThreadPoolExecutor _threadPoolExecutor;
 	private int _workersCoreSize = _WORKERS_CORE_SIZE;
 	private int _workersMaxSize = _WORKERS_MAX_SIZE;
 
