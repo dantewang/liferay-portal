@@ -214,12 +214,8 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 	protected abstract void dispatch(
 		Set<MessageListener> messageListeners, Message message);
 
-	/**
-	 * @deprecated As of Judson (7.1.x), with no direct replacement
-	 */
-	@Deprecated
-	protected ThreadPoolExecutor getThreadPoolExecutor() {
-		return _threadPoolExecutor;
+	protected NoticeableThreadPoolExecutor getNoticeableThreadPoolExecutor() {
+		return _noticeableThreadPoolExecutor;
 	}
 
 	protected PermissionCheckerFactory permissionCheckerFactory;
@@ -259,7 +255,6 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 	private NoticeableThreadPoolExecutor _noticeableThreadPoolExecutor;
 	private PortalExecutorManager _portalExecutorManager;
 	private RejectedExecutionHandler _rejectedExecutionHandler;
-	private ThreadPoolExecutor _threadPoolExecutor;
 	private int _workersCoreSize = _WORKERS_CORE_SIZE;
 	private int _workersMaxSize = _WORKERS_MAX_SIZE;
 
