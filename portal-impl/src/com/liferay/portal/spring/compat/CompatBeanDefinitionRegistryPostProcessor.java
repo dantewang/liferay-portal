@@ -15,12 +15,13 @@
 package com.liferay.portal.spring.compat;
 
 import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
-import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.trash.kernel.service.TrashEntryLocalService;
 import com.liferay.trash.kernel.service.TrashEntryService;
 import com.liferay.trash.kernel.service.TrashVersionLocalService;
 import com.liferay.trash.kernel.service.persistence.TrashEntryPersistence;
 import com.liferay.trash.kernel.service.persistence.TrashVersionPersistence;
+
+import java.lang.reflect.Proxy;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -35,7 +36,7 @@ public class CompatBeanDefinitionRegistryPostProcessor
 	implements BeanDefinitionRegistryPostProcessor {
 
 	public static Object create(Class<?> clazz) {
-		return ProxyUtil.newProxyInstance(
+		return Proxy.newProxyInstance(
 			clazz.getClassLoader(),
 			new Class<?>[] {clazz, IdentifiableOSGiService.class},
 			(proxy, method, args) -> null);
