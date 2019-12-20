@@ -19,6 +19,8 @@ package com.liferay.oauth.util;
  */
 public interface OAuthWebKeys {
 
+	public static final String OAUTH = "OAUTH";
+
 	public static final String OAUTH_ACCESSOR = "OAUTH_ACCESSOR";
 
 	public static final String OAUTH_VERIFIER = "OAUTH_VERIFIER";
