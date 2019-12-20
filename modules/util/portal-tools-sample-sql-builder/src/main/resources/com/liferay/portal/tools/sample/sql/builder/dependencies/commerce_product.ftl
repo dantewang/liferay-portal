@@ -1,37 +1,39 @@
-<#list dataFactory.assetEntryModels as assetEntryModel>
+<#list dataFactory.newAssetEntryModels() as assetEntryModel>
 	${dataFactory.toInsertSQL(assetEntryModel)}
 </#list>
 
-${dataFactory.toInsertSQL(dataFactory.commerceCatalogModel)}
+${dataFactory.toInsertSQL(dataFactory.newCommerceCatalogModel())}
 
 ${dataFactory.toInsertSQL(dataFactory.commerceCatalogResourcePermission())}
 
-${dataFactory.toInsertSQL(dataFactory.commerceChannelModel)}
+${dataFactory.toInsertSQL(dataFactory.newCommerceChannelModel())}
 
-${dataFactory.toInsertSQL(dataFactory.commerceCurrencyModel)}
+${dataFactory.toInsertSQL(dataFactory.newCommerceCurrencyModel())}
 
-<#list dataFactory.CPDefinitionLocalizationModels as cpDefinitionLocalizationModel>
+<#list dataFactory.newCPDefinitionLocalizationModels() as cpDefinitionLocalizationModel>
 	${dataFactory.toInsertSQL(cpDefinitionLocalizationModel)}
 </#list>
 
-<#list dataFactory.CPDefinitionModels as cpDefinitionModel>
+<#list dataFactory.newCPDefinitionModels() as cpDefinitionModel>
 	${dataFactory.toInsertSQL(cpDefinitionModel)}
 </#list>
 
-<#list dataFactory.CPFriendlyURLEntryModels as cpFriendlyURLEntryModel>
+<#list dataFactory.newCPFriendlyURLEntryModels() as cpFriendlyURLEntryModel>
 	${dataFactory.toInsertSQL(cpFriendlyURLEntryModel)}
 
 	${dataFactory.getCSVWriter("cpFriendlyURLEntry").write(cpFriendlyURLEntryModel.urlTitle + "\n")}
 </#list>
 
-<#list dataFactory.CPInstanceModels as cpInstanceModel>
+<#list dataFactory.newCPInstanceModels() as cpInstanceModel>
 	${dataFactory.toInsertSQL(cpInstanceModel)}
 </#list>
 
-<#list dataFactory.CProductModels as cProductModel>
+<#list dataFactory.newCProductModels() as cProductModel>
 	${dataFactory.toInsertSQL(cProductModel)}
 </#list>
 
-<#list dataFactory.CPTaxCategoryModels as cpTaxCategoryModel>
-	${dataFactory.toInsertSQL(cpTaxCategoryModel)}
-</#list>
+${dataFactory.toInsertSQL(dataFactory.newCPTaxCategoryModel())}
+
+<@insertGroup _groupModel=dataFactory.newCommerceCatalogGroupModel() />
+
+<@insertGroup _groupModel=dataFactory.newCommerceChannelGroupModel() />
