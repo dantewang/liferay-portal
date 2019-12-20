@@ -31,9 +31,14 @@ import com.liferay.portal.kernel.util.DigesterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.io.IOException;
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.Portlet;
+import javax.portlet.PortletException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -138,6 +143,16 @@ public class AuthorizePortlet extends MVCPortlet {
 
 			actionResponse.sendRedirect(oAuthCallbackURL);
 		}
+	}
+
+	@Override
+	public void render(
+			RenderRequest renderRequest, RenderResponse renderResponse)
+		throws IOException, PortletException {
+
+		renderRequest.setAttribute(OAuthWebKeys.OAUTH, _oAuth);
+
+		super.render(renderRequest, renderResponse);
 	}
 
 	private static final String _OAUTH_CALLBACK_OOB = "oob";
