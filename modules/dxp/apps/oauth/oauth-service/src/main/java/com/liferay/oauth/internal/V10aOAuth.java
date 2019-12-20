@@ -341,13 +341,6 @@ public class V10aOAuth implements OAuth {
 		return byteBuffer.array();
 	}
 
-	@SuppressWarnings("unused")
-	private static void _put(String key, byte[] bytes) {
-		OAuthAccessor oAuthAccessor = deserialize(bytes);
-
-		_portalCache.put(key, oAuthAccessor);
-	}
-
 	private void _notifyCluster(String key, OAuthAccessor oAuthAccessor)
 		throws Exception {
 
