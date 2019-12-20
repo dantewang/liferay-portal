@@ -23,6 +23,7 @@ import com.liferay.oauth.service.OAuthUserLocalServiceUtil;
 import com.liferay.oauth.util.DefaultOAuthAccessor;
 import com.liferay.oauth.util.DefaultOAuthConsumer;
 import com.liferay.oauth.util.DefaultOAuthMessage;
+import com.liferay.oauth.util.DefaultOAuthValidator;
 import com.liferay.oauth.util.OAuth;
 import com.liferay.oauth.util.OAuthAccessor;
 import com.liferay.oauth.util.OAuthAccessorConstants;
@@ -30,7 +31,7 @@ import com.liferay.oauth.util.OAuthConsumer;
 import com.liferay.oauth.util.OAuthMessage;
 import com.liferay.oauth.util.OAuthValidator;
 import com.liferay.portal.kernel.cache.PortalCache;
-import com.liferay.portal.kernel.cache.SingleVMPoolUtil;
+import com.liferay.portal.kernel.cache.SingleVMPool;
 import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterRequest;
 import com.liferay.portal.kernel.cluster.FutureClusterResponses;
@@ -64,7 +65,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.oauth.server.OAuthServlet;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Ivica Cardic
@@ -73,15 +76,6 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(immediate = true, service = OAuth.class)
 public class V10aOAuth implements OAuth {
-
-	public V10aOAuth(OAuthValidator oAuthValidator) {
-		_oAuthValidator = oAuthValidator;
-
-		if (_log.isDebugEnabled()) {
-			_portalCache.registerPortalCacheListener(
-				new V10aOAuthDebugCacheListener<>());
-		}
-	}
 
 	@Override
 	public String addParameters(String url, String... parameters)
@@ -331,6 +325,20 @@ public class V10aOAuth implements OAuth {
 		return null;
 	}
 
+	@Activate
+	protected void activate() {
+		_oAuthValidator = new DefaultOAuthValidator();
+
+		_portalCache =
+			(PortalCache<Serializable, Object>)_singleVMPool.getPortalCache(
+				V10aOAuth.class.getName());
+
+		if (_log.isDebugEnabled()) {
+			_portalCache.registerPortalCacheListener(
+				new V10aOAuthDebugCacheListener<>());
+		}
+	}
+
 	protected byte[] serialize(OAuthAccessor oAuthAccessor) {
 		Serializer serializer = new Serializer();
 
@@ -375,11 +383,13 @@ public class V10aOAuth implements OAuth {
 
 	private static final Log _log = LogFactoryUtil.getLog(V10aOAuth.class);
 
-	private static final PortalCache<Serializable, Object> _portalCache =
-		SingleVMPoolUtil.getPortalCache(V10aOAuth.class.getName());
 	private static final MethodKey _putMethodKey = new MethodKey(
 		V10aOAuth.class, "_put", String.class, byte[].class);
 
-	private final OAuthValidator _oAuthValidator;
+	private OAuthValidator _oAuthValidator;
+	private PortalCache<Serializable, Object> _portalCache;
+
+	@Reference
+	private SingleVMPool _singleVMPool;
 
 }
