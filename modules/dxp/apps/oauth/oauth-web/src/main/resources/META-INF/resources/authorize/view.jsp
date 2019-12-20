@@ -46,11 +46,13 @@
 	<%
 	String oAuthVerifier = (String)request.getAttribute(OAuthWebKeys.OAUTH_VERIFIER);
 
+	OAuth oAuth = (OAuth)request.getAttribute(OAuthWebKeys.OAUTH);
+
 	String oAuthCallback = ParamUtil.getString(request, net.oauth.OAuth.OAUTH_CALLBACK);
 
-	OAuthMessage oAuthMessage = OAuthUtil.getOAuthMessage(request, currentURL);
+	OAuthMessage oAuthMessage = oAuth.getOAuthMessage(request, currentURL);
 
-	OAuthAccessor oAuthAccessor = OAuthUtil.getOAuthAccessor(oAuthMessage);
+	OAuthAccessor oAuthAccessor = oAuth.getOAuthAccessor(oAuthMessage);
 
 	OAuthApplication oAuthApplication = null;
 
