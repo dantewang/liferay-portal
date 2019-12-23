@@ -1789,37 +1789,6 @@ public class DataFactory {
 		return ddmTemplateLinkModel;
 	}
 
-	public DDMTemplateVersionModel newDDMTemplateVersionModel() {
-		DDMTemplateVersionModelImpl ddmTemplateVersionModelImpl =
-			new DDMTemplateVersionModelImpl();
-
-		ddmTemplateVersionModelImpl.setTemplateVersionId(_counter.get());
-		ddmTemplateVersionModelImpl.setGroupId(_globalGroupId);
-		ddmTemplateVersionModelImpl.setCompanyId(_companyId);
-		ddmTemplateVersionModelImpl.setUserId(_defaultUserId);
-		ddmTemplateVersionModelImpl.setCreateDate(nextFutureDate());
-		ddmTemplateVersionModelImpl.setTemplateId(_defaultJournalDDMTemplateId);
-		ddmTemplateVersionModelImpl.setClassPK(_defaultJournalDDMStructureId);
-		ddmTemplateVersionModelImpl.setClassNameId(
-			getClassNameId(DDMStructure.class));
-		ddmTemplateVersionModelImpl.setVersion(
-			DDMTemplateConstants.VERSION_DEFAULT);
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append(_DEFAULT_JOURNAL_DDMSTRUCTUREKEY);
-		sb.append("</name></root>");
-
-		ddmTemplateVersionModelImpl.setName(sb.toString());
-
-		ddmTemplateVersionModelImpl.setStatusByUserId(_defaultUserId);
-		ddmTemplateVersionModelImpl.setStatusDate(nextFutureDate());
-
-		return ddmTemplateVersionModelImpl;
-	}
-
 	public DDMStructureLayoutModel newDefaultDLDDMStructureLayoutModel() {
 		return newDDMStructureLayoutModel(
 			_globalGroupId, _defaultUserId, _defaultDLDDMStructureVersionId,
@@ -1866,6 +1835,37 @@ public class DataFactory {
 		return newDDMTemplateModel(
 			_globalGroupId, _defaultUserId, _defaultJournalDDMStructureId,
 			getClassNameId(JournalArticle.class), _defaultJournalDDMTemplateId);
+	}
+
+	public DDMTemplateVersionModel newDefaultJournalDDMTemplateVersionModel() {
+		DDMTemplateVersionModelImpl ddmTemplateVersionModelImpl =
+			new DDMTemplateVersionModelImpl();
+
+		ddmTemplateVersionModelImpl.setTemplateVersionId(_counter.get());
+		ddmTemplateVersionModelImpl.setGroupId(_globalGroupId);
+		ddmTemplateVersionModelImpl.setCompanyId(_companyId);
+		ddmTemplateVersionModelImpl.setUserId(_defaultUserId);
+		ddmTemplateVersionModelImpl.setCreateDate(nextFutureDate());
+		ddmTemplateVersionModelImpl.setTemplateId(_defaultJournalDDMTemplateId);
+		ddmTemplateVersionModelImpl.setClassPK(_defaultJournalDDMStructureId);
+		ddmTemplateVersionModelImpl.setClassNameId(
+			getClassNameId(DDMStructure.class));
+		ddmTemplateVersionModelImpl.setVersion(
+			DDMTemplateConstants.VERSION_DEFAULT);
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
+		sb.append(_DEFAULT_JOURNAL_DDMSTRUCTUREKEY);
+		sb.append("</name></root>");
+
+		ddmTemplateVersionModelImpl.setName(sb.toString());
+
+		ddmTemplateVersionModelImpl.setStatusByUserId(_defaultUserId);
+		ddmTemplateVersionModelImpl.setStatusDate(nextFutureDate());
+
+		return ddmTemplateVersionModelImpl;
 	}
 
 	public UserModel newDefaultUserModel() {
