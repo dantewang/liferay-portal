@@ -72,6 +72,11 @@ public interface OAuth {
 			boolean sendBody)
 		throws OAuthException;
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             OAuthToken}
+	 */
+	@Deprecated
 	public String randomizeToken(String token);
 
 	public void validateOAuthMessage(

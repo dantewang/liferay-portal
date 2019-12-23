@@ -298,6 +298,11 @@ public class V10aOAuth implements OAuth {
 		}
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             OAuthToken#randomizeToken}
+	 */
+	@Deprecated
 	@Override
 	public String randomizeToken(String token) {
 		return DigesterUtil.digestHex(
