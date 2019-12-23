@@ -20,7 +20,7 @@ import com.liferay.oauth.exception.OAuthApplicationWebsiteURLException;
 import com.liferay.oauth.model.OAuthApplication;
 import com.liferay.oauth.model.OAuthUser;
 import com.liferay.oauth.service.base.OAuthApplicationLocalServiceBaseImpl;
-import com.liferay.oauth.util.OAuth;
+import com.liferay.oauth.util.OAuthToken;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.dao.orm.custom.sql.CustomSQL;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -86,7 +86,8 @@ public class OAuthApplicationLocalServiceImpl
 
 		oAuthApplication.setConsumerKey(consumerKey);
 
-		oAuthApplication.setConsumerSecret(_oAuth.randomizeToken(consumerKey));
+		oAuthApplication.setConsumerSecret(
+			_oAuthToken.randomizeToken(consumerKey));
 		oAuthApplication.setAccessLevel(accessLevel);
 		oAuthApplication.setShareableAccessToken(shareableAccessToken);
 		oAuthApplication.setCallbackURI(callbackURI);
@@ -303,6 +304,6 @@ public class OAuthApplicationLocalServiceImpl
 	private CustomSQL _customSQL;
 
 	@Reference
-	private OAuth _oAuth;
+	private OAuthToken _oAuthToken;
 
 }

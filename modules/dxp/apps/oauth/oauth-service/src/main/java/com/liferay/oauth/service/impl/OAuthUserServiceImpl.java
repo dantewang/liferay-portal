@@ -18,8 +18,8 @@ import com.liferay.oauth.model.OAuthApplication;
 import com.liferay.oauth.model.OAuthUser;
 import com.liferay.oauth.service.base.OAuthUserServiceBaseImpl;
 import com.liferay.oauth.service.permission.OAuthUserPermission;
-import com.liferay.oauth.util.OAuth;
 import com.liferay.oauth.util.OAuthActionKeys;
+import com.liferay.oauth.util.OAuthToken;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
@@ -58,10 +58,10 @@ public class OAuthUserServiceImpl extends OAuthUserServiceBaseImpl {
 			return oAuthUser;
 		}
 
-		String accessToken = _oAuth.randomizeToken(
+		String accessToken = _oAuthToken.randomizeToken(
 			oAuthApplication.getConsumerKey());
 
-		String accessSecret = _oAuth.randomizeToken(
+		String accessSecret = _oAuthToken.randomizeToken(
 			consumerKey.concat(accessToken));
 
 		return oAuthUserLocalService.addOAuthUser(
@@ -84,6 +84,6 @@ public class OAuthUserServiceImpl extends OAuthUserServiceBaseImpl {
 	}
 
 	@Reference
-	private OAuth _oAuth;
+	private OAuthToken _oAuthToken;
 
 }

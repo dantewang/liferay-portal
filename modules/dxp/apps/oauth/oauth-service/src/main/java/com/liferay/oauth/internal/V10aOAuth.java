@@ -29,6 +29,7 @@ import com.liferay.oauth.util.OAuthAccessor;
 import com.liferay.oauth.util.OAuthAccessorConstants;
 import com.liferay.oauth.util.OAuthConsumer;
 import com.liferay.oauth.util.OAuthMessage;
+import com.liferay.oauth.util.OAuthToken;
 import com.liferay.oauth.util.OAuthValidator;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.SingleVMPool;
@@ -149,13 +150,14 @@ public class V10aOAuth implements OAuth {
 
 		String consumerKey = oAuthApplication.getConsumerKey();
 
-		String token = randomizeToken(consumerKey);
+		String token = _oAuthToken.randomizeToken(consumerKey);
 
 		oAuthAccessor.setAccessToken(token);
 
 		oAuthAccessor.setRequestToken(null);
 
-		String tokenSecret = randomizeToken(consumerKey.concat(token));
+		String tokenSecret = _oAuthToken.randomizeToken(
+			consumerKey.concat(token));
 
 		oAuthAccessor.setTokenSecret(tokenSecret);
 
@@ -194,11 +196,12 @@ public class V10aOAuth implements OAuth {
 
 		oAuthAccessor.setAccessToken(null);
 
-		String token = randomizeToken(consumerKey);
+		String token = _oAuthToken.randomizeToken(consumerKey);
 
 		oAuthAccessor.setRequestToken(token);
 
-		String tokenSecret = randomizeToken(consumerKey.concat(token));
+		String tokenSecret = _oAuthToken.randomizeToken(
+			consumerKey.concat(token));
 
 		oAuthAccessor.setTokenSecret(tokenSecret);
 
@@ -396,6 +399,9 @@ public class V10aOAuth implements OAuth {
 
 	@Reference
 	private OAuthApplicationLocalService _oAuthApplicationLocalService;
+
+	@Reference
+	private OAuthToken _oAuthToken;
 
 	@Reference
 	private OAuthUserLocalService _oAuthUserLocalService;
