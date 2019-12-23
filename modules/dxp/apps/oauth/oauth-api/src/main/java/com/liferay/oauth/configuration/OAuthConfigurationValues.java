@@ -21,9 +21,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
  */
 public class OAuthConfigurationValues {
 
-	public static final String OAUTH_CLASS_NAME = GetterUtil.getString(
-		OAuthConfigurationUtil.get("oauth.class.name"));
-
 	public static final String OAUTH_REALM = GetterUtil.getString(
 		OAuthConfigurationUtil.get("oauth.realm"));
 
