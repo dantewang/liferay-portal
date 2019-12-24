@@ -141,10 +141,17 @@ public abstract class BaseUpgradeCompanyId extends UpgradeProcess {
 		protected List<Long> getCompanyIds(Connection connection)
 			throws SQLException {
 
+			return getCompanyIds(connection, "Company");
+		}
+
+		protected List<Long> getCompanyIds(
+				Connection connection, String tableName)
+			throws SQLException {
+
 			List<Long> companyIds = new ArrayList<>();
 
 			try (PreparedStatement ps = connection.prepareStatement(
-					"select companyId from Company");
+					"select distinct companyId from " + tableName);
 				ResultSet rs = ps.executeQuery()) {
 
 				while (rs.next()) {
