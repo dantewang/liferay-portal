@@ -94,14 +94,6 @@ public class DestinationConfiguration implements Serializable {
 		return _maximumQueueSize;
 	}
 
-	/**
-	 * @deprecated As of Judson (7.1.x), with no direct replacement
-	 */
-	@Deprecated
-	public RejectedExecutionHandler getRejectedExecutionHandler() {
-		return _rejectedExecutionHandler;
-	}
-
 	public int getWorkersCoreSize() {
 		return _workersCoreSize;
 	}
@@ -121,16 +113,6 @@ public class DestinationConfiguration implements Serializable {
 
 	public void setMaximumQueueSize(int maximumQueueSize) {
 		_maximumQueueSize = maximumQueueSize;
-	}
-
-	/**
-	 * @deprecated As of Judson (7.1.x), with no direct replacement
-	 */
-	@Deprecated
-	public void setRejectedExecutionHandler(
-		RejectedExecutionHandler rejectedExecutionHandler) {
-
-		_rejectedExecutionHandler = rejectedExecutionHandler;
 	}
 
 	public void setWorkersCoreSize(int workersCoreSize) {
