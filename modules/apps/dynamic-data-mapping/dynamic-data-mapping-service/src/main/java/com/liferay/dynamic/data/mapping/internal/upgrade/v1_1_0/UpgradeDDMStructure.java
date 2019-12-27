@@ -65,49 +65,7 @@ public class UpgradeDDMStructure extends UpgradeProcess {
 		upgradeDDMStructureVersionDefinition();
 	}
 
-	protected DDMFormRule getSetVisibleDDMFormRule(
-			String ddmFormFieldName, String visibilityExpression)
-		throws DDMExpressionException {
-
-		try {
-			DDMExpression<Boolean> ddmExpression =
-				_ddmExpressionFactory.createExpression(
-					CreateExpressionRequest.Builder.newBuilder(
-						visibilityExpression
-					).build());
-
-			Map<String, VariableDependencies> variableDependencies =
-				ddmExpression.getVariableDependenciesMap();
-
-			String condition = visibilityExpression;
-
-			for (String variable : variableDependencies.keySet()) {
-				condition = StringUtil.replace(
-					condition, new String[] {variable},
-					new String[] {
-						"getValue(" + StringUtil.quote(variable) + ")"
-					},
-					true);
-			}
-
-			return new DDMFormRule(
-				condition, "setVisible('" + ddmFormFieldName + "', true)");
-		}
-		catch (DDMExpressionException ddmee) {
-			_log.error(
-				String.format(
-					"Unable to upgrade the visibility expression \"%s\" to a " +
-						"form rule",
-					visibilityExpression),
-				ddmee);
-
-			throw ddmee;
-		}
-	}
-
-	protected String updateDefinition(String definition)
-		throws PortalException {
-
+	protected String updateDefinition(String definition) {
 		DDMFormDeserializerDeserializeRequest.Builder deserializerBuilder =
 			DDMFormDeserializerDeserializeRequest.Builder.newBuilder(
 				definition);
@@ -131,8 +89,9 @@ public class UpgradeDDMStructure extends UpgradeProcess {
 				continue;
 			}
 
-			DDMFormRule ddmFormRule = getSetVisibleDDMFormRule(
-				ddmFormField.getName(), visibilityExpression);
+			DDMFormRule ddmFormRule = new DDMFormRule(
+				visibilityExpression,
+				"setVisible('" + ddmFormField.getName() + "', true)");
 
 			ddmFormRules.add(ddmFormRule);
 
