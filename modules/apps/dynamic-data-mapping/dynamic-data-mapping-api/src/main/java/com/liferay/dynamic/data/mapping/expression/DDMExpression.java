@@ -16,9 +16,6 @@ package com.liferay.dynamic.data.mapping.expression;
 
 import com.liferay.dynamic.data.mapping.expression.model.Expression;
 
-import java.util.Collections;
-import java.util.Map;
-
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
