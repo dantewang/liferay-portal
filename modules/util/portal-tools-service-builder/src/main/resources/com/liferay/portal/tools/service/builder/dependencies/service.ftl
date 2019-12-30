@@ -8,7 +8,6 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
 import com.liferay.portal.kernel.security.access.control.AccessControlled;
 import com.liferay.portal.kernel.service.Base${sessionTypeName}Service;
-import com.liferay.portal.kernel.service.PermissionedModelLocalService;
 import com.liferay.portal.kernel.service.PersistedModelLocalService;
 import com.liferay.portal.kernel.service.PersistedResourcedModelLocalService;
 import com.liferay.portal.kernel.service.change.tracking.CTService;
@@ -103,9 +102,7 @@ public interface ${entity.name}${sessionTypeName}Service
 			, CTService<${entity.name}>
 		</#if>
 
-		<#if entity.isPermissionedModel()>
-			, PermissionedModelLocalService
-		<#elseif entity.isResourcedModel()>
+		<#if entity.isResourcedModel()>
 			, PersistedModelLocalService
 			, PersistedResourcedModelLocalService
 		<#elseif entity.versionEntity??>

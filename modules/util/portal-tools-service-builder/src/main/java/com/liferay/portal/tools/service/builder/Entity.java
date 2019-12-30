@@ -1090,14 +1090,6 @@ public class Entity implements Comparable<Entity> {
 		return StringUtil.equalsIgnoreCase("long", entityColumn.getType());
 	}
 
-	public boolean isPermissionedModel() {
-		if (hasEntityColumn("resourceBlockId")) {
-			return true;
-		}
-
-		return false;
-	}
-
 	public boolean isPortalReference() {
 		return _portalReference;
 	}

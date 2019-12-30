@@ -565,69 +565,41 @@ public int countBy${entityFinder.name}(
 			</#if>
 		</#list>
 
-		<#if entity.isPermissionedModel()>
-			<#include "persistence_impl_count_by_query.ftl">
+		StringBundler query = new StringBundler(${entityColumns?size + 1});
 
-			String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(), ${entity.name}.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, _FILTER_ENTITY_TABLE_FILTER_USERID_COLUMN<#if entityFinder.hasEntityColumn("groupId")>, groupId</#if>);
+		query.append(_FILTER_SQL_COUNT_${entity.alias?upper_case}_WHERE);
 
-			Session session = null;
+		<#assign sqlQuery = true />
 
-			try {
-				session = openSession();
+		<#include "persistence_impl_finder_cols.ftl">
 
-				Query q = session.createQuery(sql);
+		<#assign sqlQuery = false />
 
-				QueryPos qPos = QueryPos.getInstance(q);
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(), ${entity.name}.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN<#if entityFinder.hasEntityColumn("groupId")>, groupId</#if>);
 
-				<@finderQPos />
+		Session session = null;
 
-				Long count = (Long)q.uniqueResult();
+		try {
+			session = openSession();
 
-				return count.intValue();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		<#else>
-			StringBundler query = new StringBundler(${entityColumns?size + 1});
+			SQLQuery q = session.createSynchronizedSQLQuery(sql);
 
-			query.append(_FILTER_SQL_COUNT_${entity.alias?upper_case}_WHERE);
+			q.addScalar(COUNT_COLUMN_NAME, com.liferay.portal.kernel.dao.orm.Type.LONG);
 
-			<#assign sqlQuery = true />
+			QueryPos qPos = QueryPos.getInstance(q);
 
-			<#include "persistence_impl_finder_cols.ftl">
+			<@finderQPos />
 
-			<#assign sqlQuery = false />
+			Long count = (Long)q.uniqueResult();
 
-			String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(), ${entity.name}.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN<#if entityFinder.hasEntityColumn("groupId")>, groupId</#if>);
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				SQLQuery q = session.createSynchronizedSQLQuery(sql);
-
-				q.addScalar(COUNT_COLUMN_NAME, com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				<@finderQPos />
-
-				Long count = (Long)q.uniqueResult();
-
-				return count.intValue();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		</#if>
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
 	}
 
 	<#if entityFinder.hasArrayableOperator()>
@@ -724,89 +696,51 @@ public int countBy${entityFinder.name}(
 				</#if>
 			</#list>
 
-			<#if entity.isPermissionedModel()>
-				<#include "persistence_impl_count_by_arrayable_query.ftl">
+			StringBundler query = new StringBundler();
 
-				String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(), ${entity.name}.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, _FILTER_ENTITY_TABLE_FILTER_USERID_COLUMN
+			query.append(_FILTER_SQL_COUNT_${entity.alias?upper_case}_WHERE);
 
-				<#if entityFinder.hasEntityColumn("groupId")>,
-					<#if entityFinder.getEntityColumn("groupId").hasArrayableOperator()>
-						groupIds
-					<#else>
-						groupId
-					</#if>
-				</#if>);
+			<#assign sqlQuery = true />
 
-				Session session = null;
+			<#include "persistence_impl_finder_arrayable_cols.ftl">
 
-				try {
-					session = openSession();
+			<#assign sqlQuery = false />
 
-					Query q = session.createQuery(sql);
+			String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(), ${entity.name}.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN
 
-					<#if bindParameter(entityColumns)>
-						QueryPos qPos = QueryPos.getInstance(q);
-					</#if>
+			<#if entityFinder.hasEntityColumn("groupId")>,
+				<#if entityFinder.getEntityColumn("groupId").hasArrayableOperator()>
+					groupIds
+				<#else>
+					groupId
+				</#if>
+			</#if>);
 
-					<@finderQPos _arrayable=true />
+			Session session = null;
 
-					Long count = (Long)q.uniqueResult();
+			try {
+				session = openSession();
 
-					return count.intValue();
-				}
-				catch (Exception e) {
-					throw processException(e);
-				}
-				finally {
-					closeSession(session);
-				}
-			<#else>
-				StringBundler query = new StringBundler();
+				SQLQuery q = session.createSynchronizedSQLQuery(sql);
 
-				query.append(_FILTER_SQL_COUNT_${entity.alias?upper_case}_WHERE);
+				q.addScalar(COUNT_COLUMN_NAME, com.liferay.portal.kernel.dao.orm.Type.LONG);
 
-				<#assign sqlQuery = true />
+				<#if bindParameter(entityColumns)>
+					QueryPos qPos = QueryPos.getInstance(q);
+				</#if>
 
-				<#include "persistence_impl_finder_arrayable_cols.ftl">
+				<@finderQPos _arrayable=true />
 
-				<#assign sqlQuery = false />
+				Long count = (Long)q.uniqueResult();
 
-				String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(), ${entity.name}.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN
-
-				<#if entityFinder.hasEntityColumn("groupId")>,
-					<#if entityFinder.getEntityColumn("groupId").hasArrayableOperator()>
-						groupIds
-					<#else>
-						groupId
-					</#if>
-				</#if>);
-
-				Session session = null;
-
-				try {
-					session = openSession();
-
-					SQLQuery q = session.createSynchronizedSQLQuery(sql);
-
-					q.addScalar(COUNT_COLUMN_NAME, com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-					<#if bindParameter(entityColumns)>
-						QueryPos qPos = QueryPos.getInstance(q);
-					</#if>
-
-					<@finderQPos _arrayable=true />
-
-					Long count = (Long)q.uniqueResult();
-
-					return count.intValue();
-				}
-				catch (Exception e) {
-					throw processException(e);
-				}
-				finally {
-					closeSession(session);
-				}
-			</#if>
+				return count.intValue();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
 		}
 	</#if>
 </#if>
