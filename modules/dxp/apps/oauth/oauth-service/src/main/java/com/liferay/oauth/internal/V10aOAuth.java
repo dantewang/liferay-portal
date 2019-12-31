@@ -64,11 +64,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.oauth.server.OAuthServlet;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Ivica Cardic
  * @author Raymond Augé
  * @author Igor Beslic
  */
+@Component(immediate = true, service = OAuth.class)
 public class V10aOAuth implements OAuth {
 
 	public V10aOAuth(OAuthValidator oAuthValidator) {
