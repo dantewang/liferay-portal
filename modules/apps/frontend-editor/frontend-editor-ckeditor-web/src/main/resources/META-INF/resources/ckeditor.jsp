@@ -24,7 +24,6 @@ String contents = (String)request.getAttribute(CKEditorConstants.ATTRIBUTE_NAMES
 String cssClass = GetterUtil.getString((String)request.getAttribute(CKEditorConstants.ATTRIBUTE_NAMESPACE + ":cssClass"));
 Map<String, Object> data = (Map<String, Object>)request.getAttribute(CKEditorConstants.ATTRIBUTE_NAMESPACE + ":data");
 String editorName = (String)request.getAttribute(CKEditorConstants.ATTRIBUTE_NAMESPACE + ":editorName");
-String initMethod = (String)request.getAttribute(CKEditorConstants.ATTRIBUTE_NAMESPACE + ":initMethod");
 boolean inlineEdit = GetterUtil.getBoolean((String)request.getAttribute(CKEditorConstants.ATTRIBUTE_NAMESPACE + ":inlineEdit"));
 String inlineEditSaveURL = GetterUtil.getString((String)request.getAttribute(CKEditorConstants.ATTRIBUTE_NAMESPACE + ":inlineEditSaveURL"));
 String name = GetterUtil.getString((String)request.getAttribute(CKEditorConstants.ATTRIBUTE_NAMESPACE + ":name"));
@@ -131,16 +130,7 @@ name = HtmlUtil.escapeJS(name);
 	var instancePendingData;
 
 	var getInitialContent = function() {
-		var data;
-
-		if (window['<%= HtmlUtil.escapeJS(namespace + initMethod) %>']) {
-			data = <%= HtmlUtil.escapeJS(namespace + initMethod) %>();
-		} else {
-			data =
-				'<%= (contents != null) ? HtmlUtil.escapeJS(contents) : StringPool.BLANK %>';
-		}
-
-		return data;
+		return '<%= (contents != null) ? HtmlUtil.escapeJS(contents) : StringPool.BLANK %>';
 	};
 
 	var onLocaleChangedHandler = function(event) {
