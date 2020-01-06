@@ -58,13 +58,6 @@ public class UserDisplayTag extends TagSupport {
 				"liferay-ui:user-display:displayStyle",
 				String.valueOf(_displayStyle));
 
-			if (Validator.isNull(_imageCssClass)) {
-				_imageCssClass = "img-circle";
-			}
-
-			httpServletRequest.setAttribute(
-				"liferay-ui:user-display:imageCssClass", _imageCssClass);
-
 			httpServletRequest.setAttribute(
 				"liferay-ui:user-display:showLink", String.valueOf(_showLink));
 			httpServletRequest.setAttribute(
@@ -134,10 +127,6 @@ public class UserDisplayTag extends TagSupport {
 		_endPage = endPage;
 	}
 
-	public void setImageCssClass(String imageCssClass) {
-		_imageCssClass = imageCssClass;
-	}
-
 	public void setMarkupView(String markupView) {
 		_markupView = markupView;
 	}
@@ -201,7 +190,6 @@ public class UserDisplayTag extends TagSupport {
 	private boolean _author;
 	private int _displayStyle = 1;
 	private String _endPage;
-	private String _imageCssClass;
 	private String _markupView;
 	private boolean _showLink = true;
 	private boolean _showUserDetails = true;
