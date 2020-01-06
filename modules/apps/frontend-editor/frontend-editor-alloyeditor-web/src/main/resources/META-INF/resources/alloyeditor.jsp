@@ -25,7 +25,6 @@ String contentsLanguageId = (String)request.getAttribute(AlloyEditorConstants.AT
 String cssClass = GetterUtil.getString((String)request.getAttribute(AlloyEditorConstants.ATTRIBUTE_NAMESPACE + ":cssClass"));
 Map<String, Object> data = (Map<String, Object>)request.getAttribute(AlloyEditorConstants.ATTRIBUTE_NAMESPACE + ":data");
 String editorName = (String)request.getAttribute(AlloyEditorConstants.ATTRIBUTE_NAMESPACE + ":editorName");
-String initMethod = (String)request.getAttribute(AlloyEditorConstants.ATTRIBUTE_NAMESPACE + ":initMethod");
 String name = namespace + GetterUtil.getString((String)request.getAttribute(AlloyEditorConstants.ATTRIBUTE_NAMESPACE + ":name"));
 String onBlurMethod = (String)request.getAttribute(AlloyEditorConstants.ATTRIBUTE_NAMESPACE + ":onBlurMethod");
 String onChangeMethod = (String)request.getAttribute(AlloyEditorConstants.ATTRIBUTE_NAMESPACE + ":onChangeMethod");
@@ -175,16 +174,7 @@ name = HtmlUtil.escapeJS(name);
 	};
 
 	var getInitialContent = function() {
-		var data;
-
-		if (window['<%= HtmlUtil.escapeJS(namespace + initMethod) %>']) {
-			data = <%= HtmlUtil.escapeJS(namespace + initMethod) %>();
-		} else {
-			data =
-				'<%= (contents != null) ? HtmlUtil.escapeJS(contents) : StringPool.BLANK %>';
-		}
-
-		return data;
+		return '<%= (contents != null) ? HtmlUtil.escapeJS(contents) : StringPool.BLANK %>';
 	};
 
 	var createInstance = function() {

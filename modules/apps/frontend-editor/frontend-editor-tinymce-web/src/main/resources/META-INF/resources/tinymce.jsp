@@ -31,7 +31,6 @@ contentsLanguageId = LocaleUtil.toLanguageId(contentsLocale);
 String cssClass = GetterUtil.getString((String)request.getAttribute(TinyMCEEditorConstants.ATTRIBUTE_NAMESPACE + ":cssClass"));
 Map<String, Object> data = (Map<String, Object>)request.getAttribute(TinyMCEEditorConstants.ATTRIBUTE_NAMESPACE + ":data");
 String editorName = (String)request.getAttribute(TinyMCEEditorConstants.ATTRIBUTE_NAMESPACE + ":editorName");
-String initMethod = (String)request.getAttribute(TinyMCEEditorConstants.ATTRIBUTE_NAMESPACE + ":initMethod");
 String name = namespace + GetterUtil.getString((String)request.getAttribute(TinyMCEEditorConstants.ATTRIBUTE_NAMESPACE + ":name"));
 
 String onChangeMethod = (String)request.getAttribute(TinyMCEEditorConstants.ATTRIBUTE_NAMESPACE + ":onChangeMethod");
@@ -79,16 +78,7 @@ name = HtmlUtil.escapeJS(name);
 	};
 
 	var getInitialContent = function() {
-		var data;
-
-		if (window['<%= HtmlUtil.escapeJS(namespace + initMethod) %>']) {
-			data = <%= HtmlUtil.escapeJS(namespace + initMethod) %>();
-		} else {
-			data =
-				'<%= (contents != null) ? HtmlUtil.escapeJS(contents) : StringPool.BLANK %>';
-		}
-
-		return data;
+		return '<%= (contents != null) ? HtmlUtil.escapeJS(contents) : StringPool.BLANK %>';
 	};
 
 	window['<%= name %>'] = {
@@ -283,10 +273,6 @@ name = HtmlUtil.escapeJS(name);
 		},
 
 		initInstanceCallback: function() {
-			<c:if test="<%= (contents == null) && Validator.isNotNull(initMethod) %>">
-				window['<%= name %>'].init(getInitialContent());
-			</c:if>
-
 			var iframe = A.one('#<%= name %>_ifr');
 
 			if (iframe) {
