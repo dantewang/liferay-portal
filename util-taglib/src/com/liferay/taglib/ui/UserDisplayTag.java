@@ -53,8 +53,6 @@ public class UserDisplayTag extends TagSupport {
 				(HttpServletRequest)pageContext.getRequest();
 
 			httpServletRequest.setAttribute(
-				"liferay-ui:user-display:author", String.valueOf(_author));
-			httpServletRequest.setAttribute(
 				"liferay-ui:user-display:displayStyle",
 				String.valueOf(_displayStyle));
 
@@ -113,10 +111,6 @@ public class UserDisplayTag extends TagSupport {
 		catch (Exception e) {
 			throw new JspException(e);
 		}
-	}
-
-	public void setAuthor(boolean author) {
-		_author = author;
 	}
 
 	public void setDisplayStyle(Object displayStyle) {
@@ -187,7 +181,6 @@ public class UserDisplayTag extends TagSupport {
 		return "/html/taglib/ui/user_display/start.jsp";
 	}
 
-	private boolean _author;
 	private int _displayStyle = 1;
 	private String _endPage;
 	private String _markupView;

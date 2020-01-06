@@ -17,7 +17,6 @@
 <%@ include file="/html/common/init.jsp" %>
 
 <%
-boolean author = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:user-display:author"));
 int displayStyle = GetterUtil.getInteger((String)request.getAttribute("liferay-ui:user-display:displayStyle"));
 boolean showLink = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:user-display:showLink"));
 boolean showUserDetails = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:user-display:showUserDetails"));
