@@ -81,7 +81,7 @@ String notificationTemplateSubject = BeanPropertiesUtil.getString(calendarNotifi
 		<aui:field-wrapper label="body">
 			<liferay-ui:input-editor
 				contents="<%= notificationTemplateBody %>"
-				editorImpl="ckeditor"
+				editorName="ckeditor"
 			/>
 
 			<aui:input name="body" type="hidden" value="<%= notificationTemplateBody %>" />

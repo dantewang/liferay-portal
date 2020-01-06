@@ -199,15 +199,6 @@ public class InputEditorTag extends BaseValidatorTagSupport {
 		_data = data;
 	}
 
-	/**
-	 * @deprecated As of Wilberforce (7.0.x), replaced by {@link
-	 *             #setEditorName(String)}
-	 */
-	@Deprecated
-	public void setEditorImpl(String editorImpl) {
-		_editorName = PropsUtil.get(editorImpl);
-	}
-
 	public void setEditorName(String editorName) {
 		_editorName = editorName;
 	}
