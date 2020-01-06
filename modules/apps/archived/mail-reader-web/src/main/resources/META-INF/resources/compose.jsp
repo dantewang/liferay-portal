@@ -107,7 +107,7 @@ else {
 			<aui:field-wrapper label="body">
 				<liferay-ui:input-editor
 					contents="<%= body %>"
-					editorImpl="<%= EDITOR_WYSIWYG_IMPL_KEY %>"
+					editorName="<%= EDITOR_WYSIWYG_IMPL_KEY %>"
 					toolbarSet="email"
 					width="100%"
 				/>

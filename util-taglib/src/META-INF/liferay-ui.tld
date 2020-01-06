@@ -1648,12 +1648,6 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<description>Deprecated as of 7.0.0, replaced by the attribute <![CDATA[<code>editorName</code>]]>.</description>
-			<name>editorImpl</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
 			<name>editorName</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
