@@ -12,7 +12,7 @@
  *
  */
 
-package com.liferay.oauth.util;
+package com.liferay.oauth.web.internal.util;
 
 import com.liferay.oauth.constants.OAuthConstants;
 import com.liferay.petra.string.StringPool;
