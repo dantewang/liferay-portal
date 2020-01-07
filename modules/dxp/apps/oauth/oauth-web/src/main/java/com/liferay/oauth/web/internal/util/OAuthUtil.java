@@ -15,13 +15,23 @@
 package com.liferay.oauth.web.internal.util;
 
 import com.liferay.oauth.constants.OAuthConstants;
+import com.liferay.oauth.util.OAuth;
+import com.liferay.oauth.util.OAuthAccessor;
+import com.liferay.oauth.util.OAuthMessage;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.exception.PortalException;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Ivica Cardic
  * @author Raymond Augé
  * @author Igor Beslic
  */
+@Component(immediate = true, service = {})
 public class OAuthUtil {
 
 	public static String getAccessTokenURI() {
@@ -40,12 +50,29 @@ public class OAuthUtil {
 		return _authorizeURI;
 	}
 
+	public static OAuthAccessor getOAuthAccessor(OAuthMessage oAuthMessage)
+		throws PortalException {
+
+		return _oAuth.getOAuthAccessor(oAuthMessage);
+	}
+
+	public static OAuthMessage getOAuthMessage(
+		HttpServletRequest httpServletRequest, String url) {
+
+		return _oAuth.getOAuthMessage(httpServletRequest, url);
+	}
+
 	public static String getRequestTokenURI() {
 		if (_requestTokenURI == null) {
 			_requestTokenURI = _getOAuthURI("request_token");
 		}
 
 		return _requestTokenURI;
+	}
+
+	@Reference(unbind = "-")
+	protected void setOAuth(OAuth oAuth) {
+		_oAuth = oAuth;
 	}
 
 	private static String _getOAuthURI(String uriSuffix) {
@@ -71,6 +98,7 @@ public class OAuthUtil {
 
 	private static String _accessTokenURI;
 	private static String _authorizeURI;
+	private static OAuth _oAuth;
 	private static String _requestTokenURI;
 
 }
