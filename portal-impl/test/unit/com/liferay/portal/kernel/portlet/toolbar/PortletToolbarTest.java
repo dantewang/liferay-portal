@@ -17,6 +17,7 @@ package com.liferay.portal.kernel.portlet.toolbar;
 import com.liferay.portal.kernel.portlet.toolbar.contributor.locator.PortletToolbarContributorLocator;
 import com.liferay.portal.kernel.servlet.PortletServlet;
 import com.liferay.portal.kernel.servlet.taglib.ui.Menu;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -47,9 +48,8 @@ public class PortletToolbarTest {
 
 	@Test
 	public void testGetPortletTitleMenus() {
-		PortalUtil portalUtil = new PortalUtil();
-
-		portalUtil.setPortal(new PortalImpl());
+		ReflectionTestUtil.setFieldValue(
+			PortalUtil.class, "_portal", new PortalImpl());
 
 		PropsUtil.setProps(new PropsImpl());
 

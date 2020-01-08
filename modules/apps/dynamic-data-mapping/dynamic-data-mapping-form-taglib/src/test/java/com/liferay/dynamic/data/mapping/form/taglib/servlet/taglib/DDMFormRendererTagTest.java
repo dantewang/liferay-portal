@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -433,9 +434,8 @@ public class DDMFormRendererTagTest extends PowerMockito {
 	}
 
 	protected void setUpPortalUtil() {
-		PortalUtil portalUtil = new PortalUtil();
-
-		portalUtil.setPortal(mock(Portal.class));
+		ReflectionTestUtil.setFieldValue(
+			PortalUtil.class, "_portal", mock(Portal.class));
 
 		when(
 			PortalUtil.getHttpServletRequest(Matchers.any(RenderRequest.class))

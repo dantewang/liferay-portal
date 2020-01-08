@@ -25,6 +25,7 @@ import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.dynamic.data.mapping.util.DDMFormFactory;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -192,8 +193,6 @@ public class CopyFormInstanceFormInstanceMVCActionCommandTest
 	}
 
 	protected void setUpPortalUtil() {
-		PortalUtil portalUtil = new PortalUtil();
-
 		Portal portal = mock(Portal.class);
 
 		ResourceBundle resourceBundle = mock(ResourceBundle.class);
@@ -204,7 +203,7 @@ public class CopyFormInstanceFormInstanceMVCActionCommandTest
 			resourceBundle
 		);
 
-		portalUtil.setPortal(portal);
+		ReflectionTestUtil.setFieldValue(PortalUtil.class, "_portal", portal);
 	}
 
 	protected void setUpResourceBundleUtil() {

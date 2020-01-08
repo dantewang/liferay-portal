@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalService;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -456,9 +457,8 @@ public class DDMFormDisplayContextTest extends PowerMockito {
 	}
 
 	protected void setUpPortalUtil() {
-		PortalUtil portalUtil = new PortalUtil();
-
-		portalUtil.setPortal(mock(Portal.class));
+		ReflectionTestUtil.setFieldValue(
+			PortalUtil.class, "_portal", mock(Portal.class));
 
 		when(
 			PortalUtil.getHttpServletRequest(Matchers.any(RenderRequest.class))

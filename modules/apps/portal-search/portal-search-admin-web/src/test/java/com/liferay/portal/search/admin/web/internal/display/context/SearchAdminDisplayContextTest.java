@@ -17,6 +17,7 @@ package com.liferay.portal.search.admin.web.internal.display.context;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.NavigationItemList;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.language.Language;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.Portal;
@@ -264,9 +265,7 @@ public class SearchAdminDisplayContextTest {
 			Mockito.anyString(), Mockito.anyString()
 		);
 
-		PortalUtil portalUtil = new PortalUtil();
-
-		portalUtil.setPortal(_portal);
+		ReflectionTestUtil.setFieldValue(PortalUtil.class, "_portal", _portal);
 	}
 
 	protected Http http;

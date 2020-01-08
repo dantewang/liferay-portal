@@ -38,6 +38,7 @@ import com.liferay.dynamic.data.mapping.storage.Field;
 import com.liferay.dynamic.data.mapping.storage.Fields;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.json.JSONFactoryImpl;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -762,8 +763,6 @@ public class DDMImplTest extends BaseDDMTestCase {
 	}
 
 	protected void setUpPortalUtil() {
-		PortalUtil portalUtil = new PortalUtil();
-
 		Portal portal = mock(Portal.class);
 
 		ResourceBundle resourceBundle = mock(ResourceBundle.class);
@@ -774,7 +773,7 @@ public class DDMImplTest extends BaseDDMTestCase {
 			resourceBundle
 		);
 
-		portalUtil.setPortal(portal);
+		ReflectionTestUtil.setFieldValue(PortalUtil.class, "_portal", portal);
 	}
 
 	protected void testValues(

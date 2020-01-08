@@ -19,6 +19,7 @@ import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.LocalizedValue;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -374,8 +375,6 @@ public class DDMStructureImplTest extends BaseDDMTestCase {
 	}
 
 	protected void setUpPortalUtil() {
-		PortalUtil portalUtil = new PortalUtil();
-
 		Portal portal = mock(Portal.class);
 
 		ResourceBundle resourceBundle = mock(ResourceBundle.class);
@@ -386,7 +385,7 @@ public class DDMStructureImplTest extends BaseDDMTestCase {
 			resourceBundle
 		);
 
-		portalUtil.setPortal(portal);
+		ReflectionTestUtil.setFieldValue(PortalUtil.class, "_portal", portal);
 	}
 
 }

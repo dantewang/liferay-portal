@@ -30,6 +30,7 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 import com.liferay.dynamic.data.mapping.test.util.DDMFormFieldTypeSettingsTestUtil;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.json.JSONFactoryImpl;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
@@ -170,8 +171,6 @@ public class DDMFormJSONDeserializerTest
 	}
 
 	protected void setUpPortalUtil() {
-		PortalUtil portalUtil = new PortalUtil();
-
 		Portal portal = mock(Portal.class);
 
 		ResourceBundle resourceBundle = mock(ResourceBundle.class);
@@ -182,7 +181,7 @@ public class DDMFormJSONDeserializerTest
 			resourceBundle
 		);
 
-		portalUtil.setPortal(portal);
+		ReflectionTestUtil.setFieldValue(PortalUtil.class, "_portal", portal);
 	}
 
 	@Override

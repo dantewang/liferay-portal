@@ -41,6 +41,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
@@ -1079,8 +1080,6 @@ public class DDMFormPagesTemplateContextFactoryTest extends PowerMockito {
 	}
 
 	protected void setUpPortalUtil() {
-		PortalUtil portalUtil = new PortalUtil();
-
 		Portal portal = mock(Portal.class);
 
 		ResourceBundle resourceBundle = mock(ResourceBundle.class);
@@ -1103,7 +1102,7 @@ public class DDMFormPagesTemplateContextFactoryTest extends PowerMockito {
 			resourceBundle
 		);
 
-		portalUtil.setPortal(portal);
+		ReflectionTestUtil.setFieldValue(PortalUtil.class, "_portal", portal);
 	}
 
 	protected void setUpResourceBundle() {

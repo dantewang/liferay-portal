@@ -364,9 +364,8 @@ public class DefaultExportImportContentProcessorTest {
 
 		};
 
-		PortalUtil portalUtil = new PortalUtil();
-
-		portalUtil.setPortal(portalImpl);
+		ReflectionTestUtil.setFieldValue(
+			PortalUtil.class, "_portal", portalImpl);
 
 		Portal originalPortal = ReflectionTestUtil.getAndSetFieldValue(
 			_layoutReferencesExportImportContentProcessor, "_portal",
@@ -436,7 +435,8 @@ public class DefaultExportImportContentProcessorTest {
 			PropsValues.LAYOUT_FRIENDLY_URL_PRIVATE_USER_SERVLET_MAPPING +
 				StringPool.SLASH);
 
-		portalUtil.setPortal(new PortalImpl());
+		ReflectionTestUtil.setFieldValue(
+			PortalUtil.class, "_portal", new PortalImpl());
 
 		ReflectionTestUtil.setFieldValue(
 			_layoutReferencesExportImportContentProcessor, "_portal",
@@ -791,9 +791,8 @@ public class DefaultExportImportContentProcessorTest {
 
 		};
 
-		PortalUtil portalUtil = new PortalUtil();
-
-		portalUtil.setPortal(portalImpl);
+		ReflectionTestUtil.setFieldValue(
+			PortalUtil.class, "_portal", portalImpl);
 
 		String content = replaceParameters(
 			getContent("invalid_layout_references.txt"), _fileEntry);
@@ -829,7 +828,8 @@ public class DefaultExportImportContentProcessorTest {
 				noSuchLayoutExceptionThrown);
 		}
 
-		portalUtil.setPortal(new PortalImpl());
+		ReflectionTestUtil.setFieldValue(
+			PortalUtil.class, "_portal", new PortalImpl());
 	}
 
 	protected Layout addMultiLocaleLayout(Group group, boolean privateLayout)

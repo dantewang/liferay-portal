@@ -15,6 +15,7 @@
 package com.liferay.portal.search.admin.web.internal.display.context;
 
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -236,9 +237,7 @@ public class FieldMappingsDisplayContextTest {
 			Mockito.anyString(), Mockito.anyString()
 		);
 
-		PortalUtil portalUtil = new PortalUtil();
-
-		portalUtil.setPortal(_portal);
+		ReflectionTestUtil.setFieldValue(PortalUtil.class, "_portal", _portal);
 	}
 
 	protected Http http;

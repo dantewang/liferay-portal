@@ -256,8 +256,6 @@ public class TrackbackMVCActionCommandTest extends PowerMockito {
 	}
 
 	protected void setUpPortalUtil() throws Exception {
-		PortalUtil portalUtil = new PortalUtil();
-
 		Portal portal = mock(Portal.class);
 
 		when(
@@ -278,7 +276,7 @@ public class TrackbackMVCActionCommandTest extends PowerMockito {
 			_mockHttpServletResponse
 		);
 
-		portalUtil.setPortal(portal);
+		ReflectionTestUtil.setFieldValue(PortalUtil.class, "_portal", portal);
 	}
 
 	protected void setUpPortletPreferencesFactoryUtil() throws Exception {
