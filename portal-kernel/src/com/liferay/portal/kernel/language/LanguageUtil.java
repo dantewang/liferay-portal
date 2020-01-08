@@ -17,6 +17,7 @@ package com.liferay.portal.kernel.language;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.ResourceBundleLoader;
+import com.liferay.portal.kernel.util.ServiceProxyFactory;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
@@ -373,10 +374,16 @@ public class LanguageUtil {
 			httpServletRequest, httpServletResponse, locale);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public void setLanguage(Language language) {
 		_language = language;
 	}
 
-	private static Language _language;
+	private static volatile Language _language =
+		ServiceProxyFactory.newServiceTrackedInstance(
+			Language.class, LanguageUtil.class, "_language", false);
 
 }
