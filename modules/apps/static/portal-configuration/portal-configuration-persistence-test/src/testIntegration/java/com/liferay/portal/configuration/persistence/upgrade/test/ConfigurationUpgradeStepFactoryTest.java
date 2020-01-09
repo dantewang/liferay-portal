@@ -58,36 +58,21 @@ public class ConfigurationUpgradeStepFactoryTest {
 
 	@Test
 	public void testCreateUpgradeStep() throws Exception {
-		String oldPid = "test.old.pid";
-		String newPid = "test.new.pid";
-
 		Configuration configuration = _configurationAdmin.getConfiguration(
-			oldPid);
+			_OLD_PID);
 
-		Assert.assertTrue(_persistenceManager.exists(oldPid));
+		Assert.assertTrue(_persistenceManager.exists(_OLD_PID));
 
 		UpgradeStep upgradeStep =
-			_configurationUpgradeStepFactory.createUpgradeStep(oldPid, newPid);
+			_configurationUpgradeStepFactory.createUpgradeStep(
+				_OLD_PID, _NEW_PID);
 
-		upgradeStep.upgrade(
-			new DBProcessContext() {
+		upgradeStep.upgrade(_DB_PROCESS_CONTEXT);
 
-				@Override
-				public DBContext getDBContext() {
-					return new DBContext();
-				}
+		Assert.assertFalse(_persistenceManager.exists(_OLD_PID));
+		Assert.assertTrue(_persistenceManager.exists(_NEW_PID));
 
-				@Override
-				public OutputStream getOutputStream() {
-					return null;
-				}
-
-			});
-
-		Assert.assertFalse(_persistenceManager.exists(oldPid));
-		Assert.assertTrue(_persistenceManager.exists(newPid));
-
-		_persistenceManager.delete(newPid);
+		_persistenceManager.delete(_NEW_PID);
 
 		ConfigurationTestUtil.deleteConfiguration(configuration);
 	}
@@ -96,7 +81,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 	public void testCreateUpgradeStepWithFactory() throws Exception {
 		Configuration configuration =
 			_configurationAdmin.createFactoryConfiguration(
-				"test.old.pid", StringPool.QUESTION);
+				_OLD_PID, StringPool.QUESTION);
 
 		String oldPid = configuration.getPid();
 
@@ -125,25 +110,11 @@ public class ConfigurationUpgradeStepFactoryTest {
 
 		UpgradeStep upgradeStep =
 			_configurationUpgradeStepFactory.createUpgradeStep(
-				"test.old.pid", "test.new.pid");
+				_OLD_PID, _NEW_PID);
 
-		upgradeStep.upgrade(
-			new DBProcessContext() {
+		upgradeStep.upgrade(_DB_PROCESS_CONTEXT);
 
-				@Override
-				public DBContext getDBContext() {
-					return new DBContext();
-				}
-
-				@Override
-				public OutputStream getOutputStream() {
-					return null;
-				}
-
-			});
-
-		String newPid = StringUtil.replace(
-			oldPid, "test.old.pid", "test.new.pid");
+		String newPid = StringUtil.replace(oldPid, _OLD_PID, _NEW_PID);
 
 		Assert.assertFalse(_persistenceManager.exists(oldPid));
 		Assert.assertTrue(_persistenceManager.exists(newPid));
@@ -152,6 +123,25 @@ public class ConfigurationUpgradeStepFactoryTest {
 
 		ConfigurationTestUtil.deleteConfiguration(configuration);
 	}
+
+	private static final DBProcessContext _DB_PROCESS_CONTEXT =
+		new DBProcessContext() {
+
+			@Override
+			public DBContext getDBContext() {
+				return new DBContext();
+			}
+
+			@Override
+			public OutputStream getOutputStream() {
+				return null;
+			}
+
+		};
+
+	private static final String _NEW_PID = "test.new.pid";
+
+	private static final String _OLD_PID = "test.old.pid";
 
 	@Inject
 	private ConfigurationAdmin _configurationAdmin;
