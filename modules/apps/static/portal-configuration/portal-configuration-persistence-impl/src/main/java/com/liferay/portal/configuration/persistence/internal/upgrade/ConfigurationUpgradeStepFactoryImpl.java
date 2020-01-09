@@ -75,9 +75,8 @@ public class ConfigurationUpgradeStepFactoryImpl
 					if (_log.isWarnEnabled()) {
 						_log.warn(
 							StringBundler.concat(
-								"Unable to upgrade the oldPid ", oldFactoryPid,
-								" because the related data not exist in the ",
-								"Configuration_ table"));
+								"Unable to upgrade ", oldFactoryPid,
+								" because no associated configuration exists"));
 					}
 
 					return;
@@ -89,20 +88,18 @@ public class ConfigurationUpgradeStepFactoryImpl
 
 					dictionary.put("service.factoryPid", newFactoryPid);
 
-					String oldPid = (String)dictionary.get("service.pid");
+					String oldPid = dictionary.get("service.pid");
 
 					String newPid = StringUtil.replace(
 						oldPid, oldFactoryPid, newFactoryPid);
 
 					dictionary.put("service.pid", newPid);
 
-					String oldFileName = (String)dictionary.get(
-						"felix.fileinstall.filename");
-
 					dictionary.put(
 						"felix.fileinstall.filename",
 						StringUtil.replace(
-							oldFileName, oldFactoryPid, newFactoryPid));
+							dictionary.get("felix.fileinstall.filename"),
+							oldFactoryPid, newFactoryPid));
 
 					_persistenceManager.store(newPid, dictionary);
 
