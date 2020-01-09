@@ -52,7 +52,9 @@ public class ConfigurationUpgradeStepFactoryImpl
 	}
 
 	@Override
-	public UpgradeStep createFactoryUpgradeStep(String oldPid, String newPid) {
+	public UpgradeStep createFactoryUpgradeStep(
+		String oldFactoryPid, String newFactoryPid) {
+
 		return dbProcessContext -> {
 			ServiceReference<ConfigurationAdmin> serviceReference =
 				_bundleContext.getServiceReference(ConfigurationAdmin.class);
@@ -62,8 +64,8 @@ public class ConfigurationUpgradeStepFactoryImpl
 
 			String filter = StringBundler.concat(
 				StringPool.OPEN_PARENTHESIS,
-				ConfigurationAdmin.SERVICE_FACTORYPID, StringPool.EQUAL, oldPid,
-				StringPool.CLOSE_PARENTHESIS);
+				ConfigurationAdmin.SERVICE_FACTORYPID, StringPool.EQUAL,
+				oldFactoryPid, StringPool.CLOSE_PARENTHESIS);
 
 			try {
 				Configuration[] configurations =
@@ -73,7 +75,7 @@ public class ConfigurationUpgradeStepFactoryImpl
 					if (_log.isWarnEnabled()) {
 						_log.warn(
 							StringBundler.concat(
-								"Unable to upgrade the oldPid ", oldPid,
+								"Unable to upgrade the oldPid ", oldFactoryPid,
 								" because the related data not exist in the ",
 								"Configuration_ table"));
 					}
@@ -85,31 +87,29 @@ public class ConfigurationUpgradeStepFactoryImpl
 					Dictionary<String, String> dictionary =
 						_persistenceManager.load(configuration.getPid());
 
-					dictionary.put("service.factoryPid", newPid);
+					dictionary.put("service.factoryPid", newFactoryPid);
 
-					String oldServicePid = (String)dictionary.get(
-						"service.pid");
+					String oldPid = (String)dictionary.get("service.pid");
 
-					String newServicePid = StringUtil.replace(
-						oldServicePid, oldPid, newPid);
+					String newPid = StringUtil.replace(
+						oldPid, oldFactoryPid, newFactoryPid);
 
-					dictionary.put("service.pid", newServicePid);
+					dictionary.put("service.pid", newPid);
 
 					String oldFileName = (String)dictionary.get(
 						"felix.fileinstall.filename");
 
 					dictionary.put(
 						"felix.fileinstall.filename",
-						StringUtil.replace(oldFileName, oldPid, newPid));
+						StringUtil.replace(
+							oldFileName, oldFactoryPid, newFactoryPid));
 
-					_persistenceManager.store(newServicePid, dictionary);
+					_persistenceManager.store(newPid, dictionary);
 
-					_persistenceManager.delete(oldServicePid);
+					_persistenceManager.delete(oldPid);
 
-					_renameConfigurationFile(
-						oldServicePid, newServicePid, "cfg");
-					_renameConfigurationFile(
-						oldServicePid, newServicePid, "config");
+					_renameConfigurationFile(oldPid, newPid, "cfg");
+					_renameConfigurationFile(oldPid, newPid, "config");
 				}
 			}
 			catch (Exception e) {
