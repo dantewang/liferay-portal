@@ -67,17 +67,11 @@ public class ConfigurationUpgradeStepFactoryTest {
 		String newPid = StringUtil.replace(oldPid, _OLD_PID, _NEW_PID);
 
 		try {
-			int index = oldPid.lastIndexOf('.');
-
-			StringBundler sb = new StringBundler(4);
-
-			sb.append(configuration.getFactoryPid());
-			sb.append(StringPool.DASH);
-			sb.append(oldPid.substring(index + 1));
-			sb.append(".config");
-
 			File file = new File(
-				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, sb.toString());
+				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
+				StringBundler.concat(
+					configuration.getFactoryPid(), StringPool.DASH,
+					oldPid.substring(oldPid.lastIndexOf('.') + 1), ".config"));
 
 			file = file.getAbsoluteFile();
 
