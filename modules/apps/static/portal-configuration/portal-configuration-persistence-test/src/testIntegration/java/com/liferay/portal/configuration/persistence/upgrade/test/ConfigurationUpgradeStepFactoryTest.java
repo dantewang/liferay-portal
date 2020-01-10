@@ -64,43 +64,47 @@ public class ConfigurationUpgradeStepFactoryTest {
 
 		String oldPid = configuration.getPid();
 
-		int index = oldPid.lastIndexOf('.');
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append(configuration.getFactoryPid());
-		sb.append(StringPool.DASH);
-		sb.append(oldPid.substring(index + 1));
-		sb.append(".config");
-
-		File file = new File(
-			PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, sb.toString());
-
-		file = file.getAbsoluteFile();
-
-		URI uri = file.toURI();
-
-		ConfigurationTestUtil.saveConfiguration(
-			configuration,
-			MapUtil.singletonDictionary(
-				"felix.fileinstall.filename", uri.toString()));
-
-		Assert.assertTrue(_persistenceManager.exists(oldPid));
-
-		UpgradeStep upgradeStep =
-			_configurationUpgradeStepFactory.createFactoryUpgradeStep(
-				_OLD_PID, _NEW_PID);
-
-		upgradeStep.upgrade(_DB_PROCESS_CONTEXT);
-
 		String newPid = StringUtil.replace(oldPid, _OLD_PID, _NEW_PID);
 
-		Assert.assertFalse(_persistenceManager.exists(oldPid));
-		Assert.assertTrue(_persistenceManager.exists(newPid));
+		try {
+			int index = oldPid.lastIndexOf('.');
 
-		_persistenceManager.delete(newPid);
+			StringBundler sb = new StringBundler(4);
 
-		ConfigurationTestUtil.deleteConfiguration(configuration);
+			sb.append(configuration.getFactoryPid());
+			sb.append(StringPool.DASH);
+			sb.append(oldPid.substring(index + 1));
+			sb.append(".config");
+
+			File file = new File(
+				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, sb.toString());
+
+			file = file.getAbsoluteFile();
+
+			URI uri = file.toURI();
+
+			ConfigurationTestUtil.saveConfiguration(
+				configuration,
+				MapUtil.singletonDictionary(
+					"felix.fileinstall.filename", uri.toString()));
+
+			Assert.assertTrue(_persistenceManager.exists(oldPid));
+
+			UpgradeStep upgradeStep =
+				_configurationUpgradeStepFactory.createFactoryUpgradeStep(
+					_OLD_PID, _NEW_PID);
+
+			upgradeStep.upgrade(_DB_PROCESS_CONTEXT);
+
+			Assert.assertFalse(_persistenceManager.exists(oldPid));
+			Assert.assertTrue(_persistenceManager.exists(newPid));
+		}
+		finally {
+			_persistenceManager.delete(oldPid);
+			_persistenceManager.delete(newPid);
+
+			ConfigurationTestUtil.deleteConfiguration(configuration);
+		}
 	}
 
 	@Test
@@ -108,20 +112,24 @@ public class ConfigurationUpgradeStepFactoryTest {
 		Configuration configuration = _configurationAdmin.getConfiguration(
 			_OLD_PID);
 
-		Assert.assertTrue(_persistenceManager.exists(_OLD_PID));
+		try {
+			Assert.assertTrue(_persistenceManager.exists(_OLD_PID));
 
-		UpgradeStep upgradeStep =
-			_configurationUpgradeStepFactory.createUpgradeStep(
-				_OLD_PID, _NEW_PID);
+			UpgradeStep upgradeStep =
+				_configurationUpgradeStepFactory.createUpgradeStep(
+					_OLD_PID, _NEW_PID);
 
-		upgradeStep.upgrade(_DB_PROCESS_CONTEXT);
+			upgradeStep.upgrade(_DB_PROCESS_CONTEXT);
 
-		Assert.assertFalse(_persistenceManager.exists(_OLD_PID));
-		Assert.assertTrue(_persistenceManager.exists(_NEW_PID));
+			Assert.assertFalse(_persistenceManager.exists(_OLD_PID));
+			Assert.assertTrue(_persistenceManager.exists(_NEW_PID));
+		}
+		finally {
+			_persistenceManager.delete(_OLD_PID);
+			_persistenceManager.delete(_NEW_PID);
 
-		_persistenceManager.delete(_NEW_PID);
-
-		ConfigurationTestUtil.deleteConfiguration(configuration);
+			ConfigurationTestUtil.deleteConfiguration(configuration);
+		}
 	}
 
 	private static final DBProcessContext _DB_PROCESS_CONTEXT =
