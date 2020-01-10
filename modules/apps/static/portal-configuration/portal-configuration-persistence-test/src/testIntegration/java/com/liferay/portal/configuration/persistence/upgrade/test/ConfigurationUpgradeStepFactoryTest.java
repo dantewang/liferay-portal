@@ -82,7 +82,9 @@ public class ConfigurationUpgradeStepFactoryTest {
 				MapUtil.singletonDictionary(
 					"felix.fileinstall.filename", uri.toString()));
 
-			Assert.assertTrue(_persistenceManager.exists(oldPid));
+			Assert.assertTrue(
+				"Configuration " + oldPid + " does not exist",
+				_persistenceManager.exists(oldPid));
 
 			UpgradeStep upgradeStep =
 				_configurationUpgradeStepFactory.createFactoryUpgradeStep(
@@ -90,8 +92,12 @@ public class ConfigurationUpgradeStepFactoryTest {
 
 			upgradeStep.upgrade(_DB_PROCESS_CONTEXT);
 
-			Assert.assertFalse(_persistenceManager.exists(oldPid));
-			Assert.assertTrue(_persistenceManager.exists(newPid));
+			Assert.assertFalse(
+				"Configuration " + oldPid + " still exists",
+				_persistenceManager.exists(oldPid));
+			Assert.assertTrue(
+				"Configuration " + newPid + " does not exist",
+				_persistenceManager.exists(newPid));
 		}
 		finally {
 			_persistenceManager.delete(oldPid);
@@ -107,7 +113,9 @@ public class ConfigurationUpgradeStepFactoryTest {
 			_OLD_PID);
 
 		try {
-			Assert.assertTrue(_persistenceManager.exists(_OLD_PID));
+			Assert.assertTrue(
+				"Configuration " + _OLD_PID + " does not exist",
+				_persistenceManager.exists(_OLD_PID));
 
 			UpgradeStep upgradeStep =
 				_configurationUpgradeStepFactory.createUpgradeStep(
@@ -115,8 +123,12 @@ public class ConfigurationUpgradeStepFactoryTest {
 
 			upgradeStep.upgrade(_DB_PROCESS_CONTEXT);
 
-			Assert.assertFalse(_persistenceManager.exists(_OLD_PID));
-			Assert.assertTrue(_persistenceManager.exists(_NEW_PID));
+			Assert.assertFalse(
+				"Configuration " + _OLD_PID + " still exists",
+				_persistenceManager.exists(_OLD_PID));
+			Assert.assertTrue(
+				"Configuration " + _NEW_PID + " does not exist",
+				_persistenceManager.exists(_NEW_PID));
 		}
 		finally {
 			_persistenceManager.delete(_OLD_PID);
