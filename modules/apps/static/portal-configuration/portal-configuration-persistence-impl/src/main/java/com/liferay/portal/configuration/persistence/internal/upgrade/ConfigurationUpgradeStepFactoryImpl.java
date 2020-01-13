@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
-import java.io.IOException;
 
 import java.nio.file.Files;
 
@@ -148,23 +147,20 @@ public class ConfigurationUpgradeStepFactoryImpl
 								"config");
 						}
 					}
-					catch (Exception e) {
-						throw new UpgradeException(e);
-					}
 					finally {
 						_bundleContext.ungetService(serviceReference);
 					}
 				}
 			}
-			catch (IOException ioe) {
-				throw new UpgradeException(ioe);
+			catch (Exception e) {
+				throw new UpgradeException(e);
 			}
 		};
 	}
 
 	private void _renameConfigurationFile(
 			String oldPid, String newPid, String extension)
-		throws IOException {
+		throws Exception {
 
 		File oldConfigFile = new File(
 			StringBundler.concat(
