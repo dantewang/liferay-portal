@@ -58,10 +58,10 @@ public class ConfigurationUpgradeStepFactoryImpl
 					_persistenceManager.store(newPid, dictionary);
 
 					_persistenceManager.delete(oldPid);
-				}
 
-				_renameConfigurationFile(oldPid, newPid, "cfg");
-				_renameConfigurationFile(oldPid, newPid, "config");
+					_renameConfigurationFile(oldPid, newPid, "cfg");
+					_renameConfigurationFile(oldPid, newPid, "config");
+				}
 			}
 			catch (IOException ioe) {
 				throw new UpgradeException(ioe);
