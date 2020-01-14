@@ -113,14 +113,14 @@ public class ConfigurationUpgradeStepFactoryImpl
 
 							dictionary.put("service.pid", newServicePid);
 
-							String oldFileName = dictionary.get(
+							String oldUri = dictionary.get(
 								"felix.fileinstall.filename");
 
-							String newFileName = StringUtil.replace(
-								oldFileName, oldPid, newPid);
+							String newUri = StringUtil.replace(
+								oldUri, oldPid, newPid);
 
 							dictionary.put(
-								"felix.fileinstall.filename", newFileName);
+								"felix.fileinstall.filename", newUri);
 
 							_persistenceManager.store(
 								newServicePid, dictionary);
@@ -128,20 +128,20 @@ public class ConfigurationUpgradeStepFactoryImpl
 							_persistenceManager.delete(oldServicePid);
 
 							_renameConfigurationFile(
-								oldFileName.substring(
-									oldFileName.lastIndexOf('/') + 1,
-									oldFileName.lastIndexOf('.')),
-								newFileName.substring(
-									newFileName.lastIndexOf('/') + 1,
-									newFileName.lastIndexOf('.')),
+								oldUri.substring(
+									oldUri.lastIndexOf('/') + 1,
+									oldUri.lastIndexOf('.')),
+								newUri.substring(
+									newUri.lastIndexOf('/') + 1,
+									newUri.lastIndexOf('.')),
 								"cfg");
 							_renameConfigurationFile(
-								oldFileName.substring(
-									oldFileName.lastIndexOf('/') + 1,
-									oldFileName.lastIndexOf('.')),
-								newFileName.substring(
-									newFileName.lastIndexOf('/') + 1,
-									newFileName.lastIndexOf('.')),
+								oldUri.substring(
+									oldUri.lastIndexOf('/') + 1,
+									oldUri.lastIndexOf('.')),
+								newUri.substring(
+									newUri.lastIndexOf('/') + 1,
+									newUri.lastIndexOf('.')),
 								"config");
 						}
 					}
