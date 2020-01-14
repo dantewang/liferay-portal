@@ -17,6 +17,7 @@ package com.liferay.layouts.admin.kernel.util;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ServiceProxyFactory;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.xml.Element;
 
@@ -78,6 +79,8 @@ public class SitemapUtil {
 		_sitemap = sitemap;
 	}
 
-	private static Sitemap _sitemap;
+	private static volatile Sitemap _sitemap =
+		ServiceProxyFactory.newServiceTrackedInstance(
+			Sitemap.class, SitemapUtil.class, "_sitemap", false);
 
 }
