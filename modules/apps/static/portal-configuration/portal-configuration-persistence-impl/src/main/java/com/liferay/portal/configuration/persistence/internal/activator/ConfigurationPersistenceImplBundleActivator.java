@@ -80,7 +80,7 @@ public class ConfigurationPersistenceImplBundleActivator
 			bundleContext.registerService(
 				ConfigurationUpgradeStepFactory.class,
 				new ConfigurationUpgradeStepFactoryImpl(
-					bundleContext, _configurationPersistenceManager),
+					_configurationPersistenceManager),
 				null);
 	}
 

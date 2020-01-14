@@ -15,7 +15,6 @@
 package com.liferay.portal.configuration.persistence.internal.upgrade;
 
 import com.liferay.petra.string.StringBundler;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.persistence.upgrade.ConfigurationUpgradeStepFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -31,13 +30,9 @@ import java.net.URI;
 import java.nio.file.Files;
 
 import java.util.Dictionary;
+import java.util.Enumeration;
 
 import org.apache.felix.cm.PersistenceManager;
-
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.cm.Configuration;
-import org.osgi.service.cm.ConfigurationAdmin;
 
 /**
  * @author Preston Crary
@@ -46,9 +41,8 @@ public class ConfigurationUpgradeStepFactoryImpl
 	implements ConfigurationUpgradeStepFactory {
 
 	public ConfigurationUpgradeStepFactoryImpl(
-		BundleContext bundleContext, PersistenceManager persistenceManager) {
+		PersistenceManager persistenceManager) {
 
-		_bundleContext = bundleContext;
 		_persistenceManager = persistenceManager;
 	}
 
@@ -70,74 +64,47 @@ public class ConfigurationUpgradeStepFactoryImpl
 					_renameConfigurationFile(oldPid, newPid, "config");
 				}
 				else {
-					ServiceReference<ConfigurationAdmin> serviceReference =
-						_bundleContext.getServiceReference(
-							ConfigurationAdmin.class);
+					Enumeration<Dictionary<String, String>> dictionaries =
+						_persistenceManager.getDictionaries();
 
-					ConfigurationAdmin configurationAdmin =
-						_bundleContext.getService(serviceReference);
+					while (dictionaries.hasMoreElements()) {
+						Dictionary<String, String> dictionary =
+							dictionaries.nextElement();
 
-					try {
-						Configuration[] configurations =
-							configurationAdmin.listConfigurations(
-								StringBundler.concat(
-									StringPool.OPEN_PARENTHESIS,
-									ConfigurationAdmin.SERVICE_FACTORYPID,
-									StringPool.EQUAL, oldPid,
-									StringPool.CLOSE_PARENTHESIS));
+						String factoryPid = dictionary.get(
+							"service.factoryPid");
 
-						if ((configurations == null) ||
-							(configurations.length == 0)) {
+						if ((factoryPid == null) ||
+							!factoryPid.equals(oldPid)) {
 
-							if (_log.isWarnEnabled()) {
-								_log.warn(
-									StringBundler.concat(
-										"Unable to upgrade ", oldPid,
-										" because no associated configuration ",
-										"exists"));
-							}
-
-							return;
+							continue;
 						}
 
-						for (Configuration configuration : configurations) {
-							Dictionary<String, String> dictionary =
-								_persistenceManager.load(
-									configuration.getPid());
+						dictionary.put("service.factoryPid", newPid);
 
-							dictionary.put("service.factoryPid", newPid);
+						String oldServicePid = dictionary.get("service.pid");
 
-							String oldServicePid = dictionary.get(
-								"service.pid");
+						String newServicePid = StringUtil.replace(
+							oldServicePid, oldPid, newPid);
 
-							String newServicePid = StringUtil.replace(
-								oldServicePid, oldPid, newPid);
+						dictionary.put("service.pid", newServicePid);
 
-							dictionary.put("service.pid", newServicePid);
+						String oldUri = dictionary.get(
+							"felix.fileinstall.filename");
 
-							String oldUri = dictionary.get(
-								"felix.fileinstall.filename");
+						String newUri = StringUtil.replace(
+							oldUri, oldPid, newPid);
 
-							String newUri = StringUtil.replace(
-								oldUri, oldPid, newPid);
+						dictionary.put("felix.fileinstall.filename", newUri);
 
-							dictionary.put(
-								"felix.fileinstall.filename", newUri);
+						_persistenceManager.store(newServicePid, dictionary);
 
-							_persistenceManager.store(
-								newServicePid, dictionary);
+						_persistenceManager.delete(oldServicePid);
 
-							_persistenceManager.delete(oldServicePid);
+						File oldConfigFile = new File(URI.create(oldUri));
+						File newConfigFile = new File(URI.create(newUri));
 
-							File oldConfigFile = new File(URI.create(oldUri));
-							File newConfigFile = new File(URI.create(newUri));
-
-							_renameConfigurationFile(
-								oldConfigFile, newConfigFile);
-						}
-					}
-					finally {
-						_bundleContext.ungetService(serviceReference);
+						_renameConfigurationFile(oldConfigFile, newConfigFile);
 					}
 				}
 			}
@@ -190,7 +157,6 @@ public class ConfigurationUpgradeStepFactoryImpl
 	private static final Log _log = LogFactoryUtil.getLog(
 		ConfigurationUpgradeStepFactoryImpl.class);
 
-	private final BundleContext _bundleContext;
 	private final PersistenceManager _persistenceManager;
 
 }
