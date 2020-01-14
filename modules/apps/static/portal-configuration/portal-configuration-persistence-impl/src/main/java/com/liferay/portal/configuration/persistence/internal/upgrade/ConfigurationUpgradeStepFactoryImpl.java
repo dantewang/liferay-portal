@@ -59,11 +59,10 @@ public class ConfigurationUpgradeStepFactoryImpl
 					_persistenceManager.store(newPid, dictionary);
 
 					_persistenceManager.delete(oldPid);
-
-					_renameConfigurationFile(oldPid, newPid, "cfg");
-					_renameConfigurationFile(oldPid, newPid, "config");
 				}
 				else {
+					boolean isFactoryPid = false;
+
 					Enumeration<Dictionary<String, String>> dictionaries =
 						_persistenceManager.getDictionaries();
 
@@ -79,6 +78,8 @@ public class ConfigurationUpgradeStepFactoryImpl
 
 							continue;
 						}
+
+						isFactoryPid = true;
 
 						dictionary.put("service.factoryPid", newPid);
 
@@ -106,7 +107,14 @@ public class ConfigurationUpgradeStepFactoryImpl
 
 						_renameConfigurationFile(oldConfigFile, newConfigFile);
 					}
+
+					if (isFactoryPid) {
+						return;
+					}
 				}
+
+				_renameConfigurationFile(oldPid, newPid, "cfg");
+				_renameConfigurationFile(oldPid, newPid, "config");
 			}
 			catch (Exception e) {
 				throw new UpgradeException(e);
