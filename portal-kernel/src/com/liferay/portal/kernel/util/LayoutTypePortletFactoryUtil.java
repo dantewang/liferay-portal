@@ -30,12 +30,19 @@ public class LayoutTypePortletFactoryUtil {
 		return _layoutTypePortletFactory;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public void setLayoutTypePortletFactory(
 		LayoutTypePortletFactory layoutTypePortletFactory) {
 
 		_layoutTypePortletFactory = layoutTypePortletFactory;
 	}
 
-	private static LayoutTypePortletFactory _layoutTypePortletFactory;
+	private static volatile LayoutTypePortletFactory _layoutTypePortletFactory =
+		ServiceProxyFactory.newServiceTrackedInstance(
+			LayoutTypePortletFactory.class, LayoutTypePortletFactoryUtil.class,
+			"_layoutTypePortletFactory", false);
 
 }
