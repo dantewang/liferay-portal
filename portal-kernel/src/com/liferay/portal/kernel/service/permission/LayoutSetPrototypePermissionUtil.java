@@ -16,6 +16,7 @@ package com.liferay.portal.kernel.service.permission;
 
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.util.ServiceProxyFactory;
 
 /**
  * @author Brian Wing Shun Chan
@@ -45,12 +46,21 @@ public class LayoutSetPrototypePermissionUtil {
 		return _layoutSetPrototypePermission;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public void setLayoutSetPrototypePermission(
 		LayoutSetPrototypePermission layoutSetPrototypePermission) {
 
 		_layoutSetPrototypePermission = layoutSetPrototypePermission;
 	}
 
-	private static LayoutSetPrototypePermission _layoutSetPrototypePermission;
+	private static volatile LayoutSetPrototypePermission
+		_layoutSetPrototypePermission =
+			ServiceProxyFactory.newServiceTrackedInstance(
+				LayoutSetPrototypePermission.class,
+				LayoutSetPrototypePermissionUtil.class,
+				"_layoutSetPrototypePermission", false);
 
 }

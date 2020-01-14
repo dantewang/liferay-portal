@@ -17,6 +17,7 @@ package com.liferay.portal.kernel.service.permission;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.util.ServiceProxyFactory;
 
 /**
  * @author Brian Wing Shun Chan
@@ -111,10 +112,17 @@ public class LayoutPermissionUtil {
 		return _layoutPermission;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public void setLayoutPermission(LayoutPermission layoutPermission) {
 		_layoutPermission = layoutPermission;
 	}
 
-	private static LayoutPermission _layoutPermission;
+	private static volatile LayoutPermission _layoutPermission =
+		ServiceProxyFactory.newServiceTrackedInstance(
+			LayoutPermission.class, LayoutPermissionUtil.class,
+			"_layoutPermission", false);
 
 }

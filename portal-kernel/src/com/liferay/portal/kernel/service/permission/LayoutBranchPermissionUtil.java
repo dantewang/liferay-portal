@@ -17,6 +17,7 @@ package com.liferay.portal.kernel.service.permission;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.LayoutBranch;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.util.ServiceProxyFactory;
 
 /**
  * @author Brian Wing Shun Chan
@@ -63,12 +64,19 @@ public class LayoutBranchPermissionUtil {
 		return _layoutBranchPermission;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public void setLayoutBranchPermission(
 		LayoutBranchPermission layoutBranchPermission) {
 
 		_layoutBranchPermission = layoutBranchPermission;
 	}
 
-	private static LayoutBranchPermission _layoutBranchPermission;
+	private static volatile LayoutBranchPermission _layoutBranchPermission =
+		ServiceProxyFactory.newServiceTrackedInstance(
+			LayoutBranchPermission.class, LayoutBranchPermissionUtil.class,
+			"_layoutBranchPermission", false);
 
 }
