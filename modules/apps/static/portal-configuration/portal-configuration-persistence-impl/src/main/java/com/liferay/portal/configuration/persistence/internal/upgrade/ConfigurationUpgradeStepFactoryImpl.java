@@ -75,14 +75,14 @@ public class ConfigurationUpgradeStepFactoryImpl
 					ConfigurationAdmin configurationAdmin =
 						_bundleContext.getService(serviceReference);
 
-					String filter = StringBundler.concat(
-						StringPool.OPEN_PARENTHESIS,
-						ConfigurationAdmin.SERVICE_FACTORYPID, StringPool.EQUAL,
-						oldPid, StringPool.CLOSE_PARENTHESIS);
-
 					try {
 						Configuration[] configurations =
-							configurationAdmin.listConfigurations(filter);
+							configurationAdmin.listConfigurations(
+								StringBundler.concat(
+									StringPool.OPEN_PARENTHESIS,
+									ConfigurationAdmin.SERVICE_FACTORYPID,
+									StringPool.EQUAL, oldPid,
+									StringPool.CLOSE_PARENTHESIS));
 
 						if ((configurations == null) ||
 							(configurations.length == 0)) {
