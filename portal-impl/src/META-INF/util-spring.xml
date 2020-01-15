@@ -146,9 +146,6 @@
 			<bean class="com.liferay.portal.jsonwebservice.DefaultJSONWebServiceRegistratorBuilder" />
 		</property>
 	</bean>
-	<bean class="com.liferay.portal.kernel.language.LanguageUtil" id="com.liferay.portal.kernel.language.LanguageUtil">
-		<property name="language" ref="com.liferay.portal.language.LanguageImpl" />
-	</bean>
 	<bean class="com.liferay.portal.kernel.language.UnicodeLanguageUtil" id="com.liferay.portal.kernel.language.UnicodeLanguageUtil">
 		<property name="unicodeLanguage">
 			<bean class="com.liferay.portal.language.UnicodeLanguageImpl" />
@@ -362,9 +359,6 @@
 	<bean class="com.liferay.portal.util.MimeTypesImpl" id="com.liferay.portal.kernel.util.MimeTypes" />
 	<bean class="com.liferay.portal.kernel.util.MimeTypesUtil" id="com.liferay.portal.kernel.util.MimeTypesUtil">
 		<property name="mimeTypes" ref="com.liferay.portal.kernel.util.MimeTypes" />
-	</bean>
-	<bean class="com.liferay.portal.kernel.util.PortalUtil" id="com.liferay.portal.kernel.util.PortalUtil">
-		<property name="portal" ref="com.liferay.portal.util.Portal" />
 	</bean>
 	<bean class="com.liferay.portal.kernel.util.PortletListerFactoryUtil" id="com.liferay.portal.kernel.util.PortletListerFactoryUtil">
 		<property name="portletListerFactory">

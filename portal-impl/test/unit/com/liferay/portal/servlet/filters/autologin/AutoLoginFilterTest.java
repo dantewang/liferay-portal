@@ -17,6 +17,7 @@ package com.liferay.portal.servlet.filters.autologin;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.security.auto.login.AutoLogin;
 import com.liferay.portal.kernel.security.auto.login.BaseAutoLogin;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.util.PortalImpl;
@@ -44,9 +45,8 @@ public class AutoLoginFilterTest {
 
 	@Test
 	public void testDoFilter() throws IOException, ServletException {
-		PortalUtil portalUtil = new PortalUtil();
-
-		portalUtil.setPortal(new PortalImpl());
+		ReflectionTestUtil.setFieldValue(
+			PortalUtil.class, "_portal", new PortalImpl());
 
 		RegistryUtil.setRegistry(new BasicRegistryImpl());
 

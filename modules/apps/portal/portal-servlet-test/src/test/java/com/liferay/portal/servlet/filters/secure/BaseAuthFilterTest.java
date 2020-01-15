@@ -56,7 +56,8 @@ public class BaseAuthFilterTest {
 
 	@BeforeClass
 	public static void setUpClass() {
-		_portalUtil.setPortal(_testPortalImpl);
+		ReflectionTestUtil.setFieldValue(
+			PortalUtil.class, "_portal", _testPortalImpl);
 
 		PropsUtil.setProps(new PropsImpl());
 
@@ -113,14 +114,17 @@ public class BaseAuthFilterTest {
 		try {
 			_setPortalProperty("PORTAL_PROXY_PATH", "/liferay123");
 
-			_portalUtil.setPortal(new TestPortalImpl());
+			ReflectionTestUtil.setFieldValue(
+				PortalUtil.class, "_portal", new TestPortalImpl());
 
 			_mockFilterConfig.addInitParameter("https.required", "true");
 
 			_processFilter();
 		}
 		finally {
-			_portalUtil.setPortal(_testPortalImpl);
+			ReflectionTestUtil.setFieldValue(
+				PortalUtil.class, "_portal", _testPortalImpl);
+
 			_setPortalProperty("PORTAL_PROXY_PATH", portalProxyPath);
 		}
 
@@ -138,7 +142,8 @@ public class BaseAuthFilterTest {
 		try {
 			_setPortalProperty("PORTAL_PROXY_PATH", "/liferay123");
 
-			_portalUtil.setPortal(new TestPortalImpl());
+			ReflectionTestUtil.setFieldValue(
+				PortalUtil.class, "_portal", new TestPortalImpl());
 
 			_mockHttpServletRequest.setQueryString("a=1");
 			_mockHttpServletRequest.setRequestURI("/abc123");
@@ -148,7 +153,9 @@ public class BaseAuthFilterTest {
 			_processFilter();
 		}
 		finally {
-			_portalUtil.setPortal(_testPortalImpl);
+			ReflectionTestUtil.setFieldValue(
+				PortalUtil.class, "_portal", _testPortalImpl);
+
 			_setPortalProperty("PORTAL_PROXY_PATH", portalProxyPath);
 		}
 
@@ -254,7 +261,6 @@ public class BaseAuthFilterTest {
 			PropsValues.class, propertyName, value);
 	}
 
-	private static final PortalUtil _portalUtil = new PortalUtil();
 	private static final PortalImpl _testPortalImpl = new TestPortalImpl();
 
 	private TestAuthFilter _authFilter;

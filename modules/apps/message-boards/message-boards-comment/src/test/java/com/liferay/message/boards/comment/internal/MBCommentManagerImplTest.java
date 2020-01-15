@@ -267,9 +267,7 @@ public class MBCommentManagerImplTest extends Mockito {
 	}
 
 	protected void setUpPortalUtil() {
-		PortalUtil portalUtil = new PortalUtil();
-
-		portalUtil.setPortal(_portal);
+		ReflectionTestUtil.setFieldValue(PortalUtil.class, "_portal", _portal);
 	}
 
 	protected void setUpServiceContext() {

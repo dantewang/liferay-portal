@@ -77,9 +77,8 @@ public class ComboServletTest extends PowerMockito {
 
 		httpUtil.setHttp(new HttpImpl());
 
-		PortalUtil portalUtil = new PortalUtil();
-
-		portalUtil.setPortal(new PortalImpl());
+		ReflectionTestUtil.setFieldValue(
+			PortalUtil.class, "_portal", new PortalImpl());
 
 		ReflectionTestUtil.setFieldValue(
 			PrefsPropsUtil.class, "_portalPreferencesLocalService",

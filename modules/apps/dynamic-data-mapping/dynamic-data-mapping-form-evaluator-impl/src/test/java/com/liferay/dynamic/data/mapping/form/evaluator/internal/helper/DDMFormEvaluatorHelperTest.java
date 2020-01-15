@@ -1382,8 +1382,6 @@ public class DDMFormEvaluatorHelperTest extends PowerMockito {
 	}
 
 	protected void setUpPortalUtil() throws Exception {
-		PortalUtil portalUtil = new PortalUtil();
-
 		Portal portal = Mockito.mock(Portal.class);
 
 		Mockito.when(
@@ -1398,7 +1396,7 @@ public class DDMFormEvaluatorHelperTest extends PowerMockito {
 			_company
 		);
 
-		portalUtil.setPortal(portal);
+		ReflectionTestUtil.setFieldValue(PortalUtil.class, "_portal", portal);
 	}
 
 	protected void setUpResourceBundleLoaderUtil() {

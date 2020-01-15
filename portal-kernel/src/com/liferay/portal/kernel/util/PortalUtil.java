@@ -2154,10 +2154,16 @@ public class PortalUtil {
 			portletId, user, layout, windowState, httpServletRequest);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public void setPortal(Portal portal) {
 		_portal = portal;
 	}
 
-	private static Portal _portal;
+	private static volatile Portal _portal =
+		ServiceProxyFactory.newServiceTrackedInstance(
+			Portal.class, PortalUtil.class, "_portal", false);
 
 }

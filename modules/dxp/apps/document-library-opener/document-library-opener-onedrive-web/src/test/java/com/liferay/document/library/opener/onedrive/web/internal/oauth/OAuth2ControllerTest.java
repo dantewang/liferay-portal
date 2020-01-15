@@ -79,9 +79,7 @@ public class OAuth2ControllerTest {
 			RandomTestUtil.randomString()
 		);
 
-		PortalUtil portalUtil = new PortalUtil();
-
-		portalUtil.setPortal(_portal);
+		ReflectionTestUtil.setFieldValue(PortalUtil.class, "_portal", _portal);
 
 		_portletURLFactory = Mockito.mock(PortletURLFactory.class);
 

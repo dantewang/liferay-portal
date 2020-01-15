@@ -533,11 +533,9 @@ public abstract class BaseSamlTestCase extends PowerMockito {
 	protected void setupPortal() throws Exception {
 		httpClient = mock(HttpClient.class);
 
-		PortalUtil portalUtil = new PortalUtil();
-
 		portal = mock(Portal.class);
 
-		portalUtil.setPortal(portal);
+		ReflectionTestUtil.setFieldValue(PortalUtil.class, "_portal", portal);
 
 		when(
 			portal.getCompanyId(Mockito.any(HttpServletRequest.class))

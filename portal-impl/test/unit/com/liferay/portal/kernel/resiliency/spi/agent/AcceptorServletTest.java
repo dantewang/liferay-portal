@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.resiliency.spi.SPI;
 import com.liferay.portal.kernel.resiliency.spi.SPIUtil;
 import com.liferay.portal.kernel.test.CaptureHandler;
 import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.util.PortalImpl;
@@ -63,9 +64,8 @@ public class AcceptorServletTest {
 
 	@Before
 	public void setUp() {
-		PortalUtil portalUtil = new PortalUtil();
-
-		portalUtil.setPortal(
+		ReflectionTestUtil.setFieldValue(
+			PortalUtil.class, "_portal",
 			new PortalImpl() {
 
 				@Override

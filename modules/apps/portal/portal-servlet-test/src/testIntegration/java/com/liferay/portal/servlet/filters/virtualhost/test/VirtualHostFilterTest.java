@@ -72,7 +72,8 @@ public class VirtualHostFilterTest {
 		_mockHttpServletRequest.setAttribute(
 			WebKeys.VIRTUAL_HOST_LAYOUT_SET, _layoutSet);
 
-		_portalUtil.setPortal(
+		ReflectionTestUtil.setFieldValue(
+			PortalUtil.class, "_portal",
 			new PortalImpl() {
 
 				@Override
@@ -90,7 +91,7 @@ public class VirtualHostFilterTest {
 
 	@After
 	public void tearDown() {
-		_portalUtil.setPortal(_portal);
+		ReflectionTestUtil.setFieldValue(PortalUtil.class, "_portal", _portal);
 	}
 
 	@Test
@@ -181,9 +182,6 @@ public class VirtualHostFilterTest {
 
 	@Inject
 	private Portal _portal;
-
-	@Inject
-	private PortalUtil _portalUtil;
 
 	private final VirtualHostFilter _virtualHostFilter =
 		new VirtualHostFilter();
