@@ -55,8 +55,6 @@ public class ConfigurationUpgradeStepFactoryImpl
 					Dictionary<String, String> dictionary =
 						_persistenceManager.load(oldPid);
 
-					dictionary.remove("service.pid");
-
 					dictionary.put("service.pid", newPid);
 
 					_persistenceManager.store(newPid, dictionary);
