@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeException;
 import com.liferay.portal.kernel.upgrade.UpgradeStep;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import java.util.Dictionary;
+import java.util.Enumeration;
 
 import org.apache.felix.cm.PersistenceManager;
 
@@ -58,6 +60,62 @@ public class ConfigurationUpgradeStepFactoryImpl
 					_persistenceManager.store(newPid, dictionary);
 
 					_persistenceManager.delete(oldPid);
+				}
+				else {
+					Enumeration<Dictionary<String, String>> dictionaries =
+						_persistenceManager.getDictionaries();
+
+					while (dictionaries.hasMoreElements()) {
+						Dictionary<String, String> dictionary =
+							dictionaries.nextElement();
+
+						String factoryPid = dictionary.get(
+							"service.factoryPid");
+
+						if ((factoryPid == null) ||
+							!factoryPid.equals(oldPid)) {
+
+							continue;
+						}
+
+						dictionary.put("service.factoryPid", newPid);
+
+						String oldServicePid = dictionary.get("service.pid");
+
+						String newServicePid = StringUtil.replace(
+							oldServicePid, oldPid, newPid);
+
+						dictionary.put("service.pid", newServicePid);
+
+						String oldUri = dictionary.get(
+							"felix.fileinstall.filename");
+
+						String newUri = StringUtil.replace(
+							oldUri, oldPid, newPid);
+
+						dictionary.put("felix.fileinstall.filename", newUri);
+
+						_persistenceManager.store(newServicePid, dictionary);
+
+						_persistenceManager.delete(oldServicePid);
+
+						_renameConfigurationFile(
+							oldUri.substring(
+								oldUri.lastIndexOf('/') + 1,
+								oldUri.lastIndexOf('.')),
+							newUri.substring(
+								newUri.lastIndexOf('/') + 1,
+								newUri.lastIndexOf('.')),
+							"cfg");
+						_renameConfigurationFile(
+							oldUri.substring(
+								oldUri.lastIndexOf('/') + 1,
+								oldUri.lastIndexOf('.')),
+							newUri.substring(
+								newUri.lastIndexOf('/') + 1,
+								newUri.lastIndexOf('.')),
+							"config");
+					}
 				}
 
 				_renameConfigurationFile(oldPid, newPid, "cfg");
