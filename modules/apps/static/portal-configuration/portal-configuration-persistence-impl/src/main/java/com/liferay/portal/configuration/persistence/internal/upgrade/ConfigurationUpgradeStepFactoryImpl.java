@@ -26,6 +26,8 @@ import com.liferay.portal.util.PropsValues;
 import java.io.File;
 import java.io.IOException;
 
+import java.net.URI;
+
 import java.nio.file.Files;
 
 import java.util.Dictionary;
@@ -99,22 +101,10 @@ public class ConfigurationUpgradeStepFactoryImpl
 
 						_persistenceManager.delete(oldServicePid);
 
-						_renameConfigurationFile(
-							oldUri.substring(
-								oldUri.lastIndexOf('/') + 1,
-								oldUri.lastIndexOf('.')),
-							newUri.substring(
-								newUri.lastIndexOf('/') + 1,
-								newUri.lastIndexOf('.')),
-							"cfg");
-						_renameConfigurationFile(
-							oldUri.substring(
-								oldUri.lastIndexOf('/') + 1,
-								oldUri.lastIndexOf('.')),
-							newUri.substring(
-								newUri.lastIndexOf('/') + 1,
-								newUri.lastIndexOf('.')),
-							"config");
+						File oldConfigFile = new File(URI.create(oldUri));
+						File newConfigFile = new File(URI.create(newUri));
+
+						_renameConfigurationFile(oldConfigFile, newConfigFile);
 					}
 				}
 
@@ -128,22 +118,12 @@ public class ConfigurationUpgradeStepFactoryImpl
 	}
 
 	private void _renameConfigurationFile(
-			String oldPid, String newPid, String extension)
+			File oldConfigFile, File newConfigFile)
 		throws IOException {
-
-		File oldConfigFile = new File(
-			StringBundler.concat(
-				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, "/", oldPid, ".",
-				extension));
 
 		if (!oldConfigFile.exists()) {
 			return;
 		}
-
-		File newConfigFile = new File(
-			StringBundler.concat(
-				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, "/", newPid, ".",
-				extension));
 
 		if (newConfigFile.exists()) {
 			if (_log.isWarnEnabled()) {
@@ -158,6 +138,23 @@ public class ConfigurationUpgradeStepFactoryImpl
 		}
 
 		Files.move(oldConfigFile.toPath(), newConfigFile.toPath());
+	}
+
+	private void _renameConfigurationFile(
+			String oldPid, String newPid, String extension)
+		throws IOException {
+
+		File oldConfigFile = new File(
+			StringBundler.concat(
+				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, "/", oldPid, ".",
+				extension));
+
+		File newConfigFile = new File(
+			StringBundler.concat(
+				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, "/", newPid, ".",
+				extension));
+
+		_renameConfigurationFile(oldConfigFile, newConfigFile);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
