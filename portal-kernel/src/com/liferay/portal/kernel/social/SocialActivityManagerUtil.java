@@ -17,6 +17,7 @@ package com.liferay.portal.kernel.social;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.ClassedModel;
 import com.liferay.portal.kernel.model.GroupedModel;
+import com.liferay.portal.kernel.util.ServiceProxyFactory;
 
 import java.util.Date;
 
@@ -76,6 +77,10 @@ public class SocialActivityManagerUtil {
 			userId, classedModel, type, createDate);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public <T extends ClassedModel & GroupedModel> void
 		setSocialActivityManager(
 			SocialActivityManager<T> socialActivityManager) {
@@ -83,6 +88,11 @@ public class SocialActivityManagerUtil {
 		_socialActivityManager = socialActivityManager;
 	}
 
-	private static SocialActivityManager<?> _socialActivityManager;
+	private static volatile SocialActivityManager<?> _socialActivityManager =
+		ServiceProxyFactory.newServiceTrackedInstance(
+			SocialActivityManager.class, SocialActivityManagerUtil.class,
+			"_socialActivityManager",
+			"(objectClass=com.liferay.portal.social.SocialActivityManagerImpl)",
+			false);
 
 }
