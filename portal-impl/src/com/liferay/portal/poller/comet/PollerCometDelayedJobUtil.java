@@ -14,6 +14,8 @@
 
 package com.liferay.portal.poller.comet;
 
+import com.liferay.portal.kernel.util.ServiceProxyFactory;
+
 /**
  * @author Edward Han
  */
@@ -30,12 +32,19 @@ public class PollerCometDelayedJobUtil {
 		return _pollerCometDelayedJob;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public void setPollerCometDelayedJob(
 		PollerCometDelayedJob pollerCometDelayedJob) {
 
 		_pollerCometDelayedJob = pollerCometDelayedJob;
 	}
 
-	private static PollerCometDelayedJob _pollerCometDelayedJob;
+	private static volatile PollerCometDelayedJob _pollerCometDelayedJob =
+		ServiceProxyFactory.newServiceTrackedInstance(
+			PollerCometDelayedJob.class, PollerCometDelayedJobUtil.class,
+			"_pollerCometDelayedJob", false);
 
 }

@@ -9,15 +9,6 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
 >
 
-	<!-- Util -->
-
-	<bean class="com.liferay.portal.poller.comet.PollerCometDelayedJobUtil" id="ccom.liferay.portal.poller.comet.PollerCometDelayedJobUtil">
-		<property name="pollerCometDelayedJob" ref="messageListener.PollerCometDelayedJob" />
-	</bean>
-	<bean class="com.liferay.portal.poller.PollerRequestHandlerUtil" id="com.liferay.portal.poller.PollerRequestHandlerUtil">
-		<property name="pollerRequestHandler" ref="messageListener.pollerRequestHandler" />
-	</bean>
-
 	<!-- Messaging -->
 
 	<bean class="com.liferay.portal.kernel.messaging.config.DefaultMessagingConfigurator" id="messagingConfigurator.poller">

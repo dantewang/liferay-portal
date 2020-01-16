@@ -16,6 +16,7 @@ package com.liferay.portal.poller;
 
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.poller.PollerHeader;
+import com.liferay.portal.kernel.util.ServiceProxyFactory;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,12 +41,19 @@ public class PollerRequestHandlerUtil {
 			httpServletRequest, pollerRequestString);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public void setPollerRequestHandler(
 		PollerRequestHandler pollerRequestHandler) {
 
 		_pollerRequestHandler = pollerRequestHandler;
 	}
 
-	private static PollerRequestHandler _pollerRequestHandler;
+	private static volatile PollerRequestHandler _pollerRequestHandler =
+		ServiceProxyFactory.newServiceTrackedInstance(
+			PollerRequestHandler.class, PollerRequestHandlerUtil.class,
+			"_pollerRequestHandler", false);
 
 }
