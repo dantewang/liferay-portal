@@ -15,10 +15,13 @@
 package com.liferay.portal.configuration.persistence.upgrade.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.persistence.upgrade.ConfigurationUpgradeStepFactory;
 import com.liferay.portal.configuration.test.util.ConfigurationTestUtil;
+import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBContext;
+import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.db.DBProcessContext;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.upgrade.UpgradeStep;
@@ -80,12 +83,20 @@ public class ConfigurationUpgradeStepFactoryTest {
 	public void testCreateUpgradeStepWithConfigFileExistAndDataNotExist()
 		throws Exception {
 
-		_assertConfigFile(
-			new File(
-				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, _OLD_PID + ".config"),
-			new File(
-				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, _NEW_PID + ".config"),
-			_OLD_PID, _NEW_PID);
+		try {
+			_assertConfigFile(
+				new File(
+					PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
+					_OLD_PID + ".config"),
+				new File(
+					PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
+					_NEW_PID + ".config"),
+				_OLD_PID, _NEW_PID);
+		}
+		finally {
+			_persistenceManager.delete(_OLD_PID);
+			_persistenceManager.delete(_NEW_PID);
+		}
 	}
 
 	@Test
@@ -129,14 +140,24 @@ public class ConfigurationUpgradeStepFactoryTest {
 	public void testCreateUpgradeStepWithFactoryConfigFileExistAndDataNotExist()
 		throws Exception {
 
-		_assertConfigFile(
-			new File(
-				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
-				_OLD_PID + "-instance.config"),
-			new File(
-				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
-				_NEW_PID + "-instance.config"),
-			_OLD_PID + "-instance", _NEW_PID + "-instance");
+		try {
+			_assertConfigFile(
+				new File(
+					PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
+					_OLD_PID + "-instance.config"),
+				new File(
+					PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
+					_NEW_PID + "-instance.config"),
+				_OLD_PID + "-instance", _NEW_PID + "-instance");
+		}
+		finally {
+			DB db = DBManagerUtil.getDB();
+
+			db.runSQL(
+				StringBundler.concat(
+					"delete from Configuration_ where configurationId like '",
+					_OLD_PID, "%' or configurationId like '", _NEW_PID, "%'"));
+		}
 	}
 
 	@Test
