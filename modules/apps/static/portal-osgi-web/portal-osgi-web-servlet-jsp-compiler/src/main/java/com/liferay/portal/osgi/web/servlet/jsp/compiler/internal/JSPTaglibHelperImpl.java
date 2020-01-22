@@ -103,9 +103,9 @@ public class JSPTaglibHelperImpl implements JSPTaglibHelper {
 
 				listenerClassNames.add(listenerClassName);
 			}
-			catch (Exception exception) {
-				servletContext.log(exception.getMessage(), exception);
-			}
+		}
+		catch (Exception exception) {
+			servletContext.log(exception.getMessage(), exception);
 		}
 	}
 
