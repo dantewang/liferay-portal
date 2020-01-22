@@ -51,6 +51,8 @@ public class ConfigurationUpgradeStepFactoryImpl
 	public UpgradeStep createUpgradeStep(String oldPid, String newPid) {
 		return dbProcessContext -> {
 			try {
+				boolean scanConfigFiles = true;
+
 				if (_persistenceManager.exists(oldPid)) {
 					Dictionary<String, String> dictionary =
 						_persistenceManager.load(oldPid);
@@ -62,6 +64,8 @@ public class ConfigurationUpgradeStepFactoryImpl
 					_persistenceManager.store(newPid, dictionary);
 
 					_persistenceManager.delete(oldPid);
+
+					scanConfigFiles = false;
 				}
 				else {
 					Enumeration<Dictionary<String, String>> dictionaries =
@@ -110,6 +114,23 @@ public class ConfigurationUpgradeStepFactoryImpl
 
 				_renameConfigurationFile(oldPid, newPid, "cfg");
 				_renameConfigurationFile(oldPid, newPid, "config");
+
+				if (scanConfigFiles) {
+					File configResourcesDir = new File(
+						PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR);
+
+					for (File file : configResourcesDir.listFiles()) {
+						String fileName = file.getName();
+
+						if (fileName.startsWith(oldPid + "-")) {
+							String newConfigFilePath = StringUtil.replace(
+								file.getPath(), oldPid, newPid);
+
+							_renameConfigurationFile(
+								file, new File(newConfigFilePath));
+						}
+					}
+				}
 			}
 			catch (IOException ioException) {
 				throw new UpgradeException(ioException);
