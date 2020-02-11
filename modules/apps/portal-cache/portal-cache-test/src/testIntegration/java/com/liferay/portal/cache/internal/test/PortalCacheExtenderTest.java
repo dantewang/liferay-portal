@@ -15,6 +15,7 @@
 package com.liferay.portal.cache.internal.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.portal.cache.test.module.CacheModule;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
@@ -23,11 +24,16 @@ import java.lang.management.ManagementFactory;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 /**
  * @author Kyle Miho
@@ -39,6 +45,24 @@ public class PortalCacheExtenderTest {
 	@Rule
 	public static final AggregateTestRule aggregateTestRule =
 		new LiferayIntegrationTestRule();
+
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		Bundle bundle = FrameworkUtil.getBundle(CacheModule.class);
+
+		if (bundle.getState() != Bundle.ACTIVE) {
+			bundle.start();
+		}
+	}
+
+	@AfterClass
+	public static void tearDownClass() throws Exception {
+		Bundle bundle = FrameworkUtil.getBundle(CacheModule.class);
+
+		if (bundle.getState() == Bundle.ACTIVE) {
+			bundle.stop();
+		}
+	}
 
 	@Test
 	public void testExtendModuleMultiVMConfig() throws Exception {
