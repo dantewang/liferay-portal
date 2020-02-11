@@ -1,0 +1,93 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.portal.cache.internal.test;
+
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+
+import java.lang.management.ManagementFactory;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+/**
+ * @author Kyle Miho
+ */
+@RunWith(Arquillian.class)
+public class PortalCacheExtenderTest {
+
+	@ClassRule
+	@Rule
+	public static final AggregateTestRule aggregateTestRule =
+		new LiferayIntegrationTestRule();
+
+	@Test
+	public void testExtendModuleMultiVMConfig() throws Exception {
+		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+
+		ObjectName objectName = new ObjectName(
+			"net.sf.ehcache:type=CacheConfiguration,CacheManager" +
+				"=MULTI_VM_PORTAL_CACHE_MANAGER,name=test.cache.multi.vm");
+
+		Assert.assertEquals(
+			mBeanServer.getAttribute(objectName, "Eternal"), false);
+
+		Assert.assertEquals(
+			1000, mBeanServer.getAttribute(objectName, "MaxElementsInMemory"));
+
+		Assert.assertEquals(
+			"test.cache.multi.vm",
+			mBeanServer.getAttribute(objectName, "Name"));
+
+		Assert.assertEquals(
+			mBeanServer.getAttribute(objectName, "OverflowToDisk"), true);
+
+		Assert.assertEquals(
+			mBeanServer.getAttribute(objectName, "TimeToIdleSeconds"), 50L);
+	}
+
+	@Test
+	public void testExtendModuleSingleVMConfig() throws Exception {
+		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+
+		ObjectName objectName = new ObjectName(
+			"net.sf.ehcache:type=CacheConfiguration,CacheManager" +
+				"=SINGLE_VM_PORTAL_CACHE_MANAGER,name=test.cache.single.vm");
+
+		Assert.assertEquals(
+			mBeanServer.getAttribute(objectName, "Eternal"), false);
+
+		Assert.assertEquals(
+			1000, mBeanServer.getAttribute(objectName, "MaxElementsInMemory"));
+
+		Assert.assertEquals(
+			"test.cache.single.vm",
+			mBeanServer.getAttribute(objectName, "Name"));
+
+		Assert.assertEquals(
+			mBeanServer.getAttribute(objectName, "OverflowToDisk"), true);
+
+		Assert.assertEquals(
+			mBeanServer.getAttribute(objectName, "TimeToIdleSeconds"), 50L);
+	}
+
+}
