@@ -1,0 +1,17 @@
+<ehcache
+	dynamicConfig="true"
+	monitoring="off"
+	name="module-multi-vm"
+	updateCheck="false"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://www.ehcache.org/ehcache.xsd"
+>
+	<cache
+		eternal="false"
+		maxElementsInMemory="1000"
+		name="test.cache.multi.vm"
+		overflowToDisk="true"
+		timeToIdleSeconds="50"
+	>
+	</cache>
+</ehcache>
