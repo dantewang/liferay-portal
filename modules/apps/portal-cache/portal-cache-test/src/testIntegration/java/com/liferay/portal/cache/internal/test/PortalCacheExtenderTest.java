@@ -73,7 +73,7 @@ public class PortalCacheExtenderTest {
 				"=MULTI_VM_PORTAL_CACHE_MANAGER,name=test.cache.multi.vm");
 
 		Assert.assertEquals(
-			mBeanServer.getAttribute(objectName, "Eternal"), false);
+			false, mBeanServer.getAttribute(objectName, "Eternal"));
 
 		Assert.assertEquals(
 			1000, mBeanServer.getAttribute(objectName, "MaxElementsInMemory"));
@@ -83,10 +83,10 @@ public class PortalCacheExtenderTest {
 			mBeanServer.getAttribute(objectName, "Name"));
 
 		Assert.assertEquals(
-			mBeanServer.getAttribute(objectName, "OverflowToDisk"), true);
+			true, mBeanServer.getAttribute(objectName, "OverflowToDisk"));
 
 		Assert.assertEquals(
-			mBeanServer.getAttribute(objectName, "TimeToIdleSeconds"), 50L);
+			50L, mBeanServer.getAttribute(objectName, "TimeToIdleSeconds"));
 	}
 
 	@Test
@@ -98,7 +98,7 @@ public class PortalCacheExtenderTest {
 				"=SINGLE_VM_PORTAL_CACHE_MANAGER,name=test.cache.single.vm");
 
 		Assert.assertEquals(
-			mBeanServer.getAttribute(objectName, "Eternal"), false);
+			false, mBeanServer.getAttribute(objectName, "Eternal"));
 
 		Assert.assertEquals(
 			1000, mBeanServer.getAttribute(objectName, "MaxElementsInMemory"));
@@ -108,10 +108,10 @@ public class PortalCacheExtenderTest {
 			mBeanServer.getAttribute(objectName, "Name"));
 
 		Assert.assertEquals(
-			mBeanServer.getAttribute(objectName, "OverflowToDisk"), true);
+			true, mBeanServer.getAttribute(objectName, "OverflowToDisk"));
 
 		Assert.assertEquals(
-			mBeanServer.getAttribute(objectName, "TimeToIdleSeconds"), 50L);
+			50L, mBeanServer.getAttribute(objectName, "TimeToIdleSeconds"));
 	}
 
 }
