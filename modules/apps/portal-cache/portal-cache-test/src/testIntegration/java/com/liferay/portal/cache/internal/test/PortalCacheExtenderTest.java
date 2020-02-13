@@ -15,6 +15,7 @@
 package com.liferay.portal.cache.internal.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.cache.test.module.CacheModule;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -66,36 +67,25 @@ public class PortalCacheExtenderTest {
 
 	@Test
 	public void testExtendModuleMultiVMConfig() throws Exception {
-		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-
-		ObjectName objectName = new ObjectName(
-			"net.sf.ehcache:type=CacheConfiguration,CacheManager" +
-				"=MULTI_VM_PORTAL_CACHE_MANAGER,name=test.cache.multi.vm");
-
-		Assert.assertEquals(
-			false, mBeanServer.getAttribute(objectName, "Eternal"));
-
-		Assert.assertEquals(
-			1000, mBeanServer.getAttribute(objectName, "MaxElementsInMemory"));
-
-		Assert.assertEquals(
-			"test.cache.multi.vm",
-			mBeanServer.getAttribute(objectName, "Name"));
-
-		Assert.assertEquals(
-			true, mBeanServer.getAttribute(objectName, "OverflowToDisk"));
-
-		Assert.assertEquals(
-			50L, mBeanServer.getAttribute(objectName, "TimeToIdleSeconds"));
+		_assertCacheConfig(
+			"MULTI_VM_PORTAL_CACHE_MANAGER", "test.cache.multi.vm");
 	}
 
 	@Test
 	public void testExtendModuleSingleVMConfig() throws Exception {
+		_assertCacheConfig(
+			"SINGLE_VM_PORTAL_CACHE_MANAGER", "test.cache.single.vm");
+	}
+
+	private void _assertCacheConfig(String cacheManagerName, String cacheName)
+		throws Exception {
+
 		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
 
 		ObjectName objectName = new ObjectName(
-			"net.sf.ehcache:type=CacheConfiguration,CacheManager" +
-				"=SINGLE_VM_PORTAL_CACHE_MANAGER,name=test.cache.single.vm");
+			StringBundler.concat(
+				"net.sf.ehcache:type=CacheConfiguration,CacheManager=",
+				cacheManagerName, ",name=", cacheName));
 
 		Assert.assertEquals(
 			false, mBeanServer.getAttribute(objectName, "Eternal"));
@@ -104,8 +94,7 @@ public class PortalCacheExtenderTest {
 			1000, mBeanServer.getAttribute(objectName, "MaxElementsInMemory"));
 
 		Assert.assertEquals(
-			"test.cache.single.vm",
-			mBeanServer.getAttribute(objectName, "Name"));
+			cacheName, mBeanServer.getAttribute(objectName, "Name"));
 
 		Assert.assertEquals(
 			true, mBeanServer.getAttribute(objectName, "OverflowToDisk"));
