@@ -68,7 +68,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 		oldConfigFile.createNewFile();
 
 		try {
-			_assertConfig(
+			_testUpgradeConfig(
 				oldConfigFile,
 				new File(
 					PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
@@ -84,7 +84,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 		throws Exception {
 
 		try {
-			_assertConfigFile(
+			_testUpgradeConfigFileOnly(
 				new File(
 					PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
 					_OLD_PID + ".config"),
@@ -103,7 +103,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 	public void testCreateUpgradeStepWithConfigFileNotExistAndDataExit()
 		throws Exception {
 
-		_assertConfig(null, null);
+		_testUpgradeConfig(null, null);
 	}
 
 	@Test
@@ -124,7 +124,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 		try {
 			oldConfigFile.createNewFile();
 
-			_assertConfigFactory(
+			_testUpgradeFactoryConfig(
 				oldConfigFile,
 				new File(
 					PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
@@ -141,7 +141,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 		throws Exception {
 
 		try {
-			_assertConfigFile(
+			_testUpgradeConfigFileOnly(
 				new File(
 					PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
 					_OLD_PID + "-instance.config"),
@@ -173,7 +173,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 		String newPid = StringUtil.replace(oldPid, _OLD_PID, _NEW_PID);
 
 		try {
-			_assertConfigFactory(
+			_testUpgradeFactoryConfig(
 				new File(
 					PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
 					oldPid + ".config"),
@@ -184,7 +184,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 		}
 	}
 
-	private void _assertConfig(File oldConfigFile, File newConfigFile)
+	private void _testUpgradeConfig(File oldConfigFile, File newConfigFile)
 		throws Exception {
 
 		Configuration configuration = _configurationAdmin.getConfiguration(
@@ -236,7 +236,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 		}
 	}
 
-	private void _assertConfigFactory(
+	private void _testUpgradeFactoryConfig(
 			File oldConfigFile, File newConfigFile, String oldPid,
 			String newPid, Configuration configuration)
 		throws Exception {
@@ -293,7 +293,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 		}
 	}
 
-	private void _assertConfigFile(
+	private void _testUpgradeConfigFileOnly(
 			File oldConfigFile, File newConfigFile, String oldPid,
 			String newPid)
 		throws Exception {
