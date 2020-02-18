@@ -114,10 +114,10 @@ public class ConfigurationUpgradeStepFactoryImpl
 				_renameConfigurationFile(oldPid, newPid, "config");
 
 				if (scanFactoryConfigFiles) {
-					File configResouecesDir = new File(
+					File configResourcesDir = new File(
 						PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR);
 
-					for (File file : configResouecesDir.listFiles()) {
+					for (File file : configResourcesDir.listFiles()) {
 						String fileName = file.getName();
 
 						if (fileName.startsWith(oldPid + "-")) {
