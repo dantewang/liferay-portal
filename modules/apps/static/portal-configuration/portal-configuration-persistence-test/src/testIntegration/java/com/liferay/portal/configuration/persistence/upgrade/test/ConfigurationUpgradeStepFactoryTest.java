@@ -74,7 +74,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 				new File(
 					PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
 					_NEW_PID + ".config"),
-				_OLD_PID, _NEW_PID, true, false);
+				_OLD_PID, _NEW_PID, false);
 		}
 		finally {
 			ConfigurationTestUtil.deleteConfiguration(configuration);
@@ -87,7 +87,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 			_OLD_PID);
 
 		try {
-			_testUpgradeConfig(null, null, _OLD_PID, _NEW_PID, true, false);
+			_testUpgradeConfig(null, null, _OLD_PID, _NEW_PID, false);
 		}
 		finally {
 			ConfigurationTestUtil.deleteConfiguration(configuration);
@@ -105,7 +105,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 			oldConfigFile,
 			new File(
 				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, _NEW_PID + ".config"),
-			_OLD_PID, _NEW_PID, false, false);
+			null, null, false);
 	}
 
 	@Test
@@ -136,7 +136,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 				new File(
 					PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
 					newPid + ".config"),
-				oldPid, newPid, true, true);
+				oldPid, newPid, true);
 		}
 		finally {
 			ConfigurationTestUtil.deleteConfiguration(configuration);
@@ -164,7 +164,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 				MapUtil.singletonDictionary(
 					"felix.fileinstall.filename", uri.toString()));
 
-			_testUpgradeConfig(null, null, oldPid, newPid, true, true);
+			_testUpgradeConfig(null, null, oldPid, newPid, true);
 		}
 		finally {
 			ConfigurationTestUtil.deleteConfiguration(configuration);
@@ -184,16 +184,16 @@ public class ConfigurationUpgradeStepFactoryTest {
 			new File(
 				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
 				_NEW_PID + "-instance.config"),
-			_OLD_PID + "-instance", _NEW_PID + "-instance", false, true);
+			null, null, true);
 	}
 
 	private void _testUpgradeConfig(
 			File oldConfigFile, File newConfigFile, String oldPid,
-			String newPid, boolean configurationDataExist, boolean factory)
+			String newPid, boolean factory)
 		throws Exception {
 
 		try {
-			if (configurationDataExist) {
+			if (oldPid != null) {
 				Assert.assertTrue(
 					"Configuration " + oldPid + " does not exist",
 					_persistenceManager.exists(oldPid));
@@ -201,7 +201,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 
 			if (oldConfigFile != null) {
 				Assert.assertTrue(
-					"Configuration file " + oldPid + ".config does not exist",
+					"Configuration file " + oldConfigFile + " does not exist",
 					oldConfigFile.exists());
 			}
 
@@ -211,7 +211,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 
 			upgradeStep.upgrade(_DB_PROCESS_CONTEXT);
 
-			if (configurationDataExist) {
+			if (oldPid != null) {
 				Assert.assertFalse(
 					"Configuration " + oldPid + " still exists",
 					_persistenceManager.exists(oldPid));
@@ -222,10 +222,10 @@ public class ConfigurationUpgradeStepFactoryTest {
 
 			if (oldConfigFile != null) {
 				Assert.assertFalse(
-					"Configuration file " + oldPid + " .config still exists",
+					"Configuration file " + oldConfigFile + " still exists",
 					oldConfigFile.exists());
 				Assert.assertTrue(
-					"Configuration file " + newPid + " .config does not exist",
+					"Configuration file " + newConfigFile + " does not exist",
 					newConfigFile.exists());
 			}
 		}
@@ -235,7 +235,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 				newConfigFile.delete();
 			}
 
-			if (!factory || configurationDataExist) {
+			if (!factory && (oldPid != null)) {
 				_persistenceManager.delete(oldPid);
 				_persistenceManager.delete(newPid);
 			}
