@@ -59,9 +59,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 		new LiferayIntegrationTestRule();
 
 	@Test
-	public void testUpgradeConfigFactoryDisableConfigFileExistConfigExist()
-		throws Exception {
-
+	public void testUpgradeConfigWithDBAndFile() throws Exception {
 		Configuration configuration = _configurationAdmin.getConfiguration(
 			_OLD_PID);
 
@@ -84,9 +82,20 @@ public class ConfigurationUpgradeStepFactoryTest {
 	}
 
 	@Test
-	public void testUpgradeConfigFactoryDisableConfigFileExistConfigNotExist()
-		throws Exception {
+	public void testUpgradeConfigWithDBWithoutFile() throws Exception {
+		Configuration configuration = _configurationAdmin.getConfiguration(
+			_OLD_PID);
 
+		try {
+			_testUpgradeConfig(null, null, _OLD_PID, _NEW_PID, true, false);
+		}
+		finally {
+			ConfigurationTestUtil.deleteConfiguration(configuration);
+		}
+	}
+
+	@Test
+	public void testUpgradeConfigWithoutDBWithFile() throws Exception {
 		File oldConfigFile = new File(
 			PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, _OLD_PID + ".config");
 
@@ -100,24 +109,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 	}
 
 	@Test
-	public void testUpgradeConfigFactoryDisableConfigFileNotExistConfigExist()
-		throws Exception {
-
-		Configuration configuration = _configurationAdmin.getConfiguration(
-			_OLD_PID);
-
-		try {
-			_testUpgradeConfig(null, null, _OLD_PID, _NEW_PID, true, false);
-		}
-		finally {
-			ConfigurationTestUtil.deleteConfiguration(configuration);
-		}
-	}
-
-	@Test
-	public void testUpgradeConfigFactoryEnableConfigFileExistAndConfigExist()
-		throws Exception {
-
+	public void testUpgradeFactoryConfigWithDBAndFile() throws Exception {
 		Configuration configuration =
 			_configurationAdmin.createFactoryConfiguration(
 				_OLD_PID, StringPool.QUESTION);
@@ -152,27 +144,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 	}
 
 	@Test
-	public void testUpgradeConfigFactoryEnableConfigFileExistAndConfigNotExist()
-		throws Exception {
-
-		File oldConfigFile = new File(
-			PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
-			_OLD_PID + "-instance.config");
-
-		oldConfigFile.createNewFile();
-
-		_testUpgradeConfig(
-			oldConfigFile,
-			new File(
-				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
-				_NEW_PID + "-instance.config"),
-			_OLD_PID + "-instance", _NEW_PID + "-instance", false, true);
-	}
-
-	@Test
-	public void testUpgradeConfigFactoryEnableConfigFileNotExistAndConfigExist()
-		throws Exception {
-
+	public void testUpgradeFactoryConfigWithDBWithoutFile() throws Exception {
 		Configuration configuration =
 			_configurationAdmin.createFactoryConfiguration(
 				_OLD_PID, StringPool.QUESTION);
@@ -197,6 +169,22 @@ public class ConfigurationUpgradeStepFactoryTest {
 		finally {
 			ConfigurationTestUtil.deleteConfiguration(configuration);
 		}
+	}
+
+	@Test
+	public void testUpgradeFactoryConfigWithoutDBWithFile() throws Exception {
+		File oldConfigFile = new File(
+			PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
+			_OLD_PID + "-instance.config");
+
+		oldConfigFile.createNewFile();
+
+		_testUpgradeConfig(
+			oldConfigFile,
+			new File(
+				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
+				_NEW_PID + "-instance.config"),
+			_OLD_PID + "-instance", _NEW_PID + "-instance", false, true);
 	}
 
 	private void _testUpgradeConfig(
