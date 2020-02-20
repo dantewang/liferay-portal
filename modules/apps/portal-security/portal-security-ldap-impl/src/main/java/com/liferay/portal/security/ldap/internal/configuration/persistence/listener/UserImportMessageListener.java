@@ -180,7 +180,7 @@ public class UserImportMessageListener
 		String className = clazz.getName();
 
 		Trigger trigger = _triggerFactory.createTrigger(
-			className, className, null, null, interval, TimeUnit.MINUTE);
+			className, className, null, null, interval, false, TimeUnit.MINUTE);
 
 		SchedulerEntry schedulerEntry = new SchedulerEntryImpl(
 			className, trigger);
