@@ -95,6 +95,15 @@ public class QuartzTriggerFactory implements TriggerFactory {
 	@Override
 	public Trigger createTrigger(
 		String jobName, String groupName, Date startDate, Date endDate,
+		int interval, TimeUnit timeUnit) {
+
+		return createTrigger(
+			jobName, groupName, startDate, endDate, interval, false, timeUnit);
+	}
+
+	@Override
+	public Trigger createTrigger(
+		String jobName, String groupName, Date startDate, Date endDate,
 		String cronExpression) {
 
 		return createTrigger(

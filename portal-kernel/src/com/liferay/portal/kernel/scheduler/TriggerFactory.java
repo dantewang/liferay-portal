@@ -29,13 +29,9 @@ public interface TriggerFactory {
 		String jobName, String groupName, Date startDate, Date endDate,
 		int interval, boolean startInmediately, TimeUnit timeUnit);
 
-	public default Trigger createTrigger(
+	public Trigger createTrigger(
 		String jobName, String groupName, Date startDate, Date endDate,
-		int interval, TimeUnit timeUnit) {
-
-		return createTrigger(
-			jobName, groupName, startDate, endDate, interval, false, timeUnit);
-	}
+		int interval, TimeUnit timeUnit);
 
 	public Trigger createTrigger(
 		String jobName, String groupName, Date startDate, Date endDate,
