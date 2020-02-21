@@ -2457,7 +2457,7 @@ public class ClusterSchedulerEngineTest {
 		@Override
 		public Trigger createTrigger(
 			String jobName, String groupName, Date startDate, Date endDate,
-			int interval, boolean startInmediately, TimeUnit timeUnit) {
+			int interval, boolean startImmediately, TimeUnit timeUnit) {
 
 			return null;
 		}
