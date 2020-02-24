@@ -15,6 +15,7 @@
 package com.liferay.portal.configuration.persistence.internal.upgrade;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.persistence.upgrade.ConfigurationUpgradeStepFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -51,8 +52,6 @@ public class ConfigurationUpgradeStepFactoryImpl
 	public UpgradeStep createUpgradeStep(String oldPid, String newPid) {
 		return dbProcessContext -> {
 			try {
-				boolean scanConfigFiles = true;
-
 				if (_persistenceManager.exists(oldPid)) {
 					Dictionary<String, String> dictionary =
 						_persistenceManager.load(oldPid);
@@ -62,8 +61,6 @@ public class ConfigurationUpgradeStepFactoryImpl
 					_persistenceManager.store(newPid, dictionary);
 
 					_persistenceManager.delete(oldPid);
-
-					scanConfigFiles = false;
 				}
 				else {
 					Enumeration<Dictionary<String, String>> dictionaries =
@@ -110,23 +107,21 @@ public class ConfigurationUpgradeStepFactoryImpl
 					}
 				}
 
-				_renameConfigurationFile(oldPid, newPid, "cfg");
-				_renameConfigurationFile(oldPid, newPid, "config");
+				File configResourcesDir = new File(
+					PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR);
 
-				if (scanConfigFiles) {
-					File configResourcesDir = new File(
-						PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR);
+				for (File file : configResourcesDir.listFiles()) {
+					String fileName = file.getName();
 
-					for (File file : configResourcesDir.listFiles()) {
-						String fileName = file.getName();
+					if (fileName.equals(oldPid.concat(".cfg")) ||
+						fileName.equals(oldPid.concat(".config")) ||
+						fileName.startsWith(oldPid.concat(StringPool.DASH))) {
 
-						if (fileName.startsWith(oldPid + "-")) {
-							String newConfigFilePath = StringUtil.replace(
-								file.getPath(), oldPid, newPid);
-
-							_renameConfigurationFile(
-								file, new File(newConfigFilePath));
-						}
+						_renameConfigurationFile(
+							file,
+							new File(
+								StringUtil.replace(
+									file.getPath(), oldPid, newPid)));
 					}
 				}
 			}
@@ -157,23 +152,6 @@ public class ConfigurationUpgradeStepFactoryImpl
 		}
 
 		Files.move(oldConfigFile.toPath(), newConfigFile.toPath());
-	}
-
-	private void _renameConfigurationFile(
-			String oldPid, String newPid, String extension)
-		throws IOException {
-
-		File oldConfigFile = new File(
-			StringBundler.concat(
-				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, "/", oldPid, ".",
-				extension));
-
-		File newConfigFile = new File(
-			StringBundler.concat(
-				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, "/", newPid, ".",
-				extension));
-
-		_renameConfigurationFile(oldConfigFile, newConfigFile);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
