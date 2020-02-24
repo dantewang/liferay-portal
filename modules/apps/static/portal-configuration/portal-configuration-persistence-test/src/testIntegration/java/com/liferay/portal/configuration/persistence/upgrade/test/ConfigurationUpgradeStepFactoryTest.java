@@ -20,9 +20,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.persistence.upgrade.ConfigurationUpgradeStepFactory;
 import com.liferay.portal.configuration.test.util.ConfigurationTestUtil;
 import com.liferay.portal.kernel.dao.db.DB;
-import com.liferay.portal.kernel.dao.db.DBContext;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
-import com.liferay.portal.kernel.dao.db.DBProcessContext;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.upgrade.UpgradeStep;
 import com.liferay.portal.kernel.util.MapUtil;
@@ -32,7 +30,6 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
-import java.io.OutputStream;
 
 import java.net.URI;
 
@@ -209,7 +206,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 				_configurationUpgradeStepFactory.createUpgradeStep(
 					_OLD_PID, _NEW_PID);
 
-			upgradeStep.upgrade(_DB_PROCESS_CONTEXT);
+			upgradeStep.upgrade(null);
 
 			if (oldPid != null) {
 				Assert.assertFalse(
@@ -250,21 +247,6 @@ public class ConfigurationUpgradeStepFactoryTest {
 			}
 		}
 	}
-
-	private static final DBProcessContext _DB_PROCESS_CONTEXT =
-		new DBProcessContext() {
-
-			@Override
-			public DBContext getDBContext() {
-				return new DBContext();
-			}
-
-			@Override
-			public OutputStream getOutputStream() {
-				return null;
-			}
-
-		};
 
 	private static final String _NEW_PID = "test.new.pid";
 
