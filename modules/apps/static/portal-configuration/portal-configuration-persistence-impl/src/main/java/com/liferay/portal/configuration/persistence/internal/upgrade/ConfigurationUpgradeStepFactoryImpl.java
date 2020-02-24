@@ -70,40 +70,34 @@ public class ConfigurationUpgradeStepFactoryImpl
 						Dictionary<String, String> dictionary =
 							dictionaries.nextElement();
 
-						String factoryPid = dictionary.get(
-							"service.factoryPid");
-
-						if ((factoryPid == null) ||
-							!factoryPid.equals(oldPid)) {
+						if (!oldPid.equals(
+								dictionary.get("service.factoryPid"))) {
 
 							continue;
 						}
 
 						dictionary.put("service.factoryPid", newPid);
 
-						String oldServicePid = dictionary.get("service.pid");
-
 						String newServicePid = StringUtil.replace(
-							oldServicePid, oldPid, newPid);
+							dictionary.get("service.pid"), oldPid, newPid);
 
-						dictionary.put("service.pid", newServicePid);
-
-						String oldUri = dictionary.get(
-							"felix.fileinstall.filename");
+						String oldServicePid = dictionary.put(
+							"service.pid", newServicePid);
 
 						String newUri = StringUtil.replace(
-							oldUri, oldPid, newPid);
+							dictionary.get("felix.fileinstall.filename"),
+							oldPid, newPid);
 
-						dictionary.put("felix.fileinstall.filename", newUri);
+						String oldUri = dictionary.put(
+							"felix.fileinstall.filename", newUri);
 
 						_persistenceManager.store(newServicePid, dictionary);
 
 						_persistenceManager.delete(oldServicePid);
 
-						File oldConfigFile = new File(URI.create(oldUri));
-						File newConfigFile = new File(URI.create(newUri));
-
-						_renameConfigurationFile(oldConfigFile, newConfigFile);
+						_renameConfigurationFile(
+							new File(URI.create(oldUri)),
+							new File(URI.create(newUri)));
 					}
 				}
 
