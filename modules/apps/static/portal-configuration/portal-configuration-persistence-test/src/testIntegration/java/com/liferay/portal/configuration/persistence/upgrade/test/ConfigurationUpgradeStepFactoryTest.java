@@ -100,8 +100,20 @@ public class ConfigurationUpgradeStepFactoryTest {
 
 		String newPid = _NEW_PID;
 
+		String parentDir = _props.get(PropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR);
+
 		try {
 			if (factory) {
+				if (configFileExist) {
+					oldConfigFile = new File(
+						parentDir, oldPid + "-instance.config");
+
+					newConfigFile = new File(
+						parentDir, newPid + "-instance.config");
+
+					oldConfigFile.createNewFile();
+				}
+
 				if (dataExist) {
 					configuration =
 						_configurationAdmin.createFactoryConfiguration(
@@ -111,38 +123,14 @@ public class ConfigurationUpgradeStepFactoryTest {
 
 					newPid = StringUtil.replace(oldPid, _OLD_PID, _NEW_PID);
 
-					oldConfigFile = new File(
-						PropsUtil.get(PropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR),
-						oldPid + ".config");
+					if (configFileExist) {
+						URI uri = oldConfigFile.toURI();
 
-					URI uri = oldConfigFile.toURI();
-
-					ConfigurationTestUtil.saveConfiguration(
-						configuration,
-						MapUtil.singletonDictionary(
-							"felix.fileinstall.filename", uri.toString()));
-				}
-
-				if (configFileExist) {
-					if (dataExist) {
-						newConfigFile = new File(
-							PropsUtil.get(
-								PropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR),
-							newPid + ".config");
+						ConfigurationTestUtil.saveConfiguration(
+							configuration,
+							MapUtil.singletonDictionary(
+								"felix.fileinstall.filename", uri.toString()));
 					}
-					else {
-						oldConfigFile = new File(
-							PropsUtil.get(
-								PropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR),
-							oldPid + "-instance.config");
-
-						newConfigFile = new File(
-							PropsUtil.get(
-								PropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR),
-							newPid + "-instance.config");
-					}
-
-					oldConfigFile.createNewFile();
 				}
 			}
 			else {
@@ -152,15 +140,11 @@ public class ConfigurationUpgradeStepFactoryTest {
 				}
 
 				if (configFileExist) {
-					oldConfigFile = new File(
-						PropsUtil.get(PropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR),
-						oldPid + ".config");
+					oldConfigFile = new File(parentDir, oldPid + ".config");
 
 					oldConfigFile.createNewFile();
 
-					newConfigFile = new File(
-						PropsUtil.get(PropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR),
-						newPid + ".config");
+					newConfigFile = new File(parentDir, newPid + ".config");
 				}
 			}
 
@@ -238,5 +222,8 @@ public class ConfigurationUpgradeStepFactoryTest {
 
 	@Inject
 	private PersistenceManager _persistenceManager;
+
+	@Inject
+	private Props _props;
 
 }
