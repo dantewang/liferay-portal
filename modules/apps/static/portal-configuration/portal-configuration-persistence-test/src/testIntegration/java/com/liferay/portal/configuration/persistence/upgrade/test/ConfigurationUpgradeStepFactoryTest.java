@@ -92,62 +92,56 @@ public class ConfigurationUpgradeStepFactoryTest {
 
 		Configuration configuration = null;
 
-		File oldConfigFile = null;
-
-		File newConfigFile = null;
-
 		String oldPid = _OLD_PID;
 
 		String newPid = _NEW_PID;
 
 		String parentDir = _props.get(PropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR);
 
+		File oldConfigFile = new File(parentDir, oldPid + ".config");
+
+		File newConfigFile = new File(parentDir, newPid + ".config");
+
+		if (factory) {
+			oldConfigFile = new File(parentDir, oldPid + "-instance.config");
+
+			newConfigFile = new File(parentDir, newPid + "-instance.config");
+		}
+
 		try {
-			if (dataExist && factory) {
-				configuration = _configurationAdmin.createFactoryConfiguration(
-					oldPid, StringPool.QUESTION);
-
-				oldPid = configuration.getPid();
-
-				newPid = StringUtil.replace(oldPid, _OLD_PID, _NEW_PID);
-
-				File file = new File(parentDir, oldPid + ".config");
-
-				URI uri = file.toURI();
-
-				ConfigurationTestUtil.saveConfiguration(
-					configuration,
-					MapUtil.singletonDictionary(
-						"felix.fileinstall.filename", uri.toString()));
-			}
-			else if (dataExist) {
-				configuration = _configurationAdmin.getConfiguration(oldPid);
-			}
-
 			if (configFileExist) {
-				if (factory && !dataExist) {
-					oldPid = oldPid + "-instance";
-
-					newPid = newPid + "-instance";
-				}
-
-				oldConfigFile = new File(parentDir, oldPid + ".config");
-
 				oldConfigFile.createNewFile();
 
-				newConfigFile = new File(parentDir, newPid + ".config");
-			}
-
-			if (dataExist) {
-				Assert.assertTrue(
-					"Configuration " + oldPid + " does not exist",
-					_persistenceManager.exists(oldPid));
-			}
-
-			if (configFileExist) {
 				Assert.assertTrue(
 					"Configuration file " + oldConfigFile + " does not exist",
 					oldConfigFile.exists());
+			}
+
+			if (dataExist) {
+				if (factory) {
+					configuration =
+						_configurationAdmin.createFactoryConfiguration(
+							oldPid, StringPool.QUESTION);
+
+					oldPid = configuration.getPid();
+
+					newPid = StringUtil.replace(oldPid, _OLD_PID, _NEW_PID);
+
+					URI uri = oldConfigFile.toURI();
+
+					ConfigurationTestUtil.saveConfiguration(
+						configuration,
+						MapUtil.singletonDictionary(
+							"felix.fileinstall.filename", uri.toString()));
+				}
+				else {
+					configuration = _configurationAdmin.getConfiguration(
+						oldPid);
+				}
+
+				Assert.assertTrue(
+					"Configuration " + oldPid + " does not exist",
+					_persistenceManager.exists(oldPid));
 			}
 
 			UpgradeStep upgradeStep =
