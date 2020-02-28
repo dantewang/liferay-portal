@@ -134,10 +134,6 @@ public class ConfigurationUpgradeStepFactoryTest {
 					configuration = _configurationAdmin.getConfiguration(
 						oldPid);
 				}
-
-				Assert.assertTrue(
-					"Configuration " + oldPid + " does not exist",
-					_persistenceManager.exists(oldPid));
 			}
 
 			UpgradeStep upgradeStep =
