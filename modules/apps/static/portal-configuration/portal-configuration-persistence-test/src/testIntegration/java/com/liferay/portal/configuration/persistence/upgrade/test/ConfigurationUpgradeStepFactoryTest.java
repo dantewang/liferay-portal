@@ -120,7 +120,7 @@ public class ConfigurationUpgradeStepFactoryTest {
 					MapUtil.singletonDictionary(
 						"felix.fileinstall.filename", uri.toString()));
 			}
-			else if (dataExist && !factory) {
+			else if (dataExist) {
 				configuration = _configurationAdmin.getConfiguration(oldPid);
 			}
 
