@@ -111,10 +111,6 @@ public class ConfigurationUpgradeStepFactoryTest {
 		try {
 			if (configFileExist) {
 				oldConfigFile.createNewFile();
-
-				Assert.assertTrue(
-					"Configuration file " + oldConfigFile + " does not exist",
-					oldConfigFile.exists());
 			}
 
 			if (dataExist) {
