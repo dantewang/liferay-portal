@@ -34,6 +34,8 @@ import java.io.File;
 
 import java.net.URI;
 
+import java.util.Dictionary;
+
 import org.apache.felix.cm.PersistenceManager;
 
 import org.junit.Assert;
@@ -122,18 +124,18 @@ public class ConfigurationUpgradeStepFactoryTest {
 					oldPid = configuration.getPid();
 
 					newPid = StringUtil.replace(oldPid, _OLD_PID, _NEW_PID);
-
-					URI uri = oldConfigFile.toURI();
-
-					ConfigurationTestUtil.saveConfiguration(
-						configuration,
-						MapUtil.singletonDictionary(
-							"felix.fileinstall.filename", uri.toString()));
 				}
 				else {
 					configuration = _configurationAdmin.getConfiguration(
 						oldPid);
 				}
+
+				URI uri = oldConfigFile.toURI();
+
+				ConfigurationTestUtil.saveConfiguration(
+					configuration,
+					MapUtil.singletonDictionary(
+						"felix.fileinstall.filename", uri.toString()));
 			}
 
 			UpgradeStep upgradeStep =
@@ -149,6 +151,17 @@ public class ConfigurationUpgradeStepFactoryTest {
 				Assert.assertTrue(
 					"Configuration " + newPid + " does not exist",
 					_persistenceManager.exists(newPid));
+
+				Dictionary<String, String> dictionary =
+					_persistenceManager.load(newPid);
+
+				String fileName = dictionary.get("felix.fileinstall.filename");
+
+				URI uri = newConfigFile.toURI();
+
+				Assert.assertTrue(
+					"Configuration " + fileName + " is not inconsistent",
+					fileName.equals(uri.toString()));
 			}
 
 			if (configFileExist) {
