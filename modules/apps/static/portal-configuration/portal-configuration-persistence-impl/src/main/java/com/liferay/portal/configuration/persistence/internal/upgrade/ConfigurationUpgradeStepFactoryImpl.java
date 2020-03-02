@@ -27,8 +27,6 @@ import com.liferay.portal.util.PropsValues;
 import java.io.File;
 import java.io.IOException;
 
-import java.net.URI;
-
 import java.nio.file.Files;
 
 import java.util.Dictionary;
@@ -84,20 +82,15 @@ public class ConfigurationUpgradeStepFactoryImpl
 						String oldServicePid = dictionary.put(
 							"service.pid", newServicePid);
 
-						String newUri = StringUtil.replace(
-							dictionary.get("felix.fileinstall.filename"),
-							oldPid, newPid);
-
-						String oldUri = dictionary.put(
-							"felix.fileinstall.filename", newUri);
+						dictionary.put(
+							"felix.fileinstall.filename",
+							StringUtil.replace(
+								dictionary.get("felix.fileinstall.filename"),
+								oldPid, newPid));
 
 						_persistenceManager.store(newServicePid, dictionary);
 
 						_persistenceManager.delete(oldServicePid);
-
-						_renameConfigurationFile(
-							new File(URI.create(oldUri)),
-							new File(URI.create(newUri)));
 					}
 				}
 
