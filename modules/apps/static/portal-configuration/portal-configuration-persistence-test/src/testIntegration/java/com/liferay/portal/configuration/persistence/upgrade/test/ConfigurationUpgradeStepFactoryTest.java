@@ -130,12 +130,19 @@ public class ConfigurationUpgradeStepFactoryTest {
 						oldPid);
 				}
 
-				URI uri = oldConfigFile.toURI();
+				if (configFileExist) {
+					URI uri = oldConfigFile.toURI();
 
-				ConfigurationTestUtil.saveConfiguration(
-					configuration,
-					MapUtil.singletonDictionary(
-						"felix.fileinstall.filename", uri.toString()));
+					ConfigurationTestUtil.saveConfiguration(
+						configuration,
+						MapUtil.singletonDictionary(
+							"felix.fileinstall.filename", uri.toString()));
+				}
+				else {
+					ConfigurationTestUtil.saveConfiguration(
+						configuration,
+						MapUtil.singletonDictionary("key", "value"));
+				}
 			}
 
 			UpgradeStep upgradeStep =
@@ -157,11 +164,19 @@ public class ConfigurationUpgradeStepFactoryTest {
 
 				String fileName = dictionary.get("felix.fileinstall.filename");
 
-				URI uri = newConfigFile.toURI();
+				if (configFileExist) {
+					URI uri = newConfigFile.toURI();
 
-				Assert.assertTrue(
-					"Configuration " + fileName + " is not inconsistent",
-					fileName.equals(uri.toString()));
+					Assert.assertTrue(
+						"Configuration " + fileName + " is not inconsistent",
+						fileName.equals(uri.toString()));
+				}
+				else {
+					Assert.assertNull(
+						"Configuration property felix.fileinstall.filename " +
+							"still exists",
+						fileName);
+				}
 			}
 
 			if (configFileExist) {
