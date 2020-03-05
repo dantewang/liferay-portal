@@ -300,6 +300,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.TimeZone;
 
 import javax.portlet.PortletPreferences;
@@ -2618,25 +2619,29 @@ public class DataFactory {
 		long parentMessageId = 0;
 		String subject = null;
 		String body = null;
+		String urlSubject = null;
 
 		if (index == 0) {
 			messageId = mbThreadModel.getRootMessageId();
 			parentMessageId = MBMessageConstants.DEFAULT_PARENT_MESSAGE_ID;
 			subject = String.valueOf(classPK);
 			body = String.valueOf(classPK);
+			urlSubject = String.valueOf(mbThreadModel.getRootMessageId());
 		}
 		else {
 			messageId = _counter.get();
 			parentMessageId = mbThreadModel.getRootMessageId();
 			subject = "N/A";
 			body = "This is test comment " + index + ".";
+			urlSubject = _randomString("This-is-test-comment-" + index);
 		}
 
 		return newMBMessageModel(
 			mbThreadModel.getGroupId(), classNameId, classPK,
 			MBCategoryConstants.DISCUSSION_CATEGORY_ID,
 			mbThreadModel.getThreadId(), messageId,
-			mbThreadModel.getRootMessageId(), parentMessageId, subject, body);
+			mbThreadModel.getRootMessageId(), parentMessageId, subject, body,
+			urlSubject);
 	}
 
 	public List<MBMessageModel> newMBMessageModels(
@@ -2651,7 +2656,7 @@ public class DataFactory {
 				mbThreadModel.getThreadId(), mbThreadModel.getRootMessageId(),
 				mbThreadModel.getRootMessageId(),
 				MBMessageConstants.DEFAULT_PARENT_MESSAGE_ID, "Test Message 1",
-				"This is test message 1."));
+				"This is test message 1.", _randomString("Test-Message-1")));
 
 		for (int i = 2; i <= _maxMBMessageCount; i++) {
 			mbMessageModels.add(
@@ -2660,7 +2665,8 @@ public class DataFactory {
 					mbThreadModel.getCategoryId(), mbThreadModel.getThreadId(),
 					_counter.get(), mbThreadModel.getRootMessageId(),
 					mbThreadModel.getRootMessageId(), "Test Message " + i,
-					"This is test message " + i + "."));
+					"This is test message " + i + ".",
+					_randomString("Test-Message-" + i)));
 		}
 
 		return mbMessageModels;
@@ -4031,7 +4037,7 @@ public class DataFactory {
 	protected MBMessageModel newMBMessageModel(
 		long groupId, long classNameId, long classPK, long categoryId,
 		long threadId, long messageId, long rootMessageId, long parentMessageId,
-		String subject, String body) {
+		String subject, String body, String urlSubject) {
 
 		MBMessageModel mBMessageModel = new MBMessageModelImpl();
 
@@ -4050,6 +4056,7 @@ public class DataFactory {
 		mBMessageModel.setRootMessageId(rootMessageId);
 		mBMessageModel.setParentMessageId(parentMessageId);
 		mBMessageModel.setSubject(subject);
+		mBMessageModel.setUrlSubject(urlSubject);
 		mBMessageModel.setBody(body);
 		mBMessageModel.setFormat(MBMessageConstants.DEFAULT_FORMAT);
 		mBMessageModel.setLastPublishDate(new Date());
@@ -4401,6 +4408,24 @@ public class DataFactory {
 		catch (ReflectiveOperationException reflectiveOperationException) {
 			ReflectionUtil.throwException(reflectiveOperationException);
 		}
+	}
+
+	private static String _randomString(String prefix) {
+		String key =
+			"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+		Random random = new Random();
+
+		StringBundler sb = new StringBundler(12);
+
+		sb.append(prefix);
+		sb.append("-");
+
+		for (int i = 0; i < 10; i++) {
+			sb.append(key.charAt(random.nextInt(key.length())));
+		}
+
+		return sb.toString();
 	}
 
 	private String _getMBDiscussionCombinedClassName(Class<?> clazz) {
