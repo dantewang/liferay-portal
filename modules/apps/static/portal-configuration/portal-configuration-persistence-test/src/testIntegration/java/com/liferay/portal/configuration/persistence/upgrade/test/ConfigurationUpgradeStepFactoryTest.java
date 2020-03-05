@@ -138,7 +138,11 @@ public class ConfigurationUpgradeStepFactoryTest {
 						MapUtil.singletonDictionary(
 							"felix.fileinstall.filename", uri.toString()));
 				}
-				else {
+				else if (factory) {
+
+					// Factory configuration instance will only be persisted
+					// after the first update with actual data
+
 					ConfigurationTestUtil.saveConfiguration(
 						configuration,
 						MapUtil.singletonDictionary("key", "value"));
