@@ -171,9 +171,9 @@ public class ConfigurationUpgradeStepFactoryTest {
 				if (configFileExist) {
 					URI uri = newConfigFile.toURI();
 
-					Assert.assertTrue(
+					Assert.assertEquals(
 						"Configuration " + fileName + " is not inconsistent",
-						fileName.equals(uri.toString()));
+						fileName, uri.toString());
 				}
 				else {
 					Assert.assertNull(
