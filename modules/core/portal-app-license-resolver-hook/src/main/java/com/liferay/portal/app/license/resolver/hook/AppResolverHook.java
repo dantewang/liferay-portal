@@ -88,6 +88,10 @@ public class AppResolverHook implements ResolverHook {
 
 			String productId = (String)properties.get("product-id");
 
+			if ((productId == null) && properties.containsKey("product-type")) {
+				productId = bundleRevision.getSymbolicName();
+			}
+
 			if (productId == null) {
 				continue;
 			}
