@@ -258,6 +258,13 @@ public class DepotAppCustomizationLocalServiceUtil {
 		return getService().getDepotAppCustomizationsCount();
 	}
 
+	public static int getDepotAppCustomizationsCount(
+		long depotEntryId, boolean enabled) {
+
+		return getService().getDepotAppCustomizationsCount(
+			depotEntryId, enabled);
+	}
+
 	public static
 		com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery
 			getIndexableActionableDynamicQuery() {

@@ -32,34 +32,39 @@ import java.util.Map;
  */
 public class EntityColumn implements Cloneable, Comparable<EntityColumn> {
 
-	public EntityColumn(String name) {
+	public EntityColumn(ServiceBuilder serviceBuilder, String name) {
 		this(
-			name, null, null, null, false, false, false, null, null, true, true,
-			false, null, null, false, null, null, true, true, false, false,
-			CTColumnResolutionType.STRICT, false, false, null, false);
-	}
-
-	public EntityColumn(String name, String dbName) {
-		this(
-			name, null, dbName, "String", false, false, false, null, null, null,
-			null, true, false, false, false, CTColumnResolutionType.STRICT,
-			false, false, null, false);
+			serviceBuilder, name, null, null, null, false, false, false, null,
+			null, true, true, false, null, null, false, null, null, true, true,
+			false, false, CTColumnResolutionType.STRICT, false, false, null,
+			false);
 	}
 
 	public EntityColumn(
-		String name, String pluralName, String dbName, String type,
-		boolean primary, boolean accessor, boolean filterPrimary,
-		String entityName, String mappingTableName, boolean caseSensitive,
-		boolean orderByAscending, boolean orderColumn, String comparator,
-		String arrayableOperator, boolean arrayablePagination, String idType,
-		String idParam, boolean convertNull, boolean lazy, boolean localized,
+		ServiceBuilder serviceBuilder, String name, String dbName) {
+
+		this(
+			serviceBuilder, name, null, dbName, "String", false, false, false,
+			null, null, null, null, true, false, false, false,
+			CTColumnResolutionType.STRICT, false, false, null, false);
+	}
+
+	public EntityColumn(
+		ServiceBuilder serviceBuilder, String name, String pluralName,
+		String dbName, String type, boolean primary, boolean accessor,
+		boolean filterPrimary, String entityName, String mappingTableName,
+		boolean caseSensitive, boolean orderByAscending, boolean orderColumn,
+		String comparator, String arrayableOperator,
+		boolean arrayablePagination, String idType, String idParam,
+		boolean convertNull, boolean lazy, boolean localized,
 		boolean jsonEnabled, CTColumnResolutionType ctColumnResolutionType,
 		boolean containerModel, boolean parentContainerModel,
 		String uadAnonymizeFieldName, boolean uadNonanonymizable) {
 
+		_serviceBuilder = serviceBuilder;
 		_name = name;
 		_pluralName = GetterUtil.getString(
-			pluralName, TextFormatter.formatPlural(name));
+			pluralName, serviceBuilder.formatPlural(name));
 		_dbName = dbName;
 		_type = type;
 		_primary = primary;
@@ -90,18 +95,19 @@ public class EntityColumn implements Cloneable, Comparable<EntityColumn> {
 	}
 
 	public EntityColumn(
-		String name, String pluralName, String dbName, String type,
-		boolean primary, boolean accessor, boolean filterPrimary,
-		String ejbName, String mappingTable, String idType, String idParam,
-		boolean convertNull, boolean lazy, boolean localized,
-		boolean jsonEnabled, CTColumnResolutionType ctColumnResolutionType,
-		boolean containerModel, boolean parentContainerModel,
-		String uadAnonymizeFieldName, boolean uadNonanonymizable) {
+		ServiceBuilder serviceBuilder, String name, String pluralName,
+		String dbName, String type, boolean primary, boolean accessor,
+		boolean filterPrimary, String ejbName, String mappingTable,
+		String idType, String idParam, boolean convertNull, boolean lazy,
+		boolean localized, boolean jsonEnabled,
+		CTColumnResolutionType ctColumnResolutionType, boolean containerModel,
+		boolean parentContainerModel, String uadAnonymizeFieldName,
+		boolean uadNonanonymizable) {
 
 		this(
-			name, pluralName, dbName, type, primary, accessor, filterPrimary,
-			ejbName, mappingTable, true, true, false, null, null, false, idType,
-			idParam, convertNull, lazy, localized, jsonEnabled,
+			serviceBuilder, name, pluralName, dbName, type, primary, accessor,
+			filterPrimary, ejbName, mappingTable, true, true, false, null, null,
+			false, idType, idParam, convertNull, lazy, localized, jsonEnabled,
 			ctColumnResolutionType, containerModel, parentContainerModel,
 			uadAnonymizeFieldName, uadNonanonymizable);
 	}
@@ -109,8 +115,8 @@ public class EntityColumn implements Cloneable, Comparable<EntityColumn> {
 	@Override
 	public Object clone() {
 		return new EntityColumn(
-			getName(), getPluralName(), getDBName(), getType(), isPrimary(),
-			isAccessor(), isFilterPrimary(), getEntityName(),
+			_serviceBuilder, getName(), getPluralName(), getDBName(), getType(),
+			isPrimary(), isAccessor(), isFilterPrimary(), getEntityName(),
 			getMappingTableName(), isCaseSensitive(), isOrderByAscending(),
 			isOrderColumn(), getComparator(), getArrayableOperator(),
 			hasArrayablePagination(), getIdType(), getIdParam(),
@@ -228,7 +234,7 @@ public class EntityColumn implements Cloneable, Comparable<EntityColumn> {
 	}
 
 	public String getMethodNames() {
-		return TextFormatter.formatPlural(_methodName);
+		return _serviceBuilder.formatPlural(_methodName);
 	}
 
 	public String getMethodUserUuidName() {
@@ -240,7 +246,7 @@ public class EntityColumn implements Cloneable, Comparable<EntityColumn> {
 	}
 
 	public String getPluralHumanName() {
-		return TextFormatter.formatPlural(getHumanName());
+		return _serviceBuilder.formatPlural(getHumanName());
 	}
 
 	public String getPluralName() {
@@ -635,6 +641,7 @@ public class EntityColumn implements Cloneable, Comparable<EntityColumn> {
 	private boolean _parentContainerModel;
 	private final String _pluralName;
 	private final boolean _primary;
+	private ServiceBuilder _serviceBuilder;
 	private final String _type;
 	private final String _uadAnonymizeFieldName;
 	private final boolean _uadNonanonymizable;

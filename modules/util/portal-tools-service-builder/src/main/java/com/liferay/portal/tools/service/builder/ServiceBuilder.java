@@ -962,6 +962,28 @@ public class ServiceBuilder {
 		}
 	}
 
+	public String formatPlural(String s) {
+		if (isVersionLTE_7_2_0()) {
+			if (Validator.isNull(s)) {
+				return s;
+			}
+
+			if (s.endsWith("s")) {
+				s = s.substring(0, s.length() - 1) + "ses";
+			}
+			else if (s.endsWith("y")) {
+				s = s.substring(0, s.length() - 1) + "ies";
+			}
+			else {
+				s = s + "s";
+			}
+
+			return s;
+		}
+
+		return TextFormatter.formatPlural(s);
+	}
+
 	public String getCacheFieldMethodName(JavaField javaField) {
 		List<JavaAnnotation> javaAnnotations = javaField.getAnnotations();
 
@@ -5950,11 +5972,12 @@ public class ServiceBuilder {
 			}
 
 			EntityColumn entityColumn = new EntityColumn(
-				columnName, columnPluralName, columnDBName, columnType, primary,
-				accessor, filterPrimary, columnEntityName, mappingTableName,
-				idType, idParam, convertNull, lazy, localized, colJsonEnabled,
-				ctColumnResolutionType, containerModel, parentContainerModel,
-				uadAnonymizeFieldName, uadNonanonymizable);
+				this, columnName, columnPluralName, columnDBName, columnType,
+				primary, accessor, filterPrimary, columnEntityName,
+				mappingTableName, idType, idParam, convertNull, lazy, localized,
+				colJsonEnabled, ctColumnResolutionType, containerModel,
+				parentContainerModel, uadAnonymizeFieldName,
+				uadNonanonymizable);
 
 			if (primary) {
 				if (!columnType.equals("int") && !columnType.equals("long") &&
@@ -6038,7 +6061,7 @@ public class ServiceBuilder {
 				}
 
 				int index = entityColumns.indexOf(
-					new EntityColumn(orderColName));
+					new EntityColumn(this, orderColName));
 
 				if (index < 0) {
 					throw new IllegalArgumentException(
@@ -6063,7 +6086,7 @@ public class ServiceBuilder {
 		List<Element> finderElements = entityElement.elements("finder");
 
 		if (uuid) {
-			if (entityColumns.contains(new EntityColumn("companyId"))) {
+			if (entityColumns.contains(new EntityColumn(this, "companyId"))) {
 				Element finderElement = DocumentHelper.createElement("finder");
 
 				finderElement.addAttribute("name", "Uuid_C");
@@ -6081,7 +6104,7 @@ public class ServiceBuilder {
 				finderElements.add(0, finderElement);
 			}
 
-			if (entityColumns.contains(new EntityColumn("groupId"))) {
+			if (entityColumns.contains(new EntityColumn(this, "groupId"))) {
 				Element finderElement = DocumentHelper.createElement("finder");
 
 				if (entityName.equals("Layout")) {
@@ -6127,7 +6150,7 @@ public class ServiceBuilder {
 		}
 
 		if (externalReferenceCode &&
-			entityColumns.contains(new EntityColumn("companyId"))) {
+			entityColumns.contains(new EntityColumn(this, "companyId"))) {
 
 			Element finderElement = DocumentHelper.createElement("finder");
 
@@ -6260,8 +6283,8 @@ public class ServiceBuilder {
 
 			entityFinders.add(
 				new EntityFinder(
-					finderName, finderPluralName, finderReturn, finderUnique,
-					finderWhere, finderDBWhere, finderDBIndex,
+					this, finderName, finderPluralName, finderReturn,
+					finderUnique, finderWhere, finderDBWhere, finderDBIndex,
 					finderEntityColumns));
 		}
 
@@ -6441,8 +6464,8 @@ public class ServiceBuilder {
 
 		if (versioned) {
 			EntityColumn headEntityColumn = new EntityColumn(
-				"head", null, "head", "boolean", false, false, false, null,
-				null, null, null, true, false, false, false,
+				this, "head", null, "head", "boolean", false, false, false,
+				null, null, null, null, true, false, false, false,
 				CTColumnResolutionType.STRICT, false, false, null, false);
 
 			headEntityColumn.setComparator("=");
@@ -6453,7 +6476,7 @@ public class ServiceBuilder {
 				entity.getDatabaseRegularEntityColumns();
 
 			int index = databaseRegularEntityColumns.indexOf(
-				new EntityColumn("headId"));
+				new EntityColumn(this, "headId"));
 
 			databaseRegularEntityColumns.add(index + 1, headEntityColumn);
 
@@ -6486,9 +6509,10 @@ public class ServiceBuilder {
 
 				listIterator.set(
 					new EntityFinder(
-						entityFinder.getName(), entityFinder.getPluralName(),
-						"Collection", false, entityFinder.getWhere(),
-						entityFinder.getDBWhere(), entityFinder.isDBIndex(),
+						this, entityFinder.getName(),
+						entityFinder.getPluralName(), "Collection", false,
+						entityFinder.getWhere(), entityFinder.getDBWhere(),
+						entityFinder.isDBIndex(),
 						new ArrayList<>(entityFinder.getEntityColumns())));
 
 				List<EntityColumn> finderEntityColumns =
@@ -6500,7 +6524,7 @@ public class ServiceBuilder {
 
 				listIterator.add(
 					new EntityFinder(
-						entityFinder.getName() + "_Head", null,
+						this, entityFinder.getName() + "_Head", null,
 						entityFinder.getReturnType(), entityFinder.isUnique(),
 						entityFinder.getWhere(), entityFinder.getDBWhere(),
 						entityFinder.isDBIndex(), finderEntityColumns));
@@ -6654,7 +6678,7 @@ public class ServiceBuilder {
 			}
 
 			localizedEntityColumns.add(
-				new EntityColumn(columnName, columnDBName));
+				new EntityColumn(this, columnName, columnDBName));
 
 			newLocalizedColumnElement = newLocalizedEntityElement.addElement(
 				"column");

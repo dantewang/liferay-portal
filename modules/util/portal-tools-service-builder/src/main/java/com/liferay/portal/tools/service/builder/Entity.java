@@ -70,15 +70,18 @@ public class Entity implements Comparable<Entity> {
 	}
 
 	public static boolean hasEntityColumn(
-		String name, List<EntityColumn> entityColumns) {
+		ServiceBuilder serviceBuilder, String name,
+		List<EntityColumn> entityColumns) {
 
-		return hasEntityColumn(name, null, entityColumns);
+		return hasEntityColumn(serviceBuilder, name, null, entityColumns);
 	}
 
 	public static boolean hasEntityColumn(
-		String name, String type, List<EntityColumn> entityColumns) {
+		ServiceBuilder serviceBuilder, String name, String type,
+		List<EntityColumn> entityColumns) {
 
-		int index = entityColumns.indexOf(new EntityColumn(name));
+		int index = entityColumns.indexOf(
+			new EntityColumn(serviceBuilder, name));
 
 		if (index != -1) {
 			EntityColumn entityColumn = entityColumns.get(index);
@@ -127,7 +130,7 @@ public class Entity implements Comparable<Entity> {
 		_portletShortName = portletShortName;
 		_name = name;
 		_pluralName = GetterUtil.getString(
-			pluralName, TextFormatter.formatPlural(name));
+			pluralName, serviceBuilder.formatPlural(name));
 		_humanName = GetterUtil.getString(
 			humanName, ServiceBuilder.toHumanName(name));
 		_table = table;
@@ -588,7 +591,7 @@ public class Entity implements Comparable<Entity> {
 	}
 
 	public String getPluralHumanName() {
-		return TextFormatter.formatPlural(_humanName);
+		return _serviceBuilder.formatPlural(_humanName);
 	}
 
 	public String getPluralName() {
@@ -829,11 +832,11 @@ public class Entity implements Comparable<Entity> {
 	}
 
 	public boolean hasEntityColumn(String name) {
-		return hasEntityColumn(name, _entityColumns);
+		return hasEntityColumn(_serviceBuilder, name, _entityColumns);
 	}
 
 	public boolean hasEntityColumn(String name, String type) {
-		return hasEntityColumn(name, type, _entityColumns);
+		return hasEntityColumn(_serviceBuilder, name, type, _entityColumns);
 	}
 
 	public boolean hasEntityColumns() {
@@ -1008,12 +1011,12 @@ public class Entity implements Comparable<Entity> {
 
 		String methodName = entityColumn.getMethodName();
 
-		if ((_entityColumns.indexOf(new EntityColumn("parent" + methodName)) !=
-				-1) &&
-			(_entityColumns.indexOf(new EntityColumn("left" + methodName)) !=
-				-1) &&
-			(_entityColumns.indexOf(new EntityColumn("right" + methodName)) !=
-				-1)) {
+		if (_entityColumns.contains(
+				new EntityColumn(_serviceBuilder, "parent" + methodName)) &&
+			_entityColumns.contains(
+				new EntityColumn(_serviceBuilder, "left" + methodName)) &&
+			_entityColumns.contains(
+				new EntityColumn(_serviceBuilder, "right" + methodName))) {
 
 			return true;
 		}

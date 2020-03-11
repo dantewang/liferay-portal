@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.PortletPreferencesImpl;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
@@ -48,7 +49,16 @@ public class TemplatePortletPreferences {
 
 			Object valueObject = entry.getValue();
 
-			if (valueObject instanceof String) {
+			if (valueObject instanceof Collection) {
+				for (Object value : (Collection)valueObject) {
+					if (value instanceof String) {
+						sb.append("<value>");
+						sb.append(XMLUtil.toCompactSafe((String)value));
+						sb.append("</value>");
+					}
+				}
+			}
+			else if (valueObject instanceof String) {
 				sb.append("<value>");
 				sb.append(XMLUtil.toCompactSafe((String)valueObject));
 				sb.append("</value>");

@@ -46,9 +46,9 @@ definition {
 			collectionName = "Basic Components",
 			fragmentName = "Button");
 
-		PageEditor.clickFragmentTopper(fragmentName = "Button");
-
-		AssertVisible(locator1 = "PageEditor#EDITABLE_FIELD_TOOLBAR_CONFIGURATION_BUTTON");
+		AssertVisible(
+			key_elementType = "Fragment",
+			locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
 	}
 
 	@description = "This is a test for LPS-99377. User can change checkbox fragment configuration."
@@ -181,11 +181,9 @@ definition {
 			collectionName = "Collection Name",
 			fragmentName = "Text Fragment Example");
 
-		Click(
-			fragment_name = "Text Fragment Example",
-			locator1 = "PageEditor#SECTION_NAME");
-
-		PageEditorConfiguration._toggleConfigurationFloatingToolbar();
+		Click.clickNoMouseOver(
+			key_elementType = "Fragment",
+			locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
 
 		task ("Assert placeholder is exist") {
 			AssertVisible(locator1 = "FragmentEditor#FRAGMENTS_EDITOR_FLOATING_CONFIGURATION_PANEL");

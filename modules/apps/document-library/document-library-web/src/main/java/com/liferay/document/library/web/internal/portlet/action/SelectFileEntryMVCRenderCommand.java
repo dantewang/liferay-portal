@@ -15,7 +15,7 @@
 package com.liferay.document.library.web.internal.portlet.action;
 
 import com.liferay.document.library.constants.DLPortletKeys;
-import com.liferay.document.library.web.internal.util.DLTrashUtil;
+import com.liferay.document.library.web.internal.helper.DLTrashHelper;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 
 import org.osgi.service.component.annotations.Component;
@@ -36,8 +36,8 @@ import org.osgi.service.component.annotations.Reference;
 public class SelectFileEntryMVCRenderCommand extends GetFolderMVCRenderCommand {
 
 	@Override
-	protected DLTrashUtil getDLTrashUtil() {
-		return _dlTrashUtil;
+	protected DLTrashHelper getDLTrashHelper() {
+		return _dlTrashHelper;
 	}
 
 	@Override
@@ -46,6 +46,6 @@ public class SelectFileEntryMVCRenderCommand extends GetFolderMVCRenderCommand {
 	}
 
 	@Reference
-	private DLTrashUtil _dlTrashUtil;
+	private DLTrashHelper _dlTrashHelper;
 
 }

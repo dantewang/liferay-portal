@@ -40,7 +40,7 @@ import com.liferay.exportimport.lar.PermissionImporter;
 import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.processor.PortletRegistry;
 import com.liferay.fragment.service.FragmentEntryLinkLocalService;
-import com.liferay.layout.admin.web.internal.exportimport.data.handler.util.LayoutPageTemplateStructureDataHandlerUtil;
+import com.liferay.layout.admin.web.internal.exportimport.data.handler.helper.LayoutPageTemplateStructureDataHandlerHelper;
 import com.liferay.layout.model.LayoutClassedModelUsage;
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructure;
 import com.liferay.layout.page.template.service.LayoutPageTemplateStructureLocalService;
@@ -1498,7 +1498,7 @@ public class LayoutStagedModelDataHandler
 		for (Element layoutPageTemplateStructureElement :
 				layoutPageTemplateStructureElements) {
 
-			_layoutPageTemplateStructureDataHandlerUtil.
+			_layoutPageTemplateStructureDataHandlerHelper.
 				importLayoutPageTemplateStructure(
 					portletDataContext,
 					_portal.getClassNameId(Layout.class.getName()),
@@ -2336,8 +2336,8 @@ public class LayoutStagedModelDataHandler
 	private LayoutLocalServiceHelper _layoutLocalServiceHelper;
 
 	@Reference
-	private LayoutPageTemplateStructureDataHandlerUtil
-		_layoutPageTemplateStructureDataHandlerUtil;
+	private LayoutPageTemplateStructureDataHandlerHelper
+		_layoutPageTemplateStructureDataHandlerHelper;
 
 	@Reference
 	private LayoutPageTemplateStructureLocalService

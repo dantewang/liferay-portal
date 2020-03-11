@@ -1,7 +1,7 @@
 Bundle-Activator: com.liferay.app.builder.web.internal.activator.AppBuilderWebBundleActivator
 Bundle-Name: Liferay App Builder Web
 Bundle-SymbolicName: com.liferay.app.builder.web
-Bundle-Version: 1.0.18
+Bundle-Version: 1.0.19
 Provide-Capability:\
 	liferay.resource.bundle;\
 		resource.bundle.aggregate:String="(bundle.symbolic.name=com.liferay.app.builder.lang)";\

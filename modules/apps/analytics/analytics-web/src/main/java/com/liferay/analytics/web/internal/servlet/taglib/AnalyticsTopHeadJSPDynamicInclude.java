@@ -65,6 +65,8 @@ public class AnalyticsTopHeadJSPDynamicInclude extends BaseJSPDynamicInclude {
 		}
 
 		Map<String, String> analyticsClientConfig = HashMapBuilder.put(
+			"channelId", _getLiferayAnalyticsChannelId(themeDisplay)
+		).put(
 			"dataSourceId",
 			_getLiferayAnalyticsDataSourceId(themeDisplay.getCompany())
 		).put(
@@ -104,6 +106,14 @@ public class AnalyticsTopHeadJSPDynamicInclude extends BaseJSPDynamicInclude {
 	)
 	protected void setServletContext(ServletContext servletContext) {
 		super.setServletContext(servletContext);
+	}
+
+	private String _getLiferayAnalyticsChannelId(ThemeDisplay themeDisplay) {
+		Layout layout = themeDisplay.getLayout();
+
+		Group group = layout.getGroup();
+
+		return group.getTypeSettingsProperty("analyticsChannelId");
 	}
 
 	private String _getLiferayAnalyticsDataSourceId(Company company) {

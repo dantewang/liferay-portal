@@ -25,7 +25,7 @@ import com.liferay.document.library.kernel.util.DLValidator;
 import com.liferay.document.library.kernel.versioning.VersioningStrategy;
 import com.liferay.document.library.preview.DLPreviewRendererProvider;
 import com.liferay.document.library.util.DLURLHelper;
-import com.liferay.document.library.web.internal.util.DLTrashUtil;
+import com.liferay.document.library.web.internal.helper.DLTrashHelper;
 import com.liferay.dynamic.data.mapping.storage.StorageEngine;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFactory;
@@ -122,7 +122,7 @@ public class DLDisplayContextProviderImpl implements DLDisplayContextProvider {
 			dlViewFileEntryHistoryDisplayContext =
 				new DefaultDLViewFileEntryHistoryDisplayContext(
 					httpServletRequest, fileVersion, resourceBundle,
-					_dlTrashUtil, _versioningStrategy, _dlURLHelper);
+					_dlTrashHelper, _versioningStrategy, _dlURLHelper);
 
 		if (fileVersion == null) {
 			return dlViewFileEntryHistoryDisplayContext;
@@ -164,7 +164,7 @@ public class DLDisplayContextProviderImpl implements DLDisplayContextProvider {
 				new DefaultDLViewFileVersionDisplayContext(
 					httpServletRequest, httpServletResponse, fileShortcut,
 					_dlMimeTypeDisplayContext, resourceBundle, _storageEngine,
-					_dlTrashUtil, dlPreviewRendererProvider,
+					_dlTrashHelper, dlPreviewRendererProvider,
 					_versioningStrategy, _dlURLHelper);
 
 			for (DLDisplayContextFactory dlDisplayContextFactory :
@@ -202,7 +202,7 @@ public class DLDisplayContextProviderImpl implements DLDisplayContextProvider {
 			new DefaultDLViewFileVersionDisplayContext(
 				httpServletRequest, httpServletResponse, fileVersion,
 				_dlMimeTypeDisplayContext, resourceBundle, _storageEngine,
-				_dlTrashUtil, dlPreviewRendererProvider, _versioningStrategy,
+				_dlTrashHelper, dlPreviewRendererProvider, _versioningStrategy,
 				_dlURLHelper);
 
 		for (DLDisplayContextFactory dlDisplayContextFactory :
@@ -259,7 +259,7 @@ public class DLDisplayContextProviderImpl implements DLDisplayContextProvider {
 		_dlPreviewRendererProviders;
 
 	@Reference
-	private DLTrashUtil _dlTrashUtil;
+	private DLTrashHelper _dlTrashHelper;
 
 	@Reference
 	private DLURLHelper _dlURLHelper;

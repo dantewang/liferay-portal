@@ -281,6 +281,14 @@ public class DepotAppCustomizationLocalServiceWrapper
 	}
 
 	@Override
+	public int getDepotAppCustomizationsCount(
+		long depotEntryId, boolean enabled) {
+
+		return _depotAppCustomizationLocalService.
+			getDepotAppCustomizationsCount(depotEntryId, enabled);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery
 		getIndexableActionableDynamicQuery() {
 

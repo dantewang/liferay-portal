@@ -17,6 +17,7 @@ package com.liferay.project.templates;
 import aQute.bnd.main.bnd;
 
 import com.liferay.maven.executor.MavenExecutor;
+import com.liferay.project.templates.extensions.ProjectTemplatesArgs;
 import com.liferay.project.templates.extensions.util.FileUtil;
 import com.liferay.project.templates.extensions.util.ProjectTemplatesUtil;
 import com.liferay.project.templates.extensions.util.Validator;
@@ -463,8 +464,6 @@ public interface BaseProjectTemplatesTestCase {
 		completeArgs.add("-DartifactId=" + name);
 		completeArgs.add("-Dversion=1.0.0");
 
-		String liferayVersion = null;
-
 		boolean liferayVersionSet = false;
 		boolean projectTypeSet = false;
 
@@ -472,7 +471,6 @@ public interface BaseProjectTemplatesTestCase {
 			completeArgs.add(arg);
 
 			if (arg.startsWith("-DliferayVersion=")) {
-				liferayVersion = arg.substring(17);
 				liferayVersionSet = true;
 			}
 			else if (arg.startsWith("-DprojectType=")) {
@@ -481,7 +479,7 @@ public interface BaseProjectTemplatesTestCase {
 		}
 
 		if (!liferayVersionSet) {
-			completeArgs.add("-DliferayVersion=7.3.0");
+			completeArgs.add("-DliferayVersion=" + getDefaultLiferayVersion());
 		}
 
 		if (!projectTypeSet) {
@@ -771,6 +769,12 @@ public interface BaseProjectTemplatesTestCase {
 		return executeMaven(projectDir, false, mavenExecutor, args);
 	}
 
+	public default String getDefaultLiferayVersion() {
+		ProjectTemplatesArgs projectTemplatesArgs = new ProjectTemplatesArgs();
+
+		return projectTemplatesArgs.getLiferayVersion();
+	}
+
 	public default File getWorkspaceDir(File dir) {
 		File gradleParent = findParentFile(
 			dir,
@@ -843,9 +847,11 @@ public interface BaseProjectTemplatesTestCase {
 			enableTargetPlatformInWorkspace(workspaceDir, "7.2.1");
 		}
 		else {
-			workspaceDir = buildWorkspace(temporaryFolder, "7.3.0");
+			workspaceDir = buildWorkspace(
+				temporaryFolder, getDefaultLiferayVersion());
 
-			enableTargetPlatformInWorkspace(workspaceDir, "7.3.0");
+			enableTargetPlatformInWorkspace(
+				workspaceDir, getDefaultLiferayVersion());
 		}
 
 		File modulesDir = new File(workspaceDir, "modules");

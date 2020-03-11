@@ -229,6 +229,10 @@ public interface DepotAppCustomizationLocalService
 	public int getDepotAppCustomizationsCount();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getDepotAppCustomizationsCount(
+		long depotEntryId, boolean enabled);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
 	/**

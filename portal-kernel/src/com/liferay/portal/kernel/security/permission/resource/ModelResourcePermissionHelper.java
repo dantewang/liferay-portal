@@ -19,7 +19,10 @@ import com.liferay.portal.kernel.security.permission.PermissionChecker;
 
 /**
  * @author Preston Crary
+ * @deprecated As of Athanasius (7.3.x), replaced by {@link
+ *             ModelResourcePermissionUtil}
  */
+@Deprecated
 public class ModelResourcePermissionHelper {
 
 	public static void check(

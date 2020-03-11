@@ -17,8 +17,13 @@ package com.liferay.data.engine.taglib.servlet.taglib;
 import com.liferay.data.engine.taglib.servlet.taglib.base.BaseDataLayoutBuilderTag;
 import com.liferay.data.engine.taglib.servlet.taglib.util.DataLayoutTaglibUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
+import com.liferay.portal.kernel.util.ListUtil;
 
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -47,6 +52,7 @@ public class DataLayoutBuilderTag extends BaseDataLayoutBuilderTag {
 		setNamespacedAttribute(
 			request, "fieldTypesModules",
 			DataLayoutTaglibUtil.resolveFieldTypesModules());
+		setNamespacedAttribute(request, "sidebarPanels", _getSidebarPanels());
 
 		return result;
 	}
@@ -85,6 +91,40 @@ public class DataLayoutBuilderTag extends BaseDataLayoutBuilderTag {
 		).toArray(
 			String[]::new
 		);
+	}
+
+	private Map<String, Object> _getSidebarPanels() {
+		Map<String, Object> sidebarPanels =
+			LinkedHashMapBuilder.<String, Object>put(
+				"fields",
+				HashMapBuilder.<String, Object>put(
+					"icon", "grid"
+				).put(
+					"isLink", false
+				).put(
+					"label", LanguageUtil.get(request, "fields")
+				).put(
+					"pluginEntryPoint",
+					DataLayoutTaglibUtil.resolveModule(
+						"data-engine-taglib/data_layout_builder/js/plugins" +
+							"/fields-sidebar/index.es")
+				).put(
+					"sidebarPanelId", "fields"
+				).build()
+			).build();
+
+		List<Map> additionalPanels = getAdditionalPanels();
+
+		if (ListUtil.isEmpty(additionalPanels)) {
+			return sidebarPanels;
+		}
+
+		for (Map<String, Object> additionalPanel : additionalPanels) {
+			sidebarPanels.put(
+				(String)additionalPanel.get("sidebarPanelId"), additionalPanel);
+		}
+
+		return sidebarPanels;
 	}
 
 }

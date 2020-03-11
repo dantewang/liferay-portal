@@ -217,7 +217,7 @@
 </tr>
 <tr>
 	<td>FIELD_LABEL</td>
-	<td>//div[contains(@data-field-name,'${key_fieldName}')]//p | //div[contains(@class,'ddm-field-container')]//p[contains(text(),'${key_fieldName}')]</td>
+	<td>//div[contains(@data-field-name,'${key_fieldName}')]//p | //div[contains(@class,'ddm-field-container')]//p[contains(text(),'${key_fieldName}')] | //div[contains(@class,'ddm')]//p[contains(text(),'${key_fieldName}')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -309,7 +309,7 @@
 </tr>
 <tr>
 	<td>DATA_PROVIDER_OUTPUT_PARAMETER_PATH_FIELD_2</td>
-	<td>//div[contains(@data-field-name,'outputParameters')]/../following-sibling::div/div//input[@type='text' and contains(@name,'outputParameters') and contains(@placeholder,'path')]</td>
+	<td>//div[contains(@data-field-name,'outputParameters')]/following-sibling::div/div//input[@type='text' and contains(@name,'outputParameters') and contains(@placeholder,'path')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -319,7 +319,7 @@
 </tr>
 <tr>
 	<td>DATA_PROVIDER_OUTPUT_PARAMETER_LABEL_FIELD_2</td>
-	<td>//div[contains(@data-field-name,'outputParameters')]/../following-sibling::div/div//input[@type='text' and contains(@name,'outputParameters') and contains(@placeholder,'label')]</td>
+	<td>//div[contains(@data-field-name,'outputParameters')]/following-sibling::div/div//input[@type='text' and contains(@name,'outputParameters') and contains(@placeholder,'label')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -329,7 +329,7 @@
 </tr>
 <tr>
 	<td>DATA_PROVIDER_OUTPUT_PARAMETER_TYPE_FIELD_2</td>
-	<td>//div[contains(@data-field-name,'outputParameters')]/../following-sibling::div//div[contains(@data-field-name,'outputParameterType')]//button</td>
+	<td>//div[contains(@data-field-name,'outputParameters')]/following-sibling::div//div[contains(@data-field-name,'outputParameterType')]//button</td>
 	<td></td>
 </tr>
 <tr>

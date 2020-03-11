@@ -16,10 +16,10 @@ package com.liferay.document.library.web.internal.portlet.configuration.icon;
 
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
+import com.liferay.document.library.web.internal.helper.DLTrashHelper;
 import com.liferay.document.library.web.internal.portlet.action.ActionUtil;
 import com.liferay.document.library.web.internal.util.DLFolderUtil;
 import com.liferay.document.library.web.internal.util.DLPortletConfigurationIconUtil;
-import com.liferay.document.library.web.internal.util.DLTrashUtil;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -28,7 +28,7 @@ import com.liferay.portal.kernel.portlet.configuration.icon.PortletConfiguration
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
-import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionHelper;
+import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.Portal;
@@ -66,7 +66,7 @@ public class DeleteFolderPortletConfigurationIcon
 
 			String key = "delete";
 
-			if (_dlTrashUtil.isTrashEnabled(
+			if (_dlTrashHelper.isTrashEnabled(
 					themeDisplay.getScopeGroupId(), folder.getRepositoryId())) {
 
 				key = "move-to-recycle-bin";
@@ -106,7 +106,7 @@ public class DeleteFolderPortletConfigurationIcon
 					WebKeys.THEME_DISPLAY);
 
 			if (DLFolderUtil.isRepositoryRoot(folder) ||
-				!_dlTrashUtil.isTrashEnabled(
+				!_dlTrashHelper.isTrashEnabled(
 					themeDisplay.getScopeGroupId(), folder.getRepositoryId())) {
 
 				portletURL.setParameter(Constants.CMD, Constants.DELETE);
@@ -171,7 +171,7 @@ public class DeleteFolderPortletConfigurationIcon
 
 				Folder folder = ActionUtil.getFolder(portletRequest);
 
-				return ModelResourcePermissionHelper.contains(
+				return ModelResourcePermissionUtil.contains(
 					_folderModelResourcePermission,
 					themeDisplay.getPermissionChecker(),
 					themeDisplay.getScopeGroupId(), folder.getFolderId(),
@@ -185,7 +185,7 @@ public class DeleteFolderPortletConfigurationIcon
 	}
 
 	@Reference
-	private DLTrashUtil _dlTrashUtil;
+	private DLTrashHelper _dlTrashHelper;
 
 	@Reference(
 		target = "(model.class.name=com.liferay.portal.kernel.repository.model.Folder)"

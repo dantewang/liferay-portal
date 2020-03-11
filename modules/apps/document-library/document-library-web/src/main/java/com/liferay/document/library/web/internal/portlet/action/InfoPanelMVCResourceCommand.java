@@ -18,7 +18,7 @@ import com.liferay.bulk.selection.BulkSelection;
 import com.liferay.bulk.selection.BulkSelectionFactory;
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.web.internal.constants.DLWebKeys;
-import com.liferay.document.library.web.internal.util.DLTrashUtil;
+import com.liferay.document.library.web.internal.helper.DLTrashHelper;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCResourceCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.repository.model.RepositoryModel;
@@ -66,7 +66,7 @@ public class InfoPanelMVCResourceCommand extends BaseMVCResourceCommand {
 		}
 
 		resourceRequest.setAttribute(
-			DLWebKeys.DOCUMENT_LIBRARY_TRASH_UTIL, _dlTrashUtil);
+			DLWebKeys.DOCUMENT_LIBRARY_TRASH_HELPER, _dlTrashHelper);
 		resourceRequest.setAttribute(
 			WebKeys.DOCUMENT_LIBRARY_FILE_ENTRIES,
 			ActionUtil.getFileEntries(resourceRequest));
@@ -83,7 +83,7 @@ public class InfoPanelMVCResourceCommand extends BaseMVCResourceCommand {
 	}
 
 	@Reference
-	private DLTrashUtil _dlTrashUtil;
+	private DLTrashHelper _dlTrashHelper;
 
 	@Reference(
 		target = "(model.class.name=com.liferay.portal.kernel.repository.model.RepositoryModel)"

@@ -15,7 +15,7 @@
 package com.liferay.layout.page.template.admin.web.internal.portlet.action;
 
 import com.liferay.layout.page.template.admin.constants.LayoutPageTemplateAdminPortletKeys;
-import com.liferay.layout.page.template.admin.web.internal.portlet.util.ExportUtil;
+import com.liferay.layout.page.template.admin.web.internal.portlet.helper.ExportHelper;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
 import com.liferay.layout.page.template.service.LayoutPageTemplateEntryLocalService;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
@@ -84,7 +84,7 @@ public class ExportLayoutPageTemplateEntriesMVCResourceCommand
 				layoutPageTemplateEntries.add(layoutPageTemplateEntry);
 			}
 
-			return _exportUtil.exportPageTemplateDefinitions(
+			return _exportHelper.exportPageTemplateDefinitions(
 				layoutPageTemplateEntries);
 		}
 		catch (Exception exception) {
@@ -112,7 +112,7 @@ public class ExportLayoutPageTemplateEntriesMVCResourceCommand
 	}
 
 	@Reference
-	private ExportUtil _exportUtil;
+	private ExportHelper _exportHelper;
 
 	@Reference
 	private LayoutPageTemplateEntryLocalService

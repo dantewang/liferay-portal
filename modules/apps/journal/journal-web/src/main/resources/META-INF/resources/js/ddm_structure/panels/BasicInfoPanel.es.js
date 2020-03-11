@@ -27,9 +27,14 @@ export default function BasicInfoPanel({url}) {
 		fetch(url)
 			.then(response => response.text())
 			.then(content => {
-				if (isMounted) {
+				if (isMounted()) {
 					setContent(content);
 					setLoading(false);
+				}
+			})
+			.catch(error => {
+				if (process.env.NODE_ENV === 'development') {
+					console.error(error);
 				}
 			});
 	}, [isMounted, url]);

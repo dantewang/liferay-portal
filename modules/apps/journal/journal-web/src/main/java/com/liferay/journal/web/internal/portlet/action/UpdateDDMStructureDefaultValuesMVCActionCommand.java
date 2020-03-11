@@ -26,7 +26,6 @@ import com.liferay.dynamic.data.mapping.util.DDMUtil;
 import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.exception.ArticleContentSizeException;
 import com.liferay.journal.model.JournalArticle;
-import com.liferay.journal.model.JournalArticleConstants;
 import com.liferay.journal.service.JournalArticleService;
 import com.liferay.journal.util.JournalConverter;
 import com.liferay.journal.util.JournalHelper;
@@ -34,20 +33,15 @@ import com.liferay.journal.web.internal.configuration.JournalDDMEditorConfigurat
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.LiferayFileItemException;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.util.HtmlUtil;
-import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
-import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
@@ -95,9 +89,6 @@ public class UpdateDDMStructureDefaultValuesMVCActionCommand
 	protected void doProcessAction(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
 
 		UploadException uploadException =
 			(UploadException)actionRequest.getAttribute(
@@ -160,20 +151,6 @@ public class UpdateDDMStructureDefaultValuesMVCActionCommand
 		}
 
 		String content = _journalConverter.getContent(ddmStructure, fields);
-
-		Locale articleDefaultLocale = LocaleUtil.fromLanguageId(
-			LocalizationUtil.getDefaultLanguageId(content));
-
-		if ((classNameId == JournalArticleConstants.CLASSNAME_ID_DEFAULT) &&
-			!_hasDefaultLocale(titleMap, articleDefaultLocale)) {
-
-			titleMap.put(
-				articleDefaultLocale,
-				LanguageUtil.format(
-					_portal.getHttpServletRequest(actionRequest), "untitled-x",
-					HtmlUtil.escape(
-						ddmStructure.getName(themeDisplay.getLocale()))));
-		}
 
 		Map<Locale, String> descriptionMap =
 			LocalizationUtil.getLocalizationMap(
@@ -261,18 +238,6 @@ public class UpdateDDMStructureDefaultValuesMVCActionCommand
 		_assetDisplayPageEntryFormProcessor.process(
 			JournalArticle.class.getName(), article.getResourcePrimKey(),
 			actionRequest);
-	}
-
-	private boolean _hasDefaultLocale(Map<Locale, String> map, Locale locale) {
-		if (MapUtil.isEmpty(map)) {
-			return false;
-		}
-
-		if (Validator.isNull(map.get(locale))) {
-			return false;
-		}
-
-		return true;
 	}
 
 	@Reference

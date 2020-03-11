@@ -20,10 +20,10 @@ import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 import com.liferay.document.library.web.internal.display.context.logic.DLPortletInstanceSettingsHelper;
 import com.liferay.document.library.web.internal.display.context.util.DLRequestHelper;
+import com.liferay.document.library.web.internal.helper.DLTrashHelper;
 import com.liferay.document.library.web.internal.security.permission.resource.DLFolderPermission;
 import com.liferay.document.library.web.internal.security.permission.resource.DLPermission;
 import com.liferay.document.library.web.internal.util.DLFolderUtil;
-import com.liferay.document.library.web.internal.util.DLTrashUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.search.ResultRow;
@@ -64,10 +64,10 @@ import javax.servlet.http.HttpServletRequest;
 public class FolderActionDisplayContext {
 
 	public FolderActionDisplayContext(
-		HttpServletRequest httpServletRequest, DLTrashUtil dlTrashUtil) {
+		HttpServletRequest httpServletRequest, DLTrashHelper dlTrashHelper) {
 
 		_httpServletRequest = httpServletRequest;
-		_dlTrashUtil = dlTrashUtil;
+		_dlTrashHelper = dlTrashHelper;
 
 		_dlRequestHelper = new DLRequestHelper(httpServletRequest);
 	}
@@ -620,7 +620,7 @@ public class FolderActionDisplayContext {
 
 		if (((folder == null) ||
 			 folder.isRepositoryCapabilityProvided(TrashCapability.class)) &&
-			_dlTrashUtil.isTrashEnabled(
+			_dlTrashHelper.isTrashEnabled(
 				_dlRequestHelper.getScopeGroupId(), _getRepositoryId())) {
 
 			return true;
@@ -853,7 +853,7 @@ public class FolderActionDisplayContext {
 	}
 
 	private final DLRequestHelper _dlRequestHelper;
-	private final DLTrashUtil _dlTrashUtil;
+	private final DLTrashHelper _dlTrashHelper;
 	private Folder _folder;
 	private final HttpServletRequest _httpServletRequest;
 	private String _randomNamespace;

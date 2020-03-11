@@ -40,7 +40,7 @@ import com.liferay.document.library.kernel.service.DLFileEntryTypeLocalService;
 import com.liferay.document.library.kernel.service.DLFileVersionLocalService;
 import com.liferay.document.library.kernel.service.DLTrashService;
 import com.liferay.document.library.kernel.util.DL;
-import com.liferay.document.library.web.internal.util.DLTrashUtil;
+import com.liferay.document.library.web.internal.helper.DLTrashHelper;
 import com.liferay.dynamic.data.mapping.kernel.DDMFormValues;
 import com.liferay.dynamic.data.mapping.kernel.DDMStructure;
 import com.liferay.dynamic.data.mapping.kernel.StorageEngineManagerUtil;
@@ -288,7 +288,7 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 
 				if (folder.isRepositoryCapabilityProvided(
 						TrashCapability.class) &&
-					_dlTrashUtil.isTrashEnabled(
+					_dlTrashHelper.isTrashEnabled(
 						folder.getGroupId(), folder.getRepositoryId())) {
 
 					_dlTrashService.moveFolderToTrash(folder.getFolderId());
@@ -308,7 +308,7 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 
 				if (fileEntry.isRepositoryCapabilityProvided(
 						TrashCapability.class) &&
-					_dlTrashUtil.isTrashEnabled(
+					_dlTrashHelper.isTrashEnabled(
 						fileEntry.getGroupId(), fileEntry.getRepositoryId())) {
 
 					_dlTrashService.moveFileEntryToTrash(
@@ -1263,9 +1263,9 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 	private DLFileVersionLocalService _dlFileVersionLocalService;
 
 	@Reference
-	private DLTrashService _dlTrashService;
+	private DLTrashHelper _dlTrashHelper;
 
 	@Reference
-	private DLTrashUtil _dlTrashUtil;
+	private DLTrashService _dlTrashService;
 
 }

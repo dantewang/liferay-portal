@@ -18,9 +18,6 @@
 
 <%
 String analyticsClientConfig = (String)request.getAttribute(AnalyticsWebKeys.ANALYTICS_CLIENT_CONFIG);
-Group liveGroup = StagingUtil.getLiveGroup(themeDisplay.getScopeGroup());
-
-String channelId = liveGroup.getTypeSettingsProperty("analyticsChannelId");
 %>
 
 <script data-senna-track="temporary" type="text/javascript">
@@ -46,7 +43,6 @@ String channelId = liveGroup.getTypeSettingsProperty("analyticsChannelId");
 
 		Analytics.registerMiddleware(function(request) {
 			request.context.canonicalUrl = themeDisplay.getCanonicalURL();
-			request.context.channelId = <%= StringUtil.quote(channelId) %>;
 			request.context.groupId = themeDisplay.getScopeGroupIdOrLiveGroupId();
 
 			return request;
@@ -72,7 +68,6 @@ String channelId = liveGroup.getTypeSettingsProperty("analyticsChannelId");
 
 					Analytics.registerMiddleware(function(request) {
 						request.context.canonicalUrl = themeDisplay.getCanonicalURL();
-						request.context.channelId = <%= StringUtil.quote(channelId) %>;
 						request.context.groupId = themeDisplay.getScopeGroupIdOrLiveGroupId();
 
 						return request;

@@ -290,7 +290,7 @@
 			<finder-column name="articleId" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="JournalContentSearch" remote-service="false">
+	<entity local-service="true" name="JournalContentSearch" plural-name="JournalContentSearchs" remote-service="false">
 
 		<!-- PK fields -->
 

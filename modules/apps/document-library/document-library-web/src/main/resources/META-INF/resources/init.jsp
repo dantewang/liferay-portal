@@ -120,6 +120,7 @@ page import="com.liferay.document.library.web.internal.display.context.logic.DLP
 page import="com.liferay.document.library.web.internal.display.context.logic.DLVisualizationHelper" %><%@
 page import="com.liferay.document.library.web.internal.display.context.util.DLRequestHelper" %><%@
 page import="com.liferay.document.library.web.internal.display.context.util.IGRequestHelper" %><%@
+page import="com.liferay.document.library.web.internal.helper.DLTrashHelper" %><%@
 page import="com.liferay.document.library.web.internal.portlet.action.ActionUtil" %><%@
 page import="com.liferay.document.library.web.internal.portlet.action.EditFileEntryMVCActionCommand" %><%@
 page import="com.liferay.document.library.web.internal.search.EntriesChecker" %><%@
@@ -131,7 +132,6 @@ page import="com.liferay.document.library.web.internal.security.permission.resou
 page import="com.liferay.document.library.web.internal.settings.DLPortletInstanceSettings" %><%@
 page import="com.liferay.document.library.web.internal.util.DLBreadcrumbUtil" %><%@
 page import="com.liferay.document.library.web.internal.util.DLSubscriptionUtil" %><%@
-page import="com.liferay.document.library.web.internal.util.DLTrashUtil" %><%@
 page import="com.liferay.document.library.web.internal.util.DLWebComponentProvider" %><%@
 page import="com.liferay.document.library.web.internal.util.IGUtil" %><%@
 page import="com.liferay.dynamic.data.mapping.kernel.DDMForm" %><%@
@@ -261,7 +261,7 @@ page import="javax.portlet.WindowState" %>
 <portlet:defineObjects />
 
 <%
-DLTrashUtil dlTrashUtil = (DLTrashUtil)request.getAttribute(DLWebKeys.DOCUMENT_LIBRARY_TRASH_UTIL);
+DLTrashHelper dlTrashHelper = (DLTrashHelper)request.getAttribute(DLWebKeys.DOCUMENT_LIBRARY_TRASH_HELPER);
 
 DLWebComponentProvider dlWebComponentProvider = DLWebComponentProvider.getDLWebComponentProvider();
 

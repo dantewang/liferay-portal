@@ -28,10 +28,10 @@ import com.liferay.document.library.kernel.util.DLUtil;
 import com.liferay.document.library.web.internal.constants.DLWebKeys;
 import com.liferay.document.library.web.internal.display.context.logic.DLPortletInstanceSettingsHelper;
 import com.liferay.document.library.web.internal.display.context.util.DLRequestHelper;
+import com.liferay.document.library.web.internal.helper.DLTrashHelper;
 import com.liferay.document.library.web.internal.security.permission.resource.DLFileEntryPermission;
 import com.liferay.document.library.web.internal.security.permission.resource.DLFolderPermission;
 import com.liferay.document.library.web.internal.settings.DLPortletInstanceSettings;
-import com.liferay.document.library.web.internal.util.DLTrashUtil;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemList;
@@ -103,8 +103,8 @@ public class DLAdminManagementToolbarDisplayContext {
 		_dlPortletInstanceSettingsHelper = new DLPortletInstanceSettingsHelper(
 			_dlRequestHelper);
 
-		_dlTrashUtil = (DLTrashUtil)_httpServletRequest.getAttribute(
-			DLWebKeys.DOCUMENT_LIBRARY_TRASH_UTIL);
+		_dlTrashHelper = (DLTrashHelper)_httpServletRequest.getAttribute(
+			DLWebKeys.DOCUMENT_LIBRARY_TRASH_HELPER);
 
 		_themeDisplay = (ThemeDisplay)_httpServletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -201,7 +201,7 @@ public class DLAdminManagementToolbarDisplayContext {
 						dropdownItem -> {
 							dropdownItem.putData("action", "deleteEntries");
 
-							if (_dlTrashUtil.isTrashEnabled(
+							if (_dlTrashHelper.isTrashEnabled(
 									scopeGroup.getGroupId(),
 									_getRepositoryId())) {
 
@@ -924,7 +924,7 @@ public class DLAdminManagementToolbarDisplayContext {
 	private final DLPortletInstanceSettingsHelper
 		_dlPortletInstanceSettingsHelper;
 	private final DLRequestHelper _dlRequestHelper;
-	private final DLTrashUtil _dlTrashUtil;
+	private final DLTrashHelper _dlTrashHelper;
 	private Boolean _hasValidAssetVocabularies;
 	private final HttpServletRequest _httpServletRequest;
 	private final LiferayPortletRequest _liferayPortletRequest;

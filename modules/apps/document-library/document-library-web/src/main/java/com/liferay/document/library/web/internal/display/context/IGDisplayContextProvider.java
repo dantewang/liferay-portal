@@ -16,7 +16,7 @@ package com.liferay.document.library.web.internal.display.context;
 
 import com.liferay.document.library.kernel.versioning.VersioningStrategy;
 import com.liferay.document.library.util.DLURLHelper;
-import com.liferay.document.library.web.internal.util.DLTrashUtil;
+import com.liferay.document.library.web.internal.helper.DLTrashHelper;
 import com.liferay.image.gallery.display.kernel.display.context.IGDisplayContextFactory;
 import com.liferay.image.gallery.display.kernel.display.context.IGViewFileVersionDisplayContext;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
@@ -66,7 +66,7 @@ public class IGDisplayContextProvider {
 			IGViewFileVersionDisplayContext igViewFileVersionDisplayContext =
 				new DefaultIGViewFileVersionDisplayContext(
 					httpServletRequest, httpServletResponse, fileShortcut,
-					resourceBundle, _dlTrashUtil, _versioningStrategy,
+					resourceBundle, _dlTrashHelper, _versioningStrategy,
 					_dlURLHelper);
 
 			if (fileShortcut == null) {
@@ -106,7 +106,7 @@ public class IGDisplayContextProvider {
 			IGViewFileVersionDisplayContext igViewFileVersionDisplayContext =
 				new DefaultIGViewFileVersionDisplayContext(
 					httpServletRequest, httpServletResponse, fileVersion,
-					resourceBundle, _dlTrashUtil, _versioningStrategy,
+					resourceBundle, _dlTrashHelper, _versioningStrategy,
 					_dlURLHelper);
 
 			if (fileVersion == null) {
@@ -141,7 +141,7 @@ public class IGDisplayContextProvider {
 	}
 
 	@Reference
-	private DLTrashUtil _dlTrashUtil;
+	private DLTrashHelper _dlTrashHelper;
 
 	@Reference
 	private DLURLHelper _dlURLHelper;

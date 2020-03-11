@@ -214,7 +214,9 @@ definition {
 
 		PageEditor.gotoTab(tabName = "Contents");
 
-		LexiconEntry.gotoFragmentEllipsisMenuItem(menuItem = "Edit");
+		LexiconEntry.gotoFragmentPageContentEllipsisMenuItem(
+			menuItem = "Edit",
+			rowEntry = "WC WebContent Title");
 
 		AssertVisible(locator1 = "WCEditWebContent#SIDEBAR");
 	}
@@ -255,7 +257,7 @@ definition {
 
 	@description = "This is a test for LPS-91000 and LPS-95002. User can edit number of columns a section has as well as padding options."
 	@priority = "5"
-	test ChangeLayoutSectionProperties {
+	test ChangeLayoutELementProperties {
 
 		// Ignore test from acceptance until POSHI-48 resolved
 
@@ -276,7 +278,11 @@ definition {
 		}
 
 		task ("Add a 2 column row layout") {
-			PageEditor.addLayoutRow(columnCount = "2");
+			PageEditor.addLayoutRow();
+
+			PageEditor.editLayoutRow(
+				columnCount = "2",
+				spaceBetweenColumns = "true");
 		}
 
 		task ("Assert the layout by default has space between columns") {
@@ -290,6 +296,12 @@ definition {
 		}
 
 		task ("Edit the row's properties") {
+			if (IsVisible(key_elementType = "Row", locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON")) {
+				Click(
+					key_elementType = "Row",
+					locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
+			}
+
 			PageEditor.editLayoutRow(
 				columnCount = "3",
 				spaceBetweenColumns = "false");
@@ -642,7 +654,7 @@ definition {
 
 	@description = "This is a test for LPS-102887. A user can edit content in a web content display widget through content panel"
 	@priority = "4"
-	test EditWecContentInAPViaContentPanel {
+	test EditWebContentInAPViaContentPanel {
 		JSONWebcontent.addWebContent(
 			content = "Web Content Content",
 			groupName = "Test Site Name",
@@ -686,7 +698,7 @@ definition {
 
 	@description = "This is a test for LPS-102887. A user can edit content in a web content display widget through content panel"
 	@priority = "4"
-	test EditWecContentInWCDViaContentPanel {
+	test EditWebContentInWCDViaContentPanel {
 		JSONWebcontent.addWebContent(
 			content = "Web Content Content",
 			groupName = "Test Site Name",

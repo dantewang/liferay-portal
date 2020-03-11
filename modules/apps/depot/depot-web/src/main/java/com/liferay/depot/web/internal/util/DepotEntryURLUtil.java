@@ -16,9 +16,13 @@ package com.liferay.depot.web.internal.util;
 
 import com.liferay.depot.model.DepotEntry;
 import com.liferay.depot.web.internal.constants.DepotPortletKeys;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.taglib.security.PermissionsURLTag;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionURL;
@@ -36,7 +40,7 @@ public class DepotEntryURLUtil {
 		ActionURL addDepotEntryURL = liferayPortletResponse.createActionURL();
 
 		addDepotEntryURL.setParameter(
-			ActionRequest.ACTION_NAME, "/depot_entry/add");
+			ActionRequest.ACTION_NAME, "/depot/add_depot_entry");
 		addDepotEntryURL.setParameter("redirect", redirect);
 
 		return addDepotEntryURL;
@@ -50,12 +54,25 @@ public class DepotEntryURLUtil {
 			liferayPortletResponse.createActionURL();
 
 		deleteDepotEntryActionURL.setParameter(
-			ActionRequest.ACTION_NAME, "/depot_entry/delete");
+			ActionRequest.ACTION_NAME, "/depot/delete_depot_entry");
 		deleteDepotEntryActionURL.setParameter("redirect", redirect);
 		deleteDepotEntryActionURL.setParameter(
 			"depotEntryId", String.valueOf(depotEntryId));
 
 		return deleteDepotEntryActionURL;
+	}
+
+	public static String getDepotEntryPermissionsURL(
+			DepotEntry depotEntry, LiferayPortletRequest liferayPortletRequest)
+		throws Exception {
+
+		Group group = depotEntry.getGroup();
+
+		return PermissionsURLTag.doTag(
+			StringPool.BLANK, DepotEntry.class.getName(), group.getName(), null,
+			String.valueOf(depotEntry.getDepotEntryId()),
+			LiferayWindowState.POP_UP.toString(), null,
+			liferayPortletRequest.getHttpServletRequest());
 	}
 
 	public static ActionURL getDisconnectSiteActionURL(
@@ -66,7 +83,7 @@ public class DepotEntryURLUtil {
 			liferayPortletResponse.createActionURL();
 
 		disconnectSiteActionURL.setParameter(
-			ActionRequest.ACTION_NAME, "/depot_entry/disconnect");
+			ActionRequest.ACTION_NAME, "/depot/disconnect_depot_entry");
 		disconnectSiteActionURL.setParameter("redirect", redirect);
 		disconnectSiteActionURL.setParameter(
 			"depotEntryGroupRelId", String.valueOf(depotEntryGroupRelId));
@@ -83,7 +100,7 @@ public class DepotEntryURLUtil {
 			PortletRequest.RENDER_PHASE);
 
 		editDepotEntryURL.setParameter(
-			"mvcRenderCommandName", "/depot_entry/edit");
+			"mvcRenderCommandName", "/depot/edit_depot_entry");
 		editDepotEntryURL.setParameter("redirect", redirect);
 		editDepotEntryURL.setParameter(
 			"depotEntryId", String.valueOf(depotEntry.getDepotEntryId()));
@@ -100,7 +117,7 @@ public class DepotEntryURLUtil {
 
 		updateSearchableActionURL.setParameter(
 			ActionRequest.ACTION_NAME,
-			"/depot_entry_group_rel/update_searchable");
+			"/depot/update_depot_entry_group_rel_searchable");
 		updateSearchableActionURL.setParameter("redirect", redirect);
 		updateSearchableActionURL.setParameter(
 			"depotEntryGroupRelId", String.valueOf(depotEntryGroupRelId));

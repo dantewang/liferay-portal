@@ -69,7 +69,7 @@ const setItem = (key, value) => {
 };
 
 /**
- * Analytics class that is desined to collect events that are captured
+ * Analytics class that is designed to collect events that are captured
  * for later processing. It persists the events in localStorage
  * and flushes it to the defined endpoint at regular intervals.
  */
@@ -126,9 +126,10 @@ class Analytics {
 	 * @example
 	 * Analytics.create(
 	 *   {
-	 *	   endpointUrl: 'https://osbasahcerebropublisher-projectname.lfr.io'
-	 *	   flushInterval: 2000,
-	 *	   userId: 'id-s7uatimmxgo',
+	 *     endpointUrl: 'https://osbasahpublisher-projectid.lfr.cloud'
+	 *     flushInterval: 2000,
+	 *     userId: 'id-s7uatimmxgo',
+	 *     channelId: '123456789',
 	 *     dataSourceId: 'MyDataSourceId',
 	 *   }
 	 * );
@@ -216,7 +217,7 @@ class Analytics {
 	}
 
 	/**
-	 * Registers the given plugin and executes its initialistion logic
+	 * Registers the given plugin and executes its initialization logic
 	 * @param {Function} plugin An Analytics Plugin
 	 */
 	registerPlugin(plugin) {
@@ -278,7 +279,7 @@ class Analytics {
 	}
 
 	/**
-	 * Registers an event that is to be sent to the LCS endpoint
+	 * Registers an event that is to be sent to Analytics Cloud
 	 * @param {string} eventId Id of the event
 	 * @param {string} applicationId ID of the application that triggered the event
 	 * @param {object} eventProps Complementary information about the event
@@ -366,9 +367,9 @@ class Analytics {
 	}
 
 	/**
-	 * Returns an unique identifier for an user, additionaly it stores
+	 * Returns an unique identifier for an user, additionally it stores
 	 * the generated token to the local storage cache and clears
-	 * previously stored identiy hash.
+	 * previously stored identity hash.
 	 * @return {string} The generated id
 	 */
 	_generateUserId() {
@@ -427,8 +428,8 @@ class Analytics {
 
 	/**
 	 * Gets the userId for the existing analytics user. Previously generated ids
-	 * are stored and retrieved before generating a new one. If a anonymous
-	 * navigation is started after a identified navigation, the user ID token
+	 * are stored and retrieved before generating a new one. If an anonymous
+	 * navigation is started after an identified navigation, the user ID token
 	 * is regenerated.
 	 * @return {Promise} A promise resolved with the stored or generated userId
 	 */

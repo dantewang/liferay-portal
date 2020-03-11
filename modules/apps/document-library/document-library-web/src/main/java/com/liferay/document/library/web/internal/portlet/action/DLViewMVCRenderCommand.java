@@ -22,8 +22,8 @@ import com.liferay.document.library.kernel.service.DLFolderLocalService;
 import com.liferay.document.library.repository.authorization.capability.AuthorizationCapability;
 import com.liferay.document.library.web.internal.constants.DLWebKeys;
 import com.liferay.document.library.web.internal.display.context.DLViewFileEntryMetadataSetsDisplayContext;
+import com.liferay.document.library.web.internal.helper.DLTrashHelper;
 import com.liferay.document.library.web.internal.portlet.toolbar.contributor.DLPortletToolbarContributorRegistry;
-import com.liferay.document.library.web.internal.util.DLTrashUtil;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLinkLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMStructureService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -95,8 +95,8 @@ public class DLViewMVCRenderCommand extends GetFolderMVCRenderCommand {
 	}
 
 	@Override
-	protected DLTrashUtil getDLTrashUtil() {
-		return _dlTrashUtil;
+	protected DLTrashHelper getDLTrashHelper() {
+		return _dlTrashHelper;
 	}
 
 	@Override
@@ -163,7 +163,7 @@ public class DLViewMVCRenderCommand extends GetFolderMVCRenderCommand {
 		_dlPortletToolbarContributorRegistry;
 
 	@Reference
-	private DLTrashUtil _dlTrashUtil;
+	private DLTrashHelper _dlTrashHelper;
 
 	@Reference
 	private Portal _portal;

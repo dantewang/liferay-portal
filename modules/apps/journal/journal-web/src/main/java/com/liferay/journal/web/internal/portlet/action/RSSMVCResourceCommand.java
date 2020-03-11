@@ -15,7 +15,7 @@
 package com.liferay.journal.web.internal.portlet.action;
 
 import com.liferay.journal.constants.JournalPortletKeys;
-import com.liferay.journal.web.internal.util.JournalRSSUtil;
+import com.liferay.journal.web.internal.helper.JournalRSSHelper;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseRSSMVCResourceCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 
@@ -45,18 +45,18 @@ public class RSSMVCResourceCommand extends BaseRSSMVCResourceCommand {
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
 
-		return _journalRSSUtil.getRSS(resourceRequest, resourceResponse);
+		return _journalRSSHelper.getRSS(resourceRequest, resourceResponse);
 	}
 
 	@Reference
-	protected void setJournalRSSUtil(JournalRSSUtil journalRSSUtil) {
-		_journalRSSUtil = journalRSSUtil;
+	protected void setJournalRSSHelper(JournalRSSHelper journalRSSHelper) {
+		_journalRSSHelper = journalRSSHelper;
 	}
 
-	protected void unsetJournalRSSUtil(JournalRSSUtil journalRSSUtil) {
-		_journalRSSUtil = null;
+	protected void unsetJournalRSSHelper(JournalRSSHelper journalRSSHelper) {
+		_journalRSSHelper = null;
 	}
 
-	private JournalRSSUtil _journalRSSUtil;
+	private JournalRSSHelper _journalRSSHelper;
 
 }

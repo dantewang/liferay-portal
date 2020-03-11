@@ -19,7 +19,7 @@ import com.liferay.document.library.util.DLURLHelper;
 import com.liferay.document.library.web.internal.display.context.logic.DLPortletInstanceSettingsHelper;
 import com.liferay.document.library.web.internal.display.context.logic.UIItemsBuilder;
 import com.liferay.document.library.web.internal.display.context.util.IGRequestHelper;
-import com.liferay.document.library.web.internal.util.DLTrashUtil;
+import com.liferay.document.library.web.internal.helper.DLTrashHelper;
 import com.liferay.image.gallery.display.kernel.display.context.IGViewFileVersionDisplayContext;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileShortcut;
@@ -44,21 +44,21 @@ public class DefaultIGViewFileVersionDisplayContext
 	public DefaultIGViewFileVersionDisplayContext(
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, FileShortcut fileShortcut,
-			ResourceBundle resourceBundle, DLTrashUtil dlTrashUtil,
+			ResourceBundle resourceBundle, DLTrashHelper dlTrashHelper,
 			VersioningStrategy versioningStrategy, DLURLHelper dlURLHelper)
 		throws PortalException {
 
 		this(
 			httpServletRequest, httpServletResponse,
 			fileShortcut.getFileVersion(), fileShortcut, resourceBundle,
-			dlTrashUtil, versioningStrategy, dlURLHelper);
+			dlTrashHelper, versioningStrategy, dlURLHelper);
 	}
 
 	public DefaultIGViewFileVersionDisplayContext(
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, FileVersion fileVersion,
 			FileShortcut fileShortcut, ResourceBundle resourceBundle,
-			DLTrashUtil dlTrashUtil, VersioningStrategy versioningStrategy,
+			DLTrashHelper dlTrashHelper, VersioningStrategy versioningStrategy,
 			DLURLHelper dlURLHelper)
 		throws PortalException {
 
@@ -69,12 +69,12 @@ public class DefaultIGViewFileVersionDisplayContext
 
 		if (fileShortcut == null) {
 			_uiItemsBuilder = new UIItemsBuilder(
-				httpServletRequest, fileVersion, resourceBundle, dlTrashUtil,
+				httpServletRequest, fileVersion, resourceBundle, dlTrashHelper,
 				versioningStrategy, dlURLHelper);
 		}
 		else {
 			_uiItemsBuilder = new UIItemsBuilder(
-				httpServletRequest, fileShortcut, resourceBundle, dlTrashUtil,
+				httpServletRequest, fileShortcut, resourceBundle, dlTrashHelper,
 				versioningStrategy, dlURLHelper);
 		}
 	}
@@ -82,13 +82,13 @@ public class DefaultIGViewFileVersionDisplayContext
 	public DefaultIGViewFileVersionDisplayContext(
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, FileVersion fileVersion,
-			ResourceBundle resourceBundle, DLTrashUtil dlTrashUtil,
+			ResourceBundle resourceBundle, DLTrashHelper dlTrashHelper,
 			VersioningStrategy versioningStrategy, DLURLHelper dlURLHelper)
 		throws PortalException {
 
 		this(
 			httpServletRequest, httpServletResponse, fileVersion, null,
-			resourceBundle, dlTrashUtil, versioningStrategy, dlURLHelper);
+			resourceBundle, dlTrashHelper, versioningStrategy, dlURLHelper);
 	}
 
 	@Override

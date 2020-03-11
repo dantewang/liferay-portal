@@ -172,6 +172,14 @@ public class DepotAppCustomizationPersistenceTest {
 	}
 
 	@Test
+	public void testCountByD_E() throws Exception {
+		_persistence.countByD_E(
+			RandomTestUtil.nextLong(), RandomTestUtil.randomBoolean());
+
+		_persistence.countByD_E(0L, RandomTestUtil.randomBoolean());
+	}
+
+	@Test
 	public void testCountByD_P() throws Exception {
 		_persistence.countByD_P(RandomTestUtil.nextLong(), "");
 
@@ -459,6 +467,17 @@ public class DepotAppCustomizationPersistenceTest {
 		DepotAppCustomization existingDepotAppCustomization =
 			_persistence.findByPrimaryKey(
 				newDepotAppCustomization.getPrimaryKey());
+
+		Assert.assertEquals(
+			Long.valueOf(existingDepotAppCustomization.getDepotEntryId()),
+			ReflectionTestUtil.<Long>invoke(
+				existingDepotAppCustomization, "getOriginalDepotEntryId",
+				new Class<?>[0]));
+		Assert.assertEquals(
+			Boolean.valueOf(existingDepotAppCustomization.getEnabled()),
+			ReflectionTestUtil.<Boolean>invoke(
+				existingDepotAppCustomization, "getOriginalEnabled",
+				new Class<?>[0]));
 
 		Assert.assertEquals(
 			Long.valueOf(existingDepotAppCustomization.getDepotEntryId()),
