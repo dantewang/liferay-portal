@@ -2194,6 +2194,10 @@ public class PropsValues {
 	public static final String PORTAL_PROXY_PATH = PropsUtil.get(
 		PropsKeys.PORTAL_PROXY_PATH);
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final boolean PORTAL_RESILIENCY_ENABLED =
 		GetterUtil.getBoolean(
 			PropsUtil.get(PropsKeys.PORTAL_RESILIENCY_ENABLED));
