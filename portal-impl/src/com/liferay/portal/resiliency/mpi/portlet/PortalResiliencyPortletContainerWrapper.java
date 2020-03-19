@@ -27,7 +27,6 @@ import com.liferay.portal.kernel.resiliency.spi.SPI;
 import com.liferay.portal.kernel.resiliency.spi.SPIRegistryUtil;
 import com.liferay.portal.kernel.resiliency.spi.agent.SPIAgent;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.util.PropsValues;
 
 import java.util.Collections;
 import java.util.List;
@@ -47,11 +46,6 @@ public class PortalResiliencyPortletContainerWrapper
 	public static PortletContainer
 		createPortalResiliencyPortletContainerWrapper(
 			PortletContainer portletContainer) {
-
-		if (PropsValues.PORTAL_RESILIENCY_ENABLED) {
-			portletContainer = new PortalResiliencyPortletContainerWrapper(
-				portletContainer);
-		}
 
 		return portletContainer;
 	}

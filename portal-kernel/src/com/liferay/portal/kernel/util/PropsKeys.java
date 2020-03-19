@@ -2485,6 +2485,10 @@ public interface PropsKeys {
 
 	public static final String PORTAL_PROXY_PATH = "portal.proxy.path";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String PORTAL_RESILIENCY_ENABLED =
 		"portal.resiliency.enabled";
 
