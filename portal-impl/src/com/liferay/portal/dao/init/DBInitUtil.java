@@ -152,7 +152,14 @@ public class DBInitUtil {
 			if (!rs.next()) {
 				_addReleaseInfo(connection);
 
-				StartupHelperUtil.setDbNew(true);
+				try (PreparedStatement statement = connection.prepareStatement(
+						"select count(*)from Release_ ");
+					ResultSet result = statement.executeQuery()) {
+
+					if (result.getInt(1) == 1) {
+						StartupHelperUtil.setDbNew(true);
+					}
+				}
 			}
 
 			return true;
