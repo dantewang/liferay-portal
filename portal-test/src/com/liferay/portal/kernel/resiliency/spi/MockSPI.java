@@ -22,7 +22,9 @@ import java.rmi.RemoteException;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), with no direct replacement
  */
+@Deprecated
 public class MockSPI implements SPI {
 
 	@Override
