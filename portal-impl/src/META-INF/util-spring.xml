@@ -196,18 +196,6 @@
 	<bean class="com.liferay.portal.kernel.portlet.configuration.icon.PortletConfigurationIconMenu" id="com.liferay.portal.kernel.portlet.configuration.icon.PortletConfigurationIconMenu" />
 	<bean class="com.liferay.portal.kernel.portlet.configuration.icon.PortletConfigurationIconTracker" id="com.liferay.portal.kernel.portlet.configuration.icon.PortletConfigurationIconTracker" />
 	<bean class="com.liferay.portal.kernel.portlet.toolbar.PortletToolbar" id="com.liferay.portal.kernel.portlet.toolbar.PortletToolbar" />
-	<bean class="com.liferay.portal.kernel.resiliency.spi.SPIRegistryUtil" id="com.liferay.portal.kernel.resiliency.spi.SPIRegistryUtil">
-		<property name="sPIRegistry">
-			<bean class="com.liferay.portal.resiliency.spi.SPIRegistryImpl">
-				<property name="errorSPI">
-					<bean class="com.liferay.portal.resiliency.spi.ErrorSPI" />
-				</property>
-				<property name="sPIRegistryValidator">
-					<bean class="com.liferay.portal.kernel.resiliency.spi.DefaultSPIRegistryValidator" />
-				</property>
-			</bean>
-		</property>
-	</bean>
 	<bean class="com.liferay.portal.kernel.resiliency.spi.agent.SPIAgentFactoryUtil" id="com.liferay.portal.kernel.resiliency.spi.agent.SPIAgentFactoryUtil">
 		<property name="sPIAgentClasses">
 			<set>
