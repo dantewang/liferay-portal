@@ -181,12 +181,12 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 			_charArrayWriter = null;
 		}
-		catch (UnsupportedEncodingException uee) {
+		catch (UnsupportedEncodingException unsupportedEncodingException) {
 			_errorDispatcher.jspError(
 				"jsp.error.needAlternateJavaEncoding", _javaEncoding);
 		}
-		catch (IOException ioe) {
-			throw new JasperException(ioe);
+		catch (IOException ioException) {
+			throw new JasperException(ioException);
 		}
 	}
 
@@ -330,11 +330,11 @@ public class JspCompiler extends Jsr199JavaCompiler {
 				StreamUtil.transfer(
 					bytecodeJavaFileObject.openInputStream(), fileOutputStream);
 			}
-			catch (IOException ioe) {
+			catch (IOException ioException) {
 				ServletContext servletContext =
 					_jspCompilationContext.getServletContext();
 
-				servletContext.log("Unable to save class file", ioe);
+				servletContext.log("Unable to save class file", ioException);
 			}
 		}
 	}
