@@ -56,31 +56,45 @@ public class JspFactoryWrapper extends JspFactory {
 		ServletResponse servletResponse, String errorPageURL,
 		boolean needsSession, int buffer, boolean autoflush) {
 
-		if (autoflush) {
-			buffer = _JSP_WRITER_BUFFER_SIZE;
-		}
+		Thread currentThread = Thread.currentThread();
 
-		PageContext pageContext = _jspFactory.getPageContext(
-			servlet, servletRequest, servletResponse, errorPageURL,
-			needsSession, buffer, autoflush);
+		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
 
-		if (_DIRECT_SERVLET_CONTEXT_ENABLED) {
-			String servletPath = (String)servletRequest.getAttribute(
-				WebKeys.SERVLET_PATH);
+		Class<?> clazz = _jspFactory.getClass();
 
-			if (servletPath != null) {
-				servletRequest.removeAttribute(WebKeys.SERVLET_PATH);
+		try {
+			currentThread.setContextClassLoader(clazz.getClassLoader());
 
-				ServletContext servletContext = pageContext.getServletContext();
-
-				String contextPath = servletContext.getContextPath();
-
-				DirectServletRegistryUtil.putServlet(
-					contextPath.concat(servletPath), servlet);
+			if (autoflush) {
+				buffer = _JSP_WRITER_BUFFER_SIZE;
 			}
-		}
 
-		return new PageContextWrapper(pageContext);
+			PageContext pageContext = _jspFactory.getPageContext(
+				servlet, servletRequest, servletResponse, errorPageURL,
+				needsSession, buffer, autoflush);
+
+			if (_DIRECT_SERVLET_CONTEXT_ENABLED) {
+				String servletPath = (String) servletRequest.getAttribute(
+					WebKeys.SERVLET_PATH);
+
+				if (servletPath != null) {
+					servletRequest.removeAttribute(WebKeys.SERVLET_PATH);
+
+					ServletContext servletContext =
+						pageContext.getServletContext();
+
+					String contextPath = servletContext.getContextPath();
+
+					DirectServletRegistryUtil.putServlet(
+						contextPath.concat(servletPath), servlet);
+				}
+			}
+
+			return new PageContextWrapper(pageContext);
+		}
+		finally {
+			currentThread.setContextClassLoader(contextClassLoader);
+		}
 	}
 
 	@Override
