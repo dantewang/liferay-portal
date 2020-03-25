@@ -500,3 +500,26 @@ Remove those properties from your properties file.
 This feature has been deprecated.
 
 ---------------------------------------
+
+### Portal resiliency feature is no longer supported
+- **Date:** 2020-Mar-23
+- **JIRA Ticket:** [LPS-110758](https://issues.liferay.com/browse/LPS-110758)
+
+#### What changed?
+
+Properties with `portal.resiliency` as prefix are removed, which means
+portal sandbox feature is no longer supported.
+
+#### Who is affected?
+
+This affects anyone used the removed properties.
+
+#### How should I update my code?
+
+Remove those properties from your properties file.
+
+#### Why was this change made?
+
+This feature has been deprecated.
+
+---------------------------------------
