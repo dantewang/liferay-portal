@@ -107,7 +107,7 @@ public class CompileJSPTask extends DefaultTask {
 	private String[] _getCompleteArgs() {
 		return new String[] {
 			"-d", FileUtil.getAbsolutePath(getDestinationDir()),
-			"-disablePooling", "-webapp",
+			"-poolingEnabled", "false", "-no-strictQuoteEscaping", "-webapp",
 			FileUtil.getAbsolutePath(getWebAppDir())
 		};
 	}
