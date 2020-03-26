@@ -28,7 +28,6 @@ import com.liferay.portal.kernel.nio.intraband.SystemDataType;
 import com.liferay.portal.kernel.resiliency.mpi.MPIHelperUtil;
 import com.liferay.portal.kernel.resiliency.spi.SPI;
 import com.liferay.portal.kernel.resiliency.spi.SPIConfiguration;
-import com.liferay.portal.kernel.resiliency.spi.SPIUtil;
 
 import java.nio.ByteBuffer;
 
@@ -93,27 +92,9 @@ public class IntrabandBridgeDestination extends DestinationWrapper {
 	}
 
 	public void sendMessageRoutingBag(MessageRoutingBag messageRoutingBag) {
-		if (SPIUtil.isSPI()) {
-			SPI spi = SPIUtil.getSPI();
-
-			try {
-				String routingId = toRoutingId(spi);
-
-				messageRoutingBag.appendRoutingId(routingId);
-
-				if (!messageRoutingBag.isRoutingDowncast()) {
-					sendMessageRoutingBag(
-						spi.getRegistrationReference(), messageRoutingBag);
-				}
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		}
-
 		List<SPI> spis = MPIHelperUtil.getSPIs();
 
-		if (spis.isEmpty() && !SPIUtil.isSPI()) {
+		if (spis.isEmpty()) {
 			MessageBusUtil.addDestination(destination);
 		}
 		else {
