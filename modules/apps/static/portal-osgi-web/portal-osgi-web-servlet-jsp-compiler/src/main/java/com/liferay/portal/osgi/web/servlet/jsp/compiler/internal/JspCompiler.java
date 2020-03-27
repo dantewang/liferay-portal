@@ -23,12 +23,17 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.osgi.web.servlet.jsp.compiler.internal.util.ClassPathUtil;
 
+import java.io.CharArrayWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
-import java.net.URI;
 import java.net.URL;
 
 import java.security.AccessController;
@@ -43,7 +48,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 
@@ -62,6 +66,7 @@ import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.Options;
 import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.JavacErrorDetail;
+import org.apache.jasper.compiler.JspRuntimeContext;
 import org.apache.jasper.compiler.Jsr199JavaCompiler;
 import org.apache.jasper.compiler.Node;
 
@@ -84,12 +89,12 @@ public class JspCompiler extends Jsr199JavaCompiler {
 	public JavacErrorDetail[] compile(String className, Node.Nodes pageNodes)
 		throws JasperException {
 
-		classFiles = new ArrayList<>();
+		_bytecodeJavaFileObjects = new ArrayList<>();
 
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 
 		if (javaCompiler == null) {
-			errDispatcher.jspError("jsp.error.nojdk");
+			_errorDispatcher.jspError("jsp.error.nojdk");
 
 			throw new JasperException("Unable to find Java compiler");
 		}
@@ -103,31 +108,36 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 		try {
 			standardJavaFileManager.setLocation(
-				StandardLocation.CLASS_PATH, cpath);
+				StandardLocation.CLASS_PATH, _classPath);
 		}
 		catch (IOException ioException) {
 			throw new JasperException(ioException);
 		}
 
-		try (JavaFileManager javaFileManager = getJavaFileManager(
-				standardJavaFileManager)) {
+		try (JavaFileManager javaFileManager = new BundleJavaFileManager(
+				_classLoader, standardJavaFileManager, _javaFileObjectResolvers,
+				_bytecodeJavaFileObjects)) {
 
 			JavaCompiler.CompilationTask compilationTask = javaCompiler.getTask(
-				null, javaFileManager, diagnosticCollector, options, null,
+				null, javaFileManager, diagnosticCollector, _compilerOptions,
+				null,
 				Arrays.asList(
 					new StringJavaFileObject(
-						className.substring(className.lastIndexOf('.') + 1),
-						charArrayWriter.toString())));
+						className.substring(
+							className.lastIndexOf(CharPool.PERIOD) + 1),
+						_charArrayWriter.toString())));
 
 			if (_log.isDebugEnabled()) {
 				_log.debug("Compiling JSP: ".concat(className));
 			}
 
 			if (compilationTask.call()) {
-				for (BytecodeFile bytecodeFile : classFiles) {
-					rtctxt.setBytecode(
-						bytecodeFile.getClassName(),
-						bytecodeFile.getBytecode());
+				for (BytecodeJavaFileObject bytecodeJavaFileObject :
+						_bytecodeJavaFileObjects) {
+
+					_jspRuntimeContext.setBytecode(
+						bytecodeJavaFileObject.getClassName(),
+						bytecodeJavaFileObject.getBytecode());
 				}
 
 				return null;
@@ -148,7 +158,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 				i);
 
 			javacErrorDetails[i] = ErrorDispatcher.createJavacError(
-				javaFileName, pageNodes,
+				_javaFileName, pageNodes,
 				new StringBuilder(diagnostic.getMessage(null)),
 				(int)diagnostic.getLineNumber());
 		}
@@ -157,11 +167,51 @@ public class JspCompiler extends Jsr199JavaCompiler {
 	}
 
 	@Override
+	public void doJavaFile(boolean keep) throws JasperException {
+		if (!keep) {
+			_charArrayWriter = null;
+
+			return;
+		}
+
+		try (Writer writer = new OutputStreamWriter(
+				new FileOutputStream(_javaFileName), _javaEncoding)) {
+
+			writer.write(_charArrayWriter.toString());
+
+			_charArrayWriter = null;
+		}
+		catch (UnsupportedEncodingException unsupportedEncodingException) {
+			_errorDispatcher.jspError(
+				"jsp.error.needAlternateJavaEncoding", _javaEncoding);
+		}
+		catch (IOException ioException) {
+			throw new JasperException(ioException);
+		}
+	}
+
+	@Override
+	public long getClassLastModified() {
+		return _jspRuntimeContext.getBytecodeBirthTime(
+			_jspCompilationContext.getFullClassName());
+	}
+
+	@Override
+	public Writer getJavaWriter(String javaFileName, String javaEncoding) {
+		_javaFileName = javaFileName;
+		_javaEncoding = javaEncoding;
+
+		_charArrayWriter = new CharArrayWriter();
+
+		return _charArrayWriter;
+	}
+
+	@Override
 	public void init(
 		JspCompilationContext jspCompilationContext,
 		ErrorDispatcher errorDispatcher, boolean suppressLogging) {
 
-		options.add("-XDuseUnsharedTable");
+		_compilerOptions.add("-XDuseUnsharedTable");
 
 		Options options = jspCompilationContext.getOptions();
 
@@ -235,14 +285,122 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 		jspCompilationContext.setClassLoader(jspBundleClassloader);
 
-		initClassPath(servletContext);
-		initTLDMappings(
+		_initClassPath();
+		_initTLDMappings(
 			servletContext, jspCompilationContext.getTagFileJarUrls());
 
-		super.init(jspCompilationContext, errorDispatcher, suppressLogging);
+		_jspCompilationContext = jspCompilationContext;
+
+		_errorDispatcher = errorDispatcher;
+
+		_jspRuntimeContext = jspCompilationContext.getRuntimeContext();
+
+		_compilerOptions.add("-proc:none");
 	}
 
-	protected void addDependenciesToClassPath() {
+	@Override
+	public void release() {
+		_bytecodeJavaFileObjects = null;
+	}
+
+	@Override
+	public void saveClassFile(String className, String classFileName) {
+		for (BytecodeJavaFileObject bytecodeJavaFileObject :
+				_bytecodeJavaFileObjects) {
+
+			String bytecodeFileClassName =
+				bytecodeJavaFileObject.getClassName();
+			String outputFileName = classFileName;
+
+			if (!className.equals(bytecodeFileClassName)) {
+				outputFileName = outputFileName.substring(
+					0, outputFileName.lastIndexOf(File.separator) + 1);
+
+				outputFileName = outputFileName.concat(
+					bytecodeFileClassName.substring(
+						bytecodeFileClassName.lastIndexOf(CharPool.PERIOD) + 1)
+				).concat(
+					".class"
+				);
+			}
+
+			try (FileOutputStream fileOutputStream = new FileOutputStream(
+					outputFileName)) {
+
+				StreamUtil.transfer(
+					bytecodeJavaFileObject.openInputStream(), fileOutputStream);
+			}
+			catch (IOException ioException) {
+				ServletContext servletContext =
+					_jspCompilationContext.getServletContext();
+
+				servletContext.log("Unable to save class file", ioException);
+			}
+		}
+	}
+
+	@Override
+	public void setClassPath(List<File> classPath) {
+	}
+
+	@Override
+	public void setDebug(boolean debug) {
+		if (debug) {
+			_compilerOptions.add("-g");
+		}
+		else {
+			_compilerOptions.add("-g:none");
+		}
+	}
+
+	@Override
+	public void setExtdirs(String exts) {
+		_compilerOptions.add("-extdirs");
+		_compilerOptions.add(exts);
+	}
+
+	@Override
+	public void setSourceVM(String sourceVM) {
+		_compilerOptions.add("-source");
+		_compilerOptions.add(sourceVM);
+	}
+
+	@Override
+	public void setTargetVM(String targetVM) {
+		_compilerOptions.add("-target");
+		_compilerOptions.add(targetVM);
+	}
+
+	private static Set<String> _collectPackageNames(BundleWiring bundleWiring) {
+		Set<String> packageNames = _bundleWiringPackageNamesCache.get(
+			bundleWiring);
+
+		if (packageNames != null) {
+			return packageNames;
+		}
+
+		packageNames = new HashSet<>();
+
+		for (BundleCapability bundleCapability :
+				bundleWiring.getCapabilities(
+					BundleRevision.PACKAGE_NAMESPACE)) {
+
+			Map<String, Object> attributes = bundleCapability.getAttributes();
+
+			Object packageName = attributes.get(
+				BundleRevision.PACKAGE_NAMESPACE);
+
+			if (packageName != null) {
+				packageNames.add((String)packageName);
+			}
+		}
+
+		_bundleWiringPackageNamesCache.put(bundleWiring, packageNames);
+
+		return packageNames;
+	}
+
+	private void _addDependenciesToClassPath() {
 		ClassLoader frameworkClassLoader = Bundle.class.getClassLoader();
 
 		for (String className : _JSP_COMPILER_DEPENDENCIES) {
@@ -250,7 +408,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 				Class<?> clazz = Class.forName(
 					className, true, frameworkClassLoader);
 
-				addDependencyToClassPath(clazz);
+				_addDependencyToClassPath(clazz);
 			}
 			catch (ClassNotFoundException classNotFoundException) {
 				_log.error(
@@ -260,7 +418,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		}
 	}
 
-	protected void addDependencyToClassPath(Class<?> clazz) {
+	private void _addDependencyToClassPath(Class<?> clazz) {
 		ProtectionDomain protectionDomain = clazz.getProtectionDomain();
 
 		if (protectionDomain == null) {
@@ -292,7 +450,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		}
 	}
 
-	protected void collectTLDMappings(
+	private void _collectTLDMappings(
 			Map<String, String[]> tldMappings, Map<String, URL> tagFileJarUrls,
 			Bundle bundle)
 		throws IOException {
@@ -330,76 +488,22 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		}
 	}
 
-	@Override
-	protected JavaFileManager getJavaFileManager(
-		JavaFileManager javaFileManager) {
-
-		if (javaFileManager instanceof StandardJavaFileManager) {
-			StandardJavaFileManager standardJavaFileManager =
-				(StandardJavaFileManager)javaFileManager;
-
-			try {
-				standardJavaFileManager.setLocation(
-					StandardLocation.CLASS_PATH, _classPath);
-			}
-			catch (IOException ioException) {
-				_log.error(ioException.getMessage(), ioException);
-			}
-
-			javaFileManager = new BundleJavaFileManager(
-				_classLoader, standardJavaFileManager,
-				_javaFileObjectResolvers);
-		}
-
-		return super.getJavaFileManager(javaFileManager);
-	}
-
-	@Override
-	protected JavaFileObject getOutputFile(String className, URI uri) {
-		Map<String, Map<String, JavaFileObject>> packageMap =
-			rtctxt.getPackageMap();
-
-		String packageName = className.substring(
-			0, className.lastIndexOf(CharPool.PERIOD));
-
-		// Swap the parent class's packageJavaFileObjects reference from a plain
-		// HashMap to a thread safe ConcurrentHashMap
-
-		Map<String, JavaFileObject> packageJavaFileObjects = packageMap.get(
-			packageName);
-
-		JavaFileObject javaFileObject = super.getOutputFile(className, uri);
-
-		if (packageJavaFileObjects == null) {
-			packageMap.put(
-				packageName,
-				new ConcurrentHashMap<>(packageMap.get(packageName)));
-		}
-
-		return javaFileObject;
-	}
-
-	protected void initClassPath(ServletContext servletContext) {
+	private void _initClassPath() {
 		if (System.getSecurityManager() != null) {
 			AccessController.doPrivileged(
-				new PrivilegedAction<Void>() {
+				(PrivilegedAction<Void>)() -> {
+					_addDependenciesToClassPath();
 
-					@Override
-					public Void run() {
-						addDependenciesToClassPath();
-
-						return null;
-					}
-
+					return null;
 				});
 		}
 		else {
-			addDependenciesToClassPath();
+			_addDependenciesToClassPath();
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void initTLDMappings(
+	private void _initTLDMappings(
 		ServletContext servletContext, Map<String, URL> tagFileJarUrls) {
 
 		Map<String, String[]> tldMappings =
@@ -414,7 +518,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 		try {
 			for (Bundle bundle : _allParticipatingBundles) {
-				collectTLDMappings(tldMappings, tagFileJarUrls, bundle);
+				_collectTLDMappings(tldMappings, tagFileJarUrls, bundle);
 			}
 		}
 		catch (Exception exception) {
@@ -434,35 +538,6 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 		servletContext.setAttribute(
 			Constants.JSP_TLD_URI_TO_LOCATION_MAP, tldMappings);
-	}
-
-	private static Set<String> _collectPackageNames(BundleWiring bundleWiring) {
-		Set<String> packageNames = _bundleWiringPackageNamesCache.get(
-			bundleWiring);
-
-		if (packageNames != null) {
-			return packageNames;
-		}
-
-		packageNames = new HashSet<>();
-
-		for (BundleCapability bundleCapability :
-				bundleWiring.getCapabilities(
-					BundleRevision.PACKAGE_NAMESPACE)) {
-
-			Map<String, Object> attributes = bundleCapability.getAttributes();
-
-			Object packageName = attributes.get(
-				BundleRevision.PACKAGE_NAMESPACE);
-
-			if (packageName != null) {
-				packageNames.add((String)packageName);
-			}
-		}
-
-		_bundleWiringPackageNamesCache.put(bundleWiring, packageNames);
-
-		return packageNames;
 	}
 
 	private static final String[] _JSP_COMPILER_DEPENDENCIES = {
@@ -510,9 +585,17 @@ public class JspCompiler extends Jsr199JavaCompiler {
 	private Bundle[] _allParticipatingBundles;
 	private final Map<BundleWiring, Set<String>> _bundleWiringPackageNames =
 		new HashMap<>(_jspBundleWiringPackageNames);
+	private List<BytecodeJavaFileObject> _bytecodeJavaFileObjects;
+	private CharArrayWriter _charArrayWriter;
 	private ClassLoader _classLoader;
 	private final List<File> _classPath = new ArrayList<>();
+	private final List<String> _compilerOptions = new ArrayList<>();
+	private ErrorDispatcher _errorDispatcher;
+	private String _javaEncoding;
+	private String _javaFileName;
 	private final List<JavaFileObjectResolver> _javaFileObjectResolvers =
 		new ArrayList<>();
+	private JspCompilationContext _jspCompilationContext;
+	private JspRuntimeContext _jspRuntimeContext;
 
 }
