@@ -18,12 +18,9 @@ import com.liferay.portal.cache.thread.local.ThreadLocalCacheAdvice;
 import com.liferay.portal.dao.jdbc.aop.DynamicDataSourceAdvice;
 import com.liferay.portal.increment.BufferedIncrementAdvice;
 import com.liferay.portal.internal.cluster.ClusterableAdvice;
-import com.liferay.portal.internal.cluster.SPIClusterableAdvice;
 import com.liferay.portal.kernel.aop.ChainableMethodAdvice;
 import com.liferay.portal.kernel.dao.jdbc.aop.DynamicDataSourceTargetSource;
-import com.liferay.portal.kernel.resiliency.spi.SPIUtil;
 import com.liferay.portal.kernel.util.InfrastructureUtil;
-import com.liferay.portal.resiliency.service.PortalResiliencyAdvice;
 import com.liferay.portal.search.IndexableAdvice;
 import com.liferay.portal.security.access.control.AccessControlAdvice;
 import com.liferay.portal.service.ServiceContextAdvice;
@@ -90,17 +87,9 @@ public class AopCacheManager {
 
 		chainableMethodAdvices.add(new IndexableAdvice());
 
-		if (PropsValues.PORTAL_RESILIENCY_ENABLED) {
-			chainableMethodAdvices.add(new PortalResiliencyAdvice());
-		}
-
 		chainableMethodAdvices.add(new RetryAdvice());
 
 		chainableMethodAdvices.add(new ServiceContextAdvice());
-
-		if (SPIUtil.isSPI()) {
-			chainableMethodAdvices.add(new SPIClusterableAdvice());
-		}
 
 		chainableMethodAdvices.add(new SystemEventAdvice());
 

@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.resiliency.mpi.MPIHelperUtil;
-import com.liferay.portal.kernel.resiliency.spi.SPIUtil;
 import com.liferay.portal.kernel.resiliency.spi.provider.SPIProvider;
 import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
@@ -44,7 +43,9 @@ import javax.servlet.ServletContextListener;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), with no direct replacement
  */
+@Deprecated
 public class SPIClassPathContextListener implements ServletContextListener {
 
 	public static volatile String SPI_CLASS_PATH = StringPool.BLANK;
@@ -114,17 +115,9 @@ public class SPIClassPathContextListener implements ServletContextListener {
 		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
 
 		try {
-			Class<SPIProvider> spiProviderClass = null;
-
-			if (SPIUtil.isSPI()) {
-				spiProviderClass = (Class<SPIProvider>)loadClassDirectly(
-					contextClassLoader, spiProviderClassName);
-			}
-			else {
-				spiProviderClass =
-					(Class<SPIProvider>)contextClassLoader.loadClass(
-						spiProviderClassName);
-			}
+			Class<SPIProvider> spiProviderClass =
+				(Class<SPIProvider>)contextClassLoader.loadClass(
+					spiProviderClassName);
 
 			SPIProvider spiProvider = spiProviderClass.newInstance();
 
