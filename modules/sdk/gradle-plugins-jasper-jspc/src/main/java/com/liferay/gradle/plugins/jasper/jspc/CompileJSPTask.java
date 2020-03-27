@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.jasper.JspC;
 
@@ -49,6 +51,10 @@ public class CompileJSPTask extends DefaultTask {
 		FileCollection jspCClasspath = getJspCClasspath();
 
 		JspC jspC = new JspC();
+
+		Logger logger = Logger.getLogger("org.apache.tomcat");
+
+		logger.setLevel(Level.INFO);
 
 		try {
 			jspC.setArgs(_getCompleteArgs());
