@@ -86,11 +86,19 @@ public class IntrabandBridgeDestination extends DestinationWrapper {
 		MessageBusUtil.addDestination(destination);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	protected void sendMessageRoutingBag(
 		RegistrationReference registrationReference,
 		MessageRoutingBag messageRoutingBag) {
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	protected String toRoutingId(SPI spi) throws RemoteException {
 		return null;
 	}
