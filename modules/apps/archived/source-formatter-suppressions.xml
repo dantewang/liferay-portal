@@ -8,9 +8,13 @@
 	<source-check>
 		<suppress checks="BNDDirectoryNameCheck" files=".*" />
 		<suppress checks="JavaInternalPackageCheck" files=".*" />
+		<suppress checks="JavaMultiPlusConcatCheck" files="spi-admin-portlet/docroot/WEB-INF/src/com/liferay/portal/resiliency/spi/monitor/messaging/SPIRestartMessageListener\.java" />
+		<suppress checks="JavaMultiPlusConcatCheck" files="spi-admin-portlet/docroot/WEB-INF/src/com/liferay/portal/resiliency/spi/service/impl/SPIDefinitionLocalServiceImpl\.java" />
 		<suppress checks="JavaPackagePathCheck" files=".*" />
 		<suppress checks="JavaXMLSecurityCheck" files="spi-provider-web/docroot/WEB-INF/src/com/liferay/portal/resiliency/spi/provider/tomcat/TomcatRemoteSPI\.java" />
 		<suppress checks="JavaXMLSecurityCheck" files="xsl-content-web/src/main/java/com/liferay/xsl/content/web/internal/util/XSLContentUtil\.java" />
 		<suppress checks="JSPDefineObjectsCheck" files="spi-admin-portlet/docroot/init\.jsp" />
+		<suppress checks="XMLBuildFileCheck" files="spi-admin-portlet/build\.xml" />
+		<suppress checks="XMLBuildFileCheck" files="spi-provider-web/build\.xml" />
 	</source-check>
 </suppressions>
