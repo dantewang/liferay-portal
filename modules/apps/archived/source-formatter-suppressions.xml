@@ -9,6 +9,8 @@
 		<suppress checks="BNDDirectoryNameCheck" files=".*" />
 		<suppress checks="JavaInternalPackageCheck" files=".*" />
 		<suppress checks="JavaPackagePathCheck" files=".*" />
+		<suppress checks="JavaXMLSecurityCheck" files="spi-provider-web/docroot/WEB-INF/src/com/liferay/portal/resiliency/spi/provider/tomcat/TomcatRemoteSPI\.java" />
 		<suppress checks="JavaXMLSecurityCheck" files="xsl-content-web/src/main/java/com/liferay/xsl/content/web/internal/util/XSLContentUtil\.java" />
+		<suppress checks="JSPDefineObjectsCheck" files="spi-admin-portlet/docroot/init\.jsp" />
 	</source-check>
 </suppressions>
