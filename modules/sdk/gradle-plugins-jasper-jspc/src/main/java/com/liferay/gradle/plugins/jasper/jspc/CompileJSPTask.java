@@ -27,6 +27,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.jasper.JspC;
+import org.apache.jasper.servlet.JspCServletContext;
+import org.apache.jasper.servlet.TldScanner;
+import org.apache.tomcat.JarScanner;
+import org.apache.tomcat.util.scan.StandardJarScanner;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
@@ -50,7 +54,34 @@ public class CompileJSPTask extends DefaultTask {
 	public void compileJSP() {
 		FileCollection jspCClasspath = getJspCClasspath();
 
-		JspC jspC = new JspC();
+		JspC jspC = new JspC() {
+
+			@Override
+			protected TldScanner newTldScanner(
+				JspCServletContext context, boolean namespaceAware,
+				boolean validate, boolean blockExternal) {
+
+				return new TldScanner(
+					context, namespaceAware, validate, blockExternal) {
+
+					@Override
+					public void scanJars() {
+						context.setAttribute(
+							JarScanner.class.getName(),
+							new StandardJarScanner() {
+								{
+									setScanManifest(false);
+									setScanClassPath(false);
+								}
+							});
+
+						super.scanJars();
+					}
+
+				};
+			}
+
+		};
 
 		Logger logger = Logger.getLogger("org.apache.tomcat");
 
