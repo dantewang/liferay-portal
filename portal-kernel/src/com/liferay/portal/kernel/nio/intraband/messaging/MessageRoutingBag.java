@@ -29,7 +29,9 @@ import java.util.ArrayList;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), with no direct replacement
  */
+@Deprecated
 public class MessageRoutingBag implements Externalizable {
 
 	public static final String MESSAGE_ROUTING_BAG = "MESSAGE_ROUTING_BAG";

@@ -18,7 +18,9 @@ import java.io.IOException;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), with no direct replacement
  */
+@Deprecated
 public interface CompletionHandler<A> {
 
 	public void delivered(A attachment);
