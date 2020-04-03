@@ -18,7 +18,9 @@ import java.io.Serializable;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), with no direct replacement
  */
+@Deprecated
 public interface TargetLocator extends Serializable {
 
 	public Object getTarget(String id);

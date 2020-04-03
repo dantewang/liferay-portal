@@ -22,7 +22,9 @@ import java.io.Serializable;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), with no direct replacement
  */
+@Deprecated
 public interface Welder extends Serializable {
 
 	public void destroy() throws IOException;

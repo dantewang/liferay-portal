@@ -32,7 +32,9 @@ import java.util.EnumSet;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), with no direct replacement
  */
+@Deprecated
 public class IntrabandRPCUtil {
 
 	public static <V extends Serializable> NoticeableFuture<V> execute(

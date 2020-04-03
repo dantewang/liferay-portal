@@ -22,7 +22,9 @@ import java.io.ObjectInputStream;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), with no direct replacement
  */
+@Deprecated
 public abstract class BaseWelder implements Welder {
 
 	public BaseWelder() {
