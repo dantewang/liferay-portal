@@ -20,7 +20,6 @@ import com.liferay.petra.executor.PortalExecutorManager;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.concurrent.DefaultNoticeableFuture;
-import com.liferay.portal.kernel.nio.intraband.PortalExecutorManagerInvocationHandler;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.SwappableSecurityManager;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -89,7 +88,34 @@ public class AutoBatchPreparedStatementUtilTest {
 			(PortalExecutorManager)ProxyUtil.newProxyInstance(
 				AutoBatchPreparedStatementUtilTest.class.getClassLoader(),
 				new Class<?>[] {PortalExecutorManager.class},
-				new PortalExecutorManagerInvocationHandler()));
+				new InvocationHandler() {
+
+					@Override
+					public Object invoke(
+						Object proxy, Method method, Object[] args) {
+
+						if (Objects.equals(
+								method.getName(), "getPortalExecutor")) {
+
+							return new NoticeableThreadPoolExecutor(
+								1, 1, 60, TimeUnit.SECONDS,
+								new LinkedBlockingQueue<>(1),
+								Executors.defaultThreadFactory(),
+								new ThreadPoolExecutor.AbortPolicy(),
+								new ThreadPoolHandlerAdapter()) {
+
+								@Override
+								public void execute(Runnable runnable) {
+									runnable.run();
+								}
+
+							};
+						}
+
+						throw new UnsupportedOperationException();
+					}
+
+				}));
 	}
 
 	@Test
