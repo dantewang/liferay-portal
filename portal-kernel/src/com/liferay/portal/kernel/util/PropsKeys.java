@@ -1335,43 +1335,95 @@ public interface PropsKeys {
 
 	public static final String INDEXER_ENABLED = "indexer.enabled";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String INTRABAND_IMPL = "intraband.impl";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String INTRABAND_MAILBOX_REAPER_THREAD_ENABLED =
 		"intraband.mailbox.reaper.thread.enabled";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String INTRABAND_MAILBOX_STORAGE_LIFE =
 		"intraband.mailbox.storage.life";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String INTRABAND_PROXY_DUMP_CLASSES_DIR =
 		"intraband.proxy.dump.classes.dir";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String INTRABAND_PROXY_DUMP_CLASSES_ENABLED =
 		"intraband.proxy.dump.classes.enabled";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String INTRABAND_TIMEOUT_DEFAULT =
 		"intraband.timeout.default";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String INTRABAND_WELDER_IMPL = "intraband.welder.impl";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String INTRABAND_WELDER_SOCKET_BUFFER_SIZE =
 		"intraband.welder.socket.buffer.size";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String INTRABAND_WELDER_SOCKET_KEEP_ALIVE =
 		"intraband.welder.socket.keep.alive";
 
 	public static final String INTRABAND_WELDER_SOCKET_REUSE_ADDRESS =
 		"intraband.welder.socket.reuse.address";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String INTRABAND_WELDER_SOCKET_SERVER_START_PORT =
 		"intraband.welder.socket.server.start.port";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String INTRABAND_WELDER_SOCKET_SO_LINGER =
 		"intraband.welder.socket.so.linger";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String INTRABAND_WELDER_SOCKET_SO_TIMEOUT =
 		"intraband.welder.socket.so.timeout";
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String INTRABAND_WELDER_SOCKET_TCP_NO_DELAY =
 		"intraband.welder.socket.tcp.no.delay";
 

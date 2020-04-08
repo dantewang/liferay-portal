@@ -1167,9 +1167,17 @@ public class PropsValues {
 	public static final boolean INDEX_WITH_THREAD = GetterUtil.getBoolean(
 		PropsUtil.get(PropsKeys.INDEX_WITH_THREAD));
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String INTRABAND_PROXY_DUMP_CLASSES_DIR = PropsUtil.get(
 		PropsKeys.INTRABAND_PROXY_DUMP_CLASSES_DIR);
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final boolean INTRABAND_PROXY_DUMP_CLASSES_ENABLED =
 		GetterUtil.getBoolean(
 			PropsUtil.get(PropsKeys.INTRABAND_PROXY_DUMP_CLASSES_ENABLED));
