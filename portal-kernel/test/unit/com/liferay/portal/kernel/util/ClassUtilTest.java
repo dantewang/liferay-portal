@@ -18,6 +18,9 @@ import com.liferay.petra.string.StringPool;
 
 import java.io.StringReader;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -52,6 +55,18 @@ public class ClassUtilTest {
 			"AnnotationClass.Annotation", "AnnotationClass", "A", "B");
 		testGetClassesFromAnnotation(
 			"AnnotationClass.Annotation", "AnnotationClass", "A", "B", "C");
+	}
+
+	@Test
+	public void testGetNormalizeParentPath() throws Exception {
+		testGetNormalizedParentPath(
+			"jar:file:/opt/liferay/tomcat/lib/servlet-api.jar" +
+				"!/javax/servlet/Servlet.class",
+			"/opt/liferay/tomcat/lib/servlet-api.jar!/");
+		testGetNormalizedParentPath(
+			"jar:file:/C:/Liferay/tomcat/lib/servlet-api.jar" +
+				"!/javax/servlet/Servlet.class",
+			"C:/Liferay/tomcat/lib/servlet-api.jar!/");
 	}
 
 	protected void testGetClassesFromAnnotation(
@@ -90,6 +105,17 @@ public class ClassUtilTest {
 		Collections.addAll(expectedClassNames, arrayParameterClassNames);
 
 		Assert.assertEquals(expectedClassNames, actualClassNames);
+	}
+
+	protected void testGetNormalizedParentPath(String url, String expectedPath)
+		throws MalformedURLException {
+
+		String resourceName = url.substring(url.indexOf("!/") + 2);
+
+		String normalizedPath = ClassUtil.getNormalizedParentPath(
+			new URL(url), resourceName);
+
+		Assert.assertEquals(expectedPath, normalizedPath);
 	}
 
 }
