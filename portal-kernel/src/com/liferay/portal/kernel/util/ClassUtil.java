@@ -189,6 +189,12 @@ public class ClassUtil {
 			parentPath = parentPath.substring(6);
 		}
 
+		if ((parentPath.charAt(0) == CharPool.SLASH) &&
+			(parentPath.charAt(2) == CharPool.COLON)) {
+
+			parentPath = parentPath.substring(1);
+		}
+
 		return parentPath;
 	}
 
