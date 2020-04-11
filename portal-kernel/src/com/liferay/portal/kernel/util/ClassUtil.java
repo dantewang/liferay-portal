@@ -134,24 +134,7 @@ public class ClassUtil {
 		return clazz.getName();
 	}
 
-	public static String getParentPath(
-		ClassLoader classLoader, String className) {
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("Class name " + className);
-		}
-
-		if (!className.endsWith(_CLASS_EXTENSION)) {
-			className += _CLASS_EXTENSION;
-		}
-
-		className = StringUtil.replace(
-			className, CharPool.PERIOD, CharPool.SLASH);
-
-		className = StringUtil.replace(className, "/class", _CLASS_EXTENSION);
-
-		URL url = classLoader.getResource(className);
-
+	public static String getNormalizedParentPath(URL url, String resourceName) {
 		String path = null;
 
 		try {
@@ -194,7 +177,7 @@ public class ClassUtil {
 			_log.debug("Path " + path);
 		}
 
-		int pos = path.indexOf(className);
+		int pos = path.indexOf(resourceName);
 
 		String parentPath = path.substring(0, pos);
 
@@ -205,6 +188,29 @@ public class ClassUtil {
 		if (parentPath.startsWith("file:/")) {
 			parentPath = parentPath.substring(6);
 		}
+
+		return parentPath;
+	}
+
+	public static String getParentPath(
+		ClassLoader classLoader, String className) {
+
+		if (_log.isDebugEnabled()) {
+			_log.debug("Class name " + className);
+		}
+
+		if (!className.endsWith(_CLASS_EXTENSION)) {
+			className += _CLASS_EXTENSION;
+		}
+
+		className = StringUtil.replace(
+			className, CharPool.PERIOD, CharPool.SLASH);
+
+		className = StringUtil.replace(className, "/class", _CLASS_EXTENSION);
+
+		URL url = classLoader.getResource(className);
+
+		String parentPath = getNormalizedParentPath(url, className);
 
 		if (_log.isDebugEnabled()) {
 			_log.debug("Parent path " + parentPath);
