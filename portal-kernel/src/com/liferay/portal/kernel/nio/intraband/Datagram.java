@@ -62,7 +62,9 @@ import java.util.EnumSet;
  * </p>
  *
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), with no direct replacement
  */
+@Deprecated
 public class Datagram {
 
 	public static Datagram createRequestDatagram(byte type, byte[] data) {

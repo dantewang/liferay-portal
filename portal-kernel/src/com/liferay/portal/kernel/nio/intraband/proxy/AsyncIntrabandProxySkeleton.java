@@ -24,7 +24,9 @@ import java.util.concurrent.ExecutorService;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), with no direct replacement
  */
+@Deprecated
 public class AsyncIntrabandProxySkeleton implements IntrabandProxySkeleton {
 
 	public static IntrabandProxySkeleton createAsyncIntrabandProxySkeleton(

@@ -34,7 +34,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), with no direct replacement
  */
+@Deprecated
 public class MailboxUtil {
 
 	public static ByteBuffer receiveMail(long receipt) {

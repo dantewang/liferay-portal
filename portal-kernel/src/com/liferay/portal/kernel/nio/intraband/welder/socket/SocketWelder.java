@@ -35,7 +35,9 @@ import java.nio.channels.SocketChannel;
 
 /**
  * @author Shuyang Zhou
+ * @deprecated As of Athanasius (7.3.x), with no direct replacement
  */
+@Deprecated
 public class SocketWelder extends BaseWelder {
 
 	public SocketWelder() throws IOException {
