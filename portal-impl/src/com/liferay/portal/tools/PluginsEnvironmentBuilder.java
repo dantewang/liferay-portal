@@ -376,7 +376,9 @@ public class PluginsEnvironmentBuilder {
 		List<String> jars = new ArrayList<>();
 
 		jars.add("commons-logging.jar");
-		jars.add("log4j.jar");
+		jars.add("log4j-1.2-api.jar");
+		jars.add("log4j-api.jar");
+		jars.add("log4j-core.jar");
 		jars.add("util-bridges.jar");
 		jars.add("util-java.jar");
 		jars.add("util-taglib.jar");
