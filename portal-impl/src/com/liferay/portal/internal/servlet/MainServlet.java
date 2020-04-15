@@ -53,7 +53,6 @@ import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.service.LayoutTemplateLocalServiceUtil;
 import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
-import com.liferay.portal.kernel.service.ResourceActionLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.InactiveRequestHandler;
 import com.liferay.portal.kernel.servlet.PortalSessionThreadLocal;
@@ -407,7 +406,9 @@ public class MainServlet extends HttpServlet {
 		}
 
 		try {
-			_initResourceActions(portlets);
+			for (Portlet portlet : portlets) {
+				ResourceActionsUtil.check(portlet);
+			}
 		}
 		catch (Exception exception) {
 			_log.error(exception, exception);
@@ -976,28 +977,6 @@ public class MainServlet extends HttpServlet {
 		servletContext.setAttribute(WebKeys.PLUGIN_PORTLETS, portlets);
 
 		return portlets;
-	}
-
-	private void _initResourceActions(List<Portlet> portlets) throws Exception {
-		for (Portlet portlet : portlets) {
-			List<String> portletActions =
-				ResourceActionsUtil.getPortletResourceActions(portlet);
-
-			ResourceActionLocalServiceUtil.checkResourceActions(
-				portlet.getPortletId(), portletActions);
-
-			List<String> modelNames =
-				ResourceActionsUtil.getPortletModelResources(
-					portlet.getPortletId());
-
-			for (String modelName : modelNames) {
-				List<String> modelActions =
-					ResourceActionsUtil.getModelResourceActions(modelName);
-
-				ResourceActionLocalServiceUtil.checkResourceActions(
-					modelName, modelActions);
-			}
-		}
 	}
 
 	private void _initServlet() {
