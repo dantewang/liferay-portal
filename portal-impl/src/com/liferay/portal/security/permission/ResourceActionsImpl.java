@@ -91,7 +91,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			ClassLoader classLoader = clazz.getClassLoader();
 
 			for (String config : PropsValues.RESOURCE_ACTIONS_CONFIGS) {
-				read(null, classLoader, config);
+				_read(null, classLoader, config, null);
 			}
 		}
 		catch (Exception exception) {
@@ -575,7 +575,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		throws Exception {
 
 		for (String source : sources) {
-			read(servletContextName, classLoader, source);
+			_read(servletContextName, classLoader, source, null);
 		}
 	}
 
