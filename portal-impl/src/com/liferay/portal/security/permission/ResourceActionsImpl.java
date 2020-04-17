@@ -101,7 +101,8 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public void check(Portlet portlet) {
-		String portletName = portlet.getPortletId();
+		String portletName = PortletIdCodec.decodePortletName(
+			portlet.getPortletId());
 
 		_check(portletName, _getPortletResourceActions(portletName, portlet));
 	}
