@@ -42,7 +42,6 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.ResourceBundleLoader;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -351,10 +350,6 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getPortletResourceActions(Portlet portlet) {
 		Set<String> actions = new LinkedHashSet<>(
 			getPortletResourceActions(portlet.getPortletId()));
-
-		synchronized (this) {
-			_checkPortletActions(portlet, actions);
-		}
 
 		return new ArrayList<>(actions);
 	}
@@ -822,9 +817,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		synchronized (this) {
 			portletActions = _getPortletMimeTypeActions(name, portlet);
 
-			if (!name.equals(PortletKeys.PORTAL)) {
-				_checkPortletActions(portlet, portletActions);
-			}
+			_checkPortletActions(portlet, portletActions);
 
 			_checkPortletGroupDefaultActions(
 				portletResourceActionsBag.getGroupDefaultActions());
@@ -1286,9 +1279,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		portletActions.addAll(_getPortletMimeTypeActions(name, portlet));
 
-		if (!name.equals(PortletKeys.PORTAL)) {
-			_checkPortletActions(portlet, portletActions);
-		}
+		_checkPortletActions(portlet, portletActions);
 
 		if (portletActions.size() > 64) {
 			throw new ResourceActionsException(
