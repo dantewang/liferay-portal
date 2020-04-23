@@ -74,10 +74,22 @@ public interface ResourceActions {
 
 	public Double getModelResourceWeight(String name);
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public String[] getOrganizationModelResources();
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public String[] getPortalModelResources();
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public String getPortletBaseResource(String portletName);
 
 	public List<String> getPortletModelResources(String portletName);
@@ -103,6 +115,10 @@ public interface ResourceActions {
 	public List<String> getResourceActions(
 		String portletResource, String modelResource);
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public List<String> getResourceGroupDefaultActions(String name);
 
 	public List<String> getResourceGuestUnsupportedActions(
@@ -111,10 +127,22 @@ public interface ResourceActions {
 	public List<Role> getRoles(
 		long companyId, Group group, String modelResource, int[] roleTypes);
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public String[] getRootModelResources();
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public boolean hasModelResourceActions(String name);
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public boolean isOrganizationModelResource(String modelResource);
 
 	public boolean isPortalModelResource(String modelResource);
