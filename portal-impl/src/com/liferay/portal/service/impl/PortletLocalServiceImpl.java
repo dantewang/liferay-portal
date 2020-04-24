@@ -1176,7 +1176,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		}
 
 		List<String> actionIds = ResourceActionsUtil.getPortletResourceActions(
-			portlet);
+			portlet.getRootPortletId());
 
 		if (actionIds.contains(ActionKeys.ADD_TO_PAGE)) {
 			List<String> guestUnsupportedActionIds =

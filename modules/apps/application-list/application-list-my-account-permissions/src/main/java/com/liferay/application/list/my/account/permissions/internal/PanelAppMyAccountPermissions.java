@@ -75,7 +75,8 @@ public class PanelAppMyAccountPermissions {
 		for (Portlet portlet : portlets) {
 			try {
 				List<String> actionIds =
-					ResourceActionsUtil.getPortletResourceActions(portlet);
+					ResourceActionsUtil.getPortletResourceActions(
+						portlet.getRootPortletId());
 
 				_initPermissions(
 					companyId, portlet.getPortletId(),

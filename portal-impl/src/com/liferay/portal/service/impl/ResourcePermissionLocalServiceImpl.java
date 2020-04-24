@@ -1208,7 +1208,8 @@ public class ResourcePermissionLocalServiceImpl
 				portlet.getRootPortletId());
 
 		List<String> ownerPortletActionIds =
-			ResourceActionsUtil.getPortletResourceActions(portlet);
+			ResourceActionsUtil.getPortletResourceActions(
+				portlet.getRootPortletId());
 
 		List<String> groupPortletActionIds =
 			ResourceActionsUtil.getPortletResourceGroupDefaultActions(
