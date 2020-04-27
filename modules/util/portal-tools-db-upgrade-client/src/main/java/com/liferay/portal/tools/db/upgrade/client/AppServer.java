@@ -16,69 +16,52 @@ package com.liferay.portal.tools.db.upgrade.client;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author David Truong
  */
 public class AppServer {
 
+	public static AppServer getAppServer(
+		String appServerName, Properties property) {
+
+		return new AppServer(
+			property.getProperty(appServerName + "-" + _PROPERTY_NAMES[0]),
+			property.getProperty(appServerName + "-" + _PROPERTY_NAMES[1]),
+			property.getProperty(appServerName + "-" + _PROPERTY_NAMES[2]),
+			property.getProperty(appServerName + "-" + _PROPERTY_NAMES[3]),
+			property.getProperty(appServerName + "-" + _PROPERTY_NAMES[4]));
+	}
+
 	public static Map<String, AppServer> getAppServers() {
-		return new LinkedHashMap<String, AppServer>() {
-			{
-				put("jboss", AppServer.getJBossEAPAppServer());
-				put("tcserver", AppServer.getTCServerAppServer());
-				put("tomcat", AppServer.getTomcatAppServer());
-				put("weblogic", AppServer.getWebLogicAppServer());
-				put("websphere", AppServer.getWebSphereAppServer());
-				put("wildfly", AppServer.getWildFlyAppServer());
-			}
-		};
-	}
+		Properties supportedAppServerProperties = new Properties();
+		InputStream inputStream = AppServer.class.getResourceAsStream(
+			"/app-server-supported.properties");
 
-	public static AppServer getJBossEAPAppServer() {
-		return new AppServer(
-			"../../jboss-eap-7.1.0", _getJBossExtraLibDirNames(),
-			"/modules/com/liferay/portal/main",
-			"/standalone/deployments/ROOT.war", "jboss");
-	}
+		try {
+			supportedAppServerProperties.load(inputStream);
+		}
+		catch (IOException ioException) {
+			ioException.printStackTrace();
+		}
 
-	public static AppServer getTCServerAppServer() {
-		return new AppServer(
-			"../../../../tc-server-4.0.2",
-			"/runtimes/tomcat-9.0.10.A.RELEASE/lib", "/instances/liferay/lib",
-			"/instances/liferay/webapps/ROOT", "tomcat");
-	}
+		Map<String, AppServer> appServers = new LinkedHashMap<>();
 
-	public static AppServer getTomcatAppServer() {
-		return new AppServer(
-			"../../tomcat-9.0.33", "/bin", "/lib", "/webapps/ROOT", "tomcat");
-	}
+		_appServerNames.forEach(
+			appServerName -> appServers.put(
+				appServerName,
+				getAppServer(appServerName, supportedAppServerProperties)));
 
-	public static AppServer getWebLogicAppServer() {
-		return new AppServer(
-			"../../weblogic-12.2.1", "/wlserver/modules",
-			"/domains/liferay/lib", "/domains/liferay/autodeploy/ROOT",
-			"weblogic");
-	}
-
-	public static AppServer getWebSphereAppServer() {
-		return new AppServer(
-			"../../websphere-9.0.0.0", "", "/lib",
-			"/profiles/liferay/installedApps/liferay-cell/liferay-portal.ear" +
-				"/liferay-portal.war",
-			"websphere");
-	}
-
-	public static AppServer getWildFlyAppServer() {
-		return new AppServer(
-			"../../wildfly-16.0.0", _getJBossExtraLibDirNames(),
-			"/modules/com/liferay/portal/main",
-			"/standalone/deployments/ROOT.war", "wildfly");
+		return appServers;
 	}
 
 	public AppServer(
@@ -157,24 +140,6 @@ public class AppServer {
 		_portalDirName = portalDirName;
 	}
 
-	private static String _getJBossExtraLibDirNames() {
-		StringBuilder sb = new StringBuilder();
-
-		String extraLibDirPrefix = "/modules/system/layers/base/";
-
-		sb.append(extraLibDirPrefix);
-
-		sb.append("javax/mail,");
-		sb.append(extraLibDirPrefix);
-		sb.append("javax/persistence,");
-		sb.append(extraLibDirPrefix);
-		sb.append("javax/servlet,");
-		sb.append(extraLibDirPrefix);
-		sb.append("javax/transaction");
-
-		return sb.toString();
-	}
-
 	private void _setDirName(String dirName) {
 		try {
 			_dir = new File(dirName);
@@ -187,6 +152,22 @@ public class AppServer {
 			ioException.printStackTrace();
 		}
 	}
+
+	private static final String[] _PROPERTY_NAMES = {
+		"dir", "extra.lib.dirs", "global.lib.dir", "portal.dir",
+		"server.detector.server.id"
+	};
+
+	private static final Set<String> _appServerNames = new HashSet<String>() {
+		{
+			add("jboss");
+			add("tcserver");
+			add("tomcat");
+			add("weblogic");
+			add("websphere");
+			add("wildfly");
+		}
+	};
 
 	private File _dir;
 	private String _extraLibDirNames;
