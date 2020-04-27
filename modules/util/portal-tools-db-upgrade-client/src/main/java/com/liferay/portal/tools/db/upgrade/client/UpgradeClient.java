@@ -710,16 +710,7 @@ public class UpgradeClient {
 	private static final String _JAVA_HOME = System.getenv("JAVA_HOME");
 
 	private static final Map<String, AppServer> _appServers =
-		new LinkedHashMap<String, AppServer>() {
-			{
-				put("jboss", AppServer.getJBossEAPAppServer());
-				put("tcserver", AppServer.getTCServerAppServer());
-				put("tomcat", AppServer.getTomcatAppServer());
-				put("weblogic", AppServer.getWebLogicAppServer());
-				put("websphere", AppServer.getWebSphereAppServer());
-				put("wildfly", AppServer.getWildFlyAppServer());
-			}
-		};
+		AppServer.getAppServers();
 	private static final Map<String, Database> _databases =
 		new LinkedHashMap<String, Database>() {
 			{

@@ -18,12 +18,27 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author David Truong
  */
 public class AppServer {
+
+	public static Map<String, AppServer> getAppServers() {
+		return new LinkedHashMap<String, AppServer>() {
+			{
+				put("jboss", AppServer.getJBossEAPAppServer());
+				put("tcserver", AppServer.getTCServerAppServer());
+				put("tomcat", AppServer.getTomcatAppServer());
+				put("weblogic", AppServer.getWebLogicAppServer());
+				put("websphere", AppServer.getWebSphereAppServer());
+				put("wildfly", AppServer.getWildFlyAppServer());
+			}
+		};
+	}
 
 	public static AppServer getJBossEAPAppServer() {
 		return new AppServer(
