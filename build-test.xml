@@ -8374,6 +8374,7 @@ auto.deploy.dest.dir=C:/WINDOWS/system32/config/systemprofile/liferay/websphere-
 			ignore.errors.file.name=${project.dir}/portal-web/test-ignorable-error-lines.xml
 			ip.address=${ip.address}
 			liferay.home.dir.name=${liferay.home}
+			liferay.app.server.global.lib.dir=${app.server.lib.global.dir}
 			output.dir.name=${selenium.output.dir.name}
 			product.names=${product.names}
 			project.dir=${project.dir}
