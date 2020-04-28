@@ -1345,19 +1345,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		_portletResourceActionsBags = new HashMap<>();
 	private final Set<String> _rootModelResources = new HashSet<>();
 
-	private static class ModelResourceActionsBag {
-
-		public Set<String> getGroupDefaultActions() {
-			return _groupDefaultActions;
-		}
-
-		public Set<String> getGuestDefaultActions() {
-			return _guestDefaultActions;
-		}
-
-		public Set<String> getGuestUnsupportedActions() {
-			return _guestUnsupportedActions;
-		}
+	private static class ModelResourceActionsBag extends ResourceActionsBag {
 
 		public Set<String> getModelActions() {
 			return _modelActions;
@@ -1375,9 +1363,6 @@ public class ResourceActionsImpl implements ResourceActions {
 			return _resourceWeights;
 		}
 
-		private final Set<String> _groupDefaultActions = new HashSet<>();
-		private final Set<String> _guestDefaultActions = new HashSet<>();
-		private final Set<String> _guestUnsupportedActions = new HashSet<>();
 		private final Set<String> _modelActions = new HashSet<>();
 		private final Set<String> _ownerDefaultActions = new HashSet<>();
 		private final Set<String> _portletResources = new HashSet<>();
@@ -1385,19 +1370,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	}
 
-	private static class PortletResourceActionsBag {
-
-		public Set<String> getGroupDefaultActions() {
-			return _groupDefaultActions;
-		}
-
-		public Set<String> getGuestDefaultActions() {
-			return _guestDefaultActions;
-		}
-
-		public Set<String> getGuestUnsupportedActions() {
-			return _guestUnsupportedActions;
-		}
+	private static class PortletResourceActionsBag extends ResourceActionsBag {
 
 		public Set<String> getLayoutManagerActions() {
 			return _layoutManagerActions;
@@ -1421,13 +1394,30 @@ public class ResourceActionsImpl implements ResourceActions {
 			_portletRootModelResource = portletRootModelResource;
 		}
 
-		private final Set<String> _groupDefaultActions = new HashSet<>();
-		private final Set<String> _guestDefaultActions = new HashSet<>();
-		private final Set<String> _guestUnsupportedActions = new HashSet<>();
 		private final Set<String> _layoutManagerActions = new HashSet<>();
 		private final Set<String> _modelResources = new HashSet<>();
 		private final Set<String> _portletResourceActions = new HashSet<>();
 		private String _portletRootModelResource;
+
+	}
+
+	private static class ResourceActionsBag {
+
+		public Set<String> getGroupDefaultActions() {
+			return _groupDefaultActions;
+		}
+
+		public Set<String> getGuestDefaultActions() {
+			return _guestDefaultActions;
+		}
+
+		public Set<String> getGuestUnsupportedActions() {
+			return _guestUnsupportedActions;
+		}
+
+		private final Set<String> _groupDefaultActions = new HashSet<>();
+		private final Set<String> _guestDefaultActions = new HashSet<>();
+		private final Set<String> _guestUnsupportedActions = new HashSet<>();
 
 	}
 
