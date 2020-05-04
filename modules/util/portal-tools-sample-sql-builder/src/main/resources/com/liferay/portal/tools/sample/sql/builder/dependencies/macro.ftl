@@ -205,10 +205,10 @@
 	${dataFactory.toInsertSQL(dataFactory.newContactModel(_userModel))}
 
 	<#list _roleIds as roleId>
-		insert into Users_Roles values (0, ${roleId}, ${_userModel.userId});
+		insert into Users_Roles values (0, ${roleId}, ${_userModel.userId}, 0, 0);
 	</#list>
 
 	<#list _groupIds as groupId>
-		insert into Users_Groups values (0, ${groupId}, ${_userModel.userId});
+		insert into Users_Groups values (0, ${groupId}, ${_userModel.userId}, 0, 0);
 	</#list>
 </#macro>
