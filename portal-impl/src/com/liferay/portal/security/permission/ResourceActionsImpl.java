@@ -1328,28 +1328,36 @@ public class ResourceActionsImpl implements ResourceActions {
 		new HashMap<>();
 	private final Set<String> _rootModelResources = new HashSet<>();
 
-	private static class ResourceActionsBag {
+	private static class ResourceActionsBag
+		implements com.liferay.portal.kernel.security.permission.
+					   ResourceActionsBag {
 
+		@Override
 		public List<String> getGroupDefaultActions() {
 			return new ArrayList<>(_groupDefaultActions);
 		}
 
+		@Override
 		public List<String> getGuestDefaultActions() {
 			return new ArrayList<>(_guestDefaultActions);
 		}
 
+		@Override
 		public List<String> getGuestUnsupportedActions() {
 			return new ArrayList<>(_guestUnsupportedActions);
 		}
 
+		@Override
 		public List<String> getLayoutManagerActions() {
 			return new ArrayList<>(_layoutManagerActions);
 		}
 
+		@Override
 		public List<String> getOwnerDefaultActions() {
 			return new ArrayList<>(_ownerDefaultActions);
 		}
 
+		@Override
 		public List<String> getSupportsActions() {
 			return new ArrayList<>(_supportsActions);
 		}
