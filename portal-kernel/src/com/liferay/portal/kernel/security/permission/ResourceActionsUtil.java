@@ -96,6 +96,10 @@ public class ResourceActionsUtil {
 		return getResourceActions().getModelResourceActions(name);
 	}
 
+	public static ResourceActionsBag getModelResourceActionsBag(String name) {
+		return getResourceActions().getModelResourceActionsBag(name);
+	}
+
 	public static List<String> getModelResourceGroupDefaultActions(
 		String name) {
 
