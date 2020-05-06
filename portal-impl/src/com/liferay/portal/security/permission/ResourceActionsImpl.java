@@ -257,6 +257,11 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	@Override
+	public ResourceActionsBag getModelResourceActionsBag(String name) {
+		return _getResourceActionsBag(name, _modelResourceActionsBags);
+	}
+
+	@Override
 	public List<String> getModelResourceGroupDefaultActions(String name) {
 		ResourceActionsBagImpl modelResourceActionsBagImpl =
 			_getResourceActionsBag(name, _modelResourceActionsBags);

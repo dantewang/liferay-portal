@@ -70,6 +70,8 @@ public interface ResourceActions {
 
 	public List<String> getModelResourceActions(String name);
 
+	public ResourceActionsBag getModelResourceActionsBag(String name);
+
 	public List<String> getModelResourceGroupDefaultActions(String name);
 
 	public List<String> getModelResourceGuestDefaultActions(String name);
