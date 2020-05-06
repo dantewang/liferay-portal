@@ -1330,28 +1330,28 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	private static class ResourceActionsBag {
 
-		public Set<String> getGroupDefaultActions() {
-			return _groupDefaultActions;
+		public List<String> getGroupDefaultActions() {
+			return new ArrayList<>(_groupDefaultActions);
 		}
 
-		public Set<String> getGuestDefaultActions() {
-			return _guestDefaultActions;
+		public List<String> getGuestDefaultActions() {
+			return new ArrayList<>(_guestDefaultActions);
 		}
 
-		public Set<String> getGuestUnsupportedActions() {
-			return _guestUnsupportedActions;
+		public List<String> getGuestUnsupportedActions() {
+			return new ArrayList<>(_guestUnsupportedActions);
 		}
 
-		public Set<String> getLayoutManagerActions() {
-			return _layoutManagerActions;
+		public List<String> getLayoutManagerActions() {
+			return new ArrayList<>(_layoutManagerActions);
 		}
 
-		public Set<String> getOwnerDefaultActions() {
-			return _ownerDefaultActions;
+		public List<String> getOwnerDefaultActions() {
+			return new ArrayList<>(_ownerDefaultActions);
 		}
 
-		public Set<String> getSupportsActions() {
-			return _supportsActions;
+		public List<String> getSupportsActions() {
+			return new ArrayList<>(_supportsActions);
 		}
 
 		private final Set<String> _groupDefaultActions = new HashSet<>();
