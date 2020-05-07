@@ -463,7 +463,10 @@ public class ResourceActionsImpl implements ResourceActions {
 	@Override
 	public List<String> getResourceActions(String name) {
 		if (name.indexOf(CharPool.PERIOD) != -1) {
-			return getModelResourceActions(name);
+			ResourceActionsBag resourceActionsBag = getModelResourceActionsBag(
+				name);
+
+			return resourceActionsBag.getSupportsActions();
 		}
 
 		return getPortletResourceActions(name);
@@ -479,7 +482,10 @@ public class ResourceActionsImpl implements ResourceActions {
 			actions = getPortletResourceActions(portletResource);
 		}
 		else {
-			actions = getModelResourceActions(modelResource);
+			ResourceActionsBag resourceActionsBag = getModelResourceActionsBag(
+				modelResource);
+
+			actions = resourceActionsBag.getSupportsActions();
 		}
 
 		return actions;
@@ -492,7 +498,10 @@ public class ResourceActionsImpl implements ResourceActions {
 	@Override
 	public List<String> getResourceGroupDefaultActions(String name) {
 		if (name.contains(StringPool.PERIOD)) {
-			return getModelResourceGroupDefaultActions(name);
+			ResourceActionsBag resourceActionsBag = getModelResourceActionsBag(
+				name);
+
+			return resourceActionsBag.getGroupDefaultActions();
 		}
 
 		return getPortletResourceGroupDefaultActions(name);
@@ -506,10 +515,16 @@ public class ResourceActionsImpl implements ResourceActions {
 			return getPortletResourceGuestUnsupportedActions(portletResource);
 		}
 		else if (Validator.isNull(portletResource)) {
-			return getModelResourceGuestUnsupportedActions(modelResource);
+			ResourceActionsBag modelResourceActionsBag =
+				getModelResourceActionsBag(modelResource);
+
+			return modelResourceActionsBag.getGuestUnsupportedActions();
 		}
 		else if (_modelResourceActionsBags.containsKey(modelResource)) {
-			return getModelResourceGuestUnsupportedActions(modelResource);
+			ResourceActionsBag modelResourceActionsBag =
+				getModelResourceActionsBag(modelResource);
+
+			return modelResourceActionsBag.getGuestUnsupportedActions();
 		}
 		else if (_portletResourceActionsBags.containsKey(portletResource)) {
 			return getPortletResourceGuestUnsupportedActions(portletResource);
@@ -665,8 +680,11 @@ public class ResourceActionsImpl implements ResourceActions {
 			portletName, portletResourceActions);
 
 		for (String modelName : getPortletModelResources(portletName)) {
+			ResourceActionsBag resourceActionsBag = getModelResourceActionsBag(
+				modelName);
+
 			ResourceActionLocalServiceUtil.checkResourceActions(
-				modelName, getModelResourceActions(modelName));
+				modelName, resourceActionsBag.getSupportsActions());
 		}
 	}
 

@@ -45,6 +45,7 @@ import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBag;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.security.permission.comparator.ActionComparator;
 import com.liferay.portal.kernel.service.GroupService;
@@ -781,8 +782,10 @@ public class RolesAdminPortlet extends MVCPortlet {
 			portletId);
 
 		if (modelResource != null) {
-			List<String> actions = ResourceActionsUtil.getModelResourceActions(
-				modelResource);
+			ResourceActionsBag resourceActionsBag =
+				ResourceActionsUtil.getModelResourceActionsBag(modelResource);
+
+			List<String> actions = resourceActionsBag.getSupportsActions();
 
 			if (actions.contains(ActionKeys.VIEW)) {
 				updateAction(

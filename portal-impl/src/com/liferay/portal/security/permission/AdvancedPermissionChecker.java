@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.model.UserGroupRole;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBag;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.security.permission.UserBag;
 import com.liferay.portal.kernel.security.permission.UserBagFactoryUtil;
@@ -157,9 +158,11 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 			List<String> guestUnsupportedActions;
 
 			if (name.indexOf(CharPool.PERIOD) != -1) {
+				ResourceActionsBag resourceActionsBag =
+					ResourceActionsUtil.getModelResourceActionsBag(name);
+
 				guestUnsupportedActions =
-					ResourceActionsUtil.getModelResourceGuestUnsupportedActions(
-						name);
+					resourceActionsBag.getGuestUnsupportedActions();
 			}
 			else {
 				guestUnsupportedActions =
@@ -1312,9 +1315,11 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 
 			// Check unsupported model actions
 
+			ResourceActionsBag resourceActionsBag =
+				ResourceActionsUtil.getModelResourceActionsBag(name);
+
 			List<String> actions =
-				ResourceActionsUtil.getModelResourceGuestUnsupportedActions(
-					name);
+				resourceActionsBag.getGuestUnsupportedActions();
 
 			if (actions.contains(actionId)) {
 				return false;
