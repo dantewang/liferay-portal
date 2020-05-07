@@ -45,6 +45,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.security.permission.PermissionUpdateHandler;
 import com.liferay.portal.kernel.security.permission.PermissionUpdateHandlerRegistryUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBag;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.SQLStateAcceptor;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -161,8 +162,11 @@ public class ResourcePermissionLocalServiceImpl
 			Role ownerRole = roleLocalService.getRole(
 				companyId, RoleConstants.OWNER);
 
+			ResourceActionsBag resourceActionsBag =
+				ResourceActionsUtil.getModelResourceActionsBag(name);
+
 			List<String> ownerActionIds =
-				ResourceActionsUtil.getModelResourceActions(name);
+				resourceActionsBag.getSupportsActions();
 
 			filterOwnerActions(name, ownerActionIds);
 
@@ -358,7 +362,10 @@ public class ResourcePermissionLocalServiceImpl
 				actionIds = ResourceActionsUtil.getPortletResourceActions(name);
 			}
 			else {
-				actionIds = ResourceActionsUtil.getModelResourceActions(name);
+				ResourceActionsBag resourceActionsBag =
+					ResourceActionsUtil.getModelResourceActionsBag(name);
+
+				actionIds = resourceActionsBag.getSupportsActions();
 
 				filterOwnerActions(name, actionIds);
 			}
@@ -387,9 +394,10 @@ public class ResourcePermissionLocalServiceImpl
 							getPortletResourceGroupDefaultActions(name);
 				}
 				else {
-					actions =
-						ResourceActionsUtil.getModelResourceGroupDefaultActions(
-							name);
+					ResourceActionsBag resourceActionsBag =
+						ResourceActionsUtil.getModelResourceActionsBag(name);
+
+					actions = resourceActionsBag.getGroupDefaultActions();
 				}
 
 				Role groupRole = roleLocalService.getDefaultGroupRole(groupId);
@@ -420,9 +428,10 @@ public class ResourcePermissionLocalServiceImpl
 							getPortletResourceGuestDefaultActions(name);
 				}
 				else {
-					actions =
-						ResourceActionsUtil.getModelResourceGuestDefaultActions(
-							name);
+					ResourceActionsBag resourceActionsBag =
+						ResourceActionsUtil.getModelResourceActionsBag(name);
+
+					actions = resourceActionsBag.getGuestDefaultActions();
 				}
 
 				Role guestRole = roleLocalService.getRole(
@@ -1237,18 +1246,19 @@ public class ResourcePermissionLocalServiceImpl
 
 			List<String> groupModelActionIds = null;
 
+			ResourceActionsBag resourceActionsBag =
+				ResourceActionsUtil.getModelResourceActionsBag(modelResource);
+
 			if (Objects.equals(rootModelResource, modelResource)) {
 				groupModelActionIds =
-					ResourceActionsUtil.getModelResourceGroupDefaultActions(
-						rootModelResource);
+					resourceActionsBag.getGroupDefaultActions();
 			}
 
 			List<String> guestModelActionIds =
-				ResourceActionsUtil.getModelResourceGuestDefaultActions(
-					modelResource);
+				resourceActionsBag.getGuestDefaultActions();
 
 			List<String> ownerModelActionIds =
-				ResourceActionsUtil.getModelResourceActions(modelResource);
+				resourceActionsBag.getSupportsActions();
 
 			filterOwnerActions(modelResource, ownerModelActionIds);
 
@@ -1322,12 +1332,14 @@ public class ResourcePermissionLocalServiceImpl
 
 		List<String> actionIds = null;
 
+		ResourceActionsBag resourceActionsBag =
+			ResourceActionsUtil.getModelResourceActionsBag(name);
+
 		if (toRole.getType() == RoleConstants.TYPE_REGULAR) {
-			actionIds = ResourceActionsUtil.getModelResourceActions(name);
+			actionIds = resourceActionsBag.getSupportsActions();
 		}
 		else {
-			actionIds = ResourceActionsUtil.getModelResourceGroupDefaultActions(
-				name);
+			actionIds = resourceActionsBag.getGroupDefaultActions();
 		}
 
 		setResourcePermissions(
@@ -1672,8 +1684,11 @@ public class ResourcePermissionLocalServiceImpl
 	}
 
 	protected void filterOwnerActions(String name, List<String> actionIds) {
+		ResourceActionsBag resourceActionsBag =
+			ResourceActionsUtil.getModelResourceActionsBag(name);
+
 		List<String> defaultOwnerActions =
-			ResourceActionsUtil.getModelResourceOwnerDefaultActions(name);
+			resourceActionsBag.getOwnerDefaultActions();
 
 		if (!defaultOwnerActions.isEmpty()) {
 			actionIds.retainAll(defaultOwnerActions);
@@ -1869,7 +1884,10 @@ public class ResourcePermissionLocalServiceImpl
 			actions = ResourceActionsUtil.getPortletResourceActions(name);
 		}
 		else {
-			actions = ResourceActionsUtil.getModelResourceActions(name);
+			ResourceActionsBag resourceActionsBag =
+				ResourceActionsUtil.getModelResourceActionsBag(name);
+
+			actions = resourceActionsBag.getSupportsActions();
 		}
 
 		if (ListUtil.isEmpty(actions)) {
