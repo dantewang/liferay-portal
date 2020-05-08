@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleWrapper;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBag;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.RoleLocalServiceWrapper;
@@ -32,6 +33,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -202,16 +204,44 @@ public class ModelPermissionsFactoryTest extends PowerMockito {
 
 		mockStatic(ResourceActionsUtil.class);
 
-		when(
-			ResourceActionsUtil.getModelResourceGroupDefaultActions(className)
-		).thenReturn(
-			Arrays.asList(ActionKeys.VIEW)
-		);
+		ResourceActionsBag resourceActionsBag = new ResourceActionsBag() {
+
+			@Override
+			public List<String> getGroupDefaultActions() {
+				return Arrays.asList(ActionKeys.VIEW);
+			}
+
+			@Override
+			public List<String> getGuestDefaultActions() {
+				return Arrays.asList(ActionKeys.VIEW);
+			}
+
+			@Override
+			public List<String> getGuestUnsupportedActions() {
+				return null;
+			}
+
+			@Override
+			public List<String> getLayoutManagerActions() {
+				return null;
+			}
+
+			@Override
+			public List<String> getOwnerDefaultActions() {
+				return null;
+			}
+
+			@Override
+			public List<String> getSupportsActions() {
+				return null;
+			}
+
+		};
 
 		when(
-			ResourceActionsUtil.getModelResourceGuestDefaultActions(className)
+			ResourceActionsUtil.getModelResourceActionsBag(className)
 		).thenReturn(
-			Arrays.asList(ActionKeys.VIEW)
+			resourceActionsBag
 		);
 
 		ModelPermissions modelPermissions = ModelPermissionsFactory.create(
