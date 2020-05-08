@@ -248,6 +248,10 @@ public class ResourceActionsImpl implements ResourceActions {
 		return value;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public List<String> getModelResourceActions(String name) {
 		ResourceActionsBagImpl modelResourceActionsBagImpl =
@@ -261,6 +265,10 @@ public class ResourceActionsImpl implements ResourceActions {
 		return _getResourceActionsBag(name, _modelResourceActionsBags);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public List<String> getModelResourceGroupDefaultActions(String name) {
 		ResourceActionsBagImpl modelResourceActionsBagImpl =
@@ -270,6 +278,10 @@ public class ResourceActionsImpl implements ResourceActions {
 			modelResourceActionsBagImpl._groupDefaultActions);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public List<String> getModelResourceGuestDefaultActions(String name) {
 		ResourceActionsBagImpl modelResourceActionsBagImpl =
@@ -279,6 +291,10 @@ public class ResourceActionsImpl implements ResourceActions {
 			modelResourceActionsBagImpl._guestDefaultActions);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public List<String> getModelResourceGuestUnsupportedActions(String name) {
 		ResourceActionsBagImpl modelResourceActionsBagImpl =
@@ -293,6 +309,10 @@ public class ResourceActionsImpl implements ResourceActions {
 		return _MODEL_RESOURCE_NAME_PREFIX;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public List<String> getModelResourceOwnerDefaultActions(String name) {
 		ResourceActionsBagImpl modelResourceActionsBagImpl =

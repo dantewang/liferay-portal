@@ -68,18 +68,38 @@ public interface ResourceActions {
 
 	public String getModelResource(Locale locale, String name);
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public List<String> getModelResourceActions(String name);
 
 	public ResourceActionsBag getModelResourceActionsBag(String name);
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public List<String> getModelResourceGroupDefaultActions(String name);
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public List<String> getModelResourceGuestDefaultActions(String name);
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public List<String> getModelResourceGuestUnsupportedActions(String name);
 
 	public String getModelResourceNamePrefix();
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public List<String> getModelResourceOwnerDefaultActions(String name);
 
 	public Double getModelResourceWeight(String name);
