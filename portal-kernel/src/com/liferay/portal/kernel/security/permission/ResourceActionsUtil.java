@@ -92,6 +92,10 @@ public class ResourceActionsUtil {
 		return getResourceActions().getModelResource(locale, name);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static List<String> getModelResourceActions(String name) {
 		return getResourceActions().getModelResourceActions(name);
 	}
@@ -100,18 +104,30 @@ public class ResourceActionsUtil {
 		return getResourceActions().getModelResourceActionsBag(name);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static List<String> getModelResourceGroupDefaultActions(
 		String name) {
 
 		return getResourceActions().getModelResourceGroupDefaultActions(name);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static List<String> getModelResourceGuestDefaultActions(
 		String name) {
 
 		return getResourceActions().getModelResourceGuestDefaultActions(name);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static List<String> getModelResourceGuestUnsupportedActions(
 		String name) {
 
@@ -123,6 +139,10 @@ public class ResourceActionsUtil {
 		return getResourceActions().getModelResourceNamePrefix();
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static List<String> getModelResourceOwnerDefaultActions(
 		String name) {
 
