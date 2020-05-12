@@ -728,7 +728,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		_checkPortletLayoutManagerActions(actions);
 
 		if ((portlet != null) &&
-			(portlet.getControlPanelEntryCategory() != null)) {
+			Validator.isNotNull(portlet.getControlPanelEntryCategory())) {
 
 			actions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
 		}
