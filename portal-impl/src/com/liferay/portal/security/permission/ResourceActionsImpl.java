@@ -1317,9 +1317,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		portletActions.addAll(_getPortletMimeTypeActions(name, portlet));
 
-		if (!name.equals(PortletKeys.PORTAL)) {
-			_checkPortletActions(portlet, portletActions);
-		}
+		_checkPortletActions(portlet, portletActions);
 
 		if (portletActions.size() > 64) {
 			throw new ResourceActionsException(
