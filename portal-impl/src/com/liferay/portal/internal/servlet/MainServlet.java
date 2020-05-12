@@ -981,7 +981,8 @@ public class MainServlet extends HttpServlet {
 	private void _initResourceActions(List<Portlet> portlets) throws Exception {
 		for (Portlet portlet : portlets) {
 			List<String> portletActions =
-				ResourceActionsUtil.getPortletResourceActions(portlet);
+				ResourceActionsUtil.getPortletResourceActions(
+					portlet.getPortletId());
 
 			ResourceActionLocalServiceUtil.checkResourceActions(
 				portlet.getPortletId(), portletActions);
