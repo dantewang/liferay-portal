@@ -443,13 +443,8 @@ public class ResourceActionsImpl implements ResourceActions {
 		ResourceActionsBagImpl portletResourceActionsBagImpl =
 			_getResourceActionsBag(name, _portletResourceActionsBags);
 
-		Set<String> actions =
-			portletResourceActionsBagImpl._guestUnsupportedActions;
-
-		actions.add(ActionKeys.CONFIGURATION);
-		actions.add(ActionKeys.PERMISSIONS);
-
-		return new ArrayList<>(actions);
+		return new ArrayList<>(
+			portletResourceActionsBagImpl._guestUnsupportedActions);
 	}
 
 	@Override
@@ -878,6 +873,16 @@ public class ResourceActionsImpl implements ResourceActions {
 
 			_checkPortletLayoutManagerActions(
 				portletResourceActionsBagImpl._layoutManagerActions);
+
+			Set<String> guestUnsupportedActions =
+				portletResourceActionsBagImpl._guestUnsupportedActions;
+
+			guestUnsupportedActions.add(ActionKeys.CONFIGURATION);
+			guestUnsupportedActions.add(ActionKeys.PERMISSIONS);
+
+			_checkGuestUnsupportedActions(
+				guestUnsupportedActions,
+				portletResourceActionsBagImpl._guestDefaultActions);
 		}
 
 		return new ArrayList<>(portletActions);
@@ -1148,6 +1153,9 @@ public class ResourceActionsImpl implements ResourceActions {
 		guestUnsupportedActions.clear();
 
 		_readActionKeys(guestUnsupportedActions, guestUnsupportedElement);
+
+		guestUnsupportedActions.add(ActionKeys.CONFIGURATION);
+		guestUnsupportedActions.add(ActionKeys.PERMISSIONS);
 
 		_checkGuestUnsupportedActions(
 			guestUnsupportedActions, guestDefaultActions);
