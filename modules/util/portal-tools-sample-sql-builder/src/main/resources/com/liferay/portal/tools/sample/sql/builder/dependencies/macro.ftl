@@ -53,6 +53,8 @@
 >
 	<#list _layoutModels as layoutModel>
 		${dataFactory.toInsertSQL(layoutModel)}
+
+		${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(layoutModel))}
 	</#list>
 </#macro>
 
