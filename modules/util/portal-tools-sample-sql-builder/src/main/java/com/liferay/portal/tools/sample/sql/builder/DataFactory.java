@@ -2196,7 +2196,7 @@ public class DataFactory {
 
 	public List<FragmentEntryLinkModel> newFragmentEntryLinkModels(
 			List<LayoutModel> layoutModels)
-		throws IOException {
+		throws Exception {
 
 		List<FragmentEntryLinkModel> fragmentEntryLinkModels =
 			new ArrayList<>();
