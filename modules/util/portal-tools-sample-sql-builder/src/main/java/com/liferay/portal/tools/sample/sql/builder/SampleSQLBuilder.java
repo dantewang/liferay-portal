@@ -19,6 +19,7 @@ import com.liferay.petra.io.unsync.UnsyncBufferedReader;
 import com.liferay.petra.io.unsync.UnsyncBufferedWriter;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.dao.db.PostgreSQLDB;
 import com.liferay.portal.freemarker.FreeMarkerUtil;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
@@ -180,6 +181,10 @@ public class SampleSQLBuilder {
 			(BenchmarksPropsValues.DB_TYPE == DBType.MYSQL)) {
 
 			db = new SampleMySQLDB(db.getMajorVersion(), db.getMinorVersion());
+		}
+		else if (_dbType == DBType.POSTGRESQL) {
+			db = new SamplePostgreSQLDB(
+				db.getMajorVersion(), db.getMinorVersion());
 		}
 
 		Map<String, Writer> sqlWriters = new HashMap<>();
