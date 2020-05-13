@@ -48,6 +48,14 @@
 	${dataFactory.toInsertSQL(layoutPageTemplateStructureRelModel)}
 </#macro>
 
+<#macro insertContentLayout
+	_layoutModels
+>
+	<#list _layoutModels as layoutModel>
+		${dataFactory.toInsertSQL(layoutModel)}
+	</#list>
+</#macro>
+
 <#macro insertDDMContent
 	_ddmStorageLinkId
 	_ddmStructureId
