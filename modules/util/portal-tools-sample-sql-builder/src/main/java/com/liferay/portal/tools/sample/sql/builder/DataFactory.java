@@ -394,6 +394,19 @@ public class DataFactory {
 			_guestRoleModel.getRoleId(), _sampleUserId);
 	}
 
+	public String generateJSONData(String jsonString) {
+		StringBundler sb = new StringBundler(5);
+
+		sb.append("\"backgroundImage\"\\:{\"title\":\"");
+		sb.append(_backgroundPictureTitle);
+		sb.append("\",\"url\":\"");
+		sb.append(_backgroundPictureURL);
+		sb.append("\"}");
+
+		return jsonString.replaceAll(
+			"\"backgroundImage\":\\{\\}", sb.toString());
+	}
+
 	public RoleModel getAdministratorRoleModel() {
 		return _administratorRoleModel;
 	}
@@ -2690,6 +2703,63 @@ public class DataFactory {
 		JSONObject jsonObject = layoutData.getLayoutDataJSONObject();
 
 		layoutPageTemplateStructureRelModel.setData(jsonObject.toString());
+
+		return layoutPageTemplateStructureRelModel;
+	}
+
+	public LayoutPageTemplateStructureRelModel
+		newLayoutPageTemplateStructureRelModel(
+			LayoutModel layoutModel,
+			LayoutPageTemplateStructureModel layoutPageTemplateStructureModel,
+			List<FragmentEntryLinkModel> fragmentEntryLinkModels) {
+
+		List<FragmentEntryLinkModel> targetFragmentEntryLinkModels =
+			new ArrayList<>();
+
+		for (FragmentEntryLinkModel model : fragmentEntryLinkModels) {
+			if (model.getClassPK() == layoutModel.getPlid()) {
+				targetFragmentEntryLinkModels.add(model);
+			}
+		}
+
+		LayoutPageTemplateStructureRelModel
+			layoutPageTemplateStructureRelModel =
+				new LayoutPageTemplateStructureRelModelImpl();
+
+		layoutPageTemplateStructureRelModel.setUuid(SequentialUUID.generate());
+		layoutPageTemplateStructureRelModel.setLayoutPageTemplateStructureRelId(
+			_counter.get());
+		layoutPageTemplateStructureRelModel.setGroupId(
+			layoutPageTemplateStructureModel.getGroupId());
+		layoutPageTemplateStructureRelModel.setCompanyId(_companyId);
+		layoutPageTemplateStructureRelModel.setUserId(_sampleUserId);
+		layoutPageTemplateStructureRelModel.setUserName(_SAMPLE_USER_NAME);
+		layoutPageTemplateStructureRelModel.setCreateDate(new Date());
+		layoutPageTemplateStructureRelModel.setModifiedDate(new Date());
+		layoutPageTemplateStructureRelModel.setLayoutPageTemplateStructureId(
+			layoutPageTemplateStructureModel.
+				getLayoutPageTemplateStructureId());
+		layoutPageTemplateStructureRelModel.setSegmentsExperienceId(0L);
+
+		LayoutData layoutData = LayoutData.of(
+			layoutModel.toEscapedModel(),
+			layoutRow -> layoutRow.addLayoutColumns(
+				layoutColumn -> {
+					List<Long> fragmentEntryLinkIds =
+						layoutColumn.getFragmentEntryLinkIds();
+
+					for (FragmentEntryLinkModel fragmentEntryLinkModel :
+							targetFragmentEntryLinkModels) {
+
+						fragmentEntryLinkIds.add(
+							fragmentEntryLinkModel.getFragmentEntryLinkId());
+					}
+				}));
+
+		JSONObject jsonObject = layoutData.getLayoutDataJSONObject();
+
+		layoutPageTemplateStructureRelModel.setData(
+			generateJSONData(jsonObject.toString()));
 
 		return layoutPageTemplateStructureRelModel;
 	}

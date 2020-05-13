@@ -65,6 +65,10 @@
 		<#local layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(layoutModel)>
 
 		${dataFactory.toInsertSQL(layoutPageTemplateStructureModel)}
+
+		<#local layoutPageTemplateStructureRelModel = dataFactory.newLayoutPageTemplateStructureRelModel(layoutModel, layoutPageTemplateStructureModel, fragmentEntryLinkModels)>
+
+		${dataFactory.toInsertSQL(layoutPageTemplateStructureRelModel)}
 	</#list>
 </#macro>
 
