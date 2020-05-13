@@ -51,6 +51,12 @@
 <#macro insertContentLayout
 	_layoutModels
 >
+	<#local fragmentEntryLinkModels = dataFactory.newFragmentEntryLinkModels(_layoutModels)>
+
+	<#list fragmentEntryLinkModels as fragmentEntryLinkModel>
+		${dataFactory.toInsertSQL(fragmentEntryLinkModel)}
+	</#list>
+
 	<#list _layoutModels as layoutModel>
 		${dataFactory.toInsertSQL(layoutModel)}
 
