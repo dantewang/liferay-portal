@@ -894,6 +894,24 @@ public class DataFactory {
 		}
 	}
 
+	public void initBackgroundImageItem(
+		DLFolderModel dlFolderModel, DLFileEntryModel dlFileEntryModel) {
+
+		StringBundler sb = new StringBundler(7);
+
+		sb.append("/documents/1/");
+		sb.append(dlFolderModel.getFolderId());
+		sb.append(StringPool.SLASH);
+		sb.append(dlFileEntryModel.getName());
+		sb.append(StringPool.SLASH);
+		sb.append(dlFileEntryModel.getUuid());
+		sb.append("?version=1.0&download=true");
+
+		_backgroundPictureURL = sb.toString();
+
+		_backgroundPictureTitle = dlFileEntryModel.getName();
+	}
+
 	public void initCommerceCatalogModel() {
 		_commerceCatalogModel = new CommerceCatalogModelImpl();
 
@@ -2012,6 +2030,33 @@ public class DataFactory {
 			dlFileVersionModel.getFileVersionId());
 
 		return dlFileEntryMetadataModel;
+	}
+
+	public DLFileEntryModel newDlFileEntryModel(DLFolderModel dlFolderModel) {
+		DLFileEntryModel dlFileEntryModel = new DLFileEntryModelImpl();
+
+		dlFileEntryModel.setUuid(SequentialUUID.generate());
+		dlFileEntryModel.setFileEntryId(_counter.get());
+		dlFileEntryModel.setGroupId(dlFolderModel.getGroupId());
+		dlFileEntryModel.setCompanyId(_companyId);
+		dlFileEntryModel.setUserId(_sampleUserId);
+		dlFileEntryModel.setUserName(_SAMPLE_USER_NAME);
+		dlFileEntryModel.setCreateDate(nextFutureDate());
+		dlFileEntryModel.setModifiedDate(nextFutureDate());
+		dlFileEntryModel.setRepositoryId(dlFolderModel.getRepositoryId());
+		dlFileEntryModel.setFolderId(dlFolderModel.getFolderId());
+		dlFileEntryModel.setName("welcome_bg_benchmark");
+		dlFileEntryModel.setFileName("welcome_bg_benchmark.jpg");
+		dlFileEntryModel.setExtension("jpg");
+		dlFileEntryModel.setMimeType(ContentTypes.IMAGE_JPEG);
+		dlFileEntryModel.setTitle("welcome_bg_benchmark.jpg");
+		dlFileEntryModel.setFileEntryTypeId(
+			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
+		dlFileEntryModel.setVersion(DLFileEntryConstants.VERSION_DEFAULT);
+		dlFileEntryModel.setSize(413419);
+		dlFileEntryModel.setLastPublishDate(nextFutureDate());
+
+		return dlFileEntryModel;
 	}
 
 	public List<DLFileEntryModel> newDlFileEntryModels(
@@ -4649,6 +4694,8 @@ public class DataFactory {
 
 	private static final int _WRITER_BUFFER_SIZE = 16 * 1024;
 
+	private static String _backgroundPictureTitle;
+	private static String _backgroundPictureURL;
 	private static final PortletPreferencesFactory _portletPreferencesFactory =
 		new PortletPreferencesFactoryImpl();
 
