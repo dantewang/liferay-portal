@@ -470,11 +470,13 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public List<String> getResourceActions(String name) {
-		if (name.indexOf(CharPool.PERIOD) != -1) {
-			return getModelResourceActions(name);
+		if (name.indexOf(CharPool.PERIOD) == -1) {
+			name = PortletIdCodec.decodePortletName(name);
 		}
 
-		return getPortletResourceActions(name);
+		ResourceActionsBag resourceActionsBag = _getResourceActionsBag(name);
+
+		return new ArrayList<>(resourceActionsBag.getSupportsActions());
 	}
 
 	@Override
