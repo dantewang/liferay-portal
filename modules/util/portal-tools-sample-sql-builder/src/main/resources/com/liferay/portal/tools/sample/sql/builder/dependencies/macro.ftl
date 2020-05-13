@@ -55,6 +55,10 @@
 		${dataFactory.toInsertSQL(layoutModel)}
 
 		${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(layoutModel))}
+
+		<#local layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(layoutModel)>
+
+		${dataFactory.toInsertSQL(layoutPageTemplateStructureModel)}
 	</#list>
 </#macro>
 
