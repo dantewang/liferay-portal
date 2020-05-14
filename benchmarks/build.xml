@@ -67,6 +67,11 @@
 				dir="${sdk.dir}/dist"
 				includes="com.liferay.wiki.*.jar"
 			/>
+			
+			<fileset
+				dir="${sdk.dir}/dist"
+				includes="com.liferay.portal.dao.db*.jar"
+			/>
 			<path refid="project.classpath" />
 		</path>
 
