@@ -48,6 +48,30 @@
 	${dataFactory.toInsertSQL(layoutPageTemplateStructureRelModel)}
 </#macro>
 
+<#macro insertContentLayout
+	_layoutModels
+>
+	<#local fragmentEntryLinkModels = dataFactory.newFragmentEntryLinkModels(_layoutModels)>
+
+	<#list fragmentEntryLinkModels as fragmentEntryLinkModel>
+		${dataFactory.toInsertSQL(fragmentEntryLinkModel)}
+	</#list>
+
+	<#list _layoutModels as layoutModel>
+		${dataFactory.toInsertSQL(layoutModel)}
+
+		${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(layoutModel))}
+
+		<#local layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(layoutModel)>
+
+		${dataFactory.toInsertSQL(layoutPageTemplateStructureModel)}
+
+		<#local layoutPageTemplateStructureRelModel = dataFactory.newLayoutPageTemplateStructureRelModel(layoutModel, layoutPageTemplateStructureModel, fragmentEntryLinkModels)>
+
+		${dataFactory.toInsertSQL(layoutPageTemplateStructureRelModel)}
+	</#list>
+</#macro>
+
 <#macro insertDDMContent
 	_ddmStorageLinkId
 	_ddmStructureId
@@ -138,6 +162,58 @@
 			/>
 		</#list>
 	</#if>
+</#macro>
+
+<#macro insertHomePageDLFolder
+	_ddmStructureId
+	_dlFolderDepth
+	_groupId
+	_parentDLFolderId
+>
+	<#local dlFolderModel = dataFactory.newDLFolderModel(_groupId, _parentDLFolderId)>
+
+	${dataFactory.toInsertSQL(dlFolderModel)}
+
+	<@insertAssetEntry _entry=dlFolderModel />
+
+	<#local dlFileEntryModel = dataFactory.newDlFileEntryModel(dlFolderModel)>
+
+	${dataFactory.toInsertSQL(dlFileEntryModel)}
+
+	<#local dlFileVersionModel = dataFactory.newDLFileVersionModel(dlFileEntryModel)>
+
+	${dataFactory.toInsertSQL(dlFileVersionModel)}
+
+	<@insertAssetEntry _entry=dlFileEntryModel />
+
+	<#local ddmStorageLinkId = dataFactory.getCounterNext()>
+
+	<@insertDDMContent
+		_ddmStorageLinkId=ddmStorageLinkId
+		_ddmStructureId=_ddmStructureId
+		_entry=dlFileEntryModel
+	/>
+
+	<@insertMBDiscussion
+		_classNameId=dataFactory.DLFileEntryClassNameId
+		_classPK=dlFileEntryModel.fileEntryId
+		_groupId=dlFileEntryModel.groupId
+		_maxCommentCount=0
+		_mbRootMessageId=dataFactory.getCounterNext()
+		_mbThreadId=dataFactory.getCounterNext()
+	/>
+
+	${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(dlFileEntryModel))}
+
+	<#local dlFileEntryMetadataModel = dataFactory.newDLFileEntryMetadataModel(ddmStorageLinkId, _ddmStructureId, dlFileVersionModel)>
+
+	${dataFactory.toInsertSQL(dlFileEntryMetadataModel)}
+
+	${dataFactory.toInsertSQL(dataFactory.newDDMStructureLinkModel(dlFileEntryMetadataModel))}
+
+	${dataFactory.getCSVWriter("homepage").write(dlFileEntryModel.uuid + "," + dlFolderModel.folderId + "," + dlFileEntryModel.name + "\n")}
+
+	${dataFactory.initBackgroundImageItem(dlFolderModel, dlFileEntryModel)}
 </#macro>
 
 <#macro insertGroup
