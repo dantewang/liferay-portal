@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender class="org.apache.log4j.ConsoleAppender" name="CONSOLE">
+		<layout class="org.apache.log4j.EnhancedPatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t][%c{1}:%L] %m%n" />
+		</layout>
+	</appender>
+
+	<appender class="org.apache.log4j.rolling.RollingFileAppender" name="TEXT_FILE">
+		<rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+			<param name="FileNamePattern" value="@user_dir@/logs/liferay.%d{yyyy-MM-dd}.log" />
+		</rollingPolicy>
+
+		<layout class="org.apache.log4j.EnhancedPatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t][%c{1}:%L] %m%n" />
+		</layout>
+	</appender>
+
+	<appender class="org.apache.log4j.rolling.RollingFileAppender" name="XML_FILE">
+		<rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+			<param name="FileNamePattern" value="@user_dir@/logs/liferay.%d{yyyy-MM-dd}.xml" />
+		</rollingPolicy>
+
+		<layout class="org.apache.log4j.xml.XMLLayout">
+			<param name="LocationInfo" value="true" />
+		</layout>
+	</appender>
+
+	<category name="level">
+		<priority value="ALL" />
+	</category>
+
+	<category name="level.off">
+		<priority value="OFF" />
+	</category>
+
+	<category name="level.fatal">
+		<priority value="FATAL" />
+	</category>
+
+	<category name="level.error">
+		<priority value="ERROR" />
+	</category>
+
+	<category name="level.warn">
+		<priority value="WARN" />
+	</category>
+
+	<category name="level.info">
+		<priority value="INFO" />
+	</category>
+
+	<category name="level.debug">
+		<priority value="DEBUG" />
+	</category>
+
+	<category name="level.trace">
+		<priority value="TRACE" />
+	</category>
+
+	<root>
+		<priority value="INFO" />
+
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="TEXT_FILE" />
+		<appender-ref ref="XML_FILE" />
+	</root>
+</log4j:configuration>
