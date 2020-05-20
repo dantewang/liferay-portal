@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.StringWriter;
 
 import java.net.URI;
 import java.net.URL;
@@ -47,9 +46,6 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.SimpleLayout;
-import org.apache.log4j.WriterAppender;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -151,7 +147,7 @@ public class Log4jTest {
 
 		String expectedOutput = logMessages[logMessages.length - 1];
 
-		_assertLog(expectedOutput, 148);
+		_assertLog(expectedOutput, 144);
 	}
 
 	@Test
@@ -277,7 +273,7 @@ public class Log4jTest {
 
 					String[] logMessages = StringUtil.splitLines(content);
 
-					_assertLog(logMessages[logMessages.length - 1], 250);
+					_assertLog(logMessages[logMessages.length - 1], 246);
 				}
 			}
 			else {
@@ -297,7 +293,7 @@ public class Log4jTest {
 						Assert.fail("There is no log meesage output");
 					}
 
-					_assertXmlLog(content.substring(index), 250);
+					_assertXmlLog(content.substring(index), 246);
 				}
 			}
 		}
@@ -327,35 +323,6 @@ public class Log4jTest {
 
 		Assert.assertTrue(
 			"DEBUG level should be enabled", childLog.isDebugEnabled());
-	}
-
-	@Test
-	public void testWriteAppender() {
-		StringWriter stringWrite = new StringWriter();
-
-		WriterAppender writerAppender = new WriterAppender(
-			new SimpleLayout(), stringWrite);
-
-		Logger logger = Logger.getLogger(Log4jTest.class.getName());
-
-		logger.addAppender(writerAppender);
-
-		Log log = LogFactoryUtil.getLog(Log4jTest.class);
-
-		log.info("Test message");
-
-		String logMessage = stringWrite.toString();
-
-		try {
-			Assert.assertTrue(
-				"Log message should be " + logMessage,
-				logMessage.equals(
-					Level.INFO + " - Test message" +
-						System.getProperty("line.separator")));
-		}
-		finally {
-			logger.removeAppender(writerAppender);
-		}
 	}
 
 	private static byte[] _getBytes(InputStream inputStream)
