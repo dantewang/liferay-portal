@@ -14,14 +14,12 @@
 
 package com.liferay.portal.log4j;
 
+import com.liferay.petra.io.StreamUtil;
 import com.liferay.petra.log4j.Log4JUtil;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.log.Log4jLogFactoryImpl;
 import com.liferay.portal.util.PropsImpl;
@@ -76,9 +74,7 @@ public class Log4jTest {
 		String urlContent = "";
 
 		try (InputStream inputStream = url.openStream()) {
-			byte[] bytes = _getBytes(inputStream);
-
-			urlContent = new String(bytes, StringPool.UTF8);
+			urlContent = StreamUtil.toString(inputStream);
 		}
 
 		String dir = StringUtil.replace(
@@ -146,7 +142,7 @@ public class Log4jTest {
 
 		String expectedOutput = logMessages[logMessages.length - 1];
 
-		_assertLog(expectedOutput, 143);
+		_assertLog(expectedOutput, 139);
 	}
 
 	@Test
@@ -238,13 +234,11 @@ public class Log4jTest {
 					"test file name should be " + fileName, matcher.matches());
 
 				try (InputStream inputStream = url.openStream()) {
-					byte[] bytes = _getBytes(inputStream);
-
-					content = new String(bytes, StringPool.UTF8);
+					content = StreamUtil.toString(inputStream);
 
 					String[] logMessages = StringUtil.splitLines(content);
 
-					_assertLog(logMessages[logMessages.length - 1], 217);
+					_assertLog(logMessages[logMessages.length - 1], 213);
 				}
 			}
 			else {
@@ -254,16 +248,14 @@ public class Log4jTest {
 					"xml file name should be " + fileName, matcher.matches());
 
 				try (InputStream inputStream = url.openStream()) {
-					byte[] bytes = _getBytes(inputStream);
-
-					content = new String(bytes, StringPool.UTF8);
+					content = StreamUtil.toString(inputStream);
 
 					int index = content.lastIndexOf("<log4j:event");
 
 					Assert.assertTrue(
 						"There is no log meesage output", index > 0);
 
-					_assertXmlLog(content.substring(index), 217);
+					_assertXmlLog(content.substring(index), 213);
 				}
 			}
 		}
@@ -293,17 +285,6 @@ public class Log4jTest {
 
 		Assert.assertTrue(
 			"DEBUG level should be enabled", childLog.isDebugEnabled());
-	}
-
-	private static byte[] _getBytes(InputStream inputStream)
-		throws IOException {
-
-		UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
-			new UnsyncByteArrayOutputStream();
-
-		StreamUtil.transfer(inputStream, unsyncByteArrayOutputStream, -1, true);
-
-		return unsyncByteArrayOutputStream.toByteArray();
 	}
 
 	private void _assertLog(String expectedOutput, int invokeLineNumber) {
