@@ -1006,7 +1006,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 
 		synchronized (this) {
-			portletActions = _getPortletMimeTypeActions(name, portlet);
+			portletActions.addAll(_getPortletMimeTypeActions(name, portlet));
 
 			_checkPortletActions(portlet, portletActions);
 
