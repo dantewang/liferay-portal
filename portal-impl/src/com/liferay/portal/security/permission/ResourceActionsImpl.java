@@ -410,18 +410,15 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public List<String> getPortletResourceGroupDefaultActions(String name) {
-
-		// This method should always be called only after
-		// _getPortletResourceActions has been called at least once to populate
-		// the default group actions. Check to make sure this is the case.
-		// However, if it is not, that means the methods
-		// getPortletResourceGuestDefaultActions and
-		// getPortletResourceGuestDefaultActions may not work either.
-
 		name = PortletIdCodec.decodePortletName(name);
+
+		Portlet portlet = portletLocalService.getPortletById(name);
 
 		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
 			name);
+
+		_checkPortletResourceActionsBag(
+			name, portlet, portletResourceActionsBag);
 
 		return new ArrayList<>(
 			portletResourceActionsBag.getGroupDefaultActions());
@@ -431,8 +428,13 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getPortletResourceGuestDefaultActions(String name) {
 		name = PortletIdCodec.decodePortletName(name);
 
+		Portlet portlet = portletLocalService.getPortletById(name);
+
 		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
 			name);
+
+		_checkPortletResourceActionsBag(
+			name, portlet, portletResourceActionsBag);
 
 		return new ArrayList<>(
 			portletResourceActionsBag.getGuestDefaultActions());
@@ -442,8 +444,13 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getPortletResourceGuestUnsupportedActions(String name) {
 		name = PortletIdCodec.decodePortletName(name);
 
+		Portlet portlet = portletLocalService.getPortletById(name);
+
 		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
 			name);
+
+		_checkPortletResourceActionsBag(
+			name, portlet, portletResourceActionsBag);
 
 		Set<String> actions =
 			portletResourceActionsBag.getGuestUnsupportedActions();
@@ -458,8 +465,13 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getPortletResourceLayoutManagerActions(String name) {
 		name = PortletIdCodec.decodePortletName(name);
 
+		Portlet portlet = portletLocalService.getPortletById(name);
+
 		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
 			name);
+
+		_checkPortletResourceActionsBag(
+			name, portlet, portletResourceActionsBag);
 
 		Set<String> actions =
 			portletResourceActionsBag.getLayoutManagerActions();
