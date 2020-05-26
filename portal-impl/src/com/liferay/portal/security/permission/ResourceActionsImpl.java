@@ -437,13 +437,8 @@ public class ResourceActionsImpl implements ResourceActions {
 		ResourceActionsBag portletResourceActionsBag =
 			_getPortletResourceActionsBag(name);
 
-		Set<String> actions =
-			portletResourceActionsBag.getGuestUnsupportedActions();
-
-		actions.add(ActionKeys.CONFIGURATION);
-		actions.add(ActionKeys.PERMISSIONS);
-
-		return new ArrayList<>(actions);
+		return new ArrayList<>(
+			portletResourceActionsBag.getGuestUnsupportedActions());
 	}
 
 	@Override
@@ -989,6 +984,16 @@ public class ResourceActionsImpl implements ResourceActions {
 
 			_checkPortletLayoutManagerActions(
 				resourceActionsBag.getLayoutManagerActions());
+
+			Set<String> guestUnsupportedActions =
+				resourceActionsBag.getGuestUnsupportedActions();
+
+			guestUnsupportedActions.addAll(
+				_defaultPortletGuestUnsupportedActions);
+
+			_checkGuestUnsupportedActions(
+				guestUnsupportedActions,
+				resourceActionsBag.getGuestDefaultActions());
 		}
 
 		return resourceActionsBag;
@@ -1232,7 +1237,8 @@ public class ResourceActionsImpl implements ResourceActions {
 
 			_readResource(
 				modelResourceElement, modelName,
-				Collections.singleton(ActionKeys.PERMISSIONS));
+				Collections.singleton(ActionKeys.PERMISSIONS),
+				Collections.emptySet());
 
 			if (modelNames != null) {
 				modelNames.add(modelName);
@@ -1271,7 +1277,8 @@ public class ResourceActionsImpl implements ResourceActions {
 				}
 
 				_readResource(
-					portletResourceElement, portletName, portletActions);
+					portletResourceElement, portletName, portletActions,
+					_defaultPortletGuestUnsupportedActions);
 
 				if (portletNames != null) {
 					portletNames.add(portletName);
@@ -1282,7 +1289,8 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	private void _readResource(
 			Element resourceElement, String name,
-			Set<String> defaultResourceActions)
+			Set<String> defaultResourceActions,
+			Set<String> defaultGuestUnsupportedActions)
 		throws ResourceActionsException {
 
 		ResourceActionsBag resourceActionsBag = _getResourceActionsBag(name);
@@ -1336,20 +1344,22 @@ public class ResourceActionsImpl implements ResourceActions {
 			_readActionKeys(guestDefaultActions, guestDefaultsElement);
 		}
 
+		Set<String> guestUnsupportedActions =
+			resourceActionsBag.getGuestUnsupportedActions();
+
+		guestUnsupportedActions.addAll(defaultGuestUnsupportedActions);
+
 		Element guestUnsupportedElement = _getPermissionsChildElement(
 			resourceElement, "guest-unsupported");
 
 		if (guestUnsupportedElement != null) {
-			Set<String> guestUnsupportedActions =
-				resourceActionsBag.getGuestUnsupportedActions();
-
 			guestUnsupportedActions.clear();
 
 			_readActionKeys(guestUnsupportedActions, guestUnsupportedElement);
-
-			_checkGuestUnsupportedActions(
-				guestUnsupportedActions, guestDefaultActions);
 		}
+
+		_checkGuestUnsupportedActions(
+			guestUnsupportedActions, guestDefaultActions);
 
 		Element ownerDefaultsElement = _getPermissionsChildElement(
 			resourceElement, "owner-defaults");
@@ -1400,6 +1410,14 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ResourceActionsImpl.class);
+
+	private static final Set<String> _defaultPortletGuestUnsupportedActions =
+		new HashSet<String>() {
+			{
+				add(ActionKeys.CONFIGURATION);
+				add(ActionKeys.PERMISSIONS);
+			}
+		};
 
 	private final Map<String, Double> _modelResourceWeights = new HashMap<>();
 	private final Set<String> _organizationModelResources = new HashSet<>();
