@@ -672,10 +672,10 @@ public class ResourceActionsImpl implements ResourceActions {
 		ResourceActionLocalServiceUtil.checkResourceActions(
 			portletName, portletResourceActions);
 
-		for (String modelName : getPortletModelResources(portletName)) {
-			ResourceActionLocalServiceUtil.checkResourceActions(
-				modelName, getModelResourceActions(modelName));
-		}
+		//for (String modelName : getPortletModelResources(portletName)) {
+		//	ResourceActionLocalServiceUtil.checkResourceActions(
+		//		modelName, getModelResourceActions(modelName));
+		//}
 	}
 
 	private void _checkGuestUnsupportedActions(
@@ -1133,6 +1133,9 @@ public class ResourceActionsImpl implements ResourceActions {
 				modelResourceElement, modelName,
 				Collections.singleton(ActionKeys.PERMISSIONS),
 				Collections.emptySet());
+
+			resourceActionLocalService.checkResourceActions(
+				modelName, getModelResourceActions(modelName));
 
 			if (portletNames != null) {
 				portletNames.addAll(_resourceReferences.get(modelName));
