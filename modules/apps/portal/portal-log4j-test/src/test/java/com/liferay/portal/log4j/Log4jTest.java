@@ -93,18 +93,15 @@ public class Log4jTest {
 			urlContent = StreamUtil.toString(inputStream);
 		}
 
-		File tempDir = new File(SystemProperties.get(SystemProperties.TMP_DIR));
-
-		_tempLogDir = new File(
-			StringUtil.replace(tempDir.getPath(), '\\', '/'), "logs");
-
-		urlContent = StringUtil.replace(
-			urlContent, "@temp_dir@",
-			StringUtil.replace(tempDir.getPath(), '\\', '/'));
+		_tempLogDir = new File(FileUtil.createTempFolder(), "logs");
 
 		_tempFile = FileUtil.createTempFile("xml");
 
-		FileUtil.write(_tempFile, urlContent);
+		FileUtil.write(
+			_tempFile,
+			StringUtil.replace(
+				urlContent, "@temp_dir@",
+				StringUtil.replace(_tempLogDir.getPath(), '\\', '/')));
 
 		URI uri = _tempFile.toURI();
 
