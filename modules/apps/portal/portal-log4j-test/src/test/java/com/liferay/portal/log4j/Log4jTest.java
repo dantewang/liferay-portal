@@ -203,11 +203,12 @@ public class Log4jTest {
 
 	@Test
 	public void testGetOriginalLevel() {
-		String level = Log4JUtil.getOriginalLevel(Level.INFO.toString());
+		String level = Log4JUtil.getOriginalLevel(
+			LoggerName.LOGGER_INFO.toString());
 
 		Assert.assertEquals("The original level should be INFO", "INFO", level);
 
-		level = Log4JUtil.getOriginalLevel(Level.DEBUG.toString());
+		level = Log4JUtil.getOriginalLevel(LoggerName.LOGGER_DEBUG.toString());
 
 		Assert.assertEquals(
 			"The original level should be DEBUG", "DEBUG", level);
@@ -215,47 +216,47 @@ public class Log4jTest {
 
 	@Test
 	public void testLoggerEnabled() {
-		Log log = LogFactoryUtil.getLog(Level.ALL.toString());
+		Log log = LogFactoryUtil.getLog(LoggerName.LOGGER_ALL.toString());
 
 		Assert.assertTrue("Logger should be all enabled", log.isTraceEnabled());
 
-		log = LogFactoryUtil.getLog(Level.OFF.toString());
+		log = LogFactoryUtil.getLog(LoggerName.LOGGER_OFF.toString());
 
 		Assert.assertFalse(
 			"Setting logger level OFF does not take effect",
 			log.isFatalEnabled());
 
-		log = LogFactoryUtil.getLog(Level.FATAL.toString());
+		log = LogFactoryUtil.getLog(LoggerName.LOGGER_FATAL.toString());
 
 		Assert.assertTrue(
 			"Setting logger level FATAL does not take effect",
 			log.isFatalEnabled() && !log.isErrorEnabled());
 
-		log = LogFactoryUtil.getLog(Level.ERROR.toString());
+		log = LogFactoryUtil.getLog(LoggerName.LOGGER_ERROR.toString());
 
 		Assert.assertTrue(
 			"Setting logger level ERROR does not take effect",
 			log.isErrorEnabled() && !log.isWarnEnabled());
 
-		log = LogFactoryUtil.getLog(Level.WARN.toString());
+		log = LogFactoryUtil.getLog(LoggerName.LOGGER_WARN.toString());
 
 		Assert.assertTrue(
 			"Setting logger level WARN does not take effect",
 			log.isWarnEnabled() && !log.isInfoEnabled());
 
-		log = LogFactoryUtil.getLog(Level.INFO.toString());
+		log = LogFactoryUtil.getLog(LoggerName.LOGGER_INFO.toString());
 
 		Assert.assertTrue(
 			"Setting logger level INFO does not take effect",
 			log.isInfoEnabled() && !log.isDebugEnabled());
 
-		log = LogFactoryUtil.getLog(Level.DEBUG.toString());
+		log = LogFactoryUtil.getLog(LoggerName.LOGGER_DEBUG.toString());
 
 		Assert.assertTrue(
 			"Setting logger level DEBUG does not take effect",
 			log.isDebugEnabled() && !log.isTraceEnabled());
 
-		log = LogFactoryUtil.getLog(Level.TRACE.toString());
+		log = LogFactoryUtil.getLog(LoggerName.LOGGER_TRACE.toString());
 
 		Assert.assertTrue(
 			"Setting logger level TRACE does not take effect",
@@ -264,16 +265,16 @@ public class Log4jTest {
 
 	@Test
 	public void testSetLevel() {
-		Log log = LogFactoryUtil.getLog(Level.WARN.toString());
+		Log log = LogFactoryUtil.getLog(LoggerName.LOGGER_WARN.toString());
 
 		Assert.assertTrue("Warn level should be enabled", log.isWarnEnabled());
 
-		_setLevel(Level.WARN.toString(), "DEBUG");
+		_setLevel(LoggerName.LOGGER_WARN.toString(), "DEBUG");
 
 		Assert.assertTrue(
 			"DEBUG level should be enabled", log.isDebugEnabled());
 
-		_setLevel(Level.WARN.toString(), "WARN");
+		_setLevel(LoggerName.LOGGER_WARN.toString(), "WARN");
 
 		Log childLog = LogFactoryUtil.getLog("com.test.parent.child");
 
@@ -638,18 +639,19 @@ public class Log4jTest {
 	private static class TestException extends Exception {
 	}
 
-	private enum Level {
+	private enum LoggerName {
 
-		ALL("level"), DEBUG("level.debug"), ERROR("level.error"),
-		FATAL("level.fatal"), INFO("level.info"), OFF("level.off"),
-		TRACE("level.trace"), WARN("level.warn");
+		LOGGER_ALL("level"), LOGGER_DEBUG("level.debug"),
+		LOGGER_ERROR("level.error"), LOGGER_FATAL("level.fatal"),
+		LOGGER_INFO("level.info"), LOGGER_OFF("level.off"),
+		LOGGER_TRACE("level.trace"), LOGGER_WARN("level.warn");
 
 		@Override
 		public String toString() {
 			return _name;
 		}
 
-		private Level(String name) {
+		private LoggerName(String name) {
 			_name = name;
 		}
 
