@@ -20,13 +20,9 @@ import com.liferay.petra.log4j.Log4JUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
-import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.log.Log4jLogFactoryImpl;
-import com.liferay.portal.util.FastDateFormatFactoryImpl;
-import com.liferay.portal.util.FileImpl;
 import com.liferay.portal.util.PropsImpl;
 
 import java.io.File;
@@ -37,8 +33,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import java.net.URI;
 import java.net.URL;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import java.text.SimpleDateFormat;
 
@@ -62,16 +61,6 @@ public class Log4jTest {
 	public static void setUpClass() throws Exception {
 		PropsUtil.setProps(new PropsImpl());
 
-		FastDateFormatFactoryUtil fastDateFormatFactoryUtil =
-			new FastDateFormatFactoryUtil();
-
-		fastDateFormatFactoryUtil.setFastDateFormatFactory(
-			new FastDateFormatFactoryImpl());
-
-		FileUtil fileUtil = new FileUtil();
-
-		fileUtil.setFile(new FileImpl());
-
 		_originalOutputStream = System.out;
 
 		_printStream = new TeePrintStream(
@@ -90,19 +79,19 @@ public class Log4jTest {
 			urlContent = StreamUtil.toString(inputStream);
 		}
 
-		_tempLogDir = new File(FileUtil.createTempFolder(), "logs");
+		Path tempLogDir = Files.createTempDirectory(Log4jTest.class.getName());
 
-		_tempLog4JConfigFile = FileUtil.createTempFile("xml");
+		_tempLogDir = tempLogDir.toFile();
 
-		FileUtil.write(
-			_tempLog4JConfigFile,
-			StringUtil.replace(
-				urlContent, "@temp_dir@",
-				StringUtil.replace(_tempLogDir.getPath(), '\\', '/')));
+		_tempLogDir.deleteOnExit();
 
-		URI uri = _tempLog4JConfigFile.toURI();
+		urlContent = StringUtil.replace(
+			urlContent, "@temp_dir@",
+			StringUtil.replace(tempLogDir.toString(), '\\', '/'));
 
-		Log4JUtil.configureLog4J(uri.toURL());
+		Files.write(Paths.get(url.toURI()), urlContent.getBytes());
+
+		Log4JUtil.configureLog4J(url);
 
 		LogFactoryUtil.setLogFactory(new Log4jLogFactoryImpl());
 
@@ -118,18 +107,6 @@ public class Log4jTest {
 		System.setOut(_originalOutputStream);
 
 		LogManager.shutdown();
-
-		if (_tempLog4JConfigFile != null) {
-			_tempLog4JConfigFile.delete();
-		}
-
-		if (_tempLogDir != null) {
-			for (File file : _tempLogDir.listFiles()) {
-				file.delete();
-			}
-
-			_tempLogDir.delete();
-		}
 	}
 
 	@Test
@@ -574,7 +551,8 @@ public class Log4jTest {
 						matcher.matches());
 
 					_assertLog(
-						FileUtil.read(file.getPath()), level, renderMessage);
+						StreamUtil.toString(new FileInputStream(file)), level,
+						renderMessage);
 				}
 				else {
 					matcher = _xmlFileNamePattern.matcher(fileName);
@@ -602,7 +580,6 @@ public class Log4jTest {
 		"\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d.\\d\\d\\d");
 	private static PrintStream _originalOutputStream;
 	private static PrintStream _printStream;
-	private static File _tempLog4JConfigFile;
 	private static File _tempLogDir;
 	private static final Pattern _textFileNamePattern = Pattern.compile(
 		"liferay.\\d\\d\\d\\d-\\d\\d-\\d\\d.log");
