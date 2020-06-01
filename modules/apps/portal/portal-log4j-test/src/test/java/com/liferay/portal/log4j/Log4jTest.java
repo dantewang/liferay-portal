@@ -79,9 +79,7 @@ public class Log4jTest {
 
 		System.setOut(_printStream);
 
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader classLoader = currentThread.getContextClassLoader();
+		ClassLoader classLoader = Log4jTest.class.getClassLoader();
 
 		URL url = classLoader.getResource(
 			"com/liferay/portal/log4j/dependencies/log4j.xml");
