@@ -28,7 +28,7 @@
 		</layout>
 	</appender>
 
-	<category name="level">
+	<category name="level.all">
 		<priority value="ALL" />
 	</category>
 

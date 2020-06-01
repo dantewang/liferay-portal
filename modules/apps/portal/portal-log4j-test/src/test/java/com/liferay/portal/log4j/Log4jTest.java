@@ -20,6 +20,7 @@ import com.liferay.petra.log4j.Log4JUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.log.Log4jLogFactoryImpl;
@@ -94,10 +95,6 @@ public class Log4jTest {
 		Log4JUtil.configureLog4J(url);
 
 		LogFactoryUtil.setLogFactory(new Log4jLogFactoryImpl());
-
-		_setLevel(Log4jTest.class.getName(), "TRACE");
-
-		_log = LogFactoryUtil.getLog(Log4jTest.class);
 
 		_unsyncStringWriter.reset();
 	}
@@ -429,71 +426,23 @@ public class Log4jTest {
 		String level, String renderMessage, boolean message,
 		boolean throwable) {
 
-		if (level.equals("TRACE")) {
-			if (message && throwable) {
-				_log.trace(renderMessage, new TestException());
-			}
-			else if (message && !throwable) {
-				_log.trace(renderMessage);
-			}
-			else {
-				_log.trace(new TestException());
-			}
+		Log log = LogFactoryUtil.getLog("level." + level.toLowerCase());
+
+		if (message && throwable) {
+			ReflectionTestUtil.invoke(
+				log, level.toLowerCase(),
+				new Class[]{Object.class, Throwable.class}, renderMessage,
+				new TestException());
 		}
-		else if (level.equals("DEBUG")) {
-			if (message && throwable) {
-				_log.debug(renderMessage, new TestException());
-			}
-			else if (message && !throwable) {
-				_log.debug(renderMessage);
-			}
-			else {
-				_log.debug(new TestException());
-			}
-		}
-		else if (level.equals("INFO")) {
-			if (message && throwable) {
-				_log.info(renderMessage, new TestException());
-			}
-			else if (message && !throwable) {
-				_log.info(renderMessage);
-			}
-			else {
-				_log.info(new TestException());
-			}
-		}
-		else if (level.equals("WARN")) {
-			if (message && throwable) {
-				_log.warn(renderMessage, new TestException());
-			}
-			else if (message && !throwable) {
-				_log.warn(renderMessage);
-			}
-			else {
-				_log.warn(new TestException());
-			}
-		}
-		else if (level.equals("ERROR")) {
-			if (message && throwable) {
-				_log.error(renderMessage, new TestException());
-			}
-			else if (message && !throwable) {
-				_log.error(renderMessage);
-			}
-			else {
-				_log.error(new TestException());
-			}
+		else if (message && !throwable) {
+			ReflectionTestUtil.invoke(
+				log, level.toLowerCase(), new Class[]{Object.class},
+				renderMessage);
 		}
 		else {
-			if (message && throwable) {
-				_log.fatal(renderMessage, new TestException());
-			}
-			else if (message && !throwable) {
-				_log.fatal(renderMessage);
-			}
-			else {
-				_log.fatal(new TestException());
-			}
+			ReflectionTestUtil.invoke(
+				log, level.toLowerCase(), new Class[]{Throwable.class},
+				new TestException());
 		}
 	}
 
@@ -575,8 +524,6 @@ public class Log4jTest {
 		}
 	}
 
-	private static Log _log;
-
 	private static final Pattern _datePattern = Pattern.compile(
 		"\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d.\\d\\d\\d");
 	private static PrintStream _originalOutputStream;
@@ -641,7 +588,7 @@ public class Log4jTest {
 
 	private enum LoggerName {
 
-		LOGGER_ALL("level"), LOGGER_DEBUG("level.debug"),
+		LOGGER_ALL("level.all"), LOGGER_DEBUG("level.debug"),
 		LOGGER_ERROR("level.error"), LOGGER_FATAL("level.fatal"),
 		LOGGER_INFO("level.info"), LOGGER_OFF("level.off"),
 		LOGGER_TRACE("level.trace"), LOGGER_WARN("level.warn");
