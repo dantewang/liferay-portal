@@ -614,9 +614,11 @@ public class Log4jTest {
 
 		@Override
 		public void write(byte[] bytes, int offset, int length) {
-			super.write(bytes, offset, length);
-
 			String content = new String(bytes);
+
+			if (!content.contains("[Log4jTest:")) {
+				super.write(bytes, offset, length);
+			}
 
 			_unsyncStringWriter.write(content.toCharArray(), offset, length);
 		}
