@@ -468,6 +468,15 @@ public class ResourceActionsImpl implements ResourceActions {
 		return actions;
 	}
 
+	@Override
+	public ResourceActionsBag getResourceActionsBag(String name) {
+		if (_isModelName(name)) {
+			return _resourceActionsBags.get(name);
+		}
+
+		return _getPortletResourceActionsBag(name, null);
+	}
+
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
 	 */
