@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.model.UserGroupRole;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBag;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.security.permission.UserBag;
 import com.liferay.portal.kernel.security.permission.UserBagFactoryUtil;
@@ -1279,36 +1280,20 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 	private boolean _hasGuestPermission(
 		Group group, String name, String primKey, String actionId) {
 
-		List<String> resourceActions = ResourceActionsUtil.getResourceActions(
-			name);
+		ResourceActionsBag resourceActionsBag =
+			ResourceActionsUtil.getResourceActionsBag(name);
+
+		List<String> resourceActions = resourceActionsBag.getSupportsActions();
 
 		if (!resourceActions.contains(actionId)) {
 			return false;
 		}
 
-		if (name.indexOf(CharPool.PERIOD) != -1) {
+		List<String> guestUnsupportedActions =
+			resourceActionsBag.getGuestUnsupportedActions();
 
-			// Check unsupported model actions
-
-			List<String> actions =
-				ResourceActionsUtil.getModelResourceGuestUnsupportedActions(
-					name);
-
-			if (actions.contains(actionId)) {
-				return false;
-			}
-		}
-		else {
-
-			// Check unsupported portlet actions
-
-			List<String> actions =
-				ResourceActionsUtil.getPortletResourceGuestUnsupportedActions(
-					name);
-
-			if (actions.contains(actionId)) {
-				return false;
-			}
+		if (guestUnsupportedActions.contains(actionId)) {
+			return false;
 		}
 
 		long companyId = user.getCompanyId();
