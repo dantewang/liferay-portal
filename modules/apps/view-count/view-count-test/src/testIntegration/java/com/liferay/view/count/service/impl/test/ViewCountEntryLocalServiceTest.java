@@ -44,7 +44,7 @@ import java.util.Objects;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.FutureTask;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 
 import org.hibernate.util.JDBCExceptionReporter;
 
