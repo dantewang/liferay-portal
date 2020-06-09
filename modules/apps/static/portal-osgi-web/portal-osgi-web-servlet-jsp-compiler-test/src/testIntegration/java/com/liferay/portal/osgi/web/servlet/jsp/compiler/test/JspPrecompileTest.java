@@ -64,8 +64,9 @@ import javax.portlet.Portlet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -358,8 +359,10 @@ public class JspPrecompileTest {
 
 		String compilerLog = sb.toString();
 
-		for (LoggingEvent loggingEvent : captureAppender.getLoggingEvents()) {
-			String message = loggingEvent.getRenderedMessage();
+		for (LogEvent logEvent : captureAppender.getLogEvents()) {
+			Message objectMessage = logEvent.getMessage();
+
+			String message = objectMessage.getFormattedMessage();
 
 			if (message.equals(compilerLog)) {
 				return true;
