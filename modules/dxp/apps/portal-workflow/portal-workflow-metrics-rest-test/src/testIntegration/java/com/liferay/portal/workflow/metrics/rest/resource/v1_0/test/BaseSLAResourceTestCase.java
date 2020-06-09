@@ -73,7 +73,7 @@ import javax.ws.rs.core.MultivaluedHashMap;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.lang.time.DateUtils;
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 
 import org.junit.After;
 import org.junit.Assert;
