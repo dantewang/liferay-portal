@@ -43,8 +43,9 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -426,15 +427,17 @@ public class BatchEngineImportTaskExecutorTest
 	private void _assertInvalidFile(CaptureAppender captureAppender) {
 		Assert.assertEquals(0, blogsEntryLocalService.getBlogsEntriesCount());
 
-		List<LoggingEvent> loggingEvents = captureAppender.getLoggingEvents();
+		List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-		Assert.assertEquals(loggingEvents.toString(), 1, loggingEvents.size());
+		Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-		LoggingEvent loggingEvent = loggingEvents.get(0);
+		LogEvent logEvent = logEvents.get(0);
 
-		Assert.assertEquals(Level.ERROR, loggingEvent.getLevel());
+		Assert.assertEquals(Level.ERROR, logEvent.getLevel());
 
-		String message = (String)loggingEvent.getMessage();
+		Message objectMessage = logEvent.getMessage();
+
+		String message = objectMessage.getFormattedMessage();
 
 		Assert.assertTrue(
 			message.startsWith("Unable to update batch engine import task"));

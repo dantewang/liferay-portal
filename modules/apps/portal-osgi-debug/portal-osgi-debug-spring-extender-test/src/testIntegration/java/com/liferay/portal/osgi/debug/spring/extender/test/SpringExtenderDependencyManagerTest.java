@@ -49,8 +49,9 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -113,15 +114,15 @@ public class SpringExtenderDependencyManagerTest {
 		try (CaptureAppender captureAppender = _configureLog4JLogger()) {
 			_captureLog(captureAppender);
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 2, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 2, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
 
-			String message = (String)loggingEvent.getMessage();
+			Message objectMessage = logEvent.getMessage();
+
+			String message = objectMessage.getFormattedMessage();
 
 			Assert.assertEquals(
 				message,
@@ -129,19 +130,21 @@ public class SpringExtenderDependencyManagerTest {
 					"registered",
 				message);
 
-			Level level = loggingEvent.getLevel();
+			Level level = logEvent.getLevel();
 
 			Assert.assertEquals(level.toString(), Level.INFO, level);
 
-			loggingEvent = loggingEvents.get(1);
+			logEvent = logEvents.get(1);
 
-			message = (String)loggingEvent.getMessage();
+			objectMessage = logEvent.getMessage();
+
+			message = objectMessage.getFormattedMessage();
 
 			Assert.assertEquals(
 				message, "Stopped scanning for unavailable components",
 				message);
 
-			level = loggingEvent.getLevel();
+			level = logEvent.getLevel();
 
 			Assert.assertEquals(level.toString(), Level.INFO, level);
 		}
@@ -159,15 +162,15 @@ public class SpringExtenderDependencyManagerTest {
 		try (CaptureAppender captureAppender = _configureLog4JLogger()) {
 			_captureLog(captureAppender);
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 2, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 2, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
 
-			String message = (String)loggingEvent.getMessage();
+			Message objectMessage = logEvent.getMessage();
+
+			String message = objectMessage.getFormattedMessage();
 
 			StringBundler sb = new StringBundler(5);
 
@@ -186,20 +189,22 @@ public class SpringExtenderDependencyManagerTest {
 
 			Assert.assertTrue(message, message.contains(sb.toString()));
 
-			Level level = loggingEvent.getLevel();
+			Level level = logEvent.getLevel();
 
 			Assert.assertEquals(
 				level.toString(), Level.WARN, loggingEvent.getLevel());
 
-			loggingEvent = loggingEvents.get(1);
+			logEvent = logEvents.get(1);
 
-			message = (String)loggingEvent.getMessage();
+			Message objectMessage = logEvent.getMessage();
+
+			message = objectMessage.getFormattedMessage();
 
 			Assert.assertEquals(
 				message, "Stopped scanning for unavailable components",
 				message);
 
-			level = loggingEvent.getLevel();
+			level = logEvent.getLevel();
 
 			Assert.assertEquals(level.toString(), Level.INFO, level);
 		}
@@ -217,15 +222,17 @@ public class SpringExtenderDependencyManagerTest {
 		CountDownLatch countDownLatch = new CountDownLatch(1);
 
 		ReflectionTestUtil.setFieldValue(
-			captureAppender, "_loggingEvents",
+			captureAppender, "_logEvents",
 			new CopyOnWriteArrayList<LoggingEvent>() {
 
 				@Override
-				public boolean add(LoggingEvent loggingEvent) {
-					boolean added = super.add(loggingEvent);
+				public boolean add(LogEvent logEvent) {
+					boolean added = super.add(logEvent);
+
+					Message objectMessage = logEvent.getMessage();
 
 					if (Objects.equals(
-							loggingEvent.getMessage(),
+							objectMessage.getFormattedMessage(),
 							"Stopped scanning for unavailable components")) {
 
 						return added;
