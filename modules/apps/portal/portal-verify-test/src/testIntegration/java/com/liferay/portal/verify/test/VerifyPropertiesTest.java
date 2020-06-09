@@ -30,7 +30,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -64,20 +65,20 @@ public class VerifyPropertiesTest extends BaseVerifyProcessTestCase {
 
 			doVerify();
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				StringBundler.concat(
 					"Portal property \"", migratedPortalKey,
 					"\" was migrated to the system property \"",
 					migratedPortalKey, "\""),
-				loggingEvent.getMessage());
+				objectMessage.getFormattedMessage());
 		}
 		finally {
 			_setPropertyKeys(
@@ -100,20 +101,20 @@ public class VerifyPropertiesTest extends BaseVerifyProcessTestCase {
 
 			doVerify();
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				StringBundler.concat(
 					"System property \"", migratedSystemKey,
 					"\" was migrated to the portal property \"",
 					migratedSystemKey, "\""),
-				loggingEvent.getMessage());
+				objectMessage.getFormattedMessage());
 		}
 		finally {
 			_setPropertyKeys(
@@ -141,20 +142,20 @@ public class VerifyPropertiesTest extends BaseVerifyProcessTestCase {
 
 			doVerify();
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				StringBundler.concat(
 					"Portal property \"", modularizedPortalKey,
 					"\" was modularized to ", modularizedPortalKey, " as \"",
 					modularizedPortalKey, "\""),
-				loggingEvent.getMessage());
+				objectMessage.getFormattedMessage());
 		}
 		finally {
 			_setPropertyKeys(
@@ -176,17 +177,17 @@ public class VerifyPropertiesTest extends BaseVerifyProcessTestCase {
 
 			doVerify();
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				"Portal property \"" + obsoletePortalKey + "\" is obsolete",
-				loggingEvent.getMessage());
+				objectMessage.getFormattedMessage());
 		}
 		finally {
 			_setPropertyKeys(
@@ -208,17 +209,17 @@ public class VerifyPropertiesTest extends BaseVerifyProcessTestCase {
 
 			doVerify();
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				"System property \"" + obsoleteSystemKey + "\" is obsolete",
-				loggingEvent.getMessage());
+				objectMessage.getFormattedMessage());
 		}
 		finally {
 			_setPropertyKeys(
@@ -241,19 +242,19 @@ public class VerifyPropertiesTest extends BaseVerifyProcessTestCase {
 
 			doVerify();
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				StringBundler.concat(
 					"Portal property \"", renamedPortalKey,
 					"\" was renamed to \"", renamedPortalKey, "\""),
-				loggingEvent.getMessage());
+				objectMessage.getFormattedMessage());
 		}
 		finally {
 			_setPropertyKeys("_RENAMED_PORTAL_KEYS", originalRenamedPortalKeys);
@@ -275,19 +276,19 @@ public class VerifyPropertiesTest extends BaseVerifyProcessTestCase {
 
 			doVerify();
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				StringBundler.concat(
 					"System property \"", renamedSystemKey,
 					"\" was renamed to \"", renamedSystemKey, "\""),
-				loggingEvent.getMessage());
+				objectMessage.getFormattedMessage());
 		}
 		finally {
 			_setPropertyKeys("_RENAMED_SYSTEM_KEYS", originalRenamedSystemKeys);
@@ -304,11 +305,9 @@ public class VerifyPropertiesTest extends BaseVerifyProcessTestCase {
 
 			doVerify();
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertTrue(
-				loggingEvents.toString(), loggingEvents.isEmpty());
+			Assert.assertTrue(logEvents.toString(), logEvents.isEmpty());
 		}
 	}
 

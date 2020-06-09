@@ -51,7 +51,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -145,15 +146,15 @@ public class JournalFeedStagedModelDataHandlerTest
 
 			super.testCleanStagedModelDataHandler();
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
 
-			String message = (String)loggingEvent.getMessage();
+			Message objectMessage = logEvent.getMessage();
+
+			String message = objectMessage.getFormattedMessage();
 
 			Assert.assertTrue(
 				message, message.startsWith("A feed with the ID "));
@@ -210,15 +211,15 @@ public class JournalFeedStagedModelDataHandlerTest
 
 			super.testStagedModelDataHandler();
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
 
-			String message = (String)loggingEvent.getMessage();
+			Message objectMessage = logEvent.getMessage();
+
+			String message = objectMessage.getFormattedMessage();
 
 			Assert.assertTrue(
 				message, message.startsWith("A feed with the ID "));

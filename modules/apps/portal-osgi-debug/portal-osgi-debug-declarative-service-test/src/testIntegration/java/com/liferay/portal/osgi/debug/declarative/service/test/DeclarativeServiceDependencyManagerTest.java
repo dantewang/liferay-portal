@@ -46,8 +46,8 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -110,26 +110,32 @@ public class DeclarativeServiceDependencyManagerTest {
 		try (CaptureAppender captureAppender = _configureLog4JLogger()) {
 			_captureLog(captureAppender);
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 2, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 2, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				"All declarative service components are satisfied",
-				loggingEvent.getMessage());
-			Assert.assertEquals(Level.INFO, loggingEvent.getLevel());
+				objectMessage.getFormattedMessage());
 
-			loggingEvent = loggingEvents.get(1);
+			Assert.assertEquals(
+				Log4JLoggerTestUtil.INFO, String.valueOf(logEvent.getLevel()));
+
+			logEvent = logEvents.get(1);
+
+			objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				"Stopped scanning for unsatisfied declarative service " +
 					"components",
-				loggingEvent.getMessage());
-			Assert.assertEquals(Level.INFO, loggingEvent.getLevel());
+				objectMessage.getFormattedMessage());
+
+			Assert.assertEquals(
+				Log4JLoggerTestUtil.INFO, String.valueOf(logEvent.getLevel()));
 		}
 	}
 
@@ -145,15 +151,15 @@ public class DeclarativeServiceDependencyManagerTest {
 		try (CaptureAppender captureAppender = _configureLog4JLogger()) {
 			_captureLog(captureAppender);
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 2, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 2, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
 
-			String message = (String)loggingEvent.getMessage();
+			Message objectMessage = logEvent.getMessage();
+
+			String message = objectMessage.getFormattedMessage();
 
 			message = message.replaceAll("\\s", "");
 			message = message.replaceAll("\\n", "");
@@ -171,15 +177,20 @@ public class DeclarativeServiceDependencyManagerTest {
 			Assert.assertTrue(
 				message, message.contains(s.replaceAll("\\s", "")));
 
-			Assert.assertEquals(Level.WARN, loggingEvent.getLevel());
+			Assert.assertEquals(
+				Log4JLoggerTestUtil.WARN, String.valueOf(logEvent.getLevel()));
 
-			loggingEvent = loggingEvents.get(1);
+			logEvent = logEvents.get(1);
+
+			objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				"Stopped scanning for unsatisfied declarative service " +
 					"components",
-				loggingEvent.getMessage());
-			Assert.assertEquals(Level.INFO, loggingEvent.getLevel());
+				objectMessage.getFormattedMessage());
+
+			Assert.assertEquals(
+				Log4JLoggerTestUtil.INFO, String.valueOf(logEvent.getLevel()));
 		}
 		finally {
 			bundle.uninstall();
@@ -195,14 +206,16 @@ public class DeclarativeServiceDependencyManagerTest {
 		CountDownLatch countDownLatch = new CountDownLatch(1);
 
 		ReflectionTestUtil.setFieldValue(
-			captureAppender, "_loggingEvents",
-			new CopyOnWriteArrayList<LoggingEvent>() {
+			captureAppender, "_logEvents",
+			new CopyOnWriteArrayList<LogEvent>() {
 
 				@Override
-				public boolean add(LoggingEvent loggingEvent) {
-					boolean added = super.add(loggingEvent);
+				public boolean add(LogEvent logEvent) {
+					boolean added = super.add(logEvent);
 
-					String message = String.valueOf(loggingEvent.getMessage());
+					Message objectMessage = logEvent.getMessage();
+
+					String message = objectMessage.getFormattedMessage();
 
 					if (message.equals(
 							"Stopped scanning for unsatisfied declarative " +

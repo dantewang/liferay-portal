@@ -53,8 +53,8 @@ import java.sql.ResultSet;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.spi.LoggingEvent;
-import org.apache.log4j.spi.ThrowableInformation;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -560,16 +560,17 @@ public class LayoutCTTest {
 			_ctProcessLocalService.addCTProcess(
 				_ctCollection.getUserId(), _ctCollection.getCtCollectionId());
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
+
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
+
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
-
-			LoggingEvent loggingEvent = loggingEvents.get(0);
-
-			Assert.assertEquals(
-				"Unable to execute background task", loggingEvent.getMessage());
+				"Unable to execute background task",
+				objectMessage.getFormattedMessage());
 		}
 
 		try (SafeClosable safeClosable =
@@ -619,20 +620,13 @@ public class LayoutCTTest {
 			_ctProcessLocalService.addCTProcess(
 				_ctCollection.getUserId(), _ctCollection.getCtCollectionId());
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
 
-			ThrowableInformation throwableInformation =
-				loggingEvent.getThrowableInformation();
-
-			Assert.assertNotNull(throwableInformation);
-
-			Throwable throwable = throwableInformation.getThrowable();
+			Throwable throwable = logEvent.getThrown();
 
 			Assert.assertNotNull(throwable);
 
@@ -843,20 +837,13 @@ public class LayoutCTTest {
 			_ctProcessLocalService.addCTProcess(
 				_ctCollection.getUserId(), _ctCollection.getCtCollectionId());
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
 
-			ThrowableInformation throwableInformation =
-				loggingEvent.getThrowableInformation();
-
-			Assert.assertNotNull(throwableInformation);
-
-			Throwable throwable = throwableInformation.getThrowable();
+			Throwable throwable = logEvent.getThrown();
 
 			Assert.assertNotNull(throwable);
 

@@ -47,7 +47,8 @@ import javax.portlet.WindowState;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -85,26 +86,28 @@ public class ResourceRequestPortletContainerTest
 			PortletContainerTestUtil.Response response =
 				PortletContainerTestUtil.request(url);
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 2, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 2, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				"Invalid portlet ID '\"><script>alert(1)</script>",
-				loggingEvent.getMessage());
+				objectMessage.getFormattedMessage());
 
-			loggingEvent = loggingEvents.get(1);
+			logEvent = logEvents.get(1);
+
+			objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				StringBundler.concat(
 					"User 0 is not allowed to serve resource for ", layoutURL,
 					" on '\"><script>alert(1)</script>: Invalid portlet ID ",
 					"'\"><script>alert(1)</script>"),
-				loggingEvent.getMessage());
+				objectMessage.getFormattedMessage());
 
 			Assert.assertEquals(403, response.getCode());
 		}

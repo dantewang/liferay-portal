@@ -58,7 +58,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 import org.hibernate.util.JDBCExceptionReporter;
 
@@ -177,59 +178,63 @@ public class MBMessageServiceTest {
 			DB db = DBManagerUtil.getDB();
 
 			if (db.getDBType() == DBType.HYPERSONIC) {
-				for (LoggingEvent loggingEvent :
-						captureAppender2.getLoggingEvents()) {
+				for (LogEvent logEvent : captureAppender2.getLogEvents()) {
+					Message message = logEvent.getMessage();
 
-					String message = loggingEvent.getRenderedMessage();
+					String formattedMessage = message.getFormattedMessage();
 
 					Assert.assertTrue(
-						message.startsWith(
+						formattedMessage.startsWith(
 							"Application exception overridden by commit " +
 								"exception"));
 				}
 
-				for (LoggingEvent loggingEvent :
-						captureAppender5.getLoggingEvents()) {
+				for (LogEvent logEvent : captureAppender5.getLogEvents()) {
+					Message message = logEvent.getMessage();
 
-					String message = loggingEvent.getRenderedMessage();
+					String formattedMessage = message.getFormattedMessage();
 
 					Assert.assertTrue(
-						message.startsWith("Unable to process message"));
+						formattedMessage.startsWith(
+							"Unable to process message"));
 				}
 			}
 			else if (db.getDBType() == DBType.SYBASE) {
-				for (LoggingEvent loggingEvent :
-						captureAppender1.getLoggingEvents()) {
+				for (LogEvent logEvent : captureAppender1.getLogEvents()) {
+					Message message = logEvent.getMessage();
 
-					String message = loggingEvent.getRenderedMessage();
+					String formattedMessage = message.getFormattedMessage();
 
 					Assert.assertTrue(
-						message.startsWith("Caught unexpected exception"));
+						formattedMessage.startsWith(
+							"Caught unexpected exception"));
 				}
 
-				for (LoggingEvent loggingEvent :
-						captureAppender3.getLoggingEvents()) {
+				for (LogEvent logEvent : captureAppender3.getLogEvents()) {
+					Message message = logEvent.getMessage();
 
-					String message = loggingEvent.getRenderedMessage();
+					String formattedMessage = message.getFormattedMessage();
 
 					StringBundler sb = new StringBundler(2);
 
 					sb.append("com.liferay.portal.kernel.exception.");
 					sb.append("SystemException:");
 
-					Assert.assertTrue(message.startsWith(sb.toString()));
+					Assert.assertTrue(
+						formattedMessage.startsWith(sb.toString()));
 				}
 
-				for (LoggingEvent loggingEvent :
-						captureAppender4.getLoggingEvents()) {
+				for (LogEvent logEvent : captureAppender4.getLogEvents()) {
+					Message message = logEvent.getMessage();
 
-					String message = loggingEvent.getRenderedMessage();
+					String formattedMessage = message.getFormattedMessage();
 
 					Assert.assertTrue(
-						message, message.contains("Your server command"));
+						formattedMessage,
+						formattedMessage.contains("Your server command"));
 					Assert.assertTrue(
-						message,
-						message.contains(
+						formattedMessage,
+						formattedMessage.contains(
 							"encountered a deadlock situation. Please re-run " +
 								"your command."));
 				}

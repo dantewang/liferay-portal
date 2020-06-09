@@ -51,7 +51,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.core.LogEvent;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -1222,14 +1222,13 @@ public class CTSQLTransformerTest {
 
 			Assert.assertEquals(expectedOutputSQL, newSQL);
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
 			if (expectedOutputSQLFile.endsWith("_ct.sql")) {
-				Assert.assertFalse(newSQL, loggingEvents.isEmpty());
+				Assert.assertFalse(newSQL, logEvents.isEmpty());
 			}
 			else {
-				Assert.assertTrue(newSQL, loggingEvents.isEmpty());
+				Assert.assertTrue(newSQL, logEvents.isEmpty());
 			}
 
 			return newSQL;

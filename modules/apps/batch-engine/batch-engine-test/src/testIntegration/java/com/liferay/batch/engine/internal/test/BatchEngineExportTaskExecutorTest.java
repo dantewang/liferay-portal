@@ -50,7 +50,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.zip.ZipInputStream;
 
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -285,16 +286,18 @@ public class BatchEngineExportTaskExecutorTest
 	}
 
 	private void _assertEmptyFieldNames(CaptureAppender captureAppender) {
-		List<LoggingEvent> loggingEvents = captureAppender.getLoggingEvents();
+		List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-		Assert.assertEquals(loggingEvents.toString(), 1, loggingEvents.size());
+		Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-		LoggingEvent loggingEvent = loggingEvents.get(0);
+		LogEvent logEvent = logEvents.get(0);
 
 		Assert.assertEquals(
-			Log4JLoggerTestUtil.ERROR, String.valueOf(loggingEvent.getLevel()));
+			Log4JLoggerTestUtil.ERROR, String.valueOf(logEvent.getLevel()));
 
-		String message = (String)loggingEvent.getMessage();
+		Message objectMessage = logEvent.getMessage();
+
+		String message = objectMessage.getFormattedMessage();
 
 		Assert.assertTrue(
 			message.startsWith("Unable to update batch engine export task"));

@@ -56,8 +56,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.spi.LoggingEvent;
-import org.apache.log4j.spi.ThrowableInformation;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -181,18 +181,17 @@ public class ExportImportLifecycleEventTest {
 				TestPropsValues.getUserId(), _group.getGroupId(), targetGroupId,
 				false, new long[0], _parameterMap);
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
-				"Unable to execute background task", loggingEvent.getMessage());
+				"Unable to execute background task",
+				objectMessage.getFormattedMessage());
 
-			ThrowableInformation throwableInformation =
-				loggingEvent.getThrowableInformation();
-
-			Throwable throwable = throwableInformation.getThrowable();
+			Throwable throwable = logEvent.getThrown();
 
 			Assert.assertSame(NoSuchGroupException.class, throwable.getClass());
 		}
@@ -285,18 +284,17 @@ public class ExportImportLifecycleEventTest {
 				user.getUserId(), _group.getGroupId(), _liveGroup.getGroupId(),
 				0, 0, StringPool.BLANK, _parameterMap);
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
-				"Unable to execute background task", loggingEvent.getMessage());
+				"Unable to execute background task",
+				objectMessage.getFormattedMessage());
 
-			ThrowableInformation throwableInformation =
-				loggingEvent.getThrowableInformation();
-
-			Throwable throwable = throwableInformation.getThrowable();
+			Throwable throwable = logEvent.getThrown();
 
 			Assert.assertSame(
 				NoSuchLayoutException.class, throwable.getClass());

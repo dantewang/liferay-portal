@@ -33,7 +33,8 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -76,17 +77,17 @@ public class AMImageScalerTrackerImplTest {
 
 			_enableAMDefaultImageScaler();
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				"Unable to find default image scaler",
-				loggingEvent.getMessage());
+				objectMessage.getFormattedMessage());
 		}
 	}
 
@@ -112,17 +113,17 @@ public class AMImageScalerTrackerImplTest {
 			_amImageScalerTracker.getAMImageScaler(
 				RandomTestUtil.randomString());
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				"Unable to find default image scaler",
-				loggingEvent.getMessage());
+				objectMessage.getFormattedMessage());
 		}
 		finally {
 			_unregisterAMImageScaler(amImageScalerServiceRegistration);

@@ -36,7 +36,8 @@ import java.util.Dictionary;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -166,19 +167,19 @@ public class FileInstallConfigTest {
 
 			_configuration = _createConfiguration(configurationPid, content);
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message message = logEvent.getMessage();
 
 			Assert.assertEquals(
 				StringBundler.concat(
 					"Unable to install .cfg file ", configPathDeprecated,
 					", please use .config file instead."),
-				loggingEvent.getMessage());
+				message.getFormattedMessage());
 
 			Configuration configurationDeprecated =
 				_configurationAdmin.getConfiguration(
