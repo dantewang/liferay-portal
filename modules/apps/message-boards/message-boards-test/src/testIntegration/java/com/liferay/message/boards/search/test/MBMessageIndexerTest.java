@@ -49,8 +49,9 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -96,11 +97,9 @@ public class MBMessageIndexerTest {
 			_indexer.reindex(
 				new String[] {String.valueOf(_company1.getCompanyId())});
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 0, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 0, logEvents.size());
 		}
 	}
 
@@ -126,20 +125,20 @@ public class MBMessageIndexerTest {
 			_indexer.reindex(
 				new String[] {String.valueOf(_company1.getCompanyId())});
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 2, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 2, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
+
+			Message objectMessage = logEvent.getMessage();
 
 			Assert.assertEquals(
 				StringBundler.concat(
 					"Reindexing message boards messages for message board ",
 					"category ID ", MBCategoryConstants.DISCUSSION_CATEGORY_ID,
 					" and group ID ", group.getGroupId()),
-				loggingEvent.getMessage());
+				objectMessage.getFormattedMessage());
 		}
 	}
 
@@ -172,13 +171,11 @@ public class MBMessageIndexerTest {
 			_indexer.reindex(
 				new String[] {String.valueOf(_company1.getCompanyId())});
 
-			List<LoggingEvent> loggingEvents =
-				captureAppender.getLoggingEvents();
+			List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-			Assert.assertEquals(
-				loggingEvents.toString(), 1, loggingEvents.size());
+			Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-			LoggingEvent loggingEvent = loggingEvents.get(0);
+			LogEvent logEvent = logEvents.get(0);
 
 			Assert.assertEquals(
 				StringBundler.concat(
@@ -186,7 +183,7 @@ public class MBMessageIndexerTest {
 					"category ID ",
 					MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID,
 					" and group ID ", group.getGroupId()),
-				loggingEvent.getMessage());
+				logEvent.getMessage());
 		}
 	}
 

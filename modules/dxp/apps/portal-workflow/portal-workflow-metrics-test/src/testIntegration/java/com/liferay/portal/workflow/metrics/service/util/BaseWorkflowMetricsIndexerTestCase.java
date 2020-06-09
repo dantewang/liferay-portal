@@ -63,7 +63,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.stream.Stream;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 
 import org.junit.Before;
 

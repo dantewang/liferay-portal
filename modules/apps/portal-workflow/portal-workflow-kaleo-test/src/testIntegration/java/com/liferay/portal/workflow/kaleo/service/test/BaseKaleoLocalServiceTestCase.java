@@ -52,7 +52,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 
 import org.junit.Before;
 
