@@ -131,7 +131,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 
 import org.junit.After;
 import org.junit.AfterClass;
