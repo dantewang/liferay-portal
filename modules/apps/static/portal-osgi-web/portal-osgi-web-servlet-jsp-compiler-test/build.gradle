@@ -1,4 +1,6 @@
 dependencies {
+	testIntegrationCompile group: "com.liferay", name: "log4j-api", version: "2.14.0.LIFERAY-PATCHED-1"
+	testIntegrationCompile group: "com.liferay", name: "log4j-core", version: "2.14.0.LIFERAY-PATCHED-1"
 	testIntegrationCompile group: "com.liferay", name: "org.eclipse.osgi", version: "3.13.0.LIFERAY-PATCHED-11"
 	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "default"
 	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"

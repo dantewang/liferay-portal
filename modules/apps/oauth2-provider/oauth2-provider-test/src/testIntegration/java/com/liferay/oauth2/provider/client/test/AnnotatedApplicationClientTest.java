@@ -34,7 +34,7 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
