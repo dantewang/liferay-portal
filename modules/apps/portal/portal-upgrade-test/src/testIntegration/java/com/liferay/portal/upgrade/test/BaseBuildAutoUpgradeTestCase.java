@@ -55,8 +55,8 @@ import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LogEvent;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -448,13 +448,13 @@ public abstract class BaseBuildAutoUpgradeTestCase {
 	private String _assertAndGetFirstLogRecordMessage(
 		CaptureAppender captureAppender) {
 
-		List<LoggingEvent> loggingEvents = captureAppender.getLoggingEvents();
+		List<LogEvent> logEvents = captureAppender.getLogEvents();
 
-		Assert.assertEquals(loggingEvents.toString(), 1, loggingEvents.size());
+		Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
 
-		LoggingEvent loggingEvent = loggingEvents.get(0);
+		LogEvent logEvent = logEvents.get(0);
 
-		return loggingEvent.getRenderedMessage();
+		return logEvent.getRenderedMessage();
 	}
 
 	private void _initTableColumns(
