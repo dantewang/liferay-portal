@@ -14,6 +14,7 @@
 
 package com.liferay.petra.log4j;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
@@ -26,28 +27,37 @@ import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.lang.reflect.Field;
+
 import java.net.URL;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.ConfigurationSource;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.composite.CompositeConfiguration;
+import org.apache.logging.log4j.core.config.xml.XmlConfiguration;
+import org.apache.logging.log4j.core.config.xml.XmlConfigurationFactory;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
 
 /**
  * @author Brian Wing Shun Chan
@@ -89,38 +99,72 @@ public class Log4JUtil {
 
 		// See LPS-6029, LPS-8865, and LPS-24280
 
-		DOMConfigurator domConfigurator = new DOMConfigurator();
+		try {
+			Path path = Files.createTempFile(null, ".xml");
 
-		domConfigurator.doConfigure(
-			new UnsyncStringReader(urlContent),
-			LogManager.getLoggerRepository());
+			Files.write(path, urlContent.getBytes());
+
+			ConfigurationSource configurationSource = new ConfigurationSource(
+				new ByteArrayInputStream(urlContent.getBytes()), path.toFile());
+
+			LoggerContext loggerContext = Configurator.initialize(
+				null, configurationSource);
+
+			XmlConfigurationFactory xmlConfigurationFactory =
+				new XmlConfigurationFactory();
+
+			XmlConfiguration xmlConfiguration =
+				(XmlConfiguration)xmlConfigurationFactory.getConfiguration(
+					loggerContext, configurationSource);
+
+			_configurations.add(xmlConfiguration);
+
+			if (_compositeConfiguration == null) {
+				_compositeConfiguration = new CompositeConfiguration(
+					_configurations);
+			}
+			else {
+				Field field = ReflectionUtil.getDeclaredField(
+					CompositeConfiguration.class, "configurations");
+
+				field.set(_compositeConfiguration, _configurations);
+
+				_compositeConfiguration =
+					(CompositeConfiguration)
+						_compositeConfiguration.reconfigure();
+			}
+
+			loggerContext.setConfiguration(_compositeConfiguration);
+		}
+		catch (Exception exception) {
+			System.out.println("hello world");
+		}
 
 		try {
 			SAXReader saxReader = new SAXReader();
 
-			saxReader.setEntityResolver(
-				new EntityResolver() {
+			//			saxReader.setEntityResolver(
+			//				new EntityResolver() {
 
-					@Override
-					public InputSource resolveEntity(
-						String publicId, String systemId) {
-
-						if (systemId.endsWith("log4j.dtd")) {
-							return new InputSource(
-								DOMConfigurator.class.getResourceAsStream(
-									"log4j.dtd"));
-						}
-
-						return null;
-					}
-
-				});
+			//
+			//					@Override
+			//					public InputSource resolveEntity(
+			//						String publicId, String systemId) {
+			//
+			//						if (systemId.endsWith("log4j.dtd")) {
+			//							return new InputSource(
+			//								DOMConfigurator.class.getResourceAsStream(
+			//									"log4j.dtd"));
+			//						}
+			//
+			//						return null;
+			//					}
+			//
+			//				});
 
 			Document document = saxReader.read(
 				new UnsyncStringReader(urlContent), url.toExternalForm());
-
 			Element rootElement = document.getRootElement();
-
 			List<Element> categoryElements = rootElement.elements("category");
 
 			for (Element categoryElement : categoryElements) {
@@ -135,6 +179,7 @@ public class Log4JUtil {
 
 				jdkLogger.setLevel(_getJdkLevel(priority));
 			}
+
 		}
 		catch (Exception exception) {
 			_logger.error(exception, exception);
@@ -146,21 +191,17 @@ public class Log4JUtil {
 	}
 
 	public static String getOriginalLevel(String className) {
-		Level level = Level.ALL;
+		org.apache.logging.log4j.core.Logger logger =
+			(org.apache.logging.log4j.core.Logger)LogManager.getLogger(
+				className);
 
-		Enumeration<Logger> enumeration = LogManager.getCurrentLoggers();
-
-		while (enumeration.hasMoreElements()) {
-			Logger logger = enumeration.nextElement();
-
-			if (className.equals(logger.getName())) {
-				level = logger.getLevel();
-
-				break;
-			}
-		}
+		Level level = logger.getLevel();
 
 		return level.toString();
+	}
+
+	public static List<XmlConfiguration> getConfigurations() {
+		return _configurations;
 	}
 
 	public static void initLog4J(
@@ -188,7 +229,8 @@ public class Log4JUtil {
 	}
 
 	public static void setLevel(String name, String priority, boolean custom) {
-		Logger logger = Logger.getLogger(name);
+		org.apache.logging.log4j.core.Logger logger =
+			(org.apache.logging.log4j.core.Logger)LogManager.getLogger(name);
 
 		logger.setLevel(Level.toLevel(priority));
 
@@ -308,10 +350,13 @@ public class Log4JUtil {
 			content, "<appender-ref ref=\"" + appenderName + "\" />");
 	}
 
-	private static final Logger _logger = Logger.getRootLogger();
+	private static final Logger _logger = LogManager.getRootLogger();
 
 	private static final Map<String, String> _customLogSettings =
 		new ConcurrentHashMap<>();
 	private static String _liferayHome;
+	private static final List<XmlConfiguration> _configurations =
+		new ArrayList<>();
+	private static CompositeConfiguration _compositeConfiguration;
 
 }
