@@ -2,4 +2,9 @@ Bundle-Name: Liferay Server Admin Web
 Bundle-SymbolicName: com.liferay.server.admin.web
 Bundle-Version: 4.0.19
 DynamicImport-Package: *
+Import-Package:\
+	!org.apache.logging.log4j.spi.*,\
+	!org.apache.logging.log4j.util.*,\
+	\
+	*
 Web-ContextPath: /server-admin-web
