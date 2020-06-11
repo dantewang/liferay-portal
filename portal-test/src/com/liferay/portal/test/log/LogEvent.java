@@ -14,41 +14,35 @@
 
 package com.liferay.portal.test.log;
 
-import org.apache.log4j.spi.LoggingEvent;
-import org.apache.log4j.spi.ThrowableInformation;
+import org.apache.logging.log4j.message.Message;
 
 /**
  * @author Tina Tian
  */
 public class LogEvent {
 
-	public LogEvent(LoggingEvent loggingEvent) {
-		_loggingEvent = loggingEvent;
+	public LogEvent(org.apache.logging.log4j.core.LogEvent logEvent) {
+		_logEvent = logEvent;
 	}
 
 	public String getMessage() {
-		return _loggingEvent.getRenderedMessage();
+		Message message = _logEvent.getMessage();
+
+		return message.getFormattedMessage();
 	}
 
 	public String getPriority() {
-		return String.valueOf(_loggingEvent.getLevel());
+		return String.valueOf(_logEvent.getLevel());
 	}
 
 	public Throwable getThrowable() {
-		ThrowableInformation throwableInformation =
-			_loggingEvent.getThrowableInformation();
-
-		if (throwableInformation != null) {
-			return throwableInformation.getThrowable();
-		}
-
-		return null;
+		return _logEvent.getThrown();
 	}
 
 	public Object getWrappedObject() {
-		return _loggingEvent;
+		return _logEvent;
 	}
 
-	private final LoggingEvent _loggingEvent;
+	private final org.apache.logging.log4j.core.LogEvent _logEvent;
 
 }
