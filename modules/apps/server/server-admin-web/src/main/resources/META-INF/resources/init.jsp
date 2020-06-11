@@ -81,7 +81,6 @@ page import="com.liferay.taglib.servlet.PipingServletResponse" %>
 <%@ page import="java.util.ArrayList" %><%@
 page import="java.util.Collection" %><%@
 page import="java.util.Date" %><%@
-page import="java.util.Enumeration" %><%@
 page import="java.util.Iterator" %><%@
 page import="java.util.List" %><%@
 page import="java.util.Map" %><%@
@@ -92,9 +91,10 @@ page import="java.util.TreeMap" %>
 page import="javax.portlet.PortletURL" %><%@
 page import="javax.portlet.WindowState" %>
 
-<%@ page import="org.apache.log4j.Level" %><%@
-page import="org.apache.log4j.LogManager" %><%@
-page import="org.apache.log4j.Logger" %>
+<%@ page import="org.apache.logging.log4j.Level" %><%@
+page import="org.apache.logging.log4j.LogManager" %><%@
+page import="org.apache.logging.log4j.core.Logger" %><%@
+page import="org.apache.logging.log4j.core.LoggerContext" %>
 
 <liferay-frontend:defineObjects />
 
