@@ -22,6 +22,7 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -61,6 +62,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.util.tracker.BundleTracker;
@@ -72,6 +74,8 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext bundleContext) throws Exception {
+		_bundleContext = bundleContext;
+
 		_bundleTracker = new BundleTracker<Bundle>(
 			bundleContext, ~(Bundle.INSTALLED | Bundle.UNINSTALLED), null) {
 
@@ -100,6 +104,12 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 	@Override
 	public void stop(BundleContext context) {
 		_bundleTracker.close();
+
+		for (ServiceRegistration<LoggerConfig> serviceRegistration :
+				_serviceRegistrations.values()) {
+
+			serviceRegistration.unregister();
+		}
 	}
 
 	private static String _escapeXMLAttribute(String s) {
@@ -302,14 +312,36 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 			currentBundleRootLogger.addAppender(
 				appender, appenderRef.getLevel(), appenderRef.getFilter());
 		}
+
+		_registerLoggerConfigService(currentBundleRootLogger, symbolicName);
+	}
+
+	private void _registerLoggerConfigService(
+		LoggerConfig currentBundleRootLogger, String symbolicName) {
+
+		ServiceRegistration<LoggerConfig> serviceRegistration =
+			_serviceRegistrations.get(symbolicName);
+
+		if (serviceRegistration != null) {
+			serviceRegistration.unregister();
+		}
+
+		serviceRegistration = _bundleContext.registerService(
+			LoggerConfig.class, currentBundleRootLogger,
+			new HashMapDictionary<>());
+
+		_serviceRegistrations.put(symbolicName, serviceRegistration);
 	}
 
 	private static final Logger _logger = LogManager.getLogger(
 		Log4jExtenderBundleActivator.class);
 
+	private static BundleContext _bundleContext;
 	private static String _liferayHome;
 	private static final Map<ClassLoader, LoggerContext> _loggerContextsMap =
 		new ConcurrentHashMap<>();
+	private static final Map<String, ServiceRegistration<LoggerConfig>>
+		_serviceRegistrations = new ConcurrentHashMap<>();
 	private static final Map<ClassLoader, List<XmlConfiguration>>
 		_xmlConfigurationsMap = new ConcurrentHashMap<>();
 
