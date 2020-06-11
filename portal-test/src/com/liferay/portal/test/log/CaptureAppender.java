@@ -14,91 +14,62 @@
 
 package com.liferay.portal.test.log;
 
-import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 
 import java.io.Closeable;
 
-import java.lang.reflect.Field;
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.Category;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.Logger;
+import org.apache.logging.log4j.core.appender.AbstractAppender;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.config.Property;
+import org.apache.logging.log4j.core.impl.Log4jLogEvent;
 
 /**
  * @author Shuyang Zhou
  */
-public class CaptureAppender extends AppenderSkeleton implements Closeable {
+public class CaptureAppender extends AbstractAppender implements Closeable {
 
 	public CaptureAppender(Logger logger) {
+		super(logger.getName(), null, null, true, null);
+
 		_logger = logger;
 
 		_level = _logger.getLevel();
 
-		_parentCategory = logger.getParent();
+		_loggerConfig = _logger.get();
 
-		try {
-			_parentField.set(_logger, null);
-		}
-		catch (Exception exception) {
-			throw new RuntimeException(exception);
-		}
+		_loggerConfig.setAdditive(false);
+	}
+
+	@Override
+	public void append(LogEvent logEvent) {
+		_logEvents.add(new PrintableLogEvent((Log4jLogEvent)logEvent));
 	}
 
 	@Override
 	public void close() {
-		closed = true;
-
 		_logger.removeAppender(this);
 
 		_logger.setLevel(_level);
 
-		try {
-			_parentField.set(_logger, _parentCategory);
-		}
-		catch (Exception exception) {
-			throw new RuntimeException(exception);
-		}
+		_loggerConfig.setAdditive(true);
 	}
 
-	public List<LoggingEvent> getLoggingEvents() {
-		return _loggingEvents;
-	}
-
-	@Override
-	public boolean requiresLayout() {
-		return false;
-	}
-
-	@Override
-	protected void append(LoggingEvent loggingEvent) {
-		_loggingEvents.add(new PrintableLoggingEvent(loggingEvent));
-	}
-
-	private static final Field _parentField;
-
-	static {
-		try {
-			_parentField = ReflectionUtil.getDeclaredField(
-				Category.class, "parent");
-		}
-		catch (Exception exception) {
-			throw new ExceptionInInitializerError(exception);
-		}
+	public List<LogEvent> getLogEvents() {
+		return _logEvents;
 	}
 
 	private final Level _level;
+	private final List<LogEvent> _logEvents = new CopyOnWriteArrayList<>();
 	private final Logger _logger;
-	private final List<LoggingEvent> _loggingEvents =
-		new CopyOnWriteArrayList<>();
-	private final Category _parentCategory;
+	private final LoggerConfig _loggerConfig;
 
-	private static class PrintableLoggingEvent extends LoggingEvent {
+	private static class PrintableLogEvent extends Log4jLogEvent {
 
 		@Override
 		public String toString() {
@@ -113,14 +84,12 @@ public class CaptureAppender extends AppenderSkeleton implements Closeable {
 			return sb.toString();
 		}
 
-		private PrintableLoggingEvent(LoggingEvent loggingEvent) {
+		private PrintableLogEvent(LogEvent logEvent) {
 			super(
-				loggingEvent.getFQNOfLoggerClass(), loggingEvent.getLogger(),
-				loggingEvent.getTimeStamp(), loggingEvent.getLevel(),
-				loggingEvent.getMessage(), loggingEvent.getThreadName(),
-				loggingEvent.getThrowableInformation(), loggingEvent.getNDC(),
-				loggingEvent.getLocationInformation(),
-				loggingEvent.getProperties());
+				logEvent.getLoggerName(), logEvent.getMarker(),
+				logEvent.getLoggerFqcn(), logEvent.getSource(),
+				logEvent.getLevel(), logEvent.getMessage(),
+				(List<Property>)null, logEvent.getThrown());
 		}
 
 	}
