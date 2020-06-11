@@ -16,10 +16,11 @@ package com.liferay.portal.log4j.extender.internal;
 
 import com.liferay.petra.io.StreamUtil;
 import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
+import com.liferay.petra.log4j.Log4JUtil;
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -27,24 +28,35 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import java.net.MalformedURLException;
-import java.net.URI;
+import java.lang.reflect.Field;
+
 import java.net.URL;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.ConfigurationSource;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.composite.CompositeConfiguration;
+import org.apache.logging.log4j.core.config.xml.XmlConfiguration;
+import org.apache.logging.log4j.core.config.xml.XmlConfigurationFactory;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.util.tracker.BundleTracker;
 
 /**
@@ -146,7 +158,8 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 		return urlContent;
 	}
 
-	private void _configureLog4j(Bundle bundle, String resourcePath)
+	private synchronized void _configureLog4j(
+			Bundle bundle, String resourcePath)
 		throws IOException {
 
 		Enumeration<URL> enumeration = bundle.findEntries(
@@ -154,19 +167,60 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 
 		if (enumeration != null) {
 			while (enumeration.hasMoreElements()) {
-				DOMConfigurator domConfigurator = new DOMConfigurator();
+				BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
 
-				domConfigurator.doConfigure(
-					new UnsyncStringReader(
-						_getURLContent(enumeration.nextElement())),
-					LogManager.getLoggerRepository());
+				ConfigurationSource configurationSource = null;
+
+				URL url = enumeration.nextElement();
+
+				try {
+					Path path = Files.createTempFile(null, ".xml");
+
+					String urlContent = _getURLContent(url);
+
+					Files.write(path, urlContent.getBytes());
+
+					configurationSource = new ConfigurationSource(
+						url.openStream(), path.toFile());
+				}
+				catch (Exception exception) {
+					exception.printStackTrace();
+				}
+
+				// version1 use one loggerContext.
+
+				LoggerContext loggerContext = Configurator.initialize(
+					bundleWiring.getClassLoader(), configurationSource);
+
+				XmlConfigurationFactory xmlConfigurationFactory =
+					new XmlConfigurationFactory();
+
+				XmlConfiguration xmlConfiguration =
+					(XmlConfiguration)xmlConfigurationFactory.getConfiguration(
+						loggerContext, configurationSource);
+
+				_configurations.add(xmlConfiguration);
+
+				_compositeConfiguration =
+					(CompositeConfiguration)loggerContext.getConfiguration();
+
+				try {
+					Field field = ReflectionUtil.getDeclaredField(
+						CompositeConfiguration.class, "configurations");
+
+					field.set(_compositeConfiguration, _configurations);
+
+					loggerContext.setConfiguration(
+						_compositeConfiguration.reconfigure());
+				}
+				catch (Exception exception) {
+					exception.printStackTrace();
+				}
 			}
 		}
 	}
 
-	private void _configureLog4j(String symbolicName)
-		throws MalformedURLException {
-
+	private void _configureLog4j(String symbolicName) throws IOException {
 		File configFile = new File(
 			StringBundler.concat(
 				PropsValues.MODULE_FRAMEWORK_BASE_DIR, "/log4j/", symbolicName,
@@ -176,17 +230,44 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 			return;
 		}
 
-		DOMConfigurator domConfigurator = new DOMConfigurator();
+		ConfigurationSource configurationSource = new ConfigurationSource(
+			new FileInputStream(configFile), configFile);
 
-		URI uri = configFile.toURI();
+		LoggerContext loggerContext = Configurator.initialize(
+			null, configurationSource);
 
-		domConfigurator.doConfigure(
-			uri.toURL(), LogManager.getLoggerRepository());
+		XmlConfigurationFactory xmlConfigurationFactory =
+			new XmlConfigurationFactory();
+
+		XmlConfiguration xmlConfiguration =
+			(XmlConfiguration)xmlConfigurationFactory.getConfiguration(
+				loggerContext, configurationSource);
+
+		_configurations.add(xmlConfiguration);
+
+		_compositeConfiguration =
+			(CompositeConfiguration)loggerContext.getConfiguration();
+
+		try {
+			Field field = ReflectionUtil.getDeclaredField(
+				CompositeConfiguration.class, "configurations");
+
+			field.set(_compositeConfiguration, _configurations);
+
+			loggerContext.setConfiguration(
+				_compositeConfiguration.reconfigure());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	private static final Logger _logger = Logger.getLogger(
+	private static final Logger _logger = LogManager.getLogger(
 		Log4jExtenderBundleActivator.class);
 
+	private static CompositeConfiguration _compositeConfiguration;
+	private static final List<XmlConfiguration> _configurations =
+		Log4JUtil.getConfigurations();
 	private static String _liferayHome;
 
 	private volatile BundleTracker<Bundle> _bundleTracker;
