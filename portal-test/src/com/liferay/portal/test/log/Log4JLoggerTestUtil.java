@@ -19,8 +19,8 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.log.LogWrapper;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.Logger;
 
 /**
  * @author Shuyang Zhou
