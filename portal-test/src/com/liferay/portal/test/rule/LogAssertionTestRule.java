@@ -31,7 +31,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 import org.junit.Assert;
 import org.junit.runner.Description;
@@ -70,10 +72,11 @@ public class LogAssertionTestRule
 
 		for (CaptureAppender captureAppender : captureAppenders) {
 			try {
-				for (LoggingEvent loggingEvent :
-						captureAppender.getLoggingEvents()) {
+				for (LogEvent logEvent : captureAppender.getLogEvents()) {
+					Message objectMessage = logEvent.getMessage();
 
-					String renderedMessage = loggingEvent.getRenderedMessage();
+					String renderedMessage =
+						objectMessage.getFormattedMessage();
 
 					if (!isExpected(expectedLogsList, renderedMessage)) {
 						sb.append(renderedMessage);
@@ -229,8 +232,8 @@ public class LogAssertionTestRule
 	}
 
 	protected static void installLog4jAppender() {
-		org.apache.log4j.Logger logger =
-			org.apache.log4j.Logger.getRootLogger();
+		org.apache.logging.log4j.core.Logger logger =
+			(org.apache.logging.log4j.core.Logger)LogManager.getRootLogger();
 
 		logger.removeAppender(LogAssertionAppender.INSTANCE);
 
@@ -287,8 +290,8 @@ public class LogAssertionTestRule
 	}
 
 	protected static void uninstallLog4jAppender() {
-		org.apache.log4j.Logger logger =
-			org.apache.log4j.Logger.getRootLogger();
+		org.apache.logging.log4j.core.Logger logger =
+			(org.apache.logging.log4j.core.Logger)LogManager.getRootLogger();
 
 		logger.removeAppender(LogAssertionAppender.INSTANCE);
 	}
