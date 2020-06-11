@@ -14,13 +14,14 @@
 
 package com.liferay.portal.test.log;
 
+import com.liferay.petra.log4j.Log4JUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.log.LogWrapper;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.Logger;
 
 /**
  * @author Shuyang Zhou
@@ -105,9 +106,11 @@ public class Log4JLoggerTestUtil {
 
 		CaptureAppender captureAppender = new CaptureAppender(logger);
 
+		captureAppender.start();
+
 		logger.addAppender(captureAppender);
 
-		logger.setLevel(level);
+		Log4JUtil.setLevel(logger.getName(), level.toString(), false);
 
 		return captureAppender;
 	}
