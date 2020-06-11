@@ -16,6 +16,8 @@ Import-Package:\
 	\
 	!org.checkerframework.checker.nullness.qual.*,\
 	\
+	!org.jboss.logging.*,\
+	\
 	!org.joda.time.*,\
 	\
 	!org.jsoup.*,\
