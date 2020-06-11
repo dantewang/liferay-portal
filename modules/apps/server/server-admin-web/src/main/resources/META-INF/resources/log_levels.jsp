@@ -35,11 +35,9 @@ SearchContainer<Map.Entry<String, Logger>> loggerSearchContainer = new SearchCon
 
 Map<String, Logger> currentLoggerNames = new TreeMap<>();
 
-Enumeration<Logger> enu = LogManager.getCurrentLoggers();
+List<Logger> loggers = Log4JUtil.getAllLoggers();
 
-while (enu.hasMoreElements()) {
-	Logger logger = enu.nextElement();
-
+for (Logger logger : loggers) {
 	String loggerName = logger.getName();
 
 	if (Validator.isNull(keywords) || loggerName.contains(keywords)) {
@@ -54,11 +52,9 @@ Iterator<Map.Entry<String, Logger>> itr = currentLoggerNamesList.iterator();
 while (itr.hasNext()) {
 	Map.Entry<String, Logger> entry = itr.next();
 
-	Logger logger = entry.getValue();
+	String name = entry.getKey();
 
-	Level level = logger.getLevel();
-
-	if (level == null) {
+	if (name == StringPool.BLANK) {
 		itr.remove();
 	}
 }
