@@ -26,29 +26,38 @@ import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import java.net.URL;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerRepository;
-import org.apache.log4j.xml.DOMConfigurator;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.ConfigurationSource;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.config.composite.CompositeConfiguration;
+import org.apache.logging.log4j.core.config.xml.XmlConfiguration;
+import org.apache.logging.log4j.core.config.xml.XmlConfigurationFactory;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
 
 /**
  * @author Brian Wing Shun Chan
@@ -88,48 +97,75 @@ public class Log4JUtil {
 			return;
 		}
 
-		// See LPS-6029, LPS-8865, and LPS-24280
-
-		DOMConfigurator domConfigurator = new DOMConfigurator();
-
-		domConfigurator.doConfigure(
-			new UnsyncStringReader(urlContent),
-			LogManager.getLoggerRepository());
-
 		try {
+			if (_xmlConfigurationList == null) {
+				_xmlConfigurationList = new ArrayList<>();
+			}
+			else {
+				List<XmlConfiguration> newXmlConfigurationList =
+					new ArrayList<>();
+
+				for (XmlConfiguration xmlConfiguration :
+						_xmlConfigurationList) {
+
+					newXmlConfigurationList.add(
+						(XmlConfiguration)xmlConfiguration.reconfigure());
+				}
+
+				_xmlConfigurationList = newXmlConfigurationList;
+			}
+
+			Path path = Files.createTempFile(null, ".xml");
+
+			Files.write(path, urlContent.getBytes());
+
+			if (_loggerContext == null) {
+				_loggerContext = Configurator.initialize(
+					null, Log4JUtil.class.getClassLoader(), path.toUri());
+
+				_xmlConfigurationList.add(
+					(XmlConfiguration)_loggerContext.getConfiguration());
+			}
+			else {
+				File file = path.toFile();
+
+				ConfigurationSource configurationSource =
+					new ConfigurationSource(new FileInputStream(file), file);
+
+				XmlConfigurationFactory xmlConfigurationFactory =
+					new XmlConfigurationFactory();
+
+				XmlConfiguration xmlConfiguration =
+					(XmlConfiguration)xmlConfigurationFactory.getConfiguration(
+						_loggerContext, configurationSource);
+
+				_xmlConfigurationList.add(xmlConfiguration);
+
+				CompositeConfiguration compositeConfiguration =
+					new CompositeConfiguration(_xmlConfigurationList);
+
+				_loggerContext.setConfiguration(compositeConfiguration);
+			}
+
+			Configuration configuration = _loggerContext.getConfiguration();
+
+			_rootLoggerConfig = configuration.getRootLogger();
+
 			SAXReader saxReader = new SAXReader();
-
-			saxReader.setEntityResolver(
-				new EntityResolver() {
-
-					@Override
-					public InputSource resolveEntity(
-						String publicId, String systemId) {
-
-						if (systemId.endsWith("log4j.dtd")) {
-							return new InputSource(
-								DOMConfigurator.class.getResourceAsStream(
-									"log4j.dtd"));
-						}
-
-						return null;
-					}
-
-				});
 
 			Document document = saxReader.read(
 				new UnsyncStringReader(urlContent), url.toExternalForm());
 
 			Element rootElement = document.getRootElement();
 
-			List<Element> categoryElements = rootElement.elements("category");
+			Element loggersElement = rootElement.element("Loggers");
 
-			for (Element categoryElement : categoryElements) {
-				String name = categoryElement.attributeValue("name");
+			List<Element> loggerElements = loggersElement.elements("Logger");
 
-				Element priorityElement = categoryElement.element("priority");
+			for (Element loggerElement : loggerElements) {
+				String name = loggerElement.attributeValue("name");
 
-				String priority = priorityElement.attributeValue("value");
+				String priority = loggerElement.attributeValue("level");
 
 				java.util.logging.Logger jdkLogger =
 					java.util.logging.Logger.getLogger(name);
@@ -147,21 +183,17 @@ public class Log4JUtil {
 	}
 
 	public static String getOriginalLevel(String className) {
-		Level level = Level.ALL;
+		org.apache.logging.log4j.core.Logger logger =
+			(org.apache.logging.log4j.core.Logger)LogManager.getLogger(
+				className);
 
-		Enumeration<Logger> enumeration = LogManager.getCurrentLoggers();
-
-		while (enumeration.hasMoreElements()) {
-			Logger logger = enumeration.nextElement();
-
-			if (className.equals(logger.getName())) {
-				level = logger.getLevel();
-
-				break;
-			}
-		}
+		Level level = logger.getLevel();
 
 		return level.toString();
+	}
+
+	public static LoggerConfig getRootLogger() {
+		return _rootLoggerConfig;
 	}
 
 	public static void initLog4J(
@@ -189,7 +221,8 @@ public class Log4JUtil {
 	}
 
 	public static void setLevel(String name, String priority, boolean custom) {
-		Logger logger = Logger.getLogger(name);
+		org.apache.logging.log4j.core.Logger logger =
+			(org.apache.logging.log4j.core.Logger)LogManager.getLogger(name);
 
 		logger.setLevel(Level.toLevel(priority));
 
@@ -204,9 +237,7 @@ public class Log4JUtil {
 	}
 
 	public static void shutdownLog4J() {
-		LoggerRepository loggerRepository = LogManager.getLoggerRepository();
-
-		loggerRepository.shutdown();
+		LogManager.shutdown();
 	}
 
 	private static String _escapeXMLAttribute(String s) {
@@ -315,10 +346,13 @@ public class Log4JUtil {
 			content, "<appender-ref ref=\"" + appenderName + "\" />");
 	}
 
-	private static final Logger _logger = Logger.getRootLogger();
+	private static final Logger _logger = LogManager.getRootLogger();
 
 	private static final Map<String, String> _customLogSettings =
 		new ConcurrentHashMap<>();
 	private static String _liferayHome;
+	private static LoggerContext _loggerContext;
+	private static LoggerConfig _rootLoggerConfig;
+	private static List<XmlConfiguration> _xmlConfigurationList;
 
 }
