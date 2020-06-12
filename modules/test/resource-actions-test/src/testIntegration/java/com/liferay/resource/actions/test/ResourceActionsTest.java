@@ -17,6 +17,8 @@ package com.liferay.resource.actions.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -83,7 +85,7 @@ public class ResourceActionsTest {
 			URL url = classLoader.getResource("resource-actions/default.xml");
 
 			if (url == null) {
-				System.out.println(
+				_log.info(
 					"\n\t\t" + bundle.getSymbolicName() +
 						": resource-actions/default.xml is not found");
 
@@ -141,6 +143,9 @@ public class ResourceActionsTest {
 				errors.isEmpty());
 		}
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		ResourceActionsTest.class.getName());
 
 	@Inject
 	private ResourceActions _resourceActions;
