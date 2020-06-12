@@ -138,7 +138,7 @@ public class ResourceActionsTest {
 			String errors = sb.toString();
 
 			Assert.assertTrue(
-				"The following resource action issues are found:".concat(
+				"The following resource action issues are found: ".concat(
 					errors),
 				errors.isEmpty());
 		}
