@@ -118,7 +118,9 @@ public class ResourceActionsTest {
 				for (Element compositeModelNameElement :
 						resourceElement.elements("composite-model-name")) {
 
-					String compositeModelName = _getCompositeModelName(
+					String compositeModelName = ReflectionTestUtil.invoke(
+						_resourceActions, "_getCompositeModelName",
+						new Class<?>[] {Element.class},
 						compositeModelNameElement);
 
 					if (!modelNamesList.contains(compositeModelName)) {
@@ -138,12 +140,6 @@ public class ResourceActionsTest {
 					errors),
 				errors.isEmpty());
 		}
-	}
-
-	private String _getCompositeModelName(Element compositeModelNameElement) {
-		return ReflectionTestUtil.invoke(
-			_resourceActions, "_getCompositeModelName",
-			new Class<?>[] {Element.class}, compositeModelNameElement);
 	}
 
 	@Inject
