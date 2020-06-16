@@ -697,18 +697,6 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
-	private void _checkPortletGroupDefaultActions(Set<String> actions) {
-		if (actions.isEmpty()) {
-			actions.add(ActionKeys.VIEW);
-		}
-	}
-
-	private void _checkPortletGuestDefaultActions(Set<String> actions) {
-		if (actions.isEmpty()) {
-			actions.add(ActionKeys.VIEW);
-		}
-	}
-
 	private void _checkPortletLayoutManagerActions(Set<String> actions) {
 		if (!actions.contains(ActionKeys.ACCESS_IN_CONTROL_PANEL) &&
 			!actions.contains(ActionKeys.ADD_TO_PAGE)) {
@@ -827,11 +815,19 @@ public class ResourceActionsImpl implements ResourceActions {
 
 			portletActions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
 
-			_checkPortletGroupDefaultActions(
-				resourceActionsBag.getGroupDefaultActions());
+			Set<String> groupDefaultActions =
+				resourceActionsBag.getGroupDefaultActions();
 
-			_checkPortletGuestDefaultActions(
-				resourceActionsBag.getGuestDefaultActions());
+			if (groupDefaultActions.isEmpty()) {
+				groupDefaultActions.add(ActionKeys.VIEW);
+			}
+
+			Set<String> guestDefaultActions =
+				resourceActionsBag.getGuestDefaultActions();
+
+			if (guestDefaultActions.isEmpty()) {
+				guestDefaultActions.add(ActionKeys.VIEW);
+			}
 
 			_checkPortletLayoutManagerActions(
 				resourceActionsBag.getLayoutManagerActions());
