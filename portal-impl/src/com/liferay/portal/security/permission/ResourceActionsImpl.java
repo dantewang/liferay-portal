@@ -818,16 +818,12 @@ public class ResourceActionsImpl implements ResourceActions {
 			Set<String> groupDefaultActions =
 				resourceActionsBag.getGroupDefaultActions();
 
-			if (groupDefaultActions.isEmpty()) {
-				groupDefaultActions.add(ActionKeys.VIEW);
-			}
+			groupDefaultActions.add(ActionKeys.VIEW);
 
 			Set<String> guestDefaultActions =
 				resourceActionsBag.getGuestDefaultActions();
 
-			if (guestDefaultActions.isEmpty()) {
-				guestDefaultActions.add(ActionKeys.VIEW);
-			}
+			guestDefaultActions.add(ActionKeys.VIEW);
 
 			_checkPortletLayoutManagerActions(
 				resourceActionsBag.getLayoutManagerActions());
@@ -837,10 +833,6 @@ public class ResourceActionsImpl implements ResourceActions {
 
 			guestUnsupportedActions.addAll(
 				_defaultPortletGuestUnsupportedActions);
-
-			_checkGuestUnsupportedActions(
-				guestUnsupportedActions,
-				resourceActionsBag.getGuestDefaultActions());
 		}
 
 		return resourceActionsBag;
