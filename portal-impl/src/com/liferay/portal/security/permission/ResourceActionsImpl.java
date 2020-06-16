@@ -1064,8 +1064,10 @@ public class ResourceActionsImpl implements ResourceActions {
 				Set<String> portletActions = _getPortletMimeTypeActions(
 					portletName, portlet);
 
-				if (!portletName.equals(PortletKeys.PORTAL)) {
-					_checkPortletActions(portlet, portletActions);
+				_checkPortletActions(portlet, portletActions);
+
+				if (portletName.equals(PortletKeys.PORTAL)) {
+					portletActions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
 				}
 
 				_readResource(
