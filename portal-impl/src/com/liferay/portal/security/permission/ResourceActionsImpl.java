@@ -1008,9 +1008,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		synchronized (this) {
 			portletActions = _getPortletMimeTypeActions(name, portlet);
 
-			if (!name.equals(PortletKeys.PORTAL)) {
-				_checkPortletActions(portlet, portletActions);
-			}
+			_checkPortletActions(portlet, portletActions);
 
 			_checkPortletGroupDefaultActions(
 				portletResourceActionsBag.getGroupDefaultActions());
