@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
-import com.liferay.portal.kernel.util.SortedProperties;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.io.File;
@@ -135,7 +134,7 @@ public class TCKtoJUnitConverter {
 		sb.append("\">\n");
 		sb.append("\t<properties>\n");
 
-		Properties properties = new SortedProperties(System.getProperties());
+		Properties properties = System.getProperties();
 
 		Enumeration<String> enumeration =
 			(Enumeration<String>)properties.propertyNames();
