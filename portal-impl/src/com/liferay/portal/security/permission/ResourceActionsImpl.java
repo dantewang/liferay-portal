@@ -970,7 +970,9 @@ public class ResourceActionsImpl implements ResourceActions {
 		synchronized (this) {
 			portletActions.addAll(_getPortletMimeTypeActions(name, portlet));
 
-			_checkPortletActions(portlet, portletActions);
+			_checkPortletLayoutManagerActions(portletActions);
+
+			portletActions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
 
 			Set<String> groupDefaultActions =
 				resourceActionsBag.getGroupDefaultActions();
