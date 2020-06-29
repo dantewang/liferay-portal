@@ -647,14 +647,15 @@ public class ResourceActionsImpl implements ResourceActions {
 			String... sources)
 		throws ResourceActionsException {
 
-		Set<String> portletNames = new HashSet<>();
+		Set<String> resourceNames = new HashSet<>();
 
 		for (String source : sources) {
-			_read(null, servletContextName, classLoader, source, portletNames);
+			_read(null, servletContextName, classLoader, source, resourceNames);
 		}
 
-		for (String portletName : portletNames) {
-			check(portletName);
+		for (String resourceName : resourceNames) {
+			ResourceActionLocalServiceUtil.checkResourceActions(
+				resourceName, getResourceActions(resourceName));
 		}
 	}
 
@@ -993,7 +994,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	private void _read(
 			Portlet portlet, String servletContextName, ClassLoader classLoader,
-			String source, Set<String> portletNames)
+			String source, Set<String> resourceNames)
 		throws ResourceActionsException {
 
 		InputStream inputStream = classLoader.getResourceAsStream(source);
@@ -1036,17 +1037,17 @@ public class ResourceActionsImpl implements ResourceActions {
 
 				_read(
 					portlet, servletContextName, classLoader, file,
-					portletNames);
+					resourceNames);
 
 				String extFileName = StringUtil.replace(
 					file, ".xml", "-ext.xml");
 
 				_read(
 					portlet, servletContextName, classLoader, extFileName,
-					portletNames);
+					resourceNames);
 			}
 
-			_read(portlet, servletContextName, document, portletNames);
+			_read(portlet, servletContextName, document, resourceNames);
 
 			if (source.endsWith(".xml") && !source.endsWith("-ext.xml")) {
 				String extFileName = StringUtil.replace(
@@ -1054,7 +1055,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 				_read(
 					portlet, servletContextName, classLoader, extFileName,
-					portletNames);
+					resourceNames);
 			}
 		}
 		catch (DocumentException documentException) {
@@ -1064,7 +1065,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	private void _read(
 			Portlet portlet, String servletContextName, Document document,
-			Set<String> portletNames)
+			Set<String> resourceNames)
 		throws ResourceActionsException {
 
 		Element rootElement = document.getRootElement();
@@ -1099,8 +1100,8 @@ public class ResourceActionsImpl implements ResourceActions {
 				_readResource(
 					portletResourceElement, portletName, portletActions);
 
-				if (portletNames != null) {
-					portletNames.add(portletName);
+				if (resourceNames != null) {
+					resourceNames.add(portletName);
 				}
 			}
 		}
@@ -1172,8 +1173,8 @@ public class ResourceActionsImpl implements ResourceActions {
 				modelResourceElement, modelName,
 				Collections.singleton(ActionKeys.PERMISSIONS));
 
-			if (portletNames != null) {
-				portletNames.addAll(_resourceReferences.get(modelName));
+			if (resourceNames != null) {
+				resourceNames.add(modelName);
 			}
 		}
 	}
