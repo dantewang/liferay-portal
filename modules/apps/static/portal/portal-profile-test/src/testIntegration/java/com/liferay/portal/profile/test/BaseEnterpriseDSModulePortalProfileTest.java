@@ -49,7 +49,7 @@ public class BaseEnterpriseDSModulePortalProfileTest {
 			bundle.getBundleContext(),
 			FrameworkUtil.createFilter(
 				"(objectClass=com.liferay.portal.profile.test.util." +
-					"PortalProfileTestUtil)"),
+					"BaseEnterpriseDSModulePortalProfileTestComponent)"),
 			null);
 
 		_serviceTracker.open();
