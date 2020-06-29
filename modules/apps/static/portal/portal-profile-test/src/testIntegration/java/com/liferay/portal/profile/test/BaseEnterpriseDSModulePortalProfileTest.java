@@ -40,7 +40,7 @@ public class BaseEnterpriseDSModulePortalProfileTest {
 		new LiferayIntegrationTestRule();
 
 	@Test
-	public void testComponentEnable() throws Exception {
+	public void testComponentEnable() {
 		Bundle bundle = FrameworkUtil.getBundle(
 			BaseEnterpriseDSModulePortalProfileTest.class);
 
