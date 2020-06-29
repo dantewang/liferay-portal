@@ -27,6 +27,10 @@
 			/>
 			<fileset
 				dir="${sdk.dir}/dist"
+				includes="com.liferay.change.tracking.*.jar"
+			/>
+			<fileset
+				dir="${sdk.dir}/dist"
 				includes="com.liferay.dynamic.data.*.jar"
 			/>
 			<fileset
