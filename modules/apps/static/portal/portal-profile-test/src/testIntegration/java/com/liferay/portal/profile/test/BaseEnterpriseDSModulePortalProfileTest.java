@@ -24,8 +24,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
-import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.framework.ServiceReference;
 
 /**
  * @author Hai Yu
@@ -43,18 +44,19 @@ public class BaseEnterpriseDSModulePortalProfileTest {
 		Bundle bundle = FrameworkUtil.getBundle(
 			BaseEnterpriseDSModulePortalProfileTest.class);
 
-		ServiceTracker<Object, Object> serviceTracker = new ServiceTracker<>(
-			bundle.getBundleContext(),
-			FrameworkUtil.createFilter(
-				"(objectClass=com.liferay.portal.profile.test.util." +
-					"BaseEnterpriseDSModulePortalProfileTestComponent)"),
-			null);
+		BundleContext bundleContext = bundle.getBundleContext();
 
-		serviceTracker.open();
+		ServiceReference<?> serviceReference =
+			bundleContext.getServiceReference(
+				"com.liferay.portal.profile.test.util." +
+					"BaseEnterpriseDSModulePortalProfileTestComponent");
 
-		Assert.assertNotNull(serviceTracker.getService());
-
-		serviceTracker.close();
+		try {
+			Assert.assertNotNull(bundleContext.getService(serviceReference));
+		}
+		finally {
+			bundleContext.ungetService(serviceReference);
+		}
 	}
 
 }
