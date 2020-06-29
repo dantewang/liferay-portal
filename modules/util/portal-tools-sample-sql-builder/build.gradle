@@ -29,6 +29,8 @@ dependencies {
 	compile project(":apps:asset:asset-entry-rel-service")
 	compile project(":apps:blogs:blogs-api")
 	compile project(":apps:blogs:blogs-service")
+	compile project(":apps:change-tracking:change-tracking-api")
+	compile project(":apps:change-tracking:change-tracking-service")
 	compile project(":apps:document-library:document-library-api")
 	compile project(":apps:dynamic-data-lists:dynamic-data-lists-api")
 	compile project(":apps:dynamic-data-lists:dynamic-data-lists-service")
