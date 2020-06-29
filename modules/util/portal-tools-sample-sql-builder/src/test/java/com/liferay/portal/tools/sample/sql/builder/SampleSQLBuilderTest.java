@@ -93,7 +93,7 @@ public class SampleSQLBuilderTest {
 			System.setProperty(
 				"sample-sql-properties", tempPropertiesFile.getAbsolutePath());
 
-			new SampleSQLBuilder(new DataFactory());
+			new SampleSQLBuilder();
 
 			_loadHypersonic("../../../sql", tempDir.getAbsolutePath());
 		}
@@ -142,6 +142,12 @@ public class SampleSQLBuilderTest {
 		properties.put(
 			BenchmarksPropsKeys.MAX_COMMERCE_PRODUCT_INSTANCE_COUNT, "1");
 		properties.put("PropsKeys.MAX_CONTENT_LAYOUT_COUNT", "1");
+		properties.put(BenchmarksPropsKeys.MAX_CT_COUNT, "1");
+		properties.put(BenchmarksPropsKeys.MAX_CT_JOURNAL_ARTICLE_COUNT, "1");
+		properties.put(BenchmarksPropsKeys.MAX_CT_JOURNAL_FOLDER_COUNT, "1");
+		properties.put(BenchmarksPropsKeys.MAX_CT_PAGE_COUNT, "1");
+		properties.put(
+			BenchmarksPropsKeys.MAX_CT_WEBCONTENT_DISPLAY_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.MAX_DDL_CUSTOM_FIELD_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.MAX_DDL_RECORD_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.MAX_DDL_RECORD_SET_COUNT, "1");
@@ -166,9 +172,9 @@ public class SampleSQLBuilderTest {
 		properties.put(BenchmarksPropsKeys.OPTIMIZE_BUFFER_SIZE, "8192");
 		properties.put(
 			BenchmarksPropsKeys.OUTPUT_CSV_FILE_NAMES,
-			"assetPublisher,blog,company,cpFriendlyURLEntry,documentLibrary," +
-				"dynamicDataList,fragment,layout,mbCategory,mbThread," +
-					"repository,wiki");
+			"assetPublisher,blog,company,cpFriendlyURLEntry,cTLayout," +
+				"documentLibrary,dynamicDataList,fragment,layout,mbCategory," +
+					"mbThread,repository,wiki");
 		properties.put(BenchmarksPropsKeys.OUTPUT_DIR, outputDir);
 		properties.put(BenchmarksPropsKeys.OUTPUT_MERGE, "true");
 		properties.put(
