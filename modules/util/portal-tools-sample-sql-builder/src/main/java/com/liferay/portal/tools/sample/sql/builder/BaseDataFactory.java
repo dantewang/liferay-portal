@@ -159,6 +159,11 @@ public abstract class BaseDataFactory {
 
 		DDMStorageLinkModel ddmStorageLinkModel = new DDMStorageLinkModelImpl();
 
+		if (journalArticleModel.getCtCollectionId() != 0) {
+			ddmStorageLinkModel.setCtCollectionId(
+				journalArticleModel.getCtCollectionId());
+		}
+
 		ddmStorageLinkModel.setUuid(SequentialUUID.generate());
 		ddmStorageLinkModel.setStorageLinkId(counter.get());
 		ddmStorageLinkModel.setClassNameId(
@@ -213,6 +218,11 @@ public abstract class BaseDataFactory {
 
 		DDMTemplateLinkModel ddmTemplateLinkModel =
 			new DDMTemplateLinkModelImpl();
+
+		if (journalArticleModel.getCtCollectionId() != 0) {
+			ddmTemplateLinkModel.setCtCollectionId(
+				journalArticleModel.getCtCollectionId());
+		}
 
 		ddmTemplateLinkModel.setCompanyId(COMPANY_ID);
 		ddmTemplateLinkModel.setTemplateLinkId(counter.get());
@@ -283,6 +293,11 @@ public abstract class BaseDataFactory {
 		LayoutFriendlyURLModel layoutFriendlyURLEntryModel =
 			new LayoutFriendlyURLModelImpl();
 
+		if (layoutModel.getCtCollectionId() != 0) {
+			layoutFriendlyURLEntryModel.setCtCollectionId(
+				layoutModel.getCtCollectionId());
+		}
+
 		layoutFriendlyURLEntryModel.setUuid(SequentialUUID.generate());
 		layoutFriendlyURLEntryModel.setLayoutFriendlyURLId(counter.get());
 		layoutFriendlyURLEntryModel.setGroupId(layoutModel.getGroupId());
@@ -301,7 +316,8 @@ public abstract class BaseDataFactory {
 	}
 
 	public LayoutModel newLayoutModel(
-		long groupId, String name, String column1, String column2) {
+		long groupId, String name, String column1, String column2, long userId,
+		String userName, long ctCollectionId) {
 
 		SimpleCounter simpleCounter = layoutCounters.get(groupId);
 
@@ -317,8 +333,9 @@ public abstract class BaseDataFactory {
 		layoutModel.setPlid(counter.get());
 		layoutModel.setGroupId(groupId);
 		layoutModel.setCompanyId(COMPANY_ID);
-		layoutModel.setUserId(SAMPLE_USER_ID);
-		layoutModel.setUserName(SAMPLE_USER_NAME);
+		layoutModel.setCtCollectionId(ctCollectionId);
+		layoutModel.setUserId(userId);
+		layoutModel.setUserName(userName);
 		layoutModel.setCreateDate(new Date());
 		layoutModel.setModifiedDate(new Date());
 		layoutModel.setLayoutId(simpleCounter.get());
@@ -377,14 +394,16 @@ public abstract class BaseDataFactory {
 	protected AssetEntryModel newAssetEntryModel(
 		long groupId, Date createDate, Date modifiedDate, long classNameId,
 		long classPK, String uuid, long classTypeId, boolean listable,
-		boolean visible, String mimeType, String title) {
+		boolean visible, String mimeType, String title, long userId,
+		long ctCollectionId) {
 
 		AssetEntryModel assetEntryModel = new AssetEntryModelImpl();
 
 		assetEntryModel.setEntryId(counter.get());
 		assetEntryModel.setGroupId(groupId);
 		assetEntryModel.setCompanyId(COMPANY_ID);
-		assetEntryModel.setUserId(SAMPLE_USER_ID);
+		assetEntryModel.setCtCollectionId(ctCollectionId);
+		assetEntryModel.setUserId(userId);
 		assetEntryModel.setCreateDate(createDate);
 		assetEntryModel.setModifiedDate(modifiedDate);
 		assetEntryModel.setClassNameId(classNameId);
@@ -503,7 +522,7 @@ public abstract class BaseDataFactory {
 	protected JournalArticleLocalizationModel
 		newJournalArticleLocalizationModel(
 			JournalArticleModel journalArticleModel, int articleIndex,
-			int versionIndex) {
+			int versionIndex, long ctCollectionId) {
 
 		JournalArticleLocalizationModel journalArticleLocalizationModel =
 			new JournalArticleLocalizationModelImpl();
@@ -518,6 +537,7 @@ public abstract class BaseDataFactory {
 		journalArticleLocalizationModel.setArticleLocalizationId(counter.get());
 		journalArticleLocalizationModel.setCompanyId(
 			journalArticleModel.getCompanyId());
+		journalArticleLocalizationModel.setCtCollectionId(ctCollectionId);
 		journalArticleLocalizationModel.setArticlePK(
 			journalArticleModel.getId());
 		journalArticleLocalizationModel.setTitle(sb.toString());
@@ -529,7 +549,8 @@ public abstract class BaseDataFactory {
 
 	protected JournalArticleModel newJournalArticleModel(
 			JournalArticleResourceModel journalArticleResourceModel,
-			int articleIndex, int versionIndex)
+			int articleIndex, int versionIndex, long ctCollectionId,
+			long userId, String userName, long folderId, String treePath)
 		throws PortalException {
 
 		JournalArticleModel journalArticleModel = new JournalArticleModelImpl();
@@ -541,15 +562,17 @@ public abstract class BaseDataFactory {
 		journalArticleModel.setGroupId(
 			journalArticleResourceModel.getGroupId());
 		journalArticleModel.setCompanyId(COMPANY_ID);
-		journalArticleModel.setUserId(SAMPLE_USER_ID);
-		journalArticleModel.setUserName(SAMPLE_USER_NAME);
+		journalArticleModel.setCtCollectionId(ctCollectionId);
+		journalArticleModel.setUserId(userId);
+		journalArticleModel.setUserName(userName);
 		journalArticleModel.setCreateDate(new Date());
 		journalArticleModel.setModifiedDate(new Date());
 		journalArticleModel.setClassNameId(
 			JournalArticleConstants.CLASS_NAME_ID_DEFAULT);
 		journalArticleModel.setArticleId(
 			journalArticleResourceModel.getArticleId());
-		journalArticleModel.setTreePath("/");
+		journalArticleModel.setFolderId(folderId);
+		journalArticleModel.setTreePath(treePath);
 		journalArticleModel.setVersion(versionIndex);
 
 		StringBundler sb = new StringBundler(4);
@@ -578,7 +601,7 @@ public abstract class BaseDataFactory {
 	}
 
 	protected JournalArticleResourceModel newJournalArticleResourceModel(
-		long groupId) {
+		long groupId, long ctCollectionId) {
 
 		JournalArticleResourceModel journalArticleResourceModel =
 			new JournalArticleResourceModelImpl();
@@ -587,6 +610,7 @@ public abstract class BaseDataFactory {
 		journalArticleResourceModel.setResourcePrimKey(counter.get());
 		journalArticleResourceModel.setGroupId(groupId);
 		journalArticleResourceModel.setCompanyId(COMPANY_ID);
+		journalArticleResourceModel.setCtCollectionId(ctCollectionId);
 		journalArticleResourceModel.setArticleId(String.valueOf(counter.get()));
 
 		journalArticleResourceUUIDs.put(
@@ -603,6 +627,7 @@ public abstract class BaseDataFactory {
 			new PortletPreferencesModelImpl();
 
 		portletPreferencesModel.setCompanyId(COMPANY_ID);
+		portletPreferencesModel.setCtCollectionId(ctCollctionId);
 		portletPreferencesModel.setPortletPreferencesId(counter.get());
 		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
 		portletPreferencesModel.setOwnerType(
@@ -616,14 +641,15 @@ public abstract class BaseDataFactory {
 
 	protected SocialActivityModel newSocialActivityModel(
 		long groupId, long classNameId, long classPK, int type,
-		String extraData) {
+		String extraData, long userId, long ctCollectionId) {
 
 		SocialActivityModel socialActivityModel = new SocialActivityModelImpl();
 
 		socialActivityModel.setActivityId(socialActivityCounter.get());
+		socialActivityModel.setCtCollectionId(ctCollectionId);
 		socialActivityModel.setGroupId(groupId);
 		socialActivityModel.setCompanyId(COMPANY_ID);
-		socialActivityModel.setUserId(SAMPLE_USER_ID);
+		socialActivityModel.setUserId(userId);
 		socialActivityModel.setCreateDate(CURRENT_TIME + timeCounter.get());
 		socialActivityModel.setClassNameId(classNameId);
 		socialActivityModel.setClassPK(classPK);

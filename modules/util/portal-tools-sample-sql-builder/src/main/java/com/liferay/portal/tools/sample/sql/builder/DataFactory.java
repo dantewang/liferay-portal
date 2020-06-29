@@ -1889,7 +1889,7 @@ public class DataFactory extends BaseDataFactory {
 		int versionIndex) {
 
 		return newJournalArticleLocalizationModel(
-			journalArticleModel, articleIndex, versionIndex);
+			journalArticleModel, articleIndex, versionIndex, 0);
 	}
 
 	public JournalArticleModel newJournalArticleModel(
@@ -1898,7 +1898,8 @@ public class DataFactory extends BaseDataFactory {
 		throws PortalException {
 
 		JournalArticleModel journalArticleModel = newJournalArticleModel(
-			journalArticleResourceModel, articleIndex, versionIndex);
+			journalArticleResourceModel, articleIndex, versionIndex, 0,
+			SAMPLE_USER_ID, SAMPLE_USER_NAME, 0, "/");
 
 		if (Validator.isNull(_defaultJournalArticleId)) {
 			_defaultJournalArticleId = journalArticleModel.getArticleId();
@@ -1910,7 +1911,7 @@ public class DataFactory extends BaseDataFactory {
 	public JournalArticleResourceModel newJournalArticleResourceModel(
 		long groupId) {
 
-		return newJournalArticleResourceModel(groupId);
+		return newJournalArticleResourceModel(groupId, 0);
 	}
 
 	public PortletPreferencesModel newJournalContentPortletPreferencesModel(
@@ -1951,7 +1952,9 @@ public class DataFactory extends BaseDataFactory {
 	public LayoutModel newLayoutModel(
 		long groupId, String name, String column1, String column2) {
 
-		return newLayoutModel(groupId, name, column1, column2);
+		return newLayoutModel(
+			groupId, name, column1, column2, SAMPLE_USER_ID, SAMPLE_USER_NAME,
+			0);
 	}
 
 	public LayoutPageTemplateStructureModel newLayoutPageTemplateStructureModel(
@@ -3019,7 +3022,7 @@ public class DataFactory extends BaseDataFactory {
 
 		return newAssetEntryModel(
 			groupId, createDate, modifiedDate, classNameId, classPK, uuid,
-			classTypeId, listable, visible, mimeType, title);
+			classTypeId, listable, visible, mimeType, title, SAMPLE_USER_ID, 0);
 	}
 
 	protected AssetVocabularyModel newAssetVocabularyModel(
@@ -3490,7 +3493,7 @@ public class DataFactory extends BaseDataFactory {
 	protected PortletPreferencesModel newPortletPreferencesModel(
 		long plid, String portletId, String preferences) {
 
-		return newPortletPreferencesModel(plid, portletId, preferences);
+		return newPortletPreferencesModel(plid, portletId, preferences, 0);
 	}
 
 	protected ReleaseModelImpl newReleaseModel(
@@ -3576,7 +3579,7 @@ public class DataFactory extends BaseDataFactory {
 		String extraData) {
 
 		return newSocialActivityModel(
-			groupId, classNameId, classPK, type, extraData, 0, SAMPLE_USER_ID);
+			groupId, classNameId, classPK, type, extraData, SAMPLE_USER_ID, 0);
 	}
 
 	protected SubscriptionModel newSubscriptionModel(
