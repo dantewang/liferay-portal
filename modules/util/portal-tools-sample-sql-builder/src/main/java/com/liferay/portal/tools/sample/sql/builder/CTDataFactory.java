@@ -14,12 +14,17 @@
 
 package com.liferay.portal.tools.sample.sql.builder;
 
+import com.liferay.asset.kernel.model.AssetEntryModel;
 import com.liferay.change.tracking.model.CTCollectionModel;
 import com.liferay.change.tracking.model.CTPreferencesModel;
 import com.liferay.change.tracking.model.impl.CTCollectionModelImpl;
 import com.liferay.change.tracking.model.impl.CTPreferencesModelImpl;
+import com.liferay.journal.model.JournalFolder;
+import com.liferay.journal.model.JournalFolderModel;
+import com.liferay.journal.model.impl.JournalFolderModelImpl;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.model.UserModel;
+import com.liferay.portal.kernel.util.ContentTypes;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +36,28 @@ import java.util.List;
 public class CTDataFactory extends BaseDataFactory {
 
 	public CTDataFactory() throws Exception {
+	}
+
+	public List<AssetEntryModel> newAssetEntryModels(
+		List<JournalFolderModel> journalFolderModels) {
+
+		List<AssetEntryModel> assetEntryModels = new ArrayList<>(
+			BenchmarksPropsValues.MAX_CT_JOURNAL_FOLDER_COUNT);
+
+		journalFolderModels.forEach(
+			journalFolderModel -> assetEntryModels.add(
+				newAssetEntryModel(
+					journalFolderModel.getGroupId(),
+					journalFolderModel.getCreateDate(),
+					journalFolderModel.getModifiedDate(),
+					getClassNameId(JournalFolder.class),
+					journalFolderModel.getFolderId(),
+					journalFolderModel.getUuid(), 0, true, true,
+					ContentTypes.TEXT_PLAIN, journalFolderModel.getName(),
+					journalFolderModel.getUserId(),
+					journalFolderModel.getCtCollectionId())));
+
+		return assetEntryModels;
 	}
 
 	public List<CTCollectionModel> newCTCollectionModels(UserModel userModel) {
@@ -80,6 +107,23 @@ public class CTDataFactory extends BaseDataFactory {
 		return cTPreferencesModel;
 	}
 
+	public List<JournalFolderModel> newJournalFolderModels(
+		CTCollectionModel cTCollectionModel, long groupId) {
+
+		List<JournalFolderModel> journalFolderModels = new ArrayList<>(
+			BenchmarksPropsValues.MAX_CT_JOURNAL_FOLDER_COUNT);
+
+		for (int i = 0; i < BenchmarksPropsValues.MAX_CT_JOURNAL_FOLDER_COUNT;
+			 i++) {
+
+			journalFolderModels.add(
+				newJournalFolderModel(
+					cTCollectionModel, groupId, "Journal Folder " + (i + 1)));
+		}
+
+		return journalFolderModels;
+	}
+
 	protected CTCollectionModel newCTCollectionModel(
 		UserModel userModel, String name) {
 
@@ -109,6 +153,29 @@ public class CTDataFactory extends BaseDataFactory {
 			cTCollectionModel.getCtCollectionId());
 
 		return cTPreferencesModel;
+	}
+
+	protected JournalFolderModel newJournalFolderModel(
+		CTCollectionModel cTCollectionModel, long groupId, String name) {
+
+		JournalFolderModel journalFolderModel = new JournalFolderModelImpl();
+
+		long folderId = counter.get();
+
+		journalFolderModel.setUuid(SequentialUUID.generate());
+		journalFolderModel.setCtCollectionId(
+			cTCollectionModel.getCtCollectionId());
+		journalFolderModel.setFolderId(folderId);
+		journalFolderModel.setGroupId(groupId);
+		journalFolderModel.setCompanyId(cTCollectionModel.getCompanyId());
+		journalFolderModel.setUserId(cTCollectionModel.getUserId());
+		journalFolderModel.setCreateDate(new Date());
+		journalFolderModel.setModifiedDate(new Date());
+		journalFolderModel.setParentFolderId(0);
+		journalFolderModel.setTreePath("/" + folderId + "/");
+		journalFolderModel.setName(name);
+
+		return journalFolderModel;
 	}
 
 }
