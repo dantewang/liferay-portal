@@ -57,6 +57,21 @@ public interface BenchmarksPropsKeys {
 	public static final String MAX_CONTENT_LAYOUT_COUNT =
 		"sample.sql.max.content.layout.count";
 
+	public static final String MAX_CT_COUNT =
+		"sample.sql.max.change.list.count";
+
+	public static final String MAX_CT_JOURNAL_ARTICLE_COUNT =
+		"sample.sql.max.ct.journal.article.count";
+
+	public static final String MAX_CT_JOURNAL_FOLDER_COUNT =
+		"sample.sql.max.ct.journal.folder.count";
+
+	public static final String MAX_CT_PAGE_COUNT =
+		"sample.sql.max.ct.page.count";
+
+	public static final String MAX_CT_WEBCONTENT_DISPLAY_COUNT =
+		"sample.sql.max.ct.webcontent.display.count";
+
 	public static final String MAX_DDL_CUSTOM_FIELD_COUNT =
 		"sample.sql.max.ddl.custom.field.count";
 
