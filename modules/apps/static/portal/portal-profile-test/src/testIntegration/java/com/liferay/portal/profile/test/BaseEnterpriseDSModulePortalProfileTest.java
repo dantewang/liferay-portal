@@ -52,7 +52,10 @@ public class BaseEnterpriseDSModulePortalProfileTest {
 					"BaseEnterpriseDSModulePortalProfileTestComponent");
 
 		try {
-			Assert.assertNotNull(bundleContext.getService(serviceReference));
+			Assert.assertNotNull(
+				"BaseEnterpriseDSModulePortalProfileTestComponent is not " +
+					"started",
+				bundleContext.getService(serviceReference));
 		}
 		finally {
 			bundleContext.ungetService(serviceReference);
