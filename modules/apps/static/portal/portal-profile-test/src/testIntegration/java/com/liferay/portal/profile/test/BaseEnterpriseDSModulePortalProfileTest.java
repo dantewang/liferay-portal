@@ -17,9 +17,7 @@ package com.liferay.portal.profile.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,31 +38,23 @@ public class BaseEnterpriseDSModulePortalProfileTest {
 	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
 		new LiferayIntegrationTestRule();
 
-	@BeforeClass
-	public static void setUpClass() throws Exception {
+	@Test
+	public void testComponentEnable() throws Exception {
 		Bundle bundle = FrameworkUtil.getBundle(
 			BaseEnterpriseDSModulePortalProfileTest.class);
 
-		_serviceTracker = new ServiceTracker<>(
+		ServiceTracker<Object, Object> serviceTracker = new ServiceTracker<>(
 			bundle.getBundleContext(),
 			FrameworkUtil.createFilter(
 				"(objectClass=com.liferay.portal.profile.test.util." +
 					"BaseEnterpriseDSModulePortalProfileTestComponent)"),
 			null);
 
-		_serviceTracker.open();
-	}
+		serviceTracker.open();
 
-	@AfterClass
-	public static void tearDownClass() {
-		_serviceTracker.close();
-	}
+		Assert.assertNotNull(serviceTracker.getService());
 
-	@Test
-	public void testComponentEnable() throws Exception {
-		Assert.assertNotNull(_serviceTracker.getService());
+		serviceTracker.close();
 	}
-
-	private static ServiceTracker<Object, Object> _serviceTracker;
 
 }
