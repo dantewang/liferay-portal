@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.io.OutputStreamWriter;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedWriter;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.tools.ToolDependencies;
 import com.liferay.portal.tools.sample.sql.builder.io.CharPipe;
 import com.liferay.portal.tools.sample.sql.builder.io.UnsyncTeeWriter;
@@ -41,7 +42,6 @@ import java.nio.channels.FileChannel;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,17 +56,14 @@ public class SampleSQLBuilder {
 		ToolDependencies.wireBasic();
 
 		try {
-			DataFactory dataFactory = new DataFactory();
-
-			new SampleSQLBuilder(dataFactory);
+			new SampleSQLBuilder();
 		}
 		catch (Exception exception) {
 			exception.printStackTrace();
 		}
 	}
 
-	public SampleSQLBuilder(DataFactory dataFactory) throws Exception {
-		_dataFactory = dataFactory;
+	public SampleSQLBuilder() throws Exception {
 
 		// Generic
 
@@ -266,8 +263,7 @@ public class SampleSQLBuilder {
 								"sample.sql")));
 
 					FreeMarkerUtil.process(
-						BenchmarksPropsValues.SCRIPT,
-						Collections.singletonMap("dataFactory", _dataFactory),
+						BenchmarksPropsValues.SCRIPT, _createContext(),
 						sampleSQLWriter);
 				}
 				catch (Throwable t) {
@@ -275,7 +271,7 @@ public class SampleSQLBuilder {
 				}
 				finally {
 					try {
-						_dataFactory.closeCSVWriters();
+						DataFactory.closeCSVWriters();
 					}
 					catch (IOException ioException) {
 						ioException.printStackTrace();
@@ -361,11 +357,18 @@ public class SampleSQLBuilder {
 		insertSQLWriter.write(insertSQL);
 	}
 
+	private Map<String, Object> _createContext() throws Exception {
+		return HashMapBuilder.<String, Object>put(
+			"cTDataFactory", new CTDataFactory()
+		).put(
+			"dataFactory", new DataFactory()
+		).build();
+	}
+
 	private static final int _PIPE_BUFFER_SIZE = 16 * 1024 * 1024;
 
 	private static final int _WRITER_BUFFER_SIZE = 16 * 1024;
 
-	private final DataFactory _dataFactory;
 	private volatile Throwable _freeMarkerThrowable;
 
 }

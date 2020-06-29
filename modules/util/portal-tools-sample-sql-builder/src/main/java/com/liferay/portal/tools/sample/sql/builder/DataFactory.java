@@ -578,6 +578,10 @@ public class DataFactory extends BaseDataFactory {
 		return BenchmarksPropsValues.MAX_BLOGS_ENTRY_COMMENT_COUNT;
 	}
 
+	public int getMaxCTCount() {
+		return BenchmarksPropsValues.MAX_CT_COUNT;
+	}
+
 	public int getMaxDDLRecordCount() {
 		return BenchmarksPropsValues.MAX_DDL_RECORD_COUNT;
 	}
