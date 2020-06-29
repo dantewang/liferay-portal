@@ -2503,6 +2503,16 @@ public class DataFactory extends BaseDataFactory {
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
+		CTCollectionModel cTCollectionModel) {
+
+		return Collections.singletonList(
+			newResourcePermissionModel(
+				CTCollection.class.getName(),
+				String.valueOf(cTCollectionModel.getCtCollectionId()),
+				_ownerRoleModel.getRoleId(), cTCollectionModel.getUserId()));
+	}
+
+	public List<ResourcePermissionModel> newResourcePermissionModels(
 		DDLRecordSetModel ddlRecordSetModel) {
 
 		return Collections.singletonList(

@@ -16,6 +16,10 @@
 		layoutModel = dataFactory.newLayoutModel(userGroupModel.groupId, "home", "", "")
 	/>
 
+	<#if dataFactory.maxCTCount gt 0>
+		<#include "changelist_journal_article.ftl">
+	</#if>
+
 	<@insertLayout _layoutModel=layoutModel />
 
 	<@insertGroup _groupModel=userGroupModel />
