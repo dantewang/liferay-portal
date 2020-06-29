@@ -160,6 +160,24 @@ public abstract class BaseDataFactory {
 		return writer;
 	}
 
+	public String getJournalArticleLayoutColumn(
+		int pageCount, int dispalyCount) {
+
+		StringBundler sb = new StringBundler(3 * dispalyCount);
+
+		String portletPrefix = StringBundler.concat(
+			"com_liferay_journal_content_web_portlet_JournalContentPortlet",
+			"_INSTANCE_TEST_", pageCount, "_");
+
+		for (int i = 1; i <= dispalyCount; i++) {
+			sb.append(portletPrefix);
+			sb.append(i);
+			sb.append(StringPool.COMMA);
+		}
+
+		return sb.toString();
+	}
+
 	public DDMStorageLinkModel newDDMStorageLinkModel(
 		JournalArticleModel journalArticleModel, long structureId) {
 

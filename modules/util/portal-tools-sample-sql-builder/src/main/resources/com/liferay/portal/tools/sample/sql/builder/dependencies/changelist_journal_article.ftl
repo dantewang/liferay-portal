@@ -15,6 +15,12 @@ ${dataFactory.toInsertSQL(cTDataFactory.newCTPreferencesModel(cTCollectionModels
 		dDMStorageLinkModels = cTDataFactory.newDDMStorageLinkModels(journalArticleModels, ddmStructureModel.structureId)
 		socialActivityModels = cTDataFactory.newSocialActivityModels(journalArticleModels)
 		articleAssetEntryModels = cTDataFactory.newAssetEntryModels(journalArticleModels, journalArticleLocalizationModels)
+		layoutModels = cTDataFactory.newLayoutModels(groupId, cTCollectionModel)
+		layoutFriendlyURLModels = cTDataFactory.newLayoutFriendlyURLModels(layoutModels)
+		layoutAssetEntryModels = cTDataFactory.newLayoutAssetEntryModels(layoutModels)
+		journalPagePortletPreferencesModels = cTDataFactory.newJournalPortletPreferencesModels(layoutModels)
+		journalArticlePortletPreferencesModels = cTDataFactory.newJournalArticlePortletPreferencesModels(layoutModels, journalArticleResourceModels)
+		journalContentSearchModels = cTDataFactory.newJournalContentSearchModels(journalArticleModels, layoutModels)
 	/>
 
 	<#list journalFolderModels as journalFolderModel>
@@ -51,5 +57,29 @@ ${dataFactory.toInsertSQL(cTDataFactory.newCTPreferencesModel(cTCollectionModels
 
 	<#list articleAssetEntryModels as articleAssetEntryModel>
 		${dataFactory.toInsertSQL(articleAssetEntryModel)}
+	</#list>
+
+	<#list layoutModels as layoutModel>
+		${dataFactory.toInsertSQL(layoutModel)}
+	</#list>
+
+	<#list layoutFriendlyURLModels as layoutFriendlyURLModel>
+		${dataFactory.toInsertSQL(layoutFriendlyURLModel)}
+	</#list>
+
+	<#list layoutAssetEntryModels as layoutAssetEntryModel>
+		${dataFactory.toInsertSQL(layoutAssetEntryModel)}
+	</#list>
+
+	<#list journalPagePortletPreferencesModels as journalPagePortletPreferencesModel>
+		${dataFactory.toInsertSQL(journalPagePortletPreferencesModel)}
+	</#list>
+
+	<#list journalArticlePortletPreferencesModels as journalArticlePortletPreferencesModel>
+		${dataFactory.toInsertSQL(journalArticlePortletPreferencesModel)}
+	</#list>
+
+	<#list journalContentSearchModels as journalContentSearchModel>
+		${dataFactory.toInsertSQL(journalContentSearchModel)}
 	</#list>
 </#list>

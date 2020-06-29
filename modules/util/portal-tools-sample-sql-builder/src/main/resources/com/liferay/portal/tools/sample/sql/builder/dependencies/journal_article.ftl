@@ -28,7 +28,7 @@ ${dataFactory.toInsertSQL(ddmTemplateVersionModel)}
 	<#assign
 		portletIdPrefix = "com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_TEST_" + journalArticlePageCount + "_"
 
-		layoutModel = dataFactory.newLayoutModel(groupId, groupId + "_journal_article_" + journalArticlePageCount, "", dataFactory.getJournalArticleLayoutColumn(portletIdPrefix))
+		layoutModel = dataFactory.newLayoutModel(groupId, groupId + "_journal_article_" + journalArticlePageCount, "", dataFactory.getJournalArticleLayoutColumn(journalArticlePageCount))
 	/>
 
 	${dataFactory.getCSVWriter("layout").write(layoutModel.friendlyURL + "\n")}

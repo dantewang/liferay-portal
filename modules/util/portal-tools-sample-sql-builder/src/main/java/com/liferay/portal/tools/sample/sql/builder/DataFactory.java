@@ -555,19 +555,9 @@ public class DataFactory extends BaseDataFactory {
 		return getClassNameId(JournalArticle.class);
 	}
 
-	public String getJournalArticleLayoutColumn(String portletPrefix) {
-		StringBundler sb = new StringBundler(
-			3 * BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_COUNT);
-
-		for (int i = 1; i <= BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_COUNT;
-			 i++) {
-
-			sb.append(portletPrefix);
-			sb.append(i);
-			sb.append(StringPool.COMMA);
-		}
-
-		return sb.toString();
+	public String getJournalArticleLayoutColumn(int pageCount) {
+		return getJournalArticleLayoutColumn(
+			pageCount, BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_COUNT);
 	}
 
 	public int getMaxAssetPublisherPageCount() {
