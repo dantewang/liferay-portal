@@ -19,6 +19,9 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Hai Yu
  */
-@Component(enabled = false, service = BaseEnterpriseDSModulePortalProfileTestComponent.class)
+@Component(
+	enabled = false,
+	service = BaseEnterpriseDSModulePortalProfileTestComponent.class
+)
 public class BaseEnterpriseDSModulePortalProfileTestComponent {
 }
