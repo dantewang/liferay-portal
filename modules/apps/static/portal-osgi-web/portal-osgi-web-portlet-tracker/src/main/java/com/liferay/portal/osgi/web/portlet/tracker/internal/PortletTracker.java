@@ -342,6 +342,9 @@ public class PortletTracker
 
 			portletBagFactory.create(portletModel, portlet, true);
 
+			serviceRegistrations.doConfiguration(
+				bundleClassLoader, portletName);
+
 			deployPortlet(
 				serviceReference, portletModel,
 				_companyLocalService.getCompanies());
@@ -1216,8 +1219,6 @@ public class PortletTracker
 
 		serviceRegistrations.setPortletApp(portletApp);
 
-		serviceRegistrations.doConfiguration(classLoader);
-
 		return portletApp;
 	}
 
@@ -1297,13 +1298,14 @@ public class PortletTracker
 	}
 
 	protected void readResourceActions(
-		Configuration configuration, ClassLoader classLoader) {
+		Configuration configuration, ClassLoader classLoader,
+		String portletName) {
 
 		Properties properties = configuration.getProperties();
 
 		try {
 			ResourceActionsUtil.read(
-				null, classLoader,
+				portletName, null, classLoader,
 				StringUtil.split(
 					properties.getProperty(
 						PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
@@ -1450,13 +1452,15 @@ public class PortletTracker
 			_portletApp = portletApp;
 		}
 
-		protected synchronized void doConfiguration(ClassLoader classLoader) {
+		protected synchronized void doConfiguration(
+			ClassLoader classLoader, String portletName) {
+
 			if (classLoader.getResource("portlet.properties") != null) {
 				Configuration configuration =
 					ConfigurationFactoryUtil.getConfiguration(
 						classLoader, "portlet");
 
-				readResourceActions(configuration, classLoader);
+				readResourceActions(configuration, classLoader, portletName);
 			}
 		}
 
