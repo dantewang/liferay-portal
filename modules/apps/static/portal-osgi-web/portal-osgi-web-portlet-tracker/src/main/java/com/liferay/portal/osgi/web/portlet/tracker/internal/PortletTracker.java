@@ -374,6 +374,24 @@ public class PortletTracker
 
 			portletBagFactory.create(portletModel, portlet, true);
 
+			Configuration configuration =
+				serviceRegistrations.getConfiguration();
+
+			if (configuration != null) {
+				Properties properties = configuration.getProperties();
+
+				try {
+					ResourceActionsUtil.readPortletResource(
+						portletModel, bundleClassLoader,
+						StringUtil.split(
+							properties.getProperty(
+								PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
+				}
+				catch (Exception exception) {
+					_log.error(exception, exception);
+				}
+			}
+
 			deployPortlet(
 				serviceReference, portletModel,
 				_companyLocalService.getCompanies());
@@ -1320,23 +1338,6 @@ public class PortletTracker
 		return serviceRegistrations;
 	}
 
-	protected void readResourceActions(
-		Configuration configuration, ClassLoader classLoader) {
-
-		Properties properties = configuration.getProperties();
-
-		try {
-			ResourceActionsUtil.read(
-				classLoader,
-				StringUtil.split(
-					properties.getProperty(
-						PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
-		}
-		catch (Exception exception) {
-			_log.error(exception, exception);
-		}
-	}
-
 	@Reference(unbind = "-")
 	protected void setHttpServiceRuntime(
 		HttpServiceRuntime httpServiceRuntime, Map<String, Object> properties) {
@@ -1535,13 +1536,16 @@ public class PortletTracker
 		}
 
 		protected synchronized void doConfiguration(ClassLoader classLoader) {
-			if (classLoader.getResource("portlet.properties") != null) {
-				Configuration configuration =
-					ConfigurationFactoryUtil.getConfiguration(
-						classLoader, "portlet");
+			if ((_configuration == null) &&
+				(classLoader.getResource("portlet.properties") != null)) {
 
-				readResourceActions(configuration, classLoader);
+				_configuration = ConfigurationFactoryUtil.getConfiguration(
+					classLoader, "portlet");
 			}
+		}
+
+		protected synchronized Configuration getConfiguration() {
+			return _configuration;
 		}
 
 		protected synchronized PortletApp getPortletApp() {
@@ -1553,6 +1557,7 @@ public class PortletTracker
 		}
 
 		private final Bundle _bundle;
+		private Configuration _configuration;
 		private PortletApp _portletApp;
 		private final List<ServiceReference<Portlet>> _serviceReferences =
 			new ArrayList<>();
