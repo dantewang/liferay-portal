@@ -261,9 +261,9 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 			}
 		}
 
-		processPortletProperties(servletContextName, classLoader);
-
 		for (Portlet portlet : portlets) {
+			processPortletProperties(portlet, servletContextName, classLoader);
+
 			ResourceActionsUtil.check(portlet.getPortletId());
 
 			checkResourceBundles(classLoader, portlet);
@@ -448,7 +448,7 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 	}
 
 	protected void processPortletProperties(
-			String servletContextName, ClassLoader classLoader)
+			Portlet portlet, String servletContextName, ClassLoader classLoader)
 		throws Exception {
 
 		Configuration portletPropertiesConfiguration = null;
@@ -473,11 +473,23 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 			return;
 		}
 
-		ResourceActionsUtil.read(
-			servletContextName, classLoader,
+		ResourceActionsUtil.readPortletResource(
+			portlet, servletContextName, classLoader,
 			StringUtil.split(
 				portletProperties.getProperty(
 					PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #processPortletProperties(String, String, ClassLoader)}
+	 */
+	@Deprecated
+	protected void processPortletProperties(
+			String servletContextName, ClassLoader classLoader)
+		throws Exception {
+
+		processPortletProperties(null, servletContextName, classLoader);
 	}
 
 	protected void unbindDataSource(String servletContextName) {
