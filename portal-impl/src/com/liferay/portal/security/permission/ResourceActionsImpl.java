@@ -611,7 +611,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			String servletContextName, ClassLoader classLoader, String source)
 		throws ResourceActionsException {
 
-		_read(servletContextName, classLoader, source, null);
+		_read(null, servletContextName, classLoader, source, null);
 	}
 
 	@Override
@@ -655,11 +655,31 @@ public class ResourceActionsImpl implements ResourceActions {
 		Set<String> portletNames = new HashSet<>();
 
 		for (String source : sources) {
-			_read(servletContextName, classLoader, source, portletNames);
+			_read(null, servletContextName, classLoader, source, portletNames);
 		}
 
 		for (String portletName : portletNames) {
 			check(portletName);
+		}
+	}
+
+	@Override
+	public void readModelResource(
+			String servletContextName, ClassLoader classLoader,
+			String... sources)
+		throws ResourceActionsException {
+
+		readAndCheck(servletContextName, classLoader, sources);
+	}
+
+	@Override
+	public void readPortletResource(
+			Portlet portlet, String servletContextName, ClassLoader classLoader,
+			String... sources)
+		throws ResourceActionsException {
+
+		for (String source : sources) {
+			_read(portlet, servletContextName, classLoader, source, null);
 		}
 	}
 
@@ -995,8 +1015,8 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	private void _read(
-			String servletContextName, ClassLoader classLoader, String source,
-			Set<String> portletNames)
+			Portlet portlet, String servletContextName, ClassLoader classLoader,
+			String source, Set<String> portletNames)
 		throws ResourceActionsException {
 
 		InputStream inputStream = classLoader.getResourceAsStream(source);
@@ -1037,23 +1057,27 @@ public class ResourceActionsImpl implements ResourceActions {
 				String file = StringUtil.trim(
 					resourceElement.attributeValue("file"));
 
-				_read(servletContextName, classLoader, file, portletNames);
+				_read(
+					portlet, servletContextName, classLoader, file,
+					portletNames);
 
 				String extFileName = StringUtil.replace(
 					file, ".xml", "-ext.xml");
 
 				_read(
-					servletContextName, classLoader, extFileName, portletNames);
+					portlet, servletContextName, classLoader, extFileName,
+					portletNames);
 			}
 
-			_read(servletContextName, document, portletNames);
+			_read(portlet, servletContextName, document, portletNames);
 
 			if (source.endsWith(".xml") && !source.endsWith("-ext.xml")) {
 				String extFileName = StringUtil.replace(
 					source, ".xml", "-ext.xml");
 
 				_read(
-					servletContextName, classLoader, extFileName, portletNames);
+					portlet, servletContextName, classLoader, extFileName,
+					portletNames);
 			}
 		}
 		catch (DocumentException documentException) {
@@ -1062,7 +1086,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	private void _read(
-			String servletContextName, Document document,
+			Portlet portlet, String servletContextName, Document document,
 			Set<String> portletNames)
 		throws ResourceActionsException {
 
@@ -1076,14 +1100,23 @@ public class ResourceActionsImpl implements ResourceActions {
 					servletContextName,
 					portletResourceElement.elementTextTrim("portlet-name"));
 
-				Portlet portlet = portletLocalService.getPortletById(
-					portletName);
+				if (portlet != null) {
+					String deployPortletName = PortletIdCodec.decodePortletName(
+						portlet.getPortletId());
+
+					if (!deployPortletName.equals(portletName)) {
+						continue;
+					}
+				}
+				else {
+					portlet = portletLocalService.getPortletById(portletName);
+				}
 
 				Set<String> portletActions = _getPortletMimeTypeActions(
 					portletName, portlet);
 
 				if (!portletName.equals(PortletKeys.PORTAL)) {
-					_checkPortletActions(portlet, portletActions);
+					_checkPortletLayoutManagerActions(portletActions);
 				}
 
 				_readResource(
