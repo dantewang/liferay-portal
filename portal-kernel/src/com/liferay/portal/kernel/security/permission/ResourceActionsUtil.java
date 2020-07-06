@@ -292,6 +292,10 @@ public class ResourceActionsUtil {
 		getResourceActions().read(servletContextName, classLoader, sources);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	public static void readAndCheck(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
