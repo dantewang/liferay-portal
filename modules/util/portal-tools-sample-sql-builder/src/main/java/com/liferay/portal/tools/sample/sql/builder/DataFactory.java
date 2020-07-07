@@ -171,6 +171,7 @@ import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedWriter;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.metadata.RawMetadataProcessor;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.BaseModel;
@@ -947,24 +948,6 @@ public class DataFactory {
 
 			_assetTagModelsMaps[i - 1] = assetTagModelsMap;
 		}
-	}
-
-	public void initBackgroundImageItem(
-		DLFolderModel dlFolderModel, DLFileEntryModel dlFileEntryModel) {
-
-		StringBundler sb = new StringBundler(7);
-
-		sb.append("/documents/1/");
-		sb.append(dlFolderModel.getFolderId());
-		sb.append(StringPool.SLASH);
-		sb.append(dlFileEntryModel.getName());
-		sb.append(StringPool.SLASH);
-		sb.append(dlFileEntryModel.getUuid());
-		sb.append("?version=1.0&download=true");
-
-		_backgroundPictureURL = sb.toString();
-
-		_backgroundPictureTitle = dlFileEntryModel.getName();
 	}
 
 	public void initCommerceCatalogModel() {
@@ -1997,33 +1980,6 @@ public class DataFactory {
 			dlFileVersionModel.getFileVersionId());
 
 		return dlFileEntryMetadataModel;
-	}
-
-	public DLFileEntryModel newDlFileEntryModel(DLFolderModel dlFolderModel) {
-		DLFileEntryModel dlFileEntryModel = new DLFileEntryModelImpl();
-
-		dlFileEntryModel.setUuid(SequentialUUID.generate());
-		dlFileEntryModel.setFileEntryId(_counter.get());
-		dlFileEntryModel.setGroupId(dlFolderModel.getGroupId());
-		dlFileEntryModel.setCompanyId(_companyId);
-		dlFileEntryModel.setUserId(_sampleUserId);
-		dlFileEntryModel.setUserName(_SAMPLE_USER_NAME);
-		dlFileEntryModel.setCreateDate(nextFutureDate());
-		dlFileEntryModel.setModifiedDate(nextFutureDate());
-		dlFileEntryModel.setRepositoryId(dlFolderModel.getRepositoryId());
-		dlFileEntryModel.setFolderId(dlFolderModel.getFolderId());
-		dlFileEntryModel.setName("welcome_bg_benchmark");
-		dlFileEntryModel.setFileName("welcome_bg_benchmark.jpg");
-		dlFileEntryModel.setExtension("jpg");
-		dlFileEntryModel.setMimeType(ContentTypes.IMAGE_JPEG);
-		dlFileEntryModel.setTitle("welcome_bg_benchmark.jpg");
-		dlFileEntryModel.setFileEntryTypeId(
-			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
-		dlFileEntryModel.setVersion(DLFileEntryConstants.VERSION_DEFAULT);
-		dlFileEntryModel.setSize(413419);
-		dlFileEntryModel.setLastPublishDate(nextFutureDate());
-
-		return dlFileEntryModel;
 	}
 
 	public List<DLFileEntryModel> newDlFileEntryModels(
@@ -4674,11 +4630,15 @@ public class DataFactory {
 			(ContainerLayoutStructureItem)
 				layoutStructure.addContainerLayoutStructureItem(
 					parentItemId, 0);
-		JSONObject jsonObject1 = JSONFactoryUtil.createJSONObject();
 
-		jsonObject1.put("title", _backgroundPictureTitle);
-		jsonObject1.put("url", _backgroundPictureURL);
+		JSONObject jsonObject1 = JSONUtil.put(
+			"title", _BACKGROUND_PICTURE_TITLE
+		).put(
+			"url", _BACKGROUND_PICTURE_URL
+		);
+
 		containerLayoutStructureItem1.setBackgroundImageJSONObject(jsonObject1);
+
 		containerLayoutStructureItem1.setAlign(null);
 		containerLayoutStructureItem1.setBorderColor(null);
 		containerLayoutStructureItem1.setBorderRadius("");
@@ -4702,14 +4662,14 @@ public class DataFactory {
 		for (FragmentEntryLinkModel fragmentEntryLinkModel :
 				fragmentEntryLinkModels) {
 
-			if (fragmentEntryLinkModel.getRendererKey().equals("") &&
+			String rendererKey = fragmentEntryLinkModel.getRendererKey();
+
+			if (rendererKey.equals("") &&
 				(fragmentEntryLinkModel.getPlid() == layoutModel.getPlid())) {
 
-				FragmentLayoutStructureItem fragmentLayoutStructureItem =
-					(FragmentLayoutStructureItem)
-						layoutStructure.addFragmentLayoutStructureItem(
-							fragmentEntryLinkModel.getFragmentEntryLinkId(),
-							containerLayoutStructureItem1.getItemId(), 0);
+				layoutStructure.addFragmentLayoutStructureItem(
+					fragmentEntryLinkModel.getFragmentEntryLinkId(),
+					containerLayoutStructureItem1.getItemId(), 0);
 
 				break;
 			}
@@ -4723,9 +4683,11 @@ public class DataFactory {
 			(ContainerLayoutStructureItem)
 				layoutStructure.addContainerLayoutStructureItem(
 					parentItemId, 1);
+
 		JSONObject jsonObject2 = JSONFactoryUtil.createJSONObject();
 
 		containerLayoutStructureItem2.setBackgroundImageJSONObject(jsonObject2);
+
 		containerLayoutStructureItem2.setAlign(null);
 		containerLayoutStructureItem2.setBorderColor(null);
 		containerLayoutStructureItem2.setBorderRadius("");
@@ -4750,8 +4712,9 @@ public class DataFactory {
 		for (FragmentEntryLinkModel fragmentEntryLinkModel :
 				fragmentEntryLinkModels) {
 
-			if (fragmentEntryLinkModel.getRendererKey().equals(
-					_HEADING_RENDER_KEY) &&
+			String rendererKey = fragmentEntryLinkModel.getRendererKey();
+
+			if (rendererKey.equals(_HEADING_RENDER_KEY) &&
 				(fragmentEntryLinkModel.getPlid() == layoutModel.getPlid())) {
 
 				fragmentLayoutStructureItem =
@@ -4760,8 +4723,7 @@ public class DataFactory {
 							fragmentEntryLinkModel.getFragmentEntryLinkId(),
 							containerLayoutStructureItem2.getItemId(), 0);
 			}
-			else if (fragmentEntryLinkModel.getRendererKey().equals(
-						_PARAGRAPH_RENDER_KEY) &&
+			else if (rendererKey.equals(_PARAGRAPH_RENDER_KEY) &&
 					 (fragmentEntryLinkModel.getPlid() ==
 						 layoutModel.getPlid())) {
 
@@ -4809,6 +4771,12 @@ public class DataFactory {
 		return StringUtil.merge(lines, StringPool.SPACE);
 	}
 
+	private static final String _BACKGROUND_PICTURE_TITLE =
+		"welcome_bg_benchmark.png";
+
+	private static final String _BACKGROUND_PICTURE_URL =
+		"/welcome_bg_benchmark.png";
+
 	private static final long _CURRENT_TIME = System.currentTimeMillis();
 
 	private static final String _DEPENDENCIES_DIR =
@@ -4826,8 +4794,6 @@ public class DataFactory {
 
 	private static final int _WRITER_BUFFER_SIZE = 16 * 1024;
 
-	private static String _backgroundPictureTitle;
-	private static String _backgroundPictureURL;
 	private static final PortletPreferencesFactory _portletPreferencesFactory =
 		new PortletPreferencesFactoryImpl();
 
