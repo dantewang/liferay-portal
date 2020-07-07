@@ -1088,7 +1088,8 @@ public class ResourceActionsImpl implements ResourceActions {
 					portletResourceElement.elementTextTrim("portlet-name"));
 
 				if (portlet != null) {
-					String deployPortletName = portlet.getPortletId();
+					String deployPortletName = PortletIdCodec.decodePortletName(
+						portlet.getPortletId());
 
 					if (!deployPortletName.equals(portletName)) {
 						continue;
