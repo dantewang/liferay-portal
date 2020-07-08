@@ -1135,8 +1135,7 @@ public class DataFactory {
 			 productIndex < BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT;
 			 productIndex++) {
 
-			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
-				productIndex);
+			long[] cpDefinitionIds = _cpDefinitionIdList.get(productIndex);
 
 			for (int definitionIndex = 0;
 				 definitionIndex <
@@ -1444,8 +1443,7 @@ public class DataFactory {
 			 productIndex < BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT;
 			 productIndex++) {
 
-			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
-				productIndex);
+			long[] cpDefinitionIds = _cpDefinitionIdList.get(productIndex);
 
 			for (int definitionIndex = 0;
 				 definitionIndex <
@@ -1471,8 +1469,7 @@ public class DataFactory {
 			 productIndex < BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT;
 			 productIndex++) {
 
-			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
-				productIndex);
+			long[] cpDefinitionIds = _cpDefinitionIdList.get(productIndex);
 
 			for (int definitionIndex = 0;
 				 definitionIndex <
@@ -1525,8 +1522,7 @@ public class DataFactory {
 			 productIndex < BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT;
 			 productIndex++) {
 
-			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
-				productIndex);
+			long[] cpDefinitionIds = _cpDefinitionIdList.get(productIndex);
 
 			for (int definitionIndex = 0;
 				 definitionIndex <
@@ -4544,7 +4540,7 @@ public class DataFactory {
 	private final long _companyId;
 	private final SimpleCounter _counter;
 	private final int _cpDefinitionCount;
-	private List _cpDefinitionIdList;
+	private List<long[]> _cpDefinitionIdList;
 	private final Map<Long, String> _cpDefinitionLocalizationNames =
 		new HashMap<>();
 	private final List<Long> _cProductIds = new ArrayList<>();
