@@ -548,10 +548,6 @@ public class DataFactory {
 		return _counter.get();
 	}
 
-	public List<CPFriendlyURLEntryModel> getCPFriendlyURLEntryModels() {
-		return new ArrayList<>(_cpFriendlyURLEntryModels);
-	}
-
 	public List<CPInstanceModel> getCPInstanceModels() {
 		return new ArrayList<>(_cpInstanceModels);
 	}
@@ -865,7 +861,6 @@ public class DataFactory {
 	}
 
 	public void initCommerceProductModels() {
-		_cpFriendlyURLEntryModels = new ArrayList<>(_cpDefinitionCount);
 		_cpInstanceModels = new ArrayList<>(
 			_cpDefinitionCount *
 				BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_INSTANCE_COUNT);
@@ -1499,6 +1494,30 @@ public class DataFactory {
 		}
 
 		return cpDefinitionModels;
+	}
+
+	public List<CPFriendlyURLEntryModel> newCPFriendlyURLEntryModels() {
+		List<CPFriendlyURLEntryModel> cpFriendlyURLEntryModels =
+			new ArrayList<>(_cpDefinitionCount);
+
+		for (int productIndex = 0;
+			 productIndex < BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT;
+			 productIndex++) {
+
+			for (int definitionIndex = 0;
+				 definitionIndex <
+					 BenchmarksPropsValues.
+						 MAX_COMMERCE_PRODUCT_DEFINITION_COUNT;
+				 definitionIndex++) {
+
+				cpFriendlyURLEntryModels.add(
+					newCPFriendlyURLEntryModel(
+						_cProductIds.get(productIndex),
+						_publishedCPDefinitionIds.get(productIndex)));
+			}
+		}
+
+		return cpFriendlyURLEntryModels;
 	}
 
 	public List<CProductModel> newCProductModels() {
@@ -4489,7 +4508,6 @@ public class DataFactory {
 	private List _cpDefinitionIdList;
 	private final Map<Long, String> _cpDefinitionLocalizationNames =
 		new HashMap<>();
-	private List<CPFriendlyURLEntryModel> _cpFriendlyURLEntryModels;
 	private List<CPInstanceModel> _cpInstanceModels;
 	private final List<Long> _cProductIds = new ArrayList<>();
 	private final long _cPTaxCategoryId;
