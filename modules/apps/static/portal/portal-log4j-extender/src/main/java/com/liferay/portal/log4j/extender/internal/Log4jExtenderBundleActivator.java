@@ -176,7 +176,9 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 
 		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
 
-		_configureLog4j(bundleWiring.getClassLoader(), configFile);
+		_configureLog4j(
+			bundleWiring.getClassLoader(), configFile,
+			bundle.getSymbolicName());
 	}
 
 	private void _configureLog4j(Bundle bundle, String resourcePath)
@@ -199,6 +201,8 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 
 				ClassLoader bundleClassLoader = bundleWiring.getClassLoader();
 
+				String symbolicName = bundle.getSymbolicName();
+
 				if (bundleClassLoader == null) {
 					List<BundleWire> bundleWire = bundleWiring.getRequiredWires(
 						"osgi.wiring.host");
@@ -209,14 +213,19 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 						hostBundleWire.getProviderWiring();
 
 					bundleClassLoader = hostBundleWiring.getClassLoader();
+
+					Bundle hostBundle = hostBundleWiring.getBundle();
+
+					symbolicName = hostBundle.getSymbolicName();
 				}
 
-				_configureLog4j(bundleClassLoader, path.toFile());
+				_configureLog4j(bundleClassLoader, path.toFile(), symbolicName);
 			}
 		}
 	}
 
-	private void _configureLog4j(ClassLoader bundleClassLoader, File configFile)
+	private void _configureLog4j(
+			ClassLoader bundleClassLoader, File configFile, String symbolicName)
 		throws Exception {
 
 		List<XmlConfiguration> xmlConfigurationList = _xmlConfigurationsMap.get(
@@ -265,6 +274,8 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 			loggerContext.setConfiguration(
 				new CompositeConfiguration(xmlConfigurationList));
 		}
+
+		Log4JUtil.setLoggerContexts(symbolicName, loggerContext);
 
 		_xmlConfigurationsMap.put(bundleClassLoader, xmlConfigurationList);
 
