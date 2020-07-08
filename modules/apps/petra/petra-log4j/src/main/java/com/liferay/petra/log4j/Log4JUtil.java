@@ -155,6 +155,8 @@ public class Log4JUtil {
 
 			_rootLoggerConfig = configuration.getRootLogger();
 
+			_loggerContexts.put(_PORTAT_SYMBOLICNAME, _loggerContext);
+
 			SAXReader saxReader = new SAXReader();
 
 			Document document = saxReader.read(
@@ -358,6 +360,8 @@ public class Log4JUtil {
 		return StringUtil.removeSubstring(
 			content, "<appender-ref ref=\"" + appenderName + "\" />");
 	}
+
+	private static final String _PORTAT_SYMBOLICNAME = "portal.symbolicname";
 
 	private static final Logger _logger = LogManager.getRootLogger();
 
