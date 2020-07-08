@@ -458,10 +458,6 @@ public class DataFactory {
 		return allAssetCategoryModels;
 	}
 
-	public List<AssetEntryModel> getAssetEntryModels() {
-		return new ArrayList<>(_assetEntryModels);
-	}
-
 	public List<Long> getAssetTagIds(AssetEntryModel assetEntryModel) {
 		Map<Long, List<AssetTagModel>> assetTagModelsMap =
 			_assetTagModelsMaps[(int)assetEntryModel.getGroupId() - 1];
@@ -879,7 +875,6 @@ public class DataFactory {
 	}
 
 	public void initCommerceProductModels() {
-		_assetEntryModels = new ArrayList<>(_cpDefinitionCount);
 		_cpDefinitionLocalizationModels = new ArrayList<>(_cpDefinitionCount);
 		_cpDefinitionModels = new ArrayList<>(_cpDefinitionCount);
 		_cpFriendlyURLEntryModels = new ArrayList<>(_cpDefinitionCount);
@@ -909,13 +904,6 @@ public class DataFactory {
 					newCPDefinitionModel(
 						cpDefinitionId, _cProductIds.get(productIndex),
 						_cPTaxCategoryId, definitionIndex + 1));
-
-				_assetEntryModels.add(
-					newAssetEntryModel(
-						_commerceCatalogGroupId, new Date(), new Date(),
-						getClassNameId(CPDefinition.class), cpDefinitionId,
-						SequentialUUID.generate(), 0, true, true, "text/plain",
-						_cpDefinitionLocalizationNames.get(cpDefinitionId)));
 
 				_cpFriendlyURLEntryModels.add(
 					newCPFriendlyURLEntryModel(
@@ -1166,6 +1154,37 @@ public class DataFactory {
 			wikiPageModel.getModifiedDate(), getClassNameId(WikiPage.class),
 			wikiPageModel.getResourcePrimKey(), wikiPageModel.getUuid(), 0,
 			true, true, ContentTypes.TEXT_HTML, wikiPageModel.getTitle());
+	}
+
+	public List<AssetEntryModel> newAssetEntryModels() {
+		List<AssetEntryModel> assetEntryModels = new ArrayList<>(
+			_cpDefinitionCount);
+
+		for (int productIndex = 0;
+			 productIndex < BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT;
+			 productIndex++) {
+
+			long[] cpDefinitionIds = (long[])_cpDefinitionIdList.get(
+				productIndex);
+
+			for (int definitionIndex = 0;
+				 definitionIndex <
+					 BenchmarksPropsValues.
+						 MAX_COMMERCE_PRODUCT_DEFINITION_COUNT;
+				 definitionIndex++) {
+
+				assetEntryModels.add(
+					newAssetEntryModel(
+						_commerceCatalogGroupId, new Date(), new Date(),
+						getClassNameId(CPDefinition.class),
+						cpDefinitionIds[definitionIndex],
+						SequentialUUID.generate(), 0, true, true, "text/plain",
+						_cpDefinitionLocalizationNames.get(
+							cpDefinitionIds[definitionIndex])));
+			}
+		}
+
+		return assetEntryModels;
 	}
 
 	public List<PortletPreferencesModel>
@@ -4414,7 +4433,6 @@ public class DataFactory {
 	private final long[] _assetClassNameIds;
 	private final Map<Long, Integer> _assetClassNameIdsIndexes =
 		new HashMap<>();
-	private List<AssetEntryModel> _assetEntryModels;
 	private final Map<Long, Integer> _assetPublisherQueryStartIndexes =
 		new HashMap<>();
 	private Map<Long, SimpleCounter>[] _assetTagCounters;
