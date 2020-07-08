@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.log.LogFactory;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
@@ -37,8 +38,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -178,6 +182,23 @@ public class Log4JUtil {
 		}
 	}
 
+	public static List<org.apache.logging.log4j.core.Logger> getAllLoggers() {
+		List<org.apache.logging.log4j.core.Logger> allLoggers =
+			new ArrayList<>();
+
+		Collection<LoggerContext> loggerContexts = _loggerContexts.values();
+
+		Iterator<LoggerContext> iterator = loggerContexts.iterator();
+
+		while (iterator.hasNext()) {
+			LoggerContext loggerContext = iterator.next();
+
+			allLoggers.addAll(loggerContext.getLoggers());
+		}
+
+		return ListUtil.sort(allLoggers, new LoggerNameComparator());
+	}
+
 	public static Map<String, String> getCustomLogSettings() {
 		return new HashMap<>(_customLogSettings);
 	}
@@ -234,6 +255,12 @@ public class Log4JUtil {
 		if (custom) {
 			_customLogSettings.put(name, priority);
 		}
+	}
+
+	public static void setLoggerContexts(
+		String symbolicName, LoggerContext loggerContext) {
+
+		_loggerContexts.put(symbolicName, loggerContext);
 	}
 
 	public static void shutdownLog4J() {
@@ -352,7 +379,25 @@ public class Log4JUtil {
 		new ConcurrentHashMap<>();
 	private static String _liferayHome;
 	private static LoggerContext _loggerContext;
+	private static final Map<String, LoggerContext> _loggerContexts =
+		new ConcurrentHashMap<>();
 	private static LoggerConfig _rootLoggerConfig;
 	private static List<XmlConfiguration> _xmlConfigurationList;
+
+	private static class LoggerNameComparator
+		implements Comparator<org.apache.logging.log4j.core.Logger> {
+
+		@Override
+		public int compare(
+			org.apache.logging.log4j.core.Logger logger1,
+			org.apache.logging.log4j.core.Logger logger2) {
+
+			String name1 = logger1.getName();
+			String name2 = logger2.getName();
+
+			return name1.compareTo(name2);
+		}
+
+	}
 
 }
