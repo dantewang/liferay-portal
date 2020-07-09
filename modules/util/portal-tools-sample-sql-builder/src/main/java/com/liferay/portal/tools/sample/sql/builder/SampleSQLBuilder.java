@@ -271,6 +271,8 @@ public class SampleSQLBuilder {
 						).put(
 							"messageBoardDataFactory", new MessageBoardDataFactory()
 						).put(
+							"portletPreferenceDataFactory", new PortletPreferenceDataFactory()
+						).put(
 							"releaseDataFactory", new ReleaseDataFactory()
 						).put(
 							"resourcePermissionDataFactory", new ResourcePermissionDataFactory()
