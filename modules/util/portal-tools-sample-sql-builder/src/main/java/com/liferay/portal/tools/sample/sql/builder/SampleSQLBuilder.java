@@ -255,6 +255,8 @@ public class SampleSQLBuilder {
 						).put(
 							"commerceDataFactory", new CommerceDataFactory()
 						).put(
+							"counterDataFactory", new CounterDataFactory()
+						).put(
 							"dataFactory", new DataFactory()
 						).put(
 							"dDLDDMDataFactory", new DDLDDMDataFactory()

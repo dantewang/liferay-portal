@@ -19,7 +19,7 @@
 			_entry=wikiPageModel
 		/>
 
-		<#assign mbRootMessageId = dataFactory.getCounterNext() />
+		<#assign mbRootMessageId = counterDataFactory.getCounterNext() />
 
 		<@insertMBDiscussion
 			_classNameId=wikiDataFactory.wikiPageClassNameId
@@ -27,7 +27,7 @@
 			_groupId=groupId
 			_maxCommentCount=wikiDataFactory.maxWikiPageCommentCount
 			_mbRootMessageId=mbRootMessageId
-			_mbThreadId=dataFactory.getCounterNext()
+			_mbThreadId=counterDataFactory.getCounterNext()
 		/>
 
 		${csvFileWriter.write("wiki", wikiNodeModel.nodeId + "," + wikiNodeModel.name + "," + wikiPageModel.resourcePrimKey + "," + wikiPageModel.title + "," + mbRootMessageId + "\n")}
