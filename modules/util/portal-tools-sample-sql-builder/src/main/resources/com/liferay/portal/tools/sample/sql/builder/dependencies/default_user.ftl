@@ -26,7 +26,7 @@
 
 	userGroupModel = userDataFactory.newGroupModel(sampleUserModel)
 
-	layoutModel = dataFactory.newLayoutModel(userGroupModel.groupId, "home", "", "")
+	layoutModel = layoutDataFactory.newLayoutModel(userGroupModel.groupId, "home", "", "")
 />
 
 <@insertLayout _layoutModel=layoutModel />
