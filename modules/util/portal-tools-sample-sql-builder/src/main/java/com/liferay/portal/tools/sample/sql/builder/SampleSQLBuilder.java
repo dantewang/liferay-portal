@@ -260,6 +260,8 @@ public class SampleSQLBuilder {
 							"dLDataFactory", new DLDataFactory()
 						).put(
 							"journalDataFactory", new JournalDataFactory()
+						).put(
+							"messageBoardDataFactory", new MessageBoardDataFactory()
 						).build(),
 						sampleSQLWriter);
 				}
