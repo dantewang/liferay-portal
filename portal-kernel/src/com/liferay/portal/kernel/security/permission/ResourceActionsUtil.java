@@ -292,6 +292,24 @@ public class ResourceActionsUtil {
 		getResourceActions().read(servletContextName, classLoader, sources);
 	}
 
+	public static void read(
+			String deployPortletName, String servletContextName,
+			ClassLoader classLoader, String source)
+		throws Exception {
+
+		getResourceActions().read(
+			deployPortletName, servletContextName, classLoader, source);
+	}
+
+	public static void read(
+			String deployPortletName, String servletContextName,
+			ClassLoader classLoader, String... sources)
+		throws Exception {
+
+		getResourceActions().read(
+			deployPortletName, servletContextName, classLoader, sources);
+	}
+
 	public static void readAndCheck(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)

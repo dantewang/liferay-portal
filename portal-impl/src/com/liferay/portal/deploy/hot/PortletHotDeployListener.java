@@ -262,9 +262,10 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 			}
 		}
 
-		processPortletProperties(servletContextName, classLoader);
-
 		for (Portlet portlet : portlets) {
+			processPortletProperties(
+				portlet.getPortletId(), servletContextName, classLoader);
+
 			ResourceActionsUtil.check(portlet.getPortletId());
 
 			checkResourceBundles(classLoader, portlet);
@@ -448,8 +449,21 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 		}
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #processPortletProperties(String, String, ClassLoader)}
+	 */
+	@Deprecated
 	protected void processPortletProperties(
 			String servletContextName, ClassLoader classLoader)
+		throws Exception {
+
+		processPortletProperties(null, servletContextName, classLoader);
+	}
+
+	protected void processPortletProperties(
+			String portletId, String servletContextName,
+			ClassLoader classLoader)
 		throws Exception {
 
 		Configuration portletPropertiesConfiguration = null;
@@ -475,7 +489,7 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 		}
 
 		ResourceActionsUtil.read(
-			servletContextName, classLoader,
+			portletId, servletContextName, classLoader,
 			StringUtil.split(
 				portletProperties.getProperty(
 					PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
