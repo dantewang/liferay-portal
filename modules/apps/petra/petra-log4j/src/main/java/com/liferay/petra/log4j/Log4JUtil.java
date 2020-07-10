@@ -48,6 +48,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.logging.log4j.Level;
@@ -195,13 +196,23 @@ public class Log4JUtil {
 	}
 
 	public static String getOriginalLevel(String className) {
-		org.apache.logging.log4j.core.Logger logger =
-			(org.apache.logging.log4j.core.Logger)LogManager.getLogger(
-				className);
+		Set<String> symbolicNames = _loggerContexts.keySet();
 
-		Level level = logger.getLevel();
+		Iterator<String> iterator = symbolicNames.iterator();
 
-		return level.toString();
+		while (iterator.hasNext()) {
+			String symbolicName = iterator.next();
+
+			if (symbolicName.equals(_PORTAT_SYMBOLICNAME)) {
+				continue;
+			}
+
+			if (className.startsWith(symbolicName)) {
+				return _getLog4jLevel(className, symbolicName);
+			}
+		}
+
+		return _getLog4jLevel(className, _PORTAT_SYMBOLICNAME);
 	}
 
 	public static LoggerConfig getRootLogger() {
@@ -233,8 +244,35 @@ public class Log4JUtil {
 	}
 
 	public static void setLevel(String name, String priority, boolean custom) {
-		org.apache.logging.log4j.core.Logger logger =
-			(org.apache.logging.log4j.core.Logger)LogManager.getLogger(name);
+		org.apache.logging.log4j.core.Logger logger = null;
+
+		LoggerContext loggerContext = null;
+
+		Set<String> symbolicNames = _loggerContexts.keySet();
+
+		Iterator<String> iterator = symbolicNames.iterator();
+
+		while (iterator.hasNext()) {
+			String symbolicName = iterator.next();
+
+			if (symbolicName.equals(_PORTAT_SYMBOLICNAME)) {
+				continue;
+			}
+
+			if (name.startsWith(symbolicName)) {
+				loggerContext = _loggerContexts.get(symbolicName);
+
+				logger = loggerContext.getLogger(name);
+
+				break;
+			}
+		}
+
+		if (logger == null) {
+			loggerContext = _loggerContexts.get(_PORTAT_SYMBOLICNAME);
+
+			logger = loggerContext.getLogger(name);
+		}
 
 		logger.setLevel(Level.toLevel(priority));
 
@@ -305,6 +343,19 @@ public class Log4JUtil {
 		}
 
 		return _liferayHome;
+	}
+
+	private static String _getLog4jLevel(
+		String className, String symbolicName) {
+
+		LoggerContext loggerContext = _loggerContexts.get(symbolicName);
+
+		org.apache.logging.log4j.core.Logger logger = loggerContext.getLogger(
+			className);
+
+		Level level = logger.getLevel();
+
+		return level.toString();
 	}
 
 	private static String _getURLContent(URL url) {
