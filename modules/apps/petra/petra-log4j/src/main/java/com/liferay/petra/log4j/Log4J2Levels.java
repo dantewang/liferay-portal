@@ -14,15 +14,12 @@
 
 package com.liferay.petra.log4j;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 
 /**
- * @author Brian Wing Shun Chan
- * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
- *             Log4J2Levels}
+ * @author Hai Yu
  */
-@Deprecated
-public class Levels {
+public class Log4J2Levels {
 
 	public static final Level[] ALL_LEVELS = {
 		Level.OFF, Level.FATAL, Level.ERROR, Level.WARN, Level.INFO,
