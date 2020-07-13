@@ -14,9 +14,9 @@
 
 package com.liferay.portal.tools.sample.sql.builder;
 
+import com.liferay.dynamic.data.mapping.constants.DDMStructureConstants;
 import com.liferay.dynamic.data.mapping.model.DDMContentModel;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLink;
-import com.liferay.dynamic.data.mapping.model.DDMStructureConstants;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureVersionModel;
