@@ -273,16 +273,20 @@ import com.liferay.wiki.model.impl.WikiPageModelImpl;
 import com.liferay.wiki.model.impl.WikiPageResourceModelImpl;
 import com.liferay.wiki.social.WikiActivityKeys;
 
-import javax.portlet.PortletPreferences;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
 import java.math.BigDecimal;
+
 import java.sql.Types;
+
 import java.text.Format;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -292,6 +296,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+
+import javax.portlet.PortletPreferences;
 
 /**
  * @author Brian Wing Shun Chan
@@ -1825,8 +1831,8 @@ public class DataFactory {
 		return newDDMStructureModel(
 			_globalGroupId, _defaultUserId,
 			getClassNameId(JournalArticle.class),
-			DataFactoryConstants.JOURNAL_STRUCTURE_KEY, _journalDDMStructureContent,
-			_defaultJournalDDMStructureId);
+			DataFactoryConstants.JOURNAL_STRUCTURE_KEY,
+			_journalDDMStructureContent, _defaultJournalDDMStructureId);
 	}
 
 	public DDMStructureVersionModel newDefaultJournalDDMStructureVersionModel(
@@ -2229,7 +2235,8 @@ public class DataFactory {
 			DataFactoryConstants.LANGUAGE_ID);
 		journalArticleModel.setDDMStructureKey(
 			DataFactoryConstants.JOURNAL_STRUCTURE_KEY);
-		journalArticleModel.setDDMTemplateKey(DataFactoryConstants.JOURNAL_STRUCTURE_KEY);
+		journalArticleModel.setDDMTemplateKey(
+			DataFactoryConstants.JOURNAL_STRUCTURE_KEY);
 		journalArticleModel.setDisplayDate(new Date());
 		journalArticleModel.setExpirationDate(nextFutureDate());
 		journalArticleModel.setReviewDate(new Date());
@@ -3855,7 +3862,8 @@ public class DataFactory {
 		ddmTemplateModel.setClassNameId(getClassNameId(DDMStructure.class));
 		ddmTemplateModel.setClassPK(structureId);
 		ddmTemplateModel.setResourceClassNameId(sourceClassNameId);
-		ddmTemplateModel.setTemplateKey(DataFactoryConstants.JOURNAL_STRUCTURE_KEY);
+		ddmTemplateModel.setTemplateKey(
+			DataFactoryConstants.JOURNAL_STRUCTURE_KEY);
 		ddmTemplateModel.setVersion(DDMTemplateConstants.VERSION_DEFAULT);
 		ddmTemplateModel.setVersionUserId(userId);
 		ddmTemplateModel.setVersionUserName(
