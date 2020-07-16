@@ -103,36 +103,13 @@ public class ResourceActionsTest {
 			for (Element resourceElement :
 					rootElement.elements("model-resource")) {
 
-				for (Element modelNameElement :
-						resourceElement.elements("model-name")) {
+				_collectResourceActionsErrorForResourceElement(
+					resourceElement, bundle, "model-name", sb,
+					modelNamesList);
 
-					String modelName = modelNameElement.getTextTrim();
-
-					if (!modelNamesList.contains(modelName)) {
-						sb.append("\n\t\t");
-						sb.append(bundle.getSymbolicName());
-						sb.append(" ");
-						sb.append(modelName);
-						sb.append(": is not found in the modelNamesList.");
-					}
-				}
-
-				for (Element compositeModelNameElement :
-						resourceElement.elements("composite-model-name")) {
-
-					String compositeModelName = ReflectionTestUtil.invoke(
-						_resourceActions, "_getCompositeModelName",
-						new Class<?>[] {Element.class},
-						compositeModelNameElement);
-
-					if (!modelNamesList.contains(compositeModelName)) {
-						sb.append("\n\t\t");
-						sb.append(bundle.getSymbolicName());
-						sb.append(" ");
-						sb.append(compositeModelName);
-						sb.append(": is not found in the modelNamesList.");
-					}
-				}
+				_collectResourceActionsErrorForResourceElement(
+					resourceElement, bundle,"composite-model-name", sb,
+					modelNamesList);
 			}
 
 			String errors = sb.toString();
@@ -141,6 +118,35 @@ public class ResourceActionsTest {
 				"The following resource action issues are found: ".concat(
 					errors),
 				errors.isEmpty());
+		}
+	}
+
+	private void _collectResourceActionsErrorForResourceElement(
+		Element resourceElement, Bundle bundle, String type,
+		StringBundler sb, List<String> modelNamesList) {
+
+		String modelName = null;
+
+		for (Element modelNameElement :
+				resourceElement.elements(type)) {
+
+			if (type == "model-name") {
+				modelName = modelNameElement.getTextTrim();
+			}
+			else if (type == "composite-model-name") {
+				modelName = ReflectionTestUtil.invoke(
+					_resourceActions, "_getCompositeModelName",
+					new Class<?>[] {Element.class},
+					modelNameElement);
+			}
+
+			if (!modelNamesList.contains(modelName)) {
+				sb.append("\n\t\t");
+				sb.append(bundle.getSymbolicName());
+				sb.append(" ");
+				sb.append(modelName);
+				sb.append(": is not found in the modelNamesList.");
+			}
 		}
 	}
 
