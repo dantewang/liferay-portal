@@ -85,9 +85,11 @@ public class ResourceActionsTest {
 			URL url = classLoader.getResource("resource-actions/default.xml");
 
 			if (url == null) {
-				_log.info(
-					"\n\t\t" + bundle.getSymbolicName() +
-						": resource-actions/default.xml is not found");
+				if (_log.isInfoEnabled()) {
+					_log.info(
+						"\n\t\t" + bundle.getSymbolicName() +
+							": resource-actions/default.xml is not found");
+				}
 
 				continue;
 			}
@@ -104,11 +106,10 @@ public class ResourceActionsTest {
 					rootElement.elements("model-resource")) {
 
 				_collectResourceActionsErrorForResourceElement(
-					resourceElement, bundle, "model-name", sb,
-					modelNamesList);
+					resourceElement, bundle, "model-name", sb, modelNamesList);
 
 				_collectResourceActionsErrorForResourceElement(
-					resourceElement, bundle,"composite-model-name", sb,
+					resourceElement, bundle, "composite-model-name", sb,
 					modelNamesList);
 			}
 
@@ -122,22 +123,19 @@ public class ResourceActionsTest {
 	}
 
 	private void _collectResourceActionsErrorForResourceElement(
-		Element resourceElement, Bundle bundle, String type,
-		StringBundler sb, List<String> modelNamesList) {
+		Element resourceElement, Bundle bundle, String type, StringBundler sb,
+		List<String> modelNamesList) {
 
 		String modelName = null;
 
-		for (Element modelNameElement :
-				resourceElement.elements(type)) {
-
-			if (type == "model-name") {
+		for (Element modelNameElement : resourceElement.elements(type)) {
+			if (type.equals("model-name")) {
 				modelName = modelNameElement.getTextTrim();
 			}
-			else if (type == "composite-model-name") {
+			else if (type.equals("composite-model-name")) {
 				modelName = ReflectionTestUtil.invoke(
 					_resourceActions, "_getCompositeModelName",
-					new Class<?>[] {Element.class},
-					modelNameElement);
+					new Class<?>[] {Element.class}, modelNameElement);
 			}
 
 			if (!modelNamesList.contains(modelName)) {
