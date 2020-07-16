@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.UnsecureSAXReaderUtil;
@@ -106,11 +107,7 @@ public class ResourceActionsTest {
 					rootElement.elements("model-resource")) {
 
 				_collectResourceActionsErrorForResourceElement(
-					resourceElement, bundle, "model-name", sb, modelNamesList);
-
-				_collectResourceActionsErrorForResourceElement(
-					resourceElement, bundle, "composite-model-name", sb,
-					modelNamesList);
+					resourceElement, bundle, sb, modelNamesList);
 			}
 
 			String errors = sb.toString();
@@ -123,28 +120,25 @@ public class ResourceActionsTest {
 	}
 
 	private void _collectResourceActionsErrorForResourceElement(
-		Element resourceElement, Bundle bundle, String type, StringBundler sb,
+		Element resourceElement, Bundle bundle, StringBundler sb,
 		List<String> modelNamesList) {
 
-		String modelName = null;
+		String modelName = resourceElement.elementTextTrim(
+			"model-name");
 
-		for (Element modelNameElement : resourceElement.elements(type)) {
-			if (type.equals("model-name")) {
-				modelName = modelNameElement.getTextTrim();
-			}
-			else if (type.equals("composite-model-name")) {
-				modelName = ReflectionTestUtil.invoke(
-					_resourceActions, "_getCompositeModelName",
-					new Class<?>[] {Element.class}, modelNameElement);
-			}
+		if (Validator.isNull(modelName)) {
+			modelName = ReflectionTestUtil.invoke(
+				_resourceActions, "_getCompositeModelName",
+				new Class<?>[] {Element.class},
+				resourceElement.element("composite-model-name"));
+		}
 
-			if (!modelNamesList.contains(modelName)) {
-				sb.append("\n\t\t");
-				sb.append(bundle.getSymbolicName());
-				sb.append(" ");
-				sb.append(modelName);
-				sb.append(": is not found in the modelNamesList.");
-			}
+		if (!modelNamesList.contains(modelName)) {
+			sb.append("\n\t\t");
+			sb.append(bundle.getSymbolicName());
+			sb.append(" ");
+			sb.append(modelName);
+			sb.append(": is not found in the modelNamesList.");
 		}
 	}
 
