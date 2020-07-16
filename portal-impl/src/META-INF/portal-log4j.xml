@@ -23,7 +23,7 @@
 			ignoreExceptions="false"
 			name="XML_FILE"
 		>
-			<Log4j1XmlLayout locationInfo="true" />
+			<XMLLayout charset="utf-8" compact="yes" />
 
 			<TimeBasedTriggeringPolicy />
 
