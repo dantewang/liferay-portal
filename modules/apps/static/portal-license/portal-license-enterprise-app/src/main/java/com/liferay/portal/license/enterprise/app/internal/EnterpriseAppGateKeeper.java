@@ -31,17 +31,13 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.license.enterprise.app.internal.constants.EnterpriseAppDestinationNames;
 import com.liferay.portal.lpkg.deployer.LPKGDeployer;
-
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-
 import javax.servlet.Filter;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -212,7 +208,7 @@ public class EnterpriseAppGateKeeper {
 			return false;
 		}
 
-		Map<String, String> portalLicenseProperties =
+		/*Map<String, String> portalLicenseProperties =
 			_licenseManager.getLicenseProperties("Portal");
 
 		String portalLicenseType = portalLicenseProperties.get("type");
@@ -264,7 +260,7 @@ public class EnterpriseAppGateKeeper {
 
 				return false;
 			}
-		}
+		}*/
 
 		return true;
 	}
@@ -357,6 +353,10 @@ public class EnterpriseAppGateKeeper {
 					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH));
 
 			String productId = _webContextPaths.get(webContextPath);
+
+			if (webContextPath.equals("/blogs-web")) {
+				productId = "test.product";
+			}
 
 			if (productId == null) {
 				return null;
