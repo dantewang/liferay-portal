@@ -102,6 +102,8 @@ public abstract class BaseDataFactory {
 		return StringUtil.merge(lines, StringPool.SPACE);
 	}
 
+	protected static final long ADMINISTRATOR_ROLE_ID;
+
 	protected static final long COMMERCE_CATALOG_GROUP_ID;
 
 	protected static final long COMMERCE_CATALOG_ID;
@@ -120,9 +122,19 @@ public abstract class BaseDataFactory {
 
 	protected static final long GUEST_GROUP_ID;
 
+	protected static final long GUEST_ROLE_ID;
+
+	protected static final long OWNER_ROLE_ID;
+
+	protected static final long POWER_USER_ROLE_ID;
+
 	protected static final long SAMPLE_USER_ID;
 
 	protected static final String SAMPLE_USER_NAME = "Sample";
+
+	protected static final long SITE_MEMBER_ROLE_ID;
+
+	protected static final long USER_ROLE_ID;
 
 	protected static Map<Long, List<AssetCategoryModel>>[]
 		assetCategoryModelsMaps;
@@ -227,6 +239,12 @@ public abstract class BaseDataFactory {
 		COMMERCE_CHANNEL_GROUP_ID = counter.get();
 		COMMERCE_CHANNEL_ID = counter.get();
 		COMMERCE_CATALOG_ID = counter.get();
+		ADMINISTRATOR_ROLE_ID = counter.get();
+		GUEST_ROLE_ID = counter.get();
+		OWNER_ROLE_ID = counter.get();
+		POWER_USER_ROLE_ID = counter.get();
+		SITE_MEMBER_ROLE_ID = counter.get();
+		USER_ROLE_ID = counter.get();
 	}
 
 }
