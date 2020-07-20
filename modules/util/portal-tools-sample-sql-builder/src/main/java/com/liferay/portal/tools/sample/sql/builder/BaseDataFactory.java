@@ -134,6 +134,8 @@ public abstract class BaseDataFactory {
 
 	protected static final long SAMPLE_USER_ID;
 
+	protected static final String SAMPLE_USER_NAME = "Sample";
+
 	protected static final long SITE_MEMBER_ROLE_ID;
 
 	protected static final long USER_ROLE_ID;
