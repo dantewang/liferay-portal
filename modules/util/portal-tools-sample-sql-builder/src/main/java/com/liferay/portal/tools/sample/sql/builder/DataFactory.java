@@ -334,8 +334,8 @@ public class DataFactory extends BaseDataFactory {
 		initUserNames();
 	}
 
-	public RoleModel getAdministratorRoleModel() {
-		return _administratorRoleModel;
+	public long getAdministratorRoleId() {
+		return ADMINISTRATOR_ROLE_ID;
 	}
 
 	public List<Long> getAssetCategoryIds(AssetEntryModel assetEntryModel) {
@@ -588,8 +588,8 @@ public class DataFactory extends BaseDataFactory {
 		return portletPrefix.concat(PortletIdCodec.generateInstanceId());
 	}
 
-	public RoleModel getPowerUserRoleModel() {
-		return _powerUserRoleModel;
+	public long getPowerUserRoleId() {
+		return POWER_USER_ROLE_ID;
 	}
 
 	public List<RoleModel> getRoleModels() {
@@ -606,8 +606,8 @@ public class DataFactory extends BaseDataFactory {
 		return sequence;
 	}
 
-	public RoleModel getUserRoleModel() {
-		return _userRoleModel;
+	public long getUserRoleId() {
+		return USER_ROLE_ID;
 	}
 
 	public long getWikiPageClassNameId() {
@@ -787,14 +787,15 @@ public class DataFactory extends BaseDataFactory {
 		// Administrator
 
 		_administratorRoleModel = newRoleModel(
-			RoleConstants.ADMINISTRATOR, RoleConstants.TYPE_REGULAR);
+			RoleConstants.ADMINISTRATOR, RoleConstants.TYPE_REGULAR,
+			ADMINISTRATOR_ROLE_ID);
 
 		_roleModels.add(_administratorRoleModel);
 
 		// Guest
 
 		_guestRoleModel = newRoleModel(
-			RoleConstants.GUEST, RoleConstants.TYPE_REGULAR);
+			RoleConstants.GUEST, RoleConstants.TYPE_REGULAR, GUEST_ROLE_ID);
 
 		_roleModels.add(_guestRoleModel);
 
@@ -803,33 +804,34 @@ public class DataFactory extends BaseDataFactory {
 		_roleModels.add(
 			newRoleModel(
 				RoleConstants.ORGANIZATION_ADMINISTRATOR,
-				RoleConstants.TYPE_ORGANIZATION));
+				RoleConstants.TYPE_ORGANIZATION, counter.get()));
 
 		// Organization Owner
 
 		_roleModels.add(
 			newRoleModel(
 				RoleConstants.ORGANIZATION_OWNER,
-				RoleConstants.TYPE_ORGANIZATION));
+				RoleConstants.TYPE_ORGANIZATION, counter.get()));
 
 		// Organization User
 
 		_roleModels.add(
 			newRoleModel(
 				RoleConstants.ORGANIZATION_USER,
-				RoleConstants.TYPE_ORGANIZATION));
+				RoleConstants.TYPE_ORGANIZATION, counter.get()));
 
 		// Owner
 
 		_ownerRoleModel = newRoleModel(
-			RoleConstants.OWNER, RoleConstants.TYPE_REGULAR);
+			RoleConstants.OWNER, RoleConstants.TYPE_REGULAR, OWNER_ROLE_ID);
 
 		_roleModels.add(_ownerRoleModel);
 
 		// Power User
 
 		_powerUserRoleModel = newRoleModel(
-			RoleConstants.POWER_USER, RoleConstants.TYPE_REGULAR);
+			RoleConstants.POWER_USER, RoleConstants.TYPE_REGULAR,
+			POWER_USER_ROLE_ID);
 
 		_roleModels.add(_powerUserRoleModel);
 
@@ -837,24 +839,28 @@ public class DataFactory extends BaseDataFactory {
 
 		_roleModels.add(
 			newRoleModel(
-				RoleConstants.SITE_ADMINISTRATOR, RoleConstants.TYPE_SITE));
+				RoleConstants.SITE_ADMINISTRATOR, RoleConstants.TYPE_SITE,
+				counter.get()));
 
 		// Site Member
 
 		_siteMemberRoleModel = newRoleModel(
-			RoleConstants.SITE_MEMBER, RoleConstants.TYPE_SITE);
+			RoleConstants.SITE_MEMBER, RoleConstants.TYPE_SITE,
+			SITE_MEMBER_ROLE_ID);
 
 		_roleModels.add(_siteMemberRoleModel);
 
 		// Site Owner
 
 		_roleModels.add(
-			newRoleModel(RoleConstants.SITE_OWNER, RoleConstants.TYPE_SITE));
+			newRoleModel(
+				RoleConstants.SITE_OWNER, RoleConstants.TYPE_SITE,
+				counter.get()));
 
 		// User
 
 		_userRoleModel = newRoleModel(
-			RoleConstants.USER, RoleConstants.TYPE_REGULAR);
+			RoleConstants.USER, RoleConstants.TYPE_REGULAR, USER_ROLE_ID);
 
 		_roleModels.add(_userRoleModel);
 	}
@@ -2823,8 +2829,7 @@ public class DataFactory extends BaseDataFactory {
 	public ResourcePermissionModel newResourcePermission() {
 		return newResourcePermissionModel(
 			CommerceCatalog.class.getName(),
-			String.valueOf(COMMERCE_CATALOG_ID), _guestRoleModel.getRoleId(),
-			SAMPLE_USER_ID);
+			String.valueOf(COMMERCE_CATALOG_ID), GUEST_ROLE_ID, SAMPLE_USER_ID);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -2843,7 +2848,7 @@ public class DataFactory extends BaseDataFactory {
 				newResourcePermissionModel(
 					AssetVocabulary.class.getName(),
 					String.valueOf(assetVocabularyModel.getVocabularyId()),
-					_ownerRoleModel.getRoleId(), DEFAULT_USER_ID));
+					OWNER_ROLE_ID, DEFAULT_USER_ID));
 		}
 
 		return newResourcePermissionModels(
@@ -2867,7 +2872,7 @@ public class DataFactory extends BaseDataFactory {
 			newResourcePermissionModel(
 				DDLRecordSet.class.getName(),
 				String.valueOf(ddlRecordSetModel.getRecordSetId()),
-				_ownerRoleModel.getRoleId(), DEFAULT_USER_ID));
+				OWNER_ROLE_ID, DEFAULT_USER_ID));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -2882,15 +2887,12 @@ public class DataFactory extends BaseDataFactory {
 		String primKey = String.valueOf(ddmStructureModel.getStructureId());
 
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _guestRoleModel.getRoleId(), 0));
+			newResourcePermissionModel(name, primKey, GUEST_ROLE_ID, 0));
 		resourcePermissionModels.add(
 			newResourcePermissionModel(
-				name, primKey, _ownerRoleModel.getRoleId(),
-				ddmStructureModel.getUserId()));
+				name, primKey, OWNER_ROLE_ID, ddmStructureModel.getUserId()));
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _userRoleModel.getRoleId(), 0));
+			newResourcePermissionModel(name, primKey, USER_ROLE_ID, 0));
 
 		return resourcePermissionModels;
 	}
@@ -2907,15 +2909,12 @@ public class DataFactory extends BaseDataFactory {
 		String primKey = String.valueOf(ddmTemplateModel.getTemplateId());
 
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _guestRoleModel.getRoleId(), 0));
+			newResourcePermissionModel(name, primKey, GUEST_ROLE_ID, 0));
 		resourcePermissionModels.add(
 			newResourcePermissionModel(
-				name, primKey, _ownerRoleModel.getRoleId(),
-				ddmTemplateModel.getUserId()));
+				name, primKey, OWNER_ROLE_ID, ddmTemplateModel.getUserId()));
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _userRoleModel.getRoleId(), 0));
+			newResourcePermissionModel(name, primKey, USER_ROLE_ID, 0));
 
 		return resourcePermissionModels;
 	}
@@ -2942,7 +2941,7 @@ public class DataFactory extends BaseDataFactory {
 		return Collections.singletonList(
 			newResourcePermissionModel(
 				Group.class.getName(), String.valueOf(groupModel.getGroupId()),
-				_ownerRoleModel.getRoleId(), SAMPLE_USER_ID));
+				OWNER_ROLE_ID, SAMPLE_USER_ID));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -3002,7 +3001,7 @@ public class DataFactory extends BaseDataFactory {
 		return Collections.singletonList(
 			newResourcePermissionModel(
 				Role.class.getName(), String.valueOf(roleModel.getRoleId()),
-				_ownerRoleModel.getRoleId(), SAMPLE_USER_ID));
+				OWNER_ROLE_ID, SAMPLE_USER_ID));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -3018,7 +3017,7 @@ public class DataFactory extends BaseDataFactory {
 		return Collections.singletonList(
 			newResourcePermissionModel(
 				User.class.getName(), String.valueOf(userModel.getUserId()),
-				_ownerRoleModel.getRoleId(), userModel.getUserId()));
+				OWNER_ROLE_ID, userModel.getUserId()));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -4036,23 +4035,20 @@ public class DataFactory extends BaseDataFactory {
 			new ArrayList<>(3);
 
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _guestRoleModel.getRoleId(), 0));
+			newResourcePermissionModel(name, primKey, GUEST_ROLE_ID, 0));
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _ownerRoleModel.getRoleId(), ownerId));
+			newResourcePermissionModel(name, primKey, OWNER_ROLE_ID, ownerId));
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _siteMemberRoleModel.getRoleId(), 0));
+			newResourcePermissionModel(name, primKey, SITE_MEMBER_ROLE_ID, 0));
 
 		return resourcePermissionModels;
 	}
 
-	protected RoleModel newRoleModel(String name, int type) {
+	protected RoleModel newRoleModel(String name, int type, long roleId) {
 		RoleModel roleModel = new RoleModelImpl();
 
 		roleModel.setUuid(SequentialUUID.generate());
-		roleModel.setRoleId(counter.get());
+		roleModel.setRoleId(roleId);
 		roleModel.setCompanyId(COMPANY_ID);
 		roleModel.setUserId(SAMPLE_USER_ID);
 		roleModel.setUserName(_SAMPLE_USER_NAME);
