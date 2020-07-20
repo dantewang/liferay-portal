@@ -1461,6 +1461,26 @@ public class DataFactory {
 		return counterModels;
 	}
 
+	public CPTaxCategoryModel newCPTaxCategoryModel() {
+		CPTaxCategoryModel cpTaxCategoryModel = new CPTaxCategoryModelImpl();
+
+		cpTaxCategoryModel.setCPTaxCategoryId(_cPTaxCategoryId);
+		cpTaxCategoryModel.setCompanyId(_companyId);
+		cpTaxCategoryModel.setUserId(_sampleUserId);
+		cpTaxCategoryModel.setUserName(_SAMPLE_USER_NAME);
+		cpTaxCategoryModel.setCreateDate(new Date());
+		cpTaxCategoryModel.setModifiedDate(new Date());
+		cpTaxCategoryModel.setName(
+			StringBundler.concat(
+				"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root ",
+				"available-locales=\"en_US\" default-locale=\"en_US\"><Name ",
+				"language-id=\"en_US\">Normal Product</Name></root>"));
+
+		cpTaxCategoryModel.setDescription(null);
+
+		return cpTaxCategoryModel;
+	}
+
 	public DDMStructureLayoutModel newDDLDDMStructureLayoutModel(
 		long groupId, DDMStructureVersionModel ddmStructureVersionModel) {
 
@@ -3695,26 +3715,6 @@ public class DataFactory {
 			BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_DEFINITION_COUNT);
 
 		return cProductModel;
-	}
-
-	protected CPTaxCategoryModel newCPTaxCategoryModel() {
-		CPTaxCategoryModel cpTaxCategoryModel = new CPTaxCategoryModelImpl();
-
-		cpTaxCategoryModel.setCPTaxCategoryId(_cPTaxCategoryId);
-		cpTaxCategoryModel.setCompanyId(_companyId);
-		cpTaxCategoryModel.setUserId(_sampleUserId);
-		cpTaxCategoryModel.setUserName(_SAMPLE_USER_NAME);
-		cpTaxCategoryModel.setCreateDate(new Date());
-		cpTaxCategoryModel.setModifiedDate(new Date());
-		cpTaxCategoryModel.setName(
-			StringBundler.concat(
-				"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root ",
-				"available-locales=\"en_US\" default-locale=\"en_US\"><Name ",
-				"language-id=\"en_US\">Normal Product</Name></root>"));
-
-		cpTaxCategoryModel.setDescription(null);
-
-		return cpTaxCategoryModel;
 	}
 
 	protected DDMContentModel newDDMContentModel(
