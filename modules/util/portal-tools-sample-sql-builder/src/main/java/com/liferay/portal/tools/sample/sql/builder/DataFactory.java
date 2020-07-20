@@ -566,10 +566,6 @@ public class DataFactory {
 		return new ArrayList<>(_cpInstanceModels);
 	}
 
-	public List<CProductModel> getCProductModels() {
-		return new ArrayList<>(_cProductModels);
-	}
-
 	public long getDefaultDLDDMStructureId() {
 		return _defaultDLDDMStructureId;
 	}
@@ -879,9 +875,6 @@ public class DataFactory {
 	}
 
 	public void initCommerceProductModels() {
-		_cProductModels = new ArrayList<>(
-			BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT);
-
 		int cpDefinitionCount =
 			BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT *
 				BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_DEFINITION_COUNT;
@@ -899,11 +892,6 @@ public class DataFactory {
 			 productIndex++) {
 
 			long[] cpDefinitionIds = _cpDefinitionIdList.get(productIndex);
-
-			_cProductModels.add(
-				newCProductModel(
-					_cProductIds.get(productIndex),
-					_publishedCPDefinitionIds.get(productIndex)));
 
 			for (int definitionIndex = 0;
 				 definitionIndex <
@@ -1453,6 +1441,23 @@ public class DataFactory {
 		counterModels.add(counterModel);
 
 		return counterModels;
+	}
+
+	public List<CProductModel> newCProductModels() {
+		List<CProductModel> cProductModels = new ArrayList<>(
+			BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT);
+
+		for (int productIndex = 0;
+			 productIndex < BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT;
+			 productIndex++) {
+
+			cProductModels.add(
+				newCProductModel(
+					_cProductIds.get(productIndex),
+					_publishedCPDefinitionIds.get(productIndex)));
+		}
+
+		return cProductModels;
 	}
 
 	public CPTaxCategoryModel newCPTaxCategoryModel() {
@@ -4428,7 +4433,6 @@ public class DataFactory {
 	private List<CPFriendlyURLEntryModel> _cpFriendlyURLEntryModels;
 	private List<CPInstanceModel> _cpInstanceModels;
 	private final List<Long> _cProductIds = new ArrayList<>();
-	private List<CProductModel> _cProductModels;
 	private final long _cPTaxCategoryId;
 	private final PortletPreferencesImpl
 		_defaultAssetPublisherPortletPreferencesImpl;
