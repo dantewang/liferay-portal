@@ -1145,9 +1145,8 @@ public class ResourceActionsImpl implements ResourceActions {
 				modelResourceElement, modelName,
 				Collections.singleton(ActionKeys.PERMISSIONS));
 
-			if (resourceNames != null) {
-				resourceNames.add(modelName);
-			}
+			resourceActionLocalService.checkResourceActions(
+				modelName, getModelResourceActions(modelName));
 		}
 	}
 
