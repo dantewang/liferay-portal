@@ -360,9 +360,9 @@ public class DataFactory {
 				_readFile("default_asset_publisher_preference.xml"));
 
 		_defaultDLDDMStructureId = _counter.get();
-		_defaultJournalDDMStructureId = _counter.get();
 		_defaultDDLDDMStructureVersionId = _counter.get();
 		_defaultDLDDMStructureVersionId = _counter.get();
+		_defaultJournalDDMStructureId = _counter.get();
 		_defaultJournalDDMStructureVersionId = _counter.get();
 		_defaultJournalDDMTemplateId = _counter.get();
 
