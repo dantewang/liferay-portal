@@ -261,8 +261,32 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 			}
 		}
 
+		Configuration portletPropertiesConfiguration = null;
+
+		try {
+			portletPropertiesConfiguration =
+				ConfigurationFactoryUtil.getConfiguration(
+					classLoader, "portlet");
+		}
+		catch (Exception exception) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Unable to read portlet.properties");
+			}
+		}
+
 		for (Portlet portlet : portlets) {
-			processPortletProperties(portlet, servletContextName, classLoader);
+			if (portletPropertiesConfiguration != null) {
+				Properties portletProperties =
+					portletPropertiesConfiguration.getProperties();
+
+				if (!portletProperties.isEmpty()) {
+					ResourceActionsUtil.readPortletResource(
+						portlet, servletContextName, classLoader,
+						StringUtil.split(
+							portletProperties.getProperty(
+								PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
+				}
+			}
 
 			ResourceActionsUtil.check(portlet.getPortletId());
 
@@ -447,8 +471,12 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 		}
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	protected void processPortletProperties(
-			Portlet portlet, String servletContextName, ClassLoader classLoader)
+			String servletContextName, ClassLoader classLoader)
 		throws Exception {
 
 		Configuration portletPropertiesConfiguration = null;
@@ -473,23 +501,11 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 			return;
 		}
 
-		ResourceActionsUtil.readPortletResource(
-			portlet, servletContextName, classLoader,
+		ResourceActionsUtil.read(
+			servletContextName, classLoader,
 			StringUtil.split(
 				portletProperties.getProperty(
 					PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
-	}
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #processPortletProperties(String, String, ClassLoader)}
-	 */
-	@Deprecated
-	protected void processPortletProperties(
-			String servletContextName, ClassLoader classLoader)
-		throws Exception {
-
-		processPortletProperties(null, servletContextName, classLoader);
 	}
 
 	protected void unbindDataSource(String servletContextName) {
