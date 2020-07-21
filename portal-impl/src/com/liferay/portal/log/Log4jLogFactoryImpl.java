@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactory;
 
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Brian Wing Shun Chan
@@ -31,7 +32,18 @@ public class Log4jLogFactoryImpl implements LogFactory {
 
 	@Override
 	public Log getLog(String name) {
-		return new Log4jLogImpl(LogManager.getLogger(name));
+		return new Log4jLogImpl(_logManagerSub.getLog(name));
+	}
+
+	private final LogManagerSub _logManagerSub = new LogManagerSub();
+
+	private class LogManagerSub extends LogManager {
+
+		public Logger getLog(String name) {
+			return getLogger(
+				"com.liferay.portal.kernel.log.LogFactoryUtil", name);
+		}
+
 	}
 
 }
