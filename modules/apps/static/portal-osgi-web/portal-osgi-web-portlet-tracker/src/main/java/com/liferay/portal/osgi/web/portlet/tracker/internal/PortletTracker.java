@@ -342,11 +342,10 @@ public class PortletTracker
 
 			portletBagFactory.create(portletModel, portlet, true);
 
-			if (bundleClassLoader.getResource("portlet.properties") != null) {
-				Configuration configuration =
-					ConfigurationFactoryUtil.getConfiguration(
-						bundleClassLoader, "portlet");
+			Configuration configuration =
+				serviceRegistrations.getConfiguration();
 
+			if (configuration != null) {
 				Properties properties = configuration.getProperties();
 
 				try {
@@ -1234,6 +1233,8 @@ public class PortletTracker
 
 		serviceRegistrations.setPortletApp(portletApp);
 
+		serviceRegistrations.doConfiguration(classLoader);
+
 		return portletApp;
 	}
 
@@ -1449,6 +1450,19 @@ public class PortletTracker
 			_portletApp = portletApp;
 		}
 
+		protected synchronized void doConfiguration(ClassLoader classLoader) {
+			if ((_configuration == null) &&
+				(classLoader.getResource("portlet.properties") != null)) {
+
+				_configuration = ConfigurationFactoryUtil.getConfiguration(
+					classLoader, "portlet");
+			}
+		}
+
+		protected synchronized Configuration getConfiguration() {
+			return _configuration;
+		}
+
 		protected synchronized PortletApp getPortletApp() {
 			return _portletApp;
 		}
@@ -1458,6 +1472,7 @@ public class PortletTracker
 		}
 
 		private final Bundle _bundle;
+		private Configuration _configuration;
 		private PortletApp _portletApp;
 		private final List<ServiceReference<Portlet>> _serviceReferences =
 			new ArrayList<>();
