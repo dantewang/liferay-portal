@@ -44,7 +44,6 @@ import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.portlet.PortletInstanceFactory;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.PortletLocalService;
 import com.liferay.portal.kernel.service.ResourceActionLocalService;
@@ -346,7 +345,7 @@ public class PortletTracker
 
 			if (sources != null) {
 				try {
-					ResourceActionsUtil.readPortletResource(
+					_resourceActions.readPortletResource(
 						portletModel, null, bundleClassLoader, sources);
 				}
 				catch (Exception exception) {
@@ -1460,8 +1459,8 @@ public class PortletTracker
 							PropsKeys.RESOURCE_ACTIONS_CONFIGS));
 
 					try {
-						ResourceActionsUtil.checkResourceActions(
-							ResourceActionsUtil.readModelResource(
+						_resourceActions.checkResourceActions(
+							_resourceActions.readModelResource(
 								null, classLoader, _sources));
 					}
 					catch (Exception exception) {
