@@ -686,11 +686,6 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		resourceActionLocalService.checkResourceActions(
 			portletName, portletResourceActions);
-
-		for (String modelName : getPortletModelResources(portletName)) {
-			resourceActionLocalService.checkResourceActions(
-				modelName, getModelResourceActions(modelName));
-		}
 	}
 
 	private void _checkGuestUnsupportedActions(
