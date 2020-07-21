@@ -635,13 +635,13 @@ public class ResourceActionsImpl implements ResourceActions {
 			String... sources)
 		throws ResourceActionsException {
 
-		Set<String> resourceNames = new HashSet<>();
+		Set<String> portletNames = new HashSet<>();
 
 		for (String source : sources) {
-			_read(servletContextName, classLoader, source, resourceNames);
+			_read(servletContextName, classLoader, source, portletNames);
 		}
 
-		for (String resourceName : resourceNames) {
+		for (String resourceName : portletNames) {
 			resourceActionLocalService.checkResourceActions(
 				resourceName, getResourceActions(resourceName));
 		}
@@ -977,7 +977,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	private void _read(
 			String servletContextName, ClassLoader classLoader, String source,
-			Set<String> resourceNames)
+			Set<String> portletNames)
 		throws ResourceActionsException {
 
 		InputStream inputStream = classLoader.getResourceAsStream(source);
@@ -1018,25 +1018,23 @@ public class ResourceActionsImpl implements ResourceActions {
 				String file = StringUtil.trim(
 					resourceElement.attributeValue("file"));
 
-				_read(servletContextName, classLoader, file, resourceNames);
+				_read(servletContextName, classLoader, file, portletNames);
 
 				String extFileName = StringUtil.replace(
 					file, ".xml", "-ext.xml");
 
 				_read(
-					servletContextName, classLoader, extFileName,
-					resourceNames);
+					servletContextName, classLoader, extFileName, portletNames);
 			}
 
-			_read(servletContextName, document, resourceNames);
+			_read(servletContextName, document, portletNames);
 
 			if (source.endsWith(".xml") && !source.endsWith("-ext.xml")) {
 				String extFileName = StringUtil.replace(
 					source, ".xml", "-ext.xml");
 
 				_read(
-					servletContextName, classLoader, extFileName,
-					resourceNames);
+					servletContextName, classLoader, extFileName, portletNames);
 			}
 		}
 		catch (DocumentException documentException) {
@@ -1046,7 +1044,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	private void _read(
 			String servletContextName, Document document,
-			Set<String> resourceNames)
+			Set<String> portletNames)
 		throws ResourceActionsException {
 
 		Element rootElement = document.getRootElement();
@@ -1072,8 +1070,8 @@ public class ResourceActionsImpl implements ResourceActions {
 				_readResource(
 					portletResourceElement, portletName, portletActions);
 
-				if (resourceNames != null) {
-					resourceNames.add(portletName);
+				if (portletNames != null) {
+					portletNames.add(portletName);
 				}
 			}
 		}
