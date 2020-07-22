@@ -30,6 +30,8 @@ import com.liferay.document.library.kernel.model.DLFolderModel;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleLocalizationModel;
 import com.liferay.journal.model.JournalArticleModel;
+import com.liferay.journal.model.JournalFolder;
+import com.liferay.journal.model.JournalFolderModel;
 import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.model.MBDiscussion;
 import com.liferay.message.boards.model.MBMessage;
@@ -319,6 +321,28 @@ public class AssetDataFactory extends BaseDataFactory {
 							cpDefinitionIds[definitionIndex])));
 			}
 		}
+
+		return assetEntryModels;
+	}
+
+	public List<AssetEntryModel> newAssetEntryModels(
+		List<JournalFolderModel> journalFolderModels) {
+
+		List<AssetEntryModel> assetEntryModels = new ArrayList<>(
+			BenchmarksPropsValues.MAX_CT_JOURNAL_FOLDER_COUNT);
+
+		journalFolderModels.forEach(
+			journalFolderModel -> assetEntryModels.add(
+				newAssetEntryModel(
+					journalFolderModel.getGroupId(),
+					journalFolderModel.getCreateDate(),
+					journalFolderModel.getModifiedDate(),
+					getClassNameId(JournalFolder.class),
+					journalFolderModel.getFolderId(),
+					journalFolderModel.getUuid(), 0, true, true,
+					ContentTypes.TEXT_PLAIN, journalFolderModel.getName(),
+					journalFolderModel.getUserId(),
+					journalFolderModel.getCtCollectionId())));
 
 		return assetEntryModels;
 	}
