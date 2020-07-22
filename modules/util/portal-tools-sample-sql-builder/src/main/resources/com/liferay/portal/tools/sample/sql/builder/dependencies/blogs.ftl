@@ -33,7 +33,7 @@ ${dataFactory.toInsertSQL(blogDataFactory.newUserNotificationDeliveryModel("com_
 
 	${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(blogsEntryModel))}
 
-	${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(blogsEntryModel))}
+	${dataFactory.toInsertSQL(socialActivityDataFactory.newSocialActivityModel(blogsEntryModel))}
 
 	${csvFileWriter.write("blog", blogsEntryModel.entryId + "," + blogsEntryModel.urlTitle + "," + mbRootMessageId + "\n")}
 </#list>
