@@ -326,6 +326,44 @@ public class AssetDataFactory extends BaseDataFactory {
 	}
 
 	public List<AssetEntryModel> newAssetEntryModels(
+		List<JournalArticleModel> journalArticleModels,
+		List<JournalArticleLocalizationModel>
+			journalArticleLocalizationModels) {
+
+		List<AssetEntryModel> assetEntryModels = new ArrayList<>(
+			BenchmarksPropsValues.MAX_CT_JOURNAL_ARTICLE_COUNT *
+				BenchmarksPropsValues.MAX_CT_JOURNAL_FOLDER_COUNT);
+
+		for (int i = 0; i < journalArticleModels.size(); i++) {
+			JournalArticleModel journalArticleModel = journalArticleModels.get(
+				i);
+
+			JournalArticleLocalizationModel journalArticleLocalizationModel =
+				journalArticleLocalizationModels.get(i);
+
+			long resourcePrimKey = journalArticleModel.getResourcePrimKey();
+
+			String resourceUUID = journalArticleResourceUUIDs.get(
+				resourcePrimKey);
+
+			assetEntryModels.add(
+				newAssetEntryModel(
+					journalArticleModel.getGroupId(),
+					journalArticleModel.getCreateDate(),
+					journalArticleModel.getModifiedDate(),
+					getClassNameId(JournalArticle.class), resourcePrimKey,
+					resourceUUID, DEFAULT_JOURNAL_DDM_STRUCTURE_ID,
+					journalArticleModel.isIndexable(), true,
+					ContentTypes.TEXT_HTML,
+					journalArticleLocalizationModel.getTitle(),
+					journalArticleModel.getUserId(),
+					journalArticleModel.getCtCollectionId()));
+		}
+
+		return assetEntryModels;
+	}
+
+	public List<AssetEntryModel> newAssetEntryModels(
 		List<JournalFolderModel> journalFolderModels) {
 
 		List<AssetEntryModel> assetEntryModels = new ArrayList<>(

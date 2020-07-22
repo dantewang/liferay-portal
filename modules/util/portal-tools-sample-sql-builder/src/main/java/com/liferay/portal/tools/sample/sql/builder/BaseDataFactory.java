@@ -125,6 +125,8 @@ public abstract class BaseDataFactory {
 
 	protected static final long COMPANY_ID;
 
+	protected static final int CT_ARTICLE_VERSION = 1;
+
 	protected static final long DEFAULT_JOURNAL_DDM_STRUCTURE_ID;
 
 	protected static final long DEFAULT_USER_ID;
