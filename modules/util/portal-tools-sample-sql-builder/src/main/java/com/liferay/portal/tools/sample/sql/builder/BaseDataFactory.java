@@ -129,6 +129,8 @@ public abstract class BaseDataFactory {
 		BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT *
 			BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_DEFINITION_COUNT;
 
+	protected static final int CT_ARTICLE_VERSION = 1;
+
 	protected static final long DEFAULT_JOURNAL_DDM_STRUCTURE_ID;
 
 	protected static final long DEFAULT_USER_ID;
