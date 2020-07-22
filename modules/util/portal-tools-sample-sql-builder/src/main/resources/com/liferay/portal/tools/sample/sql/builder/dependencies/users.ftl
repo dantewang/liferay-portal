@@ -5,6 +5,10 @@
 	userModels = userDataFactory.newUserModels()
 />
 
+<#if cTDataFactory.maxCTCount gt 0>
+	${resourcePermissionDataFactory.toInsertSQL(cTDataFactory.newCTPreferencesModel())}
+</#if>
+
 <#list userModels as userModel>
 	<#assign userGroupModel = userDataFactory.newGroupModel(userModel) />
 
