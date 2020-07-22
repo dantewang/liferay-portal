@@ -259,6 +259,8 @@ public class SampleSQLBuilder {
 						).put(
 							"csvFileWriter", csvFileWriter
 						).put(
+							"cTDataFactory", new CTDataFactory()
+						).put(
 							"dDLDDMDataFactory", new DDLDDMDataFactory()
 						).put(
 							"dLDataFactory", new DLDataFactory()
