@@ -14,6 +14,9 @@
 
 package com.liferay.portal.tools.sample.sql.builder;
 
+import com.liferay.change.tracking.model.CTCollection;
+import com.liferay.change.tracking.model.CTEntry;
+import com.liferay.change.tracking.model.CTPreferences;
 import com.liferay.counter.kernel.model.Counter;
 import com.liferay.counter.kernel.model.CounterModel;
 import com.liferay.counter.model.impl.CounterModelImpl;
@@ -79,6 +82,33 @@ public class CounterDataFactory extends BaseDataFactory {
 
 		counterModel.setName(SocialActivity.class.getName());
 		counterModel.setCurrentId(socialActivityCounter.get());
+
+		counterModels.add(counterModel);
+
+		// CTPreferencesCounter;
+
+		counterModel = new CounterModelImpl();
+
+		counterModel.setName(CTPreferences.class.getName());
+		counterModel.setCurrentId(cTPreferencesCounter.get());
+
+		counterModels.add(counterModel);
+
+		// CTCollection
+
+		counterModel = new CounterModelImpl();
+
+		counterModel.setName(CTCollection.class.getName());
+		counterModel.setCurrentId(cTCollectionCounter.get());
+
+		counterModels.add(counterModel);
+
+		// CTEntry
+
+		counterModel = new CounterModelImpl();
+
+		counterModel.setName(CTEntry.class.getName());
+		counterModel.setCurrentId(cTEntryCounter.get());
 
 		counterModels.add(counterModel);
 
