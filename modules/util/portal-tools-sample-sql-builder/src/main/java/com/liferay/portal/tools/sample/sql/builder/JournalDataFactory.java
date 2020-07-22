@@ -14,6 +14,7 @@
 
 package com.liferay.portal.tools.sample.sql.builder;
 
+import com.liferay.change.tracking.model.CTCollectionModel;
 import com.liferay.dynamic.data.mapping.constants.DDMTemplateConstants;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
@@ -35,10 +36,12 @@ import com.liferay.journal.model.JournalArticleLocalizationModel;
 import com.liferay.journal.model.JournalArticleModel;
 import com.liferay.journal.model.JournalArticleResourceModel;
 import com.liferay.journal.model.JournalContentSearchModel;
+import com.liferay.journal.model.JournalFolderModel;
 import com.liferay.journal.model.impl.JournalArticleLocalizationModelImpl;
 import com.liferay.journal.model.impl.JournalArticleModelImpl;
 import com.liferay.journal.model.impl.JournalArticleResourceModelImpl;
 import com.liferay.journal.model.impl.JournalContentSearchModelImpl;
+import com.liferay.journal.model.impl.JournalFolderModelImpl;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -52,7 +55,9 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.portlet.PortletPreferences;
 
@@ -323,6 +328,23 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		return journalContentSearchModel;
 	}
 
+	public List<JournalFolderModel> newJournalFolderModels(
+		CTCollectionModel cTCollectionModel, long groupId) {
+
+		List<JournalFolderModel> journalFolderModels = new ArrayList<>(
+			BenchmarksPropsValues.MAX_CT_JOURNAL_FOLDER_COUNT);
+
+		for (int i = 0; i < BenchmarksPropsValues.MAX_CT_JOURNAL_FOLDER_COUNT;
+			 i++) {
+
+			journalFolderModels.add(
+				newJournalFolderModel(
+					cTCollectionModel, groupId, "Journal Folder " + (i + 1)));
+		}
+
+		return journalFolderModels;
+	}
+
 	public <K, V> ObjectValuePair<K, V> newObjectValuePair(K key, V value) {
 		return new ObjectValuePair<>(key, value);
 	}
@@ -420,6 +442,29 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		}
 
 		return journalArticleModel;
+	}
+
+	protected JournalFolderModel newJournalFolderModel(
+		CTCollectionModel cTCollectionModel, long groupId, String name) {
+
+		JournalFolderModel journalFolderModel = new JournalFolderModelImpl();
+
+		long folderId = counter.get();
+
+		journalFolderModel.setUuid(SequentialUUID.generate());
+		journalFolderModel.setCtCollectionId(
+			cTCollectionModel.getCtCollectionId());
+		journalFolderModel.setFolderId(folderId);
+		journalFolderModel.setGroupId(groupId);
+		journalFolderModel.setCompanyId(cTCollectionModel.getCompanyId());
+		journalFolderModel.setUserId(cTCollectionModel.getUserId());
+		journalFolderModel.setCreateDate(new Date());
+		journalFolderModel.setModifiedDate(new Date());
+		journalFolderModel.setParentFolderId(0);
+		journalFolderModel.setTreePath("/" + folderId + "/");
+		journalFolderModel.setName(name);
+
+		return journalFolderModel;
 	}
 
 	private void _initJournalArticleContent() {
