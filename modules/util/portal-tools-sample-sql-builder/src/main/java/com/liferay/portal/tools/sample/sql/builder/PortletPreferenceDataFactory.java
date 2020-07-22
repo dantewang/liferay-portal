@@ -22,6 +22,8 @@ import com.liferay.dynamic.data.lists.model.DDLRecordSetModel;
 import com.liferay.dynamic.data.mapping.constants.DDMPortletKeys;
 import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticleResourceModel;
+import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.model.LayoutModel;
 import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
@@ -36,6 +38,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.portlet.PortletPreferences;
 
@@ -108,6 +111,48 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 			newPortletPreferencesModel(
 				plid, DDMPortletKeys.DYNAMIC_DATA_MAPPING,
 				PortletConstants.DEFAULT_PREFERENCES));
+
+		return portletPreferencesModels;
+	}
+
+	public List<PortletPreferencesModel>
+			newJournalArticlePortletPreferencesModels(
+				List<LayoutModel> layoutModels,
+				List<JournalArticleResourceModel> journalArticleResourceModels)
+		throws Exception {
+
+		List<PortletPreferencesModel> portletPreferencesModels =
+			new ArrayList<>(
+				BenchmarksPropsValues.MAX_CT_PAGE_COUNT *
+					BenchmarksPropsValues.MAX_CT_WEBCONTENT_DISPLAY_COUNT);
+
+		for (int i = 0; i < BenchmarksPropsValues.MAX_CT_PAGE_COUNT; i++) {
+			for (int j = 0;
+				 j < BenchmarksPropsValues.MAX_CT_WEBCONTENT_DISPLAY_COUNT;
+				 j++) {
+
+				portletPreferencesModels.add(
+					newPortletPreferencesModel(
+						layoutModels.get(i), i + 1, j + 1,
+						journalArticleResourceModels));
+			}
+		}
+
+		return portletPreferencesModels;
+	}
+
+	public List<PortletPreferencesModel> newJournalPortletPreferencesModels(
+		List<LayoutModel> layoutModels) {
+
+		List<PortletPreferencesModel> portletPreferencesModels =
+			new ArrayList<>(layoutModels.size());
+
+		layoutModels.forEach(
+			layoutModel -> portletPreferencesModels.add(
+				newPortletPreferencesModel(
+					layoutModel.getPlid(), JournalPortletKeys.JOURNAL,
+					PortletConstants.DEFAULT_PREFERENCES,
+					layoutModel.getCtCollectionId())));
 
 		return portletPreferencesModels;
 	}
@@ -286,6 +331,38 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 		return new ObjectValuePair<>(
 			assetTagNames,
 			index + BenchmarksPropsValues.MAX_ASSET_ENTRY_TO_ASSET_TAG_COUNT);
+	}
+
+	protected PortletPreferencesModel newPortletPreferencesModel(
+			LayoutModel layoutModel, int pageCount, int dispalyCount,
+			List<JournalArticleResourceModel> journalArticleResourceModels)
+		throws Exception {
+
+		String portletId = StringBundler.concat(
+			"com_liferay_journal_content_web_portlet_",
+			"JournalContentPortlet_INSTANCE_TEST_", pageCount, "_",
+			dispalyCount);
+
+		Random random = new Random();
+
+		int articleCount = random.nextInt(
+			BenchmarksPropsValues.MAX_CT_JOURNAL_ARTICLE_COUNT);
+
+		JournalArticleResourceModel journalArticleResourceModel =
+			journalArticleResourceModels.get(articleCount);
+
+		PortletPreferences jxPortletPreferences = new PortletPreferencesImpl();
+
+		jxPortletPreferences.setValue(
+			"articleId", journalArticleResourceModel.getArticleId());
+		jxPortletPreferences.setValue(
+			"groupId",
+			String.valueOf(journalArticleResourceModel.getGroupId()));
+
+		return newPortletPreferencesModel(
+			layoutModel.getPlid(), portletId,
+			portletPreferencesFactory.toXML(jxPortletPreferences),
+			layoutModel.getCtCollectionId());
 	}
 
 	protected PortletPreferencesModel newPortletPreferencesModel(

@@ -15,6 +15,7 @@
 package com.liferay.portal.tools.sample.sql.builder;
 
 import com.liferay.blogs.constants.BlogsPortletKeys;
+import com.liferay.change.tracking.model.CTCollectionModel;
 import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.hello.world.web.internal.constants.HelloWorldPortletKeys;
@@ -129,6 +130,19 @@ public class LayoutDataFactory extends BaseDataFactory {
 		return layoutFriendlyURLEntryModel;
 	}
 
+	public List<LayoutFriendlyURLModel> newLayoutFriendlyURLModels(
+		List<LayoutModel> layoutModels) {
+
+		List<LayoutFriendlyURLModel> layoutFriendlyURLModels = new ArrayList<>(
+			layoutModels.size());
+
+		layoutModels.forEach(
+			layoutModel -> layoutFriendlyURLModels.add(
+				newLayoutFriendlyURLModel(layoutModel)));
+
+		return layoutFriendlyURLModels;
+	}
+
 	public LayoutModel newLayoutModel(
 		long groupId, String name, String column1, String column2) {
 
@@ -181,6 +195,27 @@ public class LayoutDataFactory extends BaseDataFactory {
 		layoutModel.setLastPublishDate(new Date());
 
 		return layoutModel;
+	}
+
+	public List<LayoutModel> newLayoutModels(
+		long groupId, CTCollectionModel cTCollectionModel) {
+
+		List<LayoutModel> layoutModels = new ArrayList<>(
+			BenchmarksPropsValues.MAX_CT_PAGE_COUNT);
+
+		for (int i = 0; i < BenchmarksPropsValues.MAX_CT_PAGE_COUNT; i++) {
+			String name = groupId + "_journal_article_" + (i + 1);
+
+			String column2 = getJournalArticleLayoutColumn(
+				i + 1, BenchmarksPropsValues.MAX_CT_WEBCONTENT_DISPLAY_COUNT);
+
+			layoutModels.add(
+				newLayoutModel(
+					groupId, name, "", column2, cTCollectionModel.getUserId(),
+					"", cTCollectionModel.getCtCollectionId()));
+		}
+
+		return layoutModels;
 	}
 
 	public List<LayoutSetModel> newLayoutSetModels(long groupId) {
