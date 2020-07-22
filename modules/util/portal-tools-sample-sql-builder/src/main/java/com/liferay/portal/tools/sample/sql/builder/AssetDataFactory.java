@@ -362,6 +362,9 @@ public class AssetDataFactory extends BaseDataFactory {
 					journalArticleModel.getCtCollectionId()));
 		}
 
+		cTEntryMap.put(
+			AssetEntry.class.getName() + "-article", assetEntryModels);
+
 		return assetEntryModels;
 	}
 
@@ -383,6 +386,9 @@ public class AssetDataFactory extends BaseDataFactory {
 					ContentTypes.TEXT_PLAIN, journalFolderModel.getName(),
 					journalFolderModel.getUserId(),
 					journalFolderModel.getCtCollectionId())));
+
+		cTEntryMap.put(
+			AssetEntry.class.getName() + "-folder", assetEntryModels);
 
 		return assetEntryModels;
 	}
@@ -408,6 +414,8 @@ public class AssetDataFactory extends BaseDataFactory {
 						ContentTypes.TEXT_HTML, title, layoutModel.getUserId(),
 						layoutModel.getCtCollectionId()));
 			});
+
+		cTEntryMap.put(AssetEntry.class.getName() + "-page", assetEntryModels);
 
 		return assetEntryModels;
 	}

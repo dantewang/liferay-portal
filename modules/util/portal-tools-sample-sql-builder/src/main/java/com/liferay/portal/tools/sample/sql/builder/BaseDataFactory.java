@@ -182,6 +182,7 @@ public abstract class BaseDataFactory {
 	protected static final SimpleCounter cTCollectionCounter =
 		new SimpleCounter();
 	protected static final SimpleCounter cTEntryCounter = new SimpleCounter();
+	protected static final Map<String, List<?>> cTEntryMap = new HashMap<>();
 	protected static final SimpleCounter cTPreferencesCounter =
 		new SimpleCounter();
 	protected static final Map<Long, String> journalArticleResourceUUIDs =
