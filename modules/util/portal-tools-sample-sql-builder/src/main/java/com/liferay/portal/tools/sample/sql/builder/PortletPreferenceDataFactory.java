@@ -138,6 +138,11 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 			}
 		}
 
+		cTEntryMap.put(
+			com.liferay.portal.kernel.model.PortletPreferences.class.getName() +
+				"-journalArticle",
+			portletPreferencesModels);
+
 		return portletPreferencesModels;
 	}
 
@@ -153,6 +158,11 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 					layoutModel.getPlid(), JournalPortletKeys.JOURNAL,
 					PortletConstants.DEFAULT_PREFERENCES,
 					layoutModel.getCtCollectionId())));
+
+		cTEntryMap.put(
+			com.liferay.portal.kernel.model.PortletPreferences.class.getName() +
+				"-journalPage",
+			portletPreferencesModels);
 
 		return portletPreferencesModels;
 	}

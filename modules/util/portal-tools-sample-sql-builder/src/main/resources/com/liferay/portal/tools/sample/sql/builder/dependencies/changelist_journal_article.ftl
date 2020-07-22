@@ -21,6 +21,7 @@ ${resourcePermissionDataFactory.toInsertSQL(cTDataFactory.newCTPreferencesModel(
 			journalPagePortletPreferencesModels = portletPreferenceDataFactory.newJournalPortletPreferencesModels(layoutModels)
 			journalArticlePortletPreferencesModels = portletPreferenceDataFactory.newJournalArticlePortletPreferencesModels(layoutModels, journalArticleResourceModels)
 			journalContentSearchModels = journalDataFactory.newJournalContentSearchModels(journalArticleModels, layoutModels)
+			cTEntryModels = cTDataFactory.newCTEntryModels(cTCollectionModel)
 		/>
 
 		<#list journalFolderModels as journalFolderModel>
@@ -81,5 +82,9 @@ ${resourcePermissionDataFactory.toInsertSQL(cTDataFactory.newCTPreferencesModel(
 
 		<#list journalContentSearchModels as journalContentSearchModel>
 			${resourcePermissionDataFactory.toInsertSQL(journalContentSearchModel)}
+		</#list>
+
+		<#list cTEntryModels as cTEntryModel>
+			${resourcePermissionDataFactory.toInsertSQL(cTEntryModel)}
 		</#list>
 </#list>

@@ -30,6 +30,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
 import com.liferay.portlet.social.model.impl.SocialActivityModelImpl;
+import com.liferay.social.kernel.model.SocialActivity;
 import com.liferay.social.kernel.model.SocialActivityConstants;
 import com.liferay.social.kernel.model.SocialActivityModel;
 import com.liferay.util.SimpleCounter;
@@ -134,6 +135,8 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 		journalArticleModels.forEach(
 			journalArticleModel -> socialActivityModels.add(
 				newSocialActivityModel(journalArticleModel)));
+
+		cTEntryMap.put(SocialActivity.class.getName(), socialActivityModels);
 
 		return socialActivityModels;
 	}
