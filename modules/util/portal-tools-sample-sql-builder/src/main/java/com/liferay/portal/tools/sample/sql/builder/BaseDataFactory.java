@@ -17,6 +17,12 @@ package com.liferay.portal.tools.sample.sql.builder;
 import com.liferay.asset.kernel.model.AssetCategoryModel;
 import com.liferay.asset.kernel.model.AssetTagModel;
 import com.liferay.blogs.model.BlogsEntry;
+import com.liferay.change.tracking.model.CTAutoResolutionInfo;
+import com.liferay.change.tracking.model.CTCollection;
+import com.liferay.change.tracking.model.CTEntry;
+import com.liferay.change.tracking.model.CTMessage;
+import com.liferay.change.tracking.model.CTPreferences;
+import com.liferay.change.tracking.model.CTProcess;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.message.boards.model.MBDiscussion;
 import com.liferay.petra.string.StringBundler;
@@ -172,6 +178,13 @@ public abstract class BaseDataFactory {
 
 		models.add(getMBDiscussionCombinedClassName(BlogsEntry.class));
 		models.add(getMBDiscussionCombinedClassName(WikiPage.class));
+
+		models.add(CTAutoResolutionInfo.class.getName());
+		models.add(CTCollection.class.getName());
+		models.add(CTEntry.class.getName());
+		models.add(CTMessage.class.getName());
+		models.add(CTPreferences.class.getName());
+		models.add(CTProcess.class.getName());
 
 		for (String model : models) {
 			ClassNameModel classNameModel = new ClassNameModelImpl();
