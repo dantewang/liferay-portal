@@ -125,12 +125,21 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 		long groupId, long classNameId, long classPK, int type,
 		String extraData) {
 
+		return newSocialActivityModel(
+			groupId, classNameId, classPK, type, extraData, SAMPLE_USER_ID, 0);
+	}
+
+	protected SocialActivityModel newSocialActivityModel(
+		long groupId, long classNameId, long classPK, int type,
+		String extraData, long userId, long ctCollectionId) {
+
 		SocialActivityModel socialActivityModel = new SocialActivityModelImpl();
 
 		socialActivityModel.setActivityId(socialActivityCounter.get());
+		socialActivityModel.setCtCollectionId(ctCollectionId);
 		socialActivityModel.setGroupId(groupId);
 		socialActivityModel.setCompanyId(COMPANY_ID);
-		socialActivityModel.setUserId(SAMPLE_USER_ID);
+		socialActivityModel.setUserId(userId);
 		socialActivityModel.setCreateDate(_CURRENT_TIME + _timeCounter.get());
 		socialActivityModel.setClassNameId(classNameId);
 		socialActivityModel.setClassPK(classPK);
