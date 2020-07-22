@@ -159,6 +159,11 @@ public abstract class BaseDataFactory {
 	protected static final Map<Long, String> cpDefinitionLocalizationNames =
 		new HashMap<>();
 	protected static final List<Long> cProductIds = new ArrayList<>();
+	protected static final SimpleCounter cTCollectionCounter =
+		new SimpleCounter();
+	protected static final SimpleCounter cTEntryCounter = new SimpleCounter();
+	protected static final SimpleCounter cTPreferencesCounter =
+		new SimpleCounter();
 	protected static final Map<Long, String> journalArticleResourceUUIDs =
 		new HashMap<>();
 	protected static final PortletPreferencesFactory portletPreferencesFactory =
