@@ -20,6 +20,8 @@ import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.blogs.model.BlogsEntry;
 import com.liferay.blogs.model.BlogsEntryModel;
+import com.liferay.change.tracking.model.CTCollection;
+import com.liferay.change.tracking.model.CTCollectionModel;
 import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
@@ -124,6 +126,16 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 		return newResourcePermissionModels(
 			BlogsEntry.class.getName(),
 			String.valueOf(blogsEntryModel.getEntryId()), SAMPLE_USER_ID);
+	}
+
+	public List<ResourcePermissionModel> newResourcePermissionModels(
+		CTCollectionModel cTCollectionModel) {
+
+		return Collections.singletonList(
+			newResourcePermissionModel(
+				CTCollection.class.getName(),
+				String.valueOf(cTCollectionModel.getCtCollectionId()),
+				OWNER_ROLE_ID, cTCollectionModel.getUserId()));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
