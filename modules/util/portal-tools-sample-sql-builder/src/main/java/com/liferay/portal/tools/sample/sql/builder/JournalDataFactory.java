@@ -46,6 +46,7 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.LayoutModel;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.template.TemplateConstants;
@@ -78,19 +79,9 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		return getClassNameId(JournalArticle.class);
 	}
 
-	public String getJournalArticleLayoutColumn(String portletPrefix) {
-		StringBundler sb = new StringBundler(
-			3 * BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_COUNT);
-
-		for (int i = 1; i <= BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_COUNT;
-			 i++) {
-
-			sb.append(portletPrefix);
-			sb.append(i);
-			sb.append(StringPool.COMMA);
-		}
-
-		return sb.toString();
+	public String getJournalArticleLayoutColumn(int pageCount) {
+		return getJournalArticleLayoutColumn(
+			pageCount, BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_COUNT);
 	}
 
 	public int getMaxJournalArticleCount() {
@@ -449,6 +440,22 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 			journalArticleModel.getArticleId());
 
 		return journalContentSearchModel;
+	}
+
+	public List<JournalContentSearchModel> newJournalContentSearchModels(
+		List<JournalArticleModel> journalArticleModels,
+		List<LayoutModel> layoutModels) {
+
+		List<JournalContentSearchModel> journalContentSearchModels =
+			new ArrayList<>(layoutModels.size());
+
+		layoutModels.forEach(
+			layoutModel -> journalArticleModels.forEach(
+				journalArticleModel -> journalContentSearchModels.add(
+					newJournalContentSearchModel(
+						journalArticleModel, layoutModel.getLayoutId()))));
+
+		return journalContentSearchModels;
 	}
 
 	public List<JournalFolderModel> newJournalFolderModels(

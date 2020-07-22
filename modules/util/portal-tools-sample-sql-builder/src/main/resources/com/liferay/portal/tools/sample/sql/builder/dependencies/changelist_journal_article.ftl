@@ -15,6 +15,12 @@ ${resourcePermissionDataFactory.toInsertSQL(cTDataFactory.newCTPreferencesModel(
 			dDMStorageLinkModels = journalDataFactory.newDDMStorageLinkModels(journalArticleModels, ddmStructureModel.structureId)
 			socialActivityModels = socialActivityDataFactory.newSocialActivityModels(journalArticleModels)
 			articleAssetEntryModels = assetDataFactory.newAssetEntryModels(journalArticleModels, journalArticleLocalizationModels)
+			layoutModels = layoutDataFactory.newLayoutModels(groupId, cTCollectionModel)
+			layoutFriendlyURLModels = layoutDataFactory.newLayoutFriendlyURLModels(layoutModels)
+			layoutAssetEntryModels = assetDataFactory.newLayoutAssetEntryModels(layoutModels)
+			journalPagePortletPreferencesModels = portletPreferenceDataFactory.newJournalPortletPreferencesModels(layoutModels)
+			journalArticlePortletPreferencesModels = portletPreferenceDataFactory.newJournalArticlePortletPreferencesModels(layoutModels, journalArticleResourceModels)
+			journalContentSearchModels = journalDataFactory.newJournalContentSearchModels(journalArticleModels, layoutModels)
 		/>
 
 		<#list journalFolderModels as journalFolderModel>
@@ -51,5 +57,29 @@ ${resourcePermissionDataFactory.toInsertSQL(cTDataFactory.newCTPreferencesModel(
 
 		<#list articleAssetEntryModels as articleAssetEntryModel>
 			${resourcePermissionDataFactory.toInsertSQL(articleAssetEntryModel)}
+		</#list>
+
+		<#list layoutModels as layoutModel>
+			${resourcePermissionDataFactory.toInsertSQL(layoutModel)}
+		</#list>
+
+		<#list layoutFriendlyURLModels as layoutFriendlyURLModel>
+			${resourcePermissionDataFactory.toInsertSQL(layoutFriendlyURLModel)}
+		</#list>
+
+		<#list layoutAssetEntryModels as layoutAssetEntryModel>
+			${resourcePermissionDataFactory.toInsertSQL(layoutAssetEntryModel)}
+		</#list>
+
+		<#list journalPagePortletPreferencesModels as journalPagePortletPreferencesModel>
+			${resourcePermissionDataFactory.toInsertSQL(journalPagePortletPreferencesModel)}
+		</#list>
+
+		<#list journalArticlePortletPreferencesModels as journalArticlePortletPreferencesModel>
+			${resourcePermissionDataFactory.toInsertSQL(journalArticlePortletPreferencesModel)}
+		</#list>
+
+		<#list journalContentSearchModels as journalContentSearchModel>
+			${resourcePermissionDataFactory.toInsertSQL(journalContentSearchModel)}
 		</#list>
 </#list>
