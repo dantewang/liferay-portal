@@ -253,6 +253,8 @@ public class SampleSQLBuilder {
 						).put(
 							"commerceDataFactory", new CommerceDataFactory()
 						).put(
+							"counterDataFactory", new CounterDataFactory()
+						).put(
 							"csvFileWriter", csvFileWriter
 						).put(
 							"dataFactory", new DataFactory()
