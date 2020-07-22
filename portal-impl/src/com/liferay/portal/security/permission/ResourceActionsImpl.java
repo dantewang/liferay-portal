@@ -1087,6 +1087,9 @@ public class ResourceActionsImpl implements ResourceActions {
 						continue;
 					}
 				}
+				else {
+					portlet = portletLocalService.getPortletById(portletName);
+				}
 
 				Set<String> portletActions = _getPortletMimeTypeActions(
 					portletName, portlet);
