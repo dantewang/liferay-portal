@@ -35,6 +35,8 @@ import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleResourceModel;
+import com.liferay.journal.model.JournalFolder;
+import com.liferay.journal.model.JournalFolderModel;
 import com.liferay.message.boards.model.MBCategory;
 import com.liferay.message.boards.model.MBCategoryModel;
 import com.liferay.message.boards.model.MBMessage;
@@ -224,6 +226,15 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 			JournalArticle.class.getName(),
 			String.valueOf(journalArticleResourceModel.getResourcePrimKey()),
 			SAMPLE_USER_ID);
+	}
+
+	public List<ResourcePermissionModel> newResourcePermissionModels(
+		JournalFolderModel journalFolderModel) {
+
+		return newResourcePermissionModels(
+			JournalFolder.class.getName(),
+			String.valueOf(journalFolderModel.getFolderId()),
+			journalFolderModel.getUserId());
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
