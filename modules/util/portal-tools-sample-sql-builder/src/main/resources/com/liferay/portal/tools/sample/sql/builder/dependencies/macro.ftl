@@ -31,7 +31,7 @@
 >
 	${dataFactory.toInsertSQL(_layoutModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(_layoutModel))}
+	${dataFactory.toInsertSQL(layoutDataFactory.newLayoutFriendlyURLModel(_layoutModel))}
 
 	<#local fragmentEntryLinkModel = fragmentDataFactory.newFragmentEntryLinkModel(_layoutModel, _fragmentEntryModel)>
 
@@ -145,7 +145,7 @@
 >
 	${dataFactory.toInsertSQL(_groupModel)}
 
-	<#local layoutSetModels = dataFactory.newLayoutSetModels(_groupModel.groupId)>
+	<#local layoutSetModels = layoutDataFactory.newLayoutSetModels(_groupModel.groupId)>
 
 	<#list layoutSetModels as layoutSetModel>
 		${dataFactory.toInsertSQL(layoutSetModel)}
@@ -157,7 +157,7 @@
 >
 	${dataFactory.toInsertSQL(_layoutModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(_layoutModel))}
+	${dataFactory.toInsertSQL(layoutDataFactory.newLayoutFriendlyURLModel(_layoutModel))}
 </#macro>
 
 <#macro insertMBDiscussion
