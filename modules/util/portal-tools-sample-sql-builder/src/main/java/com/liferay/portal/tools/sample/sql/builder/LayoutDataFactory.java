@@ -22,7 +22,9 @@ import com.liferay.hello.world.web.internal.constants.HelloWorldPortletKeys;
 import com.liferay.login.web.constants.LoginPortletKeys;
 import com.liferay.message.boards.constants.MBPortletKeys;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutConstants;
+import com.liferay.portal.kernel.model.LayoutFriendlyURL;
 import com.liferay.portal.kernel.model.LayoutFriendlyURLModel;
 import com.liferay.portal.kernel.model.LayoutModel;
 import com.liferay.portal.kernel.model.LayoutSetModel;
@@ -140,6 +142,9 @@ public class LayoutDataFactory extends BaseDataFactory {
 			layoutModel -> layoutFriendlyURLModels.add(
 				newLayoutFriendlyURLModel(layoutModel)));
 
+		cTEntryMap.put(
+			LayoutFriendlyURL.class.getName(), layoutFriendlyURLModels);
+
 		return layoutFriendlyURLModels;
 	}
 
@@ -214,6 +219,8 @@ public class LayoutDataFactory extends BaseDataFactory {
 					groupId, name, "", column2, cTCollectionModel.getUserId(),
 					"", cTCollectionModel.getCtCollectionId()));
 		}
+
+		cTEntryMap.put(Layout.class.getName(), layoutModels);
 
 		return layoutModels;
 	}
