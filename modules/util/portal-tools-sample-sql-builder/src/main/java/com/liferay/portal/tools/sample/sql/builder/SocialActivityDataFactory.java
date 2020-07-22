@@ -36,6 +36,9 @@ import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.social.WikiActivityKeys;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Lily Chi
  */
@@ -119,6 +122,20 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 
 		return newSocialActivityModel(
 			mbMessageModel.getGroupId(), classNameId, classPK, type, extraData);
+	}
+
+	public List<SocialActivityModel> newSocialActivityModels(
+		List<JournalArticleModel> journalArticleModels) {
+
+		List<SocialActivityModel> socialActivityModels = new ArrayList<>(
+			BenchmarksPropsValues.MAX_CT_JOURNAL_ARTICLE_COUNT *
+				BenchmarksPropsValues.MAX_CT_JOURNAL_FOLDER_COUNT);
+
+		journalArticleModels.forEach(
+			journalArticleModel -> socialActivityModels.add(
+				newSocialActivityModel(journalArticleModel)));
+
+		return socialActivityModels;
 	}
 
 	protected SocialActivityModel newSocialActivityModel(
