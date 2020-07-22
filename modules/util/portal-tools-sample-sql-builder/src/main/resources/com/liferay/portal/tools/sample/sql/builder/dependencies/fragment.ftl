@@ -1,8 +1,8 @@
-<#assign fragmentCollectionModel = dataFactory.newFragmentCollectionModel(groupId) />
+<#assign fragmentCollectionModel = fragmentDataFactory.newFragmentCollectionModel(groupId) />
 
 ${dataFactory.toInsertSQL(fragmentCollectionModel)}
 
-<#assign fragmentEntryModel = dataFactory.newFragmentEntryModel(groupId, fragmentCollectionModel) />
+<#assign fragmentEntryModel = fragmentDataFactory.newFragmentEntryModel(groupId, fragmentCollectionModel) />
 
 ${dataFactory.toInsertSQL(fragmentEntryModel)}
 
