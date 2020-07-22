@@ -154,6 +154,11 @@ public abstract class BaseDataFactory {
 		new HashMap<>();
 	protected static Map<Long, List<AssetTagModel>>[] assetTagModelsMaps;
 	protected static final SimpleCounter counter;
+	protected static final SimpleCounter cTCollectionCounter =
+		new SimpleCounter();
+	protected static final SimpleCounter cTEntryCounter = new SimpleCounter();
+	protected static final SimpleCounter cTPreferencesCounter =
+		new SimpleCounter();
 	protected static final Map<Long, String> journalArticleResourceUUIDs =
 		new HashMap<>();
 	protected static final PortletPreferencesFactory portletPreferencesFactory =
