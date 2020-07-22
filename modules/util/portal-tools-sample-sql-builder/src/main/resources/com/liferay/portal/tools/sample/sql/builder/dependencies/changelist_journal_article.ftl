@@ -62,6 +62,7 @@ ${resourcePermissionDataFactory.toInsertSQL(cTDataFactory.newCTPreferencesModel(
 
 		<#list layoutModels as layoutModel>
 			${resourcePermissionDataFactory.toInsertSQL(layoutModel)}
+			${csvFileWriter.write("cTLayout", userModel.screenName + "," + layoutModel.friendlyURL + "," + layoutModel.ctCollectionId + "\n")}
 		</#list>
 
 		<#list layoutFriendlyURLModels as layoutFriendlyURLModel>
