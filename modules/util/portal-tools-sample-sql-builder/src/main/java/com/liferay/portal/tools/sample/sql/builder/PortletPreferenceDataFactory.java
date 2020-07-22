@@ -291,10 +291,17 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 	protected PortletPreferencesModel newPortletPreferencesModel(
 		long plid, String portletId, String preferences) {
 
+		return newPortletPreferencesModel(plid, portletId, preferences, 0);
+	}
+
+	protected PortletPreferencesModel newPortletPreferencesModel(
+		long plid, String portletId, String preferences, long ctCollctionId) {
+
 		PortletPreferencesModel portletPreferencesModel =
 			new PortletPreferencesModelImpl();
 
 		portletPreferencesModel.setCompanyId(COMPANY_ID);
+		portletPreferencesModel.setCtCollectionId(ctCollctionId);
 		portletPreferencesModel.setPortletPreferencesId(counter.get());
 		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
 		portletPreferencesModel.setOwnerType(
