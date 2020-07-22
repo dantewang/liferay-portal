@@ -85,9 +85,6 @@ import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetEntryModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetTagModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
-import com.liferay.subscription.constants.SubscriptionConstants;
-import com.liferay.subscription.model.SubscriptionModel;
-import com.liferay.subscription.model.impl.SubscriptionModelImpl;
 import com.liferay.util.SimpleCounter;
 import com.liferay.view.count.model.ViewCountEntryModel;
 import com.liferay.view.count.model.impl.ViewCountEntryModelImpl;
@@ -949,23 +946,6 @@ public class DataFactory extends BaseDDMDataFactory {
 			String.valueOf(wikiPageModel.getResourcePrimKey()), SAMPLE_USER_ID);
 	}
 
-	public SubscriptionModel newSubscriptionModel(
-		BlogsEntryModel blogsEntryModel) {
-
-		return newSubscriptionModel(
-			getClassNameId(BlogsEntry.class), blogsEntryModel.getEntryId());
-	}
-
-	public SubscriptionModel newSubscriptionModel(MBThreadModel mBThreadModel) {
-		return newSubscriptionModel(
-			getClassNameId(MBThread.class), mBThreadModel.getThreadId());
-	}
-
-	public SubscriptionModel newSubscriptionModel(WikiPageModel wikiPageModel) {
-		return newSubscriptionModel(
-			getClassNameId(WikiPage.class), wikiPageModel.getResourcePrimKey());
-	}
-
 	public ViewCountEntryModel newViewCountEntryModel(
 		AssetEntryModel assetEntryModel) {
 
@@ -1247,24 +1227,6 @@ public class DataFactory extends BaseDDMDataFactory {
 			newResourcePermissionModel(name, primKey, SITE_MEMBER_ROLE_ID, 0));
 
 		return resourcePermissionModels;
-	}
-
-	protected SubscriptionModel newSubscriptionModel(
-		long classNameId, long classPK) {
-
-		SubscriptionModel subscriptionModel = new SubscriptionModelImpl();
-
-		subscriptionModel.setSubscriptionId(counter.get());
-		subscriptionModel.setCompanyId(COMPANY_ID);
-		subscriptionModel.setUserId(SAMPLE_USER_ID);
-		subscriptionModel.setUserName(SAMPLE_USER_NAME);
-		subscriptionModel.setCreateDate(new Date());
-		subscriptionModel.setModifiedDate(new Date());
-		subscriptionModel.setClassNameId(classNameId);
-		subscriptionModel.setClassPK(classPK);
-		subscriptionModel.setFrequency(SubscriptionConstants.FREQUENCY_INSTANT);
-
-		return subscriptionModel;
 	}
 
 	protected ViewCountEntryModel newViewCountEntryModel(
