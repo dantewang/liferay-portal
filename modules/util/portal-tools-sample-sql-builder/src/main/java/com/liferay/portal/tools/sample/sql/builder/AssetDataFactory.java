@@ -416,12 +416,24 @@ public class AssetDataFactory extends BaseDataFactory {
 		long classPK, String uuid, long classTypeId, boolean listable,
 		boolean visible, String mimeType, String title) {
 
+		return newAssetEntryModel(
+			groupId, createDate, modifiedDate, classNameId, classPK, uuid,
+			classTypeId, listable, visible, mimeType, title, SAMPLE_USER_ID, 0);
+	}
+
+	protected AssetEntryModel newAssetEntryModel(
+		long groupId, Date createDate, Date modifiedDate, long classNameId,
+		long classPK, String uuid, long classTypeId, boolean listable,
+		boolean visible, String mimeType, String title, long userId,
+		long ctCollectionId) {
+
 		AssetEntryModel assetEntryModel = new AssetEntryModelImpl();
 
 		assetEntryModel.setEntryId(counter.get());
 		assetEntryModel.setGroupId(groupId);
 		assetEntryModel.setCompanyId(COMPANY_ID);
-		assetEntryModel.setUserId(SAMPLE_USER_ID);
+		assetEntryModel.setCtCollectionId(ctCollectionId);
+		assetEntryModel.setUserId(userId);
 		assetEntryModel.setUserName(SAMPLE_USER_NAME);
 		assetEntryModel.setCreateDate(createDate);
 		assetEntryModel.setModifiedDate(modifiedDate);

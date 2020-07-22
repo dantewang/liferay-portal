@@ -107,6 +107,11 @@ public class LayoutDataFactory extends BaseDataFactory {
 		LayoutFriendlyURLModel layoutFriendlyURLEntryModel =
 			new LayoutFriendlyURLModelImpl();
 
+		if (layoutModel.getCtCollectionId() != 0) {
+			layoutFriendlyURLEntryModel.setCtCollectionId(
+				layoutModel.getCtCollectionId());
+		}
+
 		layoutFriendlyURLEntryModel.setUuid(SequentialUUID.generate());
 		layoutFriendlyURLEntryModel.setLayoutFriendlyURLId(counter.get());
 		layoutFriendlyURLEntryModel.setGroupId(layoutModel.getGroupId());
@@ -127,6 +132,15 @@ public class LayoutDataFactory extends BaseDataFactory {
 	public LayoutModel newLayoutModel(
 		long groupId, String name, String column1, String column2) {
 
+		return newLayoutModel(
+			groupId, name, column1, column2, SAMPLE_USER_ID, SAMPLE_USER_NAME,
+			0);
+	}
+
+	public LayoutModel newLayoutModel(
+		long groupId, String name, String column1, String column2, long userId,
+		String userName, long ctCollectionId) {
+
 		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
 
 		if (simpleCounter == null) {
@@ -141,8 +155,9 @@ public class LayoutDataFactory extends BaseDataFactory {
 		layoutModel.setPlid(counter.get());
 		layoutModel.setGroupId(groupId);
 		layoutModel.setCompanyId(COMPANY_ID);
-		layoutModel.setUserId(SAMPLE_USER_ID);
-		layoutModel.setUserName(SAMPLE_USER_NAME);
+		layoutModel.setCtCollectionId(ctCollectionId);
+		layoutModel.setUserId(userId);
+		layoutModel.setUserName(userName);
 		layoutModel.setCreateDate(new Date());
 		layoutModel.setModifiedDate(new Date());
 		layoutModel.setLayoutId(simpleCounter.get());
