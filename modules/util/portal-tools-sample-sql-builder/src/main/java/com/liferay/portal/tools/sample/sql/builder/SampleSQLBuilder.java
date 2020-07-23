@@ -249,6 +249,8 @@ public class SampleSQLBuilder {
 					FreeMarkerUtil.process(
 						BenchmarksPropsValues.SCRIPT,
 						HashMapBuilder.<String, Object>put(
+							"blogDataFactory", new BlogDataFactory()
+						).put(
 							"csvFileWriter", csvFileWriter
 						).put(
 							"dataFactory", new DataFactory()
