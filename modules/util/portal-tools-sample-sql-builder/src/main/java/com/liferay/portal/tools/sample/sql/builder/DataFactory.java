@@ -57,13 +57,9 @@ import com.liferay.counter.kernel.model.CounterModel;
 import com.liferay.counter.model.impl.CounterModelImpl;
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.kernel.model.DLFileEntry;
-import com.liferay.document.library.kernel.model.DLFileEntryConstants;
 import com.liferay.document.library.kernel.model.DLFileEntryMetadata;
 import com.liferay.document.library.kernel.model.DLFileEntryMetadataModel;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
-import com.liferay.document.library.kernel.model.DLFileEntryTypeConstants;
-import com.liferay.document.library.kernel.model.DLFileEntryTypeModel;
-import com.liferay.document.library.kernel.model.DLFileVersionModel;
 import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLFolderModel;
 import com.liferay.dynamic.data.lists.constants.DDLPortletKeys;
@@ -77,9 +73,7 @@ import com.liferay.dynamic.data.lists.model.impl.DDLRecordModelImpl;
 import com.liferay.dynamic.data.lists.model.impl.DDLRecordSetModelImpl;
 import com.liferay.dynamic.data.lists.model.impl.DDLRecordVersionModelImpl;
 import com.liferay.dynamic.data.mapping.constants.DDMPortletKeys;
-import com.liferay.dynamic.data.mapping.model.DDMContent;
 import com.liferay.dynamic.data.mapping.model.DDMContentModel;
-import com.liferay.dynamic.data.mapping.model.DDMStorageLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLinkModel;
@@ -87,7 +81,6 @@ import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureVersionModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLinkModelImpl;
 import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.model.FragmentCollectionModel;
@@ -145,7 +138,6 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.metadata.RawMetadataProcessor;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.Company;
@@ -217,11 +209,6 @@ import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetEntryModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetTagModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFileVersionModelImpl;
-import com.liferay.portlet.documentlibrary.model.impl.DLFolderModelImpl;
 import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
 import com.liferay.portlet.social.model.impl.SocialActivityModelImpl;
 import com.liferay.social.kernel.model.SocialActivity;
@@ -286,13 +273,7 @@ public class DataFactory extends BaseDDMDataFactory {
 		_accountId = counter.get();
 		_cpTaxCategoryId = counter.get();
 		_defaultDDLDDMStructureVersionId = counter.get();
-		_defaultDLDDMStructureId = counter.get();
-		_defaultDLDDMStructureVersionId = counter.get();
 		_userPersonalSiteGroupId = counter.get();
-
-		_dlDDMStructureContent = readFile("ddm_structure_basic_document.json");
-		_dlDDMStructureLayoutContent = readFile(
-			"ddm_structure_layout_basic_document.json");
 
 		_defaultAssetPublisherPortletPreferencesImpl =
 			(PortletPreferencesImpl)portletPreferencesFactory.fromDefaultXML(
@@ -495,14 +476,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return cpDefinitionIdList;
 	}
 
-	public long getDefaultDLDDMStructureId() {
-		return _defaultDLDDMStructureId;
-	}
-
-	public long getDLFileEntryClassNameId() {
-		return getClassNameId(DLFileEntry.class);
-	}
-
 	public int getMaxAssetPublisherPageCount() {
 		return BenchmarksPropsValues.MAX_ASSETPUBLISHER_PAGE_COUNT;
 	}
@@ -517,10 +490,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 	public int getMaxDDLRecordSetCount() {
 		return BenchmarksPropsValues.MAX_DDL_RECORD_SET_COUNT;
-	}
-
-	public int getMaxDLFolderDepth() {
-		return BenchmarksPropsValues.MAX_DL_FOLDER_DEPTH;
 	}
 
 	public int getMaxGroupCount() {
@@ -1624,39 +1593,6 @@ public class DataFactory extends BaseDDMDataFactory {
 			sb.toString());
 	}
 
-	public DDMContentModel newDDMContentModel(
-		DLFileEntryModel dlFileEntryModel) {
-
-		StringBundler sb = new StringBundler(6);
-
-		sb.append("{\"availableLanguageIds\": [\"en_US\"],");
-		sb.append("\"defaultLanguageId\": \"en_US\", \"fieldValues\": [{");
-		sb.append("\"instanceId\": \"");
-		sb.append(StringUtil.randomId());
-		sb.append("\", \"name\": \"CONTENT_TYPE\", \"value\": {\"en_US\": ");
-		sb.append("\"text/plain\"}}]}");
-
-		return newDDMContentModel(
-			counter.get(), dlFileEntryModel.getGroupId(), sb.toString());
-	}
-
-	public DDMStorageLinkModel newDDMStorageLinkModel(
-		long ddmStorageLinkId, DDMContentModel ddmContentModel,
-		long structureId) {
-
-		DDMStorageLinkModel ddmStorageLinkModel = new DDMStorageLinkModelImpl();
-
-		ddmStorageLinkModel.setUuid(SequentialUUID.generate());
-		ddmStorageLinkModel.setStorageLinkId(ddmStorageLinkId);
-		ddmStorageLinkModel.setClassNameId(getClassNameId(DDMContent.class));
-		ddmStorageLinkModel.setClassPK(ddmContentModel.getContentId());
-		ddmStorageLinkModel.setStructureId(structureId);
-		ddmStorageLinkModel.setStructureVersionId(
-			_defaultDLDDMStructureVersionId);
-
-		return ddmStorageLinkModel;
-	}
-
 	public DDMStructureLinkModel newDDMStructureLinkModel(
 		DDLRecordSetModel ddlRecordSetModel) {
 
@@ -1682,133 +1618,10 @@ public class DataFactory extends BaseDDMDataFactory {
 			ddmStructureModel, _defaultDDLDDMStructureVersionId);
 	}
 
-	public DDMStructureLayoutModel newDefaultDLDDMStructureLayoutModel() {
-		return newDDMStructureLayoutModel(
-			GLOBAL_GROUP_ID, DEFAULT_USER_ID, _defaultDLDDMStructureVersionId,
-			_dlDDMStructureLayoutContent);
-	}
-
-	public DDMStructureModel newDefaultDLDDMStructureModel() {
-		return newDDMStructureModel(
-			GLOBAL_GROUP_ID, DEFAULT_USER_ID, getClassNameId(DLFileEntry.class),
-			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent,
-			_defaultDLDDMStructureId);
-	}
-
-	public DDMStructureVersionModel newDefaultDLDDMStructureVersionModel(
-		DDMStructureModel ddmStructureModel) {
-
-		return newDDMStructureVersionModel(
-			ddmStructureModel, _defaultDLDDMStructureVersionId);
-	}
-
 	public UserModel newDefaultUserModel() {
 		return newUserModel(
 			DEFAULT_USER_ID, StringPool.BLANK, StringPool.BLANK,
 			StringPool.BLANK, true);
-	}
-
-	public DLFileEntryMetadataModel newDLFileEntryMetadataModel(
-		long ddmStorageLinkId, long ddmStructureId,
-		DLFileVersionModel dlFileVersionModel) {
-
-		DLFileEntryMetadataModel dlFileEntryMetadataModel =
-			new DLFileEntryMetadataModelImpl();
-
-		dlFileEntryMetadataModel.setUuid(SequentialUUID.generate());
-		dlFileEntryMetadataModel.setFileEntryMetadataId(counter.get());
-		dlFileEntryMetadataModel.setDDMStorageId(ddmStorageLinkId);
-		dlFileEntryMetadataModel.setDDMStructureId(ddmStructureId);
-		dlFileEntryMetadataModel.setFileEntryId(
-			dlFileVersionModel.getFileEntryId());
-		dlFileEntryMetadataModel.setFileVersionId(
-			dlFileVersionModel.getFileVersionId());
-
-		return dlFileEntryMetadataModel;
-	}
-
-	public List<DLFileEntryModel> newDlFileEntryModels(
-		DLFolderModel dlFolderModel) {
-
-		List<DLFileEntryModel> dlFileEntryModels = new ArrayList<>(
-			BenchmarksPropsValues.MAX_DL_FILE_ENTRY_COUNT);
-
-		for (int i = 1; i <= BenchmarksPropsValues.MAX_DL_FILE_ENTRY_COUNT;
-			 i++) {
-
-			dlFileEntryModels.add(newDlFileEntryModel(dlFolderModel, i));
-		}
-
-		return dlFileEntryModels;
-	}
-
-	public DLFileEntryTypeModel newDLFileEntryTypeModel() {
-		DLFileEntryTypeModel defaultDLFileEntryTypeModel =
-			new DLFileEntryTypeModelImpl();
-
-		defaultDLFileEntryTypeModel.setUuid(SequentialUUID.generate());
-		defaultDLFileEntryTypeModel.setFileEntryTypeId(
-			_defaultDLFileEntryTypeId);
-		defaultDLFileEntryTypeModel.setCreateDate(nextFutureDate());
-		defaultDLFileEntryTypeModel.setModifiedDate(nextFutureDate());
-		defaultDLFileEntryTypeModel.setFileEntryTypeKey(
-			StringUtil.toUpperCase(
-				DLFileEntryTypeConstants.NAME_BASIC_DOCUMENT));
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append(DLFileEntryTypeConstants.NAME_BASIC_DOCUMENT);
-		sb.append("</name></root>");
-
-		defaultDLFileEntryTypeModel.setName(sb.toString());
-
-		defaultDLFileEntryTypeModel.setLastPublishDate(nextFutureDate());
-
-		return defaultDLFileEntryTypeModel;
-	}
-
-	public DLFileVersionModel newDLFileVersionModel(
-		DLFileEntryModel dlFileEntryModel) {
-
-		DLFileVersionModel dlFileVersionModel = new DLFileVersionModelImpl();
-
-		dlFileVersionModel.setUuid(SequentialUUID.generate());
-		dlFileVersionModel.setFileVersionId(counter.get());
-		dlFileVersionModel.setGroupId(dlFileEntryModel.getGroupId());
-		dlFileVersionModel.setCompanyId(COMPANY_ID);
-		dlFileVersionModel.setUserId(SAMPLE_USER_ID);
-		dlFileVersionModel.setUserName(SAMPLE_USER_NAME);
-		dlFileVersionModel.setCreateDate(nextFutureDate());
-		dlFileVersionModel.setModifiedDate(nextFutureDate());
-		dlFileVersionModel.setRepositoryId(dlFileEntryModel.getRepositoryId());
-		dlFileVersionModel.setFolderId(dlFileEntryModel.getFolderId());
-		dlFileVersionModel.setFileEntryId(dlFileEntryModel.getFileEntryId());
-		dlFileVersionModel.setFileName(dlFileEntryModel.getFileName());
-		dlFileVersionModel.setExtension(dlFileEntryModel.getExtension());
-		dlFileVersionModel.setMimeType(dlFileEntryModel.getMimeType());
-		dlFileVersionModel.setTitle(dlFileEntryModel.getTitle());
-		dlFileVersionModel.setFileEntryTypeId(
-			dlFileEntryModel.getFileEntryTypeId());
-		dlFileVersionModel.setVersion(dlFileEntryModel.getVersion());
-		dlFileVersionModel.setSize(dlFileEntryModel.getSize());
-		dlFileVersionModel.setLastPublishDate(nextFutureDate());
-
-		return dlFileVersionModel;
-	}
-
-	public List<DLFolderModel> newDLFolderModels(
-		long groupId, long parentFolderId) {
-
-		List<DLFolderModel> dlFolderModels = new ArrayList<>(
-			BenchmarksPropsValues.MAX_DL_FOLDER_COUNT);
-
-		for (int i = 1; i <= BenchmarksPropsValues.MAX_DL_FOLDER_COUNT; i++) {
-			dlFolderModels.add(newDLFolderModel(groupId, parentFolderId, i));
-		}
-
-		return dlFolderModels;
 	}
 
 	public FragmentCollectionModel newFragmentCollectionModel(long groupId) {
@@ -3366,59 +3179,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return ddmStructureLinkModel;
 	}
 
-	protected DLFileEntryModel newDlFileEntryModel(
-		DLFolderModel dlFolderModel, int index) {
-
-		DLFileEntryModel dlFileEntryModel = new DLFileEntryModelImpl();
-
-		dlFileEntryModel.setUuid(SequentialUUID.generate());
-		dlFileEntryModel.setFileEntryId(counter.get());
-		dlFileEntryModel.setGroupId(dlFolderModel.getGroupId());
-		dlFileEntryModel.setCompanyId(COMPANY_ID);
-		dlFileEntryModel.setUserId(SAMPLE_USER_ID);
-		dlFileEntryModel.setUserName(SAMPLE_USER_NAME);
-		dlFileEntryModel.setCreateDate(nextFutureDate());
-		dlFileEntryModel.setModifiedDate(nextFutureDate());
-		dlFileEntryModel.setRepositoryId(dlFolderModel.getRepositoryId());
-		dlFileEntryModel.setFolderId(dlFolderModel.getFolderId());
-		dlFileEntryModel.setName("TestFile" + index);
-		dlFileEntryModel.setFileName("TestFile" + index + ".txt");
-		dlFileEntryModel.setExtension("txt");
-		dlFileEntryModel.setMimeType(ContentTypes.TEXT_PLAIN);
-		dlFileEntryModel.setTitle("TestFile" + index + ".txt");
-		dlFileEntryModel.setFileEntryTypeId(
-			DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
-		dlFileEntryModel.setVersion(DLFileEntryConstants.VERSION_DEFAULT);
-		dlFileEntryModel.setSize(BenchmarksPropsValues.MAX_DL_FILE_ENTRY_SIZE);
-		dlFileEntryModel.setLastPublishDate(nextFutureDate());
-
-		return dlFileEntryModel;
-	}
-
-	protected DLFolderModel newDLFolderModel(
-		long groupId, long parentFolderId, int index) {
-
-		DLFolderModel dlFolderModel = new DLFolderModelImpl();
-
-		dlFolderModel.setUuid(SequentialUUID.generate());
-		dlFolderModel.setFolderId(counter.get());
-		dlFolderModel.setGroupId(groupId);
-		dlFolderModel.setCompanyId(COMPANY_ID);
-		dlFolderModel.setUserId(SAMPLE_USER_ID);
-		dlFolderModel.setUserName(SAMPLE_USER_NAME);
-		dlFolderModel.setCreateDate(nextFutureDate());
-		dlFolderModel.setModifiedDate(nextFutureDate());
-		dlFolderModel.setRepositoryId(groupId);
-		dlFolderModel.setParentFolderId(parentFolderId);
-		dlFolderModel.setName("Test Folder " + index);
-		dlFolderModel.setLastPostDate(nextFutureDate());
-		dlFolderModel.setDefaultFileEntryTypeId(_defaultDLFileEntryTypeId);
-		dlFolderModel.setLastPublishDate(nextFutureDate());
-		dlFolderModel.setStatusDate(nextFutureDate());
-
-		return dlFolderModel;
-	}
-
 	protected GroupModel newGroupModel(
 		long groupId, long classNameId, long classPK, String name,
 		boolean site) {
@@ -3900,12 +3660,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		_defaultAssetPublisherPortletPreferencesImpl;
 	private AssetVocabularyModel _defaultAssetVocabularyModel;
 	private final long _defaultDDLDDMStructureVersionId;
-	private final long _defaultDLDDMStructureId;
-	private final long _defaultDLDDMStructureVersionId;
-	private long _defaultDLFileEntryTypeId =
-		DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT;
-	private final String _dlDDMStructureContent;
-	private final String _dlDDMStructureLayoutContent;
 	private List<String> _firstNames;
 	private RoleModel _guestRoleModel;
 	private List<String> _lastNames;
