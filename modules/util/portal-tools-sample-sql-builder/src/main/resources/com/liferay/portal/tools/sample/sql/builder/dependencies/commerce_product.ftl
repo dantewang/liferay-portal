@@ -2,37 +2,37 @@
 	${dataFactory.toInsertSQL(assetEntryModel)}
 </#list>
 
-${dataFactory.toInsertSQL(dataFactory.newCommerceCatalogModel())}
+${dataFactory.toInsertSQL(commerceDataFactory.newCommerceCatalogModel())}
 
 ${dataFactory.toInsertSQL(dataFactory.newCommerceCatalogResourcePermission())}
 
-${dataFactory.toInsertSQL(dataFactory.newCommerceChannelModel())}
+${dataFactory.toInsertSQL(commerceDataFactory.newCommerceChannelModel())}
 
-${dataFactory.toInsertSQL(dataFactory.newCommerceCurrencyModel())}
+${dataFactory.toInsertSQL(commerceDataFactory.newCommerceCurrencyModel())}
 
-<#list dataFactory.newCPDefinitionLocalizationModels() as cpDefinitionLocalizationModel>
+<#list commerceDataFactory.newCPDefinitionLocalizationModels() as cpDefinitionLocalizationModel>
 	${dataFactory.toInsertSQL(cpDefinitionLocalizationModel)}
 </#list>
 
-<#list dataFactory.newCPDefinitionModels() as cpDefinitionModel>
+<#list commerceDataFactory.newCPDefinitionModels() as cpDefinitionModel>
 	${dataFactory.toInsertSQL(cpDefinitionModel)}
 </#list>
 
-<#list dataFactory.newCPFriendlyURLEntryModels() as cpFriendlyURLEntryModel>
+<#list commerceDataFactory.newCPFriendlyURLEntryModels() as cpFriendlyURLEntryModel>
 	${dataFactory.toInsertSQL(cpFriendlyURLEntryModel)}
 
 	${csvFileWriter.write("cpFriendlyURLEntry", cpFriendlyURLEntryModel.urlTitle + "\n")}
 </#list>
 
-<#list dataFactory.newCPInstanceModels() as cpInstanceModel>
+<#list commerceDataFactory.newCPInstanceModels() as cpInstanceModel>
 	${dataFactory.toInsertSQL(cpInstanceModel)}
 </#list>
 
-<#list dataFactory.newCProductModels() as cProductModel>
+<#list commerceDataFactory.newCProductModels() as cProductModel>
 	${dataFactory.toInsertSQL(cProductModel)}
 </#list>
 
-${dataFactory.toInsertSQL(dataFactory.newCPTaxCategoryModel())}
+${dataFactory.toInsertSQL(commerceDataFactory.newCPTaxCategoryModel())}
 
 <@insertGroup _groupModel=userDataFactory.newCommerceCatalogGroupModel() />
 
