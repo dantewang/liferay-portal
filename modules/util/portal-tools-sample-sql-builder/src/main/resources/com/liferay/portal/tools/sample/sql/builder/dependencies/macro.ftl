@@ -55,14 +55,14 @@
 	_currentIndex = -1
 >
 	<#if _currentIndex = -1>
-		<#local ddmContentModel = dataFactory.newDDMContentModel(_entry)>
+		<#local ddmContentModel = dLDataFactory.newDDMContentModel(_entry)>
 	<#else>
 		<#local ddmContentModel = dataFactory.newDDMContentModel(_entry, _currentIndex)>
 	</#if>
 
 	${dataFactory.toInsertSQL(ddmContentModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(_ddmStorageLinkId, ddmContentModel, _ddmStructureId))}
+	${dataFactory.toInsertSQL(dLDataFactory.newDDMStorageLinkModel(_ddmStorageLinkId, ddmContentModel, _ddmStructureId))}
 </#macro>
 
 <#macro insertDDMStructure
@@ -83,20 +83,20 @@
 	_groupId
 	_parentDLFolderId
 >
-	<#if _dlFolderDepth <= dataFactory.maxDLFolderDepth>
-		<#local dlFolderModels = dataFactory.newDLFolderModels(_groupId, _parentDLFolderId)>
+	<#if _dlFolderDepth <= dLDataFactory.maxDLFolderDepth>
+		<#local dlFolderModels = dLDataFactory.newDLFolderModels(_groupId, _parentDLFolderId)>
 
 		<#list dlFolderModels as dlFolderModel>
 			${dataFactory.toInsertSQL(dlFolderModel)}
 
 			<@insertAssetEntry _entry=dlFolderModel />
 
-			<#local dlFileEntryModels = dataFactory.newDlFileEntryModels(dlFolderModel)>
+			<#local dlFileEntryModels = dLDataFactory.newDlFileEntryModels(dlFolderModel)>
 
 			<#list dlFileEntryModels as dlFileEntryModel>
 				${dataFactory.toInsertSQL(dlFileEntryModel)}
 
-				<#local dlFileVersionModel = dataFactory.newDLFileVersionModel(dlFileEntryModel)>
+				<#local dlFileVersionModel = dLDataFactory.newDLFileVersionModel(dlFileEntryModel)>
 
 				${dataFactory.toInsertSQL(dlFileVersionModel)}
 
@@ -111,7 +111,7 @@
 				/>
 
 				<@insertMBDiscussion
-					_classNameId=dataFactory.DLFileEntryClassNameId
+					_classNameId=dLDataFactory.DLFileEntryClassNameId
 					_classPK=dlFileEntryModel.fileEntryId
 					_groupId=dlFileEntryModel.groupId
 					_maxCommentCount=0
@@ -121,7 +121,7 @@
 
 				${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(dlFileEntryModel))}
 
-				<#local dlFileEntryMetadataModel = dataFactory.newDLFileEntryMetadataModel(ddmStorageLinkId, _ddmStructureId, dlFileVersionModel)>
+				<#local dlFileEntryMetadataModel = dLDataFactory.newDLFileEntryMetadataModel(ddmStorageLinkId, _ddmStructureId, dlFileVersionModel)>
 
 				${dataFactory.toInsertSQL(dlFileEntryMetadataModel)}
 
