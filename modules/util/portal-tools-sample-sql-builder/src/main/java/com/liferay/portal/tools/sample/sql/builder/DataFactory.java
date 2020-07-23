@@ -77,11 +77,9 @@ import com.liferay.dynamic.data.lists.model.impl.DDLRecordModelImpl;
 import com.liferay.dynamic.data.lists.model.impl.DDLRecordSetModelImpl;
 import com.liferay.dynamic.data.lists.model.impl.DDLRecordVersionModelImpl;
 import com.liferay.dynamic.data.mapping.constants.DDMPortletKeys;
-import com.liferay.dynamic.data.mapping.constants.DDMStructureConstants;
 import com.liferay.dynamic.data.mapping.constants.DDMTemplateConstants;
 import com.liferay.dynamic.data.mapping.model.DDMContent;
 import com.liferay.dynamic.data.mapping.model.DDMContentModel;
-import com.liferay.dynamic.data.mapping.model.DDMStorageLink;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
@@ -92,16 +90,11 @@ import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateVersionModel;
-import com.liferay.dynamic.data.mapping.model.impl.DDMContentModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLayoutModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLinkModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStructureModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStructureVersionModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateVersionModelImpl;
-import com.liferay.dynamic.data.mapping.storage.StorageType;
 import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.model.FragmentCollectionModel;
 import com.liferay.fragment.model.FragmentEntryLinkModel;
@@ -295,7 +288,7 @@ import javax.portlet.PortletPreferences;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DataFactory extends BaseDataFactory {
+public class DataFactory extends BaseDDMDataFactory {
 
 	public DataFactory() throws Exception {
 		_simpleDateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
@@ -1724,43 +1717,6 @@ public class DataFactory extends BaseDataFactory {
 
 		return newDDMStructureVersionModel(
 			ddmStructureModel, _defaultDDLDDMStructureVersionId);
-	}
-
-	public DDMStructureVersionModel newDDMStructureVersionModel(
-		DDMStructureModel ddmStructureModel, long structureVersionId) {
-
-		DDMStructureVersionModel ddmStructureVersionModel =
-			new DDMStructureVersionModelImpl();
-
-		ddmStructureVersionModel.setStructureVersionId(structureVersionId);
-		ddmStructureVersionModel.setGroupId(ddmStructureModel.getGroupId());
-		ddmStructureVersionModel.setCompanyId(COMPANY_ID);
-		ddmStructureVersionModel.setUserId(ddmStructureModel.getUserId());
-		ddmStructureVersionModel.setUserName(SAMPLE_USER_NAME);
-		ddmStructureVersionModel.setCreateDate(nextFutureDate());
-		ddmStructureVersionModel.setStructureId(
-			ddmStructureModel.getStructureId());
-		ddmStructureVersionModel.setVersion(
-			DDMStructureConstants.VERSION_DEFAULT);
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append(ddmStructureModel.getStructureKey());
-		sb.append("</name></root>");
-
-		ddmStructureVersionModel.setName(sb.toString());
-
-		ddmStructureVersionModel.setDefinition(
-			ddmStructureModel.getDefinition());
-		ddmStructureVersionModel.setStorageType(StorageType.JSON.toString());
-		ddmStructureVersionModel.setStatusByUserId(
-			ddmStructureModel.getUserId());
-		ddmStructureVersionModel.setStatusByUserName(SAMPLE_USER_NAME);
-		ddmStructureVersionModel.setStatusDate(nextFutureDate());
-
-		return ddmStructureVersionModel;
 	}
 
 	public DDMTemplateLinkModel newDDMTemplateLinkModel(
@@ -3656,47 +3612,6 @@ public class DataFactory extends BaseDataFactory {
 		return cProductModel;
 	}
 
-	protected DDMContentModel newDDMContentModel(
-		long contentId, long groupId, String data) {
-
-		DDMContentModel ddmContentModel = new DDMContentModelImpl();
-
-		ddmContentModel.setUuid(SequentialUUID.generate());
-		ddmContentModel.setContentId(contentId);
-		ddmContentModel.setGroupId(groupId);
-		ddmContentModel.setCompanyId(COMPANY_ID);
-		ddmContentModel.setUserId(SAMPLE_USER_ID);
-		ddmContentModel.setUserName(SAMPLE_USER_NAME);
-		ddmContentModel.setCreateDate(nextFutureDate());
-		ddmContentModel.setModifiedDate(nextFutureDate());
-		ddmContentModel.setName(DDMStorageLink.class.getName());
-		ddmContentModel.setData(data);
-
-		return ddmContentModel;
-	}
-
-	protected DDMStructureLayoutModel newDDMStructureLayoutModel(
-		long groupId, long userId, long structureVersionId, String definition) {
-
-		DDMStructureLayoutModel ddmStructureLayoutModel =
-			new DDMStructureLayoutModelImpl();
-
-		ddmStructureLayoutModel.setUuid(SequentialUUID.generate());
-		ddmStructureLayoutModel.setStructureLayoutId(counter.get());
-		ddmStructureLayoutModel.setGroupId(groupId);
-		ddmStructureLayoutModel.setCompanyId(COMPANY_ID);
-		ddmStructureLayoutModel.setUserId(userId);
-		ddmStructureLayoutModel.setUserName(SAMPLE_USER_NAME);
-		ddmStructureLayoutModel.setCreateDate(nextFutureDate());
-		ddmStructureLayoutModel.setModifiedDate(nextFutureDate());
-		ddmStructureLayoutModel.setStructureLayoutKey(
-			String.valueOf(counter.get()));
-		ddmStructureLayoutModel.setStructureVersionId(structureVersionId);
-		ddmStructureLayoutModel.setDefinition(definition);
-
-		return ddmStructureLayoutModel;
-	}
-
 	protected DDMStructureLinkModel newDDMStructureLinkModel(
 		long classNameId, long classPK, long structureId) {
 
@@ -3709,42 +3624,6 @@ public class DataFactory extends BaseDataFactory {
 		ddmStructureLinkModel.setStructureId(structureId);
 
 		return ddmStructureLinkModel;
-	}
-
-	protected DDMStructureModel newDDMStructureModel(
-		long groupId, long userId, long classNameId, String structureKey,
-		String definition, long structureId) {
-
-		DDMStructureModel ddmStructureModel = new DDMStructureModelImpl();
-
-		ddmStructureModel.setUuid(SequentialUUID.generate());
-		ddmStructureModel.setStructureId(structureId);
-		ddmStructureModel.setGroupId(groupId);
-		ddmStructureModel.setCompanyId(COMPANY_ID);
-		ddmStructureModel.setUserId(userId);
-		ddmStructureModel.setUserName(SAMPLE_USER_NAME);
-		ddmStructureModel.setVersionUserId(userId);
-		ddmStructureModel.setVersionUserName(SAMPLE_USER_NAME);
-		ddmStructureModel.setCreateDate(nextFutureDate());
-		ddmStructureModel.setModifiedDate(nextFutureDate());
-		ddmStructureModel.setClassNameId(classNameId);
-		ddmStructureModel.setStructureKey(structureKey);
-		ddmStructureModel.setVersion(DDMStructureConstants.VERSION_DEFAULT);
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append(structureKey);
-		sb.append("</name></root>");
-
-		ddmStructureModel.setName(sb.toString());
-
-		ddmStructureModel.setDefinition(definition);
-		ddmStructureModel.setStorageType(StorageType.JSON.toString());
-		ddmStructureModel.setLastPublishDate(nextFutureDate());
-
-		return ddmStructureModel;
 	}
 
 	protected DDMTemplateModel newDDMTemplateModel(
