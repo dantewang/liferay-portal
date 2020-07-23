@@ -182,16 +182,11 @@ import com.liferay.util.SimpleCounter;
 import com.liferay.view.count.model.ViewCountEntryModel;
 import com.liferay.view.count.model.impl.ViewCountEntryModelImpl;
 import com.liferay.view.count.service.persistence.ViewCountEntryPK;
-import com.liferay.wiki.constants.WikiPageConstants;
 import com.liferay.wiki.constants.WikiPortletKeys;
 import com.liferay.wiki.model.WikiNode;
 import com.liferay.wiki.model.WikiNodeModel;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.model.WikiPageModel;
-import com.liferay.wiki.model.WikiPageResourceModel;
-import com.liferay.wiki.model.impl.WikiNodeModelImpl;
-import com.liferay.wiki.model.impl.WikiPageModelImpl;
-import com.liferay.wiki.model.impl.WikiPageResourceModelImpl;
 import com.liferay.wiki.social.WikiActivityKeys;
 
 import java.io.IOException;
@@ -440,10 +435,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return BenchmarksPropsValues.MAX_GROUP_COUNT;
 	}
 
-	public int getMaxWikiPageCommentCount() {
-		return BenchmarksPropsValues.MAX_WIKI_PAGE_COMMENT_COUNT;
-	}
-
 	public List<Long> getNewUserGroupIds(
 		long groupId, GroupModel guestGroupModel) {
 
@@ -521,10 +512,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 	public long getUserRoleId() {
 		return USER_ROLE_ID;
-	}
-
-	public long getWikiPageClassNameId() {
-		return getClassNameId(WikiPage.class);
 	}
 
 	public void initAssetCategoryModels() {
@@ -2148,43 +2135,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return virtualHostModel;
 	}
 
-	public List<WikiNodeModel> newWikiNodeModels(long groupId) {
-		List<WikiNodeModel> wikiNodeModels = new ArrayList<>(
-			BenchmarksPropsValues.MAX_WIKI_NODE_COUNT);
-
-		for (int i = 1; i <= BenchmarksPropsValues.MAX_WIKI_NODE_COUNT; i++) {
-			wikiNodeModels.add(newWikiNodeModel(groupId, i));
-		}
-
-		return wikiNodeModels;
-	}
-
-	public List<WikiPageModel> newWikiPageModels(WikiNodeModel wikiNodeModel) {
-		List<WikiPageModel> wikiPageModels = new ArrayList<>(
-			BenchmarksPropsValues.MAX_WIKI_PAGE_COUNT);
-
-		for (int i = 1; i <= BenchmarksPropsValues.MAX_WIKI_PAGE_COUNT; i++) {
-			wikiPageModels.add(newWikiPageModel(wikiNodeModel, i));
-		}
-
-		return wikiPageModels;
-	}
-
-	public WikiPageResourceModel newWikiPageResourceModel(
-		WikiPageModel wikiPageModel) {
-
-		WikiPageResourceModel wikiPageResourceModel =
-			new WikiPageResourceModelImpl();
-
-		wikiPageResourceModel.setUuid(SequentialUUID.generate());
-		wikiPageResourceModel.setResourcePrimKey(
-			wikiPageModel.getResourcePrimKey());
-		wikiPageResourceModel.setNodeId(wikiPageModel.getNodeId());
-		wikiPageResourceModel.setTitle(wikiPageModel.getTitle());
-
-		return wikiPageResourceModel;
-	}
-
 	public String[] nextUserName(long index) {
 		String[] userName = new String[2];
 
@@ -2816,53 +2766,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		viewCountEntryModel.setViewCount(viewCount);
 
 		return viewCountEntryModel;
-	}
-
-	protected WikiNodeModel newWikiNodeModel(long groupId, int index) {
-		WikiNodeModel wikiNodeModel = new WikiNodeModelImpl();
-
-		wikiNodeModel.setUuid(SequentialUUID.generate());
-		wikiNodeModel.setNodeId(counter.get());
-		wikiNodeModel.setGroupId(groupId);
-		wikiNodeModel.setCompanyId(COMPANY_ID);
-		wikiNodeModel.setUserId(SAMPLE_USER_ID);
-		wikiNodeModel.setUserName(SAMPLE_USER_NAME);
-		wikiNodeModel.setCreateDate(new Date());
-		wikiNodeModel.setModifiedDate(new Date());
-		wikiNodeModel.setName("Test Node " + index);
-		wikiNodeModel.setLastPostDate(new Date());
-		wikiNodeModel.setLastPublishDate(new Date());
-		wikiNodeModel.setStatusDate(new Date());
-
-		return wikiNodeModel;
-	}
-
-	protected WikiPageModel newWikiPageModel(
-		WikiNodeModel wikiNodeModel, int index) {
-
-		WikiPageModel wikiPageModel = new WikiPageModelImpl();
-
-		wikiPageModel.setUuid(SequentialUUID.generate());
-		wikiPageModel.setPageId(counter.get());
-		wikiPageModel.setResourcePrimKey(counter.get());
-		wikiPageModel.setGroupId(wikiNodeModel.getGroupId());
-		wikiPageModel.setCompanyId(COMPANY_ID);
-		wikiPageModel.setUserId(SAMPLE_USER_ID);
-		wikiPageModel.setUserName(SAMPLE_USER_NAME);
-		wikiPageModel.setCreateDate(new Date());
-		wikiPageModel.setModifiedDate(new Date());
-		wikiPageModel.setNodeId(wikiNodeModel.getNodeId());
-		wikiPageModel.setTitle("Test Page " + index);
-		wikiPageModel.setVersion(WikiPageConstants.VERSION_DEFAULT);
-		wikiPageModel.setContent(
-			StringBundler.concat(
-				"This is Test Page ", index, " of ", wikiNodeModel.getName(),
-				"."));
-		wikiPageModel.setFormat("creole");
-		wikiPageModel.setHead(true);
-		wikiPageModel.setLastPublishDate(new Date());
-
-		return wikiPageModel;
 	}
 
 	protected void toInsertSQL(StringBundler sb, BaseModel<?> baseModel) {
