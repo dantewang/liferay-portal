@@ -77,7 +77,6 @@ import com.liferay.dynamic.data.lists.model.impl.DDLRecordModelImpl;
 import com.liferay.dynamic.data.lists.model.impl.DDLRecordSetModelImpl;
 import com.liferay.dynamic.data.lists.model.impl.DDLRecordVersionModelImpl;
 import com.liferay.dynamic.data.mapping.constants.DDMPortletKeys;
-import com.liferay.dynamic.data.mapping.constants.DDMTemplateConstants;
 import com.liferay.dynamic.data.mapping.model.DDMContent;
 import com.liferay.dynamic.data.mapping.model.DDMContentModel;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLinkModel;
@@ -87,14 +86,9 @@ import com.liferay.dynamic.data.mapping.model.DDMStructureLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureVersionModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
-import com.liferay.dynamic.data.mapping.model.DDMTemplateLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
-import com.liferay.dynamic.data.mapping.model.DDMTemplateVersionModel;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStorageLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLinkModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateLinkModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
-import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateVersionModelImpl;
 import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.model.FragmentCollectionModel;
 import com.liferay.fragment.model.FragmentEntryLinkModel;
@@ -112,17 +106,11 @@ import com.liferay.friendly.url.model.impl.FriendlyURLEntryModelImpl;
 import com.liferay.hello.world.web.internal.constants.HelloWorldPortletKeys;
 import com.liferay.journal.constants.JournalActivityKeys;
 import com.liferay.journal.constants.JournalArticleConstants;
-import com.liferay.journal.constants.JournalContentPortletKeys;
 import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleLocalizationModel;
 import com.liferay.journal.model.JournalArticleModel;
 import com.liferay.journal.model.JournalArticleResourceModel;
-import com.liferay.journal.model.JournalContentSearchModel;
-import com.liferay.journal.model.impl.JournalArticleLocalizationModelImpl;
-import com.liferay.journal.model.impl.JournalArticleModelImpl;
-import com.liferay.journal.model.impl.JournalArticleResourceModelImpl;
-import com.liferay.journal.model.impl.JournalContentSearchModelImpl;
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructureModel;
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructureRelModel;
 import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureModelImpl;
@@ -156,7 +144,6 @@ import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.metadata.RawMetadataProcessor;
 import com.liferay.portal.kernel.model.AccountModel;
@@ -194,7 +181,6 @@ import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.security.auth.FullNameGenerator;
 import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
-import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
@@ -302,17 +288,11 @@ public class DataFactory extends BaseDDMDataFactory {
 		_defaultDDLDDMStructureVersionId = counter.get();
 		_defaultDLDDMStructureId = counter.get();
 		_defaultDLDDMStructureVersionId = counter.get();
-		_defaultJournalDDMStructureVersionId = counter.get();
-		_defaultJournalDDMTemplateId = counter.get();
 		_userPersonalSiteGroupId = counter.get();
 
 		_dlDDMStructureContent = readFile("ddm_structure_basic_document.json");
 		_dlDDMStructureLayoutContent = readFile(
 			"ddm_structure_layout_basic_document.json");
-		_journalDDMStructureContent = readFile(
-			"ddm_structure_basic_web_content.json");
-		_journalDDMStructureLayoutContent = readFile(
-			"ddm_structure_layout_basic_web_content.json");
 
 		_defaultAssetPublisherPortletPreferencesImpl =
 			(PortletPreferencesImpl)portletPreferencesFactory.fromDefaultXML(
@@ -320,8 +300,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 		initAssetCategoryModels();
 		initAssetTagModels();
-
-		initJournalArticleContent();
 
 		initRoleModels();
 		initUserNames();
@@ -525,25 +503,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return getClassNameId(DLFileEntry.class);
 	}
 
-	public long getJournalArticleClassNameId() {
-		return getClassNameId(JournalArticle.class);
-	}
-
-	public String getJournalArticleLayoutColumn(String portletPrefix) {
-		StringBundler sb = new StringBundler(
-			3 * BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_COUNT);
-
-		for (int i = 1; i <= BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_COUNT;
-			 i++) {
-
-			sb.append(portletPrefix);
-			sb.append(i);
-			sb.append(StringPool.COMMA);
-		}
-
-		return sb.toString();
-	}
-
 	public int getMaxAssetPublisherPageCount() {
 		return BenchmarksPropsValues.MAX_ASSETPUBLISHER_PAGE_COUNT;
 	}
@@ -566,18 +525,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 	public int getMaxGroupCount() {
 		return BenchmarksPropsValues.MAX_GROUP_COUNT;
-	}
-
-	public int getMaxJournalArticleCount() {
-		return BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_COUNT;
-	}
-
-	public int getMaxJournalArticlePageCount() {
-		return BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_PAGE_COUNT;
-	}
-
-	public int getMaxJournalArticleVersionCount() {
-		return BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_VERSION_COUNT;
 	}
 
 	public int getMaxWikiPageCommentCount() {
@@ -804,34 +751,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 			assetTagModelsMaps[i - 1] = assetTagModelsMap;
 		}
-	}
-
-	public void initJournalArticleContent() {
-		int maxJournalArticleSize =
-			BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_SIZE;
-
-		StringBundler sb = new StringBundler(6);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><dynamic-element name=\"content");
-		sb.append("\" type=\"text_area\" index-type=\"keyword\" index=\"0\">");
-		sb.append("<dynamic-content language-id=\"en_US\"><![CDATA[");
-
-		if (maxJournalArticleSize <= 0) {
-			maxJournalArticleSize = 1;
-		}
-
-		char[] chars = new char[maxJournalArticleSize];
-
-		for (int i = 0; i < maxJournalArticleSize; i++) {
-			chars[i] = (char)(CharPool.LOWER_CASE_A + (i % 26));
-		}
-
-		sb.append(new String(chars));
-
-		sb.append("]]></dynamic-content></dynamic-element></root>");
-
-		_journalArticleContent = sb.toString();
 	}
 
 	public void initRoleModels() {
@@ -1722,23 +1641,6 @@ public class DataFactory extends BaseDDMDataFactory {
 	}
 
 	public DDMStorageLinkModel newDDMStorageLinkModel(
-		JournalArticleModel journalArticleModel, long structureId) {
-
-		DDMStorageLinkModel ddmStorageLinkModel = new DDMStorageLinkModelImpl();
-
-		ddmStorageLinkModel.setUuid(SequentialUUID.generate());
-		ddmStorageLinkModel.setStorageLinkId(counter.get());
-		ddmStorageLinkModel.setClassNameId(
-			getClassNameId(JournalArticle.class));
-		ddmStorageLinkModel.setClassPK(journalArticleModel.getId());
-		ddmStorageLinkModel.setStructureId(structureId);
-		ddmStorageLinkModel.setStructureVersionId(
-			_defaultJournalDDMStructureVersionId);
-
-		return ddmStorageLinkModel;
-	}
-
-	public DDMStorageLinkModel newDDMStorageLinkModel(
 		long ddmStorageLinkId, DDMContentModel ddmContentModel,
 		long structureId) {
 
@@ -1780,22 +1682,6 @@ public class DataFactory extends BaseDDMDataFactory {
 			ddmStructureModel, _defaultDDLDDMStructureVersionId);
 	}
 
-	public DDMTemplateLinkModel newDDMTemplateLinkModel(
-		JournalArticleModel journalArticleModel, long templateId) {
-
-		DDMTemplateLinkModel ddmTemplateLinkModel =
-			new DDMTemplateLinkModelImpl();
-
-		ddmTemplateLinkModel.setCompanyId(COMPANY_ID);
-		ddmTemplateLinkModel.setTemplateLinkId(counter.get());
-		ddmTemplateLinkModel.setClassNameId(
-			getClassNameId(JournalArticle.class));
-		ddmTemplateLinkModel.setClassPK(journalArticleModel.getId());
-		ddmTemplateLinkModel.setTemplateId(templateId);
-
-		return ddmTemplateLinkModel;
-	}
-
 	public DDMStructureLayoutModel newDefaultDLDDMStructureLayoutModel() {
 		return newDDMStructureLayoutModel(
 			GLOBAL_GROUP_ID, DEFAULT_USER_ID, _defaultDLDDMStructureVersionId,
@@ -1814,65 +1700,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 		return newDDMStructureVersionModel(
 			ddmStructureModel, _defaultDLDDMStructureVersionId);
-	}
-
-	public DDMStructureLayoutModel newDefaultJournalDDMStructureLayoutModel() {
-		return newDDMStructureLayoutModel(
-			GLOBAL_GROUP_ID, DEFAULT_USER_ID,
-			_defaultJournalDDMStructureVersionId,
-			_journalDDMStructureLayoutContent);
-	}
-
-	public DDMStructureModel newDefaultJournalDDMStructureModel() {
-		return newDDMStructureModel(
-			GLOBAL_GROUP_ID, DEFAULT_USER_ID,
-			getClassNameId(JournalArticle.class), _JOURNAL_STRUCTURE_KEY,
-			_journalDDMStructureContent, DEFAULT_JOURNAL_DDM_STRUCTURE_ID);
-	}
-
-	public DDMStructureVersionModel newDefaultJournalDDMStructureVersionModel(
-		DDMStructureModel ddmStructureModel) {
-
-		return newDDMStructureVersionModel(
-			ddmStructureModel, _defaultJournalDDMStructureVersionId);
-	}
-
-	public DDMTemplateModel newDefaultJournalDDMTemplateModel() {
-		return newDDMTemplateModel(
-			GLOBAL_GROUP_ID, DEFAULT_USER_ID, DEFAULT_JOURNAL_DDM_STRUCTURE_ID,
-			getClassNameId(JournalArticle.class), _defaultJournalDDMTemplateId);
-	}
-
-	public DDMTemplateVersionModel newDefaultJournalDDMTemplateVersionModel() {
-		DDMTemplateVersionModelImpl ddmTemplateVersionModelImpl =
-			new DDMTemplateVersionModelImpl();
-
-		ddmTemplateVersionModelImpl.setTemplateVersionId(counter.get());
-		ddmTemplateVersionModelImpl.setGroupId(GLOBAL_GROUP_ID);
-		ddmTemplateVersionModelImpl.setCompanyId(COMPANY_ID);
-		ddmTemplateVersionModelImpl.setUserId(DEFAULT_USER_ID);
-		ddmTemplateVersionModelImpl.setCreateDate(nextFutureDate());
-		ddmTemplateVersionModelImpl.setTemplateId(_defaultJournalDDMTemplateId);
-		ddmTemplateVersionModelImpl.setClassPK(
-			DEFAULT_JOURNAL_DDM_STRUCTURE_ID);
-		ddmTemplateVersionModelImpl.setClassNameId(
-			getClassNameId(DDMStructure.class));
-		ddmTemplateVersionModelImpl.setVersion(
-			DDMTemplateConstants.VERSION_DEFAULT);
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append(_JOURNAL_STRUCTURE_KEY);
-		sb.append("</name></root>");
-
-		ddmTemplateVersionModelImpl.setName(sb.toString());
-
-		ddmTemplateVersionModelImpl.setStatusByUserId(DEFAULT_USER_ID);
-		ddmTemplateVersionModelImpl.setStatusDate(nextFutureDate());
-
-		return ddmTemplateVersionModelImpl;
 	}
 
 	public UserModel newDefaultUserModel() {
@@ -2154,147 +1981,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 	public UserModel newGuestUserModel() {
 		return newUserModel(counter.get(), "Test", "Test", "Test", false);
-	}
-
-	public JournalArticleLocalizationModel newJournalArticleLocalizationModel(
-		JournalArticleModel journalArticleModel, int articleIndex,
-		int versionIndex) {
-
-		JournalArticleLocalizationModel journalArticleLocalizationModel =
-			new JournalArticleLocalizationModelImpl();
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("TestJournalArticle_");
-		sb.append(articleIndex);
-		sb.append(StringPool.UNDERLINE);
-		sb.append(versionIndex);
-
-		journalArticleLocalizationModel.setArticleLocalizationId(counter.get());
-		journalArticleLocalizationModel.setCompanyId(
-			journalArticleModel.getCompanyId());
-		journalArticleLocalizationModel.setArticlePK(
-			journalArticleModel.getId());
-		journalArticleLocalizationModel.setTitle(sb.toString());
-		journalArticleLocalizationModel.setLanguageId(
-			journalArticleModel.getDefaultLanguageId());
-
-		return journalArticleLocalizationModel;
-	}
-
-	public JournalArticleModel newJournalArticleModel(
-			JournalArticleResourceModel journalArticleResourceModel,
-			int articleIndex, int versionIndex)
-		throws PortalException {
-
-		JournalArticleModel journalArticleModel = new JournalArticleModelImpl();
-
-		journalArticleModel.setUuid(SequentialUUID.generate());
-		journalArticleModel.setId(counter.get());
-		journalArticleModel.setResourcePrimKey(
-			journalArticleResourceModel.getResourcePrimKey());
-		journalArticleModel.setGroupId(
-			journalArticleResourceModel.getGroupId());
-		journalArticleModel.setCompanyId(COMPANY_ID);
-		journalArticleModel.setUserId(SAMPLE_USER_ID);
-		journalArticleModel.setUserName(SAMPLE_USER_NAME);
-		journalArticleModel.setCreateDate(new Date());
-		journalArticleModel.setModifiedDate(new Date());
-		journalArticleModel.setClassNameId(
-			JournalArticleConstants.CLASS_NAME_ID_DEFAULT);
-		journalArticleModel.setArticleId(
-			journalArticleResourceModel.getArticleId());
-		journalArticleModel.setTreePath("/");
-		journalArticleModel.setVersion(versionIndex);
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("TestJournalArticle_");
-		sb.append(articleIndex);
-		sb.append(StringPool.UNDERLINE);
-		sb.append(versionIndex);
-
-		journalArticleModel.setUrlTitle(sb.toString());
-
-		journalArticleModel.setContent(_journalArticleContent);
-		journalArticleModel.setDefaultLanguageId("en_US");
-		journalArticleModel.setDDMStructureKey(_JOURNAL_STRUCTURE_KEY);
-		journalArticleModel.setDDMTemplateKey(_JOURNAL_STRUCTURE_KEY);
-		journalArticleModel.setDisplayDate(new Date());
-		journalArticleModel.setExpirationDate(nextFutureDate());
-		journalArticleModel.setReviewDate(new Date());
-		journalArticleModel.setIndexable(true);
-		journalArticleModel.setLastPublishDate(new Date());
-		journalArticleModel.setStatusDate(new Date());
-
-		if (Validator.isNull(_defaultJournalArticleId)) {
-			_defaultJournalArticleId = journalArticleModel.getArticleId();
-		}
-
-		return journalArticleModel;
-	}
-
-	public JournalArticleResourceModel newJournalArticleResourceModel(
-		long groupId) {
-
-		JournalArticleResourceModel journalArticleResourceModel =
-			new JournalArticleResourceModelImpl();
-
-		journalArticleResourceModel.setUuid(SequentialUUID.generate());
-		journalArticleResourceModel.setResourcePrimKey(counter.get());
-		journalArticleResourceModel.setGroupId(groupId);
-		journalArticleResourceModel.setCompanyId(COMPANY_ID);
-		journalArticleResourceModel.setArticleId(String.valueOf(counter.get()));
-
-		journalArticleResourceUUIDs.put(
-			journalArticleResourceModel.getPrimaryKey(),
-			journalArticleResourceModel.getUuid());
-
-		return journalArticleResourceModel;
-	}
-
-	public PortletPreferencesModel newJournalContentPortletPreferencesModel(
-			FragmentEntryLinkModel fragmentEntryLinkModel)
-		throws Exception {
-
-		PortletPreferences portletPreferences = new PortletPreferencesImpl();
-
-		portletPreferences.setValue("articleId", _defaultJournalArticleId);
-
-		PortletPreferencesModel portletPreferencesModel =
-			new PortletPreferencesModelImpl();
-
-		portletPreferencesModel.setPortletPreferencesId(counter.get());
-		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
-		portletPreferencesModel.setOwnerType(
-			PortletKeys.PREFS_OWNER_TYPE_LAYOUT);
-		portletPreferencesModel.setPlid(fragmentEntryLinkModel.getClassPK());
-		portletPreferencesModel.setPortletId(
-			PortletIdCodec.encode(
-				JournalContentPortletKeys.JOURNAL_CONTENT,
-				fragmentEntryLinkModel.getNamespace()));
-		portletPreferencesModel.setPreferences(
-			portletPreferencesFactory.toXML(portletPreferences));
-
-		return portletPreferencesModel;
-	}
-
-	public JournalContentSearchModel newJournalContentSearchModel(
-		JournalArticleModel journalArticleModel, long layoutId) {
-
-		JournalContentSearchModel journalContentSearchModel =
-			new JournalContentSearchModelImpl();
-
-		journalContentSearchModel.setContentSearchId(counter.get());
-		journalContentSearchModel.setGroupId(journalArticleModel.getGroupId());
-		journalContentSearchModel.setCompanyId(COMPANY_ID);
-		journalContentSearchModel.setLayoutId(layoutId);
-		journalContentSearchModel.setPortletId(
-			JournalContentPortletKeys.JOURNAL_CONTENT);
-		journalContentSearchModel.setArticleId(
-			journalArticleModel.getArticleId());
-
-		return journalContentSearchModel;
 	}
 
 	public List<PortletPreferencesModel> newJournalPortletPreferencesModels(
@@ -2655,10 +2341,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		}
 
 		return mbThreadModels;
-	}
-
-	public <K, V> ObjectValuePair<K, V> newObjectValuePair(K key, V value) {
-		return new ObjectValuePair<>(key, value);
 	}
 
 	public PortletPreferencesModel newPortletPreferencesModel(
@@ -3684,46 +3366,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return ddmStructureLinkModel;
 	}
 
-	protected DDMTemplateModel newDDMTemplateModel(
-		long groupId, long userId, long structureId, long sourceClassNameId,
-		long templateId) {
-
-		DDMTemplateModel ddmTemplateModel = new DDMTemplateModelImpl();
-
-		ddmTemplateModel.setUuid(SequentialUUID.generate());
-		ddmTemplateModel.setTemplateId(templateId);
-		ddmTemplateModel.setGroupId(groupId);
-		ddmTemplateModel.setCompanyId(COMPANY_ID);
-		ddmTemplateModel.setUserId(userId);
-		ddmTemplateModel.setCreateDate(nextFutureDate());
-		ddmTemplateModel.setModifiedDate(nextFutureDate());
-		ddmTemplateModel.setClassNameId(getClassNameId(DDMStructure.class));
-		ddmTemplateModel.setClassPK(structureId);
-		ddmTemplateModel.setResourceClassNameId(sourceClassNameId);
-		ddmTemplateModel.setTemplateKey(_JOURNAL_STRUCTURE_KEY);
-		ddmTemplateModel.setVersion(DDMTemplateConstants.VERSION_DEFAULT);
-		ddmTemplateModel.setVersionUserId(userId);
-		ddmTemplateModel.setVersionUserName(SAMPLE_USER_NAME);
-
-		StringBundler sb = new StringBundler(3);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append("Basic Web Content</name></root>");
-
-		ddmTemplateModel.setName(sb.toString());
-
-		ddmTemplateModel.setType(DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY);
-		ddmTemplateModel.setMode(DDMTemplateConstants.TEMPLATE_MODE_CREATE);
-		ddmTemplateModel.setLanguage(TemplateConstants.LANG_TYPE_FTL);
-		ddmTemplateModel.setScript("${content.getData()}");
-		ddmTemplateModel.setCacheable(true);
-		ddmTemplateModel.setSmallImage(false);
-		ddmTemplateModel.setLastPublishDate(nextFutureDate());
-
-		return ddmTemplateModel;
-	}
-
 	protected DLFileEntryModel newDlFileEntryModel(
 		DLFolderModel dlFolderModel, int index) {
 
@@ -4244,8 +3886,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 	private static final long _CURRENT_TIME = System.currentTimeMillis();
 
-	private static final String _JOURNAL_STRUCTURE_KEY = "BASIC-WEB-CONTENT";
-
 	private final long _accountId;
 	private RoleModel _administratorRoleModel;
 	private Map<Long, SimpleCounter>[] _assetCategoryCounters;
@@ -4264,16 +3904,10 @@ public class DataFactory extends BaseDDMDataFactory {
 	private final long _defaultDLDDMStructureVersionId;
 	private long _defaultDLFileEntryTypeId =
 		DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT;
-	private String _defaultJournalArticleId;
-	private final long _defaultJournalDDMStructureVersionId;
-	private final long _defaultJournalDDMTemplateId;
 	private final String _dlDDMStructureContent;
 	private final String _dlDDMStructureLayoutContent;
 	private List<String> _firstNames;
 	private RoleModel _guestRoleModel;
-	private String _journalArticleContent;
-	private final String _journalDDMStructureContent;
-	private final String _journalDDMStructureLayoutContent;
 	private List<String> _lastNames;
 	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
 	private RoleModel _ownerRoleModel;
