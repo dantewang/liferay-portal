@@ -263,6 +263,8 @@ public class SampleSQLBuilder {
 						).put(
 							"messageBoardDataFactory",
 							new MessageBoardDataFactory()
+						).put(
+							"wikiDataFactory", new WikiDataFactory()
 						).build(),
 						sampleSQLWriter);
 				}
