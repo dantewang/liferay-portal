@@ -253,6 +253,8 @@ public class SampleSQLBuilder {
 						).put(
 							"dataFactory", new DataFactory()
 						).put(
+							"dLDataFactory", new DLDataFactory()
+						).put(
 							"journalDataFactory", new JournalDataFactory()
 						).build(),
 						sampleSQLWriter);
