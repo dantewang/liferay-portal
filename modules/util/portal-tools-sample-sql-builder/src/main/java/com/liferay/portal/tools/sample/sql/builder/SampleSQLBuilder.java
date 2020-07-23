@@ -252,6 +252,8 @@ public class SampleSQLBuilder {
 							"csvFileWriter", csvFileWriter
 						).put(
 							"dataFactory", new DataFactory()
+						).put(
+							"journalDataFactory", new JournalDataFactory()
 						).build(),
 						sampleSQLWriter);
 				}
