@@ -45,6 +45,6 @@ ${dataFactory.toInsertSQL(dataFactory.newCommerceCurrencyModel())}
 
 ${dataFactory.toInsertSQL(dataFactory.newCPTaxCategoryModel())}
 
-<@insertGroup _groupModel=dataFactory.newCommerceCatalogGroupModel() />
+<@insertGroup _groupModel=userDataFactory.newCommerceCatalogGroupModel() />
 
-<@insertGroup _groupModel=dataFactory.newCommerceChannelGroupModel() />
+<@insertGroup _groupModel=userDataFactory.newCommerceChannelGroupModel() />
