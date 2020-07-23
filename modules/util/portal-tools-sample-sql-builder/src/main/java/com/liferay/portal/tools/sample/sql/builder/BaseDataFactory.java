@@ -108,9 +108,14 @@ public abstract class BaseDataFactory {
 
 	protected static final long COMMERCE_CATALOG_ID;
 
+	protected static final String COMMERCE_CATALOG_NAME = "Master";
+
 	protected static final long COMMERCE_CHANNEL_GROUP_ID;
 
 	protected static final long COMMERCE_CHANNEL_ID;
+
+	protected static final String COMMERCE_CHANNEL_NAME =
+		BaseDataFactory.SAMPLE_USER_NAME + " Channel";
 
 	protected static final long COMPANY_ID;
 
