@@ -57,31 +57,17 @@ import com.liferay.counter.kernel.model.CounterModel;
 import com.liferay.counter.model.impl.CounterModelImpl;
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.kernel.model.DLFileEntry;
-import com.liferay.document.library.kernel.model.DLFileEntryMetadata;
-import com.liferay.document.library.kernel.model.DLFileEntryMetadataModel;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
 import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLFolderModel;
 import com.liferay.dynamic.data.lists.constants.DDLPortletKeys;
-import com.liferay.dynamic.data.lists.constants.DDLRecordConstants;
-import com.liferay.dynamic.data.lists.constants.DDLRecordSetConstants;
-import com.liferay.dynamic.data.lists.model.DDLRecordModel;
 import com.liferay.dynamic.data.lists.model.DDLRecordSet;
 import com.liferay.dynamic.data.lists.model.DDLRecordSetModel;
-import com.liferay.dynamic.data.lists.model.DDLRecordVersionModel;
-import com.liferay.dynamic.data.lists.model.impl.DDLRecordModelImpl;
-import com.liferay.dynamic.data.lists.model.impl.DDLRecordSetModelImpl;
-import com.liferay.dynamic.data.lists.model.impl.DDLRecordVersionModelImpl;
 import com.liferay.dynamic.data.mapping.constants.DDMPortletKeys;
-import com.liferay.dynamic.data.mapping.model.DDMContentModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
-import com.liferay.dynamic.data.mapping.model.DDMStructureLayoutModel;
-import com.liferay.dynamic.data.mapping.model.DDMStructureLinkModel;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
-import com.liferay.dynamic.data.mapping.model.DDMStructureVersionModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
-import com.liferay.dynamic.data.mapping.model.impl.DDMStructureLinkModelImpl;
 import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.model.FragmentCollectionModel;
 import com.liferay.fragment.model.FragmentEntryLinkModel;
@@ -272,7 +258,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 		_accountId = counter.get();
 		_cpTaxCategoryId = counter.get();
-		_defaultDDLDDMStructureVersionId = counter.get();
 		_userPersonalSiteGroupId = counter.get();
 
 		_defaultAssetPublisherPortletPreferencesImpl =
@@ -482,14 +467,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 	public int getMaxBlogsEntryCommentCount() {
 		return BenchmarksPropsValues.MAX_BLOGS_ENTRY_COMMENT_COUNT;
-	}
-
-	public int getMaxDDLRecordCount() {
-		return BenchmarksPropsValues.MAX_DDL_RECORD_COUNT;
-	}
-
-	public int getMaxDDLRecordSetCount() {
-		return BenchmarksPropsValues.MAX_DDL_RECORD_SET_COUNT;
 	}
 
 	public int getMaxGroupCount() {
@@ -1393,68 +1370,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return cpTaxCategoryModel;
 	}
 
-	public DDMStructureLayoutModel newDDLDDMStructureLayoutModel(
-		long groupId, DDMStructureVersionModel ddmStructureVersionModel) {
-
-		StringBundler sb = new StringBundler(
-			3 + (BenchmarksPropsValues.MAX_DDL_CUSTOM_FIELD_COUNT * 4));
-
-		sb.append("{\"defaultLanguageId\": \"en_US\", \"pages\": [{\"rows\": ");
-		sb.append("[");
-
-		for (int i = 0; i < BenchmarksPropsValues.MAX_DDL_CUSTOM_FIELD_COUNT;
-			 i++) {
-
-			sb.append("{\"columns\": [{\"fieldNames\": [\"");
-			sb.append(nextDDLCustomFieldName(groupId, i));
-			sb.append("\"], \"size\": 12}]}");
-			sb.append(", ");
-		}
-
-		if (BenchmarksPropsValues.MAX_DDL_CUSTOM_FIELD_COUNT > 0) {
-			sb.setIndex(sb.index() - 1);
-		}
-
-		sb.append("], \"title\": {\"en_US\": \"\"}}],\"paginationMode\": ");
-		sb.append("\"single-page\"}");
-
-		return newDDMStructureLayoutModel(
-			GLOBAL_GROUP_ID, DEFAULT_USER_ID,
-			ddmStructureVersionModel.getStructureVersionId(), sb.toString());
-	}
-
-	public DDMStructureModel newDDLDDMStructureModel(long groupId) {
-		StringBundler sb = new StringBundler(
-			3 + (BenchmarksPropsValues.MAX_DDL_CUSTOM_FIELD_COUNT * 9));
-
-		sb.append("{\"availableLanguageIds\": [\"en_US\"],");
-		sb.append("\"defaultLanguageId\": \"en_US\", \"fields\": [");
-
-		for (int i = 0; i < BenchmarksPropsValues.MAX_DDL_CUSTOM_FIELD_COUNT;
-			 i++) {
-
-			sb.append("{\"dataType\": \"string\", \"indexType\": ");
-			sb.append("\"keyword\", \"label\": {\"en_US\": \"Text");
-			sb.append(i);
-			sb.append("\"}, \"name\": \"");
-			sb.append(nextDDLCustomFieldName(groupId, i));
-			sb.append("\", \"readOnly\": false, \"repeatable\": false,");
-			sb.append("\"required\": false, \"showLabel\": true, \"type\": ");
-			sb.append("\"text\"}");
-			sb.append(",");
-		}
-
-		if (BenchmarksPropsValues.MAX_DDL_CUSTOM_FIELD_COUNT > 0) {
-			sb.setIndex(sb.index() - 1);
-		}
-
-		sb.append("]}");
-
-		return newDDMStructureModel(
-			groupId, SAMPLE_USER_ID, getClassNameId(DDLRecordSet.class),
-			"Test DDM Structure", sb.toString(), counter.get());
-	}
-
 	public List<PortletPreferencesModel> newDDLPortletPreferencesModels(
 		long plid) {
 
@@ -1475,147 +1390,6 @@ public class DataFactory extends BaseDDMDataFactory {
 				PortletConstants.DEFAULT_PREFERENCES));
 
 		return portletPreferencesModels;
-	}
-
-	public DDLRecordModel newDDLRecordModel(
-		DDLRecordSetModel dDLRecordSetModel) {
-
-		DDLRecordModel ddlRecordModel = new DDLRecordModelImpl();
-
-		ddlRecordModel.setUuid(SequentialUUID.generate());
-		ddlRecordModel.setRecordId(counter.get());
-		ddlRecordModel.setGroupId(dDLRecordSetModel.getGroupId());
-		ddlRecordModel.setCompanyId(COMPANY_ID);
-		ddlRecordModel.setUserId(SAMPLE_USER_ID);
-		ddlRecordModel.setUserName(SAMPLE_USER_NAME);
-		ddlRecordModel.setVersionUserId(SAMPLE_USER_ID);
-		ddlRecordModel.setVersionUserName(SAMPLE_USER_NAME);
-		ddlRecordModel.setCreateDate(new Date());
-		ddlRecordModel.setModifiedDate(new Date());
-		ddlRecordModel.setDDMStorageId(counter.get());
-		ddlRecordModel.setRecordSetId(dDLRecordSetModel.getRecordSetId());
-		ddlRecordModel.setVersion(DDLRecordConstants.VERSION_DEFAULT);
-		ddlRecordModel.setDisplayIndex(
-			DDLRecordConstants.DISPLAY_INDEX_DEFAULT);
-		ddlRecordModel.setLastPublishDate(new Date());
-
-		return ddlRecordModel;
-	}
-
-	public DDLRecordSetModel newDDLRecordSetModel(
-		DDMStructureModel ddmStructureModel, int currentIndex) {
-
-		DDLRecordSetModel ddlRecordSetModel = new DDLRecordSetModelImpl();
-
-		ddlRecordSetModel.setUuid(SequentialUUID.generate());
-		ddlRecordSetModel.setRecordSetId(counter.get());
-		ddlRecordSetModel.setGroupId(ddmStructureModel.getGroupId());
-		ddlRecordSetModel.setCompanyId(COMPANY_ID);
-		ddlRecordSetModel.setUserId(SAMPLE_USER_ID);
-		ddlRecordSetModel.setUserName(SAMPLE_USER_NAME);
-		ddlRecordSetModel.setCreateDate(new Date());
-		ddlRecordSetModel.setModifiedDate(new Date());
-		ddlRecordSetModel.setDDMStructureId(ddmStructureModel.getStructureId());
-		ddlRecordSetModel.setRecordSetKey(String.valueOf(counter.get()));
-
-		StringBundler sb = new StringBundler(5);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><name language-id=\"en_US\">");
-		sb.append("Test DDL Record Set ");
-		sb.append(currentIndex);
-		sb.append("</name></root>");
-
-		ddlRecordSetModel.setName(sb.toString());
-
-		ddlRecordSetModel.setMinDisplayRows(
-			DDLRecordSetConstants.MIN_DISPLAY_ROWS_DEFAULT);
-		ddlRecordSetModel.setScope(
-			DDLRecordSetConstants.SCOPE_DYNAMIC_DATA_LISTS);
-		ddlRecordSetModel.setSettings(StringPool.BLANK);
-		ddlRecordSetModel.setLastPublishDate(new Date());
-
-		return ddlRecordSetModel;
-	}
-
-	public DDLRecordVersionModel newDDLRecordVersionModel(
-		DDLRecordModel dDLRecordModel) {
-
-		DDLRecordVersionModel ddlRecordVersionModel =
-			new DDLRecordVersionModelImpl();
-
-		ddlRecordVersionModel.setRecordVersionId(counter.get());
-		ddlRecordVersionModel.setGroupId(dDLRecordModel.getGroupId());
-		ddlRecordVersionModel.setCompanyId(COMPANY_ID);
-		ddlRecordVersionModel.setUserId(SAMPLE_USER_ID);
-		ddlRecordVersionModel.setUserName(SAMPLE_USER_NAME);
-		ddlRecordVersionModel.setCreateDate(dDLRecordModel.getModifiedDate());
-		ddlRecordVersionModel.setDDMStorageId(dDLRecordModel.getDDMStorageId());
-		ddlRecordVersionModel.setRecordSetId(dDLRecordModel.getRecordSetId());
-		ddlRecordVersionModel.setRecordId(dDLRecordModel.getRecordId());
-		ddlRecordVersionModel.setVersion(dDLRecordModel.getVersion());
-		ddlRecordVersionModel.setDisplayIndex(dDLRecordModel.getDisplayIndex());
-		ddlRecordVersionModel.setStatus(WorkflowConstants.STATUS_APPROVED);
-		ddlRecordVersionModel.setStatusDate(dDLRecordModel.getModifiedDate());
-
-		return ddlRecordVersionModel;
-	}
-
-	public DDMContentModel newDDMContentModel(
-		DDLRecordModel ddlRecordModel, int currentIndex) {
-
-		StringBundler sb = new StringBundler(
-			3 + (BenchmarksPropsValues.MAX_DDL_CUSTOM_FIELD_COUNT * 7));
-
-		sb.append("{\"availableLanguageIds\": [\"en_US\"],");
-		sb.append("\"defaultLanguageId\": \"en_US\", \"fieldValues\": [");
-
-		for (int i = 0; i < BenchmarksPropsValues.MAX_DDL_CUSTOM_FIELD_COUNT;
-			 i++) {
-
-			sb.append("{\"instanceId\": \"");
-			sb.append(StringUtil.randomId());
-			sb.append("\", \"name\": \"");
-			sb.append(nextDDLCustomFieldName(ddlRecordModel.getGroupId(), i));
-			sb.append("\", \"value\": {\"en_US\": \"Test Record ");
-			sb.append(currentIndex);
-			sb.append("\"}},");
-		}
-
-		if (BenchmarksPropsValues.MAX_DDL_CUSTOM_FIELD_COUNT > 0) {
-			sb.setIndex(sb.index() - 1);
-		}
-
-		sb.append("]}");
-
-		return newDDMContentModel(
-			ddlRecordModel.getDDMStorageId(), ddlRecordModel.getGroupId(),
-			sb.toString());
-	}
-
-	public DDMStructureLinkModel newDDMStructureLinkModel(
-		DDLRecordSetModel ddlRecordSetModel) {
-
-		return newDDMStructureLinkModel(
-			getClassNameId(DDLRecordSet.class),
-			ddlRecordSetModel.getRecordSetId(),
-			ddlRecordSetModel.getDDMStructureId());
-	}
-
-	public DDMStructureLinkModel newDDMStructureLinkModel(
-		DLFileEntryMetadataModel dLFileEntryMetadataModel) {
-
-		return newDDMStructureLinkModel(
-			getClassNameId(DLFileEntryMetadata.class),
-			dLFileEntryMetadataModel.getFileEntryMetadataId(),
-			dLFileEntryMetadataModel.getDDMStructureId());
-	}
-
-	public DDMStructureVersionModel newDDMStructureVersionModel(
-		DDMStructureModel ddmStructureModel) {
-
-		return newDDMStructureVersionModel(
-			ddmStructureModel, _defaultDDLDDMStructureVersionId);
 	}
 
 	public UserModel newDefaultUserModel() {
@@ -3165,20 +2939,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return cProductModel;
 	}
 
-	protected DDMStructureLinkModel newDDMStructureLinkModel(
-		long classNameId, long classPK, long structureId) {
-
-		DDMStructureLinkModel ddmStructureLinkModel =
-			new DDMStructureLinkModelImpl();
-
-		ddmStructureLinkModel.setStructureLinkId(counter.get());
-		ddmStructureLinkModel.setClassNameId(classNameId);
-		ddmStructureLinkModel.setClassPK(classPK);
-		ddmStructureLinkModel.setStructureId(structureId);
-
-		return ddmStructureLinkModel;
-	}
-
 	protected GroupModel newGroupModel(
 		long groupId, long classNameId, long classPK, String name,
 		boolean site) {
@@ -3532,19 +3292,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return wikiPageModel;
 	}
 
-	protected String nextDDLCustomFieldName(
-		long groupId, int customFieldIndex) {
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("custom_field_text_");
-		sb.append(groupId);
-		sb.append("_");
-		sb.append(customFieldIndex);
-
-		return sb.toString();
-	}
-
 	protected void toInsertSQL(StringBundler sb, BaseModel<?> baseModel) {
 		try {
 			sb.append("insert into ");
@@ -3659,7 +3406,6 @@ public class DataFactory extends BaseDDMDataFactory {
 	private final PortletPreferencesImpl
 		_defaultAssetPublisherPortletPreferencesImpl;
 	private AssetVocabularyModel _defaultAssetVocabularyModel;
-	private final long _defaultDDLDDMStructureVersionId;
 	private List<String> _firstNames;
 	private RoleModel _guestRoleModel;
 	private List<String> _lastNames;
