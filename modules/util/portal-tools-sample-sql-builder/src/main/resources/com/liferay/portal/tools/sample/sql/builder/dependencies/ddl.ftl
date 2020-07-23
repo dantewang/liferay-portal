@@ -1,14 +1,14 @@
-<#assign ddlRecordSetCounts = dataFactory.getSequence(dataFactory.maxDDLRecordSetCount) />
+<#assign ddlRecordSetCounts = dataFactory.getSequence(dDLDDMDataFactory.maxDDLRecordSetCount) />
 
 <#list ddlRecordSetCounts as ddlRecordSetCount>
 	<#if ddlRecordSetCount = 1>
 		<#assign
-			ddmStructureModel = dataFactory.newDDLDDMStructureModel(groupId)
-			ddmStructureVersionModel = dataFactory.newDDMStructureVersionModel(ddmStructureModel)
+			ddmStructureModel = dDLDDMDataFactory.newDDLDDMStructureModel(groupId)
+			ddmStructureVersionModel = dDLDDMDataFactory.newDDMStructureVersionModel(ddmStructureModel)
 		/>
 
 		<@insertDDMStructure
-			_ddmStructureLayoutModel=dataFactory.newDDLDDMStructureLayoutModel(groupId, ddmStructureVersionModel)
+			_ddmStructureLayoutModel=dDLDDMDataFactory.newDDLDDMStructureLayoutModel(groupId, ddmStructureVersionModel)
 			_ddmStructureModel=ddmStructureModel
 			_ddmStructureVersionModel=ddmStructureVersionModel
 		/>
@@ -23,20 +23,20 @@
 
 	<@insertLayout _layoutModel=layoutModel />
 
-	<#assign ddlRecordSetModel = dataFactory.newDDLRecordSetModel(ddmStructureModel, ddlRecordSetCount) />
+	<#assign ddlRecordSetModel = dDLDDMDataFactory.newDDLRecordSetModel(ddmStructureModel, ddlRecordSetCount) />
 
 	${dataFactory.toInsertSQL(ddlRecordSetModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newDDMStructureLinkModel(ddlRecordSetModel))}
+	${dataFactory.toInsertSQL(dDLDDMDataFactory.newDDMStructureLinkModel(ddlRecordSetModel))}
 
-	<#assign ddlRecordCounts = dataFactory.getSequence(dataFactory.maxDDLRecordCount) />
+	<#assign ddlRecordCounts = dataFactory.getSequence(dDLDDMDataFactory.maxDDLRecordCount) />
 
 	<#list ddlRecordCounts as ddlRecordCount>
-		<#assign ddlRecordModel = dataFactory.newDDLRecordModel(ddlRecordSetModel) />
+		<#assign ddlRecordModel = dDLDDMDataFactory.newDDLRecordModel(ddlRecordSetModel) />
 
 		${dataFactory.toInsertSQL(ddlRecordModel)}
 
-		${dataFactory.toInsertSQL(dataFactory.newDDLRecordVersionModel(ddlRecordModel))}
+		${dataFactory.toInsertSQL(dDLDDMDataFactory.newDDLRecordVersionModel(ddlRecordModel))}
 
 		<@insertDDMContent
 			_currentIndex=ddlRecordCount
