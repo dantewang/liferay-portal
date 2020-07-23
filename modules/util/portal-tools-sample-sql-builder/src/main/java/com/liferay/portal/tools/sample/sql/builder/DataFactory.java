@@ -45,13 +45,6 @@ import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
-import com.liferay.fragment.constants.FragmentConstants;
-import com.liferay.fragment.model.FragmentCollectionModel;
-import com.liferay.fragment.model.FragmentEntryLinkModel;
-import com.liferay.fragment.model.FragmentEntryModel;
-import com.liferay.fragment.model.impl.FragmentCollectionModelImpl;
-import com.liferay.fragment.model.impl.FragmentEntryLinkModelImpl;
-import com.liferay.fragment.model.impl.FragmentEntryModelImpl;
 import com.liferay.friendly.url.model.FriendlyURLEntryLocalization;
 import com.liferay.hello.world.web.internal.constants.HelloWorldPortletKeys;
 import com.liferay.journal.constants.JournalActivityKeys;
@@ -61,11 +54,6 @@ import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleLocalizationModel;
 import com.liferay.journal.model.JournalArticleModel;
 import com.liferay.journal.model.JournalArticleResourceModel;
-import com.liferay.layout.page.template.model.LayoutPageTemplateStructureModel;
-import com.liferay.layout.page.template.model.LayoutPageTemplateStructureRelModel;
-import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureModelImpl;
-import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureRelModelImpl;
-import com.liferay.layout.util.template.LayoutData;
 import com.liferay.login.web.constants.LoginPortletKeys;
 import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.constants.MBPortletKeys;
@@ -82,7 +70,6 @@ import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupModel;
@@ -116,7 +103,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.version.Version;
-import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
 import com.liferay.portal.model.impl.LayoutModelImpl;
 import com.liferay.portal.model.impl.LayoutSetModelImpl;
@@ -765,78 +751,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return portletPreferencesModels;
 	}
 
-	public FragmentCollectionModel newFragmentCollectionModel(long groupId) {
-		FragmentCollectionModel fragmentCollectionModel =
-			new FragmentCollectionModelImpl();
-
-		fragmentCollectionModel.setUuid(SequentialUUID.generate());
-		fragmentCollectionModel.setFragmentCollectionId(counter.get());
-		fragmentCollectionModel.setGroupId(groupId);
-		fragmentCollectionModel.setCompanyId(COMPANY_ID);
-		fragmentCollectionModel.setUserId(SAMPLE_USER_ID);
-		fragmentCollectionModel.setCreateDate(new Date());
-		fragmentCollectionModel.setModifiedDate(new Date());
-		fragmentCollectionModel.setFragmentCollectionKey("fragmentcollection");
-		fragmentCollectionModel.setName("fragmentcollection");
-
-		return fragmentCollectionModel;
-	}
-
-	public FragmentEntryLinkModel newFragmentEntryLinkModel(
-		LayoutModel layoutModel, FragmentEntryModel fragmentEntryModel) {
-
-		FragmentEntryLinkModel fragmentEntryLinkModel =
-			new FragmentEntryLinkModelImpl();
-
-		fragmentEntryLinkModel.setUuid(SequentialUUID.generate());
-		fragmentEntryLinkModel.setFragmentEntryLinkId(counter.get());
-		fragmentEntryLinkModel.setGroupId(fragmentEntryModel.getGroupId());
-		fragmentEntryLinkModel.setCompanyId(COMPANY_ID);
-		fragmentEntryLinkModel.setUserId(SAMPLE_USER_ID);
-		fragmentEntryLinkModel.setUserName(SAMPLE_USER_NAME);
-		fragmentEntryLinkModel.setCreateDate(new Date());
-		fragmentEntryLinkModel.setModifiedDate(new Date());
-		fragmentEntryLinkModel.setFragmentEntryId(
-			fragmentEntryModel.getFragmentEntryId());
-		fragmentEntryLinkModel.setClassNameId(getClassNameId(Layout.class));
-		fragmentEntryLinkModel.setClassPK(layoutModel.getPlid());
-		fragmentEntryLinkModel.setCss(fragmentEntryModel.getCss());
-		fragmentEntryLinkModel.setJs(fragmentEntryModel.getJs());
-		fragmentEntryLinkModel.setHtml(fragmentEntryModel.getHtml());
-		fragmentEntryLinkModel.setEditableValues(StringPool.BLANK);
-		fragmentEntryLinkModel.setNamespace(StringUtil.randomId());
-		fragmentEntryLinkModel.setPosition(0);
-
-		return fragmentEntryLinkModel;
-	}
-
-	public FragmentEntryModel newFragmentEntryModel(
-			long groupId, FragmentCollectionModel fragmentCollectionModel)
-		throws Exception {
-
-		FragmentEntryModel fragmentEntryModel = new FragmentEntryModelImpl();
-
-		fragmentEntryModel.setUuid(SequentialUUID.generate());
-		fragmentEntryModel.setFragmentEntryId(counter.get());
-		fragmentEntryModel.setGroupId(groupId);
-		fragmentEntryModel.setCompanyId(COMPANY_ID);
-		fragmentEntryModel.setUserId(SAMPLE_USER_ID);
-		fragmentEntryModel.setUserName(SAMPLE_USER_NAME);
-		fragmentEntryModel.setCreateDate(new Date());
-		fragmentEntryModel.setModifiedDate(new Date());
-		fragmentEntryModel.setFragmentCollectionId(
-			fragmentCollectionModel.getFragmentCollectionId());
-		fragmentEntryModel.setFragmentEntryKey("web_content");
-		fragmentEntryModel.setName("web_content");
-		fragmentEntryModel.setCss(StringPool.BLANK);
-		fragmentEntryModel.setHtml(readFile("web_content.html"));
-		fragmentEntryModel.setJs(StringPool.BLANK);
-		fragmentEntryModel.setType(FragmentConstants.TYPE_COMPONENT);
-		fragmentEntryModel.setStatus(WorkflowConstants.STATUS_APPROVED);
-
-		return fragmentEntryModel;
-	}
-
 	public List<PortletPreferencesModel> newJournalPortletPreferencesModels(
 		long plid) {
 
@@ -911,73 +825,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		layoutModel.setLastPublishDate(new Date());
 
 		return layoutModel;
-	}
-
-	public LayoutPageTemplateStructureModel newLayoutPageTemplateStructureModel(
-		LayoutModel layoutModel) {
-
-		LayoutPageTemplateStructureModel layoutPageTemplateStructureModel =
-			new LayoutPageTemplateStructureModelImpl();
-
-		layoutPageTemplateStructureModel.setUuid(SequentialUUID.generate());
-
-		layoutPageTemplateStructureModel.setLayoutPageTemplateStructureId(
-			counter.get());
-
-		layoutPageTemplateStructureModel.setGroupId(layoutModel.getGroupId());
-		layoutPageTemplateStructureModel.setCompanyId(COMPANY_ID);
-		layoutPageTemplateStructureModel.setUserId(SAMPLE_USER_ID);
-		layoutPageTemplateStructureModel.setUserName(SAMPLE_USER_NAME);
-		layoutPageTemplateStructureModel.setCreateDate(new Date());
-		layoutPageTemplateStructureModel.setModifiedDate(new Date());
-		layoutPageTemplateStructureModel.setClassNameId(
-			getClassNameId(Layout.class));
-		layoutPageTemplateStructureModel.setClassPK(layoutModel.getPlid());
-
-		return layoutPageTemplateStructureModel;
-	}
-
-	public LayoutPageTemplateStructureRelModel
-		newLayoutPageTemplateStructureRelModel(
-			LayoutModel layoutModel,
-			LayoutPageTemplateStructureModel layoutPageTemplateStructureModel,
-			FragmentEntryLinkModel fragmentEntryLinkModel) {
-
-		LayoutPageTemplateStructureRelModel
-			layoutPageTemplateStructureRelModel =
-				new LayoutPageTemplateStructureRelModelImpl();
-
-		layoutPageTemplateStructureRelModel.setUuid(SequentialUUID.generate());
-		layoutPageTemplateStructureRelModel.setLayoutPageTemplateStructureRelId(
-			counter.get());
-		layoutPageTemplateStructureRelModel.setGroupId(
-			layoutPageTemplateStructureModel.getGroupId());
-		layoutPageTemplateStructureRelModel.setCompanyId(COMPANY_ID);
-		layoutPageTemplateStructureRelModel.setUserId(SAMPLE_USER_ID);
-		layoutPageTemplateStructureRelModel.setUserName(SAMPLE_USER_NAME);
-		layoutPageTemplateStructureRelModel.setCreateDate(new Date());
-		layoutPageTemplateStructureRelModel.setModifiedDate(new Date());
-		layoutPageTemplateStructureRelModel.setLayoutPageTemplateStructureId(
-			layoutPageTemplateStructureModel.
-				getLayoutPageTemplateStructureId());
-		layoutPageTemplateStructureRelModel.setSegmentsExperienceId(0L);
-
-		LayoutData layoutData = LayoutData.of(
-			layoutModel.toEscapedModel(),
-			layoutRow -> layoutRow.addLayoutColumns(
-				layoutColumn -> {
-					List<Long> fragmentEntryLinkIds =
-						layoutColumn.getFragmentEntryLinkIds();
-
-					fragmentEntryLinkIds.add(
-						fragmentEntryLinkModel.getFragmentEntryLinkId());
-				}));
-
-		JSONObject jsonObject = layoutData.getLayoutDataJSONObject();
-
-		layoutPageTemplateStructureRelModel.setData(jsonObject.toString());
-
-		return layoutPageTemplateStructureRelModel;
 	}
 
 	public List<LayoutSetModel> newLayoutSetModels(long groupId) {
