@@ -57,7 +57,7 @@
 	<#if _currentIndex = -1>
 		<#local ddmContentModel = dLDataFactory.newDDMContentModel(_entry)>
 	<#else>
-		<#local ddmContentModel = dataFactory.newDDMContentModel(_entry, _currentIndex)>
+		<#local ddmContentModel = dDLDDMDataFactory.newDDMContentModel(_entry, _currentIndex)>
 	</#if>
 
 	${dataFactory.toInsertSQL(ddmContentModel)}
@@ -125,7 +125,7 @@
 
 				${dataFactory.toInsertSQL(dlFileEntryMetadataModel)}
 
-				${dataFactory.toInsertSQL(dataFactory.newDDMStructureLinkModel(dlFileEntryMetadataModel))}
+				${dataFactory.toInsertSQL(dDLDDMDataFactory.newDDMStructureLinkModel(dlFileEntryMetadataModel))}
 
 				${csvFileWriter.write("documentLibrary", dlFileEntryModel.uuid + "," + dlFolderModel.folderId + "," + dlFileEntryModel.name + "," + dlFileEntryModel.fileEntryId + "\n")}
 			</#list>
