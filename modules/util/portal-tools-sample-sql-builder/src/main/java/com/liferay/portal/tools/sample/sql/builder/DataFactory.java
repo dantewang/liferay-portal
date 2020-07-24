@@ -29,9 +29,6 @@ import com.liferay.blogs.social.BlogsActivityKeys;
 import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CommerceCatalog;
-import com.liferay.counter.kernel.model.Counter;
-import com.liferay.counter.kernel.model.CounterModel;
-import com.liferay.counter.model.impl.CounterModelImpl;
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
@@ -45,7 +42,6 @@ import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
-import com.liferay.friendly.url.model.FriendlyURLEntryLocalization;
 import com.liferay.hello.world.web.internal.constants.HelloWorldPortletKeys;
 import com.liferay.journal.constants.JournalActivityKeys;
 import com.liferay.journal.constants.JournalArticleConstants;
@@ -84,7 +80,6 @@ import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.model.ReleaseConstants;
 import com.liferay.portal.kernel.model.ReleaseModel;
 import com.liferay.portal.kernel.model.ResourceConstants;
-import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.model.ResourcePermissionModel;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleModel;
@@ -118,7 +113,6 @@ import com.liferay.portlet.asset.model.impl.AssetTagModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
 import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
 import com.liferay.portlet.social.model.impl.SocialActivityModelImpl;
-import com.liferay.social.kernel.model.SocialActivity;
 import com.liferay.social.kernel.model.SocialActivityConstants;
 import com.liferay.social.kernel.model.SocialActivityModel;
 import com.liferay.subscription.constants.SubscriptionConstants;
@@ -310,10 +304,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return allAssetVocabularyModels;
 	}
 
-	public long getCounterNext() {
-		return counter.get();
-	}
-
 	public int getMaxAssetPublisherPageCount() {
 		return BenchmarksPropsValues.MAX_ASSETPUBLISHER_PAGE_COUNT;
 	}
@@ -334,16 +324,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 	public String getPortletId(String portletPrefix) {
 		return portletPrefix.concat(PortletIdCodec.generateInstanceId());
-	}
-
-	public List<Integer> getSequence(int size) {
-		List<Integer> sequence = new ArrayList<>(size);
-
-		for (int i = 1; i <= size; i++) {
-			sequence.add(i);
-		}
-
-		return sequence;
 	}
 
 	public void initAssetCategoryModels() {
@@ -655,48 +635,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		}
 
 		return layoutModels;
-	}
-
-	public List<CounterModel> newCounterModels() {
-		List<CounterModel> counterModels = new ArrayList<>();
-
-		// Counter
-
-		CounterModel counterModel = new CounterModelImpl();
-
-		counterModel.setName(Counter.class.getName());
-		counterModel.setCurrentId(counter.get());
-
-		counterModels.add(counterModel);
-
-		// FriendlyURLEntryLocalization
-
-		counterModel = new CounterModelImpl();
-
-		counterModel.setName(FriendlyURLEntryLocalization.class.getName());
-		counterModel.setCurrentId(counter.get());
-
-		counterModels.add(counterModel);
-
-		// ResourcePermission
-
-		counterModel = new CounterModelImpl();
-
-		counterModel.setName(ResourcePermission.class.getName());
-		counterModel.setCurrentId(resourcePermissionCounter.get());
-
-		counterModels.add(counterModel);
-
-		// SocialActivity
-
-		counterModel = new CounterModelImpl();
-
-		counterModel.setName(SocialActivity.class.getName());
-		counterModel.setCurrentId(socialActivityCounter.get());
-
-		counterModels.add(counterModel);
-
-		return counterModels;
 	}
 
 	public List<AssetEntryModel> newCPDefinitionAssetEntryModels(

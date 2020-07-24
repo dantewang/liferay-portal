@@ -1,4 +1,4 @@
-<#assign pageCounts = dataFactory.getSequence(dataFactory.maxAssetPublisherPageCount) />
+<#assign pageCounts = counterDataFactory.getSequence(dataFactory.maxAssetPublisherPageCount) />
 
 <#list pageCounts as pageCount>
 	<#assign
