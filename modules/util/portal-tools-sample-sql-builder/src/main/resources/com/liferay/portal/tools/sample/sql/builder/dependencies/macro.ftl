@@ -119,7 +119,7 @@
 					_mbThreadId=counterDataFactory.getCounterNext()
 				/>
 
-				${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(dlFileEntryModel))}
+				${dataFactory.toInsertSQL(socialActivityDataFactory.newSocialActivityModel(dlFileEntryModel))}
 
 				<#local dlFileEntryMetadataModel = dLDataFactory.newDLFileEntryMetadataModel(ddmStorageLinkId, _ddmStructureId, dlFileVersionModel)>
 
@@ -181,7 +181,7 @@
 	<#list mbMessageModels as mbMessageModel>
 		<@insertMBMessage _mbMessageModel=mbMessageModel />
 
-		${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel))}
+		${dataFactory.toInsertSQL(socialActivityDataFactory.newSocialActivityModel(mbMessageModel))}
 	</#list>
 
 	${dataFactory.toInsertSQL(messageBoardDataFactory.newMBDiscussionModel(_groupId, _classNameId, _classPK, _mbThreadId))}
