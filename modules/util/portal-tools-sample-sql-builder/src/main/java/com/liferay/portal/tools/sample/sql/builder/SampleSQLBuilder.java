@@ -274,6 +274,9 @@ public class SampleSQLBuilder {
 						).put(
 							"releaseDataFactory", new ReleaseDataFactory()
 						).put(
+							"socialActivityDataFactory",
+							new SocialActivityDataFactory()
+						).put(
 							"userDataFactory", new UserDataFactory()
 						).put(
 							"wikiDataFactory", new WikiDataFactory()
