@@ -26,10 +26,8 @@ import com.liferay.blogs.constants.BlogsPortletKeys;
 import com.liferay.blogs.model.BlogsEntry;
 import com.liferay.blogs.model.BlogsEntryModel;
 import com.liferay.blogs.social.BlogsActivityKeys;
-import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CommerceCatalog;
-import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
 import com.liferay.document.library.kernel.model.DLFolder;
@@ -42,7 +40,6 @@ import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
-import com.liferay.hello.world.web.internal.constants.HelloWorldPortletKeys;
 import com.liferay.journal.constants.JournalActivityKeys;
 import com.liferay.journal.constants.JournalArticleConstants;
 import com.liferay.journal.constants.JournalPortletKeys;
@@ -50,9 +47,7 @@ import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleLocalizationModel;
 import com.liferay.journal.model.JournalArticleModel;
 import com.liferay.journal.model.JournalArticleResourceModel;
-import com.liferay.login.web.constants.LoginPortletKeys;
 import com.liferay.message.boards.constants.MBCategoryConstants;
-import com.liferay.message.boards.constants.MBPortletKeys;
 import com.liferay.message.boards.model.MBCategory;
 import com.liferay.message.boards.model.MBCategoryModel;
 import com.liferay.message.boards.model.MBDiscussion;
@@ -70,11 +65,7 @@ import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.Layout;
-import com.liferay.portal.kernel.model.LayoutConstants;
-import com.liferay.portal.kernel.model.LayoutFriendlyURLModel;
 import com.liferay.portal.kernel.model.LayoutModel;
-import com.liferay.portal.kernel.model.LayoutSetModel;
-import com.liferay.portal.kernel.model.LayoutTypePortletConstants;
 import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.model.ReleaseConstants;
@@ -96,11 +87,7 @@ import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.TextFormatter;
-import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.version.Version;
-import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
-import com.liferay.portal.model.impl.LayoutModelImpl;
-import com.liferay.portal.model.impl.LayoutSetModelImpl;
 import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
 import com.liferay.portal.model.impl.ReleaseModelImpl;
 import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
@@ -581,62 +568,6 @@ public class DataFactory extends BaseDDMDataFactory {
 			String.valueOf(COMMERCE_CATALOG_ID), GUEST_ROLE_ID, SAMPLE_USER_ID);
 	}
 
-	public LayoutModel newContentLayoutModel(
-		long groupId, String name, String fragmentEntries) {
-
-		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
-
-		if (simpleCounter == null) {
-			simpleCounter = new SimpleCounter();
-
-			_layoutCounters.put(groupId, simpleCounter);
-		}
-
-		LayoutModel layoutModel = new LayoutModelImpl();
-
-		layoutModel.setUuid(SequentialUUID.generate());
-		layoutModel.setPlid(counter.get());
-		layoutModel.setGroupId(groupId);
-		layoutModel.setCompanyId(COMPANY_ID);
-		layoutModel.setUserId(SAMPLE_USER_ID);
-		layoutModel.setUserName(SAMPLE_USER_NAME);
-		layoutModel.setCreateDate(new Date());
-		layoutModel.setModifiedDate(new Date());
-		layoutModel.setLayoutId(simpleCounter.get());
-		layoutModel.setName(
-			"<?xml version=\"1.0\"?><root><name>" + name + "</name></root>");
-		layoutModel.setType(LayoutConstants.TYPE_CONTENT);
-		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + name);
-
-		UnicodeProperties typeSettingsUnicodeProperties = new UnicodeProperties(
-			true);
-
-		typeSettingsUnicodeProperties.setProperty(
-			"fragmentEntries", fragmentEntries);
-
-		layoutModel.setTypeSettings(
-			StringUtil.replace(
-				typeSettingsUnicodeProperties.toString(), '\n', "\\n"));
-
-		layoutModel.setLastPublishDate(new Date());
-
-		return layoutModel;
-	}
-
-	public List<LayoutModel> newContentLayoutModels(long groupId) {
-		List<LayoutModel> layoutModels = new ArrayList<>();
-
-		for (int i = 0; i < BenchmarksPropsValues.MAX_CONTENT_LAYOUT_COUNT;
-			 i++) {
-
-			layoutModels.add(
-				newContentLayoutModel(
-					groupId, i + "_web_content", "web_content"));
-		}
-
-		return layoutModels;
-	}
-
 	public List<AssetEntryModel> newCPDefinitionAssetEntryModels(
 		List<long[]> cpDefinitionIdList) {
 
@@ -696,82 +627,6 @@ public class DataFactory extends BaseDDMDataFactory {
 			newPortletPreferencesModel(
 				plid, JournalPortletKeys.JOURNAL,
 				PortletConstants.DEFAULT_PREFERENCES));
-	}
-
-	public LayoutFriendlyURLModel newLayoutFriendlyURLModel(
-		LayoutModel layoutModel) {
-
-		LayoutFriendlyURLModel layoutFriendlyURLEntryModel =
-			new LayoutFriendlyURLModelImpl();
-
-		layoutFriendlyURLEntryModel.setUuid(SequentialUUID.generate());
-		layoutFriendlyURLEntryModel.setLayoutFriendlyURLId(counter.get());
-		layoutFriendlyURLEntryModel.setGroupId(layoutModel.getGroupId());
-		layoutFriendlyURLEntryModel.setCompanyId(COMPANY_ID);
-		layoutFriendlyURLEntryModel.setUserId(SAMPLE_USER_ID);
-		layoutFriendlyURLEntryModel.setUserName(SAMPLE_USER_NAME);
-		layoutFriendlyURLEntryModel.setCreateDate(new Date());
-		layoutFriendlyURLEntryModel.setModifiedDate(new Date());
-		layoutFriendlyURLEntryModel.setPlid(layoutModel.getPlid());
-		layoutFriendlyURLEntryModel.setFriendlyURL(
-			layoutModel.getFriendlyURL());
-		layoutFriendlyURLEntryModel.setLanguageId("en_US");
-		layoutFriendlyURLEntryModel.setLastPublishDate(new Date());
-
-		return layoutFriendlyURLEntryModel;
-	}
-
-	public LayoutModel newLayoutModel(
-		long groupId, String name, String column1, String column2) {
-
-		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
-
-		if (simpleCounter == null) {
-			simpleCounter = new SimpleCounter();
-
-			_layoutCounters.put(groupId, simpleCounter);
-		}
-
-		LayoutModel layoutModel = new LayoutModelImpl();
-
-		layoutModel.setUuid(SequentialUUID.generate());
-		layoutModel.setPlid(counter.get());
-		layoutModel.setGroupId(groupId);
-		layoutModel.setCompanyId(COMPANY_ID);
-		layoutModel.setUserId(SAMPLE_USER_ID);
-		layoutModel.setUserName(SAMPLE_USER_NAME);
-		layoutModel.setCreateDate(new Date());
-		layoutModel.setModifiedDate(new Date());
-		layoutModel.setLayoutId(simpleCounter.get());
-		layoutModel.setName(
-			"<?xml version=\"1.0\"?><root><name>" + name + "</name></root>");
-		layoutModel.setType(LayoutConstants.TYPE_PORTLET);
-		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + name);
-
-		UnicodeProperties typeSettingsUnicodeProperties = new UnicodeProperties(
-			true);
-
-		typeSettingsUnicodeProperties.setProperty(
-			LayoutTypePortletConstants.LAYOUT_TEMPLATE_ID, "2_columns_ii");
-		typeSettingsUnicodeProperties.setProperty("column-1", column1);
-		typeSettingsUnicodeProperties.setProperty("column-2", column2);
-
-		layoutModel.setTypeSettings(
-			StringUtil.replace(
-				typeSettingsUnicodeProperties.toString(), '\n', "\\n"));
-
-		layoutModel.setLastPublishDate(new Date());
-
-		return layoutModel;
-	}
-
-	public List<LayoutSetModel> newLayoutSetModels(long groupId) {
-		List<LayoutSetModel> layoutSetModels = new ArrayList<>(2);
-
-		layoutSetModels.add(newLayoutSetModel(groupId, true));
-		layoutSetModels.add(newLayoutSetModel(groupId, false));
-
-		return layoutSetModels;
 	}
 
 	public AssetEntryModel newMBDiscussionAssetEntryModel(
@@ -913,32 +768,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return newPortletPreferencesModel(
 			plid, portletId,
 			portletPreferencesFactory.toXML(jxPortletPreferences));
-	}
-
-	public List<LayoutModel> newPublicLayoutModels(long groupId) {
-		List<LayoutModel> layoutModels = new ArrayList<>();
-
-		layoutModels.add(
-			newLayoutModel(
-				groupId, "welcome", LoginPortletKeys.LOGIN + ",",
-				HelloWorldPortletKeys.HELLO_WORLD + ","));
-		layoutModels.add(
-			newLayoutModel(groupId, "blogs", "", BlogsPortletKeys.BLOGS + ","));
-		layoutModels.add(
-			newLayoutModel(
-				groupId, "commerce_product", "",
-				CPPortletKeys.CP_CONTENT_WEB + ","));
-		layoutModels.add(
-			newLayoutModel(
-				groupId, "document_library", "",
-				DLPortletKeys.DOCUMENT_LIBRARY + ","));
-		layoutModels.add(
-			newLayoutModel(
-				groupId, "forums", "", MBPortletKeys.MESSAGE_BOARDS + ","));
-		layoutModels.add(
-			newLayoutModel(groupId, "wiki", "", WikiPortletKeys.WIKI + ","));
-
-		return layoutModels;
 	}
 
 	public List<ReleaseModel> newReleaseModels() throws IOException {
@@ -1505,26 +1334,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return assetVocabularyModel;
 	}
 
-	protected LayoutSetModel newLayoutSetModel(
-		long groupId, boolean privateLayout) {
-
-		LayoutSetModel layoutSetModel = new LayoutSetModelImpl();
-
-		long layoutSetId = counter.get();
-
-		layoutSetModel.setLayoutSetId(layoutSetId);
-
-		layoutSetModel.setGroupId(groupId);
-		layoutSetModel.setCompanyId(COMPANY_ID);
-		layoutSetModel.setCreateDate(new Date());
-		layoutSetModel.setModifiedDate(new Date());
-		layoutSetModel.setPrivateLayout(privateLayout);
-		layoutSetModel.setThemeId("classic_WAR_classictheme");
-		layoutSetModel.setColorSchemeId("01");
-
-		return layoutSetModel;
-	}
-
 	protected PortletPreferencesModel newPortletPreferencesModel(
 		long plid, String portletId, String preferences) {
 
@@ -1755,7 +1564,6 @@ public class DataFactory extends BaseDDMDataFactory {
 	private final PortletPreferencesImpl
 		_defaultAssetPublisherPortletPreferencesImpl;
 	private AssetVocabularyModel _defaultAssetVocabularyModel;
-	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
 	private final Format _simpleDateFormat;
 	private final SimpleCounter _timeCounter;
 
