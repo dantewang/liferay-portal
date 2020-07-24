@@ -1,4 +1,4 @@
-<#list dataFactory.newCPDefinitionAssetEntryModels() as assetEntryModel>
+<#list assetDataFactory.newCPDefinitionAssetEntryModels() as assetEntryModel>
 	${resourcePermissionDataFactory.toInsertSQL(assetEntryModel)}
 </#list>
 
