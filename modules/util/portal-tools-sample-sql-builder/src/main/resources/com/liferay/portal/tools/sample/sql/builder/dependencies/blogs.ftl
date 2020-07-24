@@ -13,7 +13,7 @@ ${resourcePermissionDataFactory.toInsertSQL(blogDataFactory.newUserNotificationD
 
 	${resourcePermissionDataFactory.toInsertSQL(blogDataFactory.newFriendlyURLEntryMapping(friendlyURLEntryModel))}
 
-	${resourcePermissionDataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(blogsEntryModel))}
+	${resourcePermissionDataFactory.toInsertSQL(assetDataFactory.newMBDiscussionAssetEntryModel(blogsEntryModel))}
 
 	<@insertAssetEntry
 		_categoryAndTag=true
