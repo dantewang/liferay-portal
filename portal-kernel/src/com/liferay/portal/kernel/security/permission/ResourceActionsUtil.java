@@ -278,6 +278,24 @@ public class ResourceActionsUtil {
 	}
 
 	public static void read(
+			Portlet portlet, String servletContextName, ClassLoader classLoader,
+			String source)
+		throws Exception {
+
+		getResourceActions().read(
+			portlet, servletContextName, classLoader, source);
+	}
+
+	public static void read(
+			Portlet portlet, String servletContextName, ClassLoader classLoader,
+			String... sources)
+		throws Exception {
+
+		getResourceActions().read(
+			portlet, servletContextName, classLoader, sources);
+	}
+
+	public static void read(
 			String servletContextName, ClassLoader classLoader, String source)
 		throws Exception {
 
