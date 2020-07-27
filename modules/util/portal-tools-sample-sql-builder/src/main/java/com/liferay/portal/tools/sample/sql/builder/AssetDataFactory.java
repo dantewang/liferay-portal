@@ -298,35 +298,6 @@ public class AssetDataFactory extends BaseDataFactory {
 			true, true, ContentTypes.TEXT_HTML, wikiPageModel.getTitle());
 	}
 
-	public List<AssetEntryModel> newCPDefinitionAssetEntryModels() {
-		List<AssetEntryModel> assetEntryModels = new ArrayList<>();
-
-		for (int productIndex = 0;
-			 productIndex < BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT;
-			 productIndex++) {
-
-			long[] cpDefinitionIds = cpDefinitionIdList.get(productIndex);
-
-			for (int definitionIndex = 0;
-				 definitionIndex <
-					 BenchmarksPropsValues.
-						 MAX_COMMERCE_PRODUCT_DEFINITION_COUNT;
-				 definitionIndex++) {
-
-				assetEntryModels.add(
-					newAssetEntryModel(
-						COMMERCE_CATALOG_GROUP_ID, new Date(), new Date(),
-						getClassNameId(CPDefinition.class),
-						cpDefinitionIds[definitionIndex],
-						SequentialUUID.generate(), 0, true, true, "text/plain",
-						cpDefinitionLocalizationNames.get(
-							cpDefinitionIds[definitionIndex])));
-			}
-		}
-
-		return assetEntryModels;
-	}
-
 	public List<AssetEntryModel> newAssetEntryModels(
 		List<JournalArticleModel> journalArticleModels,
 		List<JournalArticleLocalizationModel>
@@ -389,6 +360,35 @@ public class AssetDataFactory extends BaseDataFactory {
 
 		cTEntryMap.put(
 			AssetEntry.class.getName() + "-folder", assetEntryModels);
+
+		return assetEntryModels;
+	}
+
+	public List<AssetEntryModel> newCPDefinitionAssetEntryModels() {
+		List<AssetEntryModel> assetEntryModels = new ArrayList<>();
+
+		for (int productIndex = 0;
+			 productIndex < BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT;
+			 productIndex++) {
+
+			long[] cpDefinitionIds = cpDefinitionIdList.get(productIndex);
+
+			for (int definitionIndex = 0;
+				 definitionIndex <
+					 BenchmarksPropsValues.
+						 MAX_COMMERCE_PRODUCT_DEFINITION_COUNT;
+				 definitionIndex++) {
+
+				assetEntryModels.add(
+					newAssetEntryModel(
+						COMMERCE_CATALOG_GROUP_ID, new Date(), new Date(),
+						getClassNameId(CPDefinition.class),
+						cpDefinitionIds[definitionIndex],
+						SequentialUUID.generate(), 0, true, true, "text/plain",
+						cpDefinitionLocalizationNames.get(
+							cpDefinitionIds[definitionIndex])));
+			}
+		}
 
 		return assetEntryModels;
 	}
