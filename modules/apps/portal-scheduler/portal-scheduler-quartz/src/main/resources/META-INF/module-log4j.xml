@@ -5,5 +5,7 @@
 		<Logger level="ERROR" name="com.liferay.portal.scheduler.quartz.internal.PortalJobStore" />
 
 		<Logger level="WARN" name="com.liferay.portal.scheduler.quartz.internal.QuartzSchedulerEngine" />
+
+		<Logger level="ERROR" name="com.liferay.portal.scheduler.quartz.internal.QuartzSchemaManager" />
 	</Loggers>
 </Configuration>
