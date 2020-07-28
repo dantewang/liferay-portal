@@ -184,6 +184,8 @@ public class Log4JUtil {
 			}
 		}
 		catch (Exception exception) {
+			_logger = LogManager.getRootLogger();
+
 			_logger.error(exception, exception);
 		}
 	}
@@ -245,12 +247,7 @@ public class Log4JUtil {
 
 		configureLog4J(classLoader);
 
-		try {
-			LogFactoryUtil.setLogFactory(logFactory);
-		}
-		catch (Exception exception) {
-			_logger.error(exception, exception);
-		}
+		LogFactoryUtil.setLogFactory(logFactory);
 
 		for (Map.Entry<String, String> entry : customLogSettings.entrySet()) {
 			setLevel(entry.getKey(), entry.getValue(), false);
@@ -401,6 +398,8 @@ public class Log4JUtil {
 			urlContent = new String(bytes, StringPool.UTF8);
 		}
 		catch (Exception exception) {
+			_logger = LogManager.getRootLogger();
+
 			_logger.error(exception, exception);
 
 			return null;
@@ -439,7 +438,7 @@ public class Log4JUtil {
 
 	private static final String _PORTAT_SYMBOLICNAME = "portal.symbolicname";
 
-	private static final Logger _logger = LogManager.getRootLogger();
+	private static Logger _logger;
 
 	private static final Map<String, String> _customLogSettings =
 		new ConcurrentHashMap<>();
