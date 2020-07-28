@@ -125,8 +125,11 @@ public class Log4JUtil {
 			Files.write(path, urlContent.getBytes());
 
 			if (_loggerContext == null) {
+				ClassLoader portalClassLoader =
+					Log4JUtil.class.getClassLoader();
+
 				_loggerContext = Configurator.initialize(
-					null, Log4JUtil.class.getClassLoader(), path.toUri());
+					null, portalClassLoader.getParent(), path.toUri());
 
 				_xmlConfigurationList.add(
 					(XmlConfiguration)_loggerContext.getConfiguration());
