@@ -10,7 +10,7 @@
 
 		${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(wikiPageModel))}
 
-		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(wikiPageModel))}
+		${dataFactory.toInsertSQL(subscriptionDataFactory.newSubscriptionModel(wikiPageModel))}
 
 		${dataFactory.toInsertSQL(wikiDataFactory.newWikiPageResourceModel(wikiPageModel))}
 
