@@ -5,7 +5,7 @@
 	cProductModels = commerceDataFactory.newCProductModels(publishedCPDefinitionIds)
 	cpDefinitionModels = commerceDataFactory.newCPDefinitionModels(cpDefinitionIdList, cProductModels)
 	cpFriendlyURLEntryModels = commerceDataFactory.newCPFriendlyURLEntryModels(cProductModels)
-	assetEntryModels = dataFactory.newCPDefinitionAssetEntryModels(cpDefinitionIdList)
+	assetEntryModels = assetDataFactory.newCPDefinitionAssetEntryModels(cpDefinitionIdList)
 	cpDefinitionLocalizationModels = commerceDataFactory.newCPDefinitionLocalizationModels(cpDefinitionIdList)
 />
 
