@@ -276,17 +276,11 @@ public class Log4jTest {
 
 		_setLevel(LoggerName.LOGGER_WARN.toString(), "WARN");
 
-		Log childLog = LogFactoryUtil.getLog("com.test.parent.child");
+		Log childLog = LogFactoryUtil.getLog(
+			LoggerName.LOGGER_WARN.toString() + ".child");
 
 		Assert.assertTrue(
-			"INFO level should be enabled", childLog.isInfoEnabled());
-		Assert.assertFalse(
-			"DEBUG level should be not enabled", childLog.isDebugEnabled());
-
-		_setLevel("com.test.parent", "DEBUG");
-
-		Assert.assertTrue(
-			"DEBUG level should be enabled", childLog.isDebugEnabled());
+			"WARN level should be enabled", childLog.isWarnEnabled());
 	}
 
 	private static void _setLevel(String loggerName, String level) {
