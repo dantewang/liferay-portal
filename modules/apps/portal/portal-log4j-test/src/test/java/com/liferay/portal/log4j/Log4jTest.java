@@ -45,7 +45,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -331,10 +331,15 @@ public class Log4jTest {
 			matcher.matches());
 
 		if (logMessages.length > 1) {
+			String exceptionDetailMessage = null;
+
+			String expectedExceptionOutput = StringBundler.concat(
+				TestException.class.getName(), ": ", exceptionDetailMessage);
+
 			Assert.assertEquals(
 				"Expected output exception should be " +
-					TestException.class.getName(),
-				TestException.class.getName(), logMessages[1]);
+					expectedExceptionOutput,
+				expectedExceptionOutput, logMessages[1]);
 		}
 	}
 
