@@ -1,4 +1,15 @@
-<#list dataFactory.newCPDefinitionAssetEntryModels() as assetEntryModel>
+<#assign
+	cpInstanceModels = dataFactory.newCPInstanceModels()
+	cpDefinitionIdList = dataFactory.getCPDefinitionIdList(cpInstanceModels)
+	publishedCPDefinitionIds = dataFactory.getPublishedCPDefinitionIds(cpDefinitionIdList)
+	cProductModels = dataFactory.newCProductModels(publishedCPDefinitionIds)
+	cpDefinitionModels = dataFactory.newCPDefinitionModels(cpDefinitionIdList, cProductModels)
+	cpFriendlyURLEntryModels = dataFactory.newCPFriendlyURLEntryModels(cProductModels)
+	assetEntryModels = dataFactory.newCPDefinitionAssetEntryModels(cpDefinitionIdList)
+	cpDefinitionLocalizationModels = dataFactory.newCPDefinitionLocalizationModels(cpDefinitionIdList)
+/>
+
+<#list assetEntryModels as assetEntryModel>
 	${dataFactory.toInsertSQL(assetEntryModel)}
 </#list>
 
@@ -10,25 +21,25 @@ ${dataFactory.toInsertSQL(dataFactory.newCommerceChannelModel())}
 
 ${dataFactory.toInsertSQL(dataFactory.newCommerceCurrencyModel())}
 
-<#list dataFactory.newCPDefinitionLocalizationModels() as cpDefinitionLocalizationModel>
+<#list cpDefinitionLocalizationModels as cpDefinitionLocalizationModel>
 	${dataFactory.toInsertSQL(cpDefinitionLocalizationModel)}
 </#list>
 
-<#list dataFactory.newCPDefinitionModels() as cpDefinitionModel>
+<#list cpDefinitionModels as cpDefinitionModel>
 	${dataFactory.toInsertSQL(cpDefinitionModel)}
 </#list>
 
-<#list dataFactory.newCPFriendlyURLEntryModels() as cpFriendlyURLEntryModel>
+<#list cpFriendlyURLEntryModels as cpFriendlyURLEntryModel>
 	${dataFactory.toInsertSQL(cpFriendlyURLEntryModel)}
 
 	${csvFileWriter.write("cpFriendlyURLEntry", cpFriendlyURLEntryModel.urlTitle + "\n")}
 </#list>
 
-<#list dataFactory.newCPInstanceModels() as cpInstanceModel>
+<#list cpInstanceModels as cpInstanceModel>
 	${dataFactory.toInsertSQL(cpInstanceModel)}
 </#list>
 
-<#list dataFactory.newCProductModels() as cProductModel>
+<#list cProductModels as cProductModel>
 	${dataFactory.toInsertSQL(cProductModel)}
 </#list>
 
