@@ -8,18 +8,18 @@
 
 <#assign ddmTemplateModel = journalDataFactory.newDefaultJournalDDMTemplateModel() />
 
-${dataFactory.toInsertSQL(ddmTemplateModel)}
+${resourcePermissionDataFactory.toInsertSQL(ddmTemplateModel)}
 
-${dataFactory.toInsertSQL(journalDataFactory.newDefaultJournalDDMTemplateVersionModel())}
+${resourcePermissionDataFactory.toInsertSQL(journalDataFactory.newDefaultJournalDDMTemplateVersionModel())}
 
 <#assign
 	journalArticlePageCounts = counterDataFactory.getSequence(journalDataFactory.maxJournalArticlePageCount)
 
-	resourcePermissionModels = dataFactory.newResourcePermissionModels("com.liferay.journal", groupId)
+	resourcePermissionModels = resourcePermissionDataFactory.newResourcePermissionModels("com.liferay.journal", groupId)
 />
 
 <#list resourcePermissionModels as resourcePermissionModel>
-	${dataFactory.toInsertSQL(resourcePermissionModel)}
+	${resourcePermissionDataFactory.toInsertSQL(resourcePermissionModel)}
 </#list>
 
 <#list journalArticlePageCounts as journalArticlePageCount>
@@ -36,7 +36,7 @@ ${dataFactory.toInsertSQL(journalDataFactory.newDefaultJournalDDMTemplateVersion
 	<#assign portletPreferencesModels = dataFactory.newJournalPortletPreferencesModels(layoutModel.plid) />
 
 	<#list portletPreferencesModels as portletPreferencesModel>
-		${dataFactory.toInsertSQL(portletPreferencesModel)}
+		${resourcePermissionDataFactory.toInsertSQL(portletPreferencesModel)}
 	</#list>
 
 	<#assign journalArticleCounts = counterDataFactory.getSequence(journalDataFactory.maxJournalArticleCount) />
@@ -44,24 +44,24 @@ ${dataFactory.toInsertSQL(journalDataFactory.newDefaultJournalDDMTemplateVersion
 	<#list journalArticleCounts as journalArticleCount>
 		<#assign journalArticleResourceModel = journalDataFactory.newJournalArticleResourceModel(groupId) />
 
-		${dataFactory.toInsertSQL(journalArticleResourceModel)}
+		${resourcePermissionDataFactory.toInsertSQL(journalArticleResourceModel)}
 
 		<#assign versionCounts = counterDataFactory.getSequence(journalDataFactory.maxJournalArticleVersionCount) />
 
 		<#list versionCounts as versionCount>
 			<#assign journalArticleModel = journalDataFactory.newJournalArticleModel(journalArticleResourceModel, journalArticleCount, versionCount) />
 
-			${dataFactory.toInsertSQL(journalArticleModel)}
+			${resourcePermissionDataFactory.toInsertSQL(journalArticleModel)}
 
 			<#assign journalArticleLocalizationModel = journalDataFactory.newJournalArticleLocalizationModel(journalArticleModel, journalArticleCount, versionCount) />
 
-			${dataFactory.toInsertSQL(journalArticleLocalizationModel)}
+			${resourcePermissionDataFactory.toInsertSQL(journalArticleLocalizationModel)}
 
-			${dataFactory.toInsertSQL(journalDataFactory.newDDMTemplateLinkModel(journalArticleModel, ddmTemplateModel.templateId))}
+			${resourcePermissionDataFactory.toInsertSQL(journalDataFactory.newDDMTemplateLinkModel(journalArticleModel, ddmTemplateModel.templateId))}
 
-			${dataFactory.toInsertSQL(journalDataFactory.newDDMStorageLinkModel(journalArticleModel, ddmStructureModel.structureId))}
+			${resourcePermissionDataFactory.toInsertSQL(journalDataFactory.newDDMStorageLinkModel(journalArticleModel, ddmStructureModel.structureId))}
 
-			${dataFactory.toInsertSQL(socialActivityDataFactory.newSocialActivityModel(journalArticleModel))}
+			${resourcePermissionDataFactory.toInsertSQL(socialActivityDataFactory.newSocialActivityModel(journalArticleModel))}
 
 			<#if versionCount = journalDataFactory.maxJournalArticleVersionCount>
 				<@insertAssetEntry
@@ -80,8 +80,8 @@ ${dataFactory.toInsertSQL(journalDataFactory.newDefaultJournalDDMTemplateVersion
 			_mbThreadId=counterDataFactory.getCounterNext()
 		/>
 
-		${dataFactory.toInsertSQL(dataFactory.newPortletPreferencesModel(layoutModel.plid, portletIdPrefix + journalArticleCount, journalArticleResourceModel))}
+		${resourcePermissionDataFactory.toInsertSQL(dataFactory.newPortletPreferencesModel(layoutModel.plid, portletIdPrefix + journalArticleCount, journalArticleResourceModel))}
 
-		${dataFactory.toInsertSQL(journalDataFactory.newJournalContentSearchModel(journalArticleModel, layoutModel.layoutId))}
+		${resourcePermissionDataFactory.toInsertSQL(journalDataFactory.newJournalContentSearchModel(journalArticleModel, layoutModel.layoutId))}
 	</#list>
 </#list>

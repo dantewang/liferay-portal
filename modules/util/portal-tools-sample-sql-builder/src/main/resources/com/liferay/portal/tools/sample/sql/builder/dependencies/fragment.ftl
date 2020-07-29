@@ -1,10 +1,10 @@
 <#assign fragmentCollectionModel = fragmentDataFactory.newFragmentCollectionModel(groupId) />
 
-${dataFactory.toInsertSQL(fragmentCollectionModel)}
+${resourcePermissionDataFactory.toInsertSQL(fragmentCollectionModel)}
 
 <#assign fragmentEntryModel = fragmentDataFactory.newFragmentEntryModel(groupId, fragmentCollectionModel) />
 
-${dataFactory.toInsertSQL(fragmentEntryModel)}
+${resourcePermissionDataFactory.toInsertSQL(fragmentEntryModel)}
 
 <#assign contentLayoutModels = layoutDataFactory.newContentLayoutModels(groupId) />
 

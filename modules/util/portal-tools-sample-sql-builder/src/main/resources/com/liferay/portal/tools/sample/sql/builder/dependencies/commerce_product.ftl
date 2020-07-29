@@ -10,40 +10,40 @@
 />
 
 <#list assetEntryModels as assetEntryModel>
-	${dataFactory.toInsertSQL(assetEntryModel)}
+	${resourcePermissionDataFactory.toInsertSQL(assetEntryModel)}
 </#list>
 
-${dataFactory.toInsertSQL(commerceDataFactory.newCommerceCatalogModel())}
+${resourcePermissionDataFactory.toInsertSQL(commerceDataFactory.newCommerceCatalogModel())}
 
-${dataFactory.toInsertSQL(dataFactory.newCommerceCatalogResourcePermission())}
+${resourcePermissionDataFactory.toInsertSQL(resourcePermissionDataFactory.newCommerceCatalogResourcePermission())}
 
-${dataFactory.toInsertSQL(commerceDataFactory.newCommerceChannelModel())}
+${resourcePermissionDataFactory.toInsertSQL(commerceDataFactory.newCommerceChannelModel())}
 
-${dataFactory.toInsertSQL(commerceDataFactory.newCommerceCurrencyModel())}
+${resourcePermissionDataFactory.toInsertSQL(commerceDataFactory.newCommerceCurrencyModel())}
 
 <#list cpDefinitionLocalizationModels as cpDefinitionLocalizationModel>
-	${dataFactory.toInsertSQL(cpDefinitionLocalizationModel)}
+	${resourcePermissionDataFactory.toInsertSQL(cpDefinitionLocalizationModel)}
 </#list>
 
 <#list cpDefinitionModels as cpDefinitionModel>
-	${dataFactory.toInsertSQL(cpDefinitionModel)}
+	${resourcePermissionDataFactory.toInsertSQL(cpDefinitionModel)}
 </#list>
 
 <#list cpFriendlyURLEntryModels as cpFriendlyURLEntryModel>
-	${dataFactory.toInsertSQL(cpFriendlyURLEntryModel)}
+	${resourcePermissionDataFactory.toInsertSQL(cpFriendlyURLEntryModel)}
 
 	${csvFileWriter.write("cpFriendlyURLEntry", cpFriendlyURLEntryModel.urlTitle + "\n")}
 </#list>
 
 <#list cpInstanceModels as cpInstanceModel>
-	${dataFactory.toInsertSQL(cpInstanceModel)}
+	${resourcePermissionDataFactory.toInsertSQL(cpInstanceModel)}
 </#list>
 
 <#list cProductModels as cProductModel>
-	${dataFactory.toInsertSQL(cProductModel)}
+	${resourcePermissionDataFactory.toInsertSQL(cProductModel)}
 </#list>
 
-${dataFactory.toInsertSQL(commerceDataFactory.newCPTaxCategoryModel())}
+${resourcePermissionDataFactory.toInsertSQL(commerceDataFactory.newCPTaxCategoryModel())}
 
 <@insertGroup _groupModel=userDataFactory.newCommerceCatalogGroupModel() />
 
