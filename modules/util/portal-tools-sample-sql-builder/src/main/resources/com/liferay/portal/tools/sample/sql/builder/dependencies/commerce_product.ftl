@@ -1,25 +1,25 @@
 <#assign
-	cpInstanceModels = dataFactory.newCPInstanceModels()
-	cpDefinitionIdList = dataFactory.getCPDefinitionIdList(cpInstanceModels)
-	publishedCPDefinitionIds = dataFactory.getPublishedCPDefinitionIds(cpDefinitionIdList)
-	cProductModels = dataFactory.newCProductModels(publishedCPDefinitionIds)
-	cpDefinitionModels = dataFactory.newCPDefinitionModels(cpDefinitionIdList, cProductModels)
-	cpFriendlyURLEntryModels = dataFactory.newCPFriendlyURLEntryModels(cProductModels)
+	cpInstanceModels = commerceDataFactory.newCPInstanceModels()
+	cpDefinitionIdList = commerceDataFactory.getCPDefinitionIdList(cpInstanceModels)
+	publishedCPDefinitionIds = commerceDataFactory.getPublishedCPDefinitionIds(cpDefinitionIdList)
+	cProductModels = commerceDataFactory.newCProductModels(publishedCPDefinitionIds)
+	cpDefinitionModels = commerceDataFactory.newCPDefinitionModels(cpDefinitionIdList, cProductModels)
+	cpFriendlyURLEntryModels = commerceDataFactory.newCPFriendlyURLEntryModels(cProductModels)
 	assetEntryModels = dataFactory.newCPDefinitionAssetEntryModels(cpDefinitionIdList)
-	cpDefinitionLocalizationModels = dataFactory.newCPDefinitionLocalizationModels(cpDefinitionIdList)
+	cpDefinitionLocalizationModels = commerceDataFactory.newCPDefinitionLocalizationModels(cpDefinitionIdList)
 />
 
 <#list assetEntryModels as assetEntryModel>
 	${dataFactory.toInsertSQL(assetEntryModel)}
 </#list>
 
-${dataFactory.toInsertSQL(dataFactory.newCommerceCatalogModel())}
+${dataFactory.toInsertSQL(commerceDataFactory.newCommerceCatalogModel())}
 
 ${dataFactory.toInsertSQL(dataFactory.newCommerceCatalogResourcePermission())}
 
-${dataFactory.toInsertSQL(dataFactory.newCommerceChannelModel())}
+${dataFactory.toInsertSQL(commerceDataFactory.newCommerceChannelModel())}
 
-${dataFactory.toInsertSQL(dataFactory.newCommerceCurrencyModel())}
+${dataFactory.toInsertSQL(commerceDataFactory.newCommerceCurrencyModel())}
 
 <#list cpDefinitionLocalizationModels as cpDefinitionLocalizationModel>
 	${dataFactory.toInsertSQL(cpDefinitionLocalizationModel)}
@@ -43,7 +43,7 @@ ${dataFactory.toInsertSQL(dataFactory.newCommerceCurrencyModel())}
 	${dataFactory.toInsertSQL(cProductModel)}
 </#list>
 
-${dataFactory.toInsertSQL(dataFactory.newCPTaxCategoryModel())}
+${dataFactory.toInsertSQL(commerceDataFactory.newCPTaxCategoryModel())}
 
 <@insertGroup _groupModel=userDataFactory.newCommerceCatalogGroupModel() />
 
