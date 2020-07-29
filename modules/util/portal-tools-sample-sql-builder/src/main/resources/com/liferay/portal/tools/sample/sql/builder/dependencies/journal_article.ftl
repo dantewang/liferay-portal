@@ -33,7 +33,7 @@ ${resourcePermissionDataFactory.toInsertSQL(journalDataFactory.newDefaultJournal
 
 	<@insertLayout _layoutModel=layoutModel />
 
-	<#assign portletPreferencesModels = dataFactory.newJournalPortletPreferencesModels(layoutModel.plid) />
+	<#assign portletPreferencesModels = portletPreferenceDataFactory.newJournalPortletPreferencesModels(layoutModel.plid) />
 
 	<#list portletPreferencesModels as portletPreferencesModel>
 		${resourcePermissionDataFactory.toInsertSQL(portletPreferencesModel)}
@@ -80,7 +80,7 @@ ${resourcePermissionDataFactory.toInsertSQL(journalDataFactory.newDefaultJournal
 			_mbThreadId=counterDataFactory.getCounterNext()
 		/>
 
-		${resourcePermissionDataFactory.toInsertSQL(dataFactory.newPortletPreferencesModel(layoutModel.plid, portletIdPrefix + journalArticleCount, journalArticleResourceModel))}
+		${resourcePermissionDataFactory.toInsertSQL(portletPreferenceDataFactory.newPortletPreferencesModel(layoutModel.plid, portletIdPrefix + journalArticleCount, journalArticleResourceModel))}
 
 		${resourcePermissionDataFactory.toInsertSQL(journalDataFactory.newJournalContentSearchModel(journalArticleModel, layoutModel.layoutId))}
 	</#list>
