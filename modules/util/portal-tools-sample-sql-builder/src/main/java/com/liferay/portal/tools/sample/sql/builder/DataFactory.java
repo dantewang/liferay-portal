@@ -1441,30 +1441,31 @@ public class DataFactory {
 	}
 
 	public List<CPDefinitionModel> newCPDefinitionModels(
-		List<long[]> cpDefinitionIdList, List<CProductModel> cProductModels) {
+		List<CProductModel> cProductModels) {
 
 		List<CPDefinitionModel> cpDefinitionModels = new ArrayList<>();
 
-		int productIndex = 0;
-
 		for (CProductModel cProductModel : cProductModels) {
-			long[] cpDefinitionIds = cpDefinitionIdList.get(productIndex);
-
 			for (int definitionIndex = 0;
 				 definitionIndex <
 					 BenchmarksPropsValues.
 						 MAX_COMMERCE_PRODUCT_DEFINITION_COUNT;
 				 definitionIndex++) {
 
-				long cpDefinitionId = cpDefinitionIds[definitionIndex];
+				long cpDefinitionId = _counter.get();
 
 				cpDefinitionModels.add(
 					newCPDefinitionModel(
 						cpDefinitionId, cProductModel.getCProductId(),
 						_cpTaxCategoryId, definitionIndex + 1));
+
+				if (definitionIndex == BenchmarksPropsValues.
+						MAX_COMMERCE_PRODUCT_DEFINITION_COUNT - 1) {
+
+					cProductModel.setPublishedCPDefinitionId(cpDefinitionId);
+				}
 			}
 
-			productIndex++;
 		}
 
 		return cpDefinitionModels;
@@ -3775,7 +3776,7 @@ public class DataFactory {
 		return cpInstanceModel;
 	}
 
-	protected CProductModel newCProductModel(long publishedCPDefinitionId) {
+	protected CProductModel newCProductModel() {
 		CProductModel cProductModel = new CProductModelImpl();
 
 		cProductModel.setUuid(SequentialUUID.generate());
@@ -3786,7 +3787,6 @@ public class DataFactory {
 		cProductModel.setUserName(_SAMPLE_USER_NAME);
 		cProductModel.setCreateDate(new Date());
 		cProductModel.setModifiedDate(new Date());
-		cProductModel.setPublishedCPDefinitionId(publishedCPDefinitionId);
 		cProductModel.setLatestVersion(
 			BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_DEFINITION_COUNT);
 
