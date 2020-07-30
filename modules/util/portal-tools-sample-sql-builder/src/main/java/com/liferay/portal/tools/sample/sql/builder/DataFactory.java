@@ -1441,31 +1441,28 @@ public class DataFactory {
 	}
 
 	public List<CPDefinitionModel> newCPDefinitionModels(
-		List<CProductModel> cProductModels) {
+		CProductModel cProductModel) {
 
 		List<CPDefinitionModel> cpDefinitionModels = new ArrayList<>();
 
-		for (CProductModel cProductModel : cProductModels) {
-			for (int definitionIndex = 0;
-				 definitionIndex <
-					 BenchmarksPropsValues.
-						 MAX_COMMERCE_PRODUCT_DEFINITION_COUNT;
-				 definitionIndex++) {
+		for (int definitionIndex = 0;
+			 definitionIndex <
+				 BenchmarksPropsValues.
+					 MAX_COMMERCE_PRODUCT_DEFINITION_COUNT;
+			 definitionIndex++) {
 
-				long cpDefinitionId = _counter.get();
+			long cpDefinitionId = _counter.get();
 
-				cpDefinitionModels.add(
-					newCPDefinitionModel(
-						cpDefinitionId, cProductModel.getCProductId(),
-						_cpTaxCategoryId, definitionIndex + 1));
+			cpDefinitionModels.add(
+				newCPDefinitionModel(
+					cpDefinitionId, cProductModel.getCProductId(),
+					_cpTaxCategoryId, definitionIndex + 1));
 
-				if (definitionIndex == BenchmarksPropsValues.
-						MAX_COMMERCE_PRODUCT_DEFINITION_COUNT - 1) {
+			if (definitionIndex == BenchmarksPropsValues.
+					MAX_COMMERCE_PRODUCT_DEFINITION_COUNT - 1) {
 
-					cProductModel.setPublishedCPDefinitionId(cpDefinitionId);
-				}
+				cProductModel.setPublishedCPDefinitionId(cpDefinitionId);
 			}
-
 		}
 
 		return cpDefinitionModels;
@@ -3621,7 +3618,9 @@ public class DataFactory {
 	}
 
 	protected CPDefinitionLocalizationModel newCPDefinitionLocalizationModel(
-		long cpDefinitionId) {
+		CPDefinitionModel cpDefinitionModel) {
+
+		long cpDefinitionId = cpDefinitionModel.getCPDefinitionId();
 
 		CPDefinitionLocalizationModel cpDefinitionLocalizationModel =
 			new CPDefinitionLocalizationModelImpl();

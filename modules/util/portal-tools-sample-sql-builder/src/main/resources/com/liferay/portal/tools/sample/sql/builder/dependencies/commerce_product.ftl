@@ -3,10 +3,8 @@
 	cpDefinitionIdList = dataFactory.getCPDefinitionIdList(cpInstanceModels)
 	publishedCPDefinitionIds = dataFactory.getPublishedCPDefinitionIds(cpDefinitionIdList)
 	cProductModels = dataFactory.newCProductModels()
-	cpDefinitionModels = dataFactory.newCPDefinitionModels(cProductModels)
 	cpFriendlyURLEntryModels = dataFactory.newCPFriendlyURLEntryModels(cProductModels)
 	assetEntryModels = dataFactory.newCPDefinitionAssetEntryModels(cpDefinitionIdList)
-	cpDefinitionLocalizationModels = dataFactory.newCPDefinitionLocalizationModels(cpDefinitionIdList)
 />
 
 <#list assetEntryModels as assetEntryModel>
@@ -40,6 +38,12 @@ ${dataFactory.toInsertSQL(dataFactory.newCommerceCurrencyModel())}
 </#list>
 
 <#list cProductModels as cProductModel>
+    <#list dataFactory.newCPDefinitionModels(cProductModel) as cpDefinitionModel>
+        ${dataFactory.toInsertSQL(cpDefinitionModel)}
+
+		${dataFactory.toInsertSQL(dataFactory.newCPDefinitionLocalizationModel(cpDefinitionModel))}
+    </#list>
+
 	${dataFactory.toInsertSQL(cProductModel)}
 </#list>
 
