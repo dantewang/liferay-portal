@@ -20,6 +20,7 @@ import com.liferay.petra.log4j.Log4JUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.log.SanitizerLogWrapper;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.log.Log4jLogFactoryImpl;
@@ -338,8 +339,8 @@ public class Log4jTest {
 	}
 
 	private void _assertXmlLog(
-			String actualOutput, String level, String outputLogMethodName,
-			String renderMessage, boolean throwable)
+			String actualOutput, String level, String renderMessage,
+			boolean throwable)
 		throws Exception {
 
 		String consoleOutput = _unsyncStringWriter.toString();
@@ -352,72 +353,87 @@ public class Log4jTest {
 
 		Date logDate = simpleDateFormat.parse(date);
 
-		String content = consoleOutput.substring(datePattern.length());
-
-		int index = content.indexOf(":");
-
-		content = content.substring(index);
-
-		index = content.indexOf("]");
-
-		String lineNumber = content.substring(1, index);
-
 		Thread currentThread = Thread.currentThread();
 
-		if (throwable) {
-			String startThrowableTag = "<log4j:throwable><![CDATA[";
-			String endThrowableTag = "]]></log4j:throwable>";
+		String expectedInstantTagContent =
+			"<Instant epochSecond=\"number\" nanoOfSecond=\"number\"/>";
 
-			int start = actualOutput.indexOf(startThrowableTag);
-			int end = actualOutput.indexOf(endThrowableTag);
+		Matcher matcher = _instantPattern.matcher(actualOutput);
 
-			String stackTraceContent = actualOutput.substring(
-				start + startThrowableTag.length(), end);
+		boolean includeInstantTag = false;
 
-			String[] stackTrace = StringUtil.splitLines(stackTraceContent);
+		while (matcher.find()) {
+			includeInstantTag = true;
 
-			Assert.assertEquals(
-				"Expected output exception should include " +
-					TestException.class.getName(),
-				TestException.class.getName(), stackTrace[0]);
+			String instantTagContent = matcher.group();
 
 			actualOutput = StringUtil.replace(
-				actualOutput, stackTraceContent, TestException.class.getName());
+				actualOutput, instantTagContent, expectedInstantTagContent);
 		}
 
-		StringBundler sb = new StringBundler(23);
+		Assert.assertTrue(
+			"XML output should include Instant tag: " +
+				expectedInstantTagContent,
+			includeInstantTag);
 
-		sb.append("<log4j:event logger=\"");
-		sb.append(Log4jTest.class.getName());
-		sb.append("\" timestamp=\"");
+		String xmlNameSpaces =
+			"xmlns=\"http://logging.apache.org/log4j/2.0/events\"";
+
+		StringBundler sb = new StringBundler(26);
+
+		sb.append("\r\n  <Event ");
+		sb.append(xmlNameSpaces);
+		sb.append(" timeMillis=\"");
 		sb.append(logDate.getTime());
-		sb.append("\" level=\"");
-		sb.append(level);
 		sb.append("\" thread=\"");
 		sb.append(currentThread.getName());
-		sb.append("\">\r\n");
-		sb.append("<log4j:message><![CDATA[");
-
-		if (renderMessage != null) {
-			sb.append(renderMessage);
-		}
-
-		sb.append("]]></log4j:message>\r\n");
+		sb.append("\" level=\"");
+		sb.append(level);
+		sb.append("\" loggerName=\"");
+		sb.append(Log4jTest.class.getName());
+		sb.append("\" endOfBatch=\"false\" loggerFqcn=\"");
+		sb.append(SanitizerLogWrapper.class.getName());
+		sb.append("\" threadId=\"");
+		sb.append(currentThread.getId());
+		sb.append("\" threadPriority=\"");
+		sb.append(currentThread.getPriority());
+		sb.append("\">\r\n    ");
+		sb.append(expectedInstantTagContent);
+		sb.append("\r\n    <Message>");
+		sb.append(renderMessage);
 
 		if (throwable) {
-			sb.append("<log4j:throwable><![CDATA[");
-			sb.append(TestException.class.getName());
-			sb.append("]]></log4j:throwable>\r\n");
-		}
+			String startExtendedStackTraceTag = "<ExtendedStackTrace>";
+			String endExtendedStackTraceTag = "</ExtendedStackTrace>";
 
-		sb.append("<log4j:locationInfo class=\"");
-		sb.append(Log4jTest.class.getName());
-		sb.append("\" method=\"");
-		sb.append(outputLogMethodName);
-		sb.append("\" file=\"Log4jTest.java\" line=\"");
-		sb.append(lineNumber);
-		sb.append("\"/>\r\n");
-		sb.append("</log4j:event>\r\n\r\n");
+			int start = actualOutput.indexOf(startExtendedStackTraceTag);
+			int end = actualOutput.indexOf(endExtendedStackTraceTag);
+
+			String expectedExtendedStackTraceTagContent =
+				"<ExtendedStackTrace>...</ExtendedStackTrace>";
+
+			Assert.assertTrue(
+				"XML output should include ExtendedStackTrace tag: " +
+					expectedExtendedStackTraceTagContent,
+				(start > 0) && (end > 0));
+
+			String extendedStackTraceTagContent = actualOutput.substring(
+				start, end + endExtendedStackTraceTag.length());
+
+			actualOutput = StringUtil.replace(
+				actualOutput, extendedStackTraceTagContent,
+				expectedExtendedStackTraceTagContent);
+
+			sb.append("</Message>\r\n    <Thrown commonElementCount=\"0\" ");
+			sb.append("name=\"");
+			sb.append(TestException.class.getName());
+			sb.append("\">\r\n      ");
+			sb.append(expectedExtendedStackTraceTagContent);
+			sb.append("\r\n    </Thrown>\r\n  </Event>\r\n");
+		}
+		else {
+			sb.append("</Message>\r\n  </Event>\r\n");
+		}
 
 		Assert.assertEquals(
 			"LogMessage should be " + sb.toString(), sb.toString(),
@@ -531,8 +547,6 @@ public class Log4jTest {
 			}
 		}
 
-		String outputLogMethodName = "_outputLog";
-
 		_outputLog(level, renderMessage, message, throwable);
 
 		Matcher matcher = null;
@@ -561,7 +575,7 @@ public class Log4jTest {
 
 					_assertXmlLog(
 						StreamUtil.toString(new FileInputStream(file)), level,
-						outputLogMethodName, renderMessage, throwable);
+						renderMessage, throwable);
 				}
 			}
 		}
@@ -574,6 +588,8 @@ public class Log4jTest {
 
 	private static final Pattern _datePattern = Pattern.compile(
 		"\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d.\\d\\d\\d");
+	private static final Pattern _instantPattern = Pattern.compile(
+		"<Instant epochSecond=\\\"(\\d*)\\\" nanoOfSecond=\\\"(\\d*)\\\"/>");
 	private static PrintStream _originalOutputStream;
 	private static PrintStream _printStream;
 	private static File _tempLogDir;
