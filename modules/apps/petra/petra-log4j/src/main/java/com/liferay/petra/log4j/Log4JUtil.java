@@ -324,7 +324,10 @@ public class Log4JUtil {
 			loggerContext.start(compositeConfiguration);
 		}
 		else {
-			loggerContext.setConfiguration(compositeConfiguration);
+			Configuration oldConfiguration = loggerContext.setConfiguration(
+				compositeConfiguration);
+
+			oldConfiguration.stop();
 		}
 	}
 
