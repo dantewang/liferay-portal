@@ -284,6 +284,13 @@ public class Log4jTest {
 		Assert.assertFalse(
 			"DEBUG level should be not enabled", childLog.isDebugEnabled());
 
+		_setLevel("", "DEBUG");
+
+		Assert.assertTrue(
+			"DEBUG level should be enabled", childLog.isDebugEnabled());
+
+		_setLevel("", "INFO");
+
 		_setLevel("com.test.parent", "DEBUG");
 
 		Assert.assertTrue(
