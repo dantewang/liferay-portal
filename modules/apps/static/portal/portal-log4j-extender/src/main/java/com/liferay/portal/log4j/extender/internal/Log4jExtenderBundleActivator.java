@@ -287,7 +287,10 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 			loggerContext.start(compositeConfiguration);
 		}
 		else {
-			loggerContext.setConfiguration(compositeConfiguration);
+			Configuration oldConfiguration = loggerContext.setConfiguration(
+				compositeConfiguration);
+
+			oldConfiguration.stop();
 		}
 
 		Configuration configuration = loggerContext.getConfiguration();
