@@ -21,6 +21,7 @@ import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -29,14 +30,14 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 
 import java.lang.reflect.Method;
 
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import java.util.ArrayList;
@@ -48,15 +49,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.LifeCycle;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.AppenderRef;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
-import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.config.composite.CompositeConfiguration;
 import org.apache.logging.log4j.core.config.xml.XmlConfiguration;
 import org.apache.logging.log4j.core.config.xml.XmlConfigurationFactory;
+import org.apache.logging.log4j.core.impl.Log4jContextFactory;
+import org.apache.logging.log4j.core.selector.ContextSelector;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
@@ -81,10 +84,30 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 
 			@Override
 			public Bundle addingBundle(Bundle bundle, BundleEvent bundleEvent) {
+				List<Bundle> bundles = new ArrayList<>();
+
+				bundles.add(bundle);
+
+				BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
+
+				ClassLoader bundleClassLoader = bundleWiring.getClassLoader();
+
+				if (bundleClassLoader == null) {
+					List<BundleWire> bundleWire = bundleWiring.getRequiredWires(
+						"osgi.wiring.host");
+
+					BundleWire hostBundleWire = bundleWire.get(0);
+
+					BundleWiring hostBundleWiring =
+						hostBundleWire.getProviderWiring();
+
+					bundleClassLoader = hostBundleWiring.getClassLoader();
+
+					bundles.add(0, hostBundleWiring.getBundle());
+				}
+
 				try {
-					_configureLog4j(bundle, "module-log4j.xml");
-					_configureLog4j(bundle, "module-log4j-ext.xml");
-					_configureLog4j(bundle);
+					_configureLog4J(bundleClassLoader, _collectURLs(bundles));
 				}
 				catch (Exception exception) {
 					_logger.error(
@@ -174,120 +197,98 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 		return urlContent;
 	}
 
-	private void _configureLog4j(Bundle bundle) throws Exception {
-		File configFile = new File(
-			StringBundler.concat(
-				PropsValues.MODULE_FRAMEWORK_BASE_DIR, "/log4j/",
-				bundle.getSymbolicName(), "-log4j-ext.xml"));
+	private List<URL> _collectURLs(List<Bundle> bundles)
+		throws MalformedURLException {
 
-		if (!configFile.exists()) {
+		List<URL> urls = new ArrayList<>();
+
+		for (Bundle bundle : bundles) {
+			Enumeration<URL> enumeration = bundle.findEntries(
+				"META-INF", "module-log4j.xml", false);
+
+			if (enumeration != null) {
+				while (enumeration.hasMoreElements()) {
+					urls.add(enumeration.nextElement());
+				}
+			}
+
+			enumeration = bundle.findEntries(
+				"META-INF", "module-log4j-ext.xml", false);
+
+			if (enumeration != null) {
+				while (enumeration.hasMoreElements()) {
+					urls.add(enumeration.nextElement());
+				}
+			}
+
+			File configFile = new File(
+				StringBundler.concat(
+					PropsValues.MODULE_FRAMEWORK_BASE_DIR, "/log4j/",
+					bundle.getSymbolicName(), "-log4j-ext.xml"));
+
+			if (configFile.exists()) {
+				Path path = configFile.toPath();
+
+				URI uri = path.toUri();
+
+				urls.add(uri.toURL());
+			}
+		}
+
+		return urls;
+	}
+
+	private void _configureLog4J(ClassLoader bundleClassLoader, List<URL> urls)
+		throws Exception {
+
+		if (urls.isEmpty()) {
 			return;
 		}
 
-		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
+		Log4jContextFactory loggerContextFactory =
+			(Log4jContextFactory)LogManager.getFactory();
 
-		_configureLog4j(
-			bundleWiring.getClassLoader(), configFile,
-			bundle.getSymbolicName());
-	}
+		ContextSelector contextSelector = loggerContextFactory.getSelector();
 
-	private void _configureLog4j(Bundle bundle, String resourcePath)
-		throws Exception {
+		URL configLocationURL = urls.get(0);
 
-		Enumeration<URL> enumeration = bundle.findEntries(
-			"META-INF", resourcePath, false);
+		LoggerContext loggerContext = contextSelector.getContext(
+			null, bundleClassLoader, false, configLocationURL.toURI());
 
-		if (enumeration != null) {
-			while (enumeration.hasMoreElements()) {
-				URL url = enumeration.nextElement();
+		List<XmlConfiguration> configurations = new ArrayList<>();
 
-				Path path = Files.createTempFile(null, ".xml");
+		for (URL url : urls) {
+			String urlContent = _getURLContent(url);
 
-				String urlContent = _getURLContent(url);
-
-				Files.write(path, urlContent.getBytes());
-
-				BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
-
-				ClassLoader bundleClassLoader = bundleWiring.getClassLoader();
-
-				String symbolicName = bundle.getSymbolicName();
-
-				if (bundleClassLoader == null) {
-					List<BundleWire> bundleWire = bundleWiring.getRequiredWires(
-						"osgi.wiring.host");
-
-					BundleWire hostBundleWire = bundleWire.get(0);
-
-					BundleWiring hostBundleWiring =
-						hostBundleWire.getProviderWiring();
-
-					bundleClassLoader = hostBundleWiring.getClassLoader();
-
-					Bundle hostBundle = hostBundleWiring.getBundle();
-
-					symbolicName = hostBundle.getSymbolicName();
-				}
-
-				_configureLog4j(bundleClassLoader, path.toFile(), symbolicName);
-			}
-		}
-	}
-
-	private void _configureLog4j(
-			ClassLoader bundleClassLoader, File configFile, String symbolicName)
-		throws Exception {
-
-		List<XmlConfiguration> xmlConfigurationList = _xmlConfigurationsMap.get(
-			bundleClassLoader);
-
-		if (xmlConfigurationList == null) {
-			xmlConfigurationList = new ArrayList<>();
-		}
-		else {
-			List<XmlConfiguration> newXmlConfigurationList = new ArrayList<>();
-
-			for (XmlConfiguration xmlConfiguration : xmlConfigurationList) {
-				newXmlConfigurationList.add(
-					(XmlConfiguration)xmlConfiguration.reconfigure());
+			if (urlContent == null) {
+				continue;
 			}
 
-			xmlConfigurationList = newXmlConfigurationList;
-		}
-
-		LoggerContext loggerContext = null;
-
-		if (xmlConfigurationList.isEmpty()) {
-			loggerContext = Configurator.initialize(
-				null, bundleClassLoader, configFile.toURI());
-
-			xmlConfigurationList.add(
-				(XmlConfiguration)loggerContext.getConfiguration());
-
-			_loggerContextsMap.put(bundleClassLoader, loggerContext);
-		}
-		else {
 			ConfigurationSource configurationSource = new ConfigurationSource(
-				new FileInputStream(configFile), configFile);
+				new UnsyncByteArrayInputStream(
+					urlContent.getBytes(StringPool.UTF8)));
 
 			XmlConfigurationFactory xmlConfigurationFactory =
 				new XmlConfigurationFactory();
 
-			loggerContext = _loggerContextsMap.get(bundleClassLoader);
-
-			XmlConfiguration xmlConfiguration =
+			configurations.add(
 				(XmlConfiguration)xmlConfigurationFactory.getConfiguration(
-					loggerContext, configurationSource);
-
-			xmlConfigurationList.add(xmlConfiguration);
-
-			loggerContext.setConfiguration(
-				new CompositeConfiguration(xmlConfigurationList));
+					loggerContext, configurationSource));
 		}
 
-		Log4JUtil.setLoggerContexts(symbolicName, loggerContext);
+		if (configurations.isEmpty()) {
+			return;
+		}
 
-		_xmlConfigurationsMap.put(bundleClassLoader, xmlConfigurationList);
+		CompositeConfiguration compositeConfiguration =
+			new CompositeConfiguration(configurations);
+
+		if (loggerContext.getState() == LifeCycle.State.INITIALIZED) {
+			loggerContext.start(compositeConfiguration);
+		}
+		else {
+			loggerContext.setConfiguration(compositeConfiguration);
+		}
 
 		Configuration configuration = loggerContext.getConfiguration();
 
@@ -313,14 +314,15 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 				appender, appenderRef.getLevel(), appenderRef.getFilter());
 		}
 
-		_registerLoggerConfigService(currentBundleRootLogger, symbolicName);
+		_registerLoggerConfigService(
+			currentBundleRootLogger, bundleClassLoader);
 	}
 
 	private void _registerLoggerConfigService(
-		LoggerConfig currentBundleRootLogger, String symbolicName) {
+		LoggerConfig currentBundleRootLogger, ClassLoader bundleClassLoader) {
 
 		ServiceRegistration<LoggerConfig> serviceRegistration =
-			_serviceRegistrations.get(symbolicName);
+			_serviceRegistrations.get(bundleClassLoader);
 
 		if (serviceRegistration != null) {
 			serviceRegistration.unregister();
@@ -330,7 +332,7 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 			LoggerConfig.class, currentBundleRootLogger,
 			new HashMapDictionary<>());
 
-		_serviceRegistrations.put(symbolicName, serviceRegistration);
+		_serviceRegistrations.put(bundleClassLoader, serviceRegistration);
 	}
 
 	private static final Logger _logger = LogManager.getLogger(
@@ -338,12 +340,8 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 
 	private static BundleContext _bundleContext;
 	private static String _liferayHome;
-	private static final Map<ClassLoader, LoggerContext> _loggerContextsMap =
-		new ConcurrentHashMap<>();
-	private static final Map<String, ServiceRegistration<LoggerConfig>>
+	private static final Map<ClassLoader, ServiceRegistration<LoggerConfig>>
 		_serviceRegistrations = new ConcurrentHashMap<>();
-	private static final Map<ClassLoader, List<XmlConfiguration>>
-		_xmlConfigurationsMap = new ConcurrentHashMap<>();
 
 	private volatile BundleTracker<Bundle> _bundleTracker;
 
