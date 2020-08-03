@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -255,8 +256,6 @@ public class Log4JUtil {
 	}
 
 	public static void setLevel(String name, String priority, boolean custom) {
-		org.apache.logging.log4j.core.Logger logger = null;
-
 		LoggerContext loggerContext = null;
 
 		Set<String> symbolicNames = _loggerContexts.keySet();
@@ -266,26 +265,91 @@ public class Log4JUtil {
 		while (iterator.hasNext()) {
 			String symbolicName = iterator.next();
 
-			if (symbolicName.equals(_PORTAT_SYMBOLICNAME)) {
+			if (Validator.isNull(name) ||
+				symbolicName.equals(_PORTAT_SYMBOLICNAME)) {
+
 				continue;
 			}
 
 			if (name.startsWith(symbolicName)) {
 				loggerContext = _loggerContexts.get(symbolicName);
 
-				logger = loggerContext.getLogger(name);
-
 				break;
 			}
 		}
 
-		if (logger == null) {
+		if (loggerContext == null) {
 			loggerContext = _loggerContexts.get(_PORTAT_SYMBOLICNAME);
-
-			logger = loggerContext.getLogger(name);
 		}
 
-		logger.setLevel(Level.toLevel(priority));
+		Configuration configuration = loggerContext.getConfiguration();
+
+		LoggerConfig loggerConfig = null;
+
+		Level level = Level.toLevel(priority);
+
+		boolean updateLoggers = false;
+
+		if (Validator.isNull(name)) {
+			loggerConfig = configuration.getRootLogger();
+
+			Level orginalLevel = loggerConfig.getLevel();
+
+			if (!orginalLevel.equals(level)) {
+				loggerConfig.setLevel(level);
+
+				updateLoggers = true;
+			}
+		}
+		else {
+			loggerConfig = configuration.getLoggerConfig(name);
+
+			if (!name.equals(loggerConfig.getName())) {
+				loggerConfig = new LoggerConfig(name, level, true);
+
+				configuration.addLogger(name, loggerConfig);
+
+				updateLoggers = true;
+			}
+			else {
+				Level orginalLevel = loggerConfig.getLevel();
+
+				if (!orginalLevel.equals(level)) {
+					loggerConfig.setLevel(level);
+
+					updateLoggers = true;
+				}
+			}
+		}
+
+		if (updateLoggers) {
+			if (Validator.isNull(name)) {
+				Level portalRootLevel = loggerConfig.getLevel();
+
+				Collection<LoggerContext> loggerContexts =
+					_loggerContexts.values();
+
+				Iterator<LoggerContext> loggerContextIterator =
+					loggerContexts.iterator();
+
+				while (loggerContextIterator.hasNext()) {
+					loggerContext = loggerContextIterator.next();
+
+					configuration = loggerContext.getConfiguration();
+
+					loggerConfig = configuration.getRootLogger();
+
+					loggerConfig.setLevel(portalRootLevel);
+
+					configuration.addLogger(name, loggerConfig);
+
+					loggerContext.updateLoggers();
+				}
+			}
+			else {
+				loggerContext.updateLoggers();
+			}
+		}
 
 		java.util.logging.Logger jdkLogger = java.util.logging.Logger.getLogger(
 			name);
