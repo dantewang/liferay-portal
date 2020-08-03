@@ -181,8 +181,7 @@ public class PluginPackageHotDeployListener extends BaseHotDeployListener {
 	}
 
 	protected void initLogger(ClassLoader classLoader) {
-		Log4JUtil.configureLog4J(
-			classLoader.getResource("META-INF/portal-log4j.xml"));
+		Log4JUtil.configureLog4J(classLoader);
 	}
 
 	protected void initPortletProps(ClassLoader classLoader) throws Exception {
