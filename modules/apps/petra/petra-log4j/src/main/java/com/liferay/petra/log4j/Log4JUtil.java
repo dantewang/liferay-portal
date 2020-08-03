@@ -16,11 +16,14 @@ package com.liferay.petra.log4j;
 
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
+import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactory;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
@@ -28,15 +31,11 @@ import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.net.URISyntaxException;
 import java.net.URL;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,14 +51,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LifeCycle;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
-import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.config.composite.CompositeConfiguration;
 import org.apache.logging.log4j.core.config.xml.XmlConfiguration;
 import org.apache.logging.log4j.core.config.xml.XmlConfigurationFactory;
+import org.apache.logging.log4j.core.impl.Log4jContextFactory;
+import org.apache.logging.log4j.core.selector.ContextSelector;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -72,14 +73,22 @@ import org.dom4j.io.SAXReader;
 public class Log4JUtil {
 
 	public static void configureLog4J(ClassLoader classLoader) {
-		configureLog4J(classLoader.getResource("META-INF/portal-log4j.xml"));
+		URL url = classLoader.getResource("META-INF/portal-log4j.xml");
+
+		if (url == null) {
+			return;
+		}
+
+		List<URL> urls = new ArrayList<>();
+
+		urls.add(url);
 
 		try {
 			Enumeration<URL> enumeration = classLoader.getResources(
 				"META-INF/portal-log4j-ext.xml");
 
 			while (enumeration.hasMoreElements()) {
-				configureLog4J(enumeration.nextElement());
+				urls.add(enumeration.nextElement());
 			}
 		}
 		catch (IOException ioException) {
@@ -90,105 +99,30 @@ public class Log4JUtil {
 				java.util.logging.Level.WARNING,
 				"Unable to load portal-log4j-ext.xml", ioException);
 		}
-	}
 
-	public static void configureLog4J(URL url) {
-		if (url == null) {
-			return;
-		}
+		Log4jContextFactory loggerContextFactory =
+			(Log4jContextFactory)LogManager.getFactory();
 
-		String urlContent = _getURLContent(url);
-
-		if (urlContent == null) {
-			return;
-		}
+		ContextSelector contextSelector = loggerContextFactory.getSelector();
 
 		try {
-			if (_xmlConfigurationList == null) {
-				_xmlConfigurationList = new ArrayList<>();
-			}
-			else {
-				List<XmlConfiguration> newXmlConfigurationList =
-					new ArrayList<>();
+			LoggerContext loggerContext = contextSelector.getContext(
+				null, _processClassLoader(classLoader), false, url.toURI());
 
-				for (XmlConfiguration xmlConfiguration :
-						_xmlConfigurationList) {
-
-					newXmlConfigurationList.add(
-						(XmlConfiguration)xmlConfiguration.reconfigure());
-				}
-
-				_xmlConfigurationList = newXmlConfigurationList;
-			}
-
-			Path path = Files.createTempFile(null, ".xml");
-
-			Files.write(path, urlContent.getBytes());
-
-			if (_loggerContext == null) {
-				ClassLoader portalClassLoader =
-					Log4JUtil.class.getClassLoader();
-
-				_loggerContext = Configurator.initialize(
-					null, portalClassLoader.getParent(), path.toUri());
-
-				_xmlConfigurationList.add(
-					(XmlConfiguration)_loggerContext.getConfiguration());
-			}
-			else {
-				File file = path.toFile();
-
-				ConfigurationSource configurationSource =
-					new ConfigurationSource(new FileInputStream(file), file);
-
-				XmlConfigurationFactory xmlConfigurationFactory =
-					new XmlConfigurationFactory();
-
-				XmlConfiguration xmlConfiguration =
-					(XmlConfiguration)xmlConfigurationFactory.getConfiguration(
-						_loggerContext, configurationSource);
-
-				_xmlConfigurationList.add(xmlConfiguration);
-
-				CompositeConfiguration compositeConfiguration =
-					new CompositeConfiguration(_xmlConfigurationList);
-
-				_loggerContext.setConfiguration(compositeConfiguration);
-			}
-
-			Configuration configuration = _loggerContext.getConfiguration();
-
-			_rootLoggerConfig = configuration.getRootLogger();
-
-			_loggerContexts.put(_PORTAT_SYMBOLICNAME, _loggerContext);
-
-			SAXReader saxReader = new SAXReader();
-
-			Document document = saxReader.read(
-				new UnsyncStringReader(urlContent), url.toExternalForm());
-
-			Element rootElement = document.getRootElement();
-
-			Element loggersElement = rootElement.element("Loggers");
-
-			List<Element> loggerElements = loggersElement.elements("Logger");
-
-			for (Element loggerElement : loggerElements) {
-				String name = loggerElement.attributeValue("name");
-
-				String priority = loggerElement.attributeValue("level");
-
-				java.util.logging.Logger jdkLogger =
-					java.util.logging.Logger.getLogger(name);
-
-				jdkLogger.setLevel(_getJdkLevel(priority));
-			}
+			_configureLog4J(loggerContext, urls.toArray(new URL[0]));
 		}
-		catch (Exception exception) {
-			_logger = LogManager.getRootLogger();
-
-			_logger.error(exception, exception);
+		catch (URISyntaxException uriSyntaxException) {
 		}
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
+	public static void configureLog4J(URL url) {
+		throw new UnsupportedOperationException(
+			"Configuring Log4J by providing a single URL is no longer " +
+				"supported due to context separation in Log4J 2");
 	}
 
 	public static List<org.apache.logging.log4j.core.Logger> getAllLoggers() {
@@ -233,7 +167,12 @@ public class Log4JUtil {
 	}
 
 	public static LoggerConfig getRootLogger() {
-		return _rootLoggerConfig;
+		LoggerContext loggerContext = (LoggerContext)LogManager.getContext(
+			Log.class.getClassLoader(), false);
+
+		Configuration configuration = loggerContext.getConfiguration();
+
+		return configuration.getRootLogger();
 	}
 
 	public static void initLog4J(
@@ -379,6 +318,80 @@ public class Log4JUtil {
 		}
 	}
 
+	private static void _configureLog4J(
+		LoggerContext loggerContext, URL... urls) {
+
+		List<XmlConfiguration> configurations = new ArrayList<>();
+
+		for (URL url : urls) {
+			if (url == null) {
+				continue;
+			}
+
+			String urlContent = _getURLContent(url);
+
+			if (urlContent == null) {
+				return;
+			}
+
+			try {
+				ConfigurationSource configurationSource =
+					new ConfigurationSource(
+						new UnsyncByteArrayInputStream(
+							urlContent.getBytes(StringPool.UTF8)));
+
+				XmlConfigurationFactory xmlConfigurationFactory =
+					new XmlConfigurationFactory();
+
+				configurations.add(
+					(XmlConfiguration)xmlConfigurationFactory.getConfiguration(
+						loggerContext, configurationSource));
+
+				SAXReader saxReader = new SAXReader();
+
+				Document document = saxReader.read(
+					new UnsyncStringReader(urlContent), url.toExternalForm());
+
+				Element rootElement = document.getRootElement();
+
+				Element loggersElement = rootElement.element("Loggers");
+
+				List<Element> loggerElements = loggersElement.elements(
+					"Logger");
+
+				for (Element loggerElement : loggerElements) {
+					String name = loggerElement.attributeValue("name");
+
+					String priority = loggerElement.attributeValue("level");
+
+					java.util.logging.Logger jdkLogger =
+						java.util.logging.Logger.getLogger(name);
+
+					jdkLogger.setLevel(_getJdkLevel(priority));
+				}
+			}
+			catch (Exception exception) {
+				_logger = LogManager.getRootLogger();
+
+				_logger.error(exception, exception);
+			}
+		}
+
+		if (configurations.isEmpty()) {
+			return;
+		}
+
+		CompositeConfiguration compositeConfiguration =
+			new CompositeConfiguration(configurations);
+
+		if (loggerContext.getState() == LifeCycle.State.INITIALIZED) {
+			loggerContext.start(compositeConfiguration);
+		}
+		else {
+			loggerContext.setConfiguration(compositeConfiguration);
+		}
+	}
+
 	private static String _escapeXMLAttribute(String s) {
 		return StringUtil.replace(
 			s,
@@ -483,6 +496,14 @@ public class Log4JUtil {
 		return _removeAppender(urlContent, "XML_FILE");
 	}
 
+	private static ClassLoader _processClassLoader(ClassLoader classLoader) {
+		if (classLoader == PortalClassLoaderUtil.getClassLoader()) {
+			return Log.class.getClassLoader();
+		}
+
+		return classLoader;
+	}
+
 	private static String _removeAppender(String content, String appenderName) {
 		int x = content.indexOf("<appender name=\"" + appenderName + "\"");
 
@@ -507,11 +528,8 @@ public class Log4JUtil {
 	private static final Map<String, String> _customLogSettings =
 		new ConcurrentHashMap<>();
 	private static String _liferayHome;
-	private static LoggerContext _loggerContext;
 	private static final Map<String, LoggerContext> _loggerContexts =
 		new ConcurrentHashMap<>();
-	private static LoggerConfig _rootLoggerConfig;
-	private static List<XmlConfiguration> _xmlConfigurationList;
 
 	private static class LoggerNameComparator
 		implements Comparator<org.apache.logging.log4j.core.Logger> {
