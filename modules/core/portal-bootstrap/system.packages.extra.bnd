@@ -357,7 +357,6 @@ Provide-Capability:\
 	@../../../lib/portal/log4j-1.2-api.jar,\
 	@../../../lib/portal/log4j-api.jar,\
 	@../../../lib/portal/log4j-core.jar,\
-	@../../../lib/portal/log4j-extras.jar,\
 	@../../../lib/portal/portletmvc4spring-framework.jar,\
 	@../../../lib/portal/rome.jar,\
 	@../../../lib/portal/slf4j-api.jar,\
