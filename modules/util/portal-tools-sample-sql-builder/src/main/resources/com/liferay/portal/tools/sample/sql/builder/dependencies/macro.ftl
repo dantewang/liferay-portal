@@ -202,7 +202,7 @@
 >
 	${dataFactory.toInsertSQL(_userModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newContactModel(_userModel))}
+	${dataFactory.toInsertSQL(userDataFactory.newContactModel(_userModel))}
 
 	<#list _roleIds as roleId>
 		${dataFactory.toInsertSQL("Users_Roles", 0, roleId, _userModel.userId)}
