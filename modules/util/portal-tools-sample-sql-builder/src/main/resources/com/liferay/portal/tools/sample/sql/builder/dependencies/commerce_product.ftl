@@ -1,9 +1,9 @@
 <#assign
-	commerceCurrencyModel = dataFactory.newCommerceCurrencyModel()
-	commerceCatalogModel = dataFactory.newCommerceCatalogModel(commerceCurrencyModel)
-	commerceChannelModel = dataFactory.newCommerceChannelModel(commerceCurrencyModel)
+	commerceCurrencyModel = commerceDataFactory.newCommerceCurrencyModel()
+	commerceCatalogModel = commerceDataFactory.newCommerceCatalogModel(commerceCurrencyModel)
+	commerceChannelModel = commerceDataFactory.newCommerceChannelModel(commerceCurrencyModel)
 	commerceCatalogGroupModel = userDataFactory.newCommerceCatalogGroupModel(commerceCatalogModel)
-	cpTaxCategoryModel = dataFactory.newCPTaxCategoryModel()
+	cpTaxCategoryModel = commerceDataFactory.newCPTaxCategoryModel()
 />
 
 ${dataFactory.toInsertSQL(commerceCatalogModel)}
@@ -14,17 +14,17 @@ ${dataFactory.toInsertSQL(commerceChannelModel)}
 
 ${dataFactory.toInsertSQL(commerceCurrencyModel)}
 
-<#list dataFactory.getSequence(dataFactory.maxCommerceProductCount) as commerceProductCount>
-	<#assign cProductModel = dataFactory.newCProductModel(commerceCatalogGroupModel) />
+<#list dataFactory.getSequence(commerceDataFactory.maxCommerceProductCount) as commerceProductCount>
+	<#assign cProductModel = commerceDataFactory.newCProductModel(commerceCatalogGroupModel) />
 
 	${dataFactory.toInsertSQL(cProductModel)}
 
-	<#list dataFactory.getSequence(dataFactory.maxCommerceProductDefinitionCount) as commerceProductDefinitionCount>
+	<#list dataFactory.getSequence(commerceDataFactory.maxCommerceProductDefinitionCount) as commerceProductDefinitionCount>
 		<#assign
-			cpDefinitionModel = dataFactory.newCPDefinitionModel(cpTaxCategoryModel, cProductModel, commerceCatalogGroupModel, commerceProductDefinitionCount)
-			cpFriendlyURLEntryModel = dataFactory.newCPFriendlyURLEntryModel(cProductModel)
+			cpDefinitionModel = commerceDataFactory.newCPDefinitionModel(cpTaxCategoryModel, cProductModel, commerceCatalogGroupModel, commerceProductDefinitionCount)
+			cpFriendlyURLEntryModel = commerceDataFactory.newCPFriendlyURLEntryModel(cProductModel)
 			assetEntryModel = dataFactory.newCPDefinitionAssetEntryModel(cpDefinitionModel, commerceCatalogGroupModel)
-			cpDefinitionLocalizationModel = dataFactory.newCPDefinitionLocalizationModel(cpDefinitionModel)
+			cpDefinitionLocalizationModel = commerceDataFactory.newCPDefinitionLocalizationModel(cpDefinitionModel)
 		/>
 
 		${dataFactory.toInsertSQL(cpDefinitionModel)}
@@ -37,8 +37,8 @@ ${dataFactory.toInsertSQL(commerceCurrencyModel)}
 
 		${dataFactory.toInsertSQL(cpDefinitionLocalizationModel)}
 
-		<#list dataFactory.getSequence(dataFactory.maxCommerceProductInstanceCount) as commerceProductInstanceCount>
-			${dataFactory.toInsertSQL(dataFactory.newCPInstanceModel(cpDefinitionModel, commerceCatalogGroupModel, commerceProductInstanceCount))}
+		<#list dataFactory.getSequence(commerceDataFactory.maxCommerceProductInstanceCount) as commerceProductInstanceCount>
+			${dataFactory.toInsertSQL(commerceDataFactory.newCPInstanceModel(cpDefinitionModel, commerceCatalogGroupModel, commerceProductInstanceCount))}
 		</#list>
 	</#list>
 </#list>
