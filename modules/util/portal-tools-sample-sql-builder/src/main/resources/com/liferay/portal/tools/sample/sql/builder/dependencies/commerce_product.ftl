@@ -8,18 +8,18 @@
 	cpTaxCategoryModel = commerceDataFactory.newCPTaxCategoryModel()
 />
 
-${dataFactory.toInsertSQL(commerceCatalogModel)}
+${resourcePermissionDataFactory.toInsertSQL(commerceCatalogModel)}
 
-${dataFactory.toInsertSQL(dataFactory.newCommerceCatalogResourcePermissionModel(commerceCatalogModel))}
+${resourcePermissionDataFactory.toInsertSQL(resourcePermissionDataFactory.newCommerceCatalogResourcePermissionModel(commerceCatalogModel))}
 
-${dataFactory.toInsertSQL(commerceChannelModel)}
+${resourcePermissionDataFactory.toInsertSQL(commerceChannelModel)}
 
-${dataFactory.toInsertSQL(commerceCurrencyModel)}
+${resourcePermissionDataFactory.toInsertSQL(commerceCurrencyModel)}
 
 <#list counterDataFactory.getSequence(commerceDataFactory.maxCommerceProductCount) as commerceProductCount>
 	<#assign cProductModel = commerceDataFactory.newCProductModel(commerceCatalogGroupModel) />
 
-	${dataFactory.toInsertSQL(cProductModel)}
+	${resourcePermissionDataFactory.toInsertSQL(cProductModel)}
 
 	<#list counterDataFactory.getSequence(commerceDataFactory.maxCommerceProductDefinitionCount) as commerceProductDefinitionCount>
 		<#assign
@@ -27,23 +27,23 @@ ${dataFactory.toInsertSQL(commerceCurrencyModel)}
 			cpFriendlyURLEntryModel = commerceDataFactory.newCPFriendlyURLEntryModel(cProductModel)
 		/>
 
-		${dataFactory.toInsertSQL(cpDefinitionModel)}
+		${resourcePermissionDataFactory.toInsertSQL(cpDefinitionModel)}
 
-		${dataFactory.toInsertSQL(cpFriendlyURLEntryModel)}
+		${resourcePermissionDataFactory.toInsertSQL(cpFriendlyURLEntryModel)}
 
 		${csvFileWriter.write("cpFriendlyURLEntry", cpFriendlyURLEntryModel.urlTitle + "\n")}
 
-		${dataFactory.toInsertSQL(dataFactory.newCPDefinitionModelAssetEntryModel(cpDefinitionModel, commerceCatalogGroupModel))}
+		${resourcePermissionDataFactory.toInsertSQL(dataFactory.newCPDefinitionModelAssetEntryModel(cpDefinitionModel, commerceCatalogGroupModel))}
 
-		${dataFactory.toInsertSQL(commerceDataFactory.newCPDefinitionLocalizationModel(cpDefinitionModel))}
+		${resourcePermissionDataFactory.toInsertSQL(commerceDataFactory.newCPDefinitionLocalizationModel(cpDefinitionModel))}
 
 		<#list counterDataFactory.getSequence(commerceDataFactory.maxCommerceProductInstanceCount) as commerceProductInstanceCount>
-			${dataFactory.toInsertSQL(commerceDataFactory.newCPInstanceModel(cpDefinitionModel, commerceCatalogGroupModel, commerceProductInstanceCount))}
+			${resourcePermissionDataFactory.toInsertSQL(commerceDataFactory.newCPInstanceModel(cpDefinitionModel, commerceCatalogGroupModel, commerceProductInstanceCount))}
 		</#list>
 	</#list>
 </#list>
 
-${dataFactory.toInsertSQL(cpTaxCategoryModel)}
+${resourcePermissionDataFactory.toInsertSQL(cpTaxCategoryModel)}
 
 <@insertGroup _groupModel=commerceCatalogGroupModel />
 
