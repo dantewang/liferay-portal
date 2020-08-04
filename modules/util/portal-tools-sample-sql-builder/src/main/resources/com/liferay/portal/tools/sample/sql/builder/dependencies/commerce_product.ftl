@@ -3,7 +3,7 @@
 
 	commerceCatalogModel = dataFactory.newCommerceCatalogModel(commerceCurrencyModel)
 
-	commerceCatalogGroupModel = dataFactory.newCommerceCatalogGroupModel(commerceCatalogModel)
+	commerceCatalogGroupModel = userDataFactory.newCommerceCatalogGroupModel(commerceCatalogModel)
 	commerceChannelModel = dataFactory.newCommerceChannelModel(commerceCurrencyModel)
 	cpTaxCategoryModel = dataFactory.newCPTaxCategoryModel()
 />
@@ -47,4 +47,4 @@ ${dataFactory.toInsertSQL(cpTaxCategoryModel)}
 
 <@insertGroup _groupModel=commerceCatalogGroupModel />
 
-<@insertGroup _groupModel=dataFactory.newCommerceChannelGroupModel(commerceChannelModel) />
+<@insertGroup _groupModel=userDataFactory.newCommerceChannelGroupModel(commerceChannelModel) />
