@@ -39,7 +39,9 @@ import java.util.Dictionary;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.WriterAppender;
+import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
@@ -190,7 +192,7 @@ public class OutputStreamContainerFactoryTrackerImpl
 		_portalRootLoggerConfig.addAppender(_writerAppender, null, null);
 
 		_serviceTracker = ServiceTrackerFactory.open(
-			bundleContext, LoggerConfig.class,
+			bundleContext, LoggerContext.class,
 			new LoggerConfigServiceTrackerCustomizer());
 
 		Dictionary<String, Object> dictionary = new HashMapDictionary<>();
@@ -267,41 +269,46 @@ public class OutputStreamContainerFactoryTrackerImpl
 	private LoggerConfig _portalRootLoggerConfig;
 	private final List<ServiceRegistration<?>> _serviceRegistrations =
 		new ArrayList<>();
-	private volatile ServiceTracker<LoggerConfig, LoggerConfig> _serviceTracker;
+	private volatile ServiceTracker<LoggerContext, LoggerContext>
+		_serviceTracker;
 	private WriterAppender _writerAppender;
 	private final ThreadLocal<Writer> _writerThreadLocal = new ThreadLocal<>();
 
 	private class LoggerConfigServiceTrackerCustomizer
-		implements ServiceTrackerCustomizer<LoggerConfig, LoggerConfig> {
+		implements ServiceTrackerCustomizer<LoggerContext, LoggerContext> {
 
 		@Override
-		public LoggerConfig addingService(
-			ServiceReference<LoggerConfig> serviceReference) {
+		public LoggerContext addingService(
+			ServiceReference<LoggerContext> serviceReference) {
 
 			Bundle bundle = serviceReference.getBundle();
 
 			BundleContext bundleContext = bundle.getBundleContext();
 
-			LoggerConfig loggerConfig = bundleContext.getService(
+			LoggerContext loggerContext = bundleContext.getService(
 				serviceReference);
 
-			loggerConfig.addAppender(_writerAppender, null, null);
+			modifiedService(serviceReference, loggerContext);
 
-			return loggerConfig;
+			return loggerContext;
 		}
 
 		@Override
 		public void modifiedService(
-			ServiceReference<LoggerConfig> serviceReference,
-			LoggerConfig loggerContext) {
+			ServiceReference<LoggerContext> serviceReference,
+			LoggerContext loggerContext) {
+
+			Configuration configuration = loggerContext.getConfiguration();
+
+			LoggerConfig loggerConfig = configuration.getRootLogger();
+
+			loggerConfig.addAppender(_writerAppender, null, null);
 		}
 
 		@Override
 		public void removedService(
-			ServiceReference<LoggerConfig> reference,
-			LoggerConfig loggerConfig) {
-
-			loggerConfig.removeAppender(_writerAppender.getName());
+			ServiceReference<LoggerContext> serviceReference,
+			LoggerContext loggerContext) {
 		}
 
 	}
