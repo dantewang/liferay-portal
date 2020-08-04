@@ -186,7 +186,11 @@
 	<classpathentry kind="lib" path="lib/portal/ical4j.jar"/>
 	<classpathentry kind="lib" path="lib/portal/im4java.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jabsorb.jar"/>
+	<classpathentry kind="lib" path="lib/portal/jackson-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/portal/jackson-core.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jackson-databind.jar"/>
+	<classpathentry kind="lib" path="lib/portal/jackson-dataformat-xml.jar"/>
+	<classpathentry kind="lib" path="lib/portal/jackson-module-jaxb-annotations.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jai-imageio-core.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jai-imageio-jpeg2000.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jai_codec.jar"/>
@@ -236,7 +240,9 @@
 	<classpathentry kind="lib" path="lib/portal/jws-api.jar"/>
 	<classpathentry kind="lib" path="lib/portal/kxml2.jar"/>
 	<classpathentry kind="lib" path="lib/portal/liferay-icu4j.jar"/>
-	<classpathentry kind="lib" path="lib/portal/log4j.jar"/>
+	<classpathentry kind="lib" path="lib/portal/log4j-1.2-api.jar"/>
+	<classpathentry kind="lib" path="lib/portal/log4j-api.jar"/>
+	<classpathentry kind="lib" path="lib/portal/log4j-core.jar"/>
 	<classpathentry kind="lib" path="lib/portal/log4j-extras.jar"/>
 	<classpathentry kind="lib" path="lib/portal/mchange-commons-java.jar"/>
 	<classpathentry kind="lib" path="lib/portal/metadata-extractor.jar"/>
@@ -287,6 +293,7 @@
 	<classpathentry kind="lib" path="lib/portal/spring-web.jar"/>
 	<classpathentry kind="lib" path="lib/portal/spring-webmvc.jar"/>
 	<classpathentry kind="lib" path="lib/portal/stax.jar"/>
+	<classpathentry kind="lib" path="lib/portal/stax2.jar"/>
 	<classpathentry kind="lib" path="lib/portal/stax-ex.jar"/>
 	<classpathentry kind="lib" path="lib/portal/streambuffer.jar"/>
 	<classpathentry kind="lib" path="lib/portal/stringtemplate.jar"/>
@@ -300,6 +307,7 @@
 	<classpathentry kind="lib" path="lib/portal/urlrewritefilter.jar"/>
 	<classpathentry kind="lib" path="lib/portal/vorbis-java-core.jar"/>
 	<classpathentry kind="lib" path="lib/portal/vorbis-java-tika.jar"/>
+	<classpathentry kind="lib" path="lib/portal/woodstox-core.jar"/>
 	<classpathentry kind="lib" path="lib/portal/wsdl4j.jar"/>
 	<classpathentry kind="lib" path="lib/portal/wstx.jar"/>
 	<classpathentry kind="lib" path="lib/portal/xalan.jar"/>

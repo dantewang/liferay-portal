@@ -155,6 +155,7 @@
 /portal/jackson-annotations.jar
 /portal/jackson-core.jar
 /portal/jackson-databind.jar
+/portal/jackson-dataformat-xml.jar
 /portal/jackson-module-jaxb-annotations.jar
 /portal/jai_codec.jar
 /portal/jai_core.jar
@@ -204,7 +205,9 @@
 /portal/jws-api.jar
 /portal/kxml2.jar
 /portal/liferay-icu4j.jar
-/portal/log4j.jar
+/portal/log4j-1.2-api.jar
+/portal/log4j-api.jar
+/portal/log4j-core.jar
 /portal/log4j-extras.jar
 /portal/mchange-commons-java.jar
 /portal/metadata-extractor.jar
@@ -255,6 +258,7 @@
 /portal/spring-web.jar
 /portal/spring-webmvc.jar
 /portal/stax-ex.jar
+/portal/stax2.jar
 /portal/stax.jar
 /portal/streambuffer.jar
 /portal/stringtemplate.jar
@@ -268,6 +272,7 @@
 /portal/urlrewritefilter.jar
 /portal/vorbis-java-core.jar
 /portal/vorbis-java-tika.jar
+/portal/woodstox-core.jar
 /portal/wsdl4j.jar
 /portal/wstx.jar
 /portal/xalan.jar
