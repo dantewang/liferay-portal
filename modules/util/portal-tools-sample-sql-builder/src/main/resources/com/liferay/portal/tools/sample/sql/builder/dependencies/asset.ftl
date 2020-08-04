@@ -1,11 +1,11 @@
 <#list dataFactory.assetVocabularyModels as assetVocabularyModel>
-	${dataFactory.toInsertSQL(assetVocabularyModel)}
+	${resourcePermissionDataFactory.toInsertSQL(assetVocabularyModel)}
 </#list>
 
 <#list dataFactory.assetCategoryModels as assetCategoryModel>
-	${dataFactory.toInsertSQL(assetCategoryModel)}
+	${resourcePermissionDataFactory.toInsertSQL(assetCategoryModel)}
 </#list>
 
 <#list dataFactory.assetTagModels as assetTagModel>
-	${dataFactory.toInsertSQL(assetTagModel)}
+	${resourcePermissionDataFactory.toInsertSQL(assetTagModel)}
 </#list>
