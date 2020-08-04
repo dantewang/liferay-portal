@@ -78,11 +78,13 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 		_bundleContext = bundleContext;
 
-		_bundleTracker = new BundleTracker<Bundle>(
+		_bundleTracker = new BundleTracker<LoggerContext>(
 			bundleContext, ~(Bundle.INSTALLED | Bundle.UNINSTALLED), null) {
 
 			@Override
-			public Bundle addingBundle(Bundle bundle, BundleEvent bundleEvent) {
+			public LoggerContext addingBundle(
+				Bundle bundle, BundleEvent bundleEvent) {
+
 				List<Bundle> bundles = new ArrayList<>();
 
 				bundles.add(bundle);
@@ -106,7 +108,8 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 				}
 
 				try {
-					_configureLog4J(bundleClassLoader, _collectURLs(bundles));
+					return _configureLog4J(
+						bundleClassLoader, _collectURLs(bundles));
 				}
 				catch (Exception exception) {
 					_logger.error(
@@ -115,7 +118,20 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 						exception);
 				}
 
-				return bundle;
+				return null;
+			}
+
+			@Override
+			public void removedBundle(
+				Bundle bundle, BundleEvent event, LoggerContext loggerContext) {
+
+				BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
+
+				ClassLoader bundleClassLoader = bundleWiring.getClassLoader();
+
+				if ((loggerContext != null) && (bundleClassLoader != null)) {
+					LogManager.shutdown(loggerContext);
+				}
 			}
 
 		};
@@ -175,11 +191,12 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 		return urls;
 	}
 
-	private void _configureLog4J(ClassLoader bundleClassLoader, List<URL> urls)
+	private LoggerContext _configureLog4J(
+			ClassLoader bundleClassLoader, List<URL> urls)
 		throws Exception {
 
 		if (urls.isEmpty()) {
-			return;
+			return null;
 		}
 
 		Log4jContextFactory loggerContextFactory =
@@ -214,7 +231,7 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 		}
 
 		if (configurations.isEmpty()) {
-			return;
+			return null;
 		}
 
 		CompositeConfiguration compositeConfiguration =
@@ -253,6 +270,8 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 
 		_registerLoggerConfigService(
 			currentBundleRootLogger, bundleClassLoader);
+
+		return loggerContext;
 	}
 
 	private String _escapeXMLAttribute(String s) {
@@ -323,6 +342,6 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 	private static final Map<ClassLoader, ServiceRegistration<LoggerConfig>>
 		_serviceRegistrations = new ConcurrentHashMap<>();
 
-	private volatile BundleTracker<Bundle> _bundleTracker;
+	private volatile BundleTracker<LoggerContext> _bundleTracker;
 
 }
