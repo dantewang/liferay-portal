@@ -2467,18 +2467,6 @@
 				</licenses>
 			</library>
 			<library>
-				<file-name>lib/portal/log4j-extras.jar</file-name>
-				<version>1.2.17</version>
-				<project-name>Log4j Extras</project-name>
-				<project-url>http://logging.apache.org/log4j/extras</project-url>
-				<licenses>
-					<license>
-						<license-name>Apache License 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
-					</license>
-				</licenses>
-			</library>
-			<library>
 				<file-name>lib/portal/mchange-commons-java.jar</file-name>
 				<version>0.2.15</version>
 				<project-name>C3P0</project-name>
