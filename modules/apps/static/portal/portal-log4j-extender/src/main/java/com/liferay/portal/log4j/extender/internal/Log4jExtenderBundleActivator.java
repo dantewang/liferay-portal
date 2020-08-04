@@ -330,15 +330,6 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 				appender, appenderRef.getLevel(), appenderRef.getFilter());
 		}
 
-		_registerLoggerConfigService(
-			currentBundleRootLogger, bundleClassLoader);
-
-		return loggerContext;
-	}
-
-	private void _registerLoggerConfigService(
-		LoggerConfig currentBundleRootLogger, ClassLoader bundleClassLoader) {
-
 		ServiceRegistration<LoggerConfig> serviceRegistration =
 			_serviceRegistrations.get(bundleClassLoader);
 
@@ -351,6 +342,8 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 			new HashMapDictionary<>());
 
 		_serviceRegistrations.put(bundleClassLoader, serviceRegistration);
+
+		return loggerContext;
 	}
 
 	private static final Logger _logger = LogManager.getLogger(
