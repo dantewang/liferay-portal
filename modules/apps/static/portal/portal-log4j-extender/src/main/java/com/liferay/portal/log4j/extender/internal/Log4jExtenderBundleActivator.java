@@ -130,6 +130,11 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 				ClassLoader bundleClassLoader = bundleWiring.getClassLoader();
 
 				if ((loggerContext != null) && (bundleClassLoader != null)) {
+					ServiceRegistration<LoggerConfig> serviceRegistration =
+						_serviceRegistrations.remove(bundleClassLoader);
+
+					serviceRegistration.unregister();
+
 					LogManager.shutdown(loggerContext);
 				}
 			}
@@ -142,12 +147,6 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 	@Override
 	public void stop(BundleContext bundleContext) {
 		_bundleTracker.close();
-
-		for (ServiceRegistration<LoggerConfig> serviceRegistration :
-				_serviceRegistrations.values()) {
-
-			serviceRegistration.unregister();
-		}
 	}
 
 	private List<URL> _collectURLs(List<Bundle> bundles)
