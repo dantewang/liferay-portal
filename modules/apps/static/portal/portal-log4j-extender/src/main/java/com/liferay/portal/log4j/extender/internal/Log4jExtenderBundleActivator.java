@@ -131,7 +131,7 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 				ClassLoader bundleClassLoader = bundleWiring.getClassLoader();
 
 				if ((loggerContext != null) && (bundleClassLoader != null)) {
-					ServiceRegistration<LoggerConfig> serviceRegistration =
+					ServiceRegistration<LoggerContext> serviceRegistration =
 						_serviceRegistrations.remove(bundleClassLoader);
 
 					serviceRegistration.unregister();
@@ -330,18 +330,20 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 				appender, appenderRef.getLevel(), appenderRef.getFilter());
 		}
 
-		ServiceRegistration<LoggerConfig> serviceRegistration =
-			_serviceRegistrations.get(bundleClassLoader);
+		_serviceRegistrations.compute(
+			bundleClassLoader,
+			(classLoader, serviceRegistration) -> {
+				if (serviceRegistration != null) {
+					serviceRegistration.setProperties(
+						new HashMapDictionary<>());
 
-		if (serviceRegistration != null) {
-			serviceRegistration.unregister();
-		}
+					return serviceRegistration;
+				}
 
-		serviceRegistration = _bundleContext.registerService(
-			LoggerConfig.class, currentBundleRootLogger,
-			new HashMapDictionary<>());
-
-		_serviceRegistrations.put(bundleClassLoader, serviceRegistration);
+				return _bundleContext.registerService(
+					LoggerContext.class, loggerContext,
+					new HashMapDictionary<>());
+			});
 
 		return loggerContext;
 	}
@@ -351,7 +353,7 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 
 	private static BundleContext _bundleContext;
 	private static String _liferayHome;
-	private static final Map<ClassLoader, ServiceRegistration<LoggerConfig>>
+	private static final Map<ClassLoader, ServiceRegistration<LoggerContext>>
 		_serviceRegistrations = new ConcurrentHashMap<>();
 
 	private volatile BundleTracker<LoggerContext> _bundleTracker;
