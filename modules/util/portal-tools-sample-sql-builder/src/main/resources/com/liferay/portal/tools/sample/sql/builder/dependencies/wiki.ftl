@@ -8,7 +8,7 @@
 	<#list wikiPageModels as wikiPageModel>
 		${resourcePermissionDataFactory.toInsertSQL(wikiPageModel)}
 
-		${resourcePermissionDataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(wikiPageModel))}
+		${resourcePermissionDataFactory.toInsertSQL(assetDataFactory.newMBDiscussionAssetEntryModel(wikiPageModel))}
 
 		${resourcePermissionDataFactory.toInsertSQL(subscriptionDataFactory.newSubscriptionModel(wikiPageModel))}
 

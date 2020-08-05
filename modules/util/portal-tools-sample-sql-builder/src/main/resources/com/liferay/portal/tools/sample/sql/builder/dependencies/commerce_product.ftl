@@ -23,7 +23,7 @@ ${resourcePermissionDataFactory.toInsertSQL(commerceCurrencyModel)}
 		<#assign
 			cpDefinitionModel = commerceDataFactory.newCPDefinitionModel(cpTaxCategoryModel, cProductModel, commerceCatalogGroupModel, commerceProductDefinitionCount)
 			cpFriendlyURLEntryModel = commerceDataFactory.newCPFriendlyURLEntryModel(cProductModel)
-			assetEntryModel = dataFactory.newCPDefinitionAssetEntryModel(cpDefinitionModel, commerceCatalogGroupModel)
+			assetEntryModel = assetDataFactory.newCPDefinitionAssetEntryModel(cpDefinitionModel, commerceCatalogGroupModel)
 			cpDefinitionLocalizationModel = commerceDataFactory.newCPDefinitionLocalizationModel(cpDefinitionModel)
 		/>
 
