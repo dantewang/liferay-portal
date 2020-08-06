@@ -1,0 +1,8 @@
+dependencies {
+	testCompile group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "default"
+	testCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
+	testCompile group: "log4j", name: "log4j", version: "1.2.17"
+	testCompile project(":apps:petra:petra-log4j")
+	testCompile project(":core:petra:petra-io")
+	testCompile project(":core:petra:petra-string")
+}
