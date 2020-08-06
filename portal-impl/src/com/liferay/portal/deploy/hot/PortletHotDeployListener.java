@@ -472,8 +472,7 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 	}
 
 	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #processPortletProperties(String, String, ClassLoader)}
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
 	 */
 	@Deprecated
 	protected void processPortletProperties(
