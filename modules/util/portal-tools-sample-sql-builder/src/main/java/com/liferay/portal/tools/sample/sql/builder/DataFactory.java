@@ -1184,12 +1184,21 @@ public class DataFactory {
 			new CommerceCurrencyModelImpl();
 
 		commerceCurrencyModel.setUuid(SequentialUUID.generate());
+
+		//PK fields
+
 		commerceCurrencyModel.setCommerceCurrencyId(_counter.get());
+
+		//Audit fields
+
 		commerceCurrencyModel.setCompanyId(_companyId);
 		commerceCurrencyModel.setUserId(_sampleUserId);
 		commerceCurrencyModel.setUserName(_SAMPLE_USER_NAME);
 		commerceCurrencyModel.setCreateDate(new Date());
 		commerceCurrencyModel.setModifiedDate(new Date());
+
+		//Other fields
+
 		commerceCurrencyModel.setCode("USD");
 
 		String name = StringBundler.concat(
@@ -1368,9 +1377,17 @@ public class DataFactory {
 
 		long cpDefinitionId = cpDefinitionModel.getCPDefinitionId();
 
+		//PK fields
+
 		cpDefinitionLocalizationModel.setCpDefinitionLocalizationId(
 			_counter.get());
+
+		//Audit fields
+
 		cpDefinitionLocalizationModel.setCompanyId(_companyId);
+
+		//Other fields
+
 		cpDefinitionLocalizationModel.setCPDefinitionId(cpDefinitionId);
 		cpDefinitionLocalizationModel.setLanguageId("en_US");
 		cpDefinitionLocalizationModel.setName("Definition " + cpDefinitionId);
