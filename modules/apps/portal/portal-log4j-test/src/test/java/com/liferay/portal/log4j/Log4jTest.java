@@ -45,8 +45,6 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.LogManager;
-
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -106,7 +104,7 @@ public class Log4jTest {
 	public static void tearDownClass() {
 		System.setOut(_originalOutputStream);
 
-		LogManager.shutdown();
+		Log4JUtil.shutdownLog4J();
 	}
 
 	@Test
