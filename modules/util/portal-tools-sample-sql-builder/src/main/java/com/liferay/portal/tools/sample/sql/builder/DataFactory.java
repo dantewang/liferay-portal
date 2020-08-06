@@ -1388,8 +1388,6 @@ public class DataFactory {
 
 		//Other fields
 
-		cpDefinitionLocalizationModel.setCPDefinitionId(cpDefinitionId);
-		cpDefinitionLocalizationModel.setLanguageId("en_US");
 		cpDefinitionLocalizationModel.setName("Definition " + cpDefinitionId);
 		cpDefinitionLocalizationModel.setShortDescription(
 			"Short description for definition " + cpDefinitionId);
@@ -1402,6 +1400,11 @@ public class DataFactory {
 			"A meta-description for definition " + cpDefinitionId);
 		cpDefinitionLocalizationModel.setMetaKeywords(
 			"Meta-keywords for definition " + cpDefinitionId);
+
+		//Auto generated
+
+		cpDefinitionLocalizationModel.setCPDefinitionId(cpDefinitionId);
+		cpDefinitionLocalizationModel.setLanguageId("en_US");
 
 		return cpDefinitionLocalizationModel;
 	}
