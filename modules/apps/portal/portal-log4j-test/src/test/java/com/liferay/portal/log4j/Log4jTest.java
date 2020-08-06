@@ -108,95 +108,51 @@ public class Log4jTest {
 	}
 
 	@Test
-	public void testConsoleAppenderWithOutputMessage() {
-		_testConsoleAppender("TRACE", true, false);
+	public void testConsoleAppender() {
+		_testConsoleAppender("TRACE", "TRACE message", null);
+		_testConsoleAppender("DEBUG", "DEBUG message", null);
+		_testConsoleAppender("INFO", "INFO message", null);
+		_testConsoleAppender("WARN", "WARN message", null);
+		_testConsoleAppender("ERROR", "ERROR message", null);
+		_testConsoleAppender("FATAL", "FATAL message", null);
 
-		_testConsoleAppender("DEBUG", true, false);
+		_testConsoleAppender("TRACE", "TRACE message", new TestException());
+		_testConsoleAppender("DEBUG", "DEBUG message", new TestException());
+		_testConsoleAppender("INFO", "INFO message", new TestException());
+		_testConsoleAppender("WARN", "WARN message", new TestException());
+		_testConsoleAppender("ERROR", "ERROR message", new TestException());
+		_testConsoleAppender("FATAL", "FATAL message", new TestException());
 
-		_testConsoleAppender("INFO", true, false);
-
-		_testConsoleAppender("WARN", true, false);
-
-		_testConsoleAppender("ERROR", true, false);
-
-		_testConsoleAppender("FATAL", true, false);
+		_testConsoleAppender("TRACE", null, new TestException());
+		_testConsoleAppender("DEBUG", null, new TestException());
+		_testConsoleAppender("INFO", null, new TestException());
+		_testConsoleAppender("WARN", null, new TestException());
+		_testConsoleAppender("ERROR", null, new TestException());
+		_testConsoleAppender("FATAL", null, new TestException());
 	}
 
 	@Test
-	public void testConsoleAppenderWithOutputMessageAndThrowException() {
-		_testConsoleAppender("TRACE", true, true);
+	public void testFileAppender() throws Exception {
+		_testFileAppender("TRACE", "TRACE message", null);
+		_testFileAppender("DEBUG", "DEBUG message", null);
+		_testFileAppender("INFO", "INFO message", null);
+		_testFileAppender("WARN", "WARN message", null);
+		_testFileAppender("ERROR", "ERROR message", null);
+		_testFileAppender("FATAL", "FATAL message", null);
 
-		_testConsoleAppender("DEBUG", true, true);
+		_testFileAppender("TRACE", "TRACE message", new TestException());
+		_testFileAppender("DEBUG", "DEBUG message", new TestException());
+		_testFileAppender("INFO", "INFO message", new TestException());
+		_testFileAppender("WARN", "WARN message", new TestException());
+		_testFileAppender("ERROR", "ERROR message", new TestException());
+		_testFileAppender("FATAL", "FATAL message", new TestException());
 
-		_testConsoleAppender("INFO", true, true);
-
-		_testConsoleAppender("WARN", true, true);
-
-		_testConsoleAppender("ERROR", true, true);
-
-		_testConsoleAppender("FATAL", true, true);
-	}
-
-	@Test
-	public void testConsoleAppenderWithThrowException() {
-		_testConsoleAppender("TRACE", false, true);
-
-		_testConsoleAppender("DEBUG", false, true);
-
-		_testConsoleAppender("INFO", false, true);
-
-		_testConsoleAppender("WARN", false, true);
-
-		_testConsoleAppender("ERROR", false, true);
-
-		_testConsoleAppender("FATAL", false, true);
-	}
-
-	@Test
-	public void testFileAppenderWithOutputMessage() throws Exception {
-		_testFileAppender("TRACE", true, false);
-
-		_testFileAppender("DEBUG", true, false);
-
-		_testFileAppender("INFO", true, false);
-
-		_testFileAppender("WARN", true, false);
-
-		_testFileAppender("ERROR", true, false);
-
-		_testFileAppender("FATAL", true, false);
-	}
-
-	@Test
-	public void testFileAppenderWithOutputMessageAndThrowException()
-		throws Exception {
-
-		_testFileAppender("TRACE", true, true);
-
-		_testFileAppender("DEBUG", true, true);
-
-		_testFileAppender("INFO", true, true);
-
-		_testFileAppender("WARN", true, true);
-
-		_testFileAppender("ERROR", true, true);
-
-		_testFileAppender("FATAL", true, true);
-	}
-
-	@Test
-	public void testFileAppenderWithThrowException() throws Exception {
-		_testFileAppender("TRACE", false, true);
-
-		_testFileAppender("DEBUG", false, true);
-
-		_testFileAppender("INFO", false, true);
-
-		_testFileAppender("WARN", false, true);
-
-		_testFileAppender("ERROR", false, true);
-
-		_testFileAppender("FATAL", false, true);
+		_testFileAppender("TRACE", null, new TestException());
+		_testFileAppender("DEBUG", null, new TestException());
+		_testFileAppender("INFO", null, new TestException());
+		_testFileAppender("WARN", null, new TestException());
+		_testFileAppender("ERROR", null, new TestException());
+		_testFileAppender("FATAL", null, new TestException());
 	}
 
 	@Test
@@ -334,7 +290,7 @@ public class Log4jTest {
 
 	private void _assertXmlLog(
 			String actualOutput, String level, String outputLogMethodName,
-			String renderMessage, boolean throwable)
+			String renderMessage, Throwable throwable)
 		throws Exception {
 
 		String consoleOutput = _unsyncStringWriter.toString();
@@ -359,7 +315,7 @@ public class Log4jTest {
 
 		Thread currentThread = Thread.currentThread();
 
-		if (throwable) {
+		if (throwable != null) {
 			String startThrowableTag = "<log4j:throwable><![CDATA[";
 			String endThrowableTag = "]]></log4j:throwable>";
 
@@ -399,7 +355,7 @@ public class Log4jTest {
 
 		sb.append("]]></log4j:message>\r\n");
 
-		if (throwable) {
+		if (throwable != null) {
 			sb.append("<log4j:throwable><![CDATA[");
 			sb.append(TestException.class.getName());
 			sb.append("]]></log4j:throwable>\r\n");
@@ -419,91 +375,82 @@ public class Log4jTest {
 			actualOutput);
 	}
 
-	private void _outputLog(
-		String level, String renderMessage, boolean message,
-		boolean throwable) {
-
+	private void _outputLog(String level, String message, Throwable throwable) {
 		if (level.equals("TRACE")) {
-			if (message && throwable) {
-				_log.trace(renderMessage, new TestException());
+			if ((message == null) && (throwable != null)) {
+				_log.trace(throwable);
 			}
-			else if (message && !throwable) {
-				_log.trace(renderMessage);
+			else if ((message != null) && (throwable == null)) {
+				_log.trace(message);
 			}
 			else {
-				_log.trace(new TestException());
+				_log.trace(message, throwable);
 			}
 		}
 		else if (level.equals("DEBUG")) {
-			if (message && throwable) {
-				_log.debug(renderMessage, new TestException());
+			if ((message == null) && (throwable != null)) {
+				_log.debug(throwable);
 			}
-			else if (message && !throwable) {
-				_log.debug(renderMessage);
+			else if ((message != null) && (throwable == null)) {
+				_log.debug(message);
 			}
 			else {
-				_log.debug(new TestException());
+				_log.debug(message, throwable);
 			}
 		}
 		else if (level.equals("INFO")) {
-			if (message && throwable) {
-				_log.info(renderMessage, new TestException());
+			if ((message == null) && (throwable != null)) {
+				_log.info(throwable);
 			}
-			else if (message && !throwable) {
-				_log.info(renderMessage);
+			else if ((message != null) && (throwable == null)) {
+				_log.info(message);
 			}
 			else {
-				_log.info(new TestException());
+				_log.info(message, throwable);
 			}
 		}
 		else if (level.equals("WARN")) {
-			if (message && throwable) {
-				_log.warn(renderMessage, new TestException());
+			if ((message == null) && (throwable != null)) {
+				_log.warn(throwable);
 			}
-			else if (message && !throwable) {
-				_log.warn(renderMessage);
+			else if ((message != null) && (throwable == null)) {
+				_log.warn(message);
 			}
 			else {
-				_log.warn(new TestException());
+				_log.warn(message, throwable);
 			}
 		}
 		else if (level.equals("ERROR")) {
-			if (message && throwable) {
-				_log.error(renderMessage, new TestException());
+			if ((message == null) && (throwable != null)) {
+				_log.error(throwable);
 			}
-			else if (message && !throwable) {
-				_log.error(renderMessage);
+			else if ((message != null) && (throwable == null)) {
+				_log.error(message);
 			}
 			else {
-				_log.error(new TestException());
+				_log.error(message, throwable);
 			}
 		}
 		else {
-			if (message && throwable) {
-				_log.fatal(renderMessage, new TestException());
+			if ((message == null) && (throwable != null)) {
+				_log.fatal(throwable);
 			}
-			else if (message && !throwable) {
-				_log.fatal(renderMessage);
+			else if ((message != null) && (throwable == null)) {
+				_log.fatal(message);
 			}
 			else {
-				_log.fatal(new TestException());
+				_log.fatal(message, throwable);
 			}
 		}
 	}
 
 	private void _testConsoleAppender(
-		String level, boolean message, boolean throwable) {
+		String level, String message, Throwable throwable) {
 
-		String renderMessage = null;
-
-		if (message) {
-			renderMessage = level + " message";
-		}
-
-		_outputLog(level, renderMessage, message, throwable);
+		_outputLog(level, message, throwable);
 
 		try {
-			_assertLog(_unsyncStringWriter.toString(), level, renderMessage);
+			_assertLog(_unsyncStringWriter.toString(), level, message);
 		}
 		finally {
 			_unsyncStringWriter.reset();
@@ -511,14 +458,8 @@ public class Log4jTest {
 	}
 
 	private void _testFileAppender(
-			String level, boolean message, boolean throwable)
+			String level, String message, Throwable throwable)
 		throws Exception {
-
-		String renderMessage = null;
-
-		if (message) {
-			renderMessage = level + " message";
-		}
 
 		for (File logFile : _tempLogDir.listFiles()) {
 			try (FileWriter fileWriter = new FileWriter(logFile, false)) {
@@ -528,7 +469,7 @@ public class Log4jTest {
 
 		String outputLogMethodName = "_outputLog";
 
-		_outputLog(level, renderMessage, message, throwable);
+		_outputLog(level, message, throwable);
 
 		Matcher matcher = null;
 
@@ -545,7 +486,7 @@ public class Log4jTest {
 
 					_assertLog(
 						StreamUtil.toString(new FileInputStream(file)), level,
-						renderMessage);
+						message);
 				}
 				else {
 					matcher = _xmlFileNamePattern.matcher(fileName);
@@ -556,7 +497,7 @@ public class Log4jTest {
 
 					_assertXmlLog(
 						StreamUtil.toString(new FileInputStream(file)), level,
-						outputLogMethodName, renderMessage, throwable);
+						outputLogMethodName, message, throwable);
 				}
 			}
 		}
