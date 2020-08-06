@@ -571,6 +571,20 @@ public class ResourceActionsImpl implements ResourceActions {
 		return false;
 	}
 
+	@Override
+	public boolean hasResourceTag(
+			ClassLoader classLoader, String resourceTagName, String... sources)
+		throws ResourceActionsException {
+
+		for (String source : sources) {
+			if (_hasResourceTag(classLoader, resourceTagName, source)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
 	 */
@@ -994,6 +1008,68 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 
 		return types;
+	}
+
+	private boolean _hasResourceTag(
+			ClassLoader classLoader, String resourceTagName, String source)
+		throws ResourceActionsException {
+
+		InputStream inputStream = classLoader.getResourceAsStream(source);
+
+		if (inputStream == null) {
+			return false;
+		}
+
+		try {
+			Document document = UnsecureSAXReaderUtil.read(inputStream, true);
+
+			Element rootElement = document.getRootElement();
+
+			for (Element resourceElement : rootElement.elements("resource")) {
+				String file = StringUtil.trim(
+					resourceElement.attributeValue("file"));
+
+				if (_hasResourceTag(classLoader, resourceTagName, file)) {
+					return true;
+				}
+
+				String extFileName = StringUtil.replace(
+					file, ".xml", "-ext.xml");
+
+				if (_hasResourceTag(
+						classLoader, resourceTagName, extFileName)) {
+
+					return true;
+				}
+			}
+
+			List<Element> resourceElements = rootElement.elements(
+				resourceTagName);
+
+			if (((resourceTagName.equals("portlet-resource") &&
+				  PropsValues.RESOURCE_ACTIONS_READ_PORTLET_RESOURCES) ||
+				 resourceTagName.equals("model-resource")) &&
+				!resourceElements.isEmpty()) {
+
+				return true;
+			}
+
+			if (source.endsWith(".xml") && !source.endsWith("-ext.xml")) {
+				String extFileName = StringUtil.replace(
+					source, ".xml", "-ext.xml");
+
+				if (_hasResourceTag(
+						classLoader, resourceTagName, extFileName)) {
+
+					return true;
+				}
+			}
+		}
+		catch (DocumentException documentException) {
+			throw new ResourceActionsException(documentException);
+		}
+
+		return false;
 	}
 
 	private String _normalizePortletName(

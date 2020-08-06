@@ -260,6 +260,14 @@ public class ResourceActionsUtil {
 		return getResourceActions().hasModelResourceActions(name);
 	}
 
+	public static boolean hasResourceTag(
+			ClassLoader classLoader, String resourceTagName, String... sources)
+		throws Exception {
+
+		return getResourceActions().hasResourceTag(
+			classLoader, resourceTagName, sources);
+	}
+
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
 	 */

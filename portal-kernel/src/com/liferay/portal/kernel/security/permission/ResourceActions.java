@@ -156,6 +156,10 @@ public interface ResourceActions {
 	@Deprecated
 	public boolean hasModelResourceActions(String name);
 
+	public boolean hasResourceTag(
+			ClassLoader classLoader, String resourceTagName, String... sources)
+		throws ResourceActionsException;
+
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
 	 */
