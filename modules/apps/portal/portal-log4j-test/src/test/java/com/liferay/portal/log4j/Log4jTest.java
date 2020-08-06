@@ -95,7 +95,7 @@ public class Log4jTest {
 
 		LogFactoryUtil.setLogFactory(new Log4jLogFactoryImpl());
 
-		_setLevel(Log4jTest.class.getName(), "TRACE");
+		Log4JUtil.setLevel(Log4jTest.class.getName(), "TRACE", false);
 
 		_log = LogFactoryUtil.getLog(Log4jTest.class);
 
@@ -269,12 +269,12 @@ public class Log4jTest {
 
 		Assert.assertTrue("Warn level should be enabled", log.isWarnEnabled());
 
-		_setLevel(LoggerName.LOGGER_WARN.toString(), "DEBUG");
+		Log4JUtil.setLevel(LoggerName.LOGGER_WARN.toString(), "DEBUG", false);
 
 		Assert.assertTrue(
 			"DEBUG level should be enabled", log.isDebugEnabled());
 
-		_setLevel(LoggerName.LOGGER_WARN.toString(), "WARN");
+		Log4JUtil.setLevel(LoggerName.LOGGER_WARN.toString(), "WARN", false);
 
 		Log childLog = LogFactoryUtil.getLog("com.test.parent.child");
 
@@ -283,14 +283,10 @@ public class Log4jTest {
 		Assert.assertFalse(
 			"DEBUG level should be not enabled", childLog.isDebugEnabled());
 
-		_setLevel("com.test.parent", "DEBUG");
+		Log4JUtil.setLevel("com.test.parent", "DEBUG", false);
 
 		Assert.assertTrue(
 			"DEBUG level should be enabled", childLog.isDebugEnabled());
-	}
-
-	private static void _setLevel(String loggerName, String level) {
-		Log4JUtil.setLevel(loggerName, level, false);
 	}
 
 	private void _assertLog(
