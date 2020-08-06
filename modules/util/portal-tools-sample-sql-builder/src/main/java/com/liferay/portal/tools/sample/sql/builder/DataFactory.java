@@ -1109,18 +1109,18 @@ public class DataFactory {
 		CommerceCatalogModel commerceCatalogModel =
 			new CommerceCatalogModelImpl();
 
-		//PK fields
+		// PK fields
 
 		commerceCatalogModel.setCommerceCatalogId(_counter.get());
 
-		//Audit fields
+		// Audit fields
 
 		commerceCatalogModel.setCompanyId(_companyId);
 		commerceCatalogModel.setUserName(_SAMPLE_USER_NAME);
 		commerceCatalogModel.setCreateDate(new Date());
 		commerceCatalogModel.setModifiedDate(new Date());
 
-		//Other fields
+		// Other fields
 
 		commerceCatalogModel.setName("Master");
 		commerceCatalogModel.setCommerceCurrencyCode(
@@ -1155,11 +1155,11 @@ public class DataFactory {
 		CommerceChannelModel commerceChannelModel =
 			new CommerceChannelModelImpl();
 
-		//PK fields
+		// PK fields
 
 		commerceChannelModel.setCommerceChannelId(_counter.get());
 
-		//Audit fields
+		// Audit fields
 
 		commerceChannelModel.setCompanyId(_companyId);
 		commerceChannelModel.setUserId(_sampleUserId);
@@ -1167,7 +1167,7 @@ public class DataFactory {
 		commerceChannelModel.setCreateDate(new Date());
 		commerceChannelModel.setModifiedDate(new Date());
 
-		//Other fields
+		// Other fields
 
 		commerceChannelModel.setSiteGroupId(1);
 		commerceChannelModel.setName(_SAMPLE_USER_NAME + " Channel");
@@ -1185,11 +1185,11 @@ public class DataFactory {
 
 		commerceCurrencyModel.setUuid(SequentialUUID.generate());
 
-		//PK fields
+		// PK fields
 
 		commerceCurrencyModel.setCommerceCurrencyId(_counter.get());
 
-		//Audit fields
+		// Audit fields
 
 		commerceCurrencyModel.setCompanyId(_companyId);
 		commerceCurrencyModel.setUserId(_sampleUserId);
@@ -1197,7 +1197,7 @@ public class DataFactory {
 		commerceCurrencyModel.setCreateDate(new Date());
 		commerceCurrencyModel.setModifiedDate(new Date());
 
-		//Other fields
+		// Other fields
 
 		commerceCurrencyModel.setCode("USD");
 
@@ -1377,16 +1377,16 @@ public class DataFactory {
 
 		long cpDefinitionId = cpDefinitionModel.getCPDefinitionId();
 
-		//PK fields
+		// PK fields
 
 		cpDefinitionLocalizationModel.setCpDefinitionLocalizationId(
 			_counter.get());
 
-		//Audit fields
+		// Audit fields
 
 		cpDefinitionLocalizationModel.setCompanyId(_companyId);
 
-		//Other fields
+		// Other fields
 
 		cpDefinitionLocalizationModel.setCPDefinitionId(cpDefinitionId);
 		cpDefinitionLocalizationModel.setLanguageId("en_US");
@@ -1416,15 +1416,15 @@ public class DataFactory {
 
 		cpDefinitionModel.setUuid(SequentialUUID.generate());
 
-		//PK fields
+		// PK fields
 
 		cpDefinitionModel.setCPDefinitionId(cpDefinitionId);
 
-		//Group instance
+		// Group instance
 
 		cpDefinitionModel.setGroupId(commerceCatalogGroupModel.getGroupId());
 
-		//Audit fields
+		// Audit fields
 
 		cpDefinitionModel.setCompanyId(_companyId);
 		cpDefinitionModel.setUserId(_sampleUserId);
@@ -1432,7 +1432,7 @@ public class DataFactory {
 		cpDefinitionModel.setCreateDate(new Date());
 		cpDefinitionModel.setModifiedDate(new Date());
 
-		//Other fields
+		// Other fields
 
 		cpDefinitionModel.setCProductId(cProductModel.getCProductId());
 		cpDefinitionModel.setCPTaxCategoryId(
@@ -1507,15 +1507,15 @@ public class DataFactory {
 
 		cpInstanceModel.setUuid(SequentialUUID.generate());
 
-		//PK fields
+		// PK fields
 
 		cpInstanceModel.setCPInstanceId(_counter.get());
 
-		//Group instance
+		// Group instance
 
 		cpInstanceModel.setGroupId(commerceCatalogGroupModel.getGroupId());
 
-		//Audit fields
+		// Audit fields
 
 		cpInstanceModel.setCompanyId(_companyId);
 		cpInstanceModel.setUserId(_sampleUserId);
@@ -1523,15 +1523,17 @@ public class DataFactory {
 		cpInstanceModel.setCreateDate(new Date());
 		cpInstanceModel.setModifiedDate(new Date());
 
-		//Other fields
-
-		String instanceKey = cpDefinitionId + StringPool.POUND + index;
+		// Other fields
 
 		cpInstanceModel.setCPDefinitionId(cpDefinitionId);
 		cpInstanceModel.setCPInstanceUuid(SequentialUUID.generate());
+
+		String instanceKey = cpDefinitionId + StringPool.POUND + index;
+
 		cpInstanceModel.setSku("SKU" + instanceKey);
 		cpInstanceModel.setGtin("GTIN" + instanceKey);
 		cpInstanceModel.setManufacturerPartNumber("MPN" + instanceKey);
+
 		cpInstanceModel.setPurchasable(true);
 		cpInstanceModel.setWidth((index * 2) + 1);
 		cpInstanceModel.setHeight(index + 5);
@@ -1565,15 +1567,15 @@ public class DataFactory {
 
 		cProductModel.setUuid(SequentialUUID.generate());
 
-		//PK fields
+		// PK fields
 
 		cProductModel.setCProductId(_counter.get());
 
-		//Group instance
+		// Group instance
 
 		cProductModel.setGroupId(commerceCatalogGroupModel.getGroupId());
 
-		//Audit fields
+		// Audit fields
 
 		cProductModel.setCompanyId(_companyId);
 		cProductModel.setUserId(_sampleUserId);
@@ -1581,7 +1583,7 @@ public class DataFactory {
 		cProductModel.setCreateDate(new Date());
 		cProductModel.setModifiedDate(new Date());
 
-		//Other fields
+		// Other fields
 
 		cProductModel.setLatestVersion(
 			BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_DEFINITION_COUNT);
@@ -1592,11 +1594,11 @@ public class DataFactory {
 	public CPTaxCategoryModel newCPTaxCategoryModel() {
 		CPTaxCategoryModel cpTaxCategoryModel = new CPTaxCategoryModelImpl();
 
-		//PK fields
+		// PK fields
 
 		cpTaxCategoryModel.setCPTaxCategoryId(_counter.get());
 
-		//Audit fields
+		// Audit fields
 
 		cpTaxCategoryModel.setCompanyId(_companyId);
 		cpTaxCategoryModel.setUserId(_sampleUserId);
@@ -1604,7 +1606,7 @@ public class DataFactory {
 		cpTaxCategoryModel.setCreateDate(new Date());
 		cpTaxCategoryModel.setModifiedDate(new Date());
 
-		//Other fields
+		// Other fields
 
 		cpTaxCategoryModel.setName(
 			StringBundler.concat(
