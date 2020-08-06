@@ -1109,12 +1109,18 @@ public class DataFactory {
 		CommerceCatalogModel commerceCatalogModel =
 			new CommerceCatalogModelImpl();
 
+		// PK fields
+
 		commerceCatalogModel.setCommerceCatalogId(_counter.get());
+
+		// Audit fields
 
 		commerceCatalogModel.setCompanyId(_companyId);
 		commerceCatalogModel.setUserName(_SAMPLE_USER_NAME);
 		commerceCatalogModel.setCreateDate(new Date());
 		commerceCatalogModel.setModifiedDate(new Date());
+
+		// Other fields
 
 		commerceCatalogModel.setName("Master");
 		commerceCatalogModel.setCommerceCurrencyCode(
