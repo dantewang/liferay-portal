@@ -646,6 +646,12 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readModelResource(String, ClassLoader, Set, String[])} and
+	 *             {@link #checkResourceActions(Set)}
+	 */
+	@Deprecated
 	@Override
 	public void readAndCheck(
 			String servletContextName, ClassLoader classLoader,
