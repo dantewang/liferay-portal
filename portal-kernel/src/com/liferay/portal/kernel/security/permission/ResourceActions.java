@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.model.Role;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -48,6 +49,8 @@ public interface ResourceActions {
 	@Deprecated
 	public void checkAction(String name, String actionId)
 		throws NoSuchResourceActionException;
+
+	public void checkResourceActions(Set<String> resourceNames);
 
 	public String getAction(
 		HttpServletRequest httpServletRequest, String action);
@@ -180,7 +183,7 @@ public interface ResourceActions {
 			String... sources)
 		throws ResourceActionsException;
 
-	public void readModelResource(
+	public Set<String> readModelResource(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
 		throws ResourceActionsException;
