@@ -281,6 +281,12 @@ public class ResourceActionsUtil {
 		return getResourceActions().isRootModelResource(modelResource);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readPortletResource(String, ClassLoader, String[])} and
+	 *             {@link #readModelResource(String, ClassLoader, String[])}
+	 */
+	@Deprecated
 	public static void read(
 			String servletContextName, ClassLoader classLoader, String source)
 		throws Exception {
@@ -288,6 +294,12 @@ public class ResourceActionsUtil {
 		getResourceActions().read(servletContextName, classLoader, source);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readPortletResource(String, ClassLoader, String[])} and
+	 *             {@link #readModelResource(String, ClassLoader, String[])}
+	 */
+	@Deprecated
 	public static void read(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
@@ -296,6 +308,12 @@ public class ResourceActionsUtil {
 		getResourceActions().read(servletContextName, classLoader, sources);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readModelResource(String, ClassLoader, String[])} and
+	 *             {@link #checkResourceActions(Set)}
+	 */
+	@Deprecated
 	public static void readAndCheck(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
