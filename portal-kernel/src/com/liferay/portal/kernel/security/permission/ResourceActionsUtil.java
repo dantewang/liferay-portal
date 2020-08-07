@@ -53,6 +53,10 @@ public class ResourceActionsUtil {
 		getResourceActions().checkAction(name, actionId);
 	}
 
+	public static void checkResourceActions(Set<String> resourceNames) {
+		getResourceActions().checkResourceActions(resourceNames);
+	}
+
 	public static String getAction(
 		HttpServletRequest httpServletRequest, String action) {
 
