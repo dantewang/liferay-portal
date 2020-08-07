@@ -215,6 +215,18 @@ public interface ResourceActions {
 			String... sources)
 		throws ResourceActionsException;
 
+	public Set<String> readModelResources(
+			ClassLoader classLoader, String... sources)
+		throws ResourceActionsException;
+
+	public void readPortletResource(
+			Portlet portlet, ClassLoader classLoader, String... sources)
+		throws ResourceActionsException;
+
+	public Set<String> readPortletResources(
+			ClassLoader classLoader, String... sources)
+		throws ResourceActionsException;
+
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
 	 */

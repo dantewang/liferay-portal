@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.model.Role;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -328,6 +329,27 @@ public class ResourceActionsUtil {
 
 		getResourceActions().readAndCheck(
 			servletContextName, classLoader, sources);
+	}
+
+	public static Set<String> readModelResources(
+			ClassLoader classLoader, String... sources)
+		throws Exception {
+
+		return getResourceActions().readModelResources(classLoader, sources);
+	}
+
+	public static void readPortletResource(
+			Portlet portlet, ClassLoader classLoader, String... sources)
+		throws Exception {
+
+		getResourceActions().readPortletResource(portlet, classLoader, sources);
+	}
+
+	public static Set<String> readPortletResources(
+			ClassLoader classLoader, String... sources)
+		throws Exception {
+
+		return getResourceActions().readPortletResources(classLoader, sources);
 	}
 
 	/**

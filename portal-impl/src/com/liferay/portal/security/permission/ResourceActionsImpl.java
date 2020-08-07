@@ -718,6 +718,52 @@ public class ResourceActionsImpl implements ResourceActions {
 		readAndCheck(classLoader, sources);
 	}
 
+	@Override
+	public Set<String> readModelResources(
+			ClassLoader classLoader, String... sources)
+		throws ResourceActionsException {
+
+		Set<String> resourceNames = new HashSet<>();
+
+		for (String source : sources) {
+			_read(
+				classLoader, source,
+				rootElement -> _readModelResource(rootElement, resourceNames));
+		}
+
+		return resourceNames;
+	}
+
+	@Override
+	public void readPortletResource(
+			Portlet portlet, ClassLoader classLoader, String... sources)
+		throws ResourceActionsException {
+
+		for (String source : sources) {
+			_read(
+				classLoader, source,
+				rootElement -> _readPortletResource(
+					portlet, rootElement, null));
+		}
+	}
+
+	@Override
+	public Set<String> readPortletResources(
+			ClassLoader classLoader, String... sources)
+		throws ResourceActionsException {
+
+		Set<String> resourceNames = new HashSet<>();
+
+		for (String source : sources) {
+			_read(
+				classLoader, source,
+				rootElement -> _readPortletResource(
+					null, rootElement, resourceNames));
+		}
+
+		return resourceNames;
+	}
+
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
 	 */
