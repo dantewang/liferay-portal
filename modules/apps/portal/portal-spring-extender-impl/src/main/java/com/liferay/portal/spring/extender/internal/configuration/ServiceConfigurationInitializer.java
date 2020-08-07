@@ -30,8 +30,10 @@ import com.liferay.portal.spring.extender.internal.loader.ModuleResourceLoader;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -126,11 +128,15 @@ public class ServiceConfigurationInitializer {
 
 	private void _readResourceActions() {
 		try {
-			_resourceActions.readAndCheck(
-				null, _classLoader,
+			Set<String> resourceNames = new HashSet<>();
+
+			_resourceActions.readModelResource(
+				null, _classLoader, resourceNames,
 				StringUtil.split(
 					_portletConfiguration.get(
 						PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
+
+			_resourceActions.checkResourceActions(resourceNames);
 		}
 		catch (Exception exception) {
 			_log.error(
