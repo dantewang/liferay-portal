@@ -274,17 +274,39 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 			}
 		}
 
-		for (Portlet portlet : portlets) {
-			if (portletPropertiesConfiguration != null) {
-				Properties portletProperties =
-					portletPropertiesConfiguration.getProperties();
+		Properties portletProperties = null;
 
-				if (!portletProperties.isEmpty()) {
-					ResourceActionsUtil.readPortletResource(
-						portlet, servletContextName, classLoader,
-						StringUtil.split(
-							portletProperties.getProperty(
-								PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
+		String[] sources = null;
+
+		boolean readModelResource = false;
+
+		boolean readResource = false;
+
+		if (portletPropertiesConfiguration != null) {
+			portletProperties = portletPropertiesConfiguration.getProperties();
+
+			sources = StringUtil.split(
+				portletProperties.getProperty(
+					PropsKeys.RESOURCE_ACTIONS_CONFIGS));
+
+			if (!portletProperties.isEmpty()) {
+				readModelResource = ResourceActionsUtil.hasResourceTag(
+					classLoader, "model-resource", sources);
+
+				readResource = true;
+			}
+		}
+
+		for (Portlet portlet : portlets) {
+			if (readResource) {
+				ResourceActionsUtil.readPortletResource(
+					portlet, servletContextName, classLoader, sources);
+
+				if (readModelResource) {
+					ResourceActionsUtil.readModelResource(
+						servletContextName, classLoader, sources);
+
+					readModelResource = false;
 				}
 			}
 
