@@ -359,8 +359,9 @@ public class PortletTracker
 					if (ResourceActionsUtil.hasResourceTag(
 							bundleClassLoader, "model-resource", sources)) {
 
-						ResourceActionsUtil.readModelResource(
-							null, bundleClassLoader, sources);
+						ResourceActionsUtil.checkResourceActions(
+							ResourceActionsUtil.readModelResource(
+								null, bundleClassLoader, sources));
 					}
 				}
 				catch (Exception exception) {
