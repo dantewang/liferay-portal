@@ -720,6 +720,75 @@ public class ResourceActionsImpl implements ResourceActions {
 		readAndCheck(classLoader, sources);
 	}
 
+	@Override
+	public Set<String> readModelResources(
+			ClassLoader classLoader, String... sources)
+		throws ResourceActionsException {
+
+		Set<String> resourceNames = new HashSet<>();
+
+		for (String source : sources) {
+			_read(
+				classLoader, source,
+				rootElement -> _readModelResources(rootElement, resourceNames));
+		}
+
+		return resourceNames;
+	}
+
+	@Override
+	public Set<String> readModelResources(Document document)
+		throws ResourceActionsException {
+
+		DocumentType documentType = document.getDocumentType();
+
+		String publicId = GetterUtil.getString(documentType.getPublicId());
+
+		if (publicId.equals(
+				"-//Liferay//DTD Resource Action Mapping 6.0.0//EN")) {
+
+			if (_log.isWarnEnabled()) {
+				_log.warn("Please update document to use the 6.1.0 format");
+			}
+		}
+
+		Set<String> resourceNames = new HashSet<>();
+
+		_readModelResources(document.getRootElement(), resourceNames);
+
+		return resourceNames;
+	}
+
+	@Override
+	public void readPortletResource(
+			Portlet portlet, ClassLoader classLoader, String... sources)
+		throws ResourceActionsException {
+
+		for (String source : sources) {
+			_read(
+				classLoader, source,
+				rootElement -> _readPortletResources(
+					portlet, rootElement, null));
+		}
+	}
+
+	@Override
+	public Set<String> readPortletResources(
+			ClassLoader classLoader, String... sources)
+		throws ResourceActionsException {
+
+		Set<String> resourceNames = new HashSet<>();
+
+		for (String source : sources) {
+			_read(
+				classLoader, source,
+				rootElement -> _readPortletResources(
+					null, rootElement, resourceNames));
+		}
+
+		return resourceNames;
+	}
+
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
 	 */
