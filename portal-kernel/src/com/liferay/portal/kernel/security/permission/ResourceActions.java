@@ -170,20 +170,43 @@ public interface ResourceActions {
 
 	public boolean isRootModelResource(String modelResource);
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readPortletResource(String, ClassLoader, String[])} and
+	 *             {@link #readModelResource(String, ClassLoader, String[])}
+	 */
+	@Deprecated
 	public void read(
 			String servletContextName, ClassLoader classLoader, String source)
 		throws ResourceActionsException;
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readPortletResource(String, ClassLoader, String[])} and
+	 *             {@link #readModelResource(String, ClassLoader, String[])}
+	 */
+	@Deprecated
 	public void read(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
 		throws ResourceActionsException;
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readModelResource(String, Document)}
+	 */
+	@Deprecated
 	public void read(
 			String servletContextName, Document document,
 			Set<String> resourceNames)
 		throws ResourceActionsException;
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readModelResource(String, ClassLoader, String[])} and
+	 *             {@link #checkResourceActions(Set)}
+	 */
+	@Deprecated
 	public void readAndCheck(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
