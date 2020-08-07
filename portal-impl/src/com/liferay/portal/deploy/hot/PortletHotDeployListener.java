@@ -303,8 +303,13 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 					portlet, servletContextName, classLoader, sources);
 
 				if (readModelResource) {
+					Set<String> resourceNames = new HashSet<>();
+
 					ResourceActionsUtil.readModelResource(
-						servletContextName, classLoader, sources);
+						servletContextName, classLoader, resourceNames,
+						sources);
+
+					ResourceActionsUtil.checkResourceActions(resourceNames);
 
 					readModelResource = false;
 				}
