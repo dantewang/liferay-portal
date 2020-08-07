@@ -610,7 +610,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			String servletContextName, ClassLoader classLoader, String source)
 		throws ResourceActionsException {
 
-		_read(null, servletContextName, classLoader, source, null);
+		_read(null, servletContextName, classLoader, source, null, true, true);
 	}
 
 	@Override
@@ -633,7 +633,9 @@ public class ResourceActionsImpl implements ResourceActions {
 		Set<String> resourceNames = new HashSet<>();
 
 		for (String source : sources) {
-			_read(null, servletContextName, classLoader, source, resourceNames);
+			_read(
+				null, servletContextName, classLoader, source, resourceNames,
+				true, true);
 		}
 
 		for (String resourceName : resourceNames) {
@@ -648,7 +650,18 @@ public class ResourceActionsImpl implements ResourceActions {
 			String... sources)
 		throws ResourceActionsException {
 
-		readAndCheck(servletContextName, classLoader, sources);
+		Set<String> resourceNames = new HashSet<>();
+
+		for (String source : sources) {
+			_read(
+				null, servletContextName, classLoader, source, resourceNames,
+				false, true);
+		}
+
+		for (String resourceName : resourceNames) {
+			resourceActionLocalService.checkResourceActions(
+				resourceName, getResourceActions(resourceName));
+		}
 	}
 
 	@Override
@@ -658,7 +671,9 @@ public class ResourceActionsImpl implements ResourceActions {
 		throws ResourceActionsException {
 
 		for (String source : sources) {
-			_read(portlet, servletContextName, classLoader, source, null);
+			_read(
+				portlet, servletContextName, classLoader, source, null, true,
+				false);
 		}
 	}
 
@@ -995,7 +1010,8 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	private void _read(
 			Portlet portlet, String servletContextName, ClassLoader classLoader,
-			String source, Set<String> resourceNames)
+			String source, Set<String> resourceNames,
+			boolean readPortletResource, boolean readModelResource)
 		throws ResourceActionsException {
 
 		InputStream inputStream = classLoader.getResourceAsStream(source);
@@ -1038,17 +1054,25 @@ public class ResourceActionsImpl implements ResourceActions {
 
 				_read(
 					portlet, servletContextName, classLoader, file,
-					resourceNames);
+					resourceNames, readPortletResource, readModelResource);
 
 				String extFileName = StringUtil.replace(
 					file, ".xml", "-ext.xml");
 
 				_read(
 					portlet, servletContextName, classLoader, extFileName,
-					resourceNames);
+					resourceNames, readPortletResource, readModelResource);
 			}
 
-			_read(portlet, servletContextName, document, resourceNames);
+			if (readPortletResource) {
+				_readPortletResource(
+					portlet, servletContextName, rootElement, resourceNames);
+			}
+
+			if (readModelResource) {
+				_readModelResource(
+					servletContextName, rootElement, resourceNames);
+			}
 
 			if (source.endsWith(".xml") && !source.endsWith("-ext.xml")) {
 				String extFileName = StringUtil.replace(
@@ -1056,7 +1080,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 				_read(
 					portlet, servletContextName, classLoader, extFileName,
-					resourceNames);
+					resourceNames, readPortletResource, readModelResource);
 			}
 		}
 		catch (DocumentException documentException) {
@@ -1064,48 +1088,24 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
-	private void _read(
-			Portlet portlet, String servletContextName, Document document,
+	private void _readActionKeys(
+		Collection<String> actions, Element parentElement) {
+
+		for (Element actionKeyElement : parentElement.elements("action-key")) {
+			String actionKey = actionKeyElement.getTextTrim();
+
+			if (Validator.isNull(actionKey)) {
+				continue;
+			}
+
+			actions.add(actionKey);
+		}
+	}
+
+	private void _readModelResource(
+			String servletContextName, Element rootElement,
 			Set<String> resourceNames)
 		throws ResourceActionsException {
-
-		Element rootElement = document.getRootElement();
-
-		if (PropsValues.RESOURCE_ACTIONS_READ_PORTLET_RESOURCES) {
-			for (Element portletResourceElement :
-					rootElement.elements("portlet-resource")) {
-
-				String portletName = _normalizePortletName(
-					servletContextName,
-					portletResourceElement.elementTextTrim("portlet-name"));
-
-				if (portlet != null) {
-					String deployPortletName = PortletIdCodec.decodePortletName(
-						portlet.getPortletId());
-
-					if (!deployPortletName.equals(portletName)) {
-						continue;
-					}
-				}
-				else {
-					portlet = portletLocalService.getPortletById(portletName);
-				}
-
-				Set<String> portletActions = _getPortletMimeTypeActions(
-					portletName, portlet);
-
-				if (!portletName.equals(PortletKeys.PORTAL)) {
-					_checkPortletLayoutManagerActions(portletActions);
-				}
-
-				_readResource(
-					portletResourceElement, portletName, portletActions);
-
-				if (resourceNames != null) {
-					resourceNames.add(portletName);
-				}
-			}
-		}
 
 		for (Element modelResourceElement :
 				rootElement.elements("model-resource")) {
@@ -1180,17 +1180,45 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
-	private void _readActionKeys(
-		Collection<String> actions, Element parentElement) {
+	private void _readPortletResource(
+			Portlet portlet, String servletContextName, Element rootElement,
+			Set<String> resourceNames)
+		throws ResourceActionsException {
 
-		for (Element actionKeyElement : parentElement.elements("action-key")) {
-			String actionKey = actionKeyElement.getTextTrim();
+		if (PropsValues.RESOURCE_ACTIONS_READ_PORTLET_RESOURCES) {
+			for (Element portletResourceElement :
+					rootElement.elements("portlet-resource")) {
 
-			if (Validator.isNull(actionKey)) {
-				continue;
+				String portletName = _normalizePortletName(
+					servletContextName,
+					portletResourceElement.elementTextTrim("portlet-name"));
+
+				if (portlet != null) {
+					String deployPortletName = PortletIdCodec.decodePortletName(
+						portlet.getPortletId());
+
+					if (!deployPortletName.equals(portletName)) {
+						continue;
+					}
+				}
+				else {
+					portlet = portletLocalService.getPortletById(portletName);
+				}
+
+				Set<String> portletActions = _getPortletMimeTypeActions(
+					portletName, portlet);
+
+				if (!portletName.equals(PortletKeys.PORTAL)) {
+					_checkPortletLayoutManagerActions(portletActions);
+				}
+
+				_readResource(
+					portletResourceElement, portletName, portletActions);
+
+				if (resourceNames != null) {
+					resourceNames.add(portletName);
+				}
 			}
-
-			actions.add(actionKey);
 		}
 	}
 
