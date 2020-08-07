@@ -616,6 +616,12 @@ public class ResourceActionsImpl implements ResourceActions {
 		return false;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readPortletResources(String, ClassLoader, String[])} and
+	 *             {@link #readModelResource(String, ClassLoader, String[])}
+	 */
+	@Deprecated
 	@Override
 	public void read(
 			String servletContextName, ClassLoader classLoader, String source)
@@ -632,6 +638,12 @@ public class ResourceActionsImpl implements ResourceActions {
 				servletContextName, rootElement, null));
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readPortletResources(String, ClassLoader, String[])} and
+	 *             {@link #readModelResource(String, ClassLoader, String[])}
+	 */
+	@Deprecated
 	@Override
 	public void read(
 			String servletContextName, ClassLoader classLoader,
@@ -643,6 +655,11 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readModelResource(String, Document)}
+	 */
+	@Deprecated
 	@Override
 	public void read(
 			String servletContextName, Document document,
@@ -655,6 +672,12 @@ public class ResourceActionsImpl implements ResourceActions {
 			servletContextName, document.getRootElement(), resourceNames);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readModelResource(String, ClassLoader, String[])} and
+	 *             {@link #checkResourceActions(Set)}
+	 */
+	@Deprecated
 	@Override
 	public void readAndCheck(
 			String servletContextName, ClassLoader classLoader,
