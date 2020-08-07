@@ -51,6 +51,8 @@ public interface ResourceActions {
 	public void checkAction(String name, String actionId)
 		throws NoSuchResourceActionException;
 
+	public void checkResourceActions(Set<String> resourceNames);
+
 	public String getAction(
 		HttpServletRequest httpServletRequest, String action);
 
@@ -187,7 +189,7 @@ public interface ResourceActions {
 			String... sources)
 		throws ResourceActionsException;
 
-	public void readModelResource(
+	public Set<String> readModelResource(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
 		throws ResourceActionsException;
