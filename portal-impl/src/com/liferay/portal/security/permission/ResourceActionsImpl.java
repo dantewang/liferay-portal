@@ -14,9 +14,7 @@
 
 package com.liferay.portal.security.permission;
 
-import com.liferay.petra.function.UnsafeBiConsumer;
 import com.liferay.petra.function.UnsafeConsumer;
-import com.liferay.petra.function.UnsafeTriConsumer;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -637,14 +635,12 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		_read(
 			classLoader, source,
-			rootElement ->
-				_readModelResource(
-					servletContextName, rootElement, null));
+			rootElement -> _readModelResource(
+				servletContextName, rootElement, null));
 		_read(
 			classLoader, source,
-			rootElement ->
-				_readPortletResource(
-					null, servletContextName, rootElement, null));
+			rootElement -> _readPortletResource(
+				null, servletContextName, rootElement, null));
 	}
 
 	@Override
@@ -675,14 +671,12 @@ public class ResourceActionsImpl implements ResourceActions {
 		for (String source : sources) {
 			_read(
 				classLoader, source,
-				rootElement ->
-					_readModelResource(
-						servletContextName, rootElement, resourceNames));
+				rootElement -> _readModelResource(
+					servletContextName, rootElement, resourceNames));
 			_read(
 				classLoader, source,
-				rootElement ->
-					_readPortletResource(
-						null, servletContextName, rootElement, null));
+				rootElement -> _readPortletResource(
+					null, servletContextName, rootElement, null));
 		}
 
 		for (String resourceName : resourceNames) {
@@ -700,9 +694,8 @@ public class ResourceActionsImpl implements ResourceActions {
 		for (String source : sources) {
 			_read(
 				classLoader, source,
-				rootElement ->
-					_readModelResource(
-						servletContextName, rootElement, resourceNames));
+				rootElement -> _readModelResource(
+					servletContextName, rootElement, resourceNames));
 		}
 	}
 
@@ -715,9 +708,8 @@ public class ResourceActionsImpl implements ResourceActions {
 		for (String source : sources) {
 			_read(
 				classLoader, source,
-				rootElement ->
-					_readPortletResource(
-						portlet, servletContextName, rootElement, null));
+				rootElement -> _readPortletResource(
+					portlet, servletContextName, rootElement, null));
 		}
 	}
 
