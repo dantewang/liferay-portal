@@ -14,6 +14,8 @@
 
 package com.liferay.portal.security.permission;
 
+import com.liferay.petra.function.UnsafeBiConsumer;
+import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.function.UnsafeTriConsumer;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
@@ -634,14 +636,15 @@ public class ResourceActionsImpl implements ResourceActions {
 		throws ResourceActionsException {
 
 		_read(
-			servletContextName, classLoader, source, null,
-			(contextName, rootElement, names) ->
-				_readModelResource(contextName, rootElement, names));
+			classLoader, source,
+			rootElement ->
+				_readModelResource(
+					servletContextName, rootElement, null));
 		_read(
-			servletContextName, classLoader, source, null,
-			(contextName, rootElement, names) ->
+			classLoader, source,
+			rootElement ->
 				_readPortletResource(
-					null, contextName, rootElement, names));
+					null, servletContextName, rootElement, null));
 	}
 
 	@Override
@@ -671,14 +674,15 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		for (String source : sources) {
 			_read(
-				servletContextName, classLoader, source, resourceNames,
-				(contextName, rootElement, names) ->
-					_readModelResource(contextName, rootElement, names));
+				classLoader, source,
+				rootElement ->
+					_readModelResource(
+						servletContextName, rootElement, resourceNames));
 			_read(
-				servletContextName, classLoader, source, resourceNames,
-				(contextName, rootElement, names) ->
+				classLoader, source,
+				rootElement ->
 					_readPortletResource(
-						null, contextName, rootElement, names));
+						null, servletContextName, rootElement, null));
 		}
 
 		for (String resourceName : resourceNames) {
@@ -695,9 +699,10 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		for (String source : sources) {
 			_read(
-				servletContextName, classLoader, source, resourceNames,
-				(contextName, rootElement, names) ->
-					_readModelResource(contextName, rootElement, names));
+				classLoader, source,
+				rootElement ->
+					_readModelResource(
+						servletContextName, rootElement, resourceNames));
 		}
 	}
 
@@ -709,10 +714,10 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		for (String source : sources) {
 			_read(
-				servletContextName, classLoader, source, null,
-				(contextName, rootElement, names) ->
+				classLoader, source,
+				rootElement ->
 					_readPortletResource(
-						portlet, contextName, rootElement, names));
+						portlet, servletContextName, rootElement, null));
 		}
 	}
 
@@ -1110,11 +1115,9 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	private void _read(
-			String servletContextName, ClassLoader classLoader,
-			String source, Set<String> resourceNames,
-			UnsafeTriConsumer
-				<String, Element, Set<String>, ResourceActionsException>
-					readResourceConsumer)
+			ClassLoader classLoader, String source,
+			UnsafeConsumer<Element, ResourceActionsException>
+				readResourceConsumer)
 		throws ResourceActionsException {
 
 		InputStream inputStream = classLoader.getResourceAsStream(source);
@@ -1155,28 +1158,21 @@ public class ResourceActionsImpl implements ResourceActions {
 				String file = StringUtil.trim(
 					resourceElement.attributeValue("file"));
 
-				_read(
-					servletContextName, classLoader, file,
-					resourceNames, readResourceConsumer);
+				_read(classLoader, file, readResourceConsumer);
 
 				String extFileName = StringUtil.replace(
 					file, ".xml", "-ext.xml");
 
-				_read(
-					servletContextName, classLoader, extFileName,
-					resourceNames, readResourceConsumer);
+				_read(classLoader, extFileName, readResourceConsumer);
 			}
 
-			readResourceConsumer.accept(
-				servletContextName, rootElement, resourceNames);
+			readResourceConsumer.accept(rootElement);
 
 			if (source.endsWith(".xml") && !source.endsWith("-ext.xml")) {
 				String extFileName = StringUtil.replace(
 					source, ".xml", "-ext.xml");
 
-				_read(
-					servletContextName, classLoader, extFileName,
-					resourceNames, readResourceConsumer);
+				_read(classLoader, extFileName, readResourceConsumer);
 			}
 		}
 		catch (DocumentException documentException) {
