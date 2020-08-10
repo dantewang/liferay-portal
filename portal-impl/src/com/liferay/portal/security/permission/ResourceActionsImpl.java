@@ -632,7 +632,8 @@ public class ResourceActionsImpl implements ResourceActions {
 			String servletContextName, ClassLoader classLoader, String source)
 		throws ResourceActionsException {
 
-		_read(null, servletContextName, classLoader, source, null, true, true);
+		_read(null, servletContextName, classLoader, source, null, true);
+		_read(null, servletContextName, classLoader, source, null, false);
 	}
 
 	@Override
@@ -663,7 +664,10 @@ public class ResourceActionsImpl implements ResourceActions {
 		for (String source : sources) {
 			_read(
 				null, servletContextName, classLoader, source, resourceNames,
-				true, true);
+				true);
+			_read(
+				null, servletContextName, classLoader, source, resourceNames,
+				false);
 		}
 
 		for (String resourceName : resourceNames) {
@@ -681,7 +685,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		for (String source : sources) {
 			_read(
 				null, servletContextName, classLoader, source, resourceNames,
-				false, true);
+				false);
 		}
 	}
 
@@ -693,8 +697,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		for (String source : sources) {
 			_read(
-				portlet, servletContextName, classLoader, source, null, true,
-				false);
+				portlet, servletContextName, classLoader, source, null, true);
 		}
 	}
 
@@ -1094,7 +1097,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	private void _read(
 			Portlet portlet, String servletContextName, ClassLoader classLoader,
 			String source, Set<String> resourceNames,
-			boolean readPortletResource, boolean readModelResource)
+			boolean readPortletResource)
 		throws ResourceActionsException {
 
 		InputStream inputStream = classLoader.getResourceAsStream(source);
@@ -1137,22 +1140,21 @@ public class ResourceActionsImpl implements ResourceActions {
 
 				_read(
 					portlet, servletContextName, classLoader, file,
-					resourceNames, readPortletResource, readModelResource);
+					resourceNames, readPortletResource);
 
 				String extFileName = StringUtil.replace(
 					file, ".xml", "-ext.xml");
 
 				_read(
 					portlet, servletContextName, classLoader, extFileName,
-					resourceNames, readPortletResource, readModelResource);
+					resourceNames, readPortletResource);
 			}
 
 			if (readPortletResource) {
 				_readPortletResource(
 					portlet, servletContextName, rootElement, resourceNames);
 			}
-
-			if (readModelResource) {
+			else {
 				_readModelResource(
 					servletContextName, rootElement, resourceNames);
 			}
@@ -1163,7 +1165,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 				_read(
 					portlet, servletContextName, classLoader, extFileName,
-					resourceNames, readPortletResource, readModelResource);
+					resourceNames, readPortletResource);
 			}
 		}
 		catch (DocumentException documentException) {
