@@ -14,6 +14,7 @@
 
 package com.liferay.portal.security.permission;
 
+import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -611,8 +612,14 @@ public class ResourceActionsImpl implements ResourceActions {
 			String servletContextName, ClassLoader classLoader, String source)
 		throws ResourceActionsException {
 
-		_read(null, servletContextName, classLoader, source, null, true);
-		_read(null, servletContextName, classLoader, source, null, false);
+		_read(
+			classLoader, source,
+			rootElement -> _readPortletResource(
+				null, servletContextName, rootElement, null));
+		_read(
+			classLoader, source,
+			rootElement -> _readModelResource(
+				servletContextName, rootElement, null));
 	}
 
 	@Override
@@ -658,11 +665,13 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		for (String source : sources) {
 			_read(
-				null, servletContextName, classLoader, source, resourceNames,
-				true);
+				classLoader, source,
+				rootElement -> _readPortletResource(
+					null, servletContextName, rootElement, null));
 			_read(
-				null, servletContextName, classLoader, source, resourceNames,
-				false);
+				classLoader, source,
+				rootElement -> _readModelResource(
+					servletContextName, rootElement, resourceNames));
 		}
 
 		for (String resourceName : resourceNames) {
@@ -1002,9 +1011,9 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	private void _read(
-			Portlet portlet, String servletContextName, ClassLoader classLoader,
-			String source, Set<String> resourceNames,
-			boolean readPortletResource)
+			ClassLoader classLoader, String source,
+			UnsafeConsumer<Element, ResourceActionsException>
+				readResourceConsumer)
 		throws ResourceActionsException {
 
 		InputStream inputStream = classLoader.getResourceAsStream(source);
@@ -1045,34 +1054,21 @@ public class ResourceActionsImpl implements ResourceActions {
 				String file = StringUtil.trim(
 					resourceElement.attributeValue("file"));
 
-				_read(
-					portlet, servletContextName, classLoader, file,
-					resourceNames, readPortletResource);
+				_read(classLoader, file, readResourceConsumer);
 
 				String extFileName = StringUtil.replace(
 					file, ".xml", "-ext.xml");
 
-				_read(
-					portlet, servletContextName, classLoader, extFileName,
-					resourceNames, readPortletResource);
+				_read(classLoader, extFileName, readResourceConsumer);
 			}
 
-			if (readPortletResource) {
-				_readPortletResource(
-					portlet, servletContextName, rootElement, resourceNames);
-			}
-			else {
-				_readModelResource(
-					servletContextName, rootElement, resourceNames);
-			}
+			readResourceConsumer.accept(rootElement);
 
 			if (source.endsWith(".xml") && !source.endsWith("-ext.xml")) {
 				String extFileName = StringUtil.replace(
 					source, ".xml", "-ext.xml");
 
-				_read(
-					portlet, servletContextName, classLoader, extFileName,
-					resourceNames, readPortletResource);
+				_read(classLoader, extFileName, readResourceConsumer);
 			}
 		}
 		catch (DocumentException documentException) {
