@@ -138,7 +138,7 @@ public class ServiceConfigurationInitializer {
 								PropsKeys.RESOURCE_ACTIONS_CONFIGS))));
 			}
 			else {
-				_resourceActions.read(
+				_resourceActions.readModelResource(
 					null, _classLoader,
 					StringUtil.split(
 						_portletConfiguration.get(
