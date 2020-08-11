@@ -82,7 +82,7 @@ public class KaleoDefinitionVersionModelListener
 	}
 
 	private void _checkResourceActions() throws Exception {
-		_resourceActions.read(
+		_resourceActions.readPortletResource(
 			null, KaleoDefinitionVersionModelListener.class.getClassLoader(),
 			"/resource-actions/default.xml");
 
