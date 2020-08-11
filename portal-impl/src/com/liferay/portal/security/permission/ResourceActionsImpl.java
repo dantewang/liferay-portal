@@ -89,9 +89,10 @@ public class ResourceActionsImpl implements ResourceActions {
 
 			ClassLoader classLoader = clazz.getClassLoader();
 
-			for (String config : PropsValues.RESOURCE_ACTIONS_CONFIGS) {
-				read(classLoader, config);
-			}
+			readPortletResources(
+				classLoader, PropsValues.RESOURCE_ACTIONS_CONFIGS);
+			readModelResource(
+				classLoader, PropsValues.RESOURCE_ACTIONS_CONFIGS);
 		}
 		catch (Exception exception) {
 			_log.error(exception, exception);
