@@ -588,7 +588,12 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 			return;
 		}
 
-		ResourceActionsUtil.read(
+		ResourceActionsUtil.readPortletResources(
+			classLoader,
+			StringUtil.split(
+				portletProperties.getProperty(
+					PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
+		ResourceActionsUtil.readModelResource(
 			classLoader,
 			StringUtil.split(
 				portletProperties.getProperty(

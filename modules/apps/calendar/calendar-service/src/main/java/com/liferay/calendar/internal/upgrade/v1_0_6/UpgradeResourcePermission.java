@@ -87,7 +87,7 @@ public class UpgradeResourcePermission extends UpgradeProcess {
 			ClassLoader classLoader = clazz.getClassLoader();
 
 			for (String config : PropsValues.RESOURCE_ACTIONS_CONFIGS) {
-				resourceActionsImpl.read(classLoader, config);
+				resourceActionsImpl.readModelResource(classLoader, config);
 			}
 
 			return resourceActionsImpl.getModelResourceGuestUnsupportedActions(
