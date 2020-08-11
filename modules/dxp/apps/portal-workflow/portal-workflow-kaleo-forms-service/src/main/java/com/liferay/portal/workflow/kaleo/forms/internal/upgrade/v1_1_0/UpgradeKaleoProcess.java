@@ -210,7 +210,7 @@ public class UpgradeKaleoProcess extends UpgradeProcess {
 	protected void initKaleoFormsDDMCompositeModelsResourceActions()
 		throws Exception {
 
-		_resourceActions.read(
+		_resourceActions.readModelResource(
 			null, UpgradeKaleoProcess.class.getClassLoader(),
 			"/resource-actions/default.xml");
 
