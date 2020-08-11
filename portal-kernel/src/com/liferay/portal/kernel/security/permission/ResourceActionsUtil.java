@@ -318,6 +318,15 @@ public class ResourceActionsUtil {
 			portlet, servletContextName, classLoader, sources);
 	}
 
+	public static Set<String> readPortletResources(
+			String servletContextName, ClassLoader classLoader,
+			String... sources)
+		throws Exception {
+
+		return getResourceActions().readPortletResources(
+			servletContextName, classLoader, sources);
+	}
+
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
 	 */
