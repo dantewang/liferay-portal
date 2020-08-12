@@ -15,7 +15,7 @@ ${resourcePermissionDataFactory.toInsertSQL(journalDataFactory.newDefaultJournal
 <#assign
 	journalArticlePageCounts = counterDataFactory.getSequence(journalDataFactory.maxJournalArticlePageCount)
 
-	resourcePermissionModels = resourcePermissionDataFactory.newResourcePermissionModels("com.liferay.journal", groupId)
+	resourcePermissionModels = journalDataFactory.newResourcePermissionModels("com.liferay.journal", groupId)
 />
 
 <#list resourcePermissionModels as resourcePermissionModel>
