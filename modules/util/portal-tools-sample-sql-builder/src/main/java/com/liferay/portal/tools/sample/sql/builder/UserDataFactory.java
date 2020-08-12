@@ -117,10 +117,18 @@ public class UserDataFactory extends BaseDataFactory {
 	public AccountModel newAccountModel() {
 		AccountModel accountModel = new AccountModelImpl();
 
+		// PK fields
+
 		accountModel.setAccountId(_accountId);
+
+		// Audit fields
+
 		accountModel.setCompanyId(COMPANY_ID);
 		accountModel.setCreateDate(new Date());
 		accountModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		accountModel.setName("Liferay");
 		accountModel.setLegalName("Liferay, Inc.");
 
@@ -148,7 +156,12 @@ public class UserDataFactory extends BaseDataFactory {
 	public CompanyModel newCompanyModel() {
 		CompanyModel companyModel = new CompanyModelImpl();
 
+		//  PK fields
+
 		companyModel.setCompanyId(COMPANY_ID);
+
+		// Other fields
+
 		companyModel.setAccountId(_accountId);
 		companyModel.setWebId("liferay.com");
 		companyModel.setMx("liferay.com");
@@ -160,7 +173,12 @@ public class UserDataFactory extends BaseDataFactory {
 	public ContactModel newContactModel(UserModel userModel) {
 		ContactModel contactModel = new ContactModelImpl();
 
+		// PK fields
+
 		contactModel.setContactId(userModel.getContactId());
+
+		// Audit fields
+
 		contactModel.setCompanyId(userModel.getCompanyId());
 		contactModel.setUserId(userModel.getUserId());
 
@@ -174,6 +192,9 @@ public class UserDataFactory extends BaseDataFactory {
 
 		contactModel.setCreateDate(new Date());
 		contactModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		contactModel.setClassNameId(getClassNameId(User.class));
 		contactModel.setClassPK(userModel.getUserId());
 		contactModel.setAccountId(_accountId);
@@ -260,8 +281,16 @@ public class UserDataFactory extends BaseDataFactory {
 	public VirtualHostModel newVirtualHostModel() {
 		VirtualHostModel virtualHostModel = new VirtualHostModelImpl();
 
+		//  PK fields
+
 		virtualHostModel.setVirtualHostId(counter.get());
+
+		// Audit fields
+
 		virtualHostModel.setCompanyId(COMPANY_ID);
+
+		// Other fields
+
 		virtualHostModel.setHostname(BenchmarksPropsValues.VIRTUAL_HOST_NAME);
 
 		return virtualHostModel;
@@ -273,10 +302,21 @@ public class UserDataFactory extends BaseDataFactory {
 
 		GroupModel groupModel = new GroupModelImpl();
 
+		// UUID
+
 		groupModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		groupModel.setGroupId(groupId);
+
+		// Audit fields
+
 		groupModel.setCompanyId(COMPANY_ID);
 		groupModel.setCreatorUserId(SAMPLE_USER_ID);
+
+		// Other fields
+
 		groupModel.setClassNameId(classNameId);
 		groupModel.setClassPK(classPK);
 		groupModel.setTreePath(
@@ -298,13 +338,24 @@ public class UserDataFactory extends BaseDataFactory {
 	protected RoleModel newRoleModel(String name, int type, long roleId) {
 		RoleModel roleModel = new RoleModelImpl();
 
+		// UUID
+
 		roleModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		roleModel.setRoleId(roleId);
+
+		// Audit fields
+
 		roleModel.setCompanyId(COMPANY_ID);
 		roleModel.setUserId(SAMPLE_USER_ID);
 		roleModel.setUserName(SAMPLE_USER_NAME);
 		roleModel.setCreateDate(new Date());
 		roleModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		roleModel.setClassNameId(getClassNameId(Role.class));
 		roleModel.setClassPK(roleModel.getRoleId());
 		roleModel.setName(name);
@@ -323,19 +374,30 @@ public class UserDataFactory extends BaseDataFactory {
 
 		UserModel userModel = new UserModelImpl();
 
+		// UUID
+
 		userModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		userModel.setUserId(userId);
+
+		// Audit fields
+
 		userModel.setCompanyId(COMPANY_ID);
 		userModel.setCreateDate(new Date());
 		userModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		userModel.setDefaultUser(defaultUser);
 		userModel.setContactId(counter.get());
 		userModel.setPassword("test");
 		userModel.setPasswordModifiedDate(new Date());
 		userModel.setReminderQueryQuestion("What is your screen name?");
 		userModel.setReminderQueryAnswer(screenName);
-		userModel.setEmailAddress(screenName + "@liferay.com");
 		userModel.setScreenName(screenName);
+		userModel.setEmailAddress(screenName + "@liferay.com");
 		userModel.setLanguageId("en_US");
 		userModel.setGreeting("Welcome " + screenName + StringPool.EXCLAMATION);
 		userModel.setFirstName(firstName);

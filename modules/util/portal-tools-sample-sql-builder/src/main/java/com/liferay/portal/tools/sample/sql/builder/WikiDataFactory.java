@@ -69,9 +69,17 @@ public class WikiDataFactory extends BaseDataFactory {
 		WikiPageResourceModel wikiPageResourceModel =
 			new WikiPageResourceModelImpl();
 
+		// UUID
+
 		wikiPageResourceModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		wikiPageResourceModel.setResourcePrimKey(
 			wikiPageModel.getResourcePrimKey());
+
+		// Other fields
+
 		wikiPageResourceModel.setNodeId(wikiPageModel.getNodeId());
 		wikiPageResourceModel.setTitle(wikiPageModel.getTitle());
 
@@ -81,14 +89,28 @@ public class WikiDataFactory extends BaseDataFactory {
 	protected WikiNodeModel newWikiNodeModel(long groupId, int index) {
 		WikiNodeModel wikiNodeModel = new WikiNodeModelImpl();
 
+		// UUID
+
 		wikiNodeModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		wikiNodeModel.setNodeId(counter.get());
+
+		// Group instance
+
 		wikiNodeModel.setGroupId(groupId);
+
+		// Audit fields
+
 		wikiNodeModel.setCompanyId(COMPANY_ID);
 		wikiNodeModel.setUserId(SAMPLE_USER_ID);
 		wikiNodeModel.setUserName(SAMPLE_USER_NAME);
 		wikiNodeModel.setCreateDate(new Date());
 		wikiNodeModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		wikiNodeModel.setName("Test Node " + index);
 		wikiNodeModel.setLastPostDate(new Date());
 		wikiNodeModel.setLastPublishDate(new Date());
@@ -102,15 +124,32 @@ public class WikiDataFactory extends BaseDataFactory {
 
 		WikiPageModel wikiPageModel = new WikiPageModelImpl();
 
+		// UUID
+
 		wikiPageModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		wikiPageModel.setPageId(counter.get());
+
+		// Resource
+
 		wikiPageModel.setResourcePrimKey(counter.get());
+
+		// Group instance
+
 		wikiPageModel.setGroupId(wikiNodeModel.getGroupId());
+
+		// Audit fields
+
 		wikiPageModel.setCompanyId(COMPANY_ID);
 		wikiPageModel.setUserId(SAMPLE_USER_ID);
 		wikiPageModel.setUserName(SAMPLE_USER_NAME);
 		wikiPageModel.setCreateDate(new Date());
 		wikiPageModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		wikiPageModel.setNodeId(wikiNodeModel.getNodeId());
 		wikiPageModel.setTitle("Test Page " + index);
 		wikiPageModel.setVersion(WikiPageConstants.VERSION_DEFAULT);

@@ -90,8 +90,16 @@ public class DLDataFactory extends BaseDDMDataFactory {
 
 		DDMStorageLinkModel ddmStorageLinkModel = new DDMStorageLinkModelImpl();
 
+		// UUID
+
 		ddmStorageLinkModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		ddmStorageLinkModel.setStorageLinkId(ddmStorageLinkId);
+
+		// Other fields
+
 		ddmStorageLinkModel.setClassNameId(getClassNameId(DDMContent.class));
 		ddmStorageLinkModel.setClassPK(ddmContentModel.getContentId());
 		ddmStorageLinkModel.setStructureId(structureId);
@@ -128,8 +136,16 @@ public class DLDataFactory extends BaseDDMDataFactory {
 		DLFileEntryMetadataModel dlFileEntryMetadataModel =
 			new DLFileEntryMetadataModelImpl();
 
+		// UUID
+
 		dlFileEntryMetadataModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		dlFileEntryMetadataModel.setFileEntryMetadataId(counter.get());
+
+		// Other fields
+
 		dlFileEntryMetadataModel.setDDMStorageId(ddmStorageLinkId);
 		dlFileEntryMetadataModel.setDDMStructureId(ddmStructureId);
 		dlFileEntryMetadataModel.setFileEntryId(
@@ -159,11 +175,22 @@ public class DLDataFactory extends BaseDDMDataFactory {
 		DLFileEntryTypeModel defaultDLFileEntryTypeModel =
 			new DLFileEntryTypeModelImpl();
 
+		// UUID
+
 		defaultDLFileEntryTypeModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		defaultDLFileEntryTypeModel.setFileEntryTypeId(
 			_defaultDLFileEntryTypeId);
+
+		// Audit fields
+
 		defaultDLFileEntryTypeModel.setCreateDate(nextFutureDate());
 		defaultDLFileEntryTypeModel.setModifiedDate(nextFutureDate());
+
+		// Other fields
+
 		defaultDLFileEntryTypeModel.setFileEntryTypeKey(
 			StringUtil.toUpperCase(
 				DLFileEntryTypeConstants.NAME_BASIC_DOCUMENT));
@@ -187,14 +214,28 @@ public class DLDataFactory extends BaseDDMDataFactory {
 
 		DLFileVersionModel dlFileVersionModel = new DLFileVersionModelImpl();
 
+		// UUID
+
 		dlFileVersionModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		dlFileVersionModel.setFileVersionId(counter.get());
+
+		// Group instance
+
 		dlFileVersionModel.setGroupId(dlFileEntryModel.getGroupId());
+
+		// Audit fields
+
 		dlFileVersionModel.setCompanyId(COMPANY_ID);
 		dlFileVersionModel.setUserId(SAMPLE_USER_ID);
 		dlFileVersionModel.setUserName(SAMPLE_USER_NAME);
 		dlFileVersionModel.setCreateDate(nextFutureDate());
 		dlFileVersionModel.setModifiedDate(nextFutureDate());
+
+		// Other fields
+
 		dlFileVersionModel.setRepositoryId(dlFileEntryModel.getRepositoryId());
 		dlFileVersionModel.setFolderId(dlFileEntryModel.getFolderId());
 		dlFileVersionModel.setFileEntryId(dlFileEntryModel.getFileEntryId());
@@ -229,14 +270,28 @@ public class DLDataFactory extends BaseDDMDataFactory {
 
 		DLFileEntryModel dlFileEntryModel = new DLFileEntryModelImpl();
 
+		// UUID
+
 		dlFileEntryModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		dlFileEntryModel.setFileEntryId(counter.get());
+
+		// Group instance
+
 		dlFileEntryModel.setGroupId(dlFolderModel.getGroupId());
+
+		// Audit fields
+
 		dlFileEntryModel.setCompanyId(COMPANY_ID);
 		dlFileEntryModel.setUserId(SAMPLE_USER_ID);
 		dlFileEntryModel.setUserName(SAMPLE_USER_NAME);
 		dlFileEntryModel.setCreateDate(nextFutureDate());
 		dlFileEntryModel.setModifiedDate(nextFutureDate());
+
+		// Other fields
+
 		dlFileEntryModel.setRepositoryId(dlFolderModel.getRepositoryId());
 		dlFileEntryModel.setFolderId(dlFolderModel.getFolderId());
 		dlFileEntryModel.setName("TestFile" + index);
@@ -258,14 +313,28 @@ public class DLDataFactory extends BaseDDMDataFactory {
 
 		DLFolderModel dlFolderModel = new DLFolderModelImpl();
 
+		// UUID
+
 		dlFolderModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		dlFolderModel.setFolderId(counter.get());
+
+		// Group instance
+
 		dlFolderModel.setGroupId(groupId);
+
+		// Audit fields
+
 		dlFolderModel.setCompanyId(COMPANY_ID);
 		dlFolderModel.setUserId(SAMPLE_USER_ID);
 		dlFolderModel.setUserName(SAMPLE_USER_NAME);
 		dlFolderModel.setCreateDate(nextFutureDate());
 		dlFolderModel.setModifiedDate(nextFutureDate());
+
+		// Other fields
+
 		dlFolderModel.setRepositoryId(groupId);
 		dlFolderModel.setParentFolderId(parentFolderId);
 		dlFolderModel.setName("Test Folder " + index);
