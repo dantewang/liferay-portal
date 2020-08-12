@@ -47,7 +47,6 @@ import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutModel;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
-import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.ResourcePermissionModel;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleModel;
@@ -56,9 +55,7 @@ import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.TextFormatter;
-import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.wiki.model.WikiNode;
 import com.liferay.wiki.model.WikiNodeModel;
 import com.liferay.wiki.model.WikiPage;
@@ -352,51 +349,6 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 		sb.append(", 0, null);");
 
 		return sb.toString();
-	}
-
-	protected ResourcePermissionModel newResourcePermissionModel(
-		String name, String primKey, long roleId, long ownerId) {
-
-		ResourcePermissionModel resourcePermissionModel =
-			new ResourcePermissionModelImpl();
-
-		// PK fields
-
-		resourcePermissionModel.setResourcePermissionId(
-			resourcePermissionCounter.get());
-
-		// Audit fields
-
-		resourcePermissionModel.setCompanyId(COMPANY_ID);
-
-		// Other fields
-
-		resourcePermissionModel.setName(name);
-		resourcePermissionModel.setScope(ResourceConstants.SCOPE_INDIVIDUAL);
-		resourcePermissionModel.setPrimKey(primKey);
-		resourcePermissionModel.setPrimKeyId(GetterUtil.getLong(primKey));
-		resourcePermissionModel.setRoleId(roleId);
-		resourcePermissionModel.setOwnerId(ownerId);
-		resourcePermissionModel.setActionIds(1);
-		resourcePermissionModel.setViewActionId(true);
-
-		return resourcePermissionModel;
-	}
-
-	protected List<ResourcePermissionModel> newResourcePermissionModels(
-		String name, String primKey, long ownerId) {
-
-		List<ResourcePermissionModel> resourcePermissionModels =
-			new ArrayList<>(3);
-
-		resourcePermissionModels.add(
-			newResourcePermissionModel(name, primKey, GUEST_ROLE_ID, 0));
-		resourcePermissionModels.add(
-			newResourcePermissionModel(name, primKey, OWNER_ROLE_ID, ownerId));
-		resourcePermissionModels.add(
-			newResourcePermissionModel(name, primKey, SITE_MEMBER_ROLE_ID, 0));
-
-		return resourcePermissionModels;
 	}
 
 	protected void toInsertSQL(StringBundler sb, BaseModel<?> baseModel) {

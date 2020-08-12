@@ -24,11 +24,15 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
+import com.liferay.portal.kernel.model.ResourceConstants;
+import com.liferay.portal.kernel.model.ResourcePermissionModel;
 import com.liferay.portal.kernel.model.UserPersonalSite;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.model.impl.ClassNameModelImpl;
+import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.model.WikiPage;
@@ -92,6 +96,51 @@ public abstract class BaseDataFactory {
 
 		return classLoader.getResourceAsStream(
 			_DEPENDENCIES_DIR + resourceName);
+	}
+
+	protected ResourcePermissionModel newResourcePermissionModel(
+		String name, String primKey, long roleId, long ownerId) {
+
+		ResourcePermissionModel resourcePermissionModel =
+			new ResourcePermissionModelImpl();
+
+		// PK fields
+
+		resourcePermissionModel.setResourcePermissionId(
+			resourcePermissionCounter.get());
+
+		// Audit fields
+
+		resourcePermissionModel.setCompanyId(COMPANY_ID);
+
+		// Other fields
+
+		resourcePermissionModel.setName(name);
+		resourcePermissionModel.setScope(ResourceConstants.SCOPE_INDIVIDUAL);
+		resourcePermissionModel.setPrimKey(primKey);
+		resourcePermissionModel.setPrimKeyId(GetterUtil.getLong(primKey));
+		resourcePermissionModel.setRoleId(roleId);
+		resourcePermissionModel.setOwnerId(ownerId);
+		resourcePermissionModel.setActionIds(1);
+		resourcePermissionModel.setViewActionId(true);
+
+		return resourcePermissionModel;
+	}
+
+	protected List<ResourcePermissionModel> newResourcePermissionModels(
+		String name, String primKey, long ownerId) {
+
+		List<ResourcePermissionModel> resourcePermissionModels =
+			new ArrayList<>(3);
+
+		resourcePermissionModels.add(
+			newResourcePermissionModel(name, primKey, GUEST_ROLE_ID, 0));
+		resourcePermissionModels.add(
+			newResourcePermissionModel(name, primKey, OWNER_ROLE_ID, ownerId));
+		resourcePermissionModels.add(
+			newResourcePermissionModel(name, primKey, SITE_MEMBER_ROLE_ID, 0));
+
+		return resourcePermissionModels;
 	}
 
 	protected String readFile(String resourceName) throws IOException {
