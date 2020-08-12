@@ -265,6 +265,8 @@ public class SampleSQLBuilder {
 						).put(
 							"fragmentDataFactory", new FragmentDataFactory()
 						).put(
+							"insertSQLBuilder", new InsertSQLBuilder()
+						).put(
 							"journalDataFactory", new JournalDataFactory()
 						).put(
 							"layoutDataFactory", new LayoutDataFactory()
@@ -276,9 +278,6 @@ public class SampleSQLBuilder {
 							new PortletPreferenceDataFactory()
 						).put(
 							"releaseDataFactory", new ReleaseDataFactory()
-						).put(
-							"resourcePermissionDataFactory",
-							new ResourcePermissionDataFactory()
 						).put(
 							"socialActivityDataFactory",
 							new SocialActivityDataFactory()

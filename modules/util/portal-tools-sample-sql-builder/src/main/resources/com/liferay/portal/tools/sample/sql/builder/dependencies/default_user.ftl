@@ -45,7 +45,7 @@
 />
 
 <#list groupIds as groupId>
-	${resourcePermissionDataFactory.toInsertSQL(blogDataFactory.newBlogsStatsUserModel(groupId))}
+	${insertSQLBuilder.toInsertSQL(blogDataFactory.newBlogsStatsUserModel(groupId))}
 
-	${resourcePermissionDataFactory.toInsertSQL(messageBoardDataFactory.newMBStatsUserModel(groupId))}
+	${insertSQLBuilder.toInsertSQL(messageBoardDataFactory.newMBStatsUserModel(groupId))}
 </#list>

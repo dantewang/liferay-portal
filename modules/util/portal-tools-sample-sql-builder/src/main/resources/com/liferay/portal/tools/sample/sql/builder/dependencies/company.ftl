@@ -1,9 +1,9 @@
 <#assign companyModel = userDataFactory.newCompanyModel() />
 
-${resourcePermissionDataFactory.toInsertSQL(companyModel)}
+${insertSQLBuilder.toInsertSQL(companyModel)}
 
-${resourcePermissionDataFactory.toInsertSQL(userDataFactory.newAccountModel())}
+${insertSQLBuilder.toInsertSQL(userDataFactory.newAccountModel())}
 
-${resourcePermissionDataFactory.toInsertSQL(userDataFactory.newVirtualHostModel())}
+${insertSQLBuilder.toInsertSQL(userDataFactory.newVirtualHostModel())}
 
 ${csvFileWriter.write("company", companyModel.companyId + "\n")}

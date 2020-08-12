@@ -76,9 +76,9 @@ import java.util.TimeZone;
 /**
  * @author Lily Chi
  */
-public class ResourcePermissionDataFactory {
+public class InsertSQLBuilder {
 
-	public ResourcePermissionDataFactory() {
+	public InsertSQLBuilder() {
 		_simpleDateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss", TimeZone.getDefault());
 	}
@@ -94,7 +94,7 @@ public class ResourcePermissionDataFactory {
 			for (Class<?> modelClass : clazz.getInterfaces()) {
 				try {
 					Method method =
-						ResourcePermissionDataFactoryImpl.class.getMethod(
+						ResourcePermissionDataFactory.class.getMethod(
 							"newResourcePermissionModels", modelClass);
 
 					for (ResourcePermissionModel resourcePermissionModel :
@@ -228,12 +228,11 @@ public class ResourcePermissionDataFactory {
 		return sb.toString();
 	}
 
-	private final ResourcePermissionDataFactoryImpl
-		_resourcePermissionDataFactory =
-			new ResourcePermissionDataFactoryImpl();
+	private final ResourcePermissionDataFactory _resourcePermissionDataFactory =
+		new ResourcePermissionDataFactory();
 	private final Format _simpleDateFormat;
 
-	private class ResourcePermissionDataFactoryImpl extends BaseDataFactory {
+	private class ResourcePermissionDataFactory extends BaseDataFactory {
 
 		public List<ResourcePermissionModel> newResourcePermissionModels(
 			AssetCategoryModel assetCategoryModel) {
