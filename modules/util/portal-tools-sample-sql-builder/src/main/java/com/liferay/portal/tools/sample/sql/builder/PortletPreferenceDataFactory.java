@@ -294,8 +294,16 @@ public class PortletPreferenceDataFactory extends BaseDataFactory {
 		PortletPreferencesModel portletPreferencesModel =
 			new PortletPreferencesModelImpl();
 
-		portletPreferencesModel.setCompanyId(COMPANY_ID);
+		// PK fields
+
 		portletPreferencesModel.setPortletPreferencesId(counter.get());
+
+		// Audit fields
+
+		portletPreferencesModel.setCompanyId(COMPANY_ID);
+
+		// Other fields
+
 		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
 		portletPreferencesModel.setOwnerType(
 			PortletKeys.PREFS_OWNER_TYPE_LAYOUT);

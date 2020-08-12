@@ -58,19 +58,32 @@ public class LayoutDataFactory extends BaseDataFactory {
 
 		LayoutModel layoutModel = new LayoutModelImpl();
 
+		// UUID
+
 		layoutModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		layoutModel.setPlid(counter.get());
+
+		// Group instance
+
 		layoutModel.setGroupId(groupId);
+
+		// Audit fields
+
 		layoutModel.setCompanyId(COMPANY_ID);
 		layoutModel.setUserId(SAMPLE_USER_ID);
 		layoutModel.setUserName(SAMPLE_USER_NAME);
 		layoutModel.setCreateDate(new Date());
 		layoutModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		layoutModel.setLayoutId(simpleCounter.get());
 		layoutModel.setName(
 			"<?xml version=\"1.0\"?><root><name>" + name + "</name></root>");
 		layoutModel.setType(LayoutConstants.TYPE_CONTENT);
-		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + name);
 
 		UnicodeProperties typeSettingsUnicodeProperties = new UnicodeProperties(
 			true);
@@ -82,6 +95,7 @@ public class LayoutDataFactory extends BaseDataFactory {
 			StringUtil.replace(
 				typeSettingsUnicodeProperties.toString(), '\n', "\\n"));
 
+		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + name);
 		layoutModel.setLastPublishDate(new Date());
 
 		return layoutModel;
@@ -107,14 +121,28 @@ public class LayoutDataFactory extends BaseDataFactory {
 		LayoutFriendlyURLModel layoutFriendlyURLEntryModel =
 			new LayoutFriendlyURLModelImpl();
 
+		// UUID
+
 		layoutFriendlyURLEntryModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		layoutFriendlyURLEntryModel.setLayoutFriendlyURLId(counter.get());
+
+		// Group instance
+
 		layoutFriendlyURLEntryModel.setGroupId(layoutModel.getGroupId());
+
+		// Audit fields
+
 		layoutFriendlyURLEntryModel.setCompanyId(COMPANY_ID);
 		layoutFriendlyURLEntryModel.setUserId(SAMPLE_USER_ID);
 		layoutFriendlyURLEntryModel.setUserName(SAMPLE_USER_NAME);
 		layoutFriendlyURLEntryModel.setCreateDate(new Date());
 		layoutFriendlyURLEntryModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		layoutFriendlyURLEntryModel.setPlid(layoutModel.getPlid());
 		layoutFriendlyURLEntryModel.setFriendlyURL(
 			layoutModel.getFriendlyURL());
@@ -137,19 +165,32 @@ public class LayoutDataFactory extends BaseDataFactory {
 
 		LayoutModel layoutModel = new LayoutModelImpl();
 
+		// UUID
+
 		layoutModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		layoutModel.setPlid(counter.get());
+
+		// Group instance
+
 		layoutModel.setGroupId(groupId);
+
+		// Audit fields
+
 		layoutModel.setCompanyId(COMPANY_ID);
 		layoutModel.setUserId(SAMPLE_USER_ID);
 		layoutModel.setUserName(SAMPLE_USER_NAME);
 		layoutModel.setCreateDate(new Date());
 		layoutModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		layoutModel.setLayoutId(simpleCounter.get());
 		layoutModel.setName(
 			"<?xml version=\"1.0\"?><root><name>" + name + "</name></root>");
 		layoutModel.setType(LayoutConstants.TYPE_PORTLET);
-		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + name);
 
 		UnicodeProperties typeSettingsUnicodeProperties = new UnicodeProperties(
 			true);
@@ -163,6 +204,7 @@ public class LayoutDataFactory extends BaseDataFactory {
 			StringUtil.replace(
 				typeSettingsUnicodeProperties.toString(), '\n', "\\n"));
 
+		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + name);
 		layoutModel.setLastPublishDate(new Date());
 
 		return layoutModel;
@@ -208,14 +250,22 @@ public class LayoutDataFactory extends BaseDataFactory {
 
 		LayoutSetModel layoutSetModel = new LayoutSetModelImpl();
 
-		long layoutSetId = counter.get();
+		// PK fields
 
-		layoutSetModel.setLayoutSetId(layoutSetId);
+		layoutSetModel.setLayoutSetId(counter.get());
+
+		// Group instance
 
 		layoutSetModel.setGroupId(groupId);
+
+		// Audit fields
+
 		layoutSetModel.setCompanyId(COMPANY_ID);
 		layoutSetModel.setCreateDate(new Date());
 		layoutSetModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		layoutSetModel.setPrivateLayout(privateLayout);
 		layoutSetModel.setThemeId("classic_WAR_classictheme");
 		layoutSetModel.setColorSchemeId("01");

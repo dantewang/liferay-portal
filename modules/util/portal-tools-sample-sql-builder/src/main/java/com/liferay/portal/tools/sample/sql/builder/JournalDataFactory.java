@@ -105,8 +105,16 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 
 		DDMStorageLinkModel ddmStorageLinkModel = new DDMStorageLinkModelImpl();
 
+		// UUID
+
 		ddmStorageLinkModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		ddmStorageLinkModel.setStorageLinkId(counter.get());
+
+		// Other fields
+
 		ddmStorageLinkModel.setClassNameId(
 			getClassNameId(JournalArticle.class));
 		ddmStorageLinkModel.setClassPK(journalArticleModel.getId());
@@ -123,8 +131,16 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		DDMTemplateLinkModel ddmTemplateLinkModel =
 			new DDMTemplateLinkModelImpl();
 
-		ddmTemplateLinkModel.setCompanyId(COMPANY_ID);
+		// PK fields
+
 		ddmTemplateLinkModel.setTemplateLinkId(counter.get());
+
+		// Audit fields
+
+		ddmTemplateLinkModel.setCompanyId(COMPANY_ID);
+
+		// Other fields
+
 		ddmTemplateLinkModel.setClassNameId(
 			getClassNameId(JournalArticle.class));
 		ddmTemplateLinkModel.setClassPK(journalArticleModel.getId());
@@ -164,16 +180,27 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		DDMTemplateVersionModelImpl ddmTemplateVersionModelImpl =
 			new DDMTemplateVersionModelImpl();
 
+		// PK fields
+
 		ddmTemplateVersionModelImpl.setTemplateVersionId(counter.get());
+
+		// Group instance
+
 		ddmTemplateVersionModelImpl.setGroupId(GLOBAL_GROUP_ID);
+
+		// Audit fields
+
 		ddmTemplateVersionModelImpl.setCompanyId(COMPANY_ID);
 		ddmTemplateVersionModelImpl.setUserId(DEFAULT_USER_ID);
 		ddmTemplateVersionModelImpl.setCreateDate(nextFutureDate());
-		ddmTemplateVersionModelImpl.setTemplateId(_defaultJournalDDMTemplateId);
-		ddmTemplateVersionModelImpl.setClassPK(
-			DEFAULT_JOURNAL_DDM_STRUCTURE_ID);
+
+		// Other fields
+
 		ddmTemplateVersionModelImpl.setClassNameId(
 			getClassNameId(DDMStructure.class));
+		ddmTemplateVersionModelImpl.setClassPK(
+			DEFAULT_JOURNAL_DDM_STRUCTURE_ID);
+		ddmTemplateVersionModelImpl.setTemplateId(_defaultJournalDDMTemplateId);
 		ddmTemplateVersionModelImpl.setVersion(
 			DDMTemplateConstants.VERSION_DEFAULT);
 
@@ -206,9 +233,17 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		sb.append(StringPool.UNDERLINE);
 		sb.append(versionIndex);
 
+		// PK fields
+
 		journalArticleLocalizationModel.setArticleLocalizationId(counter.get());
+
+		// Audit fields
+
 		journalArticleLocalizationModel.setCompanyId(
 			journalArticleModel.getCompanyId());
+
+		// Other fields
+
 		journalArticleLocalizationModel.setArticlePK(
 			journalArticleModel.getId());
 		journalArticleLocalizationModel.setTitle(sb.toString());
@@ -225,22 +260,39 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 
 		JournalArticleModel journalArticleModel = new JournalArticleModelImpl();
 
+		// UUID
+
 		journalArticleModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		journalArticleModel.setId(counter.get());
+
+		// Resource
+
 		journalArticleModel.setResourcePrimKey(
 			journalArticleResourceModel.getResourcePrimKey());
+
+		// Group instance
+
 		journalArticleModel.setGroupId(
 			journalArticleResourceModel.getGroupId());
+
+		// Audit fields
+
 		journalArticleModel.setCompanyId(COMPANY_ID);
 		journalArticleModel.setUserId(SAMPLE_USER_ID);
 		journalArticleModel.setUserName(SAMPLE_USER_NAME);
 		journalArticleModel.setCreateDate(new Date());
 		journalArticleModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		journalArticleModel.setClassNameId(
 			JournalArticleConstants.CLASS_NAME_ID_DEFAULT);
+		journalArticleModel.setTreePath("/");
 		journalArticleModel.setArticleId(
 			journalArticleResourceModel.getArticleId());
-		journalArticleModel.setTreePath("/");
 		journalArticleModel.setVersion(versionIndex);
 
 		StringBundler sb = new StringBundler(4);
@@ -253,9 +305,9 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		journalArticleModel.setUrlTitle(sb.toString());
 
 		journalArticleModel.setContent(_journalArticleContent);
-		journalArticleModel.setDefaultLanguageId("en_US");
 		journalArticleModel.setDDMStructureKey(_JOURNAL_STRUCTURE_KEY);
 		journalArticleModel.setDDMTemplateKey(_JOURNAL_STRUCTURE_KEY);
+		journalArticleModel.setDefaultLanguageId("en_US");
 		journalArticleModel.setDisplayDate(new Date());
 		journalArticleModel.setExpirationDate(nextFutureDate());
 		journalArticleModel.setReviewDate(new Date());
@@ -276,10 +328,24 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		JournalArticleResourceModel journalArticleResourceModel =
 			new JournalArticleResourceModelImpl();
 
+		// UUID
+
 		journalArticleResourceModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		journalArticleResourceModel.setResourcePrimKey(counter.get());
+
+		// Group instance
+
 		journalArticleResourceModel.setGroupId(groupId);
+
+		// Audit fields
+
 		journalArticleResourceModel.setCompanyId(COMPANY_ID);
+
+		// Other fields
+
 		journalArticleResourceModel.setArticleId(String.valueOf(counter.get()));
 
 		journalArticleResourceUUIDs.put(
@@ -300,7 +366,12 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		PortletPreferencesModel portletPreferencesModel =
 			new PortletPreferencesModelImpl();
 
+		// PK fields
+
 		portletPreferencesModel.setPortletPreferencesId(counter.get());
+
+		// Other fields
+
 		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
 		portletPreferencesModel.setOwnerType(
 			PortletKeys.PREFS_OWNER_TYPE_LAYOUT);
@@ -321,9 +392,20 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		JournalContentSearchModel journalContentSearchModel =
 			new JournalContentSearchModelImpl();
 
+		// PK fields
+
 		journalContentSearchModel.setContentSearchId(counter.get());
+
+		// Group instance
+
 		journalContentSearchModel.setGroupId(journalArticleModel.getGroupId());
+
+		// Audit fields
+
 		journalContentSearchModel.setCompanyId(COMPANY_ID);
+
+		// Other fields
+
 		journalContentSearchModel.setLayoutId(layoutId);
 		journalContentSearchModel.setPortletId(
 			JournalContentPortletKeys.JOURNAL_CONTENT);
@@ -343,20 +425,34 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 
 		DDMTemplateModel ddmTemplateModel = new DDMTemplateModelImpl();
 
+		// UUID
+
 		ddmTemplateModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		ddmTemplateModel.setTemplateId(templateId);
+
+		// Group instance
+
 		ddmTemplateModel.setGroupId(groupId);
+
+		// Audit fields
+
 		ddmTemplateModel.setCompanyId(COMPANY_ID);
 		ddmTemplateModel.setUserId(userId);
+		ddmTemplateModel.setVersionUserId(userId);
+		ddmTemplateModel.setVersionUserName(SAMPLE_USER_NAME);
 		ddmTemplateModel.setCreateDate(nextFutureDate());
 		ddmTemplateModel.setModifiedDate(nextFutureDate());
+
+		// Other fields
+
 		ddmTemplateModel.setClassNameId(getClassNameId(DDMStructure.class));
 		ddmTemplateModel.setClassPK(structureId);
 		ddmTemplateModel.setResourceClassNameId(sourceClassNameId);
 		ddmTemplateModel.setTemplateKey(_JOURNAL_STRUCTURE_KEY);
 		ddmTemplateModel.setVersion(DDMTemplateConstants.VERSION_DEFAULT);
-		ddmTemplateModel.setVersionUserId(userId);
-		ddmTemplateModel.setVersionUserName(SAMPLE_USER_NAME);
 
 		StringBundler sb = new StringBundler(3);
 
