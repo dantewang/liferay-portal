@@ -1,18 +1,18 @@
 <#assign wikiNodeModels = wikiDataFactory.newWikiNodeModels(groupId) />
 
 <#list wikiNodeModels as wikiNodeModel>
-	${resourcePermissionDataFactory.toInsertSQL(wikiNodeModel)}
+	${insertSQLBuilder.toInsertSQL(wikiNodeModel)}
 
 	<#assign wikiPageModels = wikiDataFactory.newWikiPageModels(wikiNodeModel) />
 
 	<#list wikiPageModels as wikiPageModel>
-		${resourcePermissionDataFactory.toInsertSQL(wikiPageModel)}
+		${insertSQLBuilder.toInsertSQL(wikiPageModel)}
 
-		${resourcePermissionDataFactory.toInsertSQL(assetDataFactory.newMBDiscussionAssetEntryModel(wikiPageModel))}
+		${insertSQLBuilder.toInsertSQL(assetDataFactory.newMBDiscussionAssetEntryModel(wikiPageModel))}
 
-		${resourcePermissionDataFactory.toInsertSQL(subscriptionDataFactory.newSubscriptionModel(wikiPageModel))}
+		${insertSQLBuilder.toInsertSQL(subscriptionDataFactory.newSubscriptionModel(wikiPageModel))}
 
-		${resourcePermissionDataFactory.toInsertSQL(wikiDataFactory.newWikiPageResourceModel(wikiPageModel))}
+		${insertSQLBuilder.toInsertSQL(wikiDataFactory.newWikiPageResourceModel(wikiPageModel))}
 
 		<@insertAssetEntry
 			_categoryAndTag=true

@@ -1,5 +1,5 @@
 <#assign releaseModels = releaseDataFactory.newReleaseModels() />
 
 <#list releaseModels as releaseModel>
-	${resourcePermissionDataFactory.toInsertSQL(releaseModel)}
+	${insertSQLBuilder.toInsertSQL(releaseModel)}
 </#list>
