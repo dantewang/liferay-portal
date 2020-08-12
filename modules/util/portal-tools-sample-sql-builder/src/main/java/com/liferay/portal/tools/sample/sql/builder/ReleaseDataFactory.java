@@ -84,9 +84,17 @@ public class ReleaseDataFactory extends BaseDataFactory {
 
 		ReleaseModelImpl releaseModelImpl = new ReleaseModelImpl();
 
+		// PK fields
+
 		releaseModelImpl.setReleaseId(releaseId);
+
+		// Audit fields
+
 		releaseModelImpl.setCreateDate(new Date());
 		releaseModelImpl.setModifiedDate(new Date());
+
+		// Other fields
+
 		releaseModelImpl.setServletContextName(servletContextName);
 		releaseModelImpl.setSchemaVersion(schemaVersion);
 		releaseModelImpl.setBuildNumber(buildNumber);

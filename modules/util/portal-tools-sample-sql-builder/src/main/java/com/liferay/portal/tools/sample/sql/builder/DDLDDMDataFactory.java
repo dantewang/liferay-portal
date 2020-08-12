@@ -122,9 +122,20 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 
 		DDLRecordModel ddlRecordModel = new DDLRecordModelImpl();
 
+		// UUID
+
 		ddlRecordModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		ddlRecordModel.setRecordId(counter.get());
+
+		// Group instance
+
 		ddlRecordModel.setGroupId(dDLRecordSetModel.getGroupId());
+
+		// Audit fields
+
 		ddlRecordModel.setCompanyId(COMPANY_ID);
 		ddlRecordModel.setUserId(SAMPLE_USER_ID);
 		ddlRecordModel.setUserName(SAMPLE_USER_NAME);
@@ -132,6 +143,9 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 		ddlRecordModel.setVersionUserName(SAMPLE_USER_NAME);
 		ddlRecordModel.setCreateDate(new Date());
 		ddlRecordModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		ddlRecordModel.setDDMStorageId(counter.get());
 		ddlRecordModel.setRecordSetId(dDLRecordSetModel.getRecordSetId());
 		ddlRecordModel.setVersion(DDLRecordConstants.VERSION_DEFAULT);
@@ -147,14 +161,28 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 
 		DDLRecordSetModel ddlRecordSetModel = new DDLRecordSetModelImpl();
 
+		// UUID
+
 		ddlRecordSetModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		ddlRecordSetModel.setRecordSetId(counter.get());
+
+		// Group instance
+
 		ddlRecordSetModel.setGroupId(ddmStructureModel.getGroupId());
+
+		// Audit fields
+
 		ddlRecordSetModel.setCompanyId(COMPANY_ID);
 		ddlRecordSetModel.setUserId(SAMPLE_USER_ID);
 		ddlRecordSetModel.setUserName(SAMPLE_USER_NAME);
 		ddlRecordSetModel.setCreateDate(new Date());
 		ddlRecordSetModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		ddlRecordSetModel.setDDMStructureId(ddmStructureModel.getStructureId());
 		ddlRecordSetModel.setRecordSetKey(String.valueOf(counter.get()));
 
@@ -184,12 +212,23 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 		DDLRecordVersionModel ddlRecordVersionModel =
 			new DDLRecordVersionModelImpl();
 
+		// PK fields
+
 		ddlRecordVersionModel.setRecordVersionId(counter.get());
+
+		// Group instance
+
 		ddlRecordVersionModel.setGroupId(dDLRecordModel.getGroupId());
+
+		// Audit fields
+
 		ddlRecordVersionModel.setCompanyId(COMPANY_ID);
 		ddlRecordVersionModel.setUserId(SAMPLE_USER_ID);
 		ddlRecordVersionModel.setUserName(SAMPLE_USER_NAME);
 		ddlRecordVersionModel.setCreateDate(dDLRecordModel.getModifiedDate());
+
+		// Other fields
+
 		ddlRecordVersionModel.setDDMStorageId(dDLRecordModel.getDDMStorageId());
 		ddlRecordVersionModel.setRecordSetId(dDLRecordModel.getRecordSetId());
 		ddlRecordVersionModel.setRecordId(dDLRecordModel.getRecordId());
@@ -264,7 +303,12 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 		DDMStructureLinkModel ddmStructureLinkModel =
 			new DDMStructureLinkModelImpl();
 
+		// PK fields
+
 		ddmStructureLinkModel.setStructureLinkId(counter.get());
+
+		// Other fields
+
 		ddmStructureLinkModel.setClassNameId(classNameId);
 		ddmStructureLinkModel.setClassPK(classPK);
 		ddmStructureLinkModel.setStructureId(structureId);
