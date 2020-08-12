@@ -38,12 +38,23 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 		DDMStructureVersionModel ddmStructureVersionModel =
 			new DDMStructureVersionModelImpl();
 
+		// PK fields
+
 		ddmStructureVersionModel.setStructureVersionId(structureVersionId);
+
+		// Group instance
+
 		ddmStructureVersionModel.setGroupId(ddmStructureModel.getGroupId());
+
+		// Audit fields
+
 		ddmStructureVersionModel.setCompanyId(COMPANY_ID);
 		ddmStructureVersionModel.setUserId(ddmStructureModel.getUserId());
 		ddmStructureVersionModel.setUserName(SAMPLE_USER_NAME);
 		ddmStructureVersionModel.setCreateDate(nextFutureDate());
+
+		// Other fields
+
 		ddmStructureVersionModel.setStructureId(
 			ddmStructureModel.getStructureId());
 		ddmStructureVersionModel.setVersion(
@@ -74,14 +85,28 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 
 		DDMContentModel ddmContentModel = new DDMContentModelImpl();
 
+		// UUID
+
 		ddmContentModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		ddmContentModel.setContentId(contentId);
+
+		// Group instance
+
 		ddmContentModel.setGroupId(groupId);
+
+		// Audit fields
+
 		ddmContentModel.setCompanyId(COMPANY_ID);
 		ddmContentModel.setUserId(SAMPLE_USER_ID);
 		ddmContentModel.setUserName(SAMPLE_USER_NAME);
 		ddmContentModel.setCreateDate(nextFutureDate());
 		ddmContentModel.setModifiedDate(nextFutureDate());
+
+		// Other fields
+
 		ddmContentModel.setName(DDMStorageLink.class.getName());
 		ddmContentModel.setData(data);
 
@@ -94,14 +119,28 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 		DDMStructureLayoutModel ddmStructureLayoutModel =
 			new DDMStructureLayoutModelImpl();
 
+		// UUID
+
 		ddmStructureLayoutModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		ddmStructureLayoutModel.setStructureLayoutId(counter.get());
+
+		// Group instance
+
 		ddmStructureLayoutModel.setGroupId(groupId);
+
+		// Audit fields
+
 		ddmStructureLayoutModel.setCompanyId(COMPANY_ID);
 		ddmStructureLayoutModel.setUserId(userId);
 		ddmStructureLayoutModel.setUserName(SAMPLE_USER_NAME);
 		ddmStructureLayoutModel.setCreateDate(nextFutureDate());
 		ddmStructureLayoutModel.setModifiedDate(nextFutureDate());
+
+		// Other fields
+
 		ddmStructureLayoutModel.setStructureLayoutKey(
 			String.valueOf(counter.get()));
 		ddmStructureLayoutModel.setStructureVersionId(structureVersionId);
@@ -116,9 +155,20 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 
 		DDMStructureModel ddmStructureModel = new DDMStructureModelImpl();
 
+		// UUID
+
 		ddmStructureModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		ddmStructureModel.setStructureId(structureId);
+
+		// Group instance
+
 		ddmStructureModel.setGroupId(groupId);
+
+		// Audit fields
+
 		ddmStructureModel.setCompanyId(COMPANY_ID);
 		ddmStructureModel.setUserId(userId);
 		ddmStructureModel.setUserName(SAMPLE_USER_NAME);
@@ -126,6 +176,9 @@ public abstract class BaseDDMDataFactory extends BaseDataFactory {
 		ddmStructureModel.setVersionUserName(SAMPLE_USER_NAME);
 		ddmStructureModel.setCreateDate(nextFutureDate());
 		ddmStructureModel.setModifiedDate(nextFutureDate());
+
+		// Other fields
+
 		ddmStructureModel.setClassNameId(classNameId);
 		ddmStructureModel.setStructureKey(structureKey);
 		ddmStructureModel.setVersion(DDMStructureConstants.VERSION_DEFAULT);

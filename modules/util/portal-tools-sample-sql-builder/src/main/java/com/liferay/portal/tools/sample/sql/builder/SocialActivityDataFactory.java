@@ -127,11 +127,22 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 
 		SocialActivityModel socialActivityModel = new SocialActivityModelImpl();
 
+		// PK fields
+
 		socialActivityModel.setActivityId(socialActivityCounter.get());
+
+		// Group instance
+
 		socialActivityModel.setGroupId(groupId);
+
+		// Audit fields
+
 		socialActivityModel.setCompanyId(COMPANY_ID);
 		socialActivityModel.setUserId(SAMPLE_USER_ID);
 		socialActivityModel.setCreateDate(_CURRENT_TIME + _timeCounter.get());
+
+		// Other fields
+
 		socialActivityModel.setClassNameId(classNameId);
 		socialActivityModel.setClassPK(classPK);
 		socialActivityModel.setType(type);

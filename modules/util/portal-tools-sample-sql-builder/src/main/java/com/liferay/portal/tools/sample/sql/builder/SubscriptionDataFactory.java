@@ -53,12 +53,20 @@ public class SubscriptionDataFactory extends BaseDataFactory {
 
 		SubscriptionModel subscriptionModel = new SubscriptionModelImpl();
 
+		// PK fields
+
 		subscriptionModel.setSubscriptionId(counter.get());
+
+		// Audit fields
+
 		subscriptionModel.setCompanyId(COMPANY_ID);
 		subscriptionModel.setUserId(SAMPLE_USER_ID);
 		subscriptionModel.setUserName(SAMPLE_USER_NAME);
 		subscriptionModel.setCreateDate(new Date());
 		subscriptionModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		subscriptionModel.setClassNameId(classNameId);
 		subscriptionModel.setClassPK(classPK);
 		subscriptionModel.setFrequency(SubscriptionConstants.FREQUENCY_INSTANT);

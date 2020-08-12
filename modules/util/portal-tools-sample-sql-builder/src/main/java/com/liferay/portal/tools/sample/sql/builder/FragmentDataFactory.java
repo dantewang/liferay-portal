@@ -45,13 +45,27 @@ public class FragmentDataFactory extends BaseDataFactory {
 		FragmentCollectionModel fragmentCollectionModel =
 			new FragmentCollectionModelImpl();
 
+		// UUID
+
 		fragmentCollectionModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		fragmentCollectionModel.setFragmentCollectionId(counter.get());
+
+		// Group instance
+
 		fragmentCollectionModel.setGroupId(groupId);
+
+		// Audit fields
+
 		fragmentCollectionModel.setCompanyId(COMPANY_ID);
 		fragmentCollectionModel.setUserId(SAMPLE_USER_ID);
 		fragmentCollectionModel.setCreateDate(new Date());
 		fragmentCollectionModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		fragmentCollectionModel.setFragmentCollectionKey("fragmentcollection");
 		fragmentCollectionModel.setName("fragmentcollection");
 
@@ -64,21 +78,35 @@ public class FragmentDataFactory extends BaseDataFactory {
 		FragmentEntryLinkModel fragmentEntryLinkModel =
 			new FragmentEntryLinkModelImpl();
 
+		// UUID
+
 		fragmentEntryLinkModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		fragmentEntryLinkModel.setFragmentEntryLinkId(counter.get());
+
+		// Group instance
+
 		fragmentEntryLinkModel.setGroupId(fragmentEntryModel.getGroupId());
+
+		// Audit fields
+
 		fragmentEntryLinkModel.setCompanyId(COMPANY_ID);
 		fragmentEntryLinkModel.setUserId(SAMPLE_USER_ID);
 		fragmentEntryLinkModel.setUserName(SAMPLE_USER_NAME);
 		fragmentEntryLinkModel.setCreateDate(new Date());
 		fragmentEntryLinkModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		fragmentEntryLinkModel.setFragmentEntryId(
 			fragmentEntryModel.getFragmentEntryId());
 		fragmentEntryLinkModel.setClassNameId(getClassNameId(Layout.class));
 		fragmentEntryLinkModel.setClassPK(layoutModel.getPlid());
 		fragmentEntryLinkModel.setCss(fragmentEntryModel.getCss());
-		fragmentEntryLinkModel.setJs(fragmentEntryModel.getJs());
 		fragmentEntryLinkModel.setHtml(fragmentEntryModel.getHtml());
+		fragmentEntryLinkModel.setJs(fragmentEntryModel.getJs());
 		fragmentEntryLinkModel.setEditableValues(StringPool.BLANK);
 		fragmentEntryLinkModel.setNamespace(StringUtil.randomId());
 		fragmentEntryLinkModel.setPosition(0);
@@ -92,14 +120,28 @@ public class FragmentDataFactory extends BaseDataFactory {
 
 		FragmentEntryModel fragmentEntryModel = new FragmentEntryModelImpl();
 
+		// UUID
+
 		fragmentEntryModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		fragmentEntryModel.setFragmentEntryId(counter.get());
+
+		// Group instance
+
 		fragmentEntryModel.setGroupId(groupId);
+
+		// Audit fields
+
 		fragmentEntryModel.setCompanyId(COMPANY_ID);
 		fragmentEntryModel.setUserId(SAMPLE_USER_ID);
 		fragmentEntryModel.setUserName(SAMPLE_USER_NAME);
 		fragmentEntryModel.setCreateDate(new Date());
 		fragmentEntryModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		fragmentEntryModel.setFragmentCollectionId(
 			fragmentCollectionModel.getFragmentCollectionId());
 		fragmentEntryModel.setFragmentEntryKey("web_content");
@@ -119,17 +161,29 @@ public class FragmentDataFactory extends BaseDataFactory {
 		LayoutPageTemplateStructureModel layoutPageTemplateStructureModel =
 			new LayoutPageTemplateStructureModelImpl();
 
+		// UUID
+
 		layoutPageTemplateStructureModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
 
 		layoutPageTemplateStructureModel.setLayoutPageTemplateStructureId(
 			counter.get());
 
+		// Group instance
+
 		layoutPageTemplateStructureModel.setGroupId(layoutModel.getGroupId());
+
+		// Audit fields
+
 		layoutPageTemplateStructureModel.setCompanyId(COMPANY_ID);
 		layoutPageTemplateStructureModel.setUserId(SAMPLE_USER_ID);
 		layoutPageTemplateStructureModel.setUserName(SAMPLE_USER_NAME);
 		layoutPageTemplateStructureModel.setCreateDate(new Date());
 		layoutPageTemplateStructureModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		layoutPageTemplateStructureModel.setClassNameId(
 			getClassNameId(Layout.class));
 		layoutPageTemplateStructureModel.setClassPK(layoutModel.getPlid());
@@ -147,16 +201,30 @@ public class FragmentDataFactory extends BaseDataFactory {
 			layoutPageTemplateStructureRelModel =
 				new LayoutPageTemplateStructureRelModelImpl();
 
+		// UUID
+
 		layoutPageTemplateStructureRelModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
 		layoutPageTemplateStructureRelModel.setLayoutPageTemplateStructureRelId(
 			counter.get());
+
+		// Group instance
+
 		layoutPageTemplateStructureRelModel.setGroupId(
 			layoutPageTemplateStructureModel.getGroupId());
+
+		// Audit fields
+
 		layoutPageTemplateStructureRelModel.setCompanyId(COMPANY_ID);
 		layoutPageTemplateStructureRelModel.setUserId(SAMPLE_USER_ID);
 		layoutPageTemplateStructureRelModel.setUserName(SAMPLE_USER_NAME);
 		layoutPageTemplateStructureRelModel.setCreateDate(new Date());
 		layoutPageTemplateStructureRelModel.setModifiedDate(new Date());
+
+		// Other fields
+
 		layoutPageTemplateStructureRelModel.setLayoutPageTemplateStructureId(
 			layoutPageTemplateStructureModel.
 				getLayoutPageTemplateStructureId());

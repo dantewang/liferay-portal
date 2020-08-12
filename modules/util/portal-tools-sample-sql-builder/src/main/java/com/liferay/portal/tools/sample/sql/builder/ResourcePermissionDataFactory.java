@@ -360,9 +360,17 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 		ResourcePermissionModel resourcePermissionModel =
 			new ResourcePermissionModelImpl();
 
+		// PK fields
+
 		resourcePermissionModel.setResourcePermissionId(
 			resourcePermissionCounter.get());
+
+		// Audit fields
+
 		resourcePermissionModel.setCompanyId(COMPANY_ID);
+
+		// Other fields
+
 		resourcePermissionModel.setName(name);
 		resourcePermissionModel.setScope(ResourceConstants.SCOPE_INDIVIDUAL);
 		resourcePermissionModel.setPrimKey(primKey);
