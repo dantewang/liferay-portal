@@ -44,6 +44,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
+import com.liferay.portal.kernel.model.ResourcePermissionModel;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.ObjectValuePair;
@@ -53,6 +54,7 @@ import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.portlet.PortletPreferences;
 
@@ -417,6 +419,13 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 
 	public <K, V> ObjectValuePair<K, V> newObjectValuePair(K key, V value) {
 		return new ObjectValuePair<>(key, value);
+	}
+
+	public List<ResourcePermissionModel> newResourcePermissionModels(
+		String name, long primKey) {
+
+		return newResourcePermissionModels(
+			name, String.valueOf(primKey), SAMPLE_USER_ID);
 	}
 
 	protected DDMTemplateModel newDDMTemplateModel(
