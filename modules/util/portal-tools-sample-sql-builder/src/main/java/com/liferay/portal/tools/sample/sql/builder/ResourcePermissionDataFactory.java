@@ -76,208 +76,11 @@ import java.util.TimeZone;
 /**
  * @author Lily Chi
  */
-public class ResourcePermissionDataFactory extends BaseDataFactory {
+public class ResourcePermissionDataFactory {
 
 	public ResourcePermissionDataFactory() {
 		_simpleDateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss", TimeZone.getDefault());
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		AssetCategoryModel assetCategoryModel) {
-
-		return newResourcePermissionModels(
-			AssetCategory.class.getName(),
-			String.valueOf(assetCategoryModel.getCategoryId()), SAMPLE_USER_ID);
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		AssetVocabularyModel assetVocabularyModel) {
-
-		if (assetVocabularyModel.getUserId() == DEFAULT_USER_ID) {
-			return Collections.singletonList(
-				newResourcePermissionModel(
-					AssetVocabulary.class.getName(),
-					String.valueOf(assetVocabularyModel.getVocabularyId()),
-					OWNER_ROLE_ID, DEFAULT_USER_ID));
-		}
-
-		return newResourcePermissionModels(
-			AssetVocabulary.class.getName(),
-			String.valueOf(assetVocabularyModel.getVocabularyId()),
-			SAMPLE_USER_ID);
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		BlogsEntryModel blogsEntryModel) {
-
-		return newResourcePermissionModels(
-			BlogsEntry.class.getName(),
-			String.valueOf(blogsEntryModel.getEntryId()), SAMPLE_USER_ID);
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		DDLRecordSetModel ddlRecordSetModel) {
-
-		return Collections.singletonList(
-			newResourcePermissionModel(
-				DDLRecordSet.class.getName(),
-				String.valueOf(ddlRecordSetModel.getRecordSetId()),
-				OWNER_ROLE_ID, DEFAULT_USER_ID));
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		DDMStructureModel ddmStructureModel) {
-
-		List<ResourcePermissionModel> resourcePermissionModels =
-			new ArrayList<>(3);
-
-		String name = _getResourcePermissionModelName(
-			DDMStructure.class.getName(),
-			getClassName(ddmStructureModel.getClassNameId()));
-		String primKey = String.valueOf(ddmStructureModel.getStructureId());
-
-		resourcePermissionModels.add(
-			newResourcePermissionModel(name, primKey, GUEST_ROLE_ID, 0));
-		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, OWNER_ROLE_ID, ddmStructureModel.getUserId()));
-		resourcePermissionModels.add(
-			newResourcePermissionModel(name, primKey, USER_ROLE_ID, 0));
-
-		return resourcePermissionModels;
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		DDMTemplateModel ddmTemplateModel) {
-
-		List<ResourcePermissionModel> resourcePermissionModels =
-			new ArrayList<>(3);
-
-		String name = _getResourcePermissionModelName(
-			DDMTemplate.class.getName(),
-			getClassName(ddmTemplateModel.getResourceClassNameId()));
-		String primKey = String.valueOf(ddmTemplateModel.getTemplateId());
-
-		resourcePermissionModels.add(
-			newResourcePermissionModel(name, primKey, GUEST_ROLE_ID, 0));
-		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, OWNER_ROLE_ID, ddmTemplateModel.getUserId()));
-		resourcePermissionModels.add(
-			newResourcePermissionModel(name, primKey, USER_ROLE_ID, 0));
-
-		return resourcePermissionModels;
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		DLFileEntryModel dlFileEntryModel) {
-
-		return newResourcePermissionModels(
-			DLFileEntry.class.getName(),
-			String.valueOf(dlFileEntryModel.getFileEntryId()), SAMPLE_USER_ID);
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		DLFolderModel dlFolderModel) {
-
-		return newResourcePermissionModels(
-			DLFolder.class.getName(),
-			String.valueOf(dlFolderModel.getFolderId()), SAMPLE_USER_ID);
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		GroupModel groupModel) {
-
-		return Collections.singletonList(
-			newResourcePermissionModel(
-				Group.class.getName(), String.valueOf(groupModel.getGroupId()),
-				OWNER_ROLE_ID, SAMPLE_USER_ID));
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		JournalArticleResourceModel journalArticleResourceModel) {
-
-		return newResourcePermissionModels(
-			JournalArticle.class.getName(),
-			String.valueOf(journalArticleResourceModel.getResourcePrimKey()),
-			SAMPLE_USER_ID);
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		LayoutModel layoutModel) {
-
-		return newResourcePermissionModels(
-			Layout.class.getName(), String.valueOf(layoutModel.getPlid()), 0);
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		MBCategoryModel mbCategoryModel) {
-
-		return newResourcePermissionModels(
-			MBCategory.class.getName(),
-			String.valueOf(mbCategoryModel.getCategoryId()), SAMPLE_USER_ID);
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		MBMessageModel mbMessageModel) {
-
-		return newResourcePermissionModels(
-			MBMessage.class.getName(),
-			String.valueOf(mbMessageModel.getMessageId()), SAMPLE_USER_ID);
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		PortletPreferencesModel portletPreferencesModel) {
-
-		String portletId = portletPreferencesModel.getPortletId();
-
-		String name = portletId;
-
-		int index = portletId.indexOf(StringPool.UNDERLINE);
-
-		if (index > 0) {
-			name = portletId.substring(0, index);
-		}
-
-		String primKey = PortletPermissionUtil.getPrimaryKey(
-			portletPreferencesModel.getPlid(), portletId);
-
-		return newResourcePermissionModels(name, primKey, 0);
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		RoleModel roleModel) {
-
-		return Collections.singletonList(
-			newResourcePermissionModel(
-				Role.class.getName(), String.valueOf(roleModel.getRoleId()),
-				OWNER_ROLE_ID, SAMPLE_USER_ID));
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		UserModel userModel) {
-
-		return Collections.singletonList(
-			newResourcePermissionModel(
-				User.class.getName(), String.valueOf(userModel.getUserId()),
-				OWNER_ROLE_ID, userModel.getUserId()));
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		WikiNodeModel wikiNodeModel) {
-
-		return newResourcePermissionModels(
-			WikiNode.class.getName(), String.valueOf(wikiNodeModel.getNodeId()),
-			SAMPLE_USER_ID);
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		WikiPageModel wikiPageModel) {
-
-		return newResourcePermissionModels(
-			WikiPage.class.getName(),
-			String.valueOf(wikiPageModel.getResourcePrimKey()), SAMPLE_USER_ID);
 	}
 
 	public String toInsertSQL(BaseModel<?> baseModel) {
@@ -291,12 +94,12 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 			for (Class<?> modelClass : clazz.getInterfaces()) {
 				try {
 					Method method =
-						ResourcePermissionDataFactory.class.getMethod(
+						ResourcePermissionDataFactoryImpl.class.getMethod(
 							"newResourcePermissionModels", modelClass);
 
 					for (ResourcePermissionModel resourcePermissionModel :
 							(List<ResourcePermissionModel>)method.invoke(
-								this, baseModel)) {
+								_resourcePermissionDataFactory, baseModel)) {
 
 						sb.append("\n");
 
@@ -425,6 +228,219 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 		return sb.toString();
 	}
 
+	private final ResourcePermissionDataFactoryImpl
+		_resourcePermissionDataFactory =
+			new ResourcePermissionDataFactoryImpl();
 	private final Format _simpleDateFormat;
+
+	private class ResourcePermissionDataFactoryImpl extends BaseDataFactory {
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			AssetCategoryModel assetCategoryModel) {
+
+			return newResourcePermissionModels(
+				AssetCategory.class.getName(),
+				String.valueOf(assetCategoryModel.getCategoryId()),
+				SAMPLE_USER_ID);
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			AssetVocabularyModel assetVocabularyModel) {
+
+			if (assetVocabularyModel.getUserId() == DEFAULT_USER_ID) {
+				return Collections.singletonList(
+					newResourcePermissionModel(
+						AssetVocabulary.class.getName(),
+						String.valueOf(assetVocabularyModel.getVocabularyId()),
+						OWNER_ROLE_ID, DEFAULT_USER_ID));
+			}
+
+			return newResourcePermissionModels(
+				AssetVocabulary.class.getName(),
+				String.valueOf(assetVocabularyModel.getVocabularyId()),
+				SAMPLE_USER_ID);
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			BlogsEntryModel blogsEntryModel) {
+
+			return newResourcePermissionModels(
+				BlogsEntry.class.getName(),
+				String.valueOf(blogsEntryModel.getEntryId()), SAMPLE_USER_ID);
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			DDLRecordSetModel ddlRecordSetModel) {
+
+			return Collections.singletonList(
+				newResourcePermissionModel(
+					DDLRecordSet.class.getName(),
+					String.valueOf(ddlRecordSetModel.getRecordSetId()),
+					OWNER_ROLE_ID, DEFAULT_USER_ID));
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			DDMStructureModel ddmStructureModel) {
+
+			List<ResourcePermissionModel> resourcePermissionModels =
+				new ArrayList<>(3);
+
+			String name = _getResourcePermissionModelName(
+				DDMStructure.class.getName(),
+				getClassName(ddmStructureModel.getClassNameId()));
+			String primKey = String.valueOf(ddmStructureModel.getStructureId());
+
+			resourcePermissionModels.add(
+				newResourcePermissionModel(name, primKey, GUEST_ROLE_ID, 0));
+			resourcePermissionModels.add(
+				newResourcePermissionModel(
+					name, primKey, OWNER_ROLE_ID,
+					ddmStructureModel.getUserId()));
+			resourcePermissionModels.add(
+				newResourcePermissionModel(name, primKey, USER_ROLE_ID, 0));
+
+			return resourcePermissionModels;
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			DDMTemplateModel ddmTemplateModel) {
+
+			List<ResourcePermissionModel> resourcePermissionModels =
+				new ArrayList<>(3);
+
+			String name = _getResourcePermissionModelName(
+				DDMTemplate.class.getName(),
+				getClassName(ddmTemplateModel.getResourceClassNameId()));
+			String primKey = String.valueOf(ddmTemplateModel.getTemplateId());
+
+			resourcePermissionModels.add(
+				newResourcePermissionModel(name, primKey, GUEST_ROLE_ID, 0));
+			resourcePermissionModels.add(
+				newResourcePermissionModel(
+					name, primKey, OWNER_ROLE_ID,
+					ddmTemplateModel.getUserId()));
+			resourcePermissionModels.add(
+				newResourcePermissionModel(name, primKey, USER_ROLE_ID, 0));
+
+			return resourcePermissionModels;
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			DLFileEntryModel dlFileEntryModel) {
+
+			return newResourcePermissionModels(
+				DLFileEntry.class.getName(),
+				String.valueOf(dlFileEntryModel.getFileEntryId()),
+				SAMPLE_USER_ID);
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			DLFolderModel dlFolderModel) {
+
+			return newResourcePermissionModels(
+				DLFolder.class.getName(),
+				String.valueOf(dlFolderModel.getFolderId()), SAMPLE_USER_ID);
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			GroupModel groupModel) {
+
+			return Collections.singletonList(
+				newResourcePermissionModel(
+					Group.class.getName(),
+					String.valueOf(groupModel.getGroupId()), OWNER_ROLE_ID,
+					SAMPLE_USER_ID));
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			JournalArticleResourceModel journalArticleResourceModel) {
+
+			return newResourcePermissionModels(
+				JournalArticle.class.getName(),
+				String.valueOf(
+					journalArticleResourceModel.getResourcePrimKey()),
+				SAMPLE_USER_ID);
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			LayoutModel layoutModel) {
+
+			return newResourcePermissionModels(
+				Layout.class.getName(), String.valueOf(layoutModel.getPlid()),
+				0);
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			MBCategoryModel mbCategoryModel) {
+
+			return newResourcePermissionModels(
+				MBCategory.class.getName(),
+				String.valueOf(mbCategoryModel.getCategoryId()),
+				SAMPLE_USER_ID);
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			MBMessageModel mbMessageModel) {
+
+			return newResourcePermissionModels(
+				MBMessage.class.getName(),
+				String.valueOf(mbMessageModel.getMessageId()), SAMPLE_USER_ID);
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			PortletPreferencesModel portletPreferencesModel) {
+
+			String portletId = portletPreferencesModel.getPortletId();
+
+			String name = portletId;
+
+			int index = portletId.indexOf(StringPool.UNDERLINE);
+
+			if (index > 0) {
+				name = portletId.substring(0, index);
+			}
+
+			String primKey = PortletPermissionUtil.getPrimaryKey(
+				portletPreferencesModel.getPlid(), portletId);
+
+			return newResourcePermissionModels(name, primKey, 0);
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			RoleModel roleModel) {
+
+			return Collections.singletonList(
+				newResourcePermissionModel(
+					Role.class.getName(), String.valueOf(roleModel.getRoleId()),
+					OWNER_ROLE_ID, SAMPLE_USER_ID));
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			UserModel userModel) {
+
+			return Collections.singletonList(
+				newResourcePermissionModel(
+					User.class.getName(), String.valueOf(userModel.getUserId()),
+					OWNER_ROLE_ID, userModel.getUserId()));
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			WikiNodeModel wikiNodeModel) {
+
+			return newResourcePermissionModels(
+				WikiNode.class.getName(),
+				String.valueOf(wikiNodeModel.getNodeId()), SAMPLE_USER_ID);
+		}
+
+		public List<ResourcePermissionModel> newResourcePermissionModels(
+			WikiPageModel wikiPageModel) {
+
+			return newResourcePermissionModels(
+				WikiPage.class.getName(),
+				String.valueOf(wikiPageModel.getResourcePrimKey()),
+				SAMPLE_USER_ID);
+		}
+
+	}
 
 }
