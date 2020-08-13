@@ -1,33 +1,33 @@
-<#assign wikiNodeModels = dataFactory.newWikiNodeModels(groupId) />
+<#assign wikiNodeModels = wikiDataFactory.newWikiNodeModels(groupId) />
 
 <#list wikiNodeModels as wikiNodeModel>
-	${dataFactory.toInsertSQL(wikiNodeModel)}
+	${resourcePermissionDataFactory.toInsertSQL(wikiNodeModel)}
 
-	<#assign wikiPageModels = dataFactory.newWikiPageModels(wikiNodeModel) />
+	<#assign wikiPageModels = wikiDataFactory.newWikiPageModels(wikiNodeModel) />
 
 	<#list wikiPageModels as wikiPageModel>
-		${dataFactory.toInsertSQL(wikiPageModel)}
+		${resourcePermissionDataFactory.toInsertSQL(wikiPageModel)}
 
-		${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(wikiPageModel))}
+		${resourcePermissionDataFactory.toInsertSQL(assetDataFactory.newMBDiscussionAssetEntryModel(wikiPageModel))}
 
-		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(wikiPageModel))}
+		${resourcePermissionDataFactory.toInsertSQL(subscriptionDataFactory.newSubscriptionModel(wikiPageModel))}
 
-		${dataFactory.toInsertSQL(dataFactory.newWikiPageResourceModel(wikiPageModel))}
+		${resourcePermissionDataFactory.toInsertSQL(wikiDataFactory.newWikiPageResourceModel(wikiPageModel))}
 
 		<@insertAssetEntry
 			_categoryAndTag=true
 			_entry=wikiPageModel
 		/>
 
-		<#assign mbRootMessageId = dataFactory.getCounterNext() />
+		<#assign mbRootMessageId = counterDataFactory.getCounterNext() />
 
 		<@insertMBDiscussion
-			_classNameId=dataFactory.wikiPageClassNameId
+			_classNameId=wikiDataFactory.wikiPageClassNameId
 			_classPK=wikiPageModel.resourcePrimKey
 			_groupId=groupId
-			_maxCommentCount=dataFactory.maxWikiPageCommentCount
+			_maxCommentCount=wikiDataFactory.maxWikiPageCommentCount
 			_mbRootMessageId=mbRootMessageId
-			_mbThreadId=dataFactory.getCounterNext()
+			_mbThreadId=counterDataFactory.getCounterNext()
 		/>
 
 		${csvFileWriter.write("wiki", wikiNodeModel.nodeId + "," + wikiNodeModel.name + "," + wikiPageModel.resourcePrimKey + "," + wikiPageModel.title + "," + mbRootMessageId + "\n")}

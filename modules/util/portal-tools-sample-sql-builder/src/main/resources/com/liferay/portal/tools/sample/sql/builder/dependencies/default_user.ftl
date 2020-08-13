@@ -1,16 +1,16 @@
 <#-- Default user -->
 
-<@insertUser _userModel=dataFactory.newDefaultUserModel() />
+<@insertUser _userModel=userDataFactory.newDefaultUserModel() />
 
 <#-- Guest user -->
 
-<#assign guestUserModel = dataFactory.newGuestUserModel() />
+<#assign guestUserModel = userDataFactory.newGuestUserModel() />
 
-<@insertGroup _groupModel=dataFactory.newGroupModel(guestUserModel) />
+<@insertGroup _groupModel=userDataFactory.newGroupModel(guestUserModel) />
 
 <#assign
 	groupIds = [guestGroupModel.groupId]
-	roleIds = [dataFactory.administratorRoleModel.roleId]
+	roleIds = [userDataFactory.administratorRoleId]
 />
 
 <@insertUser
@@ -22,11 +22,11 @@
 <#-- Sample user -->
 
 <#assign
-	sampleUserModel = dataFactory.newSampleUserModel()
+	sampleUserModel = userDataFactory.newSampleUserModel()
 
-	userGroupModel = dataFactory.newGroupModel(sampleUserModel)
+	userGroupModel = userDataFactory.newGroupModel(sampleUserModel)
 
-	layoutModel = dataFactory.newLayoutModel(userGroupModel.groupId, "home", "", "")
+	layoutModel = layoutDataFactory.newLayoutModel(userGroupModel.groupId, "home", "", "")
 />
 
 <@insertLayout _layoutModel=layoutModel />
@@ -34,8 +34,8 @@
 <@insertGroup _groupModel=userGroupModel />
 
 <#assign
-	groupIds = dataFactory.getSequence(dataFactory.maxGroupCount)
-	roleIds = [dataFactory.administratorRoleModel.roleId, dataFactory.powerUserRoleModel.roleId, dataFactory.userRoleModel.roleId]
+	groupIds = counterDataFactory.getSequence(userDataFactory.maxGroupCount)
+	roleIds = [userDataFactory.administratorRoleId, userDataFactory.powerUserRoleId, userDataFactory.userRoleId]
 />
 
 <@insertUser
@@ -45,7 +45,7 @@
 />
 
 <#list groupIds as groupId>
-	${dataFactory.toInsertSQL(dataFactory.newBlogsStatsUserModel(groupId))}
+	${resourcePermissionDataFactory.toInsertSQL(blogDataFactory.newBlogsStatsUserModel(groupId))}
 
-	${dataFactory.toInsertSQL(dataFactory.newMBStatsUserModel(groupId))}
+	${resourcePermissionDataFactory.toInsertSQL(messageBoardDataFactory.newMBStatsUserModel(groupId))}
 </#list>
