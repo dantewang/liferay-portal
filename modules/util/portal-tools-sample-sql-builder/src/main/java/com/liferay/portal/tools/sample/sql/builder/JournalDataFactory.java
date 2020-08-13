@@ -173,7 +173,7 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 	}
 
 	public DDMTemplateModel newDefaultJournalDDMTemplateModel() {
-		return newDDMTemplateModel(
+		return _newDDMTemplateModel(
 			GLOBAL_GROUP_ID, DEFAULT_USER_ID, DEFAULT_JOURNAL_DDM_STRUCTURE_ID,
 			getClassNameId(JournalArticle.class), _defaultJournalDDMTemplateId);
 	}
@@ -428,7 +428,42 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 			name, String.valueOf(primKey), SAMPLE_USER_ID);
 	}
 
-	protected DDMTemplateModel newDDMTemplateModel(
+	private void _initJournalArticleContent() {
+		int maxJournalArticleSize =
+			BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_SIZE;
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\"><dynamic-element name=\"content");
+		sb.append("\" type=\"text_area\" index-type=\"keyword\" index=\"0\">");
+		sb.append("<dynamic-content language-id=\"en_US\"><![CDATA[");
+
+		if (maxJournalArticleSize <= 0) {
+			maxJournalArticleSize = 1;
+		}
+
+		char[] chars = new char[maxJournalArticleSize];
+
+		for (int i = 0; i < maxJournalArticleSize; i++) {
+			chars[i] = (char)(CharPool.LOWER_CASE_A + (i % 26));
+		}
+
+		sb.append(new String(chars));
+
+		sb.append("]]></dynamic-content></dynamic-element></root>");
+
+		_journalArticleContent = sb.toString();
+	}
+
+	private void _initJournalDDMStructureContent() throws Exception {
+		_journalDDMStructureContent = readFile(
+			"ddm_structure_basic_web_content.json");
+		_journalDDMStructureLayoutContent = readFile(
+			"ddm_structure_layout_basic_web_content.json");
+	}
+
+	private DDMTemplateModel _newDDMTemplateModel(
 		long groupId, long userId, long structureId, long sourceClassNameId,
 		long templateId) {
 
@@ -480,41 +515,6 @@ public class JournalDataFactory extends BaseDDMDataFactory {
 		ddmTemplateModel.setLastPublishDate(nextFutureDate());
 
 		return ddmTemplateModel;
-	}
-
-	private void _initJournalArticleContent() {
-		int maxJournalArticleSize =
-			BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_SIZE;
-
-		StringBundler sb = new StringBundler(6);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><dynamic-element name=\"content");
-		sb.append("\" type=\"text_area\" index-type=\"keyword\" index=\"0\">");
-		sb.append("<dynamic-content language-id=\"en_US\"><![CDATA[");
-
-		if (maxJournalArticleSize <= 0) {
-			maxJournalArticleSize = 1;
-		}
-
-		char[] chars = new char[maxJournalArticleSize];
-
-		for (int i = 0; i < maxJournalArticleSize; i++) {
-			chars[i] = (char)(CharPool.LOWER_CASE_A + (i % 26));
-		}
-
-		sb.append(new String(chars));
-
-		sb.append("]]></dynamic-content></dynamic-element></root>");
-
-		_journalArticleContent = sb.toString();
-	}
-
-	private void _initJournalDDMStructureContent() throws Exception {
-		_journalDDMStructureContent = readFile(
-			"ddm_structure_basic_web_content.json");
-		_journalDDMStructureLayoutContent = readFile(
-			"ddm_structure_layout_basic_web_content.json");
 	}
 
 	private static final String _JOURNAL_STRUCTURE_KEY = "BASIC-WEB-CONTENT";

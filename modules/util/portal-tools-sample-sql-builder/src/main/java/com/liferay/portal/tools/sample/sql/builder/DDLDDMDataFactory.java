@@ -68,7 +68,7 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 			 i++) {
 
 			sb.append("{\"columns\": [{\"fieldNames\": [\"");
-			sb.append(nextDDLCustomFieldName(groupId, i));
+			sb.append(_nextDDLCustomFieldName(groupId, i));
 			sb.append("\"], \"size\": 12}]}");
 			sb.append(", ");
 		}
@@ -99,7 +99,7 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 			sb.append("\"keyword\", \"label\": {\"en_US\": \"Text");
 			sb.append(i);
 			sb.append("\"}, \"name\": \"");
-			sb.append(nextDDLCustomFieldName(groupId, i));
+			sb.append(_nextDDLCustomFieldName(groupId, i));
 			sb.append("\", \"readOnly\": false, \"repeatable\": false,");
 			sb.append("\"required\": false, \"showLabel\": true, \"type\": ");
 			sb.append("\"text\"}");
@@ -255,7 +255,7 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 			sb.append("{\"instanceId\": \"");
 			sb.append(StringUtil.randomId());
 			sb.append("\", \"name\": \"");
-			sb.append(nextDDLCustomFieldName(ddlRecordModel.getGroupId(), i));
+			sb.append(_nextDDLCustomFieldName(ddlRecordModel.getGroupId(), i));
 			sb.append("\", \"value\": {\"en_US\": \"Test Record ");
 			sb.append(currentIndex);
 			sb.append("\"}},");
@@ -275,7 +275,7 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 	public DDMStructureLinkModel newDDMStructureLinkModel(
 		DDLRecordSetModel ddlRecordSetModel) {
 
-		return newDDMStructureLinkModel(
+		return _newDDMStructureLinkModel(
 			getClassNameId(DDLRecordSet.class),
 			ddlRecordSetModel.getRecordSetId(),
 			ddlRecordSetModel.getDDMStructureId());
@@ -284,7 +284,7 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 	public DDMStructureLinkModel newDDMStructureLinkModel(
 		DLFileEntryMetadataModel dLFileEntryMetadataModel) {
 
-		return newDDMStructureLinkModel(
+		return _newDDMStructureLinkModel(
 			getClassNameId(DLFileEntryMetadata.class),
 			dLFileEntryMetadataModel.getFileEntryMetadataId(),
 			dLFileEntryMetadataModel.getDDMStructureId());
@@ -297,7 +297,7 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 			ddmStructureModel, _defaultDDLDDMStructureVersionId);
 	}
 
-	protected DDMStructureLinkModel newDDMStructureLinkModel(
+	private DDMStructureLinkModel _newDDMStructureLinkModel(
 		long classNameId, long classPK, long structureId) {
 
 		DDMStructureLinkModel ddmStructureLinkModel =
@@ -316,9 +316,7 @@ public class DDLDDMDataFactory extends BaseDDMDataFactory {
 		return ddmStructureLinkModel;
 	}
 
-	protected String nextDDLCustomFieldName(
-		long groupId, int customFieldIndex) {
-
+	private String _nextDDLCustomFieldName(long groupId, int customFieldIndex) {
 		StringBundler sb = new StringBundler(4);
 
 		sb.append("custom_field_text_");

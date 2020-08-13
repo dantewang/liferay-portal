@@ -52,7 +52,7 @@ public class BlogDataFactory extends BaseDataFactory {
 			BenchmarksPropsValues.MAX_BLOGS_ENTRY_COUNT);
 
 		for (int i = 1; i <= BenchmarksPropsValues.MAX_BLOGS_ENTRY_COUNT; i++) {
-			blogEntryModels.add(newBlogsEntryModel(groupId, i));
+			blogEntryModels.add(_newBlogsEntryModel(groupId, i));
 		}
 
 		return blogEntryModels;
@@ -210,7 +210,7 @@ public class BlogDataFactory extends BaseDataFactory {
 		return userNotificationDeliveryModel;
 	}
 
-	protected BlogsEntryModel newBlogsEntryModel(long groupId, int index) {
+	private BlogsEntryModel _newBlogsEntryModel(long groupId, int index) {
 		BlogsEntryModel blogsEntryModel = new BlogsEntryModelImpl();
 
 		// UUID

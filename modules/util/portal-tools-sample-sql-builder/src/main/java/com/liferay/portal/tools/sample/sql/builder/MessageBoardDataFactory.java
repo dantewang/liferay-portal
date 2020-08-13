@@ -46,7 +46,7 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 			BenchmarksPropsValues.MAX_MB_CATEGORY_COUNT);
 
 		for (int i = 1; i <= BenchmarksPropsValues.MAX_MB_CATEGORY_COUNT; i++) {
-			mbCategoryModels.add(newMBCategoryModel(groupId, i));
+			mbCategoryModels.add(_newMBCategoryModel(groupId, i));
 		}
 
 		return mbCategoryModels;
@@ -150,7 +150,7 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 			urlSubject = "test-comment-" + index;
 		}
 
-		return newMBMessageModel(
+		return _newMBMessageModel(
 			mbThreadModel.getGroupId(), classNameId, classPK,
 			MBCategoryConstants.DISCUSSION_CATEGORY_ID,
 			mbThreadModel.getThreadId(), messageId,
@@ -165,7 +165,7 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 			BenchmarksPropsValues.MAX_MB_MESSAGE_COUNT);
 
 		mbMessageModels.add(
-			newMBMessageModel(
+			_newMBMessageModel(
 				mbThreadModel.getGroupId(), 0, 0, mbThreadModel.getCategoryId(),
 				mbThreadModel.getThreadId(), mbThreadModel.getRootMessageId(),
 				mbThreadModel.getRootMessageId(),
@@ -174,7 +174,7 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 
 		for (int i = 2; i <= BenchmarksPropsValues.MAX_MB_MESSAGE_COUNT; i++) {
 			mbMessageModels.add(
-				newMBMessageModel(
+				_newMBMessageModel(
 					mbThreadModel.getGroupId(), 0, 0,
 					mbThreadModel.getCategoryId(), mbThreadModel.getThreadId(),
 					counter.get(), mbThreadModel.getRootMessageId(),
@@ -259,7 +259,7 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 	public MBThreadModel newMBThreadModel(
 		long threadId, long groupId, long rootMessageId) {
 
-		return newMBThreadModel(
+		return _newMBThreadModel(
 			threadId, groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID,
 			rootMessageId);
 	}
@@ -272,7 +272,7 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 
 		for (int i = 0; i < BenchmarksPropsValues.MAX_MB_THREAD_COUNT; i++) {
 			mbThreadModels.add(
-				newMBThreadModel(
+				_newMBThreadModel(
 					counter.get(), mbCategoryModel.getGroupId(),
 					mbCategoryModel.getCategoryId(), counter.get()));
 		}
@@ -280,7 +280,7 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		return mbThreadModels;
 	}
 
-	protected MBCategoryModel newMBCategoryModel(long groupId, int index) {
+	private MBCategoryModel _newMBCategoryModel(long groupId, int index) {
 		MBCategoryModel mbCategoryModel = new MBCategoryModelImpl();
 
 		// UUID
@@ -316,7 +316,7 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		return mbCategoryModel;
 	}
 
-	protected MBMessageModel newMBMessageModel(
+	private MBMessageModel _newMBMessageModel(
 		long groupId, long classNameId, long classPK, long categoryId,
 		long threadId, long messageId, long rootMessageId, long parentMessageId,
 		String subject, String urlSubject, String body) {
@@ -361,7 +361,7 @@ public class MessageBoardDataFactory extends BaseDataFactory {
 		return mBMessageModel;
 	}
 
-	protected MBThreadModel newMBThreadModel(
+	private MBThreadModel _newMBThreadModel(
 		long threadId, long groupId, long categoryId, long rootMessageId) {
 
 		MBThreadModel mbThreadModel = new MBThreadModelImpl();

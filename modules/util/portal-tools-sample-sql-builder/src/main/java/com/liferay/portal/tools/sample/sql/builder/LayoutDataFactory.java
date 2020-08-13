@@ -213,8 +213,8 @@ public class LayoutDataFactory extends BaseDataFactory {
 	public List<LayoutSetModel> newLayoutSetModels(long groupId) {
 		List<LayoutSetModel> layoutSetModels = new ArrayList<>(2);
 
-		layoutSetModels.add(newLayoutSetModel(groupId, true));
-		layoutSetModels.add(newLayoutSetModel(groupId, false));
+		layoutSetModels.add(_newLayoutSetModel(groupId, true));
+		layoutSetModels.add(_newLayoutSetModel(groupId, false));
 
 		return layoutSetModels;
 	}
@@ -245,7 +245,7 @@ public class LayoutDataFactory extends BaseDataFactory {
 		return layoutModels;
 	}
 
-	protected LayoutSetModel newLayoutSetModel(
+	private LayoutSetModel _newLayoutSetModel(
 		long groupId, boolean privateLayout) {
 
 		LayoutSetModel layoutSetModel = new LayoutSetModelImpl();

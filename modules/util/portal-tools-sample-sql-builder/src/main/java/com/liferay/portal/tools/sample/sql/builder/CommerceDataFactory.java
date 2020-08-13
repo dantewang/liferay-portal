@@ -287,7 +287,7 @@ public class CommerceDataFactory extends BaseDataFactory {
 	public CPFriendlyURLEntryModel newCPFriendlyURLEntryModel(
 		CProductModel cProductModel) {
 
-		return newCPFriendlyURLEntryModel(
+		return _newCPFriendlyURLEntryModel(
 			0, getClassNameId(CProduct.class), cProductModel.getCProductId(),
 			FriendlyURLNormalizerUtil.normalizeWithPeriodsAndSlashes(
 				"Definition " + cProductModel.getPublishedCPDefinitionId()));
@@ -420,7 +420,7 @@ public class CommerceDataFactory extends BaseDataFactory {
 		return cpTaxCategoryModel;
 	}
 
-	protected CPFriendlyURLEntryModel newCPFriendlyURLEntryModel(
+	private CPFriendlyURLEntryModel _newCPFriendlyURLEntryModel(
 		long groupId, long classNameId, long classPK, String urlTitle) {
 
 		CPFriendlyURLEntryModel cpFriendlyURLEntryModel =

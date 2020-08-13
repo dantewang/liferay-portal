@@ -48,7 +48,7 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 	public SocialActivityModel newSocialActivityModel(
 		BlogsEntryModel blogsEntryModel) {
 
-		return newSocialActivityModel(
+		return _newSocialActivityModel(
 			blogsEntryModel.getGroupId(), getClassNameId(BlogsEntry.class),
 			blogsEntryModel.getEntryId(), BlogsActivityKeys.ADD_ENTRY,
 			"{\"title\":\"" + blogsEntryModel.getTitle() + "\"}");
@@ -57,7 +57,7 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 	public SocialActivityModel newSocialActivityModel(
 		DLFileEntryModel dlFileEntryModel) {
 
-		return newSocialActivityModel(
+		return _newSocialActivityModel(
 			dlFileEntryModel.getGroupId(), getClassNameId(DLFileEntry.class),
 			dlFileEntryModel.getFileEntryId(), DLActivityKeys.ADD_FILE_ENTRY,
 			StringPool.BLANK);
@@ -74,7 +74,7 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 			type = JournalActivityKeys.ADD_ARTICLE;
 		}
 
-		return newSocialActivityModel(
+		return _newSocialActivityModel(
 			journalArticleModel.getGroupId(),
 			getClassNameId(JournalArticle.class),
 			journalArticleModel.getResourcePrimKey(), type,
@@ -117,11 +117,11 @@ public class SocialActivityDataFactory extends BaseDataFactory {
 			type = SocialActivityConstants.TYPE_ADD_COMMENT;
 		}
 
-		return newSocialActivityModel(
+		return _newSocialActivityModel(
 			mbMessageModel.getGroupId(), classNameId, classPK, type, extraData);
 	}
 
-	protected SocialActivityModel newSocialActivityModel(
+	private SocialActivityModel _newSocialActivityModel(
 		long groupId, long classNameId, long classPK, int type,
 		String extraData) {
 

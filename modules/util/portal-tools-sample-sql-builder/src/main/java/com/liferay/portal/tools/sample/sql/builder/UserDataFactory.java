@@ -138,7 +138,7 @@ public class UserDataFactory extends BaseDataFactory {
 	public GroupModel newCommerceCatalogGroupModel(
 		CommerceCatalogModel commerceCatalogModel) {
 
-		return newGroupModel(
+		return _newGroupModel(
 			counter.get(), getClassNameId(CommerceCatalog.class),
 			commerceCatalogModel.getCommerceCatalogId(),
 			commerceCatalogModel.getName(), false);
@@ -147,7 +147,7 @@ public class UserDataFactory extends BaseDataFactory {
 	public GroupModel newCommerceChannelGroupModel(
 		CommerceChannelModel commerceChannelModel) {
 
-		return newGroupModel(
+		return _newGroupModel(
 			counter.get(), getClassNameId(CommerceChannel.class),
 			commerceChannelModel.getCommerceChannelId(),
 			commerceChannelModel.getName(), false);
@@ -210,19 +210,19 @@ public class UserDataFactory extends BaseDataFactory {
 	}
 
 	public UserModel newDefaultUserModel() {
-		return newUserModel(
+		return _newUserModel(
 			DEFAULT_USER_ID, StringPool.BLANK, StringPool.BLANK,
 			StringPool.BLANK, true);
 	}
 
 	public GroupModel newGlobalGroupModel() {
-		return newGroupModel(
+		return _newGroupModel(
 			GLOBAL_GROUP_ID, getClassNameId(Company.class), COMPANY_ID,
 			GroupConstants.GLOBAL, false);
 	}
 
 	public GroupModel newGroupModel(UserModel userModel) {
-		return newGroupModel(
+		return _newGroupModel(
 			counter.get(), getClassNameId(User.class), userModel.getUserId(),
 			userModel.getScreenName(), false);
 	}
@@ -233,7 +233,7 @@ public class UserDataFactory extends BaseDataFactory {
 
 		for (int i = 1; i <= BenchmarksPropsValues.MAX_GROUP_COUNT; i++) {
 			groupModels.add(
-				newGroupModel(
+				_newGroupModel(
 					i, getClassNameId(Group.class), i, "Site " + i, true));
 		}
 
@@ -241,17 +241,17 @@ public class UserDataFactory extends BaseDataFactory {
 	}
 
 	public GroupModel newGuestGroupModel() {
-		return newGroupModel(
+		return _newGroupModel(
 			GUEST_GROUP_ID, getClassNameId(Group.class), GUEST_GROUP_ID,
 			GroupConstants.GUEST, true);
 	}
 
 	public UserModel newGuestUserModel() {
-		return newUserModel(counter.get(), "Test", "Test", "Test", false);
+		return _newUserModel(counter.get(), "Test", "Test", "Test", false);
 	}
 
 	public UserModel newSampleUserModel() {
-		return newUserModel(
+		return _newUserModel(
 			SAMPLE_USER_ID, SAMPLE_USER_NAME, SAMPLE_USER_NAME,
 			SAMPLE_USER_NAME, false);
 	}
@@ -264,7 +264,7 @@ public class UserDataFactory extends BaseDataFactory {
 			String[] userName = _nextUserName(i);
 
 			userModels.add(
-				newUserModel(
+				_newUserModel(
 					counter.get(), userName[0], userName[1],
 					"test" + _userScreenNameCounter.get(), false));
 		}
@@ -273,7 +273,7 @@ public class UserDataFactory extends BaseDataFactory {
 	}
 
 	public GroupModel newUserPersonalSiteGroupModel() {
-		return newGroupModel(
+		return _newGroupModel(
 			_userPersonalSiteGroupId, getClassNameId(UserPersonalSite.class),
 			DEFAULT_USER_ID, GroupConstants.USER_PERSONAL_SITE, false);
 	}
@@ -296,7 +296,117 @@ public class UserDataFactory extends BaseDataFactory {
 		return virtualHostModel;
 	}
 
-	protected GroupModel newGroupModel(
+	private void _initRoleModels() {
+		_roleModels = new ArrayList<>();
+
+		// Administrator
+
+		_administratorRoleModel = _newRoleModel(
+			RoleConstants.ADMINISTRATOR, RoleConstants.TYPE_REGULAR,
+			ADMINISTRATOR_ROLE_ID);
+
+		_roleModels.add(_administratorRoleModel);
+
+		// Guest
+
+		_guestRoleModel = _newRoleModel(
+			RoleConstants.GUEST, RoleConstants.TYPE_REGULAR, GUEST_ROLE_ID);
+
+		_roleModels.add(_guestRoleModel);
+
+		// Organization Administrator
+
+		_roleModels.add(
+			_newRoleModel(
+				RoleConstants.ORGANIZATION_ADMINISTRATOR,
+				RoleConstants.TYPE_ORGANIZATION, counter.get()));
+
+		// Organization Owner
+
+		_roleModels.add(
+			_newRoleModel(
+				RoleConstants.ORGANIZATION_OWNER,
+				RoleConstants.TYPE_ORGANIZATION, counter.get()));
+
+		// Organization User
+
+		_roleModels.add(
+			_newRoleModel(
+				RoleConstants.ORGANIZATION_USER,
+				RoleConstants.TYPE_ORGANIZATION, counter.get()));
+
+		// Owner
+
+		_ownerRoleModel = _newRoleModel(
+			RoleConstants.OWNER, RoleConstants.TYPE_REGULAR, OWNER_ROLE_ID);
+
+		_roleModels.add(_ownerRoleModel);
+
+		// Power User
+
+		_powerUserRoleModel = _newRoleModel(
+			RoleConstants.POWER_USER, RoleConstants.TYPE_REGULAR,
+			POWER_USER_ROLE_ID);
+
+		_roleModels.add(_powerUserRoleModel);
+
+		// Site Administrator
+
+		_roleModels.add(
+			_newRoleModel(
+				RoleConstants.SITE_ADMINISTRATOR, RoleConstants.TYPE_SITE,
+				counter.get()));
+
+		// Site Member
+
+		_siteMemberRoleModel = _newRoleModel(
+			RoleConstants.SITE_MEMBER, RoleConstants.TYPE_SITE,
+			SITE_MEMBER_ROLE_ID);
+
+		_roleModels.add(_siteMemberRoleModel);
+
+		// Site Owner
+
+		_roleModels.add(
+			_newRoleModel(
+				RoleConstants.SITE_OWNER, RoleConstants.TYPE_SITE,
+				counter.get()));
+
+		// User
+
+		_userRoleModel = _newRoleModel(
+			RoleConstants.USER, RoleConstants.TYPE_REGULAR, USER_ROLE_ID);
+
+		_roleModels.add(_userRoleModel);
+	}
+
+	private void _initUserNames() throws Exception {
+		_firstNames = new ArrayList<>();
+
+		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
+			new InputStreamReader(getResourceInputStream("first_names.txt")));
+
+		String line = null;
+
+		while ((line = unsyncBufferedReader.readLine()) != null) {
+			_firstNames.add(line);
+		}
+
+		unsyncBufferedReader.close();
+
+		_lastNames = new ArrayList<>();
+
+		unsyncBufferedReader = new UnsyncBufferedReader(
+			new InputStreamReader(getResourceInputStream("last_names.txt")));
+
+		while ((line = unsyncBufferedReader.readLine()) != null) {
+			_lastNames.add(line);
+		}
+
+		unsyncBufferedReader.close();
+	}
+
+	private GroupModel _newGroupModel(
 		long groupId, long classNameId, long classPK, String name,
 		boolean site) {
 
@@ -335,7 +445,7 @@ public class UserDataFactory extends BaseDataFactory {
 		return groupModel;
 	}
 
-	protected RoleModel newRoleModel(String name, int type, long roleId) {
+	private RoleModel _newRoleModel(String name, int type, long roleId) {
 		RoleModel roleModel = new RoleModelImpl();
 
 		// UUID
@@ -364,7 +474,7 @@ public class UserDataFactory extends BaseDataFactory {
 		return roleModel;
 	}
 
-	protected UserModel newUserModel(
+	private UserModel _newUserModel(
 		long userId, String firstName, String lastName, String screenName,
 		boolean defaultUser) {
 
@@ -410,116 +520,6 @@ public class UserDataFactory extends BaseDataFactory {
 		userModel.setEmailAddressVerified(true);
 
 		return userModel;
-	}
-
-	private void _initRoleModels() {
-		_roleModels = new ArrayList<>();
-
-		// Administrator
-
-		_administratorRoleModel = newRoleModel(
-			RoleConstants.ADMINISTRATOR, RoleConstants.TYPE_REGULAR,
-			ADMINISTRATOR_ROLE_ID);
-
-		_roleModels.add(_administratorRoleModel);
-
-		// Guest
-
-		_guestRoleModel = newRoleModel(
-			RoleConstants.GUEST, RoleConstants.TYPE_REGULAR, GUEST_ROLE_ID);
-
-		_roleModels.add(_guestRoleModel);
-
-		// Organization Administrator
-
-		_roleModels.add(
-			newRoleModel(
-				RoleConstants.ORGANIZATION_ADMINISTRATOR,
-				RoleConstants.TYPE_ORGANIZATION, counter.get()));
-
-		// Organization Owner
-
-		_roleModels.add(
-			newRoleModel(
-				RoleConstants.ORGANIZATION_OWNER,
-				RoleConstants.TYPE_ORGANIZATION, counter.get()));
-
-		// Organization User
-
-		_roleModels.add(
-			newRoleModel(
-				RoleConstants.ORGANIZATION_USER,
-				RoleConstants.TYPE_ORGANIZATION, counter.get()));
-
-		// Owner
-
-		_ownerRoleModel = newRoleModel(
-			RoleConstants.OWNER, RoleConstants.TYPE_REGULAR, OWNER_ROLE_ID);
-
-		_roleModels.add(_ownerRoleModel);
-
-		// Power User
-
-		_powerUserRoleModel = newRoleModel(
-			RoleConstants.POWER_USER, RoleConstants.TYPE_REGULAR,
-			POWER_USER_ROLE_ID);
-
-		_roleModels.add(_powerUserRoleModel);
-
-		// Site Administrator
-
-		_roleModels.add(
-			newRoleModel(
-				RoleConstants.SITE_ADMINISTRATOR, RoleConstants.TYPE_SITE,
-				counter.get()));
-
-		// Site Member
-
-		_siteMemberRoleModel = newRoleModel(
-			RoleConstants.SITE_MEMBER, RoleConstants.TYPE_SITE,
-			SITE_MEMBER_ROLE_ID);
-
-		_roleModels.add(_siteMemberRoleModel);
-
-		// Site Owner
-
-		_roleModels.add(
-			newRoleModel(
-				RoleConstants.SITE_OWNER, RoleConstants.TYPE_SITE,
-				counter.get()));
-
-		// User
-
-		_userRoleModel = newRoleModel(
-			RoleConstants.USER, RoleConstants.TYPE_REGULAR, USER_ROLE_ID);
-
-		_roleModels.add(_userRoleModel);
-	}
-
-	private void _initUserNames() throws Exception {
-		_firstNames = new ArrayList<>();
-
-		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
-			new InputStreamReader(getResourceInputStream("first_names.txt")));
-
-		String line = null;
-
-		while ((line = unsyncBufferedReader.readLine()) != null) {
-			_firstNames.add(line);
-		}
-
-		unsyncBufferedReader.close();
-
-		_lastNames = new ArrayList<>();
-
-		unsyncBufferedReader = new UnsyncBufferedReader(
-			new InputStreamReader(getResourceInputStream("last_names.txt")));
-
-		while ((line = unsyncBufferedReader.readLine()) != null) {
-			_lastNames.add(line);
-		}
-
-		unsyncBufferedReader.close();
 	}
 
 	private String[] _nextUserName(long index) {

@@ -165,7 +165,7 @@ public class DLDataFactory extends BaseDDMDataFactory {
 		for (int i = 1; i <= BenchmarksPropsValues.MAX_DL_FILE_ENTRY_COUNT;
 			 i++) {
 
-			dlFileEntryModels.add(newDlFileEntryModel(dlFolderModel, i));
+			dlFileEntryModels.add(_newDlFileEntryModel(dlFolderModel, i));
 		}
 
 		return dlFileEntryModels;
@@ -259,13 +259,13 @@ public class DLDataFactory extends BaseDDMDataFactory {
 			BenchmarksPropsValues.MAX_DL_FOLDER_COUNT);
 
 		for (int i = 1; i <= BenchmarksPropsValues.MAX_DL_FOLDER_COUNT; i++) {
-			dlFolderModels.add(newDLFolderModel(groupId, parentFolderId, i));
+			dlFolderModels.add(_newDLFolderModel(groupId, parentFolderId, i));
 		}
 
 		return dlFolderModels;
 	}
 
-	protected DLFileEntryModel newDlFileEntryModel(
+	private DLFileEntryModel _newDlFileEntryModel(
 		DLFolderModel dlFolderModel, int index) {
 
 		DLFileEntryModel dlFileEntryModel = new DLFileEntryModelImpl();
@@ -308,7 +308,7 @@ public class DLDataFactory extends BaseDDMDataFactory {
 		return dlFileEntryModel;
 	}
 
-	protected DLFolderModel newDLFolderModel(
+	private DLFolderModel _newDLFolderModel(
 		long groupId, long parentFolderId, int index) {
 
 		DLFolderModel dlFolderModel = new DLFolderModelImpl();

@@ -46,7 +46,7 @@ public class WikiDataFactory extends BaseDataFactory {
 			BenchmarksPropsValues.MAX_WIKI_NODE_COUNT);
 
 		for (int i = 1; i <= BenchmarksPropsValues.MAX_WIKI_NODE_COUNT; i++) {
-			wikiNodeModels.add(newWikiNodeModel(groupId, i));
+			wikiNodeModels.add(_newWikiNodeModel(groupId, i));
 		}
 
 		return wikiNodeModels;
@@ -57,7 +57,7 @@ public class WikiDataFactory extends BaseDataFactory {
 			BenchmarksPropsValues.MAX_WIKI_PAGE_COUNT);
 
 		for (int i = 1; i <= BenchmarksPropsValues.MAX_WIKI_PAGE_COUNT; i++) {
-			wikiPageModels.add(newWikiPageModel(wikiNodeModel, i));
+			wikiPageModels.add(_newWikiPageModel(wikiNodeModel, i));
 		}
 
 		return wikiPageModels;
@@ -86,7 +86,7 @@ public class WikiDataFactory extends BaseDataFactory {
 		return wikiPageResourceModel;
 	}
 
-	protected WikiNodeModel newWikiNodeModel(long groupId, int index) {
+	private WikiNodeModel _newWikiNodeModel(long groupId, int index) {
 		WikiNodeModel wikiNodeModel = new WikiNodeModelImpl();
 
 		// UUID
@@ -119,7 +119,7 @@ public class WikiDataFactory extends BaseDataFactory {
 		return wikiNodeModel;
 	}
 
-	protected WikiPageModel newWikiPageModel(
+	private WikiPageModel _newWikiPageModel(
 		WikiNodeModel wikiNodeModel, int index) {
 
 		WikiPageModel wikiPageModel = new WikiPageModelImpl();

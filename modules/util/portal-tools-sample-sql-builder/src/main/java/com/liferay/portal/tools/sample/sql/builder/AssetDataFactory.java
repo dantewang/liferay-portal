@@ -94,7 +94,7 @@ public class AssetDataFactory extends BaseDataFactory {
 					new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
 		}
 
-		SimpleCounter counter = getSimpleCounter(
+		SimpleCounter counter = _getSimpleCounter(
 			_assetCategoryCounters, assetEntryModel.getGroupId(),
 			assetEntryModel.getClassNameId());
 
@@ -153,7 +153,7 @@ public class AssetDataFactory extends BaseDataFactory {
 					new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
 		}
 
-		SimpleCounter counter = getSimpleCounter(
+		SimpleCounter counter = _getSimpleCounter(
 			_assetTagCounters, assetEntryModel.getGroupId(),
 			assetEntryModel.getClassNameId());
 
@@ -209,7 +209,7 @@ public class AssetDataFactory extends BaseDataFactory {
 	}
 
 	public AssetEntryModel newAssetEntryModel(BlogsEntryModel blogsEntryModel) {
-		return newAssetEntryModel(
+		return _newAssetEntryModel(
 			blogsEntryModel.getGroupId(), blogsEntryModel.getCreateDate(),
 			blogsEntryModel.getModifiedDate(), getClassNameId(BlogsEntry.class),
 			blogsEntryModel.getEntryId(), blogsEntryModel.getUuid(), 0, true,
@@ -219,7 +219,7 @@ public class AssetDataFactory extends BaseDataFactory {
 	public AssetEntryModel newAssetEntryModel(
 		DLFileEntryModel dLFileEntryModel) {
 
-		return newAssetEntryModel(
+		return _newAssetEntryModel(
 			dLFileEntryModel.getGroupId(), dLFileEntryModel.getCreateDate(),
 			dLFileEntryModel.getModifiedDate(),
 			getClassNameId(DLFileEntry.class),
@@ -229,7 +229,7 @@ public class AssetDataFactory extends BaseDataFactory {
 	}
 
 	public AssetEntryModel newAssetEntryModel(DLFolderModel dLFolderModel) {
-		return newAssetEntryModel(
+		return _newAssetEntryModel(
 			dLFolderModel.getGroupId(), dLFolderModel.getCreateDate(),
 			dLFolderModel.getModifiedDate(), getClassNameId(DLFolder.class),
 			dLFolderModel.getFolderId(), dLFolderModel.getUuid(), 0, true, true,
@@ -250,7 +250,7 @@ public class AssetDataFactory extends BaseDataFactory {
 			visible = true;
 		}
 
-		return newAssetEntryModel(
+		return _newAssetEntryModel(
 			mbMessageModel.getGroupId(), mbMessageModel.getCreateDate(),
 			mbMessageModel.getModifiedDate(), classNameId,
 			mbMessageModel.getMessageId(), mbMessageModel.getUuid(), 0, true,
@@ -258,7 +258,7 @@ public class AssetDataFactory extends BaseDataFactory {
 	}
 
 	public AssetEntryModel newAssetEntryModel(MBThreadModel mbThreadModel) {
-		return newAssetEntryModel(
+		return _newAssetEntryModel(
 			mbThreadModel.getGroupId(), mbThreadModel.getCreateDate(),
 			mbThreadModel.getModifiedDate(), getClassNameId(MBThread.class),
 			mbThreadModel.getThreadId(), mbThreadModel.getUuid(), 0, true,
@@ -278,7 +278,7 @@ public class AssetDataFactory extends BaseDataFactory {
 
 		String resourceUUID = journalArticleResourceUUIDs.get(resourcePrimKey);
 
-		return newAssetEntryModel(
+		return _newAssetEntryModel(
 			journalArticleModel.getGroupId(),
 			journalArticleModel.getCreateDate(),
 			journalArticleModel.getModifiedDate(),
@@ -289,7 +289,7 @@ public class AssetDataFactory extends BaseDataFactory {
 	}
 
 	public AssetEntryModel newAssetEntryModel(WikiPageModel wikiPageModel) {
-		return newAssetEntryModel(
+		return _newAssetEntryModel(
 			wikiPageModel.getGroupId(), wikiPageModel.getCreateDate(),
 			wikiPageModel.getModifiedDate(), getClassNameId(WikiPage.class),
 			wikiPageModel.getResourcePrimKey(), wikiPageModel.getUuid(), 0,
@@ -300,7 +300,7 @@ public class AssetDataFactory extends BaseDataFactory {
 		CPDefinitionModel cpDefinitionModel,
 		GroupModel commerceCatalogGroupModel) {
 
-		return newAssetEntryModel(
+		return _newAssetEntryModel(
 			commerceCatalogGroupModel.getGroupId(), new Date(), new Date(),
 			getClassNameId(CPDefinition.class),
 			cpDefinitionModel.getCPDefinitionId(), SequentialUUID.generate(), 0,
@@ -311,7 +311,7 @@ public class AssetDataFactory extends BaseDataFactory {
 	public AssetEntryModel newMBDiscussionAssetEntryModel(
 		BlogsEntryModel blogsEntryModel) {
 
-		return newAssetEntryModel(
+		return _newAssetEntryModel(
 			blogsEntryModel.getGroupId(), blogsEntryModel.getCreateDate(),
 			blogsEntryModel.getModifiedDate(),
 			getClassNameId(getMBDiscussionCombinedClassName(BlogsEntry.class)),
@@ -322,7 +322,7 @@ public class AssetDataFactory extends BaseDataFactory {
 	public AssetEntryModel newMBDiscussionAssetEntryModel(
 		WikiPageModel wikiPageModel) {
 
-		return newAssetEntryModel(
+		return _newAssetEntryModel(
 			wikiPageModel.getGroupId(), wikiPageModel.getCreateDate(),
 			wikiPageModel.getModifiedDate(),
 			getClassNameId(getMBDiscussionCombinedClassName(WikiPage.class)),
@@ -333,122 +333,9 @@ public class AssetDataFactory extends BaseDataFactory {
 	public ViewCountEntryModel newViewCountEntryModel(
 		AssetEntryModel assetEntryModel) {
 
-		return newViewCountEntryModel(
+		return _newViewCountEntryModel(
 			assetEntryModel.getCompanyId(), getClassNameId(AssetEntry.class),
 			assetEntryModel.getPrimaryKey(), 0);
-	}
-
-	protected SimpleCounter getSimpleCounter(
-		Map<Long, SimpleCounter>[] simpleCountersArray, long groupId,
-		long classNameId) {
-
-		Map<Long, SimpleCounter> simpleCounters =
-			simpleCountersArray[(int)groupId - 1];
-
-		if (simpleCounters == null) {
-			simpleCounters = new HashMap<>();
-
-			simpleCountersArray[(int)groupId - 1] = simpleCounters;
-		}
-
-		SimpleCounter simpleCounter = simpleCounters.get(classNameId);
-
-		if (simpleCounter == null) {
-			simpleCounter = new SimpleCounter(0);
-
-			simpleCounters.put(classNameId, simpleCounter);
-		}
-
-		return simpleCounter;
-	}
-
-	protected AssetCategoryModel newAssetCategoryModel(
-		long groupId, String name, long vocabularyId) {
-
-		AssetCategoryModel assetCategoryModel = new AssetCategoryModelImpl();
-
-		// UUID
-
-		assetCategoryModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		assetCategoryModel.setCategoryId(counter.get());
-
-		// Group instance
-
-		assetCategoryModel.setGroupId(groupId);
-
-		// Audit fields
-
-		assetCategoryModel.setCompanyId(COMPANY_ID);
-		assetCategoryModel.setUserId(SAMPLE_USER_ID);
-		assetCategoryModel.setUserName(SAMPLE_USER_NAME);
-		assetCategoryModel.setCreateDate(new Date());
-		assetCategoryModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		assetCategoryModel.setParentCategoryId(
-			AssetCategoryConstants.DEFAULT_PARENT_CATEGORY_ID);
-		assetCategoryModel.setTreePath(
-			"/" + assetCategoryModel.getCategoryId() + "/");
-		assetCategoryModel.setName(name);
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
-		sb.append("default-locale=\"en_US\"><Title language-id=\"en_US\">");
-		sb.append(name);
-		sb.append("</Title></root>");
-
-		assetCategoryModel.setTitle(sb.toString());
-
-		assetCategoryModel.setVocabularyId(vocabularyId);
-		assetCategoryModel.setLastPublishDate(new Date());
-
-		return assetCategoryModel;
-	}
-
-	protected AssetEntryModel newAssetEntryModel(
-		long groupId, Date createDate, Date modifiedDate, long classNameId,
-		long classPK, String uuid, long classTypeId, boolean listable,
-		boolean visible, String mimeType, String title) {
-
-		AssetEntryModel assetEntryModel = new AssetEntryModelImpl();
-
-		// PK fields
-
-		assetEntryModel.setEntryId(counter.get());
-
-		// Group instance
-
-		assetEntryModel.setGroupId(groupId);
-
-		// Audit fields
-
-		assetEntryModel.setCompanyId(COMPANY_ID);
-		assetEntryModel.setUserId(SAMPLE_USER_ID);
-		assetEntryModel.setUserName(SAMPLE_USER_NAME);
-		assetEntryModel.setCreateDate(createDate);
-		assetEntryModel.setModifiedDate(modifiedDate);
-
-		// Other fields
-
-		assetEntryModel.setClassNameId(classNameId);
-		assetEntryModel.setClassPK(classPK);
-		assetEntryModel.setClassUuid(uuid);
-		assetEntryModel.setClassTypeId(classTypeId);
-		assetEntryModel.setListable(listable);
-		assetEntryModel.setVisible(visible);
-		assetEntryModel.setStartDate(createDate);
-		assetEntryModel.setEndDate(nextFutureDate());
-		assetEntryModel.setPublishDate(createDate);
-		assetEntryModel.setExpirationDate(nextFutureDate());
-		assetEntryModel.setMimeType(mimeType);
-		assetEntryModel.setTitle(title);
-
-		return assetEntryModel;
 	}
 
 	protected AssetVocabularyModel newAssetVocabularyModel(
@@ -497,26 +384,28 @@ public class AssetDataFactory extends BaseDataFactory {
 		return assetVocabularyModel;
 	}
 
-	protected ViewCountEntryModel newViewCountEntryModel(
-		long companyId, long classNameId, long classPK, long viewCount) {
+	private SimpleCounter _getSimpleCounter(
+		Map<Long, SimpleCounter>[] simpleCountersArray, long groupId,
+		long classNameId) {
 
-		ViewCountEntryModel viewCountEntryModel = new ViewCountEntryModelImpl();
+		Map<Long, SimpleCounter> simpleCounters =
+			simpleCountersArray[(int)groupId - 1];
 
-		// PK fields
+		if (simpleCounters == null) {
+			simpleCounters = new HashMap<>();
 
-		viewCountEntryModel.setCompanyId(companyId);
-		viewCountEntryModel.setClassNameId(classNameId);
-		viewCountEntryModel.setClassPK(classPK);
+			simpleCountersArray[(int)groupId - 1] = simpleCounters;
+		}
 
-		// Other fields
+		SimpleCounter simpleCounter = simpleCounters.get(classNameId);
 
-		viewCountEntryModel.setViewCount(viewCount);
+		if (simpleCounter == null) {
+			simpleCounter = new SimpleCounter(0);
 
-		// Autogenerated fields
+			simpleCounters.put(classNameId, simpleCounter);
+		}
 
-		viewCountEntryModel.setPrimaryKey(new ViewCountEntryPK());
-
-		return viewCountEntryModel;
+		return simpleCounter;
 	}
 
 	private void _initAssetCategoryModels() {
@@ -569,7 +458,7 @@ public class AssetDataFactory extends BaseDataFactory {
 					sb.append(k);
 
 					assetCategoryModels.add(
-						newAssetCategoryModel(
+						_newAssetCategoryModel(
 							i, sb.toString(),
 							assetVocabularyModel.getVocabularyId()));
 				}
@@ -656,6 +545,117 @@ public class AssetDataFactory extends BaseDataFactory {
 
 			assetTagModelsMaps[i - 1] = assetTagModelsMap;
 		}
+	}
+
+	private AssetCategoryModel _newAssetCategoryModel(
+		long groupId, String name, long vocabularyId) {
+
+		AssetCategoryModel assetCategoryModel = new AssetCategoryModelImpl();
+
+		// UUID
+
+		assetCategoryModel.setUuid(SequentialUUID.generate());
+
+		// PK fields
+
+		assetCategoryModel.setCategoryId(counter.get());
+
+		// Group instance
+
+		assetCategoryModel.setGroupId(groupId);
+
+		// Audit fields
+
+		assetCategoryModel.setCompanyId(COMPANY_ID);
+		assetCategoryModel.setUserId(SAMPLE_USER_ID);
+		assetCategoryModel.setUserName(SAMPLE_USER_NAME);
+		assetCategoryModel.setCreateDate(new Date());
+		assetCategoryModel.setModifiedDate(new Date());
+
+		// Other fields
+
+		assetCategoryModel.setParentCategoryId(
+			AssetCategoryConstants.DEFAULT_PARENT_CATEGORY_ID);
+		assetCategoryModel.setTreePath(
+			"/" + assetCategoryModel.getCategoryId() + "/");
+		assetCategoryModel.setName(name);
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append("<?xml version=\"1.0\"?><root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\"><Title language-id=\"en_US\">");
+		sb.append(name);
+		sb.append("</Title></root>");
+
+		assetCategoryModel.setTitle(sb.toString());
+
+		assetCategoryModel.setVocabularyId(vocabularyId);
+		assetCategoryModel.setLastPublishDate(new Date());
+
+		return assetCategoryModel;
+	}
+
+	private AssetEntryModel _newAssetEntryModel(
+		long groupId, Date createDate, Date modifiedDate, long classNameId,
+		long classPK, String uuid, long classTypeId, boolean listable,
+		boolean visible, String mimeType, String title) {
+
+		AssetEntryModel assetEntryModel = new AssetEntryModelImpl();
+
+		// PK fields
+
+		assetEntryModel.setEntryId(counter.get());
+
+		// Group instance
+
+		assetEntryModel.setGroupId(groupId);
+
+		// Audit fields
+
+		assetEntryModel.setCompanyId(COMPANY_ID);
+		assetEntryModel.setUserId(SAMPLE_USER_ID);
+		assetEntryModel.setUserName(SAMPLE_USER_NAME);
+		assetEntryModel.setCreateDate(createDate);
+		assetEntryModel.setModifiedDate(modifiedDate);
+
+		// Other fields
+
+		assetEntryModel.setClassNameId(classNameId);
+		assetEntryModel.setClassPK(classPK);
+		assetEntryModel.setClassUuid(uuid);
+		assetEntryModel.setClassTypeId(classTypeId);
+		assetEntryModel.setListable(listable);
+		assetEntryModel.setVisible(visible);
+		assetEntryModel.setStartDate(createDate);
+		assetEntryModel.setEndDate(nextFutureDate());
+		assetEntryModel.setPublishDate(createDate);
+		assetEntryModel.setExpirationDate(nextFutureDate());
+		assetEntryModel.setMimeType(mimeType);
+		assetEntryModel.setTitle(title);
+
+		return assetEntryModel;
+	}
+
+	private ViewCountEntryModel _newViewCountEntryModel(
+		long companyId, long classNameId, long classPK, long viewCount) {
+
+		ViewCountEntryModel viewCountEntryModel = new ViewCountEntryModelImpl();
+
+		// PK fields
+
+		viewCountEntryModel.setCompanyId(companyId);
+		viewCountEntryModel.setClassNameId(classNameId);
+		viewCountEntryModel.setClassPK(classPK);
+
+		// Other fields
+
+		viewCountEntryModel.setViewCount(viewCount);
+
+		// Autogenerated fields
+
+		viewCountEntryModel.setPrimaryKey(new ViewCountEntryPK());
+
+		return viewCountEntryModel;
 	}
 
 	private Map<Long, SimpleCounter>[] _assetCategoryCounters;

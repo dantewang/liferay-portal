@@ -45,7 +45,7 @@ public class ReleaseDataFactory extends BaseDataFactory {
 			PortalUpgradeProcess.getLatestSchemaVersion();
 
 		releases.add(
-			newReleaseModel(
+			_newReleaseModel(
 				ReleaseConstants.DEFAULT_ID,
 				ReleaseConstants.DEFAULT_SERVLET_CONTEXT_NAME,
 				latestSchemaVersion.toString(), ReleaseInfo.getBuildNumber(),
@@ -67,7 +67,7 @@ public class ReleaseDataFactory extends BaseDataFactory {
 					String schemaVersion = parts[1];
 
 					releases.add(
-						newReleaseModel(
+						_newReleaseModel(
 							counter.get(), servletContextName, schemaVersion, 0,
 							true, null));
 				}
@@ -77,7 +77,7 @@ public class ReleaseDataFactory extends BaseDataFactory {
 		return releases;
 	}
 
-	protected ReleaseModelImpl newReleaseModel(
+	private ReleaseModelImpl _newReleaseModel(
 			long releaseId, String servletContextName, String schemaVersion,
 			int buildNumber, boolean verified, String testString)
 		throws IOException {
