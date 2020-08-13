@@ -1,14 +1,14 @@
-<#assign ddlRecordSetCounts = counterDataFactory.getSequence(dDLDDMDataFactory.maxDDLRecordSetCount) />
+<#assign ddlRecordSetCounts = counterDataFactory.getSequence(ddlDDMDataFactory.maxDDLRecordSetCount) />
 
 <#list ddlRecordSetCounts as ddlRecordSetCount>
 	<#if ddlRecordSetCount = 1>
 		<#assign
-			ddmStructureModel = dDLDDMDataFactory.newDDLDDMStructureModel(groupId)
-			ddmStructureVersionModel = dDLDDMDataFactory.newDDMStructureVersionModel(ddmStructureModel)
+			ddmStructureModel = ddlDDMDataFactory.newDDLDDMStructureModel(groupId)
+			ddmStructureVersionModel = ddlDDMDataFactory.newDDMStructureVersionModel(ddmStructureModel)
 		/>
 
 		<@insertDDMStructure
-			_ddmStructureLayoutModel=dDLDDMDataFactory.newDDLDDMStructureLayoutModel(groupId, ddmStructureVersionModel)
+			_ddmStructureLayoutModel=ddlDDMDataFactory.newDDLDDMStructureLayoutModel(groupId, ddmStructureVersionModel)
 			_ddmStructureModel=ddmStructureModel
 			_ddmStructureVersionModel=ddmStructureVersionModel
 		/>
@@ -23,20 +23,20 @@
 
 	<@insertLayout _layoutModel=layoutModel />
 
-	<#assign ddlRecordSetModel = dDLDDMDataFactory.newDDLRecordSetModel(ddmStructureModel, ddlRecordSetCount) />
+	<#assign ddlRecordSetModel = ddlDDMDataFactory.newDDLRecordSetModel(ddmStructureModel, ddlRecordSetCount) />
 
 	${insertSQLBuilder.toInsertSQL(ddlRecordSetModel)}
 
-	${insertSQLBuilder.toInsertSQL(dDLDDMDataFactory.newDDMStructureLinkModel(ddlRecordSetModel))}
+	${insertSQLBuilder.toInsertSQL(ddlDDMDataFactory.newDDMStructureLinkModel(ddlRecordSetModel))}
 
-	<#assign ddlRecordCounts = counterDataFactory.getSequence(dDLDDMDataFactory.maxDDLRecordCount) />
+	<#assign ddlRecordCounts = counterDataFactory.getSequence(ddlDDMDataFactory.maxDDLRecordCount) />
 
 	<#list ddlRecordCounts as ddlRecordCount>
-		<#assign ddlRecordModel = dDLDDMDataFactory.newDDLRecordModel(ddlRecordSetModel) />
+		<#assign ddlRecordModel = ddlDDMDataFactory.newDDLRecordModel(ddlRecordSetModel) />
 
 		${insertSQLBuilder.toInsertSQL(ddlRecordModel)}
 
-		${insertSQLBuilder.toInsertSQL(dDLDDMDataFactory.newDDLRecordVersionModel(ddlRecordModel))}
+		${insertSQLBuilder.toInsertSQL(ddlDDMDataFactory.newDDLRecordVersionModel(ddlRecordModel))}
 
 		<@insertDDMContent
 			_currentIndex=ddlRecordCount

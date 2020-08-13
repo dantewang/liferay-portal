@@ -55,14 +55,14 @@
 	_currentIndex = -1
 >
 	<#if _currentIndex = -1>
-		<#local ddmContentModel = dLDataFactory.newDDMContentModel(_entry)>
+		<#local ddmContentModel = dlDataFactory.newDDMContentModel(_entry)>
 	<#else>
-		<#local ddmContentModel = dDLDDMDataFactory.newDDMContentModel(_entry, _currentIndex)>
+		<#local ddmContentModel = ddlDDMDataFactory.newDDMContentModel(_entry, _currentIndex)>
 	</#if>
 
 	${insertSQLBuilder.toInsertSQL(ddmContentModel)}
 
-	${insertSQLBuilder.toInsertSQL(dLDataFactory.newDDMStorageLinkModel(_ddmStorageLinkId, ddmContentModel, _ddmStructureId))}
+	${insertSQLBuilder.toInsertSQL(dlDataFactory.newDDMStorageLinkModel(_ddmStorageLinkId, ddmContentModel, _ddmStructureId))}
 </#macro>
 
 <#macro insertDDMStructure
@@ -83,20 +83,20 @@
 	_groupId
 	_parentDLFolderId
 >
-	<#if _dlFolderDepth <= dLDataFactory.maxDLFolderDepth>
-		<#local dlFolderModels = dLDataFactory.newDLFolderModels(_groupId, _parentDLFolderId)>
+	<#if _dlFolderDepth <= dlDataFactory.maxDLFolderDepth>
+		<#local dlFolderModels = dlDataFactory.newDLFolderModels(_groupId, _parentDLFolderId)>
 
 		<#list dlFolderModels as dlFolderModel>
 			${insertSQLBuilder.toInsertSQL(dlFolderModel)}
 
 			<@insertAssetEntry _entry=dlFolderModel />
 
-			<#local dlFileEntryModels = dLDataFactory.newDlFileEntryModels(dlFolderModel)>
+			<#local dlFileEntryModels = dlDataFactory.newDlFileEntryModels(dlFolderModel)>
 
 			<#list dlFileEntryModels as dlFileEntryModel>
 				${insertSQLBuilder.toInsertSQL(dlFileEntryModel)}
 
-				<#local dlFileVersionModel = dLDataFactory.newDLFileVersionModel(dlFileEntryModel)>
+				<#local dlFileVersionModel = dlDataFactory.newDLFileVersionModel(dlFileEntryModel)>
 
 				${insertSQLBuilder.toInsertSQL(dlFileVersionModel)}
 
@@ -111,7 +111,7 @@
 				/>
 
 				<@insertMBDiscussion
-					_classNameId=dLDataFactory.DLFileEntryClassNameId
+					_classNameId=dlDataFactory.DLFileEntryClassNameId
 					_classPK=dlFileEntryModel.fileEntryId
 					_groupId=dlFileEntryModel.groupId
 					_maxCommentCount=0
@@ -121,11 +121,11 @@
 
 				${insertSQLBuilder.toInsertSQL(socialActivityDataFactory.newSocialActivityModel(dlFileEntryModel))}
 
-				<#local dlFileEntryMetadataModel = dLDataFactory.newDLFileEntryMetadataModel(ddmStorageLinkId, _ddmStructureId, dlFileVersionModel)>
+				<#local dlFileEntryMetadataModel = dlDataFactory.newDLFileEntryMetadataModel(ddmStorageLinkId, _ddmStructureId, dlFileVersionModel)>
 
 				${insertSQLBuilder.toInsertSQL(dlFileEntryMetadataModel)}
 
-				${insertSQLBuilder.toInsertSQL(dDLDDMDataFactory.newDDMStructureLinkModel(dlFileEntryMetadataModel))}
+				${insertSQLBuilder.toInsertSQL(ddlDDMDataFactory.newDDMStructureLinkModel(dlFileEntryMetadataModel))}
 
 				${csvFileWriter.write("documentLibrary", dlFileEntryModel.uuid + "," + dlFolderModel.folderId + "," + dlFileEntryModel.name + "," + dlFileEntryModel.fileEntryId + "\n")}
 			</#list>
