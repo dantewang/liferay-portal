@@ -126,11 +126,12 @@ public class ServiceConfigurationInitializer {
 
 	private void _readResourceActions() {
 		try {
-			_resourceActions.readAndCheck(
-				null, _classLoader,
-				StringUtil.split(
-					_portletConfiguration.get(
-						PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
+			_resourceActions.checkResourceActions(
+				_resourceActions.readModelResource(
+					null, _classLoader,
+					StringUtil.split(
+						_portletConfiguration.get(
+							PropsKeys.RESOURCE_ACTIONS_CONFIGS))));
 		}
 		catch (Exception exception) {
 			_log.error(
