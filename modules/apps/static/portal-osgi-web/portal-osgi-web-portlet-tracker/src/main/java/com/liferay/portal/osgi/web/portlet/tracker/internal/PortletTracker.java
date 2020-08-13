@@ -349,11 +349,15 @@ public class PortletTracker
 				Properties properties = configuration.getProperties();
 
 				try {
+					String[] sources = StringUtil.split(
+						properties.getProperty(
+							PropsKeys.RESOURCE_ACTIONS_CONFIGS));
+
 					ResourceActionsUtil.readPortletResource(
-						portletModel, null, bundleClassLoader,
-						StringUtil.split(
-							properties.getProperty(
-								PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
+						portletModel, null, bundleClassLoader, sources);
+
+					ResourceActionsUtil.readModelResource(
+						null, bundleClassLoader, sources);
 				}
 				catch (Exception exception) {
 					_log.error(exception, exception);
