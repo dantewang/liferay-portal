@@ -309,6 +309,12 @@ public class ResourceActionsUtil {
 		getResourceActions().read(servletContextName, classLoader, sources);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readPortletResource(String, Document)} and
+	 *             {@link #readModelResource(String, Document)}
+	 */
+	@Deprecated
 	public static void read(
 			String servletContextName, Document document,
 			Set<String> resourceNames)
