@@ -734,6 +734,19 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	@Override
+	public Set<String> readModelResource(Document document)
+		throws ResourceActionsException {
+
+		_validatePublicId(document);
+
+		Set<String> resourceNames = new HashSet<>();
+
+		_readModelResource(document.getRootElement(), resourceNames);
+
+		return resourceNames;
+	}
+
+	@Override
 	public void readPortletResource(
 			Portlet portlet, ClassLoader classLoader, String... sources)
 		throws ResourceActionsException {
