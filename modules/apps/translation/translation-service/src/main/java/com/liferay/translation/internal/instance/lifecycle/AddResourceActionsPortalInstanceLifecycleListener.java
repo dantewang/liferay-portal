@@ -43,13 +43,12 @@ public class AddResourceActionsPortalInstanceLifecycleListener
 				"/dependencies/languages.xml.tpl");
 
 		for (Locale availableLocale : _language.getAvailableLocales()) {
-			_resourceActions.read(
+			_resourceActions.readModelResource(
 				null,
 				SAXReaderUtil.read(
 					StringUtil.replace(
 						xml, "[$LANGUAGE$]",
-						_language.getLanguageId(availableLocale))),
-				null);
+						_language.getLanguageId(availableLocale))));
 		}
 	}
 
