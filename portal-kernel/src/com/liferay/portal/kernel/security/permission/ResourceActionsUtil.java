@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.exception.NoSuchResourceActionException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.xml.Document;
 
 import java.util.List;
 import java.util.Locale;
@@ -312,6 +313,14 @@ public class ResourceActionsUtil {
 
 		return getResourceActions().readModelResource(
 			servletContextName, classLoader, sources);
+	}
+
+	public static Set<String> readModelResource(
+			String servletContextName, Document document)
+		throws Exception {
+
+		return getResourceActions().readModelResource(
+			servletContextName, document);
 	}
 
 	public static void readPortletResource(
