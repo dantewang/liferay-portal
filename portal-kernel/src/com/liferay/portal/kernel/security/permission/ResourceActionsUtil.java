@@ -314,6 +314,14 @@ public class ResourceActionsUtil {
 			servletContextName, classLoader, sources);
 	}
 
+	public static Set<String> readModelResource(
+			String servletContextName, Document document)
+		throws Exception {
+
+		return getResourceActions().readModelResource(
+			servletContextName, document);
+	}
+
 	public static void readPortletResource(
 			Portlet portlet, String servletContextName, ClassLoader classLoader,
 			String... sources)
