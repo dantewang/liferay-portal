@@ -44,14 +44,13 @@ public class AddResourceActionsPortalInstanceLifecycleListener
 		String[] languageIds = ArrayUtil.sortedUnique(PropsValues.LOCALES);
 
 		for (int i = 0; i < languageIds.length; i++) {
-			_resourceActions.read(
+			_resourceActions.readModelResource(
 				null,
 				SAXReaderUtil.read(
 					StringUtil.replace(
 						StringUtil.replace(
 							xml, "[$LANGUAGE_ID$]", languageIds[i]),
-						"[$WEIGHT$]", String.valueOf(i))),
-				null);
+						"[$WEIGHT$]", String.valueOf(i))));
 		}
 	}
 
