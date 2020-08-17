@@ -219,6 +219,9 @@ public interface ResourceActions {
 			ClassLoader classLoader, String... sources)
 		throws ResourceActionsException;
 
+	public Set<String> readModelResources(Document document)
+		throws ResourceActionsException;
+
 	public void readPortletResource(
 			Portlet portlet, ClassLoader classLoader, String... sources)
 		throws ResourceActionsException;
