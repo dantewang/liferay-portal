@@ -212,6 +212,10 @@ public interface ResourceActions {
 			String... sources)
 		throws ResourceActionsException;
 
+	public Set<String> readModelResource(
+			String servletContextName, Document document)
+		throws ResourceActionsException;
+
 	public void readPortletResource(
 			Portlet portlet, String servletContextName, ClassLoader classLoader,
 			String... sources)
@@ -220,6 +224,10 @@ public interface ResourceActions {
 	public void readPortletResource(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
+		throws ResourceActionsException;
+
+	public void readPortletResource(
+			String servletContextName, Document document)
 		throws ResourceActionsException;
 
 	/**

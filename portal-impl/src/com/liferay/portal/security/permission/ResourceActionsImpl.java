@@ -727,6 +727,31 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	@Override
+	public Set<String> readModelResource(
+			String servletContextName, Document document)
+		throws ResourceActionsException {
+
+		DocumentType documentType = document.getDocumentType();
+
+		String publicId = GetterUtil.getString(documentType.getPublicId());
+
+		if (publicId.equals(
+				"-//Liferay//DTD Resource Action Mapping 6.0.0//EN")) {
+
+			if (_log.isWarnEnabled()) {
+				_log.warn("Please update document to use the 6.1.0 format");
+			}
+		}
+
+		Set<String> resourceNames = new HashSet<>();
+
+		_readModelResource(
+			servletContextName, document.getRootElement(), resourceNames);
+
+		return resourceNames;
+	}
+
+	@Override
 	public void readPortletResource(
 			Portlet portlet, String servletContextName, ClassLoader classLoader,
 			String... sources)
@@ -752,6 +777,27 @@ public class ResourceActionsImpl implements ResourceActions {
 				rootElement -> _readPortletResource(
 					null, servletContextName, rootElement, null));
 		}
+	}
+
+	@Override
+	public void readPortletResource(
+			String servletContextName, Document document)
+		throws ResourceActionsException {
+
+		DocumentType documentType = document.getDocumentType();
+
+		String publicId = GetterUtil.getString(documentType.getPublicId());
+
+		if (publicId.equals(
+				"-//Liferay//DTD Resource Action Mapping 6.0.0//EN")) {
+
+			if (_log.isWarnEnabled()) {
+				_log.warn("Please update document to use the 6.1.0 format");
+			}
+		}
+
+		_readPortletResource(
+			null, servletContextName, document.getRootElement(), null);
 	}
 
 	/**
