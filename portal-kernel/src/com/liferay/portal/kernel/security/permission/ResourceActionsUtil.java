@@ -300,6 +300,24 @@ public class ResourceActionsUtil {
 			servletContextName, classLoader, sources);
 	}
 
+	public static void readModelResource(
+			String servletContextName, ClassLoader classLoader,
+			String... sources)
+		throws Exception {
+
+		getResourceActions().readModelResource(
+			servletContextName, classLoader, sources);
+	}
+
+	public static void readPortletResource(
+			Portlet portlet, String servletContextName, ClassLoader classLoader,
+			String... sources)
+		throws Exception {
+
+		getResourceActions().readPortletResource(
+			portlet, servletContextName, classLoader, sources);
+	}
+
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
 	 */
