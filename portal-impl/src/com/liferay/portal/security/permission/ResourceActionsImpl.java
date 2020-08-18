@@ -1029,26 +1029,12 @@ public class ResourceActionsImpl implements ResourceActions {
 
 			Element rootElement = document.getRootElement();
 
-			for (Element resourceElement : rootElement.elements("resource")) {
-				String file = StringUtil.trim(
-					resourceElement.attributeValue("file"));
-
-				_read(classLoader, file, readResourceConsumer);
-
-				String extFileName = StringUtil.replace(
-					file, ".xml", "-ext.xml");
-
-				_read(classLoader, extFileName, readResourceConsumer);
-			}
+			_readResourceFiles(
+				classLoader, rootElement, readResourceConsumer, null);
 
 			readResourceConsumer.accept(rootElement);
 
-			if (source.endsWith(".xml") && !source.endsWith("-ext.xml")) {
-				String extFileName = StringUtil.replace(
-					source, ".xml", "-ext.xml");
-
-				_read(classLoader, extFileName, readResourceConsumer);
-			}
+			_readResourceFiles(classLoader, null, readResourceConsumer, source);
 		}
 		catch (DocumentException documentException) {
 			throw new ResourceActionsException(documentException);
@@ -1284,6 +1270,36 @@ public class ResourceActionsImpl implements ResourceActions {
 		layoutManagerActions.clear();
 
 		_readActionKeys(layoutManagerActions, layoutManagerElement);
+	}
+
+	private void _readResourceFiles(
+			ClassLoader classLoader, Element rootElement,
+			UnsafeConsumer<Element, ResourceActionsException>
+				readResourceConsumer,
+			String source)
+		throws ResourceActionsException {
+
+		if (rootElement != null) {
+			for (Element resourceElement : rootElement.elements("resource")) {
+				String file = StringUtil.trim(
+					resourceElement.attributeValue("file"));
+
+				_read(classLoader, file, readResourceConsumer);
+
+				String extFileName = StringUtil.replace(
+					file, ".xml", "-ext.xml");
+
+				_read(classLoader, extFileName, readResourceConsumer);
+			}
+		}
+		else {
+			if (source.endsWith(".xml") && !source.endsWith("-ext.xml")) {
+				String extFileName = StringUtil.replace(
+					source, ".xml", "-ext.xml");
+
+				_read(classLoader, extFileName, readResourceConsumer);
+			}
+		}
 	}
 
 	private void _validatePublicId(Document document) {
