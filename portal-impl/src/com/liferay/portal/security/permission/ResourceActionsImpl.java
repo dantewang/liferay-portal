@@ -640,17 +640,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	public void read(Document document, Set<String> resourceNames)
 		throws ResourceActionsException {
 
-		DocumentType documentType = document.getDocumentType();
-
-		String publicId = GetterUtil.getString(documentType.getPublicId());
-
-		if (publicId.equals(
-				"-//Liferay//DTD Resource Action Mapping 6.0.0//EN")) {
-
-			if (_log.isWarnEnabled()) {
-				_log.warn("Please update document to use the 6.1.0 format");
-			}
-		}
+		_validatePublicId(document);
 
 		_readModelResource(document.getRootElement(), resourceNames);
 	}
@@ -747,17 +737,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	public Set<String> readModelResources(Document document)
 		throws ResourceActionsException {
 
-		DocumentType documentType = document.getDocumentType();
-
-		String publicId = GetterUtil.getString(documentType.getPublicId());
-
-		if (publicId.equals(
-				"-//Liferay//DTD Resource Action Mapping 6.0.0//EN")) {
-
-			if (_log.isWarnEnabled()) {
-				_log.warn("Please update document to use the 6.1.0 format");
-			}
-		}
+		_validatePublicId(document);
 
 		Set<String> resourceNames = new HashSet<>();
 
@@ -1140,18 +1120,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		try {
 			Document document = UnsecureSAXReaderUtil.read(inputStream, true);
 
-			DocumentType documentType = document.getDocumentType();
-
-			String publicId = GetterUtil.getString(documentType.getPublicId());
-
-			if (publicId.equals(
-					"-//Liferay//DTD Resource Action Mapping 6.0.0//EN")) {
-
-				if (_log.isWarnEnabled()) {
-					_log.warn(
-						"Please update " + source + " to use the 6.1.0 format");
-				}
-			}
+			_validatePublicId(document);
 
 			Element rootElement = document.getRootElement();
 
@@ -1405,6 +1374,20 @@ public class ResourceActionsImpl implements ResourceActions {
 		layoutManagerActions.clear();
 
 		_readActionKeys(layoutManagerActions, layoutManagerElement);
+	}
+
+	private void _validatePublicId(Document document) {
+		DocumentType documentType = document.getDocumentType();
+
+		String publicId = GetterUtil.getString(documentType.getPublicId());
+
+		if (publicId.equals(
+				"-//Liferay//DTD Resource Action Mapping 6.0.0//EN")) {
+
+			if (_log.isWarnEnabled()) {
+				_log.warn("Please update document to use the 6.1.0 format");
+			}
+		}
 	}
 
 	private static final String _ACTION_NAME_PREFIX = "action.";
