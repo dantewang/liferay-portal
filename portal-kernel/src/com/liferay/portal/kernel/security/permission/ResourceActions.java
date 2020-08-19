@@ -181,7 +181,7 @@ public interface ResourceActions {
 
 	public void read(
 			String servletContextName, Document document,
-			Set<String> portletNames)
+			Set<String> resourceNames)
 		throws ResourceActionsException;
 
 	public void readAndCheck(
