@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<category name="logger.all">
+		<priority value="ALL" />
+	</category>
+
+	<category name="logger.off">
+		<priority value="OFF" />
+	</category>
+
+	<category name="logger.fatal">
+		<priority value="FATAL" />
+	</category>
+
+	<category name="logger.error">
+		<priority value="ERROR" />
+	</category>
+
+	<category name="logger.warn">
+		<priority value="WARN" />
+	</category>
+
+	<category name="logger.info">
+		<priority value="INFO" />
+	</category>
+
+	<category name="logger.debug">
+		<priority value="DEBUG" />
+	</category>
+
+	<category name="logger.trace">
+		<priority value="TRACE" />
+	</category>
+
+	<category name="com.liferay.portal.internal.servlet.MainServlet">
+		<priority value="WARN" />
+	</category>
+</log4j:configuration>
