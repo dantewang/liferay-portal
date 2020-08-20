@@ -68,8 +68,7 @@ public class Log4jTest {
 
 		ClassLoader classLoader = Log4jTest.class.getClassLoader();
 
-		URL url = classLoader.getResource(
-			"com/liferay/portal/log4j/dependencies/log4j.xml");
+		URL url = classLoader.getResource("META-INF/portal-log4j-ext.xml");
 
 		String urlContent = "";
 
@@ -89,7 +88,7 @@ public class Log4jTest {
 
 		Files.write(Paths.get(url.toURI()), urlContent.getBytes());
 
-		Log4JUtil.configureLog4J(url);
+		Log4JUtil.configureLog4J(classLoader);
 
 		LogFactoryUtil.setLogFactory(new Log4jLogFactoryImpl());
 
