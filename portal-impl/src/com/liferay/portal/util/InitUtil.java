@@ -66,6 +66,7 @@ import java.util.List;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.lang.time.StopWatch;
+import org.apache.logging.log4j.core.LoggerContext;
 
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -137,7 +138,8 @@ public class InitUtil {
 		if (GetterUtil.getBoolean(
 				SystemProperties.get("log4j.configure.on.startup"), true)) {
 
-			Log4JUtil.configureLog4J(InitUtil.class.getClassLoader());
+			_loggerContext = Log4JUtil.initLog4J(
+				InitUtil.class.getClassLoader());
 		}
 
 		// Shared log
@@ -295,6 +297,29 @@ public class InitUtil {
 		}
 	}
 
+	public static void registerLoggerContext() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		final ServiceRegistration<LoggerContext>
+			loggerContextServiceRegistration = registry.registerService(
+				LoggerContext.class, _loggerContext);
+
+		PortalLifecycleUtil.register(
+			new BasePortalLifecycle() {
+
+				@Override
+				protected void doPortalDestroy() {
+					loggerContextServiceRegistration.unregister();
+				}
+
+				@Override
+				protected void doPortalInit() {
+				}
+
+			},
+			PortalLifecycle.METHOD_DESTROY);
+	}
+
 	public static void registerSpringInitialized() {
 		Registry registry = RegistryUtil.getRegistry();
 
@@ -350,5 +375,6 @@ public class InitUtil {
 
 	private static ApplicationContext _appApplicationContext;
 	private static boolean _initialized;
+	private static LoggerContext _loggerContext;
 
 }

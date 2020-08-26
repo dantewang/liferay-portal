@@ -72,47 +72,13 @@ import org.dom4j.io.SAXReader;
  */
 public class Log4JUtil {
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #initLog4J(ClassLoader)}
+	 */
+	@Deprecated
 	public static void configureLog4J(ClassLoader classLoader) {
-		URL url = classLoader.getResource("META-INF/portal-log4j.xml");
-
-		if (url == null) {
-			return;
-		}
-
-		List<URL> urls = new ArrayList<>();
-
-		urls.add(url);
-
-		try {
-			Enumeration<URL> enumeration = classLoader.getResources(
-				"META-INF/portal-log4j-ext.xml");
-
-			while (enumeration.hasMoreElements()) {
-				urls.add(enumeration.nextElement());
-			}
-		}
-		catch (IOException ioException) {
-			java.util.logging.Logger logger =
-				java.util.logging.Logger.getLogger(Log4JUtil.class.getName());
-
-			logger.log(
-				java.util.logging.Level.WARNING,
-				"Unable to load portal-log4j-ext.xml", ioException);
-		}
-
-		Log4jContextFactory loggerContextFactory =
-			(Log4jContextFactory)LogManager.getFactory();
-
-		ContextSelector contextSelector = loggerContextFactory.getSelector();
-
-		try {
-			LoggerContext loggerContext = contextSelector.getContext(
-				null, _processClassLoader(classLoader), false, url.toURI());
-
-			_configureLog4J(loggerContext, urls.toArray(new URL[0]));
-		}
-		catch (URISyntaxException uriSyntaxException) {
-		}
+		initLog4J(classLoader);
 	}
 
 	/**
@@ -175,6 +141,50 @@ public class Log4JUtil {
 		return configuration.getRootLogger();
 	}
 
+	public static LoggerContext initLog4J(ClassLoader classLoader) {
+		URL url = classLoader.getResource("META-INF/portal-log4j.xml");
+
+		if (url == null) {
+			return null;
+		}
+
+		List<URL> urls = new ArrayList<>();
+
+		urls.add(url);
+
+		try {
+			Enumeration<URL> enumeration = classLoader.getResources(
+				"META-INF/portal-log4j-ext.xml");
+
+			while (enumeration.hasMoreElements()) {
+				urls.add(enumeration.nextElement());
+			}
+		}
+		catch (IOException ioException) {
+			java.util.logging.Logger logger =
+				java.util.logging.Logger.getLogger(Log4JUtil.class.getName());
+
+			logger.log(
+				java.util.logging.Level.WARNING,
+				"Unable to load portal-log4j-ext.xml", ioException);
+		}
+
+		Log4jContextFactory loggerContextFactory =
+			(Log4jContextFactory)LogManager.getFactory();
+
+		ContextSelector contextSelector = loggerContextFactory.getSelector();
+
+		try {
+			LoggerContext loggerContext = contextSelector.getContext(
+				null, _processClassLoader(classLoader), false, url.toURI());
+
+			return _configureLog4J(loggerContext, urls.toArray(new URL[0]));
+		}
+		catch (URISyntaxException uriSyntaxException) {
+			return null;
+		}
+	}
+
 	public static void initLog4J(
 		String serverId, String liferayHome, ClassLoader classLoader,
 		LogFactory logFactory, Map<String, String> customLogSettings) {
@@ -185,7 +195,7 @@ public class Log4JUtil {
 
 		_liferayHome = _escapeXMLAttribute(liferayHome);
 
-		configureLog4J(classLoader);
+		initLog4J(classLoader);
 
 		LogFactoryUtil.setLogFactory(logFactory);
 
@@ -318,7 +328,7 @@ public class Log4JUtil {
 		}
 	}
 
-	private static void _configureLog4J(
+	private static LoggerContext _configureLog4J(
 		LoggerContext loggerContext, URL... urls) {
 
 		List<XmlConfiguration> configurations = new ArrayList<>();
@@ -331,7 +341,7 @@ public class Log4JUtil {
 			String urlContent = _getURLContent(url);
 
 			if (urlContent == null) {
-				return;
+				return null;
 			}
 
 			try {
@@ -378,7 +388,7 @@ public class Log4JUtil {
 		}
 
 		if (configurations.isEmpty()) {
-			return;
+			return null;
 		}
 
 		CompositeConfiguration compositeConfiguration =
@@ -390,6 +400,8 @@ public class Log4JUtil {
 		else {
 			loggerContext.setConfiguration(compositeConfiguration);
 		}
+
+		return loggerContext;
 	}
 
 	private static String _escapeXMLAttribute(String s) {

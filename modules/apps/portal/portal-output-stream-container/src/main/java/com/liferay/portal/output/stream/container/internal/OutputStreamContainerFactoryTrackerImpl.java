@@ -17,7 +17,6 @@ package com.liferay.portal.output.stream.container.internal;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.osgi.util.ServiceTrackerFactory;
-import com.liferay.petra.log4j.Log4JUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
@@ -187,10 +186,6 @@ public class OutputStreamContainerFactoryTrackerImpl
 
 		_writerAppender.start();
 
-		_portalRootLoggerConfig = Log4JUtil.getRootLogger();
-
-		_portalRootLoggerConfig.addAppender(_writerAppender, null, null);
-
 		_serviceTracker = ServiceTrackerFactory.open(
 			bundleContext, LoggerContext.class,
 			new LoggerConfigServiceTrackerCustomizer());
@@ -244,8 +239,6 @@ public class OutputStreamContainerFactoryTrackerImpl
 		if (_serviceTracker != null) {
 			_serviceTracker.close();
 		}
-
-		_portalRootLoggerConfig.removeAppender(_writerAppender.getName());
 	}
 
 	@Reference(target = ModuleServiceLifecycle.PORTAL_INITIALIZED, unbind = "-")
@@ -266,7 +259,6 @@ public class OutputStreamContainerFactoryTrackerImpl
 	)
 	private volatile OutputStreamContainerFactory _outputStreamContainerFactory;
 
-	private LoggerConfig _portalRootLoggerConfig;
 	private final List<ServiceRegistration<?>> _serviceRegistrations =
 		new ArrayList<>();
 	private volatile ServiceTracker<LoggerContext, LoggerContext>
