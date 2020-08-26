@@ -262,6 +262,8 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 			throw new RuntimeException(exception);
 		}
 
+		InitUtil.registerLoggerContext();
+
 		ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
 
 		ClassLoaderPool.register(_portalServletContextName, portalClassLoader);

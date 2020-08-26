@@ -30,15 +30,22 @@ import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.plugin.PluginPackageUtil;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 import com.liferay.util.portlet.PortletProps;
 
 import java.lang.reflect.Method;
 
 import java.net.URL;
 
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
+
+import org.apache.logging.log4j.core.LoggerContext;
 
 /**
  * @author Jorge Ferrer
@@ -152,6 +159,14 @@ public class PluginPackageHotDeployListener extends BaseHotDeployListener {
 
 		ServletContextPool.remove(servletContextName);
 
+		ServiceRegistration<LoggerContext> loggerContextServiceRegistration =
+			_serviceRegistrations.remove(
+				hotDeployEvent.getContextClassLoader());
+
+		if (loggerContextServiceRegistration != null) {
+			loggerContextServiceRegistration.unregister();
+		}
+
 		destroyServiceComponent(
 			new ServletServiceContextComponentConfiguration(servletContext),
 			hotDeployEvent.getContextClassLoader());
@@ -181,7 +196,15 @@ public class PluginPackageHotDeployListener extends BaseHotDeployListener {
 	}
 
 	protected void initLogger(ClassLoader classLoader) {
-		Log4JUtil.configureLog4J(classLoader);
+		LoggerContext loggerContext = Log4JUtil.initLog4J(classLoader);
+
+		if (loggerContext != null) {
+			Registry registry = RegistryUtil.getRegistry();
+
+			_serviceRegistrations.put(
+				classLoader,
+				registry.registerService(LoggerContext.class, loggerContext));
+		}
 	}
 
 	protected void initPortletProps(ClassLoader classLoader) throws Exception {
@@ -249,5 +272,8 @@ public class PluginPackageHotDeployListener extends BaseHotDeployListener {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		PluginPackageHotDeployListener.class);
+
+	private static final Map<ClassLoader, ServiceRegistration<LoggerContext>>
+		_serviceRegistrations = new ConcurrentHashMap<>();
 
 }
