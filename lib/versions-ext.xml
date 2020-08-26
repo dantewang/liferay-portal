@@ -1819,6 +1819,30 @@
 				</comments>
 			</library>
 			<library>
+				<file-name>lib/portal/jackson-annotations.jar</file-name>
+				<version>2.10.2</version>
+				<project-name>Jackson Annotations</project-name>
+				<project-url>http://github.com/FasterXML/jackson</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>lib/portal/jackson-core.jar</file-name>
+				<version>2.10.2</version>
+				<project-name>Jackson Core</project-name>
+				<project-url>https://github.com/FasterXML/jackson-core</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
 				<file-name>lib/portal/jai-imageio-core.jar</file-name>
 				<version>1.4.0</version>
 				<project-name>Java Advanced Imaging Image I/O Tools API Core (standalone)</project-name>
@@ -1847,6 +1871,30 @@
 				<version>2.10.3.LIFERAY-PATCHED-1</version>
 				<project-name>Jackson Databind</project-name>
 				<project-url>https://github.com/FasterXML/jackson-databind</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>lib/portal/jackson-dataformat-xml.jar</file-name>
+				<version>2.10.2</version>
+				<project-name>Jackson Dataformat XML</project-name>
+				<project-url>https://github.com/FasterXML/jackson-dataformat-xml</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>lib/portal/jackson-module-jaxb-annotations.jar</file-name>
+				<version>2.10.2</version>
+				<project-name>Jackson Module Jaxb Annotations</project-name>
+				<project-url>https://github.com/FasterXML/jackson-modules-base</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License 2.0</license-name>
@@ -3113,6 +3161,18 @@
 				</licenses>
 			</library>
 			<library>
+				<file-name>lib/portal/stax2.jar</file-name>
+				<version>4.2</version>
+				<project-name>Stax2 API</project-name>
+				<project-url>http://github.com/FasterXML/stax2-api</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
 				<file-name>lib/portal/stax-ex.jar</file-name>
 				<version>1.2</version>
 				<project-name>StAX-Ex</project-name>
@@ -3263,6 +3323,18 @@
 					<license>
 						<license-name>BSD Style License</license-name>
 						<license-url>http://en.wikipedia.org/wiki/BSD_licenses</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>lib/portal/woodstox-core.jar</file-name>
+				<version>6.0.3</version>
+				<project-name>Woodstox</project-name>
+				<project-url>https://github.com/FasterXML/woodstox</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
 					</license>
 				</licenses>
 			</library>
