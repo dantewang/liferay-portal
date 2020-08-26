@@ -301,6 +301,12 @@ public class OutputStreamContainerFactoryTrackerImpl
 		public void removedService(
 			ServiceReference<LoggerContext> serviceReference,
 			LoggerContext loggerContext) {
+
+			Configuration configuration = loggerContext.getConfiguration();
+
+			LoggerConfig loggerConfig = configuration.getRootLogger();
+
+			loggerConfig.removeAppender(_writerAppender.getName());
 		}
 
 	}
