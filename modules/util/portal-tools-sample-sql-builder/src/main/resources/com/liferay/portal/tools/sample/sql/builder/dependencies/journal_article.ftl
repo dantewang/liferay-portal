@@ -12,7 +12,7 @@
 
 <#assign ddmTemplateModel = dataFactory.newDefaultJournalDDMTemplateModel(journalArticleClassNameId, ddmStructureClassNameId) />
 
-${dataFactory.toInsertSQL(ddmTemplateModel)}
+${dataFactory.toInsertSQL(ddmTemplateModel, dataFactory.getClassName(ddmTemplateModel))}
 
 ${dataFactory.toInsertSQL(dataFactory.newDefaultJournalDDMTemplateVersionModel(ddmStructureClassNameId))}
 
