@@ -2328,7 +2328,8 @@ public class DataFactory {
 	}
 
 	public FragmentEntryLinkModel newFragmentEntryLinkModel(
-		LayoutModel layoutModel, FragmentEntryModel fragmentEntryModel) {
+		LayoutModel layoutModel, FragmentEntryModel fragmentEntryModel,
+		long classNameId) {
 
 		FragmentEntryLinkModel fragmentEntryLinkModel =
 			new FragmentEntryLinkModelImpl();
@@ -2357,7 +2358,7 @@ public class DataFactory {
 
 		fragmentEntryLinkModel.setFragmentEntryId(
 			fragmentEntryModel.getFragmentEntryId());
-		fragmentEntryLinkModel.setClassNameId(getClassNameId(Layout.class));
+		fragmentEntryLinkModel.setClassNameId(classNameId);
 		fragmentEntryLinkModel.setClassPK(layoutModel.getPlid());
 		fragmentEntryLinkModel.setCss(fragmentEntryModel.getCss());
 		fragmentEntryLinkModel.setHtml(fragmentEntryModel.getHtml());
@@ -2849,7 +2850,7 @@ public class DataFactory {
 	}
 
 	public LayoutPageTemplateStructureModel newLayoutPageTemplateStructureModel(
-		LayoutModel layoutModel) {
+		LayoutModel layoutModel, long classNameId) {
 
 		LayoutPageTemplateStructureModel layoutPageTemplateStructureModel =
 			new LayoutPageTemplateStructureModelImpl();
@@ -2877,8 +2878,7 @@ public class DataFactory {
 
 		// Other fields
 
-		layoutPageTemplateStructureModel.setClassNameId(
-			getClassNameId(Layout.class));
+		layoutPageTemplateStructureModel.setClassNameId(classNameId);
 		layoutPageTemplateStructureModel.setClassPK(layoutModel.getPlid());
 
 		return layoutPageTemplateStructureModel;

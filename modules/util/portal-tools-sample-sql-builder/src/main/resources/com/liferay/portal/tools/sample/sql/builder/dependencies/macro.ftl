@@ -34,7 +34,7 @@
 
 	${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(_layoutModel))}
 
-	<#local fragmentEntryLinkModel = dataFactory.newFragmentEntryLinkModel(_layoutModel, _fragmentEntryModel)>
+	<#local fragmentEntryLinkModel = dataFactory.newFragmentEntryLinkModel(_layoutModel, _fragmentEntryModel, dataFactory.getClassNameId("com.liferay.portal.kernel.model.Layout"))>
 
 	${dataFactory.toInsertSQL(fragmentEntryLinkModel)}
 
@@ -44,7 +44,7 @@
 
 	${dataFactory.toInsertSQL(layoutPageTemplateStructureModel)}
 
-	<#local layoutPageTemplateStructureRelModel = dataFactory.newLayoutPageTemplateStructureRelModel(_layoutModel, layoutPageTemplateStructureModel, fragmentEntryLinkModel)>
+	<#local layoutPageTemplateStructureRelModel = dataFactory.newLayoutPageTemplateStructureRelModel(_layoutModel, layoutPageTemplateStructureModel, fragmentEntryLinkModel, dataFactory.getClassNameId("com.liferay.portal.kernel.model.Layout"))>
 
 	${dataFactory.toInsertSQL(layoutPageTemplateStructureRelModel)}
 </#macro>
