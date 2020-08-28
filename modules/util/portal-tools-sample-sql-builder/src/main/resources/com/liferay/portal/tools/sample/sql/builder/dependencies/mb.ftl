@@ -14,6 +14,7 @@
 		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(mbThreadModel, dataFactory.getClassNameId("com.liferay.message.boards.model.MBThread")))}
 
 		<@insertAssetEntry
+			_assetCategoryModelsMaps=assetCategoryModelsMaps
 			_classNameIds=[dataFactory.getClassNameId("com.liferay.message.boards.model.MBThread")]
 			_entry=mbThreadModel
 		/>
@@ -23,7 +24,10 @@
 		<#assign mbMessageModels = dataFactory.newMBMessageModels(mbThreadModel) />
 
 		<#list mbMessageModels as mbMessageModel>
-			<@insertMBMessage _mbMessageModel=mbMessageModel />
+			<@insertMBMessage
+				_mbMessageAssetCategoryModelsMaps=assetCategoryModelsMaps
+				_mbMessageModel=mbMessageModel
+			/>
 
 			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel, dataFactory.getClassNameId("com.liferay.wiki.model.WikiPage"), dataFactory.getClassNameId("com.liferay.message.boards.model.MBMessage")))}
 		</#list>

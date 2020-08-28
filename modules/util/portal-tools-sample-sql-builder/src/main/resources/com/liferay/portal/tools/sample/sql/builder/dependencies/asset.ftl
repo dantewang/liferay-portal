@@ -1,10 +1,14 @@
-<#assign assetClassNameIds = dataFactory.assetClassNameIds />
+<#assign
+	assetClassNameIds = dataFactory.assetClassNameIds
+	assetVocabularyModelsArray = dataFactory.newAssetVocabularyModelsArray()
+	assetCategoryModelsMaps = dataFactory.newAssetCategoryModelsMaps(assetVocabularyModelsArray, assetClassNameIds)
+/>
 
-<#list dataFactory.newAssetVocabularyModels(dataFactory.newDefaultAssetVocabularyModel()) as assetVocabularyModel>
+<#list dataFactory.newAssetVocabularyModels(dataFactory.newDefaultAssetVocabularyModel(), assetVocabularyModelsArray) as assetVocabularyModel>
 	${dataFactory.toInsertSQL(assetVocabularyModel)}
 </#list>
 
-<#list dataFactory.assetCategoryModels as assetCategoryModel>
+<#list dataFactory.newAssetCategoryModels(assetCategoryModelsMaps) as assetCategoryModel>
 	${dataFactory.toInsertSQL(assetCategoryModel)}
 </#list>
 

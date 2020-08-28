@@ -18,6 +18,7 @@
 		${dataFactory.toInsertSQL(dataFactory.newWikiPageResourceModel(wikiPageModel))}
 
 		<@insertAssetEntry
+			_assetCategoryModelsMaps=assetCategoryModelsMaps
 			_categoryAndTag=true
 			_classNameIds=[wikiPageClassNameId]
 			_entry=wikiPageModel
@@ -30,6 +31,7 @@
 			_classPK=wikiPageModel.resourcePrimKey
 			_groupId=groupId
 			_maxCommentCount=dataFactory.maxWikiPageCommentCount
+			_mbDiscussionAssetCategoryModelsMaps=assetCategoryModelsMaps
 			_mbRootMessageId=mbRootMessageId
 			_mbThreadId=dataFactory.getCounterNext()
 		/>

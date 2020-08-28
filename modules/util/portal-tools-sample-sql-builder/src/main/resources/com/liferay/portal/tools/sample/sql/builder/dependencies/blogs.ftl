@@ -17,6 +17,7 @@
 	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(blogsEntryModel, dataFactory.getClassNameId("com.liferay.message.boards.model.MBDiscussion_com.liferay.blogs.model.BlogsEntry")))}
 
 	<@insertAssetEntry
+		_assetCategoryModelsMaps=assetCategoryModelsMaps
 		_categoryAndTag=true
 		_classNameIds=[blogsEntryClassNameId]
 		_entry=blogsEntryModel
@@ -29,6 +30,7 @@
 		_classPK=blogsEntryModel.entryId
 		_groupId=groupId
 		_maxCommentCount=dataFactory.maxBlogsEntryCommentCount
+		_mbDiscussionAssetCategoryModelsMaps=assetCategoryModelsMaps
 		_mbRootMessageId=mbRootMessageId
 		_mbThreadId=dataFactory.getCounterNext()
 	/>
