@@ -306,6 +306,13 @@ public class DataFactory {
 		_socialActivityCounter = new SimpleCounter();
 		_userScreenNameCounter = new SimpleCounter();
 
+		_administratorRoleId = _counter.get();
+		_guestRoleId = _counter.get();
+		_ownerRoleId = _counter.get();
+		_powerUserRoleId = _counter.get();
+		_siteMemberRoleId = _counter.get();
+		_userRoleId = _counter.get();
+
 		List<String> models = ModelHintsUtil.getModels();
 
 		models.add(Layout.class.getName());
@@ -363,8 +370,8 @@ public class DataFactory {
 		initUserNames();
 	}
 
-	public RoleModel getAdministratorRoleModel() {
-		return _administratorRoleModel;
+	public long getAdministratorRoleId() {
+		return _administratorRoleId;
 	}
 
 	public List<Long> getAssetCategoryIds(AssetEntryModel assetEntryModel) {
@@ -634,8 +641,8 @@ public class DataFactory {
 		return portletPrefix.concat(PortletIdCodec.generateInstanceId());
 	}
 
-	public RoleModel getPowerUserRoleModel() {
-		return _powerUserRoleModel;
+	public long getPowerUserRoleId() {
+		return _powerUserRoleId;
 	}
 
 	public List<RoleModel> getRoleModels() {
@@ -652,8 +659,8 @@ public class DataFactory {
 		return sequence;
 	}
 
-	public RoleModel getUserRoleModel() {
-		return _userRoleModel;
+	public long getUserRoleId() {
+		return _userRoleId;
 	}
 
 	public void initAssetCategoryModels() {
@@ -825,14 +832,15 @@ public class DataFactory {
 		// Administrator
 
 		_administratorRoleModel = newRoleModel(
-			RoleConstants.ADMINISTRATOR, RoleConstants.TYPE_REGULAR);
+			RoleConstants.ADMINISTRATOR, RoleConstants.TYPE_REGULAR,
+			_administratorRoleId);
 
 		_roleModels.add(_administratorRoleModel);
 
 		// Guest
 
 		_guestRoleModel = newRoleModel(
-			RoleConstants.GUEST, RoleConstants.TYPE_REGULAR);
+			RoleConstants.GUEST, RoleConstants.TYPE_REGULAR, _guestRoleId);
 
 		_roleModels.add(_guestRoleModel);
 
@@ -841,33 +849,34 @@ public class DataFactory {
 		_roleModels.add(
 			newRoleModel(
 				RoleConstants.ORGANIZATION_ADMINISTRATOR,
-				RoleConstants.TYPE_ORGANIZATION));
+				RoleConstants.TYPE_ORGANIZATION, _counter.get()));
 
 		// Organization Owner
 
 		_roleModels.add(
 			newRoleModel(
 				RoleConstants.ORGANIZATION_OWNER,
-				RoleConstants.TYPE_ORGANIZATION));
+				RoleConstants.TYPE_ORGANIZATION, _counter.get()));
 
 		// Organization User
 
 		_roleModels.add(
 			newRoleModel(
 				RoleConstants.ORGANIZATION_USER,
-				RoleConstants.TYPE_ORGANIZATION));
+				RoleConstants.TYPE_ORGANIZATION, _counter.get()));
 
 		// Owner
 
 		_ownerRoleModel = newRoleModel(
-			RoleConstants.OWNER, RoleConstants.TYPE_REGULAR);
+			RoleConstants.OWNER, RoleConstants.TYPE_REGULAR, _ownerRoleId);
 
 		_roleModels.add(_ownerRoleModel);
 
 		// Power User
 
 		_powerUserRoleModel = newRoleModel(
-			RoleConstants.POWER_USER, RoleConstants.TYPE_REGULAR);
+			RoleConstants.POWER_USER, RoleConstants.TYPE_REGULAR,
+			_powerUserRoleId);
 
 		_roleModels.add(_powerUserRoleModel);
 
@@ -875,24 +884,28 @@ public class DataFactory {
 
 		_roleModels.add(
 			newRoleModel(
-				RoleConstants.SITE_ADMINISTRATOR, RoleConstants.TYPE_SITE));
+				RoleConstants.SITE_ADMINISTRATOR, RoleConstants.TYPE_SITE,
+				_counter.get()));
 
 		// Site Member
 
 		_siteMemberRoleModel = newRoleModel(
-			RoleConstants.SITE_MEMBER, RoleConstants.TYPE_SITE);
+			RoleConstants.SITE_MEMBER, RoleConstants.TYPE_SITE,
+			_siteMemberRoleId);
 
 		_roleModels.add(_siteMemberRoleModel);
 
 		// Site Owner
 
 		_roleModels.add(
-			newRoleModel(RoleConstants.SITE_OWNER, RoleConstants.TYPE_SITE));
+			newRoleModel(
+				RoleConstants.SITE_OWNER, RoleConstants.TYPE_SITE,
+				_counter.get()));
 
 		// User
 
 		_userRoleModel = newRoleModel(
-			RoleConstants.USER, RoleConstants.TYPE_REGULAR);
+			RoleConstants.USER, RoleConstants.TYPE_REGULAR, _userRoleId);
 
 		_roleModels.add(_userRoleModel);
 	}
@@ -1142,7 +1155,7 @@ public class DataFactory {
 		return newResourcePermissionModel(
 			CommerceCatalog.class.getName(),
 			String.valueOf(commerceCatalogModel.getCommerceCatalogId()),
-			_guestRoleModel.getRoleId(), _sampleUserId);
+			_guestRoleId, _sampleUserId);
 	}
 
 	public GroupModel newCommerceChannelGroupModel(
@@ -3409,7 +3422,7 @@ public class DataFactory {
 				newResourcePermissionModel(
 					AssetVocabulary.class.getName(),
 					String.valueOf(assetVocabularyModel.getVocabularyId()),
-					_ownerRoleModel.getRoleId(), _defaultUserId));
+					_ownerRoleId, _defaultUserId));
 		}
 
 		return newResourcePermissionModels(
@@ -3433,7 +3446,7 @@ public class DataFactory {
 			newResourcePermissionModel(
 				DDLRecordSet.class.getName(),
 				String.valueOf(ddlRecordSetModel.getRecordSetId()),
-				_ownerRoleModel.getRoleId(), _defaultUserId));
+				_ownerRoleId, _defaultUserId));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -3448,15 +3461,12 @@ public class DataFactory {
 		String primKey = String.valueOf(ddmStructureModel.getStructureId());
 
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _guestRoleModel.getRoleId(), 0));
+			newResourcePermissionModel(name, primKey, _guestRoleId, 0));
 		resourcePermissionModels.add(
 			newResourcePermissionModel(
-				name, primKey, _ownerRoleModel.getRoleId(),
-				ddmStructureModel.getUserId()));
+				name, primKey, _ownerRoleId, ddmStructureModel.getUserId()));
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _userRoleModel.getRoleId(), 0));
+			newResourcePermissionModel(name, primKey, _userRoleId, 0));
 
 		return resourcePermissionModels;
 	}
@@ -3473,15 +3483,12 @@ public class DataFactory {
 		String primKey = String.valueOf(ddmTemplateModel.getTemplateId());
 
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _guestRoleModel.getRoleId(), 0));
+			newResourcePermissionModel(name, primKey, _guestRoleId, 0));
 		resourcePermissionModels.add(
 			newResourcePermissionModel(
-				name, primKey, _ownerRoleModel.getRoleId(),
-				ddmTemplateModel.getUserId()));
+				name, primKey, _ownerRoleId, ddmTemplateModel.getUserId()));
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _userRoleModel.getRoleId(), 0));
+			newResourcePermissionModel(name, primKey, _userRoleId, 0));
 
 		return resourcePermissionModels;
 	}
@@ -3508,7 +3515,7 @@ public class DataFactory {
 		return Collections.singletonList(
 			newResourcePermissionModel(
 				Group.class.getName(), String.valueOf(groupModel.getGroupId()),
-				_ownerRoleModel.getRoleId(), _sampleUserId));
+				_ownerRoleId, _sampleUserId));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -3568,7 +3575,7 @@ public class DataFactory {
 		return Collections.singletonList(
 			newResourcePermissionModel(
 				Role.class.getName(), String.valueOf(roleModel.getRoleId()),
-				_ownerRoleModel.getRoleId(), _sampleUserId));
+				_ownerRoleId, _sampleUserId));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -3584,7 +3591,7 @@ public class DataFactory {
 		return Collections.singletonList(
 			newResourcePermissionModel(
 				User.class.getName(), String.valueOf(userModel.getUserId()),
-				_ownerRoleModel.getRoleId(), userModel.getUserId()));
+				_ownerRoleId, userModel.getUserId()));
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -4727,19 +4734,16 @@ public class DataFactory {
 			new ArrayList<>(3);
 
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _guestRoleModel.getRoleId(), 0));
+			newResourcePermissionModel(name, primKey, _guestRoleId, 0));
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _ownerRoleModel.getRoleId(), ownerId));
+			newResourcePermissionModel(name, primKey, _ownerRoleId, ownerId));
 		resourcePermissionModels.add(
-			newResourcePermissionModel(
-				name, primKey, _siteMemberRoleModel.getRoleId(), 0));
+			newResourcePermissionModel(name, primKey, _siteMemberRoleId, 0));
 
 		return resourcePermissionModels;
 	}
 
-	protected RoleModel newRoleModel(String name, int type) {
+	protected RoleModel newRoleModel(String name, int type, long roleId) {
 		RoleModel roleModel = new RoleModelImpl();
 
 		// UUID
@@ -4748,7 +4752,7 @@ public class DataFactory {
 
 		// PK fields
 
-		roleModel.setRoleId(_counter.get());
+		roleModel.setRoleId(roleId);
 
 		// Audit fields
 
@@ -5086,10 +5090,8 @@ public class DataFactory {
 
 	private static final String _SAMPLE_USER_NAME = "Sample";
 
-	private static final PortletPreferencesFactory _portletPreferencesFactory =
-		new PortletPreferencesFactoryImpl();
-
 	private final long _accountId;
+	private final long _administratorRoleId;
 	private RoleModel _administratorRoleModel;
 	private Map<Long, SimpleCounter>[] _assetCategoryCounters;
 	private Map<Long, List<AssetCategoryModel>>[] _assetCategoryModelsMaps;
@@ -5125,6 +5127,7 @@ public class DataFactory {
 	private final SimpleCounter _futureDateCounter;
 	private final long _globalGroupId;
 	private final long _guestGroupId;
+	private final long _guestRoleId;
 	private RoleModel _guestRoleModel;
 	private String _journalArticleContent;
 	private final Map<Long, String> _journalArticleResourceUUIDs =
@@ -5133,16 +5136,22 @@ public class DataFactory {
 	private final String _journalDDMStructureLayoutContent;
 	private List<String> _lastNames;
 	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
+	private final long _ownerRoleId;
 	private RoleModel _ownerRoleModel;
+	private final PortletPreferencesFactory _portletPreferencesFactory =
+		new PortletPreferencesFactoryImpl();
+	private final long _powerUserRoleId;
 	private RoleModel _powerUserRoleModel;
 	private final SimpleCounter _resourcePermissionCounter;
 	private List<RoleModel> _roleModels;
 	private final long _sampleUserId;
 	private final Format _simpleDateFormat;
+	private final long _siteMemberRoleId;
 	private RoleModel _siteMemberRoleModel;
 	private final SimpleCounter _socialActivityCounter;
 	private final SimpleCounter _timeCounter;
 	private final long _userPersonalSiteGroupId;
+	private final long _userRoleId;
 	private RoleModel _userRoleModel;
 	private final SimpleCounter _userScreenNameCounter;
 

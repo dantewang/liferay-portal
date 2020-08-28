@@ -10,7 +10,7 @@
 
 <#assign
 	groupIds = [guestGroupModel.groupId]
-	roleIds = [dataFactory.administratorRoleModel.roleId]
+	roleIds = [dataFactory.administratorRoleId]
 />
 
 <@insertUser
@@ -35,7 +35,7 @@
 
 <#assign
 	groupIds = dataFactory.getSequence(dataFactory.maxGroupCount)
-	roleIds = [dataFactory.administratorRoleModel.roleId, dataFactory.powerUserRoleModel.roleId, dataFactory.userRoleModel.roleId]
+	roleIds = [dataFactory.administratorRoleId, dataFactory.powerUserRoleId, dataFactory.userRoleId]
 />
 
 <@insertUser
