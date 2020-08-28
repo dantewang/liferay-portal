@@ -75,7 +75,6 @@ import com.liferay.dynamic.data.lists.model.impl.DDLRecordVersionModelImpl;
 import com.liferay.dynamic.data.mapping.constants.DDMPortletKeys;
 import com.liferay.dynamic.data.mapping.constants.DDMStructureConstants;
 import com.liferay.dynamic.data.mapping.constants.DDMTemplateConstants;
-import com.liferay.dynamic.data.mapping.model.DDMContent;
 import com.liferay.dynamic.data.mapping.model.DDMContentModel;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLink;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLinkModel;
@@ -524,10 +523,6 @@ public class DataFactory {
 
 	public long getDefaultDLDDMStructureId() {
 		return _defaultDLDDMStructureId;
-	}
-
-	public long getDLFileEntryClassNameId() {
-		return getClassNameId(DLFileEntry.class);
 	}
 
 	public long getJournalArticleClassNameId() {
@@ -1952,7 +1947,7 @@ public class DataFactory {
 
 	public DDMStorageLinkModel newDDMStorageLinkModel(
 		long ddmStorageLinkId, DDMContentModel ddmContentModel,
-		long structureId) {
+		long structureId, long classNameId) {
 
 		DDMStorageLinkModel ddmStorageLinkModel = new DDMStorageLinkModelImpl();
 
@@ -1966,7 +1961,7 @@ public class DataFactory {
 
 		// Other fields
 
-		ddmStorageLinkModel.setClassNameId(getClassNameId(DDMContent.class));
+		ddmStorageLinkModel.setClassNameId(classNameId);
 		ddmStorageLinkModel.setClassPK(ddmContentModel.getContentId());
 		ddmStorageLinkModel.setStructureId(structureId);
 		ddmStorageLinkModel.setStructureVersionId(
@@ -2076,9 +2071,9 @@ public class DataFactory {
 			_dlDDMStructureLayoutContent);
 	}
 
-	public DDMStructureModel newDefaultDLDDMStructureModel() {
+	public DDMStructureModel newDefaultDLDDMStructureModel(long classNameId) {
 		return newDDMStructureModel(
-			_globalGroupId, _defaultUserId, getClassNameId(DLFileEntry.class),
+			_globalGroupId, _defaultUserId, classNameId,
 			RawMetadataProcessor.TIKA_RAW_METADATA, _dlDDMStructureContent,
 			_defaultDLDDMStructureId);
 	}
