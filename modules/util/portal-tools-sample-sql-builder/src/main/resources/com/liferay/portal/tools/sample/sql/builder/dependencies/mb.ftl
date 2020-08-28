@@ -11,7 +11,7 @@
 	<#list mbThreadModels as mbThreadModel>
 		${dataFactory.toInsertSQL(mbThreadModel)}
 
-		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(mbThreadModel))}
+		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(mbThreadModel, dataFactory.getClassNameId("com.liferay.message.boards.model.MBThread")))}
 
 		<@insertAssetEntry
 			_classNameIds=[dataFactory.getClassNameId("com.liferay.message.boards.model.MBThread")]

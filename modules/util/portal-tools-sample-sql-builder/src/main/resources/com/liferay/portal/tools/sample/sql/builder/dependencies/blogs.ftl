@@ -35,7 +35,7 @@ ${dataFactory.toInsertSQL(dataFactory.newUserNotificationDeliveryModel("com_life
 		_mbThreadId=dataFactory.getCounterNext()
 	/>
 
-	${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(blogsEntryModel))}
+	${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(blogsEntryModel, blogsEntryClassNameId))}
 
 	${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(blogsEntryModel, blogsEntryClassNameId))}
 
