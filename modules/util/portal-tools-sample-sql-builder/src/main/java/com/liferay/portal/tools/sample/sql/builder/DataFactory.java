@@ -3595,25 +3595,25 @@ public class DataFactory {
 	}
 
 	public SocialActivityModel newSocialActivityModel(
-		BlogsEntryModel blogsEntryModel) {
+		BlogsEntryModel blogsEntryModel, long classNameId) {
 
 		return newSocialActivityModel(
-			blogsEntryModel.getGroupId(), getClassNameId(BlogsEntry.class),
+			blogsEntryModel.getGroupId(), classNameId,
 			blogsEntryModel.getEntryId(), BlogsActivityKeys.ADD_ENTRY,
 			"{\"title\":\"" + blogsEntryModel.getTitle() + "\"}");
 	}
 
 	public SocialActivityModel newSocialActivityModel(
-		DLFileEntryModel dlFileEntryModel) {
+		DLFileEntryModel dlFileEntryModel, long classNameId) {
 
 		return newSocialActivityModel(
-			dlFileEntryModel.getGroupId(), getClassNameId(DLFileEntry.class),
+			dlFileEntryModel.getGroupId(), classNameId,
 			dlFileEntryModel.getFileEntryId(), DLActivityKeys.ADD_FILE_ENTRY,
 			StringPool.BLANK);
 	}
 
 	public SocialActivityModel newSocialActivityModel(
-		JournalArticleModel journalArticleModel) {
+		JournalArticleModel journalArticleModel, long classNameId) {
 
 		int type = JournalActivityKeys.UPDATE_ARTICLE;
 
@@ -3624,14 +3624,14 @@ public class DataFactory {
 		}
 
 		return newSocialActivityModel(
-			journalArticleModel.getGroupId(),
-			getClassNameId(JournalArticle.class),
+			journalArticleModel.getGroupId(), classNameId,
 			journalArticleModel.getResourcePrimKey(), type,
 			"{\"title\":\"" + journalArticleModel.getUrlTitle() + "\"}");
 	}
 
 	public SocialActivityModel newSocialActivityModel(
-		MBMessageModel mbMessageModel) {
+		MBMessageModel mbMessageModel, long wikiPageClassNameId,
+		long mbMessageClassNameId) {
 
 		long classNameId = mbMessageModel.getClassNameId();
 		long classPK = mbMessageModel.getClassPK();
@@ -3639,7 +3639,7 @@ public class DataFactory {
 		int type = 0;
 		String extraData = null;
 
-		if (classNameId == getClassNameId(WikiPage.class)) {
+		if (classNameId == wikiPageClassNameId) {
 			extraData = "{\"version\":1}";
 
 			type = WikiActivityKeys.ADD_PAGE;
@@ -3649,7 +3649,7 @@ public class DataFactory {
 
 			type = MBActivityKeys.ADD_MESSAGE;
 
-			classNameId = getClassNameId(MBMessage.class);
+			classNameId = mbMessageClassNameId;
 			classPK = mbMessageModel.getMessageId();
 		}
 		else {
