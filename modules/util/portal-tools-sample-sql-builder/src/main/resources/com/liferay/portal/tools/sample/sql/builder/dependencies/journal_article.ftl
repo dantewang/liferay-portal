@@ -1,4 +1,8 @@
-<#assign ddmStructureModel = dataFactory.newDefaultJournalDDMStructureModel() />
+<#assign
+	journalArticleClassNameId = dataFactory.getClassNameId("com.liferay.journal.model.JournalArticle")
+	ddmStructureClassNameId = dataFactory.getClassNameId("com.liferay.dynamic.data.mapping.model.DDMStructure")
+	ddmStructureModel = dataFactory.newDefaultJournalDDMStructureModel(journalArticleClassNameId)
+/>
 
 <@insertDDMStructure
 	_ddmStructureLayoutModel=dataFactory.newDefaultJournalDDMStructureLayoutModel()
@@ -6,11 +10,11 @@
 	_ddmStructureVersionModel=dataFactory.newDefaultJournalDDMStructureVersionModel(ddmStructureModel)
 />
 
-<#assign ddmTemplateModel = dataFactory.newDefaultJournalDDMTemplateModel() />
+<#assign ddmTemplateModel = dataFactory.newDefaultJournalDDMTemplateModel(journalArticleClassNameId, ddmStructureClassNameId) />
 
 ${dataFactory.toInsertSQL(ddmTemplateModel)}
 
-${dataFactory.toInsertSQL(dataFactory.newDefaultJournalDDMTemplateVersionModel())}
+${dataFactory.toInsertSQL(dataFactory.newDefaultJournalDDMTemplateVersionModel(ddmStructureClassNameId))}
 
 <#assign
 	journalArticlePageCounts = dataFactory.getSequence(dataFactory.maxJournalArticlePageCount)
@@ -57,9 +61,9 @@ ${dataFactory.toInsertSQL(dataFactory.newDefaultJournalDDMTemplateVersionModel()
 
 			${dataFactory.toInsertSQL(journalArticleLocalizationModel)}
 
-			${dataFactory.toInsertSQL(dataFactory.newDDMTemplateLinkModel(journalArticleModel, ddmTemplateModel.templateId))}
+			${dataFactory.toInsertSQL(dataFactory.newDDMTemplateLinkModel(journalArticleModel, ddmTemplateModel.templateId, journalArticleClassNameId))}
 
-			${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(journalArticleModel, ddmStructureModel.structureId))}
+			${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(journalArticleModel, ddmStructureModel.structureId, journalArticleClassNameId))}
 
 			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(journalArticleModel))}
 
@@ -73,7 +77,7 @@ ${dataFactory.toInsertSQL(dataFactory.newDefaultJournalDDMTemplateVersionModel()
 		</#list>
 
 		<@insertMBDiscussion
-			_classNameId=dataFactory.journalArticleClassNameId
+			_classNameId=journalArticleClassNameId
 			_classPK=journalArticleResourceModel.resourcePrimKey
 			_groupId=groupId
 			_maxCommentCount=0
