@@ -36,7 +36,6 @@ import com.liferay.commerce.product.model.CPDefinitionModel;
 import com.liferay.commerce.product.model.CPFriendlyURLEntryModel;
 import com.liferay.commerce.product.model.CPInstanceModel;
 import com.liferay.commerce.product.model.CPTaxCategoryModel;
-import com.liferay.commerce.product.model.CProduct;
 import com.liferay.commerce.product.model.CProductModel;
 import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.model.CommerceCatalogModel;
@@ -1535,10 +1534,10 @@ public class DataFactory {
 	}
 
 	public CPFriendlyURLEntryModel newCPFriendlyURLEntryModel(
-		CProductModel cProductModel) {
+		CProductModel cProductModel, long classNameId) {
 
 		return newCPFriendlyURLEntryModel(
-			0, getClassNameId(CProduct.class), cProductModel.getCProductId(),
+			0, classNameId, cProductModel.getCProductId(),
 			FriendlyURLNormalizerUtil.normalizeWithPeriodsAndSlashes(
 				"Definition " + cProductModel.getPublishedCPDefinitionId()));
 	}
