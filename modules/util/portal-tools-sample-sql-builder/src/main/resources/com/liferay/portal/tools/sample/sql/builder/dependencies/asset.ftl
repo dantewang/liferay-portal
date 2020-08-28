@@ -1,3 +1,5 @@
+<#assign assetClassNameIds = dataFactory.assetClassNameIds />
+
 <#list dataFactory.assetVocabularyModels as assetVocabularyModel>
 	${dataFactory.toInsertSQL(assetVocabularyModel)}
 </#list>

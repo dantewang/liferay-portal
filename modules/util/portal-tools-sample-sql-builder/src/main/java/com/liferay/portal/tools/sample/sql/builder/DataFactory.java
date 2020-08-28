@@ -426,6 +426,23 @@ public class DataFactory {
 		return allAssetCategoryModels;
 	}
 
+	public long[] getAssetClassNameIds() {
+		long[] assetClassNameIds = new long[3];
+
+		ClassNameModel blogEntrysClassNameModel = _classNameModels.get(
+			BlogsEntry.class.getName());
+		ClassNameModel journalArticleClassNameModel = _classNameModels.get(
+			JournalArticle.class.getName());
+		ClassNameModel wikiPageClassNameModel = _classNameModels.get(
+			WikiPage.class.getName());
+
+		assetClassNameIds[0] = blogEntrysClassNameModel.getClassNameId();
+		assetClassNameIds[1] = journalArticleClassNameModel.getClassNameId();
+		assetClassNameIds[2] = wikiPageClassNameModel.getClassNameId();
+
+		return assetClassNameIds;
+	}
+
 	public List<Long> getAssetTagIds(AssetEntryModel assetEntryModel) {
 		Map<Long, List<AssetTagModel>> assetTagModelsMap =
 			_assetTagModelsMaps[(int)assetEntryModel.getGroupId() - 1];
@@ -637,15 +654,16 @@ public class DataFactory {
 		return groupIds;
 	}
 
-	public long getNextAssetClassNameId(long groupId) {
+	public long getNextAssetClassNameId(
+		long groupId, long[] assetClassNameIds) {
+
 		Integer index = _assetClassNameIdsIndexes.get(groupId);
 
 		if (index == null) {
 			index = 0;
 		}
 
-		long classNameId =
-			_assetClassNameIds[index % _assetClassNameIds.length];
+		long classNameId = assetClassNameIds[index % assetClassNameIds.length];
 
 		_assetClassNameIdsIndexes.put(groupId, ++index);
 
@@ -3135,7 +3153,8 @@ public class DataFactory {
 	}
 
 	public PortletPreferencesModel newPortletPreferencesModel(
-			long plid, long groupId, String portletId, int currentIndex)
+			long plid, long groupId, String portletId, int currentIndex,
+			long[] assetClassNameIds)
 		throws Exception {
 
 		if (currentIndex == 1) {
@@ -3162,7 +3181,8 @@ public class DataFactory {
 				_assetCategoryModelsMaps[(int)groupId - 1];
 
 			List<AssetCategoryModel> assetCategoryModels =
-				assetCategoryModelsMap.get(getNextAssetClassNameId(groupId));
+				assetCategoryModelsMap.get(
+					getNextAssetClassNameId(groupId, assetClassNameIds));
 
 			if ((assetCategoryModels == null) ||
 				assetCategoryModels.isEmpty()) {
@@ -3179,7 +3199,7 @@ public class DataFactory {
 				_assetTagModelsMaps[(int)groupId - 1];
 
 			List<AssetTagModel> assetTagModels = assetTagModelsMap.get(
-				getNextAssetClassNameId(groupId));
+				getNextAssetClassNameId(groupId, assetClassNameIds));
 
 			if ((assetTagModels == null) || assetTagModels.isEmpty()) {
 				return newPortletPreferencesModel(
