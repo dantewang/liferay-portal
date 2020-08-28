@@ -650,10 +650,6 @@ public class DataFactory {
 		return _userRoleModel;
 	}
 
-	public long getWikiPageClassNameId() {
-		return getClassNameId(WikiPage.class);
-	}
-
 	public void initAssetCategoryModels() {
 		_assetCategoryModelsMaps =
 			(Map<Long, List<AssetCategoryModel>>[])

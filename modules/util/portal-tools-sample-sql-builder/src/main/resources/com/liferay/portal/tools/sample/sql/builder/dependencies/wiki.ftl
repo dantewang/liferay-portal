@@ -26,7 +26,7 @@
 		<#assign mbRootMessageId = dataFactory.getCounterNext() />
 
 		<@insertMBDiscussion
-			_classNameId=dataFactory.wikiPageClassNameId
+			_classNameId=wikiPageClassNameId
 			_classPK=wikiPageModel.resourcePrimKey
 			_groupId=groupId
 			_maxCommentCount=dataFactory.maxWikiPageCommentCount
