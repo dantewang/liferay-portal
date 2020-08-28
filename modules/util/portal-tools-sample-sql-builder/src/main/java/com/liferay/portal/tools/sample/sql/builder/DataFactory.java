@@ -139,7 +139,6 @@ import com.liferay.message.boards.model.MBMailingListModel;
 import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.model.MBMessageModel;
 import com.liferay.message.boards.model.MBStatsUserModel;
-import com.liferay.message.boards.model.MBThread;
 import com.liferay.message.boards.model.MBThreadFlagModel;
 import com.liferay.message.boards.model.MBThreadModel;
 import com.liferay.message.boards.model.impl.MBCategoryModelImpl;
@@ -3671,20 +3670,22 @@ public class DataFactory {
 	}
 
 	public SubscriptionModel newSubscriptionModel(
-		BlogsEntryModel blogsEntryModel) {
+		BlogsEntryModel blogsEntryModel, long classNameId) {
 
-		return newSubscriptionModel(
-			getClassNameId(BlogsEntry.class), blogsEntryModel.getEntryId());
+		return newSubscriptionModel(classNameId, blogsEntryModel.getEntryId());
 	}
 
-	public SubscriptionModel newSubscriptionModel(MBThreadModel mBThreadModel) {
-		return newSubscriptionModel(
-			getClassNameId(MBThread.class), mBThreadModel.getThreadId());
+	public SubscriptionModel newSubscriptionModel(
+		MBThreadModel mBThreadModel, long classNameId) {
+
+		return newSubscriptionModel(classNameId, mBThreadModel.getThreadId());
 	}
 
-	public SubscriptionModel newSubscriptionModel(WikiPageModel wikiPageModel) {
+	public SubscriptionModel newSubscriptionModel(
+		WikiPageModel wikiPageModel, long classNameId) {
+
 		return newSubscriptionModel(
-			getClassNameId(WikiPage.class), wikiPageModel.getResourcePrimKey());
+			classNameId, wikiPageModel.getResourcePrimKey());
 	}
 
 	public List<UserModel> newUserModels() {
