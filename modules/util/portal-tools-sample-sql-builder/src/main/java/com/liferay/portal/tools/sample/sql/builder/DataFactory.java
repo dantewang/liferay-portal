@@ -53,7 +53,6 @@ import com.liferay.counter.model.impl.CounterModelImpl;
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFileEntryConstants;
-import com.liferay.document.library.kernel.model.DLFileEntryMetadata;
 import com.liferay.document.library.kernel.model.DLFileEntryMetadataModel;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
 import com.liferay.document.library.kernel.model.DLFileEntryTypeConstants;
@@ -1684,7 +1683,9 @@ public class DataFactory {
 			ddmStructureVersionModel.getStructureVersionId(), sb.toString());
 	}
 
-	public DDMStructureModel newDDLDDMStructureModel(long groupId) {
+	public DDMStructureModel newDDLDDMStructureModel(
+		long groupId, long classNameId) {
+
 		StringBundler sb = new StringBundler(
 			3 + (BenchmarksPropsValues.MAX_DDL_CUSTOM_FIELD_COUNT * 9));
 
@@ -1712,8 +1713,8 @@ public class DataFactory {
 		sb.append("]}");
 
 		return newDDMStructureModel(
-			groupId, _sampleUserId, getClassNameId(DDLRecordSet.class),
-			"Test DDM Structure", sb.toString(), _counter.get());
+			groupId, _sampleUserId, classNameId, "Test DDM Structure",
+			sb.toString(), _counter.get());
 	}
 
 	public List<PortletPreferencesModel> newDDLPortletPreferencesModels(
@@ -1960,20 +1961,18 @@ public class DataFactory {
 	}
 
 	public DDMStructureLinkModel newDDMStructureLinkModel(
-		DDLRecordSetModel ddlRecordSetModel) {
+		DDLRecordSetModel ddlRecordSetModel, long classNameId) {
 
 		return newDDMStructureLinkModel(
-			getClassNameId(DDLRecordSet.class),
-			ddlRecordSetModel.getRecordSetId(),
+			classNameId, ddlRecordSetModel.getRecordSetId(),
 			ddlRecordSetModel.getDDMStructureId());
 	}
 
 	public DDMStructureLinkModel newDDMStructureLinkModel(
-		DLFileEntryMetadataModel dLFileEntryMetadataModel) {
+		DLFileEntryMetadataModel dLFileEntryMetadataModel, long classNameId) {
 
 		return newDDMStructureLinkModel(
-			getClassNameId(DLFileEntryMetadata.class),
-			dLFileEntryMetadataModel.getFileEntryMetadataId(),
+			classNameId, dLFileEntryMetadataModel.getFileEntryMetadataId(),
 			dLFileEntryMetadataModel.getDDMStructureId());
 	}
 
