@@ -508,6 +508,12 @@ public class DataFactory {
 		return classNameModel.getClassNameId();
 	}
 
+	public long getClassNameId(String className) {
+		ClassNameModel classNameModel = _classNameModels.get(className);
+
+		return classNameModel.getClassNameId();
+	}
+
 	public Collection<ClassNameModel> getClassNameModels() {
 		return _classNameModels.values();
 	}
