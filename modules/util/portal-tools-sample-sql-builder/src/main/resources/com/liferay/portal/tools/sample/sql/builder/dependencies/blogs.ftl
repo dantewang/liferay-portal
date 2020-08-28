@@ -20,6 +20,7 @@ ${dataFactory.toInsertSQL(dataFactory.newUserNotificationDeliveryModel("com_life
 
 	<@insertAssetEntry
 		_assetCategoryModelsMaps=assetCategoryModelsMaps
+		_assetTagModelsMaps=assetTagModelsMaps
 		_categoryAndTag=true
 		_classNameIds=[blogsEntryClassNameId]
 		_entry=blogsEntryModel
@@ -33,6 +34,7 @@ ${dataFactory.toInsertSQL(dataFactory.newUserNotificationDeliveryModel("com_life
 		_groupId=groupId
 		_maxCommentCount=dataFactory.maxBlogsEntryCommentCount
 		_mbDiscussionAssetCategoryModelsMaps=assetCategoryModelsMaps
+		_mbDiscussionAssetTagModelsMaps=assetTagModelsMaps
 		_mbRootMessageId=mbRootMessageId
 		_mbThreadId=dataFactory.getCounterNext()
 	/>

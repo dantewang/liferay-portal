@@ -21,5 +21,5 @@
 		${dataFactory.toInsertSQL(portletPreferencesModel)}
 	</#list>
 
-	${dataFactory.toInsertSQL(dataFactory.newPortletPreferencesModel(layoutModel.plid, groupId, portletId, pageCount, assetClassNameIds, assetCategoryModelsMaps))}
+	${dataFactory.toInsertSQL(dataFactory.newPortletPreferencesModel(layoutModel.plid, groupId, portletId, pageCount, assetClassNameIds, assetCategoryModelsMaps, assetTagModelsMaps))}
 </#list>
