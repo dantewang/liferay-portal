@@ -66,6 +66,7 @@ ${dataFactory.toInsertSQL(dataFactory.newDefaultJournalDDMTemplateVersionModel()
 			<#if versionCount = dataFactory.maxJournalArticleVersionCount>
 				<@insertAssetEntry
 					_categoryAndTag=true
+					_classNameIds=[dataFactory.getClassNameId("com.liferay.journal.model.JournalArticle")]
 					_entry=dataFactory.newObjectValuePair(journalArticleModel, journalArticleLocalizationModel)
 				/>
 			</#if>
