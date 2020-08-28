@@ -126,7 +126,7 @@
 					_mbThreadId=dataFactory.getCounterNext()
 				/>
 
-				${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(dlFileEntryModel))}
+				${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(dlFileEntryModel, dataFactory.getClassNameId("com.liferay.document.library.kernel.model.DLFileEntry")))}
 
 				<#local dlFileEntryMetadataModel = dataFactory.newDLFileEntryMetadataModel(ddmStorageLinkId, _ddmStructureId, dlFileVersionModel)>
 
@@ -188,7 +188,7 @@
 	<#list mbMessageModels as mbMessageModel>
 		<@insertMBMessage _mbMessageModel=mbMessageModel />
 
-		${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel))}
+		${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel, dataFactory.getClassNameId("com.liferay.wiki.model.WikiPage"), dataFactory.getClassNameId("com.liferay.message.boards.model.MBMessage")))}
 	</#list>
 
 	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionModel(_groupId, _classNameId, _classPK, _mbThreadId))}

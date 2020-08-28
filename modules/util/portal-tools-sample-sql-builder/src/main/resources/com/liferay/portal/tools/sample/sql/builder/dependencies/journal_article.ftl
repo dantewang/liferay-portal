@@ -65,7 +65,7 @@ ${dataFactory.toInsertSQL(dataFactory.newDefaultJournalDDMTemplateVersionModel(d
 
 			${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(journalArticleModel, ddmStructureModel.structureId, journalArticleClassNameId))}
 
-			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(journalArticleModel))}
+			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(journalArticleModel, journalArticleClassNameId))}
 
 			<#if versionCount = dataFactory.maxJournalArticleVersionCount>
 				<@insertAssetEntry
