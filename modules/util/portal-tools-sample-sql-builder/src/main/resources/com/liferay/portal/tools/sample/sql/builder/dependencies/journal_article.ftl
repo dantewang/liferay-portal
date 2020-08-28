@@ -52,6 +52,7 @@
 			<#if versionCount = dataFactory.maxJournalArticleVersionCount>
 				<@insertAssetEntry
 					_assetCategoryModelsMaps=assetCategoryModelsMaps
+					_assetTagModelsMaps=assetTagModelsMaps
 					_categoryAndTag=true
 					_classNameIds=[dataFactory.getClassNameId("com.liferay.journal.model.JournalArticle")]
 					_entry=dataFactory.newObjectValuePair(journalArticleModel, journalArticleLocalizationModel)
@@ -65,6 +66,7 @@
 			_groupId=groupId
 			_maxCommentCount=0
 			_mbDiscussionAssetCategoryModelsMaps=assetCategoryModelsMaps
+			_mbDiscussionAssetTagModelsMaps=assetTagModelsMaps
 			_mbRootMessageId=dataFactory.getCounterNext()
 			_mbThreadId=dataFactory.getCounterNext()
 		/>

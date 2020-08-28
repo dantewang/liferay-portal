@@ -18,6 +18,7 @@
 
 	<@insertAssetEntry
 		_assetCategoryModelsMaps=assetCategoryModelsMaps
+		_assetTagModelsMaps=assetTagModelsMaps
 		_categoryAndTag=true
 		_classNameIds=[blogsEntryClassNameId]
 		_entry=blogsEntryModel
@@ -31,6 +32,7 @@
 		_groupId=groupId
 		_maxCommentCount=dataFactory.maxBlogsEntryCommentCount
 		_mbDiscussionAssetCategoryModelsMaps=assetCategoryModelsMaps
+		_mbDiscussionAssetTagModelsMaps=assetTagModelsMaps
 		_mbRootMessageId=mbRootMessageId
 		_mbThreadId=dataFactory.getCounterNext()
 	/>
