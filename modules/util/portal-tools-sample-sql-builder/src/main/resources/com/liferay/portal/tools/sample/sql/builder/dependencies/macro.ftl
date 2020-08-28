@@ -2,9 +2,10 @@
 
 <#macro insertAssetEntry
 	_entry
+	_classNameIds = []
 	_categoryAndTag = false
 >
-	<#local assetEntryModel = dataFactory.newAssetEntryModel(_entry)>
+	<#local assetEntryModel = dataFactory.newAssetEntryModel(_entry, _classNameIds)>
 
 	${dataFactory.toInsertSQL(assetEntryModel)}
 
@@ -89,7 +90,10 @@
 		<#list dlFolderModels as dlFolderModel>
 			${dataFactory.toInsertSQL(dlFolderModel)}
 
-			<@insertAssetEntry _entry=dlFolderModel />
+			<@insertAssetEntry
+				_classNameIds=[dataFactory.getClassNameId("com.liferay.document.library.kernel.model.DLFolder")]
+				_entry=dlFolderModel
+			/>
 
 			<#local dlFileEntryModels = dataFactory.newDlFileEntryModels(dlFolderModel)>
 
@@ -100,7 +104,10 @@
 
 				${dataFactory.toInsertSQL(dlFileVersionModel)}
 
-				<@insertAssetEntry _entry=dlFileEntryModel />
+				<@insertAssetEntry
+					_classNameIds=[dataFactory.getClassNameId("com.liferay.document.library.kernel.model.DLFileEntry")]
+					_entry=dlFileEntryModel
+				/>
 
 				<#local ddmStorageLinkId = dataFactory.getCounterNext()>
 
@@ -192,7 +199,10 @@
 >
 	${dataFactory.toInsertSQL(_mbMessageModel)}
 
-	<@insertAssetEntry _entry=_mbMessageModel />
+	<@insertAssetEntry
+		_classNameIds=[dataFactory.getClassNameId("com.liferay.message.boards.model.MBDiscussion"), dataFactory.getClassNameId("com.liferay.message.boards.model.MBMessage")]
+		_entry=_mbMessageModel
+	/>
 </#macro>
 
 <#macro insertUser
