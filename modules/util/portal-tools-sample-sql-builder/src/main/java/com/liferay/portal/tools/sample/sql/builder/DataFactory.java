@@ -321,11 +321,6 @@ public class DataFactory {
 			_classNameModels.put(model, classNameModel);
 		}
 
-		_assetClassNameIds = new long[] {
-			getClassNameId(BlogsEntry.class),
-			getClassNameId(JournalArticle.class), getClassNameId(WikiPage.class)
-		};
-
 		_accountId = _counter.get();
 		_companyId = _counter.get();
 		_defaultDLDDMStructureId = _counter.get();
@@ -5110,7 +5105,6 @@ public class DataFactory {
 	private final long _accountId;
 	private final long _administratorRoleId;
 	private Map<Long, SimpleCounter>[] _assetCategoryCounters;
-	private final long[] _assetClassNameIds;
 	private final Map<Long, Integer> _assetClassNameIdsIndexes =
 		new HashMap<>();
 	private final Map<Long, Integer> _assetPublisherQueryStartIndexes =
