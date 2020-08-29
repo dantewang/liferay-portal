@@ -3,7 +3,7 @@
 
 	commerceCatalogModel = dataFactory.newCommerceCatalogModel(commerceCurrencyModel)
 
-	commerceCatalogGroupModel = dataFactory.newCommerceCatalogGroupModel(commerceCatalogModel)
+	commerceCatalogGroupModel = dataFactory.newCommerceCatalogGroupModel(commerceCatalogModel, dataFactory.getClassNameId("com.liferay.commerce.product.model.CommerceCatalog"))
 	commerceChannelModel = dataFactory.newCommerceChannelModel(commerceCurrencyModel)
 	cpTaxCategoryModel = dataFactory.newCPTaxCategoryModel()
 />
@@ -42,4 +42,4 @@ ${dataFactory.toInsertSQL(cpTaxCategoryModel)}
 
 <@insertGroup _groupModel=commerceCatalogGroupModel />
 
-<@insertGroup _groupModel=dataFactory.newCommerceChannelGroupModel(commerceChannelModel) />
+<@insertGroup _groupModel=dataFactory.newCommerceChannelGroupModel(commerceChannelModel, dataFactory.getClassNameId("com.liferay.commerce.product.model.CommerceChannel")) />

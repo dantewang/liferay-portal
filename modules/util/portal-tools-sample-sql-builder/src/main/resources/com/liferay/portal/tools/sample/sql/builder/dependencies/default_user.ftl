@@ -6,7 +6,7 @@
 
 <#assign guestUserModel = dataFactory.newGuestUserModel() />
 
-<@insertGroup _groupModel=dataFactory.newGroupModel(guestUserModel) />
+<@insertGroup _groupModel=dataFactory.newGroupModel(guestUserModel, userClassNameId) />
 
 <#assign
 	groupIds = [guestGroupModel.groupId]
@@ -24,7 +24,7 @@
 <#assign
 	sampleUserModel = dataFactory.newSampleUserModel()
 
-	userGroupModel = dataFactory.newGroupModel(sampleUserModel)
+	userGroupModel = dataFactory.newGroupModel(sampleUserModel, userClassNameId)
 
 	layoutModel = dataFactory.newLayoutModel(userGroupModel.groupId, "home", "", "")
 />
