@@ -212,7 +212,7 @@
 >
 	${dataFactory.toInsertSQL(_userModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newContactModel(_userModel))}
+	${dataFactory.toInsertSQL(dataFactory.newContactModel(_userModel, dataFactory.getClassNameId("com.liferay.portal.kernel.model.User")))}
 
 	<#list _roleIds as roleId>
 		${dataFactory.toInsertSQL("Users_Roles", 0, roleId, _userModel.userId)}
