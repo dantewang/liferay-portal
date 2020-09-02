@@ -134,7 +134,6 @@ import com.liferay.layout.page.template.model.LayoutPageTemplateStructureModel;
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructureRelModel;
 import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureModelImpl;
 import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureRelModelImpl;
-import com.liferay.layout.util.template.LayoutData;
 import com.liferay.login.web.constants.LoginPortletKeys;
 import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.constants.MBMessageConstants;
@@ -164,7 +163,6 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.metadata.RawMetadataProcessor;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.BaseModel;
@@ -2578,20 +2576,8 @@ public class DataFactory {
 				getLayoutPageTemplateStructureId());
 		layoutPageTemplateStructureRelModel.setSegmentsExperienceId(0L);
 
-		LayoutData layoutData = LayoutData.of(
-			layoutModel.toEscapedModel(),
-			layoutRow -> layoutRow.addLayoutColumns(
-				layoutColumn -> {
-					List<Long> fragmentEntryLinkIds =
-						layoutColumn.getFragmentEntryLinkIds();
-
-					fragmentEntryLinkIds.add(
-						fragmentEntryLinkModel.getFragmentEntryLinkId());
-				}));
-
-		JSONObject jsonObject = layoutData.getLayoutDataJSONObject();
-
-		layoutPageTemplateStructureRelModel.setData(jsonObject.toString());
+		layoutPageTemplateStructureRelModel.setData(
+			_generateJsonData(fragmentEntryLinkModel));
 
 		return layoutPageTemplateStructureRelModel;
 	}
@@ -4348,6 +4334,25 @@ public class DataFactory {
 		catch (ReflectiveOperationException reflectiveOperationException) {
 			ReflectionUtil.throwException(reflectiveOperationException);
 		}
+	}
+
+	private String _generateJsonData(
+		FragmentEntryLinkModel fragmentEntryLinkModel) {
+
+		String data = null;
+
+		try {
+			data = _readFile("fragment-journal-layout-definition.json");
+			data = StringUtil.replace(
+				data, "${fragmentEntryLinkId}",
+				String.valueOf(
+					fragmentEntryLinkModel.getFragmentEntryLinkId()));
+		}
+		catch (Exception exception) {
+			exception.printStackTrace();
+		}
+
+		return data;
 	}
 
 	private String _getMBDiscussionCombinedClassName(Class<?> clazz) {
