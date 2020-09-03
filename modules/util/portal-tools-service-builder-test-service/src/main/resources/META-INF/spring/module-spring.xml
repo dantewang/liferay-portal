@@ -27,6 +27,7 @@
 	<bean class="com.liferay.portal.tools.service.builder.test.service.persistence.impl.ManyColumnsEntryPersistenceImpl" id="com.liferay.portal.tools.service.builder.test.service.persistence.ManyColumnsEntryPersistence" />
 	<bean class="com.liferay.portal.tools.service.builder.test.service.impl.NestedSetsTreeEntryLocalServiceImpl" id="com.liferay.portal.tools.service.builder.test.service.NestedSetsTreeEntryLocalService" />
 	<bean class="com.liferay.portal.tools.service.builder.test.service.persistence.impl.NestedSetsTreeEntryPersistenceImpl" id="com.liferay.portal.tools.service.builder.test.service.persistence.NestedSetsTreeEntryPersistence" />
+	<bean class="com.liferay.portal.tools.service.builder.test.service.impl.NotCachedEntryLocalServiceImpl" id="com.liferay.portal.tools.service.builder.test.service.NotCachedEntryLocalService" />
 	<bean class="com.liferay.portal.tools.service.builder.test.service.persistence.impl.NotCachedEntryPersistenceImpl" id="com.liferay.portal.tools.service.builder.test.service.persistence.NotCachedEntryPersistence" />
 	<bean class="com.liferay.portal.tools.service.builder.test.service.impl.UADPartialEntryLocalServiceImpl" id="com.liferay.portal.tools.service.builder.test.service.UADPartialEntryLocalService" />
 	<bean class="com.liferay.portal.tools.service.builder.test.service.impl.UADPartialEntryServiceImpl" id="com.liferay.portal.tools.service.builder.test.service.UADPartialEntryService" />

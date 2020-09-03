@@ -15,6 +15,7 @@
 package com.liferay.portal.tools.service.builder.test.model.impl;
 
 import com.liferay.portal.tools.service.builder.test.model.NotCachedEntry;
+import com.liferay.portal.tools.service.builder.test.service.NotCachedEntryLocalServiceUtil;
 
 /**
  * The extended model base implementation for the NotCachedEntry service. Represents a row in the &quot;NotCachedEntry&quot; database table, with each column mapped to a property of this class.
@@ -36,5 +37,14 @@ public abstract class NotCachedEntryBaseImpl
 	 *
 	 * Never modify or reference this class directly. All methods that expect a not cached entry model instance should use the <code>NotCachedEntry</code> interface instead.
 	 */
+	@Override
+	public void persist() {
+		if (this.isNew()) {
+			NotCachedEntryLocalServiceUtil.addNotCachedEntry(this);
+		}
+		else {
+			NotCachedEntryLocalServiceUtil.updateNotCachedEntry(this);
+		}
+	}
 
 }

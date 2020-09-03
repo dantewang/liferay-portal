@@ -110,6 +110,11 @@ public class NotCachedEntryWrapper
 		return model.getPrimaryKey();
 	}
 
+	@Override
+	public void persist() {
+		model.persist();
+	}
+
 	/**
 	 * Sets the column1 of this not cached entry.
 	 *
