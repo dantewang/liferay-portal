@@ -201,6 +201,24 @@
 		<column name="column63" type="int" />
 		<column name="column64" type="int" />
 	</entity>
+	<entity cache-enabled="false" local-service="true" name="NotCachedEntry" remote-service="false">
+
+		<!-- PK fields -->
+
+		<column name="nestedSetsTreeEntryId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="column1" type="long" />
+		<column name="column2" type="long" />
+
+		<!-- Finder methods -->
+
+		<finder name="C_C" return-type="Collection">
+			<finder-column name="column1" />
+			<finder-column name="column2" />
+		</finder>
+	</entity>
 	<entity local-service="true" name="NestedSetsTreeEntry" remote-service="false">
 
 		<!-- PK fields -->
