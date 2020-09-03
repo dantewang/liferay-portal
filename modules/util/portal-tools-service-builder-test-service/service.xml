@@ -201,7 +201,7 @@
 		<column name="column63" type="int" />
 		<column name="column64" type="int" />
 	</entity>
-	<entity cache-enabled="false" name="NotCachedEntry" remote-service="false">
+	<entity cache-enabled="false" local-service="true" name="NotCachedEntry" remote-service="false">
 
 		<!-- PK fields -->
 
