@@ -103,6 +103,11 @@ import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
+
+<#if serviceBuilder.isVersionGTE_7_3_0() && !entity.isCacheEnabled()>
+	import com.liferay.portal.kernel.util.ProxyFactory;
+</#if>
+
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -1891,6 +1896,8 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		protected EntityCache getEntityCache() {
 			<#if osgiModule>
 				return entityCache;
+			<#elseif serviceBuilder.isVersionGTE_7_3_0() && !entity.isCacheEnabled()>
+				return entityCache;
 			<#else>
 				return EntityCacheUtil.getEntityCache();
 			</#if>
@@ -2666,19 +2673,24 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			protected CTPersistenceHelper ctPersistenceHelper;
 		</#if>
 
-		<#if dependencyInjectorDS>
-			@Reference
+		<#if serviceBuilder.isVersionGTE_7_3_0() && !entity.isCacheEnabled()>
+			protected EntityCache entityCache = ProxyFactory.newDummyInstance(EntityCache.class);
+			protected FinderCache finderCache = ProxyFactory.newDummyInstance(FinderCache.class);
 		<#else>
-			@ServiceReference(type = EntityCache.class)
-		</#if>
-		protected EntityCache entityCache;
+			<#if dependencyInjectorDS>
+				@Reference
+			<#else>
+				@ServiceReference(type = EntityCache.class)
+			</#if>
+			protected EntityCache entityCache;
 
-		<#if dependencyInjectorDS>
-			@Reference
-		<#else>
-			@ServiceReference(type = FinderCache.class)
+			<#if dependencyInjectorDS>
+				@Reference
+			<#else>
+				@ServiceReference(type = FinderCache.class)
+			</#if>
+			protected FinderCache finderCache;
 		</#if>
-		protected FinderCache finderCache;
 	</#if>
 
 	<#list entity.entityColumns as entityColumn>
