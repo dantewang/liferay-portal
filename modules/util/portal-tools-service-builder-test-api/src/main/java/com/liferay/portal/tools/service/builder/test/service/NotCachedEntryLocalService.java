@@ -63,6 +63,13 @@ public interface NotCachedEntryLocalService
 	 */
 
 	/**
+	 * NOTE FOR DEVELOPERS:
+	 *
+	 * Never reference this class directly. Use <code>NotCachedEntryLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>NotCachedEntryLocalServiceUtil</code>.
+	 */
+	public NotCachedEntry addNotCachedEntry(long column1, long column2);
+
+	/**
 	 * Adds the not cached entry to the database. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
@@ -201,6 +208,9 @@ public interface NotCachedEntryLocalService
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Class<?> getEntityCacheClass();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
 	/**
@@ -216,6 +226,10 @@ public interface NotCachedEntryLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<NotCachedEntry> getNotCachedEntries(int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<NotCachedEntry> getNotCachedEntriesByColumns(
+		long column1, long column2);
 
 	/**
 	 * Returns the number of not cached entries.
