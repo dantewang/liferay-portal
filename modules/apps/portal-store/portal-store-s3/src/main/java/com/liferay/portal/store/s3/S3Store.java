@@ -688,16 +688,6 @@ public class S3Store implements Store {
 		}
 	}
 
-	@Reference(unbind = "-")
-	protected void setS3FileCache(S3FileCache s3FileCache) {
-		_s3FileCache = s3FileCache;
-	}
-
-	@Reference(unbind = "-")
-	protected void setS3KeyTransformer(S3KeyTransformer s3KeyTransformer) {
-		_s3KeyTransformer = s3KeyTransformer;
-	}
-
 	protected SystemException transform(
 		AmazonClientException amazonClientException) {
 
@@ -751,8 +741,12 @@ public class S3Store implements Store {
 	@Reference
 	private CTStoreFactory _ctStoreFactory;
 
+	@Reference
 	private S3FileCache _s3FileCache;
+
+	@Reference
 	private S3KeyTransformer _s3KeyTransformer;
+
 	private StorageClass _storageClass;
 	private TransferManager _transferManager;
 
