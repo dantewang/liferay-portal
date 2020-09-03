@@ -169,6 +169,12 @@ create table NestedSetsTreeEntry (
 	rightNestedSetsTreeEntryId LONG
 );
 
+create table NotCachedEntry (
+	nestedSetsTreeEntryId LONG not null primary key,
+	column1 LONG,
+	column2 LONG
+);
+
 create table UADPartialEntry (
 	uadPartialEntryId LONG not null primary key,
 	userId LONG,

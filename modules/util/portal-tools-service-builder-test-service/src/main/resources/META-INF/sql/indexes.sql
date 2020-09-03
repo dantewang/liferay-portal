@@ -30,6 +30,8 @@ create unique index IX_F723689D on LazyBlobEntry (uuid_[$COLUMN_LENGTH:75$], gro
 
 create unique index IX_2E833843 on LocalizedEntryLocalization (localizedEntryId, languageId[$COLUMN_LENGTH:75$]);
 
+create index IX_3A2C11A4 on NotCachedEntry (column1, column2);
+
 create index IX_6770C47D on VersionedEntry (groupId, head);
 create unique index IX_AAA6F330 on VersionedEntry (headId);
 

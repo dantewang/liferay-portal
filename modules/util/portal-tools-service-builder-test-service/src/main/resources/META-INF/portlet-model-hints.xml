@@ -145,6 +145,11 @@
 		<field name="leftNestedSetsTreeEntryId" type="long" />
 		<field name="rightNestedSetsTreeEntryId" type="long" />
 	</model>
+	<model name="com.liferay.portal.tools.service.builder.test.model.NotCachedEntry">
+		<field name="nestedSetsTreeEntryId" type="long" />
+		<field name="column1" type="long" />
+		<field name="column2" type="long" />
+	</model>
 	<model name="com.liferay.portal.tools.service.builder.test.model.UADPartialEntry">
 		<field name="uadPartialEntryId" type="long" />
 		<field name="userId" type="long" />
