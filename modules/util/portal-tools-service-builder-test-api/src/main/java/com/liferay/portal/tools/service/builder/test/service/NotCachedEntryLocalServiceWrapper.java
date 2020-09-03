@@ -34,6 +34,18 @@ public class NotCachedEntryLocalServiceWrapper
 	}
 
 	/**
+	 * NOTE FOR DEVELOPERS:
+	 *
+	 * Never reference this class directly. Use <code>NotCachedEntryLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>NotCachedEntryLocalServiceUtil</code>.
+	 */
+	@Override
+	public com.liferay.portal.tools.service.builder.test.model.NotCachedEntry
+		addNotCachedEntry(long column1, long column2) {
+
+		return _notCachedEntryLocalService.addNotCachedEntry(column1, column2);
+	}
+
+	/**
 	 * Adds the not cached entry to the database. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
@@ -239,6 +251,11 @@ public class NotCachedEntryLocalServiceWrapper
 	}
 
 	@Override
+	public Class<?> getEntityCacheClass() {
+		return _notCachedEntryLocalService.getEntityCacheClass();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery
 		getIndexableActionableDynamicQuery() {
 
@@ -262,6 +279,15 @@ public class NotCachedEntryLocalServiceWrapper
 			getNotCachedEntries(int start, int end) {
 
 		return _notCachedEntryLocalService.getNotCachedEntries(start, end);
+	}
+
+	@Override
+	public java.util.List
+		<com.liferay.portal.tools.service.builder.test.model.NotCachedEntry>
+			getNotCachedEntriesByColumns(long column1, long column2) {
+
+		return _notCachedEntryLocalService.getNotCachedEntriesByColumns(
+			column1, column2);
 	}
 
 	/**
