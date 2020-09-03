@@ -14,7 +14,11 @@
 
 package com.liferay.portal.tools.service.builder.test.service.impl;
 
+import com.liferay.portal.tools.service.builder.test.model.NotCachedEntry;
+import com.liferay.portal.tools.service.builder.test.model.impl.NotCachedEntryImpl;
 import com.liferay.portal.tools.service.builder.test.service.base.NotCachedEntryLocalServiceBaseImpl;
+
+import java.util.List;
 
 /**
  * The implementation of the not cached entry local service.
@@ -37,5 +41,25 @@ public class NotCachedEntryLocalServiceImpl
 	 *
 	 * Never reference this class directly. Use <code>com.liferay.portal.tools.service.builder.test.service.NotCachedEntryLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>com.liferay.portal.tools.service.builder.test.service.NotCachedEntryLocalServiceUtil</code>.
 	 */
+	public NotCachedEntry addNotCachedEntry(long column1, long column2) {
+		long notCachedEntryId = counterLocalService.increment();
+
+		NotCachedEntry notCachedEntry = createNotCachedEntry(notCachedEntryId);
+
+		notCachedEntry.setColumn1(column1);
+		notCachedEntry.setColumn2(column2);
+
+		return addNotCachedEntry(notCachedEntry);
+	}
+
+	public Class<?> getEntityCacheClass() {
+		return NotCachedEntryImpl.class;
+	}
+
+	public List<NotCachedEntry> getNotCachedEntriesByColumns(
+		long column1, long column2) {
+
+		return notCachedEntryPersistence.findByC_C(column1, column2);
+	}
 
 }
