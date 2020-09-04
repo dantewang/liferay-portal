@@ -49,20 +49,6 @@ public class EagerBlobEntryUtil {
 	 */
 
 	/**
-	 * @see com.liferay.portal.kernel.service.persistence.BasePersistence#clearCache()
-	 */
-	public static void clearCache() {
-		getPersistence().clearCache();
-	}
-
-	/**
-	 * @see com.liferay.portal.kernel.service.persistence.BasePersistence#clearCache(com.liferay.portal.kernel.model.BaseModel)
-	 */
-	public static void clearCache(EagerBlobEntry eagerBlobEntry) {
-		getPersistence().clearCache(eagerBlobEntry);
-	}
-
-	/**
 	 * @see com.liferay.portal.kernel.service.persistence.BasePersistence#countWithDynamicQuery(DynamicQuery)
 	 */
 	public static long countWithDynamicQuery(DynamicQuery dynamicQuery) {
@@ -353,24 +339,6 @@ public class EagerBlobEntryUtil {
 	 */
 	public static int countByUUID_G(String uuid, long groupId) {
 		return getPersistence().countByUUID_G(uuid, groupId);
-	}
-
-	/**
-	 * Caches the eager blob entry in the entity cache if it is enabled.
-	 *
-	 * @param eagerBlobEntry the eager blob entry
-	 */
-	public static void cacheResult(EagerBlobEntry eagerBlobEntry) {
-		getPersistence().cacheResult(eagerBlobEntry);
-	}
-
-	/**
-	 * Caches the eager blob entries in the entity cache if it is enabled.
-	 *
-	 * @param eagerBlobEntries the eager blob entries
-	 */
-	public static void cacheResult(List<EagerBlobEntry> eagerBlobEntries) {
-		getPersistence().cacheResult(eagerBlobEntries);
 	}
 
 	/**
