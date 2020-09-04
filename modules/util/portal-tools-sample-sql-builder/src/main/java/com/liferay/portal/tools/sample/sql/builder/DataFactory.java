@@ -133,7 +133,6 @@ import com.liferay.layout.page.template.model.LayoutPageTemplateStructureModel;
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructureRelModel;
 import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureModelImpl;
 import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureRelModelImpl;
-import com.liferay.layout.util.template.LayoutData;
 import com.liferay.login.web.constants.LoginPortletKeys;
 import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.constants.MBMessageConstants;
@@ -163,7 +162,6 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.metadata.RawMetadataProcessor;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.BaseModel;
@@ -2883,10 +2881,12 @@ public class DataFactory {
 	}
 
 	public LayoutPageTemplateStructureRelModel
-		newLayoutPageTemplateStructureRelModel(
-			LayoutModel layoutModel,
-			LayoutPageTemplateStructureModel layoutPageTemplateStructureModel,
-			FragmentEntryLinkModel fragmentEntryLinkModel) {
+			newLayoutPageTemplateStructureRelModel(
+				LayoutModel layoutModel,
+				LayoutPageTemplateStructureModel
+					layoutPageTemplateStructureModel,
+				FragmentEntryLinkModel fragmentEntryLinkModel)
+		throws Exception {
 
 		LayoutPageTemplateStructureRelModel
 			layoutPageTemplateStructureRelModel =
@@ -2921,20 +2921,12 @@ public class DataFactory {
 				getLayoutPageTemplateStructureId());
 		layoutPageTemplateStructureRelModel.setSegmentsExperienceId(0L);
 
-		LayoutData layoutData = LayoutData.of(
-			layoutModel.toEscapedModel(),
-			layoutRow -> layoutRow.addLayoutColumns(
-				layoutColumn -> {
-					List<Long> fragmentEntryLinkIds =
-						layoutColumn.getFragmentEntryLinkIds();
-
-					fragmentEntryLinkIds.add(
-						fragmentEntryLinkModel.getFragmentEntryLinkId());
-				}));
-
-		JSONObject jsonObject = layoutData.getLayoutDataJSONObject();
-
-		layoutPageTemplateStructureRelModel.setData(jsonObject.toString());
+		layoutPageTemplateStructureRelModel.setData(
+			StringUtil.replace(
+				_readFile("layoutPageTemplateStructureRel-data-content.json"),
+				"${fragmentEntryLinkId}",
+				String.valueOf(
+					fragmentEntryLinkModel.getFragmentEntryLinkId())));
 
 		return layoutPageTemplateStructureRelModel;
 	}
