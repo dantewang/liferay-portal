@@ -8,6 +8,8 @@
 	<#assign pkEntityColumn = entity.PKEntityColumns?first />
 </#if>
 
+<#assign generateCacheCode = serviceBuilder.isVersionLTE_7_2_0() || (serviceBuilder.isVersionGTE_7_3_0() && entity.isCacheEnabled()) />
+
 <#if osgiModule>
 	<#assign
 		ctPersistenceHelper = "ctPersistenceHelper"
@@ -209,11 +211,13 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 * Never modify or reference this class directly. Always use <code>${entity.name}Util</code> to access the ${entity.humanName} persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 
-	public static final String FINDER_CLASS_NAME_ENTITY = ${entity.name}Impl.class.getName();
+	<#if generateCacheCode>
+		public static final String FINDER_CLASS_NAME_ENTITY = ${entity.name}Impl.class.getName();
 
-	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY + ".List1";
+		public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY + ".List1";
 
-	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY + ".List2";
+		public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY + ".List2";
+	</#if>
 
 	<#if serviceBuilder.isVersionGTE_7_3_0()>
 		<#assign columnBitmaskEnabled = (entity.databaseRegularEntityColumns?size &lt; 64) && !entity.hasEagerBlobColumn()/>
@@ -221,15 +225,17 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		<#assign columnBitmaskEnabled = (entity.finderEntityColumns?size &gt; 0) && (entity.finderEntityColumns?size &lt; 64) && !entity.hasEagerBlobColumn()/>
 	</#if>
 
-	private FinderPath _finderPathWithPaginationFindAll;
-	private FinderPath _finderPathWithoutPaginationFindAll;
-	private FinderPath _finderPathCountAll;
+	<#if generateCacheCode>
+		private FinderPath _finderPathWithPaginationFindAll;
+		private FinderPath _finderPathWithoutPaginationFindAll;
+		private FinderPath _finderPathCountAll;
 
-	<#if entity.isHierarchicalTree()>
-		private FinderPath _finderPathWithPaginationCountAncestors;
-		private FinderPath _finderPathWithPaginationCountDescendants;
-		private FinderPath _finderPathWithPaginationGetAncestors;
-		private FinderPath _finderPathWithPaginationGetDescendants;
+		<#if entity.isHierarchicalTree()>
+			private FinderPath _finderPathWithPaginationCountAncestors;
+			private FinderPath _finderPathWithPaginationCountDescendants;
+			private FinderPath _finderPathWithPaginationGetAncestors;
+			private FinderPath _finderPathWithPaginationGetDescendants;
+		</#if>
 	</#if>
 
 	<#list entity.entityFinders as entityFinder>
@@ -285,260 +291,262 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		</#if>
 	}
 
-	/**
-	 * Caches the ${entity.humanName} in the entity cache if it is enabled.
-	 *
-	 * @param ${entity.varName} the ${entity.humanName}
-	 */
-	@Override
-	public void cacheResult(${entity.name} ${entity.varName}) {
-		<#if entity.isChangeTrackingEnabled()>
-			if (${entity.varName}.getCtCollectionId() != 0) {
-				<#if serviceBuilder.isVersionLTE_7_2_0()>
-					${entity.varName}.resetOriginalValues();
-				</#if>
-
-				return;
-			}
-		</#if>
-
-		${entityCache}.putResult(
-				<#if serviceBuilder.isVersionLTE_7_2_0()>
-					${entityCacheEnabled},
-				</#if>
-				${entity.name}Impl.class, ${entity.varName}.getPrimaryKey(), ${entity.varName});
-
-		<#list entity.uniqueEntityFinders as uniqueEntityFinder>
-			<#assign entityColumns = uniqueEntityFinder.entityColumns />
-
-			${finderCache}.putResult(
-				_finderPathFetchBy${uniqueEntityFinder.name},
-				new Object[] {
-					<#list entityColumns as entityColumn>
-						<#if stringUtil.equals(entityColumn.type, "boolean")>
-							${entity.varName}.is${entityColumn.methodName}()
-						<#else>
-							${entity.varName}.get${entityColumn.methodName}()
-						</#if>
-
-						<#if entityColumn_has_next>
-							,
-						</#if>
-					</#list>
-				},
-				${entity.varName});
-		</#list>
-
-		<#if serviceBuilder.isVersionLTE_7_2_0()>
-			${entity.varName}.resetOriginalValues();
-		</#if>
-	}
-
-	/**
-	 * Caches the ${entity.pluralHumanName} in the entity cache if it is enabled.
-	 *
-	 * @param ${entity.pluralVarName} the ${entity.pluralHumanName}
-	 */
-	@Override
-	public void cacheResult(List<${entity.name}> ${entity.pluralVarName}) {
-		for (${entity.name} ${entity.varName} : ${entity.pluralVarName}) {
+	<#if generateCacheCode>
+		/**
+		 * Caches the ${entity.humanName} in the entity cache if it is enabled.
+		 *
+		 * @param ${entity.varName} the ${entity.humanName}
+		 */
+		@Override
+		public void cacheResult(${entity.name} ${entity.varName}) {
 			<#if entity.isChangeTrackingEnabled()>
 				if (${entity.varName}.getCtCollectionId() != 0) {
 					<#if serviceBuilder.isVersionLTE_7_2_0()>
 						${entity.varName}.resetOriginalValues();
 					</#if>
 
-					continue;
+					return;
 				}
 			</#if>
 
-			if (${entityCache}.getResult(
-				<#if serviceBuilder.isVersionLTE_7_2_0()>
-					${entityCacheEnabled},
-				</#if>
-				${entity.name}Impl.class, ${entity.varName}.getPrimaryKey()) == null) {
-				cacheResult(${entity.varName});
-			}
+			${entityCache}.putResult(
+					<#if serviceBuilder.isVersionLTE_7_2_0()>
+						${entityCacheEnabled},
+					</#if>
+					${entity.name}Impl.class, ${entity.varName}.getPrimaryKey(), ${entity.varName});
+
+			<#list entity.uniqueEntityFinders as uniqueEntityFinder>
+				<#assign entityColumns = uniqueEntityFinder.entityColumns />
+
+				${finderCache}.putResult(
+					_finderPathFetchBy${uniqueEntityFinder.name},
+					new Object[] {
+						<#list entityColumns as entityColumn>
+							<#if stringUtil.equals(entityColumn.type, "boolean")>
+								${entity.varName}.is${entityColumn.methodName}()
+							<#else>
+								${entity.varName}.get${entityColumn.methodName}()
+							</#if>
+
+							<#if entityColumn_has_next>
+								,
+							</#if>
+						</#list>
+					},
+					${entity.varName});
+			</#list>
+
 			<#if serviceBuilder.isVersionLTE_7_2_0()>
-				else {
-					${entity.varName}.resetOriginalValues();
-				}
+				${entity.varName}.resetOriginalValues();
 			</#if>
 		}
-	}
 
-	/**
-	 * Clears the cache for all ${entity.pluralHumanName}.
-	 *
-	 * <p>
-	 * The <code>com.liferay.portal.kernel.dao.orm.EntityCache</code> and <code>com.liferay.portal.kernel.dao.orm.FinderCache</code> are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		${entityCache}.clearCache(${entity.name}Impl.class);
+		/**
+		 * Caches the ${entity.pluralHumanName} in the entity cache if it is enabled.
+		 *
+		 * @param ${entity.pluralVarName} the ${entity.pluralHumanName}
+		 */
+		@Override
+		public void cacheResult(List<${entity.name}> ${entity.pluralVarName}) {
+			for (${entity.name} ${entity.varName} : ${entity.pluralVarName}) {
+				<#if entity.isChangeTrackingEnabled()>
+					if (${entity.varName}.getCtCollectionId() != 0) {
+						<#if serviceBuilder.isVersionLTE_7_2_0()>
+							${entity.varName}.resetOriginalValues();
+						</#if>
 
-		${finderCache}.clearCache(FINDER_CLASS_NAME_ENTITY);
-		${finderCache}.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		${finderCache}.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
+						continue;
+					}
+				</#if>
 
-	/**
-	 * Clears the cache for the ${entity.humanName}.
-	 *
-	 * <p>
-	 * The <code>com.liferay.portal.kernel.dao.orm.EntityCache</code> and <code>com.liferay.portal.kernel.dao.orm.FinderCache</code> are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(${entity.name} ${entity.varName}) {
-		<#if serviceBuilder.isVersionGTE_7_3_0()>
-			${entityCache}.removeResult(${entity.name}Impl.class, ${entity.varName});
-		<#else>
-			${entityCache}.removeResult(${entityCacheEnabled}, ${entity.name}Impl.class, ${entity.varName}.getPrimaryKey());
+				if (${entityCache}.getResult(
+					<#if serviceBuilder.isVersionLTE_7_2_0()>
+						${entityCacheEnabled},
+					</#if>
+					${entity.name}Impl.class, ${entity.varName}.getPrimaryKey()) == null) {
+					cacheResult(${entity.varName});
+				}
+				<#if serviceBuilder.isVersionLTE_7_2_0()>
+					else {
+						${entity.varName}.resetOriginalValues();
+					}
+				</#if>
+			}
+		}
 
+		/**
+		 * Clears the cache for all ${entity.pluralHumanName}.
+		 *
+		 * <p>
+		 * The <code>com.liferay.portal.kernel.dao.orm.EntityCache</code> and <code>com.liferay.portal.kernel.dao.orm.FinderCache</code> are both cleared by this method.
+		 * </p>
+		 */
+		@Override
+		public void clearCache() {
+			${entityCache}.clearCache(${entity.name}Impl.class);
+
+			${finderCache}.clearCache(FINDER_CLASS_NAME_ENTITY);
 			${finderCache}.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 			${finderCache}.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
 
-			<#if entity.uniqueEntityFinders?size &gt; 0>
-				clearUniqueFindersCache((${entity.name}ModelImpl)${entity.varName}, true);
-			</#if>
-		</#if>
-	}
-
-	@Override
-	public void clearCache(List<${entity.name}> ${entity.pluralVarName}) {
-		<#if serviceBuilder.isVersionLTE_7_2_0()>
-			${finderCache}.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-			${finderCache}.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		</#if>
-
-		for (${entity.name} ${entity.varName} : ${entity.pluralVarName}) {
+		/**
+		 * Clears the cache for the ${entity.humanName}.
+		 *
+		 * <p>
+		 * The <code>com.liferay.portal.kernel.dao.orm.EntityCache</code> and <code>com.liferay.portal.kernel.dao.orm.FinderCache</code> are both cleared by this method.
+		 * </p>
+		 */
+		@Override
+		public void clearCache(${entity.name} ${entity.varName}) {
 			<#if serviceBuilder.isVersionGTE_7_3_0()>
 				${entityCache}.removeResult(${entity.name}Impl.class, ${entity.varName});
 			<#else>
 				${entityCache}.removeResult(${entityCacheEnabled}, ${entity.name}Impl.class, ${entity.varName}.getPrimaryKey());
+
+				${finderCache}.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+				${finderCache}.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 				<#if entity.uniqueEntityFinders?size &gt; 0>
 					clearUniqueFindersCache((${entity.name}ModelImpl)${entity.varName}, true);
 				</#if>
 			</#if>
 		}
-	}
 
-	<#if serviceBuilder.isVersionGTE_7_3_0()>
 		@Override
-	</#if>
-	public void clearCache(Set<Serializable> primaryKeys) {
-		${finderCache}.clearCache(FINDER_CLASS_NAME_ENTITY);
-		${finderCache}.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		${finderCache}.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		public void clearCache(List<${entity.name}> ${entity.pluralVarName}) {
+			<#if serviceBuilder.isVersionLTE_7_2_0()>
+				${finderCache}.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+				${finderCache}.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+			</#if>
 
-		for (Serializable primaryKey : primaryKeys) {
-			${entityCache}.removeResult(
-				<#if serviceBuilder.isVersionLTE_7_2_0()>
-					${entityCacheEnabled},
+			for (${entity.name} ${entity.varName} : ${entity.pluralVarName}) {
+				<#if serviceBuilder.isVersionGTE_7_3_0()>
+					${entityCache}.removeResult(${entity.name}Impl.class, ${entity.varName});
+				<#else>
+					${entityCache}.removeResult(${entityCacheEnabled}, ${entity.name}Impl.class, ${entity.varName}.getPrimaryKey());
+
+					<#if entity.uniqueEntityFinders?size &gt; 0>
+						clearUniqueFindersCache((${entity.name}ModelImpl)${entity.varName}, true);
+					</#if>
 				</#if>
-				${entity.name}Impl.class, primaryKey);
-		}
-	}
-
-	<#if entity.uniqueEntityFinders?size &gt; 0>
-		protected void cacheUniqueFindersCache(${entity.name}ModelImpl ${entity.varName}ModelImpl) {
-			<#list entity.uniqueEntityFinders as uniqueEntityFinder>
-				<#assign entityColumns = uniqueEntityFinder.entityColumns />
-
-				<#if uniqueEntityFinder_index == 0>
-					Object[]
-				</#if>
-				args = new Object[] {
-					<#list entityColumns as entityColumn>
-						<#if stringUtil.equals(entityColumn.type, "boolean")>
-							${entity.varName}ModelImpl.is${entityColumn.methodName}()
-						<#elseif stringUtil.equals(entityColumn.type, "Date")>
-							_getTime(${entity.varName}ModelImpl.get${entityColumn.methodName}())
-						<#else>
-							${entity.varName}ModelImpl.get${entityColumn.methodName}()
-						</#if>
-
-						<#if entityColumn_has_next>
-							,
-						</#if>
-					</#list>
-				};
-
-				${finderCache}.putResult(_finderPathCountBy${uniqueEntityFinder.name}, args, Long.valueOf(1), false);
-				${finderCache}.putResult(_finderPathFetchBy${uniqueEntityFinder.name}, args, ${entity.varName}ModelImpl, false);
-			</#list>
+			}
 		}
 
-		<#if serviceBuilder.isVersionLTE_7_2_0()>
-			protected void clearUniqueFindersCache(${entity.name}ModelImpl ${entity.varName}ModelImpl, boolean clearCurrent) {
+		<#if serviceBuilder.isVersionGTE_7_3_0()>
+			@Override
+		</#if>
+		public void clearCache(Set<Serializable> primaryKeys) {
+			${finderCache}.clearCache(FINDER_CLASS_NAME_ENTITY);
+			${finderCache}.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+			${finderCache}.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+			for (Serializable primaryKey : primaryKeys) {
+				${entityCache}.removeResult(
+					<#if serviceBuilder.isVersionLTE_7_2_0()>
+						${entityCacheEnabled},
+					</#if>
+					${entity.name}Impl.class, primaryKey);
+			}
+		}
+
+		<#if entity.uniqueEntityFinders?size &gt; 0>
+			protected void cacheUniqueFindersCache(${entity.name}ModelImpl ${entity.varName}ModelImpl) {
 				<#list entity.uniqueEntityFinders as uniqueEntityFinder>
 					<#assign entityColumns = uniqueEntityFinder.entityColumns />
 
-					if (clearCurrent) {
-						Object[] args = new Object[] {
-							<#list entityColumns as entityColumn>
-								<#if stringUtil.equals(entityColumn.type, "boolean")>
-									${entity.varName}ModelImpl.is${entityColumn.methodName}()
-								<#elseif stringUtil.equals(entityColumn.type, "Date")>
-									_getTime(${entity.varName}ModelImpl.get${entityColumn.methodName}())
-								<#else>
-									${entity.varName}ModelImpl.get${entityColumn.methodName}()
-								</#if>
+					<#if uniqueEntityFinder_index == 0>
+						Object[]
+					</#if>
+					args = new Object[] {
+						<#list entityColumns as entityColumn>
+							<#if stringUtil.equals(entityColumn.type, "boolean")>
+								${entity.varName}ModelImpl.is${entityColumn.methodName}()
+							<#elseif stringUtil.equals(entityColumn.type, "Date")>
+								_getTime(${entity.varName}ModelImpl.get${entityColumn.methodName}())
+							<#else>
+								${entity.varName}ModelImpl.get${entityColumn.methodName}()
+							</#if>
 
-								<#if entityColumn_has_next>
-									,
-								</#if>
-							</#list>
-						};
+							<#if entityColumn_has_next>
+								,
+							</#if>
+						</#list>
+					};
 
-						${finderCache}.removeResult(_finderPathCountBy${uniqueEntityFinder.name}, args);
-						${finderCache}.removeResult(_finderPathFetchBy${uniqueEntityFinder.name}, args);
-					}
-
-					if (
-						<#if columnBitmaskEnabled>
-							(${entity.varName}ModelImpl.getColumnBitmask() & _finderPathFetchBy${uniqueEntityFinder.name}.getColumnBitmask()) != 0
-						<#else>
-							<#list entityColumns as entityColumn>
-								<#if entityColumn.isPrimitiveType()>
-									<#if stringUtil.equals(entityColumn.type, "boolean")>
-										(${entity.varName}ModelImpl.is${entityColumn.methodName}() != ${entity.varName}ModelImpl.getOriginal${entityColumn.methodName}())
-									<#else>
-										(${entity.varName}ModelImpl.get${entityColumn.methodName}() != ${entity.varName}ModelImpl.getOriginal${entityColumn.methodName}())
-									</#if>
-								<#else>
-									!Objects.equals(${entity.varName}ModelImpl.get${entityColumn.methodName}(), ${entity.varName}ModelImpl.getOriginal${entityColumn.methodName}())
-								</#if>
-
-								<#if entityColumn_has_next>
-									||
-								</#if>
-							</#list>
-						</#if>
-						) {
-
-						Object[] args = new Object[] {
-							<#list entityColumns as entityColumn>
-								<#if stringUtil.equals(entityColumn.type, "Date")>
-									_getTime(${entity.varName}ModelImpl.getOriginal${entityColumn.methodName}())
-								<#else>
-									${entity.varName}ModelImpl.getOriginal${entityColumn.methodName}()
-								</#if>
-
-								<#if entityColumn_has_next>
-									,
-								</#if>
-							</#list>
-						};
-
-						${finderCache}.removeResult(_finderPathCountBy${uniqueEntityFinder.name}, args);
-						${finderCache}.removeResult(_finderPathFetchBy${uniqueEntityFinder.name}, args);
-					}
+					${finderCache}.putResult(_finderPathCountBy${uniqueEntityFinder.name}, args, Long.valueOf(1), false);
+					${finderCache}.putResult(_finderPathFetchBy${uniqueEntityFinder.name}, args, ${entity.varName}ModelImpl, false);
 				</#list>
 			}
+
+			<#if serviceBuilder.isVersionLTE_7_2_0()>
+				protected void clearUniqueFindersCache(${entity.name}ModelImpl ${entity.varName}ModelImpl, boolean clearCurrent) {
+					<#list entity.uniqueEntityFinders as uniqueEntityFinder>
+						<#assign entityColumns = uniqueEntityFinder.entityColumns />
+
+						if (clearCurrent) {
+							Object[] args = new Object[] {
+								<#list entityColumns as entityColumn>
+									<#if stringUtil.equals(entityColumn.type, "boolean")>
+										${entity.varName}ModelImpl.is${entityColumn.methodName}()
+									<#elseif stringUtil.equals(entityColumn.type, "Date")>
+										_getTime(${entity.varName}ModelImpl.get${entityColumn.methodName}())
+									<#else>
+										${entity.varName}ModelImpl.get${entityColumn.methodName}()
+									</#if>
+
+									<#if entityColumn_has_next>
+										,
+									</#if>
+								</#list>
+							};
+
+							${finderCache}.removeResult(_finderPathCountBy${uniqueEntityFinder.name}, args);
+							${finderCache}.removeResult(_finderPathFetchBy${uniqueEntityFinder.name}, args);
+						}
+
+						if (
+							<#if columnBitmaskEnabled>
+								(${entity.varName}ModelImpl.getColumnBitmask() & _finderPathFetchBy${uniqueEntityFinder.name}.getColumnBitmask()) != 0
+							<#else>
+								<#list entityColumns as entityColumn>
+									<#if entityColumn.isPrimitiveType()>
+										<#if stringUtil.equals(entityColumn.type, "boolean")>
+											(${entity.varName}ModelImpl.is${entityColumn.methodName}() != ${entity.varName}ModelImpl.getOriginal${entityColumn.methodName}())
+										<#else>
+											(${entity.varName}ModelImpl.get${entityColumn.methodName}() != ${entity.varName}ModelImpl.getOriginal${entityColumn.methodName}())
+										</#if>
+									<#else>
+										!Objects.equals(${entity.varName}ModelImpl.get${entityColumn.methodName}(), ${entity.varName}ModelImpl.getOriginal${entityColumn.methodName}())
+									</#if>
+
+									<#if entityColumn_has_next>
+										||
+									</#if>
+								</#list>
+							</#if>
+							) {
+
+							Object[] args = new Object[] {
+								<#list entityColumns as entityColumn>
+									<#if stringUtil.equals(entityColumn.type, "Date")>
+										_getTime(${entity.varName}ModelImpl.getOriginal${entityColumn.methodName}())
+									<#else>
+										${entity.varName}ModelImpl.getOriginal${entityColumn.methodName}()
+									</#if>
+
+									<#if entityColumn_has_next>
+										,
+									</#if>
+								</#list>
+							};
+
+							${finderCache}.removeResult(_finderPathCountBy${uniqueEntityFinder.name}, args);
+							${finderCache}.removeResult(_finderPathFetchBy${uniqueEntityFinder.name}, args);
+						}
+					</#list>
+				}
+			</#if>
 		</#if>
 	</#if>
 
@@ -640,7 +648,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 					nestedSetsTreeManager.delete(${entity.varName});
 
-					clearCache();
+					<#if generateCacheCode>
+						clearCache();
+					</#if>
 
 					session.clear();
 				}
@@ -666,9 +676,11 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			closeSession(session);
 		}
 
-		if (${entity.varName} != null) {
-			clearCache(${entity.varName});
-		}
+		<#if generateCacheCode>
+			if (${entity.varName} != null) {
+				clearCache(${entity.varName});
+			}
+		</#if>
 
 		return ${entity.varName};
 	}
@@ -809,7 +821,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 					</#if>
 					}
 
-					clearCache();
+					<#if generateCacheCode>
+						clearCache();
+					</#if>
 
 					session.clear();
 				}
@@ -884,17 +898,19 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		</#if>
 
 		<#if serviceBuilder.isVersionGTE_7_3_0()>
-			${entityCache}.putResult(
-				${entity.name}Impl.class,
-				<#if (entity.collectionEntityFinders?size != 0) || (entity.uniqueEntityFinders?size &gt; 0)>
-					${entity.varName}ModelImpl
-				<#else>
-					${entity.varName}
-				</#if>
-				, false, true);
+			<#if entity.isCacheEnabled()>
+				${entityCache}.putResult(
+					${entity.name}Impl.class,
+					<#if (entity.collectionEntityFinders?size != 0) || (entity.uniqueEntityFinders?size &gt; 0)>
+						${entity.varName}ModelImpl
+					<#else>
+						${entity.varName}
+					</#if>
+					, false, true);
 
-			<#if entity.uniqueEntityFinders?size &gt; 0>
-				cacheUniqueFindersCache(${entity.varName}ModelImpl);
+				<#if entity.uniqueEntityFinders?size &gt; 0>
+					cacheUniqueFindersCache(${entity.varName}ModelImpl);
+				</#if>
 			</#if>
 
 			if (isNew) {
@@ -1059,15 +1075,20 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		 */
 		@Override
 		public ${entity.name} fetchByPrimaryKey(Serializable primaryKey) {
-			Serializable serializable = ${entityCache}.getResult(${entityCacheEnabled}, ${entity.name}Impl.class, primaryKey);
+			<#if generateCacheCode>
+				Serializable serializable = ${entityCache}.getResult(${entityCacheEnabled}, ${entity.name}Impl.class, primaryKey);
 
-			if (serializable == nullModel) {
-				return null;
-			}
+				if (serializable == nullModel) {
+					return null;
+				}
 
-			${entity.name} ${entity.varName} = (${entity.name})serializable;
+				${entity.name} ${entity.varName} = (${entity.name})serializable;
 
-			if (${entity.varName} == null) {
+				if (${entity.varName} == null) {
+			<#else>
+				${entity.name} ${entity.varName} = null;
+
+			</#if>
 				Session session = null;
 
 				try {
@@ -1075,12 +1096,14 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 					${entity.varName} = (${entity.name})session.get(${entity.name}Impl.class, primaryKey);
 
-					if (${entity.varName} != null) {
-						cacheResult(${entity.varName});
-					}
-					else {
-						${entityCache}.putResult(${entityCacheEnabled}, ${entity.name}Impl.class, primaryKey, nullModel);
-					}
+					<#if generateCacheCode>
+						if (${entity.varName} != null) {
+							cacheResult(${entity.varName});
+						}
+						else {
+							${entityCache}.putResult(${entityCacheEnabled}, ${entity.name}Impl.class, primaryKey, nullModel);
+						}
+					</#if>
 				}
 				catch (Exception exception) {
 					<#if serviceBuilder.isVersionLTE_7_2_0()>
@@ -1092,7 +1115,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				finally {
 					closeSession(session);
 				}
-			}
+			<#if generateCacheCode>
+				}
+			</#if>
 
 			return ${entity.varName};
 		}
@@ -1118,9 +1143,11 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 				${entity.varName} = (${entity.name})session.get(${entity.name}Impl.class, primaryKey);
 
-				if (${entity.varName} != null) {
-					cacheResult(${entity.varName});
-				}
+				<#if generateCacheCode>
+					if (${entity.varName} != null) {
+						cacheResult(${entity.varName});
+					}
+				</#if>
 			}
 			catch (Exception exception) {
 				throw processException(exception);
@@ -1318,7 +1345,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				for (${entity.name} ${entity.varName} : (List<${entity.name}>)query.list()) {
 					map.put(${entity.varName}.getPrimaryKeyObj(), ${entity.varName});
 
-					cacheResult(${entity.varName});
+					<#if generateCacheCode>
+						cacheResult(${entity.varName});
+					</#if>
 				}
 			}
 			catch (Exception exception) {
@@ -1390,31 +1419,35 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 */
 	@Override
 	public List<${entity.name}> findAll(int start, int end, OrderByComparator<${entity.name}> orderByComparator, boolean useFinderCache) {
-		<#if entity.isChangeTrackingEnabled()>
-			boolean productionMode = ${ctPersistenceHelper}.isProductionMode(${entity.name}.class);
-		</#if>
+		<#if generateCacheCode>
+			<#if entity.isChangeTrackingEnabled()>
+				boolean productionMode = ${ctPersistenceHelper}.isProductionMode(${entity.name}.class);
+			</#if>
 
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+			FinderPath finderPath = null;
+			Object[] finderArgs = null;
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
-			if (${useCache}) {
-				finderPath = _finderPathWithoutPaginationFindAll;
-				finderArgs = FINDER_ARGS_EMPTY;
+			if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
+				if (${useCache}) {
+					finderPath = _finderPathWithoutPaginationFindAll;
+					finderArgs = FINDER_ARGS_EMPTY;
+				}
 			}
-		}
-		else if (${useCache}) {
-			finderPath = _finderPathWithPaginationFindAll;
-			finderArgs = new Object[] {start, end, orderByComparator};
-		}
+			else if (${useCache}) {
+				finderPath = _finderPathWithPaginationFindAll;
+				finderArgs = new Object[] {start, end, orderByComparator};
+			}
+		</#if>
 
 		List<${entity.name}> list = null;
 
-		if (${useCache}) {
-			list = (List<${entity.name}>)${finderCache}.getResult(finderPath, finderArgs, this);
-		}
+		<#if generateCacheCode>
+			if (${useCache}) {
+				list = (List<${entity.name}>)${finderCache}.getResult(finderPath, finderArgs, this);
+			}
 
-		if (list == null) {
+			if (list == null) {
+		</#if>
 			StringBundler sb = null;
 			String sql = null;
 
@@ -1442,11 +1475,13 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 				list = (List<${entity.name}>)QueryUtil.list(query, getDialect(), start, end);
 
-				cacheResult(list);
+				<#if generateCacheCode>
+					cacheResult(list);
 
-				if (${useCache}) {
-					${finderCache}.putResult(finderPath, finderArgs, list);
-				}
+					if (${useCache}) {
+						${finderCache}.putResult(finderPath, finderArgs, list);
+					}
+				</#if>
 			}
 			catch (Exception exception) {
 				<#if serviceBuilder.isVersionLTE_7_2_0()>
@@ -1460,7 +1495,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			finally {
 				closeSession(session);
 			}
-		}
+		<#if generateCacheCode>
+			}
+		</#if>
 
 		return list;
 	}
@@ -1483,19 +1520,24 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 */
 	@Override
 	public int countAll() {
-		<#if entity.isChangeTrackingEnabled()>
-			boolean productionMode = ${ctPersistenceHelper}.isProductionMode(${entity.name}.class);
+		<#if generateCacheCode>
+			<#if entity.isChangeTrackingEnabled()>
+				boolean productionMode = ${ctPersistenceHelper}.isProductionMode(${entity.name}.class);
 
+				Long count = null;
+
+				if (productionMode) {
+					count = (Long)${finderCache}.getResult(_finderPathCountAll, FINDER_ARGS_EMPTY, this);
+				}
+			<#else>
+				Long count = (Long)${finderCache}.getResult(_finderPathCountAll, FINDER_ARGS_EMPTY, this);
+			</#if>
+
+			if (count == null) {
+		<#else>
 			Long count = null;
 
-			if (productionMode) {
-				count = (Long)${finderCache}.getResult(_finderPathCountAll, FINDER_ARGS_EMPTY, this);
-			}
-		<#else>
-			Long count = (Long)${finderCache}.getResult(_finderPathCountAll, FINDER_ARGS_EMPTY, this);
 		</#if>
-
-		if (count == null) {
 			Session session = null;
 
 			try {
@@ -1505,12 +1547,14 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 				count = (Long)query.uniqueResult();
 
-				<#if entity.isChangeTrackingEnabled()>
-					if (productionMode) {
+				<#if generateCacheCode>
+					<#if entity.isChangeTrackingEnabled()>
+						if (productionMode) {
+							${finderCache}.putResult(_finderPathCountAll, FINDER_ARGS_EMPTY, count);
+						}
+					<#else>
 						${finderCache}.putResult(_finderPathCountAll, FINDER_ARGS_EMPTY, count);
-					}
-				<#else>
-					${finderCache}.putResult(_finderPathCountAll, FINDER_ARGS_EMPTY, count);
+					</#if>
 				</#if>
 			}
 			catch (Exception exception) {
@@ -1529,7 +1573,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			finally {
 				closeSession(session);
 			}
-		}
+		<#if generateCacheCode>
+			}
+		</#if>
 
 		return count.intValue();
 	}
@@ -1887,14 +1933,16 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	</#if>
 
 	<#if !serviceBuilder.isVersionLTE_7_1_0()>
-		@Override
-		protected EntityCache getEntityCache() {
-			<#if osgiModule>
-				return entityCache;
-			<#else>
-				return EntityCacheUtil.getEntityCache();
-			</#if>
-		}
+		<#if generateCacheCode>
+			@Override
+			protected EntityCache getEntityCache() {
+				<#if osgiModule>
+					return entityCache;
+				<#else>
+					return EntityCacheUtil.getEntityCache();
+				</#if>
+			}
+		</#if>
 
 		@Override
 		protected String getPKDBName() {
@@ -1994,15 +2042,22 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	<#if entity.isHierarchicalTree()>
 		@Override
 		public long countAncestors(${entity.name} ${entity.varName}) {
-			Object[] finderArgs = new Object[] {${entity.varName}.get${scopeEntityColumn.methodName}(), ${entity.varName}.getLeft${pkEntityColumn.methodName}(), ${entity.varName}.getRight${pkEntityColumn.methodName}()};
+			<#if generateCacheCode>
+				Object[] finderArgs = new Object[] {${entity.varName}.get${scopeEntityColumn.methodName}(), ${entity.varName}.getLeft${pkEntityColumn.methodName}(), ${entity.varName}.getRight${pkEntityColumn.methodName}()};
 
-			Long count = (Long)${finderCache}.getResult(_finderPathWithPaginationCountAncestors, finderArgs, this);
+				Long count = (Long)${finderCache}.getResult(_finderPathWithPaginationCountAncestors, finderArgs, this);
 
-			if (count == null) {
+				if (count == null) {
+			<#else>
+				Long count = null;
+
+			</#if>
 				try {
 					count = nestedSetsTreeManager.countAncestors(${entity.varName});
 
-					${finderCache}.putResult(_finderPathWithPaginationCountAncestors, finderArgs, count);
+					<#if generateCacheCode>
+						${finderCache}.putResult(_finderPathWithPaginationCountAncestors, finderArgs, count);
+					</#if>
 				}
 				catch (SystemException systemException) {
 					<#if serviceBuilder.isVersionLTE_7_2_0()>
@@ -2011,22 +2066,31 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 					throw systemException;
 				}
-			}
+			<#if generateCacheCode>
+				}
+			</#if>
 
 			return count.intValue();
 		}
 
 		@Override
 		public long countDescendants(${entity.name} ${entity.varName}) {
-			Object[] finderArgs = new Object[] {${entity.varName}.get${scopeEntityColumn.methodName}(), ${entity.varName}.getLeft${pkEntityColumn.methodName}(), ${entity.varName}.getRight${pkEntityColumn.methodName}()};
+			<#if generateCacheCode>
+				Object[] finderArgs = new Object[] {${entity.varName}.get${scopeEntityColumn.methodName}(), ${entity.varName}.getLeft${pkEntityColumn.methodName}(), ${entity.varName}.getRight${pkEntityColumn.methodName}()};
 
-			Long count = (Long)${finderCache}.getResult(_finderPathWithPaginationCountDescendants, finderArgs, this);
+				Long count = (Long)${finderCache}.getResult(_finderPathWithPaginationCountDescendants, finderArgs, this);
 
-			if (count == null) {
+				if (count == null) {
+			<#else>
+				Long count = null;
+
+			</#if>
 				try {
 					count = nestedSetsTreeManager.countDescendants(${entity.varName});
 
-					${finderCache}.putResult(_finderPathWithPaginationCountDescendants, finderArgs, count);
+					<#if generateCacheCode>
+						${finderCache}.putResult(_finderPathWithPaginationCountDescendants, finderArgs, count);
+					</#if>
 				}
 				catch (SystemException systemException) {
 					<#if serviceBuilder.isVersionLTE_7_2_0()>
@@ -2035,34 +2099,43 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 					throw systemException;
 				}
-			}
+			<#if generateCacheCode>
+				}
+			</#if>
 
 			return count.intValue();
 		}
 
 		@Override
 		public List<${entity.name}> getAncestors(${entity.name} ${entity.varName}) {
-			Object[] finderArgs = new Object[] {${entity.varName}.get${scopeEntityColumn.methodName}(), ${entity.varName}.getLeft${pkEntityColumn.methodName}(), ${entity.varName}.getRight${pkEntityColumn.methodName}()};
+			<#if generateCacheCode>
+				Object[] finderArgs = new Object[] {${entity.varName}.get${scopeEntityColumn.methodName}(), ${entity.varName}.getLeft${pkEntityColumn.methodName}(), ${entity.varName}.getRight${pkEntityColumn.methodName}()};
 
-			List<${entity.name}> list = (List<${entity.name}>)${finderCache}.getResult(_finderPathWithPaginationGetAncestors, finderArgs, this);
+				List<${entity.name}> list = (List<${entity.name}>)${finderCache}.getResult(_finderPathWithPaginationGetAncestors, finderArgs, this);
 
-			if ((list != null) && !list.isEmpty()) {
-				for (${entity.name} temp${entity.name} : list) {
-					if ((${entity.varName}.getLeft${pkEntityColumn.methodName}() < temp${entity.name}.getLeft${pkEntityColumn.methodName}()) || (${entity.varName}.getRight${pkEntityColumn.methodName}() > temp${entity.name}.getRight${pkEntityColumn.methodName}())) {
-						list = null;
+				if ((list != null) && !list.isEmpty()) {
+					for (${entity.name} temp${entity.name} : list) {
+						if ((${entity.varName}.getLeft${pkEntityColumn.methodName}() < temp${entity.name}.getLeft${pkEntityColumn.methodName}()) || (${entity.varName}.getRight${pkEntityColumn.methodName}() > temp${entity.name}.getRight${pkEntityColumn.methodName}())) {
+							list = null;
 
-						break;
+							break;
+						}
 					}
 				}
-			}
 
-			if (list == null) {
+				if (list == null) {
+			<#else>
+				List<${entity.name}> list = null;
+
+			</#if>
 				try {
 					list = nestedSetsTreeManager.getAncestors(${entity.varName});
 
-					cacheResult(list);
+					<#if generateCacheCode>
+						cacheResult(list);
 
-					${finderCache}.putResult(_finderPathWithPaginationGetAncestors, finderArgs, list);
+						${finderCache}.putResult(_finderPathWithPaginationGetAncestors, finderArgs, list);
+					</#if>
 				}
 				catch (SystemException systemException) {
 					<#if serviceBuilder.isVersionLTE_7_2_0()>
@@ -2071,34 +2144,43 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 					throw systemException;
 				}
-			}
+			<#if generateCacheCode>
+				}
+			</#if>
 
 			return list;
 		}
 
 		@Override
 		public List<${entity.name}> getDescendants(${entity.name} ${entity.varName}) {
-			Object[] finderArgs = new Object[] {${entity.varName}.get${scopeEntityColumn.methodName}(), ${entity.varName}.getLeft${pkEntityColumn.methodName}(), ${entity.varName}.getRight${pkEntityColumn.methodName}()};
+			<#if generateCacheCode>
+				Object[] finderArgs = new Object[] {${entity.varName}.get${scopeEntityColumn.methodName}(), ${entity.varName}.getLeft${pkEntityColumn.methodName}(), ${entity.varName}.getRight${pkEntityColumn.methodName}()};
 
-			List<${entity.name}> list = (List<${entity.name}>)${finderCache}.getResult(_finderPathWithPaginationGetDescendants, finderArgs, this);
+				List<${entity.name}> list = (List<${entity.name}>)${finderCache}.getResult(_finderPathWithPaginationGetDescendants, finderArgs, this);
 
-			if ((list != null) && !list.isEmpty()) {
-				for (${entity.name} temp${entity.name} : list) {
-					if ((${entity.varName}.getLeft${pkEntityColumn.methodName}() > temp${entity.name}.getLeft${pkEntityColumn.methodName}()) || (${entity.varName}.getRight${pkEntityColumn.methodName}() < temp${entity.name}.getRight${pkEntityColumn.methodName}())) {
-						list = null;
+				if ((list != null) && !list.isEmpty()) {
+					for (${entity.name} temp${entity.name} : list) {
+						if ((${entity.varName}.getLeft${pkEntityColumn.methodName}() > temp${entity.name}.getLeft${pkEntityColumn.methodName}()) || (${entity.varName}.getRight${pkEntityColumn.methodName}() < temp${entity.name}.getRight${pkEntityColumn.methodName}())) {
+							list = null;
 
-						break;
+							break;
+						}
 					}
 				}
-			}
 
-			if (list == null) {
+				if (list == null) {
+			<#else>
+				List<${entity.name}> list = null;
+
+			</#if>
 				try {
 					list = nestedSetsTreeManager.getDescendants(${entity.varName});
 
-					cacheResult(list);
+					<#if generateCacheCode>
+						cacheResult(list);
 
-					${finderCache}.putResult(_finderPathWithPaginationGetDescendants, finderArgs, list);
+						${finderCache}.putResult(_finderPathWithPaginationGetDescendants, finderArgs, list);
+					</#if>
 				}
 				catch (SystemException systemException) {
 					<#if serviceBuilder.isVersionLTE_7_2_0()>
@@ -2107,7 +2189,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 					throw systemException;
 				}
-			}
+			<#if generateCacheCode>
+				}
+			</#if>
 
 			return list;
 		}
@@ -2153,7 +2237,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 					closeSession(session);
 				}
 
-				clearCache();
+				<#if generateCacheCode>
+					clearCache();
+				</#if>
 			}
 		}
 
@@ -2219,19 +2305,21 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 */
 	<#if dependencyInjectorDS>
 		@Activate
-		<#if serviceBuilder.isVersionGTE_7_3_0()>
+		<#if serviceBuilder.isVersionGTE_7_3_0() && entity.isCacheEnabled()>
 			public void activate(BundleContext bundleContext) {
 				_bundleContext = bundleContext;
 		<#else>
 			public void activate() {
-				${entity.name}ModelImpl.setEntityCacheEnabled(entityCacheEnabled);
-				${entity.name}ModelImpl.setFinderCacheEnabled(finderCacheEnabled);
+				<#if serviceBuilder.isVersionLTE_7_2_0()>
+					${entity.name}ModelImpl.setEntityCacheEnabled(entityCacheEnabled);
+					${entity.name}ModelImpl.setFinderCacheEnabled(finderCacheEnabled);
+				</#if>
 		</#if>
 	<#else>
 		public void afterPropertiesSet() {
 	</#if>
 
-		<#if serviceBuilder.isVersionGTE_7_3_0()>
+		<#if serviceBuilder.isVersionGTE_7_3_0() && entity.isCacheEnabled()>
 			<#if osgiModule>
 				<#if !dependencyInjectorDS>
 					Bundle bundle = FrameworkUtil.getBundle(${entity.name}PersistenceImpl.class);
@@ -2269,90 +2357,8 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			</#if>
 		</#list>
 
-		_finderPathWithPaginationFindAll =
-			<#if serviceBuilder.isVersionGTE_7_3_0()>
-				_createFinderPath(
-			<#else>
-				new FinderPath(
-					${entityCacheEnabled},
-					${finderCacheEnabled},
-					${entity.name}Impl.class,
-			</#if>
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]
-			<#if serviceBuilder.isVersionGTE_7_3_0()>
-				, new String[0], true
-			</#if>
-			);
-
-		_finderPathWithoutPaginationFindAll =
-			<#if serviceBuilder.isVersionGTE_7_3_0()>
-				_createFinderPath(
-			<#else>
-				new FinderPath(
-					${entityCacheEnabled},
-					${finderCacheEnabled},
-					${entity.name}Impl.class,
-			</#if>
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findAll", new String[0]
-			<#if serviceBuilder.isVersionGTE_7_3_0()>
-				, new String[0], true
-			</#if>
-			);
-
-		_finderPathCountAll =
-			<#if serviceBuilder.isVersionGTE_7_3_0()>
-				_createFinderPath(
-			<#else>
-				new FinderPath(
-					${entityCacheEnabled},
-					${finderCacheEnabled},
-					Long.class,
-			</#if>
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countAll", new String[0]
-			<#if serviceBuilder.isVersionGTE_7_3_0()>
-				, new String[0], false
-			</#if>
-			);
-
-		<#if entity.isHierarchicalTree()>
-			_finderPathWithPaginationCountAncestors =
-				<#if serviceBuilder.isVersionGTE_7_3_0()>
-					_createFinderPath(
-				<#else>
-					new FinderPath(
-						${entityCacheEnabled},
-						${finderCacheEnabled},
-						Long.class,
-				</#if>
-				FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-				"countAncestors",
-				new String[] {Long.class.getName(), Long.class.getName(), Long.class.getName()}
-				<#if serviceBuilder.isVersionGTE_7_3_0()>
-					, new String[]{"${scopeEntityColumn.DBName}", "left${pkEntityColumn.methodName}", "right${pkEntityColumn.methodName}"}, false
-				</#if>
-				);
-
-			_finderPathWithPaginationCountDescendants =
-				<#if serviceBuilder.isVersionGTE_7_3_0()>
-					_createFinderPath(
-				<#else>
-					new FinderPath(
-						${entityCacheEnabled},
-						${finderCacheEnabled},
-						Long.class,
-				</#if>
-				FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-				"countDescendants",
-				new String[] {Long.class.getName(), Long.class.getName(), Long.class.getName()}
-				<#if serviceBuilder.isVersionGTE_7_3_0()>
-					, new String[]{"${scopeEntityColumn.DBName}", "left${pkEntityColumn.methodName}", "right${pkEntityColumn.methodName}"}, false
-				</#if>
-				);
-
-			_finderPathWithPaginationGetAncestors =
+		<#if generateCacheCode>
+			_finderPathWithPaginationFindAll =
 				<#if serviceBuilder.isVersionGTE_7_3_0()>
 					_createFinderPath(
 				<#else>
@@ -2362,14 +2368,13 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 						${entity.name}Impl.class,
 				</#if>
 				FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-				"getAncestors",
-				new String[] {Long.class.getName(), Long.class.getName(), Long.class.getName()}
+				"findAll", new String[0]
 				<#if serviceBuilder.isVersionGTE_7_3_0()>
-					, new String[]{"${scopeEntityColumn.DBName}", "left${pkEntityColumn.methodName}", "right${pkEntityColumn.methodName}"}, true
+					, new String[0], true
 				</#if>
 				);
 
-			_finderPathWithPaginationGetDescendants =
+			_finderPathWithoutPaginationFindAll =
 				<#if serviceBuilder.isVersionGTE_7_3_0()>
 					_createFinderPath(
 				<#else>
@@ -2378,20 +2383,65 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 						${finderCacheEnabled},
 						${entity.name}Impl.class,
 				</#if>
-				FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-				"getDescendants",
-				new String[] {Long.class.getName(), Long.class.getName(), Long.class.getName()}
+				FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+				"findAll", new String[0]
 				<#if serviceBuilder.isVersionGTE_7_3_0()>
-					, new String[]{"${scopeEntityColumn.DBName}", "left${pkEntityColumn.methodName}", "right${pkEntityColumn.methodName}"}, true
+					, new String[0], true
 				</#if>
 				);
-		</#if>
 
-		<#list entity.entityFinders as entityFinder>
-			<#assign entityColumns = entityFinder.entityColumns />
+			_finderPathCountAll =
+				<#if serviceBuilder.isVersionGTE_7_3_0()>
+					_createFinderPath(
+				<#else>
+					new FinderPath(
+						${entityCacheEnabled},
+						${finderCacheEnabled},
+						Long.class,
+				</#if>
+				FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+				"countAll", new String[0]
+				<#if serviceBuilder.isVersionGTE_7_3_0()>
+					, new String[0], false
+				</#if>
+				);
 
-			<#if entityFinder.isCollection()>
-				_finderPathWithPaginationFindBy${entityFinder.name} =
+			<#if entity.isHierarchicalTree()>
+				_finderPathWithPaginationCountAncestors =
+					<#if serviceBuilder.isVersionGTE_7_3_0()>
+						_createFinderPath(
+					<#else>
+						new FinderPath(
+							${entityCacheEnabled},
+							${finderCacheEnabled},
+							Long.class,
+					</#if>
+					FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+					"countAncestors",
+					new String[] {Long.class.getName(), Long.class.getName(), Long.class.getName()}
+					<#if serviceBuilder.isVersionGTE_7_3_0()>
+						, new String[]{"${scopeEntityColumn.DBName}", "left${pkEntityColumn.methodName}", "right${pkEntityColumn.methodName}"}, false
+					</#if>
+					);
+
+				_finderPathWithPaginationCountDescendants =
+					<#if serviceBuilder.isVersionGTE_7_3_0()>
+						_createFinderPath(
+					<#else>
+						new FinderPath(
+							${entityCacheEnabled},
+							${finderCacheEnabled},
+							Long.class,
+					</#if>
+					FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+					"countDescendants",
+					new String[] {Long.class.getName(), Long.class.getName(), Long.class.getName()}
+					<#if serviceBuilder.isVersionGTE_7_3_0()>
+						, new String[]{"${scopeEntityColumn.DBName}", "left${pkEntityColumn.methodName}", "right${pkEntityColumn.methodName}"}, false
+					</#if>
+					);
+
+				_finderPathWithPaginationGetAncestors =
 					<#if serviceBuilder.isVersionGTE_7_3_0()>
 						_createFinderPath(
 					<#else>
@@ -2401,31 +2451,36 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 							${entity.name}Impl.class,
 					</#if>
 					FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-					"findBy${entityFinder.name}",
-					new String[] {
-						<#list entityColumns as entityColumn>
-							${serviceBuilder.getPrimitiveObj("${entityColumn.type}")}.class.getName(),
-						</#list>
-
-						Integer.class.getName(), Integer.class.getName(), OrderByComparator.class.getName()
-					}
+					"getAncestors",
+					new String[] {Long.class.getName(), Long.class.getName(), Long.class.getName()}
 					<#if serviceBuilder.isVersionGTE_7_3_0()>
-						,
-						new String[] {
-							<#list entityColumns as entityColumn>
-								"${entityColumn.DBName}"
-
-								<#if entityColumn_has_next>
-									,
-								</#if>
-							</#list>
-							},
-						true
+						, new String[]{"${scopeEntityColumn.DBName}", "left${pkEntityColumn.methodName}", "right${pkEntityColumn.methodName}"}, true
 					</#if>
 					);
 
-				<#if !entityFinder.hasCustomComparator()>
-					_finderPathWithoutPaginationFindBy${entityFinder.name} =
+				_finderPathWithPaginationGetDescendants =
+					<#if serviceBuilder.isVersionGTE_7_3_0()>
+						_createFinderPath(
+					<#else>
+						new FinderPath(
+							${entityCacheEnabled},
+							${finderCacheEnabled},
+							${entity.name}Impl.class,
+					</#if>
+					FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+					"getDescendants",
+					new String[] {Long.class.getName(), Long.class.getName(), Long.class.getName()}
+					<#if serviceBuilder.isVersionGTE_7_3_0()>
+						, new String[]{"${scopeEntityColumn.DBName}", "left${pkEntityColumn.methodName}", "right${pkEntityColumn.methodName}"}, true
+					</#if>
+					);
+			</#if>
+
+			<#list entity.entityFinders as entityFinder>
+				<#assign entityColumns = entityFinder.entityColumns />
+
+				<#if entityFinder.isCollection()>
+					_finderPathWithPaginationFindBy${entityFinder.name} =
 						<#if serviceBuilder.isVersionGTE_7_3_0()>
 							_createFinderPath(
 						<#else>
@@ -2434,8 +2489,103 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 								${finderCacheEnabled},
 								${entity.name}Impl.class,
 						</#if>
-						FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+						FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 						"findBy${entityFinder.name}",
+						new String[] {
+							<#list entityColumns as entityColumn>
+								${serviceBuilder.getPrimitiveObj("${entityColumn.type}")}.class.getName(),
+							</#list>
+
+							Integer.class.getName(), Integer.class.getName(), OrderByComparator.class.getName()
+						}
+						<#if serviceBuilder.isVersionGTE_7_3_0()>
+							,
+							new String[] {
+								<#list entityColumns as entityColumn>
+									"${entityColumn.DBName}"
+
+									<#if entityColumn_has_next>
+										,
+									</#if>
+								</#list>
+								},
+							true
+						</#if>
+						);
+
+					<#if !entityFinder.hasCustomComparator()>
+						_finderPathWithoutPaginationFindBy${entityFinder.name} =
+							<#if serviceBuilder.isVersionGTE_7_3_0()>
+								_createFinderPath(
+							<#else>
+								new FinderPath(
+									${entityCacheEnabled},
+									${finderCacheEnabled},
+									${entity.name}Impl.class,
+							</#if>
+							FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+							"findBy${entityFinder.name}",
+							new String[] {
+								<#list entityColumns as entityColumn>
+									${serviceBuilder.getPrimitiveObj("${entityColumn.type}")}.class.getName()
+
+									<#if entityColumn_has_next>
+										,
+									</#if>
+								</#list>
+							}
+							<#if serviceBuilder.isVersionGTE_7_3_0()>
+								,
+								new String[] {
+									<#list entityColumns as entityColumn>
+											"${entityColumn.DBName}"
+
+										<#if entityColumn_has_next>
+											,
+										</#if>
+									</#list>
+									},
+								true
+							<#elseif columnBitmaskEnabled>
+								,
+
+								<#list entityColumns as entityColumn>
+									<#if serviceBuilder.isVersionGTE_7_3_0()>
+										${entity.name}ModelImpl.getColumnBitmask("${entityColumn.DBName}")
+									<#else>
+										${entity.name}ModelImpl.${entityColumn.name?upper_case}_COLUMN_BITMASK
+									</#if>
+
+									<#if entityColumn_has_next>
+										|
+									</#if>
+								</#list>
+
+								<#if entity.entityOrder??>
+									<#list entity.entityOrder.entityColumns as entityColumn>
+										<#if !entityColumns?seq_contains(entityColumn) && !entity.PKEntityColumns?seq_contains(entityColumn)>
+											| ${entity.name}ModelImpl.${entityColumn.name?upper_case}_COLUMN_BITMASK
+										</#if>
+									</#list>
+								</#if>
+							</#if>
+
+							);
+					</#if>
+				</#if>
+
+				<#if !entityFinder.isCollection() || entityFinder.isUnique()>
+					_finderPathFetchBy${entityFinder.name} =
+						<#if serviceBuilder.isVersionGTE_7_3_0()>
+							_createFinderPath(
+						<#else>
+							new FinderPath(
+								${entityCacheEnabled},
+								${finderCacheEnabled},
+								${entity.name}Impl.class,
+						</#if>
+						FINDER_CLASS_NAME_ENTITY,
+						"fetchBy${entityFinder.name}",
 						new String[] {
 							<#list entityColumns as entityColumn>
 								${serviceBuilder.getPrimitiveObj("${entityColumn.type}")}.class.getName()
@@ -2449,7 +2599,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 							,
 							new String[] {
 								<#list entityColumns as entityColumn>
-										"${entityColumn.DBName}"
+									"${entityColumn.DBName}"
 
 									<#if entityColumn_has_next>
 										,
@@ -2461,54 +2611,41 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 							,
 
 							<#list entityColumns as entityColumn>
-								<#if serviceBuilder.isVersionGTE_7_3_0()>
-									${entity.name}ModelImpl.getColumnBitmask("${entityColumn.DBName}")
-								<#else>
-									${entity.name}ModelImpl.${entityColumn.name?upper_case}_COLUMN_BITMASK
-								</#if>
+								${entity.name}ModelImpl.${entityColumn.name?upper_case}_COLUMN_BITMASK
 
 								<#if entityColumn_has_next>
 									|
 								</#if>
 							</#list>
-
-							<#if entity.entityOrder??>
-								<#list entity.entityOrder.entityColumns as entityColumn>
-									<#if !entityColumns?seq_contains(entityColumn) && !entity.PKEntityColumns?seq_contains(entityColumn)>
-										| ${entity.name}ModelImpl.${entityColumn.name?upper_case}_COLUMN_BITMASK
-									</#if>
-								</#list>
-							</#if>
 						</#if>
 
 						);
 				</#if>
-			</#if>
 
-			<#if !entityFinder.isCollection() || entityFinder.isUnique()>
-				_finderPathFetchBy${entityFinder.name} =
-					<#if serviceBuilder.isVersionGTE_7_3_0()>
-						_createFinderPath(
-					<#else>
-						new FinderPath(
-							${entityCacheEnabled},
-							${finderCacheEnabled},
-							${entity.name}Impl.class,
-					</#if>
-					FINDER_CLASS_NAME_ENTITY,
-					"fetchBy${entityFinder.name}",
-					new String[] {
-						<#list entityColumns as entityColumn>
-							${serviceBuilder.getPrimitiveObj("${entityColumn.type}")}.class.getName()
-
-							<#if entityColumn_has_next>
-								,
-							</#if>
-						</#list>
-					}
-					<#if serviceBuilder.isVersionGTE_7_3_0()>
-						,
+				<#if !entityFinder.hasCustomComparator()>
+					_finderPathCountBy${entityFinder.name} =
+						<#if serviceBuilder.isVersionGTE_7_3_0()>
+							_createFinderPath(
+						<#else>
+							new FinderPath(
+								${entityCacheEnabled},
+								${finderCacheEnabled},
+								Long.class,
+						</#if>
+						FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+						"countBy${entityFinder.name}",
 						new String[] {
+							<#list entityColumns as entityColumn>
+								${serviceBuilder.getPrimitiveObj("${entityColumn.type}")}.class.getName()
+
+								<#if entityColumn_has_next>
+									,
+								</#if>
+							</#list>
+						}
+						<#if serviceBuilder.isVersionGTE_7_3_0()>
+							,
+							new String[] {
 							<#list entityColumns as entityColumn>
 								"${entityColumn.DBName}"
 
@@ -2517,96 +2654,49 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 								</#if>
 							</#list>
 							},
-						true
-					<#elseif columnBitmaskEnabled>
-						,
+							false
+						</#if>
+						);
+				</#if>
 
-						<#list entityColumns as entityColumn>
-							${entity.name}ModelImpl.${entityColumn.name?upper_case}_COLUMN_BITMASK
-
-							<#if entityColumn_has_next>
-								|
-							</#if>
-						</#list>
-					</#if>
-
-					);
-			</#if>
-
-			<#if !entityFinder.hasCustomComparator()>
-				_finderPathCountBy${entityFinder.name} =
-					<#if serviceBuilder.isVersionGTE_7_3_0()>
-						_createFinderPath(
-					<#else>
-						new FinderPath(
-							${entityCacheEnabled},
-							${finderCacheEnabled},
-							Long.class,
-					</#if>
-					FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-					"countBy${entityFinder.name}",
-					new String[] {
-						<#list entityColumns as entityColumn>
-							${serviceBuilder.getPrimitiveObj("${entityColumn.type}")}.class.getName()
-
-							<#if entityColumn_has_next>
-								,
-							</#if>
-						</#list>
-					}
-					<#if serviceBuilder.isVersionGTE_7_3_0()>
-						,
+				<#if entityFinder.hasArrayableOperator() || entityFinder.hasCustomComparator()>
+					_finderPathWithPaginationCountBy${entityFinder.name} =
+						<#if serviceBuilder.isVersionGTE_7_3_0()>
+							_createFinderPath(
+						<#else>
+							new FinderPath(
+								${entityCacheEnabled},
+								${finderCacheEnabled},
+								Long.class,
+						</#if>
+						FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+						"countBy${entityFinder.name}",
 						new String[] {
-						<#list entityColumns as entityColumn>
-							"${entityColumn.DBName}"
+							<#list entityColumns as entityColumn>
+								${serviceBuilder.getPrimitiveObj("${entityColumn.type}")}.class.getName()
 
-							<#if entityColumn_has_next>
-								,
-							</#if>
-						</#list>
-						},
-						false
-					</#if>
-					);
-			</#if>
+								<#if entityColumn_has_next>
+									,
+								</#if>
+							</#list>
+						}
+						<#if serviceBuilder.isVersionGTE_7_3_0()>
+							,
+							new String[] {
+							<#list entityColumns as entityColumn>
+								"${entityColumn.DBName}"
 
-			<#if entityFinder.hasArrayableOperator() || entityFinder.hasCustomComparator()>
-				_finderPathWithPaginationCountBy${entityFinder.name} =
-					<#if serviceBuilder.isVersionGTE_7_3_0()>
-						_createFinderPath(
-					<#else>
-						new FinderPath(
-							${entityCacheEnabled},
-							${finderCacheEnabled},
-							Long.class,
-					</#if>
-					FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-					"countBy${entityFinder.name}",
-					new String[] {
-						<#list entityColumns as entityColumn>
-							${serviceBuilder.getPrimitiveObj("${entityColumn.type}")}.class.getName()
-
-							<#if entityColumn_has_next>
-								,
-							</#if>
-						</#list>
-					}
-					<#if serviceBuilder.isVersionGTE_7_3_0()>
-						,
-						new String[] {
-						<#list entityColumns as entityColumn>
-							"${entityColumn.DBName}"
-
-							<#if entityColumn_has_next>
-								,
-							</#if>
-						</#list>
-						},
-						false
-					</#if>
-					);
-			</#if>
-		</#list>
+								<#if entityColumn_has_next>
+									,
+								</#if>
+							</#list>
+							},
+							false
+						</#if>
+						);
+				</#if>
+			</#list>
+		</#if>
 	}
 
 	<#if dependencyInjectorDS>
@@ -2616,20 +2706,22 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		public void destroy() {
 	</#if>
 
-		${entityCache}.removeCache(${entity.name}Impl.class.getName());
+		<#if generateCacheCode>
+			${entityCache}.removeCache(${entity.name}Impl.class.getName());
 
-		<#if serviceBuilder.isVersionGTE_7_3_0()>
-			_argumentsResolverServiceRegistration.unregister();
+			<#if serviceBuilder.isVersionGTE_7_3_0()>
+				_argumentsResolverServiceRegistration.unregister();
 
-			for (ServiceRegistration<FinderPath> serviceRegistration :
-				_serviceRegistrations) {
+				for (ServiceRegistration<FinderPath> serviceRegistration :
+					_serviceRegistrations) {
 
-				serviceRegistration.unregister();
-			}
-		<#else>
-			${finderCache}.removeCache(FINDER_CLASS_NAME_ENTITY);
-			${finderCache}.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-			${finderCache}.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+					serviceRegistration.unregister();
+				}
+			<#else>
+				${finderCache}.removeCache(FINDER_CLASS_NAME_ENTITY);
+				${finderCache}.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+				${finderCache}.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+			</#if>
 		</#if>
 
 		<#list entity.entityColumns as entityColumn>
@@ -2652,7 +2744,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	</#if>
 
 	<#if osgiModule>
-		<#if serviceBuilder.isVersionGTE_7_3_0()>
+		<#if serviceBuilder.isVersionGTE_7_3_0() && entity.isCacheEnabled()>
 			private BundleContext _bundleContext;
 		</#if>
 
@@ -2666,19 +2758,21 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			protected CTPersistenceHelper ctPersistenceHelper;
 		</#if>
 
-		<#if dependencyInjectorDS>
-			@Reference
-		<#else>
-			@ServiceReference(type = EntityCache.class)
-		</#if>
-		protected EntityCache entityCache;
+		<#if generateCacheCode>
+			<#if dependencyInjectorDS>
+				@Reference
+			<#else>
+				@ServiceReference(type = EntityCache.class)
+			</#if>
+			protected EntityCache entityCache;
 
-		<#if dependencyInjectorDS>
-			@Reference
-		<#else>
-			@ServiceReference(type = FinderCache.class)
+			<#if dependencyInjectorDS>
+				@Reference
+			<#else>
+				@ServiceReference(type = FinderCache.class)
+			</#if>
+			protected FinderCache finderCache;
 		</#if>
-		protected FinderCache finderCache;
 	</#if>
 
 	<#list entity.entityColumns as entityColumn>
@@ -2814,7 +2908,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		}
 	</#if>
 
-	<#if serviceBuilder.isVersionGTE_7_3_0()>
+	<#if serviceBuilder.isVersionGTE_7_3_0() && entity.isCacheEnabled()>
 		private FinderPath _createFinderPath(
 			String cacheName, String methodName, String[] params,
 			String[] columnNames, boolean baseModelResult) {
