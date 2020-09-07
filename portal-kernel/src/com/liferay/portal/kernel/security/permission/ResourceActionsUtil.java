@@ -350,12 +350,12 @@ public class ResourceActionsUtil {
 			portlet, servletContextName, classLoader, sources);
 	}
 
-	public static void readPortletResource(
+	public static Set<String> readPortletResource(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
 		throws Exception {
 
-		getResourceActions().readPortletResource(
+		return getResourceActions().readPortletResource(
 			servletContextName, classLoader, sources);
 	}
 

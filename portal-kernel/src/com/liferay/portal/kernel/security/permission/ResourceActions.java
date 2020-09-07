@@ -226,7 +226,7 @@ public interface ResourceActions {
 			String... sources)
 		throws ResourceActionsException;
 
-	public void readPortletResource(
+	public Set<String> readPortletResource(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
 		throws ResourceActionsException;
