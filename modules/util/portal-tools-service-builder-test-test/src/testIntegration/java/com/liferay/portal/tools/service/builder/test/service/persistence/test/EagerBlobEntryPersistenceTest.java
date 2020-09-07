@@ -433,8 +433,6 @@ public class EagerBlobEntryPersistenceTest {
 	public void testResetOriginalValues() throws Exception {
 		EagerBlobEntry newEagerBlobEntry = addEagerBlobEntry();
 
-		_persistence.clearCache();
-
 		_assertOriginalValues(
 			_persistence.findByPrimaryKey(newEagerBlobEntry.getPrimaryKey()));
 	}

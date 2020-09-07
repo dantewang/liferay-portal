@@ -1013,7 +1013,9 @@ public class ${entity.name}PersistenceTest {
 		public void testResetOriginalValues() throws Exception {
 			${entity.name} new${entity.name} = add${entity.name}();
 
-			_persistence.clearCache();
+			<#if serviceBuilder.isVersionLTE_7_2_0() || (serviceBuilder.isVersionGTE_7_3_0() && entity.isCacheEnabled())>
+				_persistence.clearCache();
+			</#if>
 
 			<#if serviceBuilder.isVersionGTE_7_3_0()>
 				_assertOriginalValues(_persistence.findByPrimaryKey(new${entity.name}.getPrimaryKey()));

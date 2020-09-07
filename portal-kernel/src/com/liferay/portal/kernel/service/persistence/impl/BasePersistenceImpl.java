@@ -68,6 +68,7 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.ProxyFactory;
 
 import java.io.Serializable;
 
@@ -110,7 +111,6 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 	public static final String COUNT_COLUMN_NAME = "COUNT_VALUE";
 
 	public void cacheResult(T model) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -797,7 +797,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 	}
 
 	protected EntityCache getEntityCache() {
-		throw new UnsupportedOperationException();
+		return _dummyEntityCache;
 	}
 
 	protected String getPKDBName() {
@@ -1033,6 +1033,8 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 	private DB _db;
 	private Map<String, String> _dbColumnNames = Collections.emptyMap();
 	private Dialect _dialect;
+	private final EntityCache _dummyEntityCache = ProxyFactory.newDummyInstance(
+		EntityCache.class);
 	private Class<T> _modelClass;
 	private Class<? extends T> _modelImplClass;
 	private ModelPKType _modelPKType = ModelPKType.COMPOUND;

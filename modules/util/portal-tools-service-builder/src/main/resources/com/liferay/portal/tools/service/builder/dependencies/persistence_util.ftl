@@ -47,19 +47,21 @@ public class ${entity.name}Util {
 	 * Never modify this class directly. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 
-	/**
-	 * @see com.liferay.portal.kernel.service.persistence.BasePersistence#clearCache()
-	 */
-	public static void clearCache() {
-		getPersistence().clearCache();
-	}
+	<#if serviceBuilder.isVersionLTE_7_2_0() || (serviceBuilder.isVersionGTE_7_3_0() && entity.isCacheEnabled())>
+		/**
+		 * @see com.liferay.portal.kernel.service.persistence.BasePersistence#clearCache()
+		 */
+		public static void clearCache() {
+			getPersistence().clearCache();
+		}
 
-	/**
-	 * @see com.liferay.portal.kernel.service.persistence.BasePersistence#clearCache(com.liferay.portal.kernel.model.BaseModel)
-	 */
-	public static void clearCache(${entity.name} ${entity.varName}) {
-		getPersistence().clearCache(${entity.varName});
-	}
+		/**
+		 * @see com.liferay.portal.kernel.service.persistence.BasePersistence#clearCache(com.liferay.portal.kernel.model.BaseModel)
+		 */
+		public static void clearCache(${entity.name} ${entity.varName}) {
+			getPersistence().clearCache(${entity.varName});
+		}
+	</#if>
 
 	/**
 	 * @see com.liferay.portal.kernel.service.persistence.BasePersistence#countWithDynamicQuery(DynamicQuery)
