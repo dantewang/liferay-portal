@@ -132,8 +132,9 @@ public class ServiceConfigurationInitializer {
 			_resourceActions.checkResourceActions(
 				_resourceActions.readModelResource(
 					null, _classLoader, sources));
-
-			_resourceActions.readPortletResource(null, _classLoader, sources);
+			_resourceActions.checkResourceActions(
+				_resourceActions.readPortletResource(
+					null, _classLoader, sources));
 		}
 		catch (Exception exception) {
 			_log.error(
