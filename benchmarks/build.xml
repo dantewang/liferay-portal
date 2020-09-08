@@ -1,9 +1,30 @@
 <?xml version="1.0"?>
 
-<project basedir="." default="run" name="benchmarks">
+<project basedir="." default="run" name="benchmarks" xmlns:if="ant:if" xmlns:unless="ant:unless">
 	<import file="../build-common.xml" />
 
-	<target name="build-sample-sql">
+	<property file="importer.${user.name}.properties" />
+	<property file="importer.properties" />
+	<property file="benchmarks.properties" />
+
+	<property name="sample-data-sql" value="sample-data-${sample.sql.db.type}.sql" />
+	<property name="build-db-file" value="../sql/build.xml" />
+
+	<macrodef name="build-sql">
+		<attribute name="dir" />
+		<sequential>
+			<ant antfile="${build-db-file}" inheritall="false" target="build-db">
+				<property name="db.sql.dir" value="@{dir}" />
+			</ant>
+
+			<concat append="true" destfile="${basedir}/${sample-data-sql}">
+				<filelist dir="@{dir}/tables/" files="tables-${sample.sql.db.type}.sql" />
+				<filelist dir="@{dir}/indexes/" files="indexes-${sample.sql.db.type}.sql" />
+			</concat>
+		</sequential>
+	</macrodef>
+
+	<target depends="clean" name="build-sample-sql">
 		<gradle-execute dir="../modules/util/portal-tools-sample-sql-builder" task="jar" />
 
 		<unzip
@@ -24,6 +45,10 @@
 			<fileset
 				dir="${sdk.dir}/dist"
 				includes="com.liferay.blogs.*.jar"
+			/>
+			<fileset
+				dir="${sdk.dir}/dist"
+				includes="com.liferay.commerce.*.jar"
 			/>
 			<fileset
 				dir="${sdk.dir}/dist"
@@ -80,6 +105,17 @@
 			<sysproperty key="sample-sql-properties" value="${sample.sql.properties.file}" />
 		</java>
 
+		<concat append="true" destfile="${basedir}/${sample-data-sql}">
+			<filelist dir="../sql/portal/" files="portal-${sample.sql.db.type}.sql" />
+			<filelist dir="../sql/indexes/" files="indexes-${sample.sql.db.type}.sql" />
+		</concat>
+
+		<for list="${portal.module.dir.list}" param="module">
+			<sequential>
+				<build-sql dir="@{module}" />
+			</sequential>
+		</for>
+
 		<delete dir="build" quiet="true" />
 	</target>
 
@@ -87,8 +123,37 @@
 		<delete includeemptydirs="true">
 			<fileset
 				dir="."
-				includes="*.csv,*.sql,benchmarks-actual.properties,output/**,temp/**"
+				includes="*.csv,*.sql,benchmarks-actual.properties,liferay/**,output/**,temp/**"
 			/>
 		</delete>
+	</target>
+
+	<target depends="clean, build-sample-sql" name="exec-sql">
+		<sequential>
+			<concat append="true" destfile="${basedir}/${sample-data-sql}" if:true="${sample.sql.output.merge}">
+				<filelist dir="${sample.sql.output.dir}" files="sample-${sample.sql.db.type}.sql" />
+			</concat>
+
+			<if>
+				<equals arg1="${sample.sql.output.merge}" arg2="false" />
+				<then>
+					<for param="sql-file-filename">
+						<path>
+							<fileset
+								dir="${sample.sql.output.dir}/output"
+								includes="*.sql"
+							/>
+						</path>
+						<sequential>
+							<concat append="true" destfile="${basedir}/${sample-data-sql}">
+								<filelist dir="${sample.sql.output.dir}/output" files="@{sql-file-filename}" />
+							</concat>
+						</sequential>
+					</for>
+				</then>
+			</if>
+
+			<sql classpathref="lib.classpath" driver="${jdbc.default.driverClassName}" password="${jdbc.default.password}" src="${basedir}/${sample-data-sql}" url="${jdbc.default.url}" userid="${jdbc.default.username}" />
+		</sequential>
 	</target>
 </project>
