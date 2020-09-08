@@ -34,13 +34,13 @@
 
 	${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(_layoutModel))}
 
-	<#local fragmentEntryLinkModel = dataFactory.newFragmentEntryLinkModel(_layoutModel, _fragmentEntryModel)>
+	<#local fragmentEntryLinkModel = dataFactory.newFragmentEntryLinkModel(_layoutModel, _fragmentEntryModel, dataFactory.getClassNameId("com.liferay.portal.kernel.model.Layout"))>
 
 	${dataFactory.toInsertSQL(fragmentEntryLinkModel)}
 
 	${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferencesModel(fragmentEntryLinkModel))}
 
-	<#local layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(_layoutModel)>
+	<#local layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(_layoutModel, dataFactory.getClassNameId("com.liferay.portal.kernel.model.Layout"))>
 
 	${dataFactory.toInsertSQL(layoutPageTemplateStructureModel)}
 
