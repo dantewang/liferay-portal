@@ -1,17 +1,3 @@
-<#assign ddmStructureModel = dataFactory.newDefaultJournalDDMStructureModel() />
-
-<@insertDDMStructure
-	_ddmStructureLayoutModel=dataFactory.newDefaultJournalDDMStructureLayoutModel()
-	_ddmStructureModel=ddmStructureModel
-	_ddmStructureVersionModel=dataFactory.newDefaultJournalDDMStructureVersionModel(ddmStructureModel)
-/>
-
-<#assign ddmTemplateModel = dataFactory.newDefaultJournalDDMTemplateModel() />
-
-${dataFactory.toInsertSQL(ddmTemplateModel)}
-
-${dataFactory.toInsertSQL(dataFactory.newDefaultJournalDDMTemplateVersionModel())}
-
 <#assign
 	journalArticlePageCounts = dataFactory.getSequence(dataFactory.maxJournalArticlePageCount)
 
@@ -57,9 +43,9 @@ ${dataFactory.toInsertSQL(dataFactory.newDefaultJournalDDMTemplateVersionModel()
 
 			${dataFactory.toInsertSQL(journalArticleLocalizationModel)}
 
-			${dataFactory.toInsertSQL(dataFactory.newDDMTemplateLinkModel(journalArticleModel, ddmTemplateModel.templateId))}
+			${dataFactory.toInsertSQL(dataFactory.newDDMTemplateLinkModel(journalArticleModel, defaultJournalDDMTemplateModel.templateId))}
 
-			${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(journalArticleModel, ddmStructureModel.structureId))}
+			${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(journalArticleModel, defaultJournalDDMStructureModel.structureId))}
 
 			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(journalArticleModel))}
 
