@@ -1,7 +1,4 @@
-<#assign
-	wikiNodeModels = dataFactory.newWikiNodeModels(groupId)
-	wikiPageClassNameId = dataFactory.getClassNameId("com.liferay.wiki.model.WikiPage")
-/>
+<#assign wikiNodeModels = dataFactory.newWikiNodeModels(groupId) />
 
 <#list wikiNodeModels as wikiNodeModel>
 	${dataFactory.toInsertSQL(wikiNodeModel)}

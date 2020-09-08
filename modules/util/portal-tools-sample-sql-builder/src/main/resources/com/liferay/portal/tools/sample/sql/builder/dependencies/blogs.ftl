@@ -1,7 +1,4 @@
-<#assign
-	blogsEntryClassNameId = dataFactory.getClassNameId("com.liferay.blogs.model.BlogsEntry")
-	blogsEntryModels = dataFactory.newBlogsEntryModels(groupId)
-/>
+<#assign blogsEntryModels = dataFactory.newBlogsEntryModels(groupId) />
 
 <#list blogsEntryModels as blogsEntryModel>
 	${dataFactory.toInsertSQL(blogsEntryModel)}
