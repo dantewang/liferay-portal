@@ -498,6 +498,30 @@ public class DataFactory {
 		return allAssetVocabularyModels;
 	}
 
+	public String getClassName(BaseModel<?> baseModel) {
+		long classNameId;
+
+		if (baseModel instanceof DDMStructureModel) {
+			DDMStructureModel ddmStructureModel = (DDMStructureModel)baseModel;
+
+			classNameId = ddmStructureModel.getClassNameId();
+		}
+		else {
+			DDMTemplateModel ddmTemplateModel = (DDMTemplateModel)baseModel;
+
+			classNameId = ddmTemplateModel.getResourceClassNameId();
+		}
+
+		for (ClassNameModel classNameModel : _classNameModels.values()) {
+			if (classNameModel.getClassNameId() == classNameId) {
+				return classNameModel.getValue();
+			}
+		}
+
+		throw new RuntimeException(
+			"Unable to find class name for id " + classNameId);
+	}
+
 	public long getClassNameId(Class<?> clazz) {
 		ClassNameModel classNameModel = _classNameModels.get(clazz.getName());
 
@@ -3338,14 +3362,13 @@ public class DataFactory {
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
-		DDMStructureModel ddmStructureModel) {
+		DDMStructureModel ddmStructureModel, String className) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
 			new ArrayList<>(3);
 
 		String name = _getResourcePermissionModelName(
-			DDMStructure.class.getName(),
-			getClassName(ddmStructureModel.getClassNameId()));
+			DDMStructure.class.getName(), className);
 		String primKey = String.valueOf(ddmStructureModel.getStructureId());
 
 		resourcePermissionModels.add(
@@ -3360,14 +3383,13 @@ public class DataFactory {
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
-		DDMTemplateModel ddmTemplateModel) {
+		DDMTemplateModel ddmTemplateModel, String className) {
 
 		List<ResourcePermissionModel> resourcePermissionModels =
 			new ArrayList<>(3);
 
 		String name = _getResourcePermissionModelName(
-			DDMTemplate.class.getName(),
-			getClassName(ddmTemplateModel.getResourceClassNameId()));
+			DDMTemplate.class.getName(), className);
 		String primKey = String.valueOf(ddmTemplateModel.getTemplateId());
 
 		resourcePermissionModels.add(
@@ -3698,7 +3720,6 @@ public class DataFactory {
 		return userModels;
 	}
 
-
 	public GroupModel newUserPersonalSiteGroupModel(long classNameId) {
 		return newGroupModel(
 			_userPersonalSiteGroupId, classNameId, _defaultUserId,
@@ -3811,6 +3832,44 @@ public class DataFactory {
 		}
 	}
 
+	public String toInsertSQL(BaseModel<?> baseModel, String className) {
+		try {
+			StringBundler sb = new StringBundler();
+
+			toInsertSQL(sb, baseModel);
+
+			Class<?> clazz = baseModel.getClass();
+
+			for (Class<?> modelClass : clazz.getInterfaces()) {
+				try {
+					Class<?>[] classArg = new Class<?>[2];
+
+					classArg[0] = modelClass;
+					classArg[1] = String.class;
+
+					Method method = DataFactory.class.getMethod(
+						"newResourcePermissionModels", classArg);
+
+					for (ResourcePermissionModel resourcePermissionModel :
+							(List<ResourcePermissionModel>)method.invoke(
+								this, baseModel, className)) {
+
+						sb.append("\n");
+
+						toInsertSQL(sb, resourcePermissionModel);
+					}
+				}
+				catch (NoSuchMethodException noSuchMethodException) {
+				}
+			}
+
+			return sb.toString();
+		}
+		catch (ReflectiveOperationException reflectiveOperationException) {
+			return ReflectionUtil.throwException(reflectiveOperationException);
+		}
+	}
+
 	public String toInsertSQL(
 		String mappingTableName, long companyId, long leftPrimaryKey,
 		long rightPrimaryKey) {
@@ -3876,17 +3935,6 @@ public class DataFactory {
 		return new ObjectValuePair<>(
 			assetTagNames,
 			index + BenchmarksPropsValues.MAX_ASSET_ENTRY_TO_ASSET_TAG_COUNT);
-	}
-
-	protected String getClassName(long classNameId) {
-		for (ClassNameModel classNameModel : _classNameModels.values()) {
-			if (classNameModel.getClassNameId() == classNameId) {
-				return classNameModel.getValue();
-			}
-		}
-
-		throw new RuntimeException(
-			"Unable to find class name for id " + classNameId);
 	}
 
 	protected InputStream getResourceInputStream(String resourceName) {
