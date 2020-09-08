@@ -16,18 +16,14 @@ package com.liferay.portlet.documentlibrary.store;
 
 import com.liferay.document.library.kernel.store.Store;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.change.tracking.store.CTStoreFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
-import com.liferay.registry.Registry;
-import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
-import com.liferay.registry.ServiceTrackerCustomizer;
+import com.liferay.registry.collections.ServiceReferenceMapper;
 import com.liferay.registry.collections.ServiceTrackerCollections;
 import com.liferay.registry.collections.ServiceTrackerMap;
 
@@ -149,51 +145,24 @@ public class StoreFactory {
 		}
 
 		private static final ServiceTrackerMap<String, Store>
-			_storeServiceTrackerMap;
-
-		static {
-			Registry registry = RegistryUtil.getRegistry();
-
 			_storeServiceTrackerMap =
 				ServiceTrackerCollections.openSingleValueMap(
-					Store.class, "store.type",
-					new ServiceTrackerCustomizer<Store, Store>() {
+					Store.class, "(&(ct.aware=true)(store.type=*))",
+					new ServiceReferenceMapper<String, Store>() {
 
 						@Override
-						public Store addingService(
-							ServiceReference<Store> serviceReference) {
-
-							Store store = registry.getService(serviceReference);
-
-							if (!GetterUtil.getBoolean(
-									serviceReference.getProperty("ct.aware"))) {
-
-								store = CTStoreFactoryUtil.createCTStore(
-									store,
-									GetterUtil.getString(
-										serviceReference.getProperty(
-											"store.type")));
-							}
-
-							return store;
-						}
-
-						@Override
-						public void modifiedService(
+						public void map(
 							ServiceReference<Store> serviceReference,
-							Store service) {
-						}
+							Emitter<String> emitter) {
 
-						@Override
-						public void removedService(
-							ServiceReference<Store> serviceReference,
-							Store service) {
+							String storeType =
+								(String)serviceReference.getProperty(
+									"store.type");
 
-							registry.ungetService(serviceReference);
+							emitter.emit(storeType);
 						}
 
 					});
-		}
 
 	}
 
