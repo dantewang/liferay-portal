@@ -491,12 +491,6 @@ public class DataFactory {
 			"Unable to find class name for id " + classNameId);
 	}
 
-	public long getClassNameId(Class<?> clazz) {
-		ClassNameModel classNameModel = _classNameModels.get(clazz.getName());
-
-		return classNameModel.getClassNameId();
-	}
-
 	public long getClassNameId(String className) {
 		ClassNameModel classNameModel = _classNameModels.get(className);
 
