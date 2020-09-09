@@ -2,6 +2,7 @@
 
 <#assign
 	classNameDataFactory = dataFactory.getDataFactoryInstance("classNameDataFactory")
+	journalDataFactory = dataFactory.getDataFactoryInstance("journalDataFactory")
 	portletPreferenceDataFactory = dataFactory.getDataFactoryInstance("portletPreferenceDataFactory")
 />
 
@@ -44,7 +45,7 @@
 
 	${dataFactory.toInsertSQL(fragmentEntryLinkModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferencesModel(fragmentEntryLinkModel, _portletPreferencesFactory))}
+	${dataFactory.toInsertSQL(journalDataFactory.newJournalContentPortletPreferencesModel(fragmentEntryLinkModel, _portletPreferencesFactory))}
 
 	<#local layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(_layoutModel, classNameDataFactory.getClassNameId("Layout"))>
 
