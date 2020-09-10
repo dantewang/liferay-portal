@@ -50,6 +50,7 @@ import com.liferay.document.library.kernel.util.DLUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.change.tracking.store.CTStoreFactory;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -687,16 +688,6 @@ public class S3Store implements Store {
 		}
 	}
 
-	@Reference(unbind = "-")
-	protected void setS3FileCache(S3FileCache s3FileCache) {
-		_s3FileCache = s3FileCache;
-	}
-
-	@Reference(unbind = "-")
-	protected void setS3KeyTransformer(S3KeyTransformer s3KeyTransformer) {
-		_s3KeyTransformer = s3KeyTransformer;
-	}
-
 	protected SystemException transform(
 		AmazonClientException amazonClientException) {
 
@@ -746,8 +737,16 @@ public class S3Store implements Store {
 	private AmazonS3 _amazonS3;
 	private AWSCredentialsProvider _awsCredentialsProvider;
 	private String _bucketName;
+
+	@Reference
+	private CTStoreFactory _ctStoreFactory;
+
+	@Reference
 	private S3FileCache _s3FileCache;
+
+	@Reference
 	private S3KeyTransformer _s3KeyTransformer;
+
 	private StorageClass _storageClass;
 	private TransferManager _transferManager;
 

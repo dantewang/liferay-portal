@@ -29,6 +29,6 @@ public class CTStoreFactoryUtil {
 	private static volatile CTStoreFactory _ctStoreFactory =
 		ServiceProxyFactory.newServiceTrackedInstance(
 			CTStoreFactory.class, CTStoreFactoryUtil.class, "_ctStoreFactory",
-			true);
+			false);
 
 }
