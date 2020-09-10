@@ -1,6 +1,7 @@
 <#setting number_format = "computer">
 
 <#assign
+	blogDataFactory = dataFactory.getDataFactoryInstance("blogDataFactory")
 	classNameDataFactory = dataFactory.getDataFactoryInstance("classNameDataFactory")
 	commerceDataFactory = dataFactory.getDataFactoryInstance("commerceDataFactory")
 	ddlDDMDataFactory = dataFactory.getDataFactoryInstance("ddlDDMDataFactory")

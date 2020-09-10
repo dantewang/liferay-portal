@@ -24,9 +24,6 @@ import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.blogs.constants.BlogsPortletKeys;
 import com.liferay.blogs.model.BlogsEntry;
 import com.liferay.blogs.model.BlogsEntryModel;
-import com.liferay.blogs.model.BlogsStatsUserModel;
-import com.liferay.blogs.model.impl.BlogsEntryModelImpl;
-import com.liferay.blogs.model.impl.BlogsStatsUserModelImpl;
 import com.liferay.blogs.social.BlogsActivityKeys;
 import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.commerce.product.model.CPDefinitionModel;
@@ -48,12 +45,6 @@ import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
 import com.liferay.friendly.url.model.FriendlyURLEntryLocalization;
-import com.liferay.friendly.url.model.FriendlyURLEntryLocalizationModel;
-import com.liferay.friendly.url.model.FriendlyURLEntryMappingModel;
-import com.liferay.friendly.url.model.FriendlyURLEntryModel;
-import com.liferay.friendly.url.model.impl.FriendlyURLEntryLocalizationModelImpl;
-import com.liferay.friendly.url.model.impl.FriendlyURLEntryMappingModelImpl;
-import com.liferay.friendly.url.model.impl.FriendlyURLEntryModelImpl;
 import com.liferay.hello.world.web.internal.constants.HelloWorldPortletKeys;
 import com.liferay.journal.constants.JournalActivityKeys;
 import com.liferay.journal.constants.JournalArticleConstants;
@@ -121,7 +112,6 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -303,7 +293,10 @@ public class DataFactory extends BaseDDMDataFactory {
 	}
 
 	public BaseDataFactory getDataFactoryInstance(String name) {
-		if (name.equals("commerceDataFactory")) {
+		if (name.equals("blogDataFactory")) {
+			return BlogDataFactory.getInstance();
+		}
+		else if (name.equals("commerceDataFactory")) {
 			return CommerceDataFactory.getInstance();
 		}
 		else if (name.equals("ddlDDMDataFactory")) {
@@ -327,10 +320,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 	public int getMaxAssetPublisherPageCount() {
 		return BenchmarksPropsValues.MAX_ASSETPUBLISHER_PAGE_COUNT;
-	}
-
-	public int getMaxBlogsEntryCommentCount() {
-		return BenchmarksPropsValues.MAX_BLOGS_ENTRY_COMMENT_COUNT;
 	}
 
 	public int getMaxGroupCount() {
@@ -662,42 +651,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return assetVocabularyModels;
 	}
 
-	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
-		List<BlogsEntryModel> blogEntryModels = new ArrayList<>(
-			BenchmarksPropsValues.MAX_BLOGS_ENTRY_COUNT);
-
-		for (int i = 1; i <= BenchmarksPropsValues.MAX_BLOGS_ENTRY_COUNT; i++) {
-			blogEntryModels.add(newBlogsEntryModel(groupId, i));
-		}
-
-		return blogEntryModels;
-	}
-
-	public BlogsStatsUserModel newBlogsStatsUserModel(long groupId) {
-		BlogsStatsUserModel blogsStatsUserModel = new BlogsStatsUserModelImpl();
-
-		// PK fields
-
-		blogsStatsUserModel.setStatsUserId(counter.get());
-
-		// Group instance
-
-		blogsStatsUserModel.setGroupId(groupId);
-
-		// Audit fields
-
-		blogsStatsUserModel.setCompanyId(COMPANY_ID);
-		blogsStatsUserModel.setUserId(SAMPLE_USER_ID);
-
-		// Other fields
-
-		blogsStatsUserModel.setEntryCount(
-			BenchmarksPropsValues.MAX_BLOGS_ENTRY_COUNT);
-		blogsStatsUserModel.setLastPostDate(new Date());
-
-		return blogsStatsUserModel;
-	}
-
 	public GroupModel newCommerceCatalogGroupModel(
 		CommerceCatalogModel commerceCatalogModel, long classNameId) {
 
@@ -914,107 +867,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return newUserModel(
 			DEFAULT_USER_ID, StringPool.BLANK, StringPool.BLANK,
 			StringPool.BLANK, true);
-	}
-
-	public FriendlyURLEntryLocalizationModel
-		newFriendlyURLEntryLocalizationModel(
-			FriendlyURLEntryModel friendlyURLEntryModel,
-			BlogsEntryModel blogsEntryModel) {
-
-		FriendlyURLEntryLocalizationModel friendlyURLEntryLocalizationModel =
-			new FriendlyURLEntryLocalizationModelImpl();
-
-		// PK fields
-
-		friendlyURLEntryLocalizationModel.setFriendlyURLEntryLocalizationId(
-			counter.get());
-
-		// Group instance
-
-		friendlyURLEntryLocalizationModel.setGroupId(
-			friendlyURLEntryModel.getGroupId());
-
-		// Audit fields
-
-		friendlyURLEntryLocalizationModel.setCompanyId(
-			friendlyURLEntryModel.getCompanyId());
-
-		// Other fields
-
-		friendlyURLEntryLocalizationModel.setClassNameId(
-			friendlyURLEntryModel.getClassNameId());
-		friendlyURLEntryLocalizationModel.setClassPK(
-			friendlyURLEntryModel.getClassPK());
-		friendlyURLEntryLocalizationModel.setUrlTitle(
-			blogsEntryModel.getUrlTitle());
-
-		// Autogenerated fields
-
-		friendlyURLEntryLocalizationModel.setFriendlyURLEntryId(
-			friendlyURLEntryModel.getFriendlyURLEntryId());
-		friendlyURLEntryLocalizationModel.setLanguageId(
-			LocaleUtil.toLanguageId(LocaleUtil.getSiteDefault()));
-
-		return friendlyURLEntryLocalizationModel;
-	}
-
-	public FriendlyURLEntryMappingModel newFriendlyURLEntryMapping(
-		FriendlyURLEntryModel friendlyURLEntryModel) {
-
-		FriendlyURLEntryMappingModel friendlyURLEntryMappingModel =
-			new FriendlyURLEntryMappingModelImpl();
-
-		// PK fields
-
-		friendlyURLEntryMappingModel.setFriendlyURLEntryMappingId(
-			counter.get());
-
-		//  Other fields
-
-		friendlyURLEntryMappingModel.setClassNameId(
-			friendlyURLEntryModel.getClassNameId());
-		friendlyURLEntryMappingModel.setClassPK(
-			friendlyURLEntryModel.getClassPK());
-		friendlyURLEntryMappingModel.setFriendlyURLEntryId(
-			friendlyURLEntryModel.getFriendlyURLEntryId());
-
-		return friendlyURLEntryMappingModel;
-	}
-
-	public FriendlyURLEntryModel newFriendlyURLEntryModel(
-		BlogsEntryModel blogsEntryModel, long classNameId) {
-
-		FriendlyURLEntryModel friendlyURLEntryModel =
-			new FriendlyURLEntryModelImpl();
-
-		// UUID
-
-		friendlyURLEntryModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		friendlyURLEntryModel.setFriendlyURLEntryId(counter.get());
-
-		// Group instance
-
-		friendlyURLEntryModel.setGroupId(blogsEntryModel.getGroupId());
-
-		// Audit fields
-
-		friendlyURLEntryModel.setCompanyId(COMPANY_ID);
-		friendlyURLEntryModel.setCreateDate(new Date());
-		friendlyURLEntryModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		friendlyURLEntryModel.setClassNameId(classNameId);
-		friendlyURLEntryModel.setClassPK(blogsEntryModel.getEntryId());
-
-		// Autogenerated fields
-
-		friendlyURLEntryModel.setDefaultLanguageId("en_US");
-
-		return friendlyURLEntryModel;
 	}
 
 	public GroupModel newGlobalGroupModel(long classNameId) {
@@ -2207,43 +2059,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		assetVocabularyModel.setLastPublishDate(new Date());
 
 		return assetVocabularyModel;
-	}
-
-	protected BlogsEntryModel newBlogsEntryModel(long groupId, int index) {
-		BlogsEntryModel blogsEntryModel = new BlogsEntryModelImpl();
-
-		// UUID
-
-		blogsEntryModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		blogsEntryModel.setEntryId(counter.get());
-
-		// Group instance
-
-		blogsEntryModel.setGroupId(groupId);
-
-		// Audit fields
-
-		blogsEntryModel.setCompanyId(COMPANY_ID);
-		blogsEntryModel.setUserId(SAMPLE_USER_ID);
-		blogsEntryModel.setUserName(SAMPLE_USER_NAME);
-		blogsEntryModel.setCreateDate(new Date());
-		blogsEntryModel.setModifiedDate(new Date());
-
-		// Other field
-
-		blogsEntryModel.setTitle("Test Blog " + index);
-		blogsEntryModel.setSubtitle("Subtitle of Test Blog " + index);
-		blogsEntryModel.setUrlTitle("testblog" + index);
-		blogsEntryModel.setContent("This is test blog " + index + ".");
-		blogsEntryModel.setDisplayDate(new Date());
-		blogsEntryModel.setLastPublishDate(new Date());
-		blogsEntryModel.setStatusByUserId(SAMPLE_USER_ID);
-		blogsEntryModel.setStatusDate(new Date());
-
-		return blogsEntryModel;
 	}
 
 	protected GroupModel newGroupModel(
