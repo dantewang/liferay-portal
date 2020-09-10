@@ -60,13 +60,6 @@ import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
-import com.liferay.fragment.constants.FragmentConstants;
-import com.liferay.fragment.model.FragmentCollectionModel;
-import com.liferay.fragment.model.FragmentEntryLinkModel;
-import com.liferay.fragment.model.FragmentEntryModel;
-import com.liferay.fragment.model.impl.FragmentCollectionModelImpl;
-import com.liferay.fragment.model.impl.FragmentEntryLinkModelImpl;
-import com.liferay.fragment.model.impl.FragmentEntryModelImpl;
 import com.liferay.friendly.url.model.FriendlyURLEntryLocalization;
 import com.liferay.friendly.url.model.FriendlyURLEntryLocalizationModel;
 import com.liferay.friendly.url.model.FriendlyURLEntryMappingModel;
@@ -81,10 +74,6 @@ import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleLocalizationModel;
 import com.liferay.journal.model.JournalArticleModel;
 import com.liferay.journal.model.JournalArticleResourceModel;
-import com.liferay.layout.page.template.model.LayoutPageTemplateStructureModel;
-import com.liferay.layout.page.template.model.LayoutPageTemplateStructureRelModel;
-import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureModelImpl;
-import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureRelModelImpl;
 import com.liferay.login.web.constants.LoginPortletKeys;
 import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.constants.MBMessageConstants;
@@ -231,9 +220,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		_accountId = counter.get();
 		_userPersonalSiteGroupId = counter.get();
 
-		_layoutPageTemplateStructureRelData = readFile(
-			"layout_page_template_structure_rel_data.json");
-
 		initUserNames();
 	}
 
@@ -338,6 +324,9 @@ public class DataFactory extends BaseDDMDataFactory {
 		}
 		else if (name.equals("dlDataFactory")) {
 			return DLDataFactory.getInstance();
+		}
+		else if (name.equals("fragmentDataFactory")) {
+			return FragmentDataFactory.getInstance();
 		}
 		else if (name.equals("journalDataFactory")) {
 			return JournalDataFactory.getInstance();
@@ -1292,125 +1281,6 @@ public class DataFactory extends BaseDDMDataFactory {
 			StringPool.BLANK, true);
 	}
 
-	public FragmentCollectionModel newFragmentCollectionModel(long groupId) {
-		FragmentCollectionModel fragmentCollectionModel =
-			new FragmentCollectionModelImpl();
-
-		// UUID
-
-		fragmentCollectionModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		fragmentCollectionModel.setFragmentCollectionId(counter.get());
-
-		// Group instance
-
-		fragmentCollectionModel.setGroupId(groupId);
-
-		// Audit fields
-
-		fragmentCollectionModel.setCompanyId(COMPANY_ID);
-		fragmentCollectionModel.setUserId(SAMPLE_USER_ID);
-		fragmentCollectionModel.setCreateDate(new Date());
-		fragmentCollectionModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		fragmentCollectionModel.setFragmentCollectionKey("fragmentcollection");
-		fragmentCollectionModel.setName("fragmentcollection");
-
-		return fragmentCollectionModel;
-	}
-
-	public FragmentEntryLinkModel newFragmentEntryLinkModel(
-		LayoutModel layoutModel, FragmentEntryModel fragmentEntryModel,
-		long classNameId) {
-
-		FragmentEntryLinkModel fragmentEntryLinkModel =
-			new FragmentEntryLinkModelImpl();
-
-		// UUID
-
-		fragmentEntryLinkModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		fragmentEntryLinkModel.setFragmentEntryLinkId(counter.get());
-
-		// Group instance
-
-		fragmentEntryLinkModel.setGroupId(fragmentEntryModel.getGroupId());
-
-		// Audit fields
-
-		fragmentEntryLinkModel.setCompanyId(COMPANY_ID);
-		fragmentEntryLinkModel.setUserId(SAMPLE_USER_ID);
-		fragmentEntryLinkModel.setUserName(SAMPLE_USER_NAME);
-		fragmentEntryLinkModel.setCreateDate(new Date());
-		fragmentEntryLinkModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		fragmentEntryLinkModel.setFragmentEntryId(
-			fragmentEntryModel.getFragmentEntryId());
-		fragmentEntryLinkModel.setClassNameId(classNameId);
-		fragmentEntryLinkModel.setClassPK(layoutModel.getPlid());
-		fragmentEntryLinkModel.setCss(fragmentEntryModel.getCss());
-		fragmentEntryLinkModel.setHtml(fragmentEntryModel.getHtml());
-		fragmentEntryLinkModel.setJs(fragmentEntryModel.getJs());
-		fragmentEntryLinkModel.setEditableValues(StringPool.BLANK);
-		fragmentEntryLinkModel.setNamespace(StringUtil.randomId());
-		fragmentEntryLinkModel.setPosition(0);
-
-		return fragmentEntryLinkModel;
-	}
-
-	public FragmentEntryModel newFragmentEntryModel(
-			long groupId, FragmentCollectionModel fragmentCollectionModel)
-		throws Exception {
-
-		FragmentEntryModel fragmentEntryModel = new FragmentEntryModelImpl();
-
-		// UUID
-
-		fragmentEntryModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		fragmentEntryModel.setFragmentEntryId(counter.get());
-
-		// Group instance
-
-		fragmentEntryModel.setGroupId(groupId);
-
-		// Audit fields
-
-		fragmentEntryModel.setCompanyId(COMPANY_ID);
-		fragmentEntryModel.setUserId(SAMPLE_USER_ID);
-		fragmentEntryModel.setUserName(SAMPLE_USER_NAME);
-		fragmentEntryModel.setCreateDate(new Date());
-		fragmentEntryModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		fragmentEntryModel.setFragmentCollectionId(
-			fragmentCollectionModel.getFragmentCollectionId());
-		fragmentEntryModel.setFragmentEntryKey("web_content");
-		fragmentEntryModel.setName("web_content");
-		fragmentEntryModel.setCss(StringPool.BLANK);
-		fragmentEntryModel.setHtml(readFile("web_content.html"));
-		fragmentEntryModel.setJs(StringPool.BLANK);
-		fragmentEntryModel.setType(FragmentConstants.TYPE_COMPONENT);
-		fragmentEntryModel.setStatus(WorkflowConstants.STATUS_APPROVED);
-
-		// Autogenerated fields
-
-		fragmentEntryModel.setHeadId(counter.get());
-
-		return fragmentEntryModel;
-	}
-
 	public FriendlyURLEntryLocalizationModel
 		newFriendlyURLEntryLocalizationModel(
 			FriendlyURLEntryModel friendlyURLEntryModel,
@@ -1639,90 +1509,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		layoutModel.setLastPublishDate(new Date());
 
 		return layoutModel;
-	}
-
-	public LayoutPageTemplateStructureModel newLayoutPageTemplateStructureModel(
-		LayoutModel layoutModel, long classNameId) {
-
-		LayoutPageTemplateStructureModel layoutPageTemplateStructureModel =
-			new LayoutPageTemplateStructureModelImpl();
-
-		// UUID
-
-		layoutPageTemplateStructureModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		layoutPageTemplateStructureModel.setLayoutPageTemplateStructureId(
-			counter.get());
-
-		// Group instance
-
-		layoutPageTemplateStructureModel.setGroupId(layoutModel.getGroupId());
-
-		// Audit fields
-
-		layoutPageTemplateStructureModel.setCompanyId(COMPANY_ID);
-		layoutPageTemplateStructureModel.setUserId(SAMPLE_USER_ID);
-		layoutPageTemplateStructureModel.setUserName(SAMPLE_USER_NAME);
-		layoutPageTemplateStructureModel.setCreateDate(new Date());
-		layoutPageTemplateStructureModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		layoutPageTemplateStructureModel.setClassNameId(classNameId);
-		layoutPageTemplateStructureModel.setClassPK(layoutModel.getPlid());
-
-		return layoutPageTemplateStructureModel;
-	}
-
-	public LayoutPageTemplateStructureRelModel
-			newLayoutPageTemplateStructureRelModel(
-				LayoutModel layoutModel,
-				LayoutPageTemplateStructureModel
-					layoutPageTemplateStructureModel,
-				FragmentEntryLinkModel fragmentEntryLinkModel)
-		throws Exception {
-
-		LayoutPageTemplateStructureRelModel
-			layoutPageTemplateStructureRelModel =
-				new LayoutPageTemplateStructureRelModelImpl();
-
-		// UUID
-
-		layoutPageTemplateStructureRelModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		layoutPageTemplateStructureRelModel.setLayoutPageTemplateStructureRelId(
-			counter.get());
-
-		// Group instance
-
-		layoutPageTemplateStructureRelModel.setGroupId(
-			layoutPageTemplateStructureModel.getGroupId());
-
-		// Audit fields
-
-		layoutPageTemplateStructureRelModel.setCompanyId(COMPANY_ID);
-		layoutPageTemplateStructureRelModel.setUserId(SAMPLE_USER_ID);
-		layoutPageTemplateStructureRelModel.setUserName(SAMPLE_USER_NAME);
-		layoutPageTemplateStructureRelModel.setCreateDate(new Date());
-		layoutPageTemplateStructureRelModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		layoutPageTemplateStructureRelModel.setLayoutPageTemplateStructureId(
-			layoutPageTemplateStructureModel.
-				getLayoutPageTemplateStructureId());
-		layoutPageTemplateStructureRelModel.setSegmentsExperienceId(0L);
-		layoutPageTemplateStructureRelModel.setData(
-			StringUtil.replace(
-				_layoutPageTemplateStructureRelData, "${fragmentEntryLinkId}",
-				String.valueOf(
-					fragmentEntryLinkModel.getFragmentEntryLinkId())));
-
-		return layoutPageTemplateStructureRelModel;
 	}
 
 	public List<LayoutSetModel> newLayoutSetModels(long groupId) {
@@ -3400,7 +3186,6 @@ public class DataFactory extends BaseDDMDataFactory {
 	private List<String> _firstNames;
 	private List<String> _lastNames;
 	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
-	private final String _layoutPageTemplateStructureRelData;
 	private final Format _simpleDateFormat;
 	private final SimpleCounter _timeCounter;
 	private final long _userPersonalSiteGroupId;

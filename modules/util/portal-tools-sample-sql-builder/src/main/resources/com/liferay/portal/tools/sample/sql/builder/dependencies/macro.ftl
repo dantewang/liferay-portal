@@ -4,6 +4,7 @@
 	classNameDataFactory = dataFactory.getDataFactoryInstance("classNameDataFactory")
 	ddlDDMDataFactory = dataFactory.getDataFactoryInstance("ddlDDMDataFactory")
 	dlDataFactory = dataFactory.getDataFactoryInstance("dlDataFactory")
+	fragmentDataFactory = dataFactory.getDataFactoryInstance("fragmentDataFactory")
 	journalDataFactory = dataFactory.getDataFactoryInstance("journalDataFactory")
 	portletPreferenceDataFactory = dataFactory.getDataFactoryInstance("portletPreferenceDataFactory")
 />
@@ -43,17 +44,17 @@
 
 	${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(_layoutModel))}
 
-	<#local fragmentEntryLinkModel = dataFactory.newFragmentEntryLinkModel(_layoutModel, _fragmentEntryModel, classNameDataFactory.getClassNameId("Layout"))>
+	<#local fragmentEntryLinkModel = fragmentDataFactory.newFragmentEntryLinkModel(_layoutModel, _fragmentEntryModel, classNameDataFactory.getClassNameId("Layout"))>
 
 	${dataFactory.toInsertSQL(fragmentEntryLinkModel)}
 
 	${dataFactory.toInsertSQL(journalDataFactory.newJournalContentPortletPreferencesModel(fragmentEntryLinkModel, _portletPreferencesFactory))}
 
-	<#local layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(_layoutModel, classNameDataFactory.getClassNameId("Layout"))>
+	<#local layoutPageTemplateStructureModel = fragmentDataFactory.newLayoutPageTemplateStructureModel(_layoutModel, classNameDataFactory.getClassNameId("Layout"))>
 
 	${dataFactory.toInsertSQL(layoutPageTemplateStructureModel)}
 
-	<#local layoutPageTemplateStructureRelModel = dataFactory.newLayoutPageTemplateStructureRelModel(_layoutModel, layoutPageTemplateStructureModel, fragmentEntryLinkModel)>
+	<#local layoutPageTemplateStructureRelModel = fragmentDataFactory.newLayoutPageTemplateStructureRelModel(_layoutModel, layoutPageTemplateStructureModel, fragmentEntryLinkModel)>
 
 	${dataFactory.toInsertSQL(layoutPageTemplateStructureRelModel)}
 </#macro>
