@@ -1256,27 +1256,42 @@ public class ResourceActionsImpl implements ResourceActions {
 					servletContextName,
 					portletResourceElement.elementTextTrim("portlet-name"));
 
-				if (portlet != null) {
-					String deployPortletName = PortletIdCodec.decodePortletName(
-						portlet.getPortletId());
-
-					if (!deployPortletName.equals(portletName)) {
-						continue;
-					}
-				}
-				else {
-					portlet = portletLocalService.getPortletById(portletName);
-				}
-
-				Set<String> portletActions = _getPortletMimeTypeActions(
-					portletName, portlet);
+				Set<String> portletActions = new LinkedHashSet<>();
 
 				if (!portletName.equals(PortletKeys.PORTAL)) {
+					if (portlet != null) {
+						String deployPortletName =
+							PortletIdCodec.decodePortletName(
+								portlet.getPortletId());
+
+						if (!deployPortletName.equals(portletName)) {
+							continue;
+						}
+					}
+					else {
+						portlet = portletLocalService.getPortletById(
+							portletName);
+					}
+
+					portletActions = _getPortletMimeTypeActions(
+						portletName, portlet);
+
 					_checkPortletLayoutManagerActions(portletActions);
+				}
+				else {
+					portletActions = _getPortletMimeTypeActions(
+						portletName,
+						portletLocalService.getPortletById(portletName));
 				}
 
 				_readResource(
 					portletResourceElement, portletName, portletActions);
+
+				if (portletName.equals(PortletKeys.PORTAL) &&
+					(portlet != null)) {
+
+					check(portletName);
+				}
 
 				if (resourceNames != null) {
 					resourceNames.add(portletName);
