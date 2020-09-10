@@ -3,6 +3,23 @@
 
 <resource-action-mapping>
 	<portlet-resource>
+		<portlet-name>90</portlet-name>
+		<permissions>
+			<supports>
+				<action-key>ADD_COMMERCE_PRODUCT_OPTION</action-key>
+				<action-key>ADD_COMMERCE_PRODUCT_OPTION_CATEGORY</action-key>
+				<action-key>ADD_COMMERCE_PRODUCT_SPECIFICATION_OPTION</action-key>
+			</supports>
+			<site-member-defaults />
+			<guest-defaults />
+			<guest-unsupported>
+				<action-key>ADD_COMMERCE_PRODUCT_OPTION</action-key>
+				<action-key>ADD_COMMERCE_PRODUCT_OPTION_CATEGORY</action-key>
+				<action-key>ADD_COMMERCE_PRODUCT_SPECIFICATION_OPTION</action-key>
+			</guest-unsupported>
+		</permissions>
+	</portlet-resource>
+	<portlet-resource>
 		<portlet-name>com_liferay_commerce_product_options_web_internal_portlet_CPOptionsPortlet</portlet-name>
 		<permissions>
 			<supports>
