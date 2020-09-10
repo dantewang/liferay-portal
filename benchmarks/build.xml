@@ -28,10 +28,6 @@
 
 		<path id="sample.sql.builder.classpath">
 			<fileset
-				dir="build"
-				includes="lib/*.jar"
-			/>
-			<fileset
 				dir="${sdk.dir}/dist"
 				includes="com.liferay.blogs.*.jar"
 			/>
@@ -104,8 +100,6 @@
 				<build-sql dir="@{module}" />
 			</sequential>
 		</for>
-
-		<delete dir="build" quiet="true" />
 	</target>
 
 	<target name="clean">
