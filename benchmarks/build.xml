@@ -120,31 +120,29 @@
 	<target depends="clean, build-sample-sql" name="exec-sql">
 		<property file="benchmarks.properties" />
 
-		<sequential>
-			<concat append="true" destfile="${basedir}/${sample-data-sql}" if:true="${sample.sql.output.merge}">
-				<filelist dir="${sample.sql.output.dir}" files="sample-${sample.sql.db.type}.sql" />
-			</concat>
+		<concat append="true" destfile="${basedir}/${sample-data-sql}" if:true="${sample.sql.output.merge}">
+			<filelist dir="${sample.sql.output.dir}" files="sample-${sample.sql.db.type}.sql" />
+		</concat>
 
-			<if>
-				<equals arg1="${sample.sql.output.merge}" arg2="false" />
-				<then>
-					<for param="sql-file-filename">
-						<path>
-							<fileset
-								dir="${sample.sql.output.dir}/output"
-								includes="*.sql"
-							/>
-						</path>
-						<sequential>
-							<concat append="true" destfile="${basedir}/${sample-data-sql}">
-								<filelist dir="${sample.sql.output.dir}/output" files="@{sql-file-filename}" />
-							</concat>
-						</sequential>
-					</for>
-				</then>
-			</if>
+		<if>
+			<equals arg1="${sample.sql.output.merge}" arg2="false" />
+			<then>
+				<for param="sql-file-filename">
+					<path>
+						<fileset
+							dir="${sample.sql.output.dir}/output"
+							includes="*.sql"
+						/>
+					</path>
+					<sequential>
+						<concat append="true" destfile="${basedir}/${sample-data-sql}">
+							<filelist dir="${sample.sql.output.dir}/output" files="@{sql-file-filename}" />
+						</concat>
+					</sequential>
+				</for>
+			</then>
+		</if>
 
-			<sql classpathref="lib.classpath" driver="${jdbc.default.driverClassName}" password="${jdbc.default.password}" src="${basedir}/${sample-data-sql}" url="${jdbc.default.url}" userid="${jdbc.default.username}" />
-		</sequential>
+		<sql classpathref="lib.classpath" driver="${jdbc.default.driverClassName}" password="${jdbc.default.password}" src="${basedir}/${sample-data-sql}" url="${jdbc.default.url}" userid="${jdbc.default.username}" />
 	</target>
 </project>
