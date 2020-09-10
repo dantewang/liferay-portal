@@ -3,6 +3,19 @@
 
 <resource-action-mapping>
 	<portlet-resource>
+		<portlet-name>90</portlet-name>
+		<permissions>
+			<supports>
+				<action-key>ADD_COMMERCE_PRICING_CLASS</action-key>
+			</supports>
+			<site-member-defaults />
+			<guest-defaults />
+			<guest-unsupported>
+				<action-key>ADD_COMMERCE_PRICING_CLASS</action-key>
+			</guest-unsupported>
+		</permissions>
+	</portlet-resource>
+	<portlet-resource>
 		<portlet-name>com_liferay_commerce_pricing_web_internal_portlet_CommercePricingClassesPortlet</portlet-name>
 		<permissions>
 			<supports>

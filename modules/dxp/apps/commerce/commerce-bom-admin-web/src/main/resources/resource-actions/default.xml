@@ -3,6 +3,21 @@
 
 <resource-action-mapping>
 	<portlet-resource>
+		<portlet-name>90</portlet-name>
+		<permissions>
+			<supports>
+				<action-key>ADD_COMMERCE_BOM_DEFINITION</action-key>
+				<action-key>ADD_COMMERCE_BOM_FOLDER</action-key>
+			</supports>
+			<site-member-defaults />
+			<guest-defaults />
+			<guest-unsupported>
+				<action-key>ADD_COMMERCE_BOM_DEFINITION</action-key>
+				<action-key>ADD_COMMERCE_BOM_FOLDER</action-key>
+			</guest-unsupported>
+		</permissions>
+	</portlet-resource>
+	<portlet-resource>
 		<portlet-name>com_liferay_commerce_bom_admin_web_internal_portlet_CommerceBOMAdminPortlet</portlet-name>
 		<permissions>
 			<supports>
