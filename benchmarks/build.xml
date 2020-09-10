@@ -27,16 +27,6 @@
 	<target depends="clean" name="build-sample-sql">
 		<gradle-execute dir="../modules/util/portal-tools-sample-sql-builder" task="jar" />
 
-		<unzip
-			dest="build"
-			overwrite="true"
-		>
-			<fileset
-				dir="${sdk.dir}/dist"
-				includes="com.liferay.portal.tools.sample.sql.builder*.jar"
-			/>
-		</unzip>
-
 		<path id="sample.sql.builder.classpath">
 			<fileset
 				dir="build"
@@ -45,6 +35,10 @@
 			<fileset
 				dir="${sdk.dir}/dist"
 				includes="com.liferay.blogs.*.jar"
+			/>
+			<fileset
+				dir="${sdk.dir}/dist"
+				includes="com.liferay.commerce.*.jar"
 			/>
 			<fileset
 				dir="${sdk.dir}/dist"
@@ -109,28 +103,6 @@
 		<for list="${portal.module.dir.list}" param="module">
 			<sequential>
 				<build-sql dir="@{module}" />
-			</sequential>
-		</for>
-
-		<for param="service-jar-filename">
-			<path>
-				<fileset
-					dir="${basedir}/build/lib"
-					includes="*service*.jar"
-				/>
-			</path>
-			<sequential>
-				<unzip
-					dest="${basedir}/build/lib"
-					overwrite="true"
-					src="@{service-jar-filename}"
-				>
-					<patternset>
-						<include name="**/*.sql" />
-					</patternset>
-				</unzip>
-
-				<build-sql dir="${basedir}/build/lib/META-INF/sql" />
 			</sequential>
 		</for>
 
