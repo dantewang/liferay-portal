@@ -16,7 +16,7 @@
 				<property name="db.sql.dir" value="@{dir}" />
 			</ant>
 
-			<concat append="true" destfile="${basedir}/${sample-data-sql}">
+			<concat append="true" destfile="${sample-data-sql}">
 				<filelist dir="@{dir}/tables/" files="tables-${sample.sql.db.type}.sql" />
 				<filelist dir="@{dir}/indexes/" files="indexes-${sample.sql.db.type}.sql" />
 			</concat>
@@ -80,15 +80,15 @@
 			<path refid="project.classpath" />
 		</path>
 
-		<available file="${basedir}/benchmarks.${user.name}.properties" property="user.properites.avaiable" />
+		<available file="benchmarks.${user.name}.properties" property="user.properites.avaiable" />
 
 		<if>
 			<equals arg1="${user.properites.avaiable}" arg2="true" />
 			<then>
-				<property name="sample.sql.properties.file" value="${basedir}/benchmarks.${user.name}.properties" />
+				<property name="sample.sql.properties.file" value="benchmarks.${user.name}.properties" />
 			</then>
 			<else>
-				<property name="sample.sql.properties.file" value="${basedir}/benchmarks.properties" />
+				<property name="sample.sql.properties.file" value="benchmarks.properties" />
 			</else>
 		</if>
 
@@ -100,7 +100,7 @@
 			<sysproperty key="sample-sql-properties" value="${sample.sql.properties.file}" />
 		</java>
 
-		<concat append="true" destfile="${basedir}/${sample-data-sql}">
+		<concat append="true" destfile="${sample-data-sql}">
 			<filelist dir="../sql/portal/" files="portal-${sample.sql.db.type}.sql" />
 			<filelist dir="../sql/indexes/" files="indexes-${sample.sql.db.type}.sql" />
 		</concat>
@@ -124,7 +124,7 @@
 	<target depends="clean, build-sample-sql" name="exec-sql">
 		<property file="benchmarks.properties" />
 
-		<concat append="true" destfile="${basedir}/${sample-data-sql}" if:true="${sample.sql.output.merge}">
+		<concat append="true" destfile="${sample-data-sql}" if:true="${sample.sql.output.merge}">
 			<filelist dir="${sample.sql.output.dir}" files="sample-${sample.sql.db.type}.sql" />
 		</concat>
 
@@ -139,7 +139,7 @@
 						/>
 					</path>
 					<sequential>
-						<concat append="true" destfile="${basedir}/${sample-data-sql}">
+						<concat append="true" destfile="${sample-data-sql}">
 							<filelist dir="${sample.sql.output.dir}/output" files="@{sql-file-filename}" />
 						</concat>
 					</sequential>
