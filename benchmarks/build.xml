@@ -5,7 +5,6 @@
 
 	<property file="build.${user.name}.properties" />
 	<property file="build.properties" />
-	<property file="benchmarks.properties" />
 
 	<property name="sample-data-sql" value="sample-data-${sample.sql.db.type}.sql" />
 	<property name="build-db-file" value="../sql/build.xml" />
@@ -119,6 +118,8 @@
 	</target>
 
 	<target depends="clean, build-sample-sql" name="exec-sql">
+		<property file="benchmarks.properties" />
+
 		<sequential>
 			<concat append="true" destfile="${basedir}/${sample-data-sql}" if:true="${sample.sql.output.merge}">
 				<filelist dir="${sample.sql.output.dir}" files="sample-${sample.sql.db.type}.sql" />
