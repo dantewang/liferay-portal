@@ -78,14 +78,15 @@ public class CTStoreFactoryImpl implements CTStoreFactory {
 	@Reference
 	private CTSContentLocalService _ctsContentLocalService;
 
-	private ServiceRegistration<Store> _serviceRegistration;
-	private ServiceTracker<Store, Store> _serviceTracker;
+	private ServiceTracker<Store, ServiceRegistration<Store>> _serviceTracker;
 
 	private class StoreServiceTrackerCustomizer
-		implements ServiceTrackerCustomizer<Store, Store> {
+		implements ServiceTrackerCustomizer<Store, ServiceRegistration<Store>> {
 
 		@Override
-		public Store addingService(ServiceReference<Store> serviceReference) {
+		public ServiceRegistration<Store> addingService(
+			ServiceReference<Store> serviceReference) {
+
 			if (GetterUtil.getBoolean(
 					serviceReference.getProperty("ct.aware"))) {
 
@@ -103,24 +104,26 @@ public class CTStoreFactoryImpl implements CTStoreFactory {
 			properties.put(
 				"store.type", serviceReference.getProperty("store.type"));
 
-			_serviceRegistration = _bundleContext.registerService(
+			return _bundleContext.registerService(
 				Store.class, store, properties);
-
-			return store;
 		}
 
 		@Override
 		public void modifiedService(
-			ServiceReference<Store> serviceReference, Store store) {
+			ServiceReference<Store> serviceReference,
+			ServiceRegistration<Store> serviceRegistration) {
 		}
 
 		@Override
 		public void removedService(
-			ServiceReference<Store> serviceReference, Store store) {
+			ServiceReference<Store> serviceReference,
+			ServiceRegistration<Store> serviceRegistration) {
 
 			_bundleContext.ungetService(serviceReference);
 
-			_serviceRegistration.unregister();
+			if (serviceRegistration != null) {
+				serviceRegistration.unregister();
+			}
 		}
 
 	}
