@@ -2,6 +2,7 @@
 
 <#assign
 	classNameDataFactory = dataFactory.getDataFactoryInstance("classNameDataFactory")
+	ddlDDMDataFactory = dataFactory.getDataFactoryInstance("ddlDDMDataFactory")
 	dlDataFactory = dataFactory.getDataFactoryInstance("dlDataFactory")
 	journalDataFactory = dataFactory.getDataFactoryInstance("journalDataFactory")
 	portletPreferenceDataFactory = dataFactory.getDataFactoryInstance("portletPreferenceDataFactory")
@@ -66,7 +67,7 @@
 	<#if _currentIndex = -1>
 		<#local ddmContentModel = dlDataFactory.newDDMContentModel(_entry)>
 	<#else>
-		<#local ddmContentModel = dataFactory.newDDMContentModel(_entry, _currentIndex)>
+		<#local ddmContentModel = ddlDDMDataFactory.newDDMContentModel(_entry, _currentIndex)>
 	</#if>
 
 	${dataFactory.toInsertSQL(ddmContentModel)}
@@ -140,7 +141,7 @@
 
 				${dataFactory.toInsertSQL(dlFileEntryMetadataModel)}
 
-				${dataFactory.toInsertSQL(dataFactory.newDDMStructureLinkModel(dlFileEntryMetadataModel, classNameDataFactory.getClassNameId("DLFileEntryMetadata")))}
+				${dataFactory.toInsertSQL(ddlDDMDataFactory.newDDMStructureLinkModel(dlFileEntryMetadataModel, classNameDataFactory.getClassNameId("DLFileEntryMetadata")))}
 
 				${csvFileWriter.write("documentLibrary", dlFileEntryModel.uuid + "," + dlFolderModel.folderId + "," + dlFileEntryModel.name + "," + dlFileEntryModel.fileEntryId + "\n")}
 			</#list>
