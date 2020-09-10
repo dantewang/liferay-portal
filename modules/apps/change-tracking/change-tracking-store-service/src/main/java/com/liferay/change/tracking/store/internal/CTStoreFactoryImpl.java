@@ -18,7 +18,6 @@ import com.liferay.change.tracking.service.CTEntryLocalService;
 import com.liferay.change.tracking.store.model.CTSContent;
 import com.liferay.change.tracking.store.service.CTSContentLocalService;
 import com.liferay.document.library.kernel.store.Store;
-import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.change.tracking.store.CTStoreFactory;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
@@ -28,6 +27,7 @@ import com.liferay.portal.kernel.util.HashMapDictionary;
 import java.util.Dictionary;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
@@ -52,14 +52,17 @@ public class CTStoreFactoryImpl implements CTStoreFactory {
 	}
 
 	@Activate
-	protected void activate(BundleContext bundleContext) {
+	protected void activate(BundleContext bundleContext)
+		throws InvalidSyntaxException {
+
 		_bundleContext = bundleContext;
 
 		String filterString = StringBundler.concat(
 			"(&(objectClass=", Store.class.getName(), ")(store.type=*))");
 
-		_serviceTracker = ServiceTrackerFactory.open(
-			bundleContext, filterString, new StoreServiceTrackerCustomizer());
+		_serviceTracker = new ServiceTracker<>(
+			bundleContext, bundleContext.createFilter(filterString),
+			new StoreServiceTrackerCustomizer());
 	}
 
 	@Deactivate
