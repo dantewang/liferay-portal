@@ -59,7 +59,7 @@ public class CTStoreFactoryImpl implements CTStoreFactory {
 
 		String filterString = StringBundler.concat(
 			"(&(objectClass=", Store.class.getName(), ")(store.type=*)",
-			"(!(ct.aware=*)))");
+			"(|(!(ct.aware=*))(ct.aware=false)))");
 
 		_serviceTracker = new ServiceTracker<>(
 			bundleContext, bundleContext.createFilter(filterString),
