@@ -1,5 +1,5 @@
 <#assign
-	journalArticlePageCounts = dataFactory.getSequence(journalDataFactory.maxJournalArticlePageCount)
+	journalArticlePageCounts = counterDataFactory.getSequence(journalDataFactory.maxJournalArticlePageCount)
 
 	resourcePermissionModels = dataFactory.newResourcePermissionModels("com.liferay.journal", groupId)
 />
@@ -25,14 +25,14 @@
 		${dataFactory.toInsertSQL(portletPreferencesModel)}
 	</#list>
 
-	<#assign journalArticleCounts = dataFactory.getSequence(journalDataFactory.maxJournalArticleCount) />
+	<#assign journalArticleCounts = counterDataFactory.getSequence(journalDataFactory.maxJournalArticleCount) />
 
 	<#list journalArticleCounts as journalArticleCount>
 		<#assign journalArticleResourceModel = journalDataFactory.newJournalArticleResourceModel(groupId) />
 
 		${dataFactory.toInsertSQL(journalArticleResourceModel)}
 
-		<#assign versionCounts = dataFactory.getSequence(journalDataFactory.maxJournalArticleVersionCount) />
+		<#assign versionCounts = counterDataFactory.getSequence(journalDataFactory.maxJournalArticleVersionCount) />
 
 		<#list versionCounts as versionCount>
 			<#assign journalArticleModel = journalDataFactory.newJournalArticleModel(journalArticleResourceModel, journalArticleCount, versionCount) />
@@ -63,8 +63,8 @@
 			_classPK=journalArticleResourceModel.resourcePrimKey
 			_groupId=groupId
 			_maxCommentCount=0
-			_mbRootMessageId=dataFactory.getCounterNext()
-			_mbThreadId=dataFactory.getCounterNext()
+			_mbRootMessageId=counterDataFactory.getCounterNext()
+			_mbThreadId=counterDataFactory.getCounterNext()
 		/>
 
 		${dataFactory.toInsertSQL(portletPreferenceDataFactory.newPortletPreferencesModel(layoutModel.plid, portletIdPrefix + journalArticleCount, journalArticleResourceModel))}

@@ -16,12 +16,12 @@ ${dataFactory.toInsertSQL(commerceChannelModel)}
 
 ${dataFactory.toInsertSQL(commerceCurrencyModel)}
 
-<#list dataFactory.getSequence(commerceDataFactory.maxCommerceProductCount) as commerceProductCount>
+<#list counterDataFactory.getSequence(commerceDataFactory.maxCommerceProductCount) as commerceProductCount>
 	<#assign cProductModel = commerceDataFactory.newCProductModel(commerceCatalogGroupModel) />
 
 	${dataFactory.toInsertSQL(cProductModel)}
 
-	<#list dataFactory.getSequence(commerceDataFactory.maxCommerceProductDefinitionCount) as commerceProductDefinitionCount>
+	<#list counterDataFactory.getSequence(commerceDataFactory.maxCommerceProductDefinitionCount) as commerceProductDefinitionCount>
 		<#assign
 			cpDefinitionModel = commerceDataFactory.newCPDefinitionModel(cpTaxCategoryModel, cProductModel, commerceCatalogGroupModel, commerceProductDefinitionCount)
 		/>
@@ -32,7 +32,7 @@ ${dataFactory.toInsertSQL(commerceCurrencyModel)}
 
 		${dataFactory.toInsertSQL(commerceDataFactory.newCPDefinitionLocalizationModel(cpDefinitionModel))}
 
-		<#list dataFactory.getSequence(commerceDataFactory.maxCommerceProductInstanceCount) as commerceProductInstanceCount>
+		<#list counterDataFactory.getSequence(commerceDataFactory.maxCommerceProductInstanceCount) as commerceProductInstanceCount>
 			${dataFactory.toInsertSQL(commerceDataFactory.newCPInstanceModel(cpDefinitionModel, commerceCatalogGroupModel, commerceProductInstanceCount))}
 		</#list>
 	</#list>

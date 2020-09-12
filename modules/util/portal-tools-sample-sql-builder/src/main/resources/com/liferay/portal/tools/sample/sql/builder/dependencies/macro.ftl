@@ -5,6 +5,7 @@
 	blogDataFactory = dataFactory.getDataFactoryInstance("blogDataFactory")
 	classNameDataFactory = dataFactory.getDataFactoryInstance("classNameDataFactory")
 	commerceDataFactory = dataFactory.getDataFactoryInstance("commerceDataFactory")
+	counterDataFactory = dataFactory.getDataFactoryInstance("counterDataFactory")
 	ddlDDMDataFactory = dataFactory.getDataFactoryInstance("ddlDDMDataFactory")
 	dlDataFactory = dataFactory.getDataFactoryInstance("dlDataFactory")
 	fragmentDataFactory = dataFactory.getDataFactoryInstance("fragmentDataFactory")
@@ -25,7 +26,7 @@
 		<#local assetCategoryIds = assetDataFactory.getAssetCategoryIds(assetEntryModel)>
 
 		<#list assetCategoryIds as assetCategoryId>
-			<#local assetEntryAssetCategoryRelId = dataFactory.getCounterNext()>
+			<#local assetEntryAssetCategoryRelId = counterDataFactory.getCounterNext()>
 
 			insert into AssetEntryAssetCategoryRel values (0, 0, ${assetEntryAssetCategoryRelId}, ${assetEntryModel.companyId}, ${assetEntryModel.entryId}, ${assetCategoryId}, 0);
 		</#list>
@@ -122,7 +123,7 @@
 					_entry=dlFileEntryModel
 				/>
 
-				<#local ddmStorageLinkId = dataFactory.getCounterNext()>
+				<#local ddmStorageLinkId = counterDataFactory.getCounterNext()>
 
 				<@insertDDMContent
 					_ddmStorageLinkId=ddmStorageLinkId
@@ -135,8 +136,8 @@
 					_classPK=dlFileEntryModel.fileEntryId
 					_groupId=dlFileEntryModel.groupId
 					_maxCommentCount=0
-					_mbRootMessageId=dataFactory.getCounterNext()
-					_mbThreadId=dataFactory.getCounterNext()
+					_mbRootMessageId=counterDataFactory.getCounterNext()
+					_mbThreadId=counterDataFactory.getCounterNext()
 				/>
 
 				${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(dlFileEntryModel, classNameDataFactory.getClassNameId("DLFileEntry")))}

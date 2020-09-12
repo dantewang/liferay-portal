@@ -26,9 +26,6 @@ import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.model.CommerceCatalogModel;
 import com.liferay.commerce.product.model.CommerceChannelModel;
-import com.liferay.counter.kernel.model.Counter;
-import com.liferay.counter.kernel.model.CounterModel;
-import com.liferay.counter.model.impl.CounterModelImpl;
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
@@ -40,7 +37,6 @@ import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
-import com.liferay.friendly.url.model.FriendlyURLEntryLocalization;
 import com.liferay.hello.world.web.internal.constants.HelloWorldPortletKeys;
 import com.liferay.journal.constants.JournalActivityKeys;
 import com.liferay.journal.constants.JournalArticleConstants;
@@ -91,7 +87,6 @@ import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.model.ReleaseConstants;
 import com.liferay.portal.kernel.model.ReleaseModel;
 import com.liferay.portal.kernel.model.ResourceConstants;
-import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.model.ResourcePermissionModel;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleModel;
@@ -127,7 +122,6 @@ import com.liferay.portal.model.impl.VirtualHostModelImpl;
 import com.liferay.portal.upgrade.PortalUpgradeProcess;
 import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
 import com.liferay.portlet.social.model.impl.SocialActivityModelImpl;
-import com.liferay.social.kernel.model.SocialActivity;
 import com.liferay.social.kernel.model.SocialActivityConstants;
 import com.liferay.social.kernel.model.SocialActivityModel;
 import com.liferay.subscription.constants.SubscriptionConstants;
@@ -189,10 +183,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return ADMINISTRATOR_ROLE_ID;
 	}
 
-	public long getCounterNext() {
-		return counter.get();
-	}
-
 	public BaseDataFactory getDataFactoryInstance(String name) {
 		if (name.equals("assetDataFactory")) {
 			return AssetDataFactory.getInstance();
@@ -202,6 +192,9 @@ public class DataFactory extends BaseDDMDataFactory {
 		}
 		else if (name.equals("commerceDataFactory")) {
 			return CommerceDataFactory.getInstance();
+		}
+		else if (name.equals("counterDataFactory")) {
+			return CounterDataFactory.getInstance();
 		}
 		else if (name.equals("ddlDDMDataFactory")) {
 			return DDLDDMDataFactory.getInstance();
@@ -256,16 +249,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 	public long getPowerUserRoleId() {
 		return POWER_USER_ROLE_ID;
-	}
-
-	public List<Integer> getSequence(int size) {
-		List<Integer> sequence = new ArrayList<>(size);
-
-		for (int i = 1; i <= size; i++) {
-			sequence.add(i);
-		}
-
-		return sequence;
 	}
 
 	public long getUserRoleId() {
@@ -470,48 +453,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		}
 
 		return layoutModels;
-	}
-
-	public List<CounterModel> newCounterModels() {
-		List<CounterModel> counterModels = new ArrayList<>();
-
-		// Counter
-
-		CounterModel counterModel = new CounterModelImpl();
-
-		counterModel.setName(Counter.class.getName());
-		counterModel.setCurrentId(counter.get());
-
-		counterModels.add(counterModel);
-
-		// FriendlyURLEntryLocalization
-
-		counterModel = new CounterModelImpl();
-
-		counterModel.setName(FriendlyURLEntryLocalization.class.getName());
-		counterModel.setCurrentId(counter.get());
-
-		counterModels.add(counterModel);
-
-		// ResourcePermission
-
-		counterModel = new CounterModelImpl();
-
-		counterModel.setName(ResourcePermission.class.getName());
-		counterModel.setCurrentId(resourcePermissionCounter.get());
-
-		counterModels.add(counterModel);
-
-		// SocialActivity
-
-		counterModel = new CounterModelImpl();
-
-		counterModel.setName(SocialActivity.class.getName());
-		counterModel.setCurrentId(socialActivityCounter.get());
-
-		counterModels.add(counterModel);
-
-		return counterModels;
 	}
 
 	public UserModel newDefaultUserModel() {

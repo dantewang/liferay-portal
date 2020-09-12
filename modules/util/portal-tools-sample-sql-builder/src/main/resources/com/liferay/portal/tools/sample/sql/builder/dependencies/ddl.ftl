@@ -1,6 +1,6 @@
 <#assign
 	ddlRecordSetClassNameId = classNameDataFactory.getClassNameId("DDLRecordSet")
-	ddlRecordSetCounts = dataFactory.getSequence(ddlDDMDataFactory.maxDDLRecordSetCount)
+	ddlRecordSetCounts = counterDataFactory.getSequence(ddlDDMDataFactory.maxDDLRecordSetCount)
 />
 
 <#list ddlRecordSetCounts as ddlRecordSetCount>
@@ -32,7 +32,7 @@
 
 	${dataFactory.toInsertSQL(ddlDDMDataFactory.newDDMStructureLinkModel(ddlRecordSetModel, ddlRecordSetClassNameId))}
 
-	<#assign ddlRecordCounts = dataFactory.getSequence(ddlDDMDataFactory.maxDDLRecordCount) />
+	<#assign ddlRecordCounts = counterDataFactory.getSequence(ddlDDMDataFactory.maxDDLRecordCount) />
 
 	<#list ddlRecordCounts as ddlRecordCount>
 		<#assign ddlRecordModel = ddlDDMDataFactory.newDDLRecordModel(ddlRecordSetModel) />
@@ -43,7 +43,7 @@
 
 		<@insertDDMContent
 			_currentIndex=ddlRecordCount
-			_ddmStorageLinkId=dataFactory.getCounterNext()
+			_ddmStorageLinkId=counterDataFactory.getCounterNext()
 			_ddmStructureId=ddmStructureModel.structureId
 			_entry=ddlRecordModel
 		/>

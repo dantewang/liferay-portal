@@ -1,7 +1,7 @@
 <#assign
 	assetClassNameIds = classNameDataFactory.assetClassNameIds
 	assetVocabularyModels = assetDataFactory.newAssetVocabularyModels(groupId)
-	pageCounts = dataFactory.getSequence(assetDataFactory.maxAssetPublisherPageCount)
+	pageCounts = counterDataFactory.getSequence(assetDataFactory.maxAssetPublisherPageCount)
 />
 
 <#list assetVocabularyModels as assetVocabularyModel>
