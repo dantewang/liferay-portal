@@ -17,6 +17,7 @@
 	socialActivityDataFactory = dataFactory.getDataFactoryInstance("socialActivityDataFactory")
 	subscriptionDataFactory = dataFactory.getDataFactoryInstance("subscriptionDataFactory")
 	userDataFactory = dataFactory.getDataFactoryInstance("userDataFactory")
+	wikiDataFactory = dataFactory.getDataFactoryInstance("wikiDataFactory")
 />
 
 <#macro insertAssetEntry
