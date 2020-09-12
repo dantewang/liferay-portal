@@ -8,7 +8,7 @@
 <#list userModels as userModel>
 	<#assign userGroupModel = dataFactory.newGroupModel(userModel, userClassNameId) />
 
-	<@insertLayout _layoutModel=dataFactory.newLayoutModel(userGroupModel.groupId, "home", "", "") />
+	<@insertLayout _layoutModel=layoutDataFactory.newLayoutModel(userGroupModel.groupId, "home", "", "") />
 
 	<@insertGroup _groupModel=userGroupModel />
 

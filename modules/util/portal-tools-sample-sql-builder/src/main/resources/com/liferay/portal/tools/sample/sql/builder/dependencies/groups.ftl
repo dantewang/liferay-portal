@@ -6,7 +6,7 @@
 
 <#include "default_user.ftl">
 
-<@insertLayout _layoutModel=dataFactory.newLayoutModel(guestGroupModel.groupId, "welcome", "com_liferay_login_web_portlet_LoginPortlet,", "com_liferay_hello_world_web_portlet_HelloWorldPortlet,") />
+<@insertLayout _layoutModel=layoutDataFactory.newLayoutModel(guestGroupModel.groupId, "welcome", "com_liferay_login_web_portlet_LoginPortlet,", "com_liferay_hello_world_web_portlet_HelloWorldPortlet,") />
 
 <@insertGroup _groupModel=dataFactory.newGlobalGroupModel(classNameDataFactory.getClassNameId("Company")) />
 
@@ -40,7 +40,7 @@
 		_parentDLFolderId=0
 	/>
 
-	<#assign publicLayoutModels = dataFactory.newPublicLayoutModels(groupId) />
+	<#assign publicLayoutModels = layoutDataFactory.newPublicLayoutModels(groupId) />
 
 	<#list publicLayoutModels as publicLayoutModel>
 		<@insertLayout _layoutModel=publicLayoutModel />

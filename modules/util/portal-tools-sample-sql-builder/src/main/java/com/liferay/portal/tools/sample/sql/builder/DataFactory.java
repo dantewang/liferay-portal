@@ -18,15 +18,12 @@ import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.model.AssetCategoryModel;
 import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
-import com.liferay.blogs.constants.BlogsPortletKeys;
 import com.liferay.blogs.model.BlogsEntry;
 import com.liferay.blogs.model.BlogsEntryModel;
 import com.liferay.blogs.social.BlogsActivityKeys;
-import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.model.CommerceCatalogModel;
 import com.liferay.commerce.product.model.CommerceChannelModel;
-import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
 import com.liferay.document.library.kernel.model.DLFolder;
@@ -37,16 +34,13 @@ import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
-import com.liferay.hello.world.web.internal.constants.HelloWorldPortletKeys;
 import com.liferay.journal.constants.JournalActivityKeys;
 import com.liferay.journal.constants.JournalArticleConstants;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleModel;
 import com.liferay.journal.model.JournalArticleResourceModel;
-import com.liferay.login.web.constants.LoginPortletKeys;
 import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.constants.MBMessageConstants;
-import com.liferay.message.boards.constants.MBPortletKeys;
 import com.liferay.message.boards.model.MBCategory;
 import com.liferay.message.boards.model.MBCategoryModel;
 import com.liferay.message.boards.model.MBDiscussionModel;
@@ -78,11 +72,7 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.Layout;
-import com.liferay.portal.kernel.model.LayoutConstants;
-import com.liferay.portal.kernel.model.LayoutFriendlyURLModel;
 import com.liferay.portal.kernel.model.LayoutModel;
-import com.liferay.portal.kernel.model.LayoutSetModel;
-import com.liferay.portal.kernel.model.LayoutTypePortletConstants;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.model.ReleaseConstants;
 import com.liferay.portal.kernel.model.ReleaseModel;
@@ -104,16 +94,12 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.TextFormatter;
-import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.version.Version;
 import com.liferay.portal.model.impl.AccountModelImpl;
 import com.liferay.portal.model.impl.CompanyModelImpl;
 import com.liferay.portal.model.impl.ContactModelImpl;
 import com.liferay.portal.model.impl.GroupModelImpl;
-import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
-import com.liferay.portal.model.impl.LayoutModelImpl;
-import com.liferay.portal.model.impl.LayoutSetModelImpl;
 import com.liferay.portal.model.impl.ReleaseModelImpl;
 import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
@@ -129,7 +115,6 @@ import com.liferay.subscription.model.SubscriptionModel;
 import com.liferay.subscription.model.impl.SubscriptionModelImpl;
 import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.constants.WikiPageConstants;
-import com.liferay.wiki.constants.WikiPortletKeys;
 import com.liferay.wiki.model.WikiNode;
 import com.liferay.wiki.model.WikiNodeModel;
 import com.liferay.wiki.model.WikiPage;
@@ -156,9 +141,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
 
 /**
@@ -207,6 +190,9 @@ public class DataFactory extends BaseDDMDataFactory {
 		}
 		else if (name.equals("journalDataFactory")) {
 			return JournalDataFactory.getInstance();
+		}
+		else if (name.equals("layoutDataFactory")) {
+			return LayoutDataFactory.getInstance();
 		}
 		else if (name.equals("portletPreferenceDataFactory")) {
 			return PortletPreferenceDataFactory.getInstance();
@@ -385,76 +371,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return contactModel;
 	}
 
-	public LayoutModel newContentLayoutModel(
-		long groupId, String name, String fragmentEntries) {
-
-		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
-
-		if (simpleCounter == null) {
-			simpleCounter = new SimpleCounter();
-
-			_layoutCounters.put(groupId, simpleCounter);
-		}
-
-		LayoutModel layoutModel = new LayoutModelImpl();
-
-		// UUID
-
-		layoutModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		layoutModel.setPlid(counter.get());
-
-		// Group instance
-
-		layoutModel.setGroupId(groupId);
-
-		// Audit fields
-
-		layoutModel.setCompanyId(COMPANY_ID);
-		layoutModel.setUserId(SAMPLE_USER_ID);
-		layoutModel.setUserName(SAMPLE_USER_NAME);
-		layoutModel.setCreateDate(new Date());
-		layoutModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		layoutModel.setLayoutId(simpleCounter.get());
-		layoutModel.setName(
-			"<?xml version=\"1.0\"?><root><name>" + name + "</name></root>");
-		layoutModel.setType(LayoutConstants.TYPE_CONTENT);
-
-		UnicodeProperties typeSettingsUnicodeProperties = new UnicodeProperties(
-			true);
-
-		typeSettingsUnicodeProperties.setProperty(
-			"fragmentEntries", fragmentEntries);
-
-		layoutModel.setTypeSettings(
-			StringUtil.replace(
-				typeSettingsUnicodeProperties.toString(), '\n', "\\n"));
-
-		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + name);
-		layoutModel.setLastPublishDate(new Date());
-
-		return layoutModel;
-	}
-
-	public List<LayoutModel> newContentLayoutModels(long groupId) {
-		List<LayoutModel> layoutModels = new ArrayList<>();
-
-		for (int i = 0; i < BenchmarksPropsValues.MAX_CONTENT_LAYOUT_COUNT;
-			 i++) {
-
-			layoutModels.add(
-				newContentLayoutModel(
-					groupId, i + "_web_content", "web_content"));
-		}
-
-		return layoutModels;
-	}
-
 	public UserModel newDefaultUserModel() {
 		return newUserModel(
 			DEFAULT_USER_ID, StringPool.BLANK, StringPool.BLANK,
@@ -493,110 +409,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 	public UserModel newGuestUserModel() {
 		return newUserModel(counter.get(), "Test", "Test", "Test", false);
-	}
-
-	public LayoutFriendlyURLModel newLayoutFriendlyURLModel(
-		LayoutModel layoutModel) {
-
-		LayoutFriendlyURLModel layoutFriendlyURLEntryModel =
-			new LayoutFriendlyURLModelImpl();
-
-		// UUID
-
-		layoutFriendlyURLEntryModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		layoutFriendlyURLEntryModel.setLayoutFriendlyURLId(counter.get());
-
-		// Group instance
-
-		layoutFriendlyURLEntryModel.setGroupId(layoutModel.getGroupId());
-
-		// Audit fields
-
-		layoutFriendlyURLEntryModel.setCompanyId(COMPANY_ID);
-		layoutFriendlyURLEntryModel.setUserId(SAMPLE_USER_ID);
-		layoutFriendlyURLEntryModel.setUserName(SAMPLE_USER_NAME);
-		layoutFriendlyURLEntryModel.setCreateDate(new Date());
-		layoutFriendlyURLEntryModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		layoutFriendlyURLEntryModel.setPlid(layoutModel.getPlid());
-		layoutFriendlyURLEntryModel.setFriendlyURL(
-			layoutModel.getFriendlyURL());
-		layoutFriendlyURLEntryModel.setLanguageId("en_US");
-		layoutFriendlyURLEntryModel.setLastPublishDate(new Date());
-
-		return layoutFriendlyURLEntryModel;
-	}
-
-	public LayoutModel newLayoutModel(
-		long groupId, String name, String column1, String column2) {
-
-		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
-
-		if (simpleCounter == null) {
-			simpleCounter = new SimpleCounter();
-
-			_layoutCounters.put(groupId, simpleCounter);
-		}
-
-		LayoutModel layoutModel = new LayoutModelImpl();
-
-		// UUID
-
-		layoutModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		layoutModel.setPlid(counter.get());
-
-		// Group instance
-
-		layoutModel.setGroupId(groupId);
-
-		// Audit fields
-
-		layoutModel.setCompanyId(COMPANY_ID);
-		layoutModel.setUserId(SAMPLE_USER_ID);
-		layoutModel.setUserName(SAMPLE_USER_NAME);
-		layoutModel.setCreateDate(new Date());
-		layoutModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		layoutModel.setLayoutId(simpleCounter.get());
-		layoutModel.setName(
-			"<?xml version=\"1.0\"?><root><name>" + name + "</name></root>");
-		layoutModel.setType(LayoutConstants.TYPE_PORTLET);
-
-		UnicodeProperties typeSettingsUnicodeProperties = new UnicodeProperties(
-			true);
-
-		typeSettingsUnicodeProperties.setProperty(
-			LayoutTypePortletConstants.LAYOUT_TEMPLATE_ID, "2_columns_ii");
-		typeSettingsUnicodeProperties.setProperty("column-1", column1);
-		typeSettingsUnicodeProperties.setProperty("column-2", column2);
-
-		layoutModel.setTypeSettings(
-			StringUtil.replace(
-				typeSettingsUnicodeProperties.toString(), '\n', "\\n"));
-
-		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + name);
-		layoutModel.setLastPublishDate(new Date());
-
-		return layoutModel;
-	}
-
-	public List<LayoutSetModel> newLayoutSetModels(long groupId) {
-		List<LayoutSetModel> layoutSetModels = new ArrayList<>(2);
-
-		layoutSetModels.add(newLayoutSetModel(groupId, true));
-		layoutSetModels.add(newLayoutSetModel(groupId, false));
-
-		return layoutSetModels;
 	}
 
 	public List<MBCategoryModel> newMBCategoryModels(long groupId) {
@@ -836,32 +648,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		}
 
 		return mbThreadModels;
-	}
-
-	public List<LayoutModel> newPublicLayoutModels(long groupId) {
-		List<LayoutModel> layoutModels = new ArrayList<>();
-
-		layoutModels.add(
-			newLayoutModel(
-				groupId, "welcome", LoginPortletKeys.LOGIN + ",",
-				HelloWorldPortletKeys.HELLO_WORLD + ","));
-		layoutModels.add(
-			newLayoutModel(groupId, "blogs", "", BlogsPortletKeys.BLOGS + ","));
-		layoutModels.add(
-			newLayoutModel(
-				groupId, "commerce_product", "",
-				CPPortletKeys.CP_CONTENT_WEB + ","));
-		layoutModels.add(
-			newLayoutModel(
-				groupId, "document_library", "",
-				DLPortletKeys.DOCUMENT_LIBRARY + ","));
-		layoutModels.add(
-			newLayoutModel(
-				groupId, "forums", "", MBPortletKeys.MESSAGE_BOARDS + ","));
-		layoutModels.add(
-			newLayoutModel(groupId, "wiki", "", WikiPortletKeys.WIKI + ","));
-
-		return layoutModels;
 	}
 
 	public List<ReleaseModel> newReleaseModels() throws IOException {
@@ -1513,34 +1299,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return groupModel;
 	}
 
-	protected LayoutSetModel newLayoutSetModel(
-		long groupId, boolean privateLayout) {
-
-		LayoutSetModel layoutSetModel = new LayoutSetModelImpl();
-
-		// PK fields
-
-		layoutSetModel.setLayoutSetId(counter.get());
-
-		// Group instance
-
-		layoutSetModel.setGroupId(groupId);
-
-		// Audit fields
-
-		layoutSetModel.setCompanyId(COMPANY_ID);
-		layoutSetModel.setCreateDate(new Date());
-		layoutSetModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		layoutSetModel.setPrivateLayout(privateLayout);
-		layoutSetModel.setThemeId("classic_WAR_classictheme");
-		layoutSetModel.setColorSchemeId("01");
-
-		return layoutSetModel;
-	}
-
 	protected MBCategoryModel newMBCategoryModel(long groupId, int index) {
 		MBCategoryModel mbCategoryModel = new MBCategoryModelImpl();
 
@@ -2046,7 +1804,6 @@ public class DataFactory extends BaseDDMDataFactory {
 	private final long _accountId;
 	private List<String> _firstNames;
 	private List<String> _lastNames;
-	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
 	private final Format _simpleDateFormat;
 	private final SimpleCounter _timeCounter;
 	private final long _userPersonalSiteGroupId;
