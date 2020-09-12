@@ -13,6 +13,7 @@
 	layoutDataFactory = dataFactory.getDataFactoryInstance("layoutDataFactory")
 	messageBoardDataFactory = dataFactory.getDataFactoryInstance("messageBoardDataFactory")
 	portletPreferenceDataFactory = dataFactory.getDataFactoryInstance("portletPreferenceDataFactory")
+	releaseDataFactory = dataFactory.getDataFactoryInstance("releaseDataFactory")
 />
 
 <#macro insertAssetEntry

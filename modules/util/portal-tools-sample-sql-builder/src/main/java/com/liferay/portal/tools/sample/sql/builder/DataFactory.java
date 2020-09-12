@@ -47,7 +47,6 @@ import com.liferay.message.boards.model.MBThreadModel;
 import com.liferay.message.boards.social.MBActivityKeys;
 import com.liferay.petra.io.unsync.UnsyncBufferedReader;
 import com.liferay.petra.reflect.ReflectionUtil;
-import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.AccountModel;
@@ -61,8 +60,6 @@ import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutModel;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
-import com.liferay.portal.kernel.model.ReleaseConstants;
-import com.liferay.portal.kernel.model.ReleaseModel;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.ResourcePermissionModel;
 import com.liferay.portal.kernel.model.Role;
@@ -78,21 +75,16 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ReleaseInfo;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.version.Version;
 import com.liferay.portal.model.impl.AccountModelImpl;
 import com.liferay.portal.model.impl.CompanyModelImpl;
 import com.liferay.portal.model.impl.ContactModelImpl;
 import com.liferay.portal.model.impl.GroupModelImpl;
-import com.liferay.portal.model.impl.ReleaseModelImpl;
 import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
-import com.liferay.portal.upgrade.PortalUpgradeProcess;
 import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
 import com.liferay.portlet.social.model.impl.SocialActivityModelImpl;
 import com.liferay.social.kernel.model.SocialActivityConstants;
@@ -113,9 +105,7 @@ import com.liferay.wiki.model.impl.WikiPageResourceModelImpl;
 import com.liferay.wiki.social.WikiActivityKeys;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -186,6 +176,9 @@ public class DataFactory extends BaseDDMDataFactory {
 		}
 		else if (name.equals("portletPreferenceDataFactory")) {
 			return PortletPreferenceDataFactory.getInstance();
+		}
+		else if (name.equals("releaseDataFactory")) {
+			return ReleaseDataFactory.getInstance();
 		}
 
 		return ClassNameDataFactory.getInstance();
@@ -399,45 +392,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 	public UserModel newGuestUserModel() {
 		return newUserModel(counter.get(), "Test", "Test", "Test", false);
-	}
-
-	public List<ReleaseModel> newReleaseModels() throws IOException {
-		List<ReleaseModel> releases = new ArrayList<>();
-
-		Version latestSchemaVersion =
-			PortalUpgradeProcess.getLatestSchemaVersion();
-
-		releases.add(
-			newReleaseModel(
-				ReleaseConstants.DEFAULT_ID,
-				ReleaseConstants.DEFAULT_SERVLET_CONTEXT_NAME,
-				latestSchemaVersion.toString(), ReleaseInfo.getBuildNumber(),
-				false, ReleaseConstants.TEST_STRING));
-
-		try (InputStream is = DataFactory.class.getResourceAsStream(
-				"dependencies/releases.txt");
-			Reader reader = new InputStreamReader(is);
-			UnsyncBufferedReader unsyncBufferedReader =
-				new UnsyncBufferedReader(reader)) {
-
-			String line = null;
-
-			while ((line = unsyncBufferedReader.readLine()) != null) {
-				String[] parts = StringUtil.split(line, CharPool.COLON);
-
-				if (parts.length > 0) {
-					String servletContextName = parts[0];
-					String schemaVersion = parts[1];
-
-					releases.add(
-						newReleaseModel(
-							counter.get(), servletContextName, schemaVersion, 0,
-							true, null));
-				}
-			}
-		}
-
-		return releases;
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -1048,34 +1002,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		groupModel.setActive(true);
 
 		return groupModel;
-	}
-
-	protected ReleaseModelImpl newReleaseModel(
-			long releaseId, String servletContextName, String schemaVersion,
-			int buildNumber, boolean verified, String testString)
-		throws IOException {
-
-		ReleaseModelImpl releaseModelImpl = new ReleaseModelImpl();
-
-		// PK fields
-
-		releaseModelImpl.setReleaseId(releaseId);
-
-		// Audit fields
-
-		releaseModelImpl.setCreateDate(new Date());
-		releaseModelImpl.setModifiedDate(new Date());
-
-		// Other fields
-
-		releaseModelImpl.setServletContextName(servletContextName);
-		releaseModelImpl.setSchemaVersion(schemaVersion);
-		releaseModelImpl.setBuildNumber(buildNumber);
-		releaseModelImpl.setBuildDate(new Date());
-		releaseModelImpl.setVerified(verified);
-		releaseModelImpl.setTestString(testString);
-
-		return releaseModelImpl;
 	}
 
 	protected ResourcePermissionModel newResourcePermissionModel(
