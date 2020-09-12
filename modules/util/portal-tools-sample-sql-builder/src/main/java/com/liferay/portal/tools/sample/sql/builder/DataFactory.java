@@ -20,7 +20,6 @@ import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.blogs.model.BlogsEntry;
 import com.liferay.blogs.model.BlogsEntryModel;
-import com.liferay.blogs.social.BlogsActivityKeys;
 import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.model.CommerceCatalogModel;
 import com.liferay.commerce.product.model.CommerceChannelModel;
@@ -34,17 +33,13 @@ import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureModel;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateModel;
-import com.liferay.journal.constants.JournalActivityKeys;
-import com.liferay.journal.constants.JournalArticleConstants;
 import com.liferay.journal.model.JournalArticle;
-import com.liferay.journal.model.JournalArticleModel;
 import com.liferay.journal.model.JournalArticleResourceModel;
 import com.liferay.message.boards.model.MBCategory;
 import com.liferay.message.boards.model.MBCategoryModel;
 import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.model.MBMessageModel;
 import com.liferay.message.boards.model.MBThreadModel;
-import com.liferay.message.boards.social.MBActivityKeys;
 import com.liferay.petra.io.unsync.UnsyncBufferedReader;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
@@ -85,10 +80,6 @@ import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
-import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
-import com.liferay.portlet.social.model.impl.SocialActivityModelImpl;
-import com.liferay.social.kernel.model.SocialActivityConstants;
-import com.liferay.social.kernel.model.SocialActivityModel;
 import com.liferay.subscription.constants.SubscriptionConstants;
 import com.liferay.subscription.model.SubscriptionModel;
 import com.liferay.subscription.model.impl.SubscriptionModelImpl;
@@ -102,7 +93,6 @@ import com.liferay.wiki.model.WikiPageResourceModel;
 import com.liferay.wiki.model.impl.WikiNodeModelImpl;
 import com.liferay.wiki.model.impl.WikiPageModelImpl;
 import com.liferay.wiki.model.impl.WikiPageResourceModelImpl;
-import com.liferay.wiki.social.WikiActivityKeys;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -130,7 +120,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		_simpleDateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss", TimeZone.getDefault());
 
-		_timeCounter = new SimpleCounter();
 		_userScreenNameCounter = new SimpleCounter();
 
 		_accountId = counter.get();
@@ -179,6 +168,9 @@ public class DataFactory extends BaseDDMDataFactory {
 		}
 		else if (name.equals("releaseDataFactory")) {
 			return ReleaseDataFactory.getInstance();
+		}
+		else if (name.equals("socialActivityDataFactory")) {
+			return SocialActivityDataFactory.getInstance();
 		}
 
 		return ClassNameDataFactory.getInstance();
@@ -685,82 +677,6 @@ public class DataFactory extends BaseDDMDataFactory {
 			SAMPLE_USER_NAME, false);
 	}
 
-	public SocialActivityModel newSocialActivityModel(
-		BlogsEntryModel blogsEntryModel, long classNameId) {
-
-		return newSocialActivityModel(
-			blogsEntryModel.getGroupId(), classNameId,
-			blogsEntryModel.getEntryId(), BlogsActivityKeys.ADD_ENTRY,
-			"{\"title\":\"" + blogsEntryModel.getTitle() + "\"}");
-	}
-
-	public SocialActivityModel newSocialActivityModel(
-		DLFileEntryModel dlFileEntryModel, long classNameId) {
-
-		return newSocialActivityModel(
-			dlFileEntryModel.getGroupId(), classNameId,
-			dlFileEntryModel.getFileEntryId(), DLActivityKeys.ADD_FILE_ENTRY,
-			StringPool.BLANK);
-	}
-
-	public SocialActivityModel newSocialActivityModel(
-		JournalArticleModel journalArticleModel, long classNameId) {
-
-		int type = JournalActivityKeys.UPDATE_ARTICLE;
-
-		if (journalArticleModel.getVersion() ==
-				JournalArticleConstants.VERSION_DEFAULT) {
-
-			type = JournalActivityKeys.ADD_ARTICLE;
-		}
-
-		return newSocialActivityModel(
-			journalArticleModel.getGroupId(), classNameId,
-			journalArticleModel.getResourcePrimKey(), type,
-			"{\"title\":\"" + journalArticleModel.getUrlTitle() + "\"}");
-	}
-
-	public SocialActivityModel newSocialActivityModel(
-		MBMessageModel mbMessageModel, long wikiPageClassNameId,
-		long mbMessageClassNameId) {
-
-		long classNameId = mbMessageModel.getClassNameId();
-		long classPK = mbMessageModel.getClassPK();
-
-		int type = 0;
-		String extraData = null;
-
-		if (classNameId == wikiPageClassNameId) {
-			extraData = "{\"version\":1}";
-
-			type = WikiActivityKeys.ADD_PAGE;
-		}
-		else if (classNameId == 0) {
-			extraData = "{\"title\":\"" + mbMessageModel.getSubject() + "\"}";
-
-			type = MBActivityKeys.ADD_MESSAGE;
-
-			classNameId = mbMessageClassNameId;
-			classPK = mbMessageModel.getMessageId();
-		}
-		else {
-			StringBundler sb = new StringBundler(5);
-
-			sb.append("{\"messageId\": \"");
-			sb.append(mbMessageModel.getMessageId());
-			sb.append("\", \"title\": ");
-			sb.append(mbMessageModel.getSubject());
-			sb.append("}");
-
-			extraData = sb.toString();
-
-			type = SocialActivityConstants.TYPE_ADD_COMMENT;
-		}
-
-		return newSocialActivityModel(
-			mbMessageModel.getGroupId(), classNameId, classPK, type, extraData);
-	}
-
 	public SubscriptionModel newSubscriptionModel(
 		BlogsEntryModel blogsEntryModel, long classNameId) {
 
@@ -1080,36 +996,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return roleModel;
 	}
 
-	protected SocialActivityModel newSocialActivityModel(
-		long groupId, long classNameId, long classPK, int type,
-		String extraData) {
-
-		SocialActivityModel socialActivityModel = new SocialActivityModelImpl();
-
-		// PK fields
-
-		socialActivityModel.setActivityId(socialActivityCounter.get());
-
-		// Group instance
-
-		socialActivityModel.setGroupId(groupId);
-
-		// Audit fields
-
-		socialActivityModel.setCompanyId(COMPANY_ID);
-		socialActivityModel.setUserId(SAMPLE_USER_ID);
-		socialActivityModel.setCreateDate(_CURRENT_TIME + _timeCounter.get());
-
-		// Other fields
-
-		socialActivityModel.setClassNameId(classNameId);
-		socialActivityModel.setClassPK(classPK);
-		socialActivityModel.setType(type);
-		socialActivityModel.setExtraData(extraData);
-
-		return socialActivityModel;
-	}
-
 	protected SubscriptionModel newSubscriptionModel(
 		long classNameId, long classPK) {
 
@@ -1357,13 +1243,10 @@ public class DataFactory extends BaseDDMDataFactory {
 		return sb.toString();
 	}
 
-	private static final long _CURRENT_TIME = System.currentTimeMillis();
-
 	private final long _accountId;
 	private List<String> _firstNames;
 	private List<String> _lastNames;
 	private final Format _simpleDateFormat;
-	private final SimpleCounter _timeCounter;
 	private final long _userPersonalSiteGroupId;
 	private final SimpleCounter _userScreenNameCounter;
 
