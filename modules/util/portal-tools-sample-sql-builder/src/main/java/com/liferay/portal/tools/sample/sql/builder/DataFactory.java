@@ -39,7 +39,6 @@ import com.liferay.message.boards.model.MBCategory;
 import com.liferay.message.boards.model.MBCategoryModel;
 import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.model.MBMessageModel;
-import com.liferay.message.boards.model.MBThreadModel;
 import com.liferay.petra.io.unsync.UnsyncBufferedReader;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
@@ -80,9 +79,6 @@ import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
-import com.liferay.subscription.constants.SubscriptionConstants;
-import com.liferay.subscription.model.SubscriptionModel;
-import com.liferay.subscription.model.impl.SubscriptionModelImpl;
 import com.liferay.util.SimpleCounter;
 import com.liferay.wiki.constants.WikiPageConstants;
 import com.liferay.wiki.model.WikiNode;
@@ -171,6 +167,9 @@ public class DataFactory extends BaseDDMDataFactory {
 		}
 		else if (name.equals("socialActivityDataFactory")) {
 			return SocialActivityDataFactory.getInstance();
+		}
+		else if (name.equals("subscriptionDataFactory")) {
+			return SubscriptionDataFactory.getInstance();
 		}
 
 		return ClassNameDataFactory.getInstance();
@@ -677,25 +676,6 @@ public class DataFactory extends BaseDDMDataFactory {
 			SAMPLE_USER_NAME, false);
 	}
 
-	public SubscriptionModel newSubscriptionModel(
-		BlogsEntryModel blogsEntryModel, long classNameId) {
-
-		return newSubscriptionModel(classNameId, blogsEntryModel.getEntryId());
-	}
-
-	public SubscriptionModel newSubscriptionModel(
-		MBThreadModel mBThreadModel, long classNameId) {
-
-		return newSubscriptionModel(classNameId, mBThreadModel.getThreadId());
-	}
-
-	public SubscriptionModel newSubscriptionModel(
-		WikiPageModel wikiPageModel, long classNameId) {
-
-		return newSubscriptionModel(
-			classNameId, wikiPageModel.getResourcePrimKey());
-	}
-
 	public List<UserModel> newUserModels() {
 		List<UserModel> userModels = new ArrayList<>(
 			BenchmarksPropsValues.MAX_USER_COUNT);
@@ -994,32 +974,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		roleModel.setType(type);
 
 		return roleModel;
-	}
-
-	protected SubscriptionModel newSubscriptionModel(
-		long classNameId, long classPK) {
-
-		SubscriptionModel subscriptionModel = new SubscriptionModelImpl();
-
-		// PK fields
-
-		subscriptionModel.setSubscriptionId(counter.get());
-
-		// Audit fields
-
-		subscriptionModel.setCompanyId(COMPANY_ID);
-		subscriptionModel.setUserId(SAMPLE_USER_ID);
-		subscriptionModel.setUserName(SAMPLE_USER_NAME);
-		subscriptionModel.setCreateDate(new Date());
-		subscriptionModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		subscriptionModel.setClassNameId(classNameId);
-		subscriptionModel.setClassPK(classPK);
-		subscriptionModel.setFrequency(SubscriptionConstants.FREQUENCY_INSTANT);
-
-		return subscriptionModel;
 	}
 
 	protected UserModel newUserModel(

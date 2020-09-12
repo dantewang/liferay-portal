@@ -11,7 +11,7 @@
 	<#list mbThreadModels as mbThreadModel>
 		${dataFactory.toInsertSQL(mbThreadModel)}
 
-		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(mbThreadModel, classNameDataFactory.getClassNameId("MBThread")))}
+		${dataFactory.toInsertSQL(subscriptionDataFactory.newSubscriptionModel(mbThreadModel, classNameDataFactory.getClassNameId("MBThread")))}
 
 		<@insertAssetEntry
 			_classNameIds=[classNameDataFactory.getClassNameId("MBThread")]

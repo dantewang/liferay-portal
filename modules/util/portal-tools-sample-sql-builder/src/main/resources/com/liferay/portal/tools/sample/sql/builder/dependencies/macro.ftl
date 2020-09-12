@@ -15,6 +15,7 @@
 	portletPreferenceDataFactory = dataFactory.getDataFactoryInstance("portletPreferenceDataFactory")
 	releaseDataFactory = dataFactory.getDataFactoryInstance("releaseDataFactory")
 	socialActivityDataFactory = dataFactory.getDataFactoryInstance("socialActivityDataFactory")
+	subscriptionDataFactory = dataFactory.getDataFactoryInstance("subscriptionDataFactory")
 />
 
 <#macro insertAssetEntry

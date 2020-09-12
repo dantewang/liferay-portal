@@ -13,7 +13,7 @@
 
 		${dataFactory.toInsertSQL(assetDataFactory.newMBDiscussionAssetEntryModel(wikiPageModel, classNameDataFactory.getClassNameId("MBDiscussion_WikiPage")))}
 
-		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(wikiPageModel, wikiPageClassNameId))}
+		${dataFactory.toInsertSQL(subscriptionDataFactory.newSubscriptionModel(wikiPageModel, wikiPageClassNameId))}
 
 		${dataFactory.toInsertSQL(dataFactory.newWikiPageResourceModel(wikiPageModel))}
 
