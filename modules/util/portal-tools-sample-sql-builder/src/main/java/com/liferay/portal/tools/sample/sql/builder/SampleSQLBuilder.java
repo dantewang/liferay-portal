@@ -253,8 +253,7 @@ public class SampleSQLBuilder {
 						).put(
 							"dataFactory", new DataFactory()
 						).put(
-							"resourcePermissionDataFactory",
-							new ResourcePermissionDataFactory()
+							"insertSQLBuilder", new InsertSQLBuilder()
 						).build(),
 						sampleSQLWriter);
 				}
