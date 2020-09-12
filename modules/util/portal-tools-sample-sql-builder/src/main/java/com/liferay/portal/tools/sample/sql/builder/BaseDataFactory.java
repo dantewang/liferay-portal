@@ -37,7 +37,7 @@ import java.util.Map;
 /**
  * @author Lily Chi
  */
-public abstract class BaseDataFactory {
+public abstract class BaseDataFactory extends InitBaseCounterDataFactory {
 
 	public Date nextFutureDate() {
 		return new Date(_FUTURE_TIME + (_FUTURE_COUNTER.get() * Time.SECOND));
@@ -109,8 +109,6 @@ public abstract class BaseDataFactory {
 
 		return StringUtil.merge(lines, StringPool.SPACE);
 	}
-	protected static final SimpleCounter counter = new SimpleCounter(
-		BenchmarksPropsValues.MAX_GROUP_COUNT + 1);
 
 	protected static final long ADMINISTRATOR_ROLE_ID = counter.get();
 
