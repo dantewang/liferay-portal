@@ -16,6 +16,7 @@
 	releaseDataFactory = dataFactory.getDataFactoryInstance("releaseDataFactory")
 	socialActivityDataFactory = dataFactory.getDataFactoryInstance("socialActivityDataFactory")
 	subscriptionDataFactory = dataFactory.getDataFactoryInstance("subscriptionDataFactory")
+	userDataFactory = dataFactory.getDataFactoryInstance("userDataFactory")
 />
 
 <#macro insertAssetEntry
@@ -231,7 +232,7 @@
 >
 	${dataFactory.toInsertSQL(_userModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newContactModel(_userModel, classNameDataFactory.getClassNameId("User")))}
+	${dataFactory.toInsertSQL(userDataFactory.newContactModel(_userModel, classNameDataFactory.getClassNameId("User")))}
 
 	<#list _roleIds as roleId>
 		${dataFactory.toInsertSQL("Users_Roles", 0, roleId, _userModel.userId)}

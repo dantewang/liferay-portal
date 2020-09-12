@@ -1,6 +1,6 @@
 <#assign
 	groupClassNameId = classNameDataFactory.getClassNameId("Group")
-	guestGroupModel = dataFactory.newGuestGroupModel(groupClassNameId)
+	guestGroupModel = userDataFactory.newGuestGroupModel(groupClassNameId)
 	userClassNameId = classNameDataFactory.getClassNameId("User")
 />
 
@@ -8,13 +8,13 @@
 
 <@insertLayout _layoutModel=layoutDataFactory.newLayoutModel(guestGroupModel.groupId, "welcome", "com_liferay_login_web_portlet_LoginPortlet,", "com_liferay_hello_world_web_portlet_HelloWorldPortlet,") />
 
-<@insertGroup _groupModel=dataFactory.newGlobalGroupModel(classNameDataFactory.getClassNameId("Company")) />
+<@insertGroup _groupModel=userDataFactory.newGlobalGroupModel(classNameDataFactory.getClassNameId("Company")) />
 
 <@insertGroup _groupModel=guestGroupModel />
 
-<@insertGroup _groupModel=dataFactory.newUserPersonalSiteGroupModel(classNameDataFactory.getClassNameId("UserPersonalSite")) />
+<@insertGroup _groupModel=userDataFactory.newUserPersonalSiteGroupModel(classNameDataFactory.getClassNameId("UserPersonalSite")) />
 
-<#list dataFactory.newGroupModels(groupClassNameId) as groupModel>
+<#list userDataFactory.newGroupModels(groupClassNameId) as groupModel>
 	<#assign groupId = groupModel.groupId />
 
 	<#include "asset_publisher.ftl">

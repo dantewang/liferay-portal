@@ -1,16 +1,16 @@
 <#-- Default user -->
 
-<@insertUser _userModel=dataFactory.newDefaultUserModel() />
+<@insertUser _userModel=userDataFactory.newDefaultUserModel() />
 
 <#-- Guest user -->
 
-<#assign guestUserModel = dataFactory.newGuestUserModel() />
+<#assign guestUserModel = userDataFactory.newGuestUserModel() />
 
-<@insertGroup _groupModel=dataFactory.newGroupModel(guestUserModel, userClassNameId) />
+<@insertGroup _groupModel=userDataFactory.newGroupModel(guestUserModel, userClassNameId) />
 
 <#assign
 	groupIds = [guestGroupModel.groupId]
-	roleIds = [dataFactory.administratorRoleId]
+	roleIds = [userDataFactory.administratorRoleId]
 />
 
 <@insertUser
@@ -22,9 +22,9 @@
 <#-- Sample user -->
 
 <#assign
-	sampleUserModel = dataFactory.newSampleUserModel()
+	sampleUserModel = userDataFactory.newSampleUserModel()
 
-	userGroupModel = dataFactory.newGroupModel(sampleUserModel, userClassNameId)
+	userGroupModel = userDataFactory.newGroupModel(sampleUserModel, userClassNameId)
 
 	layoutModel = layoutDataFactory.newLayoutModel(userGroupModel.groupId, "home", "", "")
 />
@@ -34,8 +34,8 @@
 <@insertGroup _groupModel=userGroupModel />
 
 <#assign
-	groupIds = counterDataFactory.getSequence(dataFactory.maxGroupCount)
-	roleIds = [dataFactory.administratorRoleId, dataFactory.powerUserRoleId, dataFactory.userRoleId]
+	groupIds = counterDataFactory.getSequence(userDataFactory.maxGroupCount)
+	roleIds = [userDataFactory.administratorRoleId, userDataFactory.powerUserRoleId, userDataFactory.userRoleId]
 />
 
 <@insertUser
