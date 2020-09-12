@@ -252,6 +252,9 @@ public class SampleSQLBuilder {
 							"csvFileWriter", csvFileWriter
 						).put(
 							"dataFactory", new DataFactory()
+						).put(
+							"resourcePermissionDataFactory",
+							new ResourcePermissionDataFactory()
 						).build(),
 						sampleSQLWriter);
 				}

@@ -56,9 +56,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		else if (name.equals("releaseDataFactory")) {
 			return ReleaseDataFactory.getInstance();
 		}
-		else if (name.equals("resourcePermissionDataFactory")) {
-			return ResourcePermissionDataFactory.getInstance();
-		}
 		else if (name.equals("socialActivityDataFactory")) {
 			return SocialActivityDataFactory.getInstance();
 		}

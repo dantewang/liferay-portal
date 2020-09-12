@@ -14,7 +14,6 @@
 	messageBoardDataFactory = dataFactory.getDataFactoryInstance("messageBoardDataFactory")
 	portletPreferenceDataFactory = dataFactory.getDataFactoryInstance("portletPreferenceDataFactory")
 	releaseDataFactory = dataFactory.getDataFactoryInstance("releaseDataFactory")
-	resourcePermissionDataFactory = dataFactory.getDataFactoryInstance("resourcePermissionDataFactory")
 	socialActivityDataFactory = dataFactory.getDataFactoryInstance("socialActivityDataFactory")
 	subscriptionDataFactory = dataFactory.getDataFactoryInstance("subscriptionDataFactory")
 	userDataFactory = dataFactory.getDataFactoryInstance("userDataFactory")
