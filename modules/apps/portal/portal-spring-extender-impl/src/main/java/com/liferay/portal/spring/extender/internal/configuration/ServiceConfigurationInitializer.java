@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.spring.extender.internal.loader.ModuleResourceLoader;
+import com.liferay.portal.util.PropsValues;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -129,24 +130,25 @@ public class ServiceConfigurationInitializer {
 			String portlets = _portletConfiguration.get(
 				"service.configurator.portlet.ids");
 
+			String[] sources = StringUtil.split(
+				_portletConfiguration.get(PropsKeys.RESOURCE_ACTIONS_CONFIGS));
+
 			if (Validator.isNull(portlets)) {
 				_resourceActions.checkResourceActions(
-					_resourceActions.readModelResources(
-						_classLoader,
-						StringUtil.split(
-							_portletConfiguration.get(
-								PropsKeys.RESOURCE_ACTIONS_CONFIGS))));
+					_resourceActions.readModelResources(_classLoader, sources));
 			}
 			else {
-				_resourceActions.readModelResources(
-					_classLoader,
-					StringUtil.split(
-						_portletConfiguration.get(
-							PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
+				_resourceActions.readModelResources(_classLoader, sources);
 
 				for (String portletId : StringUtil.split(portlets)) {
 					_resourceActions.check(portletId);
 				}
+			}
+
+			if (!PropsValues.RESOURCE_ACTIONS_READ_STRICT_MODE) {
+				_resourceActions.checkResourceActions(
+					_resourceActions.readPortletResources(
+						_classLoader, sources));
 			}
 		}
 		catch (Exception exception) {
