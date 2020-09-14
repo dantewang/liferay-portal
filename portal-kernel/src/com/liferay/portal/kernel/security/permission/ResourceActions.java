@@ -173,7 +173,7 @@ public interface ResourceActions {
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *             #readPortletResources(String, ClassLoader, String[])} and
-	 *             {@link #readModelResource(String, ClassLoader, String[])}
+	 *             {@link #readModelResources(String, ClassLoader, String[])}
 	 */
 	@Deprecated
 	public void read(
@@ -183,7 +183,7 @@ public interface ResourceActions {
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *             #readPortletResources(String, ClassLoader, String[])} and
-	 *             {@link #readModelResource(String, ClassLoader, String[])}
+	 *             {@link #readModelResources(String, ClassLoader, String[])}
 	 */
 	@Deprecated
 	public void read(
@@ -193,7 +193,7 @@ public interface ResourceActions {
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #readModelResource(String, Document)}
+	 *             #readModelResources(String, Document)}
 	 */
 	@Deprecated
 	public void read(
@@ -203,7 +203,7 @@ public interface ResourceActions {
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #readModelResource(String, ClassLoader, String[])} and
+	 *             #readModelResources(String, ClassLoader, String[])} and
 	 *             {@link #checkResourceActions(Set)}
 	 */
 	@Deprecated
@@ -212,12 +212,12 @@ public interface ResourceActions {
 			String... sources)
 		throws ResourceActionsException;
 
-	public Set<String> readModelResource(
+	public Set<String> readModelResources(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
 		throws ResourceActionsException;
 
-	public Set<String> readModelResource(
+	public Set<String> readModelResources(
 			String servletContextName, Document document)
 		throws ResourceActionsException;
 

@@ -1459,7 +1459,7 @@ public class PortletTracker
 							PropsKeys.RESOURCE_ACTIONS_CONFIGS));
 
 					try {
-						_resourceActions.readModelResource(
+						_resourceActions.readModelResources(
 							null, classLoader, _sources);
 					}
 					catch (Exception exception) {
