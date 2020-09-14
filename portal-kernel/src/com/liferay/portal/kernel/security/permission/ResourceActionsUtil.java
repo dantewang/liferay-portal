@@ -285,7 +285,7 @@ public class ResourceActionsUtil {
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *             #readPortletResources(String, ClassLoader, String[])} and
-	 *             {@link #readModelResource(String, ClassLoader, String[])}
+	 *             {@link #readModelResources(String, ClassLoader, String[])}
 	 */
 	@Deprecated
 	public static void read(
@@ -298,7 +298,7 @@ public class ResourceActionsUtil {
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *             #readPortletResources(String, ClassLoader, String[])} and
-	 *             {@link #readModelResource(String, ClassLoader, String[])}
+	 *             {@link #readModelResources(String, ClassLoader, String[])}
 	 */
 	@Deprecated
 	public static void read(
@@ -311,7 +311,7 @@ public class ResourceActionsUtil {
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #readModelResource(String, ClassLoader, String[])} and
+	 *             #readModelResources(String, ClassLoader, String[])} and
 	 *             {@link #checkResourceActions(Set)}
 	 */
 	@Deprecated
@@ -324,20 +324,20 @@ public class ResourceActionsUtil {
 			servletContextName, classLoader, sources);
 	}
 
-	public static Set<String> readModelResource(
+	public static Set<String> readModelResources(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
 		throws Exception {
 
-		return getResourceActions().readModelResource(
+		return getResourceActions().readModelResources(
 			servletContextName, classLoader, sources);
 	}
 
-	public static Set<String> readModelResource(
+	public static Set<String> readModelResources(
 			String servletContextName, Document document)
 		throws Exception {
 
-		return getResourceActions().readModelResource(
+		return getResourceActions().readModelResources(
 			servletContextName, document);
 	}
 
