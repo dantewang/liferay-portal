@@ -85,7 +85,7 @@ public class PermissionCheckerTest {
 			PermissionCheckerTest.class.getClassLoader(),
 			StringUtil.replace(packageName, '.', '/') +
 				"/dependencies/resource-actions.xml");
-		_resourceActions.readModelResource(
+		_resourceActions.readModelResources(
 			PermissionCheckerTest.class.getClassLoader(),
 			StringUtil.replace(packageName, '.', '/') +
 				"/dependencies/resource-actions.xml");

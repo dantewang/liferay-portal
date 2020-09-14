@@ -173,7 +173,7 @@ public interface ResourceActions {
 	/**
 	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
 	 *             #readPortletResources(ClassLoader, String[])} and
-	 *             {@link #readModelResource(ClassLoader, String[])}
+	 *             {@link #readModelResources(ClassLoader, String[])}
 	 */
 	@Deprecated
 	public void read(ClassLoader classLoader, String source)
@@ -182,7 +182,7 @@ public interface ResourceActions {
 	/**
 	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
 	 *             #readPortletResources(ClassLoader, String[])} and
-	 *             {@link #readModelResource(ClassLoader, String[])}
+	 *             {@link #readModelResources(ClassLoader, String[])}
 	 */
 	@Deprecated
 	public void read(ClassLoader classLoader, String... sources)
@@ -190,7 +190,7 @@ public interface ResourceActions {
 
 	/**
 	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
-	 *             #readModelResource(Document)}
+	 *             #readModelResources(Document)}
 	 */
 	@Deprecated
 	public void read(Document document, Set<String> resourceNames)
@@ -224,7 +224,7 @@ public interface ResourceActions {
 
 	/**
 	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
-	 *             #readModelResource(ClassLoader, String[])} and
+	 *             #readModelResources(ClassLoader, String[])} and
 	 *             {@link #checkResourceActions(Set)}
 	 */
 	@Deprecated
@@ -240,11 +240,11 @@ public interface ResourceActions {
 			String... sources)
 		throws ResourceActionsException;
 
-	public Set<String> readModelResource(
+	public Set<String> readModelResources(
 			ClassLoader classLoader, String... sources)
 		throws ResourceActionsException;
 
-	public Set<String> readModelResource(Document document)
+	public Set<String> readModelResources(Document document)
 		throws ResourceActionsException;
 
 	public void readPortletResource(

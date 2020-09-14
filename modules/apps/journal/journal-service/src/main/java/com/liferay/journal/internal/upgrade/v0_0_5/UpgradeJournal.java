@@ -450,7 +450,7 @@ public class UpgradeJournal extends UpgradeProcess {
 	protected void initJournalDDMCompositeModelsResourceActions()
 		throws Exception {
 
-		_resourceActions.readModelResource(
+		_resourceActions.readModelResources(
 			UpgradeJournal.class.getClassLoader(),
 			"/resource-actions/journal_ddm_composite_models.xml");
 

@@ -276,7 +276,7 @@ public class UpgradeDDMFormInstance extends UpgradeProcess {
 		Class<?> clazz = getClass();
 
 		_resourceActions.checkResourceActions(
-			_resourceActions.readModelResource(
+			_resourceActions.readModelResources(
 				clazz.getClassLoader(), "/resource-actions/default.xml"));
 	}
 
