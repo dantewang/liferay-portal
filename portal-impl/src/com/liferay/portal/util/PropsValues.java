@@ -2420,6 +2420,10 @@ public class PropsValues {
 		GetterUtil.getBoolean(
 			PropsUtil.get(PropsKeys.RESOURCE_ACTIONS_READ_PORTLET_RESOURCES));
 
+	public static final boolean RESOURCE_ACTIONS_READ_STRICT_MODE =
+		GetterUtil.getBoolean(
+			PropsUtil.get(PropsKeys.RESOURCE_ACTIONS_READ_STRICT_MODE));
+
 	public static final String RESOURCE_REPOSITORIES_ROOT = PropsUtil.get(
 		PropsKeys.RESOURCE_REPOSITORIES_ROOT);
 
