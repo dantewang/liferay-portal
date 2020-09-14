@@ -174,7 +174,7 @@ public interface ResourceActions {
 	public void read(ClassLoader classLoader, String... sources)
 		throws ResourceActionsException;
 
-	public void read(Document document, Set<String> portletNames)
+	public void read(Document document, Set<String> resourceNames)
 		throws ResourceActionsException;
 
 	/**
@@ -200,7 +200,7 @@ public interface ResourceActions {
 	@Deprecated
 	public void read(
 			String servletContextName, Document document,
-			Set<String> portletNames)
+			Set<String> resourceNames)
 		throws ResourceActionsException;
 
 	public void readAndCheck(ClassLoader classLoader, String... sources)
