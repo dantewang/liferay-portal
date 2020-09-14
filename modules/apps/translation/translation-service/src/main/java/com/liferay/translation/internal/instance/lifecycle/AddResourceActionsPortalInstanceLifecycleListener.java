@@ -44,7 +44,7 @@ public class AddResourceActionsPortalInstanceLifecycleListener
 		String[] languageIds = ArrayUtil.sortedUnique(PropsValues.LOCALES);
 
 		for (int i = 0; i < languageIds.length; i++) {
-			_resourceActions.readModelResource(
+			_resourceActions.readModelResources(
 				SAXReaderUtil.read(
 					StringUtil.replace(
 						StringUtil.replace(

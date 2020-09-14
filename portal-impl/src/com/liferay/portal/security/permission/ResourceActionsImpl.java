@@ -90,7 +90,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 			readPortletResources(
 				classLoader, PropsValues.RESOURCE_ACTIONS_CONFIGS);
-			readModelResource(
+			readModelResources(
 				classLoader, PropsValues.RESOURCE_ACTIONS_CONFIGS);
 		}
 		catch (Exception exception) {
@@ -616,7 +616,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	/**
 	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
 	 *             #readPortletResources(ClassLoader, String[])} and
-	 *             {@link #readModelResource(ClassLoader, String[])}
+	 *             {@link #readModelResources(ClassLoader, String[])}
 	 */
 	@Deprecated
 	@Override
@@ -635,7 +635,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	/**
 	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
 	 *             #readPortletResources(ClassLoader, String[])} and
-	 *             {@link #readModelResource(ClassLoader, String[])}
+	 *             {@link #readModelResources(ClassLoader, String[])}
 	 */
 	@Deprecated
 	@Override
@@ -649,7 +649,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	/**
 	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
-	 *             #readModelResource(Document)}
+	 *             #readModelResources(Document)}
 	 */
 	@Deprecated
 	@Override
@@ -701,7 +701,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	/**
 	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
-	 *             #readModelResource(ClassLoader, String[])} and
+	 *             #readModelResources(ClassLoader, String[])} and
 	 *             {@link #checkResourceActions(Set)}
 	 */
 	@Deprecated
@@ -740,7 +740,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	@Override
-	public Set<String> readModelResource(
+	public Set<String> readModelResources(
 			ClassLoader classLoader, String... sources)
 		throws ResourceActionsException {
 
@@ -756,7 +756,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	@Override
-	public Set<String> readModelResource(Document document)
+	public Set<String> readModelResources(Document document)
 		throws ResourceActionsException {
 
 		_validatePublicId(document);

@@ -135,10 +135,10 @@ public class ServiceConfigurationInitializer {
 
 			if (Validator.isNull(portlets)) {
 				_resourceActions.checkResourceActions(
-					_resourceActions.readModelResource(_classLoader, sources));
+					_resourceActions.readModelResources(_classLoader, sources));
 			}
 			else {
-				_resourceActions.readModelResource(_classLoader, sources);
+				_resourceActions.readModelResources(_classLoader, sources);
 
 				for (String portletId : StringUtil.split(portlets)) {
 					_resourceActions.check(portletId);

@@ -286,7 +286,7 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 		}
 
 		if (sources != null) {
-			ResourceActionsUtil.readModelResource(classLoader, sources);
+			ResourceActionsUtil.readModelResources(classLoader, sources);
 		}
 
 		for (Portlet portlet : portlets) {
@@ -593,7 +593,7 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 			StringUtil.split(
 				portletProperties.getProperty(
 					PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
-		ResourceActionsUtil.readModelResource(
+		ResourceActionsUtil.readModelResources(
 			classLoader,
 			StringUtil.split(
 				portletProperties.getProperty(

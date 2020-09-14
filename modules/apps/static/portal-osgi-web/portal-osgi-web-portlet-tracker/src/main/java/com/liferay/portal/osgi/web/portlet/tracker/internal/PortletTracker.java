@@ -1533,7 +1533,7 @@ public class PortletTracker
 
 					if (!PropsValues.RESOURCE_ACTIONS_READ_STRICT_MODE) {
 						try {
-							_resourceActions.readModelResource(
+							_resourceActions.readModelResources(
 								classLoader, _sources);
 						}
 						catch (Exception exception) {
