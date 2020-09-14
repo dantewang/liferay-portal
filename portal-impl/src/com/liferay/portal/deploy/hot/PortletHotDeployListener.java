@@ -286,7 +286,7 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 		}
 
 		if (sources != null) {
-			ResourceActionsUtil.readModelResource(classLoader, sources);
+			ResourceActionsUtil.readModelResources(classLoader, sources);
 		}
 
 		for (Portlet portlet : portlets) {
