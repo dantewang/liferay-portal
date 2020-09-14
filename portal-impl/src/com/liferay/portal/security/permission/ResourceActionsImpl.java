@@ -92,7 +92,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 			readPortletResources(
 				null, classLoader, PropsValues.RESOURCE_ACTIONS_CONFIGS);
-			readModelResource(
+			readModelResources(
 				null, classLoader, PropsValues.RESOURCE_ACTIONS_CONFIGS);
 		}
 		catch (Exception exception) {
@@ -618,7 +618,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *             #readPortletResources(String, ClassLoader, String[])} and
-	 *             {@link #readModelResource(String, ClassLoader, String[])}
+	 *             {@link #readModelResources(String, ClassLoader, String[])}
 	 */
 	@Deprecated
 	@Override
@@ -640,7 +640,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *             #readPortletResources(String, ClassLoader, String[])} and
-	 *             {@link #readModelResource(String, ClassLoader, String[])}
+	 *             {@link #readModelResources(String, ClassLoader, String[])}
 	 */
 	@Deprecated
 	@Override
@@ -656,7 +656,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #readModelResource(String, Document)}
+	 *             #readModelResources(String, Document)}
 	 */
 	@Deprecated
 	@Override
@@ -673,7 +673,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #readModelResource(String, ClassLoader, String[])} and
+	 *             #readModelResources(String, ClassLoader, String[])} and
 	 *             {@link #checkResourceActions(Set)}
 	 */
 	@Deprecated
@@ -703,7 +703,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	@Override
-	public Set<String> readModelResource(
+	public Set<String> readModelResources(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
 		throws ResourceActionsException {
@@ -721,7 +721,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	@Override
-	public Set<String> readModelResource(
+	public Set<String> readModelResources(
 			String servletContextName, Document document)
 		throws ResourceActionsException {
 
