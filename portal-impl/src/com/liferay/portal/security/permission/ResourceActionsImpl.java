@@ -1296,7 +1296,7 @@ public class ResourceActionsImpl implements ResourceActions {
 					portletName, portlet);
 
 				if (!portletName.equals(PortletKeys.PORTAL)) {
-					_checkPortletActions(portlet, portletActions);
+					_checkPortletLayoutManagerActions(portletActions);
 				}
 
 				_readResource(
