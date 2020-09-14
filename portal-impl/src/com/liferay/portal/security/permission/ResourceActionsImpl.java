@@ -615,7 +615,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		_read(
 			classLoader, source,
 			rootElement -> _readPortletResource(
-				servletContextName, rootElement, null));
+				null, servletContextName, rootElement, null));
 
 		_read(
 			classLoader, source,
@@ -668,7 +668,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			_read(
 				classLoader, source,
 				rootElement -> _readPortletResource(
-					servletContextName, rootElement, null));
+					null, servletContextName, rootElement, null));
 
 			_read(
 				classLoader, source,
@@ -1171,7 +1171,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	private void _readPortletResource(
-			String servletContextName, Element rootElement,
+			Portlet portlet, String servletContextName, Element rootElement,
 			Set<String> portletNames)
 		throws ResourceActionsException {
 
@@ -1183,8 +1183,17 @@ public class ResourceActionsImpl implements ResourceActions {
 					servletContextName,
 					portletResourceElement.elementTextTrim("portlet-name"));
 
-				Portlet portlet = portletLocalService.getPortletById(
-					portletName);
+				if (portlet != null) {
+					String deployPortletName = PortletIdCodec.decodePortletName(
+						portlet.getPortletId());
+
+					if (!deployPortletName.equals(portletName)) {
+						continue;
+					}
+				}
+				else {
+					portlet = portletLocalService.getPortletById(portletName);
+				}
 
 				Set<String> portletActions = _getPortletMimeTypeActions(
 					portletName, portlet);
