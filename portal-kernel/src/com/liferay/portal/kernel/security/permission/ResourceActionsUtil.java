@@ -18,9 +18,11 @@ import com.liferay.portal.kernel.exception.NoSuchResourceActionException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.xml.Document;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -50,6 +52,10 @@ public class ResourceActionsUtil {
 		throws NoSuchResourceActionException {
 
 		getResourceActions().checkAction(name, actionId);
+	}
+
+	public static void checkResourceActions(Set<String> resourceNames) {
+		getResourceActions().checkResourceActions(resourceNames);
 	}
 
 	public static String getAction(
@@ -276,6 +282,12 @@ public class ResourceActionsUtil {
 		return getResourceActions().isRootModelResource(modelResource);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readPortletResources(String, ClassLoader, String[])} and
+	 *             {@link #readModelResources(String, ClassLoader, String[])}
+	 */
+	@Deprecated
 	public static void read(
 			String servletContextName, ClassLoader classLoader, String source)
 		throws Exception {
@@ -283,6 +295,12 @@ public class ResourceActionsUtil {
 		getResourceActions().read(servletContextName, classLoader, source);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readPortletResources(String, ClassLoader, String[])} and
+	 *             {@link #readModelResources(String, ClassLoader, String[])}
+	 */
+	@Deprecated
 	public static void read(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
@@ -291,12 +309,53 @@ public class ResourceActionsUtil {
 		getResourceActions().read(servletContextName, classLoader, sources);
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #readModelResources(String, ClassLoader, String[])} and
+	 *             {@link #checkResourceActions(Set)}
+	 */
+	@Deprecated
 	public static void readAndCheck(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
 		throws Exception {
 
 		getResourceActions().readAndCheck(
+			servletContextName, classLoader, sources);
+	}
+
+	public static Set<String> readModelResources(
+			String servletContextName, ClassLoader classLoader,
+			String... sources)
+		throws Exception {
+
+		return getResourceActions().readModelResources(
+			servletContextName, classLoader, sources);
+	}
+
+	public static Set<String> readModelResources(
+			String servletContextName, Document document)
+		throws Exception {
+
+		return getResourceActions().readModelResources(
+			servletContextName, document);
+	}
+
+	public static void readPortletResource(
+			Portlet portlet, String servletContextName, ClassLoader classLoader,
+			String... sources)
+		throws Exception {
+
+		getResourceActions().readPortletResource(
+			portlet, servletContextName, classLoader, sources);
+	}
+
+	public static Set<String> readPortletResources(
+			String servletContextName, ClassLoader classLoader,
+			String... sources)
+		throws Exception {
+
+		return getResourceActions().readPortletResources(
 			servletContextName, classLoader, sources);
 	}
 
