@@ -1240,7 +1240,7 @@ public class ResourceActionsImpl implements ResourceActions {
 				Collections.singleton(ActionKeys.PERMISSIONS));
 
 			if (modelNames != null) {
-				modelNames.addAll(_resourceReferences.get(modelName));
+				modelNames.add(modelName);
 			}
 		}
 	}
