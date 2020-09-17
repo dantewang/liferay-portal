@@ -83,8 +83,22 @@ public class Configurable<T> {
 						throw new IllegalStateException("Attribute is required but not set " + method.getName());
 
 					o = ad.deflt();
-					if (o.equals(Meta.NULL))
+					if (o.equals(Meta.NULL)) {
 						o = null;
+					}
+					else if (method.getReturnType() == String.class) {
+						List<String> tokens = unescape((String)o);
+
+						if (tokens.size() == 1) {
+							o = tokens.get(0);
+						}
+
+						if (tokens.size() > 1) {
+							throw new IllegalArgumentException(
+								"Delimiter \",\" in default value of String " +
+									"type must be escaped");
+						}
+					}
 				}
 			}
 			if (o == null) {
@@ -400,3 +414,4 @@ public class Configurable<T> {
 	}
 
 }
+/* @generated */
