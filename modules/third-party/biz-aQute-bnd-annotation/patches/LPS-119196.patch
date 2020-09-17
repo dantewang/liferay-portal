@@ -1,0 +1,91 @@
+diff --git a/aQute/bnd/annotation/metatype/Configurable.java b/aQute/bnd/annotation/metatype/Configurable.java
+index b997f78e1428..8a50dd6d1ee5 100644
+--- a/aQute/bnd/annotation/metatype/Configurable.java
++++ b/aQute/bnd/annotation/metatype/Configurable.java
+@@ -83,8 +83,22 @@ public class Configurable<T> {
+ 						throw new IllegalStateException("Attribute is required but not set " + method.getName());
+ 
+ 					o = ad.deflt();
+-					if (o.equals(Meta.NULL))
++					if (o.equals(Meta.NULL)) {
+ 						o = null;
++					}
++					else if (method.getReturnType() == String.class) {
++						List<String> tokens = unescape((String)o);
++
++						if (tokens.size() == 1) {
++							o = tokens.get(0);
++						}
++
++						if (tokens.size() > 1) {
++							throw new IllegalArgumentException(
++								"Delimiter \",\" in default value of String " +
++									"type must be escaped");
++						}
++					}
+ 				}
+ 			}
+ 			if (o == null) {
+@@ -121,11 +135,6 @@ public class Configurable<T> {
+ 			}
+ 
+ 			Class<?> actualType = o.getClass();
+-
+-			if (actualType == String.class) {
+-				o = unescape((String)o);
+-			}
+-
+ 			if (actualType.isAssignableFrom(resultType))
+ 				return o;
+ 
+@@ -327,14 +336,11 @@ public class Configurable<T> {
+ 
+ 			if (o instanceof String) {
+ 				String s = (String) o;
+-
+-				s = s.replace("\\\\", _BACK_SLASH_PLACE_HOLDER);
+-
+ 				if (SPLITTER_P.matcher(s)
+ 					.find())
+ 					return Arrays.asList(s.split("\\|"));
+ 				else
+-					return Arrays.asList(s.split("(?<!\\\\),"));
++					return unescape(s);
+ 
+ 			}
+ 			return Arrays.asList(o);
+@@ -366,15 +372,19 @@ public class Configurable<T> {
+ 		return sb.toString();
+ 	}
+ 
+-	public static String unescape(String s) {
++	public static List<String> unescape(String s) {
+ 		// do it the OSGi way
+-		s = s.replace("\\\\", _BACK_SLASH_PLACE_HOLDER);
++		List<String> tokens = new ArrayList<>();
+ 
+-		s = s.replaceAll("^\\s*", "");
+-		s = s.replaceAll("(?!<\\\\)\\s*$", "");
+-		s = s.replaceAll("\\\\([\\s,=\\\\|])", "$1");
++		String[] parts = s.split("(?<!\\\\),");
+ 
+-		return s.replace(_BACK_SLASH_PLACE_HOLDER, "\\");
++		for (String p : parts) {
++			p = p.replaceAll("^\\s*", "");
++			p = p.replaceAll("(?!<\\\\)\\s*$", "");
++			p = p.replaceAll("\\\\([\\s,\\\\|])", "$1");
++			tokens.add(p);
++		}
++		return tokens;
+ 	}
+ 
+ 	private static final MethodType defaultConstructor = methodType(void.class);
+@@ -403,7 +413,5 @@ public class Configurable<T> {
+ 		}
+ 	}
+ 
+-	private static final String _BACK_SLASH_PLACE_HOLDER = "BACK_SLASH_PLACE_HOLDER";
+-
+ }
+ /* @generated */
+\ No newline at end of file
