@@ -160,6 +160,22 @@ public class ConfigurableUtilTest {
 		new ConfigurableUtil();
 	}
 
+	@Test
+	public void testSuppliedValueNotEscaped() {
+		Dictionary<String, String> dictionary = new HashMapDictionary<>();
+
+		dictionary.put("testReqiredString", "testReqiredString");
+		dictionary.put("testStringSuppliedValueNotEscaped", "a=b\\,c\\=d\\\\");
+
+		TestConfiguration testConfiguration =
+			ConfigurableUtil.createConfigurable(
+				TestConfiguration.class, dictionary);
+
+		Assert.assertEquals(
+			"a=b\\,c\\=d\\\\",
+			testConfiguration.testStringSuppliedValueNotEscaped());
+	}
+
 	@Aspect
 	public static class ConfigurableUtilAdvice {
 
@@ -224,6 +240,8 @@ public class ConfigurableUtilTest {
 		Assert.assertArrayEquals(
 			new String[] {"test_string_1", "test_string_2"},
 			testConfiguration.testStringArray());
+		Assert.assertEquals(
+			"a=b,c\\=d", testConfiguration.testStringDefaultValueEscaped());
 
 		TestClass testClass = testConfiguration.testClass();
 
@@ -286,6 +304,12 @@ public class ConfigurableUtilTest {
 
 		@Meta.AD(deflt = "test_string_1|test_string_2", required = false)
 		public String[] testStringArray();
+
+		@Meta.AD(deflt = "a=b\\,c\\=d", required = false)
+		public String testStringDefaultValueEscaped();
+
+		@Meta.AD(required = false)
+		public String testStringSuppliedValueNotEscaped();
 
 	}
 
