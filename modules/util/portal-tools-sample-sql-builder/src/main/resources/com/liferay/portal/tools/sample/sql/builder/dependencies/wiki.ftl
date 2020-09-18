@@ -16,6 +16,7 @@
 
 		<@insertAssetEntry
 			_assetCategoryModelsMaps=assetCategoryModelsMaps
+			_assetTagModelsMaps=assetTagModelsMaps
 			_categoryAndTag=true
 			_entry=wikiPageModel
 		/>
@@ -28,6 +29,7 @@
 			_groupId=groupId
 			_maxCommentCount=dataFactory.maxWikiPageCommentCount
 			_mbDiscussionAssetCategoryModelsMaps=assetCategoryModelsMaps
+			_mbDiscussionAssetTagModelsMaps=assetTagModelsMaps
 			_mbRootMessageId=mbRootMessageId
 			_mbThreadId=dataFactory.getCounterNext()
 		/>

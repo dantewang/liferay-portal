@@ -17,5 +17,5 @@
 		${dataFactory.toInsertSQL(portletPreferencesModel)}
 	</#list>
 
-	${dataFactory.toInsertSQL(dataFactory.newPortletPreferencesModel(layoutModel.plid, groupId, portletId, pageCount, assetCategoryModelsMaps))}
+	${dataFactory.toInsertSQL(dataFactory.newPortletPreferencesModel(layoutModel.plid, groupId, portletId, pageCount, assetCategoryModelsMaps, assetTagModelsMaps))}
 </#list>

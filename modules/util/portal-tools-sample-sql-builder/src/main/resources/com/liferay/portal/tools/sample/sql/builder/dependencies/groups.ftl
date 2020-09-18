@@ -32,6 +32,7 @@
 	<@insertDLFolder
 		_ddmStructureId=dataFactory.defaultDLDDMStructureId
 		_dlAssetCategoryModelsMaps=assetCategoryModelsMaps
+		_dlAssetTagModelsMaps=assetTagModelsMaps
 		_dlFolderDepth=1
 		_groupId=groupId
 		_parentDLFolderId=0

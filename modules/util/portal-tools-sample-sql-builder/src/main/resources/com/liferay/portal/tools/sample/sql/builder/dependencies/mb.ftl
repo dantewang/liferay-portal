@@ -15,6 +15,7 @@
 
 		<@insertAssetEntry
 			_assetCategoryModelsMaps=assetCategoryModelsMaps
+			_assetTagModelsMaps=assetTagModelsMaps
 			_entry=mbThreadModel
 		/>
 
@@ -25,6 +26,7 @@
 		<#list mbMessageModels as mbMessageModel>
 			<@insertMBMessage
 				_mbMessageAssetCategoryModelsMaps=assetCategoryModelsMaps
+				_mbMessageAssetTagModelsMaps=assetTagModelsMaps
 				_mbMessageModel=mbMessageModel
 			/>
 

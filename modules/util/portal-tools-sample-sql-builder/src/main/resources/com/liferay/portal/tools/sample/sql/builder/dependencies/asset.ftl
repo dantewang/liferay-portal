@@ -1,6 +1,7 @@
 <#assign
 	assetVocabularyModelsArray = dataFactory.newAssetVocabularyModelsArray()
 	assetCategoryModelsMaps = dataFactory.newAssetCategoryModelsMaps(assetVocabularyModelsArray)
+	assetTagModelsMaps = dataFactory.newAssetTagModelsMaps()
 />
 
 <#list dataFactory.newAssetVocabularyModels(dataFactory.newDefaultAssetVocabularyModel(), assetVocabularyModelsArray) as assetVocabularyModel>
@@ -11,6 +12,6 @@
 	${dataFactory.toInsertSQL(assetCategoryModel)}
 </#list>
 
-<#list dataFactory.assetTagModels as assetTagModel>
+<#list dataFactory.newAssetTagModels(assetTagModelsMaps) as assetTagModel>
 	${dataFactory.toInsertSQL(assetTagModel)}
 </#list>
