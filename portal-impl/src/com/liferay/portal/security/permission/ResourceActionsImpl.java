@@ -1237,8 +1237,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 			_readResource(
 				modelResourceElement, modelName,
-				Collections.singleton(ActionKeys.PERMISSIONS),
-				Collections.emptySet());
+				Collections.singleton(ActionKeys.PERMISSIONS));
 
 			if (modelNames != null) {
 				modelNames.add(modelName);
@@ -1277,8 +1276,7 @@ public class ResourceActionsImpl implements ResourceActions {
 				}
 
 				_readResource(
-					portletResourceElement, portletName, portletActions,
-					_defaultPortletGuestUnsupportedActions);
+					portletResourceElement, portletName, portletActions);
 
 				if (portletNames != null) {
 					portletNames.add(portletName);
@@ -1289,8 +1287,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	private void _readResource(
 			Element resourceElement, String name,
-			Set<String> defaultResourceActions,
-			Set<String> defaultGuestUnsupportedActions)
+			Set<String> defaultResourceActions)
 		throws ResourceActionsException {
 
 		ResourceActionsBag resourceActionsBag = _getResourceActionsBag(name);
@@ -1347,7 +1344,12 @@ public class ResourceActionsImpl implements ResourceActions {
 		Set<String> guestUnsupportedActions =
 			resourceActionsBag.getGuestUnsupportedActions();
 
-		guestUnsupportedActions.addAll(defaultGuestUnsupportedActions);
+		String resourceElementName = resourceElement.getName();
+
+		if (resourceElementName.equals("portlet-resource")) {
+			guestUnsupportedActions.addAll(
+				_defaultPortletGuestUnsupportedActions);
+		}
 
 		Element guestUnsupportedElement = _getPermissionsChildElement(
 			resourceElement, "guest-unsupported");
