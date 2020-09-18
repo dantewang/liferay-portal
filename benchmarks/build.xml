@@ -79,18 +79,6 @@
 			<path refid="project.classpath" />
 		</path>
 
-		<available file="benchmarks.${user.name}.properties" property="user.properites.avaiable" />
-
-		<if>
-			<equals arg1="${user.properites.avaiable}" arg2="true" />
-			<then>
-				<property name="sample.sql.properties.file" value="benchmarks.${user.name}.properties" />
-			</then>
-			<else>
-				<property name="sample.sql.properties.file" value="benchmarks.properties" />
-			</else>
-		</if>
-
 		<java
 			classname="com.liferay.portal.tools.sample.sql.builder.SampleSQLBuilder"
 			classpathref="sample.sql.builder.classpath"
@@ -121,6 +109,8 @@
 	</target>
 
 	<target depends="clean, build-sample-sql" name="merge-sql">
+		<property file="${sample.sql.properties.file}" />
+
 		<concat append="true" destfile="${sample-data-sql}" if:true="${sample.sql.output.merge}">
 			<filelist dir="${sample.sql.output.dir}" files="sample-${sample.sql.db.type}.sql" />
 		</concat>
