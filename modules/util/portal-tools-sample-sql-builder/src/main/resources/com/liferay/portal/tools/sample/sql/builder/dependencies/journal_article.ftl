@@ -51,6 +51,7 @@
 
 			<#if versionCount = dataFactory.maxJournalArticleVersionCount>
 				<@insertAssetEntry
+					_assetCategoryModelsMaps=assetCategoryModelsMaps
 					_categoryAndTag=true
 					_entry=dataFactory.newObjectValuePair(journalArticleModel, journalArticleLocalizationModel)
 				/>
@@ -62,6 +63,7 @@
 			_classPK=journalArticleResourceModel.resourcePrimKey
 			_groupId=groupId
 			_maxCommentCount=0
+			_mbDiscussionAssetCategoryModelsMaps=assetCategoryModelsMaps
 			_mbRootMessageId=dataFactory.getCounterNext()
 			_mbThreadId=dataFactory.getCounterNext()
 		/>

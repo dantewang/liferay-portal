@@ -14,6 +14,7 @@
 	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(blogsEntryModel))}
 
 	<@insertAssetEntry
+		_assetCategoryModelsMaps=assetCategoryModelsMaps
 		_categoryAndTag=true
 		_entry=blogsEntryModel
 	/>
@@ -25,6 +26,7 @@
 		_classPK=blogsEntryModel.entryId
 		_groupId=groupId
 		_maxCommentCount=dataFactory.maxBlogsEntryCommentCount
+		_mbDiscussionAssetCategoryModelsMaps=assetCategoryModelsMaps
 		_mbRootMessageId=mbRootMessageId
 		_mbThreadId=dataFactory.getCounterNext()
 	/>

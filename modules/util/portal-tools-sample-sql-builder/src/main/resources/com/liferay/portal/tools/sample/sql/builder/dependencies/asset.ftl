@@ -1,8 +1,13 @@
-<#list dataFactory.newAssetVocabularyModels(dataFactory.newDefaultAssetVocabularyModel()) as assetVocabularyModel>
+<#assign
+	assetVocabularyModelsArray = dataFactory.newAssetVocabularyModelsArray()
+	assetCategoryModelsMaps = dataFactory.newAssetCategoryModelsMaps(assetVocabularyModelsArray)
+/>
+
+<#list dataFactory.newAssetVocabularyModels(dataFactory.newDefaultAssetVocabularyModel(), assetVocabularyModelsArray) as assetVocabularyModel>
 	${dataFactory.toInsertSQL(assetVocabularyModel)}
 </#list>
 
-<#list dataFactory.assetCategoryModels as assetCategoryModel>
+<#list dataFactory.newAssetCategoryModels(assetCategoryModelsMaps) as assetCategoryModel>
 	${dataFactory.toInsertSQL(assetCategoryModel)}
 </#list>
 

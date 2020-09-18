@@ -1,6 +1,7 @@
 <#setting number_format = "computer">
 
 <#macro insertAssetEntry
+	_assetCategoryModelsMaps
 	_entry
 	_categoryAndTag = false
 >
@@ -9,7 +10,7 @@
 	${dataFactory.toInsertSQL(assetEntryModel)}
 
 	<#if _categoryAndTag>
-		<#local assetCategoryIds = dataFactory.getAssetCategoryIds(assetEntryModel)>
+		<#local assetCategoryIds = dataFactory.getAssetCategoryIds(assetEntryModel, _assetCategoryModelsMaps)>
 
 		<#list assetCategoryIds as assetCategoryId>
 			<#local assetEntryAssetCategoryRelId = dataFactory.getCounterNext()>
@@ -79,6 +80,7 @@
 
 <#macro insertDLFolder
 	_ddmStructureId
+	_dlAssetCategoryModelsMaps
 	_dlFolderDepth
 	_groupId
 	_parentDLFolderId
@@ -89,7 +91,10 @@
 		<#list dlFolderModels as dlFolderModel>
 			${dataFactory.toInsertSQL(dlFolderModel)}
 
-			<@insertAssetEntry _entry=dlFolderModel />
+			<@insertAssetEntry
+				_assetCategoryModelsMaps=_dlAssetCategoryModelsMaps
+				_entry=dlFolderModel
+			/>
 
 			<#local dlFileEntryModels = dataFactory.newDlFileEntryModels(dlFolderModel)>
 
@@ -100,7 +105,10 @@
 
 				${dataFactory.toInsertSQL(dlFileVersionModel)}
 
-				<@insertAssetEntry _entry=dlFileEntryModel />
+				<@insertAssetEntry
+					_assetCategoryModelsMaps=_dlAssetCategoryModelsMaps
+					_entry=dlFileEntryModel
+				/>
 
 				<#local ddmStorageLinkId = dataFactory.getCounterNext()>
 
@@ -115,6 +123,7 @@
 					_classPK=dlFileEntryModel.fileEntryId
 					_groupId=dlFileEntryModel.groupId
 					_maxCommentCount=0
+					_mbDiscussionAssetCategoryModelsMaps=_dlAssetCategoryModelsMaps
 					_mbRootMessageId=dataFactory.getCounterNext()
 					_mbThreadId=dataFactory.getCounterNext()
 				/>
@@ -132,6 +141,7 @@
 
 			<@insertDLFolder
 				_ddmStructureId=_ddmStructureId
+				_dlAssetCategoryModelsMaps=_dlAssetCategoryModelsMaps
 				_dlFolderDepth=_dlFolderDepth + 1
 				_groupId=groupId
 				_parentDLFolderId=dlFolderModel.folderId
@@ -165,6 +175,7 @@
 	_classPK
 	_groupId
 	_maxCommentCount
+	_mbDiscussionAssetCategoryModelsMaps
 	_mbRootMessageId
 	_mbThreadId
 >
@@ -174,12 +185,18 @@
 
 	<#local mbRootMessageModel = dataFactory.newMBMessageModel(mbThreadModel, _classNameId, _classPK, 0)>
 
-	<@insertMBMessage _mbMessageModel=mbRootMessageModel />
+	<@insertMBMessage
+		_mbMessageAssetCategoryModelsMaps=_mbDiscussionAssetCategoryModelsMaps
+		_mbMessageModel=mbRootMessageModel
+	/>
 
 	<#local mbMessageModels = dataFactory.newMBMessageModels(mbThreadModel, _classNameId, _classPK, _maxCommentCount)>
 
 	<#list mbMessageModels as mbMessageModel>
-		<@insertMBMessage _mbMessageModel=mbMessageModel />
+		<@insertMBMessage
+			_mbMessageAssetCategoryModelsMaps=_mbDiscussionAssetCategoryModelsMaps
+			_mbMessageModel=mbMessageModel
+		/>
 
 		${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel))}
 	</#list>
@@ -188,11 +205,15 @@
 </#macro>
 
 <#macro insertMBMessage
+	_mbMessageAssetCategoryModelsMaps
 	_mbMessageModel
 >
 	${dataFactory.toInsertSQL(_mbMessageModel)}
 
-	<@insertAssetEntry _entry=_mbMessageModel />
+	<@insertAssetEntry
+		_assetCategoryModelsMaps=_mbMessageAssetCategoryModelsMaps
+		_entry=_mbMessageModel
+	/>
 </#macro>
 
 <#macro insertUser
