@@ -80,7 +80,17 @@
 			<path refid="project.classpath" />
 		</path>
 
-		<property name="sample.sql.properties.file" value="benchmarks.properties" />
+		<available file="benchmarks.${user.name}.properties" property="user.properites.avaiable" />
+
+		<if>
+			<equals arg1="${user.properites.avaiable}" arg2="true" />
+			<then>
+				<property name="sample.sql.properties.file" value="benchmarks.${user.name}.properties" />
+			</then>
+			<else>
+				<property name="sample.sql.properties.file" value="benchmarks.properties" />
+			</else>
+		</if>
 
 		<java
 			classname="com.liferay.portal.tools.sample.sql.builder.SampleSQLBuilder"
