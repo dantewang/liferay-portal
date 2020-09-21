@@ -25,7 +25,7 @@
 		<#list mbMessageModels as mbMessageModel>
 			<@insertMBMessage _mbMessageModel=mbMessageModel />
 
-			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel))}
+			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel, dataFactory.getClassNameId("com.liferay.wiki.model.WikiPage"), dataFactory.getClassNameId("com.liferay.message.boards.model.MBMessage")))}
 		</#list>
 
 		${csvFileWriter.write("mbThread", mbCategoryModel.categoryId + "," + mbThreadModel.threadId + "," + mbThreadModel.rootMessageId + "\n")}
