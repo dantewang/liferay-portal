@@ -57,6 +57,7 @@
 				<@insertAssetEntry
 					_assetCategoryModels=journalArticleAssetCategoryModels
 					_assetTagModels=journalArticleAssetTagModels
+					_classNameIds=[dataFactory.getClassNameId("com.liferay.journal.model.JournalArticle")]
 					_entry=dataFactory.newObjectValuePair(journalArticleModel, journalArticleLocalizationModel)
 				/>
 			</#if>

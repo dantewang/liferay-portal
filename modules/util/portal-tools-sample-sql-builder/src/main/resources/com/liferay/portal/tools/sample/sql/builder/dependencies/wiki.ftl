@@ -4,6 +4,8 @@
 	wikiAssetTagModels = dataFactory.pickAssetTagModels(assetTagModels, 3)
 
 	wikiNodeModels = dataFactory.newWikiNodeModels(groupId)
+
+	wikiPageClassNameId = dataFactory.getClassNameId("com.liferay.wiki.model.WikiPage")
 />
 
 <#list wikiNodeModels as wikiNodeModel>
@@ -14,7 +16,7 @@
 	<#list wikiPageModels as wikiPageModel>
 		${dataFactory.toInsertSQL(wikiPageModel)}
 
-		${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(wikiPageModel))}
+		${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(wikiPageModel, dataFactory.getClassNameId("com.liferay.message.boards.model.MBDiscussion_com.liferay.wiki.model.WikiPage")))}
 
 		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(wikiPageModel))}
 
@@ -23,6 +25,7 @@
 		<@insertAssetEntry
 			_assetCategoryModels=wikiAssetCategoryModels
 			_assetTagModels=wikiAssetTagModels
+			_classNameIds=[wikiPageClassNameId]
 			_entry=wikiPageModel
 		/>
 

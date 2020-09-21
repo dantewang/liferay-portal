@@ -4,6 +4,8 @@
 	blogAssetTagModels = dataFactory.pickAssetTagModels(assetTagModels, 2)
 
 	blogsEntryModels = dataFactory.newBlogsEntryModels(groupId)
+
+	blogsEntryClassNameId = dataFactory.getClassNameId("com.liferay.blogs.model.BlogsEntry")
 />
 
 <#list blogsEntryModels as blogsEntryModel>
@@ -17,11 +19,12 @@
 
 	${dataFactory.toInsertSQL(dataFactory.newFriendlyURLEntryMapping(friendlyURLEntryModel))}
 
-	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(blogsEntryModel))}
+	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(blogsEntryModel, dataFactory.getClassNameId("com.liferay.message.boards.model.MBDiscussion_com.liferay.blogs.model.BlogsEntry")))}
 
 	<@insertAssetEntry
 		_assetCategoryModels=blogAssetCategoryModels
 		_assetTagModels=blogAssetTagModels
+		_classNameIds=[blogsEntryClassNameId]
 		_entry=blogsEntryModel
 	/>
 
