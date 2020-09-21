@@ -80,6 +80,8 @@
 			<path refid="project.classpath" />
 		</path>
 
+		<property name="sample.sql.properties.file" value="benchmarks.properties" />
+
 		<java
 			classname="com.liferay.portal.tools.sample.sql.builder.SampleSQLBuilder"
 			classpathref="sample.sql.builder.classpath"
@@ -110,7 +112,7 @@
 	</target>
 
 	<target depends="clean, build-sample-sql" name="merge-sql">
-		<property file="${sample.sql.properties.file}" />
+		<property file="benchmarks.properties" />
 
 		<concat append="true" destfile="${sample-data-sql}" if:true="${sample.sql.output.merge}">
 			<filelist dir="${sample.sql.output.dir}" files="sample-${sample.sql.db.type}.sql" />
