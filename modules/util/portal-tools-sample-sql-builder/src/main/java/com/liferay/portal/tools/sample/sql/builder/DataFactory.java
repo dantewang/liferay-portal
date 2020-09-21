@@ -581,10 +581,6 @@ public class DataFactory {
 		return _userRoleModel;
 	}
 
-	public long getWikiPageClassNameId() {
-		return getClassNameId(WikiPage.class);
-	}
-
 	public void initJournalArticleContent() {
 		int maxJournalArticleSize =
 			BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_SIZE;
