@@ -224,9 +224,9 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Equi
 		_values = values;
 		if (needValidation) {
 			for (int index = 0; index < _values.size(); index++) {
-				ValueTokenizer vt = new ValueTokenizer(_values.get(index), logger);
+				ValueTokenizer vt = new ValueTokenizer(_values.get(index), this, logger);
 				_values.set(index, vt.getValuesAsString());
-				String reason = vt.validate(this);
+				String reason = vt.validate();
 				if ((reason != null) && reason.length() > 0) {
 					logger.log(LogService.LOG_WARNING, NLS.bind(MetaTypeMsg.INVALID_OPTIONS, new Object[] {_values.get(index), getID(), reason}));
 					_labels.remove(index);
@@ -251,8 +251,8 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Equi
 	 * The given parameter is a comma delimited list needed to be parsed.
 	 */
 	void setDefaultValue(String defaults_str, boolean needValidation) {
-		ValueTokenizer vt = new ValueTokenizer(defaults_str, logger);
-		String reason = vt.validate(this);
+		ValueTokenizer vt = new ValueTokenizer(defaults_str, this, logger);
+		String reason = vt.validate();
 		if ((reason != null) && reason.length() > 0) {
 			logger.log(LogService.LOG_WARNING, NLS.bind(MetaTypeMsg.INVALID_DEFAULTS, new Object[] {vt.getValuesAsString(), getID(), reason}));
 			return;
@@ -302,8 +302,8 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Equi
 	 * @see org.osgi.service.metatype.AttributeDefinition#validate(java.lang.String)
 	 */
 	public String validate(String value) {
-		ValueTokenizer vt = new ValueTokenizer(value, logger);
-		return vt.validate(this);
+		ValueTokenizer vt = new ValueTokenizer(value, this, logger);
+		return vt.validate();
 	}
 
 	public Map<String, String> getExtensionAttributes(String schema) {
@@ -322,3 +322,4 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Equi
 		return _minValue == null ? null : String.valueOf(_minValue);
 	}
 }
+/* @generated */
