@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project basedir="." default="run" name="benchmarks" xmlns:if="ant:if" xmlns:unless="ant:unless">
+<project basedir="." default="run" name="benchmarks">
 	<import file="../build-common.xml" />
 
 	<property file="build.${user.name}.properties" />
@@ -124,10 +124,6 @@
 	<target depends="clean, build-sample-sql" name="merge-sql">
 		<property file="benchmarks.properties" />
 
-		<concat append="true" destfile="${sample-data-sql}" if:true="${sample.sql.output.merge}">
-			<filelist dir="${sample.sql.output.dir}" files="sample-${sample.sql.db.type}.sql" />
-		</concat>
-
 		<if>
 			<equals arg1="${sample.sql.output.merge}" arg2="false" />
 			<then>
@@ -145,6 +141,11 @@
 					</sequential>
 				</for>
 			</then>
+			<else>
+				<concat append="true" destfile="${sample-data-sql}">
+					<filelist dir="${sample.sql.output.dir}" files="sample-${sample.sql.db.type}.sql" />
+				</concat>
+			</else>
 		</if>
 	</target>
 </project>
