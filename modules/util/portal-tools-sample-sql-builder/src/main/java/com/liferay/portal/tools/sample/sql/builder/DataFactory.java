@@ -448,10 +448,6 @@ public class DataFactory {
 		return _defaultDLDDMStructureId;
 	}
 
-	public long getJournalArticleClassNameId() {
-		return getClassNameId(JournalArticle.class);
-	}
-
 	public String getJournalArticleLayoutColumn(String portletPrefix) {
 		StringBundler sb = new StringBundler(
 			3 * BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_COUNT);
@@ -1781,7 +1777,8 @@ public class DataFactory {
 	}
 
 	public DDMStorageLinkModel newDDMStorageLinkModel(
-		JournalArticleModel journalArticleModel, long structureId) {
+		JournalArticleModel journalArticleModel, long structureId,
+		long classNameId) {
 
 		DDMStorageLinkModel ddmStorageLinkModel = new DDMStorageLinkModelImpl();
 
@@ -1795,8 +1792,7 @@ public class DataFactory {
 
 		// Other fields
 
-		ddmStorageLinkModel.setClassNameId(
-			getClassNameId(JournalArticle.class));
+		ddmStorageLinkModel.setClassNameId(classNameId);
 		ddmStorageLinkModel.setClassPK(journalArticleModel.getId());
 		ddmStorageLinkModel.setStructureId(structureId);
 		ddmStorageLinkModel.setStructureVersionId(
@@ -1901,7 +1897,8 @@ public class DataFactory {
 	}
 
 	public DDMTemplateLinkModel newDDMTemplateLinkModel(
-		JournalArticleModel journalArticleModel, long templateId) {
+		JournalArticleModel journalArticleModel, long templateId,
+		long classNameId) {
 
 		DDMTemplateLinkModel ddmTemplateLinkModel =
 			new DDMTemplateLinkModelImpl();
@@ -1916,8 +1913,7 @@ public class DataFactory {
 
 		// Other fields
 
-		ddmTemplateLinkModel.setClassNameId(
-			getClassNameId(JournalArticle.class));
+		ddmTemplateLinkModel.setClassNameId(classNameId);
 		ddmTemplateLinkModel.setClassPK(journalArticleModel.getId());
 		ddmTemplateLinkModel.setTemplateId(templateId);
 
@@ -1957,10 +1953,11 @@ public class DataFactory {
 			_journalDDMStructureLayoutContent);
 	}
 
-	public DDMStructureModel newDefaultJournalDDMStructureModel() {
+	public DDMStructureModel newDefaultJournalDDMStructureModel(
+		long classNameId) {
+
 		return newDDMStructureModel(
-			_globalGroupId, _defaultUserId,
-			getClassNameId(JournalArticle.class), _JOURNAL_STRUCTURE_KEY,
+			_globalGroupId, _defaultUserId, classNameId, _JOURNAL_STRUCTURE_KEY,
 			_journalDDMStructureContent, _defaultJournalDDMStructureId);
 	}
 
@@ -1971,13 +1968,18 @@ public class DataFactory {
 			ddmStructureModel, _defaultJournalDDMStructureVersionId);
 	}
 
-	public DDMTemplateModel newDefaultJournalDDMTemplateModel() {
+	public DDMTemplateModel newDefaultJournalDDMTemplateModel(
+		long journalArticleClassNameId, long ddmStructureClassNameId) {
+
 		return newDDMTemplateModel(
 			_globalGroupId, _defaultUserId, _defaultJournalDDMStructureId,
-			getClassNameId(JournalArticle.class), _defaultJournalDDMTemplateId);
+			journalArticleClassNameId, _defaultJournalDDMTemplateId,
+			ddmStructureClassNameId);
 	}
 
-	public DDMTemplateVersionModel newDefaultJournalDDMTemplateVersionModel() {
+	public DDMTemplateVersionModel newDefaultJournalDDMTemplateVersionModel(
+		long classNameId) {
+
 		DDMTemplateVersionModelImpl ddmTemplateVersionModelImpl =
 			new DDMTemplateVersionModelImpl();
 
@@ -1997,8 +1999,7 @@ public class DataFactory {
 
 		// Other fields
 
-		ddmTemplateVersionModelImpl.setClassNameId(
-			getClassNameId(DDMStructure.class));
+		ddmTemplateVersionModelImpl.setClassNameId(classNameId);
 		ddmTemplateVersionModelImpl.setClassPK(_defaultJournalDDMStructureId);
 		ddmTemplateVersionModelImpl.setTemplateId(_defaultJournalDDMTemplateId);
 		ddmTemplateVersionModelImpl.setVersion(
@@ -4109,7 +4110,7 @@ public class DataFactory {
 
 	protected DDMTemplateModel newDDMTemplateModel(
 		long groupId, long userId, long structureId, long sourceClassNameId,
-		long templateId) {
+		long templateId, long classNameId) {
 
 		DDMTemplateModel ddmTemplateModel = new DDMTemplateModelImpl();
 
@@ -4136,7 +4137,7 @@ public class DataFactory {
 
 		// Other fields
 
-		ddmTemplateModel.setClassNameId(getClassNameId(DDMStructure.class));
+		ddmTemplateModel.setClassNameId(classNameId);
 		ddmTemplateModel.setClassPK(structureId);
 		ddmTemplateModel.setResourceClassNameId(sourceClassNameId);
 		ddmTemplateModel.setTemplateKey(_JOURNAL_STRUCTURE_KEY);
