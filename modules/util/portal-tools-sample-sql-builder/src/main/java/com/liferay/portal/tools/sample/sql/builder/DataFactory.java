@@ -354,9 +354,6 @@ public class DataFactory {
 
 		_assetVocabularyModelsArray = newAssetVocabularyModelsArray();
 
-		_assetCategoryModelsMaps = newAssetCategoryModelsMaps(
-			_assetVocabularyModelsArray);
-
 		initJournalArticleContent();
 
 		initRoleModels();
@@ -776,23 +773,7 @@ public class DataFactory {
 	public List<AssetCategoryModel> newAssetCategoryModels() {
 		List<AssetCategoryModel> allAssetCategoryModels = new ArrayList<>();
 
-		for (Map<Long, List<AssetCategoryModel>> assetCategoryModelsMap :
-				_assetCategoryModelsMaps) {
-
-			for (List<AssetCategoryModel> assetCategoryModels :
-					assetCategoryModelsMap.values()) {
-
-				allAssetCategoryModels.addAll(assetCategoryModels);
-			}
-		}
-
-		return allAssetCategoryModels;
-	}
-
-	public Map<Long, List<AssetCategoryModel>>[] newAssetCategoryModelsMaps(
-		List<AssetVocabularyModel>[] assetVocabularyModelsArray) {
-
-		Map<Long, List<AssetCategoryModel>>[] assetCategoryModelsMaps =
+		_assetCategoryModelsMaps =
 			(Map<Long, List<AssetCategoryModel>>[])
 				new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
 
@@ -800,8 +781,8 @@ public class DataFactory {
 
 		for (int i = 1; i <= BenchmarksPropsValues.MAX_GROUP_COUNT; i++) {
 			List<AssetVocabularyModel> assetVocabularyModels =
-				assetVocabularyModelsArray[i - 1];
-			List<AssetCategoryModel> assetCategoryModels = new ArrayList<>(
+				_assetVocabularyModelsArray[i - 1];
+			List<AssetCategoryModel> groupAssetCategoryModels = new ArrayList<>(
 				BenchmarksPropsValues.MAX_ASSET_VUCABULARY_COUNT *
 					BenchmarksPropsValues.MAX_ASSET_CATEGORY_COUNT);
 
@@ -821,10 +802,14 @@ public class DataFactory {
 					sb.append(StringPool.UNDERLINE);
 					sb.append(k);
 
-					assetCategoryModels.add(
+					AssetCategoryModel assetCategoryModel =
 						newAssetCategoryModel(
 							i, sb.toString(),
-							assetVocabularyModel.getVocabularyId()));
+							assetVocabularyModel.getVocabularyId());
+
+					groupAssetCategoryModels.add(assetCategoryModel);
+
+					allAssetCategoryModels.add(assetCategoryModel);
 				}
 			}
 
@@ -832,7 +817,7 @@ public class DataFactory {
 				new HashMap<>();
 
 			int pageSize =
-				assetCategoryModels.size() / _assetClassNameIds.length;
+				groupAssetCategoryModels.size() / _assetClassNameIds.length;
 
 			for (int j = 0; j < _assetClassNameIds.length; j++) {
 				int fromIndex = j * pageSize;
@@ -840,18 +825,18 @@ public class DataFactory {
 				int toIndex = (j + 1) * pageSize;
 
 				if (j == (_assetClassNameIds.length - 1)) {
-					toIndex = assetCategoryModels.size();
+					toIndex = groupAssetCategoryModels.size();
 				}
 
 				assetCategoryModelsMap.put(
 					_assetClassNameIds[j],
-					assetCategoryModels.subList(fromIndex, toIndex));
+					groupAssetCategoryModels.subList(fromIndex, toIndex));
 			}
 
-			assetCategoryModelsMaps[i - 1] = assetCategoryModelsMap;
+			_assetCategoryModelsMaps[i - 1] = assetCategoryModelsMap;
 		}
 
-		return assetCategoryModelsMaps;
+		return allAssetCategoryModels;
 	}
 
 	public AssetEntryModel newAssetEntryModel(BlogsEntryModel blogsEntryModel) {
@@ -5033,8 +5018,7 @@ public class DataFactory {
 	private final long _accountId;
 	private RoleModel _administratorRoleModel;
 	private Map<Long, SimpleCounter>[] _assetCategoryCounters;
-	private final Map<Long, List<AssetCategoryModel>>[]
-		_assetCategoryModelsMaps;
+	private Map<Long, List<AssetCategoryModel>>[] _assetCategoryModelsMaps;
 	private final long[] _assetClassNameIds;
 	private final Map<Long, Integer> _assetClassNameIdsIndexes =
 		new HashMap<>();
