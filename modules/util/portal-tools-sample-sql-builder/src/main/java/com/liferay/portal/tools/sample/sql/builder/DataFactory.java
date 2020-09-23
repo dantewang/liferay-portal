@@ -1005,12 +1005,13 @@ public class DataFactory {
 		return allAssetTagModels;
 	}
 
-	public List<AssetVocabularyModel> newAssetVocabularyModels(
-		AssetVocabularyModel defaultAssetVocabularyModel) {
-
+	public List<AssetVocabularyModel> newAssetVocabularyModels() {
 		List<AssetVocabularyModel> allAssetVocabularyModels = new ArrayList<>();
 
-		allAssetVocabularyModels.add(defaultAssetVocabularyModel);
+		allAssetVocabularyModels.add(
+			newAssetVocabularyModel(
+				_globalGroupId, _defaultUserId, null,
+				PropsValues.ASSET_VOCABULARY_DEFAULT));
 
 		_assetVocabularyModelsArray =
 			(List<AssetVocabularyModel>[])
@@ -2030,12 +2031,6 @@ public class DataFactory {
 		ddmTemplateLinkModel.setTemplateId(templateId);
 
 		return ddmTemplateLinkModel;
-	}
-
-	public AssetVocabularyModel newDefaultAssetVocabularyModel() {
-		return newAssetVocabularyModel(
-			_globalGroupId, _defaultUserId, null,
-			PropsValues.ASSET_VOCABULARY_DEFAULT);
 	}
 
 	public DDMStructureLayoutModel newDefaultDLDDMStructureLayoutModel() {
