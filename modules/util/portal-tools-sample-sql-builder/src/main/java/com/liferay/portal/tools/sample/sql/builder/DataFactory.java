@@ -352,8 +352,6 @@ public class DataFactory {
 			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
 				_readFile("default_asset_publisher_preference.xml"));
 
-		_assetVocabularyModelsArray = newAssetVocabularyModelsArray();
-
 		initJournalArticleContent();
 
 		initRoleModels();
@@ -1014,25 +1012,16 @@ public class DataFactory {
 
 		allAssetVocabularyModels.add(defaultAssetVocabularyModel);
 
-		for (List<AssetVocabularyModel> assetVocabularyModels :
-				_assetVocabularyModelsArray) {
-
-			allAssetVocabularyModels.addAll(assetVocabularyModels);
-		}
-
-		return allAssetVocabularyModels;
-	}
-
-	public List<AssetVocabularyModel>[] newAssetVocabularyModelsArray() {
-		List<AssetVocabularyModel>[] assetVocabularyModelsArray =
+		_assetVocabularyModelsArray =
 			(List<AssetVocabularyModel>[])
 				new List<?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
 
 		StringBundler sb = new StringBundler(4);
 
 		for (int i = 1; i <= BenchmarksPropsValues.MAX_GROUP_COUNT; i++) {
-			List<AssetVocabularyModel> assetVocabularyModels = new ArrayList<>(
-				BenchmarksPropsValues.MAX_ASSET_VUCABULARY_COUNT);
+			List<AssetVocabularyModel> groupAssetVocabularyModels =
+				new ArrayList<>(
+					BenchmarksPropsValues.MAX_ASSET_VUCABULARY_COUNT);
 
 			for (int j = 0;
 				 j < BenchmarksPropsValues.MAX_ASSET_VUCABULARY_COUNT; j++) {
@@ -1048,13 +1037,15 @@ public class DataFactory {
 					newAssetVocabularyModel(
 						i, _sampleUserId, _SAMPLE_USER_NAME, sb.toString());
 
-				assetVocabularyModels.add(assetVocabularyModel);
+				groupAssetVocabularyModels.add(assetVocabularyModel);
+
+				allAssetVocabularyModels.add(assetVocabularyModel);
 			}
 
-			assetVocabularyModelsArray[i - 1] = assetVocabularyModels;
+			_assetVocabularyModelsArray[i - 1] = groupAssetVocabularyModels;
 		}
 
-		return assetVocabularyModelsArray;
+		return allAssetVocabularyModels;
 	}
 
 	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
@@ -5026,7 +5017,7 @@ public class DataFactory {
 		new HashMap<>();
 	private Map<Long, SimpleCounter>[] _assetTagCounters;
 	private Map<Long, List<AssetTagModel>>[] _assetTagModelsMaps;
-	private final List<AssetVocabularyModel>[] _assetVocabularyModelsArray;
+	private List<AssetVocabularyModel>[] _assetVocabularyModelsArray;
 	private final Map<String, ClassNameModel> _classNameModels =
 		new HashMap<>();
 	private final long _companyId;
