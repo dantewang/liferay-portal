@@ -1,0 +1,209 @@
+diff --git a/org/eclipse/equinox/metatype/impl/AttributeDefinitionImpl.java b/org/eclipse/equinox/metatype/impl/AttributeDefinitionImpl.java
+index 2e671d6c4a1b..f0ab827d8aa9 100644
+--- a/org/eclipse/equinox/metatype/impl/AttributeDefinitionImpl.java
++++ b/org/eclipse/equinox/metatype/impl/AttributeDefinitionImpl.java
+@@ -224,9 +224,9 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Equi
+ 		_values = values;
+ 		if (needValidation) {
+ 			for (int index = 0; index < _values.size(); index++) {
+-				ValueTokenizer vt = new ValueTokenizer(_values.get(index), logger);
++				ValueTokenizer vt = new ValueTokenizer(_values.get(index), this, logger);
+ 				_values.set(index, vt.getValuesAsString());
+-				String reason = vt.validate(this);
++				String reason = vt.validate();
+ 				if ((reason != null) && reason.length() > 0) {
+ 					logger.log(LogService.LOG_WARNING, NLS.bind(MetaTypeMsg.INVALID_OPTIONS, new Object[] {_values.get(index), getID(), reason}));
+ 					_labels.remove(index);
+@@ -251,8 +251,8 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Equi
+ 	 * The given parameter is a comma delimited list needed to be parsed.
+ 	 */
+ 	void setDefaultValue(String defaults_str, boolean needValidation) {
+-		ValueTokenizer vt = new ValueTokenizer(defaults_str, logger);
+-		String reason = vt.validate(this);
++		ValueTokenizer vt = new ValueTokenizer(defaults_str, this, logger);
++		String reason = vt.validate();
+ 		if ((reason != null) && reason.length() > 0) {
+ 			logger.log(LogService.LOG_WARNING, NLS.bind(MetaTypeMsg.INVALID_DEFAULTS, new Object[] {vt.getValuesAsString(), getID(), reason}));
+ 			return;
+@@ -302,8 +302,8 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Equi
+ 	 * @see org.osgi.service.metatype.AttributeDefinition#validate(java.lang.String)
+ 	 */
+ 	public String validate(String value) {
+-		ValueTokenizer vt = new ValueTokenizer(value, logger);
+-		return vt.validate(this);
++		ValueTokenizer vt = new ValueTokenizer(value, this, logger);
++		return vt.validate();
+ 	}
+ 
+ 	public Map<String, String> getExtensionAttributes(String schema) {
+@@ -322,3 +322,4 @@ public class AttributeDefinitionImpl extends LocalizationElement implements Equi
+ 		return _minValue == null ? null : String.valueOf(_minValue);
+ 	}
+ }
++/* @generated */
+\ No newline at end of file
+diff --git a/org/eclipse/equinox/metatype/impl/ValueTokenizer.java b/org/eclipse/equinox/metatype/impl/ValueTokenizer.java
+index 4f374baaa402..7622bac65e47 100644
+--- a/org/eclipse/equinox/metatype/impl/ValueTokenizer.java
++++ b/org/eclipse/equinox/metatype/impl/ValueTokenizer.java
+@@ -27,10 +27,22 @@ public class ValueTokenizer {
+ 	/*
+ 	 * Constructor of class ValueTokenizer
+ 	 */
+-	public ValueTokenizer(String values_str, LogService logger) {
++	public ValueTokenizer(
++		String values_str, AttributeDefinitionImpl attributeDefinitionImpl,
++		LogService logger) {
++
++		_attributeDefinitionImpl = attributeDefinitionImpl;
++
+ 		this.logger = logger;
+ 		if (values_str == null)
+ 			return;
++
++		if (_attributeDefinitionImpl.getCardinality() == 0) {
++			values.add(values_str);
++
++			return;
++		}
++
+ 		// The trick is to strip out unescaped whitespace characters before and
+ 		// after the input string as well as before and after each 
+ 		// individual token within the input string without losing any escaped 
+@@ -161,7 +173,7 @@ public class ValueTokenizer {
+ 		return false;
+ 	}
+ 
+-	public String validate(AttributeDefinitionImpl ad) {
++	public String validate() {
+ 		// An empty list means the original value was null. Null is never valid.
+ 		if (values.isEmpty()) {
+ 			return MetaTypeMsg.NULL_IS_INVALID;
+@@ -169,7 +181,7 @@ public class ValueTokenizer {
+ 		String s = null;
+ 		try {
+ 			// A value must match the cardinality.
+-			int cardinality = Math.abs(ad.getCardinality());
++			int cardinality = Math.abs(_attributeDefinitionImpl.getCardinality());
+ 			// If the cardinality is zero, the value must contain one and only one token.
+ 			if (cardinality == 0) {
+ 				if (values.size() != 1) {
+@@ -184,37 +196,37 @@ public class ValueTokenizer {
+ 			for (Iterator<String> i = values.iterator(); i.hasNext();) {
+ 				s = i.next();
+ 				// If options were declared and the value does not match one of them, the value is not valid.
+-				if (!ad._values.isEmpty() && !ad._values.contains(s)) {
++				if (!_attributeDefinitionImpl._values.isEmpty() && !_attributeDefinitionImpl._values.contains(s)) {
+ 					return NLS.bind(MetaTypeMsg.VALUE_OUT_OF_OPTION, s);
+ 				}
+ 				// Check the type. Also check the range if min or max were declared.
+ 				boolean rangeError = false;
+-				switch (ad._dataType) {
++				switch (_attributeDefinitionImpl._dataType) {
+ 					case AttributeDefinition.PASSWORD :
+ 					case AttributeDefinition.STRING :
+-						rangeError = validateString(ad, s);
++						rangeError = validateString(_attributeDefinitionImpl, s);
+ 						break;
+ 					case AttributeDefinition.INTEGER :
+ 						Integer intVal = Integer.valueOf(s);
+-						if (ad._minValue != null && intVal.compareTo((Integer) ad._minValue) < 0) {
++						if (_attributeDefinitionImpl._minValue != null && intVal.compareTo((Integer) _attributeDefinitionImpl._minValue) < 0) {
+ 							rangeError = true;
+-						} else if (ad._maxValue != null && intVal.compareTo((Integer) ad._maxValue) > 0) {
++						} else if (_attributeDefinitionImpl._maxValue != null && intVal.compareTo((Integer) _attributeDefinitionImpl._maxValue) > 0) {
+ 							rangeError = true;
+ 						}
+ 						break;
+ 					case AttributeDefinition.LONG :
+ 						Long longVal = Long.valueOf(s);
+-						if (ad._minValue != null && longVal.compareTo((Long) ad._minValue) < 0) {
++						if (_attributeDefinitionImpl._minValue != null && longVal.compareTo((Long) _attributeDefinitionImpl._minValue) < 0) {
+ 							rangeError = true;
+-						} else if (ad._maxValue != null && longVal.compareTo((Long) ad._maxValue) > 0) {
++						} else if (_attributeDefinitionImpl._maxValue != null && longVal.compareTo((Long) _attributeDefinitionImpl._maxValue) > 0) {
+ 							rangeError = true;
+ 						}
+ 						break;
+ 					case AttributeDefinition.DOUBLE :
+ 						Double doubleVal = Double.valueOf(s);
+-						if (ad._minValue != null && doubleVal.compareTo((Double) ad._minValue) < 0) {
++						if (_attributeDefinitionImpl._minValue != null && doubleVal.compareTo((Double) _attributeDefinitionImpl._minValue) < 0) {
+ 							rangeError = true;
+-						} else if (ad._maxValue != null && doubleVal.compareTo((Double) ad._maxValue) > 0) {
++						} else if (_attributeDefinitionImpl._maxValue != null && doubleVal.compareTo((Double) _attributeDefinitionImpl._maxValue) > 0) {
+ 							rangeError = true;
+ 						}
+ 						break;
+@@ -224,49 +236,49 @@ public class ValueTokenizer {
+ 						break;
+ 					case AttributeDefinition.CHARACTER :
+ 						Character charVal = Character.valueOf(s.charAt(0));
+-						if (ad._minValue != null && charVal.compareTo((Character) ad._minValue) < 0) {
++						if (_attributeDefinitionImpl._minValue != null && charVal.compareTo((Character) _attributeDefinitionImpl._minValue) < 0) {
+ 							rangeError = true;
+-						} else if (ad._maxValue != null && charVal.compareTo((Character) ad._maxValue) > 0) {
++						} else if (_attributeDefinitionImpl._maxValue != null && charVal.compareTo((Character) _attributeDefinitionImpl._maxValue) > 0) {
+ 							rangeError = true;
+ 						}
+ 						break;
+ 					case AttributeDefinition.FLOAT :
+ 						Float floatVal = Float.valueOf(s);
+-						if (ad._minValue != null && floatVal.compareTo((Float) ad._minValue) < 0) {
++						if (_attributeDefinitionImpl._minValue != null && floatVal.compareTo((Float) _attributeDefinitionImpl._minValue) < 0) {
+ 							rangeError = true;
+-						} else if (ad._maxValue != null && floatVal.compareTo((Float) ad._maxValue) > 0) {
++						} else if (_attributeDefinitionImpl._maxValue != null && floatVal.compareTo((Float) _attributeDefinitionImpl._maxValue) > 0) {
+ 							rangeError = true;
+ 						}
+ 						break;
+ 					case AttributeDefinition.SHORT :
+ 						Short shortVal = Short.valueOf(s);
+-						if (ad._minValue != null && shortVal.compareTo((Short) ad._minValue) < 0) {
++						if (_attributeDefinitionImpl._minValue != null && shortVal.compareTo((Short) _attributeDefinitionImpl._minValue) < 0) {
+ 							rangeError = true;
+-						} else if (ad._maxValue != null && shortVal.compareTo((Short) ad._maxValue) > 0) {
++						} else if (_attributeDefinitionImpl._maxValue != null && shortVal.compareTo((Short) _attributeDefinitionImpl._maxValue) > 0) {
+ 							rangeError = true;
+ 						}
+ 						break;
+ 					case AttributeDefinition.BYTE :
+ 						Byte byteVal = Byte.valueOf(s);
+-						if (ad._minValue != null && byteVal.compareTo((Byte) ad._minValue) < 0) {
++						if (_attributeDefinitionImpl._minValue != null && byteVal.compareTo((Byte) _attributeDefinitionImpl._minValue) < 0) {
+ 							rangeError = true;
+-						} else if (ad._maxValue != null && byteVal.compareTo((Byte) ad._maxValue) > 0) {
++						} else if (_attributeDefinitionImpl._maxValue != null && byteVal.compareTo((Byte) _attributeDefinitionImpl._maxValue) > 0) {
+ 							rangeError = true;
+ 						}
+ 						break;
+ 					case AttributeDefinition.BIGDECIMAL :
+ 						BigDecimal bigDecVal = new BigDecimal(s);
+-						if (ad._minValue != null && bigDecVal.compareTo((BigDecimal) ad._minValue) < 0) {
++						if (_attributeDefinitionImpl._minValue != null && bigDecVal.compareTo((BigDecimal) _attributeDefinitionImpl._minValue) < 0) {
+ 							rangeError = true;
+-						} else if (ad._maxValue != null && bigDecVal.compareTo((BigDecimal) ad._maxValue) > 0) {
++						} else if (_attributeDefinitionImpl._maxValue != null && bigDecVal.compareTo((BigDecimal) _attributeDefinitionImpl._maxValue) > 0) {
+ 							rangeError = true;
+ 						}
+ 						break;
+ 					case AttributeDefinition.BIGINTEGER :
+ 						BigInteger bigIntVal = new BigInteger(s);
+-						if (ad._minValue != null && bigIntVal.compareTo((BigInteger) ad._minValue) < 0) {
++						if (_attributeDefinitionImpl._minValue != null && bigIntVal.compareTo((BigInteger) _attributeDefinitionImpl._minValue) < 0) {
+ 							rangeError = true;
+-						} else if (ad._maxValue != null && bigIntVal.compareTo((BigInteger) ad._maxValue) > 0) {
++						} else if (_attributeDefinitionImpl._maxValue != null && bigIntVal.compareTo((BigInteger) _attributeDefinitionImpl._maxValue) > 0) {
+ 							rangeError = true;
+ 						}
+ 						break;
+@@ -287,4 +299,8 @@ public class ValueTokenizer {
+ 			return message;
+ 		}
+ 	}
++
++	private final AttributeDefinitionImpl _attributeDefinitionImpl;
++
+ }
++/* @generated */
+\ No newline at end of file
