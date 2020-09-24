@@ -26,7 +26,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.Portlet;
-import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.role.RoleConstants;
@@ -55,7 +54,6 @@ import com.liferay.portal.kernel.xml.UnsecureSAXReaderUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.registry.collections.ServiceTrackerCollections;
 import com.liferay.registry.collections.ServiceTrackerList;
-import com.liferay.util.JS;
 
 import java.io.InputStream;
 
@@ -611,7 +609,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			String servletContextName, ClassLoader classLoader, String source)
 		throws ResourceActionsException {
 
-		_read(servletContextName, classLoader, source, null);
+		_read(classLoader, source, null);
 	}
 
 	@Override
@@ -643,7 +641,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			}
 		}
 
-		_read(servletContextName, document, portletNames);
+		_read(document, portletNames);
 	}
 
 	@Override
@@ -655,7 +653,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		Set<String> portletNames = new HashSet<>();
 
 		for (String source : sources) {
-			_read(servletContextName, classLoader, source, portletNames);
+			_read(classLoader, source, portletNames);
 		}
 
 		for (String portletName : portletNames) {
@@ -982,21 +980,8 @@ public class ResourceActionsImpl implements ResourceActions {
 		return types;
 	}
 
-	private String _normalizePortletName(
-		String servletContextName, String portletName) {
-
-		if (servletContextName != null) {
-			portletName = StringBundler.concat(
-				portletName, PortletConstants.WAR_SEPARATOR,
-				servletContextName);
-		}
-
-		return JS.getSafeName(portletName);
-	}
-
 	private void _read(
-			String servletContextName, ClassLoader classLoader, String source,
-			Set<String> portletNames)
+			ClassLoader classLoader, String source, Set<String> portletNames)
 		throws ResourceActionsException {
 
 		InputStream inputStream = classLoader.getResourceAsStream(source);
@@ -1037,23 +1022,21 @@ public class ResourceActionsImpl implements ResourceActions {
 				String file = StringUtil.trim(
 					resourceElement.attributeValue("file"));
 
-				_read(servletContextName, classLoader, file, portletNames);
+				_read(classLoader, file, portletNames);
 
 				String extFileName = StringUtil.replace(
 					file, ".xml", "-ext.xml");
 
-				_read(
-					servletContextName, classLoader, extFileName, portletNames);
+				_read(classLoader, extFileName, portletNames);
 			}
 
-			_read(servletContextName, document, portletNames);
+			_read(document, portletNames);
 
 			if (source.endsWith(".xml") && !source.endsWith("-ext.xml")) {
 				String extFileName = StringUtil.replace(
 					source, ".xml", "-ext.xml");
 
-				_read(
-					servletContextName, classLoader, extFileName, portletNames);
+				_read(classLoader, extFileName, portletNames);
 			}
 		}
 		catch (DocumentException documentException) {
@@ -1061,9 +1044,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
-	private void _read(
-			String servletContextName, Document document,
-			Set<String> portletNames)
+	private void _read(Document document, Set<String> portletNames)
 		throws ResourceActionsException {
 
 		Element rootElement = document.getRootElement();
@@ -1072,9 +1053,8 @@ public class ResourceActionsImpl implements ResourceActions {
 			for (Element portletResourceElement :
 					rootElement.elements("portlet-resource")) {
 
-				String portletName = _normalizePortletName(
-					servletContextName,
-					portletResourceElement.elementTextTrim("portlet-name"));
+				String portletName = portletResourceElement.elementTextTrim(
+					"portlet-name");
 
 				Portlet portlet = portletLocalService.getPortletById(
 					portletName);
@@ -1124,8 +1104,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			for (Element portletNameElement :
 					portletRefElement.elements("portlet-name")) {
 
-				String portletName = _normalizePortletName(
-					servletContextName, portletNameElement.getTextTrim());
+				String portletName = portletNameElement.getTextTrim();
 
 				// Reference for a portlet to child models
 
