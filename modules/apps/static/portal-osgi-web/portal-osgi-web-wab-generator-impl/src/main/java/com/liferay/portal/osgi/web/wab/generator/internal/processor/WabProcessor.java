@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.deploy.auto.context.AutoDeploymentContext;
 import com.liferay.portal.kernel.deploy.hot.DependencyManagementThreadLocal;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.plugin.PluginPackage;
 import com.liferay.portal.kernel.servlet.PortalClassLoaderFilter;
 import com.liferay.portal.kernel.servlet.PortalClassLoaderServlet;
@@ -66,6 +67,7 @@ import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.kernel.xml.UnsecureSAXReaderUtil;
 import com.liferay.portal.kernel.xml.XPath;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.util.JS;
 import com.liferay.whip.util.ReflectionUtil;
 
 import java.io.File;
@@ -921,6 +923,76 @@ public class WabProcessor {
 		analyzer.setProperty(Constants.REQUIRE_BUNDLE, sb.toString());
 	}
 
+	protected void processResourceActionXML() throws IOException {
+		File file = new File(_pluginDir, "portlet.properties");
+
+		if (!file.exists()) {
+			return;
+		}
+
+		Properties properties = new Properties();
+
+		try (InputStream inputStream = new FileInputStream(file)) {
+			properties.load(inputStream);
+		}
+
+		for (String xmlFile :
+				StringUtil.split(
+					properties.getProperty(
+						PropsKeys.RESOURCE_ACTIONS_CONFIGS))) {
+
+			processResourceActionXML(xmlFile);
+		}
+	}
+
+	protected void processResourceActionXML(String xmlFile) throws IOException {
+		File file = new File(_pluginDir, xmlFile);
+
+		if (!file.exists()) {
+			return;
+		}
+
+		Document document = readDocument(file);
+
+		Element rootElement = document.getRootElement();
+
+		for (Element portletResourceElement :
+				rootElement.elements("portlet-resource")) {
+
+			_normalizePortletName(
+				portletResourceElement.element("portlet-name"));
+		}
+
+		for (Element modelResourceElement :
+				rootElement.elements("model-resource")) {
+
+			Element portletRefElement = modelResourceElement.element(
+				"portlet-ref");
+
+			for (Element portletNameElement :
+					portletRefElement.elements("portlet-name")) {
+
+				_normalizePortletName(portletNameElement);
+			}
+		}
+
+		formatDocument(file, document);
+
+		if (!xmlFile.endsWith("-ext.xml")) {
+			processResourceActionXML(
+				StringUtil.replace(xmlFile, ".xml", "-ext.xml"));
+		}
+
+		for (Element resourceFileElement : rootElement.elements("resource")) {
+			String resourceFileName = StringUtil.trim(
+				resourceFileElement.attributeValue("file"));
+
+			processResourceActionXML(resourceFileName);
+			processResourceActionXML(
+				StringUtil.replace(resourceFileName, ".xml", "-ext.xml"));
+		}
+	}
+
 	protected void processServicePackageName(Resource resource) {
 		try (InputStream inputStream = resource.openInputStream()) {
 			Document document = UnsecureSAXReaderUtil.read(inputStream);
@@ -1190,6 +1262,8 @@ public class WabProcessor {
 			processWebXML("WEB-INF/web.xml");
 			processWebXML("WEB-INF/liferay-web.xml");
 
+			processResourceActionXML();
+
 			processDeclarativeReferences(analyzer);
 
 			processExtraRequirements();
@@ -1313,6 +1387,19 @@ public class WabProcessor {
 		}
 
 		return Discover.all;
+	}
+
+	private void _normalizePortletName(Element portletNameElement) {
+		String portletName = portletNameElement.getTextTrim();
+
+		if (portletName.startsWith(_context)) {
+			return;
+		}
+
+		portletNameElement.setText(
+			JS.getSafeName(
+				StringBundler.concat(
+					portletName, PortletConstants.WAR_SEPARATOR, _context)));
 	}
 
 	private void _processExcludedJSPs(Analyzer analyzer) {
