@@ -5,15 +5,15 @@
 />
 
 <#list assetVocabularyModels as assetVocabularyModel>
-	${dataFactory.toInsertSQL(assetVocabularyModel)}
+	${resourcePermissionDataFactory.toInsertSQL(assetVocabularyModel)}
 </#list>
 
 <#list assetDataFactory.newAssetCategoryModels(groupId, assetVocabularyModels, assetClassNameIds) as assetCategoryModel>
-	${dataFactory.toInsertSQL(assetCategoryModel)}
+	${resourcePermissionDataFactory.toInsertSQL(assetCategoryModel)}
 </#list>
 
 <#list assetDataFactory.newAssetTagModels(groupId, assetClassNameIds) as assetTagModel>
-	${dataFactory.toInsertSQL(assetTagModel)}
+	${resourcePermissionDataFactory.toInsertSQL(assetTagModel)}
 </#list>
 
 <#list pageCounts as pageCount>
@@ -30,8 +30,8 @@
 	<#assign portletPreferencesModels = portletPreferenceDataFactory.newAssetPublisherPortletPreferencesModels(layoutModel.plid) />
 
 	<#list portletPreferencesModels as portletPreferencesModel>
-		${dataFactory.toInsertSQL(portletPreferencesModel)}
+		${resourcePermissionDataFactory.toInsertSQL(portletPreferencesModel)}
 	</#list>
 
-	${dataFactory.toInsertSQL(portletPreferenceDataFactory.newPortletPreferencesModel(layoutModel.plid, groupId, portletId, pageCount, assetClassNameIds))}
+	${resourcePermissionDataFactory.toInsertSQL(portletPreferenceDataFactory.newPortletPreferencesModel(layoutModel.plid, groupId, portletId, pageCount, assetClassNameIds))}
 </#list>

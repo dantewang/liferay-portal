@@ -1,4 +1,4 @@
-${dataFactory.toInsertSQL(dlDataFactory.newDLFileEntryTypeModel())}
+${resourcePermissionDataFactory.toInsertSQL(dlDataFactory.newDLFileEntryTypeModel())}
 
 <#assign defaultDLDDMStructureModel = dlDataFactory.newDefaultDLDDMStructureModel(classNameDataFactory.getClassNameId("DLFileEntry")) />
 

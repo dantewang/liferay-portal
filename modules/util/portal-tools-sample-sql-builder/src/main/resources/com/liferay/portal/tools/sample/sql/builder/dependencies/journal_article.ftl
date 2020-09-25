@@ -1,11 +1,11 @@
 <#assign
 	journalArticlePageCounts = counterDataFactory.getSequence(journalDataFactory.maxJournalArticlePageCount)
 
-	resourcePermissionModels = dataFactory.newResourcePermissionModels("com.liferay.journal", groupId)
+	resourcePermissionModels = resourcePermissionDataFactory.newResourcePermissionModels("com.liferay.journal", groupId)
 />
 
 <#list resourcePermissionModels as resourcePermissionModel>
-	${dataFactory.toInsertSQL(resourcePermissionModel)}
+	${resourcePermissionDataFactory.toInsertSQL(resourcePermissionModel)}
 </#list>
 
 <#list journalArticlePageCounts as journalArticlePageCount>
@@ -22,7 +22,7 @@
 	<#assign portletPreferencesModels = portletPreferenceDataFactory.newJournalPortletPreferencesModels(layoutModel.plid) />
 
 	<#list portletPreferencesModels as portletPreferencesModel>
-		${dataFactory.toInsertSQL(portletPreferencesModel)}
+		${resourcePermissionDataFactory.toInsertSQL(portletPreferencesModel)}
 	</#list>
 
 	<#assign journalArticleCounts = counterDataFactory.getSequence(journalDataFactory.maxJournalArticleCount) />
@@ -30,24 +30,24 @@
 	<#list journalArticleCounts as journalArticleCount>
 		<#assign journalArticleResourceModel = journalDataFactory.newJournalArticleResourceModel(groupId) />
 
-		${dataFactory.toInsertSQL(journalArticleResourceModel)}
+		${resourcePermissionDataFactory.toInsertSQL(journalArticleResourceModel)}
 
 		<#assign versionCounts = counterDataFactory.getSequence(journalDataFactory.maxJournalArticleVersionCount) />
 
 		<#list versionCounts as versionCount>
 			<#assign journalArticleModel = journalDataFactory.newJournalArticleModel(journalArticleResourceModel, journalArticleCount, versionCount) />
 
-			${dataFactory.toInsertSQL(journalArticleModel)}
+			${resourcePermissionDataFactory.toInsertSQL(journalArticleModel)}
 
 			<#assign journalArticleLocalizationModel = journalDataFactory.newJournalArticleLocalizationModel(journalArticleModel, journalArticleCount, versionCount) />
 
-			${dataFactory.toInsertSQL(journalArticleLocalizationModel)}
+			${resourcePermissionDataFactory.toInsertSQL(journalArticleLocalizationModel)}
 
-			${dataFactory.toInsertSQL(journalDataFactory.newDDMTemplateLinkModel(journalArticleModel, defaultJournalDDMTemplateModel.templateId, journalArticleClassNameId))}
+			${resourcePermissionDataFactory.toInsertSQL(journalDataFactory.newDDMTemplateLinkModel(journalArticleModel, defaultJournalDDMTemplateModel.templateId, journalArticleClassNameId))}
 
-			${dataFactory.toInsertSQL(journalDataFactory.newDDMStorageLinkModel(journalArticleModel, defaultJournalDDMStructureModel.structureId, journalArticleClassNameId))}
+			${resourcePermissionDataFactory.toInsertSQL(journalDataFactory.newDDMStorageLinkModel(journalArticleModel, defaultJournalDDMStructureModel.structureId, journalArticleClassNameId))}
 
-			${dataFactory.toInsertSQL(socialActivityDataFactory.newSocialActivityModel(journalArticleModel, journalArticleClassNameId))}
+			${resourcePermissionDataFactory.toInsertSQL(socialActivityDataFactory.newSocialActivityModel(journalArticleModel, journalArticleClassNameId))}
 
 			<#if versionCount = journalDataFactory.maxJournalArticleVersionCount>
 				<@insertAssetEntry
@@ -67,8 +67,8 @@
 			_mbThreadId=counterDataFactory.getCounterNext()
 		/>
 
-		${dataFactory.toInsertSQL(portletPreferenceDataFactory.newPortletPreferencesModel(layoutModel.plid, portletIdPrefix + journalArticleCount, journalArticleResourceModel))}
+		${resourcePermissionDataFactory.toInsertSQL(portletPreferenceDataFactory.newPortletPreferencesModel(layoutModel.plid, portletIdPrefix + journalArticleCount, journalArticleResourceModel))}
 
-		${dataFactory.toInsertSQL(journalDataFactory.newJournalContentSearchModel(journalArticleModel, layoutModel.layoutId))}
+		${resourcePermissionDataFactory.toInsertSQL(journalDataFactory.newJournalContentSearchModel(journalArticleModel, layoutModel.layoutId))}
 	</#list>
 </#list>

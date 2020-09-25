@@ -4,18 +4,18 @@
 />
 
 <#list wikiNodeModels as wikiNodeModel>
-	${dataFactory.toInsertSQL(wikiNodeModel)}
+	${resourcePermissionDataFactory.toInsertSQL(wikiNodeModel)}
 
 	<#assign wikiPageModels = wikiDataFactory.newWikiPageModels(wikiNodeModel) />
 
 	<#list wikiPageModels as wikiPageModel>
-		${dataFactory.toInsertSQL(wikiPageModel)}
+		${resourcePermissionDataFactory.toInsertSQL(wikiPageModel)}
 
-		${dataFactory.toInsertSQL(assetDataFactory.newMBDiscussionAssetEntryModel(wikiPageModel, classNameDataFactory.getClassNameId("MBDiscussion_WikiPage")))}
+		${resourcePermissionDataFactory.toInsertSQL(assetDataFactory.newMBDiscussionAssetEntryModel(wikiPageModel, classNameDataFactory.getClassNameId("MBDiscussion_WikiPage")))}
 
-		${dataFactory.toInsertSQL(subscriptionDataFactory.newSubscriptionModel(wikiPageModel, wikiPageClassNameId))}
+		${resourcePermissionDataFactory.toInsertSQL(subscriptionDataFactory.newSubscriptionModel(wikiPageModel, wikiPageClassNameId))}
 
-		${dataFactory.toInsertSQL(wikiDataFactory.newWikiPageResourceModel(wikiPageModel))}
+		${resourcePermissionDataFactory.toInsertSQL(wikiDataFactory.newWikiPageResourceModel(wikiPageModel))}
 
 		<@insertAssetEntry
 			_categoryAndTag=true

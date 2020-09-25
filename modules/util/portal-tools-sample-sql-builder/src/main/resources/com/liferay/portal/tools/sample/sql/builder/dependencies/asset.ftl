@@ -1,1 +1,1 @@
-${dataFactory.toInsertSQL(assetDataFactory.newDefaultAssetVocabularyModel())}
+${resourcePermissionDataFactory.toInsertSQL(assetDataFactory.newDefaultAssetVocabularyModel())}

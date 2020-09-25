@@ -12,6 +12,6 @@
 
 <#assign defaultJournalDDMTemplateModel = journalDataFactory.newDefaultJournalDDMTemplateModel(journalArticleClassNameId, ddmStructureClassNameId) />
 
-${dataFactory.toInsertSQL(defaultJournalDDMTemplateModel, classNameDataFactory.getClassName(defaultJournalDDMTemplateModel))}
+${resourcePermissionDataFactory.toInsertSQL(defaultJournalDDMTemplateModel, classNameDataFactory.getClassName(defaultJournalDDMTemplateModel))}
 
-${dataFactory.toInsertSQL(journalDataFactory.newDefaultJournalDDMTemplateVersionModel(ddmStructureClassNameId))}
+${resourcePermissionDataFactory.toInsertSQL(journalDataFactory.newDefaultJournalDDMTemplateVersionModel(ddmStructureClassNameId))}

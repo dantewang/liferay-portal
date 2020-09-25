@@ -28,18 +28,18 @@
 
 	<#assign ddlRecordSetModel = ddlDDMDataFactory.newDDLRecordSetModel(ddmStructureModel, ddlRecordSetCount) />
 
-	${dataFactory.toInsertSQL(ddlRecordSetModel)}
+	${resourcePermissionDataFactory.toInsertSQL(ddlRecordSetModel)}
 
-	${dataFactory.toInsertSQL(ddlDDMDataFactory.newDDMStructureLinkModel(ddlRecordSetModel, ddlRecordSetClassNameId))}
+	${resourcePermissionDataFactory.toInsertSQL(ddlDDMDataFactory.newDDMStructureLinkModel(ddlRecordSetModel, ddlRecordSetClassNameId))}
 
 	<#assign ddlRecordCounts = counterDataFactory.getSequence(ddlDDMDataFactory.maxDDLRecordCount) />
 
 	<#list ddlRecordCounts as ddlRecordCount>
 		<#assign ddlRecordModel = ddlDDMDataFactory.newDDLRecordModel(ddlRecordSetModel) />
 
-		${dataFactory.toInsertSQL(ddlRecordModel)}
+		${resourcePermissionDataFactory.toInsertSQL(ddlRecordModel)}
 
-		${dataFactory.toInsertSQL(ddlDDMDataFactory.newDDLRecordVersionModel(ddlRecordModel))}
+		${resourcePermissionDataFactory.toInsertSQL(ddlDDMDataFactory.newDDLRecordVersionModel(ddlRecordModel))}
 
 		<@insertDDMContent
 			_currentIndex=ddlRecordCount
@@ -51,11 +51,11 @@
 		${csvFileWriter.write("dynamicDataList", ddlRecordModel.groupId + "," + layoutName + "," + portletId + "," + ddlRecordSetModel.recordSetId + "," + ddlRecordModel.recordId + "\n")}
 	</#list>
 
-	${dataFactory.toInsertSQL(portletPreferenceDataFactory.newPortletPreferencesModel(layoutModel.plid, portletId, ddlRecordSetModel))}
+	${resourcePermissionDataFactory.toInsertSQL(portletPreferenceDataFactory.newPortletPreferencesModel(layoutModel.plid, portletId, ddlRecordSetModel))}
 
 	<#assign portletPreferencesModels = portletPreferenceDataFactory.newDDLPortletPreferencesModels(layoutModel.plid) />
 
 	<#list portletPreferencesModels as portletPreferencesModel>
-		${dataFactory.toInsertSQL(portletPreferencesModel)}
+		${resourcePermissionDataFactory.toInsertSQL(portletPreferencesModel)}
 	</#list>
 </#list>

@@ -4,17 +4,17 @@
 />
 
 <#list blogsEntryModels as blogsEntryModel>
-	${dataFactory.toInsertSQL(blogsEntryModel)}
+	${resourcePermissionDataFactory.toInsertSQL(blogsEntryModel)}
 
 	<#assign friendlyURLEntryModel = blogDataFactory.newFriendlyURLEntryModel(blogsEntryModel, blogsEntryClassNameId) />
 
-	${dataFactory.toInsertSQL(friendlyURLEntryModel)}
+	${resourcePermissionDataFactory.toInsertSQL(friendlyURLEntryModel)}
 
-	${dataFactory.toInsertSQL(blogDataFactory.newFriendlyURLEntryLocalizationModel(friendlyURLEntryModel, blogsEntryModel))}
+	${resourcePermissionDataFactory.toInsertSQL(blogDataFactory.newFriendlyURLEntryLocalizationModel(friendlyURLEntryModel, blogsEntryModel))}
 
-	${dataFactory.toInsertSQL(blogDataFactory.newFriendlyURLEntryMapping(friendlyURLEntryModel))}
+	${resourcePermissionDataFactory.toInsertSQL(blogDataFactory.newFriendlyURLEntryMapping(friendlyURLEntryModel))}
 
-	${dataFactory.toInsertSQL(assetDataFactory.newMBDiscussionAssetEntryModel(blogsEntryModel, classNameDataFactory.getClassNameId("MBDiscussion_BlogsEntry")))}
+	${resourcePermissionDataFactory.toInsertSQL(assetDataFactory.newMBDiscussionAssetEntryModel(blogsEntryModel, classNameDataFactory.getClassNameId("MBDiscussion_BlogsEntry")))}
 
 	<@insertAssetEntry
 		_categoryAndTag=true
@@ -33,9 +33,9 @@
 		_mbThreadId=counterDataFactory.getCounterNext()
 	/>
 
-	${dataFactory.toInsertSQL(subscriptionDataFactory.newSubscriptionModel(blogsEntryModel, blogsEntryClassNameId))}
+	${resourcePermissionDataFactory.toInsertSQL(subscriptionDataFactory.newSubscriptionModel(blogsEntryModel, blogsEntryClassNameId))}
 
-	${dataFactory.toInsertSQL(socialActivityDataFactory.newSocialActivityModel(blogsEntryModel, blogsEntryClassNameId))}
+	${resourcePermissionDataFactory.toInsertSQL(socialActivityDataFactory.newSocialActivityModel(blogsEntryModel, blogsEntryClassNameId))}
 
 	${csvFileWriter.write("blog", blogsEntryModel.entryId + "," + blogsEntryModel.urlTitle + "," + mbRootMessageId + "\n")}
 </#list>
