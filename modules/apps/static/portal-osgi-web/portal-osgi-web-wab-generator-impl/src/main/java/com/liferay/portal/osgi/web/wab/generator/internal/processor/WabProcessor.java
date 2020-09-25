@@ -1394,14 +1394,16 @@ public class WabProcessor {
 	}
 
 	private void _normalizePortletName(Element portletNameElement) {
+		String contextName = _context.substring(1);
+
 		String portletName = portletNameElement.getTextTrim();
 
-		if (portletName.startsWith(_context)) {
+		if (portletName.startsWith(contextName)) {
 			return;
 		}
 
 		portletName = StringBundler.concat(
-			portletName, PortletConstants.WAR_SEPARATOR, _context);
+			contextName, PortletConstants.WAR_SEPARATOR, portletName);
 
 		String safeName = portletName;
 
