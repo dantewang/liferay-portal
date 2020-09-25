@@ -21,6 +21,7 @@ import com.liferay.commerce.product.model.CPDefinitionModel;
 import com.liferay.commerce.product.model.CPInstanceModel;
 import com.liferay.commerce.product.model.CPTaxCategoryModel;
 import com.liferay.commerce.product.model.CProductModel;
+import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.model.CommerceCatalogModel;
 import com.liferay.commerce.product.model.CommerceChannelModel;
 import com.liferay.commerce.product.model.impl.CPDefinitionLocalizationModelImpl;
@@ -33,6 +34,7 @@ import com.liferay.commerce.product.model.impl.CommerceChannelModelImpl;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.GroupModel;
+import com.liferay.portal.kernel.model.ResourcePermissionModel;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.math.BigDecimal;
@@ -86,6 +88,15 @@ public class CommerceDataFactory extends BaseDataFactory {
 		commerceCatalogModel.setSystem(true);
 
 		return commerceCatalogModel;
+	}
+
+	public ResourcePermissionModel newCommerceCatalogResourcePermissionModel(
+		CommerceCatalogModel commerceCatalogModel) {
+
+		return newResourcePermissionModel(
+			CommerceCatalog.class.getName(),
+			String.valueOf(commerceCatalogModel.getCommerceCatalogId()),
+			GUEST_ROLE_ID, SAMPLE_USER_ID);
 	}
 
 	public CommerceChannelModel newCommerceChannelModel(

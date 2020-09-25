@@ -20,8 +20,6 @@ import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.blogs.model.BlogsEntry;
 import com.liferay.blogs.model.BlogsEntryModel;
-import com.liferay.commerce.product.model.CommerceCatalog;
-import com.liferay.commerce.product.model.CommerceCatalogModel;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
 import com.liferay.document.library.kernel.model.DLFolder;
@@ -82,15 +80,6 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 
 	public static ResourcePermissionDataFactory getInstance() {
 		return _resourcePermissionDataFactory;
-	}
-
-	public ResourcePermissionModel newCommerceCatalogResourcePermissionModel(
-		CommerceCatalogModel commerceCatalogModel) {
-
-		return newResourcePermissionModel(
-			CommerceCatalog.class.getName(),
-			String.valueOf(commerceCatalogModel.getCommerceCatalogId()),
-			GUEST_ROLE_ID, SAMPLE_USER_ID);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
@@ -261,13 +250,6 @@ public class ResourcePermissionDataFactory extends BaseDataFactory {
 			newResourcePermissionModel(
 				Role.class.getName(), String.valueOf(roleModel.getRoleId()),
 				OWNER_ROLE_ID, SAMPLE_USER_ID));
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		String name, long primKey) {
-
-		return newResourcePermissionModels(
-			name, String.valueOf(primKey), SAMPLE_USER_ID);
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
