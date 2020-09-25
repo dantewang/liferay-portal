@@ -2,6 +2,7 @@
 
 <#assign
 	classNameDataFactory = dataFactory.getDataFactoryInstance("classNameDataFactory")
+	commerceDataFactory = dataFactory.getDataFactoryInstance("commerceDataFactory")
 	ddlDDMDataFactory = dataFactory.getDataFactoryInstance("ddlDDMDataFactory")
 	dlDataFactory = dataFactory.getDataFactoryInstance("dlDataFactory")
 	fragmentDataFactory = dataFactory.getDataFactoryInstance("fragmentDataFactory")
