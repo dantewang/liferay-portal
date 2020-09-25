@@ -2,6 +2,7 @@
 
 <#assign
 	classNameDataFactory = dataFactory.getDataFactoryInstance("classNameDataFactory")
+	dlDataFactory = dataFactory.getDataFactoryInstance("dlDataFactory")
 	journalDataFactory = dataFactory.getDataFactoryInstance("journalDataFactory")
 	portletPreferenceDataFactory = dataFactory.getDataFactoryInstance("portletPreferenceDataFactory")
 />
@@ -63,14 +64,14 @@
 	_currentIndex = -1
 >
 	<#if _currentIndex = -1>
-		<#local ddmContentModel = dataFactory.newDDMContentModel(_entry)>
+		<#local ddmContentModel = dlDataFactory.newDDMContentModel(_entry)>
 	<#else>
 		<#local ddmContentModel = dataFactory.newDDMContentModel(_entry, _currentIndex)>
 	</#if>
 
 	${dataFactory.toInsertSQL(ddmContentModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(_ddmStorageLinkId, ddmContentModel, _ddmStructureId, classNameDataFactory.getClassNameId("DDMContent")))}
+	${dataFactory.toInsertSQL(dlDataFactory.newDDMStorageLinkModel(_ddmStorageLinkId, ddmContentModel, _ddmStructureId, classNameDataFactory.getClassNameId("DDMContent")))}
 </#macro>
 
 <#macro insertDDMStructure
@@ -91,8 +92,8 @@
 	_groupId
 	_parentDLFolderId
 >
-	<#if _dlFolderDepth <= dataFactory.maxDLFolderDepth>
-		<#local dlFolderModels = dataFactory.newDLFolderModels(_groupId, _parentDLFolderId)>
+	<#if _dlFolderDepth <= dlDataFactory.maxDLFolderDepth>
+		<#local dlFolderModels = dlDataFactory.newDLFolderModels(_groupId, _parentDLFolderId)>
 
 		<#list dlFolderModels as dlFolderModel>
 			${dataFactory.toInsertSQL(dlFolderModel)}
@@ -102,12 +103,12 @@
 				_entry=dlFolderModel
 			/>
 
-			<#local dlFileEntryModels = dataFactory.newDlFileEntryModels(dlFolderModel)>
+			<#local dlFileEntryModels = dlDataFactory.newDlFileEntryModels(dlFolderModel)>
 
 			<#list dlFileEntryModels as dlFileEntryModel>
 				${dataFactory.toInsertSQL(dlFileEntryModel)}
 
-				<#local dlFileVersionModel = dataFactory.newDLFileVersionModel(dlFileEntryModel)>
+				<#local dlFileVersionModel = dlDataFactory.newDLFileVersionModel(dlFileEntryModel)>
 
 				${dataFactory.toInsertSQL(dlFileVersionModel)}
 
@@ -135,7 +136,7 @@
 
 				${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(dlFileEntryModel, classNameDataFactory.getClassNameId("DLFileEntry")))}
 
-				<#local dlFileEntryMetadataModel = dataFactory.newDLFileEntryMetadataModel(ddmStorageLinkId, _ddmStructureId, dlFileVersionModel)>
+				<#local dlFileEntryMetadataModel = dlDataFactory.newDLFileEntryMetadataModel(ddmStorageLinkId, _ddmStructureId, dlFileVersionModel)>
 
 				${dataFactory.toInsertSQL(dlFileEntryMetadataModel)}
 
