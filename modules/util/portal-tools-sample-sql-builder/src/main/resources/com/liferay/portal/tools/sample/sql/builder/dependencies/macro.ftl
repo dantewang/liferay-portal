@@ -1,5 +1,9 @@
 <#setting number_format = "computer">
 
+<#assign
+	classNameDataFactory = dataFactory.getDataFactoryInstance()
+/>
+
 <#macro insertAssetEntry
 	_entry
 	_classNameIds = []
@@ -34,13 +38,13 @@
 
 	${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(_layoutModel))}
 
-	<#local fragmentEntryLinkModel = dataFactory.newFragmentEntryLinkModel(_layoutModel, _fragmentEntryModel, dataFactory.getClassNameId("Layout"))>
+	<#local fragmentEntryLinkModel = dataFactory.newFragmentEntryLinkModel(_layoutModel, _fragmentEntryModel, classNameDataFactory.getClassNameId("Layout"))>
 
 	${dataFactory.toInsertSQL(fragmentEntryLinkModel)}
 
 	${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferencesModel(fragmentEntryLinkModel))}
 
-	<#local layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(_layoutModel, dataFactory.getClassNameId("Layout"))>
+	<#local layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(_layoutModel, classNameDataFactory.getClassNameId("Layout"))>
 
 	${dataFactory.toInsertSQL(layoutPageTemplateStructureModel)}
 
@@ -63,7 +67,7 @@
 
 	${dataFactory.toInsertSQL(ddmContentModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(_ddmStorageLinkId, ddmContentModel, _ddmStructureId, dataFactory.getClassNameId("DDMContent")))}
+	${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(_ddmStorageLinkId, ddmContentModel, _ddmStructureId, classNameDataFactory.getClassNameId("DDMContent")))}
 </#macro>
 
 <#macro insertDDMStructure
@@ -71,7 +75,7 @@
 	_ddmStructureLayoutModel
 	_ddmStructureVersionModel
 >
-	${dataFactory.toInsertSQL(_ddmStructureModel, dataFactory.getClassName(_ddmStructureModel))}
+	${dataFactory.toInsertSQL(_ddmStructureModel, classNameDataFactory.getClassName(_ddmStructureModel))}
 
 	${dataFactory.toInsertSQL(_ddmStructureLayoutModel)}
 
@@ -91,7 +95,7 @@
 			${dataFactory.toInsertSQL(dlFolderModel)}
 
 			<@insertAssetEntry
-				_classNameIds=[dataFactory.getClassNameId("DLFolder")]
+				_classNameIds=[classNameDataFactory.getClassNameId("DLFolder")]
 				_entry=dlFolderModel
 			/>
 
@@ -105,7 +109,7 @@
 				${dataFactory.toInsertSQL(dlFileVersionModel)}
 
 				<@insertAssetEntry
-					_classNameIds=[dataFactory.getClassNameId("DLFileEntry")]
+					_classNameIds=[classNameDataFactory.getClassNameId("DLFileEntry")]
 					_entry=dlFileEntryModel
 				/>
 
@@ -118,7 +122,7 @@
 				/>
 
 				<@insertMBDiscussion
-					_classNameId=dataFactory.getClassNameId("DLFileEntry")
+					_classNameId=classNameDataFactory.getClassNameId("DLFileEntry")
 					_classPK=dlFileEntryModel.fileEntryId
 					_groupId=dlFileEntryModel.groupId
 					_maxCommentCount=0
@@ -126,13 +130,13 @@
 					_mbThreadId=dataFactory.getCounterNext()
 				/>
 
-				${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(dlFileEntryModel, dataFactory.getClassNameId("DLFileEntry")))}
+				${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(dlFileEntryModel, classNameDataFactory.getClassNameId("DLFileEntry")))}
 
 				<#local dlFileEntryMetadataModel = dataFactory.newDLFileEntryMetadataModel(ddmStorageLinkId, _ddmStructureId, dlFileVersionModel)>
 
 				${dataFactory.toInsertSQL(dlFileEntryMetadataModel)}
 
-				${dataFactory.toInsertSQL(dataFactory.newDDMStructureLinkModel(dlFileEntryMetadataModel, dataFactory.getClassNameId("DLFileEntryMetadata")))}
+				${dataFactory.toInsertSQL(dataFactory.newDDMStructureLinkModel(dlFileEntryMetadataModel, classNameDataFactory.getClassNameId("DLFileEntryMetadata")))}
 
 				${csvFileWriter.write("documentLibrary", dlFileEntryModel.uuid + "," + dlFolderModel.folderId + "," + dlFileEntryModel.name + "," + dlFileEntryModel.fileEntryId + "\n")}
 			</#list>
@@ -188,7 +192,7 @@
 	<#list mbMessageModels as mbMessageModel>
 		<@insertMBMessage _mbMessageModel=mbMessageModel />
 
-		${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel, dataFactory.getClassNameId("WikiPage"), dataFactory.getClassNameId("MBMessage")))}
+		${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel, classNameDataFactory.getClassNameId("WikiPage"), classNameDataFactory.getClassNameId("MBMessage")))}
 	</#list>
 
 	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionModel(_groupId, _classNameId, _classPK, _mbThreadId))}
@@ -200,7 +204,7 @@
 	${dataFactory.toInsertSQL(_mbMessageModel)}
 
 	<@insertAssetEntry
-		_classNameIds=[dataFactory.getClassNameId("MBDiscussion"), dataFactory.getClassNameId("MBMessage")]
+		_classNameIds=[classNameDataFactory.getClassNameId("MBDiscussion"), classNameDataFactory.getClassNameId("MBMessage")]
 		_entry=_mbMessageModel
 	/>
 </#macro>
@@ -212,7 +216,7 @@
 >
 	${dataFactory.toInsertSQL(_userModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newContactModel(_userModel, dataFactory.getClassNameId("User")))}
+	${dataFactory.toInsertSQL(dataFactory.newContactModel(_userModel, classNameDataFactory.getClassNameId("User")))}
 
 	<#list _roleIds as roleId>
 		${dataFactory.toInsertSQL("Users_Roles", 0, roleId, _userModel.userId)}

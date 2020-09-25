@@ -11,10 +11,10 @@
 	<#list mbThreadModels as mbThreadModel>
 		${dataFactory.toInsertSQL(mbThreadModel)}
 
-		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(mbThreadModel, dataFactory.getClassNameId("MBThread")))}
+		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(mbThreadModel, classNameDataFactory.getClassNameId("MBThread")))}
 
 		<@insertAssetEntry
-			_classNameIds=[dataFactory.getClassNameId("MBThread")]
+			_classNameIds=[classNameDataFactory.getClassNameId("MBThread")]
 			_entry=mbThreadModel
 		/>
 
@@ -25,7 +25,7 @@
 		<#list mbMessageModels as mbMessageModel>
 			<@insertMBMessage _mbMessageModel=mbMessageModel />
 
-			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel, dataFactory.getClassNameId("WikiPage"), dataFactory.getClassNameId("MBMessage")))}
+			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel, classNameDataFactory.getClassNameId("WikiPage"), classNameDataFactory.getClassNameId("MBMessage")))}
 		</#list>
 
 		${csvFileWriter.write("mbThread", mbCategoryModel.categoryId + "," + mbThreadModel.threadId + "," + mbThreadModel.rootMessageId + "\n")}

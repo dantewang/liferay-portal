@@ -1,5 +1,5 @@
 <#assign
-	ddlRecordSetClassNameId = dataFactory.getClassNameId("DDLRecordSet")
+	ddlRecordSetClassNameId = classNameDataFactory.getClassNameId("DDLRecordSet")
 	ddlRecordSetCounts = dataFactory.getSequence(dataFactory.maxDDLRecordSetCount)
 />
 

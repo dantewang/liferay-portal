@@ -1,6 +1,6 @@
 <#assign
-	journalArticleClassNameId = dataFactory.getClassNameId("JournalArticle")
-	ddmStructureClassNameId = dataFactory.getClassNameId("DDMStructure")
+	journalArticleClassNameId = classNameDataFactory.getClassNameId("JournalArticle")
+	ddmStructureClassNameId = classNameDataFactory.getClassNameId("DDMStructure")
 	defaultJournalDDMStructureModel = dataFactory.newDefaultJournalDDMStructureModel(journalArticleClassNameId)
 />
 
@@ -12,6 +12,6 @@
 
 <#assign defaultJournalDDMTemplateModel = dataFactory.newDefaultJournalDDMTemplateModel(journalArticleClassNameId, ddmStructureClassNameId) />
 
-${dataFactory.toInsertSQL(defaultJournalDDMTemplateModel, dataFactory.getClassName(defaultJournalDDMTemplateModel))}
+${dataFactory.toInsertSQL(defaultJournalDDMTemplateModel, classNameDataFactory.getClassName(defaultJournalDDMTemplateModel))}
 
 ${dataFactory.toInsertSQL(dataFactory.newDefaultJournalDDMTemplateVersionModel(ddmStructureClassNameId))}

@@ -1,6 +1,6 @@
 <#assign
 	wikiNodeModels = dataFactory.newWikiNodeModels(groupId)
-	wikiPageClassNameId = dataFactory.getClassNameId("WikiPage")
+	wikiPageClassNameId = classNameDataFactory.getClassNameId("WikiPage")
 />
 
 <#list wikiNodeModels as wikiNodeModel>
@@ -11,7 +11,7 @@
 	<#list wikiPageModels as wikiPageModel>
 		${dataFactory.toInsertSQL(wikiPageModel)}
 
-		${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(wikiPageModel, dataFactory.getClassNameId("MBDiscussion_WikiPage")))}
+		${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(wikiPageModel, classNameDataFactory.getClassNameId("MBDiscussion_WikiPage")))}
 
 		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(wikiPageModel, wikiPageClassNameId))}
 

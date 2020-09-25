@@ -1,5 +1,5 @@
 <#assign
-	assetClassNameIds = dataFactory.assetClassNameIds
+	assetClassNameIds = classNameDataFactory.assetClassNameIds
 	assetVocabularyModels = dataFactory.newAssetVocabularyModels(groupId)
 	pageCounts = dataFactory.getSequence(dataFactory.maxAssetPublisherPageCount)
 />

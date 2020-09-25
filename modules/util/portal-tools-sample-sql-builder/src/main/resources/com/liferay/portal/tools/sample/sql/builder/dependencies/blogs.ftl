@@ -1,5 +1,5 @@
 <#assign
-	blogsEntryClassNameId = dataFactory.getClassNameId("BlogsEntry")
+	blogsEntryClassNameId = classNameDataFactory.getClassNameId("BlogsEntry")
 	blogsEntryModels = dataFactory.newBlogsEntryModels(groupId)
 />
 
@@ -14,7 +14,7 @@
 
 	${dataFactory.toInsertSQL(dataFactory.newFriendlyURLEntryMapping(friendlyURLEntryModel))}
 
-	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(blogsEntryModel, dataFactory.getClassNameId("MBDiscussion_BlogsEntry")))}
+	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(blogsEntryModel, classNameDataFactory.getClassNameId("MBDiscussion_BlogsEntry")))}
 
 	<@insertAssetEntry
 		_categoryAndTag=true

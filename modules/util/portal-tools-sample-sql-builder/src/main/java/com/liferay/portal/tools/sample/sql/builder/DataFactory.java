@@ -125,7 +125,6 @@ import com.liferay.message.boards.constants.MBMessageConstants;
 import com.liferay.message.boards.constants.MBPortletKeys;
 import com.liferay.message.boards.model.MBCategory;
 import com.liferay.message.boards.model.MBCategoryModel;
-import com.liferay.message.boards.model.MBDiscussion;
 import com.liferay.message.boards.model.MBDiscussionModel;
 import com.liferay.message.boards.model.MBMailingListModel;
 import com.liferay.message.boards.model.MBMessage;
@@ -150,7 +149,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.metadata.RawMetadataProcessor;
 import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.BaseModel;
-import com.liferay.portal.kernel.model.ClassNameModel;
 import com.liferay.portal.kernel.model.CompanyModel;
 import com.liferay.portal.kernel.model.ContactConstants;
 import com.liferay.portal.kernel.model.ContactModel;
@@ -163,7 +161,6 @@ import com.liferay.portal.kernel.model.LayoutFriendlyURLModel;
 import com.liferay.portal.kernel.model.LayoutModel;
 import com.liferay.portal.kernel.model.LayoutSetModel;
 import com.liferay.portal.kernel.model.LayoutTypePortletConstants;
-import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.model.ReleaseConstants;
@@ -175,7 +172,6 @@ import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserModel;
-import com.liferay.portal.kernel.model.UserPersonalSite;
 import com.liferay.portal.kernel.model.VirtualHostModel;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
@@ -200,7 +196,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.version.Version;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.impl.AccountModelImpl;
-import com.liferay.portal.model.impl.ClassNameModelImpl;
 import com.liferay.portal.model.impl.CompanyModelImpl;
 import com.liferay.portal.model.impl.ContactModelImpl;
 import com.liferay.portal.model.impl.GroupModelImpl;
@@ -263,7 +258,6 @@ import java.text.Format;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -284,46 +278,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 		_timeCounter = new SimpleCounter();
 		_userScreenNameCounter = new SimpleCounter();
-
-		List<String> models = ModelHintsUtil.getModels();
-
-		models.add(Layout.class.getName());
-		models.add(UserPersonalSite.class.getName());
-
-		models.add(_getMBDiscussionCombinedClassName(BlogsEntry.class));
-		models.add(_getMBDiscussionCombinedClassName(WikiPage.class));
-
-		for (String model : models) {
-			ClassNameModel classNameModel = new ClassNameModelImpl();
-
-			classNameModel.setClassNameId(counter.get());
-			classNameModel.setValue(model);
-
-			_classNameModels.put(model, classNameModel);
-
-			if (!model.contains(StringPool.UNDERLINE)) {
-				int index = model.lastIndexOf(StringPool.PERIOD) + 1;
-
-				_classNames.put(model.substring(index), model);
-			}
-			else {
-				String[] combineClassNames = model.split(StringPool.UNDERLINE);
-				StringBundler sb = new StringBundler(4);
-
-				for (String combineClassName : combineClassNames) {
-					int index =
-						combineClassName.lastIndexOf(StringPool.PERIOD) + 1;
-
-					sb.append(combineClassName.substring(index));
-
-					sb.append(StringPool.UNDERLINE);
-				}
-
-				sb.setIndex(3);
-
-				_classNames.put(sb.toString(), model);
-			}
-		}
 
 		_accountId = counter.get();
 		_defaultDLDDMStructureId = counter.get();
@@ -400,23 +354,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return assetCategoryIds;
 	}
 
-	public long[] getAssetClassNameIds() {
-		long[] assetClassNameIds = new long[3];
-
-		ClassNameModel blogEntrysClassNameModel = _classNameModels.get(
-			BlogsEntry.class.getName());
-		ClassNameModel journalArticleClassNameModel = _classNameModels.get(
-			JournalArticle.class.getName());
-		ClassNameModel wikiPageClassNameModel = _classNameModels.get(
-			WikiPage.class.getName());
-
-		assetClassNameIds[0] = blogEntrysClassNameModel.getClassNameId();
-		assetClassNameIds[1] = journalArticleClassNameModel.getClassNameId();
-		assetClassNameIds[2] = wikiPageClassNameModel.getClassNameId();
-
-		return assetClassNameIds;
-	}
-
 	public List<Long> getAssetTagIds(AssetEntryModel assetEntryModel) {
 		Map<Long, List<AssetTagModel>> assetTagModelsMap =
 			assetTagModelsMaps[(int)assetEntryModel.getGroupId() - 1];
@@ -459,43 +396,12 @@ public class DataFactory extends BaseDDMDataFactory {
 		return assetTagIds;
 	}
 
-	public String getClassName(BaseModel<?> baseModel) {
-		long classNameId;
-
-		if (baseModel instanceof DDMStructureModel) {
-			DDMStructureModel ddmStructureModel = (DDMStructureModel)baseModel;
-
-			classNameId = ddmStructureModel.getClassNameId();
-		}
-		else {
-			DDMTemplateModel ddmTemplateModel = (DDMTemplateModel)baseModel;
-
-			classNameId = ddmTemplateModel.getResourceClassNameId();
-		}
-
-		for (ClassNameModel classNameModel : _classNameModels.values()) {
-			if (classNameModel.getClassNameId() == classNameId) {
-				return classNameModel.getValue();
-			}
-		}
-
-		throw new RuntimeException(
-			"Unable to find class name for id " + classNameId);
-	}
-
-	public long getClassNameId(String className) {
-		ClassNameModel classNameModel = _classNameModels.get(
-			_classNames.get(className));
-
-		return classNameModel.getClassNameId();
-	}
-
-	public Collection<ClassNameModel> getClassNameModels() {
-		return _classNameModels.values();
-	}
-
 	public long getCounterNext() {
 		return counter.get();
+	}
+
+	public BaseDataFactory getDataFactoryInstance() {
+		return ClassNameDataFactory.getInstance();
 	}
 
 	public long getDefaultDLDDMStructureId() {
@@ -4791,12 +4697,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		}
 	}
 
-	private String _getMBDiscussionCombinedClassName(Class<?> clazz) {
-		return StringBundler.concat(
-			MBDiscussion.class.getName(), StringPool.UNDERLINE,
-			clazz.getName());
-	}
-
 	private String _getResourcePermissionModelName(String... classNames) {
 		if (ArrayUtil.isEmpty(classNames)) {
 			return StringPool.BLANK;
@@ -4827,9 +4727,6 @@ public class DataFactory extends BaseDDMDataFactory {
 	private final Map<Long, Integer> _assetPublisherQueryStartIndexes =
 		new HashMap<>();
 	private Map<Long, SimpleCounter>[] _assetTagCounters;
-	private final Map<String, ClassNameModel> _classNameModels =
-		new HashMap<>();
-	private final Map<String, String> _classNames = new HashMap<>();
 	private final PortletPreferencesImpl
 		_defaultAssetPublisherPortletPreferencesImpl;
 	private final long _defaultDLDDMStructureId;
