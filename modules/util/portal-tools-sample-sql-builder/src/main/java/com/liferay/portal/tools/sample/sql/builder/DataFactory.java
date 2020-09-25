@@ -519,6 +519,10 @@ public class DataFactory extends BaseDDMDataFactory {
 		return portletPrefix.concat(PortletIdCodec.generateInstanceId());
 	}
 
+	public PortletPreferencesFactory getPortletPreferencesFactory() {
+		return _portletPreferencesFactory;
+	}
+
 	public long getPowerUserRoleId() {
 		return POWER_USER_ROLE_ID;
 	}
@@ -2436,7 +2440,8 @@ public class DataFactory extends BaseDDMDataFactory {
 	}
 
 	public PortletPreferencesModel newJournalContentPortletPreferencesModel(
-			FragmentEntryLinkModel fragmentEntryLinkModel)
+			FragmentEntryLinkModel fragmentEntryLinkModel,
+			PortletPreferencesFactory portletPreferencesFactory)
 		throws Exception {
 
 		PortletPreferences portletPreferences = new PortletPreferencesImpl();
@@ -2461,7 +2466,7 @@ public class DataFactory extends BaseDDMDataFactory {
 				JournalContentPortletKeys.JOURNAL_CONTENT,
 				fragmentEntryLinkModel.getNamespace()));
 		portletPreferencesModel.setPreferences(
-			_portletPreferencesFactory.toXML(portletPreferences));
+			portletPreferencesFactory.toXML(portletPreferences));
 
 		return portletPreferencesModel;
 	}
