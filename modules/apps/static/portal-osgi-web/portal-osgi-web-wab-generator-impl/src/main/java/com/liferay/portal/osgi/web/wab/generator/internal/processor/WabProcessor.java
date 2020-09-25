@@ -924,7 +924,9 @@ public class WabProcessor {
 	}
 
 	protected void processResourceActionXML() throws IOException {
-		File file = new File(_pluginDir, "portlet.properties");
+		File dir = new File(_pluginDir, "WEB-INF/classes");
+
+		File file = new File(dir, "portlet.properties");
 
 		if (!file.exists()) {
 			return;
@@ -941,12 +943,14 @@ public class WabProcessor {
 					properties.getProperty(
 						PropsKeys.RESOURCE_ACTIONS_CONFIGS))) {
 
-			processResourceActionXML(xmlFile);
+			processResourceActionXML(dir, xmlFile);
 		}
 	}
 
-	protected void processResourceActionXML(String xmlFile) throws IOException {
-		File file = new File(_pluginDir, xmlFile);
+	protected void processResourceActionXML(
+		File dir, String xmlFile) throws IOException {
+
+		File file = new File(dir, xmlFile);
 
 		if (!file.exists()) {
 			return;
@@ -980,16 +984,16 @@ public class WabProcessor {
 
 		if (!xmlFile.endsWith("-ext.xml")) {
 			processResourceActionXML(
-				StringUtil.replace(xmlFile, ".xml", "-ext.xml"));
+				dir, StringUtil.replace(xmlFile, ".xml", "-ext.xml"));
 		}
 
 		for (Element resourceFileElement : rootElement.elements("resource")) {
 			String resourceFileName = StringUtil.trim(
 				resourceFileElement.attributeValue("file"));
 
-			processResourceActionXML(resourceFileName);
+			processResourceActionXML(dir, resourceFileName);
 			processResourceActionXML(
-				StringUtil.replace(resourceFileName, ".xml", "-ext.xml"));
+				dir, StringUtil.replace(resourceFileName, ".xml", "-ext.xml"));
 		}
 	}
 
