@@ -109,32 +109,35 @@ public abstract class BaseDataFactory {
 
 		return StringUtil.merge(lines, StringPool.SPACE);
 	}
+	protected static final SimpleCounter counter = new SimpleCounter(
+		BenchmarksPropsValues.MAX_GROUP_COUNT + 1);
 
-	protected static final long ADMINISTRATOR_ROLE_ID;
+	protected static final long ADMINISTRATOR_ROLE_ID = counter.get();
 
-	protected static final long COMPANY_ID;
+	protected static final long COMPANY_ID = counter.get();
 
-	protected static final long DEFAULT_JOURNAL_DDM_STRUCTURE_ID;
+	protected static final long DEFAULT_JOURNAL_DDM_STRUCTURE_ID =
+		counter.get();
 
-	protected static final long DEFAULT_USER_ID;
+	protected static final long DEFAULT_USER_ID = counter.get();
 
-	protected static final long GLOBAL_GROUP_ID;
+	protected static final long GLOBAL_GROUP_ID = counter.get();
 
-	protected static final long GUEST_GROUP_ID;
+	protected static final long GUEST_GROUP_ID = counter.get();
 
-	protected static final long GUEST_ROLE_ID;
+	protected static final long GUEST_ROLE_ID = counter.get();
 
-	protected static final long OWNER_ROLE_ID;
+	protected static final long OWNER_ROLE_ID = counter.get();
 
-	protected static final long POWER_USER_ROLE_ID;
+	protected static final long POWER_USER_ROLE_ID = counter.get();
 
-	protected static final long SAMPLE_USER_ID;
+	protected static final long SAMPLE_USER_ID = counter.get();
 
 	protected static final String SAMPLE_USER_NAME = "Sample";
 
-	protected static final long SITE_MEMBER_ROLE_ID;
+	protected static final long SITE_MEMBER_ROLE_ID = counter.get();
 
-	protected static final long USER_ROLE_ID;
+	protected static final long USER_ROLE_ID = counter.get();
 
 	protected static final Map<Long, List<AssetCategoryModel>>[]
 		assetCategoryModelsMaps =
@@ -143,30 +146,12 @@ public abstract class BaseDataFactory {
 	protected static final Map<Long, List<AssetTagModel>>[] assetTagModelsMaps =
 		(Map<Long, List<AssetTagModel>>[])
 			new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
-	protected static final SimpleCounter counter;
 	protected static final Map<Long, String> journalArticleResourceUUIDs =
 		new HashMap<>();
 	protected static final SimpleCounter resourcePermissionCounter =
 		new SimpleCounter();
 	protected static final SimpleCounter socialActivityCounter =
 		new SimpleCounter();
-
-	static {
-		counter = new SimpleCounter(BenchmarksPropsValues.MAX_GROUP_COUNT + 1);
-
-		COMPANY_ID = counter.get();
-		DEFAULT_USER_ID = counter.get();
-		GLOBAL_GROUP_ID = counter.get();
-		GUEST_GROUP_ID = counter.get();
-		SAMPLE_USER_ID = counter.get();
-		DEFAULT_JOURNAL_DDM_STRUCTURE_ID = counter.get();
-		ADMINISTRATOR_ROLE_ID = counter.get();
-		GUEST_ROLE_ID = counter.get();
-		OWNER_ROLE_ID = counter.get();
-		POWER_USER_ROLE_ID = counter.get();
-		SITE_MEMBER_ROLE_ID = counter.get();
-		USER_ROLE_ID = counter.get();
-	}
 
 	private static final String _DEPENDENCIES_DIR =
 		"com/liferay/portal/tools/sample/sql/builder/dependencies/data/";
