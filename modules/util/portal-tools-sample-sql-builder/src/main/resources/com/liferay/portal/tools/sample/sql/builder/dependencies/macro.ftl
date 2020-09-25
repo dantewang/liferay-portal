@@ -1,7 +1,8 @@
 <#setting number_format = "computer">
 
 <#assign
-	classNameDataFactory = dataFactory.getDataFactoryInstance()
+	classNameDataFactory = dataFactory.getDataFactoryInstance("classNameDataFactory")
+	portletPreferenceDataFactory = dataFactory.getDataFactoryInstance("portletPreferenceDataFactory")
 />
 
 <#macro insertAssetEntry

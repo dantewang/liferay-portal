@@ -12,7 +12,7 @@ ${dataFactory.toInsertSQL(fragmentEntryModel)}
 	<@insertContentLayout
 		_fragmentEntryModel=fragmentEntryModel
 		_layoutModel=contentLayoutModel
-		_portletPreferencesFactory=dataFactory.portletPreferencesFactory
+		_portletPreferencesFactory=portletPreferenceDataFactory.portletPreferencesFactory
 	/>
 
 	${csvFileWriter.write("fragment", contentLayoutModel.friendlyURL + "\n")}

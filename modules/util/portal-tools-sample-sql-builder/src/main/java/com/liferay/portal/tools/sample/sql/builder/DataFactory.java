@@ -59,7 +59,6 @@ import com.liferay.document.library.kernel.model.DLFileEntryTypeModel;
 import com.liferay.document.library.kernel.model.DLFileVersionModel;
 import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLFolderModel;
-import com.liferay.dynamic.data.lists.constants.DDLPortletKeys;
 import com.liferay.dynamic.data.lists.constants.DDLRecordConstants;
 import com.liferay.dynamic.data.lists.constants.DDLRecordSetConstants;
 import com.liferay.dynamic.data.lists.model.DDLRecordModel;
@@ -69,7 +68,6 @@ import com.liferay.dynamic.data.lists.model.DDLRecordVersionModel;
 import com.liferay.dynamic.data.lists.model.impl.DDLRecordModelImpl;
 import com.liferay.dynamic.data.lists.model.impl.DDLRecordSetModelImpl;
 import com.liferay.dynamic.data.lists.model.impl.DDLRecordVersionModelImpl;
-import com.liferay.dynamic.data.mapping.constants.DDMPortletKeys;
 import com.liferay.dynamic.data.mapping.constants.DDMTemplateConstants;
 import com.liferay.dynamic.data.mapping.model.DDMContentModel;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLinkModel;
@@ -105,7 +103,6 @@ import com.liferay.hello.world.web.internal.constants.HelloWorldPortletKeys;
 import com.liferay.journal.constants.JournalActivityKeys;
 import com.liferay.journal.constants.JournalArticleConstants;
 import com.liferay.journal.constants.JournalContentPortletKeys;
-import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleLocalizationModel;
 import com.liferay.journal.model.JournalArticleModel;
@@ -161,7 +158,6 @@ import com.liferay.portal.kernel.model.LayoutFriendlyURLModel;
 import com.liferay.portal.kernel.model.LayoutModel;
 import com.liferay.portal.kernel.model.LayoutSetModel;
 import com.liferay.portal.kernel.model.LayoutTypePortletConstants;
-import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.model.ReleaseConstants;
 import com.liferay.portal.kernel.model.ReleaseModel;
@@ -210,7 +206,6 @@ import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
 import com.liferay.portal.upgrade.PortalUpgradeProcess;
 import com.liferay.portal.util.PropsValues;
-import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
 import com.liferay.portlet.asset.model.impl.AssetEntryModelImpl;
@@ -295,10 +290,6 @@ public class DataFactory extends BaseDDMDataFactory {
 			"ddm_structure_layout_basic_web_content.json");
 		_layoutPageTemplateStructureRelData = readFile(
 			"layout_page_template_structure_rel_data.json");
-
-		_defaultAssetPublisherPortletPreferencesImpl =
-			(PortletPreferencesImpl)_portletPreferencesFactory.fromDefaultXML(
-				readFile("default_asset_publisher_preference.xml"));
 
 		initJournalArticleContent();
 
@@ -400,7 +391,11 @@ public class DataFactory extends BaseDDMDataFactory {
 		return counter.get();
 	}
 
-	public BaseDataFactory getDataFactoryInstance() {
+	public BaseDataFactory getDataFactoryInstance(String name) {
+		if (name.equals("portletPreferenceDataFactory")) {
+			return PortletPreferenceDataFactory.getInstance();
+		}
+
 		return ClassNameDataFactory.getInstance();
 	}
 
@@ -497,30 +492,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		}
 
 		return groupIds;
-	}
-
-	public long getNextAssetClassNameId(
-		long groupId, long[] assetClassNameIds) {
-
-		Integer index = _assetClassNameIdsIndexes.get(groupId);
-
-		if (index == null) {
-			index = 0;
-		}
-
-		long classNameId = assetClassNameIds[index % assetClassNameIds.length];
-
-		_assetClassNameIdsIndexes.put(groupId, ++index);
-
-		return classNameId;
-	}
-
-	public String getPortletId(String portletPrefix) {
-		return portletPrefix.concat(PortletIdCodec.generateInstanceId());
-	}
-
-	public PortletPreferencesFactory getPortletPreferencesFactory() {
-		return _portletPreferencesFactory;
 	}
 
 	public long getPowerUserRoleId() {
@@ -771,28 +742,6 @@ public class DataFactory extends BaseDDMDataFactory {
 			wikiPageModel.getModifiedDate(), classNameIds[0],
 			wikiPageModel.getResourcePrimKey(), wikiPageModel.getUuid(), 0,
 			true, true, ContentTypes.TEXT_HTML, wikiPageModel.getTitle());
-	}
-
-	public List<PortletPreferencesModel>
-		newAssetPublisherPortletPreferencesModels(long plid) {
-
-		List<PortletPreferencesModel> portletPreferencesModels =
-			new ArrayList<>(3);
-
-		portletPreferencesModels.add(
-			newPortletPreferencesModel(
-				plid, BlogsPortletKeys.BLOGS,
-				PortletConstants.DEFAULT_PREFERENCES));
-		portletPreferencesModels.add(
-			newPortletPreferencesModel(
-				plid, JournalPortletKeys.JOURNAL,
-				PortletConstants.DEFAULT_PREFERENCES));
-		portletPreferencesModels.add(
-			newPortletPreferencesModel(
-				plid, WikiPortletKeys.WIKI,
-				PortletConstants.DEFAULT_PREFERENCES));
-
-		return portletPreferencesModels;
 	}
 
 	public List<AssetTagModel> newAssetTagModels(
@@ -1514,28 +1463,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return newDDMStructureModel(
 			groupId, SAMPLE_USER_ID, classNameId, "Test DDM Structure",
 			sb.toString(), counter.get());
-	}
-
-	public List<PortletPreferencesModel> newDDLPortletPreferencesModels(
-		long plid) {
-
-		List<PortletPreferencesModel> portletPreferencesModels =
-			new ArrayList<>(3);
-
-		portletPreferencesModels.add(
-			newPortletPreferencesModel(
-				plid, DDLPortletKeys.DYNAMIC_DATA_LISTS_DISPLAY,
-				PortletConstants.DEFAULT_PREFERENCES));
-		portletPreferencesModels.add(
-			newPortletPreferencesModel(
-				plid, DDLPortletKeys.DYNAMIC_DATA_LISTS,
-				PortletConstants.DEFAULT_PREFERENCES));
-		portletPreferencesModels.add(
-			newPortletPreferencesModel(
-				plid, DDMPortletKeys.DYNAMIC_DATA_MAPPING,
-				PortletConstants.DEFAULT_PREFERENCES));
-
-		return portletPreferencesModels;
 	}
 
 	public DDLRecordModel newDDLRecordModel(
@@ -2500,15 +2427,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return journalContentSearchModel;
 	}
 
-	public List<PortletPreferencesModel> newJournalPortletPreferencesModels(
-		long plid) {
-
-		return Collections.singletonList(
-			newPortletPreferencesModel(
-				plid, JournalPortletKeys.JOURNAL,
-				PortletConstants.DEFAULT_PREFERENCES));
-	}
-
 	public LayoutFriendlyURLModel newLayoutFriendlyURLModel(
 		LayoutModel layoutModel) {
 
@@ -2958,127 +2876,6 @@ public class DataFactory extends BaseDDMDataFactory {
 
 	public <K, V> ObjectValuePair<K, V> newObjectValuePair(K key, V value) {
 		return new ObjectValuePair<>(key, value);
-	}
-
-	public PortletPreferencesModel newPortletPreferencesModel(
-			long plid, long groupId, String portletId, int currentIndex,
-			long[] assetClassNameIds)
-		throws Exception {
-
-		if (currentIndex == 1) {
-			return newPortletPreferencesModel(
-				plid, portletId, PortletConstants.DEFAULT_PREFERENCES);
-		}
-
-		String assetPublisherQueryName = "assetCategories";
-
-		if ((currentIndex % 2) == 0) {
-			assetPublisherQueryName = "assetTags";
-		}
-
-		ObjectValuePair<String[], Integer> objectValuePair = null;
-
-		Integer startIndex = _assetPublisherQueryStartIndexes.get(groupId);
-
-		if (startIndex == null) {
-			startIndex = 0;
-		}
-
-		if (assetPublisherQueryName.equals("assetCategories")) {
-			Map<Long, List<AssetCategoryModel>> assetCategoryModelsMap =
-				assetCategoryModelsMaps[(int)groupId - 1];
-
-			List<AssetCategoryModel> assetCategoryModels =
-				assetCategoryModelsMap.get(
-					getNextAssetClassNameId(groupId, assetClassNameIds));
-
-			if ((assetCategoryModels == null) ||
-				assetCategoryModels.isEmpty()) {
-
-				return newPortletPreferencesModel(
-					plid, portletId, PortletConstants.DEFAULT_PREFERENCES);
-			}
-
-			objectValuePair = getAssetPublisherAssetCategoriesQueryValues(
-				assetCategoryModels, startIndex);
-		}
-		else {
-			Map<Long, List<AssetTagModel>> assetTagModelsMap =
-				assetTagModelsMaps[(int)groupId - 1];
-
-			List<AssetTagModel> assetTagModels = assetTagModelsMap.get(
-				getNextAssetClassNameId(groupId, assetClassNameIds));
-
-			if ((assetTagModels == null) || assetTagModels.isEmpty()) {
-				return newPortletPreferencesModel(
-					plid, portletId, PortletConstants.DEFAULT_PREFERENCES);
-			}
-
-			objectValuePair = getAssetPublisherAssetTagsQueryValues(
-				assetTagModels, startIndex);
-		}
-
-		String[] assetPublisherQueryValues = objectValuePair.getKey();
-
-		_assetPublisherQueryStartIndexes.put(
-			groupId, objectValuePair.getValue());
-
-		PortletPreferences jxPortletPreferences =
-			(PortletPreferences)
-				_defaultAssetPublisherPortletPreferencesImpl.clone();
-
-		jxPortletPreferences.setValue("queryAndOperator0", "false");
-		jxPortletPreferences.setValue("queryContains0", "true");
-		jxPortletPreferences.setValue("queryName0", assetPublisherQueryName);
-		jxPortletPreferences.setValues(
-			"queryValues0",
-			new String[] {
-				assetPublisherQueryValues[0], assetPublisherQueryValues[1],
-				assetPublisherQueryValues[2]
-			});
-		jxPortletPreferences.setValue("queryAndOperator1", "false");
-		jxPortletPreferences.setValue("queryContains1", "false");
-		jxPortletPreferences.setValue("queryName1", assetPublisherQueryName);
-		jxPortletPreferences.setValue(
-			"queryValues1", assetPublisherQueryValues[3]);
-
-		return newPortletPreferencesModel(
-			plid, portletId,
-			_portletPreferencesFactory.toXML(jxPortletPreferences));
-	}
-
-	public PortletPreferencesModel newPortletPreferencesModel(
-			long plid, String portletId, DDLRecordSetModel ddlRecordSetModel)
-		throws Exception {
-
-		PortletPreferences jxPortletPreferences = new PortletPreferencesImpl();
-
-		jxPortletPreferences.setValue("editable", "true");
-		jxPortletPreferences.setValue(
-			"recordSetId", String.valueOf(ddlRecordSetModel.getRecordSetId()));
-		jxPortletPreferences.setValue("spreadsheet", "false");
-
-		return newPortletPreferencesModel(
-			plid, portletId,
-			_portletPreferencesFactory.toXML(jxPortletPreferences));
-	}
-
-	public PortletPreferencesModel newPortletPreferencesModel(
-			long plid, String portletId,
-			JournalArticleResourceModel journalArticleResourceModel)
-		throws Exception {
-
-		PortletPreferences jxPortletPreferences = new PortletPreferencesImpl();
-
-		jxPortletPreferences.setValue(
-			"articleId", journalArticleResourceModel.getArticleId());
-		jxPortletPreferences.setValue(
-			"groupId",
-			String.valueOf(journalArticleResourceModel.getGroupId()));
-
-		return newPortletPreferencesModel(
-			plid, portletId,
-			_portletPreferencesFactory.toXML(jxPortletPreferences));
 	}
 
 	public List<LayoutModel> newPublicLayoutModels(long groupId) {
@@ -3717,54 +3514,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return sb.toString();
 	}
 
-	protected ObjectValuePair<String[], Integer>
-		getAssetPublisherAssetCategoriesQueryValues(
-			List<AssetCategoryModel> assetCategoryModels, int index) {
-
-		String[] categoryIds = new String[4];
-
-		for (int i = 0; i < 4; i++) {
-			if (i > 0) {
-				index +=
-					BenchmarksPropsValues.
-						MAX_ASSET_ENTRY_TO_ASSET_CATEGORY_COUNT;
-			}
-
-			AssetCategoryModel assetCategoryModel = assetCategoryModels.get(
-				index % assetCategoryModels.size());
-
-			categoryIds[i] = String.valueOf(assetCategoryModel.getCategoryId());
-		}
-
-		return new ObjectValuePair<>(
-			categoryIds,
-			index +
-				BenchmarksPropsValues.MAX_ASSET_ENTRY_TO_ASSET_CATEGORY_COUNT);
-	}
-
-	protected ObjectValuePair<String[], Integer>
-		getAssetPublisherAssetTagsQueryValues(
-			List<AssetTagModel> assetTagModels, int index) {
-
-		String[] assetTagNames = new String[4];
-
-		for (int i = 0; i < 4; i++) {
-			if (i > 0) {
-				index +=
-					BenchmarksPropsValues.MAX_ASSET_ENTRY_TO_ASSET_TAG_COUNT;
-			}
-
-			AssetTagModel assetTagModel = assetTagModels.get(
-				index % assetTagModels.size());
-
-			assetTagNames[i] = String.valueOf(assetTagModel.getName());
-		}
-
-		return new ObjectValuePair<>(
-			assetTagNames,
-			index + BenchmarksPropsValues.MAX_ASSET_ENTRY_TO_ASSET_TAG_COUNT);
-	}
-
 	protected SimpleCounter getSimpleCounter(
 		Map<Long, SimpleCounter>[] simpleCountersArray, long groupId,
 		long classNameId) {
@@ -4301,32 +4050,6 @@ public class DataFactory extends BaseDDMDataFactory {
 		return mbThreadModel;
 	}
 
-	protected PortletPreferencesModel newPortletPreferencesModel(
-		long plid, String portletId, String preferences) {
-
-		PortletPreferencesModel portletPreferencesModel =
-			new PortletPreferencesModelImpl();
-
-		// PK fields
-
-		portletPreferencesModel.setPortletPreferencesId(counter.get());
-
-		// Audit fields
-
-		portletPreferencesModel.setCompanyId(COMPANY_ID);
-
-		// Other fields
-
-		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
-		portletPreferencesModel.setOwnerType(
-			PortletKeys.PREFS_OWNER_TYPE_LAYOUT);
-		portletPreferencesModel.setPlid(plid);
-		portletPreferencesModel.setPortletId(portletId);
-		portletPreferencesModel.setPreferences(preferences);
-
-		return portletPreferencesModel;
-	}
-
 	protected ReleaseModelImpl newReleaseModel(
 			long releaseId, String servletContextName, String schemaVersion,
 			int buildNumber, boolean verified, String testString)
@@ -4727,13 +4450,7 @@ public class DataFactory extends BaseDDMDataFactory {
 
 	private final long _accountId;
 	private Map<Long, SimpleCounter>[] _assetCategoryCounters;
-	private final Map<Long, Integer> _assetClassNameIdsIndexes =
-		new HashMap<>();
-	private final Map<Long, Integer> _assetPublisherQueryStartIndexes =
-		new HashMap<>();
 	private Map<Long, SimpleCounter>[] _assetTagCounters;
-	private final PortletPreferencesImpl
-		_defaultAssetPublisherPortletPreferencesImpl;
 	private final long _defaultDLDDMStructureId;
 	private final long _defaultDLDDMStructureVersionId;
 	private long _defaultDLFileEntryTypeId =
@@ -4750,8 +4467,6 @@ public class DataFactory extends BaseDDMDataFactory {
 	private List<String> _lastNames;
 	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
 	private final String _layoutPageTemplateStructureRelData;
-	private final PortletPreferencesFactory _portletPreferencesFactory =
-		new PortletPreferencesFactoryImpl();
 	private final Format _simpleDateFormat;
 	private final SimpleCounter _timeCounter;
 	private final long _userPersonalSiteGroupId;
