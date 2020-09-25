@@ -1,1 +1,1 @@
-${dataFactory.toInsertSQL(dataFactory.newDefaultAssetVocabularyModel())}
+${dataFactory.toInsertSQL(assetDataFactory.newDefaultAssetVocabularyModel())}

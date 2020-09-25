@@ -1,6 +1,7 @@
 <#setting number_format = "computer">
 
 <#assign
+	assetDataFactory = dataFactory.getDataFactoryInstance("assetDataFactory")
 	blogDataFactory = dataFactory.getDataFactoryInstance("blogDataFactory")
 	classNameDataFactory = dataFactory.getDataFactoryInstance("classNameDataFactory")
 	commerceDataFactory = dataFactory.getDataFactoryInstance("commerceDataFactory")
@@ -16,12 +17,12 @@
 	_classNameIds = []
 	_categoryAndTag = false
 >
-	<#local assetEntryModel = dataFactory.newAssetEntryModel(_entry, _classNameIds)>
+	<#local assetEntryModel = assetDataFactory.newAssetEntryModel(_entry, _classNameIds)>
 
 	${dataFactory.toInsertSQL(assetEntryModel)}
 
 	<#if _categoryAndTag>
-		<#local assetCategoryIds = dataFactory.getAssetCategoryIds(assetEntryModel)>
+		<#local assetCategoryIds = assetDataFactory.getAssetCategoryIds(assetEntryModel)>
 
 		<#list assetCategoryIds as assetCategoryId>
 			<#local assetEntryAssetCategoryRelId = dataFactory.getCounterNext()>
@@ -29,7 +30,7 @@
 			insert into AssetEntryAssetCategoryRel values (0, 0, ${assetEntryAssetCategoryRelId}, ${assetEntryModel.companyId}, ${assetEntryModel.entryId}, ${assetCategoryId}, 0);
 		</#list>
 
-		<#local assetTagIds = dataFactory.getAssetTagIds(assetEntryModel)>
+		<#local assetTagIds = assetDataFactory.getAssetTagIds(assetEntryModel)>
 
 		<#list assetTagIds as assetTagId>
 			${dataFactory.toInsertSQL("AssetEntries_AssetTags", assetEntryModel.companyId, assetEntryModel.entryId, assetTagId)}

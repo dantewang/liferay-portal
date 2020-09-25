@@ -1,18 +1,18 @@
 <#assign
 	assetClassNameIds = classNameDataFactory.assetClassNameIds
-	assetVocabularyModels = dataFactory.newAssetVocabularyModels(groupId)
-	pageCounts = dataFactory.getSequence(dataFactory.maxAssetPublisherPageCount)
+	assetVocabularyModels = assetDataFactory.newAssetVocabularyModels(groupId)
+	pageCounts = dataFactory.getSequence(assetDataFactory.maxAssetPublisherPageCount)
 />
 
 <#list assetVocabularyModels as assetVocabularyModel>
 	${dataFactory.toInsertSQL(assetVocabularyModel)}
 </#list>
 
-<#list dataFactory.newAssetCategoryModels(groupId, assetVocabularyModels, assetClassNameIds) as assetCategoryModel>
+<#list assetDataFactory.newAssetCategoryModels(groupId, assetVocabularyModels, assetClassNameIds) as assetCategoryModel>
 	${dataFactory.toInsertSQL(assetCategoryModel)}
 </#list>
 
-<#list dataFactory.newAssetTagModels(groupId, assetClassNameIds) as assetTagModel>
+<#list assetDataFactory.newAssetTagModels(groupId, assetClassNameIds) as assetTagModel>
 	${dataFactory.toInsertSQL(assetTagModel)}
 </#list>
 
