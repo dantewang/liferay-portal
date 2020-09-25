@@ -451,12 +451,6 @@ public class DataFactory {
 			"Unable to find class name for id " + classNameId);
 	}
 
-	public long getClassNameId(Class<?> clazz) {
-		ClassNameModel classNameModel = _classNameModels.get(clazz.getName());
-
-		return classNameModel.getClassNameId();
-	}
-
 	public long getClassNameId(String className) {
 		ClassNameModel classNameModel = _classNameModels.get(className);
 
@@ -3807,17 +3801,6 @@ public class DataFactory {
 		return new ObjectValuePair<>(
 			assetTagNames,
 			index + BenchmarksPropsValues.MAX_ASSET_ENTRY_TO_ASSET_TAG_COUNT);
-	}
-
-	protected String getClassName(long classNameId) {
-		for (ClassNameModel classNameModel : _classNameModels.values()) {
-			if (classNameModel.getClassNameId() == classNameId) {
-				return classNameModel.getValue();
-			}
-		}
-
-		throw new RuntimeException(
-			"Unable to find class name for id " + classNameId);
 	}
 
 	protected InputStream getResourceInputStream(String resourceName) {
