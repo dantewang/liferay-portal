@@ -1,0 +1,130 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.portal.tools.sample.sql.builder;
+
+import com.liferay.asset.kernel.model.AssetCategoryModel;
+import com.liferay.asset.kernel.model.AssetTagModel;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Time;
+import com.liferay.util.SimpleCounter;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author Lily Chi
+ */
+public abstract class BaseDataFactory {
+
+	public Date nextFutureDate() {
+		return new Date(_FUTURE_TIME + (_FUTURE_COUNTER.get() * Time.SECOND));
+	}
+
+	protected InputStream getResourceInputStream(String resourceName) {
+		Class<?> clazz = getClass();
+
+		ClassLoader classLoader = clazz.getClassLoader();
+
+		return classLoader.getResourceAsStream(
+			_DEPENDENCIES_DIR + resourceName);
+	}
+
+	protected String readFile(String resourceName) {
+		List<String> lines = new ArrayList<>();
+
+		try {
+			StringUtil.readLines(getResourceInputStream(resourceName), lines);
+		}
+		catch (IOException ioException) {
+			ioException.getStackTrace();
+		}
+
+		return StringUtil.merge(lines, StringPool.SPACE);
+	}
+
+	protected static final long ADMINISTRATOR_ROLE_ID;
+
+	protected static final long COMPANY_ID;
+
+	protected static final long DEFAULT_JOURNAL_DDM_STRUCTURE_ID;
+
+	protected static final long DEFAULT_USER_ID;
+
+	protected static final long GLOBAL_GROUP_ID;
+
+	protected static final long GUEST_GROUP_ID;
+
+	protected static final long GUEST_ROLE_ID;
+
+	protected static final long OWNER_ROLE_ID;
+
+	protected static final long POWER_USER_ROLE_ID;
+
+	protected static final long SAMPLE_USER_ID;
+
+	protected static final String SAMPLE_USER_NAME = "Sample";
+
+	protected static final long SITE_MEMBER_ROLE_ID;
+
+	protected static final long USER_ROLE_ID;
+
+	protected static final Map<Long, List<AssetCategoryModel>>[]
+		assetCategoryModelsMaps =
+			(Map<Long, List<AssetCategoryModel>>[])
+				new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+	protected static final Map<Long, List<AssetTagModel>>[] assetTagModelsMaps =
+		(Map<Long, List<AssetTagModel>>[])
+			new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+	protected static final SimpleCounter counter;
+	protected static final Map<Long, String> journalArticleResourceUUIDs =
+		new HashMap<>();
+	protected static final SimpleCounter resourcePermissionCounter =
+		new SimpleCounter();
+	protected static final SimpleCounter socialActivityCounter =
+		new SimpleCounter();
+
+	static {
+		counter = new SimpleCounter(BenchmarksPropsValues.MAX_GROUP_COUNT + 1);
+
+		COMPANY_ID = counter.get();
+		DEFAULT_USER_ID = counter.get();
+		GLOBAL_GROUP_ID = counter.get();
+		GUEST_GROUP_ID = counter.get();
+		SAMPLE_USER_ID = counter.get();
+		DEFAULT_JOURNAL_DDM_STRUCTURE_ID = counter.get();
+		ADMINISTRATOR_ROLE_ID = counter.get();
+		GUEST_ROLE_ID = counter.get();
+		OWNER_ROLE_ID = counter.get();
+		POWER_USER_ROLE_ID = counter.get();
+		SITE_MEMBER_ROLE_ID = counter.get();
+		USER_ROLE_ID = counter.get();
+	}
+
+	private static final String _DEPENDENCIES_DIR =
+		"com/liferay/portal/tools/sample/sql/builder/dependencies/data/";
+
+	private static final SimpleCounter _FUTURE_COUNTER = new SimpleCounter();
+
+	private static final long _FUTURE_TIME =
+		System.currentTimeMillis() + Time.YEAR;
+
+}
