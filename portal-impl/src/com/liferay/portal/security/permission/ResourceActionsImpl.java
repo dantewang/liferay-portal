@@ -394,7 +394,11 @@ public class ResourceActionsImpl implements ResourceActions {
 			getPortletResourceActions(portlet.getPortletId()));
 
 		synchronized (this) {
-			_checkPortletActions(portlet, actions);
+			_checkPortletLayoutManagerActions(actions);
+
+			if (portlet != null) {
+				actions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
+			}
 		}
 
 		return new ArrayList<>(actions);
@@ -804,14 +808,6 @@ public class ResourceActionsImpl implements ResourceActions {
 			if (guestUnsupportedActions.contains(actionId)) {
 				iterator.remove();
 			}
-		}
-	}
-
-	private void _checkPortletActions(Portlet portlet, Set<String> actions) {
-		_checkPortletLayoutManagerActions(actions);
-
-		if (portlet != null) {
-			actions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
 		}
 	}
 
