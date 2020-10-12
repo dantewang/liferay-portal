@@ -32,6 +32,7 @@ import aQute.bnd.version.Version;
 import aQute.lib.filter.Filter;
 
 import com.liferay.ant.bnd.jsp.JspAnalyzerPlugin;
+import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.events.GlobalStartupAction;
@@ -69,7 +70,6 @@ import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.kernel.xml.UnsecureSAXReaderUtil;
 import com.liferay.portal.kernel.xml.XPath;
 import com.liferay.portal.util.PropsValues;
-import com.liferay.util.JS;
 import com.liferay.whip.util.ReflectionUtil;
 
 import java.io.File;
@@ -979,7 +979,7 @@ public class WabProcessor {
 				"portlet-name");
 
 			portletNameElement.setText(
-				JS.getSafeName(
+				_getSafeName(
 					StringBundler.concat(
 						portletNameElement.getTextTrim(),
 						PortletConstants.WAR_SEPARATOR, servletContextName)));
@@ -995,7 +995,7 @@ public class WabProcessor {
 					portletRefElement.elements("portlet-name")) {
 
 				portletNameElement.setText(
-					JS.getSafeName(
+					_getSafeName(
 						StringBundler.concat(
 							portletNameElement.getTextTrim(),
 							PortletConstants.WAR_SEPARATOR,
@@ -1414,6 +1414,39 @@ public class WabProcessor {
 		}
 
 		return Discover.all;
+	}
+
+	private String _getSafeName(String portletName) {
+		if (portletName == null) {
+			return null;
+		}
+
+		StringBuilder sb = null;
+
+		int index = 0;
+
+		for (int i = 0; i < portletName.length(); i++) {
+			char c = portletName.charAt(i);
+
+			if ((c == CharPool.DASH) || (c == CharPool.PERIOD) ||
+				(c == CharPool.SPACE)) {
+
+				if (sb == null) {
+					sb = new StringBuilder(portletName.length() - 1);
+
+					sb.append(portletName, index, i);
+				}
+			}
+			else if (sb != null) {
+				sb.append(c);
+			}
+		}
+
+		if (sb == null) {
+			return portletName;
+		}
+
+		return sb.toString();
 	}
 
 	private void _processExcludedJSPs(Analyzer analyzer) {
