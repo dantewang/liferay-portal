@@ -35,6 +35,8 @@ import com.liferay.ant.bnd.jsp.JspAnalyzerPlugin;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.events.GlobalStartupAction;
+import com.liferay.portal.kernel.configuration.Configuration;
+import com.liferay.portal.kernel.configuration.ConfigurationFactoryUtil;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployListener;
 import com.liferay.portal.kernel.deploy.auto.context.AutoDeploymentContext;
@@ -75,6 +77,10 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+
+import java.net.URI;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -926,17 +932,21 @@ public class WabProcessor {
 	protected void processResourceActionXML() throws IOException {
 		File dir = new File(_pluginDir, "WEB-INF/classes");
 
-		File file = new File(dir, "portlet.properties");
+		URI uri = dir.toURI();
 
-		if (!file.exists()) {
+		ClassLoader classLoader = new URLClassLoader(new URL[] {uri.toURL()});
+
+		Configuration configuration = null;
+
+		try {
+			configuration = ConfigurationFactoryUtil.getConfiguration(
+				classLoader, "portlet");
+		}
+		catch (Exception exception) {
 			return;
 		}
 
-		Properties properties = new Properties();
-
-		try (InputStream inputStream = new FileInputStream(file)) {
-			properties.load(inputStream);
-		}
+		Properties properties = configuration.getProperties();
 
 		for (String xmlFile :
 				StringUtil.split(
