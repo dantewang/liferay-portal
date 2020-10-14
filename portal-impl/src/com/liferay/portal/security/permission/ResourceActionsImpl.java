@@ -272,6 +272,10 @@ public class ResourceActionsImpl implements ResourceActions {
 		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
 			name);
 
+		if (modelResourceActionsBag == null) {
+			return new ArrayList<>();
+		}
+
 		return new ArrayList<>(modelResourceActionsBag.getSupportsActions());
 	}
 
@@ -279,6 +283,10 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getModelResourceGroupDefaultActions(String name) {
 		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
 			name);
+
+		if (modelResourceActionsBag == null) {
+			return new ArrayList<>();
+		}
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getGroupDefaultActions());
@@ -289,6 +297,10 @@ public class ResourceActionsImpl implements ResourceActions {
 		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
 			name);
 
+		if (modelResourceActionsBag == null) {
+			return new ArrayList<>();
+		}
+
 		return new ArrayList<>(
 			modelResourceActionsBag.getGuestDefaultActions());
 	}
@@ -297,6 +309,10 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getModelResourceGuestUnsupportedActions(String name) {
 		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
 			name);
+
+		if (modelResourceActionsBag == null) {
+			return new ArrayList<>();
+		}
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getGuestUnsupportedActions());
@@ -311,6 +327,10 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getModelResourceOwnerDefaultActions(String name) {
 		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
 			name);
+
+		if (modelResourceActionsBag == null) {
+			return new ArrayList<>();
+		}
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getOwnerDefaultActions());
@@ -552,13 +572,11 @@ public class ResourceActionsImpl implements ResourceActions {
 		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
 			name);
 
-		Set<String> modelActions = modelResourceActionsBag.getSupportsActions();
-
-		if ((modelActions != null) && !modelActions.isEmpty()) {
-			return true;
+		if (modelResourceActionsBag == null) {
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	/**
