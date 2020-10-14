@@ -945,13 +945,17 @@ public class ResourceActionsImpl implements ResourceActions {
 	private ResourceActionsBag _getPortletResourceActionsBag(String name) {
 		ResourceActionsBag resourceActionsBag = _getResourceActionsBag(name);
 
-		Set<String> portletActions = resourceActionsBag.getSupportsActions();
-
-		if (!portletActions.isEmpty()) {
+		if (resourceActionsBag != null) {
 			return resourceActionsBag;
 		}
 
 		Portlet portlet = portletLocalService.getPortletById(name);
+
+		Set<String> portletActions = new HashSet<>();
+		Set<String> groupDefaultActions = new HashSet<>();
+		Set<String> guestDefaultActions = new HashSet<>();
+		Set<String> layoutManagerActions = new HashSet<>();
+		Set<String> guestUnsupportedActions = new HashSet<>();
 
 		synchronized (this) {
 			portletActions.addAll(_getPortletMimeTypeActions(name, portlet));
@@ -960,32 +964,24 @@ public class ResourceActionsImpl implements ResourceActions {
 
 			portletActions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
 
-			Set<String> groupDefaultActions =
-				resourceActionsBag.getGroupDefaultActions();
+			groupDefaultActions.add(ActionKeys.VIEW);
 
-			if (groupDefaultActions.isEmpty()) {
-				groupDefaultActions.add(ActionKeys.VIEW);
-			}
+			guestDefaultActions.add(ActionKeys.VIEW);
 
-			Set<String> guestDefaultActions =
-				resourceActionsBag.getGuestDefaultActions();
-
-			if (guestDefaultActions.isEmpty()) {
-				guestDefaultActions.add(ActionKeys.VIEW);
-			}
-
-			_checkPortletLayoutManagerActions(
-				resourceActionsBag.getLayoutManagerActions());
-
-			Set<String> guestUnsupportedActions =
-				resourceActionsBag.getGuestUnsupportedActions();
+			_checkPortletLayoutManagerActions(layoutManagerActions);
 
 			guestUnsupportedActions.addAll(
 				_defaultPortletGuestUnsupportedActions);
 
 			_checkGuestUnsupportedActions(
-				guestUnsupportedActions,
-				resourceActionsBag.getGuestDefaultActions());
+				guestUnsupportedActions, guestDefaultActions);
+
+			resourceActionsBag = new ResourceActionsBag(
+				groupDefaultActions, guestDefaultActions,
+				guestUnsupportedActions, layoutManagerActions, new HashSet<>(),
+				portletActions);
+
+			_putResourceActionsBags(name, resourceActionsBag);
 		}
 
 		return resourceActionsBag;
