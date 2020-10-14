@@ -14,7 +14,8 @@
 	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(blogsEntryModel))}
 
 	<@insertAssetEntry
-		_categoryAndTag=[assetCategoryModelsMap,assetTagModelsMap]
+		_assetCategoryModelsMap=assetCategoryModelsMap
+		_assetTagModelsMap=assetTagModelsMap
 		_entry=blogsEntryModel
 	/>
 

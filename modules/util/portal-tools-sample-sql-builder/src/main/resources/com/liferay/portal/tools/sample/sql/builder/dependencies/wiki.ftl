@@ -15,7 +15,8 @@
 		${dataFactory.toInsertSQL(dataFactory.newWikiPageResourceModel(wikiPageModel))}
 
 		<@insertAssetEntry
-			_categoryAndTag=[assetCategoryModelsMap,assetTagModelsMap]
+			_assetCategoryModelsMap=assetCategoryModelsMap
+			_assetTagModelsMap=assetTagModelsMap
 			_entry=wikiPageModel
 		/>
 

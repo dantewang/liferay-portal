@@ -51,7 +51,8 @@
 
 			<#if versionCount = dataFactory.maxJournalArticleVersionCount>
 				<@insertAssetEntry
-					_categoryAndTag=[assetCategoryModelsMap,assetTagModelsMap]
+					_assetCategoryModelsMap=assetCategoryModelsMap
+					_assetTagModelsMap=assetTagModelsMap
 					_entry=dataFactory.newObjectValuePair(journalArticleModel, journalArticleLocalizationModel)
 				/>
 			</#if>
