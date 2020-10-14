@@ -9,7 +9,7 @@
 
 	${dataFactory.toInsertSQL(assetEntryModel)}
 
-	<#if _assetCategoryModelsMap??>
+	<#if (_assetCategoryModelsMap?size > 0)>
 		<#local assetCategoryIds = dataFactory.getAssetCategoryIds(assetEntryModel, _assetCategoryModelsMap[assetEntryModel.classNameId?string])>
 
 		<#list assetCategoryIds as assetCategoryId>
@@ -19,7 +19,7 @@
 		</#list>
 	</#if>
 
-	<#if _assetTagModelsMap??>
+	<#if (_assetTagModelsMap?size > 0)>
 		<#local assetTagIds = dataFactory.getAssetTagIds(assetEntryModel, _assetTagModelsMap[assetEntryModel.classNameId?string])>
 
 		<#list assetTagIds as assetTagId>
