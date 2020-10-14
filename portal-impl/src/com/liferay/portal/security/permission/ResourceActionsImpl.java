@@ -1002,25 +1002,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	private ResourceActionsBag _getResourceActionsBag(String name) {
-		ResourceActionsBag resourceActionsBag = _resourceActionsBags.get(name);
-
-		if (resourceActionsBag != null) {
-			return resourceActionsBag;
-		}
-
-		synchronized (_resourceActionsBags) {
-			resourceActionsBag = _resourceActionsBags.get(name);
-
-			if (resourceActionsBag != null) {
-				return resourceActionsBag;
-			}
-
-			resourceActionsBag = new ResourceActionsBag();
-
-			_resourceActionsBags.put(name, resourceActionsBag);
-		}
-
-		return resourceActionsBag;
+		return _resourceActionsBags.get(name);
 	}
 
 	private String _getResourceBundlesString(
@@ -1101,6 +1083,18 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 
 		return types;
+	}
+
+	private void _putResourceActionsBags(
+		String name, ResourceActionsBag resourceActionsBag) {
+
+		synchronized (_resourceActionsBags) {
+			if (_resourceActionsBags.get(name) != null) {
+				return;
+			}
+
+			_resourceActionsBags.put(name, resourceActionsBag);
+		}
 	}
 
 	private void _read(
@@ -1306,7 +1300,11 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		ResourceActionsBag resourceActionsBag = _getResourceActionsBag(name);
 
-		Set<String> resourceActions = resourceActionsBag.getSupportsActions();
+		Set<String> resourceActions = new HashSet<>();
+
+		if (resourceActionsBag != null) {
+			resourceActions.addAll(resourceActionsBag.getSupportsActions());
+		}
 
 		Element supportsElement = _getPermissionsChildElement(
 			resourceElement, "supports");
@@ -1334,29 +1332,26 @@ public class ResourceActionsImpl implements ResourceActions {
 			}
 		}
 
+		Set<String> groupDefaultActions = new HashSet<>();
+
 		if (groupDefaultsElement != null) {
-			Set<String> groupDefaultActions =
-				resourceActionsBag.getGroupDefaultActions();
-
-			groupDefaultActions.clear();
-
 			_readActionKeys(groupDefaultActions, groupDefaultsElement);
 		}
 
-		Set<String> guestDefaultActions =
-			resourceActionsBag.getGuestDefaultActions();
+		Set<String> guestDefaultActions = new HashSet<>();
 
 		Element guestDefaultsElement = _getPermissionsChildElement(
 			resourceElement, "guest-defaults");
 
 		if (guestDefaultsElement != null) {
-			guestDefaultActions.clear();
-
 			_readActionKeys(guestDefaultActions, guestDefaultsElement);
 		}
+		else if (resourceActionsBag != null) {
+			guestDefaultActions.addAll(
+				resourceActionsBag.getGuestDefaultActions());
+		}
 
-		Set<String> guestUnsupportedActions =
-			resourceActionsBag.getGuestUnsupportedActions();
+		Set<String> guestUnsupportedActions = new HashSet<>();
 
 		String resourceElementName = resourceElement.getName();
 
@@ -1369,9 +1364,11 @@ public class ResourceActionsImpl implements ResourceActions {
 			resourceElement, "guest-unsupported");
 
 		if (guestUnsupportedElement != null) {
-			guestUnsupportedActions.clear();
-
 			_readActionKeys(guestUnsupportedActions, guestUnsupportedElement);
+		}
+		else if (resourceActionsBag != null) {
+			guestUnsupportedActions.addAll(
+				resourceActionsBag.getGuestUnsupportedActions());
 		}
 
 		_checkGuestUnsupportedActions(
@@ -1380,27 +1377,38 @@ public class ResourceActionsImpl implements ResourceActions {
 		Element ownerDefaultsElement = _getPermissionsChildElement(
 			resourceElement, "owner-defaults");
 
-		if (ownerDefaultsElement != null) {
-			_readActionKeys(
-				resourceActionsBag.getOwnerDefaultActions(),
-				ownerDefaultsElement);
+		Set<String> ownerDefaultActions = new HashSet<>();
+
+		if (resourceActionsBag != null) {
+			ownerDefaultActions.addAll(
+				resourceActionsBag.getOwnerDefaultActions());
 		}
 
-		Set<String> layoutManagerActions =
-			resourceActionsBag.getLayoutManagerActions();
+		if (ownerDefaultsElement != null) {
+			_readActionKeys(ownerDefaultActions, ownerDefaultsElement);
+		}
+
+		Set<String> layoutManagerActions = new HashSet<>();
 
 		Element layoutManagerElement = _getPermissionsChildElement(
 			resourceElement, "layout-manager");
 
 		if (layoutManagerElement == null) {
 			layoutManagerActions.addAll(resourceActions);
-
-			return;
+		}
+		else {
+			_readActionKeys(layoutManagerActions, layoutManagerElement);
 		}
 
-		layoutManagerActions.clear();
+		if (resourceActionsBag != null) {
+			_resourceActionsBags.remove(name);
+		}
 
-		_readActionKeys(layoutManagerActions, layoutManagerElement);
+		resourceActionsBag = new ResourceActionsBag(
+			groupDefaultActions, guestDefaultActions, guestUnsupportedActions,
+			layoutManagerActions, ownerDefaultActions, resourceActions);
+
+		_putResourceActionsBags(name, resourceActionsBag);
 	}
 
 	private static final String _ACTION_NAME_PREFIX = "action.";
@@ -1436,6 +1444,25 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	private static class ResourceActionsBag {
 
+		public ResourceActionsBag(
+			Set<String> groupDefaultActions, Set<String> guestDefaultActions,
+			Set<String> guestUnsupportedActions,
+			Set<String> layoutManagerActions, Set<String> ownerDefaultActions,
+			Set<String> supportsActions) {
+
+			_groupDefaultActions = Collections.unmodifiableSet(
+				groupDefaultActions);
+			_guestDefaultActions = Collections.unmodifiableSet(
+				guestDefaultActions);
+			_guestUnsupportedActions = Collections.unmodifiableSet(
+				guestUnsupportedActions);
+			_layoutManagerActions = Collections.unmodifiableSet(
+				layoutManagerActions);
+			_ownerDefaultActions = Collections.unmodifiableSet(
+				ownerDefaultActions);
+			_supportsActions = Collections.unmodifiableSet(supportsActions);
+		}
+
 		public Set<String> getGroupDefaultActions() {
 			return _groupDefaultActions;
 		}
@@ -1460,12 +1487,12 @@ public class ResourceActionsImpl implements ResourceActions {
 			return _supportsActions;
 		}
 
-		private final Set<String> _groupDefaultActions = new HashSet<>();
-		private final Set<String> _guestDefaultActions = new HashSet<>();
-		private final Set<String> _guestUnsupportedActions = new HashSet<>();
-		private final Set<String> _layoutManagerActions = new HashSet<>();
-		private final Set<String> _ownerDefaultActions = new HashSet<>();
-		private final Set<String> _supportsActions = new HashSet<>();
+		private final Set<String> _groupDefaultActions;
+		private final Set<String> _guestDefaultActions;
+		private final Set<String> _guestUnsupportedActions;
+		private final Set<String> _layoutManagerActions;
+		private final Set<String> _ownerDefaultActions;
+		private final Set<String> _supportsActions;
 
 	}
 
