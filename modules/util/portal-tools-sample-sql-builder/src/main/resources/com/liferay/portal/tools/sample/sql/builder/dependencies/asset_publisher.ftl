@@ -9,14 +9,14 @@
 	${dataFactory.toInsertSQL(assetVocabularyModel)}
 </#list>
 
-<#list assetCategoryModelsMap?keys as key>
-	<#list assetCategoryModelsMap[key] as assetCategoryModel>
+<#list assetCategoryModelsMap?values as assetCategoryModels>
+	<#list assetCategoryModels as assetCategoryModel>
 		${dataFactory.toInsertSQL(assetCategoryModel)}
 	</#list>
 </#list>
 
-<#list assetTagModelsMap?keys as key>
-	<#list assetTagModelsMap[key] as assetTagModel>
+<#list assetTagModelsMap?values as assetTagModels>
+	<#list assetTagModels as assetTagModel>
 		${dataFactory.toInsertSQL(assetTagModel)}
 	</#list>
 </#list>
