@@ -590,10 +590,6 @@ public class DataFactory {
 		return sequence;
 	}
 
-	public String getStringClassNameId(long classNameId) {
-		return String.valueOf(classNameId);
-	}
-
 	public RoleModel getUserRoleModel() {
 		return _userRoleModel;
 	}

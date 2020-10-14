@@ -10,7 +10,7 @@
 	${dataFactory.toInsertSQL(assetEntryModel)}
 
 	<#if _assetCategoryModelsMap??>
-		<#local assetCategoryIds = dataFactory.getAssetCategoryIds(assetEntryModel, _assetCategoryModelsMap[dataFactory.getStringClassNameId(assetEntryModel.classNameId)])>
+		<#local assetCategoryIds = dataFactory.getAssetCategoryIds(assetEntryModel, _assetCategoryModelsMap[assetEntryModel.classNameId?string])>
 
 		<#list assetCategoryIds as assetCategoryId>
 			<#local assetEntryAssetCategoryRelId = dataFactory.getCounterNext()>
@@ -20,7 +20,7 @@
 	</#if>
 
 	<#if _assetTagModelsMap??>
-		<#local assetTagIds = dataFactory.getAssetTagIds(assetEntryModel, _assetTagModelsMap[dataFactory.getStringClassNameId(assetEntryModel.classNameId)])>
+		<#local assetTagIds = dataFactory.getAssetTagIds(assetEntryModel, _assetTagModelsMap[assetEntryModel.classNameId?string])>
 
 		<#list assetTagIds as assetTagId>
 			${dataFactory.toInsertSQL("AssetEntries_AssetTags", assetEntryModel.companyId, assetEntryModel.entryId, assetTagId)}
