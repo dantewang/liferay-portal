@@ -1009,10 +1009,8 @@ public class ResourceActionsImpl implements ResourceActions {
 				guestUnsupportedActions, layoutManagerActions, new HashSet<>(),
 				portletActions);
 
-			_putResourceActionsBags(name, resourceActionsBag);
+			return _putResourceActionsBags(name, resourceActionsBag, false);
 		}
-
-		return resourceActionsBag;
 	}
 
 	private ResourceActionsBag _getResourceActionsBag(String name) {
@@ -1099,15 +1097,21 @@ public class ResourceActionsImpl implements ResourceActions {
 		return types;
 	}
 
-	private void _putResourceActionsBags(
-		String name, ResourceActionsBag resourceActionsBag) {
+	private ResourceActionsBag _putResourceActionsBags(
+		String name, ResourceActionsBag resourceActionsBag, boolean force) {
 
 		synchronized (_resourceActionsBags) {
-			if (_resourceActionsBags.get(name) != null) {
-				return;
-			}
+			return _resourceActionsBags.compute(
+				name,
+				(key, value) -> {
+					if (force || (value == null)) {
+						_resourceActionsBags.put(name, resourceActionsBag);
 
-			_resourceActionsBags.put(name, resourceActionsBag);
+						return resourceActionsBag;
+					}
+
+					return value;
+				});
 		}
 	}
 
@@ -1414,15 +1418,11 @@ public class ResourceActionsImpl implements ResourceActions {
 			_readActionKeys(layoutManagerActions, layoutManagerElement);
 		}
 
-		if (resourceActionsBag != null) {
-			_resourceActionsBags.remove(name);
-		}
-
 		resourceActionsBag = new ResourceActionsBag(
 			groupDefaultActions, guestDefaultActions, guestUnsupportedActions,
 			layoutManagerActions, ownerDefaultActions, resourceActions);
 
-		_putResourceActionsBags(name, resourceActionsBag);
+		_putResourceActionsBags(name, resourceActionsBag, true);
 	}
 
 	private static final String _ACTION_NAME_PREFIX = "action.";
