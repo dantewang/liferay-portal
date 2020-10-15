@@ -985,32 +985,28 @@ public class ResourceActionsImpl implements ResourceActions {
 		Set<String> layoutManagerActions = new HashSet<>();
 		Set<String> guestUnsupportedActions = new HashSet<>();
 
-		synchronized (this) {
-			portletActions.addAll(_getPortletMimeTypeActions(name, portlet));
+		portletActions.addAll(_getPortletMimeTypeActions(name, portlet));
 
-			_checkPortletLayoutManagerActions(portletActions);
+		_checkPortletLayoutManagerActions(portletActions);
 
-			portletActions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
+		portletActions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
 
-			groupDefaultActions.add(ActionKeys.VIEW);
+		groupDefaultActions.add(ActionKeys.VIEW);
 
-			guestDefaultActions.add(ActionKeys.VIEW);
+		guestDefaultActions.add(ActionKeys.VIEW);
 
-			_checkPortletLayoutManagerActions(layoutManagerActions);
+		_checkPortletLayoutManagerActions(layoutManagerActions);
 
-			guestUnsupportedActions.addAll(
-				_defaultPortletGuestUnsupportedActions);
+		guestUnsupportedActions.addAll(_defaultPortletGuestUnsupportedActions);
 
-			_checkGuestUnsupportedActions(
-				guestUnsupportedActions, guestDefaultActions);
+		_checkGuestUnsupportedActions(
+			guestUnsupportedActions, guestDefaultActions);
 
-			resourceActionsBag = new ResourceActionsBag(
-				groupDefaultActions, guestDefaultActions,
-				guestUnsupportedActions, layoutManagerActions, new HashSet<>(),
-				portletActions);
+		resourceActionsBag = new ResourceActionsBag(
+			groupDefaultActions, guestDefaultActions, guestUnsupportedActions,
+			layoutManagerActions, new HashSet<>(), portletActions);
 
-			return _putResourceActionsBags(name, resourceActionsBag, false);
-		}
+		return _putResourceActionsBags(name, resourceActionsBag, false);
 	}
 
 	private ResourceActionsBag _getResourceActionsBag(String name) {
