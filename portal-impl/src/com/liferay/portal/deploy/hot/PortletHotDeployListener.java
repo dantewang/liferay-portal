@@ -261,9 +261,41 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 			}
 		}
 
-		processPortletProperties(servletContextName, classLoader);
+		Configuration portletPropertiesConfiguration = null;
+
+		try {
+			portletPropertiesConfiguration =
+				ConfigurationFactoryUtil.getConfiguration(
+					classLoader, "portlet");
+		}
+		catch (Exception exception) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Unable to read portlet.properties");
+			}
+		}
+
+		String[] sources = null;
+
+		if (portletPropertiesConfiguration != null) {
+			Properties portletProperties =
+				portletPropertiesConfiguration.getProperties();
+
+			sources = StringUtil.split(
+				portletProperties.getProperty(
+					PropsKeys.RESOURCE_ACTIONS_CONFIGS));
+		}
+
+		if (sources != null) {
+			ResourceActionsUtil.readModelResources(
+				servletContextName, classLoader, sources);
+		}
 
 		for (Portlet portlet : portlets) {
+			if (sources != null) {
+				ResourceActionsUtil.readPortletResource(
+					portlet, servletContextName, classLoader, sources);
+			}
+
 			ResourceActionsUtil.check(portlet.getPortletId());
 
 			checkResourceBundles(classLoader, portlet);
@@ -447,6 +479,10 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 		}
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
+	 */
+	@Deprecated
 	protected void processPortletProperties(
 			String servletContextName, ClassLoader classLoader)
 		throws Exception {
