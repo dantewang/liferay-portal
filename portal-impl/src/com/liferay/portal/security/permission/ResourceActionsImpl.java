@@ -968,10 +968,8 @@ public class ResourceActionsImpl implements ResourceActions {
 				guestUnsupportedActions, layoutManagerActions, new HashSet<>(),
 				portletActions);
 
-			_putResourceActionsBags(name, resourceActionsBag);
+			return _putResourceActionsBags(name, resourceActionsBag, false);
 		}
-
-		return resourceActionsBag;
 	}
 
 	private ResourceActionsBag _getResourceActionsBag(String name) {
@@ -1070,16 +1068,18 @@ public class ResourceActionsImpl implements ResourceActions {
 		return JS.getSafeName(portletName);
 	}
 
-	private void _putResourceActionsBags(
-		String name, ResourceActionsBag resourceActionsBag) {
+	private ResourceActionsBag _putResourceActionsBags(
+		String name, ResourceActionsBag resourceActionsBag, boolean force) {
 
 		synchronized (_resourceActionsBags) {
-			if (_resourceActionsBags.get(name) != null) {
-				return;
+			if (!force && (_resourceActionsBags.get(name) != null)) {
+				return _resourceActionsBags.get(name);
 			}
 
 			_resourceActionsBags.put(name, resourceActionsBag);
 		}
+
+		return resourceActionsBag;
 	}
 
 	private void _read(
@@ -1378,15 +1378,11 @@ public class ResourceActionsImpl implements ResourceActions {
 			_readActionKeys(layoutManagerActions, layoutManagerElement);
 		}
 
-		if (resourceActionsBag != null) {
-			_resourceActionsBags.remove(name);
-		}
-
 		resourceActionsBag = new ResourceActionsBag(
 			groupDefaultActions, guestDefaultActions, guestUnsupportedActions,
 			layoutManagerActions, ownerDefaultActions, resourceActions);
 
-		_putResourceActionsBags(name, resourceActionsBag);
+		_putResourceActionsBags(name, resourceActionsBag, true);
 	}
 
 	private void _validatePublicId(Document document) {
