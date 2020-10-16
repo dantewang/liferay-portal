@@ -605,28 +605,23 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	@Override
-	public void read(
-			String servletContextName, ClassLoader classLoader, String source)
+	public void read(ClassLoader classLoader, String source)
 		throws ResourceActionsException {
 
 		_read(classLoader, source, null);
 	}
 
 	@Override
-	public void read(
-			String servletContextName, ClassLoader classLoader,
-			String... sources)
+	public void read(ClassLoader classLoader, String... sources)
 		throws ResourceActionsException {
 
 		for (String source : sources) {
-			read(servletContextName, classLoader, source);
+			read(classLoader, source);
 		}
 	}
 
 	@Override
-	public void read(
-			String servletContextName, Document document,
-			Set<String> portletNames)
+	public void read(Document document, Set<String> portletNames)
 		throws ResourceActionsException {
 
 		DocumentType documentType = document.getDocumentType();
@@ -644,10 +639,46 @@ public class ResourceActionsImpl implements ResourceActions {
 		_read(document, portletNames);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
-	public void readAndCheck(
+	public void read(
+			String servletContextName, ClassLoader classLoader, String source)
+		throws ResourceActionsException {
+
+		read(classLoader, source);
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
+	@Override
+	public void read(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
+		throws ResourceActionsException {
+
+		read(classLoader, sources);
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
+	@Override
+	public void read(
+			String servletContextName, Document document,
+			Set<String> portletNames)
+		throws ResourceActionsException {
+
+		read(document, portletNames);
+	}
+
+	@Override
+	public void readAndCheck(ClassLoader classLoader, String... sources)
 		throws ResourceActionsException {
 
 		Set<String> portletNames = new HashSet<>();
@@ -659,6 +690,19 @@ public class ResourceActionsImpl implements ResourceActions {
 		for (String portletName : portletNames) {
 			check(portletName);
 		}
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
+	@Override
+	public void readAndCheck(
+			String servletContextName, ClassLoader classLoader,
+			String... sources)
+		throws ResourceActionsException {
+
+		readAndCheck(classLoader, sources);
 	}
 
 	/**
