@@ -3,8 +3,6 @@
 <project basedir="." default="run" name="benchmarks" xmlns:if="ant:if" xmlns:unless="ant:unless">
 	<import file="../build-common.xml" />
 
-	<property file="build.properties" />
-
 	<property name="sample-data-sql" value="sample-data-${sample.sql.db.type}.sql" />
 	<property name="build-db-file" value="../sql/build.xml" />
 
@@ -79,6 +77,8 @@
 			<path refid="project.classpath" />
 		</path>
 
+		<property name="sample.sql.properties.file" value="benchmarks.properties" />
+
 		<java
 			classname="com.liferay.portal.tools.sample.sql.builder.SampleSQLBuilder"
 			classpathref="sample.sql.builder.classpath"
@@ -109,8 +109,6 @@
 	</target>
 
 	<target depends="clean, build-sample-sql" name="merge-sql">
-		<property file="${sample.sql.properties.file}" />
-
 		<concat append="true" destfile="${sample-data-sql}" if:true="${sample.sql.output.merge}">
 			<filelist dir="${sample.sql.output.dir}" files="sample-${sample.sql.db.type}.sql" />
 		</concat>
