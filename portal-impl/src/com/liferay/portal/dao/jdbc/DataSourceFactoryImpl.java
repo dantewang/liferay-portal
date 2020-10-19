@@ -14,6 +14,7 @@
 
 package com.liferay.portal.dao.jdbc;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.dao.jdbc.pool.metrics.C3P0ConnectionPoolMetrics;
@@ -31,6 +32,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.jndi.JNDIUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.JavaDetector;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -54,6 +56,8 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import java.io.Closeable;
 
+import java.lang.reflect.Field;
+
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -63,8 +67,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 import javax.management.MBeanServer;
@@ -73,6 +80,9 @@ import javax.management.ObjectName;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
 
 import javax.sql.DataSource;
 
@@ -667,6 +677,40 @@ public class DataSourceFactoryImpl implements DataSourceFactory {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		DataSourceFactoryImpl.class);
+
+	static {
+
+		// https://issues.liferay.com/browse/LPS-120753
+
+		if (JavaDetector.isIBM() &&
+			Objects.equals(
+				PropsUtil.get(PropsKeys.JDBC_DEFAULT_DRIVER_CLASS_NAME),
+				"com.mysql.jdbc.Driver")) {
+
+			try {
+				Field allowedCiphersField = ReflectionUtil.getDeclaredField(
+					Class.forName("com.mysql.cj.protocol.ExportControlled"),
+					"ALLOWED_CIPHERS");
+
+				List<String> allowedCiphers =
+					(List<String>)allowedCiphersField.get(null);
+
+				SSLContext sslContext = SSLContext.getDefault();
+
+				SSLEngine engine = sslContext.createSSLEngine();
+
+				Collections.addAll(
+					allowedCiphers, engine.getSupportedCipherSuites());
+			}
+			catch (Exception exception) {
+				_log.error(
+					"Unable to populate IBM JDK TLS cipher suite into MySQL " +
+						"Connector/J's allowed cipher list, consider disable " +
+							"SSL for connection",
+					exception);
+			}
+		}
+	}
 
 	private ServiceTracker<MBeanServer, MBeanServer> _serviceTracker;
 
