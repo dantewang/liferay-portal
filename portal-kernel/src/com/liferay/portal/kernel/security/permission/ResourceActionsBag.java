@@ -36,6 +36,8 @@ public interface ResourceActionsBag {
 
 	public List<String> getPortletResourceActions();
 
+	public ResourceActionsBag getPortletResourceActionsBag(String name);
+
 	public List<String> getPortletResourceGroupDefaultActions();
 
 	public List<String> getPortletResourceGuestDefaultActions();
