@@ -3,6 +3,8 @@
 <project basedir="." default="run" name="benchmarks">
 	<import file="../build-common.xml" />
 
+	<property name="sample.sql.properties.file" value="benchmarks.properties" />
+	<property file="${sample.sql.properties.file}" />
 	<property file="benchmarks.properties" />
 
 	<property name="sample-data-sql" value="sample-data-${sample.sql.db.type}.sql" />
@@ -78,8 +80,6 @@
 			/>
 			<path refid="project.classpath" />
 		</path>
-
-		<property name="sample.sql.properties.file" value="benchmarks.properties" />
 
 		<java
 			classname="com.liferay.portal.tools.sample.sql.builder.SampleSQLBuilder"
