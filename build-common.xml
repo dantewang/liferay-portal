@@ -33,12 +33,6 @@
 	<property file="${project.dir}/release.${env.HOSTNAME}.properties" />
 	<property file="${project.dir}/release.properties" />
 
-	<property file="${project.dir}/benchmarks/benchmarks.${user.name}.properties" />
-	<property file="${project.dir}/benchmarks/benchmarks.${env.COMPUTERNAME}.properties" />
-	<property file="${project.dir}/benchmarks/benchmarks.${env.HOST}.properties" />
-	<property file="${project.dir}/benchmarks/benchmarks.${env.HOSTNAME}.properties" />
-	<property file="${project.dir}/benchmarks/benchmarks.properties" />
-
 	<property file="${project.dir}/sql/sql.profile-dxp.properties" />
 	<property file="${project.dir}/sql/sql.${user.name}.properties" />
 	<property file="${project.dir}/sql/sql.${env.COMPUTERNAME}.properties" />
