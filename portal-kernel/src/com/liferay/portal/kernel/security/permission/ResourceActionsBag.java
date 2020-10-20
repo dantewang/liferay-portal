@@ -34,6 +34,8 @@ public interface ResourceActionsBag {
 
 	public Set<String> getOwnerDefaultActions();
 
+	public ResourceActionsBag getPortletResourceActionsBag(String name);
+
 	public Set<String> getSupportsActions();
 
 }

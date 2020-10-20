@@ -14,9 +14,21 @@
 
 package com.liferay.portal.internal.security.permission;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Portlet;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.ResourceActionsBag;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagPool;
+import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
+import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -65,9 +77,128 @@ public class ResourceActionsBagImpl implements ResourceActionsBag {
 	}
 
 	@Override
+	public ResourceActionsBag getPortletResourceActionsBag(String name) {
+		ResourceActionsBag resourceActionsBag = ResourceActionsBagPool.get(
+			name);
+
+		if (resourceActionsBag != null) {
+			return resourceActionsBag;
+		}
+
+		Portlet portlet = PortletLocalServiceUtil.getPortletById(name);
+
+		Set<String> portletActions = new HashSet<>();
+		Set<String> groupDefaultActions = new HashSet<>();
+		Set<String> guestDefaultActions = new HashSet<>();
+		Set<String> layoutManagerActions = new HashSet<>();
+		Set<String> guestUnsupportedActions = new HashSet<>();
+
+		portletActions.addAll(_getPortletMimeTypeActions(name, portlet));
+
+		_checkPortletLayoutManagerActions(portletActions);
+
+		portletActions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
+
+		groupDefaultActions.add(ActionKeys.VIEW);
+
+		guestDefaultActions.add(ActionKeys.VIEW);
+
+		_checkPortletLayoutManagerActions(layoutManagerActions);
+
+		guestUnsupportedActions.addAll(_defaultPortletGuestUnsupportedActions);
+
+		_checkGuestUnsupportedActions(
+			guestUnsupportedActions, guestDefaultActions);
+
+		resourceActionsBag = new ResourceActionsBagImpl(
+			groupDefaultActions, guestDefaultActions, guestUnsupportedActions,
+			layoutManagerActions, new HashSet<>(), portletActions);
+
+		return ResourceActionsBagPool.put(name, resourceActionsBag, false);
+	}
+
+	@Override
 	public Set<String> getSupportsActions() {
 		return _supportsActions;
 	}
+
+	private void _checkGuestUnsupportedActions(
+		Set<String> guestUnsupportedActions, Set<String> guestDefaultActions) {
+
+		// Guest default actions cannot reference guest unsupported actions
+
+		Iterator<String> iterator = guestDefaultActions.iterator();
+
+		while (iterator.hasNext()) {
+			String actionId = iterator.next();
+
+			if (guestUnsupportedActions.contains(actionId)) {
+				iterator.remove();
+			}
+		}
+	}
+
+	private void _checkPortletLayoutManagerActions(Set<String> actions) {
+		if (!actions.contains(ActionKeys.ACCESS_IN_CONTROL_PANEL) &&
+			!actions.contains(ActionKeys.ADD_TO_PAGE)) {
+
+			actions.add(ActionKeys.ADD_TO_PAGE);
+		}
+
+		actions.add(ActionKeys.CONFIGURATION);
+		actions.add(ActionKeys.PERMISSIONS);
+		actions.add(ActionKeys.PREFERENCES);
+		actions.add(ActionKeys.VIEW);
+	}
+
+	private Set<String> _getPortletMimeTypeActions(
+		String name, Portlet portlet) {
+
+		Set<String> actions = new LinkedHashSet<>();
+
+		if (portlet != null) {
+			Map<String, Set<String>> portletModes = portlet.getPortletModes();
+
+			Set<String> mimeTypePortletModes = portletModes.get(
+				ContentTypes.TEXT_HTML);
+
+			if (mimeTypePortletModes != null) {
+				for (String actionId : mimeTypePortletModes) {
+					if (StringUtil.equalsIgnoreCase(actionId, "edit")) {
+						actions.add(ActionKeys.PREFERENCES);
+					}
+					else if (StringUtil.equalsIgnoreCase(
+								actionId, "edit_guest")) {
+
+						actions.add(ActionKeys.GUEST_PREFERENCES);
+					}
+					else {
+						actions.add(StringUtil.toUpperCase(actionId));
+					}
+				}
+			}
+		}
+		else {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Unable to obtain resource actions for unknown portlet " +
+						name);
+			}
+		}
+
+		return actions;
+	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		ResourceActionsBagImpl.class);
+
+	private static final Set<String> _defaultPortletGuestUnsupportedActions =
+		new HashSet<String>() {
+			{
+				add(ActionKeys.CONFIGURATION);
+				add(ActionKeys.PERMISSIONS);
+			}
+		};
 
 	private final Set<String> _groupDefaultActions;
 	private final Set<String> _guestDefaultActions;
