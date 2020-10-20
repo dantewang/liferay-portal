@@ -3,6 +3,8 @@
 <project basedir="." default="run" name="benchmarks" xmlns:if="ant:if" xmlns:unless="ant:unless">
 	<import file="../build-common.xml" />
 
+	<property file="benchmarks.properties" />
+
 	<property name="sample-data-sql" value="sample-data-${sample.sql.db.type}.sql" />
 	<property name="build-db-file" value="../sql/build.xml" />
 
