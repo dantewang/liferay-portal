@@ -1440,60 +1440,6 @@ public class ResourceActionsImpl implements ResourceActions {
 	private final Map<String, Set<String>> _resourceReferences =
 		new ConcurrentHashMap<>();
 
-	private static class ResourceActionsBag {
-
-		public ResourceActionsBag(
-			Set<String> groupDefaultActions, Set<String> guestDefaultActions,
-			Set<String> guestUnsupportedActions,
-			Set<String> layoutManagerActions, Set<String> ownerDefaultActions,
-			Set<String> supportsActions) {
-
-			_groupDefaultActions = Collections.unmodifiableSet(
-				groupDefaultActions);
-			_guestDefaultActions = Collections.unmodifiableSet(
-				guestDefaultActions);
-			_guestUnsupportedActions = Collections.unmodifiableSet(
-				guestUnsupportedActions);
-			_layoutManagerActions = Collections.unmodifiableSet(
-				layoutManagerActions);
-			_ownerDefaultActions = Collections.unmodifiableSet(
-				ownerDefaultActions);
-			_supportsActions = Collections.unmodifiableSet(supportsActions);
-		}
-
-		public Set<String> getGroupDefaultActions() {
-			return _groupDefaultActions;
-		}
-
-		public Set<String> getGuestDefaultActions() {
-			return _guestDefaultActions;
-		}
-
-		public Set<String> getGuestUnsupportedActions() {
-			return _guestUnsupportedActions;
-		}
-
-		public Set<String> getLayoutManagerActions() {
-			return _layoutManagerActions;
-		}
-
-		public Set<String> getOwnerDefaultActions() {
-			return _ownerDefaultActions;
-		}
-
-		public Set<String> getSupportsActions() {
-			return _supportsActions;
-		}
-
-		private final Set<String> _groupDefaultActions;
-		private final Set<String> _guestDefaultActions;
-		private final Set<String> _guestUnsupportedActions;
-		private final Set<String> _layoutManagerActions;
-		private final Set<String> _ownerDefaultActions;
-		private final Set<String> _supportsActions;
-
-	}
-
 	private static class ResourceBundleLoaderListHolder {
 
 		private static final ServiceTrackerList<ResourceBundleLoader>
