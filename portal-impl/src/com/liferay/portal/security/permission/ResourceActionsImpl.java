@@ -18,6 +18,7 @@ import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.internal.security.permission.ResourceActionsBagImpl;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.exception.NoSuchResourceActionException;
 import com.liferay.portal.kernel.exception.ResourceActionsException;
@@ -34,6 +35,7 @@ import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.resource.bundle.ResourceBundleLoader;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBag;
 import com.liferay.portal.kernel.service.GroupServiceUtil;
 import com.liferay.portal.kernel.service.PortletLocalService;
 import com.liferay.portal.kernel.service.ResourceActionLocalService;
@@ -1002,7 +1004,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		_checkGuestUnsupportedActions(
 			guestUnsupportedActions, guestDefaultActions);
 
-		resourceActionsBag = new ResourceActionsBag(
+		resourceActionsBag = new ResourceActionsBagImpl(
 			groupDefaultActions, guestDefaultActions, guestUnsupportedActions,
 			layoutManagerActions, new HashSet<>(), portletActions);
 
@@ -1414,7 +1416,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			_readActionKeys(layoutManagerActions, layoutManagerElement);
 		}
 
-		resourceActionsBag = new ResourceActionsBag(
+		resourceActionsBag = new ResourceActionsBagImpl(
 			groupDefaultActions, guestDefaultActions, guestUnsupportedActions,
 			layoutManagerActions, ownerDefaultActions, resourceActions);
 
