@@ -26,7 +26,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -118,12 +117,16 @@ public class ResourceActionsBagImpl implements ResourceActionsBag {
 
 		guestDefaultActions.add(ActionKeys.VIEW);
 
-		_checkPortletLayoutManagerActions(layoutManagerActions);
+		Collections.addAll(
+			layoutManagerActions,
+			new String[] {
+				ActionKeys.ADD_TO_PAGE, ActionKeys.CONFIGURATION,
+				ActionKeys.PERMISSIONS, ActionKeys.PREFERENCES, ActionKeys.VIEW
+			});
 
-		guestUnsupportedActions.addAll(_defaultPortletGuestUnsupportedActions);
-
-		_checkGuestUnsupportedActions(
-			guestUnsupportedActions, guestDefaultActions);
+		Collections.addAll(
+			guestUnsupportedActions,
+			new String[] {ActionKeys.CONFIGURATION, ActionKeys.PERMISSIONS});
 
 		resourceActionsBag = new ResourceActionsBagImpl(
 			groupDefaultActions, guestDefaultActions, guestUnsupportedActions,
@@ -173,22 +176,6 @@ public class ResourceActionsBagImpl implements ResourceActionsBag {
 
 					return value;
 				});
-		}
-	}
-
-	private void _checkGuestUnsupportedActions(
-		Set<String> guestUnsupportedActions, Set<String> guestDefaultActions) {
-
-		// Guest default actions cannot reference guest unsupported actions
-
-		Iterator<String> iterator = guestDefaultActions.iterator();
-
-		while (iterator.hasNext()) {
-			String actionId = iterator.next();
-
-			if (guestUnsupportedActions.contains(actionId)) {
-				iterator.remove();
-			}
 		}
 	}
 
@@ -246,13 +233,6 @@ public class ResourceActionsBagImpl implements ResourceActionsBag {
 	private static final Log _log = LogFactoryUtil.getLog(
 		ResourceActionsBagImpl.class);
 
-	private static final Set<String> _defaultPortletGuestUnsupportedActions =
-		new HashSet<String>() {
-			{
-				add(ActionKeys.CONFIGURATION);
-				add(ActionKeys.PERMISSIONS);
-			}
-		};
 	private static final Map<String, ResourceActionsBag> _resourceActionsBags =
 		new ConcurrentHashMap<>();
 
