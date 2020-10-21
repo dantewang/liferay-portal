@@ -77,16 +77,44 @@ public interface ResourceActions {
 
 	public String getModelResource(Locale locale, String name);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             ResourceActionsBagUtil#getModelResourceActions(String)}
+	 */
+	@Deprecated
 	public List<String> getModelResourceActions(String name);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             ResourceActionsBagUtil#getModelResourceGroupDefaultActions(
+	 *             String)}
+	 */
+	@Deprecated
 	public List<String> getModelResourceGroupDefaultActions(String name);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             ResourceActionsBagUtil#getModelResourceGuestDefaultActions(
+	 *             String)}
+	 */
+	@Deprecated
 	public List<String> getModelResourceGuestDefaultActions(String name);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 ResourceActionsBagUtil#getModelResourceGuestUnsupportedActions(String)}
+	 */
+	@Deprecated
 	public List<String> getModelResourceGuestUnsupportedActions(String name);
 
 	public String getModelResourceNamePrefix();
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             ResourceActionsBagUtil#getModelResourceOwnerDefaultActions(
+	 *             String)}
+	 */
+	@Deprecated
 	public List<String> getModelResourceOwnerDefaultActions(String name);
 
 	public Double getModelResourceWeight(String name);
@@ -119,20 +147,57 @@ public interface ResourceActions {
 	@Deprecated
 	public List<String> getPortletResourceActions(Portlet portlet);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *                   ResourceActionsBagUtil#getPortletResourceActions(
+	 *                   String)}
+	 */
+	@Deprecated
 	public List<String> getPortletResourceActions(String name);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             ResourceActionsBagUtil#getPortletResourceGroupDefaultActions(
+	 *             String)}
+	 */
+	@Deprecated
 	public List<String> getPortletResourceGroupDefaultActions(String name);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 ResourceActionsBagUtil#getPortletResourceGuestDefaultActions(String)}
+	 */
+	@Deprecated
 	public List<String> getPortletResourceGuestDefaultActions(String name);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 ResourceActionsBagUtil#getPortletResourceGuestUnsupportedActions(String)}
+	 */
+	@Deprecated
 	public List<String> getPortletResourceGuestUnsupportedActions(String name);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 ResourceActionsBagUtil#getPortletResourceLayoutManagerActions(String)}
+	 */
+	@Deprecated
 	public List<String> getPortletResourceLayoutManagerActions(String name);
 
 	public String getPortletRootModelResource(String portletName);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             ResourceActionsBagUtil#getResourceActions(String)}
+	 */
+	@Deprecated
 	public List<String> getResourceActions(String name);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             ResourceActionsBagUtil#getResourceActions(String, String)}
+	 */
+	@Deprecated
 	public List<String> getResourceActions(
 		String portletResource, String modelResource);
 
@@ -142,6 +207,12 @@ public interface ResourceActions {
 	@Deprecated
 	public List<String> getResourceGroupDefaultActions(String name);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             ResourceActionsBagUtil#getResourceGuestUnsupportedActions(
+	 *             String, String)}
+	 */
+	@Deprecated
 	public List<String> getResourceGuestUnsupportedActions(
 		String portletResource, String modelResource);
 

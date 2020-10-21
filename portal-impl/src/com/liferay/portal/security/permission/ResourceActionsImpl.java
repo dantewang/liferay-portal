@@ -267,21 +267,44 @@ public class ResourceActionsImpl implements ResourceActions {
 		return value;
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             ResourceActionsBagUtil#getModelResourceActions(String)}
+	 */
+	@Deprecated
 	@Override
 	public List<String> getModelResourceActions(String name) {
 		return ResourceActionsBagUtil.getModelResourceActions(name);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             ResourceActionsBagUtil#getModelResourceGroupDefaultActions(
+	 *             String)}
+	 */
+	@Deprecated
 	@Override
 	public List<String> getModelResourceGroupDefaultActions(String name) {
 		return ResourceActionsBagUtil.getModelResourceGroupDefaultActions(name);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             ResourceActionsBagUtil#getModelResourceGuestDefaultActions(
+	 *             String)}
+	 */
+	@Deprecated
 	@Override
 	public List<String> getModelResourceGuestDefaultActions(String name) {
 		return ResourceActionsBagUtil.getModelResourceGuestDefaultActions(name);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             ResourceActionsBagUtil
+	 *             #getModelResourceGuestUnsupportedActions(String)}
+	 */
+	@Deprecated
 	@Override
 	public List<String> getModelResourceGuestUnsupportedActions(String name) {
 		return ResourceActionsBagUtil.getModelResourceGuestUnsupportedActions(
@@ -293,6 +316,11 @@ public class ResourceActionsImpl implements ResourceActions {
 		return _MODEL_RESOURCE_NAME_PREFIX;
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 ResourceActionsBagUtil#getModelResourceOwnerDefaultActions(String)}
+	 */
+	@Deprecated
 	@Override
 	public List<String> getModelResourceOwnerDefaultActions(String name) {
 		return ResourceActionsBagUtil.getModelResourceOwnerDefaultActions(name);
@@ -384,29 +412,55 @@ public class ResourceActionsImpl implements ResourceActions {
 		return new ArrayList<>(actions);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *                   ResourceActionsBagUtil#getPortletResourceActions(
+	 *                   String)}
+	 */
+	@Deprecated
 	@Override
 	public List<String> getPortletResourceActions(String name) {
 		return ResourceActionsBagUtil.getPortletResourceActions(name);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 ResourceActionsBagUtil#getPortletResourceGroupDefaultActions(String)}
+	 */
+	@Deprecated
 	@Override
 	public List<String> getPortletResourceGroupDefaultActions(String name) {
 		return ResourceActionsBagUtil.getPortletResourceGroupDefaultActions(
 			name);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 ResourceActionsBagUtil#getPortletResourceGuestDefaultActions(String)}
+	 */
+	@Deprecated
 	@Override
 	public List<String> getPortletResourceGuestDefaultActions(String name) {
 		return ResourceActionsBagUtil.getPortletResourceGuestDefaultActions(
 			name);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 ResourceActionsBagUtil#getPortletResourceGuestUnsupportedActions(String)}
+	 */
+	@Deprecated
 	@Override
 	public List<String> getPortletResourceGuestUnsupportedActions(String name) {
 		return ResourceActionsBagUtil.getPortletResourceGuestUnsupportedActions(
 			name);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 ResourceActionsBagUtil#getPortletResourceLayoutManagerActions(String)}
+	 */
+	@Deprecated
 	@Override
 	public List<String> getPortletResourceLayoutManagerActions(String name) {
 		return ResourceActionsBagUtil.getPortletResourceLayoutManagerActions(
@@ -419,6 +473,11 @@ public class ResourceActionsImpl implements ResourceActions {
 			PortletIdCodec.decodePortletName(portletName));
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             ResourceActionsBagUtil#getResourceActions(String)}
+	 */
+	@Deprecated
 	@Override
 	public List<String> getResourceActions(String name) {
 		if (name.indexOf(CharPool.PERIOD) != -1) {
@@ -428,6 +487,11 @@ public class ResourceActionsImpl implements ResourceActions {
 		return getPortletResourceActions(name);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             ResourceActionsBagUtil#getResourceActions(String, String)}
+	 */
+	@Deprecated
 	@Override
 	public List<String> getResourceActions(
 		String portletResource, String modelResource) {
@@ -457,6 +521,11 @@ public class ResourceActionsImpl implements ResourceActions {
 		return getPortletResourceGroupDefaultActions(name);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 ResourceActionsBagUtil#getResourceGuestUnsupportedActions(String, String)}
+	 */
+	@Deprecated
 	@Override
 	public List<String> getResourceGuestUnsupportedActions(
 		String portletResource, String modelResource) {
