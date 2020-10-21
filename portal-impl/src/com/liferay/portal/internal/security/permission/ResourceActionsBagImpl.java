@@ -35,6 +35,15 @@ import java.util.Set;
  */
 public class ResourceActionsBagImpl implements ResourceActionsBag {
 
+	public ResourceActionsBagImpl() {
+		_groupDefaultActions = new HashSet<>();
+		_guestDefaultActions = new HashSet<>();
+		_guestUnsupportedActions = new HashSet<>();
+		_layoutManagerActions = new HashSet<>();
+		_ownerDefaultActions = new HashSet<>();
+		_supportsActions = new HashSet<>();
+	}
+
 	public ResourceActionsBagImpl(
 		Set<String> groupDefaultActions, Set<String> guestDefaultActions,
 		Set<String> guestUnsupportedActions, Set<String> layoutManagerActions,
