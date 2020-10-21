@@ -31,7 +31,7 @@ import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
@@ -568,7 +568,7 @@ public class PortletPermissionImpl implements PortletPermission {
 			portletId = PortletIdCodec.decodePortletName(portletId);
 
 			List<String> layoutManagerActions =
-				ResourceActionsUtil.getPortletResourceLayoutManagerActions(
+				ResourceActionsBagUtil.getPortletResourceLayoutManagerActions(
 					portletId);
 
 			return layoutManagerActions.contains(actionId);

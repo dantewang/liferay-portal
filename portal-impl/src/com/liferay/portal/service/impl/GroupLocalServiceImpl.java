@@ -85,7 +85,7 @@ import com.liferay.portal.kernel.security.auth.RemoteAuthException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.security.permission.RolePermissions;
 import com.liferay.portal.kernel.security.permission.UserBag;
 import com.liferay.portal.kernel.service.GroupService;
@@ -4688,7 +4688,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 	protected void setRolePermissions(Group group, Role role, String name)
 		throws PortalException {
 
-		List<String> actions = ResourceActionsUtil.getModelResourceActions(
+		List<String> actions = ResourceActionsBagUtil.getModelResourceActions(
 			name);
 
 		setRolePermissions(group, role, name, actions.toArray(new String[0]));

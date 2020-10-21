@@ -27,7 +27,7 @@ import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.service.LayoutSetPrototypeLocalServiceUtil;
 import com.liferay.portal.kernel.service.ResourceLocalServiceUtil;
 import com.liferay.portal.kernel.service.ResourcePermissionServiceUtil;
@@ -211,8 +211,8 @@ public class PermissionExportImportTest {
 			Group importGroup, Role role, String importResourcePrimKey)
 		throws Exception {
 
-		List<String> resourceActions = ResourceActionsUtil.getResourceActions(
-			_PORTLET_ID, null);
+		List<String> resourceActions =
+			ResourceActionsBagUtil.getResourceActions(_PORTLET_ID, null);
 
 		Resource resource = ResourceLocalServiceUtil.getResource(
 			TestPropsValues.getCompanyId(), _PORTLET_ID,

@@ -32,11 +32,11 @@ if (Validator.isNotNull(curPortletResource)) {
 	curPortletId = curPortlet.getPortletId();
 }
 
-List<String> resourceActions = ResourceActionsUtil.getResourceActions(curPortletResource, curModelResource);
+List<String> resourceActions = ResourceActionsBagUtil.getResourceActions(curPortletResource, curModelResource);
 
 resourceActions = ListUtil.sort(resourceActions, new ActionComparator(locale));
 
-List<String> guestUnsupportedActions = ResourceActionsUtil.getResourceGuestUnsupportedActions(curPortletResource, curModelResource);
+List<String> guestUnsupportedActions = ResourceActionsBagUtil.getResourceGuestUnsupportedActions(curPortletResource, curModelResource);
 
 List<String> headerNames = new ArrayList<String>();
 

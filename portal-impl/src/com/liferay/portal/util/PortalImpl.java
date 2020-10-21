@@ -119,6 +119,7 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
@@ -7681,7 +7682,8 @@ public class PortalImpl implements Portal {
 		}
 
 		List<String> groupDefaultActions =
-			ResourceActionsUtil.getModelResourceGroupDefaultActions(className);
+			ResourceActionsBagUtil.getModelResourceGroupDefaultActions(
+				className);
 
 		return groupDefaultActions.toArray(new String[0]);
 	}
@@ -7697,7 +7699,8 @@ public class PortalImpl implements Portal {
 		}
 
 		List<String> guestDefaultActions =
-			ResourceActionsUtil.getModelResourceGuestDefaultActions(className);
+			ResourceActionsBagUtil.getModelResourceGuestDefaultActions(
+				className);
 
 		return guestDefaultActions.toArray(new String[0]);
 	}

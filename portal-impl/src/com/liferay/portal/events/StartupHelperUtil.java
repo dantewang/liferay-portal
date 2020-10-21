@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.patcher.PatcherUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.ResourceActionLocalServiceUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeException;
@@ -54,7 +55,7 @@ public class StartupHelperUtil {
 
 			for (String modelName : modelNames) {
 				List<String> actionIds =
-					ResourceActionsUtil.getModelResourceActions(modelName);
+					ResourceActionsBagUtil.getModelResourceActions(modelName);
 
 				ResourceActionLocalServiceUtil.checkResourceActions(
 					modelName, actionIds, true);
@@ -64,7 +65,8 @@ public class StartupHelperUtil {
 
 			for (String portletName : portletNames) {
 				List<String> actionIds =
-					ResourceActionsUtil.getPortletResourceActions(portletName);
+					ResourceActionsBagUtil.getPortletResourceActions(
+						portletName);
 
 				ResourceActionLocalServiceUtil.checkResourceActions(
 					portletName, actionIds, true);

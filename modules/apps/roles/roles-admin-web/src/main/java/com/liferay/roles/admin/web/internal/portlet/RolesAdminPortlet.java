@@ -45,6 +45,7 @@ import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.security.permission.comparator.ActionComparator;
 import com.liferay.portal.kernel.service.GroupService;
@@ -410,20 +411,21 @@ public class RolesAdminPortlet extends MVCPortlet {
 		if (Validator.isNotNull(portletResource)) {
 			resourceActionsMap.put(
 				portletResource,
-				ResourceActionsUtil.getResourceActions(portletResource, null));
+				ResourceActionsBagUtil.getResourceActions(
+					portletResource, null));
 		}
 
 		for (String relatedPortletResource : relatedPortletResources) {
 			resourceActionsMap.put(
 				relatedPortletResource,
-				ResourceActionsUtil.getResourceActions(
+				ResourceActionsBagUtil.getResourceActions(
 					relatedPortletResource, null));
 		}
 
 		for (String modelResource : modelResources) {
 			resourceActionsMap.put(
 				modelResource,
-				ResourceActionsUtil.getResourceActions(null, modelResource));
+				ResourceActionsBagUtil.getResourceActions(null, modelResource));
 		}
 
 		int rootResourceScope = ResourceConstants.SCOPE_COMPANY;
@@ -799,8 +801,8 @@ public class RolesAdminPortlet extends MVCPortlet {
 			portletId);
 
 		if (modelResource != null) {
-			List<String> actions = ResourceActionsUtil.getModelResourceActions(
-				modelResource);
+			List<String> actions =
+				ResourceActionsBagUtil.getModelResourceActions(modelResource);
 
 			if (actions.contains(ActionKeys.VIEW)) {
 				updateAction(

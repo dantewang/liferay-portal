@@ -45,7 +45,7 @@ import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.service.PortletLocalService;
 import com.liferay.portal.kernel.service.PortletPreferencesLocalService;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
@@ -225,8 +225,8 @@ public class DuplicateItemMVCActionCommand
 			plid, PortletIdCodec.encode(portletId, oldInstanceId));
 		String targetResourcePrimKey = PortletPermissionUtil.getPrimaryKey(
 			plid, PortletIdCodec.encode(portletId, newInstanceId));
-		List<String> actionIds = ResourceActionsUtil.getPortletResourceActions(
-			portletId);
+		List<String> actionIds =
+			ResourceActionsBagUtil.getPortletResourceActions(portletId);
 
 		List<Role> roles = _roleLocalService.getGroupRelatedRoles(groupId);
 

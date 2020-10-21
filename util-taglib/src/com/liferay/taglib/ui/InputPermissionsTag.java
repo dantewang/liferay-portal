@@ -15,7 +15,7 @@
 package com.liferay.taglib.ui;
 
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.taglib.util.IncludeTag;
 import com.liferay.taglib.util.PortalIncludeUtil;
 
@@ -48,13 +48,15 @@ public class InputPermissionsTag extends IncludeTag {
 			"liferay-ui:input-permissions:formName", formName);
 		httpServletRequest.setAttribute(
 			"liferay-ui:input-permissions:groupDefaultActions",
-			ResourceActionsUtil.getModelResourceGroupDefaultActions(modelName));
+			ResourceActionsBagUtil.getModelResourceGroupDefaultActions(
+				modelName));
 		httpServletRequest.setAttribute(
 			"liferay-ui:input-permissions:guestDefaultActions",
-			ResourceActionsUtil.getModelResourceGuestDefaultActions(modelName));
+			ResourceActionsBagUtil.getModelResourceGuestDefaultActions(
+				modelName));
 		httpServletRequest.setAttribute(
 			"liferay-ui:input-permissions:guestUnsupportedActions",
-			ResourceActionsUtil.getModelResourceGuestUnsupportedActions(
+			ResourceActionsBagUtil.getModelResourceGuestUnsupportedActions(
 				modelName));
 		httpServletRequest.setAttribute(
 			"liferay-ui:input-permissions:modelName", modelName);
@@ -62,7 +64,7 @@ public class InputPermissionsTag extends IncludeTag {
 			"liferay-ui:input-permissions:reverse", reverse);
 		httpServletRequest.setAttribute(
 			"liferay-ui:input-permissions:supportedActions",
-			ResourceActionsUtil.getModelResourceActions(modelName));
+			ResourceActionsBagUtil.getModelResourceActions(modelName));
 
 		PortalIncludeUtil.include(pageContext, page);
 

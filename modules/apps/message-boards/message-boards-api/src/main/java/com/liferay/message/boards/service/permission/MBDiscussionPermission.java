@@ -25,7 +25,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.BaseModelPermissionChecker;
 import com.liferay.portal.kernel.security.permission.BaseModelPermissionCheckerUtil;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.workflow.WorkflowInstance;
 import com.liferay.portal.kernel.workflow.permission.WorkflowPermissionUtil;
@@ -82,8 +82,8 @@ public class MBDiscussionPermission implements BaseModelPermissionChecker {
 			return false;
 		}
 
-		List<String> resourceActions = ResourceActionsUtil.getResourceActions(
-			className);
+		List<String> resourceActions =
+			ResourceActionsBagUtil.getResourceActions(className);
 
 		if (!resourceActions.contains(actionId)) {
 			return true;

@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.ThemeConstants;
 import com.liferay.portal.kernel.model.role.RoleConstants;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -52,7 +52,7 @@ public class MBUtil {
 		Role guestRole = RoleLocalServiceUtil.getRole(
 			companyId, RoleConstants.GUEST);
 
-		List<String> actionIds = ResourceActionsUtil.getModelResourceActions(
+		List<String> actionIds = ResourceActionsBagUtil.getModelResourceActions(
 			MBMessage.class.getName());
 
 		Map<Long, Set<String>> roleIdsToActionIds =
