@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.model.UserGroupRole;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.membershippolicy.SiteMembershipPolicyUtil;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.EscapableLocalizableFunction;
@@ -239,8 +240,8 @@ public class MembershipRequestLocalServiceImpl
 			group.getCompanyId(), modelResource,
 			ResourceConstants.SCOPE_INDIVIDUAL, String.valueOf(groupId));
 
-		List<String> resourceActions = ResourceActionsUtil.getResourceActions(
-			Group.class.getName());
+		List<String> resourceActions =
+			ResourceActionsBagUtil.getResourceActions(Group.class.getName());
 
 		for (Role role : roles) {
 			String roleName = role.getName();

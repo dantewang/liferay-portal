@@ -113,7 +113,7 @@ portletURL.setParameter("delta", String.valueOf(delta));
 
 		String fullAccessPermissionsDescription = LanguageUtil.format(request, "full-access-x", StringUtil.merge(localizedResourceActions, StringPool.COMMA_AND_SPACE));
 
-		resourceActions = ResourceActionsUtil.getModelResourceGroupDefaultActions(DLFileEntry.class.getName());
+		resourceActions = ResourceActionsBagUtil.getModelResourceGroupDefaultActions(DLFileEntry.class.getName());
 
 		String defaultPermissionsDescription = null;
 

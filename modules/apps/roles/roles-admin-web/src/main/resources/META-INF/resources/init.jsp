@@ -84,6 +84,7 @@ page import="com.liferay.portal.kernel.security.membershippolicy.RoleMembershipP
 page import="com.liferay.portal.kernel.security.membershippolicy.SiteMembershipPolicyUtil" %><%@
 page import="com.liferay.portal.kernel.security.permission.ActionKeys" %><%@
 page import="com.liferay.portal.kernel.security.permission.PermissionConverterUtil" %><%@
+page import="com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil" %><%@
 page import="com.liferay.portal.kernel.security.permission.ResourceActionsUtil" %><%@
 page import="com.liferay.portal.kernel.security.permission.RolePermissions" %><%@
 page import="com.liferay.portal.kernel.security.permission.comparator.ActionComparator" %><%@

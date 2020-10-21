@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
 import com.liferay.portal.kernel.util.PortletCategoryKeys;
 
@@ -119,8 +119,8 @@ public abstract class BaseControlPanelEntry implements ControlPanelEntry {
 			groupId = 0;
 		}
 
-		List<String> resourceActions = ResourceActionsUtil.getResourceActions(
-			portlet.getPortletId());
+		List<String> resourceActions =
+			ResourceActionsBagUtil.getResourceActions(portlet.getPortletId());
 
 		if (resourceActions.contains(ActionKeys.ACCESS_IN_CONTROL_PANEL) &&
 			PortletPermissionUtil.contains(

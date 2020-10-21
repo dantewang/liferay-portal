@@ -18,7 +18,7 @@ import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleWrapper;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.RoleLocalServiceWrapper;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
@@ -49,7 +49,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 /**
  * @author Jorge Ferrer
  */
-@PrepareForTest(ResourceActionsUtil.class)
+@PrepareForTest(ResourceActionsBagUtil.class)
 @RunWith(PowerMockRunner.class)
 public class ModelPermissionsFactoryTest extends PowerMockito {
 
@@ -189,16 +189,18 @@ public class ModelPermissionsFactoryTest extends PowerMockito {
 
 		String className = RandomTestUtil.randomString();
 
-		mockStatic(ResourceActionsUtil.class);
+		mockStatic(ResourceActionsBagUtil.class);
 
 		when(
-			ResourceActionsUtil.getModelResourceGroupDefaultActions(className)
+			ResourceActionsBagUtil.getModelResourceGroupDefaultActions(
+				className)
 		).thenReturn(
 			Arrays.asList(ActionKeys.VIEW)
 		);
 
 		when(
-			ResourceActionsUtil.getModelResourceGuestDefaultActions(className)
+			ResourceActionsBagUtil.getModelResourceGuestDefaultActions(
+				className)
 		).thenReturn(
 			Arrays.asList(ActionKeys.VIEW)
 		);

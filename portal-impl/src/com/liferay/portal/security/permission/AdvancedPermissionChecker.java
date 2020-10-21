@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.model.UserGroupRole;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.security.permission.UserBag;
 import com.liferay.portal.kernel.security.permission.UserBagFactoryUtil;
@@ -150,12 +151,12 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 
 			if (name.indexOf(CharPool.PERIOD) != -1) {
 				guestUnsupportedActions =
-					ResourceActionsUtil.getModelResourceGuestUnsupportedActions(
-						name);
+					ResourceActionsBagUtil.
+						getModelResourceGuestUnsupportedActions(name);
 			}
 			else {
 				guestUnsupportedActions =
-					ResourceActionsUtil.
+					ResourceActionsBagUtil.
 						getPortletResourceGuestUnsupportedActions(name);
 			}
 
@@ -1208,8 +1209,8 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 	private boolean _hasGuestPermission(
 		Group group, String name, String primKey, String actionId) {
 
-		List<String> resourceActions = ResourceActionsUtil.getResourceActions(
-			name);
+		List<String> resourceActions =
+			ResourceActionsBagUtil.getResourceActions(name);
 
 		if (!resourceActions.contains(actionId)) {
 			return false;
@@ -1220,7 +1221,7 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 			// Check unsupported model actions
 
 			List<String> actions =
-				ResourceActionsUtil.getModelResourceGuestUnsupportedActions(
+				ResourceActionsBagUtil.getModelResourceGuestUnsupportedActions(
 					name);
 
 			if (actions.contains(actionId)) {
@@ -1232,8 +1233,8 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 			// Check unsupported portlet actions
 
 			List<String> actions =
-				ResourceActionsUtil.getPortletResourceGuestUnsupportedActions(
-					name);
+				ResourceActionsBagUtil.
+					getPortletResourceGuestUnsupportedActions(name);
 
 			if (actions.contains(actionId)) {
 				return false;

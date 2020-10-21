@@ -42,7 +42,7 @@ import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.service.ImageLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.PortletLocalService;
@@ -293,7 +293,8 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 					PortletPermissionUtil.getPrimaryKey(
 						targetLayout.getPlid(), portletId);
 				List<String> actionIds =
-					ResourceActionsUtil.getPortletResourceActions(resourceName);
+					ResourceActionsBagUtil.getPortletResourceActions(
+						resourceName);
 
 				List<Role> roles = _roleLocalService.getGroupRelatedRoles(
 					targetLayout.getGroupId());

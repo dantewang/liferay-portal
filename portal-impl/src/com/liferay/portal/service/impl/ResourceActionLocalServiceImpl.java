@@ -28,7 +28,7 @@ import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.security.permission.PermissionCacheUtil;
@@ -196,10 +196,12 @@ public class ResourceActionLocalServiceImpl
 			}
 
 			List<String> groupDefaultActions =
-				ResourceActionsUtil.getModelResourceGroupDefaultActions(name);
+				ResourceActionsBagUtil.getModelResourceGroupDefaultActions(
+					name);
 
 			List<String> guestDefaultActions =
-				ResourceActionsUtil.getModelResourceGuestDefaultActions(name);
+				ResourceActionsBagUtil.getModelResourceGuestDefaultActions(
+					name);
 
 			long guestBitwiseValue = 0;
 			long ownerBitwiseValue = 0;

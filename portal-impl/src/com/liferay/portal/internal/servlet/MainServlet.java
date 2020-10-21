@@ -47,6 +47,7 @@ import com.liferay.portal.kernel.portlet.PortletConfigFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletInstanceFactoryUtil;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
@@ -980,7 +981,7 @@ public class MainServlet extends HttpServlet {
 	private void _initResourceActions(List<Portlet> portlets) throws Exception {
 		for (Portlet portlet : portlets) {
 			List<String> portletActions =
-				ResourceActionsUtil.getPortletResourceActions(
+				ResourceActionsBagUtil.getPortletResourceActions(
 					portlet.getPortletId());
 
 			ResourceActionLocalServiceUtil.checkResourceActions(
@@ -992,7 +993,7 @@ public class MainServlet extends HttpServlet {
 
 			for (String modelName : modelNames) {
 				List<String> modelActions =
-					ResourceActionsUtil.getModelResourceActions(modelName);
+					ResourceActionsBagUtil.getModelResourceActions(modelName);
 
 				ResourceActionLocalServiceUtil.checkResourceActions(
 					modelName, modelActions);

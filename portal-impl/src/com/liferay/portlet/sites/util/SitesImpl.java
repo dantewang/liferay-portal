@@ -63,7 +63,7 @@ import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.GroupServiceUtil;
 import com.liferay.portal.kernel.service.ImageLocalServiceUtil;
@@ -455,7 +455,7 @@ public class SitesImpl implements Sites {
 				targetLayout.getPlid(), sourcePortletId);
 
 			List<String> actionIds =
-				ResourceActionsUtil.getPortletResourceActions(resourceName);
+				ResourceActionsBagUtil.getPortletResourceActions(resourceName);
 
 			for (Role role : roles) {
 				String roleName = role.getName();

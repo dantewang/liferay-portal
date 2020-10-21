@@ -36,6 +36,7 @@ import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
@@ -119,8 +120,9 @@ public class PortletConfigurationPermissionsDisplayContext {
 			return _actions;
 		}
 
-		List<String> resourceActions = ResourceActionsUtil.getResourceActions(
-			_getPortletResource(), getModelResource());
+		List<String> resourceActions =
+			ResourceActionsBagUtil.getResourceActions(
+				_getPortletResource(), getModelResource());
 
 		if (Objects.equals(getModelResource(), Group.class.getName())) {
 			long modelResourceGroupId = GetterUtil.getLong(
@@ -217,7 +219,7 @@ public class PortletConfigurationPermissionsDisplayContext {
 		}
 
 		List<String> guestUnsupportedActions =
-			ResourceActionsUtil.getResourceGuestUnsupportedActions(
+			ResourceActionsBagUtil.getResourceGuestUnsupportedActions(
 				_getPortletResource(), getModelResource());
 
 		// LPS-32515
