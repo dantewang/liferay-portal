@@ -170,12 +170,29 @@ public interface ResourceActions {
 
 	public boolean isRootModelResource(String modelResource);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #readPortletResources(ClassLoader, String[])} and
+	 *             {@link #readModelResources(ClassLoader, String[])}
+	 */
+	@Deprecated
 	public void read(ClassLoader classLoader, String source)
 		throws ResourceActionsException;
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #readPortletResources(ClassLoader, String[])} and
+	 *             {@link #readModelResources(ClassLoader, String[])}
+	 */
+	@Deprecated
 	public void read(ClassLoader classLoader, String... sources)
 		throws ResourceActionsException;
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #readModelResources(Document)}
+	 */
+	@Deprecated
 	public void read(Document document, Set<String> resourceNames)
 		throws ResourceActionsException;
 
@@ -205,6 +222,12 @@ public interface ResourceActions {
 			Set<String> resourceNames)
 		throws ResourceActionsException;
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #readModelResources(ClassLoader, String[])} and
+	 *             {@link #checkResourceActions(Set)}
+	 */
+	@Deprecated
 	public void readAndCheck(ClassLoader classLoader, String... sources)
 		throws ResourceActionsException;
 

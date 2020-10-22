@@ -613,6 +613,12 @@ public class ResourceActionsImpl implements ResourceActions {
 		return false;
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #readPortletResources(ClassLoader, String[])} and
+	 *             {@link #readModelResources(ClassLoader, String[])}
+	 */
+	@Deprecated
 	@Override
 	public void read(ClassLoader classLoader, String source)
 		throws ResourceActionsException {
@@ -626,6 +632,12 @@ public class ResourceActionsImpl implements ResourceActions {
 			rootElement -> _readModelResource(rootElement, null));
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #readPortletResources(ClassLoader, String[])} and
+	 *             {@link #readModelResources(ClassLoader, String[])}
+	 */
+	@Deprecated
 	@Override
 	public void read(ClassLoader classLoader, String... sources)
 		throws ResourceActionsException {
@@ -635,6 +647,11 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #readModelResources(Document)}
+	 */
+	@Deprecated
 	@Override
 	public void read(Document document, Set<String> resourceNames)
 		throws ResourceActionsException {
@@ -682,6 +699,12 @@ public class ResourceActionsImpl implements ResourceActions {
 		read(document, resourceNames);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #readModelResources(ClassLoader, String[])} and
+	 *             {@link #checkResourceActions(Set)}
+	 */
+	@Deprecated
 	@Override
 	public void readAndCheck(ClassLoader classLoader, String... sources)
 		throws ResourceActionsException {
