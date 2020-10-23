@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.model.BaseModelListener;
 import com.liferay.portal.kernel.model.ModelListener;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
+import com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil;
 import com.liferay.portal.kernel.service.ResourceActionLocalService;
 import com.liferay.portal.kernel.service.ResourceLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -91,7 +92,7 @@ public class KaleoDefinitionVersionModelListener
 
 		for (String modelName : modelNames) {
 			List<String> modelActions =
-				_resourceActions.getModelResourceActions(modelName);
+				ResourceActionsBagUtil.getModelResourceActions(modelName);
 
 			_resourceActionLocalService.checkResourceActions(
 				modelName, modelActions);
