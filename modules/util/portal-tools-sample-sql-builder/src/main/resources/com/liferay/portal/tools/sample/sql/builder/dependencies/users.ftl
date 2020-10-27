@@ -1,12 +1,12 @@
 <#assign
 	groupIds = dataFactory.getNewUserGroupIds(groupModel.groupId, guestGroupModel)
-	roleIds = [dataFactory.administratorRoleModel.roleId, dataFactory.powerUserRoleModel.roleId, dataFactory.userRoleModel.roleId]
+	roleIds = [dataFactory.administratorRoleId, dataFactory.powerUserRoleId, dataFactory.userRoleId]
 
 	userModels = dataFactory.newUserModels()
 />
 
 <#list userModels as userModel>
-	<#assign userGroupModel = dataFactory.newGroupModel(userModel) />
+	<#assign userGroupModel = dataFactory.newGroupModel(userModel, userClassNameId) />
 
 	<@insertLayout _layoutModel=dataFactory.newLayoutModel(userGroupModel.groupId, "home", "", "") />
 

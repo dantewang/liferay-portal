@@ -3,7 +3,7 @@
 
 	commerceCatalogModel = dataFactory.newCommerceCatalogModel(commerceCurrencyModel)
 
-	commerceCatalogGroupModel = dataFactory.newCommerceCatalogGroupModel(commerceCatalogModel)
+	commerceCatalogGroupModel = dataFactory.newCommerceCatalogGroupModel(commerceCatalogModel, dataFactory.getClassNameId("CommerceCatalog"))
 	commerceChannelModel = dataFactory.newCommerceChannelModel(commerceCurrencyModel)
 	cpTaxCategoryModel = dataFactory.newCPTaxCategoryModel()
 />
@@ -28,7 +28,7 @@ ${dataFactory.toInsertSQL(commerceCurrencyModel)}
 
 		${dataFactory.toInsertSQL(cpDefinitionModel)}
 
-		${dataFactory.toInsertSQL(dataFactory.newCPDefinitionModelAssetEntryModel(cpDefinitionModel, commerceCatalogGroupModel))}
+		${dataFactory.toInsertSQL(dataFactory.newCPDefinitionModelAssetEntryModel(cpDefinitionModel, commerceCatalogGroupModel, dataFactory.getClassNameId("CPDefinition")))}
 
 		${dataFactory.toInsertSQL(dataFactory.newCPDefinitionLocalizationModel(cpDefinitionModel))}
 
@@ -42,4 +42,4 @@ ${dataFactory.toInsertSQL(cpTaxCategoryModel)}
 
 <@insertGroup _groupModel=commerceCatalogGroupModel />
 
-<@insertGroup _groupModel=dataFactory.newCommerceChannelGroupModel(commerceChannelModel) />
+<@insertGroup _groupModel=dataFactory.newCommerceChannelGroupModel(commerceChannelModel, dataFactory.getClassNameId("CommerceChannel")) />

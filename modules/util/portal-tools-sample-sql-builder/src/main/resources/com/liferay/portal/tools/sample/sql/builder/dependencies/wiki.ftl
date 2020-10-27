@@ -1,4 +1,7 @@
-<#assign wikiNodeModels = dataFactory.newWikiNodeModels(groupId) />
+<#assign
+	wikiNodeModels = dataFactory.newWikiNodeModels(groupId)
+	wikiPageClassNameId = dataFactory.getClassNameId("WikiPage")
+/>
 
 <#list wikiNodeModels as wikiNodeModel>
 	${dataFactory.toInsertSQL(wikiNodeModel)}
@@ -8,21 +11,22 @@
 	<#list wikiPageModels as wikiPageModel>
 		${dataFactory.toInsertSQL(wikiPageModel)}
 
-		${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(wikiPageModel))}
+		${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(wikiPageModel, dataFactory.getClassNameId("MBDiscussion_WikiPage")))}
 
-		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(wikiPageModel))}
+		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(wikiPageModel, wikiPageClassNameId))}
 
 		${dataFactory.toInsertSQL(dataFactory.newWikiPageResourceModel(wikiPageModel))}
 
 		<@insertAssetEntry
 			_categoryAndTag=true
+			_classNameIds=[wikiPageClassNameId]
 			_entry=wikiPageModel
 		/>
 
 		<#assign mbRootMessageId = dataFactory.getCounterNext() />
 
 		<@insertMBDiscussion
-			_classNameId=dataFactory.wikiPageClassNameId
+			_classNameId=wikiPageClassNameId
 			_classPK=wikiPageModel.resourcePrimKey
 			_groupId=groupId
 			_maxCommentCount=dataFactory.maxWikiPageCommentCount

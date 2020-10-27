@@ -1,9 +1,12 @@
-<#assign blogsEntryModels = dataFactory.newBlogsEntryModels(groupId) />
+<#assign
+	blogsEntryClassNameId = dataFactory.getClassNameId("BlogsEntry")
+	blogsEntryModels = dataFactory.newBlogsEntryModels(groupId)
+/>
 
 <#list blogsEntryModels as blogsEntryModel>
 	${dataFactory.toInsertSQL(blogsEntryModel)}
 
-	<#assign friendlyURLEntryModel = dataFactory.newFriendlyURLEntryModel(blogsEntryModel) />
+	<#assign friendlyURLEntryModel = dataFactory.newFriendlyURLEntryModel(blogsEntryModel, blogsEntryClassNameId) />
 
 	${dataFactory.toInsertSQL(friendlyURLEntryModel)}
 
@@ -11,17 +14,18 @@
 
 	${dataFactory.toInsertSQL(dataFactory.newFriendlyURLEntryMapping(friendlyURLEntryModel))}
 
-	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(blogsEntryModel))}
+	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(blogsEntryModel, dataFactory.getClassNameId("MBDiscussion_BlogsEntry")))}
 
 	<@insertAssetEntry
 		_categoryAndTag=true
+		_classNameIds=[blogsEntryClassNameId]
 		_entry=blogsEntryModel
 	/>
 
 	<#assign mbRootMessageId = dataFactory.getCounterNext() />
 
 	<@insertMBDiscussion
-		_classNameId=dataFactory.blogsEntryClassNameId
+		_classNameId=blogsEntryClassNameId
 		_classPK=blogsEntryModel.entryId
 		_groupId=groupId
 		_maxCommentCount=dataFactory.maxBlogsEntryCommentCount
@@ -29,9 +33,9 @@
 		_mbThreadId=dataFactory.getCounterNext()
 	/>
 
-	${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(blogsEntryModel))}
+	${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(blogsEntryModel, blogsEntryClassNameId))}
 
-	${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(blogsEntryModel))}
+	${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(blogsEntryModel, blogsEntryClassNameId))}
 
 	${csvFileWriter.write("blog", blogsEntryModel.entryId + "," + blogsEntryModel.urlTitle + "," + mbRootMessageId + "\n")}
 </#list>

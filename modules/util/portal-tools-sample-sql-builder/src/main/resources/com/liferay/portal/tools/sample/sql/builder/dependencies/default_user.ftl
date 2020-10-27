@@ -6,11 +6,11 @@
 
 <#assign guestUserModel = dataFactory.newGuestUserModel() />
 
-<@insertGroup _groupModel=dataFactory.newGroupModel(guestUserModel) />
+<@insertGroup _groupModel=dataFactory.newGroupModel(guestUserModel, userClassNameId) />
 
 <#assign
 	groupIds = [guestGroupModel.groupId]
-	roleIds = [dataFactory.administratorRoleModel.roleId]
+	roleIds = [dataFactory.administratorRoleId]
 />
 
 <@insertUser
@@ -24,7 +24,7 @@
 <#assign
 	sampleUserModel = dataFactory.newSampleUserModel()
 
-	userGroupModel = dataFactory.newGroupModel(sampleUserModel)
+	userGroupModel = dataFactory.newGroupModel(sampleUserModel, userClassNameId)
 
 	layoutModel = dataFactory.newLayoutModel(userGroupModel.groupId, "home", "", "")
 />
@@ -35,7 +35,7 @@
 
 <#assign
 	groupIds = dataFactory.getSequence(dataFactory.maxGroupCount)
-	roleIds = [dataFactory.administratorRoleModel.roleId, dataFactory.powerUserRoleModel.roleId, dataFactory.userRoleModel.roleId]
+	roleIds = [dataFactory.administratorRoleId, dataFactory.powerUserRoleId, dataFactory.userRoleId]
 />
 
 <@insertUser
