@@ -261,9 +261,40 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 			}
 		}
 
-		_processPortletProperties(classLoader);
+		Configuration portletPropertiesConfiguration = null;
+
+		try {
+			portletPropertiesConfiguration =
+				ConfigurationFactoryUtil.getConfiguration(
+					classLoader, "portlet");
+		}
+		catch (Exception exception) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Unable to read portlet.properties");
+			}
+		}
+
+		String[] sources = null;
+
+		if (portletPropertiesConfiguration != null) {
+			Properties portletProperties =
+				portletPropertiesConfiguration.getProperties();
+
+			sources = StringUtil.split(
+				portletProperties.getProperty(
+					PropsKeys.RESOURCE_ACTIONS_CONFIGS));
+		}
+
+		if (sources != null) {
+			ResourceActionsUtil.readModelResources(classLoader, sources);
+		}
 
 		for (Portlet portlet : portlets) {
+			if (sources != null) {
+				ResourceActionsUtil.readPortletResource(
+					portlet, classLoader, sources);
+			}
+
 			ResourceActionsUtil.check(portlet.getPortletId());
 
 			checkResourceBundles(classLoader, portlet);

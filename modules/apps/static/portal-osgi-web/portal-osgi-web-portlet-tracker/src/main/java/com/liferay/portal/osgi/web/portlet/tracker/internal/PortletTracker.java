@@ -45,7 +45,6 @@ import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.portlet.PortletInstanceFactory;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.PortletLocalService;
 import com.liferay.portal.kernel.service.ResourceActionLocalService;
@@ -371,6 +370,18 @@ public class PortletTracker
 			portletBagFactory.setWARFile(true);
 
 			portletBagFactory.create(portletModel, portlet, true);
+
+			String[] sources = serviceRegistrations.getResourceSources();
+
+			if (sources != null) {
+				try {
+					_resourceActions.readPortletResource(
+						portletModel, bundleClassLoader, sources);
+				}
+				catch (Exception exception) {
+					_log.error(exception, exception);
+				}
+			}
 
 			deployPortlet(
 				serviceReference, portletModel,
@@ -1325,23 +1336,6 @@ public class PortletTracker
 		return serviceRegistrations;
 	}
 
-	protected void readResourceActions(
-		Configuration configuration, ClassLoader classLoader) {
-
-		Properties properties = configuration.getProperties();
-
-		try {
-			ResourceActionsUtil.read(
-				classLoader,
-				StringUtil.split(
-					properties.getProperty(
-						PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
-		}
-		catch (Exception exception) {
-			_log.error(exception, exception);
-		}
-	}
-
 	@Reference(unbind = "-")
 	protected void setHttpServiceRuntime(
 		HttpServiceRuntime httpServiceRuntime, Map<String, Object> properties) {
@@ -1522,17 +1516,37 @@ public class PortletTracker
 		}
 
 		protected synchronized void doConfiguration(ClassLoader classLoader) {
-			if (classLoader.getResource("portlet.properties") != null) {
+			if ((_sources == null) &&
+				(classLoader.getResource("portlet.properties") != null)) {
+
 				Configuration configuration =
 					ConfigurationFactoryUtil.getConfiguration(
 						classLoader, "portlet");
 
-				readResourceActions(configuration, classLoader);
+				if (configuration != null) {
+					Properties properties = configuration.getProperties();
+
+					_sources = StringUtil.split(
+						properties.getProperty(
+							PropsKeys.RESOURCE_ACTIONS_CONFIGS));
+
+					try {
+						_resourceActions.readModelResources(
+							classLoader, _sources);
+					}
+					catch (Exception exception) {
+						_log.error(exception, exception);
+					}
+				}
 			}
 		}
 
 		protected synchronized PortletApp getPortletApp() {
 			return _portletApp;
+		}
+
+		protected synchronized String[] getResourceSources() {
+			return _sources;
 		}
 
 		private ServiceRegistrations(Bundle bundle) {
@@ -1543,6 +1557,7 @@ public class PortletTracker
 		private PortletApp _portletApp;
 		private final List<ServiceReference<Portlet>> _serviceReferences =
 			new ArrayList<>();
+		private String[] _sources;
 
 	}
 

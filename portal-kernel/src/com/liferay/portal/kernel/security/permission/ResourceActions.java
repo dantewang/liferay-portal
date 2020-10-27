@@ -51,6 +51,8 @@ public interface ResourceActions {
 	public void checkAction(String name, String actionId)
 		throws NoSuchResourceActionException;
 
+	public void checkResourceActions(Set<String> resourceNames);
+
 	public String getAction(
 		HttpServletRequest httpServletRequest, String action);
 
@@ -168,13 +170,30 @@ public interface ResourceActions {
 
 	public boolean isRootModelResource(String modelResource);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #readPortletResources(ClassLoader, String[])} and
+	 *             {@link #readModelResources(ClassLoader, String[])}
+	 */
+	@Deprecated
 	public void read(ClassLoader classLoader, String source)
 		throws ResourceActionsException;
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #readPortletResources(ClassLoader, String[])} and
+	 *             {@link #readModelResources(ClassLoader, String[])}
+	 */
+	@Deprecated
 	public void read(ClassLoader classLoader, String... sources)
 		throws ResourceActionsException;
 
-	public void read(Document document, Set<String> portletNames)
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #readModelResources(Document)}
+	 */
+	@Deprecated
+	public void read(Document document, Set<String> resourceNames)
 		throws ResourceActionsException;
 
 	/**
@@ -200,9 +219,15 @@ public interface ResourceActions {
 	@Deprecated
 	public void read(
 			String servletContextName, Document document,
-			Set<String> portletNames)
+			Set<String> resourceNames)
 		throws ResourceActionsException;
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #readModelResources(ClassLoader, String[])} and
+	 *             {@link #checkResourceActions(Set)}
+	 */
+	@Deprecated
 	public void readAndCheck(ClassLoader classLoader, String... sources)
 		throws ResourceActionsException;
 
@@ -213,6 +238,21 @@ public interface ResourceActions {
 	public void readAndCheck(
 			String servletContextName, ClassLoader classLoader,
 			String... sources)
+		throws ResourceActionsException;
+
+	public Set<String> readModelResources(
+			ClassLoader classLoader, String... sources)
+		throws ResourceActionsException;
+
+	public Set<String> readModelResources(Document document)
+		throws ResourceActionsException;
+
+	public void readPortletResource(
+			Portlet portlet, ClassLoader classLoader, String... sources)
+		throws ResourceActionsException;
+
+	public Set<String> readPortletResources(
+			ClassLoader classLoader, String... sources)
 		throws ResourceActionsException;
 
 	/**

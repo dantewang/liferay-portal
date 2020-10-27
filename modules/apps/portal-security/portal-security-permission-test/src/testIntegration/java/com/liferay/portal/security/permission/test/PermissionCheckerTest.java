@@ -81,7 +81,11 @@ public class PermissionCheckerTest {
 
 		String packageName = pkg.getName();
 
-		_resourceActions.read(
+		_resourceActions.readPortletResources(
+			PermissionCheckerTest.class.getClassLoader(),
+			StringUtil.replace(packageName, '.', '/') +
+				"/dependencies/resource-actions.xml");
+		_resourceActions.readModelResources(
 			PermissionCheckerTest.class.getClassLoader(),
 			StringUtil.replace(packageName, '.', '/') +
 				"/dependencies/resource-actions.xml");
