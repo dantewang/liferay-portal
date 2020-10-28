@@ -12,6 +12,8 @@
 
 <#include "default_dl_file_type.ftl">
 
+<#include "ResourceAction.ftl">
+
 <#include "groups.ftl">
 
 <#include "roles.ftl">

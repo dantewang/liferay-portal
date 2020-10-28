@@ -14,6 +14,7 @@
 
 package com.liferay.portal.tools.sample.sql.builder;
 
+import com.liferay.announcements.kernel.model.AnnouncementsEntry;
 import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.model.AssetCategoryConstants;
 import com.liferay.asset.kernel.model.AssetCategoryModel;
@@ -57,8 +58,10 @@ import com.liferay.document.library.kernel.model.DLFileEntryConstants;
 import com.liferay.document.library.kernel.model.DLFileEntryMetadata;
 import com.liferay.document.library.kernel.model.DLFileEntryMetadataModel;
 import com.liferay.document.library.kernel.model.DLFileEntryModel;
+import com.liferay.document.library.kernel.model.DLFileEntryType;
 import com.liferay.document.library.kernel.model.DLFileEntryTypeConstants;
 import com.liferay.document.library.kernel.model.DLFileEntryTypeModel;
+import com.liferay.document.library.kernel.model.DLFileShortcut;
 import com.liferay.document.library.kernel.model.DLFileVersionModel;
 import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLFolderModel;
@@ -98,6 +101,7 @@ import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateLinkModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateModelImpl;
 import com.liferay.dynamic.data.mapping.model.impl.DDMTemplateVersionModelImpl;
 import com.liferay.dynamic.data.mapping.storage.StorageType;
+import com.liferay.expando.kernel.model.ExpandoColumn;
 import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.model.FragmentCollectionModel;
 import com.liferay.fragment.model.FragmentEntryLinkModel;
@@ -171,22 +175,32 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.GroupModel;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.model.LayoutBranch;
 import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.model.LayoutFriendlyURLModel;
 import com.liferay.portal.kernel.model.LayoutModel;
+import com.liferay.portal.kernel.model.LayoutPrototype;
+import com.liferay.portal.kernel.model.LayoutSetBranch;
 import com.liferay.portal.kernel.model.LayoutSetModel;
+import com.liferay.portal.kernel.model.LayoutSetPrototype;
 import com.liferay.portal.kernel.model.LayoutTypePortletConstants;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
+import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.PasswordPolicy;
 import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.model.PortletPreferencesModel;
 import com.liferay.portal.kernel.model.ReleaseConstants;
 import com.liferay.portal.kernel.model.ReleaseModel;
+import com.liferay.portal.kernel.model.ResourceAction;
+import com.liferay.portal.kernel.model.ResourceActionModel;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.model.ResourcePermissionModel;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleModel;
+import com.liferay.portal.kernel.model.Team;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.model.UserPersonalSite;
 import com.liferay.portal.kernel.model.VirtualHostModel;
@@ -223,6 +237,7 @@ import com.liferay.portal.model.impl.LayoutModelImpl;
 import com.liferay.portal.model.impl.LayoutSetModelImpl;
 import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
 import com.liferay.portal.model.impl.ReleaseModelImpl;
+import com.liferay.portal.model.impl.ResourceActionModelImpl;
 import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.portal.model.impl.UserModelImpl;
@@ -299,6 +314,7 @@ public class DataFactory {
 		_counter = new SimpleCounter(BenchmarksPropsValues.MAX_GROUP_COUNT + 1);
 		_timeCounter = new SimpleCounter();
 		_futureDateCounter = new SimpleCounter();
+		_resourceActionCounter = new SimpleCounter();
 		_resourcePermissionCounter = new SimpleCounter();
 		_socialActivityCounter = new SimpleCounter();
 		_userScreenNameCounter = new SimpleCounter();
@@ -952,6 +968,47 @@ public class DataFactory {
 		return accountModel;
 	}
 
+	public List<ResourceActionModel>
+		newAnnouncementsEntryResourceActionModels() {
+
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(
+				AnnouncementsEntry.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(
+				AnnouncementsEntry.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(
+				AnnouncementsEntry.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				AnnouncementsEntry.class.getName(), "UPDATE", 8));
+
+		return resourceActionModels;
+	}
+
+	public List<ResourceActionModel> newAssetCategoryResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(AssetCategory.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(AssetCategory.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(
+				AssetCategory.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				AssetCategory.class.getName(), "ADD_CATEGORY", 8));
+		resourceActionModels.add(
+			newResourceActionModel(
+				AssetCategory.class.getName(), "UPDATE", 16));
+
+		return resourceActionModels;
+	}
+
 	public AssetEntryModel newAssetEntryModel(BlogsEntryModel blogsEntryModel) {
 		return newAssetEntryModel(
 			blogsEntryModel.getGroupId(), blogsEntryModel.getCreateDate(),
@@ -1060,6 +1117,45 @@ public class DataFactory {
 				PortletConstants.DEFAULT_PREFERENCES));
 
 		return portletPreferencesModels;
+	}
+
+	public List<ResourceActionModel> newAssetResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel("com.liferay.asset.tags", "PERMISSIONS", 2));
+		resourceActionModels.add(
+			newResourceActionModel("com.liferay.asset.tags", "MANAGE_TAG", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				"com.liferay.asset.categories", "PERMISSIONS", 2));
+		resourceActionModels.add(
+			newResourceActionModel(
+				"com.liferay.asset.categories", "ADD_CATEGORY", 4));
+
+		resourceActionModels.add(
+			newResourceActionModel(
+				"com.liferay.asset.categories", "ADD_VOCABULARY", 8));
+
+		return resourceActionModels;
+	}
+
+	public List<ResourceActionModel> newAssetVocabularyResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(AssetVocabulary.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(
+				AssetVocabulary.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(
+				AssetVocabulary.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				AssetVocabulary.class.getName(), "UPDATE", 8));
+
+		return resourceActionModels;
 	}
 
 	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
@@ -1376,6 +1472,15 @@ public class DataFactory {
 
 		counterModel.setName(FriendlyURLEntryLocalization.class.getName());
 		counterModel.setCurrentId(_counter.get());
+
+		counterModels.add(counterModel);
+
+		// ResourceAction
+
+		counterModel = new CounterModelImpl();
+
+		counterModel.setName(ResourceAction.class.getName());
+		counterModel.setCurrentId(_resourceActionCounter.get());
 
 		counterModels.add(counterModel);
 
@@ -2141,6 +2246,29 @@ public class DataFactory {
 			StringPool.BLANK, true);
 	}
 
+	public List<ResourceActionModel>
+		newDLFileEntryMetadataCombineDDMStructureResourceActionModels() {
+
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		StringBundler sb = new StringBundler(3);
+
+		sb.append(DLFileEntryMetadata.class.getName());
+		sb.append(StringPool.DASH);
+		sb.append(DDMStructure.class.getName());
+
+		resourceActionModels.add(
+			newResourceActionModel(sb.toString(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(sb.toString(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(sb.toString(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(sb.toString(), "UPDATE", 8));
+
+		return resourceActionModels;
+	}
+
 	public DLFileEntryMetadataModel newDLFileEntryMetadataModel(
 		long ddmStorageLinkId, long ddmStructureId,
 		DLFileVersionModel dlFileVersionModel) {
@@ -2183,6 +2311,34 @@ public class DataFactory {
 		return dlFileEntryModels;
 	}
 
+	public List<ResourceActionModel> newDLFileEntryResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(DLFileEntry.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(
+				DLFileEntry.class.getName(), "UPDATE_DISCUSSION", 2));
+		resourceActionModels.add(
+			newResourceActionModel(DLFileEntry.class.getName(), "DELETE", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				DLFileEntry.class.getName(), "OVERRIDE_CHECKOUT", 8));
+		resourceActionModels.add(
+			newResourceActionModel(
+				DLFileEntry.class.getName(), "PERMISSIONS", 16));
+		resourceActionModels.add(
+			newResourceActionModel(
+				DLFileEntry.class.getName(), "DELETE_DISCUSSION", 32));
+		resourceActionModels.add(
+			newResourceActionModel(DLFileEntry.class.getName(), "UPDATE", 64));
+		resourceActionModels.add(
+			newResourceActionModel(
+				DLFileEntry.class.getName(), "ADD_DISCUSSION", 128));
+
+		return resourceActionModels;
+	}
+
 	public DLFileEntryTypeModel newDLFileEntryTypeModel() {
 		DLFileEntryTypeModel defaultDLFileEntryTypeModel =
 			new DLFileEntryTypeModelImpl();
@@ -2219,6 +2375,42 @@ public class DataFactory {
 		defaultDLFileEntryTypeModel.setLastPublishDate(nextFutureDate());
 
 		return defaultDLFileEntryTypeModel;
+	}
+
+	public List<ResourceActionModel> newDLFileEntryTypeResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(DLFileEntryType.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(
+				DLFileEntryType.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(
+				DLFileEntryType.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				DLFileEntryType.class.getName(), "UPDATE", 8));
+
+		return resourceActionModels;
+	}
+
+	public List<ResourceActionModel> newDLFileShortcutResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(DLFileShortcut.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(
+				DLFileShortcut.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(
+				DLFileShortcut.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				DLFileShortcut.class.getName(), "UPDATE", 8));
+
+		return resourceActionModels;
 	}
 
 	public DLFileVersionModel newDLFileVersionModel(
@@ -2275,6 +2467,50 @@ public class DataFactory {
 		}
 
 		return dlFolderModels;
+	}
+
+	public List<ResourceActionModel> newDLFolderResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(DLFolder.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(DLFolder.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(DLFolder.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				DLFolder.class.getName(), "ADD_SUBFOLDER", 8));
+		resourceActionModels.add(
+			newResourceActionModel(
+				DLFolder.class.getName(), "ADD_SHORTCUT", 16));
+		resourceActionModels.add(
+			newResourceActionModel(DLFolder.class.getName(), "UPDATE", 32));
+		resourceActionModels.add(
+			newResourceActionModel(
+				DLFolder.class.getName(), "ADD_DOCUMENT", 64));
+		resourceActionModels.add(
+			newResourceActionModel(DLFolder.class.getName(), "SUBSCRIBE", 128));
+		resourceActionModels.add(
+			newResourceActionModel(DLFolder.class.getName(), "ACCESS", 256));
+
+		return resourceActionModels;
+	}
+
+	public List<ResourceActionModel> newExpandoColumnResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(ExpandoColumn.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(ExpandoColumn.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(
+				ExpandoColumn.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(ExpandoColumn.class.getName(), "UPDATE", 8));
+
+		return resourceActionModels;
 	}
 
 	public FragmentCollectionModel newFragmentCollectionModel(long groupId) {
@@ -2521,6 +2757,83 @@ public class DataFactory {
 		return groupModels;
 	}
 
+	public List<ResourceActionModel> newGroupResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(Group.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(Group.class.getName(), "PERMISSIONS", 2));
+		resourceActionModels.add(
+			newResourceActionModel(Group.class.getName(), "VIEW_MEMBERS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "MANAGE_ANNOUNCEMENTS", 8));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "PUBLISH_STAGING", 16));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "EXPORT_IMPORT_LAYOUTS", 32));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "ASSIGN_USER_ROLES", 64));
+		resourceActionModels.add(
+			newResourceActionModel(Group.class.getName(), "DELETE", 128));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "VIEW_SITE_ADMINISTRATION", 256));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "ASSIGN_MEMBERS", 512));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "MANAGE_LAYOUTS", 1024));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "MANAGE_ARCHIVED_SETUPS", 2048));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "ADD_COMMUNITY", 4096));
+		resourceActionModels.add(
+			newResourceActionModel(Group.class.getName(), "UPDATE", 8192));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "PUBLISH_PORTLET_INFO", 16384));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "ADD_LAYOUT_SET_BRANCH", 32768));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "PREVIEW_IN_DEVICE", 65536));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "MANAGE_TEAMS", 131072));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "ADD_LAYOUT", 262144));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "ADD_LAYOUT_BRANCH", 524288));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "MANAGE_SUBGROUPS", 1048576));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "VIEW_STAGING", 2097192));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "EXPORT_IMPORT_PORTLET_INFO", 4194306));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "CONFIGURE_PORTLETS", 8388608));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Group.class.getName(), "MANAGE_STAGING", 16777216));
+
+		return resourceActionModels;
+	}
+
 	public GroupModel newGuestGroupModel() {
 		return newGroupModel(
 			_guestGroupId, getClassNameId(Group.class), _guestGroupId,
@@ -2738,6 +3051,20 @@ public class DataFactory {
 				PortletConstants.DEFAULT_PREFERENCES));
 	}
 
+	public List<ResourceActionModel> newLayoutBranchResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(LayoutBranch.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(
+				LayoutBranch.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(LayoutBranch.class.getName(), "UPDATE", 8));
+
+		return resourceActionModels;
+	}
+
 	public LayoutFriendlyURLModel newLayoutFriendlyURLModel(
 		LayoutModel layoutModel) {
 
@@ -2918,6 +3245,77 @@ public class DataFactory {
 		return layoutPageTemplateStructureRelModel;
 	}
 
+	public List<ResourceActionModel> newLayoutPrototypeResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(LayoutPrototype.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(
+				LayoutPrototype.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(
+				LayoutPrototype.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				LayoutPrototype.class.getName(), "UPDATE", 8));
+
+		return resourceActionModels;
+	}
+
+	public List<ResourceActionModel> newLayoutResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(Layout.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Layout.class.getName(), "UPDATE_DISCUSSION", 2));
+		resourceActionModels.add(
+			newResourceActionModel(Layout.class.getName(), "DELETE", 4));
+		resourceActionModels.add(
+			newResourceActionModel(Layout.class.getName(), "PERMISSIONS", 8));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Layout.class.getName(), "UPDATE_LAYOUT_CONTENT", 16));
+		resourceActionModels.add(
+			newResourceActionModel(Layout.class.getName(), "CUSTOMIZE", 32));
+		resourceActionModels.add(
+			newResourceActionModel(Layout.class.getName(), "ADD_LAYOUT", 64));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Layout.class.getName(), "DELETE_DISCUSSION", 128));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Layout.class.getName(), "CONFIGURE_PORTLETS", 256));
+		resourceActionModels.add(
+			newResourceActionModel(Layout.class.getName(), "UPDATE", 512));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Layout.class.getName(), "ADD_DISCUSSION", 1024));
+
+		return resourceActionModels;
+	}
+
+	public List<ResourceActionModel> newLayoutSetBranchResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(
+				LayoutSetBranch.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(
+				LayoutSetBranch.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				LayoutSetBranch.class.getName(), "MERGE", 8));
+		resourceActionModels.add(
+			newResourceActionModel(
+				LayoutSetBranch.class.getName(), "UPDATE", 16));
+
+		return resourceActionModels;
+	}
+
 	public List<LayoutSetModel> newLayoutSetModels(long groupId) {
 		List<LayoutSetModel> layoutSetModels = new ArrayList<>(2);
 
@@ -2925,6 +3323,27 @@ public class DataFactory {
 		layoutSetModels.add(newLayoutSetModel(groupId, false));
 
 		return layoutSetModels;
+	}
+
+	public List<ResourceActionModel>
+		newLayoutSetPrototypeResourceActionModels() {
+
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(
+				LayoutSetPrototype.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(
+				LayoutSetPrototype.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(
+				LayoutSetPrototype.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				LayoutSetPrototype.class.getName(), "UPDATE", 8));
+
+		return resourceActionModels;
 	}
 
 	public List<MBCategoryModel> newMBCategoryModels(long groupId) {
@@ -3194,6 +3613,72 @@ public class DataFactory {
 
 	public <K, V> ObjectValuePair<K, V> newObjectValuePair(K key, V value) {
 		return new ObjectValuePair<>(key, value);
+	}
+
+	public List<ResourceActionModel> newOrganizationResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(Organization.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Organization.class.getName(), "ASSIGN_USER_ROLES", 2));
+		resourceActionModels.add(
+			newResourceActionModel(Organization.class.getName(), "DELETE", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Organization.class.getName(), "MANAGE_SUBORGANIZATIONS", 8));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Organization.class.getName(), "PERMISSIONS", 16));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Organization.class.getName(), "ASSIGN_MEMBERS", 32));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Organization.class.getName(), "VIEW_MEMBERS", 64));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Organization.class.getName(), "MANAGE_ANNOUNCEMENTS", 128));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Organization.class.getName(), "UPDATE", 256));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Organization.class.getName(), "MANAGE_USERS", 512));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Organization.class.getName(), "ADD_ORGANIZATION", 1024));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Organization.class.getName(),
+				"MANAGE_SUBORGANIZATIONS_ACCOUNTS", 2048));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Organization.class.getName(), "MANAGE_ACCOUNTS", 4096));
+
+		return resourceActionModels;
+	}
+
+	public List<ResourceActionModel> newPasswordPolicyResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(PasswordPolicy.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(
+				PasswordPolicy.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(
+				PasswordPolicy.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				PasswordPolicy.class.getName(), "ASSIGN_MEMBERS", 8));
+		resourceActionModels.add(
+			newResourceActionModel(
+				PasswordPolicy.class.getName(), "UPDATE", 16));
+
+		return resourceActionModels;
 	}
 
 	public PortletPreferencesModel newPortletPreferencesModel(
@@ -3590,6 +4075,29 @@ public class DataFactory {
 			String.valueOf(wikiPageModel.getResourcePrimKey()), _sampleUserId);
 	}
 
+	public List<ResourceActionModel> newRoleResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(Role.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(Role.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(Role.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Role.class.getName(), "DEFINE_PERMISSIONS", 8));
+		resourceActionModels.add(
+			newResourceActionModel(Role.class.getName(), "ASSIGN_MEMBERS", 16));
+		resourceActionModels.add(
+			newResourceActionModel(
+				Role.class.getName(), "MANAGE_ANNOUNCEMENTS", 32));
+		resourceActionModels.add(
+			newResourceActionModel(Role.class.getName(), "UPDATE", 64));
+
+		return resourceActionModels;
+	}
+
 	public UserModel newSampleUserModel() {
 		return newUserModel(
 			_sampleUserId, _SAMPLE_USER_NAME, _SAMPLE_USER_NAME,
@@ -3689,6 +4197,48 @@ public class DataFactory {
 			getClassNameId(WikiPage.class), wikiPageModel.getResourcePrimKey());
 	}
 
+	public List<ResourceActionModel> newTeamResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(Team.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(Team.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(Team.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(Team.class.getName(), "ASSIGN_MEMBERS", 8));
+		resourceActionModels.add(
+			newResourceActionModel(Team.class.getName(), "UPDATE", 16));
+
+		return resourceActionModels;
+	}
+
+	public List<ResourceActionModel> newUserGroupResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(UserGroup.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(UserGroup.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(
+				UserGroup.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(
+				UserGroup.class.getName(), "ASSIGN_MEMBERS", 8));
+		resourceActionModels.add(
+			newResourceActionModel(
+				UserGroup.class.getName(), "VIEW_MEMBERS", 16));
+		resourceActionModels.add(
+			newResourceActionModel(
+				UserGroup.class.getName(), "MANAGE_ANNOUNCEMENTS", 32));
+		resourceActionModels.add(
+			newResourceActionModel(UserGroup.class.getName(), "UPDATE", 64));
+
+		return resourceActionModels;
+	}
+
 	public List<UserModel> newUserModels() {
 		List<UserModel> userModels = new ArrayList<>(
 			BenchmarksPropsValues.MAX_USER_COUNT);
@@ -3709,6 +4259,23 @@ public class DataFactory {
 		return newGroupModel(
 			_userPersonalSiteGroupId, getClassNameId(UserPersonalSite.class),
 			_defaultUserId, GroupConstants.USER_PERSONAL_SITE, false);
+	}
+
+	public List<ResourceActionModel> newUserResourceActionModels() {
+		List<ResourceActionModel> resourceActionModels = new ArrayList<>();
+
+		resourceActionModels.add(
+			newResourceActionModel(User.class.getName(), "VIEW", 1));
+		resourceActionModels.add(
+			newResourceActionModel(User.class.getName(), "DELETE", 2));
+		resourceActionModels.add(
+			newResourceActionModel(User.class.getName(), "PERMISSIONS", 4));
+		resourceActionModels.add(
+			newResourceActionModel(User.class.getName(), "IMPERSONATE", 8));
+		resourceActionModels.add(
+			newResourceActionModel(User.class.getName(), "UPDATE", 16));
+
+		return resourceActionModels;
 	}
 
 	public VirtualHostModel newVirtualHostModel() {
@@ -4613,6 +5180,24 @@ public class DataFactory {
 		return releaseModelImpl;
 	}
 
+	protected ResourceActionModel newResourceActionModel(
+		String name, String actionId, long bitwiseValue) {
+
+		ResourceActionModel resourceActionModel = new ResourceActionModelImpl();
+
+		// PK fields
+
+		resourceActionModel.setResourceActionId(_resourceActionCounter.get());
+
+		// Other fields
+
+		resourceActionModel.setName(name);
+		resourceActionModel.setActionId(actionId);
+		resourceActionModel.setBitwiseValue(bitwiseValue);
+
+		return resourceActionModel;
+	}
+
 	protected ResourcePermissionModel newResourcePermissionModel(
 		String name, String primKey, long roleId, long ownerId) {
 
@@ -5060,6 +5645,7 @@ public class DataFactory {
 	private final String _layoutPageTemplateStructureRelData;
 	private RoleModel _ownerRoleModel;
 	private RoleModel _powerUserRoleModel;
+	private final SimpleCounter _resourceActionCounter;
 	private final SimpleCounter _resourcePermissionCounter;
 	private List<RoleModel> _roleModels;
 	private final long _sampleUserId;
