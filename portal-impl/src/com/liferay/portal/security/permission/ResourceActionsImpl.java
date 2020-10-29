@@ -628,7 +628,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	@Override
-	public void read(Document document, Set<String> portletNames)
+	public void read(Document document, Set<String> modelNames)
 		throws ResourceActionsException {
 
 		DocumentType documentType = document.getDocumentType();
@@ -643,7 +643,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			}
 		}
 
-		_readModelResources(document.getRootElement(), portletNames);
+		_readModelResources(document.getRootElement(), modelNames);
 	}
 
 	/**
@@ -688,21 +688,22 @@ public class ResourceActionsImpl implements ResourceActions {
 	public void readAndCheck(ClassLoader classLoader, String... sources)
 		throws ResourceActionsException {
 
-		Set<String> portletNames = new HashSet<>();
+		Set<String> resourceNames = new HashSet<>();
 
 		for (String source : sources) {
 			_read(
 				classLoader, source,
 				rootElement -> _readPortletResources(
-					null, rootElement, portletNames));
+					null, rootElement, resourceNames));
 
 			_read(
 				classLoader, source,
-				rootElement -> _readModelResources(rootElement, portletNames));
+				rootElement -> _readModelResources(rootElement, resourceNames));
 		}
 
-		for (String portletName : portletNames) {
-			check(portletName);
+		for (String resourceName : resourceNames) {
+			ResourceActionLocalServiceUtil.checkResourceActions(
+				resourceName, getResourceActions(resourceName));
 		}
 	}
 
@@ -1119,7 +1120,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	private void _readModelResources(
-			Element rootElement, Set<String> portletNames)
+			Element rootElement, Set<String> modelNames)
 		throws ResourceActionsException {
 
 		for (Element modelResourceElement :
@@ -1188,8 +1189,8 @@ public class ResourceActionsImpl implements ResourceActions {
 				modelResourceElement, modelName,
 				Collections.singleton(ActionKeys.PERMISSIONS));
 
-			if (portletNames != null) {
-				portletNames.addAll(_resourceReferences.get(modelName));
+			if (modelNames != null) {
+				modelNames.add(modelName);
 			}
 		}
 	}
