@@ -657,19 +657,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	public void read(Document document, Set<String> modelNames)
 		throws ResourceActionsException {
 
-		DocumentType documentType = document.getDocumentType();
-
-		String publicId = GetterUtil.getString(documentType.getPublicId());
-
-		if (publicId.equals(
-				"-//Liferay//DTD Resource Action Mapping 6.0.0//EN")) {
-
-			if (_log.isWarnEnabled()) {
-				_log.warn("Please update document to use the 6.1.0 format");
-			}
-		}
-
-		_readModelResources(document.getRootElement(), modelNames);
+		readModelResources(document);
 	}
 
 	/**
