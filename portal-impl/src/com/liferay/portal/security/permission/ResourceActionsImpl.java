@@ -636,7 +636,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			}
 		}
 
-		_read(document, portletNames);
+		_read(document.getRootElement(), portletNames);
 	}
 
 	/**
@@ -1074,7 +1074,7 @@ public class ResourceActionsImpl implements ResourceActions {
 				_read(classLoader, extFileName, portletNames);
 			}
 
-			_read(document, portletNames);
+			_read(rootElement, portletNames);
 
 			if (source.endsWith(".xml") && !source.endsWith("-ext.xml")) {
 				String extFileName = StringUtil.replace(
@@ -1088,10 +1088,8 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
-	private void _read(Document document, Set<String> portletNames)
+	private void _read(Element rootElement, Set<String> portletNames)
 		throws ResourceActionsException {
-
-		Element rootElement = document.getRootElement();
 
 		if (PropsValues.RESOURCE_ACTIONS_READ_PORTLET_RESOURCES) {
 			for (Element portletResourceElement :
