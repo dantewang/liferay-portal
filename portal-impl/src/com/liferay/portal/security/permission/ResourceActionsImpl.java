@@ -1074,7 +1074,7 @@ public class ResourceActionsImpl implements ResourceActions {
 				_read(classLoader, extFileName, portletNames);
 			}
 
-			_readPortletResources(rootElement, portletNames);
+			_readPortletResources(null, rootElement, portletNames);
 			_readModelResources(rootElement, portletNames);
 
 			if (source.endsWith(".xml") && !source.endsWith("-ext.xml")) {
@@ -1180,7 +1180,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	private void _readPortletResources(
-			Element rootElement, Set<String> portletNames)
+			Portlet portlet, Element rootElement, Set<String> portletNames)
 		throws ResourceActionsException {
 
 		if (PropsValues.RESOURCE_ACTIONS_READ_PORTLET_RESOURCES) {
@@ -1190,8 +1190,17 @@ public class ResourceActionsImpl implements ResourceActions {
 				String portletName = portletResourceElement.elementTextTrim(
 					"portlet-name");
 
-				Portlet portlet = portletLocalService.getPortletById(
-					portletName);
+				if (portlet != null) {
+					String deployPortletName = PortletIdCodec.decodePortletName(
+						portlet.getPortletId());
+
+					if (!deployPortletName.equals(portletName)) {
+						continue;
+					}
+				}
+				else {
+					portlet = portletLocalService.getPortletById(portletName);
+				}
 
 				Set<String> portletActions = _getPortletMimeTypeActions(
 					portletName, portlet);
