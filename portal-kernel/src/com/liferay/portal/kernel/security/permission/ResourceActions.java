@@ -174,7 +174,7 @@ public interface ResourceActions {
 	public void read(ClassLoader classLoader, String... sources)
 		throws ResourceActionsException;
 
-	public void read(Document document, Set<String> portletNames)
+	public void read(Document document, Set<String> modelNames)
 		throws ResourceActionsException;
 
 	/**
