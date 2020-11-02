@@ -99,18 +99,7 @@
 				<build-sql dir="@{module}" />
 			</sequential>
 		</for>
-	</target>
 
-	<target name="clean">
-		<delete includeemptydirs="true">
-			<fileset
-				dir="."
-				includes="*.csv,*.sql,benchmarks-actual.properties,liferay/**,output/**,temp/**"
-			/>
-		</delete>
-	</target>
-
-	<target depends="clean, build-sample-sql" name="merge-sql">
 		<if>
 			<equals arg1="${sample.sql.output.merge}" arg2="false" />
 			<then>
@@ -134,5 +123,14 @@
 				</concat>
 			</else>
 		</if>
+	</target>
+
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset
+				dir="."
+				includes="*.csv,*.sql,benchmarks-actual.properties,liferay/**,output/**,temp/**"
+			/>
+		</delete>
 	</target>
 </project>
