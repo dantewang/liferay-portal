@@ -126,23 +126,16 @@ public class ServiceConfigurationInitializer {
 
 	private void _readResourceActions() {
 		try {
+			_resourceActions.readAndCheck(
+				_classLoader,
+				StringUtil.split(
+					_portletConfiguration.get(
+						PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
+
 			String portlets = _portletConfiguration.get(
 				"service.configurator.portlet.ids");
 
-			if (Validator.isNull(portlets)) {
-				_resourceActions.readAndCheck(
-					_classLoader,
-					StringUtil.split(
-						_portletConfiguration.get(
-							PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
-			}
-			else {
-				_resourceActions.read(
-					_classLoader,
-					StringUtil.split(
-						_portletConfiguration.get(
-							PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
-
+			if (Validator.isNotNull(portlets)) {
 				for (String portletId : StringUtil.split(portlets)) {
 					_resourceActions.check(portletId);
 				}
