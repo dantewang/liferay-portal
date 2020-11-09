@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.security.permission;
 
+import com.liferay.portal.kernel.portlet.PortletIdCodec;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,6 +86,63 @@ public class ResourceActionsBagUtil {
 		}
 
 		return modelResourceActionsBag.getModelResourceOwnerDefaultActions();
+	}
+
+	public static List<String> getPortletResourceActions(String name) {
+		name = PortletIdCodec.decodePortletName(name);
+
+		ResourceActionsBag portletResourceActionsBag =
+			_resourceActionsBag.getPortletResourceActionsBag(name);
+
+		return portletResourceActionsBag.getPortletResourceActions();
+	}
+
+	public static List<String> getPortletResourceGroupDefaultActions(
+		String name) {
+
+		name = PortletIdCodec.decodePortletName(name);
+
+		ResourceActionsBag portletResourceActionsBag =
+			_resourceActionsBag.getPortletResourceActionsBag(name);
+
+		return portletResourceActionsBag.
+			getPortletResourceGroupDefaultActions();
+	}
+
+	public static List<String> getPortletResourceGuestDefaultActions(
+		String name) {
+
+		name = PortletIdCodec.decodePortletName(name);
+
+		ResourceActionsBag portletResourceActionsBag =
+			_resourceActionsBag.getPortletResourceActionsBag(name);
+
+		return portletResourceActionsBag.
+			getPortletResourceGuestDefaultActions();
+	}
+
+	public static List<String> getPortletResourceGuestUnsupportedActions(
+		String name) {
+
+		name = PortletIdCodec.decodePortletName(name);
+
+		ResourceActionsBag portletResourceActionsBag =
+			_resourceActionsBag.getPortletResourceActionsBag(name);
+
+		return portletResourceActionsBag.
+			getPortletResourceGuestUnsupportedActions();
+	}
+
+	public static List<String> getPortletResourceLayoutManagerActions(
+		String name) {
+
+		name = PortletIdCodec.decodePortletName(name);
+
+		ResourceActionsBag portletResourceActionsBag =
+			_resourceActionsBag.getPortletResourceActionsBag(name);
+
+		return portletResourceActionsBag.
+			getPortletResourceLayoutManagerActions();
 	}
 
 	public static ResourceActionsBag getResourceActionsBag(String name) {
