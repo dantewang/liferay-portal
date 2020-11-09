@@ -19,7 +19,9 @@ import com.liferay.portal.kernel.security.permission.ResourceActionsBag;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Hai Yu
@@ -90,6 +92,33 @@ public class ResourceActionsBagImpl implements ResourceActionsBag {
 	public List<String> getPortletResourceLayoutManagerActions() {
 		return new ArrayList<>(_layoutManagerActions);
 	}
+
+	@Override
+	public ResourceActionsBag getResourceActionsBag(String name) {
+		return _resourceActionsBags.get(name);
+	}
+
+	@Override
+	public ResourceActionsBag putResourceActionsBags(
+		String name, ResourceActionsBag resourceActionsBag, boolean force) {
+
+		synchronized (_resourceActionsBags) {
+			return _resourceActionsBags.compute(
+				name,
+				(key, value) -> {
+					if (force || (value == null)) {
+						_resourceActionsBags.put(name, resourceActionsBag);
+
+						return resourceActionsBag;
+					}
+
+					return value;
+				});
+		}
+	}
+
+	private static final Map<String, ResourceActionsBag> _resourceActionsBags =
+		new ConcurrentHashMap<>();
 
 	private final Set<String> _groupDefaultActions;
 	private final Set<String> _guestDefaultActions;

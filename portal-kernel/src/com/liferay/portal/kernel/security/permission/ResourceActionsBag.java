@@ -44,4 +44,9 @@ public interface ResourceActionsBag {
 
 	public List<String> getPortletResourceLayoutManagerActions();
 
+	public ResourceActionsBag getResourceActionsBag(String name);
+
+	public ResourceActionsBag putResourceActionsBags(
+		String name, ResourceActionsBag resourceActionsBag, boolean force);
+
 }
