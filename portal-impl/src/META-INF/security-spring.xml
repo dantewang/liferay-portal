@@ -67,7 +67,7 @@
 			<bean class="com.liferay.portal.security.permission.PermissionConverterImpl" />
 		</property>
 	</bean>
-	<bean class="com.liferay.portal.security.permission.ResourceActionsImpl" id="com.liferay.portal.kernel.security.permission.ResourceActions" />
+	<bean class="com.liferay.portal.security.permission.ResourceActionsImpl" depends-on="com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil" id="com.liferay.portal.kernel.security.permission.ResourceActions" />
 	<bean class="com.liferay.portal.internal.security.permission.ResourceActionsBagImpl" id="com.liferay.portal.kernel.security.permission.ResourceActionsBag" />
 	<bean class="com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil" id="com.liferay.portal.kernel.security.permission.ResourceActionsBagUtil">
 		<property name="resourceActionsBag" ref="com.liferay.portal.kernel.security.permission.ResourceActionsBag" />
