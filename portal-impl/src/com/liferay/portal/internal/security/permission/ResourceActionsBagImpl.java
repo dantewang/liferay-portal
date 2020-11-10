@@ -175,18 +175,14 @@ public class ResourceActionsBagImpl implements ResourceActionsBag {
 		String name, ResourceActionsBag resourceActionsBag, boolean force) {
 
 		synchronized (_resourceActionsBags) {
-			return _resourceActionsBags.compute(
-				name,
-				(key, value) -> {
-					if (force || (value == null)) {
-						_resourceActionsBags.put(name, resourceActionsBag);
+			if (!force && (_resourceActionsBags.get(name) != null)) {
+				return _resourceActionsBags.get(name);
+			}
 
-						return resourceActionsBag;
-					}
-
-					return value;
-				});
+			_resourceActionsBags.put(name, resourceActionsBag);
 		}
+
+		return resourceActionsBag;
 	}
 
 	@Override
