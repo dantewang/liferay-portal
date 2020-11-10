@@ -15,6 +15,7 @@
 package com.liferay.portal.kernel.security.permission;
 
 import java.util.List;
+import java.util.Set;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -23,6 +24,8 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 public interface ResourceActionsBag {
+
+	public boolean containsKey(String name);
 
 	public List<String> getModelResourceActions();
 
@@ -48,7 +51,11 @@ public interface ResourceActionsBag {
 
 	public ResourceActionsBag getResourceActionsBag(String name);
 
+	public Set<String> keySet();
+
 	public ResourceActionsBag putResourceActionsBags(
 		String name, ResourceActionsBag resourceActionsBag, boolean force);
+
+	public ResourceActionsBag remove(String name);
 
 }

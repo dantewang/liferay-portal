@@ -18,11 +18,16 @@ import com.liferay.portal.kernel.portlet.PortletIdCodec;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Hai Yu
  */
 public class ResourceActionsBagUtil {
+
+	public static boolean containsKey(String name) {
+		return _resourceActionsBag.containsKey(name);
+	}
 
 	public static List<String> getModelResourceActions(String name) {
 		ResourceActionsBag modelResourceActionsBag = getResourceActionsBag(
@@ -149,11 +154,19 @@ public class ResourceActionsBagUtil {
 		return _resourceActionsBag.getResourceActionsBag(name);
 	}
 
+	public static Set<String> keySet() {
+		return _resourceActionsBag.keySet();
+	}
+
 	public static ResourceActionsBag putResourceActionsBags(
 		String name, ResourceActionsBag resourceActionsBag, boolean force) {
 
 		return _resourceActionsBag.putResourceActionsBags(
 			name, resourceActionsBag, force);
+	}
+
+	public static ResourceActionsBag remove(String name) {
+		return _resourceActionsBag.remove(name);
 	}
 
 	public void setResourceActionsBag(ResourceActionsBag resourceActionsBag) {

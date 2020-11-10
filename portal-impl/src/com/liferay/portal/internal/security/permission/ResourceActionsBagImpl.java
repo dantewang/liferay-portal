@@ -62,6 +62,11 @@ public class ResourceActionsBagImpl implements ResourceActionsBag {
 	}
 
 	@Override
+	public boolean containsKey(String name) {
+		return _resourceActionsBags.containsKey(name);
+	}
+
+	@Override
 	public List<String> getModelResourceActions() {
 		return new ArrayList<>(_supportsActions);
 	}
@@ -161,6 +166,11 @@ public class ResourceActionsBagImpl implements ResourceActionsBag {
 	}
 
 	@Override
+	public Set<String> keySet() {
+		return _resourceActionsBags.keySet();
+	}
+
+	@Override
 	public ResourceActionsBag putResourceActionsBags(
 		String name, ResourceActionsBag resourceActionsBag, boolean force) {
 
@@ -177,6 +187,11 @@ public class ResourceActionsBagImpl implements ResourceActionsBag {
 					return value;
 				});
 		}
+	}
+
+	@Override
+	public ResourceActionsBag remove(String name) {
+		return _resourceActionsBags.remove(name);
 	}
 
 	private void _checkPortletLayoutManagerActions(Set<String> actions) {
