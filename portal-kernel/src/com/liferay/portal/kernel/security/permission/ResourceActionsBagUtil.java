@@ -14,9 +14,12 @@
 
 package com.liferay.portal.kernel.security.permission;
 
+import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -150,8 +153,50 @@ public class ResourceActionsBagUtil {
 			getPortletResourceLayoutManagerActions();
 	}
 
+	public static List<String> getResourceActions(String name) {
+		if (name.indexOf(CharPool.PERIOD) != -1) {
+			return getModelResourceActions(name);
+		}
+
+		return getPortletResourceActions(name);
+	}
+
+	public static List<String> getResourceActions(
+		String portletResource, String modelResource) {
+
+		List<String> actions = null;
+
+		if (Validator.isNull(modelResource)) {
+			actions = getPortletResourceActions(portletResource);
+		}
+		else {
+			actions = getModelResourceActions(modelResource);
+		}
+
+		return actions;
+	}
+
 	public static ResourceActionsBag getResourceActionsBag(String name) {
 		return _resourceActionsBag.getResourceActionsBag(name);
+	}
+
+	public static List<String> getResourceGuestUnsupportedActions(
+		String portletResource, String modelResource) {
+
+		if (Validator.isNull(modelResource)) {
+			return getPortletResourceGuestUnsupportedActions(portletResource);
+		}
+		else if (Validator.isNull(portletResource)) {
+			return getModelResourceGuestUnsupportedActions(modelResource);
+		}
+		else if (containsKey(modelResource)) {
+			return getModelResourceGuestUnsupportedActions(modelResource);
+		}
+		else if (containsKey(portletResource)) {
+			return getPortletResourceGuestUnsupportedActions(portletResource);
+		}
+
+		return Collections.emptyList();
 	}
 
 	public static Set<String> keySet() {
