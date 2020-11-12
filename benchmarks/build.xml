@@ -104,8 +104,13 @@
 			<isfalse value="${benchmark.usage}" />
 			<then>
 				<if>
-					<equals arg1="${sample.sql.output.merge}" arg2="false" />
+					<istrue value="${sample.sql.output.merge}" />
 					<then>
+						<concat append="true" destfile="${sample-data-sql}">
+							<filelist dir="${sample.sql.output.dir}" files="sample-${sample.sql.db.type}.sql" />
+						</concat>
+					</then>
+					<else>
 						<for param="sql-file-filename">
 							<path>
 								<fileset
@@ -119,11 +124,6 @@
 								</concat>
 							</sequential>
 						</for>
-					</then>
-					<else>
-						<concat append="true" destfile="${sample-data-sql}">
-							<filelist dir="${sample.sql.output.dir}" files="sample-${sample.sql.db.type}.sql" />
-						</concat>
 					</else>
 				</if>
 			</then>
