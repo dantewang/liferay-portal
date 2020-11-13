@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 
 import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
 
 /**
  * @author Cristina González
@@ -34,6 +35,11 @@ public class CompanyProviderClassTestRule extends ClassTestRule<Long> {
 	}
 
 	@Override
+	protected void afterMethod(Description description, Void v, Object target) {
+		CompanyThreadLocal.setCompanyId(_companyId);
+	}
+
+	@Override
 	protected Long beforeClass(Description description) throws PortalException {
 		Long companyId = CompanyThreadLocal.getCompanyId();
 
@@ -42,7 +48,57 @@ public class CompanyProviderClassTestRule extends ClassTestRule<Long> {
 		return companyId;
 	}
 
+	@Override
+	protected Void beforeMethod(Description description, Object target) {
+		_companyId = CompanyThreadLocal.getCompanyId();
+
+		return null;
+	}
+
+	@Override
+	protected Statement createMethodStatement(
+		Statement statement, Description description) {
+
+		return new StatementWrapper(statement) {
+
+			@Override
+			public void evaluate() throws Throwable {
+				Object target = inspectTarget(statement);
+
+				Void m = beforeMethod(description, target);
+
+				Throwable throwable1 = null;
+
+				try {
+					statement.evaluate();
+				}
+				catch (Throwable throwable2) {
+					throwable1 = throwable2;
+				}
+				finally {
+					try {
+						afterMethod(description, m, target);
+					}
+					catch (Throwable throwable2) {
+						if (throwable1 != null) {
+							throwable2.addSuppressed(throwable1);
+						}
+
+						throwable1 = throwable2;
+					}
+				}
+
+				if (throwable1 != null) {
+					throw throwable1;
+				}
+			}
+
+		};
+	}
+
 	private CompanyProviderClassTestRule() {
 	}
+
+	private Long _companyId;
 
 }
