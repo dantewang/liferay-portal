@@ -42,15 +42,15 @@ public class CompanyTestUtilTest {
 
 	@Test
 	public void test1() throws Exception {
-		_company = CompanyTestUtil.addCompany();
-
-		CompanyTestUtil.resetCompanyLocales(
-			_company.getCompanyId(), _language.getAvailableLocales(),
-			LocaleUtil.getDefault());
+		_testCompanyTestUtil();
 	}
 
 	@Test
 	public void test2() throws Exception {
+		_testCompanyTestUtil();
+	}
+
+	private void _testCompanyTestUtil() throws Exception {
 		_company = CompanyTestUtil.addCompany();
 
 		CompanyTestUtil.resetCompanyLocales(
