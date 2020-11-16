@@ -15,7 +15,7 @@
 package com.liferay.portal.test.rule;
 
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
-import com.liferay.portal.kernel.test.rule.CompanyProviderClassTestRule;
+import com.liferay.portal.kernel.test.rule.CompanyProviderMethodTestRule;
 import com.liferay.portal.kernel.test.rule.DataGuardTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRunMethodTestRule;
 import com.liferay.portal.kernel.test.rule.SynchronousDestinationTestRule;
@@ -49,7 +49,7 @@ public class LiferayIntegrationTestRule extends AggregateTestRule {
 		testRules.add(SybaseDumpTransactionLogTestRule.INSTANCE);
 		testRules.add(ClearThreadLocalClassTestRule.INSTANCE);
 		testRules.add(UniqueStringRandomizerBumperClassTestRule.INSTANCE);
-		testRules.add(CompanyProviderClassTestRule.INSTANCE);
+		testRules.add(CompanyProviderMethodTestRule.INSTANCE);
 		testRules.add(DeleteAfterTestRunMethodTestRule.INSTANCE);
 		testRules.add(InjectTestRule.INSTANCE);
 
