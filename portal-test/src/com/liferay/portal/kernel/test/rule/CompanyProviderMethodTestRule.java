@@ -21,23 +21,24 @@ import com.liferay.portal.kernel.test.util.TestPropsValues;
 import org.junit.runner.Description;
 
 /**
- * @author Cristina González
- * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
- *             CompanyProviderMethodTestRule}
+ * @author Leon Chi
  */
-@Deprecated
-public class CompanyProviderClassTestRule extends ClassTestRule<Long> {
+public class CompanyProviderMethodTestRule extends MethodTestRule<Long> {
 
-	public static final CompanyProviderClassTestRule INSTANCE =
-		new CompanyProviderClassTestRule();
+	public static final CompanyProviderMethodTestRule INSTANCE =
+		new CompanyProviderMethodTestRule();
 
 	@Override
-	protected void afterClass(Description description, Long previousCompanyId) {
-		CompanyThreadLocal.setCompanyId(previousCompanyId);
+	protected void afterMethod(
+		Description description, Long companyId, Object target) {
+
+		CompanyThreadLocal.setCompanyId(companyId);
 	}
 
 	@Override
-	protected Long beforeClass(Description description) throws PortalException {
+	protected Long beforeMethod(Description description, Object target)
+		throws PortalException {
+
 		Long companyId = CompanyThreadLocal.getCompanyId();
 
 		CompanyThreadLocal.setCompanyId(TestPropsValues.getCompanyId());
@@ -45,7 +46,7 @@ public class CompanyProviderClassTestRule extends ClassTestRule<Long> {
 		return companyId;
 	}
 
-	private CompanyProviderClassTestRule() {
+	private CompanyProviderMethodTestRule() {
 	}
 
 }
