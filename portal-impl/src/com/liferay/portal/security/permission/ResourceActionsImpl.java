@@ -380,7 +380,13 @@ public class ResourceActionsImpl implements ResourceActions {
 			getPortletResourceActions(portlet.getPortletId()));
 
 		synchronized (this) {
-			_checkPortletActions(portlet, actions);
+			_checkPortletLayoutManagerActions(actions);
+
+			if ((portlet != null) &&
+				(portlet.getControlPanelEntryCategory() != null)) {
+
+				actions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
+			}
 		}
 
 		return new ArrayList<>(actions);
@@ -751,16 +757,6 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
-	private void _checkPortletActions(Portlet portlet, Set<String> actions) {
-		_checkPortletLayoutManagerActions(actions);
-
-		if ((portlet != null) &&
-			(portlet.getControlPanelEntryCategory() != null)) {
-
-			actions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
-		}
-	}
-
 	private void _checkPortletGroupDefaultActions(Set<String> actions) {
 		if (actions.isEmpty()) {
 			actions.add(ActionKeys.VIEW);
@@ -893,7 +889,13 @@ public class ResourceActionsImpl implements ResourceActions {
 			portletActions = _getPortletMimeTypeActions(name, portlet);
 
 			if (!name.equals(PortletKeys.PORTAL)) {
-				_checkPortletActions(portlet, portletActions);
+				_checkPortletLayoutManagerActions(portletActions);
+
+				if ((portlet != null) &&
+					(portlet.getControlPanelEntryCategory() != null)) {
+
+					portletActions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
+				}
 			}
 
 			_checkPortletGroupDefaultActions(
@@ -1097,7 +1099,13 @@ public class ResourceActionsImpl implements ResourceActions {
 					portletName, portlet);
 
 				if (!portletName.equals(PortletKeys.PORTAL)) {
-					_checkPortletActions(portlet, portletActions);
+					_checkPortletLayoutManagerActions(portletActions);
+
+					if ((portlet != null) &&
+						(portlet.getControlPanelEntryCategory() != null)) {
+
+						portletActions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
+					}
 				}
 
 				_readResource(
