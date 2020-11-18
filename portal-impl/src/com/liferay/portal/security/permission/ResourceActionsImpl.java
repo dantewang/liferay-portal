@@ -578,6 +578,24 @@ public class ResourceActionsImpl implements ResourceActions {
 		return false;
 	}
 
+	public void populatePortletResource(
+			Portlet portlet, ClassLoader classLoader, String... sources)
+		throws ResourceActionsException {
+
+		String portletResourceName = PortletIdCodec.decodePortletName(
+			portlet.getPortletId());
+
+		if ((sources != null) &&
+			!_resourceActionsBags.containsKey(portletResourceName)) {
+
+			read(classLoader, sources);
+		}
+
+		resourceActionLocalService.checkResourceActions(
+			portletResourceName,
+			_getPortletResourceActions(portletResourceName, portlet));
+	}
+
 	@Override
 	public void read(ClassLoader classLoader, String source)
 		throws ResourceActionsException {
