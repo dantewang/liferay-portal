@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project basedir="." default="run" name="benchmarks">
+<project basedir="." default="run" name="benchmarks" xmlns:if="ant:if" xmlns:unless="ant:unless">
 	<import file="../build-common.xml" />
 
 	<target name="build-sample-sql">
@@ -61,15 +61,25 @@
 		</path>
 
 		<available file="benchmarks.${user.name}.properties" property="user.properites.avaiable" />
+		<available file="benchmarks.${env.COMPUTERNAME}.properties" property="env.computer.name.properites.avaiable" />
+		<available file="benchmarks.${env.HOST}.properties" property="env.host.properites.avaiable" />
+		<available file="benchmarks.${env.HOSTNAME}.properties" property="env.host.name.properites.avaiable" />
 
+		<property if:true="${user.properites.avaiable}" name="sample.sql.properties.file" value="benchmarks.${user.name}.properties" />
+		<property if:true="${env.computer.name.properites.avaiable}" name="sample.sql.properties.file" value="benchmarks.${env.COMPUTERNAME}.properties" />
+		<property if:true="${env.host.properites.avaiable}" name="sample.sql.properties.file" value="benchmarks.${env.HOST}.properties" />
+		<property if:true="${env.host.name.properites.avaiable}" name="sample.sql.properties.file" value="benchmarks.${env.HOSTNAME}.properties" />
+	
 		<if>
-			<equals arg1="${user.properites.avaiable}" arg2="true" />
+			<and>
+				<equals arg1="${user.properites.avaiable}" arg2="false" />
+				<equals arg1="${env.computer.name.properites.avaiable}" arg2="false" />
+				<equals arg1="${env.host.properites.avaiable}" arg2="false" />
+				<equals arg1="${env.host.name.properites.avaiable}" arg2="false" />
+			</and>
 			<then>
-				<property name="sample.sql.properties.file" value="benchmarks.${user.name}.properties" />
-			</then>
-			<else>
 				<property name="sample.sql.properties.file" value="benchmarks.properties" />
-			</else>
+			</then>
 		</if>
 
 		<java
