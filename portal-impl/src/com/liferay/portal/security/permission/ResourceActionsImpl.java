@@ -680,7 +680,8 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 
 		for (String portletName : portletNames) {
-			check(portletName);
+			resourceActionLocalService.checkResourceActions(
+				portletName, getResourceActions(portletName));
 		}
 	}
 
@@ -1176,7 +1177,7 @@ public class ResourceActionsImpl implements ResourceActions {
 				Collections.singleton(ActionKeys.PERMISSIONS));
 
 			if (portletNames != null) {
-				portletNames.addAll(_resourceReferences.get(modelName));
+				portletNames.add(modelName);
 			}
 		}
 	}
