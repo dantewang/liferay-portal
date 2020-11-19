@@ -61,6 +61,9 @@
 		</path>
 
 		<available file="benchmarks.${user.name}.properties" property="user.properites.avaiable" />
+		<available file="benchmarks.${env.COMPUTERNAME}.properties" property="env.computer.name.properites.avaiable" />
+		<available file="benchmarks.${env.HOST}.properties" property="env.host.properites.avaiable" />
+		<available file="benchmarks.${env.HOSTNAME}.properties" property="env.host.name.properites.avaiable" />
 
 		<if>
 			<equals arg1="${user.properites.avaiable}" arg2="true" />
@@ -68,7 +71,31 @@
 				<property name="sample.sql.properties.file" value="benchmarks.${user.name}.properties" />
 			</then>
 			<else>
-				<property name="sample.sql.properties.file" value="benchmarks.properties" />
+				<if>
+					<equals arg1="${env.computer.name.properites.avaiable}" arg2="true" />
+					<then>
+						<property name="sample.sql.properties.file" value="benchmarks.${env.COMPUTERNAME}.properties" />
+					</then>
+					<else>
+						<if>
+							<equals arg1="${env.host.properites.avaiable}" arg2="true" />
+							<then>
+								<property name="sample.sql.properties.file" value="benchmarks.${env.HOST}.properties" />
+							</then>
+							<else>
+								<if>
+									<equals arg1="${env.host.name.properites.avaiable}" arg2="true" />
+									<then>
+										<property name="sample.sql.properties.file" value="benchmarks.${env.HOSTNAME}.properties" />
+									</then>
+									<else>
+										<property name="sample.sql.properties.file" value="benchmarks.properties" />
+									</else>
+								</if>
+							</else>
+						</if>
+					</else>
+				</if>
 			</else>
 		</if>
 
