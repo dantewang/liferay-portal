@@ -18,6 +18,7 @@ import com.liferay.portal.instance.lifecycle.BasePortalInstanceLifecycleListener
 import com.liferay.portal.instance.lifecycle.PortalInstanceLifecycleListener;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
+import com.liferay.portal.kernel.service.ResourceActionLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
@@ -51,8 +52,16 @@ public class AddResourceActionsPortalInstanceLifecycleListener
 							xml, "[$LANGUAGE_ID$]", languageIds[i]),
 						"[$WEIGHT$]", String.valueOf(i))),
 				null);
+
+			String name = "com.liferay.translation.".concat(languageIds[i]);
+
+			_resourceActionLocalService.checkResourceActions(
+				name, _resourceActions.getModelResourceActions(name));
 		}
 	}
+
+	@Reference
+	private ResourceActionLocalService _resourceActionLocalService;
 
 	@Reference
 	private ResourceActions _resourceActions;
