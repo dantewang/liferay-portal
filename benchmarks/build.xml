@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project basedir="." default="run" name="benchmarks">
+<project basedir="." default="run" name="benchmarks" xmlns:if="ant:if" xmlns:unless="ant:unless">
 	<import file="../build-common.xml" />
 
 	<target name="build-sample-sql">
@@ -60,7 +60,49 @@
 			<path refid="project.classpath" />
 		</path>
 
-		<property name="sample.sql.properties.file" value="${basedir}/benchmarks.properties" />
+		<available file="benchmarks.${user.name}.properties" property="user.properites.avaiable" />
+		<available file="benchmarks.${env.COMPUTERNAME}.properties" property="env.computer.name.properites.avaiable" />
+		<available file="benchmarks.${env.HOST}.properties" property="env.host.properites.avaiable" />
+		<available file="benchmarks.${env.HOSTNAME}.properties" property="env.host.name.properites.avaiable" />
+
+		<concat append="true" destfile="benchmarks.merge.properties" fixlastline="true" if:true="${env.host.name.properites.avaiable}">
+			<filelist dir="${basedir}" files="benchmarks.${env.HOSTNAME}.properties" />
+		</concat>
+
+		<concat append="true" destfile="benchmarks.merge.properties" fixlastline="true" if:true="${env.host.properites.avaiable}">
+			<filelist dir="${basedir}" files="benchmarks.${env.HOST}.properties" />
+		</concat>
+
+		<concat append="true" destfile="benchmarks.merge.properties" fixlastline="true" if:true="${env.computer.name.properites.avaiable}">
+			<filelist dir="${basedir}" files="benchmarks.${env.COMPUTERNAME}.properties" />
+		</concat>
+
+		<concat append="true" destfile="benchmarks.merge.properties" fixlastline="true" if:true="${user.properites.avaiable}">
+			<filelist dir="${basedir}" files="benchmarks.${user.name}.properties" />
+		</concat>
+
+		<if>
+			<and>
+				<equals arg1="${user.properites.avaiable}" arg2="false" />
+				<equals arg1="${env.computer.name.properites.avaiable}" arg2="false" />
+				<equals arg1="${env.host.properites.avaiable}" arg2="false" />
+				<equals arg1="${env.host.name.properites.avaiable}" arg2="false" />
+			</and>
+			<then>
+				<concat append="false" destfile="benchmarks.customer.properties" file="benchmarks.properties" />
+			</then>
+			<else>
+				<taskdef
+					classname="com.liferay.util.ant.MergeCustomerPropertiesTask"
+					classpath="${project.dir}/util-java/util-java.jar"
+					name="merge-customer-properties"
+				/>
+
+				<merge-customer-properties inputPropertiesFile="benchmarks.merge.properties" outputPropertiesFile="benchmarks.customer.properties" rootDir="${basedir}" />
+			</else>
+		</if>
+
+		<property name="sample.sql.properties.file" value="benchmarks.customer.properties" />
 
 		<java
 			classname="com.liferay.portal.tools.sample.sql.builder.SampleSQLBuilder"
@@ -75,7 +117,7 @@
 		<delete includeemptydirs="true">
 			<fileset
 				dir="."
-				includes="*.csv,*.sql,benchmarks-actual.properties,output/**,temp/**"
+				includes="*.csv,*.sql,benchmarks-actual.properties, benchmarks.customer.properties, benchmarks.merge.properties, liferay/**,output/**,temp/**"
 			/>
 		</delete>
 	</target>
