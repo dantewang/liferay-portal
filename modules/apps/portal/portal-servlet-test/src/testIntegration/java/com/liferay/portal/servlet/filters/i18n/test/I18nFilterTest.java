@@ -97,7 +97,7 @@ public class I18nFilterTest {
 		throws Exception {
 
 		Assert.assertEquals(
-			LocaleUtil.toLanguageId(LocaleUtil.SPAIN),
+			LocaleUtil.toLanguageId(LocaleUtil.US),
 			_getPrependI18nLanguageId(
 				3, LocaleUtil.US, LocaleUtil.SPAIN, LocaleUtil.US));
 	}
@@ -107,7 +107,7 @@ public class I18nFilterTest {
 		throws Exception {
 
 		Assert.assertEquals(
-			LocaleUtil.toLanguageId(LocaleUtil.SPAIN),
+			LocaleUtil.toLanguageId(LocaleUtil.US),
 			_getPrependI18nLanguageId(
 				3, LocaleUtil.US, LocaleUtil.SPAIN, null));
 	}
@@ -117,7 +117,7 @@ public class I18nFilterTest {
 		throws Exception {
 
 		Assert.assertEquals(
-			LocaleUtil.toLanguageId(LocaleUtil.SPAIN),
+			LocaleUtil.toLanguageId(LocaleUtil.US),
 			_getPrependI18nLanguageId(
 				3, LocaleUtil.US, LocaleUtil.SPAIN, LocaleUtil.SPAIN));
 	}
