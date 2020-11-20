@@ -79,14 +79,10 @@ public class PermissionCheckerTest {
 	public static void setUpClass() throws Exception {
 		Package pkg = PermissionCheckerTest.class.getPackage();
 
-		String packageName = pkg.getName();
-
-		_resourceActions.read(
+		_resourceActions.readAndCheck(
 			PermissionCheckerTest.class.getClassLoader(),
-			StringUtil.replace(packageName, '.', '/') +
-				"/dependencies/resource-actions.xml");
-
-		_resourceActions.check(_PORTLET_RESOURCE_NAME);
+			StringUtil.replace(pkg.getName(), '.', '/') +
+				"/dependencies/resource-actions-models.xml");
 	}
 
 	@AfterClass
@@ -951,6 +947,13 @@ public class PermissionCheckerTest {
 
 		portlet.setCompanyId(companyId);
 		portlet.setPortletId(portletName);
+
+		Package pkg = PermissionConverterTest.class.getPackage();
+
+		_resourceActions.populatePortletResource(
+			portlet, PermissionCheckerTest.class.getClassLoader(),
+			StringUtil.replace(pkg.getName(), '.', '/') +
+				"/dependencies/resource-actions-portlets.xml");
 
 		_portletLocalService.deployRemotePortlet(portlet, "category.hidden");
 	}
