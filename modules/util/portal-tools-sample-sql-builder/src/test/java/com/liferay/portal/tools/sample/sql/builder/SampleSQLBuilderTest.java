@@ -127,6 +127,8 @@ public class SampleSQLBuilderTest {
 		properties.put(BenchmarksPropsKeys.DB_TYPE, "hypersonic");
 		properties.put(BenchmarksPropsKeys.MAX_ASSET_CATEGORY_COUNT, "1");
 		properties.put(
+			BenchmarksPropsKeys.MAX_ASSET_ENTRY_DATA_TYPE_COUNT, "3");
+		properties.put(
 			BenchmarksPropsKeys.MAX_ASSET_ENTRY_TO_ASSET_CATEGORY_COUNT, "1");
 		properties.put(
 			BenchmarksPropsKeys.MAX_ASSET_ENTRY_TO_ASSET_TAG_COUNT, "1");

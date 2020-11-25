@@ -46,6 +46,11 @@ public class BenchmarksPropsValues {
 	public static final int MAX_ASSET_CATEGORY_COUNT = GetterUtil.getInteger(
 		PropertiesHolder._get(BenchmarksPropsKeys.MAX_ASSET_CATEGORY_COUNT));
 
+	public static final int MAX_ASSET_ENTRY_DATA_TYPE_COUNT =
+		GetterUtil.getInteger(
+			PropertiesHolder._get(
+				BenchmarksPropsKeys.MAX_ASSET_ENTRY_DATA_TYPE_COUNT));
+
 	public static final int MAX_ASSET_ENTRY_TO_ASSET_CATEGORY_COUNT =
 		GetterUtil.getInteger(
 			PropertiesHolder._get(

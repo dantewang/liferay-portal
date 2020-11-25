@@ -24,6 +24,9 @@ public interface BenchmarksPropsKeys {
 	public static final String MAX_ASSET_CATEGORY_COUNT =
 		"sample.sql.max.asset.category.count";
 
+	public static final String MAX_ASSET_ENTRY_DATA_TYPE_COUNT =
+		"sample.sql.max.asset.entry.data.type.count";
+
 	public static final String MAX_ASSET_ENTRY_TO_ASSET_CATEGORY_COUNT =
 		"sample.sql.max.asset.entry.to.asset.category.count";
 
