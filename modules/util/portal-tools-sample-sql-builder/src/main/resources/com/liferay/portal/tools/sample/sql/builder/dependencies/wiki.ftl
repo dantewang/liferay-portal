@@ -1,4 +1,10 @@
-<#assign wikiNodeModels = dataFactory.newWikiNodeModels(groupId) />
+<#assign
+	wikiAssetCategoryModels = dataFactory.pickAssetCategoryModels(assetCategoryModels, 3)
+
+	wikiAssetTagModels = dataFactory.pickAssetTagModels(assetTagModels, 3)
+
+	wikiNodeModels = dataFactory.newWikiNodeModels(groupId)
+/>
 
 <#list wikiNodeModels as wikiNodeModel>
 	${dataFactory.toInsertSQL(wikiNodeModel)}
@@ -15,8 +21,8 @@
 		${dataFactory.toInsertSQL(dataFactory.newWikiPageResourceModel(wikiPageModel))}
 
 		<@insertAssetEntry
-			_assetCategoryModels=assetCategoryModels
-			_assetTagModels=assetTagModels
+			_assetCategoryModels=wikiAssetCategoryModels
+			_assetTagModels=wikiAssetTagModels
 			_entry=wikiPageModel
 		/>
 

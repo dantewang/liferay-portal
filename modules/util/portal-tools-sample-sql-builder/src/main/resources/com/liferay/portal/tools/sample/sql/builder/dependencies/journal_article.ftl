@@ -1,4 +1,8 @@
 <#assign
+	journalArticleAssetCategoryModels = dataFactory.pickAssetCategoryModels(assetCategoryModels, 1)
+
+	journalArticleAssetTagModels = dataFactory.pickAssetTagModels(assetTagModels, 1)
+
 	journalArticlePageCounts = dataFactory.getSequence(dataFactory.maxJournalArticlePageCount)
 
 	resourcePermissionModels = dataFactory.newResourcePermissionModels("com.liferay.journal", groupId)
@@ -51,8 +55,8 @@
 
 			<#if versionCount = dataFactory.maxJournalArticleVersionCount>
 				<@insertAssetEntry
-					_assetCategoryModels=assetCategoryModels
-					_assetTagModels=assetTagModels
+					_assetCategoryModels=journalArticleAssetCategoryModels
+					_assetTagModels=journalArticleAssetTagModels
 					_entry=dataFactory.newObjectValuePair(journalArticleModel, journalArticleLocalizationModel)
 				/>
 			</#if>

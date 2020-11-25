@@ -40,5 +40,15 @@
 		${dataFactory.toInsertSQL(portletPreferencesModel)}
 	</#list>
 
-	${dataFactory.toInsertSQL(dataFactory.newPortletPreferencesModel(layoutModel.plid, groupId, portletId, pageCount))}
+	<#if pageCount = 1>
+		${dataFactory.toInsertSQL(dataFactory.newPortletPreferencesModel(layoutModel.plid, portletId))}
+	<#elseif pageCount % 2 = 0>
+		<#assign nextAssetTagModels = dataFactory.getNextAssetTagModels([journalArticleAssetTagModels, blogAssetTagModels, wikiAssetTagModels]) />
+
+		${dataFactory.toInsertSQL(dataFactory.newPortletPreferencesModel(layoutModel.plid, groupId, portletId, pageCount, nextAssetTagModels))}
+	<#else>
+		<#assign nextAssetCategoryModels = dataFactory.getNextAssetCategoryModels([journalArticleAssetCategoryModels, blogAssetCategoryModels, wikiAssetCategoryModels]) />
+
+		${dataFactory.toInsertSQL(dataFactory.newPortletPreferencesModel(layoutModel.plid, groupId, portletId, pageCount, nextAssetCategoryModels))}
+	</#if>
 </#list>

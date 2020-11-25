@@ -1,4 +1,10 @@
-<#assign blogsEntryModels = dataFactory.newBlogsEntryModels(groupId) />
+<#assign
+	blogAssetCategoryModels = dataFactory.pickAssetCategoryModels(assetCategoryModels, 2)
+
+	blogAssetTagModels = dataFactory.pickAssetTagModels(assetTagModels, 2)
+
+	blogsEntryModels = dataFactory.newBlogsEntryModels(groupId)
+/>
 
 <#list blogsEntryModels as blogsEntryModel>
 	${dataFactory.toInsertSQL(blogsEntryModel)}
@@ -14,8 +20,8 @@
 	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionAssetEntryModel(blogsEntryModel))}
 
 	<@insertAssetEntry
-		_assetCategoryModels=assetCategoryModels
-		_assetTagModels=assetTagModels
+		_assetCategoryModels=blogAssetCategoryModels
+		_assetTagModels=blogAssetTagModels
 		_entry=blogsEntryModel
 	/>
 
