@@ -1,5 +1,7 @@
 <#assign
 	assetVocabularyModels = dataFactory.newAssetVocabularyModels(groupId)
+	assetCategoryModels = dataFactory.newAssetCategoryModels(groupId, assetVocabularyModels)
+	assetTagModels = dataFactory.newAssetTagModels(groupId)
 	pageCounts = dataFactory.getSequence(dataFactory.maxAssetPublisherPageCount)
 />
 
@@ -7,13 +9,19 @@
 	${dataFactory.toInsertSQL(assetVocabularyModel)}
 </#list>
 
-<#list dataFactory.newAssetCategoryModels(groupId, assetVocabularyModels) as assetCategoryModel>
+<#list assetCategoryModels as assetCategoryModel>
 	${dataFactory.toInsertSQL(assetCategoryModel)}
 </#list>
 
-<#list dataFactory.newAssetTagModels(groupId) as assetTagModel>
+<#list assetTagModels as assetTagModel>
 	${dataFactory.toInsertSQL(assetTagModel)}
 </#list>
+
+<#include "blogs.ftl">
+
+<#include "journal_article.ftl">
+
+<#include "wiki.ftl">
 
 <#list pageCounts as pageCount>
 	<#assign

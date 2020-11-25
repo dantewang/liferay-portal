@@ -2,22 +2,25 @@
 
 <#macro insertAssetEntry
 	_entry
-	_categoryAndTag = false
+	_assetCategoryModels = {}
+	_assetTagModels = {}
 >
 	<#local assetEntryModel = dataFactory.newAssetEntryModel(_entry)>
 
 	${dataFactory.toInsertSQL(assetEntryModel)}
 
-	<#if _categoryAndTag>
-		<#local assetCategoryIds = dataFactory.getAssetCategoryIds(assetEntryModel)>
+	<#if (_assetCategoryModels?size > 0)>
+		<#local assetCategoryIds = dataFactory.getAssetCategoryIds(assetEntryModel, _assetCategoryModels)>
 
 		<#list assetCategoryIds as assetCategoryId>
 			<#local assetEntryAssetCategoryRelId = dataFactory.getCounterNext()>
 
 			insert into AssetEntryAssetCategoryRel values (0, 0, ${assetEntryAssetCategoryRelId}, ${assetEntryModel.companyId}, ${assetEntryModel.entryId}, ${assetCategoryId}, 0);
 		</#list>
+	</#if>
 
-		<#local assetTagIds = dataFactory.getAssetTagIds(assetEntryModel)>
+	<#if (_assetTagModels?size > 0)>
+		<#local assetTagIds = dataFactory.getAssetTagIds(assetEntryModel, _assetTagModels)>
 
 		<#list assetTagIds as assetTagId>
 			${dataFactory.toInsertSQL("AssetEntries_AssetTags", assetEntryModel.companyId, assetEntryModel.entryId, assetTagId)}
