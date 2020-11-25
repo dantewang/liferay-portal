@@ -1,6 +1,6 @@
 <#assign
-	journalArticleClassNameId = dataFactory.getClassNameId("com.liferay.journal.model.JournalArticle")
-	ddmStructureClassNameId = dataFactory.getClassNameId("com.liferay.dynamic.data.mapping.model.DDMStructure")
+	journalArticleClassNameId = dataFactory.getClassNameId("JournalArticle")
+	ddmStructureClassNameId = dataFactory.getClassNameId("DDMStructure")
 	defaultJournalDDMStructureModel = dataFactory.newDefaultJournalDDMStructureModel(journalArticleClassNameId)
 />
 

@@ -37,13 +37,13 @@
 
 	${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(_layoutModel))}
 
-	<#local fragmentEntryLinkModel = dataFactory.newFragmentEntryLinkModel(_layoutModel, _fragmentEntryModel, dataFactory.getClassNameId("com.liferay.portal.kernel.model.Layout"))>
+	<#local fragmentEntryLinkModel = dataFactory.newFragmentEntryLinkModel(_layoutModel, _fragmentEntryModel, dataFactory.getClassNameId("Layout"))>
 
 	${dataFactory.toInsertSQL(fragmentEntryLinkModel)}
 
 	${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferencesModel(fragmentEntryLinkModel))}
 
-	<#local layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(_layoutModel, dataFactory.getClassNameId("com.liferay.portal.kernel.model.Layout"))>
+	<#local layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(_layoutModel, dataFactory.getClassNameId("Layout"))>
 
 	${dataFactory.toInsertSQL(layoutPageTemplateStructureModel)}
 
@@ -66,7 +66,7 @@
 
 	${dataFactory.toInsertSQL(ddmContentModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(_ddmStorageLinkId, ddmContentModel, _ddmStructureId, dataFactory.getClassNameId("com.liferay.dynamic.data.mapping.model.DDMContent")))}
+	${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(_ddmStorageLinkId, ddmContentModel, _ddmStructureId, dataFactory.getClassNameId("DDMContent")))}
 </#macro>
 
 <#macro insertDDMStructure
@@ -94,7 +94,7 @@
 			${dataFactory.toInsertSQL(dlFolderModel)}
 
 			<@insertAssetEntry
-				_classNameIds=[dataFactory.getClassNameId("com.liferay.document.library.kernel.model.DLFolder")]
+				_classNameIds=[dataFactory.getClassNameId("DLFolder")]
 				_entry=dlFolderModel
 			/>
 
@@ -108,7 +108,7 @@
 				${dataFactory.toInsertSQL(dlFileVersionModel)}
 
 				<@insertAssetEntry
-					_classNameIds=[dataFactory.getClassNameId("com.liferay.document.library.kernel.model.DLFileEntry")]
+					_classNameIds=[dataFactory.getClassNameId("DLFileEntry")]
 					_entry=dlFileEntryModel
 				/>
 
@@ -121,7 +121,7 @@
 				/>
 
 				<@insertMBDiscussion
-					_classNameId=dataFactory.getClassNameId("com.liferay.document.library.kernel.model.DLFileEntry")
+					_classNameId=dataFactory.getClassNameId("DLFileEntry")
 					_classPK=dlFileEntryModel.fileEntryId
 					_groupId=dlFileEntryModel.groupId
 					_maxCommentCount=0
@@ -129,13 +129,13 @@
 					_mbThreadId=dataFactory.getCounterNext()
 				/>
 
-				${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(dlFileEntryModel, dataFactory.getClassNameId("com.liferay.document.library.kernel.model.DLFileEntry")))}
+				${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(dlFileEntryModel, dataFactory.getClassNameId("DLFileEntry")))}
 
 				<#local dlFileEntryMetadataModel = dataFactory.newDLFileEntryMetadataModel(ddmStorageLinkId, _ddmStructureId, dlFileVersionModel)>
 
 				${dataFactory.toInsertSQL(dlFileEntryMetadataModel)}
 
-				${dataFactory.toInsertSQL(dataFactory.newDDMStructureLinkModel(dlFileEntryMetadataModel, dataFactory.getClassNameId("com.liferay.document.library.kernel.model.DLFileEntryMetadata")))}
+				${dataFactory.toInsertSQL(dataFactory.newDDMStructureLinkModel(dlFileEntryMetadataModel, dataFactory.getClassNameId("DLFileEntryMetadata")))}
 
 				${csvFileWriter.write("documentLibrary", dlFileEntryModel.uuid + "," + dlFolderModel.folderId + "," + dlFileEntryModel.name + "," + dlFileEntryModel.fileEntryId + "\n")}
 			</#list>
@@ -191,7 +191,7 @@
 	<#list mbMessageModels as mbMessageModel>
 		<@insertMBMessage _mbMessageModel=mbMessageModel />
 
-		${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel, dataFactory.getClassNameId("com.liferay.wiki.model.WikiPage"), dataFactory.getClassNameId("com.liferay.message.boards.model.MBMessage")))}
+		${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel, dataFactory.getClassNameId("WikiPage"), dataFactory.getClassNameId("MBMessage")))}
 	</#list>
 
 	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionModel(_groupId, _classNameId, _classPK, _mbThreadId))}
@@ -203,7 +203,7 @@
 	${dataFactory.toInsertSQL(_mbMessageModel)}
 
 	<@insertAssetEntry
-		_classNameIds=[dataFactory.getClassNameId("com.liferay.message.boards.model.MBDiscussion"), dataFactory.getClassNameId("com.liferay.message.boards.model.MBMessage")]
+		_classNameIds=[dataFactory.getClassNameId("MBDiscussion"), dataFactory.getClassNameId("MBMessage")]
 		_entry=_mbMessageModel
 	/>
 </#macro>
@@ -215,7 +215,7 @@
 >
 	${dataFactory.toInsertSQL(_userModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newContactModel(_userModel, dataFactory.getClassNameId("com.liferay.portal.kernel.model.User")))}
+	${dataFactory.toInsertSQL(dataFactory.newContactModel(_userModel, dataFactory.getClassNameId("User")))}
 
 	<#list _roleIds as roleId>
 		${dataFactory.toInsertSQL("Users_Roles", 0, roleId, _userModel.userId)}

@@ -1,6 +1,6 @@
 ${dataFactory.toInsertSQL(dataFactory.newDLFileEntryTypeModel())}
 
-<#assign defaultDLDDMStructureModel = dataFactory.newDefaultDLDDMStructureModel(dataFactory.getClassNameId("com.liferay.document.library.kernel.model.DLFileEntry")) />
+<#assign defaultDLDDMStructureModel = dataFactory.newDefaultDLDDMStructureModel(dataFactory.getClassNameId("DLFileEntry")) />
 
 <@insertDDMStructure
 	_ddmStructureLayoutModel=dataFactory.newDefaultDLDDMStructureLayoutModel()

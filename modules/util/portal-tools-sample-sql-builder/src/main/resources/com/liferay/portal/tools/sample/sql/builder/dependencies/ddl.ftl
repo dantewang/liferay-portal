@@ -1,5 +1,5 @@
 <#assign
-	ddlRecordSetClassNameId = dataFactory.getClassNameId("com.liferay.dynamic.data.lists.model.DDLRecordSet")
+	ddlRecordSetClassNameId = dataFactory.getClassNameId("DDLRecordSet")
 	ddlRecordSetCounts = dataFactory.getSequence(dataFactory.maxDDLRecordSetCount)
 />
 
