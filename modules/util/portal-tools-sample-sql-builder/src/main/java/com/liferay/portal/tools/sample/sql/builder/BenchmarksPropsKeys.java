@@ -123,8 +123,6 @@ public interface BenchmarksPropsKeys {
 
 	public static final String OUTPUT_DIR = "sample.sql.output.dir";
 
-	public static final String OUTPUT_MERGE = "sample.sql.output.merge";
-
 	public static final String SCRIPT = "sample.sql.script";
 
 	public static final String SEARCH_BAR_ENABLED =
