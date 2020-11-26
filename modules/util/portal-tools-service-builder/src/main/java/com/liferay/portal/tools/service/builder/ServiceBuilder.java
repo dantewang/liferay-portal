@@ -6536,9 +6536,11 @@ public class ServiceBuilder {
 					String name = column.getName();
 
 					finderWhere = StringUtil.replace(
-						finderWhere, name, alias + "." + name);
+						finderWhere, new String[] {name},
+						new String[] {alias + "." + name}, true);
 					finderDBWhere = StringUtil.replace(
-						finderDBWhere, name, alias + "." + column.getDBName());
+						finderDBWhere, new String[] {name},
+						new String[] {alias + "." + column.getDBName()}, true);
 				}
 			}
 
