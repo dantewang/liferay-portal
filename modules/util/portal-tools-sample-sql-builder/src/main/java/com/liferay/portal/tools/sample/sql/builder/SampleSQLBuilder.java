@@ -64,7 +64,11 @@ public class SampleSQLBuilder {
 
 		outputDir.mkdirs();
 
-		compressSQL(generateSQL(), outputDir);
+		File sampleSQLFile = new File(outputDir, "sample.sql");
+
+		compressSQL(generateSQL(sampleSQLFile), outputDir);
+
+		sampleSQLFile.delete();
 	}
 
 	protected void compressSQL(
@@ -198,7 +202,7 @@ public class SampleSQLBuilder {
 		return new UnsyncBufferedWriter(writer, _WRITER_BUFFER_SIZE);
 	}
 
-	protected Reader generateSQL() {
+	protected Reader generateSQL(File sampleSQLFile) {
 		final CharPipe charPipe = new CharPipe(_PIPE_BUFFER_SIZE);
 
 		Thread thread = new Thread(
@@ -207,10 +211,7 @@ public class SampleSQLBuilder {
 					Writer sampleSQLWriter = new UnsyncTeeWriter(
 						new UnsyncBufferedWriter(
 							charPipe.getWriter(), _WRITER_BUFFER_SIZE),
-						createFileWriter(
-							new File(
-								BenchmarksPropsValues.OUTPUT_DIR,
-								"sample.sql")))) {
+						createFileWriter(sampleSQLFile))) {
 
 					FreeMarkerUtil.process(
 						BenchmarksPropsValues.SCRIPT,
