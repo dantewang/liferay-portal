@@ -6535,12 +6535,10 @@ public class ServiceBuilder {
 				for (EntityColumn column : entityColumns) {
 					String name = column.getName();
 
-					finderWhere = StringUtil.replace(
-						finderWhere, new String[] {name},
-						new String[] {alias + "." + name}, true);
-					finderDBWhere = StringUtil.replace(
-						finderDBWhere, new String[] {name},
-						new String[] {alias + "." + column.getDBName()}, true);
+					finderWhere = finderWhere.replaceAll(
+						"\\b" + name + "\\b", alias + "." + name);
+					finderDBWhere = finderDBWhere.replaceAll(
+						"\\b" + name + "\\b", alias + "." + column.getDBName());
 				}
 			}
 
