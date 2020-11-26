@@ -19,7 +19,7 @@
 
 	<#include "journal_article.ftl">
 
-	<#include "fragment.ftl">
+	<#include "journal_article_content_page.ftl">
 
 	<#include "mb.ftl">
 
