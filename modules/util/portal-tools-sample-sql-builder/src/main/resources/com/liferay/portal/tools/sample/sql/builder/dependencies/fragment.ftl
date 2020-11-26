@@ -1,18 +1,24 @@
-<#assign fragmentCollectionModel = dataFactory.newFragmentCollectionModel(groupId) />
+<#assign journalArticleContentPageCounts = dataFactory.getSequence(dataFactory.maxContentLayoutCount) />
 
-${dataFactory.toInsertSQL(fragmentCollectionModel)}
-
-<#assign fragmentEntryModel = dataFactory.newFragmentEntryModel(groupId, fragmentCollectionModel) />
-
-${dataFactory.toInsertSQL(fragmentEntryModel)}
-
-<#assign contentLayoutModels = dataFactory.newContentLayoutModels(groupId) />
-
-<#list contentLayoutModels as contentLayoutModel>
-	<@insertContentLayout
-		_fragmentEntryModel=fragmentEntryModel
-		_layoutModel=contentLayoutModel
+<#list journalArticleContentPageCounts as journalArticleContentPageCount>
+	<#assign
+		journalArticleContentLayoutModels = dataFactory.newContentPageLayoutModels(groupId, journalArticleContentPageCount + "_web_content")
+		journalArticleFragmentEntryLinkModels = dataFactory.newFragmentEntryLinkModels(journalArticleContentLayoutModels, "", "", "", "", "journal_editValue.json")
 	/>
 
-	${csvFileWriter.write("fragment", contentLayoutModel.friendlyURL + "\n")}
+	<@insertContentPageLayout
+		_fragmentEntryLinkModels=journalArticleFragmentEntryLinkModels
+		_layoutModels=journalArticleContentLayoutModels
+		_templateFileName="journal_contentpage_layout_definition.json"
+	/>
+
+	<#list dataFactory.newJournalContentPortletPreferencesModels(journalArticleFragmentEntryLinkModels) as journalContentPortletPreferencesModel>
+		${dataFactory.toInsertSQL(journalContentPortletPreferencesModel)}
+	</#list>
+
+	<#list journalArticleContentLayoutModels as journalArticleContentLayoutModel>
+		<#if journalArticleContentLayoutModel.classNameId = 0>
+			${csvFileWriter.write("fragment", journalArticleContentLayoutModel.friendlyURL + "\n")}
+		</#if>
+	</#list>
 </#list>
