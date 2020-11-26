@@ -25,29 +25,6 @@
 	</#if>
 </#macro>
 
-<#macro insertContentLayout
-	_layoutModel
-	_fragmentEntryModel
->
-	${dataFactory.toInsertSQL(_layoutModel)}
-
-	${dataFactory.toInsertSQL(dataFactory.newLayoutFriendlyURLModel(_layoutModel))}
-
-	<#local fragmentEntryLinkModel = dataFactory.newFragmentEntryLinkModel(_layoutModel, _fragmentEntryModel)>
-
-	${dataFactory.toInsertSQL(fragmentEntryLinkModel)}
-
-	${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferencesModel(fragmentEntryLinkModel))}
-
-	<#local layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(_layoutModel)>
-
-	${dataFactory.toInsertSQL(layoutPageTemplateStructureModel)}
-
-	<#local layoutPageTemplateStructureRelModel = dataFactory.newLayoutPageTemplateStructureRelModel(_layoutModel, layoutPageTemplateStructureModel, fragmentEntryLinkModel)>
-
-	${dataFactory.toInsertSQL(layoutPageTemplateStructureRelModel)}
-</#macro>
-
 <#macro insertContentPageLayout
 	_fragmentEntryLinkModels
 	_layoutModels
