@@ -2,8 +2,6 @@
 
 <#include "default_user.ftl">
 
-<@insertLayout _layoutModel=dataFactory.newLayoutModel(guestGroupModel.groupId, "welcome", "com_liferay_login_web_portlet_LoginPortlet,", "com_liferay_hello_world_web_portlet_HelloWorldPortlet,") />
-
 <@insertGroup _groupModel=dataFactory.newGlobalGroupModel() />
 
 <@insertGroup _groupModel=guestGroupModel />
@@ -36,6 +34,14 @@
 		_parentDLFolderId=0
 	/>
 
+	<#assign homePageContentLayoutModels = dataFactory.newContentPageLayoutModels(groupId, "welcome") />
+
+	<@insertContentPageLayout
+		_fragmentEntryLinkModels=dataFactory.newFragmentEntryLinkModels(homePageContentLayoutModels)
+		_layoutModels=homePageContentLayoutModels
+		_templateFileName="default-homepage-layout-definition.json"
+	/>
+
 	<#assign publicLayoutModels = dataFactory.newPublicLayoutModels(groupId) />
 
 	<#list publicLayoutModels as publicLayoutModel>
@@ -46,3 +52,11 @@
 
 	${csvFileWriter.write("repository", groupId + ", " + groupModel.name + "\n")}
 </#list>
+
+<#assign defaultSiteHomePageContentLayoutModels = dataFactory.newContentPageLayoutModels(guestGroupModel.groupId, "welcome") />
+
+<@insertContentPageLayout
+	_fragmentEntryLinkModels=dataFactory.newFragmentEntryLinkModels(defaultSiteHomePageContentLayoutModels)
+	_layoutModels=defaultSiteHomePageContentLayoutModels
+	_templateFileName="default-homepage-layout-definition.json"
+/>
