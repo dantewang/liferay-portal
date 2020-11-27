@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service;
 
+import com.liferay.petra.string.StringBundler;
+
 import java.io.IOException;
 
 import java.nio.file.FileVisitOption;
@@ -22,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -32,6 +35,15 @@ import org.junit.Test;
  * @author Preston Crary
  */
 public class ServiceXMLTest {
+
+	@Test
+	public void testNameCharacters() throws Exception {
+		Stream<Path> stream = Files.find(
+			Paths.get(System.getProperty("user.dir")), Integer.MAX_VALUE,
+			ServiceXMLTest::_isServiceXml, FileVisitOption.FOLLOW_LINKS);
+
+		stream.forEach(this::_assertNameCharacters);
+	}
 
 	@Test
 	public void testTXRequired() throws Exception {
@@ -66,5 +78,55 @@ public class ServiceXMLTest {
 
 		return false;
 	}
+
+	private void _assertNameCharacters(Path path) {
+		try {
+			List<String> lines = Files.readAllLines(path);
+
+			for (String line : lines) {
+				for (String nameToken : _NAME_TOKENS) {
+					int beginIndex = line.indexOf(nameToken);
+
+					if (beginIndex < 0) {
+						continue;
+					}
+
+					beginIndex = beginIndex + nameToken.length();
+
+					int endIndex = line.indexOf("\"", beginIndex);
+
+					String name = line.substring(beginIndex, endIndex);
+
+					Assert.assertTrue(
+						StringBundler.concat(
+							"Invalid character found in ", nameToken, name,
+							"\" in ", path.toString()),
+						_isValidName(name));
+				}
+			}
+		}
+		catch (IOException ioException) {
+			throw new RuntimeException(ioException);
+		}
+	}
+
+	private boolean _isValidName(String name) {
+		for (char c : name.toCharArray()) {
+			if (((c >= 'a') && (c <= 'z')) || ((c >= 'A') && (c <= 'Z')) ||
+				(c == '_') || ((c >= '0') && (c <= '9'))) {
+
+				continue;
+			}
+
+			return false;
+		}
+
+		return true;
+	}
+
+	private static final String[] _NAME_TOKENS = {
+		" name=\"", " variable-name=\"", " plural-name=\"",
+		" plural-variable-name=\"", " table=\"", " db-name=\""
+	};
 
 }
