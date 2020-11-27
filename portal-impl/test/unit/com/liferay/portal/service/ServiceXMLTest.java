@@ -37,34 +37,16 @@ import org.junit.Test;
 public class ServiceXMLTest {
 
 	@Test
-	public void testNameCharacters() throws Exception {
+	public void testServiceXML() throws Exception {
 		Stream<Path> stream = Files.find(
 			Paths.get(System.getProperty("user.dir")), Integer.MAX_VALUE,
 			ServiceXMLTest::_isServiceXml, FileVisitOption.FOLLOW_LINKS);
 
-		stream.forEach(this::_assertNameCharacters);
-	}
-
-	@Test
-	public void testTXRequired() throws Exception {
-		Stream<Path> stream = Files.find(
-			Paths.get(System.getProperty("user.dir")), Integer.MAX_VALUE,
-			ServiceXMLTest::_isServiceXml, FileVisitOption.FOLLOW_LINKS);
-
-		stream.forEach(ServiceXMLTest::_assertNoTXRequiredElement);
-	}
-
-	private static void _assertNoTXRequiredElement(Path path) {
-		try {
-			Stream<String> stream = Files.lines(path);
-
-			Assert.assertFalse(
-				"Remove deprecated tx-required element from " + path,
-				stream.anyMatch(line -> line.contains("<tx-required>")));
-		}
-		catch (IOException ioException) {
-			throw new RuntimeException(ioException);
-		}
+		stream.forEach(
+			path -> {
+				_assertNameCharacters(path);
+				_assertNoTXRequiredElement(path);
+			});
 	}
 
 	private static boolean _isServiceXml(
@@ -104,6 +86,19 @@ public class ServiceXMLTest {
 						_isValidName(name));
 				}
 			}
+		}
+		catch (IOException ioException) {
+			throw new RuntimeException(ioException);
+		}
+	}
+
+	private void _assertNoTXRequiredElement(Path path) {
+		try {
+			Stream<String> stream = Files.lines(path);
+
+			Assert.assertFalse(
+				"Remove deprecated tx-required element from " + path,
+				stream.anyMatch(line -> line.contains("<tx-required>")));
 		}
 		catch (IOException ioException) {
 			throw new RuntimeException(ioException);
