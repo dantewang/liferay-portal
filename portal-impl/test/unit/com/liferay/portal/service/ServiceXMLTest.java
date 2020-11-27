@@ -40,25 +40,13 @@ public class ServiceXMLTest {
 	public void testServiceXML() throws Exception {
 		Stream<Path> stream = Files.find(
 			Paths.get(System.getProperty("user.dir")), Integer.MAX_VALUE,
-			ServiceXMLTest::_isServiceXml, FileVisitOption.FOLLOW_LINKS);
+			this::_isServiceXml, FileVisitOption.FOLLOW_LINKS);
 
 		stream.forEach(
 			path -> {
 				_assertNameCharacters(path);
 				_assertNoTXRequiredElement(path);
 			});
-	}
-
-	private static boolean _isServiceXml(
-		Path path, BasicFileAttributes basicFileAttributes) {
-
-		Path fileNamePath = path.getFileName();
-
-		if (Objects.equals(fileNamePath.toString(), "service.xml")) {
-			return true;
-		}
-
-		return false;
 	}
 
 	private void _assertNameCharacters(Path path) {
@@ -103,6 +91,18 @@ public class ServiceXMLTest {
 		catch (IOException ioException) {
 			throw new RuntimeException(ioException);
 		}
+	}
+
+	private boolean _isServiceXml(
+		Path path, BasicFileAttributes basicFileAttributes) {
+
+		Path fileNamePath = path.getFileName();
+
+		if (Objects.equals(fileNamePath.toString(), "service.xml")) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private boolean _isValidName(String name) {
