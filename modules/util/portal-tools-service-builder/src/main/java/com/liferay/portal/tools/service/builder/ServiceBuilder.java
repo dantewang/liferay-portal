@@ -5938,14 +5938,16 @@ public class ServiceBuilder {
 	}
 
 	private Entity _parseEntity(Element entityElement) throws Exception {
-		String entityName = entityElement.attributeValue("name");
+		String entityName = _validateName(entityElement.attributeValue("name"));
 		String humanName = entityElement.attributeValue("human-name");
-		String variableName = entityElement.attributeValue("variable-name");
-		String pluralName = entityElement.attributeValue("plural-name");
-		String pluralVariableName = entityElement.attributeValue(
-			"plural-variable-name");
+		String variableName = _validateName(
+			entityElement.attributeValue("variable-name"));
+		String pluralName = _validateName(
+			entityElement.attributeValue("plural-name"));
+		String pluralVariableName = _validateName(
+			entityElement.attributeValue("plural-variable-name"));
 
-		String tableName = entityElement.attributeValue("table");
+		String tableName = _validateName(entityElement.attributeValue("table"));
 
 		if (Validator.isNull(tableName)) {
 			tableName = entityName;
@@ -6171,12 +6173,14 @@ public class ServiceBuilder {
 		columnElements.addAll(0, derivedColumnElements);
 
 		for (Element columnElement : columnElements) {
-			String columnName = columnElement.attributeValue("name");
+			String columnName = _validateName(
+				columnElement.attributeValue("name"));
 
-			String columnPluralName = columnElement.attributeValue(
-				"plural-name");
+			String columnPluralName = _validateName(
+				columnElement.attributeValue("plural-name"));
 
-			String columnDBName = columnElement.attributeValue("db-name");
+			String columnDBName = _validateName(
+				columnElement.attributeValue("db-name"));
 
 			if (Validator.isNull(columnDBName)) {
 				columnDBName = columnName;
@@ -6339,7 +6343,8 @@ public class ServiceBuilder {
 				"order-column");
 
 			for (Element orderColumnElement : orderColumnElements) {
-				String orderColName = orderColumnElement.attributeValue("name");
+				String orderColName = _validateName(
+					orderColumnElement.attributeValue("name"));
 				boolean orderColCaseSensitive = GetterUtil.getBoolean(
 					orderColumnElement.attributeValue("case-sensitive"), true);
 
@@ -6514,9 +6519,10 @@ public class ServiceBuilder {
 		}
 
 		for (Element finderElement : finderElements) {
-			String finderName = finderElement.attributeValue("name");
-			String finderPluralName = finderElement.attributeValue(
-				"plural-name");
+			String finderName = _validateName(
+				finderElement.attributeValue("name"));
+			String finderPluralName = _validateName(
+				finderElement.attributeValue("plural-name"));
 			String finderReturn = finderElement.attributeValue("return-type");
 			boolean finderUnique = GetterUtil.getBoolean(
 				finderElement.attributeValue("unique"));
@@ -7755,6 +7761,25 @@ public class ServiceBuilder {
 		_mkdir(file.getParentFile());
 
 		Files.createFile(file.toPath());
+	}
+
+	private String _validateName(String name) {
+		if (Validator.isNull(name)) {
+			return name;
+		}
+
+		for (char c : name.toCharArray()) {
+			if (((c >= 'a') && (c <= 'z')) || ((c >= 'A') && (c <= 'Z')) ||
+				(c == '_') || ((c >= '0') && (c <= '9'))) {
+
+				continue;
+			}
+
+			throw new ServiceBuilderException(
+				"Name \"" + name + "\" contains non-word character");
+		}
+
+		return name;
 	}
 
 	private void _write(File file, String s) throws IOException {
