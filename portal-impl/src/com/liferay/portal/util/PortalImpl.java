@@ -2569,8 +2569,18 @@ public class PortalImpl implements Portal {
 
 		String portalURL = getPortalURL(httpServletRequest);
 
-		return portalURL + _pathContext +
-			getRelativeHomeURL(httpServletRequest);
+		String i18NLanguageId = (String)httpServletRequest.getAttribute(
+			WebKeys.I18N_LANGUAGE_ID);
+
+		if (i18NLanguageId == null) {
+			return StringBundler.concat(
+				portalURL, _pathContext,
+				getRelativeHomeURL(httpServletRequest));
+		}
+
+		return StringBundler.concat(
+			portalURL, _pathContext, "/", i18NLanguageId,
+			getRelativeHomeURL(httpServletRequest));
 	}
 
 	@Override
