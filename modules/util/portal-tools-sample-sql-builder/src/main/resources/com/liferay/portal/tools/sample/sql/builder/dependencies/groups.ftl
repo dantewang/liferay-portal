@@ -44,5 +44,9 @@
 
 	<@insertGroup _groupModel=groupModel />
 
+	<#if dataFactory.enableSearchBar>
+		<@insertLayout _layoutModel=dataFactory.newSearchLayoutModel(groupId) />
+	</#if>
+
 	${csvFileWriter.write("repository", groupId + ", " + groupModel.name + "\n")}
 </#list>
