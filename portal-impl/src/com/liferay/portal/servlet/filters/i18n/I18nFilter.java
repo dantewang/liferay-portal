@@ -334,7 +334,7 @@ public class I18nFilter extends BasePortalFilter {
 					return null;
 				}
 
-				return requestedLanguageId;
+				return userLanguageId;
 			}
 
 			return prependIfRequestedLocaleDiffersFromDefaultLocale(
