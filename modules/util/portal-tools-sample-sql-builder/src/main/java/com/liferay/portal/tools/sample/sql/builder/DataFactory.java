@@ -2900,59 +2900,8 @@ public class DataFactory {
 	public LayoutModel newLayoutModel(
 		long groupId, String name, String column1, String column2) {
 
-		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
-
-		if (simpleCounter == null) {
-			simpleCounter = new SimpleCounter();
-
-			_layoutCounters.put(groupId, simpleCounter);
-		}
-
-		LayoutModel layoutModel = new LayoutModelImpl();
-
-		// UUID
-
-		layoutModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		layoutModel.setPlid(_counter.get());
-
-		// Group instance
-
-		layoutModel.setGroupId(groupId);
-
-		// Audit fields
-
-		layoutModel.setCompanyId(_companyId);
-		layoutModel.setUserId(_sampleUserId);
-		layoutModel.setUserName(_SAMPLE_USER_NAME);
-		layoutModel.setCreateDate(new Date());
-		layoutModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		layoutModel.setLayoutId(simpleCounter.get());
-		layoutModel.setName(
-			"<?xml version=\"1.0\"?><root><name>" + name + "</name></root>");
-		layoutModel.setType(LayoutConstants.TYPE_PORTLET);
-
-		UnicodeProperties typeSettingsUnicodeProperties = new UnicodeProperties(
-			true);
-
-		typeSettingsUnicodeProperties.setProperty(
-			LayoutTypePortletConstants.LAYOUT_TEMPLATE_ID, "2_columns_ii");
-		typeSettingsUnicodeProperties.setProperty("column-1", column1);
-		typeSettingsUnicodeProperties.setProperty("column-2", column2);
-
-		layoutModel.setTypeSettings(
-			StringUtil.replace(
-				typeSettingsUnicodeProperties.toString(), '\n', "\\n"));
-
-		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + name);
-		layoutModel.setLastPublishDate(new Date());
-
-		return layoutModel;
+		return newLayoutModel(
+			groupId, name, false, "2_columns_ii", column1, column2);
 	}
 
 	public LayoutPageTemplateStructureModel newLayoutPageTemplateStructureModel(
@@ -3708,7 +3657,6 @@ public class DataFactory {
 	}
 
 	public LayoutModel newSearchLayoutModel(long groupId) {
-		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
 		String prefix = "com_liferay_portal_search_web";
 
 		StringBundler column1SB = new StringBundler(4);
@@ -3742,6 +3690,17 @@ public class DataFactory {
 		column3SB.append(prefix);
 		column3SB.append("_search_options_portlet_SearchOptionsPortlet,");
 
+		return newLayoutModel(
+			groupId, "search", true, "1_2_columns_i", column1SB.toString(),
+			column2SB.toString(), column3SB.toString());
+	}
+
+	protected LayoutModel newLayoutModel(
+		long groupId, String name, boolean isPrivateLayout,
+		String layoutTemplateId, String... columns) {
+
+		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
+
 		if (simpleCounter == null) {
 			simpleCounter = new SimpleCounter();
 
@@ -3774,39 +3733,30 @@ public class DataFactory {
 
 		layoutModel.setLayoutId(simpleCounter.get());
 		layoutModel.setName(
-			"<?xml version=\"1.0\"?><root><name>search</name></root>");
+			"<?xml version=\"1.0\"?><root><name>" + name + "</name></root>");
 		layoutModel.setType(LayoutConstants.TYPE_PORTLET);
-		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + "search");
 
 		UnicodeProperties typeSettingsUnicodeProperties = new UnicodeProperties(
 			true);
 
 		typeSettingsUnicodeProperties.setProperty(
-			LayoutTypePortletConstants.LAYOUT_TEMPLATE_ID, "1_2_columns_i");
-		typeSettingsUnicodeProperties.setProperty(
-			"column-1", column1SB.toString());
-		typeSettingsUnicodeProperties.setProperty(
-			"column-2", column2SB.toString());
-		typeSettingsUnicodeProperties.setProperty(
-			"column-3", column3SB.toString());
-		typeSettingsUnicodeProperties.setProperty(
-			"column-1-customizable", "false");
-		typeSettingsUnicodeProperties.setProperty(
-			"column-2-customizable", "false");
-		typeSettingsUnicodeProperties.setProperty(
-			"column-3-customizable", "false");
-		typeSettingsUnicodeProperties.setProperty(
-			LayoutConstants.CUSTOMIZABLE_LAYOUT, "false");
-		typeSettingsUnicodeProperties.setProperty("layoutUpdateable", "true");
-		typeSettingsUnicodeProperties.setProperty("merge-fail-count", "0");
-		typeSettingsUnicodeProperties.setProperty("privateLayout", "true");
+			LayoutTypePortletConstants.LAYOUT_TEMPLATE_ID, layoutTemplateId);
 
-		String typeSettings = StringUtil.replace(
-			typeSettingsUnicodeProperties.toString(), '\n', "\\n");
+		for (int i = 1; i <= columns.length; i++) {
+			typeSettingsUnicodeProperties.setProperty(
+				"column-" + i, columns[i]);
+		}
 
-		layoutModel.setTypeSettings(typeSettings);
+		typeSettingsUnicodeProperties.setProperty(
+			"privateLayout", String.valueOf(isPrivateLayout));
+
+		layoutModel.setTypeSettings(
+			StringUtil.replace(
+				typeSettingsUnicodeProperties.toString(), '\n', "\\n"));
 
 		layoutModel.setLastPublishDate(new Date());
+
+		layoutModel.setFriendlyURL(StringPool.FORWARD_SLASH + "search");
 
 		return layoutModel;
 	}
