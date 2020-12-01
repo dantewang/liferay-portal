@@ -102,7 +102,6 @@ import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.model.FragmentCollectionModel;
 import com.liferay.fragment.model.FragmentEntryLinkModel;
 import com.liferay.fragment.model.FragmentEntryModel;
-import com.liferay.fragment.model.impl.FragmentCollectionModelImpl;
 import com.liferay.fragment.model.impl.FragmentEntryLinkModelImpl;
 import com.liferay.fragment.model.impl.FragmentEntryModelImpl;
 import com.liferay.friendly.url.model.FriendlyURLEntryLocalization;
@@ -562,6 +561,10 @@ public class DataFactory {
 
 	public int getMaxCommerceProductInstanceCount() {
 		return BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_INSTANCE_COUNT;
+	}
+
+	public int getMaxContentLayoutCount() {
+		return BenchmarksPropsValues.MAX_CONTENT_LAYOUT_COUNT;
 	}
 
 	public int getMaxDDLRecordCount() {
@@ -2430,37 +2433,6 @@ public class DataFactory {
 		return dlFolderModels;
 	}
 
-	public FragmentCollectionModel newFragmentCollectionModel(long groupId) {
-		FragmentCollectionModel fragmentCollectionModel =
-			new FragmentCollectionModelImpl();
-
-		// UUID
-
-		fragmentCollectionModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		fragmentCollectionModel.setFragmentCollectionId(_counter.get());
-
-		// Group instance
-
-		fragmentCollectionModel.setGroupId(groupId);
-
-		// Audit fields
-
-		fragmentCollectionModel.setCompanyId(_companyId);
-		fragmentCollectionModel.setUserId(_sampleUserId);
-		fragmentCollectionModel.setCreateDate(new Date());
-		fragmentCollectionModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		fragmentCollectionModel.setFragmentCollectionKey("fragmentcollection");
-		fragmentCollectionModel.setName("fragmentcollection");
-
-		return fragmentCollectionModel;
-	}
-
 	public FragmentEntryLinkModel newFragmentEntryLinkModel(
 		LayoutModel layoutModel, FragmentEntryModel fragmentEntryModel) {
 
@@ -2540,6 +2512,31 @@ public class DataFactory {
 					_readFile("paragraph_configuration.json"),
 					_readFile("paragraph_editValue.json"), 0,
 					nameSpaces.get(_PARAGRAPH_RENDER_KEY)));
+		}
+
+		return fragmentEntryLinkModels;
+	}
+
+	public List<FragmentEntryLinkModel> newFragmentEntryLinkModels(
+			List<LayoutModel> layoutModels, String renderKey, String css,
+			String html, String configuration, String editValueJsonFileName)
+		throws Exception {
+
+		List<FragmentEntryLinkModel> fragmentEntryLinkModels =
+			new ArrayList<>();
+
+		String nameSpace = StringUtil.randomId();
+
+		for (LayoutModel layoutModel : layoutModels) {
+			String editValue = _readFile(editValueJsonFileName);
+
+			editValue = StringUtil.replace(
+				editValue, "${FragmentEntryLinkNameSpace}", nameSpace);
+
+			fragmentEntryLinkModels.add(
+				newFragmentEntryLinkModel(
+					layoutModel, renderKey, css, html, configuration, editValue,
+					0, nameSpace));
 		}
 
 		return fragmentEntryLinkModels;
@@ -2878,28 +2875,23 @@ public class DataFactory {
 				String.valueOf(journalArticleResourceModel.getGroupId())));
 	}
 
-	public PortletPreferencesModel newJournalContentPortletPreferencesModel(
-		FragmentEntryLinkModel fragmentEntryLinkModel) {
+	public List<PortletPreferencesModel>
+			newJournalContentPortletPreferencesModels(
+				List<FragmentEntryLinkModel> fragmentEntryLinkModels)
+		throws Exception {
 
-		PortletPreferencesModel portletPreferencesModel =
-			new PortletPreferencesModelImpl();
+		List<PortletPreferencesModel> portletPreferencesModels =
+			new ArrayList<>();
 
-		// PK fields
+		for (FragmentEntryLinkModel fragmentEntryLinkModel :
+				fragmentEntryLinkModels) {
 
-		portletPreferencesModel.setPortletPreferencesId(_counter.get());
+			portletPreferencesModels.add(
+				_newJournalContentPortletPreferencesModel(
+					fragmentEntryLinkModel));
+		}
 
-		// Other fields
-
-		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
-		portletPreferencesModel.setOwnerType(
-			PortletKeys.PREFS_OWNER_TYPE_LAYOUT);
-		portletPreferencesModel.setPlid(fragmentEntryLinkModel.getClassPK());
-		portletPreferencesModel.setPortletId(
-			PortletIdCodec.encode(
-				JournalContentPortletKeys.JOURNAL_CONTENT,
-				fragmentEntryLinkModel.getNamespace()));
-
-		return portletPreferencesModel;
+		return portletPreferencesModels;
 	}
 
 	public PortletPreferenceValueModel
@@ -5272,10 +5264,20 @@ public class DataFactory {
 							fragmentEntryLinkModel.getFragmentEntryLinkId()));
 				}
 				else {
-					data = StringUtil.replace(
-						data, "${loginPortletFragmentEntryLinkId}",
-						String.valueOf(
-							fragmentEntryLinkModel.getFragmentEntryLinkId()));
+					if (data.contains("${loginPortletFragmentEntryLinkId}")) {
+						data = StringUtil.replace(
+							data, "${loginPortletFragmentEntryLinkId}",
+							String.valueOf(
+								fragmentEntryLinkModel.
+									getFragmentEntryLinkId()));
+					}
+					else {
+						data = StringUtil.replace(
+							data, "${portletFragmentEntryLinkId}",
+							String.valueOf(
+								fragmentEntryLinkModel.
+									getFragmentEntryLinkId()));
+					}
 				}
 			}
 		}
@@ -5370,6 +5372,30 @@ public class DataFactory {
 		layoutModel.setLastPublishDate(new Date());
 
 		return layoutModel;
+	}
+
+	private PortletPreferencesModel _newJournalContentPortletPreferencesModel(
+		FragmentEntryLinkModel fragmentEntryLinkModel) {
+
+		PortletPreferencesModel portletPreferencesModel =
+			new PortletPreferencesModelImpl();
+
+		// PK fields
+
+		portletPreferencesModel.setPortletPreferencesId(_counter.get());
+
+		// Other fields
+
+		portletPreferencesModel.setOwnerId(PortletKeys.PREFS_OWNER_ID_DEFAULT);
+		portletPreferencesModel.setOwnerType(
+			PortletKeys.PREFS_OWNER_TYPE_LAYOUT);
+		portletPreferencesModel.setPlid(fragmentEntryLinkModel.getClassPK());
+		portletPreferencesModel.setPortletId(
+			PortletIdCodec.encode(
+				JournalContentPortletKeys.JOURNAL_CONTENT,
+				fragmentEntryLinkModel.getNamespace()));
+
+		return portletPreferencesModel;
 	}
 
 	private String _readFile(String resourceName) throws Exception {

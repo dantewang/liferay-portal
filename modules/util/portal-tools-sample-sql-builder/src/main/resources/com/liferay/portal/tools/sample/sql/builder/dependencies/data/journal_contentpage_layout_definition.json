@@ -1,0 +1,70 @@
+{
+	"deletedItems": [
+	],
+	"items": {
+		"04d343cb-3ffc-4b63-a95e-378d611cc1b4": {
+			"children": [
+			],
+			"config": {
+				"fragmentEntryLinkId": "${portletFragmentEntryLinkId}",
+				"landscapeMobile": {
+					"styles": {
+					}
+				},
+				"portraitMobile": {
+					"styles": {
+					}
+				},
+				"styles": {
+					"backgroundImage": {
+					},
+					"borderRadius": "",
+					"borderWidth": 0,
+					"fontFamily": "",
+					"fontSize": "",
+					"fontWeight": "",
+					"height": "",
+					"marginBottom": "",
+					"marginLeft": "",
+					"marginRight": "",
+					"marginTop": "",
+					"maxHeight": "",
+					"maxWidth": "",
+					"minHeight": "",
+					"minWidth": "",
+					"opacity": 100,
+					"overflow": "",
+					"paddingBottom": "",
+					"paddingLeft": "",
+					"paddingRight": "",
+					"paddingTop": "",
+					"shadow": "",
+					"textAlign": "",
+					"width": ""
+				},
+				"tablet": {
+					"styles": {
+					}
+				}
+			},
+			"itemId": "04d343cb-3ffc-4b63-a95e-378d611cc1b4",
+			"parentId": "238c306f-bad3-492b-e73c-dc167f5f2add",
+			"type": "fragment"
+		},
+		"238c306f-bad3-492b-e73c-dc167f5f2add": {
+			"children": [
+				"04d343cb-3ffc-4b63-a95e-378d611cc1b4"
+			],
+			"config": {
+			},
+			"itemId": "238c306f-bad3-492b-e73c-dc167f5f2add",
+			"parentId": "",
+			"type": "root"
+		}
+	},
+	"rootItems": {
+		"dropZone": "",
+		"main": "238c306f-bad3-492b-e73c-dc167f5f2add"
+	},
+	"version": 1
+}
