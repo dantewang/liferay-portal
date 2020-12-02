@@ -1101,11 +1101,7 @@ public class ResourceActionsImpl implements ResourceActions {
 				String portletName = portletResourceElement.elementTextTrim(
 					"portlet-name");
 
-				Portlet portlet = portletLocalService.getPortletById(
-					portletName);
-
-				Set<String> portletActions = _getPortletMimeTypeActions(
-					portletName, portlet);
+				Set<String> portletActions = new HashSet<>();
 
 				if (!portletName.equals(PortletKeys.PORTAL)) {
 					_checkPortletLayoutManagerActions(portletActions);
