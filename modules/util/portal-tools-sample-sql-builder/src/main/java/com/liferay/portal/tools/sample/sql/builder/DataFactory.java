@@ -230,6 +230,13 @@ import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.portal.model.impl.UserModelImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
+import com.liferay.portal.search.web.constants.SearchBarPortletKeys;
+import com.liferay.portal.search.web.internal.folder.facet.constants.FolderFacetPortletKeys;
+import com.liferay.portal.search.web.internal.site.facet.constants.SiteFacetPortletKeys;
+import com.liferay.portal.search.web.internal.suggestions.constants.SuggestionsPortletKeys;
+import com.liferay.portal.search.web.internal.tag.facet.constants.TagFacetPortletKeys;
+import com.liferay.portal.search.web.internal.type.facet.constants.TypeFacetPortletKeys;
+import com.liferay.portal.search.web.internal.user.facet.constants.UserFacetPortletKeys;
 import com.liferay.portal.upgrade.PortalUpgradeProcess;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
@@ -5220,25 +5227,25 @@ public class DataFactory {
 
 		StringBundler column1SB = new StringBundler(4);
 
-		column1SB.append(prefix);
-		column1SB.append("_search_bar_portlet_SearchBarPortlet,");
-		column1SB.append(prefix);
-		column1SB.append("_suggestions_portlet_SuggestionsPortlet,");
+		column1SB.append(SearchBarPortletKeys.SEARCH_BAR);
+		column1SB.append(",");
+		column1SB.append(SuggestionsPortletKeys.SUGGESTIONS);
+		column1SB.append(",");
 
 		StringBundler column2SB = new StringBundler(14);
 
-		column2SB.append(prefix);
-		column2SB.append("_site_facet_portlet_SiteFacetPortlet,");
-		column2SB.append(prefix);
-		column2SB.append("_type_facet_portlet_TypeFacetPortlet,");
-		column2SB.append(prefix);
-		column2SB.append("_tag_facet_portlet_TagFacetPortlet,");
+		column2SB.append(SiteFacetPortletKeys.SITE_FACET);
+		column2SB.append(",");
+		column2SB.append(TypeFacetPortletKeys.TYPE_FACET);
+		column2SB.append(",");
+		column2SB.append(TagFacetPortletKeys.TAG_FACET);
+		column2SB.append(",");
 		column2SB.append(prefix);
 		column2SB.append("_category_facet_portlet_CategoryFacetPortlet,");
-		column2SB.append(prefix);
-		column2SB.append("_folder_facet_portlet_FolderFacetPortlet,");
-		column2SB.append(prefix);
-		column2SB.append("_user_facet_portlet_UserFacetPortlet,");
+		column2SB.append(FolderFacetPortletKeys.FOLDER_FACET);
+		column2SB.append(",");
+		column2SB.append(UserFacetPortletKeys.USER_FACET);
+		column2SB.append(",");
 		column2SB.append(prefix);
 		column2SB.append("_modified_facet_portlet_ModifiedFacetPortlet,");
 
