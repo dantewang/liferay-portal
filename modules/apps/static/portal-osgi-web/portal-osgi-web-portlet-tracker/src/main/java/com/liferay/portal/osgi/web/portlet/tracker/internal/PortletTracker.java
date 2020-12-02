@@ -374,6 +374,10 @@ public class PortletTracker
 
 			portletBagFactory.create(portletModel, portlet, true);
 
+			_resourceActions.populatePortletResource(
+				portletModel, bundleClassLoader,
+				serviceRegistrations.getSources());
+
 			deployPortlet(serviceReference, portletModel);
 
 			portletModel.setReady(true);
@@ -1308,23 +1312,6 @@ public class PortletTracker
 		return serviceRegistrations;
 	}
 
-	protected void readResourceActions(
-		Configuration configuration, ClassLoader classLoader) {
-
-		Properties properties = configuration.getProperties();
-
-		try {
-			ResourceActionsUtil.read(
-				classLoader,
-				StringUtil.split(
-					properties.getProperty(
-						PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
-		}
-		catch (Exception exception) {
-			_log.error(exception, exception);
-		}
-	}
-
 	@Reference(unbind = "-")
 	protected void setHttpServiceRuntime(
 		HttpServiceRuntime httpServiceRuntime, Map<String, Object> properties) {
@@ -1497,6 +1484,10 @@ public class PortletTracker
 			_serviceReferences.add(serviceReference);
 		}
 
+		public synchronized String[] getSources() {
+			return _sources;
+		}
+
 		public synchronized void removeServiceReference(
 			ServiceReference<Portlet> serviceReference) {
 
@@ -1528,7 +1519,17 @@ public class PortletTracker
 					ConfigurationFactoryUtil.getConfiguration(
 						classLoader, "portlet");
 
-				readResourceActions(configuration, classLoader);
+				Properties properties = configuration.getProperties();
+
+				_sources = StringUtil.split(
+					properties.getProperty(PropsKeys.RESOURCE_ACTIONS_CONFIGS));
+
+				try {
+					ResourceActionsUtil.read(classLoader, _sources);
+				}
+				catch (Exception exception) {
+					_log.error(exception, exception);
+				}
 			}
 		}
 
@@ -1544,6 +1545,7 @@ public class PortletTracker
 		private PortletApp _portletApp;
 		private final List<ServiceReference<Portlet>> _serviceReferences =
 			new ArrayList<>();
+		private String[] _sources;
 
 	}
 
