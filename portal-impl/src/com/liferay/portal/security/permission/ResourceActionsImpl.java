@@ -587,7 +587,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		if (sources != null) {
 			for (String source : sources) {
-				_read(classLoader, source, null);
+				_read(classLoader, source, null, portlet);
 			}
 		}
 
@@ -1018,6 +1018,14 @@ public class ResourceActionsImpl implements ResourceActions {
 			ClassLoader classLoader, String source, Set<String> portletNames)
 		throws ResourceActionsException {
 
+		_read(classLoader, source, portletNames, null);
+	}
+
+	private void _read(
+			ClassLoader classLoader, String source, Set<String> portletNames,
+			Portlet portlet)
+		throws ResourceActionsException {
+
 		InputStream inputStream = classLoader.getResourceAsStream(source);
 
 		if (inputStream == null) {
@@ -1056,21 +1064,26 @@ public class ResourceActionsImpl implements ResourceActions {
 				String file = StringUtil.trim(
 					resourceElement.attributeValue("file"));
 
-				_read(classLoader, file, portletNames);
+				_read(classLoader, file, portletNames, portlet);
 
 				String extFileName = StringUtil.replace(
 					file, ".xml", "-ext.xml");
 
-				_read(classLoader, extFileName, portletNames);
+				_read(classLoader, extFileName, portletNames, portlet);
 			}
 
-			_read(rootElement, portletNames);
+			if (portlet == null) {
+				_read(rootElement, portletNames);
+			}
+			else {
+				_readPortletResource(rootElement, portlet);
+			}
 
 			if (source.endsWith(".xml") && !source.endsWith("-ext.xml")) {
 				String extFileName = StringUtil.replace(
 					source, ".xml", "-ext.xml");
 
-				_read(classLoader, extFileName, portletNames);
+				_read(classLoader, extFileName, portletNames, portlet);
 			}
 		}
 		catch (DocumentException documentException) {
@@ -1190,6 +1203,41 @@ public class ResourceActionsImpl implements ResourceActions {
 			}
 
 			actions.add(actionKey);
+		}
+	}
+
+	private void _readPortletResource(Element rootElement, Portlet portlet)
+		throws ResourceActionsException {
+
+		if (portlet == null) {
+			throw new IllegalArgumentException("Portlet must not be null");
+		}
+
+		if (!PropsValues.RESOURCE_ACTIONS_READ_PORTLET_RESOURCES) {
+			return;
+		}
+
+		String deployPortletName = PortletIdCodec.decodePortletName(
+			portlet.getPortletId());
+
+		for (Element portletResourceElement :
+				rootElement.elements("portlet-resource")) {
+
+			String portletName = portletResourceElement.elementTextTrim(
+				"portlet-name");
+
+			if (!portletName.equals(deployPortletName)) {
+				continue;
+			}
+
+			Set<String> portletActions = _getPortletMimeTypeActions(
+				portletName, portlet);
+
+			if (!portletName.equals(PortletKeys.PORTAL)) {
+				_checkPortletLayoutManagerActions(portletActions);
+			}
+
+			_readResource(portletResourceElement, portletName, portletActions);
 		}
 	}
 
