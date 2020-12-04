@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.model.PluginSetting;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserGroupRoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -75,6 +76,50 @@ public class PluginSettingImpl extends PluginSettingBaseImpl {
 					userId, getCompanyId(), _rolesArray, true)) {
 
 				return true;
+			}
+
+			if (RoleLocalServiceUtil.hasUserRole(
+					userId, getCompanyId(), RoleConstants.ADMINISTRATOR,
+					true)) {
+
+				return true;
+			}
+
+			User user = UserLocalServiceUtil.getUserById(userId);
+
+			if (user.isDefaultUser() && hasRoleWithName(RoleConstants.GUEST)) {
+				return true;
+			}
+		}
+		catch (Exception exception) {
+			_log.error(
+				"Unable to check if user " + userId + " has permission",
+				exception);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns <code>true</code> if the user has permission to use this plugin
+	 *
+	 * @param  userId the primary key of the user
+	 * @return <code>true</code> if the user has permission to use this plugin
+	 */
+	@Override
+	public boolean hasPermission(long userId, long groupId) {
+		try {
+			if (_rolesArray.length == 0) {
+				return true;
+			}
+
+
+			for (String roleName : _rolesArray) {
+				if (UserGroupRoleLocalServiceUtil.hasUserGroupRole(
+						userId, groupId, roleName, true)) {
+
+					return true;
+				}
 			}
 
 			if (RoleLocalServiceUtil.hasUserRole(
