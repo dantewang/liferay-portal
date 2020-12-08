@@ -2195,6 +2195,10 @@ public class DataFactory {
 
 		ddmStorageLinkModel.setStorageLinkId(ddmStorageLinkId);
 
+		// Audit fields
+
+		ddmStorageLinkModel.setCompanyId(_companyId);
+
 		// Other fields
 
 		ddmStorageLinkModel.setClassNameId(getClassNameId(DDMContent.class));
@@ -2212,7 +2216,7 @@ public class DataFactory {
 		return newDDMStructureLinkModel(
 			getClassNameId(DDLRecordSet.class),
 			ddlRecordSetModel.getRecordSetId(),
-			ddlRecordSetModel.getDDMStructureId());
+			ddlRecordSetModel.getDDMStructureId(), _companyId);
 	}
 
 	public DDMStructureLinkModel newDDMStructureLinkModel(
@@ -4412,12 +4416,22 @@ public class DataFactory {
 	protected DDMStructureLinkModel newDDMStructureLinkModel(
 		long classNameId, long classPK, long structureId) {
 
+		return newDDMStructureLinkModel(classNameId, classPK, structureId, 0);
+	}
+
+	protected DDMStructureLinkModel newDDMStructureLinkModel(
+		long classNameId, long classPK, long structureId, long companyId) {
+
 		DDMStructureLinkModel ddmStructureLinkModel =
 			new DDMStructureLinkModelImpl();
 
 		// PK fields
 
 		ddmStructureLinkModel.setStructureLinkId(_counter.get());
+
+		// Audit fields
+
+		ddmStructureLinkModel.setCompanyId(companyId);
 
 		// Other fields
 
