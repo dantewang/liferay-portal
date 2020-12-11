@@ -17,7 +17,10 @@ package com.liferay.portal.template.freemarker.internal;
 import com.liferay.petra.concurrent.ConcurrentReferenceKeyHashMap;
 import com.liferay.petra.concurrent.NoticeableExecutorService;
 import com.liferay.petra.concurrent.NoticeableFuture;
+import com.liferay.petra.concurrent.ThreadPoolHandlerAdapter;
+import com.liferay.petra.executor.PortalExecutorConfig;
 import com.liferay.petra.executor.PortalExecutorManager;
+import com.liferay.petra.lang.CentralizedThreadLocal;
 import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.petra.memory.FinalizeManager;
 import com.liferay.petra.reflect.ReflectionUtil;
@@ -37,6 +40,8 @@ import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateManager;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.template.TemplateResourceLoader;
+import com.liferay.portal.kernel.util.NamedThreadFactory;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.template.BaseTemplateManager;
@@ -82,6 +87,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -95,6 +101,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.component.ComponentContext;
@@ -387,6 +394,27 @@ public class FreeMarkerManager extends BaseTemplateManager {
 		WriterFactoryUtil.setWriterFactory(new UnsyncStringWriterFactory());
 
 		if (_freeMarkerEngineConfiguration.asyncRenderTimeout() > 0) {
+			PortalExecutorConfig portalExecutorConfig = new PortalExecutorConfig(
+				FreeMarkerManager.class.getName(), 10, 120, 60,
+				TimeUnit.SECONDS, Integer.MAX_VALUE,
+				new NamedThreadFactory(
+					FreeMarkerManager.class.getName(), Thread.NORM_PRIORITY,
+					PortalClassLoaderUtil.getClassLoader()),
+				new ThreadPoolExecutor.AbortPolicy(),
+				new ThreadPoolHandlerAdapter() {
+
+					@Override
+					public void afterExecute(
+						Runnable runnable, Throwable throwable) {
+
+						CentralizedThreadLocal.clearShortLivedThreadLocals();
+					}
+
+				});
+
+			_serviceRegistration = bundleContext.registerService(
+				PortalExecutorConfig.class, portalExecutorConfig, null);
+
 			_noticeableExecutorService =
 				_portalExecutorManager.getPortalExecutor(
 					FreeMarkerManager.class.getName());
@@ -471,6 +499,8 @@ public class FreeMarkerManager extends BaseTemplateManager {
 					FreeMarkerManager.class.getName());
 
 			_noticeableExecutorService.shutdownNow();
+
+			_serviceRegistration.unregister();
 
 			_timeoutTemplateCounters.clear();
 		}
@@ -705,6 +735,8 @@ public class FreeMarkerManager extends BaseTemplateManager {
 	private FreeMarkerTemplateResourceCache _freeMarkerTemplateResourceCache;
 
 	private NoticeableExecutorService _noticeableExecutorService;
+
+	private ServiceRegistration<PortalExecutorConfig> _serviceRegistration;
 
 	@Reference
 	private PortalExecutorManager _portalExecutorManager;
