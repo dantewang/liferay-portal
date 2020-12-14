@@ -106,7 +106,13 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 		}
 
 		long backgroundTaskId = backgroundTask.getBackgroundTaskId();
-		Date modifiedDate = backgroundTask.getModifiedDate();
+
+		com.liferay.portal.background.task.model.BackgroundTask
+			backgroundTaskModel =
+				(com.liferay.portal.background.task.model.BackgroundTask)
+					backgroundTask.getModel();
+
+		Date modifiedDate = backgroundTaskModel.getModifiedDate();
 
 		if (_queuedBackgroundTaskIds.containsKey(backgroundTaskId)) {
 			Date queuedModifiedDate = _queuedBackgroundTaskIds.get(

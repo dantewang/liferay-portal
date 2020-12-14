@@ -106,11 +106,6 @@ public class DDMStructureBackgroundTask implements BackgroundTask {
 	}
 
 	@Override
-	public Date getModifiedDate() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public String getName() {
 		throw new UnsupportedOperationException();
 	}
