@@ -68,7 +68,7 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 			(status == BackgroundTaskConstants.STATUS_FAILED) ||
 			(status == BackgroundTaskConstants.STATUS_SUCCESSFUL)) {
 
-			_queuedBackgroundTaskIds.remove(backgroundTaskId);
+			_resumedBackgroundTaskIds.remove(backgroundTaskId);
 
 			_executeQueuedBackgroundTasks(taskExecutorClassName);
 		}
@@ -114,24 +114,23 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 
 		Date modifiedDate = backgroundTaskModel.getModifiedDate();
 
-		Date queuedModifiedDate = _queuedBackgroundTaskIds.get(
+		Date resumedBackgroundTaskModifiedDate = _resumedBackgroundTaskIds.get(
 			backgroundTaskId);
 
-		if ((queuedModifiedDate != null) &&
-			DateUtil.equals(queuedModifiedDate, modifiedDate)) {
+		if ((resumedBackgroundTaskModifiedDate != null) &&
+			DateUtil.equals(resumedBackgroundTaskModifiedDate, modifiedDate)) {
 
 			if (_log.isDebugEnabled()) {
 				_log.debug(
 					StringBundler.concat(
-						"Background task ", backgroundTaskId,
-						" had been resumed. Stop the current task ",
-						"executed"));
+						"Skip background task ", backgroundTaskId,
+						" since it has already been resumed."));
 			}
 
 			return;
 		}
 
-		_queuedBackgroundTaskIds.put(backgroundTaskId, modifiedDate);
+		_resumedBackgroundTaskIds.put(backgroundTaskId, modifiedDate);
 
 		_backgroundTaskManager.resumeBackgroundTask(backgroundTaskId);
 	}
@@ -141,6 +140,6 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 
 	private final BackgroundTaskLockHelper _backgroundTaskLockHelper;
 	private final BackgroundTaskManager _backgroundTaskManager;
-	private final Map<Long, Date> _queuedBackgroundTaskIds = new HashMap<>();
+	private final Map<Long, Date> _resumedBackgroundTaskIds = new HashMap<>();
 
 }
