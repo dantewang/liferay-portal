@@ -114,21 +114,21 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 
 		Date modifiedDate = backgroundTaskModel.getModifiedDate();
 
-		if (_queuedBackgroundTaskIds.containsKey(backgroundTaskId)) {
-			Date queuedModifiedDate = _queuedBackgroundTaskIds.get(
-				backgroundTaskId);
+		Date queuedModifiedDate = _queuedBackgroundTaskIds.get(
+			backgroundTaskId);
 
-			if (DateUtil.equals(queuedModifiedDate, modifiedDate)) {
-				if (_log.isDebugEnabled()) {
-					_log.debug(
-						StringBundler.concat(
-							"Background task ", backgroundTaskId,
-							" had been resumed. Stop the current task ",
-							"executed"));
-				}
+		if ((queuedModifiedDate != null) &&
+			DateUtil.equals(queuedModifiedDate, modifiedDate)) {
 
-				return;
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					StringBundler.concat(
+						"Background task ", backgroundTaskId,
+						" had been resumed. Stop the current task ",
+						"executed"));
 			}
+
+			return;
 		}
 
 		_queuedBackgroundTaskIds.put(backgroundTaskId, modifiedDate);
