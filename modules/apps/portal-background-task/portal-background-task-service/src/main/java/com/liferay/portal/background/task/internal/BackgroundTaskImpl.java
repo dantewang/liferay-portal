@@ -116,6 +116,11 @@ public class BackgroundTaskImpl implements BackgroundTask {
 	}
 
 	@Override
+	public Date getModifiedDate() {
+		return _backgroundTask.getModifiedDate();
+	}
+
+	@Override
 	public String getName() {
 		return _backgroundTask.getName();
 	}

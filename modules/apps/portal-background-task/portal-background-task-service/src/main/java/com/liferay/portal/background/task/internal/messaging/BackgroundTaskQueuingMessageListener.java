@@ -14,6 +14,7 @@
 
 package com.liferay.portal.background.task.internal.messaging;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.background.task.internal.lock.BackgroundTaskLockHelper;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManager;
@@ -23,7 +24,12 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.Validator;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Michael C. Han
@@ -55,16 +61,18 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 
 		int status = (Integer)message.get("status");
 
+		long backgroundTaskId = (Long)message.get(
+			BackgroundTaskConstants.BACKGROUND_TASK_ID);
+
 		if ((status == BackgroundTaskConstants.STATUS_CANCELLED) ||
 			(status == BackgroundTaskConstants.STATUS_FAILED) ||
 			(status == BackgroundTaskConstants.STATUS_SUCCESSFUL)) {
 
+			_queuedBackgroundTaskIds.remove(backgroundTaskId);
+
 			_executeQueuedBackgroundTasks(taskExecutorClassName);
 		}
 		else if (status == BackgroundTaskConstants.STATUS_QUEUED) {
-			long backgroundTaskId = (Long)message.get(
-				BackgroundTaskConstants.BACKGROUND_TASK_ID);
-
 			BackgroundTask backgroundTask =
 				_backgroundTaskManager.fetchBackgroundTask(backgroundTaskId);
 
@@ -97,8 +105,29 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 			return;
 		}
 
-		_backgroundTaskManager.resumeBackgroundTask(
-			backgroundTask.getBackgroundTaskId());
+		long backgroundTaskId = backgroundTask.getBackgroundTaskId();
+		Date modifiedDate = backgroundTask.getModifiedDate();
+
+		if (_queuedBackgroundTaskIds.containsKey(backgroundTaskId)) {
+			Date queuedModifiedDate = _queuedBackgroundTaskIds.get(
+				backgroundTaskId);
+
+			if (DateUtil.equals(queuedModifiedDate, modifiedDate)) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(
+						StringBundler.concat(
+							"Background task ", backgroundTaskId,
+							" had been resumed. Stop the current task ",
+							"executed"));
+				}
+
+				return;
+			}
+		}
+
+		_queuedBackgroundTaskIds.put(backgroundTaskId, modifiedDate);
+
+		_backgroundTaskManager.resumeBackgroundTask(backgroundTaskId);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
@@ -106,5 +135,6 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 
 	private final BackgroundTaskLockHelper _backgroundTaskLockHelper;
 	private final BackgroundTaskManager _backgroundTaskManager;
+	private final Map<Long, Date> _queuedBackgroundTaskIds = new HashMap<>();
 
 }
