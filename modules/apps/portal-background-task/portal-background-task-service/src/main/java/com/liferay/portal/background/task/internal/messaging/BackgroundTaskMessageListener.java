@@ -18,6 +18,7 @@ import com.liferay.petra.lang.SafeClosable;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.background.task.internal.SerialBackgroundTaskExecutor;
 import com.liferay.portal.background.task.internal.ThreadLocalAwareBackgroundTaskExecutor;
+import com.liferay.portal.background.task.internal.lock.BackgroundTaskLockHelper;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutor;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutorRegistry;
@@ -212,6 +213,15 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 				responseMessage.put(
 					"taskExecutorClassName",
 					backgroundTask.getTaskExecutorClassName());
+
+				if (backgroundTaskExecutor.isSerial()) {
+					responseMessage.put(
+						"isolationLevel",
+						backgroundTaskExecutor.getIsolationLevel());
+					responseMessage.put(
+						"lockKey",
+						BackgroundTaskLockHelper.getLockKey(backgroundTask));
+				}
 
 				_messageBus.sendMessage(
 					DestinationNames.BACKGROUND_TASK_STATUS, responseMessage);
