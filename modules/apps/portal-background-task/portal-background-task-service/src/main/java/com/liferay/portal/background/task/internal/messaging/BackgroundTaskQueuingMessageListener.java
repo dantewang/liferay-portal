@@ -14,6 +14,7 @@
 
 package com.liferay.portal.background.task.internal.messaging;
 
+import com.liferay.petra.string.CharPool;
 import com.liferay.portal.background.task.internal.lock.BackgroundTaskLockHelper;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManager;
@@ -23,6 +24,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 /**
@@ -59,7 +62,7 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 			(status == BackgroundTaskConstants.STATUS_FAILED) ||
 			(status == BackgroundTaskConstants.STATUS_SUCCESSFUL)) {
 
-			_executeQueuedBackgroundTasks(taskExecutorClassName);
+			_executeQueuedBackgroundTasks(message, taskExecutorClassName);
 		}
 		else if (status == BackgroundTaskConstants.STATUS_QUEUED) {
 			long backgroundTaskId = (Long)message.get(
@@ -71,21 +74,75 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 			if (!_backgroundTaskLockHelper.isLockedBackgroundTask(
 					backgroundTask)) {
 
-				_executeQueuedBackgroundTasks(taskExecutorClassName);
+				_executeQueuedBackgroundTasks(message, taskExecutorClassName);
 			}
 		}
 	}
 
-	private void _executeQueuedBackgroundTasks(String taskExecutorClassName) {
+	private void _executeQueuedBackgroundTasks(
+		Message message, String taskExecutorClassName) {
+
+		String lockKey = (String)message.get("lockKey");
+
 		if (_log.isDebugEnabled()) {
-			_log.debug(
-				"Acquiring next queued background task for " +
-					taskExecutorClassName);
+			if (Validator.isNotNull(lockKey)) {
+				_log.debug(
+					"Acquiring next queued background task for " + lockKey);
+			}
+			else {
+				_log.debug(
+					"Acquiring next queued background task for " +
+						taskExecutorClassName);
+			}
 		}
 
-		BackgroundTask backgroundTask =
-			_backgroundTaskManager.fetchFirstBackgroundTask(
+		BackgroundTask backgroundTask = null;
+
+		if (Validator.isNotNull(lockKey)) {
+			int isolationLevel = (Integer)message.get("isolationLevel");
+
+			if (isolationLevel ==
+					BackgroundTaskConstants.ISOLATION_LEVEL_COMPANY) {
+
+				long companyId = GetterUtil.getLong(
+					StringUtil.extractLast(lockKey, CharPool.POUND));
+
+				backgroundTask =
+					_backgroundTaskManager.fetchFirstBackgroundTaskByCompanyId(
+						companyId, taskExecutorClassName,
+						BackgroundTaskConstants.STATUS_QUEUED);
+			}
+			else if (isolationLevel ==
+						BackgroundTaskConstants.ISOLATION_LEVEL_GROUP) {
+
+				long groupId = GetterUtil.getLong(
+					StringUtil.extractLast(lockKey, CharPool.POUND));
+
+				backgroundTask =
+					_backgroundTaskManager.fetchFirstBackgroundTaskByGroupId(
+						groupId, taskExecutorClassName,
+						BackgroundTaskConstants.STATUS_QUEUED);
+			}
+			else if (isolationLevel ==
+						BackgroundTaskConstants.ISOLATION_LEVEL_TASK_NAME) {
+
+				backgroundTask =
+					_backgroundTaskManager.fetchFirstBackgroundTask(
+						StringUtil.extractLast(lockKey, CharPool.POUND),
+						taskExecutorClassName,
+						BackgroundTaskConstants.STATUS_QUEUED);
+			}
+			else {
+				backgroundTask =
+					_backgroundTaskManager.fetchFirstBackgroundTask(
+						taskExecutorClassName,
+						BackgroundTaskConstants.STATUS_QUEUED);
+			}
+		}
+		else {
+			backgroundTask = _backgroundTaskManager.fetchFirstBackgroundTask(
 				taskExecutorClassName, BackgroundTaskConstants.STATUS_QUEUED);
+		}
 
 		if (backgroundTask == null) {
 			if (_log.isDebugEnabled()) {

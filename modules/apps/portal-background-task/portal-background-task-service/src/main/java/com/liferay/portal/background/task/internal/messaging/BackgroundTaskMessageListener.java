@@ -15,9 +15,11 @@
 package com.liferay.portal.background.task.internal.messaging;
 
 import com.liferay.petra.lang.SafeClosable;
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.background.task.internal.SerialBackgroundTaskExecutor;
 import com.liferay.portal.background.task.internal.ThreadLocalAwareBackgroundTaskExecutor;
+import com.liferay.portal.background.task.internal.lock.BackgroundTaskLockHelper;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutor;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutorRegistry;
@@ -47,6 +49,8 @@ import com.liferay.portal.kernel.util.StackTraceUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.lang.reflect.Method;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +72,8 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 		_backgroundTaskThreadLocalManager = backgroundTaskThreadLocalManager;
 		_lockManager = lockManager;
 		_messageBus = messageBus;
+
+		_backgroundTaskLockHelper = new BackgroundTaskLockHelper(lockManager);
 	}
 
 	@Override
@@ -213,6 +219,16 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 					"taskExecutorClassName",
 					backgroundTask.getTaskExecutorClassName());
 
+				if (backgroundTaskExecutor.isSerial()) {
+					responseMessage.put(
+						"isolationLevel",
+						backgroundTaskExecutor.getIsolationLevel());
+					responseMessage.put(
+						"lockKey",
+						_getLockKeyMethod.invoke(
+							_backgroundTaskLockHelper, backgroundTask));
+				}
+
 				_messageBus.sendMessage(
 					DestinationNames.BACKGROUND_TASK_STATUS, responseMessage);
 			}
@@ -332,8 +348,22 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 	private static final Log _log = LogFactoryUtil.getLog(
 		BackgroundTaskMessageListener.class);
 
+	private static final Method _getLockKeyMethod;
+
+	static {
+		try {
+			_getLockKeyMethod = ReflectionUtil.getDeclaredMethod(
+				BackgroundTaskLockHelper.class, "getLockKey",
+				BackgroundTask.class);
+		}
+		catch (Exception exception) {
+			throw new ExceptionInInitializerError(exception);
+		}
+	}
+
 	private final BackgroundTaskExecutorRegistry
 		_backgroundTaskExecutorRegistry;
+	private final BackgroundTaskLockHelper _backgroundTaskLockHelper;
 	private final BackgroundTaskManager _backgroundTaskManager;
 	private final BackgroundTaskStatusRegistry _backgroundTaskStatusRegistry;
 	private final BackgroundTaskThreadLocalManager
