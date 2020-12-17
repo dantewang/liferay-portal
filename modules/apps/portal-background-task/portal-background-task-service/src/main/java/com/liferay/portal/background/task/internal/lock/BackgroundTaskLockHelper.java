@@ -27,36 +27,7 @@ import com.liferay.portal.kernel.lock.LockManager;
  */
 public class BackgroundTaskLockHelper {
 
-	public BackgroundTaskLockHelper(LockManager lockManager) {
-		_lockManager = lockManager;
-	}
-
-	public boolean isLockedBackgroundTask(BackgroundTask backgroundTask) {
-		return _lockManager.isLocked(
-			BackgroundTaskExecutor.class.getName(), getLockKey(backgroundTask));
-	}
-
-	public Lock lockBackgroundTask(BackgroundTask backgroundTask) {
-		String owner =
-			backgroundTask.getName() + StringPool.POUND +
-				backgroundTask.getBackgroundTaskId();
-
-		return _lockManager.lock(
-			BackgroundTaskExecutor.class.getName(), getLockKey(backgroundTask),
-			owner);
-	}
-
-	public void unlockBackgroundTask(BackgroundTask backgroundTask) {
-		String owner =
-			backgroundTask.getName() + StringPool.POUND +
-				backgroundTask.getBackgroundTaskId();
-
-		_lockManager.unlock(
-			BackgroundTaskExecutor.class.getName(), getLockKey(backgroundTask),
-			owner);
-	}
-
-	protected static String getLockKey(BackgroundTask backgroundTask) {
+	public static String getLockKey(BackgroundTask backgroundTask) {
 		BackgroundTaskExecutor backgroundTaskExecutor =
 			BackgroundTaskExecutorRegistryUtil.getBackgroundTaskExecutor(
 				backgroundTask.getTaskExecutorClassName());
@@ -101,6 +72,35 @@ public class BackgroundTaskLockHelper {
 		}
 
 		return lockKey;
+	}
+
+	public BackgroundTaskLockHelper(LockManager lockManager) {
+		_lockManager = lockManager;
+	}
+
+	public boolean isLockedBackgroundTask(BackgroundTask backgroundTask) {
+		return _lockManager.isLocked(
+			BackgroundTaskExecutor.class.getName(), getLockKey(backgroundTask));
+	}
+
+	public Lock lockBackgroundTask(BackgroundTask backgroundTask) {
+		String owner =
+			backgroundTask.getName() + StringPool.POUND +
+				backgroundTask.getBackgroundTaskId();
+
+		return _lockManager.lock(
+			BackgroundTaskExecutor.class.getName(), getLockKey(backgroundTask),
+			owner);
+	}
+
+	public void unlockBackgroundTask(BackgroundTask backgroundTask) {
+		String owner =
+			backgroundTask.getName() + StringPool.POUND +
+				backgroundTask.getBackgroundTaskId();
+
+		_lockManager.unlock(
+			BackgroundTaskExecutor.class.getName(), getLockKey(backgroundTask),
+			owner);
 	}
 
 	private final LockManager _lockManager;
