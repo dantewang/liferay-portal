@@ -16,6 +16,7 @@ package com.liferay.portal.background.task.internal.messaging;
 
 import com.liferay.petra.lang.SafeClosable;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.background.task.internal.SerialBackgroundTaskExecutor;
 import com.liferay.portal.background.task.internal.ThreadLocalAwareBackgroundTaskExecutor;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
@@ -202,6 +203,9 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 						backgroundTaskStatusMessageListener);
 				}
 
+				String taskExecutorClassName =
+					backgroundTask.getTaskExecutorClassName();
+
 				Message responseMessage = new Message();
 
 				responseMessage.put(
@@ -210,8 +214,40 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 				responseMessage.put("name", backgroundTask.getName());
 				responseMessage.put("status", status);
 				responseMessage.put(
-					"taskExecutorClassName",
-					backgroundTask.getTaskExecutorClassName());
+					"taskExecutorClassName", taskExecutorClassName);
+
+				if (backgroundTaskExecutor.isSerial()) {
+					int isolationLevel =
+						backgroundTaskExecutor.getIsolationLevel();
+
+					String lockKey = StringPool.BLANK;
+
+					if (isolationLevel ==
+							BackgroundTaskConstants.ISOLATION_LEVEL_COMPANY) {
+
+						lockKey =
+							taskExecutorClassName + StringPool.POUND +
+								backgroundTask.getCompanyId();
+					}
+					else if (isolationLevel ==
+								BackgroundTaskConstants.ISOLATION_LEVEL_GROUP) {
+
+						lockKey =
+							taskExecutorClassName + StringPool.POUND +
+								backgroundTask.getGroupId();
+					}
+					else if (isolationLevel ==
+								BackgroundTaskConstants.
+									ISOLATION_LEVEL_TASK_NAME) {
+
+						lockKey =
+							taskExecutorClassName + StringPool.POUND +
+								backgroundTask.getName();
+					}
+
+					responseMessage.put("isolationLevel", isolationLevel);
+					responseMessage.put("lockKey", lockKey);
+				}
 
 				_messageBus.sendMessage(
 					DestinationNames.BACKGROUND_TASK_STATUS, responseMessage);
