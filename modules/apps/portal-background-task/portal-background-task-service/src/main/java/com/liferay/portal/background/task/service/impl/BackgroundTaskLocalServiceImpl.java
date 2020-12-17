@@ -21,6 +21,8 @@ import com.liferay.portal.background.task.internal.BackgroundTaskImpl;
 import com.liferay.portal.background.task.internal.lock.BackgroundTaskLockHelper;
 import com.liferay.portal.background.task.model.BackgroundTask;
 import com.liferay.portal.background.task.service.base.BackgroundTaskLocalServiceBaseImpl;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutor;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutorRegistry;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatus;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatusRegistry;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskThreadLocalManager;
@@ -214,9 +216,11 @@ public class BackgroundTaskLocalServiceImpl
 		final BackgroundTask backgroundTask = fetchBackgroundTask(
 			backgroundTaskId);
 
+		final BackgroundTaskImpl backgroundTaskImpl = new BackgroundTaskImpl(
+			backgroundTask);
+
 		try {
-			_backgroundTaskLockHelper.unlockBackgroundTask(
-				new BackgroundTaskImpl(backgroundTask));
+			_backgroundTaskLockHelper.unlockBackgroundTask(backgroundTaskImpl);
 		}
 		catch (Exception exception) {
 		}
@@ -226,6 +230,11 @@ public class BackgroundTaskLocalServiceImpl
 
 				@Override
 				public Void call() throws Exception {
+					BackgroundTaskExecutor backgroundTaskExecutor =
+						_backgroundTaskExecutorRegistry.
+							getBackgroundTaskExecutor(
+								backgroundTask.getTaskExecutorClassName());
+
 					Message message = new Message();
 
 					message.put(
@@ -236,6 +245,16 @@ public class BackgroundTaskLocalServiceImpl
 					message.put(
 						"taskExecutorClassName",
 						backgroundTask.getTaskExecutorClassName());
+
+					if (backgroundTaskExecutor.isSerial()) {
+						message.put(
+							"isolationLevel",
+							backgroundTaskExecutor.getIsolationLevel());
+						message.put(
+							"lockKey",
+							_backgroundTaskLockHelper.getLockKey(
+								backgroundTaskImpl));
+					}
 
 					_messageBus.sendMessage(
 						DestinationNames.BACKGROUND_TASK_STATUS, message);
@@ -780,6 +799,9 @@ public class BackgroundTaskLocalServiceImpl
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		BackgroundTaskLocalServiceImpl.class);
+
+	@Reference
+	private BackgroundTaskExecutorRegistry _backgroundTaskExecutorRegistry;
 
 	private BackgroundTaskLockHelper _backgroundTaskLockHelper;
 
