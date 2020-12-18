@@ -341,6 +341,45 @@ public class BackgroundTaskPersistenceTest {
 	}
 
 	@Test
+	public void testCountByC_T_S() throws Exception {
+		_persistence.countByC_T_S(
+			RandomTestUtil.nextLong(), "", RandomTestUtil.nextInt());
+
+		_persistence.countByC_T_S(0L, "null", 0);
+
+		_persistence.countByC_T_S(0L, (String)null, 0);
+	}
+
+	@Test
+	public void testCountByC_T_SArrayable() throws Exception {
+		_persistence.countByC_T_S(
+			RandomTestUtil.nextLong(),
+			new String[] {
+				RandomTestUtil.randomString(), "", "null", null, null
+			},
+			RandomTestUtil.nextInt());
+	}
+
+	@Test
+	public void testCountByN_T_S() throws Exception {
+		_persistence.countByN_T_S("", "", RandomTestUtil.nextInt());
+
+		_persistence.countByN_T_S("null", "null", 0);
+
+		_persistence.countByN_T_S((String)null, (String)null, 0);
+	}
+
+	@Test
+	public void testCountByN_T_SArrayable() throws Exception {
+		_persistence.countByN_T_S(
+			RandomTestUtil.randomString(),
+			new String[] {
+				RandomTestUtil.randomString(), "", "null", null, null
+			},
+			RandomTestUtil.nextInt());
+	}
+
+	@Test
 	public void testCountByG_N_T_C() throws Exception {
 		_persistence.countByG_N_T_C(
 			RandomTestUtil.nextLong(), "", "", RandomTestUtil.randomBoolean());
