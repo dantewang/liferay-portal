@@ -2016,6 +2016,526 @@ public interface BackgroundTaskPersistence
 		long groupId, String[] taskExecutorClassNames, int status);
 
 	/**
+	 * Returns all the background tasks where companyId = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @return the matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByC_T_S(
+		long companyId, String taskExecutorClassName, int status);
+
+	/**
+	 * Returns a range of all the background tasks where companyId = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>BackgroundTaskModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param start the lower bound of the range of background tasks
+	 * @param end the upper bound of the range of background tasks (not inclusive)
+	 * @return the range of matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByC_T_S(
+		long companyId, String taskExecutorClassName, int status, int start,
+		int end);
+
+	/**
+	 * Returns an ordered range of all the background tasks where companyId = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>BackgroundTaskModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param start the lower bound of the range of background tasks
+	 * @param end the upper bound of the range of background tasks (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByC_T_S(
+		long companyId, String taskExecutorClassName, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the background tasks where companyId = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>BackgroundTaskModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param start the lower bound of the range of background tasks
+	 * @param end the upper bound of the range of background tasks (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByC_T_S(
+		long companyId, String taskExecutorClassName, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first background task in the ordered set where companyId = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching background task
+	 * @throws NoSuchBackgroundTaskException if a matching background task could not be found
+	 */
+	public BackgroundTask findByC_T_S_First(
+			long companyId, String taskExecutorClassName, int status,
+			com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+				orderByComparator)
+		throws NoSuchBackgroundTaskException;
+
+	/**
+	 * Returns the first background task in the ordered set where companyId = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching background task, or <code>null</code> if a matching background task could not be found
+	 */
+	public BackgroundTask fetchByC_T_S_First(
+		long companyId, String taskExecutorClassName, int status,
+		com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+			orderByComparator);
+
+	/**
+	 * Returns the last background task in the ordered set where companyId = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching background task
+	 * @throws NoSuchBackgroundTaskException if a matching background task could not be found
+	 */
+	public BackgroundTask findByC_T_S_Last(
+			long companyId, String taskExecutorClassName, int status,
+			com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+				orderByComparator)
+		throws NoSuchBackgroundTaskException;
+
+	/**
+	 * Returns the last background task in the ordered set where companyId = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching background task, or <code>null</code> if a matching background task could not be found
+	 */
+	public BackgroundTask fetchByC_T_S_Last(
+		long companyId, String taskExecutorClassName, int status,
+		com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+			orderByComparator);
+
+	/**
+	 * Returns the background tasks before and after the current background task in the ordered set where companyId = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * @param backgroundTaskId the primary key of the current background task
+	 * @param companyId the company ID
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next background task
+	 * @throws NoSuchBackgroundTaskException if a background task with the primary key could not be found
+	 */
+	public BackgroundTask[] findByC_T_S_PrevAndNext(
+			long backgroundTaskId, long companyId, String taskExecutorClassName,
+			int status,
+			com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+				orderByComparator)
+		throws NoSuchBackgroundTaskException;
+
+	/**
+	 * Returns all the background tasks where companyId = &#63; and taskExecutorClassName = any &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>BackgroundTaskModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassNames the task executor class names
+	 * @param status the status
+	 * @return the matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByC_T_S(
+		long companyId, String[] taskExecutorClassNames, int status);
+
+	/**
+	 * Returns a range of all the background tasks where companyId = &#63; and taskExecutorClassName = any &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>BackgroundTaskModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassNames the task executor class names
+	 * @param status the status
+	 * @param start the lower bound of the range of background tasks
+	 * @param end the upper bound of the range of background tasks (not inclusive)
+	 * @return the range of matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByC_T_S(
+		long companyId, String[] taskExecutorClassNames, int status, int start,
+		int end);
+
+	/**
+	 * Returns an ordered range of all the background tasks where companyId = &#63; and taskExecutorClassName = any &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>BackgroundTaskModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassNames the task executor class names
+	 * @param status the status
+	 * @param start the lower bound of the range of background tasks
+	 * @param end the upper bound of the range of background tasks (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByC_T_S(
+		long companyId, String[] taskExecutorClassNames, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the background tasks where companyId = &#63; and taskExecutorClassName = &#63; and status = &#63;, optionally using the finder cache.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>BackgroundTaskModelImpl</code>.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param start the lower bound of the range of background tasks
+	 * @param end the upper bound of the range of background tasks (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByC_T_S(
+		long companyId, String[] taskExecutorClassNames, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Removes all the background tasks where companyId = &#63; and taskExecutorClassName = &#63; and status = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 */
+	public void removeByC_T_S(
+		long companyId, String taskExecutorClassName, int status);
+
+	/**
+	 * Returns the number of background tasks where companyId = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @return the number of matching background tasks
+	 */
+	public int countByC_T_S(
+		long companyId, String taskExecutorClassName, int status);
+
+	/**
+	 * Returns the number of background tasks where companyId = &#63; and taskExecutorClassName = any &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param taskExecutorClassNames the task executor class names
+	 * @param status the status
+	 * @return the number of matching background tasks
+	 */
+	public int countByC_T_S(
+		long companyId, String[] taskExecutorClassNames, int status);
+
+	/**
+	 * Returns all the background tasks where name = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @return the matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByN_T_S(
+		String name, String taskExecutorClassName, int status);
+
+	/**
+	 * Returns a range of all the background tasks where name = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>BackgroundTaskModelImpl</code>.
+	 * </p>
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param start the lower bound of the range of background tasks
+	 * @param end the upper bound of the range of background tasks (not inclusive)
+	 * @return the range of matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByN_T_S(
+		String name, String taskExecutorClassName, int status, int start,
+		int end);
+
+	/**
+	 * Returns an ordered range of all the background tasks where name = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>BackgroundTaskModelImpl</code>.
+	 * </p>
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param start the lower bound of the range of background tasks
+	 * @param end the upper bound of the range of background tasks (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByN_T_S(
+		String name, String taskExecutorClassName, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the background tasks where name = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>BackgroundTaskModelImpl</code>.
+	 * </p>
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param start the lower bound of the range of background tasks
+	 * @param end the upper bound of the range of background tasks (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByN_T_S(
+		String name, String taskExecutorClassName, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first background task in the ordered set where name = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching background task
+	 * @throws NoSuchBackgroundTaskException if a matching background task could not be found
+	 */
+	public BackgroundTask findByN_T_S_First(
+			String name, String taskExecutorClassName, int status,
+			com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+				orderByComparator)
+		throws NoSuchBackgroundTaskException;
+
+	/**
+	 * Returns the first background task in the ordered set where name = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching background task, or <code>null</code> if a matching background task could not be found
+	 */
+	public BackgroundTask fetchByN_T_S_First(
+		String name, String taskExecutorClassName, int status,
+		com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+			orderByComparator);
+
+	/**
+	 * Returns the last background task in the ordered set where name = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching background task
+	 * @throws NoSuchBackgroundTaskException if a matching background task could not be found
+	 */
+	public BackgroundTask findByN_T_S_Last(
+			String name, String taskExecutorClassName, int status,
+			com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+				orderByComparator)
+		throws NoSuchBackgroundTaskException;
+
+	/**
+	 * Returns the last background task in the ordered set where name = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching background task, or <code>null</code> if a matching background task could not be found
+	 */
+	public BackgroundTask fetchByN_T_S_Last(
+		String name, String taskExecutorClassName, int status,
+		com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+			orderByComparator);
+
+	/**
+	 * Returns the background tasks before and after the current background task in the ordered set where name = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * @param backgroundTaskId the primary key of the current background task
+	 * @param name the name
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next background task
+	 * @throws NoSuchBackgroundTaskException if a background task with the primary key could not be found
+	 */
+	public BackgroundTask[] findByN_T_S_PrevAndNext(
+			long backgroundTaskId, String name, String taskExecutorClassName,
+			int status,
+			com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+				orderByComparator)
+		throws NoSuchBackgroundTaskException;
+
+	/**
+	 * Returns all the background tasks where name = &#63; and taskExecutorClassName = any &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>BackgroundTaskModelImpl</code>.
+	 * </p>
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassNames the task executor class names
+	 * @param status the status
+	 * @return the matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByN_T_S(
+		String name, String[] taskExecutorClassNames, int status);
+
+	/**
+	 * Returns a range of all the background tasks where name = &#63; and taskExecutorClassName = any &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>BackgroundTaskModelImpl</code>.
+	 * </p>
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassNames the task executor class names
+	 * @param status the status
+	 * @param start the lower bound of the range of background tasks
+	 * @param end the upper bound of the range of background tasks (not inclusive)
+	 * @return the range of matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByN_T_S(
+		String name, String[] taskExecutorClassNames, int status, int start,
+		int end);
+
+	/**
+	 * Returns an ordered range of all the background tasks where name = &#63; and taskExecutorClassName = any &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>BackgroundTaskModelImpl</code>.
+	 * </p>
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassNames the task executor class names
+	 * @param status the status
+	 * @param start the lower bound of the range of background tasks
+	 * @param end the upper bound of the range of background tasks (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByN_T_S(
+		String name, String[] taskExecutorClassNames, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the background tasks where name = &#63; and taskExecutorClassName = &#63; and status = &#63;, optionally using the finder cache.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>BackgroundTaskModelImpl</code>.
+	 * </p>
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @param start the lower bound of the range of background tasks
+	 * @param end the upper bound of the range of background tasks (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching background tasks
+	 */
+	public java.util.List<BackgroundTask> findByN_T_S(
+		String name, String[] taskExecutorClassNames, int status, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator<BackgroundTask>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Removes all the background tasks where name = &#63; and taskExecutorClassName = &#63; and status = &#63; from the database.
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 */
+	public void removeByN_T_S(
+		String name, String taskExecutorClassName, int status);
+
+	/**
+	 * Returns the number of background tasks where name = &#63; and taskExecutorClassName = &#63; and status = &#63;.
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassName the task executor class name
+	 * @param status the status
+	 * @return the number of matching background tasks
+	 */
+	public int countByN_T_S(
+		String name, String taskExecutorClassName, int status);
+
+	/**
+	 * Returns the number of background tasks where name = &#63; and taskExecutorClassName = any &#63; and status = &#63;.
+	 *
+	 * @param name the name
+	 * @param taskExecutorClassNames the task executor class names
+	 * @param status the status
+	 * @return the number of matching background tasks
+	 */
+	public int countByN_T_S(
+		String name, String[] taskExecutorClassNames, int status);
+
+	/**
 	 * Returns all the background tasks where groupId = &#63; and name = &#63; and taskExecutorClassName = &#63; and completed = &#63;.
 	 *
 	 * @param groupId the group ID
