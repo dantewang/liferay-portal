@@ -256,6 +256,54 @@ public class BackgroundTaskManagerImpl implements BackgroundTaskManager {
 	}
 
 	@Override
+	public BackgroundTask fetchFirstBackgroundTask(
+		String name, String taskExecutorClassName, int status) {
+
+		com.liferay.portal.background.task.model.BackgroundTask
+			bcakgroundTaskModel =
+				_backgroundTaskLocalService.fetchFirstBackgroundTask(
+					name, taskExecutorClassName, status, null);
+
+		if (bcakgroundTaskModel == null) {
+			return null;
+		}
+
+		return new BackgroundTaskImpl(bcakgroundTaskModel);
+	}
+
+	@Override
+	public BackgroundTask fetchFirstBackgroundTaskByCompanyId(
+		long companyId, String taskExecutorClassName, int status) {
+
+		com.liferay.portal.background.task.model.BackgroundTask
+			bcakgroundTaskModel =
+				_backgroundTaskLocalService.fetchFirstBackgroundTaskByCompanyId(
+					companyId, taskExecutorClassName, status, null);
+
+		if (bcakgroundTaskModel == null) {
+			return null;
+		}
+
+		return new BackgroundTaskImpl(bcakgroundTaskModel);
+	}
+
+	@Override
+	public BackgroundTask fetchFirstBackgroundTaskByGroupId(
+		long groupId, String taskExecutorClassName, int status) {
+
+		com.liferay.portal.background.task.model.BackgroundTask
+			bcakgroundTaskModel =
+				_backgroundTaskLocalService.fetchFirstBackgroundTaskByGroupId(
+					groupId, taskExecutorClassName, status, null);
+
+		if (bcakgroundTaskModel == null) {
+			return null;
+		}
+
+		return new BackgroundTaskImpl(bcakgroundTaskModel);
+	}
+
+	@Override
 	public BackgroundTask getBackgroundTask(long backgroundTaskId)
 		throws PortalException {
 
