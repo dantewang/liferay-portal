@@ -265,6 +265,21 @@ public interface BackgroundTaskLocalService
 		OrderByComparator<BackgroundTask> orderByComparator);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public BackgroundTask fetchFirstBackgroundTask(
+		String name, String taskExecutorClassName, int status,
+		OrderByComparator<BackgroundTask> orderByComparator);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public BackgroundTask fetchFirstBackgroundTaskByCompanyId(
+		long companyId, String taskExecutorClassName, int status,
+		OrderByComparator<BackgroundTask> orderByComparator);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public BackgroundTask fetchFirstBackgroundTaskByGroupId(
+		long groupId, String taskExecutorClassName, int status,
+		OrderByComparator<BackgroundTask> orderByComparator);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
 	/**
