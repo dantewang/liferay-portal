@@ -18,7 +18,9 @@ import com.liferay.portal.kernel.configuration.Configuration;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
+import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceComponentLocalService;
 import com.liferay.portal.kernel.service.configuration.ServiceComponentConfiguration;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -127,18 +129,25 @@ public class ServiceConfigurationInitializer {
 
 	private void _readResourceActions() {
 		try {
-			_resourceActions.populateModelResources(
-				_classLoader,
-				StringUtil.split(
-					_portletConfiguration.get(
-						PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
+			String[] sources = StringUtil.split(
+				_portletConfiguration.get(PropsKeys.RESOURCE_ACTIONS_CONFIGS));
+
+			_resourceActions.populateModelResources(_classLoader, sources);
 
 			if (!PropsValues.RESOURCE_ACTIONS_STRICT_MODE_ENABLED) {
 				_resourceActions.populatePortletResources(
-					_classLoader,
-					StringUtil.split(
-						_portletConfiguration.get(
-							PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
+					_classLoader, sources);
+			}
+			else {
+				String bundleSymbolicName = _bundle.getSymbolicName();
+
+				if (bundleSymbolicName.contains("commerce")) {
+					Portlet portlet = PortletLocalServiceUtil.getPortletById(
+						"90");
+
+					_resourceActions.populatePortletResource(
+						portlet, _classLoader, sources);
+				}
 			}
 		}
 		catch (Exception exception) {
