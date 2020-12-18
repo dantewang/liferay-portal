@@ -94,6 +94,15 @@ public interface BackgroundTaskManager {
 		String taskExecutorClassName, int status,
 		OrderByComparator<BackgroundTask> orderByComparator);
 
+	public BackgroundTask fetchFirstBackgroundTask(
+		String name, String taskExecutorClassName, int status);
+
+	public BackgroundTask fetchFirstBackgroundTaskByCompanyId(
+		long companyId, String taskExecutorClassName, int status);
+
+	public BackgroundTask fetchFirstBackgroundTaskByGroupId(
+		long groupId, String taskExecutorClassName, int status);
+
 	public BackgroundTask getBackgroundTask(long backgroundTaskId)
 		throws PortalException;
 
