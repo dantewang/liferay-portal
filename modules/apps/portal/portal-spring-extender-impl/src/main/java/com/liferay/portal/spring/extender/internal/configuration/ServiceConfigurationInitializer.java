@@ -18,7 +18,9 @@ import com.liferay.portal.kernel.configuration.Configuration;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
+import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceComponentLocalService;
 import com.liferay.portal.kernel.service.configuration.ServiceComponentConfiguration;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -127,18 +129,18 @@ public class ServiceConfigurationInitializer {
 
 	private void _readResourceActions() {
 		try {
-			_resourceActions.populateModelResources(
-				_classLoader,
-				StringUtil.split(
-					_portletConfiguration.get(
-						PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
+			String[] sources = StringUtil.split(
+				_portletConfiguration.get(PropsKeys.RESOURCE_ACTIONS_CONFIGS));
 
-			if (!PropsValues.RESOURCE_ACTIONS_STRICT_MODE_ENABLED) {
+			_resourceActions.populateModelResources(_classLoader, sources);
+
+			String bundleSymbolicName = _bundle.getSymbolicName();
+
+			if (!PropsValues.RESOURCE_ACTIONS_STRICT_MODE_ENABLED ||
+				bundleSymbolicName.contains("commerce")) {
+
 				_resourceActions.populatePortletResources(
-					_classLoader,
-					StringUtil.split(
-						_portletConfiguration.get(
-							PropsKeys.RESOURCE_ACTIONS_CONFIGS)));
+					_classLoader, sources);
 			}
 		}
 		catch (Exception exception) {
