@@ -350,6 +350,39 @@ public class BackgroundTaskLocalServiceUtil {
 			taskExecutorClassName, status, orderByComparator);
 	}
 
+	public static com.liferay.portal.background.task.model.BackgroundTask
+		fetchFirstBackgroundTask(
+			String name, String taskExecutorClassName, int status,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.portal.background.task.model.BackgroundTask>
+					orderByComparator) {
+
+		return getService().fetchFirstBackgroundTask(
+			name, taskExecutorClassName, status, orderByComparator);
+	}
+
+	public static com.liferay.portal.background.task.model.BackgroundTask
+		fetchFirstBackgroundTaskByCompanyId(
+			long companyId, String taskExecutorClassName, int status,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.portal.background.task.model.BackgroundTask>
+					orderByComparator) {
+
+		return getService().fetchFirstBackgroundTaskByCompanyId(
+			companyId, taskExecutorClassName, status, orderByComparator);
+	}
+
+	public static com.liferay.portal.background.task.model.BackgroundTask
+		fetchFirstBackgroundTaskByGroupId(
+			long groupId, String taskExecutorClassName, int status,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.portal.background.task.model.BackgroundTask>
+					orderByComparator) {
+
+		return getService().fetchFirstBackgroundTaskByGroupId(
+			groupId, taskExecutorClassName, status, orderByComparator);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
