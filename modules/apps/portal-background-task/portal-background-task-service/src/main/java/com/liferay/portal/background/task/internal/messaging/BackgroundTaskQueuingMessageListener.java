@@ -132,6 +132,12 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 						taskExecutorClassName,
 						BackgroundTaskConstants.STATUS_QUEUED);
 			}
+			else {
+				backgroundTask =
+					_backgroundTaskManager.fetchFirstBackgroundTask(
+						taskExecutorClassName,
+						BackgroundTaskConstants.STATUS_QUEUED);
+			}
 		}
 		else {
 			backgroundTask = _backgroundTaskManager.fetchFirstBackgroundTask(

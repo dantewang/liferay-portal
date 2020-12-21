@@ -15,10 +15,11 @@
 package com.liferay.portal.background.task.internal.messaging;
 
 import com.liferay.petra.lang.SafeClosable;
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.background.task.internal.SerialBackgroundTaskExecutor;
 import com.liferay.portal.background.task.internal.ThreadLocalAwareBackgroundTaskExecutor;
+import com.liferay.portal.background.task.internal.lock.BackgroundTaskLockHelper;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutor;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutorRegistry;
@@ -48,6 +49,8 @@ import com.liferay.portal.kernel.util.StackTraceUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.lang.reflect.Method;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +72,8 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 		_backgroundTaskThreadLocalManager = backgroundTaskThreadLocalManager;
 		_lockManager = lockManager;
 		_messageBus = messageBus;
+
+		_backgroundTaskLockHelper = new BackgroundTaskLockHelper(lockManager);
 	}
 
 	@Override
@@ -203,9 +208,6 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 						backgroundTaskStatusMessageListener);
 				}
 
-				String taskExecutorClassName =
-					backgroundTask.getTaskExecutorClassName();
-
 				Message responseMessage = new Message();
 
 				responseMessage.put(
@@ -214,39 +216,17 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 				responseMessage.put("name", backgroundTask.getName());
 				responseMessage.put("status", status);
 				responseMessage.put(
-					"taskExecutorClassName", taskExecutorClassName);
+					"taskExecutorClassName",
+					backgroundTask.getTaskExecutorClassName());
 
 				if (backgroundTaskExecutor.isSerial()) {
-					int isolationLevel =
-						backgroundTaskExecutor.getIsolationLevel();
-
-					String lockKey = StringPool.BLANK;
-
-					if (isolationLevel ==
-							BackgroundTaskConstants.ISOLATION_LEVEL_COMPANY) {
-
-						lockKey =
-							taskExecutorClassName + StringPool.POUND +
-								backgroundTask.getCompanyId();
-					}
-					else if (isolationLevel ==
-								BackgroundTaskConstants.ISOLATION_LEVEL_GROUP) {
-
-						lockKey =
-							taskExecutorClassName + StringPool.POUND +
-								backgroundTask.getGroupId();
-					}
-					else if (isolationLevel ==
-								BackgroundTaskConstants.
-									ISOLATION_LEVEL_TASK_NAME) {
-
-						lockKey =
-							taskExecutorClassName + StringPool.POUND +
-								backgroundTask.getName();
-					}
-
-					responseMessage.put("isolationLevel", isolationLevel);
-					responseMessage.put("lockKey", lockKey);
+					responseMessage.put(
+						"isolationLevel",
+						backgroundTaskExecutor.getIsolationLevel());
+					responseMessage.put(
+						"lockKey",
+						_getLockKeyMethod.invoke(
+							_backgroundTaskLockHelper, backgroundTask));
 				}
 
 				_messageBus.sendMessage(
@@ -368,8 +348,22 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 	private static final Log _log = LogFactoryUtil.getLog(
 		BackgroundTaskMessageListener.class);
 
+	private static final Method _getLockKeyMethod;
+
+	static {
+		try {
+			_getLockKeyMethod = ReflectionUtil.getDeclaredMethod(
+				BackgroundTaskLockHelper.class, "getLockKey",
+				BackgroundTask.class);
+		}
+		catch (Exception exception) {
+			throw new ExceptionInInitializerError(exception);
+		}
+	}
+
 	private final BackgroundTaskExecutorRegistry
 		_backgroundTaskExecutorRegistry;
+	private final BackgroundTaskLockHelper _backgroundTaskLockHelper;
 	private final BackgroundTaskManager _backgroundTaskManager;
 	private final BackgroundTaskStatusRegistry _backgroundTaskStatusRegistry;
 	private final BackgroundTaskThreadLocalManager
