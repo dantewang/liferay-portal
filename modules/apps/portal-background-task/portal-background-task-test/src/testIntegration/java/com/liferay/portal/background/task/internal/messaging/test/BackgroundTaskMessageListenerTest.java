@@ -1,0 +1,324 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.portal.background.task.internal.messaging.test;
+
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.background.task.constants.BackgroundTaskContextMapConstants;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutor;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManager;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskResult;
+import com.liferay.portal.kernel.backgroundtask.BaseBackgroundTaskExecutor;
+import com.liferay.portal.kernel.backgroundtask.constants.BackgroundTaskConstants;
+import com.liferay.portal.kernel.backgroundtask.display.BackgroundTaskDisplay;
+import com.liferay.portal.kernel.lock.Lock;
+import com.liferay.portal.kernel.lock.LockManager;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
+import com.liferay.portal.kernel.test.util.GroupTestUtil;
+import com.liferay.portal.kernel.test.util.UserTestUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.HashMapDictionary;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.test.rule.Inject;
+import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+
+import java.io.Serializable;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceRegistration;
+
+/**
+ * @author Hai Yu
+ */
+@RunWith(Arquillian.class)
+public class BackgroundTaskMessageListenerTest {
+
+	@ClassRule
+	@Rule
+	public static final AggregateTestRule aggregateTestRule =
+		new LiferayIntegrationTestRule();
+
+	@Before
+	public void setUp() throws Exception {
+		Bundle bundle = FrameworkUtil.getBundle(
+			BackgroundTaskMessageListenerTest.class);
+
+		_bundleContext = bundle.getBundleContext();
+
+		_backgroundTaskExecutorServiceRegistration =
+			_bundleContext.registerService(
+				BackgroundTaskExecutor.class.getName(),
+				_backgroundTaskExecutorTest,
+				new HashMapDictionary<String, String>() {
+					{
+						put(
+							"background.task.executor.class.name",
+							BackgroundTaskExecutorTest.class.getName());
+					}
+				});
+
+		_user = UserTestUtil.addUser();
+
+		_group = GroupTestUtil.addGroup();
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		if (_backgroundTaskExecutorServiceRegistration != null) {
+			_backgroundTaskExecutorServiceRegistration.unregister();
+		}
+	}
+
+	@Test
+	public void testFetchFirstBackgroundTaskByCompanyIdFromQueued()
+		throws Exception {
+
+		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_COMPANY;
+
+		_backgroundTaskExecutorTest.setIsolationLevel(isolationLevel);
+
+		_assertFetchFirstBackgroundTaskFromQueued(
+			isolationLevel,
+			BackgroundTaskExecutorTest.class.getName() + StringPool.POUND +
+				_user.getCompanyId());
+	}
+
+	@Test
+	public void testFetchFirstBackgroundTaskByGroupIdFromQueued()
+		throws Exception {
+
+		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_GROUP;
+
+		_backgroundTaskExecutorTest.setIsolationLevel(isolationLevel);
+
+		_assertFetchFirstBackgroundTaskFromQueued(
+			isolationLevel,
+			BackgroundTaskExecutorTest.class.getName() + StringPool.POUND +
+				_group.getGroupId());
+	}
+
+	@Test
+	public void testFetchFirstBackgroundTaskByLevelClassFromQueued()
+		throws Exception {
+
+		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_CLASS;
+
+		_backgroundTaskExecutorTest.setIsolationLevel(isolationLevel);
+
+		_assertFetchFirstBackgroundTaskFromQueued(
+			isolationLevel, BackgroundTaskExecutorTest.class.getName());
+	}
+
+	@Test
+	public void testFetchFirstBackgroundTaskByLevelCustomQueued()
+		throws Exception {
+
+		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_CUSTOM;
+
+		_backgroundTaskExecutorTest.setIsolationLevel(isolationLevel);
+
+		_assertFetchFirstBackgroundTaskFromQueued(
+			isolationLevel,
+			BackgroundTaskExecutorTest.class.getName() + StringPool.POUND +
+				isolationLevel);
+	}
+
+	@Test
+	public void testFetchFirstBackgroundTaskByNameFromQueued()
+		throws Exception {
+
+		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_TASK_NAME;
+
+		_backgroundTaskExecutorTest.setIsolationLevel(isolationLevel);
+
+		_assertFetchFirstBackgroundTaskFromQueued(
+			isolationLevel,
+			BackgroundTaskExecutorTest.class.getName() + StringPool.POUND +
+				"TEST");
+	}
+
+	@Test
+	public void testFetchFirstBackgroundTaskByNotIsolatedFromQueued()
+		throws Exception {
+
+		int isolationLevel =
+			BackgroundTaskConstants.ISOLATION_LEVEL_NOT_ISOLATED;
+
+		_backgroundTaskExecutorTest.setIsolationLevel(isolationLevel);
+
+		_assertFetchFirstBackgroundTaskFromQueued(isolationLevel, null);
+	}
+
+	private void _assertFetchFirstBackgroundTaskFromQueued(
+			int isolationLevel, String lockKey)
+		throws Exception {
+
+		String taskExecutorClassName =
+			BackgroundTaskExecutorTest.class.getName();
+
+		Lock lock = null;
+
+		if (lockKey != null) {
+			lock = _lockManager.lock(
+				BackgroundTaskExecutor.class.getName(), lockKey, "test");
+		}
+
+		try {
+			_backgroundTaskManager.addBackgroundTask(
+				_user.getUserId(), _group.getGroupId(), "TEST",
+				BackgroundTaskExecutorTest.class.getName(),
+				HashMapBuilder.<String, Serializable>put(
+					BackgroundTaskContextMapConstants.DELETE_ON_SUCCESS, true
+				).build(),
+				null);
+
+			BackgroundTask backgroundTask = null;
+
+			if (isolationLevel ==
+					BackgroundTaskConstants.ISOLATION_LEVEL_COMPANY) {
+
+				long companyId = GetterUtil.getLong(
+					StringUtil.extractLast(lockKey, CharPool.POUND));
+
+				backgroundTask =
+					_backgroundTaskManager.fetchFirstBackgroundTaskByCompanyId(
+						companyId, taskExecutorClassName,
+						BackgroundTaskConstants.STATUS_QUEUED);
+			}
+			else if (isolationLevel ==
+						BackgroundTaskConstants.ISOLATION_LEVEL_GROUP) {
+
+				long groupId = GetterUtil.getLong(
+					StringUtil.extractLast(lockKey, CharPool.POUND));
+
+				backgroundTask =
+					_backgroundTaskManager.fetchFirstBackgroundTaskByGroupId(
+						groupId, taskExecutorClassName,
+						BackgroundTaskConstants.STATUS_QUEUED);
+			}
+			else if (isolationLevel ==
+						BackgroundTaskConstants.ISOLATION_LEVEL_NOT_ISOLATED) {
+
+				backgroundTask =
+					_backgroundTaskManager.fetchFirstBackgroundTask(
+						taskExecutorClassName,
+						BackgroundTaskConstants.STATUS_QUEUED);
+
+				Assert.assertNull(backgroundTask);
+
+				return;
+			}
+			else if (isolationLevel ==
+						BackgroundTaskConstants.ISOLATION_LEVEL_TASK_NAME) {
+
+				backgroundTask =
+					_backgroundTaskManager.fetchFirstBackgroundTask(
+						StringUtil.extractLast(lockKey, CharPool.POUND),
+						taskExecutorClassName,
+						BackgroundTaskConstants.STATUS_QUEUED);
+			}
+			else {
+				backgroundTask =
+					_backgroundTaskManager.fetchFirstBackgroundTask(
+						taskExecutorClassName,
+						BackgroundTaskConstants.STATUS_QUEUED);
+			}
+
+			Assert.assertNotNull(backgroundTask);
+			Assert.assertTrue(
+				"Background task status should be QUEUED(4)",
+				backgroundTask.getStatus() ==
+					BackgroundTaskConstants.STATUS_QUEUED);
+
+			_lockManager.unlock(
+				BackgroundTaskExecutor.class.getName(), lockKey, "test");
+
+			long backgroundTaskId = backgroundTask.getBackgroundTaskId();
+
+			_backgroundTaskManager.resumeBackgroundTask(backgroundTaskId);
+
+			Assert.assertNull(
+				_backgroundTaskManager.fetchBackgroundTask(backgroundTaskId));
+		}
+		finally {
+			if (lock != null) {
+				_lockManager.unlock(
+					BackgroundTaskExecutor.class.getName(), lockKey, "test");
+			}
+		}
+	}
+
+	private ServiceRegistration<?> _backgroundTaskExecutorServiceRegistration;
+	private final BackgroundTaskExecutorTest _backgroundTaskExecutorTest =
+		new BackgroundTaskExecutorTest();
+
+	@Inject
+	private BackgroundTaskManager _backgroundTaskManager;
+
+	private BundleContext _bundleContext;
+
+	@DeleteAfterTestRun
+	private Group _group;
+
+	@Inject
+	private LockManager _lockManager;
+
+	@DeleteAfterTestRun
+	private User _user;
+
+	private class BackgroundTaskExecutorTest
+		extends BaseBackgroundTaskExecutor {
+
+		@Override
+		public BackgroundTaskExecutor clone() {
+			return this;
+		}
+
+		@Override
+		public BackgroundTaskResult execute(BackgroundTask backgroundTask) {
+			return BackgroundTaskResult.SUCCESS;
+		}
+
+		@Override
+		public BackgroundTaskDisplay getBackgroundTaskDisplay(
+			BackgroundTask backgroundTask) {
+
+			return null;
+		}
+
+		@Override
+		protected void setIsolationLevel(int isolationLevel) {
+			super.setIsolationLevel(isolationLevel);
+		}
+
+	}
+
+}
