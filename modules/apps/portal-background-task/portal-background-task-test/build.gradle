@@ -3,5 +3,6 @@ dependencies {
 	testIntegrationCompile project(":apps:portal-background-task:portal-background-task-api")
 	testIntegrationCompile project(":apps:portal-background-task:portal-background-task-service")
 	testIntegrationCompile project(":core:petra:petra-sql-dsl-api")
+	testIntegrationCompile project(":core:petra:petra-string")
 	testIntegrationCompile project(":test:arquillian-extension-junit-bridge")
 }
