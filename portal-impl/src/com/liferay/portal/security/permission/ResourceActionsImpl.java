@@ -84,21 +84,6 @@ import javax.servlet.http.HttpSession;
  */
 public class ResourceActionsImpl implements ResourceActions {
 
-	public void afterPropertiesSet() {
-		try {
-			Class<?> clazz = getClass();
-
-			ClassLoader classLoader = clazz.getClassLoader();
-
-			for (String config : PropsValues.RESOURCE_ACTIONS_CONFIGS) {
-				read(classLoader, config);
-			}
-		}
-		catch (Exception exception) {
-			_log.error(exception, exception);
-		}
-	}
-
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #check(String)}
 	 */
@@ -579,6 +564,54 @@ public class ResourceActionsImpl implements ResourceActions {
 		return false;
 	}
 
+	public void populateModelResources(
+			ClassLoader classLoader, String... sources)
+		throws ResourceActionsException {
+
+		if (sources == null) {
+			return;
+		}
+
+		Set<String> modelResourceNames = new HashSet<>();
+
+		for (String source : sources) {
+			_read(
+				classLoader, source,
+				rootElement -> _readModelResources(
+					rootElement, modelResourceNames));
+		}
+
+		for (String modelResourceName : modelResourceNames) {
+			resourceActionLocalService.checkResourceActions(
+				modelResourceName, getModelResourceActions(modelResourceName));
+		}
+	}
+
+	public void populateModelResources(Document document)
+		throws ResourceActionsException {
+
+		DocumentType documentType = document.getDocumentType();
+
+		String publicId = GetterUtil.getString(documentType.getPublicId());
+
+		if (publicId.equals(
+				"-//Liferay//DTD Resource Action Mapping 6.0.0//EN")) {
+
+			if (_log.isWarnEnabled()) {
+				_log.warn("Please update document to use the 6.1.0 format");
+			}
+		}
+
+		Set<String> modelResourceNames = new HashSet<>();
+
+		_readModelResources(document.getRootElement(), modelResourceNames);
+
+		for (String modelResourceName : modelResourceNames) {
+			resourceActionLocalService.checkResourceActions(
+				modelResourceName, getModelResourceActions(modelResourceName));
+		}
+	}
+
 	public void populatePortletResource(
 			Portlet portlet, ClassLoader classLoader, String... sources)
 		throws ResourceActionsException {
@@ -605,13 +638,52 @@ public class ResourceActionsImpl implements ResourceActions {
 			_getPortletResourceActions(portletResourceName, portlet));
 	}
 
+	public void populatePortletResources(
+			ClassLoader classLoader, String... sources)
+		throws ResourceActionsException {
+
+		if ((sources == null) ||
+			!PropsValues.RESOURCE_ACTIONS_READ_PORTLET_RESOURCES) {
+
+			return;
+		}
+
+		Set<String> portletResourceNames = new HashSet<>();
+
+		for (String source : sources) {
+			_read(
+				classLoader, source,
+				rootElement -> _readPortletResources(
+					rootElement, portletResourceNames));
+		}
+
+		for (String portletResourceName : portletResourceNames) {
+			resourceActionLocalService.checkResourceActions(
+				portletResourceName,
+				getModelResourceActions(portletResourceName));
+		}
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public void read(ClassLoader classLoader, String source)
 		throws ResourceActionsException {
 
-		_read(classLoader, source, rootElement -> _read(rootElement, null));
+		_read(
+			classLoader, source,
+			rootElement -> {
+				_readModelResources(rootElement, null);
+				_readPortletResources(rootElement, null);
+			});
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public void read(ClassLoader classLoader, String... sources)
 		throws ResourceActionsException {
@@ -621,6 +693,10 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public void read(Document document, Set<String> resourceNames)
 		throws ResourceActionsException {
@@ -637,7 +713,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			}
 		}
 
-		_read(document.getRootElement(), resourceNames);
+		_readModelResources(document.getRootElement(), resourceNames);
 	}
 
 	/**
@@ -678,6 +754,10 @@ public class ResourceActionsImpl implements ResourceActions {
 		read(document, resourceNames);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public void readAndCheck(ClassLoader classLoader, String... sources)
 		throws ResourceActionsException {
@@ -687,7 +767,10 @@ public class ResourceActionsImpl implements ResourceActions {
 		for (String source : sources) {
 			_read(
 				classLoader, source,
-				rootElement -> _read(rootElement, resourceNames));
+				rootElement -> {
+					_readModelResources(rootElement, resourceNames);
+					_readPortletResources(rootElement, resourceNames);
+				});
 		}
 
 		for (String resourceName : resourceNames) {
@@ -707,6 +790,14 @@ public class ResourceActionsImpl implements ResourceActions {
 		throws ResourceActionsException {
 
 		readAndCheck(classLoader, sources);
+	}
+
+	public void readModelResources(ClassLoader classLoader, String source)
+		throws ResourceActionsException {
+
+		_read(
+			classLoader, source,
+			rootElement -> _readModelResources(rootElement, null));
 	}
 
 	/**
@@ -1092,34 +1183,23 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
-	private void _read(Element rootElement, Set<String> resourceNames)
-		throws ResourceActionsException {
+	private void _readActionKeys(
+		Collection<String> actions, Element parentElement) {
 
-		if (PropsValues.RESOURCE_ACTIONS_READ_PORTLET_RESOURCES) {
-			for (Element portletResourceElement :
-					rootElement.elements("portlet-resource")) {
+		for (Element actionKeyElement : parentElement.elements("action-key")) {
+			String actionKey = actionKeyElement.getTextTrim();
 
-				String portletName = portletResourceElement.elementTextTrim(
-					"portlet-name");
-
-				Portlet portlet = portletLocalService.getPortletById(
-					portletName);
-
-				Set<String> portletActions = _getPortletMimeTypeActions(
-					portletName, portlet);
-
-				if (!portletName.equals(PortletKeys.PORTAL)) {
-					_checkPortletLayoutManagerActions(portletActions);
-				}
-
-				_readResource(
-					portletResourceElement, portletName, portletActions);
-
-				if (resourceNames != null) {
-					resourceNames.add(portletName);
-				}
+			if (Validator.isNull(actionKey)) {
+				continue;
 			}
+
+			actions.add(actionKey);
 		}
+	}
+
+	private void _readModelResources(
+			Element rootElement, Set<String> resourceNames)
+		throws ResourceActionsException {
 
 		for (Element modelResourceElement :
 				rootElement.elements("model-resource")) {
@@ -1193,20 +1273,6 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
-	private void _readActionKeys(
-		Collection<String> actions, Element parentElement) {
-
-		for (Element actionKeyElement : parentElement.elements("action-key")) {
-			String actionKey = actionKeyElement.getTextTrim();
-
-			if (Validator.isNull(actionKey)) {
-				continue;
-			}
-
-			actions.add(actionKey);
-		}
-	}
-
 	private void _readPortletResource(Element rootElement, Portlet portlet)
 		throws ResourceActionsException {
 
@@ -1231,6 +1297,37 @@ public class ResourceActionsImpl implements ResourceActions {
 			}
 
 			_readResource(portletResourceElement, portletName, portletActions);
+		}
+	}
+
+	private void _readPortletResources(
+			Element rootElement, Set<String> resourceNames)
+		throws ResourceActionsException {
+
+		if (PropsValues.RESOURCE_ACTIONS_READ_PORTLET_RESOURCES) {
+			for (Element portletResourceElement :
+					rootElement.elements("portlet-resource")) {
+
+				String portletName = portletResourceElement.elementTextTrim(
+					"portlet-name");
+
+				Portlet portlet = portletLocalService.getPortletById(
+					portletName);
+
+				Set<String> portletActions = _getPortletMimeTypeActions(
+					portletName, portlet);
+
+				if (!portletName.equals(PortletKeys.PORTAL)) {
+					_checkPortletLayoutManagerActions(portletActions);
+				}
+
+				_readResource(
+					portletResourceElement, portletName, portletActions);
+
+				if (resourceNames != null) {
+					resourceNames.add(portletName);
+				}
+			}
 		}
 	}
 
