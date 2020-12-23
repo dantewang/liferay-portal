@@ -76,12 +76,12 @@ public class BackgroundTaskMessageListenerTest {
 		_backgroundTaskExecutorServiceRegistration =
 			_bundleContext.registerService(
 				BackgroundTaskExecutor.class.getName(),
-				_backgroundTaskExecutorTest,
+				_testBackgroundTaskExecutor,
 				new HashMapDictionary<String, String>() {
 					{
 						put(
 							"background.task.executor.class.name",
-							BackgroundTaskExecutorTest.class.getName());
+							TestBackgroundTaskExecutor.class.getName());
 					}
 				});
 
@@ -103,12 +103,12 @@ public class BackgroundTaskMessageListenerTest {
 
 		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_COMPANY;
 
-		_backgroundTaskExecutorTest.setIsolationLevel(isolationLevel);
+		_testBackgroundTaskExecutor.setIsolationLevel(isolationLevel);
 
 		_assertFetchFirstBackgroundTaskFromQueued(
 			isolationLevel,
-			BackgroundTaskExecutorTest.class.getName() + StringPool.POUND +
-				_user.getCompanyId());
+			TestBackgroundTaskExecutor.class.getName() + StringPool.POUND +
+			_user.getCompanyId());
 	}
 
 	@Test
@@ -117,12 +117,12 @@ public class BackgroundTaskMessageListenerTest {
 
 		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_GROUP;
 
-		_backgroundTaskExecutorTest.setIsolationLevel(isolationLevel);
+		_testBackgroundTaskExecutor.setIsolationLevel(isolationLevel);
 
 		_assertFetchFirstBackgroundTaskFromQueued(
 			isolationLevel,
-			BackgroundTaskExecutorTest.class.getName() + StringPool.POUND +
-				_group.getGroupId());
+			TestBackgroundTaskExecutor.class.getName() + StringPool.POUND +
+			_group.getGroupId());
 	}
 
 	@Test
@@ -131,10 +131,10 @@ public class BackgroundTaskMessageListenerTest {
 
 		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_CLASS;
 
-		_backgroundTaskExecutorTest.setIsolationLevel(isolationLevel);
+		_testBackgroundTaskExecutor.setIsolationLevel(isolationLevel);
 
 		_assertFetchFirstBackgroundTaskFromQueued(
-			isolationLevel, BackgroundTaskExecutorTest.class.getName());
+			isolationLevel, TestBackgroundTaskExecutor.class.getName());
 	}
 
 	@Test
@@ -143,12 +143,12 @@ public class BackgroundTaskMessageListenerTest {
 
 		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_CUSTOM;
 
-		_backgroundTaskExecutorTest.setIsolationLevel(isolationLevel);
+		_testBackgroundTaskExecutor.setIsolationLevel(isolationLevel);
 
 		_assertFetchFirstBackgroundTaskFromQueued(
 			isolationLevel,
-			BackgroundTaskExecutorTest.class.getName() + StringPool.POUND +
-				isolationLevel);
+			TestBackgroundTaskExecutor.class.getName() + StringPool.POUND +
+			isolationLevel);
 	}
 
 	@Test
@@ -157,12 +157,12 @@ public class BackgroundTaskMessageListenerTest {
 
 		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_TASK_NAME;
 
-		_backgroundTaskExecutorTest.setIsolationLevel(isolationLevel);
+		_testBackgroundTaskExecutor.setIsolationLevel(isolationLevel);
 
 		_assertFetchFirstBackgroundTaskFromQueued(
 			isolationLevel,
-			BackgroundTaskExecutorTest.class.getName() + StringPool.POUND +
-				"TEST");
+			TestBackgroundTaskExecutor.class.getName() + StringPool.POUND +
+			"TEST");
 	}
 
 	@Test
@@ -172,7 +172,7 @@ public class BackgroundTaskMessageListenerTest {
 		int isolationLevel =
 			BackgroundTaskConstants.ISOLATION_LEVEL_NOT_ISOLATED;
 
-		_backgroundTaskExecutorTest.setIsolationLevel(isolationLevel);
+		_testBackgroundTaskExecutor.setIsolationLevel(isolationLevel);
 
 		_assertFetchFirstBackgroundTaskFromQueued(isolationLevel, null);
 	}
@@ -182,7 +182,7 @@ public class BackgroundTaskMessageListenerTest {
 		throws Exception {
 
 		String taskExecutorClassName =
-			BackgroundTaskExecutorTest.class.getName();
+			TestBackgroundTaskExecutor.class.getName();
 
 		Lock lock = null;
 
@@ -194,7 +194,7 @@ public class BackgroundTaskMessageListenerTest {
 		try {
 			_backgroundTaskManager.addBackgroundTask(
 				_user.getUserId(), _group.getGroupId(), "TEST",
-				BackgroundTaskExecutorTest.class.getName(),
+				TestBackgroundTaskExecutor.class.getName(),
 				HashMapBuilder.<String, Serializable>put(
 					BackgroundTaskContextMapConstants.DELETE_ON_SUCCESS, true
 				).build(),
@@ -277,8 +277,8 @@ public class BackgroundTaskMessageListenerTest {
 	}
 
 	private ServiceRegistration<?> _backgroundTaskExecutorServiceRegistration;
-	private final BackgroundTaskExecutorTest _backgroundTaskExecutorTest =
-		new BackgroundTaskExecutorTest();
+	private final TestBackgroundTaskExecutor _testBackgroundTaskExecutor =
+		new TestBackgroundTaskExecutor();
 
 	@Inject
 	private BackgroundTaskManager _backgroundTaskManager;
@@ -294,7 +294,7 @@ public class BackgroundTaskMessageListenerTest {
 	@DeleteAfterTestRun
 	private User _user;
 
-	private class BackgroundTaskExecutorTest
+	private class TestBackgroundTaskExecutor
 		extends BaseBackgroundTaskExecutor {
 
 		@Override
