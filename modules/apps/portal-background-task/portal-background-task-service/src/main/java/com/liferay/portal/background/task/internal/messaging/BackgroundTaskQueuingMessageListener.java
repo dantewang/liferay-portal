@@ -109,23 +109,21 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 		BackgroundTask backgroundTask = null;
 
 		if (isolationLevel == BackgroundTaskConstants.ISOLATION_LEVEL_COMPANY) {
-			long companyId = GetterUtil.getLong(
-				StringUtil.extractLast(lockKey, CharPool.POUND));
-
 			backgroundTask =
 				_backgroundTaskManager.fetchFirstBackgroundTaskByCompanyId(
-					companyId, taskExecutorClassName,
+					GetterUtil.getLong(
+						StringUtil.extractLast(lockKey, CharPool.POUND)),
+					taskExecutorClassName,
 					BackgroundTaskConstants.STATUS_QUEUED);
 		}
 		else if (isolationLevel ==
 					BackgroundTaskConstants.ISOLATION_LEVEL_GROUP) {
 
-			long groupId = GetterUtil.getLong(
-				StringUtil.extractLast(lockKey, CharPool.POUND));
-
 			backgroundTask =
 				_backgroundTaskManager.fetchFirstBackgroundTaskByGroupId(
-					groupId, taskExecutorClassName,
+					GetterUtil.getLong(
+						StringUtil.extractLast(lockKey, CharPool.POUND)),
+					taskExecutorClassName,
 					BackgroundTaskConstants.STATUS_QUEUED);
 		}
 		else if (isolationLevel ==
