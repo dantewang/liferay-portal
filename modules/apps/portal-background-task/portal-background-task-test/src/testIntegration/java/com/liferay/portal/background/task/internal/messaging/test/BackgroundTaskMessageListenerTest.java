@@ -91,7 +91,7 @@ public class BackgroundTaskMessageListenerTest {
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		if (_backgroundTaskExecutorServiceRegistration != null) {
 			_backgroundTaskExecutorServiceRegistration.unregister();
 		}
