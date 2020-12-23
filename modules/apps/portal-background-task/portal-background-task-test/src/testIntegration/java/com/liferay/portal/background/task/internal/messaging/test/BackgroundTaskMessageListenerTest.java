@@ -101,12 +101,11 @@ public class BackgroundTaskMessageListenerTest {
 	public void testFetchFirstBackgroundTaskByCompanyIdFromQueued()
 		throws Exception {
 
-		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_COMPANY;
-
-		_testBackgroundTaskExecutor.setIsolationLevel(isolationLevel);
+		_testBackgroundTaskExecutor.setIsolationLevel(
+			BackgroundTaskConstants.ISOLATION_LEVEL_COMPANY);
 
 		_assertFetchFirstBackgroundTaskFromQueued(
-			isolationLevel,
+			BackgroundTaskConstants.ISOLATION_LEVEL_COMPANY,
 			TestBackgroundTaskExecutor.class.getName() + StringPool.POUND +
 			_user.getCompanyId());
 	}
@@ -115,12 +114,11 @@ public class BackgroundTaskMessageListenerTest {
 	public void testFetchFirstBackgroundTaskByGroupIdFromQueued()
 		throws Exception {
 
-		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_GROUP;
-
-		_testBackgroundTaskExecutor.setIsolationLevel(isolationLevel);
+		_testBackgroundTaskExecutor.setIsolationLevel(
+			BackgroundTaskConstants.ISOLATION_LEVEL_GROUP);
 
 		_assertFetchFirstBackgroundTaskFromQueued(
-			isolationLevel,
+			BackgroundTaskConstants.ISOLATION_LEVEL_GROUP,
 			TestBackgroundTaskExecutor.class.getName() + StringPool.POUND +
 			_group.getGroupId());
 	}
@@ -129,38 +127,35 @@ public class BackgroundTaskMessageListenerTest {
 	public void testFetchFirstBackgroundTaskByLevelClassFromQueued()
 		throws Exception {
 
-		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_CLASS;
-
-		_testBackgroundTaskExecutor.setIsolationLevel(isolationLevel);
+		_testBackgroundTaskExecutor.setIsolationLevel(
+			BackgroundTaskConstants.ISOLATION_LEVEL_CLASS);
 
 		_assertFetchFirstBackgroundTaskFromQueued(
-			isolationLevel, TestBackgroundTaskExecutor.class.getName());
+			BackgroundTaskConstants.ISOLATION_LEVEL_CLASS, TestBackgroundTaskExecutor.class.getName());
 	}
 
 	@Test
 	public void testFetchFirstBackgroundTaskByLevelCustomQueued()
 		throws Exception {
 
-		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_CUSTOM;
-
-		_testBackgroundTaskExecutor.setIsolationLevel(isolationLevel);
+		_testBackgroundTaskExecutor.setIsolationLevel(
+			BackgroundTaskConstants.ISOLATION_LEVEL_CUSTOM);
 
 		_assertFetchFirstBackgroundTaskFromQueued(
-			isolationLevel,
+			BackgroundTaskConstants.ISOLATION_LEVEL_CUSTOM,
 			TestBackgroundTaskExecutor.class.getName() + StringPool.POUND +
-			isolationLevel);
+			BackgroundTaskConstants.ISOLATION_LEVEL_CUSTOM);
 	}
 
 	@Test
 	public void testFetchFirstBackgroundTaskByNameFromQueued()
 		throws Exception {
 
-		int isolationLevel = BackgroundTaskConstants.ISOLATION_LEVEL_TASK_NAME;
-
-		_testBackgroundTaskExecutor.setIsolationLevel(isolationLevel);
+		_testBackgroundTaskExecutor.setIsolationLevel(
+			BackgroundTaskConstants.ISOLATION_LEVEL_TASK_NAME);
 
 		_assertFetchFirstBackgroundTaskFromQueued(
-			isolationLevel,
+			BackgroundTaskConstants.ISOLATION_LEVEL_TASK_NAME,
 			TestBackgroundTaskExecutor.class.getName() + StringPool.POUND +
 			"TEST");
 	}
@@ -169,12 +164,11 @@ public class BackgroundTaskMessageListenerTest {
 	public void testFetchFirstBackgroundTaskByNotIsolatedFromQueued()
 		throws Exception {
 
-		int isolationLevel =
-			BackgroundTaskConstants.ISOLATION_LEVEL_NOT_ISOLATED;
+		_testBackgroundTaskExecutor.setIsolationLevel(
+			BackgroundTaskConstants.ISOLATION_LEVEL_NOT_ISOLATED);
 
-		_testBackgroundTaskExecutor.setIsolationLevel(isolationLevel);
-
-		_assertFetchFirstBackgroundTaskFromQueued(isolationLevel, null);
+		_assertFetchFirstBackgroundTaskFromQueued(
+			BackgroundTaskConstants.ISOLATION_LEVEL_NOT_ISOLATED, null);
 	}
 
 	private void _assertFetchFirstBackgroundTaskFromQueued(
