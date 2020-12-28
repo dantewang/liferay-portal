@@ -43,12 +43,6 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 
 	@Override
 	protected void doReceive(Message message) throws Exception {
-		String lockKey = (String)message.get("lockKey");
-
-		if (Validator.isNull(lockKey)) {
-			return;
-		}
-
 		String taskExecutorClassName = (String)message.get(
 			"taskExecutorClassName");
 
@@ -63,6 +57,8 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 		}
 
 		int isolationLevel = (int)message.get("isolationLevel");
+
+		String lockKey = (String)message.get("lockKey");
 
 		int status = (Integer)message.get("status");
 
