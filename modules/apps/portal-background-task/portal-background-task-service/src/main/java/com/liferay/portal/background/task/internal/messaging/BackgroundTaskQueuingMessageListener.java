@@ -82,7 +82,9 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 	private void _executeQueuedBackgroundTasks(
 		String taskExecutorClassName, Message message) {
 
-		int isolationLevel = (int)message.get("isolationLevel");
+		int isolationLevel = (message.get("isolationLevel") != null) ?
+			(int)message.get("isolationLevel") :
+				BackgroundTaskConstants.ISOLATION_LEVEL_NOT_ISOLATED;
 
 		String lockKey = (String)message.get("lockKey");
 
