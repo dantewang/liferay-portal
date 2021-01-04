@@ -15,11 +15,9 @@
 package com.liferay.portal.tools.sample.sql.builder;
 
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.test.rule.LogAssertionTestRule;
 import com.liferay.portal.tools.HypersonicLoader;
@@ -38,7 +36,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
-import java.util.Enumeration;
 import java.util.Properties;
 
 import org.junit.Assert;
@@ -82,7 +79,17 @@ public class SampleSQLBuilderTest {
 			SystemProperties.get(SystemProperties.TMP_DIR),
 			String.valueOf(System.currentTimeMillis()));
 
-		_initProperties(properties, tempDir.getAbsolutePath());
+		tempDir.mkdir();
+
+		File createDir = new File(tempDir, "create");
+
+		createDir.mkdir();
+
+		File outputFile = new File(createDir, "create.sql");
+
+		_initProperties(
+			properties, tempDir.getAbsolutePath(),
+			outputFile.getAbsolutePath());
 
 		File tempPropertiesFile = File.createTempFile("test", ".properties");
 
@@ -94,36 +101,17 @@ public class SampleSQLBuilderTest {
 
 			new SampleSQLBuilder();
 
-			_loadHypersonic("../../../sql", tempDir.getAbsolutePath());
+			_loadHypersonic(
+				tempDir.getAbsolutePath(), outputFile.getAbsolutePath());
 		}
 		finally {
 			FileUtil.deltree(tempDir);
 		}
 	}
 
-	private ClassLoader _getClassLoader() {
-		Class<?> clazz = getClass();
+	private void _initProperties(
+		Properties properties, String outputDir, String outputFile) {
 
-		return clazz.getClassLoader();
-	}
-
-	private Enumeration<URL> _getServiceComponentsIndexesSQLURLs()
-		throws Exception {
-
-		ClassLoader classLoader = _getClassLoader();
-
-		return classLoader.getResources("META-INF/sql/indexes.sql");
-	}
-
-	private Enumeration<URL> _getServiceComponentsTablesSQLURLs()
-		throws Exception {
-
-		ClassLoader classLoader = _getClassLoader();
-
-		return classLoader.getResources("META-INF/sql/tables.sql");
-	}
-
-	private void _initProperties(Properties properties, String outputDir) {
 		properties.put(BenchmarksPropsKeys.DB_TYPE, "hypersonic");
 		properties.put(BenchmarksPropsKeys.MAX_ASSET_CATEGORY_COUNT, "1");
 		properties.put(
@@ -168,6 +156,7 @@ public class SampleSQLBuilderTest {
 			"assetPublisher,blog,company,documentLibrary,dynamicDataList," +
 				"fragment,layout,mbCategory,mbThread,repository,wiki");
 		properties.put(BenchmarksPropsKeys.OUTPUT_DIR, outputDir);
+		properties.put(BenchmarksPropsKeys.OUTPUT_FILE, outputFile);
 		properties.put(
 			BenchmarksPropsKeys.SCRIPT,
 			"com/liferay/portal/tools/sample/sql/builder/dependencies" +
@@ -176,19 +165,14 @@ public class SampleSQLBuilderTest {
 		properties.put(BenchmarksPropsKeys.VIRTUAL_HOST_NAME, "localhost");
 	}
 
-	private void _loadHypersonic(String sqlDir, String outputDir)
+	private void _loadHypersonic(String outputDir, String outputFile)
 		throws Exception {
 
 		try (Connection connection = DriverManager.getConnection(
 				"jdbc:hsqldb:mem:testSampleSQLBuilderDB;shutdown=true", "sa",
 				"")) {
 
-			HypersonicLoader.loadHypersonic(
-				connection, sqlDir + "/portal/portal-hypersonic.sql");
-			HypersonicLoader.loadHypersonic(
-				connection, sqlDir + "/indexes/indexes-hypersonic.sql");
-
-			_loadServiceComponentsSQL(connection);
+			HypersonicLoader.loadHypersonic(connection, outputFile);
 
 			File dir = new File(outputDir);
 
@@ -215,34 +199,6 @@ public class SampleSQLBuilderTest {
 				statement.execute("SHUTDOWN COMPACT");
 			}
 		}
-	}
-
-	private void _loadServiceComponentsSQL(Connection connection)
-		throws Exception {
-
-		DBManagerUtil.setDB(DBType.HYPERSONIC, null);
-
-		Enumeration<URL> tablesURLEnumeration =
-			_getServiceComponentsTablesSQLURLs();
-
-		while (tablesURLEnumeration.hasMoreElements()) {
-			_runSQL(connection, tablesURLEnumeration.nextElement());
-		}
-
-		Enumeration<URL> indexesURLEnumeration =
-			_getServiceComponentsIndexesSQLURLs();
-
-		while (indexesURLEnumeration.hasMoreElements()) {
-			_runSQL(connection, indexesURLEnumeration.nextElement());
-		}
-	}
-
-	private void _runSQL(Connection connection, URL url) throws Exception {
-		DB db = DBManagerUtil.getDB();
-
-		String sql = StringUtil.read(url.openStream());
-
-		db.runSQLTemplateString(connection, sql, true);
 	}
 
 	private static final String _SAMPLE_FTL_END =
