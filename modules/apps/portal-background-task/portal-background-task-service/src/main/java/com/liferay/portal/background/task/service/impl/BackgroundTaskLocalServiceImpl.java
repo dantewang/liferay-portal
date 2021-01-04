@@ -369,6 +369,33 @@ public class BackgroundTaskLocalServiceImpl
 	}
 
 	@Override
+	public BackgroundTask fetchFirstBackgroundTask(
+		String name, String taskExecutorClassName, int status,
+		OrderByComparator<BackgroundTask> orderByComparator) {
+
+		return backgroundTaskPersistence.fetchByN_T_S_First(
+			name, taskExecutorClassName, status, orderByComparator);
+	}
+
+	@Override
+	public BackgroundTask fetchFirstBackgroundTaskByCompanyId(
+		long companyId, String taskExecutorClassName, int status,
+		OrderByComparator<BackgroundTask> orderByComparator) {
+
+		return backgroundTaskPersistence.fetchByC_T_S_First(
+			companyId, taskExecutorClassName, status, orderByComparator);
+	}
+
+	@Override
+	public BackgroundTask fetchFirstBackgroundTaskByGroupId(
+		long groupId, String taskExecutorClassName, int status,
+		OrderByComparator<BackgroundTask> orderByComparator) {
+
+		return backgroundTaskPersistence.fetchByG_T_S_First(
+			groupId, taskExecutorClassName, status, orderByComparator);
+	}
+
+	@Override
 	public BackgroundTask getBackgroundTask(long backgroundTaskId)
 		throws PortalException {
 
