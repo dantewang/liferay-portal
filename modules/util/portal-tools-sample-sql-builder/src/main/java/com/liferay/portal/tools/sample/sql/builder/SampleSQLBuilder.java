@@ -23,21 +23,30 @@ import com.liferay.portal.freemarker.FreeMarkerUtil;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.db.DBType;
+import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.tools.ToolDependencies;
 import com.liferay.portal.tools.sample.sql.builder.io.CharPipe;
 import com.liferay.portal.tools.sample.sql.builder.io.UnsyncTeeWriter;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
+
+import java.net.URL;
 
 import java.sql.SQLException;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +78,14 @@ public class SampleSQLBuilder {
 		compressSQL(generateSQL(sampleSQLFile), outputDir);
 
 		sampleSQLFile.delete();
+
+		File createSQLFile = new File(BenchmarksPropsValues.OUTPUT_FILE);
+
+		try (BufferedWriter createSQLFileBufferWriter = new BufferedWriter(
+				new FileWriter(createSQLFile.getAbsoluteFile()))) {
+
+			_mergeCreateSQLStatements(createSQLFileBufferWriter);
+		}
 	}
 
 	protected void compressSQL(
@@ -252,6 +269,254 @@ public class SampleSQLBuilder {
 
 		insertSQLWriter.write(insertSQL);
 	}
+
+	private ClassLoader _getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
+	private Enumeration<URL> _getServiceComponentsIndexesSQLURLs()
+		throws Exception {
+
+		ClassLoader classLoader = _getClassLoader();
+
+		return classLoader.getResources("META-INF/sql/indexes.sql");
+	}
+
+	private Enumeration<URL> _getServiceComponentsTablesSQLURLs()
+		throws Exception {
+
+		ClassLoader classLoader = _getClassLoader();
+
+		return classLoader.getResources("META-INF/sql/tables.sql");
+	}
+
+	private void _mergeCreateSQLStatements(Writer writer) throws Exception {
+		Class<?> clazz = getClass();
+
+		ClassLoader classLoader = clazz.getClassLoader();
+
+		StringBundler sb1 = new StringBundler();
+
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(
+					classLoader.getResourceAsStream(
+						_CORE_DEPENDENCIES_DIR + _CORE_SQL_FILE_NAME +
+							".sql")))) {
+
+			String line;
+
+			while ((line = reader.readLine()) != null) {
+				sb1.append(line);
+				sb1.append(System.lineSeparator());
+			}
+		}
+
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(
+					classLoader.getResourceAsStream(
+						_CORE_DEPENDENCIES_DIR + _CORE_COMMON_SQL_FILE_NAME +
+							".sql")))) {
+
+			String line;
+
+			while ((line = reader.readLine()) != null) {
+				sb1.append(line);
+				sb1.append(System.lineSeparator());
+			}
+		}
+
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(
+					classLoader.getResourceAsStream(
+						_CORE_DEPENDENCIES_DIR + _CORE_CUNTER_SQL_FILE_NAME +
+							".sql")))) {
+
+			String line;
+
+			while ((line = reader.readLine()) != null) {
+				sb1.append(line);
+				sb1.append(System.lineSeparator());
+			}
+		}
+
+		_translateCreateSQLFile(writer, sb1.toString());
+
+		StringBundler sb2 = new StringBundler();
+
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(
+					classLoader.getResourceAsStream(
+						_CORE_DEPENDENCIES_DIR + _INDEX_SQL_FILE_NAME +
+							".sql")))) {
+
+			String line;
+
+			while ((line = reader.readLine()) != null) {
+				sb2.append(line);
+				sb2.append(System.lineSeparator());
+			}
+		}
+
+		_translateCreateSQLFile(writer, sb1.toString(), sb2.toString());
+
+		Enumeration<URL> tablesURLEnumeration =
+			_getServiceComponentsTablesSQLURLs();
+
+		StringBundler sb3 = new StringBundler();
+
+		while (tablesURLEnumeration.hasMoreElements()) {
+			URL url = tablesURLEnumeration.nextElement();
+
+			try (BufferedReader reader = new BufferedReader(
+					new InputStreamReader(url.openStream()))) {
+
+				String line;
+
+				while ((line = reader.readLine()) != null) {
+					sb3.append(line);
+					sb3.append(System.lineSeparator());
+				}
+			}
+		}
+
+		_translateCreateSQLFile(writer, sb3.toString());
+
+		Enumeration<URL> indexesURLEnumeration =
+			_getServiceComponentsIndexesSQLURLs();
+
+		StringBundler sb4 = new StringBundler();
+
+		while (indexesURLEnumeration.hasMoreElements()) {
+			URL url = indexesURLEnumeration.nextElement();
+
+			try (BufferedReader reader = new BufferedReader(
+					new InputStreamReader(url.openStream()))) {
+
+				String line;
+
+				while ((line = reader.readLine()) != null) {
+					sb4.append(line);
+					sb4.append(System.lineSeparator());
+				}
+			}
+		}
+
+		_translateCreateSQLFile(writer, sb3.toString(), sb4.toString());
+	}
+
+	private String _removeBooleanIndexes(String portalData, String indexData)
+		throws Exception {
+
+		if (Validator.isNull(portalData)) {
+			return StringPool.BLANK;
+		}
+
+		try (UnsyncBufferedReader unsyncBufferedReader =
+				new UnsyncBufferedReader(new UnsyncStringReader(indexData))) {
+
+			StringBundler sb = new StringBundler();
+
+			String line = null;
+
+			while ((line = unsyncBufferedReader.readLine()) != null) {
+				boolean append = true;
+
+				int x = line.indexOf(" on ");
+
+				if (x != -1) {
+					int y = line.indexOf(" (", x);
+
+					String table = line.substring(x + 4, y);
+
+					x = y + 2;
+
+					y = line.indexOf(")", x);
+
+					String[] columns = StringUtil.split(line.substring(x, y));
+
+					x = portalData.indexOf("create table " + table + " (");
+
+					y = portalData.indexOf(");", x);
+
+					String portalTableData = portalData.substring(x, y);
+
+					for (String column : columns) {
+						if (portalTableData.contains(
+								column.trim() + " BOOLEAN")) {
+
+							append = false;
+
+							break;
+						}
+					}
+				}
+
+				if (append) {
+					sb.append(line);
+					sb.append("\n");
+				}
+			}
+
+			return sb.toString();
+		}
+	}
+
+	private void _translateCreateSQLFile(Writer writer, String... templates)
+		throws Exception {
+
+		String template = "";
+
+		if (templates.length == 1) {
+			StringBundler sb = new StringBundler();
+
+			try (UnsyncBufferedReader unsyncBufferedReader =
+					new UnsyncBufferedReader(
+						new UnsyncStringReader(templates[0]))) {
+
+				String line = null;
+
+				while ((line = unsyncBufferedReader.readLine()) != null) {
+					sb.append(line);
+					sb.append("\n");
+				}
+			}
+
+			template = sb.toString();
+		}
+		else if (templates.length == 2) {
+			if (BenchmarksPropsValues.DB_TYPE == DBType.SYBASE) {
+				template = _removeBooleanIndexes(templates[0], templates[1]);
+			}
+			else {
+				template = templates[1];
+			}
+		}
+
+		if (Validator.isNull(template)) {
+			return;
+		}
+
+		DB db = DBManagerUtil.getDB(BenchmarksPropsValues.DB_TYPE, null);
+
+		template = db.buildSQL(template);
+
+		writer.write(template);
+	}
+
+	private static final String _CORE_COMMON_SQL_FILE_NAME =
+		"portal-data-common";
+
+	private static final String _CORE_CUNTER_SQL_FILE_NAME =
+		"portal-data-counter";
+
+	private static final String _CORE_DEPENDENCIES_DIR =
+		"com/liferay/portal/tools/sql/dependencies/";
+
+	private static final String _CORE_SQL_FILE_NAME = "portal-tables";
+
+	private static final String _INDEX_SQL_FILE_NAME = "indexes";
 
 	private static final int _PIPE_BUFFER_SIZE = 16 * 1024 * 1024;
 

@@ -157,6 +157,9 @@ public class BenchmarksPropsValues {
 	public static final String OUTPUT_DIR = PropertiesHolder._get(
 		BenchmarksPropsKeys.OUTPUT_DIR);
 
+	public static final String OUTPUT_FILE = PropertiesHolder._get(
+		BenchmarksPropsKeys.OUTPUT_FILE);
+
 	public static final String SCRIPT = PropertiesHolder._get(
 		BenchmarksPropsKeys.SCRIPT);
 

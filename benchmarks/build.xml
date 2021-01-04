@@ -4,7 +4,7 @@
 	<import file="../build-common.xml" />
 
 	<property name="build.dir" value="build" />
-	<property name="output.sql.file" value="sample-data-${sample.sql.db.type}.sql" />
+	<property name="sample.sql.output.sql.file" value="${basedir}/sample-data-${sample.sql.db.type}.sql" />
 
 	<target depends="clean" name="build-sample-sql">
 		<property name="sample.sql.output.dir" value="${basedir}/${build.dir}" />
@@ -75,24 +75,6 @@
 			<sysproperty key="sample-sql-properties" value="${basedir}/benchmarks-actual.properties" />
 		</java>
 
-		<concat append="true" destfile="${output.sql.file}">
-			<filelist dir="../sql/portal/" files="portal-${sample.sql.db.type}.sql" />
-			<filelist dir="../sql/indexes/" files="indexes-${sample.sql.db.type}.sql" />
-		</concat>
-
-		<for list="${portal.module.dir.list}" param="module">
-			<sequential>
-				<ant antfile="../sql/build.xml" inheritall="false" target="build-db">
-					<property name="db.sql.dir" value="@{module}" />
-				</ant>
-
-				<concat append="true" destfile="${output.sql.file}">
-					<filelist dir="@{module}/tables/" files="tables-${sample.sql.db.type}.sql" />
-					<filelist dir="@{module}/indexes/" files="indexes-${sample.sql.db.type}.sql" />
-				</concat>
-			</sequential>
-		</for>
-
 		<if>
 			<istrue value="${sample.sql.output.merge}" />
 			<then>
@@ -105,24 +87,24 @@
 						/>
 					</path>
 					<sequential>
-						<concat append="true" destfile="${output.sql.file}">
+						<concat append="true" destfile="${sample.sql.output.sql.file}">
 							<filelist dir="${sample.sql.output.dir}" files="@{sql-file-filename}" />
 						</concat>
 					</sequential>
 				</for>
 
-				<concat append="true" destfile="${output.sql.file}">
+				<concat append="true" destfile="${sample.sql.output.sql.file}">
 					<filelist dir="${sample.sql.output.dir}" files="misc.sql" />
 				</concat>
 
 				<echo>
 Sample SQL Build Successful
-Use ${basedir}/${output.sql.file} to insert into database.</echo>
+Use ${sample.sql.output.sql.file} to insert into database.</echo>
 			</then>
 			<else>
 				<echo>
 Sample SQL Build Successful
-Use ${basedir}/${output.sql.file} and sql files in ${sample.sql.output.dir} to insert into database.</echo>
+Use ${sample.sql.output.sql.file} and sql files in ${sample.sql.output.dir} to insert into database.</echo>
 			</else>
 		</if>
 	</target>
@@ -131,7 +113,7 @@ Use ${basedir}/${output.sql.file} and sql files in ${sample.sql.output.dir} to i
 		<delete includeemptydirs="true">
 			<fileset
 				dir="${basedir}"
-				includes="benchmarks-actual.properties, liferay/**, ${build.dir}/**, ${output.sql.file}"
+				includes="benchmarks-actual.properties, liferay/**, ${build.dir}/**, ${sample.sql.output.sql.file}"
 			/>
 		</delete>
 	</target>
