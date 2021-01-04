@@ -115,6 +115,8 @@ public interface BenchmarksPropsKeys {
 	public static final String MAX_WIKI_PAGE_COUNT =
 		"sample.sql.max.wiki.page.count";
 
+	public static final String MODULE_BND_FILES = "sample.sql.module.bnd.files";
+
 	public static final String OPTIMIZE_BUFFER_SIZE =
 		"sample.sql.optimize.buffer.size";
 
@@ -123,10 +125,14 @@ public interface BenchmarksPropsKeys {
 
 	public static final String OUTPUT_DIR = "sample.sql.output.dir";
 
+	public static final String OUTPUT_FILE = "sample.sql.output.sql.file";
+
 	public static final String SCRIPT = "sample.sql.script";
 
 	public static final String SEARCH_BAR_ENABLED =
 		"sample.sql.search.bar.enabled";
+
+	public static final String SERVICE_JARS_DIR = "sample.sql.service.jars.dir";
 
 	public static final String VIRTUAL_HOST_NAME =
 		"sample.sql.virtual.hostname";

@@ -148,6 +148,9 @@ public class BenchmarksPropsValues {
 	public static final int MAX_WIKI_PAGE_COUNT = GetterUtil.getInteger(
 		PropertiesHolder._get(BenchmarksPropsKeys.MAX_WIKI_PAGE_COUNT));
 
+	public static final String[] MODULE_BND_FILES = StringUtil.split(
+		PropertiesHolder._get(BenchmarksPropsKeys.MODULE_BND_FILES));
+
 	public static final int OPTIMIZE_BUFFER_SIZE = GetterUtil.getInteger(
 		PropertiesHolder._get(BenchmarksPropsKeys.OPTIMIZE_BUFFER_SIZE));
 
@@ -157,11 +160,17 @@ public class BenchmarksPropsValues {
 	public static final String OUTPUT_DIR = PropertiesHolder._get(
 		BenchmarksPropsKeys.OUTPUT_DIR);
 
+	public static final String OUTPUT_FILE = PropertiesHolder._get(
+		BenchmarksPropsKeys.OUTPUT_FILE);
+
 	public static final String SCRIPT = PropertiesHolder._get(
 		BenchmarksPropsKeys.SCRIPT);
 
 	public static final boolean SEARCH_BAR_ENABLED = GetterUtil.getBoolean(
 		PropertiesHolder._get(BenchmarksPropsKeys.SEARCH_BAR_ENABLED));
+
+	public static final String SERVICE_JARS_DIR = PropertiesHolder._get(
+		BenchmarksPropsKeys.SERVICE_JARS_DIR);
 
 	public static final String VIRTUAL_HOST_NAME = PropertiesHolder._get(
 		BenchmarksPropsKeys.VIRTUAL_HOST_NAME);
