@@ -16,6 +16,8 @@ package com.liferay.portal.background.task.internal.messaging;
 
 import com.liferay.portal.background.task.internal.lock.BackgroundTaskLockHelper;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutor;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutorRegistry;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManager;
 import com.liferay.portal.kernel.backgroundtask.constants.BackgroundTaskConstants;
 import com.liferay.portal.kernel.lock.LockManager;
@@ -31,8 +33,10 @@ import com.liferay.portal.kernel.util.Validator;
 public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 
 	public BackgroundTaskQueuingMessageListener(
+		BackgroundTaskExecutorRegistry backgroundTaskExecutorRegistry,
 		BackgroundTaskManager backgroundTaskManager, LockManager lockManager) {
 
+		_backgroundTaskExecutorRegistry = backgroundTaskExecutorRegistry;
 		_backgroundTaskManager = backgroundTaskManager;
 
 		_backgroundTaskLockHelper = new BackgroundTaskLockHelper(lockManager);
@@ -48,6 +52,20 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 				_log.debug(
 					"Message " + message +
 						" is missing the key \"taskExecutorClassName\"");
+			}
+
+			return;
+		}
+
+		BackgroundTaskExecutor backgroundTaskExecutor =
+			_backgroundTaskExecutorRegistry.getBackgroundTaskExecutor(
+				taskExecutorClassName);
+
+		if (!backgroundTaskExecutor.isSerial()) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					taskExecutorClassName +
+						" is non-serial BackgroundTaskExecutor ");
 			}
 
 			return;
@@ -104,6 +122,8 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 	private static final Log _log = LogFactoryUtil.getLog(
 		BackgroundTaskQueuingMessageListener.class);
 
+	private final BackgroundTaskExecutorRegistry
+		_backgroundTaskExecutorRegistry;
 	private final BackgroundTaskLockHelper _backgroundTaskLockHelper;
 	private final BackgroundTaskManager _backgroundTaskManager;
 
