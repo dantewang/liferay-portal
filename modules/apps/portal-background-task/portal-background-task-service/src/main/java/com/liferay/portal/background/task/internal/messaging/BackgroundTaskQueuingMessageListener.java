@@ -56,13 +56,20 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 			return;
 		}
 
+		String lockKey = (String)message.get("lockKey");
+
+		if (lockKey == null) {
+			return;
+		}
+
 		int status = (Integer)message.get("status");
 
 		if ((status == BackgroundTaskConstants.STATUS_CANCELLED) ||
 			(status == BackgroundTaskConstants.STATUS_FAILED) ||
 			(status == BackgroundTaskConstants.STATUS_SUCCESSFUL)) {
 
-			_executeQueuedBackgroundTasks(taskExecutorClassName, message);
+			_executeQueuedBackgroundTasks(
+				taskExecutorClassName, lockKey, message);
 		}
 		else if (status == BackgroundTaskConstants.STATUS_QUEUED) {
 			long backgroundTaskId = (Long)message.get(
@@ -74,17 +81,16 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 			if (!_backgroundTaskLockHelper.isLockedBackgroundTask(
 					backgroundTask)) {
 
-				_executeQueuedBackgroundTasks(taskExecutorClassName, message);
+				_executeQueuedBackgroundTasks(
+					taskExecutorClassName, lockKey, message);
 			}
 		}
 	}
 
 	private void _executeQueuedBackgroundTasks(
-		String taskExecutorClassName, Message message) {
+		String taskExecutorClassName, String lockKey, Message message) {
 
 		int isolationLevel = (int)message.get("isolationLevel");
-
-		String lockKey = (String)message.get("lockKey");
 
 		if (_log.isDebugEnabled()) {
 			if (isolationLevel !=
