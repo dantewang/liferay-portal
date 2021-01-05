@@ -15,6 +15,7 @@
 package com.liferay.portal.background.task.internal.messaging;
 
 import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.background.task.internal.lock.BackgroundTaskLockHelper;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManager;
@@ -51,6 +52,24 @@ public class BackgroundTaskQueuingMessageListener extends BaseMessageListener {
 				_log.debug(
 					"Message " + message +
 						" is missing the key \"taskExecutorClassName\"");
+			}
+
+			return;
+		}
+
+		if (message.get("lockKey") == null) {
+			if (_log.isDebugEnabled()) {
+				StringBundler sb = new StringBundler(7);
+
+				sb.append("BackgroundTaskQueuingMessageListener only take ");
+				sb.append("care QUEUED data, only Serial ");
+				sb.append("BackgroundTaskExecutor can generate QUEUED data ");
+				sb.append("and put the key \"lockKey\" to the message. ");
+				sb.append("Message ");
+				sb.append(message);
+				sb.append(" is missing the key \"lockKey\"");
+
+				_log.debug(sb.toString());
 			}
 
 			return;
