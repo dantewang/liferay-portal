@@ -312,6 +312,22 @@ public class SampleSQLBuilder {
 			urls.add(new URL("file:" + classPath));
 		}
 
+		String classesDir = String.valueOf(
+			SampleSQLBuilder.class.getResource("/"));
+
+		String rootDir = classesDir.substring(0, classesDir.indexOf("classes"));
+
+		urls.add(
+			new URL(
+				StringBundler.concat(
+					rootDir, "portal-impl", File.separator,
+					"portal-impl.jar")));
+		urls.add(
+			new URL(
+				StringBundler.concat(
+					rootDir, "portal-kernel", File.separator,
+					"portal-kernel.jar")));
+
 		return urls.toArray(new URL[0]);
 	}
 
