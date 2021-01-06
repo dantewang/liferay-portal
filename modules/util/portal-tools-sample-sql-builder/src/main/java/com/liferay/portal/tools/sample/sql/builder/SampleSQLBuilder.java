@@ -35,6 +35,16 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLClassLoader;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
+
 import java.sql.SQLException;
 
 import java.util.ArrayList;
@@ -52,7 +62,12 @@ public class SampleSQLBuilder {
 		ToolDependencies.wireBasic();
 
 		try {
-			new SampleSQLBuilder();
+			URLClassLoader classLoader = new URLClassLoader(_getDependencies());
+
+			Class<?> clazz = classLoader.loadClass(
+				"com.liferay.portal.tools.sample.sql.builder.SampleSQLBuilder");
+
+			clazz.newInstance();
 		}
 		catch (Exception exception) {
 			exception.printStackTrace();
@@ -253,9 +268,78 @@ public class SampleSQLBuilder {
 		insertSQLWriter.write(insertSQL);
 	}
 
+	private static void _appendClassPath(StringBuilder sb, File dir)
+		throws Exception {
+
+		if (dir.exists() && dir.isDirectory()) {
+			for (File file : dir.listFiles()) {
+				String fileName = file.getName();
+
+				if (file.isFile() && fileName.endsWith("jar")) {
+					sb.append(file.getCanonicalPath());
+					sb.append(File.pathSeparator);
+				}
+				else if (file.isDirectory()) {
+					_appendClassPath(sb, file);
+				}
+			}
+		}
+	}
+
+	private static String _getClassPath() throws Exception {
+		StringBuilder sb = new StringBuilder();
+
+		String liferayClassPath = System.getenv("LIFERAY_CLASSPATH");
+
+		if ((liferayClassPath != null) && !liferayClassPath.isEmpty()) {
+			sb.append(liferayClassPath);
+			sb.append(File.pathSeparator);
+		}
+
+		_appendClassPath(sb, new File(_jarDir, "lib"));
+		_appendClassPath(sb, _jarDir);
+		sb.append(File.pathSeparator);
+
+		return sb.toString();
+	}
+
+	private static URL[] _getDependencies() throws Exception {
+		List<URL> urls = new ArrayList<>();
+
+		String[] classPaths = _getClassPath().split(File.pathSeparator);
+
+		for (String classPath : classPaths) {
+			urls.add(new URL("file:" + classPath));
+		}
+
+		return urls.toArray(new URL[0]);
+	}
+
 	private static final int _PIPE_BUFFER_SIZE = 16 * 1024 * 1024;
 
 	private static final int _WRITER_BUFFER_SIZE = 16 * 1024;
+
+	private static File _jarDir;
+
+	static {
+		ProtectionDomain protectionDomain =
+			SampleSQLBuilder.class.getProtectionDomain();
+
+		CodeSource codeSource = protectionDomain.getCodeSource();
+
+		URL url = codeSource.getLocation();
+
+		try {
+			Path path = Paths.get(url.toURI());
+
+			File jarFile = path.toFile();
+
+			_jarDir = jarFile.getParentFile();
+		}
+		catch (URISyntaxException uriSyntaxException) {
+			throw new ExceptionInInitializerError(uriSyntaxException);
+		}
+	}
 
 	private volatile Throwable _freeMarkerThrowable;
 
