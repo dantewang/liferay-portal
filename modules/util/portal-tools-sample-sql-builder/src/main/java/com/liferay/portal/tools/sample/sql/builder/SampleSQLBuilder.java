@@ -35,12 +35,18 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+
 import java.sql.SQLException;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * @author Brian Wing Shun Chan
@@ -60,6 +66,11 @@ public class SampleSQLBuilder {
 	}
 
 	public SampleSQLBuilder() throws Exception {
+		Class<?> clazz = getClass();
+
+		_classLoader = new URLClassLoader(
+			_getDependencies(), clazz.getClassLoader());
+
 		File outputDir = new File(BenchmarksPropsValues.OUTPUT_DIR);
 
 		outputDir.mkdirs();
@@ -213,12 +224,15 @@ public class SampleSQLBuilder {
 							charPipe.getWriter(), _WRITER_BUFFER_SIZE),
 						createFileWriter(sampleSQLFile))) {
 
+					Class<?> clazz = _classLoader.loadClass(
+						DataFactory.class.getName());
+
 					FreeMarkerUtil.process(
 						BenchmarksPropsValues.SCRIPT,
 						HashMapBuilder.<String, Object>put(
 							"csvFileWriter", csvFileWriter
 						).put(
-							"dataFactory", new DataFactory()
+							"dataFactory", clazz.newInstance()
 						).build(),
 						sampleSQLWriter);
 				}
@@ -253,9 +267,41 @@ public class SampleSQLBuilder {
 		insertSQLWriter.write(insertSQL);
 	}
 
+	private URL[] _getDependencies() throws Exception {
+		List<URL> urls = new ArrayList<>();
+
+		String path = String.valueOf(
+			SampleSQLBuilder.class.getResource("/lib"));
+
+		int startIndex = path.indexOf("jar:file:") + 9;
+		int endIndex = path.indexOf(StringPool.EXCLAMATION);
+
+		String jarPath = path.substring(startIndex, endIndex);
+
+		urls.add(new URL("file:" + jarPath));
+
+		JarFile jarFile = new JarFile(jarPath);
+
+		Enumeration<JarEntry> jarEntryEnumeration = jarFile.entries();
+
+		while (jarEntryEnumeration.hasMoreElements()) {
+			JarEntry jarEntry = jarEntryEnumeration.nextElement();
+
+			String name = jarEntry.getName();
+
+			if (name.endsWith(".jar")) {
+				urls.add(new URL("jar:file:" + jarPath + "!/" + name));
+			}
+		}
+
+		return urls.toArray(new URL[0]);
+	}
+
 	private static final int _PIPE_BUFFER_SIZE = 16 * 1024 * 1024;
 
 	private static final int _WRITER_BUFFER_SIZE = 16 * 1024;
+
+	private static URLClassLoader _classLoader;
 
 	private volatile Throwable _freeMarkerThrowable;
 
