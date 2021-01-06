@@ -63,8 +63,6 @@ import java.util.Map;
 public class SampleSQLBuilder {
 
 	public static void main(String[] args) {
-		ToolDependencies.wireBasic();
-
 		try {
 			URLClassLoader classLoader = new URLClassLoader(_getDependencies());
 
@@ -79,6 +77,8 @@ public class SampleSQLBuilder {
 	}
 
 	public SampleSQLBuilder() throws Exception {
+		ToolDependencies.wireBasic();
+
 		File outputDir = new File(BenchmarksPropsValues.OUTPUT_DIR);
 
 		outputDir.mkdirs();
