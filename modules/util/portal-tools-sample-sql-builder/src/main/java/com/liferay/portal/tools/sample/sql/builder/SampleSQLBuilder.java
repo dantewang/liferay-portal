@@ -39,8 +39,12 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
@@ -312,23 +316,64 @@ public class SampleSQLBuilder {
 			urls.add(new URL("file:" + classPath));
 		}
 
-		String classesDir = String.valueOf(
-			SampleSQLBuilder.class.getResource("/"));
+		String sdkDistDir = _jarDir.getAbsolutePath();
 
-		String rootDir = classesDir.substring(0, classesDir.indexOf("classes"));
+		String rootDir = sdkDistDir.substring(0, sdkDistDir.indexOf("tools"));
 
 		urls.add(
 			new URL(
 				StringBundler.concat(
-					rootDir, "portal-impl", File.separator,
+					"file:", rootDir, "portal-impl", File.separator,
 					"portal-impl.jar")));
 		urls.add(
 			new URL(
 				StringBundler.concat(
-					rootDir, "portal-kernel", File.separator,
+					"file:", rootDir, "portal-kernel", File.separator,
 					"portal-kernel.jar")));
 
+		for (String name : _getLibs(rootDir + "lib", "development")) {
+			urls.add(new URL("file:" + name));
+		}
+
+		for (String name : _getLibs(rootDir + "lib", "global")) {
+			urls.add(new URL("file:" + name));
+		}
+
+		for (String name : _getLibs(rootDir + "lib", "portal")) {
+			urls.add(new URL("file:" + name));
+		}
+
 		return urls.toArray(new URL[0]);
+	}
+
+	private static List<String> _getLibs(String libDir, String subdir)
+		throws Exception {
+
+		List<String> libs = new ArrayList<>();
+
+		File baseDir = new File(libDir, subdir);
+
+		Files.walkFileTree(
+			baseDir.toPath(),
+			new SimpleFileVisitor<Path>() {
+
+				@Override
+				public FileVisitResult visitFile(
+						Path path, BasicFileAttributes basicFileAttributes)
+					throws IOException {
+
+					String fileName = String.valueOf(path.getFileName());
+
+					if (fileName.endsWith(".jar")) {
+						libs.add(String.valueOf(path.toAbsolutePath()));
+					}
+
+					return FileVisitResult.CONTINUE;
+				}
+
+			});
+
+		return libs;
 	}
 
 	private static final int _PIPE_BUFFER_SIZE = 16 * 1024 * 1024;
