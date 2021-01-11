@@ -79,16 +79,13 @@ public class Log4JUtilTest {
 		Log log = LogFactoryUtil.getLog(
 			"com.liferay.portal.internal.servlet.MainServlet");
 
-		Assert.assertTrue(
-			"The logger MainServlet should be INFO level", log.isInfoEnabled());
+		_assertLogLevel("INFO", log);
 
 		tempFile.renameTo(file);
 
 		Log4JUtil.configureLog4J(_classLoader);
 
-		Assert.assertTrue(
-			"The logger MainServlet should be WARN level",
-			log.isWarnEnabled() && !log.isInfoEnabled());
+		_assertLogLevel("WARN", log);
 
 		_assertLogEnable();
 	}
@@ -146,23 +143,15 @@ public class Log4JUtilTest {
 				logName, "WARN"
 			).build());
 
-		Log log = LogFactoryUtil.getLog(logName);
+		_assertLogLevel("WARN", LogFactoryUtil.getLog(logName));
 
-		Assert.assertTrue(
-			logName + " logger level should be WARN", log.isWarnEnabled());
+		_assertLogLevel(
+			"INFO", LogFactoryUtil.getLog(LoggerName.LOGGER_INFO.toString()));
 
-		log = LogFactoryUtil.getLog(LoggerName.LOGGER_INFO.toString());
-
-		Assert.assertTrue(
-			"The logger of ServerDetector should be INFO level",
-			log.isInfoEnabled());
-
-		log = LogFactoryUtil.getLog(
-			"com.liferay.portal.internal.servlet.MainServlet");
-
-		Assert.assertTrue(
-			"The logger MainServlet should be WARN level",
-			log.isWarnEnabled() && !log.isInfoEnabled());
+		_assertLogLevel(
+			"WARN",
+			LogFactoryUtil.getLog(
+				"com.liferay.portal.internal.servlet.MainServlet"));
 	}
 
 	@Test
@@ -171,24 +160,19 @@ public class Log4JUtilTest {
 
 		Log log = LogFactoryUtil.getLog(LoggerName.LOGGER_WARN.toString());
 
-		Assert.assertTrue("Warn level should be enabled", log.isWarnEnabled());
+		_assertLogLevel("WARN", log);
 
 		Log4JUtil.setLevel(LoggerName.LOGGER_WARN.toString(), "DEBUG", false);
 
-		Assert.assertTrue(
-			"DEBUG level should be enabled", log.isDebugEnabled());
+		_assertLogLevel("DEBUG", log);
 
 		Log childLog = LogFactoryUtil.getLog("com.test.parent.child");
 
-		Assert.assertTrue(
-			"INFO level should be enabled", childLog.isInfoEnabled());
-		Assert.assertFalse(
-			"DEBUG level should be not enabled", childLog.isDebugEnabled());
+		_assertLogLevel("INFO", childLog);
 
 		Log4JUtil.setLevel("com.test.parent", "DEBUG", false);
 
-		Assert.assertTrue(
-			"DEBUG level should be enabled", childLog.isDebugEnabled());
+		_assertLogLevel("DEBUG", childLog);
 	}
 
 	@Test
@@ -211,51 +195,59 @@ public class Log4JUtilTest {
 	}
 
 	private void _assertLogEnable() {
-		Log log = LogFactoryUtil.getLog(LoggerName.LOGGER_ALL.toString());
+		_assertLogLevel(
+			"ALL", LogFactoryUtil.getLog(LoggerName.LOGGER_ALL.toString()));
+		_assertLogLevel(
+			"OFF", LogFactoryUtil.getLog(LoggerName.LOGGER_OFF.toString()));
+		_assertLogLevel(
+			"FATAL", LogFactoryUtil.getLog(LoggerName.LOGGER_FATAL.toString()));
+		_assertLogLevel(
+			"ERROR", LogFactoryUtil.getLog(LoggerName.LOGGER_ERROR.toString()));
+		_assertLogLevel(
+			"WARN", LogFactoryUtil.getLog(LoggerName.LOGGER_WARN.toString()));
+		_assertLogLevel(
+			"INFO", LogFactoryUtil.getLog(LoggerName.LOGGER_INFO.toString()));
+		_assertLogLevel(
+			"DEBUG", LogFactoryUtil.getLog(LoggerName.LOGGER_DEBUG.toString()));
+		_assertLogLevel(
+			"TRACE", LogFactoryUtil.getLog(LoggerName.LOGGER_TRACE.toString()));
+	}
 
-		Assert.assertTrue("Logger should be all enabled", log.isTraceEnabled());
+	private void _assertLogLevel(String expectedLevel, Log log) {
+		if (expectedLevel.equals("ALL")) {
+			Assert.assertTrue(
+				"TRACE should be enabled if logging level is ALL",
+				log.isTraceEnabled());
 
-		log = LogFactoryUtil.getLog(LoggerName.LOGGER_OFF.toString());
+			return;
+		}
 
-		Assert.assertFalse(
-			"Setting logger level OFF does not take effect",
-			log.isFatalEnabled());
+		String actualLevel = null;
 
-		log = LogFactoryUtil.getLog(LoggerName.LOGGER_FATAL.toString());
+		if (log.isTraceEnabled()) {
+			actualLevel = "TRACE";
+		}
+		else if (log.isDebugEnabled()) {
+			actualLevel = "DEBUG";
+		}
+		else if (log.isInfoEnabled()) {
+			actualLevel = "INFO";
+		}
+		else if (log.isWarnEnabled()) {
+			actualLevel = "WARN";
+		}
+		else if (log.isErrorEnabled()) {
+			actualLevel = "ERROR";
+		}
+		else if (log.isFatalEnabled()) {
+			actualLevel = "FATAL";
+		}
+		else {
+			actualLevel = "OFF";
+		}
 
-		Assert.assertTrue(
-			"Setting logger level FATAL does not take effect",
-			log.isFatalEnabled() && !log.isErrorEnabled());
-
-		log = LogFactoryUtil.getLog(LoggerName.LOGGER_ERROR.toString());
-
-		Assert.assertTrue(
-			"Setting logger level ERROR does not take effect",
-			log.isErrorEnabled() && !log.isWarnEnabled());
-
-		log = LogFactoryUtil.getLog(LoggerName.LOGGER_WARN.toString());
-
-		Assert.assertTrue(
-			"Setting logger level WARN does not take effect",
-			log.isWarnEnabled() && !log.isInfoEnabled());
-
-		log = LogFactoryUtil.getLog(LoggerName.LOGGER_INFO.toString());
-
-		Assert.assertTrue(
-			"Setting logger level INFO does not take effect",
-			log.isInfoEnabled() && !log.isDebugEnabled());
-
-		log = LogFactoryUtil.getLog(LoggerName.LOGGER_DEBUG.toString());
-
-		Assert.assertTrue(
-			"Setting logger level DEBUG does not take effect",
-			log.isDebugEnabled() && !log.isTraceEnabled());
-
-		log = LogFactoryUtil.getLog(LoggerName.LOGGER_TRACE.toString());
-
-		Assert.assertTrue(
-			"Setting logger level TRACE does not take effect",
-			log.isTraceEnabled());
+		Assert.assertEquals(
+			"Logging level is wrong", expectedLevel, actualLevel);
 	}
 
 	private static final ClassLoader _classLoader =
