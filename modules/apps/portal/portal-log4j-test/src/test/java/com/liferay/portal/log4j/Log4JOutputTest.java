@@ -17,6 +17,7 @@ package com.liferay.portal.log4j;
 import com.liferay.petra.io.StreamUtil;
 import com.liferay.petra.io.unsync.UnsyncStringWriter;
 import com.liferay.petra.log4j.Log4JUtil;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -164,56 +165,81 @@ public class Log4JOutputTest {
 		String expectedLevel, String expectedMessage,
 		Throwable expectedThrowable, String actualOutput) {
 
+		String[] outputLines = StringUtil.splitLines(actualOutput);
+
+		Assert.assertTrue(
+			"The log output should have at least 1 line",
+			outputLines.length > 0);
+
+		String messageLine = outputLines[0];
+
+		// Date Format
+
 		Matcher dateMatcher = _datePattern.matcher(
-			actualOutput.substring(0, _DATE_FORMAT.length()));
+			messageLine.substring(0, _DATE_FORMAT.length()));
 
 		Assert.assertTrue(
 			"Output date format should be yyyy-MM-dd HH:mm:ss.SSS",
 			dateMatcher.matches());
 
-		int x = actualOutput.indexOf(StringPool.OPEN_BRACKET);
+		// Level part
 
-		String actualLevel = actualOutput.substring(_DATE_FORMAT.length(), x);
+		messageLine = messageLine.substring(_DATE_FORMAT.length());
+
+		String expectedLevelPart = StringBundler.concat(
+			StringPool.SPACE, expectedLevel, StringPool.SPACE);
 
 		Assert.assertEquals(
-			"Expected level is " + expectedLevel, expectedLevel,
-			actualLevel.trim());
+			expectedLevelPart,
+			messageLine.substring(0, expectedLevelPart.length()));
+
+		// Thread name part
+
+		int threadNamePartBeginIndex = messageLine.indexOf(
+			StringPool.OPEN_BRACKET);
+
+		messageLine = messageLine.substring(threadNamePartBeginIndex);
 
 		Thread currentThread = Thread.currentThread();
 
-		String expectedThreadName = currentThread.getName();
-
-		int y = actualOutput.indexOf(StringPool.CLOSE_BRACKET, x);
-
-		Assert.assertEquals(
-			"Expected thread name is " + expectedThreadName, expectedThreadName,
-			actualOutput.substring(x + 1, y));
-
-		x = actualOutput.indexOf(StringPool.COLON, y);
+		String expectedThreadNamePart = StringBundler.concat(
+			StringPool.OPEN_BRACKET, currentThread.getName(),
+			StringPool.CLOSE_BRACKET);
 
 		Assert.assertEquals(
-			"Expected log output class simple name is " +
-				Log4JOutputTest.class.getSimpleName(),
-			Log4JOutputTest.class.getSimpleName(),
-			actualOutput.substring(y + 2, x));
+			expectedThreadNamePart,
+			messageLine.substring(0, expectedThreadNamePart.length()));
 
-		y = actualOutput.indexOf(StringPool.CLOSE_BRACKET, x);
+		// Class name and line number part
 
-		String[] outputLines = StringUtil.splitLines(actualOutput);
+		messageLine = messageLine.substring(expectedThreadNamePart.length());
 
-		String actualMessage = actualOutput.substring(
-			y + 2, outputLines[0].length());
+		String expectedClassNamePart = StringBundler.concat(
+			StringPool.OPEN_BRACKET, Log4JOutputTest.class.getSimpleName(),
+			StringPool.COLON);
+
+		Assert.assertEquals(
+			expectedClassNamePart,
+			messageLine.substring(0, expectedClassNamePart.length()));
+
+		messageLine = messageLine.substring(expectedClassNamePart.length());
+
+		int classNamePartEndIndex = messageLine.indexOf(
+			StringPool.CLOSE_BRACKET);
+
+		Integer.valueOf(messageLine.substring(0, classNamePartEndIndex - 1));
+
+		// Message part
+
+		messageLine = messageLine.substring(classNamePartEndIndex + 1);
 
 		if (expectedMessage == null) {
-			Assert.assertTrue(
-				"Expected log message is " + expectedMessage,
-				actualMessage.equals("null"));
+			expectedMessage = "null";
 		}
-		else {
-			Assert.assertEquals(
-				"Expected log message is " + expectedMessage, expectedMessage,
-				actualMessage);
-		}
+
+		Assert.assertEquals(expectedMessage, messageLine.trim());
+
+		// Throwable part
 
 		if (expectedThrowable != null) {
 			Class<?> expectedThrowableClass = expectedThrowable.getClass();
