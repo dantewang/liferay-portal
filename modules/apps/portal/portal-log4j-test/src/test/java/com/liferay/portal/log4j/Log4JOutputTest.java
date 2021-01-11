@@ -161,7 +161,8 @@ public class Log4JOutputTest {
 	}
 
 	private void _assertTextLog(
-		String expectedLevel, String expectedMessage, String actualOutput) {
+		String expectedLevel, String expectedMessage,
+		Throwable expectedThrowable, String actualOutput) {
 
 		Matcher dateMatcher = _datePattern.matcher(
 			actualOutput.substring(0, _DATE_FORMAT.length()));
@@ -214,15 +215,17 @@ public class Log4JOutputTest {
 				actualMessage);
 		}
 
-		if (outputLines.length > 1) {
+		if (expectedThrowable != null) {
+			Class<?> expectedThrowableClass = expectedThrowable.getClass();
+
 			Assert.assertEquals(
-				"Expected output exception should be " +
-					TestException.class.getName(),
-				TestException.class.getName(), outputLines[1]);
+				expectedThrowableClass.getName(), outputLines[1]);
 
 			String actualFirstPrefixStackTraceElement = outputLines[2].trim();
 
 			Assert.assertTrue(
+				"A throwable should be logged and the first stack should be " +
+					Log4JOutputTest.class.getName(),
 				actualFirstPrefixStackTraceElement.startsWith(
 					"at " + Log4JOutputTest.class.getName()));
 		}
@@ -440,7 +443,8 @@ public class Log4JOutputTest {
 		_outputLog(level, message, throwable);
 
 		try {
-			_assertTextLog(level, message, _unsyncStringWriter.toString());
+			_assertTextLog(
+				level, message, throwable, _unsyncStringWriter.toString());
 		}
 		finally {
 			_unsyncStringWriter.reset();
@@ -472,7 +476,7 @@ public class Log4JOutputTest {
 						matcher.matches());
 
 					_assertTextLog(
-						level, message,
+						level, message, throwable,
 						StreamUtil.toString(new FileInputStream(file)));
 				}
 				else {
