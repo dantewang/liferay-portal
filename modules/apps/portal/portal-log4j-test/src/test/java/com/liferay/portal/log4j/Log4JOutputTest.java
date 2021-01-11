@@ -227,8 +227,6 @@ public class Log4JOutputTest {
 		int classNamePartEndIndex = messageLine.indexOf(
 			StringPool.CLOSE_BRACKET);
 
-		Integer.valueOf(messageLine.substring(0, classNamePartEndIndex - 1));
-
 		// Message part
 
 		messageLine = messageLine.substring(classNamePartEndIndex + 1);
