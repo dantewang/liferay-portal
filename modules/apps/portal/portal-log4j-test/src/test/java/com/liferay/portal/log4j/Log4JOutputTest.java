@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.log.Log4jLogFactoryImpl;
 import com.liferay.portal.util.PropsImpl;
 
@@ -256,140 +255,157 @@ public class Log4JOutputTest {
 	}
 
 	private void _assertXmlLog(
-			String expectedLevel, String expectedMessage, String actualOutput)
+			String expectedLevel, String expectedMessage,
+			Throwable expectedThrowable, String actualOutput)
 		throws Exception {
 
-		String log4jEventLoggerProperty = "logger=\"";
+		String[] outputLines = StringUtil.splitLines(actualOutput);
 
-		int x = actualOutput.indexOf(log4jEventLoggerProperty);
+		Assert.assertTrue(
+			"The log output should have at least 1 line",
+			outputLines.length > 0);
 
-		int y = actualOutput.indexOf(
-			StringPool.QUOTE, x + log4jEventLoggerProperty.length());
+		//Log4JEvent
+
+		String log4JEvent = outputLines[0];
+
+		String log4JEventPart = log4JEvent.substring(
+			log4JEvent.indexOf(StringPool.SPACE),
+			log4JEvent.indexOf(StringPool.GREATER_THAN));
+
+		// Log4JEvent logger
+
+		String expectedlog4JEventLoggerPart = StringBundler.concat(
+			StringPool.SPACE, "logger=", StringPool.QUOTE,
+			Log4JOutputTest.class.getName(), StringPool.QUOTE,
+			StringPool.SPACE);
 
 		Assert.assertEquals(
-			"logger should be " + Log4JOutputTest.class.getName(),
-			Log4JOutputTest.class.getName(),
-			actualOutput.substring(x + log4jEventLoggerProperty.length(), y));
+			expectedlog4JEventLoggerPart,
+			log4JEventPart.substring(0, expectedlog4JEventLoggerPart.length()));
 
-		String log4jEventTimestampProperty = "timestamp=\"";
+		log4JEventPart = log4JEventPart.substring(
+			expectedlog4JEventLoggerPart.length());
 
-		x = actualOutput.indexOf(log4jEventTimestampProperty);
+		// Log4JEvent timestamp
 
-		y = actualOutput.indexOf(
-			StringPool.QUOTE, x + log4jEventTimestampProperty.length());
+		String actualLog4JEventTimestamp = log4JEventPart.substring(
+			log4JEventPart.indexOf(StringPool.QUOTE) + 1,
+			log4JEventPart.indexOf(StringPool.SPACE) - 1);
 
-		String actualTimestamp = actualOutput.substring(
-			x + log4jEventTimestampProperty.length(), y);
-
-		Date actualTimestampDate = new Date(Long.valueOf(actualTimestamp));
+		Date actualLog4JEventlTimestampDate = new Date(
+			Long.valueOf(actualLog4JEventTimestamp));
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(_DATE_FORMAT);
 
 		Matcher dateMatcher = _datePattern.matcher(
-			simpleDateFormat.format(actualTimestampDate));
+			simpleDateFormat.format(actualLog4JEventlTimestampDate));
 
 		Assert.assertTrue(
 			"Output date format should be yyyy-MM-dd HH:mm:ss.SSS",
 			dateMatcher.matches());
 
-		String log4jEventLevelProperty = "level=\"";
+		// Log4JEvent level
 
-		x = actualOutput.indexOf(log4jEventLevelProperty);
+		String actualLog4JEventTimestampPart = StringBundler.concat(
+			"timestamp=", StringPool.QUOTE, actualLog4JEventTimestamp,
+			StringPool.QUOTE);
 
-		y = actualOutput.indexOf(
-			StringPool.QUOTE, x + log4jEventLevelProperty.length());
+		log4JEventPart = log4JEventPart.substring(
+			actualLog4JEventTimestampPart.length());
+
+		String expectedlog4JEventLevelPart = StringBundler.concat(
+			StringPool.SPACE, "level=", StringPool.QUOTE, expectedLevel,
+			StringPool.QUOTE, StringPool.SPACE);
 
 		Assert.assertEquals(
-			"Expected level is " + expectedLevel, expectedLevel,
-			actualOutput.substring(x + log4jEventLevelProperty.length(), y));
+			expectedlog4JEventLevelPart,
+			log4JEventPart.substring(0, expectedlog4JEventLevelPart.length()));
 
-		String log4jEventThreadProperty = "thread=\"";
+		// Log4JEvent thread
 
-		x = actualOutput.indexOf(log4jEventThreadProperty);
-
-		y = actualOutput.indexOf(
-			StringPool.QUOTE, x + log4jEventThreadProperty.length());
+		log4JEventPart = log4JEventPart.substring(
+			expectedlog4JEventLevelPart.length());
 
 		Thread currentThread = Thread.currentThread();
 
+		String expectedlog4JEventThreadPart = StringBundler.concat(
+			"thread=", StringPool.QUOTE, currentThread.getName(),
+			StringPool.QUOTE);
+
 		Assert.assertEquals(
-			"Expected thread name is " + currentThread.getName(),
-			currentThread.getName(),
-			actualOutput.substring(x + log4jEventThreadProperty.length(), y));
+			expectedlog4JEventThreadPart,
+			log4JEventPart.substring(0, expectedlog4JEventThreadPart.length()));
 
-		String log4jMessageTag = "CDATA[";
+		// Log4JMEssage
 
-		x = actualOutput.indexOf(log4jMessageTag);
+		if (expectedThrowable != null) {
+			if (expectedMessage == null) {
+				expectedMessage = StringPool.BLANK;
+			}
 
-		y = actualOutput.indexOf(
-			StringPool.CLOSE_BRACKET, x + log4jMessageTag.length());
+			String expectedLog4JMEssagePart = StringBundler.concat(
+				"<log4j:message>", StringPool.CDATA_OPEN, expectedMessage,
+				StringPool.CDATA_CLOSE, "</log4j:message>");
 
-		String actualMessage = actualOutput.substring(
-			x + log4jMessageTag.length(), y);
-
-		if (expectedMessage == null) {
-			Assert.assertTrue(
-				"Expected log message is " + expectedMessage,
-				Validator.isBlank(actualMessage));
-		}
-		else {
-			Assert.assertTrue(
-				"Expected log message is " + expectedMessage,
-				StringUtil.equals(expectedMessage, actualMessage));
+			Assert.assertEquals(expectedLog4JMEssagePart, outputLines[1]);
 		}
 
-		String log4jthrowableTag = "<log4j:throwable><![CDATA[";
+		// Log4JThrowable
 
-		x = actualOutput.indexOf(log4jthrowableTag);
+		if (expectedThrowable != null) {
+			Class<?> expectedThrowableClass = expectedThrowable.getClass();
 
-		if (x > -1) {
-			y = actualOutput.indexOf(
-				StringPool.CLOSE_BRACKET, x + log4jthrowableTag.length());
+			String expectedLog4JThrowablePart = StringBundler.concat(
+				"<log4j:throwable>", StringPool.CDATA_OPEN,
+				expectedThrowableClass.getName());
 
-			String actualThrowable = actualOutput.substring(
-				x + log4jthrowableTag.length(), y);
+			Assert.assertEquals(expectedLog4JThrowablePart, outputLines[2]);
 
-			String[] outputLines = StringUtil.splitLines(actualThrowable);
-
-			Assert.assertEquals(
-				"Expected output exception should be " +
-					TestException.class.getName(),
-				TestException.class.getName(), outputLines[0]);
-
-			String actualFirstPrefixStackTraceElement = outputLines[1].trim();
+			String actualFirstPrefixStackTraceElement = outputLines[3].trim();
 
 			Assert.assertTrue(
+				"A throwable should be logged and the first stack should be " +
+					Log4JOutputTest.class.getName(),
 				actualFirstPrefixStackTraceElement.startsWith(
 					"at " + Log4JOutputTest.class.getName()));
 		}
 
-		String log4jlocationInfoClassProperty = "class=\"";
+		// Log4JLocationInfo
 
-		x = actualOutput.indexOf(log4jlocationInfoClassProperty);
+		String log4JLocationInfo = outputLines[outputLines.length - 2];
 
-		y = actualOutput.indexOf(
-			StringPool.QUOTE, x + log4jlocationInfoClassProperty.length());
+		String log4JLocationInfoPart = log4JLocationInfo.substring(
+			log4JLocationInfo.indexOf(StringPool.SPACE),
+			log4JLocationInfo.indexOf(StringPool.FORWARD_SLASH));
 
-		Assert.assertEquals(
-			"Expected class is " + Log4JOutputTest.class.getName(),
-			Log4JOutputTest.class.getName(),
-			actualOutput.substring(
-				x + log4jlocationInfoClassProperty.length(), y));
+		// Log4JLocationInfo class
 
-		String log4jlocationInfoFileProperty = "file=\"";
-
-		x = actualOutput.indexOf(log4jlocationInfoFileProperty);
-
-		y = actualOutput.indexOf(
-			StringPool.QUOTE, x + log4jlocationInfoFileProperty.length());
-
-		String expectedFileName =
-			Log4JOutputTest.class.getSimpleName() + ".java";
+		String expectedLog4JLocationInfoClassPart = StringBundler.concat(
+			StringPool.SPACE, "class=", StringPool.QUOTE,
+			Log4JOutputTest.class.getName(), StringPool.QUOTE,
+			StringPool.SPACE);
 
 		Assert.assertEquals(
-			"Expected output log file is " + expectedFileName, expectedFileName,
-			actualOutput.substring(
-				x + log4jlocationInfoFileProperty.length(), y));
+			expectedLog4JLocationInfoClassPart,
+			log4JLocationInfoPart.substring(
+				0, expectedLog4JLocationInfoClassPart.length()));
+
+		// Log4JLocationInfo file
+
+		log4JLocationInfoPart = log4JLocationInfoPart.substring(
+			expectedLog4JLocationInfoClassPart.length());
+		log4JLocationInfoPart = log4JLocationInfoPart.substring(
+			log4JLocationInfoPart.indexOf("file"));
+
+		String expectedLog4JLocationInfoFilePart = StringBundler.concat(
+			"file=", StringPool.QUOTE, Log4JOutputTest.class.getSimpleName(),
+			".java", StringPool.QUOTE);
+
+		Assert.assertEquals(
+			expectedLog4JLocationInfoFilePart,
+			log4JLocationInfoPart.substring(
+				0, expectedLog4JLocationInfoFilePart.length()));
 	}
 
 	private void _outputLog(String level, String message, Throwable throwable) {
@@ -512,7 +528,7 @@ public class Log4JOutputTest {
 						matcher.matches());
 
 					_assertXmlLog(
-						level, message,
+						level, message, throwable,
 						StreamUtil.toString(new FileInputStream(file)));
 				}
 			}
