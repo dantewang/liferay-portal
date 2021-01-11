@@ -46,7 +46,7 @@ import org.junit.Test;
 public class Log4JUtilTest {
 
 	@BeforeClass
-	public static void setUpClass() throws Exception {
+	public static void setUpClass() {
 		PropsUtil.setProps(new PropsImpl());
 
 		LogFactoryUtil.setLogFactory(new Log4jLogFactoryImpl());
@@ -61,7 +61,7 @@ public class Log4JUtilTest {
 	}
 
 	@Test
-	public void testConfigureLog4JwithClassLoader() {
+	public void testConfigureLog4JWithClassLoader() {
 		URL url = _classLoader.getResource("META-INF/portal-log4j-ext.xml");
 
 		String path = url.getPath();
@@ -94,7 +94,7 @@ public class Log4JUtilTest {
 	}
 
 	@Test
-	public void testConfigureLog4JwithURL() {
+	public void testConfigureLog4JWithURL() {
 		URL url = _classLoader.getResource("META-INF/portal-log4j-ext.xml");
 
 		Log4JUtil.configureLog4J(url);
