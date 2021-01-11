@@ -209,7 +209,7 @@ public class Log4JOutputTest {
 			expectedThreadNamePart,
 			messageLine.substring(0, expectedThreadNamePart.length()));
 
-		// Class name and line number part
+		// Class name
 
 		messageLine = messageLine.substring(expectedThreadNamePart.length());
 
@@ -222,6 +222,8 @@ public class Log4JOutputTest {
 			messageLine.substring(0, expectedClassNamePart.length()));
 
 		messageLine = messageLine.substring(expectedClassNamePart.length());
+
+		// Line number
 
 		int classNamePartEndIndex = messageLine.indexOf(
 			StringPool.CLOSE_BRACKET);
