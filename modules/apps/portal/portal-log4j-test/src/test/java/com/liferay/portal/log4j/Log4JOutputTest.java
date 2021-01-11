@@ -284,10 +284,10 @@ public class Log4JOutputTest {
 			expectedLog4JEventLoggerPart,
 			log4JEventPart.substring(0, expectedLog4JEventLoggerPart.length()));
 
+		// log4j:event timestamp
+
 		log4JEventPart = log4JEventPart.substring(
 			expectedLog4JEventLoggerPart.length());
-
-		// log4j:event timestamp
 
 		String actualLog4JEventTimestamp = log4JEventPart.substring(
 			log4JEventPart.indexOf(StringPool.QUOTE) + 1,
@@ -297,12 +297,8 @@ public class Log4JOutputTest {
 
 		// log4j:event level
 
-		String actualLog4JEventTimestampPart = StringBundler.concat(
-			"timestamp=", StringPool.QUOTE, actualLog4JEventTimestamp,
-			StringPool.QUOTE);
-
 		log4JEventPart = log4JEventPart.substring(
-			actualLog4JEventTimestampPart.length());
+			"timestamp=".length() + actualLog4JEventTimestamp.length() + 2);
 
 		String expectedLog4JEventLevelPart = StringBundler.concat(
 			StringPool.SPACE, "level=", StringPool.QUOTE, expectedLevel,
