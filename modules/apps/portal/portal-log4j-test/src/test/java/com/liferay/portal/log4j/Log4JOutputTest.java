@@ -40,9 +40,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import java.text.SimpleDateFormat;
-
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -296,17 +293,7 @@ public class Log4JOutputTest {
 			log4JEventPart.indexOf(StringPool.QUOTE) + 1,
 			log4JEventPart.indexOf(StringPool.SPACE) - 1);
 
-		Date actualLog4JEventTimestampDate = new Date(
-			Long.valueOf(actualLog4JEventTimestamp));
-
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(_DATE_FORMAT);
-
-		Matcher dateMatcher = _datePattern.matcher(
-			simpleDateFormat.format(actualLog4JEventTimestampDate));
-
-		Assert.assertTrue(
-			"Output date format should be yyyy-MM-dd HH:mm:ss.SSS",
-			dateMatcher.matches());
+		Long.valueOf(actualLog4JEventTimestamp);
 
 		// log4j:event level
 
