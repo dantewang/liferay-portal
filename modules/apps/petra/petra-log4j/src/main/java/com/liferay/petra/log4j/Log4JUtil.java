@@ -285,18 +285,6 @@ public class Log4JUtil {
 	}
 
 	private static String _removeAppender(String content, String appenderName) {
-		int x = content.indexOf("<appender name=\"" + appenderName + "\"");
-
-		int y = content.indexOf("</appender>", x);
-
-		if (y != -1) {
-			y = content.indexOf("<", y + 1);
-		}
-
-		if ((x != -1) && (y != -1)) {
-			content = content.substring(0, x) + content.substring(y);
-		}
-
 		return StringUtil.removeSubstring(
 			content, "<appender-ref ref=\"" + appenderName + "\" />");
 	}
