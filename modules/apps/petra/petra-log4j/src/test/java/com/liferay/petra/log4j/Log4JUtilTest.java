@@ -120,30 +120,31 @@ public class Log4JUtilTest {
 	public void testGetOriginalLevel() {
 		Log4JUtil.configureLog4J(_classLoader);
 
-		String level = Log4JUtil.getOriginalLevel(
-			"com.liferay.portal.internal.servlet.MainServlet");
+		Assert.assertEquals(
+			"The original level should be WARN", "WARN",
+			Log4JUtil.getOriginalLevel(
+				"com.liferay.portal.internal.servlet.MainServlet"));
 
-		Assert.assertEquals("The original level should be WARN", "WARN", level);
-
-		level = Log4JUtil.getOriginalLevel(LoggerName.LOGGER_WARN.toString());
-
-		Assert.assertEquals("The original level should be WARN", "WARN", level);
+		Assert.assertEquals(
+			"The original level should be WARN", "WARN",
+			Log4JUtil.getOriginalLevel(LoggerName.LOGGER_WARN.toString()));
 	}
 
 	@Test
 	public void testInitLog4J() {
-		String logName = com.liferay.portal.util.PropsUtil.class.getName();
-
 		Log4JUtil.initLog4J(
 			ServerDetector.getServerId(), PropsUtil.get(PropsKeys.LIFERAY_HOME),
 			_classLoader, new Log4jLogFactoryImpl(),
 			HashMapBuilder.putAll(
 				new HashMap<String, String>()
 			).put(
-				logName, "WARN"
+				com.liferay.portal.util.PropsUtil.class.getName(), "WARN"
 			).build());
 
-		_assertLogLevel("WARN", LogFactoryUtil.getLog(logName));
+		_assertLogLevel(
+			"WARN",
+			LogFactoryUtil.getLog(
+				com.liferay.portal.util.PropsUtil.class.getName()));
 
 		_assertLogLevel(
 			"INFO", LogFactoryUtil.getLog(LoggerName.LOGGER_INFO.toString()));
