@@ -152,19 +152,28 @@ public class Log4JUtilTest {
 
 		Log log = LogFactoryUtil.getLog(LoggerName.LOGGER_WARN.toString());
 
+		java.util.logging.Logger jdkLogger = java.util.logging.Logger.getLogger(
+			LoggerName.LOGGER_WARN.toString());
+
 		_assertLogLevel("WARN", log);
+		_assertJDKLogLevel("WARNING", jdkLogger);
 
 		Log4JUtil.setLevel(LoggerName.LOGGER_WARN.toString(), "DEBUG", false);
 
 		_assertLogLevel("DEBUG", log);
+		_assertJDKLogLevel("FINE", jdkLogger);
 
 		Log childLog = LogFactoryUtil.getLog("com.test.parent.child");
+		java.util.logging.Logger childJDKLogger =
+			java.util.logging.Logger.getLogger("com.test.parent.child");
 
 		_assertLogLevel("INFO", childLog);
+		_assertJDKLogLevel("INFO", childJDKLogger);
 
 		Log4JUtil.setLevel("com.test.parent", "DEBUG", false);
 
 		_assertLogLevel("DEBUG", childLog);
+		_assertJDKLogLevel("FINE", childJDKLogger);
 	}
 
 	@Test
