@@ -196,11 +196,11 @@ public class Log4JUtilTest {
 
 	private void _assertJDKLogEnable() {
 		_assertJDKLogLevel(
-			"INFO",
+			"ALL",
 			java.util.logging.Logger.getLogger(
 				LoggerName.LOGGER_ALL.toString()));
 		_assertJDKLogLevel(
-			"INFO",
+			"OFF",
 			java.util.logging.Logger.getLogger(
 				LoggerName.LOGGER_OFF.toString()));
 		_assertJDKLogLevel(
@@ -234,7 +234,10 @@ public class Log4JUtilTest {
 
 		String actualLevel = null;
 
-		if (jdkLog.isLoggable(Level.FINE)) {
+		if (jdkLog.isLoggable(Level.ALL)) {
+			actualLevel = "ALL";
+		}
+		else if (jdkLog.isLoggable(Level.FINE)) {
 			actualLevel = "FINE";
 		}
 		else if (jdkLog.isLoggable(Level.INFO)) {
@@ -245,6 +248,9 @@ public class Log4JUtilTest {
 		}
 		else if (jdkLog.isLoggable(Level.SEVERE)) {
 			actualLevel = "SEVERE";
+		}
+		else if (!jdkLog.isLoggable(Level.SEVERE)) {
+			actualLevel = "OFF";
 		}
 		else {
 			actualLevel = "INFO";
