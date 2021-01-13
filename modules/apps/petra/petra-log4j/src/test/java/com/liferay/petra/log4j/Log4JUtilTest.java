@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.log4j.Appender;
 import org.apache.log4j.Logger;
@@ -74,6 +75,8 @@ public class Log4JUtilTest {
 		_assertLogLevel("WARN", log);
 
 		_assertLogEnable();
+
+		_assertJDKLogEnable();
 	}
 
 	@Test
@@ -83,6 +86,8 @@ public class Log4JUtilTest {
 		Log4JUtil.configureLog4J(url);
 
 		_assertLogEnable();
+
+		_assertJDKLogEnable();
 	}
 
 	@Test
@@ -147,19 +152,28 @@ public class Log4JUtilTest {
 
 		Log log = LogFactoryUtil.getLog(LoggerName.LOGGER_WARN.toString());
 
+		java.util.logging.Logger jdkLogger = java.util.logging.Logger.getLogger(
+			LoggerName.LOGGER_WARN.toString());
+
 		_assertLogLevel("WARN", log);
+		_assertJDKLogLevel("WARNING", jdkLogger);
 
 		Log4JUtil.setLevel(LoggerName.LOGGER_WARN.toString(), "DEBUG", false);
 
 		_assertLogLevel("DEBUG", log);
+		_assertJDKLogLevel("FINE", jdkLogger);
 
 		Log childLog = LogFactoryUtil.getLog("com.test.parent.child");
+		java.util.logging.Logger childJDKLogger =
+			java.util.logging.Logger.getLogger("com.test.parent.child");
 
 		_assertLogLevel("INFO", childLog);
+		_assertJDKLogLevel("INFO", childJDKLogger);
 
 		Log4JUtil.setLevel("com.test.parent", "DEBUG", false);
 
 		_assertLogLevel("DEBUG", childLog);
+		_assertJDKLogLevel("FINE", childJDKLogger);
 	}
 
 	@Test
@@ -179,6 +193,66 @@ public class Log4JUtilTest {
 		Assert.assertFalse(
 			"The root logger should not own appenders after shutting down",
 			appendersEnumeration.hasMoreElements());
+	}
+
+	private void _assertJDKLogEnable() {
+		_assertJDKLogLevel(
+			"INFO",
+			java.util.logging.Logger.getLogger(
+				LoggerName.LOGGER_ALL.toString()));
+		_assertJDKLogLevel(
+			"INFO",
+			java.util.logging.Logger.getLogger(
+				LoggerName.LOGGER_OFF.toString()));
+		_assertJDKLogLevel(
+			"INFO",
+			java.util.logging.Logger.getLogger(
+				LoggerName.LOGGER_FATAL.toString()));
+		_assertJDKLogLevel(
+			"SEVERE",
+			java.util.logging.Logger.getLogger(
+				LoggerName.LOGGER_ERROR.toString()));
+		_assertJDKLogLevel(
+			"WARNING",
+			java.util.logging.Logger.getLogger(
+				LoggerName.LOGGER_WARN.toString()));
+		_assertJDKLogLevel(
+			"INFO",
+			java.util.logging.Logger.getLogger(
+				LoggerName.LOGGER_INFO.toString()));
+		_assertJDKLogLevel(
+			"FINE",
+			java.util.logging.Logger.getLogger(
+				LoggerName.LOGGER_DEBUG.toString()));
+		_assertJDKLogLevel(
+			"INFO",
+			java.util.logging.Logger.getLogger(
+				LoggerName.LOGGER_TRACE.toString()));
+	}
+
+	private void _assertJDKLogLevel(
+		String expectedLevel, java.util.logging.Logger jdkLog) {
+
+		String actualLevel = null;
+
+		if (jdkLog.isLoggable(Level.FINE)) {
+			actualLevel = "FINE";
+		}
+		else if (jdkLog.isLoggable(Level.INFO)) {
+			actualLevel = "INFO";
+		}
+		else if (jdkLog.isLoggable(Level.WARNING)) {
+			actualLevel = "WARNING";
+		}
+		else if (jdkLog.isLoggable(Level.SEVERE)) {
+			actualLevel = "SEVERE";
+		}
+		else {
+			actualLevel = "INFO";
+		}
+
+		Assert.assertEquals(
+			"Logging level is wrong", expectedLevel, actualLevel);
 	}
 
 	private void _assertLogEnable() {
