@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.log.Log4jLogFactoryImpl;
 import com.liferay.portal.util.PropsImpl;
 
@@ -113,13 +114,18 @@ public class Log4JUtilTest {
 		Log4JUtil.configureLog4J(_classLoader);
 
 		Assert.assertEquals(
-			"The original level should be WARN", "WARN",
+			"The original level should be WARN by configuration", "WARN",
 			Log4JUtil.getOriginalLevel(
 				"com.liferay.portal.internal.servlet.MainServlet"));
 
 		Assert.assertEquals(
-			"The original level should be WARN", "WARN",
+			"The original level should be WARN by configuration", "WARN",
 			Log4JUtil.getOriginalLevel(LoggerName.LOGGER_WARN.toString()));
+
+		Assert.assertEquals(
+			"The original level should be ALL for Logger not configured or " +
+				"created",
+			"ALL", Log4JUtil.getOriginalLevel(StringUtil.randomString()));
 	}
 
 	@Test
