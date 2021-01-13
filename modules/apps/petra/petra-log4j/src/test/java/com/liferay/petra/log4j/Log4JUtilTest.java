@@ -16,6 +16,8 @@ package com.liferay.petra.log4j;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.test.rule.NewEnv;
+import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -35,29 +37,27 @@ import java.util.Map;
 import org.apache.log4j.Appender;
 import org.apache.log4j.Logger;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
  * @author Hai Yu
  */
+@NewEnv(type = NewEnv.Type.JVM)
 public class Log4JUtilTest {
 
-	@BeforeClass
-	public static void setUpClass() {
+	@ClassRule
+	@Rule
+	public static final NewEnvTestRule newEnvTestRule = NewEnvTestRule.INSTANCE;
+
+	@Before
+	public void setUp() {
 		PropsUtil.setProps(new PropsImpl());
 
 		LogFactoryUtil.setLogFactory(new Log4jLogFactoryImpl());
-	}
-
-	@After
-	public void tearDown() {
-		Log4JUtil.setLevel(
-			"com.liferay.portal.internal.servlet.MainServlet", "INFO", false);
-
-		Log4JUtil.shutdownLog4J();
 	}
 
 	@Test
