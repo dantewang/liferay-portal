@@ -184,6 +184,7 @@ public class Log4JUtilTest {
 		Log4JUtil.setLevel("com.test.parent", "DEBUG", false);
 
 		_assertLog4JLevel("DEBUG", childLog);
+
 		Assert.assertTrue(
 			"The child logger should be at level FINE",
 			childJDKLogger.isLoggable(Level.FINE) &&
