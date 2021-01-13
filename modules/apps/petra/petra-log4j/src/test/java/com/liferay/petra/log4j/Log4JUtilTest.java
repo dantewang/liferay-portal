@@ -72,8 +72,6 @@ public class Log4JUtilTest {
 
 		Log4JUtil.configureLog4J(_classLoader);
 
-		_assertLogLevel("WARN", log);
-
 		_assertLogEnable();
 
 		_assertJDKLogEnable();
@@ -134,11 +132,6 @@ public class Log4JUtilTest {
 
 		_assertLogLevel(
 			"WARN", LogFactoryUtil.getLog("com.liferay.portal.util.PropsUtil"));
-
-		_assertLogLevel(
-			"WARN",
-			LogFactoryUtil.getLog(
-				"com.liferay.portal.internal.servlet.MainServlet"));
 
 		_assertLogEnable();
 
@@ -261,6 +254,11 @@ public class Log4JUtilTest {
 	}
 
 	private void _assertLogEnable() {
+		_assertLogLevel(
+			"WARN",
+			LogFactoryUtil.getLog(
+				"com.liferay.portal.internal.servlet.MainServlet"));
+
 		_assertLogLevel(
 			"ALL", LogFactoryUtil.getLog(LoggerName.LOGGER_ALL.toString()));
 		_assertLogLevel(
