@@ -47,7 +47,6 @@ import org.junit.Test;
 /**
  * @author Hai Yu
  */
-@NewEnv(type = NewEnv.Type.JVM)
 public class Log4JUtilTest {
 
 	@ClassRule
@@ -65,8 +64,6 @@ public class Log4JUtilTest {
 	public void tearDown() {
 		Log4JUtil.setLevel(
 			"com.liferay.portal.internal.servlet.MainServlet", "INFO", false);
-
-		Log4JUtil.shutdownLog4J();
 	}
 
 	@Test
@@ -171,6 +168,7 @@ public class Log4JUtilTest {
 		_assertLogLevel("DEBUG", childLog);
 	}
 
+	@NewEnv(type = NewEnv.Type.JVM)
 	@Test
 	public void testShutdownLog4J() {
 		Log4JUtil.configureLog4J(_classLoader);
