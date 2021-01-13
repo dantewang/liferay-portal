@@ -20,14 +20,14 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.log.Log4jLogFactoryImpl;
 import com.liferay.portal.util.PropsImpl;
 
-import java.io.File;
+import java.io.IOException;
 
 import java.net.URL;
 
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,26 +62,12 @@ public class Log4JUtilTest {
 
 	@Test
 	public void testConfigureLog4JWithClassLoader() {
-		URL url = _classLoader.getResource("META-INF/portal-log4j-ext.xml");
-
-		String path = url.getPath();
-
-		File file = new File(path);
-
-		File tempFile = new File(
-			StringUtil.replace(
-				path, "portal-log4j-ext.xml", "portal-log4j-ext-temp.xml"));
-
-		file.renameTo(tempFile);
-
-		Log4JUtil.configureLog4J(_classLoader);
+		Log4JUtil.configureLog4J(new TestClassLoader());
 
 		Log log = LogFactoryUtil.getLog(
 			"com.liferay.portal.internal.servlet.MainServlet");
 
 		_assertLogLevel("INFO", log);
-
-		tempFile.renameTo(file);
 
 		Log4JUtil.configureLog4J(_classLoader);
 
@@ -271,6 +257,23 @@ public class Log4JUtilTest {
 		}
 
 		private final String _name;
+
+	}
+
+	private class TestClassLoader extends ClassLoader {
+
+		@Override
+		public Enumeration<URL> getResources(String name) throws IOException {
+			if (name.equals("META-INF/portal-log4j-ext.xml")) {
+				return Collections.enumeration(Collections.<URL>emptyList());
+			}
+
+			return super.getResources(name);
+		}
+
+		private TestClassLoader() {
+			super(_classLoader);
+		}
 
 	}
 
