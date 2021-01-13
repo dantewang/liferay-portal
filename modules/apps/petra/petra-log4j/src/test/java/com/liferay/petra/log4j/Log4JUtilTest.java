@@ -129,21 +129,20 @@ public class Log4JUtilTest {
 			HashMapBuilder.putAll(
 				new HashMap<String, String>()
 			).put(
-				com.liferay.portal.util.PropsUtil.class.getName(), "WARN"
+				"com.liferay.portal.util.PropsUtil", "WARN"
 			).build());
 
 		_assertLogLevel(
-			"WARN",
-			LogFactoryUtil.getLog(
-				com.liferay.portal.util.PropsUtil.class.getName()));
-
-		_assertLogLevel(
-			"INFO", LogFactoryUtil.getLog(LoggerName.LOGGER_INFO.toString()));
+			"WARN", LogFactoryUtil.getLog("com.liferay.portal.util.PropsUtil"));
 
 		_assertLogLevel(
 			"WARN",
 			LogFactoryUtil.getLog(
 				"com.liferay.portal.internal.servlet.MainServlet"));
+
+		_assertLogEnable();
+
+		_assertJDKLogEnable();
 	}
 
 	@Test
