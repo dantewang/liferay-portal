@@ -68,15 +68,15 @@ public class Log4JUtilTest {
 		Log log = LogFactoryUtil.getLog(
 			"com.liferay.portal.internal.servlet.MainServlet");
 
-		_assertLogLevel("INFO", log);
+		_assertLog4JLevel("INFO", log);
 
 		Log4JUtil.configureLog4J(_classLoader);
 
-		_assertLogLevel("WARN", log);
+		_assertLog4JLevel("WARN", log);
 
-		_assertLogEnable();
+		_assertLog4JLevels();
 
-		_assertJDKLogEnable();
+		_assertJDKLogLevels();
 	}
 
 	@Test
@@ -85,9 +85,9 @@ public class Log4JUtilTest {
 
 		Log4JUtil.configureLog4J(url);
 
-		_assertLogEnable();
+		_assertLog4JLevels();
 
-		_assertJDKLogEnable();
+		_assertJDKLogLevels();
 	}
 
 	@Test
@@ -132,17 +132,17 @@ public class Log4JUtilTest {
 				"com.liferay.portal.util.PropsUtil", "WARN"
 			).build());
 
-		_assertLogLevel(
+		_assertLog4JLevel(
 			"WARN", LogFactoryUtil.getLog("com.liferay.portal.util.PropsUtil"));
 
-		_assertLogLevel(
+		_assertLog4JLevel(
 			"WARN",
 			LogFactoryUtil.getLog(
 				"com.liferay.portal.internal.servlet.MainServlet"));
 
-		_assertLogEnable();
+		_assertLog4JLevels();
 
-		_assertJDKLogEnable();
+		_assertJDKLogLevels();
 	}
 
 	@Test
@@ -154,12 +154,12 @@ public class Log4JUtilTest {
 		java.util.logging.Logger jdkLogger = java.util.logging.Logger.getLogger(
 			LoggerName.LOGGER_WARN.toString());
 
-		_assertLogLevel("WARN", log);
+		_assertLog4JLevel("WARN", log);
 		_assertJDKLogLevel(Level.WARNING, jdkLogger);
 
 		Log4JUtil.setLevel(LoggerName.LOGGER_WARN.toString(), "DEBUG", false);
 
-		_assertLogLevel("DEBUG", log);
+		_assertLog4JLevel("DEBUG", log);
 		_assertJDKLogLevel(Level.FINE, jdkLogger);
 
 		Log childLog = LogFactoryUtil.getLog("com.test.parent.child");
@@ -167,7 +167,7 @@ public class Log4JUtilTest {
 		java.util.logging.Logger childJDKLogger =
 			java.util.logging.Logger.getLogger("com.test.parent.child");
 
-		_assertLogLevel("INFO", childLog);
+		_assertLog4JLevel("INFO", childLog);
 
 		Assert.assertTrue(
 			"The child logger should be at level INFO",
@@ -176,7 +176,7 @@ public class Log4JUtilTest {
 
 		Log4JUtil.setLevel("com.test.parent", "DEBUG", false);
 
-		_assertLogLevel("DEBUG", childLog);
+		_assertLog4JLevel("DEBUG", childLog);
 		Assert.assertTrue(
 			"The child logger should be at level FINE",
 			childJDKLogger.isLoggable(Level.FINE) &&
@@ -202,7 +202,16 @@ public class Log4JUtilTest {
 			appendersEnumeration.hasMoreElements());
 	}
 
-	private void _assertJDKLogEnable() {
+	private void _assertJDKLogLevel(
+		Level expectedLevel, java.util.logging.Logger jdkLog) {
+
+		Level actualLevel = jdkLog.getLevel();
+
+		Assert.assertEquals(
+			"Logging level is wrong", expectedLevel, actualLevel);
+	}
+
+	private void _assertJDKLogLevels() {
 		_assertJDKLogLevel(
 			Level.INFO,
 			java.util.logging.Logger.getLogger(
@@ -237,35 +246,7 @@ public class Log4JUtilTest {
 				LoggerName.LOGGER_TRACE.toString()));
 	}
 
-	private void _assertJDKLogLevel(
-		Level expectedLevel, java.util.logging.Logger jdkLog) {
-
-		Level actualLevel = jdkLog.getLevel();
-
-		Assert.assertEquals(
-			"Logging level is wrong", expectedLevel, actualLevel);
-	}
-
-	private void _assertLogEnable() {
-		_assertLogLevel(
-			"ALL", LogFactoryUtil.getLog(LoggerName.LOGGER_ALL.toString()));
-		_assertLogLevel(
-			"OFF", LogFactoryUtil.getLog(LoggerName.LOGGER_OFF.toString()));
-		_assertLogLevel(
-			"FATAL", LogFactoryUtil.getLog(LoggerName.LOGGER_FATAL.toString()));
-		_assertLogLevel(
-			"ERROR", LogFactoryUtil.getLog(LoggerName.LOGGER_ERROR.toString()));
-		_assertLogLevel(
-			"WARN", LogFactoryUtil.getLog(LoggerName.LOGGER_WARN.toString()));
-		_assertLogLevel(
-			"INFO", LogFactoryUtil.getLog(LoggerName.LOGGER_INFO.toString()));
-		_assertLogLevel(
-			"DEBUG", LogFactoryUtil.getLog(LoggerName.LOGGER_DEBUG.toString()));
-		_assertLogLevel(
-			"TRACE", LogFactoryUtil.getLog(LoggerName.LOGGER_TRACE.toString()));
-	}
-
-	private void _assertLogLevel(String expectedLevel, Log log) {
+	private void _assertLog4JLevel(String expectedLevel, Log log) {
 		if (expectedLevel.equals("ALL")) {
 			Assert.assertTrue(
 				"TRACE should be enabled if logging level is ALL",
@@ -300,6 +281,25 @@ public class Log4JUtilTest {
 
 		Assert.assertEquals(
 			"Logging level is wrong", expectedLevel, actualLevel);
+	}
+
+	private void _assertLog4JLevels() {
+		_assertLog4JLevel(
+			"ALL", LogFactoryUtil.getLog(LoggerName.LOGGER_ALL.toString()));
+		_assertLog4JLevel(
+			"OFF", LogFactoryUtil.getLog(LoggerName.LOGGER_OFF.toString()));
+		_assertLog4JLevel(
+			"FATAL", LogFactoryUtil.getLog(LoggerName.LOGGER_FATAL.toString()));
+		_assertLog4JLevel(
+			"ERROR", LogFactoryUtil.getLog(LoggerName.LOGGER_ERROR.toString()));
+		_assertLog4JLevel(
+			"WARN", LogFactoryUtil.getLog(LoggerName.LOGGER_WARN.toString()));
+		_assertLog4JLevel(
+			"INFO", LogFactoryUtil.getLog(LoggerName.LOGGER_INFO.toString()));
+		_assertLog4JLevel(
+			"DEBUG", LogFactoryUtil.getLog(LoggerName.LOGGER_DEBUG.toString()));
+		_assertLog4JLevel(
+			"TRACE", LogFactoryUtil.getLog(LoggerName.LOGGER_TRACE.toString()));
 	}
 
 	private static final ClassLoader _classLoader =
