@@ -99,6 +99,7 @@ public class Log4JUtilTest {
 
 		Map<String, String> customLogMap = Log4JUtil.getCustomLogSettings();
 
+		Assert.assertEquals(customLogMap.toString(), 2, customLogMap.size());
 		Assert.assertEquals(
 			"The logger com.custom.log1 level should be INFO", "INFO",
 			customLogMap.get("com.custom.log1"));
