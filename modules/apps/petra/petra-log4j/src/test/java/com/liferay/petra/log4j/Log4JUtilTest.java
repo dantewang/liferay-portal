@@ -155,24 +155,32 @@ public class Log4JUtilTest {
 			LoggerName.LOGGER_WARN.toString());
 
 		_assertLogLevel("WARN", log);
-		_assertJDKLogLevel("WARNING", jdkLogger);
+		_assertJDKLogLevel(Level.WARNING, jdkLogger);
 
 		Log4JUtil.setLevel(LoggerName.LOGGER_WARN.toString(), "DEBUG", false);
 
 		_assertLogLevel("DEBUG", log);
-		_assertJDKLogLevel("FINE", jdkLogger);
+		_assertJDKLogLevel(Level.FINE, jdkLogger);
 
 		Log childLog = LogFactoryUtil.getLog("com.test.parent.child");
+
 		java.util.logging.Logger childJDKLogger =
 			java.util.logging.Logger.getLogger("com.test.parent.child");
 
 		_assertLogLevel("INFO", childLog);
-		_assertJDKLogLevel("INFO", childJDKLogger);
+
+		Assert.assertTrue(
+			"The child logger should be at level INFO",
+			childJDKLogger.isLoggable(Level.INFO) &&
+			!childJDKLogger.isLoggable(Level.CONFIG));
 
 		Log4JUtil.setLevel("com.test.parent", "DEBUG", false);
 
 		_assertLogLevel("DEBUG", childLog);
-		_assertJDKLogLevel("FINE", childJDKLogger);
+		Assert.assertTrue(
+			"The child logger should be at level FINE",
+			childJDKLogger.isLoggable(Level.FINE) &&
+			!childJDKLogger.isLoggable(Level.FINER));
 	}
 
 	@Test
@@ -196,59 +204,43 @@ public class Log4JUtilTest {
 
 	private void _assertJDKLogEnable() {
 		_assertJDKLogLevel(
-			"INFO",
+			Level.INFO,
 			java.util.logging.Logger.getLogger(
 				LoggerName.LOGGER_ALL.toString()));
 		_assertJDKLogLevel(
-			"INFO",
+			Level.INFO,
 			java.util.logging.Logger.getLogger(
 				LoggerName.LOGGER_OFF.toString()));
 		_assertJDKLogLevel(
-			"INFO",
+			Level.INFO,
 			java.util.logging.Logger.getLogger(
 				LoggerName.LOGGER_FATAL.toString()));
 		_assertJDKLogLevel(
-			"SEVERE",
+			Level.SEVERE,
 			java.util.logging.Logger.getLogger(
 				LoggerName.LOGGER_ERROR.toString()));
 		_assertJDKLogLevel(
-			"WARNING",
+			Level.WARNING,
 			java.util.logging.Logger.getLogger(
 				LoggerName.LOGGER_WARN.toString()));
 		_assertJDKLogLevel(
-			"INFO",
+			Level.INFO,
 			java.util.logging.Logger.getLogger(
 				LoggerName.LOGGER_INFO.toString()));
 		_assertJDKLogLevel(
-			"FINE",
+			Level.FINE,
 			java.util.logging.Logger.getLogger(
 				LoggerName.LOGGER_DEBUG.toString()));
 		_assertJDKLogLevel(
-			"INFO",
+			Level.INFO,
 			java.util.logging.Logger.getLogger(
 				LoggerName.LOGGER_TRACE.toString()));
 	}
 
 	private void _assertJDKLogLevel(
-		String expectedLevel, java.util.logging.Logger jdkLog) {
+		Level expectedLevel, java.util.logging.Logger jdkLog) {
 
-		String actualLevel = null;
-
-		if (jdkLog.isLoggable(Level.FINE)) {
-			actualLevel = "FINE";
-		}
-		else if (jdkLog.isLoggable(Level.INFO)) {
-			actualLevel = "INFO";
-		}
-		else if (jdkLog.isLoggable(Level.WARNING)) {
-			actualLevel = "WARNING";
-		}
-		else if (jdkLog.isLoggable(Level.SEVERE)) {
-			actualLevel = "SEVERE";
-		}
-		else {
-			actualLevel = "INFO";
-		}
+		Level actualLevel = jdkLog.getLevel();
 
 		Assert.assertEquals(
 			"Logging level is wrong", expectedLevel, actualLevel);
