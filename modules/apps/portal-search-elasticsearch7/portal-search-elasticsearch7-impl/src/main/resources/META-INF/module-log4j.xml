@@ -15,6 +15,6 @@
 	</category>
 
 	<category name="com.liferay.portal.search.elasticsearch7.internal.sidecar.UncompressUtil">
-		<priority value="ERROR" />
+		<priority value="WARN" />
 	</category>
 </log4j:configuration>
