@@ -156,11 +156,28 @@ public class Log4JOutputMessageTest {
 
 		String[] outputLines = StringUtil.splitLines(actualOutput);
 
+		int outputLineIndex = 0;
+
+		for (int i = 0; i < outputLines.length; i++) {
+			String outputLine = outputLines[i];
+
+			if (outputLine.contains(
+					Log4JOutputMessageTest.class.getSimpleName())) {
+
+				outputLineIndex = i;
+
+				break;
+			}
+			else if (i == (outputLines.length - 1)) {
+				Assert.fail("The test output is not found: " + actualOutput);
+			}
+		}
+
 		Assert.assertTrue(
 			"The log output should have at least 1 line",
 			outputLines.length > 0);
 
-		String messageLine = outputLines[0];
+		String messageLine = outputLines[outputLineIndex];
 
 		// Date Format
 
@@ -236,9 +253,11 @@ public class Log4JOutputMessageTest {
 			Class<?> expectedThrowableClass = expectedThrowable.getClass();
 
 			Assert.assertEquals(
-				expectedThrowableClass.getName(), outputLines[1]);
+				expectedThrowableClass.getName(),
+				outputLines[outputLineIndex + 1]);
 
-			String actualFirstPrefixStackTraceElement = outputLines[2].trim();
+			String actualFirstPrefixStackTraceElement =
+				outputLines[outputLineIndex + 2].trim();
 
 			Assert.assertTrue(
 				"A throwable should be logged and the first stack should be " +
@@ -388,32 +407,6 @@ public class Log4JOutputMessageTest {
 				0, expectedLog4JLocationInfoFilePart.length()));
 	}
 
-	private String _getLogOutputContent(String logOutputContent) {
-		String[] outputLines = StringUtil.splitLines(logOutputContent);
-
-		String logMessage = StringPool.BLANK;
-
-		Thread currentThread = Thread.currentThread();
-
-		int stackTraceLine = 0;
-
-		for (String outputLine : outputLines) {
-			if ((outputLine.indexOf(currentThread.getName()) > -1) ||
-				(stackTraceLine > 0)) {
-
-				logMessage += outputLine + StringPool.NEW_LINE;
-
-				stackTraceLine++;
-
-				if (stackTraceLine > 2) {
-					return logMessage;
-				}
-			}
-		}
-
-		return logMessage;
-	}
-
 	private String _getXmlOutputContent(String xmlOutputContent) {
 		String log4jEventStartTag =
 			"<log4j:event logger=\"" + Log4JOutputMessageTest.class.getName() +
@@ -543,8 +536,8 @@ public class Log4JOutputMessageTest {
 			randomAccessLogFile.readFully(logOutputBytes, 0, logFileLength);
 			randomAccessXmlFile.readFully(xmlOutputBytes, 0, xmlFileLength);
 
-			String logOutputContent = _getLogOutputContent(
-				new String(logOutputBytes, StringPool.UTF8));
+			String logOutputContent = new String(
+				logOutputBytes, StringPool.UTF8);
 			String xmlOutputContent = _getXmlOutputContent(
 				new String(xmlOutputBytes, StringPool.UTF8));
 
