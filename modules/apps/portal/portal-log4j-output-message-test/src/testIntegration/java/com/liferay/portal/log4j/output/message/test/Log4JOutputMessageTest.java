@@ -379,6 +379,50 @@ public class Log4JOutputMessageTest {
 				0, expectedLog4JLocationInfoFilePart.length()));
 	}
 
+	private String _getLogOutputContent(String logOutputContent) {
+		String[] outputLines = StringUtil.splitLines(logOutputContent);
+
+		String logMessage = StringPool.BLANK;
+
+		Thread currentThread = Thread.currentThread();
+
+		int stackTraceLine = 0;
+
+		for (String outputLine : outputLines) {
+			if ((outputLine.indexOf(currentThread.getName()) > -1) ||
+				(stackTraceLine > 0)) {
+
+				logMessage += outputLine + StringPool.NEW_LINE;
+
+				stackTraceLine++;
+
+				if (stackTraceLine > 2) {
+					return logMessage;
+				}
+			}
+		}
+
+		return logMessage;
+	}
+
+	private String _getXmlOutputContent(String xmlOutputContent) {
+		String log4jEventStartTag =
+			"<log4j:event logger=\"" + Log4JOutputMessageTest.class.getName() +
+				"\"";
+		String log4jEventEndTag = "</log4j:event>";
+
+		int x = xmlOutputContent.indexOf(log4jEventStartTag);
+
+		int y = xmlOutputContent.indexOf(log4jEventEndTag, x);
+
+		if ((x != -1) && (y != -1)) {
+			xmlOutputContent = xmlOutputContent.substring(
+				x, y + log4jEventEndTag.length());
+		}
+
+		return xmlOutputContent;
+	}
+
 	private void _outputLog(String level, String message, Throwable throwable) {
 		if (level.equals("TRACE")) {
 			if ((message == null) && (throwable != null)) {
@@ -490,10 +534,10 @@ public class Log4JOutputMessageTest {
 			randomAccessLogFile.readFully(logOutputBytes, 0, logFileLength);
 			randomAccessXmlFile.readFully(xmlOutputBytes, 0, xmlFileLength);
 
-			String logOutputContent = new String(
-				logOutputBytes, StringPool.UTF8);
-			String xmlOutputContent = new String(
-				xmlOutputBytes, StringPool.UTF8);
+			String logOutputContent = _getLogOutputContent(
+				new String(logOutputBytes, StringPool.UTF8));
+			String xmlOutputContent = _getXmlOutputContent(
+				new String(xmlOutputBytes, StringPool.UTF8));
 
 			// Assert log file output
 
