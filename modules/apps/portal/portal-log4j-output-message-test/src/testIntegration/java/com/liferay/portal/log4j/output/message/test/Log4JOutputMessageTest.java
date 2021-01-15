@@ -78,9 +78,9 @@ public class Log4JOutputMessageTest {
 
 		_consoleAppender = new ConsoleAppender(layout);
 
-		_rootLogger.addAppender(_consoleAppender);
-
 		_consoleAppender.setWriter(_unsyncStringWriter);
+
+		_rootLogger.addAppender(_consoleAppender);
 
 		Log4JUtil.setLevel(
 			Log4JOutputMessageTest.class.getName(), "TRACE", false);
