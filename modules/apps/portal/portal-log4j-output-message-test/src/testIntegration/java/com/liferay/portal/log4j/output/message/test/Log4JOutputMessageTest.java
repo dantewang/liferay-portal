@@ -413,13 +413,13 @@ public class Log4JOutputMessageTest {
 				"\"";
 		String log4jEventEndTag = "</log4j:event>";
 
-		int x = xmlOutputContent.indexOf(log4jEventStartTag);
+		int beginIndex = xmlOutputContent.indexOf(log4jEventStartTag);
 
-		int y = xmlOutputContent.indexOf(log4jEventEndTag, x);
+		int endIndex = xmlOutputContent.indexOf(log4jEventEndTag, beginIndex);
 
-		if ((x != -1) && (y != -1)) {
+		if ((beginIndex != -1) && (endIndex != -1)) {
 			xmlOutputContent = xmlOutputContent.substring(
-				x, y + log4jEventEndTag.length());
+				beginIndex, endIndex + log4jEventEndTag.length());
 		}
 
 		return xmlOutputContent;
