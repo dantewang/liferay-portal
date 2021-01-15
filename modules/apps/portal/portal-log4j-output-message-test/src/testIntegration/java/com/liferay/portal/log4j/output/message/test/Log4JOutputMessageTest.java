@@ -24,7 +24,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.LogAssertionAppender;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -41,7 +40,6 @@ import org.apache.log4j.Logger;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -53,11 +51,6 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 public class Log4JOutputMessageTest {
-
-	@ClassRule
-	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new LiferayIntegrationTestRule();
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -102,11 +95,6 @@ public class Log4JOutputMessageTest {
 	@AfterClass
 	public static void tearDownClass() {
 		_rootLogger.removeAppender(_consoleAppender);
-	}
-
-	@Before
-	public void setUp() {
-		_rootLogger.removeAppender(LogAssertionAppender.INSTANCE);
 	}
 
 	@Test
