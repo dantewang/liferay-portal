@@ -21,9 +21,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -41,8 +39,6 @@ import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -475,21 +471,18 @@ public class Log4JOutputMessageTest {
 			RandomAccessFile randomAccessXmlFile = new RandomAccessFile(
 				_xmlLogFile, "r")) {
 
-			long initalLogFileLength = randomAccessLogFile.length();
-			long initalXMLFileLength = randomAccessXmlFile.length();
+			long initialLogFileLength = randomAccessLogFile.length();
+			long initialXMLFileLength = randomAccessXmlFile.length();
 
-			randomAccessLogFile.seek(initalLogFileLength);
-			randomAccessXmlFile.seek(initalXMLFileLength);
+			randomAccessLogFile.seek(initialLogFileLength);
+			randomAccessXmlFile.seek(initialXMLFileLength);
 
 			_outputLog(level, message, throwable);
 
-			long afterAddLogFileLength = randomAccessLogFile.length();
-			long afterAddXmlFileLength = randomAccessXmlFile.length();
-
 			int logFileLength =
-				(int)(afterAddLogFileLength - initalLogFileLength);
+				(int)(randomAccessLogFile.length() - initialLogFileLength);
 			int xmlFileLength =
-				(int)(afterAddXmlFileLength - initalXMLFileLength);
+				(int)(randomAccessXmlFile.length() - initialXMLFileLength);
 
 			byte[] logOutputBytes = new byte[logFileLength];
 			byte[] xmlOutputBytes = new byte[xmlFileLength];
