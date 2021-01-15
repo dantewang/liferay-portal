@@ -271,6 +271,20 @@ public class Log4JOutputMessageTest {
 		String expectedLevel, String expectedMessage,
 		Throwable expectedThrowable, String actualOutput) {
 
+		String log4jEventStartTag =
+			"<log4j:event logger=\"" + Log4JOutputMessageTest.class.getName() +
+				"\"";
+		String log4jEventEndTag = "</log4j:event>";
+
+		int beginIndex = actualOutput.indexOf(log4jEventStartTag);
+
+		int endIndex = actualOutput.indexOf(log4jEventEndTag, beginIndex);
+
+		if ((beginIndex > 0) && (endIndex > beginIndex)) {
+			actualOutput = actualOutput.substring(
+				beginIndex, endIndex + log4jEventEndTag.length());
+		}
+
 		String[] outputLines = StringUtil.splitLines(actualOutput);
 
 		Assert.assertTrue(
@@ -407,24 +421,6 @@ public class Log4JOutputMessageTest {
 				0, expectedLog4JLocationInfoFilePart.length()));
 	}
 
-	private String _getXmlOutputContent(String xmlOutputContent) {
-		String log4jEventStartTag =
-			"<log4j:event logger=\"" + Log4JOutputMessageTest.class.getName() +
-				"\"";
-		String log4jEventEndTag = "</log4j:event>";
-
-		int beginIndex = xmlOutputContent.indexOf(log4jEventStartTag);
-
-		int endIndex = xmlOutputContent.indexOf(log4jEventEndTag, beginIndex);
-
-		if ((beginIndex != -1) && (endIndex != -1)) {
-			xmlOutputContent = xmlOutputContent.substring(
-				beginIndex, endIndex + log4jEventEndTag.length());
-		}
-
-		return xmlOutputContent;
-	}
-
 	private void _outputLog(String level, String message, Throwable throwable) {
 		if (level.equals("TRACE")) {
 			if ((message == null) && (throwable != null)) {
@@ -538,8 +534,8 @@ public class Log4JOutputMessageTest {
 
 			String logOutputContent = new String(
 				logOutputBytes, StringPool.UTF8);
-			String xmlOutputContent = _getXmlOutputContent(
-				new String(xmlOutputBytes, StringPool.UTF8));
+			String xmlOutputContent = new String(
+				xmlOutputBytes, StringPool.UTF8);
 
 			// Assert log file output
 
