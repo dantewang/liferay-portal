@@ -22,6 +22,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -59,20 +60,28 @@ public class Log4JOutputMessageTest {
 		while (enumeration.hasMoreElements()) {
 			Appender appender = enumeration.nextElement();
 
+			String name = appender.getName();
+
+			if (Validator.isNull(name)) {
+				continue;
+			}
+
 			if (appender instanceof FileAppender) {
 				FileAppender fileAppender = (FileAppender)appender;
 
 				String fileName = fileAppender.getFile();
 
-				if (fileName.endsWith(".log")) {
+				if (name.equals("TEXT_FILE")) {
 					_textLogFile = new File(fileName);
 				}
-				else {
+				else if (name.equals("XML_FILE")) {
 					_xmlLogFile = new File(fileName);
 				}
 			}
 			else if (appender instanceof ConsoleAppender) {
-				layout = appender.getLayout();
+				if (name.equals("CONSOLE")) {
+					layout = appender.getLayout();
+				}
 			}
 		}
 
