@@ -89,12 +89,12 @@ public class Log4JOutputMessageTest {
 				RollingFileAppender rollingFileAppender =
 					(RollingFileAppender)appender;
 
+				TimeBasedRollingPolicy timeBasedRollingPolicy =
+					new TimeBasedRollingPolicy();
+
 				if (name.equals("TEXT_FILE")) {
 					textFileRollingFileAppender.setLayout(
 						rollingFileAppender.getLayout());
-
-					TimeBasedRollingPolicy timeBasedRollingPolicy =
-						new TimeBasedRollingPolicy();
 
 					timeBasedRollingPolicy.setFileNamePattern(
 						StringUtil.replace(tempLogDir.toString(), '\\', '/') +
@@ -106,9 +106,6 @@ public class Log4JOutputMessageTest {
 				else if (name.equals("XML_FILE")) {
 					xmlFileRollingFileAppender.setLayout(
 						rollingFileAppender.getLayout());
-
-					TimeBasedRollingPolicy timeBasedRollingPolicy =
-						new TimeBasedRollingPolicy();
 
 					timeBasedRollingPolicy.setFileNamePattern(
 						StringUtil.replace(tempLogDir.toString(), '\\', '/') +
