@@ -1449,41 +1449,6 @@ public class ResourceActionsImpl implements ResourceActions {
 	private final Map<String, Set<String>> _resourceReferences =
 		new HashMap<>();
 
-	private static class ResourceActionsBag {
-
-		public Set<String> getGroupDefaultActions() {
-			return _groupDefaultActions;
-		}
-
-		public Set<String> getGuestDefaultActions() {
-			return _guestDefaultActions;
-		}
-
-		public Set<String> getGuestUnsupportedActions() {
-			return _guestUnsupportedActions;
-		}
-
-		public Set<String> getLayoutManagerActions() {
-			return _layoutManagerActions;
-		}
-
-		public Set<String> getOwnerDefaultActions() {
-			return _ownerDefaultActions;
-		}
-
-		public Set<String> getSupportsActions() {
-			return _supportsActions;
-		}
-
-		private final Set<String> _groupDefaultActions = new HashSet<>();
-		private final Set<String> _guestDefaultActions = new HashSet<>();
-		private final Set<String> _guestUnsupportedActions = new HashSet<>();
-		private final Set<String> _layoutManagerActions = new HashSet<>();
-		private final Set<String> _ownerDefaultActions = new HashSet<>();
-		private final Set<String> _supportsActions = new HashSet<>();
-
-	}
-
 	private static class ResourceBundleLoaderListHolder {
 
 		private static final ServiceTrackerList<ResourceBundleLoader>
