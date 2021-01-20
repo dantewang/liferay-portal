@@ -1021,7 +1021,9 @@ public class ResourceActionsImpl implements ResourceActions {
 				return resourceActionsBag;
 			}
 
-			resourceActionsBag = new ResourceActionsBag();
+			resourceActionsBag = new ResourceActionsBag(
+				new HashSet<>(), new HashSet<>(), new HashSet<>(),
+				new HashSet<>(), new HashSet<>(), new HashSet<>());
 
 			_resourceActionsBags.put(name, resourceActionsBag);
 		}
