@@ -900,22 +900,6 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
-	private void _checkGuestUnsupportedActions(
-		Set<String> guestUnsupportedActions, Set<String> guestDefaultActions) {
-
-		// Guest default actions cannot reference guest unsupported actions
-
-		Iterator<String> iterator = guestDefaultActions.iterator();
-
-		while (iterator.hasNext()) {
-			String actionId = iterator.next();
-
-			if (guestUnsupportedActions.contains(actionId)) {
-				iterator.remove();
-			}
-		}
-	}
-
 	private void _checkPortletGuestUnsupportedActions(Set<String> actions) {
 		actions.add(ActionKeys.CONFIGURATION);
 		actions.add(ActionKeys.PERMISSIONS);
@@ -1337,7 +1321,7 @@ public class ResourceActionsImpl implements ResourceActions {
 					modelName, ResourceActionsBagBuilder::new);
 
 			_readResource(
-				modelResourceElement, modelName, resourceActionsBagBuilder,
+				modelResourceElement, resourceActionsBagBuilder,
 				Collections.singleton(ActionKeys.PERMISSIONS));
 		}
 	}
@@ -1368,7 +1352,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			}
 
 			_readResource(
-				portletResourceElement, portletName, resourceActionsBagBuilder,
+				portletResourceElement, resourceActionsBagBuilder,
 				portletActions);
 		}
 	}
@@ -1400,14 +1384,14 @@ public class ResourceActionsImpl implements ResourceActions {
 						portletName, ResourceActionsBagBuilder::new);
 
 				_readResource(
-					portletResourceElement, portletName,
-					resourceActionsBagBuilder, portletActions);
+					portletResourceElement, resourceActionsBagBuilder,
+					portletActions);
 			}
 		}
 	}
 
 	private void _readResource(
-			Element resourceElement, String name,
+			Element resourceElement,
 			ResourceActionsBagBuilder resourceActionsBagBuilder,
 			Set<String> defaultResourceActions)
 		throws ResourceActionsException {
