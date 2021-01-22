@@ -1493,4 +1493,51 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	}
 
+	private class ResourceActionsBagBuilder {
+
+		public void addSupportsActions(Set<String> supportsActions) {
+			_supportsActions.addAll(supportsActions);
+		}
+
+		public ResourceActionsBag build() {
+			_guestDefaultActions.removeAll(_guestUnsupportedActions);
+
+			return new ResourceActionsBag(
+				_supportsActions, _groupDefaultActions, _guestDefaultActions,
+				_guestUnsupportedActions, _layoutManagerActions,
+				_ownerDefaultActions);
+		}
+
+		public void setGroupDefaultActions(Set<String> groupDefaultActions) {
+			_groupDefaultActions = groupDefaultActions;
+		}
+
+		public void setGuestDefaultActions(Set<String> guestDefaultActions) {
+			_guestDefaultActions = guestDefaultActions;
+		}
+
+		public void setGuestUnsupportedActions(
+			Set<String> guestUnsupportedActions) {
+
+			_guestUnsupportedActions = guestUnsupportedActions;
+		}
+
+		public void setLayoutManagerActions(Set<String> layoutManagerActions) {
+			_guestUnsupportedActions = layoutManagerActions;
+		}
+
+		public void setOwnerDefaultActions(Set<String> ownerDefaultActions) {
+			_guestUnsupportedActions = ownerDefaultActions;
+		}
+
+		private Set<String> _groupDefaultActions = Collections.emptySet();
+		private Set<String> _guestDefaultActions = Collections.emptySet();
+		private Set<String> _guestUnsupportedActions = Collections.emptySet();
+		private final Set<String> _layoutManagerActions =
+			Collections.emptySet();
+		private final Set<String> _ownerDefaultActions = Collections.emptySet();
+		private final Set<String> _supportsActions = new HashSet<>();
+
+	}
+
 }
