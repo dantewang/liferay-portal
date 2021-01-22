@@ -971,18 +971,15 @@ public class ResourceActionsImpl implements ResourceActions {
 	private List<String> _getPortletResourceActions(
 		String name, Portlet portlet) {
 
-		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
-			name);
+		List<String> resourceActions = _getResourceActions(name);
 
-		Set<String> portletActions =
-			portletResourceActionsBag.getSupportsActions();
-
-		if (!portletActions.isEmpty()) {
-			return new ArrayList<>(portletActions);
+		if (!resourceActions.isEmpty()) {
+			return resourceActions;
 		}
 
 		synchronized (this) {
-			portletActions = _getPortletMimeTypeActions(name, portlet);
+			Set<String> portletActions = _getPortletMimeTypeActions(
+				name, portlet);
 
 			if (!name.equals(PortletKeys.PORTAL)) {
 				_checkPortletLayoutManagerActions(portletActions);
@@ -990,24 +987,44 @@ public class ResourceActionsImpl implements ResourceActions {
 				portletActions.add(ActionKeys.ACCESS_IN_CONTROL_PANEL);
 			}
 
-			Set<String> groupDefaultActions =
-				portletResourceActionsBag.getGroupDefaultActions();
+			Set<String> groupDefaultActions = new HashSet<>();
 
 			groupDefaultActions.add(ActionKeys.VIEW);
 
-			Set<String> guestDefaultActions =
-				portletResourceActionsBag.getGuestDefaultActions();
+			Set<String> guestDefaultActions = new HashSet<>();
 
 			guestDefaultActions.add(ActionKeys.VIEW);
 
-			_checkPortletGuestUnsupportedActions(
-				portletResourceActionsBag.getGuestUnsupportedActions());
+			Set<String> guestUnsupportedActions = new HashSet<>();
 
-			_checkPortletLayoutManagerActions(
-				portletResourceActionsBag.getLayoutManagerActions());
+			_checkPortletGuestUnsupportedActions(guestUnsupportedActions);
+
+			Set<String> layoutManagerActions = new HashSet<>();
+
+			_checkPortletLayoutManagerActions(layoutManagerActions);
+
+			ResourceActionsBag resourceActionsBag = new ResourceActionsBag(
+				portletActions, groupDefaultActions, guestDefaultActions,
+				guestUnsupportedActions, layoutManagerActions,
+				Collections.emptySet());
+
+			_registerResourceActionsBag(name, resourceActionsBag);
+
+			return _getResourceActions(name);
+		}
+	}
+
+	private List<String> _getResourceActions(String name) {
+		List<ResourceActionsBag> resourceActionsBags =
+			_resourceActionsBagServiceTrackerMap.getService(name);
+
+		List<String> portletActions = new ArrayList<>();
+
+		for (ResourceActionsBag resourceActionsBag : resourceActionsBags) {
+			portletActions.addAll(resourceActionsBag.getSupportsActions());
 		}
 
-		return new ArrayList<>(portletActions);
+		return portletActions;
 	}
 
 	private ResourceActionsBag _getResourceActionsBag(String name) {
