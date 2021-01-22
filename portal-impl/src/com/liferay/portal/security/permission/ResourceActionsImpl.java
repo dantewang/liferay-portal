@@ -53,8 +53,11 @@ import com.liferay.portal.kernel.xml.DocumentType;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.UnsecureSAXReaderUtil;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.collections.ServiceTrackerCollections;
 import com.liferay.registry.collections.ServiceTrackerList;
+import com.liferay.registry.collections.ServiceTrackerMap;
 
 import java.io.InputStream;
 
@@ -1431,6 +1434,16 @@ public class ResourceActionsImpl implements ResourceActions {
 		_readActionKeys(layoutManagerActions, layoutManagerElement);
 	}
 
+	private void _registerResourceActionsBag(
+		String name, ResourceActionsBag resourceActionsBag) {
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		registry.registerService(
+			ResourceActionsBag.class, resourceActionsBag,
+			Collections.singletonMap("resource.name", name));
+	}
+
 	private static final String _ACTION_NAME_PREFIX = "action.";
 
 	private static final String _COMPOSITE_MODEL_NAME_SEPARATOR =
@@ -1448,6 +1461,10 @@ public class ResourceActionsImpl implements ResourceActions {
 		new HashMap<>();
 	private final Map<String, ResourceActionsBag> _resourceActionsBags =
 		new HashMap<>();
+	private final ServiceTrackerMap<String, List<ResourceActionsBag>>
+		_resourceActionsBagServiceTrackerMap =
+			ServiceTrackerCollections.openMultiValueMap(
+				ResourceActionsBag.class, "resource.name");
 	private final Map<String, Set<String>> _resourceReferences =
 		new HashMap<>();
 
