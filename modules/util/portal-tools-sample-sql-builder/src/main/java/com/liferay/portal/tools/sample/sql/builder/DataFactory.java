@@ -357,7 +357,6 @@ public class DataFactory {
 		_defaultJournalDDMTemplateId = _counter.get();
 		_globalGroupId = _counter.get();
 		_guestGroupId = _counter.get();
-		_sampleUserId = _counter.get();
 		_userPersonalSiteGroupId = _counter.get();
 
 		_dlDDMStructureContent = _readFile("ddm_structure_basic_document.json");
@@ -3735,6 +3734,8 @@ public class DataFactory {
 	}
 
 	public UserModel newSampleUserModel() {
+		_sampleUserId = _counter.get();
+
 		return newUserModel(
 			_sampleUserId, _SAMPLE_USER_NAME, _SAMPLE_USER_NAME,
 			_SAMPLE_USER_NAME, false);
@@ -5324,7 +5325,7 @@ public class DataFactory {
 	private RoleModel _ownerRoleModel;
 	private RoleModel _powerUserRoleModel;
 	private final SimpleCounter _resourcePermissionCounter;
-	private final long _sampleUserId;
+	private long _sampleUserId;
 	private final Format _simpleDateFormat;
 	private RoleModel _siteMemberRoleModel;
 	private final SimpleCounter _socialActivityCounter;
