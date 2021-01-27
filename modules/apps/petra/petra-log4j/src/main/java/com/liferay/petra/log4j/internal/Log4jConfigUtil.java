@@ -14,22 +14,26 @@
 
 package com.liferay.petra.log4j.internal;
 
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerRepository;
-import org.apache.log4j.xml.DOMConfigurator;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.ConfigurationSource;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.config.plugins.util.PluginManager;
+import org.apache.logging.log4j.core.config.xml.XmlConfiguration;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -43,44 +47,47 @@ public class Log4jConfigUtil {
 	public static Map<String, String> configureLog4J(
 		String xmlContent, String... removedAppenderNames) {
 
+		Map<String, String> priorities = new HashMap<>();
+
 		Document document = null;
 
 		try {
 			SAXReader saxReader = new SAXReader();
 
 			document = saxReader.read(new UnsyncStringReader(xmlContent));
+
+			Element rootElement = document.getRootElement();
+
+			for (Element element : rootElement.elements()) {
+				for (Element childElement : element.elements()) {
+					for (String appenderName : removedAppenderNames) {
+						_removeAppender(element, childElement, appenderName);
+					}
+
+					if (Objects.equals("Logger", childElement.getName())) {
+						priorities.put(
+							childElement.attributeValue("name"),
+							childElement.attributeValue("level"));
+					}
+				}
+			}
+
+			xmlContent = document.asXML();
+
+			ConfigurationSource configurationSource = new ConfigurationSource(
+				new UnsyncByteArrayInputStream(
+					xmlContent.getBytes(StringPool.UTF8)));
+
+			_centralizedConfiguration.addConfiguration(
+				new XmlConfiguration(_loggerContext, configurationSource));
+
+			return priorities;
 		}
 		catch (Exception exception) {
 			_log.error(exception, exception);
 
 			return Collections.emptyMap();
 		}
-
-		Map<String, String> priorities = new HashMap<>();
-
-		Element rootElement = document.getRootElement();
-
-		for (Element element : rootElement.elements()) {
-			for (String appenderName : removedAppenderNames) {
-				_removeAppender(rootElement, element, appenderName);
-			}
-
-			if (Objects.equals("category", element.getName())) {
-				Element priorityElement = element.element("priority");
-
-				priorities.put(
-					element.attributeValue("name"),
-					priorityElement.attributeValue("value"));
-			}
-		}
-
-		DOMConfigurator domConfigurator = new DOMConfigurator();
-
-		domConfigurator.doConfigure(
-			new UnsyncStringReader(document.asXML()),
-			LogManager.getLoggerRepository());
-
-		return priorities;
 	}
 
 	public static java.util.logging.Level getJDKLevel(String levelString) {
@@ -104,15 +111,18 @@ public class Log4jConfigUtil {
 	public static Map<String, String> getPriorities() {
 		Map<String, String> priorities = new HashMap<>();
 
-		Enumeration<Logger> enumeration = LogManager.getCurrentLoggers();
+		Map<String, LoggerConfig> loggerConfigs =
+			_centralizedConfiguration.getLoggers();
 
-		while (enumeration.hasMoreElements()) {
-			Logger logger = enumeration.nextElement();
+		for (Map.Entry<String, LoggerConfig> loggerConfigEntry :
+				loggerConfigs.entrySet()) {
 
-			Level level = logger.getLevel();
+			LoggerConfig loggerConfig = loggerConfigEntry.getValue();
 
-			if (level != null) {
-				priorities.put(logger.getName(), level.toString());
+			if (loggerConfig.getParent() != null) {
+				priorities.put(
+					loggerConfigEntry.getKey(),
+					String.valueOf(loggerConfig.getLevel()));
 			}
 		}
 
@@ -120,28 +130,41 @@ public class Log4jConfigUtil {
 	}
 
 	public static void setLevel(String name, String priority) {
-		Logger logger = Logger.getLogger(name);
+		Level level = Level.toLevel(priority);
 
-		logger.setLevel(Level.toLevel(priority));
+		Logger logger = _loggerContext.getLogger(name);
+
+		LoggerConfig loggerConfig = _centralizedConfiguration.getLogger(name);
+
+		if (loggerConfig != null) {
+			loggerConfig.setLevel(level);
+
+			logger.setLevel(level);
+		}
+		else {
+			loggerConfig = new LoggerConfig(name, level, true);
+
+			_centralizedConfiguration.addLogger(name, loggerConfig);
+
+			_loggerContext.updateLoggers();
+		}
 	}
 
 	public static void shutdownLog4J() {
-		LoggerRepository loggerRepository = LogManager.getLoggerRepository();
-
-		loggerRepository.shutdown();
+		LogManager.shutdown();
 	}
 
 	private static void _removeAppender(
-		Element rootElement, Element element, String appenderName) {
+		Element parentElement, Element element, String appenderName) {
 
-		if (Objects.equals("appender", element.getName()) &&
+		if (Objects.equals("Appenders", parentElement.getName()) &&
 			Objects.equals(appenderName, element.attributeValue("name"))) {
 
-			rootElement.remove(element);
+			parentElement.remove(element);
 		}
 
 		for (Element childElement : element.elements()) {
-			if (Objects.equals("appender-ref", childElement.getName()) &&
+			if (Objects.equals("AppenderRef", childElement.getName()) &&
 				Objects.equals(
 					appenderName, childElement.attributeValue("ref"))) {
 
@@ -152,5 +175,23 @@ public class Log4jConfigUtil {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		Log4jConfigUtil.class);
+
+	private static final CentralizedConfiguration _centralizedConfiguration;
+	private static final LoggerContext _loggerContext;
+
+	static {
+		PluginManager.addPackage("com.liferay.petra.log4j");
+
+		LoggerContext loggerContext = (LoggerContext)LogManager.getContext();
+
+		CentralizedConfiguration centralizedConfiguration =
+			new CentralizedConfiguration(loggerContext);
+
+		loggerContext.setConfiguration(centralizedConfiguration);
+
+		_loggerContext = loggerContext;
+
+		_centralizedConfiguration = centralizedConfiguration;
+	}
 
 }
