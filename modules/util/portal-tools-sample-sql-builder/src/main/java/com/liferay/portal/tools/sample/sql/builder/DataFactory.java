@@ -357,7 +357,6 @@ public class DataFactory {
 		_defaultJournalDDMStructureId = _counter.get();
 		_defaultJournalDDMStructureVersionId = _counter.get();
 		_defaultJournalDDMTemplateId = _counter.get();
-		_globalGroupId = _counter.get();
 		_guestGroupId = _counter.get();
 		_userPersonalSiteGroupId = _counter.get();
 
@@ -2587,6 +2586,8 @@ public class DataFactory {
 	}
 
 	public GroupModel newGlobalGroupModel() {
+		_globalGroupId = _counter.get();
+
 		return newGroupModel(
 			_globalGroupId, getClassNameId(Company.class), _companyId,
 			GroupConstants.GLOBAL, false);
@@ -5297,7 +5298,7 @@ public class DataFactory {
 	private final String _dlDDMStructureLayoutContent;
 	private List<String> _firstNames;
 	private final SimpleCounter _futureDateCounter;
-	private final long _globalGroupId;
+	private long _globalGroupId;
 	private final long _guestGroupId;
 	private RoleModel _guestRoleModel;
 	private String _journalArticleContent;
