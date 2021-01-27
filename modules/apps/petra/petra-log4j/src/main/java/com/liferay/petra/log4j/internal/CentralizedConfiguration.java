@@ -1,0 +1,277 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.petra.log4j.internal;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.Filter;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.AbstractConfiguration;
+import org.apache.logging.log4j.core.config.AppenderRef;
+import org.apache.logging.log4j.core.config.ConfigurationSource;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.config.plugins.util.PluginManager;
+
+/**
+ * @author Dante Wang
+ */
+public class CentralizedConfiguration extends AbstractConfiguration {
+
+	public CentralizedConfiguration() {
+		super(
+			(LoggerContext)LogManager.getContext(),
+			ConfigurationSource.COMPOSITE_SOURCE);
+
+		PluginManager.addPackage("com.liferay.petra.log4j");
+
+		LoggerContext loggerContext = getLoggerContext();
+
+		loggerContext.setConfiguration(this);
+	}
+
+	public void addConfiguration(AbstractConfiguration abstractConfiguration) {
+		if (abstractConfiguration.getState() != State.INITIALIZING) {
+			return;
+		}
+
+		abstractConfiguration.initialize();
+
+		// DefaultMergeStrategy:
+		// Properties from all configurations are aggregated.
+		// Duplicate properties replace those in previous configurations.
+
+		Map<String, String> properties = getProperties();
+
+		properties.putAll(abstractConfiguration.getProperties());
+
+		_aggregateAppenders(abstractConfiguration);
+		_aggregateFilters(abstractConfiguration);
+		_aggregateLoggerConfigs(abstractConfiguration);
+
+		_updateLoggers();
+	}
+
+	@Override
+	public void start() {
+		LoggerConfig rootLoggerConfig = getRootLogger();
+
+		rootLoggerConfig.start();
+
+		addLogger("", rootLoggerConfig);
+
+		setStarted();
+	}
+
+	private void _aggregateAppenders(
+		AbstractConfiguration abstractConfiguration) {
+
+		// DefaultMergeStrategy:
+		// Appenders are aggregated.
+		// Appenders with the same name are replaced by those in later
+		// configurations, including all of the Appender's subcomponents.
+
+		Map<String, Appender> currentAppenders = getAppenders();
+
+		Map<String, Appender> newAppenders =
+			abstractConfiguration.getAppenders();
+
+		for (Map.Entry<String, Appender> newAppenderEntry :
+				newAppenders.entrySet()) {
+
+			Appender newAppender = newAppenderEntry.getValue();
+
+			newAppender.start();
+
+			String appenderName = newAppenderEntry.getKey();
+
+			if (!currentAppenders.containsKey(appenderName)) {
+				addAppender(newAppender);
+
+				continue;
+			}
+
+			Map<String, LoggerConfig> loggerConfigMap = getLoggers();
+
+			for (LoggerConfig loggerConfig : loggerConfigMap.values()) {
+				loggerConfig.removeAppender(appenderName);
+
+				for (AppenderRef appenderRef : loggerConfig.getAppenderRefs()) {
+					if (Objects.equals(appenderRef.getRef(), appenderName)) {
+						loggerConfig.addAppender(
+							newAppender, appenderRef.getLevel(),
+							appenderRef.getFilter());
+
+						break;
+					}
+				}
+			}
+
+			Appender oldAppender = currentAppenders.put(
+				appenderName, newAppender);
+
+			oldAppender.stop();
+		}
+	}
+
+	private void _aggregateFilters(
+		AbstractConfiguration abstractConfiguration) {
+
+		// DefaultMergeStrategy:
+		// Filters are aggregated under a CompositeFilter if more than one
+		// Filter is defined. Since Filters are not named duplicates may be
+		// present.
+
+		Filter newFilter = abstractConfiguration.getFilter();
+
+		if (newFilter != null) {
+			newFilter.start();
+		}
+
+		addFilter(newFilter);
+	}
+
+	private void _aggregateLoggerConfigContent(
+		LoggerConfig currentLoggerConfig, LoggerConfig newLoggerConfig) {
+
+		if (newLoggerConfig == null) {
+			return;
+		}
+
+		// Logger attributes are individually merged with duplicates being
+		// replaced by those in later configurations.
+
+		currentLoggerConfig.setLevel(newLoggerConfig.getLevel());
+		currentLoggerConfig.setAdditive(newLoggerConfig.isAdditive());
+
+		// Filters on a Logger are aggregated under a CompositeFilter if more
+		// than one Filter is defined. Since Filters are not named duplicates
+		// may be present.
+
+		Filter newFilter = newLoggerConfig.getFilter();
+
+		if (newFilter != null) {
+			newFilter.start();
+		}
+
+		currentLoggerConfig.addFilter(newFilter);
+
+		// Appender references on a Logger are aggregated with duplicates being
+		// replaced by those in later configurations.
+		// Filters under Appender references included or discarded depending on
+		// whether their parent Appender reference is kept or discarded.
+
+		Map<String, Appender> currentLoggerConfigAppenders =
+			currentLoggerConfig.getAppenders();
+
+		Map<String, Appender> newLoggerConfigAppenders =
+			newLoggerConfig.getAppenders();
+
+		List<AppenderRef> currentAppenderRefs =
+			currentLoggerConfig.getAppenderRefs();
+
+		for (AppenderRef newAppenderRef : newLoggerConfig.getAppenderRefs()) {
+			Appender appender = currentLoggerConfigAppenders.get(
+				newAppenderRef.getRef());
+
+			// Existing appender must be removed first as the internal data
+			// structure holding appenders does not allow replacing an existing
+			// appender
+
+			if (appender != null) {
+				currentLoggerConfig.removeAppender(newAppenderRef.getRef());
+
+				Iterator<AppenderRef> currentAppenderRefIterator =
+					currentAppenderRefs.iterator();
+
+				while (currentAppenderRefIterator.hasNext()) {
+					AppenderRef currentAppenderRef =
+						currentAppenderRefIterator.next();
+
+					if (Objects.equals(
+							currentAppenderRef.getRef(),
+							newAppenderRef.getRef())) {
+
+						currentAppenderRefIterator.remove();
+
+						break;
+					}
+				}
+			}
+
+			currentLoggerConfig.addAppender(
+				newLoggerConfigAppenders.get(newAppenderRef.getRef()),
+				newAppenderRef.getLevel(), newAppenderRef.getFilter());
+
+			currentAppenderRefs.add(newAppenderRef);
+		}
+	}
+
+	private void _aggregateLoggerConfigs(
+		AbstractConfiguration abstractConfiguration) {
+
+		// DefaultMergeStrategy:
+		// Loggers are all aggregated.
+		// See _aggregateLoggerConfigContent(LoggerConfig, LoggerConfig)
+
+		_aggregateLoggerConfigContent(
+			getRootLogger(),
+			abstractConfiguration.getLogger(LogManager.ROOT_LOGGER_NAME));
+
+		Map<String, LoggerConfig> newLoggerConfigs =
+			abstractConfiguration.getLoggers();
+
+		for (Map.Entry<String, LoggerConfig> newLoggerConfigEntry :
+				newLoggerConfigs.entrySet()) {
+
+			String name = newLoggerConfigEntry.getKey();
+
+			// Skip root logger
+
+			if (Objects.equals(name, LogManager.ROOT_LOGGER_NAME)) {
+				continue;
+			}
+
+			LoggerConfig currentLoggerConfig = getLogger(name);
+
+			LoggerConfig newLoggerConfig = newLoggerConfigEntry.getValue();
+
+			if (currentLoggerConfig != null) {
+				_aggregateLoggerConfigContent(
+					currentLoggerConfig, newLoggerConfig);
+
+				continue;
+			}
+
+			addLogger(name, newLoggerConfig);
+
+			newLoggerConfig.start();
+		}
+	}
+
+	private void _updateLoggers() {
+
+		// TODO: lock the configLock in LoggerContext
+
+		LoggerContext loggerContext = getLoggerContext();
+
+		loggerContext.updateLoggers();
+	}
+
+}
