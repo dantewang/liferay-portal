@@ -40,14 +40,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
 
 /**
  * @author Brian Wing Shun Chan
@@ -91,37 +88,19 @@ public class Log4JUtil {
 		try {
 			SAXReader saxReader = new SAXReader();
 
-			saxReader.setEntityResolver(
-				new EntityResolver() {
-
-					@Override
-					public InputSource resolveEntity(
-						String publicId, String systemId) {
-
-						if (systemId.endsWith("log4j.dtd")) {
-							return new InputSource(
-								Level.class.getResourceAsStream(
-									"xml/log4j.dtd"));
-						}
-
-						return null;
-					}
-
-				});
-
 			Document document = saxReader.read(
 				new UnsyncStringReader(urlContent), url.toExternalForm());
 
 			Element rootElement = document.getRootElement();
 
-			List<Element> categoryElements = rootElement.elements("category");
+			Element loggersElement = rootElement.element("Loggers");
 
-			for (Element categoryElement : categoryElements) {
-				String name = categoryElement.attributeValue("name");
+			List<Element> loggerElements = loggersElement.elements("Logger");
 
-				Element priorityElement = categoryElement.element("priority");
+			for (Element loggerElement : loggerElements) {
+				String name = loggerElement.attributeValue("name");
 
-				String priority = priorityElement.attributeValue("value");
+				String priority = loggerElement.attributeValue("level");
 
 				Logger jdkLogger = Logger.getLogger(name);
 
@@ -257,20 +236,8 @@ public class Log4JUtil {
 	}
 
 	private static String _removeAppender(String content, String appenderName) {
-		int x = content.indexOf("<appender name=\"" + appenderName + "\"");
-
-		int y = content.indexOf("</appender>", x);
-
-		if (y != -1) {
-			y = content.indexOf("<", y + 1);
-		}
-
-		if ((x != -1) && (y != -1)) {
-			content = content.substring(0, x) + content.substring(y);
-		}
-
 		return StringUtil.removeSubstring(
-			content, "<appender-ref ref=\"" + appenderName + "\" />");
+			content, "<AppenderRef ref=\"" + appenderName + "\" />");
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(Log4JUtil.class);
