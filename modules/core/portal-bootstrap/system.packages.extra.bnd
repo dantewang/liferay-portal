@@ -98,6 +98,12 @@ Export-Package:\
 	\
 	!unicode-license.txt,\
 	\
+	com.fasterxml.jackson.annotation;version='2.12.1',\
+	com.fasterxml.jackson.databind;version='2.12.1',\
+	com.fasterxml.jackson.databind.ser;version='2.12.1',\
+	com.fasterxml.jackson.databind.ser.impl;version='2.12.1',\
+	com.fasterxml.jackson.databind.util;version='2.12.1',\
+	\
 	com.ibm.crypto.provider,\
 	\
 	com.liferay.ibm.icu.*;version='4.0.1',\
@@ -339,6 +345,7 @@ Provide-Capability:\
 	@../../../lib/portal/dom4j.jar,\
 	@../../../lib/portal/hibernate-commons-annotations.jar,\
 	@../../../lib/portal/hibernate-core.jar,\
+	@../../../lib/portal/jackson-annotations.jar,\
 	@../../../lib/portal/jackson-databind.jar,\
 	@../../../lib/portal/jaxen.jar,\
 	@../../../lib/portal/jaxrpc.jar,\
