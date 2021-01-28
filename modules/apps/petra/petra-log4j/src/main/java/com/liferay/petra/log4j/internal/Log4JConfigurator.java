@@ -27,8 +27,6 @@ import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.xml.XmlConfiguration;
-import org.apache.logging.log4j.core.impl.Log4jContextFactory;
-import org.apache.logging.log4j.core.selector.BasicContextSelector;
 
 /**
  * @author Hai Yu
@@ -43,7 +41,7 @@ public class Log4JConfigurator {
 			XmlConfiguration xmlConfiguration = new XmlConfiguration(
 				_loggerContext, configurationSource);
 
-			_centralizedConfigurator.addConfiguration(xmlConfiguration);
+			_centralizedConfiguration.addConfiguration(xmlConfiguration);
 		}
 		catch (IOException ioException) {
 			_log.error(ioException, ioException);
@@ -75,17 +73,20 @@ public class Log4JConfigurator {
 	private static final Log _log = LogFactoryUtil.getLog(
 		Log4JConfigurator.class);
 
-	private static final CentralizedConfigurator _centralizedConfigurator;
+	private static final CentralizedConfiguration _centralizedConfiguration;
 	private static final LoggerContext _loggerContext;
 
 	static {
-		LogManager.setFactory(
-			new Log4jContextFactory(new BasicContextSelector()));
-
 		LoggerContext loggerContext = (LoggerContext)LogManager.getContext();
 
+		CentralizedConfiguration centralizedConfiguration =
+			new CentralizedConfiguration(loggerContext);
+
+		loggerContext.setConfiguration(centralizedConfiguration);
+
 		_loggerContext = loggerContext;
-		_centralizedConfigurator = new CentralizedConfigurator(loggerContext);
+
+		_centralizedConfiguration = centralizedConfiguration;
 	}
 
 }
