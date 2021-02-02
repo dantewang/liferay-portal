@@ -57,6 +57,7 @@ import java.util.jar.JarOutputStream;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.message.Message;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -454,7 +455,9 @@ public abstract class BaseBuildAutoUpgradeTestCase {
 
 		LogEvent logEvent = logEvents.get(0);
 
-		return logEvent.getRenderedMessage();
+		Message message = logEvent.getMessage();
+
+		return message.getFormattedMessage();
 	}
 
 	private void _initTableColumns(
