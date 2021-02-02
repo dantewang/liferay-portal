@@ -226,9 +226,9 @@ public class SanitizerLogWrapperTest {
 		Assert.assertEquals(logEvents.toString(), 12, logEvents.size());
 
 		for (LogEvent logEvent : logEvents) {
-			StackTraceElement stackTraceElement = logEvent.getSource();
+			Throwable throwable = logEvent.getThrown();
 
-			String line = String.valueOf(stackTraceElement.getLineNumber());
+			String line = String.valueOf(throwable.getMessage());
 
 			Assert.assertTrue(line.startsWith(exceptionPrefix));
 
