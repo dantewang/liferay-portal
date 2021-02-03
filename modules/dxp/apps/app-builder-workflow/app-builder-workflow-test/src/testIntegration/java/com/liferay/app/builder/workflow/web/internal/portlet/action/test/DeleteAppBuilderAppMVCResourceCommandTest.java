@@ -22,7 +22,7 @@ import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.test.log.CaptureAppender;
 import com.liferay.portal.test.log.Log4JLoggerTestUtil;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 
 import org.junit.Assert;
 import org.junit.Test;
