@@ -19,6 +19,9 @@ Export-Package:\
 	\
 	!aQute.lib.filter,\
 	\
+	!com.fasterxml.jackson.databind,\
+	!com.fasterxml.jackson.databind.*,\
+	\
 	!com.liferay.portal.aspectj,\
 	!com.liferay.portal.cache.thread.local,\
 	!com.liferay.portal.dao.jdbc.aop,\
