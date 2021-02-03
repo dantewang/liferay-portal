@@ -8631,14 +8631,14 @@ osb.lcs.portlet.oauth.consumer.secret=${osb.lcs.portlet.oauth.consumer.secret}</
 		<Logger level="ERROR" name="com.liferay.portal.osgi.web.wab.generator.internal.WabGenerator" />
 
 		<Logger level="WARN" name="com.liferay.portal.osgi.web.wab.generator.internal.processor.WabProcessor" />
-	<Loggers>
+	</Loggers>
 </Configuration>]]></echo>
 
 		<echo file="${liferay.home}/osgi/log4j/com.liferay.portal.search-log4j-ext.xml"><![CDATA[<?xml version="1.0"?>
 <Configuration>
 	<Loggers>
 		<Logger level="INFO" name="com.liferay.portal.search.internal.SearchEngineInitializer" />
-	<Loggers>
+	</Loggers>
 </Configuration>]]></echo>
 
 		<echo file="${liferay.home}/osgi/log4j/com.liferay.portal.search.elasticsearch7.impl-log4j-ext.xml"><![CDATA[<?xml version="1.0"?>
@@ -8647,7 +8647,7 @@ osb.lcs.portlet.oauth.consumer.secret=${osb.lcs.portlet.oauth.consumer.secret}</
 		<Logger level="ERROR" name="com.liferay.portal.search.elasticsearch7.internal.sidecar.SidecarManager" />
 
 		<Logger level="INFO" name="com.liferay.portal.search.elasticsearch7.internal.index.CompanyIndexFactory" />
-	<Loggers>
+	</Loggers>
 </Configuration>]]></echo>
 
 		<echo file="${liferay.home}/osgi/log4j/org.apache.aries.jax.rs.whiteboard-log4j-ext.xml"><![CDATA[<?xml version="1.0"?>
@@ -8656,7 +8656,7 @@ osb.lcs.portlet.oauth.consumer.secret=${osb.lcs.portlet.oauth.consumer.secret}</
 		<Logger level="ERROR" name="com.liferay.oauth2.provider.rest.internal.endpoint.liferay.LiferayOAuthDataProvider" />
 
 		<Logger level="ERROR" name="org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService" />
-	<Loggers>
+	</Loggers>
 </Configuration>]]></echo>
 
 		<get-testcase-property property.name="deploy.lcs.token.file" />
@@ -8682,7 +8682,7 @@ osb.lcs.portlet.oauth.consumer.secret=${osb.lcs.portlet.oauth.consumer.secret}</
 		<Logger level="TRACE" name="com.liferay.lcs.client.internal.command" />
 
 		<Logger level="TRACE" name="com.liferay.lcs.client.internal.runnable" />
-	<Loggers>
+	</Loggers>
 </Configuration>]]></echo>
 			</then>
 		</if>
