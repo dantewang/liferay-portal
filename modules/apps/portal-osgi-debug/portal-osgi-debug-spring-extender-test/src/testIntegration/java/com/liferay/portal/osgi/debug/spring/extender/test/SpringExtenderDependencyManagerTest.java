@@ -191,12 +191,11 @@ public class SpringExtenderDependencyManagerTest {
 
 			Level level = logEvent.getLevel();
 
-			Assert.assertEquals(
-				level.toString(), Level.WARN, loggingEvent.getLevel());
+			Assert.assertEquals(level.toString(), Level.WARN, level);
 
 			logEvent = logEvents.get(1);
 
-			Message objectMessage = logEvent.getMessage();
+			objectMessage = logEvent.getMessage();
 
 			message = objectMessage.getFormattedMessage();
 
@@ -223,7 +222,7 @@ public class SpringExtenderDependencyManagerTest {
 
 		ReflectionTestUtil.setFieldValue(
 			captureAppender, "_logEvents",
-			new CopyOnWriteArrayList<LoggingEvent>() {
+			new CopyOnWriteArrayList<LogEvent>() {
 
 				@Override
 				public boolean add(LogEvent logEvent) {
