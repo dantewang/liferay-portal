@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.AbstractConfiguration;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.xml.XmlConfiguration;
 
@@ -38,10 +39,21 @@ public class Log4JConfigurator {
 			ConfigurationSource configurationSource = new ConfigurationSource(
 				new UnsyncByteArrayInputStream(xml.getBytes(StringPool.UTF8)));
 
-			XmlConfiguration xmlConfiguration = new XmlConfiguration(
-				_loggerContext, configurationSource);
+			AbstractConfiguration abstractConfiguration = null;
 
-			_centralizedConfiguration.addConfiguration(xmlConfiguration);
+			if (xml.contains(
+					"<!DOCTYPE log4j:configuration SYSTEM \"log4j.dtd\">")) {
+
+				abstractConfiguration =
+					new org.apache.log4j.xml.XmlConfiguration(
+						_loggerContext, configurationSource, 0);
+			}
+			else {
+				abstractConfiguration = new XmlConfiguration(
+					_loggerContext, configurationSource);
+			}
+
+			_centralizedConfiguration.addConfiguration(abstractConfiguration);
 		}
 		catch (IOException ioException) {
 			_log.error(ioException, ioException);
