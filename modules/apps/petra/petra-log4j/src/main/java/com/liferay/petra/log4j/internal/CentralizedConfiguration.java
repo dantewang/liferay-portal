@@ -91,14 +91,12 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 			Appender newAppender = newAppenderEntry.getValue();
 
-			Appender currentAppender = appenders.put(
-				newAppenderEntry.getKey(), newAppender);
+			removeAppender(newAppenderEntry.getKey());
 
 			newAppender.start();
 
-			if (currentAppender != null) {
-				currentAppender.stop();
-			}
+			appenders.put(
+				newAppenderEntry.getKey(), newAppender);
 		}
 	}
 
