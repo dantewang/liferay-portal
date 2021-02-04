@@ -35,11 +35,11 @@ SearchContainer<Map.Entry<String, Logger>> loggerSearchContainer = new SearchCon
 
 Map<String, Logger> currentLoggerNames = new TreeMap<>();
 
-Enumeration<Logger> enu = LogManager.getCurrentLoggers();
+LoggerContext loggerContext = (LoggerContext)LogManager.getContext();
 
-while (enu.hasMoreElements()) {
-	Logger logger = enu.nextElement();
+Collection<Logger> loggers = loggerContext.getLoggers();
 
+for (Logger logger : loggers) {
 	String loggerName = logger.getName();
 
 	if (Validator.isNull(keywords) || loggerName.contains(keywords)) {
@@ -54,11 +54,9 @@ Iterator<Map.Entry<String, Logger>> itr = currentLoggerNamesList.iterator();
 while (itr.hasNext()) {
 	Map.Entry<String, Logger> entry = itr.next();
 
-	Logger logger = entry.getValue();
+	String name = entry.getKey();
 
-	Level level = logger.getLevel();
-
-	if (level == null) {
+	if (name == StringPool.BLANK) {
 		itr.remove();
 	}
 }
@@ -125,10 +123,10 @@ CreationMenu creationMenu =
 				<select name="<%= liferayPortletResponse.getNamespace() + "logLevel" + HtmlUtil.escapeAttribute(name) %>">
 
 					<%
-					for (int j = 0; j < Levels.ALL_LEVELS.length; j++) {
+					for (int j = 0; j < Log4J2Levels.ALL_LEVELS.length; j++) {
 					%>
 
-						<option <%= level.equals(Levels.ALL_LEVELS[j]) ? "selected" : StringPool.BLANK %> value="<%= Levels.ALL_LEVELS[j] %>"><%= Levels.ALL_LEVELS[j] %></option>
+						<option <%= level.equals(Log4J2Levels.ALL_LEVELS[j]) ? "selected" : StringPool.BLANK %> value="<%= Log4J2Levels.ALL_LEVELS[j] %>"><%= Log4J2Levels.ALL_LEVELS[j] %></option>
 
 					<%
 					}

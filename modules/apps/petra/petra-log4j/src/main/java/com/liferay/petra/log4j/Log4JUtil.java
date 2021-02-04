@@ -14,6 +14,7 @@
 
 package com.liferay.petra.log4j;
 
+import com.liferay.petra.log4j.internal.Log4JConfigurator;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
@@ -37,19 +38,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerRepository;
-import org.apache.log4j.xml.DOMConfigurator;
+import org.apache.logging.log4j.Level;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
 
 /**
  * @author Brian Wing Shun Chan
@@ -88,49 +83,26 @@ public class Log4JUtil {
 
 		// See LPS-6029, LPS-8865, and LPS-24280
 
-		DOMConfigurator domConfigurator = new DOMConfigurator();
-
-		domConfigurator.doConfigure(
-			new UnsyncStringReader(urlContent),
-			LogManager.getLoggerRepository());
+		Log4JConfigurator.configureLog4JXml(urlContent);
 
 		try {
 			SAXReader saxReader = new SAXReader();
-
-			saxReader.setEntityResolver(
-				new EntityResolver() {
-
-					@Override
-					public InputSource resolveEntity(
-						String publicId, String systemId) {
-
-						if (systemId.endsWith("log4j.dtd")) {
-							return new InputSource(
-								DOMConfigurator.class.getResourceAsStream(
-									"log4j.dtd"));
-						}
-
-						return null;
-					}
-
-				});
 
 			Document document = saxReader.read(
 				new UnsyncStringReader(urlContent), url.toExternalForm());
 
 			Element rootElement = document.getRootElement();
 
-			List<Element> categoryElements = rootElement.elements("category");
+			Element loggersElement = rootElement.element("Loggers");
 
-			for (Element categoryElement : categoryElements) {
-				String name = categoryElement.attributeValue("name");
+			List<Element> loggerElements = loggersElement.elements("Logger");
 
-				Element priorityElement = categoryElement.element("priority");
+			for (Element loggerElement : loggerElements) {
+				String name = loggerElement.attributeValue("name");
 
-				String priority = priorityElement.attributeValue("value");
+				String priority = loggerElement.attributeValue("level");
 
-				java.util.logging.Logger jdkLogger =
-					java.util.logging.Logger.getLogger(name);
+				Logger jdkLogger = Logger.getLogger(name);
 
 				jdkLogger.setLevel(_getJdkLevel(priority));
 			}
@@ -145,21 +117,7 @@ public class Log4JUtil {
 	}
 
 	public static String getOriginalLevel(String className) {
-		Level level = Level.ALL;
-
-		Enumeration<Logger> enumeration = LogManager.getCurrentLoggers();
-
-		while (enumeration.hasMoreElements()) {
-			Logger logger = enumeration.nextElement();
-
-			if (className.equals(logger.getName())) {
-				level = logger.getLevel();
-
-				break;
-			}
-		}
-
-		return level.toString();
+		return Log4JConfigurator.getOriginalLevel(className);
 	}
 
 	public static void initLog4J(
@@ -187,12 +145,9 @@ public class Log4JUtil {
 	}
 
 	public static void setLevel(String name, String priority, boolean custom) {
-		Logger logger = Logger.getLogger(name);
+		Log4JConfigurator.setLevel(name, priority);
 
-		logger.setLevel(Level.toLevel(priority));
-
-		java.util.logging.Logger jdkLogger = java.util.logging.Logger.getLogger(
-			name);
+		Logger jdkLogger = Logger.getLogger(name);
 
 		jdkLogger.setLevel(_getJdkLevel(priority));
 
@@ -202,9 +157,7 @@ public class Log4JUtil {
 	}
 
 	public static void shutdownLog4J() {
-		LoggerRepository loggerRepository = LogManager.getLoggerRepository();
-
-		loggerRepository.shutdown();
+		Log4JConfigurator.shutdownLog4J();
 	}
 
 	private static String _escapeXMLAttribute(String s) {
@@ -283,20 +236,8 @@ public class Log4JUtil {
 	}
 
 	private static String _removeAppender(String content, String appenderName) {
-		int x = content.indexOf("<appender name=\"" + appenderName + "\"");
-
-		int y = content.indexOf("</appender>", x);
-
-		if (y != -1) {
-			y = content.indexOf("<", y + 1);
-		}
-
-		if ((x != -1) && (y != -1)) {
-			content = content.substring(0, x) + content.substring(y);
-		}
-
 		return StringUtil.removeSubstring(
-			content, "<appender-ref ref=\"" + appenderName + "\" />");
+			content, "<AppenderRef ref=\"" + appenderName + "\" />");
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(Log4JUtil.class);

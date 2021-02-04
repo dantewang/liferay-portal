@@ -443,16 +443,23 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 
 			if (ArrayUtil.isEmpty(log4jJars)) {
 				String portalJarPath =
-					PortalUtil.getPortalLibDir() + "log4j.jar";
+					PortalUtil.getPortalLibDir() + "log4j-api.jar";
 
 				FileUtil.copyFile(
-					portalJarPath, srcFile + "/WEB-INF/lib/log4j.jar", true);
+					portalJarPath, srcFile + "/WEB-INF/lib/log4j-api.jar",
+					true);
 
 				portalJarPath =
-					PortalUtil.getPortalLibDir() + "log4j-extras.jar";
+					PortalUtil.getPortalLibDir() + "log4j-1.2-api.jar";
 
 				FileUtil.copyFile(
-					portalJarPath, srcFile + "/WEB-INF/lib/log4j-extras.jar",
+					portalJarPath, srcFile + "/WEB-INF/lib/log4j-1.2-api.jar",
+					true);
+
+				portalJarPath = PortalUtil.getPortalLibDir() + "log4j-core.jar";
+
+				FileUtil.copyFile(
+					portalJarPath, srcFile + "/WEB-INF/lib/log4j-core.jar",
 					true);
 			}
 		}
@@ -468,7 +475,8 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 		}
 
 		if (PropsValues.AUTO_DEPLOY_COPY_LOG4J) {
-			copyDependencyXml("log4j.properties", srcFile + "/WEB-INF/classes");
+			copyDependencyXml(
+				"log4j2.properties", srcFile + "/WEB-INF/classes");
 		}
 
 		File servicePropertiesFile = new File(
