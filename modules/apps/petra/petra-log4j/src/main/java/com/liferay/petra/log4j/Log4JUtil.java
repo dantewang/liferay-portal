@@ -95,6 +95,16 @@ public class Log4JUtil {
 
 			Element loggersElement = rootElement.element("Loggers");
 
+			if (loggersElement == null) {
+				if (_log.isInfoEnabled()) {
+					_log.info(
+						"Config file " + url.toString() +
+							" does not include <Loggers>");
+				}
+
+				return;
+			}
+
 			List<Element> loggerElements = loggersElement.elements("Logger");
 
 			for (Element loggerElement : loggerElements) {
