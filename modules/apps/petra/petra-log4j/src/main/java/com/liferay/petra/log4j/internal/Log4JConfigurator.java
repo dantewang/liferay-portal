@@ -27,6 +27,7 @@ import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.AbstractConfiguration;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
+import org.apache.logging.log4j.core.config.plugins.util.PluginManager;
 import org.apache.logging.log4j.core.config.xml.XmlConfiguration;
 
 /**
@@ -89,6 +90,8 @@ public class Log4JConfigurator {
 	private static final LoggerContext _loggerContext;
 
 	static {
+		PluginManager.addPackage("com.liferay.petra.log4j");
+
 		LoggerContext loggerContext = (LoggerContext)LogManager.getContext();
 
 		CentralizedConfiguration centralizedConfiguration =
