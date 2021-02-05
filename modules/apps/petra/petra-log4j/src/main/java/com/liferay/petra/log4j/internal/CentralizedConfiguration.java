@@ -14,13 +14,15 @@
 
 package com.liferay.petra.log4j.internal;
 
-import java.lang.reflect.Field;
-
 import java.util.Map;
+import java.util.Objects;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.AbstractConfiguration;
+import org.apache.logging.log4j.core.config.AppenderRef;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 
@@ -40,104 +42,162 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 		configuration.initialize();
 
-		// TODO: check DefaultMergeStrategy's merge policy: copied below
+		// DefaultMergeStrategy:
+		// Properties from all configurations are aggregated.
+		// Duplicate properties replace those in previous configurations.
 
-		/**
-		 * The default merge strategy for composite configurations.
-		 * <p>
-		 * The default merge strategy performs the merge according to the following rules:
-		 * <ol>
-		 * <li>Aggregates the global configuration attributes with those in later configurations replacing those in previous
-		 * configurations with the exception that the highest status level and the lowest monitorInterval greater than 0 will
-		 * be used.</li>
-		 * <li>Properties from all configurations are aggregated. Duplicate properties replace those in previous
-		 * configurations.</li>
-		 * <li>Filters are aggregated under a CompositeFilter if more than one Filter is defined. Since Filters are not named
-		 * duplicates may be present.</li>
-		 * <li>Scripts and ScriptFile references are aggregated. Duplicate definitions replace those in previous
-		 * configurations.</li>
-		 * <li>Appenders are aggregated. Appenders with the same name are replaced by those in later configurations, including
-		 * all of the Appender's subcomponents.</li>
-		 * <li>Loggers are all aggregated. Logger attributes are individually merged with duplicates being replaced by those
-		 * in later configurations. Appender references on a Logger are aggregated with duplicates being replaced by those in
-		 * later configurations. Filters on a Logger are aggregated under a CompositeFilter if more than one Filter is defined.
-		 * Since Filters are not named duplicates may be present. Filters under Appender references included or discarded
-		 * depending on whether their parent Appender reference is kept or discarded.</li>
-		 * </ol>
-		 */
-		// TODO: create diff tree for those hard to merge in instances,
-		//  for example, appenders has many types, and the layout can not be
-		//  changed in an appender instance.
-		//  new nodes and merged nodes; unchanged nodes are not included
+		Map<String, String> properties = getProperties();
 
-		_mergeAppenders(configuration);
-		_mergeLoggerConfigs(configuration);
+		properties.putAll(configuration.getProperties());
+
+		_aggregateAppenders(configuration);
+		_aggregateFilters(configuration);
+		_aggregateLoggerConfigs(configuration);
 
 		_updateLoggers();
 	}
 
 	@Override
 	public void start() {
+		LoggerConfig rootLoggerConfig = getRootLogger();
+
+		rootLoggerConfig.start();
+
+		addLogger("", rootLoggerConfig);
+
 		setStarted();
 	}
 
-	private void _mergeAppenders(AbstractConfiguration configuration) {
-		Map<String, Appender> appenders = getAppenders();
+	private void _aggregateAppenders(AbstractConfiguration configuration) {
+
+		// DefaultMergeStrategy:
+		// Appenders are aggregated.
+		// Appenders with the same name are replaced by those in later
+		// configurations, including all of the Appender's subcomponents.
 
 		Map<String, Appender> newAppenders = configuration.getAppenders();
 
 		for (Map.Entry<String, Appender> newAppenderEntry :
 				newAppenders.entrySet()) {
 
-			Appender newAppender = newAppenderEntry.getValue();
+			// Always call removeAppender(String) to try to remove the Appender
+			// with the same name from logger configs and stop it
 
-			Appender currentAppender = appenders.put(
-				newAppenderEntry.getKey(), newAppender);
+			removeAppender(newAppenderEntry.getKey());
+
+			Appender newAppender = newAppenderEntry.getValue();
 
 			newAppender.start();
 
-			if (currentAppender != null) {
-				currentAppender.stop();
-			}
+			addAppender(newAppender);
 		}
 	}
 
-	private void _mergeLoggerConfigs(AbstractConfiguration configuration) {
-		LoggerConfig newRootLoggerConfig = configuration.getRootLogger();
+	private void _aggregateFilters(AbstractConfiguration configuration) {
 
-		if (newRootLoggerConfig != null) {
-			try {
-				Field field = AbstractConfiguration.class.getDeclaredField(
-					"root");
+		// DefaultMergeStrategy:
+		// Filters are aggregated under a CompositeFilter if more than one
+		// Filter is defined. Since Filters are not named duplicates may be
+		// present.
 
-				field.setAccessible(true);
+		Filter newFilter = configuration.getFilter();
 
-				field.set(this, newRootLoggerConfig);
-			}
-			catch (IllegalAccessException | NoSuchFieldException exception) {
-				exception.printStackTrace();
-			}
+		if (newFilter != null) {
+			newFilter.start();
 		}
+
+		addFilter(newFilter);
+	}
+
+	private void _aggregateLoggerConfigContent(
+		LoggerConfig currentLoggerConfig, LoggerConfig newLoggerConfig) {
+
+		if (newLoggerConfig == null) {
+			return;
+		}
+
+		// Logger attributes are individually merged with duplicates being
+		// replaced by those in later configurations.
+
+		currentLoggerConfig.setLevel(newLoggerConfig.getLevel());
+		currentLoggerConfig.setAdditive(newLoggerConfig.isAdditive());
+
+		// Filters on a Logger are aggregated under a CompositeFilter if more
+		// than one Filter is defined. Since Filters are not named duplicates
+		// may be present.
+
+		Filter newFilter = newLoggerConfig.getFilter();
+
+		if (newFilter != null) {
+			newFilter.start();
+		}
+
+		currentLoggerConfig.addFilter(newFilter);
+
+		// Appender references on a Logger are aggregated with duplicates being
+		// replaced by those in later configurations.
+		// Filters under Appender references included or discarded depending on
+		// whether their parent Appender reference is kept or discarded.
+
+		Map<String, Appender> currentLoggerConfigAppenders =
+			currentLoggerConfig.getAppenders();
+
+		Map<String, Appender> newLoggerConfigAppenders =
+			newLoggerConfig.getAppenders();
+
+		for (AppenderRef appenderRef : newLoggerConfig.getAppenderRefs()) {
+			Appender appender = currentLoggerConfigAppenders.get(
+				appenderRef.getRef());
+
+			// Existing appender must be removed first as the internal data
+			// structure holding appenders does not allow replacing an existing
+			// appender
+
+			if (appender != null) {
+				currentLoggerConfig.removeAppender(appenderRef.getRef());
+			}
+
+			currentLoggerConfig.addAppender(
+				newLoggerConfigAppenders.get(appenderRef.getRef()),
+				appenderRef.getLevel(), appenderRef.getFilter());
+		}
+	}
+
+	private void _aggregateLoggerConfigs(AbstractConfiguration configuration) {
+
+		// DefaultMergeStrategy:
+		// Loggers are all aggregated.
+		// See _aggregateLoggerConfigContent(LoggerConfig, LoggerConfig)
+
+		_aggregateLoggerConfigContent(
+			getRootLogger(),
+			configuration.getLogger(LogManager.ROOT_LOGGER_NAME));
 
 		Map<String, LoggerConfig> newLoggerConfigs = configuration.getLoggers();
 
 		for (Map.Entry<String, LoggerConfig> newLoggerConfigEntry :
 				newLoggerConfigs.entrySet()) {
 
-			LoggerConfig currentLoggerConfig = getLoggerConfig(
-				newLoggerConfigEntry.getKey());
+			String name = newLoggerConfigEntry.getKey();
 
-			// TODO: merge instead of replacement, LoggerConfig is mutable
+			// Skip root logger
 
-			if (currentLoggerConfig != null) {
-				removeLogger(newLoggerConfigEntry.getKey());
-
-				currentLoggerConfig.stop();
+			if (Objects.equals(name, LogManager.ROOT_LOGGER_NAME)) {
+				continue;
 			}
+
+			LoggerConfig currentLoggerConfig = getLogger(name);
 
 			LoggerConfig newLoggerConfig = newLoggerConfigEntry.getValue();
 
-			addLogger(newLoggerConfigEntry.getKey(), newLoggerConfig);
+			if (currentLoggerConfig != null) {
+				_aggregateLoggerConfigContent(
+					currentLoggerConfig, newLoggerConfig);
+
+				continue;
+			}
+
+			addLogger(name, newLoggerConfig);
 
 			newLoggerConfig.start();
 		}
