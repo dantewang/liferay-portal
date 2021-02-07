@@ -44,6 +44,7 @@
 			<jvmarg if:true="${jvm.debug}" line="${jpda.settings}" />
 			<jvmarg value="-Xmx${db.build.java.mx}" />
 			<jvmarg value="-XX:MaxPermSize=${db.build.java.maxpermsize}" />
+			<sysproperty key="log4j2.disable.jmx" value="true" />
 			<arg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
 			<arg value="db.database.name=${database.name}" />
 			<arg value="db.database.types=${database.types}" />
@@ -120,6 +121,7 @@
 			fork="${fork.mode}"
 		>
 			<jvmarg if:true="${jvm.debug}" line="${jpda.settings}" />
+			<sysproperty key="log4j2.disable.jmx" value="true" />
 			<arg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
 			<arg value="-Dfile.encoding=UTF-8" />
 			<arg value="db.database.name=${database.name}" />
