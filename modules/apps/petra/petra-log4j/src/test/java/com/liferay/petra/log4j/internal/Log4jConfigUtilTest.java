@@ -238,7 +238,7 @@ public class Log4jConfigUtilTest {
 
 		_assertPriority(logger, _DEBUG);
 
-		_assertPriority(childLogger, _DEBUG);
+		_assertPriority(childLogger, _WARN);
 
 		Log4jConfigUtil.setLevel(childLoggerName, _ERROR);
 
