@@ -110,7 +110,7 @@ public class Log4jConfigUtilTest {
 		Log4jConfigUtil.configureLog4J(
 			_generateXMLConfigurationContent(loggerName, "FAKE_LEVEL"));
 
-		_assertPriority(logger, _DEBUG);
+		_assertPriority(logger, _ERROR);
 	}
 
 	@Test
@@ -190,12 +190,12 @@ public class Log4jConfigUtilTest {
 		Assert.assertFalse(priorities.containsKey(loggerName));
 
 		Log4jConfigUtil.configureLog4J(
-			_generateXMLConfigurationContent(loggerName, _ERROR));
+			_generateXMLConfigurationContent(loggerName, _WARN));
 
 		priorities = Log4jConfigUtil.getPriorities();
 
 		Assert.assertEquals(
-			"The priority should be ERROR by configuration", _ERROR,
+			"The priority should be WARN by configuration", _WARN,
 			priorities.get(loggerName));
 
 		Log4jConfigUtil.configureLog4J(
@@ -203,7 +203,9 @@ public class Log4jConfigUtilTest {
 
 		priorities = Log4jConfigUtil.getPriorities();
 
-		Assert.assertFalse(priorities.containsKey(loggerName));
+		Assert.assertEquals(
+			"The level should use its parent level(root logger level is Error)",
+			_ERROR, priorities.get(loggerName));
 	}
 
 	@Test
@@ -217,13 +219,13 @@ public class Log4jConfigUtilTest {
 
 		Logger logger = (Logger)LogManager.getLogger(loggerName);
 
-		_assertPriority(logger, _INFO);
+		_assertPriority(logger, _ERROR);
 
 		String childLoggerName = loggerName + ".child";
 
 		Logger childLogger = (Logger)LogManager.getLogger(childLoggerName);
 
-		_assertPriority(childLogger, _INFO);
+		_assertPriority(childLogger, _ERROR);
 
 		Log4jConfigUtil.configureLog4J(
 			_generateXMLConfigurationContent(loggerName, _WARN));
