@@ -125,11 +125,11 @@ public class Log4jConfigUtilTest {
 			_generateXMLConfigurationContent(
 				loggerName, _ERROR, NullAppender.class));
 
-		_assertAppenders(logger, NullAppender.class);
+		_assertAppenders(logger, ConsoleAppender.class, NullAppender.class);
 
 		Log4jConfigUtil.configureLog4J(
 			_generateXMLConfigurationContent(
-				loggerName, _ERROR, ConsoleAppender.class, NullAppender.class));
+				loggerName, _ERROR, ConsoleAppender.class));
 
 		_assertAppenders(logger, ConsoleAppender.class, NullAppender.class);
 
@@ -138,7 +138,7 @@ public class Log4jConfigUtilTest {
 				loggerName, _ERROR, ConsoleAppender.class, NullAppender.class),
 			NullAppender.class.getName());
 
-		_assertAppenders(logger, ConsoleAppender.class);
+		_assertAppenders(logger, ConsoleAppender.class, NullAppender.class);
 	}
 
 	@Test
