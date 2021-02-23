@@ -24,16 +24,16 @@ import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.varia.NullAppender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.Logger;
+import org.apache.logging.log4j.core.appender.ConsoleAppender;
+import org.apache.logging.log4j.core.appender.NullAppender;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -53,7 +53,7 @@ public class Log4jConfigUtilTest {
 	public void testConfigureLog4J() {
 		String loggerName = StringUtil.randomString();
 
-		Logger logger = Logger.getLogger(loggerName);
+		Logger logger = (Logger)LogManager.getLogger(loggerName);
 
 		Map<String, String> priorities = Log4jConfigUtil.configureLog4J(
 			_generateXMLConfigurationContent(loggerName, _ALL));
@@ -111,7 +111,7 @@ public class Log4jConfigUtilTest {
 		Log4jConfigUtil.configureLog4J(
 			_generateXMLConfigurationContent(loggerName, _ERROR));
 
-		Logger logger = Logger.getLogger(loggerName);
+		Logger logger = (Logger)LogManager.getLogger(loggerName);
 
 		_assertAppenders(logger);
 
@@ -145,8 +145,7 @@ public class Log4jConfigUtilTest {
 	public void testConfigureLog4JWithException() {
 		try (CaptureHandler captureHandler =
 				JDKLoggerTestUtil.configureJDKLogger(
-					Log4jConfigUtil.class.getName(),
-					java.util.logging.Level.SEVERE)) {
+					Log4jConfigUtil.class.getName(), Level.SEVERE)) {
 
 			Log4jConfigUtil.configureLog4J(null);
 
@@ -207,13 +206,13 @@ public class Log4jConfigUtilTest {
 	public void testSetLevel() {
 		String loggerName = StringUtil.randomString();
 
-		Logger logger = Logger.getLogger(loggerName);
+		Logger logger = (Logger)LogManager.getLogger(loggerName);
 
 		_assertPriority(logger, _INFO);
 
 		String childLoggerName = loggerName + ".child";
 
-		Logger childLogger = Logger.getLogger(childLoggerName);
+		Logger childLogger = (Logger)LogManager.getLogger(childLoggerName);
 
 		_assertPriority(childLogger, _INFO);
 
@@ -237,33 +236,30 @@ public class Log4jConfigUtilTest {
 	@NewEnv(type = NewEnv.Type.JVM)
 	@Test
 	public void testShutdownLog4J() {
-		Logger logger = Logger.getRootLogger();
+		Logger logger = (Logger)LogManager.getRootLogger();
 
-		Enumeration<Appender> appendersEnumeration = logger.getAllAppenders();
+		Map<String, Appender> appenders = logger.getAppenders();
 
 		Assert.assertTrue(
-			"The root logger should include appenders",
-			appendersEnumeration.hasMoreElements());
+			"The root logger should include appenders", !appenders.isEmpty());
 
 		Log4jConfigUtil.shutdownLog4J();
 
 		Assert.assertFalse(
 			"The root logger should not own appenders after shutting down",
-			appendersEnumeration.hasMoreElements());
+			appenders.isEmpty());
 	}
 
 	@Rule
 	public final NewEnvTestRule newEnvTestRule = NewEnvTestRule.INSTANCE;
 
 	private void _assertAppenders(Logger logger, Class<?>... appenderTypes) {
-		Enumeration<Appender> enumeration = logger.getAllAppenders();
+		Map<String, Appender> appenders = logger.getAppenders();
 
 		List<String> targetAppenderNames = new ArrayList<>();
 
-		while (enumeration.hasMoreElements()) {
-			Appender appender = enumeration.nextElement();
-
-			targetAppenderNames.add(appender.getName());
+		for (String appenderName : appenders.keySet()) {
+			targetAppenderNames.add(appenderName);
 		}
 
 		Assert.assertEquals(targetAppenderNames.size(), appenderTypes.length);
@@ -293,13 +289,13 @@ public class Log4jConfigUtilTest {
 		else if (logger.isInfoEnabled()) {
 			Assert.assertEquals("Logging priority is wrong", priority, _INFO);
 		}
-		else if (logger.isEnabledFor(Level.WARN)) {
+		else if (logger.isWarnEnabled()) {
 			Assert.assertEquals("Logging priority is wrong", priority, _WARN);
 		}
-		else if (logger.isEnabledFor(Level.ERROR)) {
+		else if (logger.isErrorEnabled()) {
 			Assert.assertEquals("Logging priority is wrong", priority, _ERROR);
 		}
-		else if (logger.isEnabledFor(Level.FATAL)) {
+		else if (logger.isFatalEnabled()) {
 			Assert.assertEquals("Logging priority is wrong", priority, _FATAL);
 		}
 		else {
@@ -310,34 +306,43 @@ public class Log4jConfigUtilTest {
 	private String _generateXMLConfigurationContent(
 		String loggerName, String priority, Class<?>... appenderTypes) {
 
-		StringBundler sb = new StringBundler(10 + (8 * appenderTypes.length));
+		StringBundler sb = new StringBundler(
+			7 + ((6 * appenderTypes.length) + 2));
 
-		sb.append("<?xml version=\"1.0\"?>");
-		sb.append("<!DOCTYPE log4j:configuration SYSTEM \"log4j.dtd\">");
-		sb.append("<log4j:configuration xmlns:log4j=");
-		sb.append("\"http://jakarta.apache.org/log4j/\">");
+		sb.append("<?xml version=\"1.0\"?><Configuration>");
 
-		for (Class<?> appenderType : appenderTypes) {
-			sb.append("<appender class=\"");
-			sb.append(appenderType.getName());
-			sb.append("\" name=\"");
-			sb.append(appenderType.getName());
-			sb.append("\"></appender>");
+		if (appenderTypes.length > 0) {
+			sb.append("<Appenders>");
+
+			for (Class<?> appenderType : appenderTypes) {
+				if (appenderType.equals(ConsoleAppender.class)) {
+					sb.append("<Console name=\"");
+					sb.append(appenderType.getName());
+					sb.append("\" />");
+				}
+				else {
+					sb.append("<Null name=\"");
+					sb.append(appenderType.getName());
+					sb.append("\" />");
+				}
+			}
+
+			sb.append("</Appenders>");
 		}
 
-		sb.append("<category name=\"");
-		sb.append(loggerName);
-		sb.append("\"><priority value=\"");
+		sb.append("<Loggers><Logger level= \"");
 		sb.append(priority);
-		sb.append("\" />");
+		sb.append("\" name=\"");
+		sb.append(loggerName);
+		sb.append("\">");
 
 		for (Class<?> appenderType : appenderTypes) {
-			sb.append("<appender-ref ref=\"");
+			sb.append("<AppenderRef ref=\"");
 			sb.append(appenderType.getName());
 			sb.append("\" />");
 		}
 
-		sb.append("</category></log4j:configuration>");
+		sb.append("</Logger></Loggers></Configuration>");
 
 		return sb.toString();
 	}
