@@ -329,7 +329,7 @@ public class Log4jConfigUtilTest {
 				if (appenderType.equals(ConsoleAppender.class)) {
 					sb.append("<Console name=\"");
 					sb.append(appenderType.getName());
-					sb.append("\" />");
+					sb.append("\"><PatternLayout /></Console>");
 				}
 				else {
 					sb.append("<Null name=\"");
