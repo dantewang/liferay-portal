@@ -14,8 +14,6 @@
 
 package com.liferay.petra.log4j.internal;
 
-import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -30,10 +28,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.config.plugins.util.PluginManager;
-import org.apache.logging.log4j.core.config.xml.XmlConfiguration;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -72,14 +68,8 @@ public class Log4jConfigUtil {
 				}
 			}
 
-			xmlContent = document.asXML();
-
-			ConfigurationSource configurationSource = new ConfigurationSource(
-				new UnsyncByteArrayInputStream(
-					xmlContent.getBytes(StringPool.UTF8)));
-
 			_centralizedConfiguration.addConfiguration(
-				new XmlConfiguration(_loggerContext, configurationSource));
+				ConfigurationFactory.getConfiguration(document.asXML()));
 
 			return priorities;
 		}
