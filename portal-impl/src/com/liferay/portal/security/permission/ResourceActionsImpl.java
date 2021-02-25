@@ -42,6 +42,7 @@ import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -1549,7 +1550,9 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		registry.registerService(
 			ResourceActionsBag.class, resourceActionsBag,
-			Collections.singletonMap("resource.name", name));
+			HashMapBuilder.put(
+				"resource.name", (Object)name
+			).build());
 	}
 
 	private static final String _ACTION_NAME_PREFIX = "action.";
