@@ -250,8 +250,17 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public List<String> getModelResourceGroupDefaultActions(String name) {
-		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
-			name);
+		List<ResourceActionsBag> modelResourceActionsBags =
+			_resourceActionsBagServiceTrackerMap.getService(name);
+
+		if ((modelResourceActionsBags == null) ||
+			modelResourceActionsBags.isEmpty()) {
+
+			return new ArrayList<>();
+		}
+
+		ResourceActionsBag modelResourceActionsBag =
+			modelResourceActionsBags.get(modelResourceActionsBags.size() - 1);
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getGroupDefaultActions());
@@ -259,8 +268,17 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public List<String> getModelResourceGuestDefaultActions(String name) {
-		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
-			name);
+		List<ResourceActionsBag> modelResourceActionsBags =
+			_resourceActionsBagServiceTrackerMap.getService(name);
+
+		if ((modelResourceActionsBags == null) ||
+			modelResourceActionsBags.isEmpty()) {
+
+			return new ArrayList<>();
+		}
+
+		ResourceActionsBag modelResourceActionsBag =
+			modelResourceActionsBags.get(modelResourceActionsBags.size() - 1);
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getGuestDefaultActions());
@@ -268,8 +286,17 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public List<String> getModelResourceGuestUnsupportedActions(String name) {
-		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
-			name);
+		List<ResourceActionsBag> modelResourceActionsBags =
+			_resourceActionsBagServiceTrackerMap.getService(name);
+
+		if ((modelResourceActionsBags == null) ||
+			modelResourceActionsBags.isEmpty()) {
+
+			return new ArrayList<>();
+		}
+
+		ResourceActionsBag modelResourceActionsBag =
+			modelResourceActionsBags.get(modelResourceActionsBags.size() - 1);
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getGuestUnsupportedActions());
@@ -282,8 +309,17 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public List<String> getModelResourceOwnerDefaultActions(String name) {
-		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
-			name);
+		List<ResourceActionsBag> modelResourceActionsBags =
+			_resourceActionsBagServiceTrackerMap.getService(name);
+
+		if ((modelResourceActionsBags == null) ||
+			modelResourceActionsBags.isEmpty()) {
+
+			return new ArrayList<>();
+		}
+
+		ResourceActionsBag modelResourceActionsBag =
+			modelResourceActionsBags.get(modelResourceActionsBags.size() - 1);
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getOwnerDefaultActions());
@@ -385,8 +421,18 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		name = PortletIdCodec.decodePortletName(name);
 
-		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
-			name);
+		List<ResourceActionsBag> portletResourceActionsBags =
+			_resourceActionsBagServiceTrackerMap.getService(name);
+
+		if ((portletResourceActionsBags == null) ||
+			portletResourceActionsBags.isEmpty()) {
+
+			return new ArrayList<>();
+		}
+
+		ResourceActionsBag portletResourceActionsBag =
+			portletResourceActionsBags.get(
+				portletResourceActionsBags.size() - 1);
 
 		return new ArrayList<>(
 			portletResourceActionsBag.getGroupDefaultActions());
@@ -396,8 +442,18 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getPortletResourceGuestDefaultActions(String name) {
 		name = PortletIdCodec.decodePortletName(name);
 
-		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
-			name);
+		List<ResourceActionsBag> portletResourceActionsBags =
+			_resourceActionsBagServiceTrackerMap.getService(name);
+
+		if ((portletResourceActionsBags == null) ||
+			portletResourceActionsBags.isEmpty()) {
+
+			return new ArrayList<>();
+		}
+
+		ResourceActionsBag portletResourceActionsBag =
+			portletResourceActionsBags.get(
+				portletResourceActionsBags.size() - 1);
 
 		return new ArrayList<>(
 			portletResourceActionsBag.getGuestDefaultActions());
@@ -407,8 +463,18 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getPortletResourceGuestUnsupportedActions(String name) {
 		name = PortletIdCodec.decodePortletName(name);
 
-		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
-			name);
+		List<ResourceActionsBag> portletResourceActionsBags =
+			_resourceActionsBagServiceTrackerMap.getService(name);
+
+		if ((portletResourceActionsBags == null) ||
+			portletResourceActionsBags.isEmpty()) {
+
+			return new ArrayList<>();
+		}
+
+		ResourceActionsBag portletResourceActionsBag =
+			portletResourceActionsBags.get(
+				portletResourceActionsBags.size() - 1);
 
 		return new ArrayList<>(
 			portletResourceActionsBag.getGuestUnsupportedActions());
@@ -418,8 +484,18 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getPortletResourceLayoutManagerActions(String name) {
 		name = PortletIdCodec.decodePortletName(name);
 
-		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
-			name);
+		List<ResourceActionsBag> portletResourceActionsBags =
+			_resourceActionsBagServiceTrackerMap.getService(name);
+
+		if ((portletResourceActionsBags == null) ||
+			portletResourceActionsBags.isEmpty()) {
+
+			return new ArrayList<>();
+		}
+
+		ResourceActionsBag portletResourceActionsBag =
+			portletResourceActionsBags.get(
+				portletResourceActionsBags.size() - 1);
 
 		return new ArrayList<>(
 			portletResourceActionsBag.getLayoutManagerActions());
@@ -518,12 +594,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	@Deprecated
 	@Override
 	public boolean hasModelResourceActions(String name) {
-		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
-			name);
-
-		Set<String> modelActions = modelResourceActionsBag.getSupportsActions();
-
-		if ((modelActions != null) && !modelActions.isEmpty()) {
+		if (_resourceActionsBagServiceTrackerMap.containsKey(name)) {
 			return true;
 		}
 
@@ -1053,6 +1124,10 @@ public class ResourceActionsImpl implements ResourceActions {
 		List<ResourceActionsBag> resourceActionsBags =
 			_resourceActionsBagServiceTrackerMap.getService(name);
 
+		if (resourceActionsBags == null) {
+			return new ArrayList<>();
+		}
+
 		List<String> resourceActions = new ArrayList<>();
 
 		for (ResourceActionsBag resourceActionsBag : resourceActionsBags) {
@@ -1060,30 +1135,6 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 
 		return resourceActions;
-	}
-
-	private ResourceActionsBag _getResourceActionsBag(String name) {
-		ResourceActionsBag resourceActionsBag = _resourceActionsBags.get(name);
-
-		if (resourceActionsBag != null) {
-			return resourceActionsBag;
-		}
-
-		synchronized (_resourceActionsBags) {
-			resourceActionsBag = _resourceActionsBags.get(name);
-
-			if (resourceActionsBag != null) {
-				return resourceActionsBag;
-			}
-
-			resourceActionsBag = new ResourceActionsBag(
-				new HashSet<>(), new HashSet<>(), new HashSet<>(),
-				new HashSet<>(), new HashSet<>(), new HashSet<>());
-
-			_resourceActionsBags.put(name, resourceActionsBag);
-		}
-
-		return resourceActionsBag;
 	}
 
 	private String _getResourceBundlesString(
