@@ -1053,13 +1053,13 @@ public class ResourceActionsImpl implements ResourceActions {
 		List<ResourceActionsBag> resourceActionsBags =
 			_resourceActionsBagServiceTrackerMap.getService(name);
 
-		List<String> portletActions = new ArrayList<>();
+		List<String> resourceActions = new ArrayList<>();
 
 		for (ResourceActionsBag resourceActionsBag : resourceActionsBags) {
-			portletActions.addAll(resourceActionsBag.getSupportsActions());
+			resourceActions.addAll(resourceActionsBag.getSupportsActions());
 		}
 
-		return portletActions;
+		return resourceActions;
 	}
 
 	private ResourceActionsBag _getResourceActionsBag(String name) {
