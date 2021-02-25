@@ -193,7 +193,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getModelNames() {
 		List<String> modelNames = new ArrayList<>();
 
-		for (String name : _resourceActionsBags.keySet()) {
+		for (String name : _resourceActionsBagServiceTrackerMap.keySet()) {
 			if (name.indexOf(CharPool.PERIOD) != -1) {
 				modelNames.add(name);
 			}
@@ -382,7 +382,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getPortletNames() {
 		List<String> portletNames = new ArrayList<>();
 
-		for (String name : _resourceActionsBags.keySet()) {
+		for (String name : _resourceActionsBagServiceTrackerMap.keySet()) {
 			if (name.indexOf(CharPool.PERIOD) == -1) {
 				portletNames.add(name);
 			}
@@ -555,10 +555,14 @@ public class ResourceActionsImpl implements ResourceActions {
 		else if (Validator.isNull(portletResource)) {
 			return getModelResourceGuestUnsupportedActions(modelResource);
 		}
-		else if (_resourceActionsBags.containsKey(modelResource)) {
+		else if (_resourceActionsBagServiceTrackerMap.containsKey(
+					modelResource)) {
+
 			return getModelResourceGuestUnsupportedActions(modelResource);
 		}
-		else if (_resourceActionsBags.containsKey(portletResource)) {
+		else if (_resourceActionsBagServiceTrackerMap.containsKey(
+					portletResource)) {
+
 			return getPortletResourceGuestUnsupportedActions(portletResource);
 		}
 
