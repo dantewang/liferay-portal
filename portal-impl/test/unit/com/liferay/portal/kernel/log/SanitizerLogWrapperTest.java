@@ -25,9 +25,6 @@ import com.liferay.portal.test.log.LogEvent;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.spi.LoggingEvent;
-import org.apache.log4j.spi.ThrowableInformation;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -222,13 +219,9 @@ public class SanitizerLogWrapperTest {
 		Assert.assertEquals(logEvents.toString(), 12, logEvents.size());
 
 		for (LogEvent logEvent : logEvents) {
-			LoggingEvent loggingEvent =
-				(LoggingEvent)logEvent.getWrappedObject();
+			Throwable throwable = logEvent.getThrowable();
 
-			ThrowableInformation throwableInformation =
-				loggingEvent.getThrowableInformation();
-
-			String line = throwableInformation.getThrowableStrRep()[0];
+			String line = String.valueOf(throwable.getMessage());
 
 			Assert.assertTrue(line.startsWith(exceptionPrefix));
 
