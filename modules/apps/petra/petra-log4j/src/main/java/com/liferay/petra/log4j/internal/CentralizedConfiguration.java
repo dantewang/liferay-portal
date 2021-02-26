@@ -77,19 +77,46 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 	private void _aggregateAppenders(
 		AbstractConfiguration abstractConfiguration) {
 
+		Map<String, Appender> currentAppenders = getAppenders();
+
 		Map<String, Appender> newAppenders =
 			abstractConfiguration.getAppenders();
 
 		for (Map.Entry<String, Appender> newAppenderEntry :
 				newAppenders.entrySet()) {
 
-			removeAppender(newAppenderEntry.getKey());
-
 			Appender newAppender = newAppenderEntry.getValue();
 
 			newAppender.start();
 
-			addAppender(newAppender);
+			String appenderName = newAppenderEntry.getKey();
+
+			if (!currentAppenders.containsKey(appenderName)) {
+				addAppender(newAppender);
+
+				continue;
+			}
+
+			Map<String, LoggerConfig> loggerConfigMap = getLoggers();
+
+			for (LoggerConfig loggerConfig : loggerConfigMap.values()) {
+				loggerConfig.removeAppender(appenderName);
+
+				for (AppenderRef appenderRef : loggerConfig.getAppenderRefs()) {
+					if (Objects.equals(appenderRef.getRef(), appenderName)) {
+						loggerConfig.addAppender(
+							newAppender, appenderRef.getLevel(),
+							appenderRef.getFilter());
+
+						break;
+					}
+				}
+			}
+
+			Appender oldAppender = currentAppenders.put(
+				appenderName, newAppender);
+
+			oldAppender.stop();
 		}
 	}
 
