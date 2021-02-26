@@ -44,12 +44,12 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		loggerContext.setConfiguration(this);
 	}
 
-	public void addConfiguration(AbstractConfiguration configuration) {
-		if (configuration.getState() != State.INITIALIZING) {
+	public void addConfiguration(AbstractConfiguration abstractConfiguration) {
+		if (abstractConfiguration.getState() != State.INITIALIZING) {
 			return;
 		}
 
-		configuration.initialize();
+		abstractConfiguration.initialize();
 
 		// DefaultMergeStrategy:
 		// Properties from all configurations are aggregated.
@@ -57,11 +57,11 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 		Map<String, String> properties = getProperties();
 
-		properties.putAll(configuration.getProperties());
+		properties.putAll(abstractConfiguration.getProperties());
 
-		_aggregateAppenders(configuration);
-		_aggregateFilters(configuration);
-		_aggregateLoggerConfigs(configuration);
+		_aggregateAppenders(abstractConfiguration);
+		_aggregateFilters(abstractConfiguration);
+		_aggregateLoggerConfigs(abstractConfiguration);
 
 		_updateLoggers();
 	}
@@ -77,14 +77,16 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		setStarted();
 	}
 
-	private void _aggregateAppenders(AbstractConfiguration configuration) {
+	private void _aggregateAppenders(
+		AbstractConfiguration abstractConfiguration) {
 
 		// DefaultMergeStrategy:
 		// Appenders are aggregated.
 		// Appenders with the same name are replaced by those in later
 		// configurations, including all of the Appender's subcomponents.
 
-		Map<String, Appender> newAppenders = configuration.getAppenders();
+		Map<String, Appender> newAppenders =
+			abstractConfiguration.getAppenders();
 
 		for (Map.Entry<String, Appender> newAppenderEntry :
 				newAppenders.entrySet()) {
@@ -102,14 +104,15 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		}
 	}
 
-	private void _aggregateFilters(AbstractConfiguration configuration) {
+	private void _aggregateFilters(
+		AbstractConfiguration abstractConfiguration) {
 
 		// DefaultMergeStrategy:
 		// Filters are aggregated under a CompositeFilter if more than one
 		// Filter is defined. Since Filters are not named duplicates may be
 		// present.
 
-		Filter newFilter = configuration.getFilter();
+		Filter newFilter = abstractConfiguration.getFilter();
 
 		if (newFilter != null) {
 			newFilter.start();
@@ -172,7 +175,8 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		}
 	}
 
-	private void _aggregateLoggerConfigs(AbstractConfiguration configuration) {
+	private void _aggregateLoggerConfigs(
+		AbstractConfiguration abstractConfiguration) {
 
 		// DefaultMergeStrategy:
 		// Loggers are all aggregated.
@@ -180,9 +184,10 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 		_aggregateLoggerConfigContent(
 			getRootLogger(),
-			configuration.getLogger(LogManager.ROOT_LOGGER_NAME));
+			abstractConfiguration.getLogger(LogManager.ROOT_LOGGER_NAME));
 
-		Map<String, LoggerConfig> newLoggerConfigs = configuration.getLoggers();
+		Map<String, LoggerConfig> newLoggerConfigs =
+			abstractConfiguration.getLoggers();
 
 		for (Map.Entry<String, LoggerConfig> newLoggerConfigEntry :
 				newLoggerConfigs.entrySet()) {
