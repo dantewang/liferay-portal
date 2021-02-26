@@ -14,6 +14,8 @@
 
 package com.liferay.petra.log4j.internal;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -156,17 +158,39 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		Map<String, Appender> newLoggerConfigAppenders =
 			newLoggerConfig.getAppenders();
 
-		for (AppenderRef appenderRef : newLoggerConfig.getAppenderRefs()) {
+		List<AppenderRef> currentAppenderRefs =
+			currentLoggerConfig.getAppenderRefs();
+
+		for (AppenderRef newAppenderRef : newLoggerConfig.getAppenderRefs()) {
 			Appender appender = currentLoggerConfigAppenders.get(
-				appenderRef.getRef());
+				newAppenderRef.getRef());
 
 			if (appender != null) {
-				currentLoggerConfig.removeAppender(appenderRef.getRef());
+				currentLoggerConfig.removeAppender(newAppenderRef.getRef());
+
+				Iterator<AppenderRef> currentAppenderRefIterator =
+					currentAppenderRefs.iterator();
+
+				while (currentAppenderRefIterator.hasNext()) {
+					AppenderRef currentAppenderRef =
+						currentAppenderRefIterator.next();
+
+					if (Objects.equals(
+							currentAppenderRef.getRef(),
+							newAppenderRef.getRef())) {
+
+						currentAppenderRefIterator.remove();
+
+						break;
+					}
+				}
 			}
 
 			currentLoggerConfig.addAppender(
-				newLoggerConfigAppenders.get(appenderRef.getRef()),
-				appenderRef.getLevel(), appenderRef.getFilter());
+				newLoggerConfigAppenders.get(newAppenderRef.getRef()),
+				newAppenderRef.getLevel(), newAppenderRef.getFilter());
+
+			currentAppenderRefs.add(newAppenderRef);
 		}
 	}
 
