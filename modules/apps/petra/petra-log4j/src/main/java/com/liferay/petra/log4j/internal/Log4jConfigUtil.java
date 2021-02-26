@@ -28,7 +28,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.apache.logging.log4j.core.config.plugins.util.PluginManager;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -132,7 +131,10 @@ public class Log4jConfigUtil {
 			_centralizedConfiguration.addLogger(name, loggerConfig);
 		}
 
-		_loggerContext.updateLoggers();
+		LoggerContext loggerContext =
+			_centralizedConfiguration.getLoggerContext();
+
+		loggerContext.updateLoggers();
 	}
 
 	public static void shutdownLog4J() {
@@ -161,22 +163,7 @@ public class Log4jConfigUtil {
 	private static final Log _log = LogFactoryUtil.getLog(
 		Log4jConfigUtil.class);
 
-	private static final CentralizedConfiguration _centralizedConfiguration;
-	private static final LoggerContext _loggerContext;
-
-	static {
-		PluginManager.addPackage("com.liferay.petra.log4j");
-
-		LoggerContext loggerContext = (LoggerContext)LogManager.getContext();
-
-		CentralizedConfiguration centralizedConfiguration =
-			new CentralizedConfiguration(loggerContext);
-
-		loggerContext.setConfiguration(centralizedConfiguration);
-
-		_loggerContext = loggerContext;
-
-		_centralizedConfiguration = centralizedConfiguration;
-	}
+	private static final CentralizedConfiguration _centralizedConfiguration =
+		new CentralizedConfiguration();
 
 }
