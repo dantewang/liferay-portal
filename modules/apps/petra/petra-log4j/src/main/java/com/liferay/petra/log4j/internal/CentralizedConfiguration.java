@@ -197,10 +197,9 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 			currentLoggerConfig.getAppenderRefs();
 
 		for (AppenderRef newAppenderRef : newLoggerConfig.getAppenderRefs()) {
-			Appender appender = currentLoggerConfigAppenders.get(
-				newAppenderRef.getRef());
+			if (currentLoggerConfigAppenders.containsKey(
+					newAppenderRef.getRef())) {
 
-			if (appender != null) {
 				currentLoggerConfig.removeAppender(newAppenderRef.getRef());
 
 				Iterator<AppenderRef> currentAppenderRefIterator =
