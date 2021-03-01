@@ -28,6 +28,7 @@ import org.apache.logging.log4j.core.config.AppenderRef;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.config.plugins.util.PluginManager;
+import org.apache.logging.log4j.core.filter.AbstractFilterable;
 
 /**
  * @author Dante Wang
@@ -124,16 +125,23 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		}
 	}
 
-	private void _aggregateFilters(
-		AbstractConfiguration abstractConfiguration) {
+	private void _aggregateFilter(
+		AbstractFilterable currentAbstractFilterable,
+		AbstractFilterable newAbstractFilterable) {
 
-		Filter newFilter = abstractConfiguration.getFilter();
+		Filter newFilter = newAbstractFilterable.getFilter();
 
 		if (newFilter != null) {
 			newFilter.start();
 
-			addFilter(newFilter);
+			currentAbstractFilterable.addFilter(newFilter);
 		}
+	}
+
+	private void _aggregateFilters(
+		AbstractConfiguration abstractConfiguration) {
+
+		_aggregateFilter(this, abstractConfiguration);
 	}
 
 	private void _aggregateLoggerConfigContent(
@@ -146,13 +154,7 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		currentLoggerConfig.setLevel(newLoggerConfig.getLevel());
 		currentLoggerConfig.setAdditive(newLoggerConfig.isAdditive());
 
-		Filter newFilter = newLoggerConfig.getFilter();
-
-		if (newFilter != null) {
-			newFilter.start();
-
-			currentLoggerConfig.addFilter(newFilter);
-		}
+		_aggregateFilter(currentLoggerConfig, newLoggerConfig);
 
 		Map<String, Appender> currentLoggerConfigAppenders =
 			currentLoggerConfig.getAppenders();
