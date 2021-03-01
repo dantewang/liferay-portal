@@ -98,9 +98,10 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 			String appenderName = newAppenderEntry.getKey();
 
-			if (!currentAppenders.containsKey(appenderName)) {
-				addAppender(newAppender);
+			Appender oldAppender = currentAppenders.put(
+				appenderName, newAppender);
 
+			if (oldAppender == null) {
 				continue;
 			}
 
@@ -119,9 +120,6 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 					}
 				}
 			}
-
-			Appender oldAppender = currentAppenders.put(
-				appenderName, newAppender);
 
 			oldAppender.stop();
 		}
