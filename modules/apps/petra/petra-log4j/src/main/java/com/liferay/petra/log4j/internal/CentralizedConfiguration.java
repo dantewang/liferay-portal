@@ -140,7 +140,42 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		}
 	}
 
-	private void _aggregateLoggerConfigContent(
+	private void _aggregateLoggerConfigs(
+		AbstractConfiguration abstractConfiguration) {
+
+		_mergeLoggerConfig(
+			getRootLogger(),
+			abstractConfiguration.getLogger(LogManager.ROOT_LOGGER_NAME));
+
+		Map<String, LoggerConfig> newLoggerConfigs =
+			abstractConfiguration.getLoggers();
+
+		for (Map.Entry<String, LoggerConfig> newLoggerConfigEntry :
+				newLoggerConfigs.entrySet()) {
+
+			String name = newLoggerConfigEntry.getKey();
+
+			if (Objects.equals(name, LogManager.ROOT_LOGGER_NAME)) {
+				continue;
+			}
+
+			LoggerConfig currentLoggerConfig = getLogger(name);
+
+			LoggerConfig newLoggerConfig = newLoggerConfigEntry.getValue();
+
+			if (currentLoggerConfig != null) {
+				_mergeLoggerConfig(currentLoggerConfig, newLoggerConfig);
+
+				continue;
+			}
+
+			addLogger(name, newLoggerConfig);
+
+			newLoggerConfig.start();
+		}
+	}
+
+	private void _mergeLoggerConfig(
 		LoggerConfig currentLoggerConfig, LoggerConfig newLoggerConfig) {
 
 		if (newLoggerConfig == null) {
@@ -191,42 +226,6 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 				newAppenderRef.getLevel(), newAppenderRef.getFilter());
 
 			currentAppenderRefs.add(newAppenderRef);
-		}
-	}
-
-	private void _aggregateLoggerConfigs(
-		AbstractConfiguration abstractConfiguration) {
-
-		_aggregateLoggerConfigContent(
-			getRootLogger(),
-			abstractConfiguration.getLogger(LogManager.ROOT_LOGGER_NAME));
-
-		Map<String, LoggerConfig> newLoggerConfigs =
-			abstractConfiguration.getLoggers();
-
-		for (Map.Entry<String, LoggerConfig> newLoggerConfigEntry :
-				newLoggerConfigs.entrySet()) {
-
-			String name = newLoggerConfigEntry.getKey();
-
-			if (Objects.equals(name, LogManager.ROOT_LOGGER_NAME)) {
-				continue;
-			}
-
-			LoggerConfig currentLoggerConfig = getLogger(name);
-
-			LoggerConfig newLoggerConfig = newLoggerConfigEntry.getValue();
-
-			if (currentLoggerConfig != null) {
-				_aggregateLoggerConfigContent(
-					currentLoggerConfig, newLoggerConfig);
-
-				continue;
-			}
-
-			addLogger(name, newLoggerConfig);
-
-			newLoggerConfig.start();
 		}
 	}
 
