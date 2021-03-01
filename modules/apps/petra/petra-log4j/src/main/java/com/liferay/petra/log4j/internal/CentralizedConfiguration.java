@@ -62,7 +62,9 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		_aggregateFilters(abstractConfiguration);
 		_aggregateLoggerConfigs(abstractConfiguration);
 
-		_updateLoggers();
+		LoggerContext loggerContext = getLoggerContext();
+
+		loggerContext.updateLoggers();
 	}
 
 	@Override
@@ -228,12 +230,6 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 			newLoggerConfig.start();
 		}
-	}
-
-	private void _updateLoggers() {
-		LoggerContext loggerContext = getLoggerContext();
-
-		loggerContext.updateLoggers();
 	}
 
 }
