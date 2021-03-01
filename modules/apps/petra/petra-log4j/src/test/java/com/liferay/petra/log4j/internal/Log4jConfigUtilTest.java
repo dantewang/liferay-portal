@@ -18,8 +18,6 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.test.CaptureHandler;
 import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
-import com.liferay.portal.kernel.test.rule.NewEnv;
-import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.ArrayList;
@@ -32,12 +30,9 @@ import java.util.logging.LogRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Logger;
-import org.apache.logging.log4j.core.appender.ConsoleAppender;
-import org.apache.logging.log4j.core.appender.NullAppender;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -116,29 +111,32 @@ public class Log4jConfigUtilTest {
 		_assertAppenders(logger);
 
 		Log4jConfigUtil.configureLog4J(
-			_generateXMLConfigurationContent(
-				loggerName, _ERROR, ConsoleAppender.class));
+			_generateXMLConfigurationContent(loggerName, _ERROR, _CONSOLE));
 
-		_assertAppenders(logger, ConsoleAppender.class);
+		_assertAppenders(logger, _CONSOLE);
+
+		Log4jConfigUtil.configureLog4J(
+			_generateXMLConfigurationContent(loggerName, _ERROR, _NULL));
+
+		_assertAppenders(logger, _CONSOLE, _NULL);
+
+		Log4jConfigUtil.configureLog4J(
+			_generateXMLConfigurationContent(loggerName, _ERROR, _CONSOLE));
+
+		_assertAppenders(logger, _CONSOLE, _NULL);
 
 		Log4jConfigUtil.configureLog4J(
 			_generateXMLConfigurationContent(
-				loggerName, _ERROR, NullAppender.class));
+				loggerName, _ERROR, _CONSOLE, _NULL));
 
-		_assertAppenders(logger, ConsoleAppender.class, NullAppender.class);
-
-		Log4jConfigUtil.configureLog4J(
-			_generateXMLConfigurationContent(
-				loggerName, _ERROR, ConsoleAppender.class));
-
-		_assertAppenders(logger, ConsoleAppender.class, NullAppender.class);
+		_assertAppenders(logger, _CONSOLE, _NULL);
 
 		Log4jConfigUtil.configureLog4J(
 			_generateXMLConfigurationContent(
-				loggerName, _ERROR, ConsoleAppender.class, NullAppender.class),
-			NullAppender.class.getName());
+				loggerName, _ERROR, _CONSOLE, _NULL),
+			_NULL);
 
-		_assertAppenders(logger, ConsoleAppender.class, NullAppender.class);
+		_assertAppenders(logger, _CONSOLE, _NULL);
 	}
 
 	@Test
@@ -266,10 +264,10 @@ public class Log4jConfigUtilTest {
 
 		Assert.assertEquals(targetAppenderNames.size(), appenderTypes.length);
 
-		for (Class<?> appenderType : appenderTypes) {
+		for (String appenderType : appenderTypes) {
 			Assert.assertTrue(
-				"Missing appender " + appenderType.getName(),
-				targetAppenderNames.contains(appenderType.getName()));
+				"Missing appender " + appenderType,
+				targetAppenderNames.contains(appenderType));
 		}
 	}
 
@@ -306,26 +304,30 @@ public class Log4jConfigUtilTest {
 	}
 
 	private String _generateXMLConfigurationContent(
-		String loggerName, String priority, Class<?>... appenderTypes) {
+		String loggerName, String priority, String... appenderTypes) {
 
 		StringBundler sb = new StringBundler(
-			7 + ((6 * appenderTypes.length) + 2));
+			7 + ((8 * appenderTypes.length) + 2));
 
-		sb.append("<?xml version=\"1.0\"?><Configuration>");
+		sb.append("<?xml version=\"1.0\"?><Configuration strict=\"true\">");
 
 		if (appenderTypes.length > 0) {
 			sb.append("<Appenders>");
 
-			for (Class<?> appenderType : appenderTypes) {
-				if (appenderType.equals(ConsoleAppender.class)) {
-					sb.append("<Console name=\"");
-					sb.append(appenderType.getName());
-					sb.append("\"><PatternLayout /></Console>");
+			for (String appenderType : appenderTypes) {
+				if (appenderType.equals("CONSOLE")) {
+					sb.append("<Appender name=\"");
+					sb.append(appenderType);
+					sb.append("\" type=\"");
+					sb.append(appenderType);
+					sb.append("\"><Layout type=\"PatternLayout\"/></Appender>");
 				}
 				else {
-					sb.append("<Null name=\"");
-					sb.append(appenderType.getName());
-					sb.append("\" />");
+					sb.append("<Appender name=\"");
+					sb.append(appenderType);
+					sb.append("\" type=\"");
+					sb.append(appenderType);
+					sb.append("\"></Appender>");
 				}
 			}
 
@@ -338,9 +340,9 @@ public class Log4jConfigUtilTest {
 		sb.append(loggerName);
 		sb.append("\">");
 
-		for (Class<?> appenderType : appenderTypes) {
+		for (String appenderType : appenderTypes) {
 			sb.append("<AppenderRef ref=\"");
-			sb.append(appenderType.getName());
+			sb.append(appenderType);
 			sb.append("\" />");
 		}
 
@@ -351,6 +353,8 @@ public class Log4jConfigUtilTest {
 
 	private static final String _ALL = "ALL";
 
+	private static final String _CONSOLE = "CONSOLE";
+
 	private static final String _DEBUG = "DEBUG";
 
 	private static final String _ERROR = "ERROR";
@@ -358,6 +362,8 @@ public class Log4jConfigUtilTest {
 	private static final String _FATAL = "FATAL";
 
 	private static final String _INFO = "INFO";
+
+	private static final String _NULL = "NULL";
 
 	private static final String _OFF = "OFF";
 
