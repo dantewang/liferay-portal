@@ -76,7 +76,7 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 		rootLoggerConfig.start();
 
-		addLogger("", rootLoggerConfig);
+		addLogger(LogManager.ROOT_LOGGER_NAME, rootLoggerConfig);
 
 		setStarted();
 	}
