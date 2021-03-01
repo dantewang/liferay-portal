@@ -60,7 +60,9 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		properties.putAll(abstractConfiguration.getProperties());
 
 		_aggregateAppenders(abstractConfiguration);
-		_aggregateFilters(abstractConfiguration);
+
+		_aggregateFilter(this, abstractConfiguration);
+
 		_aggregateLoggerConfigs(abstractConfiguration);
 
 		LoggerContext loggerContext = getLoggerContext();
@@ -136,12 +138,6 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 			currentAbstractFilterable.addFilter(newFilter);
 		}
-	}
-
-	private void _aggregateFilters(
-		AbstractConfiguration abstractConfiguration) {
-
-		_aggregateFilter(this, abstractConfiguration);
 	}
 
 	private void _aggregateLoggerConfigContent(
