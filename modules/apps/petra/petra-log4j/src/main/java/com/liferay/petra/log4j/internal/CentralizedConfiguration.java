@@ -129,9 +129,9 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 		if (newFilter != null) {
 			newFilter.start();
-		}
 
-		addFilter(newFilter);
+			addFilter(newFilter);
+		}
 	}
 
 	private void _aggregateLoggerConfigContent(
@@ -148,9 +148,9 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 		if (newFilter != null) {
 			newFilter.start();
-		}
 
-		currentLoggerConfig.addFilter(newFilter);
+			currentLoggerConfig.addFilter(newFilter);
+		}
 
 		Map<String, Appender> currentLoggerConfigAppenders =
 			currentLoggerConfig.getAppenders();
