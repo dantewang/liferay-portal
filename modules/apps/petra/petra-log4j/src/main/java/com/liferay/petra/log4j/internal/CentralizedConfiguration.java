@@ -152,9 +152,12 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 	private void _aggregateLoggerConfigs(
 		AbstractConfiguration abstractConfiguration) {
 
-		_mergeLoggerConfig(
-			getRootLogger(),
-			abstractConfiguration.getLogger(LogManager.ROOT_LOGGER_NAME));
+		LoggerConfig newRootLoggerConfig = abstractConfiguration.getLogger(
+			LogManager.ROOT_LOGGER_NAME);
+
+		if (newRootLoggerConfig != null) {
+			_mergeLoggerConfig(getRootLogger(), newRootLoggerConfig);
+		}
 
 		Map<String, LoggerConfig> newLoggerConfigs =
 			abstractConfiguration.getLoggers();
@@ -182,10 +185,6 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 	private void _mergeLoggerConfig(
 		LoggerConfig currentLoggerConfig, LoggerConfig newLoggerConfig) {
-
-		if (newLoggerConfig == null) {
-			return;
-		}
 
 		currentLoggerConfig.setLevel(newLoggerConfig.getLevel());
 		currentLoggerConfig.setAdditive(newLoggerConfig.isAdditive());
