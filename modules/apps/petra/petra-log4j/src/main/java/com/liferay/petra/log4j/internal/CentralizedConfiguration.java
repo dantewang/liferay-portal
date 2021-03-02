@@ -108,16 +108,31 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 			Map<String, LoggerConfig> loggerConfigMap = getLoggers();
 
 			for (LoggerConfig loggerConfig : loggerConfigMap.values()) {
-				loggerConfig.removeAppender(appenderName);
+				Map<String, Appender> appenders = loggerConfig.getAppenders();
+
+				if (!appenders.containsKey(appenderName)) {
+					continue;
+				}
+
+				AppenderRef currentAppenderRef = null;
 
 				for (AppenderRef appenderRef : loggerConfig.getAppenderRefs()) {
 					if (Objects.equals(appenderRef.getRef(), appenderName)) {
-						loggerConfig.addAppender(
-							newAppender, appenderRef.getLevel(),
-							appenderRef.getFilter());
+						currentAppenderRef = appenderRef;
 
 						break;
 					}
+				}
+
+				loggerConfig.removeAppender(appenderName);
+
+				if (currentAppenderRef == null) {
+					loggerConfig.addAppender(newAppender, null, null);
+				}
+				else {
+					loggerConfig.addAppender(
+						newAppender, currentAppenderRef.getLevel(),
+						currentAppenderRef.getFilter());
 				}
 			}
 
