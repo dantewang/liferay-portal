@@ -204,9 +204,13 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		List<AppenderRef> currentAppenderRefs =
 			currentLoggerConfig.getAppenderRefs();
 
-		for (AppenderRef newAppenderRef : newLoggerConfig.getAppenderRefs()) {
-			if (currentAppenders.containsKey(newAppenderRef.getRef())) {
-				currentLoggerConfig.removeAppender(newAppenderRef.getRef());
+		for (Appender newAppender : newAppenders.values()) {
+			String name = newAppender.getName();
+
+			AppenderRef newAppenderRef = _getAppenderRef(name, newLoggerConfig);
+
+			if (currentAppenders.containsKey(name)) {
+				currentLoggerConfig.removeAppender(name);
 
 				Iterator<AppenderRef> currentAppenderRefIterator =
 					currentAppenderRefs.iterator();
@@ -215,10 +219,7 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 					AppenderRef currentAppenderRef =
 						currentAppenderRefIterator.next();
 
-					if (Objects.equals(
-							currentAppenderRef.getRef(),
-							newAppenderRef.getRef())) {
-
+					if (Objects.equals(currentAppenderRef.getRef(), name)) {
 						currentAppenderRefIterator.remove();
 
 						break;
@@ -226,11 +227,16 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 				}
 			}
 
-			currentLoggerConfig.addAppender(
-				newAppenders.get(newAppenderRef.getRef()),
-				newAppenderRef.getLevel(), newAppenderRef.getFilter());
+			if (newAppenderRef == null) {
+				currentLoggerConfig.addAppender(newAppender, null, null);
+			}
+			else {
+				currentLoggerConfig.addAppender(
+					newAppender, newAppenderRef.getLevel(),
+					newAppenderRef.getFilter());
 
-			currentAppenderRefs.add(newAppenderRef);
+				currentAppenderRefs.add(newAppenderRef);
+			}
 		}
 	}
 
