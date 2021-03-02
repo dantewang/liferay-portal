@@ -14,6 +14,11 @@
 
 package com.liferay.petra.log4j.internal;
 
+import com.liferay.petra.reflect.ReflectionUtil;
+
+import java.lang.reflect.Field;
+
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -201,8 +206,10 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 		Map<String, Appender> newAppenders = newLoggerConfig.getAppenders();
 
-		List<AppenderRef> currentAppenderRefs =
-			currentLoggerConfig.getAppenderRefs();
+		List<AppenderRef> currentAppenderRefs = new ArrayList<>(
+			currentLoggerConfig.getAppenderRefs());
+
+		_setLoggerConfigAppenderRefs(currentLoggerConfig, currentAppenderRefs);
 
 		for (Appender newAppender : newAppenders.values()) {
 			String name = newAppender.getName();
@@ -237,6 +244,20 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 				currentAppenderRefs.add(newAppenderRef);
 			}
+		}
+	}
+
+	private void _setLoggerConfigAppenderRefs(
+		LoggerConfig loggerConfig, List<AppenderRef> appenderRefs) {
+
+		try {
+			Field field = ReflectionUtil.getDeclaredField(
+				LoggerConfig.class, "appenderRefs");
+
+			field.set(loggerConfig, appenderRefs);
+		}
+		catch (Exception exception) {
+			ReflectionUtil.throwException(exception);
 		}
 	}
 
