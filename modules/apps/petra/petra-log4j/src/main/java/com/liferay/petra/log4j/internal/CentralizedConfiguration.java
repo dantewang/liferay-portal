@@ -200,19 +200,16 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 		_aggregateFilter(currentLoggerConfig, newLoggerConfig);
 
-		Map<String, Appender> currentLoggerConfigAppenders =
+		Map<String, Appender> currentAppenders =
 			currentLoggerConfig.getAppenders();
 
-		Map<String, Appender> newLoggerConfigAppenders =
-			newLoggerConfig.getAppenders();
+		Map<String, Appender> newAppenders = newLoggerConfig.getAppenders();
 
 		List<AppenderRef> currentAppenderRefs =
 			currentLoggerConfig.getAppenderRefs();
 
 		for (AppenderRef newAppenderRef : newLoggerConfig.getAppenderRefs()) {
-			if (currentLoggerConfigAppenders.containsKey(
-					newAppenderRef.getRef())) {
-
+			if (currentAppenders.containsKey(newAppenderRef.getRef())) {
 				currentLoggerConfig.removeAppender(newAppenderRef.getRef());
 
 				Iterator<AppenderRef> currentAppenderRefIterator =
@@ -234,7 +231,7 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 			}
 
 			currentLoggerConfig.addAppender(
-				newLoggerConfigAppenders.get(newAppenderRef.getRef()),
+				newAppenders.get(newAppenderRef.getRef()),
 				newAppenderRef.getLevel(), newAppenderRef.getFilter());
 
 			currentAppenderRefs.add(newAppenderRef);
