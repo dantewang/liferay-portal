@@ -89,14 +89,10 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		Map<String, Appender> newAppenders =
 			abstractConfiguration.getAppenders();
 
-		for (Map.Entry<String, Appender> newAppenderEntry :
-				newAppenders.entrySet()) {
-
-			Appender newAppender = newAppenderEntry.getValue();
-
+		for (Appender newAppender : newAppenders.values()) {
 			newAppender.start();
 
-			String appenderName = newAppenderEntry.getKey();
+			String appenderName = newAppender.getName();
 
 			Appender oldAppender = currentAppenders.put(
 				appenderName, newAppender);
@@ -163,18 +159,14 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		Map<String, LoggerConfig> newLoggerConfigs =
 			abstractConfiguration.getLoggers();
 
-		for (Map.Entry<String, LoggerConfig> newLoggerConfigEntry :
-				newLoggerConfigs.entrySet()) {
-
-			String name = newLoggerConfigEntry.getKey();
+		for (LoggerConfig newLoggerConfig : newLoggerConfigs.values()) {
+			String name = newLoggerConfig.getName();
 
 			if (Objects.equals(name, LogManager.ROOT_LOGGER_NAME)) {
 				continue;
 			}
 
 			LoggerConfig currentLoggerConfig = getLogger(name);
-
-			LoggerConfig newLoggerConfig = newLoggerConfigEntry.getValue();
 
 			if (currentLoggerConfig != null) {
 				_mergeLoggerConfig(currentLoggerConfig, newLoggerConfig);
