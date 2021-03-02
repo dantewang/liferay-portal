@@ -110,25 +110,18 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 					continue;
 				}
 
-				AppenderRef currentAppenderRef = null;
-
-				for (AppenderRef appenderRef : loggerConfig.getAppenderRefs()) {
-					if (Objects.equals(appenderRef.getRef(), appenderName)) {
-						currentAppenderRef = appenderRef;
-
-						break;
-					}
-				}
+				AppenderRef appenderRef = _getAppenderRef(
+					appenderName, loggerConfig);
 
 				loggerConfig.removeAppender(appenderName);
 
-				if (currentAppenderRef == null) {
+				if (appenderRef == null) {
 					loggerConfig.addAppender(newAppender, null, null);
 				}
 				else {
 					loggerConfig.addAppender(
-						newAppender, currentAppenderRef.getLevel(),
-						currentAppenderRef.getFilter());
+						newAppender, appenderRef.getLevel(),
+						appenderRef.getFilter());
 				}
 			}
 
@@ -181,6 +174,18 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 			newLoggerConfig.start();
 		}
+	}
+
+	private AppenderRef _getAppenderRef(
+		String name, LoggerConfig loggerConfig) {
+
+		for (AppenderRef appenderRef : loggerConfig.getAppenderRefs()) {
+			if (Objects.equals(appenderRef.getRef(), name)) {
+				return appenderRef;
+			}
+		}
+
+		return null;
 	}
 
 	private void _mergeLoggerConfig(
