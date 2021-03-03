@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.test.log;
+package com.liferay.portal.test.log.log4j;
 
 import com.liferay.petra.reflect.ReflectionUtil;
 
@@ -20,7 +20,6 @@ import java.io.Closeable;
 
 import java.lang.reflect.Field;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -32,10 +31,7 @@ import org.apache.log4j.spi.LoggingEvent;
 
 /**
  * @author Shuyang Zhou
- * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
- *             com.liferay.portal.test.log.log4j.CaptureAppender}
  */
-@Deprecated
 public class CaptureAppender extends AppenderSkeleton implements Closeable {
 
 	public CaptureAppender(Logger logger) {
@@ -71,20 +67,6 @@ public class CaptureAppender extends AppenderSkeleton implements Closeable {
 
 	public List<LogEvent> getLogEvents() {
 		return _logEvents;
-	}
-
-	/**
-	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link #getLogEvents()}
-	 */
-	@Deprecated
-	public List<LoggingEvent> getLoggingEvents() {
-		List<LoggingEvent> loggingEvents = new ArrayList<>();
-
-		for (LogEvent logEvent : _logEvents) {
-			loggingEvents.add((LoggingEvent)logEvent.getWrappedObject());
-		}
-
-		return loggingEvents;
 	}
 
 	@Override
