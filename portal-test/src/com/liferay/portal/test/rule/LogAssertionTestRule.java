@@ -226,12 +226,7 @@ public class LogAssertionTestRule
 	}
 
 	protected static void installLog4jAppender() {
-		org.apache.log4j.Logger logger =
-			org.apache.log4j.Logger.getRootLogger();
-
-		logger.removeAppender(LogAssertionAppender.INSTANCE);
-
-		logger.addAppender(LogAssertionAppender.INSTANCE);
+		Log4jAssertionAppender.installLog4jAppender();
 	}
 
 	protected static boolean isExpected(
@@ -284,10 +279,7 @@ public class LogAssertionTestRule
 	}
 
 	protected static void uninstallLog4jAppender() {
-		org.apache.log4j.Logger logger =
-			org.apache.log4j.Logger.getRootLogger();
-
-		logger.removeAppender(LogAssertionAppender.INSTANCE);
+		Log4jAssertionAppender.uninstallLog4jAppender();
 	}
 
 	private LogAssertionTestRule() {
