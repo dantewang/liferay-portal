@@ -710,7 +710,7 @@ public class DataFactory {
 	public List<AssetCategoryModel> newAssetCategoryModels(
 		long groupId, List<AssetVocabularyModel> assetVocabularyModels) {
 
-		List<AssetCategoryModel> allAssetCategoryModels = new ArrayList<>();
+		List<AssetCategoryModel> assetCategoryModels = new ArrayList<>();
 
 		_assetCategoryModelsMaps =
 			(Map<Long, List<AssetCategoryModel>>[])
@@ -741,7 +741,7 @@ public class DataFactory {
 
 				groupAssetCategoryModels.add(assetCategoryModel);
 
-				allAssetCategoryModels.add(assetCategoryModel);
+				assetCategoryModels.add(assetCategoryModel);
 			}
 		}
 
@@ -769,7 +769,7 @@ public class DataFactory {
 			[((int)groupId - 1) % BenchmarksPropsValues.MAX_GROUP_COUNT] =
 				assetCategoryModelsMap;
 
-		return allAssetCategoryModels;
+		return assetCategoryModels;
 	}
 
 	public AssetEntryModel newAssetEntryModel(BlogsEntryModel blogsEntryModel) {
@@ -979,7 +979,7 @@ public class DataFactory {
 	}
 
 	public List<AssetTagModel> newAssetTagModels(long groupId) {
-		List<AssetTagModel> allAssetTagModels = new ArrayList<>();
+		List<AssetTagModel> assetTagModels = new ArrayList<>();
 
 		_assetTagModelsMaps =
 			(Map<Long, List<AssetTagModel>>[])
@@ -1005,7 +1005,7 @@ public class DataFactory {
 
 			groupAssetTagModels.add(assetTagModel);
 
-			allAssetTagModels.add(assetTagModel);
+			assetTagModels.add(assetTagModel);
 		}
 
 		Map<Long, List<AssetTagModel>> assetTagModelsMap = new HashMap<>();
@@ -1030,11 +1030,11 @@ public class DataFactory {
 			[((int)groupId - 1) % BenchmarksPropsValues.MAX_GROUP_COUNT] =
 				assetTagModelsMap;
 
-		return allAssetTagModels;
+		return assetTagModels;
 	}
 
 	public List<AssetVocabularyModel> newAssetVocabularyModels(long groupId) {
-		List<AssetVocabularyModel> allAssetVocabularyModels = new ArrayList<>();
+		List<AssetVocabularyModel> assetVocabularyModels = new ArrayList<>();
 
 		StringBundler sb = new StringBundler(4);
 
@@ -1051,10 +1051,10 @@ public class DataFactory {
 			AssetVocabularyModel assetVocabularyModel = newAssetVocabularyModel(
 				groupId, _sampleUserId, _SAMPLE_USER_NAME, sb.toString());
 
-			allAssetVocabularyModels.add(assetVocabularyModel);
+			assetVocabularyModels.add(assetVocabularyModel);
 		}
 
-		return allAssetVocabularyModels;
+		return assetVocabularyModels;
 	}
 
 	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
