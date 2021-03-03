@@ -18,47 +18,62 @@ import com.liferay.petra.string.StringBundler;
 
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
 
 /**
  * @author William Newbury
  */
-public class Log4jAssertionAppender extends AppenderSkeleton {
+public class Log4jAssertionAppender {
 
-	public static final Log4jAssertionAppender INSTANCE =
-		new Log4jAssertionAppender();
+	protected static void installLog4jAppender() {
+		_rootLogger.removeAppender(_logAppender);
 
-	@Override
-	public void close() {
+		_rootLogger.addAppender(_logAppender);
 	}
 
-	@Override
-	public boolean requiresLayout() {
-		return false;
+	protected static void uninstallLog4jAppender() {
+		_rootLogger.removeAppender(_logAppender);
 	}
 
-	@Override
-	protected void append(LoggingEvent loggingEvent) {
-		Level level = loggingEvent.getLevel();
+	private static final LogAppender _logAppender = new LogAppender();
+	private static final Logger _rootLogger = Logger.getRootLogger();
 
-		if (level.equals(Level.ERROR) || level.equals(Level.FATAL)) {
-			StringBundler sb = new StringBundler(6);
+	private static class LogAppender extends AppenderSkeleton {
 
-			sb.append("{level=");
-			sb.append(loggingEvent.getLevel());
-			sb.append(", loggerName=");
-			sb.append(loggingEvent.getLoggerName());
-			sb.append(", message=");
-			sb.append(loggingEvent.getMessage());
-
-			ThrowableInformation throwableInformation =
-				loggingEvent.getThrowableInformation();
-
-			LogAssertionTestRule.caughtFailure(
-				new AssertionError(
-					sb.toString(), throwableInformation.getThrowable()));
+		@Override
+		public void close() {
 		}
+
+		@Override
+		public boolean requiresLayout() {
+			return false;
+		}
+
+		@Override
+		protected void append(LoggingEvent loggingEvent) {
+			Level level = loggingEvent.getLevel();
+
+			if (level.equals(Level.ERROR) || level.equals(Level.FATAL)) {
+				StringBundler sb = new StringBundler(6);
+
+				sb.append("{level=");
+				sb.append(loggingEvent.getLevel());
+				sb.append(", loggerName=");
+				sb.append(loggingEvent.getLoggerName());
+				sb.append(", message=");
+				sb.append(loggingEvent.getMessage());
+
+				ThrowableInformation throwableInformation =
+					loggingEvent.getThrowableInformation();
+
+				LogAssertionTestRule.caughtFailure(
+					new AssertionError(
+						sb.toString(), throwableInformation.getThrowable()));
+			}
+		}
+
 	}
 
 }
