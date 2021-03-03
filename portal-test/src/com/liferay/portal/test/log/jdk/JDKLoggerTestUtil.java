@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.kernel.test;
+package com.liferay.portal.test.log.jdk;
 
 import com.liferay.portal.kernel.log.Jdk14LogImpl;
 import com.liferay.portal.kernel.log.Log;
@@ -24,10 +24,7 @@ import java.util.logging.Logger;
 
 /**
  * @author Shuyang Zhou
- * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
- *             com.liferay.portal.test.log.jdk.JDKLoggerTestUtil}
  */
-@Deprecated
 public class JDKLoggerTestUtil {
 
 	public static CaptureHandler configureJDKLogger(String name, Level level) {
