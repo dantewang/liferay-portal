@@ -15,10 +15,10 @@
 package com.liferay.portal.internal.increment;
 
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.test.CaptureHandler;
-import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.test.log.jdk.CaptureHandler;
+import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
 import com.liferay.portal.util.PropsUtil;
 
 import java.util.List;

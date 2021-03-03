@@ -22,10 +22,10 @@ import com.liferay.portal.fabric.netty.fileserver.handlers.FileServerTestUtil;
 import com.liferay.portal.kernel.nio.FileSystemProviderWrapper;
 import com.liferay.portal.kernel.nio.FileSystemWrapper;
 import com.liferay.portal.kernel.nio.PathWrapper;
-import com.liferay.portal.kernel.test.CaptureHandler;
-import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.test.SwappableSecurityManager;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
+import com.liferay.portal.test.log.jdk.CaptureHandler;
+import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
 
 import java.io.File;
 import java.io.IOException;
