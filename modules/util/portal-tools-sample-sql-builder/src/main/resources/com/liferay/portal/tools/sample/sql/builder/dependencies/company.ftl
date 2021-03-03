@@ -1,4 +1,4 @@
-<#assign companyModel = dataFactory.newCompanyModel() />
+<#assign companyModel = dataFactory.newDefaultCompanyModel() />
 
 ${dataFactory.toInsertSQL(companyModel)}
 

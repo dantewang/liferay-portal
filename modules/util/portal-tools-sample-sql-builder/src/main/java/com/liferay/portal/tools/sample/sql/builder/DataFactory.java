@@ -1351,7 +1351,7 @@ public class DataFactory {
 		return commerceCurrencyModel;
 	}
 
-	public CompanyModel newCompanyModel() {
+	public CompanyModel newDefaultCompanyModel() {
 		CompanyModel companyModel = new CompanyModelImpl();
 
 		// PK fields
