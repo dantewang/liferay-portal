@@ -17,8 +17,8 @@ package com.liferay.util.bean;
 import com.liferay.portal.kernel.bean.BeanLocator;
 import com.liferay.portal.kernel.bean.BeanLocatorException;
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
-import com.liferay.portal.kernel.test.CaptureHandler;
-import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.jdk.CaptureHandler;
+import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
 
 import java.util.List;
 import java.util.logging.Level;

@@ -14,11 +14,11 @@
 
 package com.liferay.portal.kernel.util;
 
-import com.liferay.portal.kernel.test.CaptureHandler;
-import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
 import com.liferay.portal.kernel.test.util.PropsTestUtil;
+import com.liferay.portal.test.log.jdk.CaptureHandler;
+import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
 
 import java.text.Collator;
 import java.text.RuleBasedCollator;

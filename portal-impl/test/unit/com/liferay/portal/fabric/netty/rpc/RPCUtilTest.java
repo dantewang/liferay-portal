@@ -21,10 +21,10 @@ import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.fabric.netty.handlers.NettyChannelAttributes;
 import com.liferay.portal.fabric.netty.rpc.handlers.NettyRPCChannelHandler;
-import com.liferay.portal.kernel.test.CaptureHandler;
-import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
+import com.liferay.portal.test.log.jdk.CaptureHandler;
+import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandlerAdapter;

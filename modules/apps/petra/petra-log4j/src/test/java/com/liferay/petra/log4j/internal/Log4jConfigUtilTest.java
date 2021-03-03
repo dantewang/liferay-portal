@@ -15,12 +15,12 @@
 package com.liferay.petra.log4j.internal;
 
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.test.CaptureHandler;
-import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.test.log.jdk.CaptureHandler;
+import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
