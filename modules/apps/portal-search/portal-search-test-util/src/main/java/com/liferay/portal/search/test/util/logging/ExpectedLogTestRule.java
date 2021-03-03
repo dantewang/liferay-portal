@@ -14,8 +14,8 @@
 
 package com.liferay.portal.search.test.util.logging;
 
-import com.liferay.portal.kernel.test.CaptureHandler;
-import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.jdk.CaptureHandler;
+import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;

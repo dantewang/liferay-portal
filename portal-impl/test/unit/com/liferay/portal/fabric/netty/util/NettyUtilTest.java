@@ -16,10 +16,10 @@ package com.liferay.portal.fabric.netty.util;
 
 import com.liferay.petra.concurrent.DefaultNoticeableFuture;
 import com.liferay.portal.fabric.netty.NettyTestUtil;
-import com.liferay.portal.kernel.test.CaptureHandler;
-import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
+import com.liferay.portal.test.log.jdk.CaptureHandler;
+import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
