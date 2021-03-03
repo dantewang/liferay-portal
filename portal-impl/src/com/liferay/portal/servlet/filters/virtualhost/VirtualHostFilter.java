@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.struts.LastPath;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -39,6 +40,7 @@ import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.webserver.WebServerServlet;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -48,6 +50,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * <p>
@@ -270,6 +273,23 @@ public class VirtualHostFilter extends BasePortalFilter {
 		long companyId = PortalInstances.getCompanyId(httpServletRequest);
 
 		try {
+			HttpSession session = httpServletRequest.getSession();
+
+			if (session.getAttribute(WebKeys.LOCALE) == null) {
+				String defaultLanguageId =
+					(String)httpServletRequest.getAttribute(
+						WebKeys.VIRTUAL_HOST_DEFAULT_LANGUAGE_ID);
+
+				if (Validator.isNotNull(defaultLanguageId)) {
+					Locale locale = LocaleUtil.fromLanguageId(
+						defaultLanguageId, true, false);
+
+					if (locale != null) {
+						session.setAttribute(WebKeys.LOCALE, locale);
+					}
+				}
+			}
+
 			Map<String, String[]> parameterMap =
 				httpServletRequest.getParameterMap();
 
