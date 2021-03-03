@@ -105,8 +105,6 @@ public class Log4JLoggerTestUtil {
 
 		CaptureAppender captureAppender = new CaptureAppender(logger);
 
-		logger.addAppender(captureAppender);
-
 		logger.setLevel(level);
 
 		return captureAppender;

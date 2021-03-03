@@ -33,7 +33,7 @@ import org.apache.log4j.spi.LoggingEvent;
 /**
  * @author Shuyang Zhou
  */
-public class CaptureAppender extends AppenderSkeleton implements Closeable {
+public class CaptureAppender implements Closeable {
 
 	public CaptureAppender(Logger logger) {
 		_logger = logger;
@@ -48,22 +48,13 @@ public class CaptureAppender extends AppenderSkeleton implements Closeable {
 		catch (Exception exception) {
 			throw new RuntimeException(exception);
 		}
+
+		logger.addAppender(_logAppender);
 	}
 
 	@Override
 	public void close() {
-		closed = true;
-
-		_logger.removeAppender(this);
-
-		_logger.setLevel(_level);
-
-		try {
-			_parentField.set(_logger, _parentCategory);
-		}
-		catch (Exception exception) {
-			throw new RuntimeException(exception);
-		}
+		_logAppender.close();
 	}
 
 	public List<LogEvent> getLogEvents() {
@@ -84,16 +75,6 @@ public class CaptureAppender extends AppenderSkeleton implements Closeable {
 		return loggingEvents;
 	}
 
-	@Override
-	public boolean requiresLayout() {
-		return false;
-	}
-
-	@Override
-	protected void append(LoggingEvent loggingEvent) {
-		_logEvents.add(new LogEvent(loggingEvent));
-	}
-
 	private static final Field _parentField;
 
 	static {
@@ -107,8 +88,39 @@ public class CaptureAppender extends AppenderSkeleton implements Closeable {
 	}
 
 	private final Level _level;
+	private final LogAppender _logAppender = new LogAppender();
 	private final List<LogEvent> _logEvents = new CopyOnWriteArrayList<>();
 	private final Logger _logger;
 	private final Category _parentCategory;
+
+	private class LogAppender extends AppenderSkeleton {
+
+		@Override
+		public void close() {
+			closed = true;
+
+			_logger.removeAppender(this);
+
+			_logger.setLevel(_level);
+
+			try {
+				_parentField.set(_logger, _parentCategory);
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		}
+
+		@Override
+		public boolean requiresLayout() {
+			return false;
+		}
+
+		@Override
+		protected void append(LoggingEvent loggingEvent) {
+			_logEvents.add(new LogEvent(loggingEvent));
+		}
+
+	}
 
 }
