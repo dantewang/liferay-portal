@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.test.log;
+package com.liferay.portal.test.log.log4j;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -24,10 +24,7 @@ import org.apache.log4j.Logger;
 
 /**
  * @author Shuyang Zhou
- * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
- *             com.liferay.portal.test.log.log4j.Log4JLoggerTestUtil}
  */
-@Deprecated
 public class Log4JLoggerTestUtil {
 
 	public static final String ALL = String.valueOf(Level.ALL);
