@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.test.log;
+package com.liferay.portal.test.log.log4j;
 
 import com.liferay.petra.reflect.ReflectionUtil;
 
@@ -32,10 +32,7 @@ import org.apache.log4j.spi.LoggingEvent;
 
 /**
  * @author Shuyang Zhou
- * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
- *             com.liferay.portal.test.log.log4j.CaptureAppender}
  */
-@Deprecated
 public class CaptureAppender extends AppenderSkeleton implements Closeable {
 
 	public CaptureAppender(Logger logger) {
