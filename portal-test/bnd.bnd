@@ -12,6 +12,8 @@ Export-Package:\
 	com.liferay.portal.kernel.test.rule,\
 	com.liferay.portal.kernel.test.util,\
 	com.liferay.portal.test.log,\
+	com.liferay.portal.test.log.jdk,\
+	com.liferay.portal.test.log.log4j,\
 	com.liferay.portal.test.mail,\
 	com.liferay.portal.test.randomizerbumpers,\
 	com.liferay.portal.test.rule,\
