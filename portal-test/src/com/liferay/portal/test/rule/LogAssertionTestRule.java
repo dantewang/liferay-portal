@@ -32,6 +32,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
+import org.apache.log4j.AppenderSkeleton;
+import org.apache.log4j.Level;
+import org.apache.log4j.spi.LoggingEvent;
+import org.apache.log4j.spi.ThrowableInformation;
+
 import org.junit.Assert;
 import org.junit.runner.Description;
 
@@ -226,7 +231,9 @@ public class LogAssertionTestRule
 	}
 
 	protected static void installLog4jAppender() {
-		Log4jAssertionAppender.installLog4jAppender();
+		_rootLogger.removeAppender(_logAppender);
+
+		_rootLogger.addAppender(_logAppender);
 	}
 
 	protected static boolean isExpected(
@@ -279,7 +286,7 @@ public class LogAssertionTestRule
 	}
 
 	protected static void uninstallLog4jAppender() {
-		Log4jAssertionAppender.uninstallLog4jAppender();
+		_rootLogger.removeAppender(_logAppender);
 	}
 
 	private LogAssertionTestRule() {
@@ -287,8 +294,47 @@ public class LogAssertionTestRule
 
 	private static final Map<Thread, Error> _concurrentFailures =
 		new ConcurrentHashMap<>();
+	private static final LogAppender _logAppender = new LogAppender();
+	private static final org.apache.log4j.Logger _rootLogger =
+		org.apache.log4j.Logger.getRootLogger();
 	private static volatile Thread _thread;
 	private static volatile Thread.UncaughtExceptionHandler
 		_uncaughtExceptionHandler;
+
+	private static class LogAppender extends AppenderSkeleton {
+
+		@Override
+		public void close() {
+		}
+
+		@Override
+		public boolean requiresLayout() {
+			return false;
+		}
+
+		@Override
+		protected void append(LoggingEvent loggingEvent) {
+			Level level = loggingEvent.getLevel();
+
+			if (level.equals(Level.ERROR) || level.equals(Level.FATAL)) {
+				StringBundler sb = new StringBundler(6);
+
+				sb.append("{level=");
+				sb.append(loggingEvent.getLevel());
+				sb.append(", loggerName=");
+				sb.append(loggingEvent.getLoggerName());
+				sb.append(", message=");
+				sb.append(loggingEvent.getMessage());
+
+				ThrowableInformation throwableInformation =
+					loggingEvent.getThrowableInformation();
+
+				LogAssertionTestRule.caughtFailure(
+					new AssertionError(
+						sb.toString(), throwableInformation.getThrowable()));
+			}
+		}
+
+	}
 
 }
