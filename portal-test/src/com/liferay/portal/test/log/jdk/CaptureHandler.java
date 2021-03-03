@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.kernel.test;
+package com.liferay.portal.test.log.jdk;
 
 import com.liferay.petra.string.StringBundler;
 
@@ -27,10 +27,7 @@ import java.util.logging.Logger;
 
 /**
  * @author Shuyang Zhou
- * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
- *             com.liferay.portal.test.log.jdk.CaptureHandler}
  */
-@Deprecated
 public class CaptureHandler extends Handler implements Closeable {
 
 	public CaptureHandler(Logger logger, Level level) {
