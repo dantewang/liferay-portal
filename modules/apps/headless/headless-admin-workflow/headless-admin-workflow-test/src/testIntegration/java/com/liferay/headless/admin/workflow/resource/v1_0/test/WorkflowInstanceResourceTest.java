@@ -23,8 +23,8 @@ import com.liferay.headless.admin.workflow.resource.v1_0.test.util.WorkflowInsta
 import com.liferay.portal.kernel.messaging.proxy.ProxyMessageListener;
 import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.kernel.workflow.WorkflowException;
-import com.liferay.portal.test.log.CaptureAppender;
-import com.liferay.portal.test.log.Log4JLoggerTestUtil;
+import com.liferay.portal.test.log.log4j.CaptureAppender;
+import com.liferay.portal.test.log.log4j.Log4JLoggerTestUtil;
 
 import java.util.List;
 

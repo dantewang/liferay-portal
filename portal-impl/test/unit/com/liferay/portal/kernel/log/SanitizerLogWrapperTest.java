@@ -18,9 +18,9 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.log.Log4jLogFactoryImpl;
-import com.liferay.portal.test.log.CaptureAppender;
-import com.liferay.portal.test.log.Log4JLoggerTestUtil;
-import com.liferay.portal.test.log.LogEvent;
+import com.liferay.portal.test.log.log4j.CaptureAppender;
+import com.liferay.portal.test.log.log4j.Log4JLoggerTestUtil;
+import com.liferay.portal.test.log.log4j.LogEvent;
 
 import java.util.List;
 import java.util.Properties;
