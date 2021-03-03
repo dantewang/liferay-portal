@@ -15,9 +15,9 @@
 package com.liferay.portal.search.elasticsearch7.internal.cluster;
 
 import com.liferay.portal.kernel.cluster.ClusterEvent;
-import com.liferay.portal.kernel.test.CaptureHandler;
-import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.test.log.jdk.CaptureHandler;
+import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
 
 import java.util.List;
 import java.util.logging.Level;

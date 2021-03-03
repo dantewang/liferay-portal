@@ -16,11 +16,11 @@ package com.liferay.portal.kernel.servlet.filters.invoker;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.servlet.HttpMethods;
-import com.liferay.portal.kernel.test.CaptureHandler;
-import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.util.ProxyFactory;
+import com.liferay.portal.test.log.jdk.CaptureHandler;
+import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
 
 import java.util.Arrays;
 import java.util.Collections;
