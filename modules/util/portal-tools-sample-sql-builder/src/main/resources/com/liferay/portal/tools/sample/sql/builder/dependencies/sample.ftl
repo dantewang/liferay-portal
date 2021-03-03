@@ -6,8 +6,6 @@
 
 <#include "default_dl_file_type.ftl">
 
-<#include "groups.ftl">
-
 <#include "release.ftl">
 
 <#include "counters.ftl">
