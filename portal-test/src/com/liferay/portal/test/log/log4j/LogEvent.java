@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.test.log;
+package com.liferay.portal.test.log.log4j;
 
 import com.liferay.petra.string.StringBundler;
 
@@ -21,10 +21,7 @@ import org.apache.log4j.spi.ThrowableInformation;
 
 /**
  * @author Tina Tian
- * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
- *              com.liferay.portal.test.log.log4j.LogEvent}
  */
-@Deprecated
 public class LogEvent {
 
 	public LogEvent(LoggingEvent loggingEvent) {
