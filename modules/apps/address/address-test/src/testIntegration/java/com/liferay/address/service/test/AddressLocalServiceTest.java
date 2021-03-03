@@ -37,9 +37,9 @@ import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.test.log.CaptureAppender;
-import com.liferay.portal.test.log.Log4JLoggerTestUtil;
-import com.liferay.portal.test.log.LogEvent;
+import com.liferay.portal.test.log.log4j.CaptureAppender;
+import com.liferay.portal.test.log.log4j.Log4JLoggerTestUtil;
+import com.liferay.portal.test.log.log4j.LogEvent;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
