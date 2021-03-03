@@ -563,6 +563,10 @@ public class DataFactory {
 		return BenchmarksPropsValues.MAX_SEGMENTS_ENTRY_COUNT;
 	}
 
+	public int getMaxVirtualInstanceCount() {
+		return BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT;
+	}
+
 	public int getMaxWikiPageCommentCount() {
 		return BenchmarksPropsValues.MAX_WIKI_PAGE_COMMENT_COUNT;
 	}
@@ -702,6 +706,27 @@ public class DataFactory {
 		// Other fields
 
 		accountModel.setName("Liferay");
+		accountModel.setLegalName("Liferay, Inc.");
+
+		return accountModel;
+	}
+
+	public AccountModel newAccountModel(CompanyModel companyModel) {
+		AccountModel accountModel = new AccountModelImpl();
+
+		// PK fields
+
+		accountModel.setAccountId(_accountId);
+
+		// Audit fields
+
+		accountModel.setCompanyId(companyModel.getCompanyId());
+		accountModel.setCreateDate(new Date());
+		accountModel.setModifiedDate(new Date());
+
+		// Other fields
+
+		accountModel.setName(companyModel.getWebId());
 		accountModel.setLegalName("Liferay, Inc.");
 
 		return accountModel;
@@ -1225,6 +1250,26 @@ public class DataFactory {
 		commerceCurrencyModel.setLastPublishDate(new Date());
 
 		return commerceCurrencyModel;
+	}
+
+	public CompanyModel newCompanyModel(int index) {
+		CompanyModel companyModel = new CompanyModelImpl();
+
+		// PK fields
+
+		companyModel.setCompanyId(_counter.get());
+
+		// Other fields
+
+		companyModel.setAccountId(_counter.get());
+		companyModel.setWebId(StringBundler.concat("liferay", index, ".com"));
+		companyModel.setMx("liferay.com");
+		companyModel.setActive(true);
+
+		_accountId = companyModel.getAccountId();
+		_companyId = companyModel.getCompanyId();
+
+		return companyModel;
 	}
 
 	public ContactModel newContactModel(UserModel userModel) {
@@ -3970,6 +4015,42 @@ public class DataFactory {
 		virtualHostModel.setHostname(BenchmarksPropsValues.VIRTUAL_HOST_NAME);
 
 		return virtualHostModel;
+	}
+
+	public VirtualHostModel newVirtualHostModel(CompanyModel companyModel) {
+		VirtualHostModel virtualHostModel = new VirtualHostModelImpl();
+
+		//  PK fields
+
+		virtualHostModel.setVirtualHostId(_counter.get());
+
+		// Audit fields
+
+		virtualHostModel.setCompanyId(companyModel.getCompanyId());
+
+		// Other fields
+
+		virtualHostModel.setHostname(companyModel.getWebId());
+
+		return virtualHostModel;
+	}
+
+	public List<UserModel> newVirtualInstanceUserModels() {
+		List<UserModel> userModels = new ArrayList<>(
+			BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_USER_COUNT);
+
+		for (int i = 0;
+			 i < BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_USER_COUNT; i++) {
+
+			String[] userName = nextUserName(i);
+
+			userModels.add(
+				newUserModel(
+					_counter.get(), userName[0], userName[1],
+					"test" + _userScreenNameCounter.get(), false));
+		}
+
+		return userModels;
 	}
 
 	public List<WikiNodeModel> newWikiNodeModels(long groupId) {
