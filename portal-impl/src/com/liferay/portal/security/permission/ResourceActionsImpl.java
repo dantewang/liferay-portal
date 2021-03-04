@@ -1632,20 +1632,20 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 
 		public void setLayoutManagerActions(Set<String> layoutManagerActions) {
-			_guestUnsupportedActions = layoutManagerActions;
+			_layoutManagerActions = layoutManagerActions;
 		}
 
 		public void setOwnerDefaultActions(Set<String> ownerDefaultActions) {
-			_guestUnsupportedActions = ownerDefaultActions;
+			_ownerDefaultActions = ownerDefaultActions;
 		}
 
 		private Set<String> _groupDefaultActions = Collections.emptySet();
 		private Set<String> _guestDefaultActions = Collections.emptySet();
 		private Set<String> _guestUnsupportedActions = Collections.emptySet();
-		private final Set<String> _layoutManagerActions =
+		private Set<String> _layoutManagerActions =
 			Collections.emptySet();
 		private final String _name;
-		private final Set<String> _ownerDefaultActions = Collections.emptySet();
+		private Set<String> _ownerDefaultActions = Collections.emptySet();
 		private final Set<String> _supportsActions = new HashSet<>();
 
 	}
