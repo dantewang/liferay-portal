@@ -25,12 +25,9 @@ import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.kernel.workflow.WorkflowException;
 import com.liferay.portal.test.log.log4j.CaptureAppender;
 import com.liferay.portal.test.log.log4j.Log4JLoggerTestUtil;
+import com.liferay.portal.test.log.log4j.LogEvent;
 
 import java.util.List;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.spi.LoggingEvent;
-import org.apache.log4j.spi.ThrowableInformation;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -58,11 +55,12 @@ public class WorkflowInstanceResourceTest
 	public void testDeleteWorkflowInstance() throws Exception {
 		try (CaptureAppender captureAppender =
 				Log4JLoggerTestUtil.configureLog4JLogger(
-					ProxyMessageListener.class.getName(), Level.WARN)) {
+					ProxyMessageListener.class.getName(),
+					Log4JLoggerTestUtil.WARN)) {
 
 			super.testDeleteWorkflowInstance();
 
-			_assertNoSuchInstanceLoggingEvents(captureAppender, 2);
+			_assertNoSuchInstanceLogEvents(captureAppender, 2);
 		}
 	}
 
@@ -71,11 +69,12 @@ public class WorkflowInstanceResourceTest
 	public void testGraphQLDeleteWorkflowInstance() throws Exception {
 		try (CaptureAppender captureAppender =
 				Log4JLoggerTestUtil.configureLog4JLogger(
-					ProxyMessageListener.class.getName(), Level.WARN)) {
+					ProxyMessageListener.class.getName(),
+					Log4JLoggerTestUtil.WARN)) {
 
 			super.testGraphQLDeleteWorkflowInstance();
 
-			_assertNoSuchInstanceLoggingEvents(captureAppender, 1);
+			_assertNoSuchInstanceLogEvents(captureAppender, 1);
 		}
 	}
 
@@ -84,11 +83,12 @@ public class WorkflowInstanceResourceTest
 	public void testGraphQLGetWorkflowInstanceNotFound() throws Exception {
 		try (CaptureAppender captureAppender =
 				Log4JLoggerTestUtil.configureLog4JLogger(
-					ProxyMessageListener.class.getName(), Level.WARN)) {
+					ProxyMessageListener.class.getName(),
+					Log4JLoggerTestUtil.WARN)) {
 
 			super.testGraphQLGetWorkflowInstanceNotFound();
 
-			_assertNoSuchInstanceLoggingEvents(captureAppender, 1);
+			_assertNoSuchInstanceLogEvents(captureAppender, 1);
 		}
 	}
 
@@ -169,21 +169,16 @@ public class WorkflowInstanceResourceTest
 			workflowInstance);
 	}
 
-	private void _assertNoSuchInstanceLoggingEvents(
-		CaptureAppender captureAppender, int totalLoggingEvents) {
+	private void _assertNoSuchInstanceLogEvents(
+		CaptureAppender captureAppender, int totalLogEvents) {
 
-		List<LoggingEvent> loggingEvents = captureAppender.getLoggingEvents();
+		List<LogEvent> logEvents = captureAppender.getLogEvents();
 
 		Assert.assertEquals(
-			loggingEvents.toString(), totalLoggingEvents, loggingEvents.size());
+			logEvents.toString(), totalLogEvents, logEvents.size());
 
-		for (LoggingEvent loggingEvent : loggingEvents) {
-			ThrowableInformation throwableInformation =
-				loggingEvent.getThrowableInformation();
-
-			Assert.assertNotNull(throwableInformation);
-
-			Throwable throwable = throwableInformation.getThrowable();
+		for (LogEvent logEvent : logEvents) {
+			Throwable throwable = logEvent.getThrowable();
 
 			Assert.assertNotNull(throwable);
 
