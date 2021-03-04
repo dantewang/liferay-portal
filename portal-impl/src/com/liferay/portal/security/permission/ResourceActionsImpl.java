@@ -1133,13 +1133,13 @@ public class ResourceActionsImpl implements ResourceActions {
 			return new ArrayList<>();
 		}
 
-		List<String> resourceActions = new ArrayList<>();
+		Set<String> resourceActions = new HashSet<>();
 
 		for (ResourceActionsBag resourceActionsBag : resourceActionsBags) {
 			resourceActions.addAll(resourceActionsBag.getSupportsActions());
 		}
 
-		return resourceActions;
+		return new ArrayList<>(resourceActions);
 	}
 
 	private String _getResourceBundlesString(
