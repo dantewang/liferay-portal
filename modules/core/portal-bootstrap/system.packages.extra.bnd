@@ -223,6 +223,7 @@ Export-Package:\
 	org.apache.commons.logging.impl;version="1.2",\
 	org.apache.commons.validator.routines;version='1.5.1',\
 	org.apache.log4j;version='2.14.0',\
+	org.apache.log4j.spi;version='2.14.0',\
 	org.apache.logging.log4j;version='2.14.0',\
 	org.apache.logging.log4j.core;version='2.14.0',\
 	org.apache.logging.log4j.core.appender;version='2.14.0',\
