@@ -14,21 +14,18 @@
 
 package com.liferay.portal.test.log.log4j;
 
-import com.liferay.petra.reflect.ReflectionUtil;
+import com.liferay.petra.log4j.Log4JUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.io.Closeable;
 
-import java.lang.reflect.Field;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.Category;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggingEvent;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.Logger;
+import org.apache.logging.log4j.core.appender.AbstractAppender;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 
 /**
  * @author Shuyang Zhou
@@ -40,21 +37,38 @@ public class CaptureAppender implements Closeable {
 
 		_level = _logger.getLevel();
 
-		_parentCategory = logger.getParent();
+		_loggerConfig = _logger.get();
 
-		try {
-			_parentField.set(_logger, null);
-		}
-		catch (Exception exception) {
-			throw new RuntimeException(exception);
-		}
+		_additive = _loggerConfig.isAdditive();
+
+		_loggerConfig.setAdditive(false);
+
+		_logAppender.start();
 
 		_logger.addAppender(_logAppender);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no replacement
+	 */
+	@Deprecated
+	public CaptureAppender(org.apache.log4j.Logger logger) {
+		_logger = null;
+
+		_level = null;
+
+		_loggerConfig = null;
+
+		_additive = false;
+	}
+
 	@Override
 	public void close() {
-		_logAppender.close();
+		_logger.removeAppender(_logAppender);
+
+		_loggerConfig.setAdditive(_additive);
+
+		Log4JUtil.setLevel(_logger.getName(), _level.toString(), false);
 	}
 
 	public List<LogEvent> getLogEvents() {
@@ -65,60 +79,27 @@ public class CaptureAppender implements Closeable {
 	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link #getLogEvents()}
 	 */
 	@Deprecated
-	public List<LoggingEvent> getLoggingEvents() {
-		List<LoggingEvent> loggingEvents = new ArrayList<>();
-
-		for (LogEvent logEvent : _logEvents) {
-			loggingEvents.add((LoggingEvent)logEvent.getWrappedObject());
-		}
-
-		return loggingEvents;
+	public List<LogEvent> getLoggingEvents() {
+		return getLogEvents();
 	}
 
-	private static final Field _parentField;
-
-	static {
-		try {
-			_parentField = ReflectionUtil.getDeclaredField(
-				Category.class, "parent");
-		}
-		catch (Exception exception) {
-			throw new ExceptionInInitializerError(exception);
-		}
-	}
-
+	private final boolean _additive;
 	private final Level _level;
-	private final LogAppender _logAppender = new LogAppender();
+	private final LogAppender _logAppender = new LogAppender(
+		StringUtil.randomString());
 	private final List<LogEvent> _logEvents = new CopyOnWriteArrayList<>();
 	private final Logger _logger;
-	private final Category _parentCategory;
+	private final LoggerConfig _loggerConfig;
 
-	private class LogAppender extends AppenderSkeleton {
+	private class LogAppender extends AbstractAppender {
 
-		@Override
-		public void close() {
-			closed = true;
-
-			_logger.removeAppender(this);
-
-			_logger.setLevel(_level);
-
-			try {
-				_parentField.set(_logger, _parentCategory);
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
+		public LogAppender(String appenderName) {
+			super(appenderName, null, null, true, null);
 		}
 
 		@Override
-		public boolean requiresLayout() {
-			return false;
-		}
-
-		@Override
-		protected void append(LoggingEvent loggingEvent) {
-			_logEvents.add(new LogEvent(loggingEvent));
+		public void append(org.apache.logging.log4j.core.LogEvent logEvent) {
+			_logEvents.add(new LogEvent(logEvent));
 		}
 
 	}
