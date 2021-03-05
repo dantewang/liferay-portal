@@ -33,7 +33,7 @@ import org.apache.log4j.spi.LoggingEvent;
 /**
  * @author Shuyang Zhou
  * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
- *             com.liferay.portal.test.log.log4j.CaptureAppender}
+ *             Log4JLoggerTestUtil.CaptureAppender}
  */
 @Deprecated
 public class CaptureAppender extends AppenderSkeleton implements Closeable {
