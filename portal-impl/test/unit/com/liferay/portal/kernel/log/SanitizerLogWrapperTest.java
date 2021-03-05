@@ -18,9 +18,9 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.log.Log4jLogFactoryImpl;
-import com.liferay.portal.test.log.log4j.CaptureAppender;
-import com.liferay.portal.test.log.log4j.Log4JLoggerTestUtil;
-import com.liferay.portal.test.log.log4j.LogEvent;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 
 import java.util.List;
 import java.util.Properties;
@@ -99,8 +99,8 @@ public class SanitizerLogWrapperTest {
 	public void setUp() {
 		String loggerName = "test.logger";
 
-		_captureAppender = Log4JLoggerTestUtil.configureLog4JLogger(
-			loggerName, Log4JLoggerTestUtil.ALL);
+		_logCapture = LoggerTestUtil.configureLog4JLogger(
+			loggerName, LoggerTestUtil.ALL);
 
 		LogFactory logFactory = LogFactoryUtil.getLogFactory();
 
@@ -108,8 +108,8 @@ public class SanitizerLogWrapperTest {
 	}
 
 	@After
-	public void tearDown() {
-		_captureAppender.close();
+	public void tearDown() throws Exception {
+		_logCapture.close();
 	}
 
 	@Test
@@ -140,13 +140,13 @@ public class SanitizerLogWrapperTest {
 		log.warn(_message);
 		log.warn(_message, exception);
 
-		List<LogEvent> logEvents = _captureAppender.getLogEvents();
+		List<LogEntry> logEntrys = _logCapture.getLogEntries();
 
-		Assert.assertNotNull(logEvents);
-		Assert.assertEquals(logEvents.toString(), 12, logEvents.size());
+		Assert.assertNotNull(logEntrys);
+		Assert.assertEquals(logEntrys.toString(), 12, logEntrys.size());
 
-		for (LogEvent logEvent : logEvents) {
-			String message = logEvent.getMessage();
+		for (LogEntry logEntry : logEntrys) {
+			String message = logEntry.getMessage();
 
 			Assert.assertTrue(
 				message.startsWith(SanitizerLogWrapper.CRLF_WARNING));
@@ -164,7 +164,7 @@ public class SanitizerLogWrapperTest {
 				expectedMessageWithCRLFChars, messageWithCRLFChars);
 		}
 
-		logEvents.clear();
+		logEntrys.clear();
 
 		_log.debug(_message);
 		_log.debug(_message, exception);
@@ -179,11 +179,11 @@ public class SanitizerLogWrapperTest {
 		_log.warn(_message);
 		_log.warn(_message, exception);
 
-		Assert.assertNotNull(logEvents);
-		Assert.assertEquals(logEvents.toString(), 12, logEvents.size());
+		Assert.assertNotNull(logEntrys);
+		Assert.assertEquals(logEntrys.toString(), 12, logEntrys.size());
 
-		for (LogEvent logEvent : logEvents) {
-			String message = logEvent.getMessage();
+		for (LogEntry logEntry : logEntrys) {
+			String message = logEntry.getMessage();
 
 			char[] messageChars = message.toCharArray();
 
@@ -213,13 +213,13 @@ public class SanitizerLogWrapperTest {
 		_log.warn(exception, exception);
 		_log.warn(null, exception);
 
-		List<LogEvent> logEvents = _captureAppender.getLogEvents();
+		List<LogEntry> logEntrys = _logCapture.getLogEntries();
 
-		Assert.assertNotNull(logEvents);
-		Assert.assertEquals(logEvents.toString(), 12, logEvents.size());
+		Assert.assertNotNull(logEntrys);
+		Assert.assertEquals(logEntrys.toString(), 12, logEntrys.size());
 
-		for (LogEvent logEvent : logEvents) {
-			Throwable throwable = logEvent.getThrowable();
+		for (LogEntry logEntry : logEntrys) {
+			Throwable throwable = logEntry.getThrowable();
 
 			String throwableMessage = throwable.getMessage();
 
@@ -253,13 +253,13 @@ public class SanitizerLogWrapperTest {
 		_log.warn(_message);
 		_log.warn(_message, exception);
 
-		List<LogEvent> logEvents = _captureAppender.getLogEvents();
+		List<LogEntry> logEntrys = _logCapture.getLogEntries();
 
-		Assert.assertNotNull(logEvents);
-		Assert.assertEquals(logEvents.toString(), 12, logEvents.size());
+		Assert.assertNotNull(logEntrys);
+		Assert.assertEquals(logEntrys.toString(), 12, logEntrys.size());
 
-		for (LogEvent logEvent : logEvents) {
-			String message = logEvent.getMessage();
+		for (LogEntry logEntry : logEntrys) {
+			String message = logEntry.getMessage();
 
 			char[] messageChars = message.toCharArray();
 
@@ -273,6 +273,6 @@ public class SanitizerLogWrapperTest {
 	private static char[] _messageChars;
 	private static Properties _systemProperties;
 
-	private CaptureAppender _captureAppender;
+	private LogCapture _logCapture;
 
 }
