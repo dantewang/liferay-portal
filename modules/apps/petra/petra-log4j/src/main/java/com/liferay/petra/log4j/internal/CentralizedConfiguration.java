@@ -99,16 +99,16 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 
 			String appenderName = newAppender.getName();
 
-			Appender oldAppender = currentAppenders.put(
+			Appender currentAppender = currentAppenders.put(
 				appenderName, newAppender);
 
-			if (oldAppender == null) {
+			if (currentAppender == null) {
 				continue;
 			}
 
-			Map<String, LoggerConfig> loggerConfigMap = getLoggers();
+			Map<String, LoggerConfig> loggerConfigs = getLoggers();
 
-			for (LoggerConfig loggerConfig : loggerConfigMap.values()) {
+			for (LoggerConfig loggerConfig : loggerConfigs.values()) {
 				Map<String, Appender> appenders = loggerConfig.getAppenders();
 
 				if (!appenders.containsKey(appenderName)) {
@@ -130,7 +130,7 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 				}
 			}
 
-			oldAppender.stop();
+			currentAppender.stop();
 		}
 	}
 
@@ -138,12 +138,12 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		AbstractFilterable currentAbstractFilterable,
 		AbstractFilterable newAbstractFilterable) {
 
-		Filter newFilter = newAbstractFilterable.getFilter();
+		Filter filter = newAbstractFilterable.getFilter();
 
-		if (newFilter != null) {
-			newFilter.start();
+		if (filter != null) {
+			filter.start();
 
-			currentAbstractFilterable.addFilter(newFilter);
+			currentAbstractFilterable.addFilter(filter);
 		}
 	}
 
