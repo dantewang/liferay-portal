@@ -147,52 +147,52 @@ public class JDKLoggerTestUtil {
 		private final Logger _logger;
 		private final boolean _useParentHandlers;
 
-		private static class PrintableLogRecord
-			extends LogRecord implements LogEntry {
+	}
 
-			@Override
-			public String getPriority() {
-				return String.valueOf(getLevel());
-			}
+	private static class PrintableLogRecord
+		extends LogRecord implements LogEntry {
 
-			@Override
-			public Throwable getThrowable() {
-				return getThrown();
-			}
+		@Override
+		public String getPriority() {
+			return String.valueOf(getLevel());
+		}
 
-			@Override
-			public Object getWrappedObject() {
-				return this;
-			}
+		@Override
+		public Throwable getThrowable() {
+			return getThrown();
+		}
 
-			@Override
-			public String toString() {
-				StringBundler sb = new StringBundler(5);
+		@Override
+		public Object getWrappedObject() {
+			return this;
+		}
 
-				sb.append("{level=");
-				sb.append(getLevel());
-				sb.append(", message=");
-				sb.append(getMessage());
-				sb.append("}");
+		@Override
+		public String toString() {
+			StringBundler sb = new StringBundler(5);
 
-				return sb.toString();
-			}
+			sb.append("{level=");
+			sb.append(getLevel());
+			sb.append(", message=");
+			sb.append(getMessage());
+			sb.append("}");
 
-			private PrintableLogRecord(LogRecord logRecord) {
-				super(logRecord.getLevel(), logRecord.getMessage());
+			return sb.toString();
+		}
 
-				setLoggerName(logRecord.getLoggerName());
-				setMillis(logRecord.getMillis());
-				setParameters(logRecord.getParameters());
-				setResourceBundle(logRecord.getResourceBundle());
-				setResourceBundleName(logRecord.getResourceBundleName());
-				setSequenceNumber(logRecord.getSequenceNumber());
-				setSourceClassName(logRecord.getSourceClassName());
-				setSourceMethodName(logRecord.getSourceMethodName());
-				setThreadID(logRecord.getThreadID());
-				setThrown(logRecord.getThrown());
-			}
+		private PrintableLogRecord(LogRecord logRecord) {
+			super(logRecord.getLevel(), logRecord.getMessage());
 
+			setLoggerName(logRecord.getLoggerName());
+			setMillis(logRecord.getMillis());
+			setParameters(logRecord.getParameters());
+			setResourceBundle(logRecord.getResourceBundle());
+			setResourceBundleName(logRecord.getResourceBundleName());
+			setSequenceNumber(logRecord.getSequenceNumber());
+			setSourceClassName(logRecord.getSourceClassName());
+			setSourceMethodName(logRecord.getSourceMethodName());
+			setThreadID(logRecord.getThreadID());
+			setThrown(logRecord.getThrown());
 		}
 
 	}
