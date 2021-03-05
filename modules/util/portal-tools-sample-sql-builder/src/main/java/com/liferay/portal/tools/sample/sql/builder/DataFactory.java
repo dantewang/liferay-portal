@@ -385,6 +385,9 @@ public class DataFactory {
 			"yyyy-MM-dd HH:mm:ss", TimeZone.getDefault());
 
 		_counter = new SimpleCounter(BenchmarksPropsValues.MAX_GROUP_COUNT + 1);
+
+		_groupCounter = new SimpleCounter(1);
+
 		_timeCounter = new SimpleCounter();
 		_futureDateCounter = new SimpleCounter();
 		_resourcePermissionCounter = new SimpleCounter();
@@ -4024,9 +4027,12 @@ public class DataFactory {
 			BenchmarksPropsValues.MAX_GROUP_COUNT);
 
 		for (int i = 1; i <= BenchmarksPropsValues.MAX_GROUP_COUNT; i++) {
+			long groupId = _groupCounter.get();
+
 			groupModels.add(
 				newGroupModel(
-					i, getClassNameId(Group.class), i, "Site " + i, true));
+					groupId, getClassNameId(Group.class), groupId, "Site " + i,
+					true));
 		}
 
 		return groupModels;
@@ -7052,6 +7058,7 @@ public class DataFactory {
 	private List<String> _firstNames;
 	private final SimpleCounter _futureDateCounter;
 	private long _globalGroupId;
+	private final SimpleCounter _groupCounter;
 	private long _guestGroupId;
 	private RoleModel _guestRoleModel;
 	private String _journalArticleContent;
