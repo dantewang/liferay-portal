@@ -15,6 +15,7 @@
 package com.liferay.portal.test.log.log4j;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.test.log.LogEntry;
 
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
@@ -22,20 +23,23 @@ import org.apache.log4j.spi.ThrowableInformation;
 /**
  * @author Tina Tian
  */
-public class LogEvent {
+public class LogEvent implements LogEntry {
 
 	public LogEvent(LoggingEvent loggingEvent) {
 		_loggingEvent = loggingEvent;
 	}
 
+	@Override
 	public String getMessage() {
 		return _loggingEvent.getRenderedMessage();
 	}
 
+	@Override
 	public String getPriority() {
 		return String.valueOf(_loggingEvent.getLevel());
 	}
 
+	@Override
 	public Throwable getThrowable() {
 		ThrowableInformation throwableInformation =
 			_loggingEvent.getThrowableInformation();
@@ -47,6 +51,7 @@ public class LogEvent {
 		return null;
 	}
 
+	@Override
 	public Object getWrappedObject() {
 		return _loggingEvent;
 	}

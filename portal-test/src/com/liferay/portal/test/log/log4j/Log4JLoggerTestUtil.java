@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.log.LogWrapper;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
+import com.liferay.portal.test.log.LogCapture;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -43,7 +44,7 @@ public class Log4JLoggerTestUtil {
 
 	public static final String WARN = String.valueOf(Level.WARN);
 
-	public static CaptureAppender configureLog4JLogger(
+	public static LogCapture configureLog4JLogger(
 		String name, String priority) {
 
 		return _configureLog4JLogger(name, Level.toLevel(priority));
