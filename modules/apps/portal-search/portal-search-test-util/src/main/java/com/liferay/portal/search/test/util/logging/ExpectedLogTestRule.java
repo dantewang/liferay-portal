@@ -14,8 +14,11 @@
 
 package com.liferay.portal.search.test.util.logging;
 
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,36 +107,49 @@ public class ExpectedLogTestRule implements TestRule {
 			return;
 		}
 
-		Assert.assertThat(getLogRecords(), _matcherBuilder.build());
+		Assert.assertThat(getLogEntrys(), _matcherBuilder.build());
 	}
 
 	protected void closeCaptureHandler() {
-		if (_captureHandler == null) {
+		if (_logCapture == null) {
 			return;
 		}
 
-		_captureHandler.close();
+		try {
+			_logCapture.close();
+		}
+		catch (Exception exception) {
+			_log.error(exception, exception);
+		}
 
-		_captureHandler = null;
+		_logCapture = null;
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
 	protected List<LogRecord> getLogRecords() {
-		if (_captureHandler != null) {
-			return _captureHandler.getLogRecords();
+		return Collections.emptyList();
+	}
+
+	protected List<LogEntry> getLogEntrys() {
+		if (_logCapture != null) {
+			return _logCapture.getLogEntries();
 		}
 
 		return Collections.emptyList();
 	}
 
 	protected void openCaptureHandler(String name, Level level) {
-		_captureHandler = JDKLoggerTestUtil.configureJDKLogger(name, level);
+		_logCapture = LoggerTestUtil.configureJDKLogger(name, level);
 	}
 
-	protected static class LogOutputMatcher<T extends List<LogRecord>>
+	protected static class LogOutputMatcher<T extends List<LogEntry>>
 		extends TypeSafeMatcher<T> {
 
 		@Factory
-		public static <T extends List<LogRecord>> Matcher<T> hasMessage(
+		public static <T extends List<LogEntry>> Matcher<T> hasMessage(
 			Matcher<String> matcher) {
 
 			return new LogOutputMatcher<>(matcher);
@@ -160,19 +176,19 @@ public class ExpectedLogTestRule implements TestRule {
 		}
 
 		@Override
-		protected boolean matchesSafely(T logRecords) {
-			if (matcher.matches(toString(logRecords))) {
+		protected boolean matchesSafely(T logEntrys) {
+			if (matcher.matches(toString(logEntrys))) {
 				return true;
 			}
 
 			return false;
 		}
 
-		protected String toString(T logRecords) {
-			Stream<LogRecord> stream = logRecords.stream();
+		protected String toString(T logEntrys) {
+			Stream<LogEntry> stream = logEntrys.stream();
 
 			return stream.map(
-				LogRecord::getMessage
+				LogEntry::getMessage
 			).collect(
 				Collectors.joining()
 			);
@@ -213,8 +229,11 @@ public class ExpectedLogTestRule implements TestRule {
 		_level = level;
 	}
 
-	private CaptureHandler _captureHandler;
+	private static final Log _log = LogFactoryUtil.getLog(
+		ExpectedLogTestRule.class);
+
 	private final Level _level;
+	private LogCapture _logCapture;
 	private final MatcherBuilder _matcherBuilder = new MatcherBuilder();
 	private final String _name;
 
