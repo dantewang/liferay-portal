@@ -395,8 +395,9 @@ public class DataFactory {
 
 		if (_assetCategoryCounters == null) {
 			_assetCategoryCounters =
-				(Map<Long, SimpleCounter>[])
-					new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+				(Map<Long, SimpleCounter>[])new HashMap<?, ?>
+					[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
+						BenchmarksPropsValues.MAX_GROUP_COUNT];
 		}
 
 		SimpleCounter counter = getSimpleCounter(
@@ -437,9 +438,9 @@ public class DataFactory {
 		}
 
 		if (_assetTagCounters == null) {
-			_assetTagCounters =
-				(Map<Long, SimpleCounter>[])
-					new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+			_assetTagCounters = (Map<Long, SimpleCounter>[])new HashMap<?, ?>
+				[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
+					BenchmarksPropsValues.MAX_GROUP_COUNT];
 		}
 
 		SimpleCounter counter = getSimpleCounter(
@@ -558,6 +559,10 @@ public class DataFactory {
 
 	public int getMaxSegmentsEntryCount() {
 		return BenchmarksPropsValues.MAX_SEGMENTS_ENTRY_COUNT;
+	}
+
+	public int getMaxVirtualInstanceCount() {
+		return BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT;
 	}
 
 	public int getMaxWikiPageCommentCount() {
@@ -699,6 +704,27 @@ public class DataFactory {
 		// Other fields
 
 		accountModel.setName("Liferay");
+		accountModel.setLegalName("Liferay, Inc.");
+
+		return accountModel;
+	}
+
+	public AccountModel newAccountModel(CompanyModel companyModel) {
+		AccountModel accountModel = new AccountModelImpl();
+
+		// PK fields
+
+		accountModel.setAccountId(_accountId);
+
+		// Audit fields
+
+		accountModel.setCompanyId(companyModel.getCompanyId());
+		accountModel.setCreateDate(new Date());
+		accountModel.setModifiedDate(new Date());
+
+		// Other fields
+
+		accountModel.setName(companyModel.getWebId());
 		accountModel.setLegalName("Liferay, Inc.");
 
 		return accountModel;
@@ -1206,6 +1232,26 @@ public class DataFactory {
 		commerceCurrencyModel.setLastPublishDate(new Date());
 
 		return commerceCurrencyModel;
+	}
+
+	public CompanyModel newCompanyModel(int index) {
+		CompanyModel companyModel = new CompanyModelImpl();
+
+		// PK fields
+
+		companyModel.setCompanyId(_counter.get());
+
+		// Other fields
+
+		companyModel.setAccountId(_counter.get());
+		companyModel.setWebId(StringBundler.concat("liferay", index, ".com"));
+		companyModel.setMx("liferay.com");
+		companyModel.setActive(true);
+
+		_accountId = companyModel.getAccountId();
+		_companyId = companyModel.getCompanyId();
+
+		return companyModel;
 	}
 
 	public ContactModel newContactModel(UserModel userModel) {
@@ -3949,6 +3995,42 @@ public class DataFactory {
 		return virtualHostModel;
 	}
 
+	public VirtualHostModel newVirtualHostModel(CompanyModel companyModel) {
+		VirtualHostModel virtualHostModel = new VirtualHostModelImpl();
+
+		//  PK fields
+
+		virtualHostModel.setVirtualHostId(_counter.get());
+
+		// Audit fields
+
+		virtualHostModel.setCompanyId(companyModel.getCompanyId());
+
+		// Other fields
+
+		virtualHostModel.setHostname(companyModel.getWebId());
+
+		return virtualHostModel;
+	}
+
+	public List<UserModel> newVirtualInstanceUserModels() {
+		List<UserModel> userModels = new ArrayList<>(
+			BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_USER_COUNT);
+
+		for (int i = 0;
+			 i < BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_USER_COUNT; i++) {
+
+			String[] userName = nextUserName(i);
+
+			userModels.add(
+				newUserModel(
+					_counter.get(), userName[0], userName[1],
+					"test" + _userScreenNameCounter.get(), false));
+		}
+
+		return userModels;
+	}
+
 	public List<WikiNodeModel> newWikiNodeModels(long groupId) {
 		List<WikiNodeModel> wikiNodeModels = new ArrayList<>(
 			BenchmarksPropsValues.MAX_WIKI_NODE_COUNT);
@@ -5299,8 +5381,9 @@ public class DataFactory {
 	private Map<Long, SimpleCounter>[] _assetCategoryCounters;
 	private final Map<Long, List<AssetCategoryModel>>[]
 		_assetCategoryModelsMaps =
-			(Map<Long, List<AssetCategoryModel>>[])
-				new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+			(Map<Long, List<AssetCategoryModel>>[])new HashMap<?, ?>
+				[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
+					BenchmarksPropsValues.MAX_GROUP_COUNT];
 	private final long[] _assetClassNameIds;
 	private final Map<Long, Integer> _assetClassNameIdsIndexes =
 		new HashMap<>();
@@ -5308,8 +5391,9 @@ public class DataFactory {
 		new HashMap<>();
 	private Map<Long, SimpleCounter>[] _assetTagCounters;
 	private final Map<Long, List<AssetTagModel>>[] _assetTagModelsMaps =
-		(Map<Long, List<AssetTagModel>>[])
-			new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+		(Map<Long, List<AssetTagModel>>[])new HashMap<?, ?>
+			[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
+				BenchmarksPropsValues.MAX_GROUP_COUNT];
 	private final Map<String, ClassNameModel> _classNameModels =
 		new HashMap<>();
 	private long _companyId;
