@@ -25,4 +25,6 @@ public interface LogCapture extends Closeable {
 
 	public List<LogEntry> getLogEntries();
 
+	public List<LogEntry> resetPriority(String priority);
+
 }

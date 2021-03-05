@@ -111,6 +111,15 @@ public class Log4JLoggerTestUtil {
 		}
 
 		@Override
+		public List<LogEntry> resetPriority(String priority) {
+			_logEntries.clear();
+
+			_logger.setLevel(Level.toLevel(priority));
+
+			return _logEntries;
+		}
+
+		@Override
 		protected void append(LoggingEvent loggingEvent) {
 			_logEntries.add(new Log4JLogEntry(loggingEvent));
 		}
