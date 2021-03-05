@@ -1299,26 +1299,6 @@ public class DataFactory {
 		return commerceCurrencyModel;
 	}
 
-	public CompanyModel newCompanyModel() {
-		CompanyModel companyModel = new CompanyModelImpl();
-
-		// PK fields
-
-		companyModel.setCompanyId(_counter.get());
-
-		// Other fields
-
-		companyModel.setAccountId(_counter.get());
-		companyModel.setWebId("liferay.com");
-		companyModel.setMx("liferay.com");
-		companyModel.setActive(true);
-
-		_accountId = companyModel.getAccountId();
-		_companyId = companyModel.getCompanyId();
-
-		return companyModel;
-	}
-
 	public ContactModel newContactModel(UserModel userModel) {
 		ContactModel contactModel = new ContactModelImpl();
 
@@ -2231,6 +2211,26 @@ public class DataFactory {
 		return newAssetVocabularyModel(
 			_globalGroupId, _defaultUserId, null,
 			PropsValues.ASSET_VOCABULARY_DEFAULT);
+	}
+
+	public CompanyModel newDefaultCompanyModel() {
+		CompanyModel companyModel = new CompanyModelImpl();
+
+		// PK fields
+
+		companyModel.setCompanyId(_counter.get());
+
+		// Other fields
+
+		companyModel.setAccountId(_counter.get());
+		companyModel.setWebId("liferay.com");
+		companyModel.setMx("liferay.com");
+		companyModel.setActive(true);
+
+		_accountId = companyModel.getAccountId();
+		_companyId = companyModel.getCompanyId();
+
+		return companyModel;
 	}
 
 	public DDMStructureLayoutModel newDefaultDLDDMStructureLayoutModel() {
