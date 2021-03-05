@@ -62,7 +62,7 @@ public class Log4JLoggerTestUtil {
 		return _configureLog4JLogger(name, Level.toLevel(priority));
 	}
 
-	private static CaptureAppender _configureLog4JLogger(
+	private static Log4JLogCapture _configureLog4JLogger(
 		String name, Level level) {
 
 		LogWrapper logWrapper = (LogWrapper)LogFactoryUtil.getLog(name);
@@ -79,16 +79,16 @@ public class Log4JLoggerTestUtil {
 				"Log " + name + " is not a Log4j logger");
 		}
 
-		CaptureAppender captureAppender = new CaptureAppender(logger);
+		Log4JLogCapture log4JLogCapture = new Log4JLogCapture(logger);
 
-		logger.addAppender(captureAppender);
+		logger.addAppender(log4JLogCapture);
 
 		logger.setLevel(level);
 
-		return captureAppender;
+		return log4JLogCapture;
 	}
 
-	private static class CaptureAppender
+	private static class Log4JLogCapture
 		extends AppenderSkeleton implements LogCapture {
 
 		@Override
@@ -118,10 +118,10 @@ public class Log4JLoggerTestUtil {
 
 		@Override
 		protected void append(LoggingEvent loggingEvent) {
-			_logEntries.add(new LogEvent(loggingEvent));
+			_logEntries.add(new Log4JLogEntry(loggingEvent));
 		}
 
-		private CaptureAppender(Logger logger) {
+		private Log4JLogCapture(Logger logger) {
 			_logger = logger;
 
 			_level = _logger.getLevel();
@@ -155,7 +155,7 @@ public class Log4JLoggerTestUtil {
 
 	}
 
-	private static class LogEvent implements LogEntry {
+	private static class Log4JLogEntry implements LogEntry {
 
 		@Override
 		public String getMessage() {
@@ -197,7 +197,7 @@ public class Log4JLoggerTestUtil {
 			return sb.toString();
 		}
 
-		private LogEvent(LoggingEvent loggingEvent) {
+		private Log4JLogEntry(LoggingEvent loggingEvent) {
 			_loggingEvent = loggingEvent;
 		}
 
