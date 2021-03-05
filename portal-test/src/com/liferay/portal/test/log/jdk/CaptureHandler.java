@@ -15,8 +15,8 @@
 package com.liferay.portal.test.log.jdk;
 
 import com.liferay.petra.string.StringBundler;
-
-import java.io.Closeable;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 /**
  * @author Shuyang Zhou
  */
-public class CaptureHandler extends Handler implements Closeable {
+public class CaptureHandler extends Handler implements LogCapture {
 
 	public CaptureHandler(Logger logger, Level level) {
 		_logger = logger;
@@ -47,7 +47,7 @@ public class CaptureHandler extends Handler implements Closeable {
 
 	@Override
 	public void close() {
-		_logRecords.clear();
+		_logEntries.clear();
 
 		_logger.removeHandler(this);
 
@@ -61,11 +61,12 @@ public class CaptureHandler extends Handler implements Closeable {
 
 	@Override
 	public void flush() {
-		_logRecords.clear();
+		_logEntries.clear();
 	}
 
-	public List<LogRecord> getLogRecords() {
-		return _logRecords;
+	@Override
+	public List<LogEntry> getLogEntries() {
+		return _logEntries;
 	}
 
 	@Override
@@ -75,24 +76,41 @@ public class CaptureHandler extends Handler implements Closeable {
 
 	@Override
 	public void publish(LogRecord logRecord) {
-		_logRecords.add(new PrintableLogRecord(logRecord));
+		_logEntries.add(new PrintableLogRecord(logRecord));
 	}
 
-	public List<LogRecord> resetLogLevel(Level level) {
-		_logRecords.clear();
+	@Override
+	public List<LogEntry> resetPriority(String priority) {
+		_logEntries.clear();
 
-		_logger.setLevel(level);
+		_logger.setLevel(Level.parse(priority));
 
-		return _logRecords;
+		return _logEntries;
 	}
 
 	private final Handler[] _handlers;
 	private final Level _level;
+	private final List<LogEntry> _logEntries = new CopyOnWriteArrayList<>();
 	private final Logger _logger;
-	private final List<LogRecord> _logRecords = new CopyOnWriteArrayList<>();
 	private final boolean _useParentHandlers;
 
-	private static class PrintableLogRecord extends LogRecord {
+	private static class PrintableLogRecord
+		extends LogRecord implements LogEntry {
+
+		@Override
+		public String getPriority() {
+			return String.valueOf(getLevel());
+		}
+
+		@Override
+		public Throwable getThrowable() {
+			return getThrown();
+		}
+
+		@Override
+		public Object getWrappedObject() {
+			return this;
+		}
 
 		@Override
 		public String toString() {
