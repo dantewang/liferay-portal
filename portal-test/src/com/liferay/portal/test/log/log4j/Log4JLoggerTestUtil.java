@@ -14,14 +14,26 @@
 
 package com.liferay.portal.test.log.log4j;
 
+import com.liferay.petra.reflect.ReflectionUtil;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.log.LogWrapper;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
 
+import java.lang.reflect.Field;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.apache.log4j.AppenderSkeleton;
+import org.apache.log4j.Category;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggingEvent;
+import org.apache.log4j.spi.ThrowableInformation;
 
 /**
  * @author Shuyang Zhou
@@ -74,6 +86,123 @@ public class Log4JLoggerTestUtil {
 		logger.setLevel(level);
 
 		return captureAppender;
+	}
+
+	private static class CaptureAppender
+		extends AppenderSkeleton implements LogCapture {
+
+		@Override
+		public void close() {
+			closed = true;
+
+			_logger.removeAppender(this);
+
+			_logger.setLevel(_level);
+
+			try {
+				_parentField.set(_logger, _parentCategory);
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		}
+
+		public List<LogEntry> getLogEntries() {
+			return _logEntries;
+		}
+
+		@Override
+		public boolean requiresLayout() {
+			return false;
+		}
+
+		@Override
+		protected void append(LoggingEvent loggingEvent) {
+			_logEntries.add(new LogEvent(loggingEvent));
+		}
+
+		private CaptureAppender(Logger logger) {
+			_logger = logger;
+
+			_level = _logger.getLevel();
+
+			_parentCategory = logger.getParent();
+
+			try {
+				_parentField.set(_logger, null);
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		}
+
+		private static final Field _parentField;
+
+		static {
+			try {
+				_parentField = ReflectionUtil.getDeclaredField(
+					Category.class, "parent");
+			}
+			catch (Exception exception) {
+				throw new ExceptionInInitializerError(exception);
+			}
+		}
+
+		private final Level _level;
+		private final List<LogEntry> _logEntries = new CopyOnWriteArrayList<>();
+		private final Logger _logger;
+		private final Category _parentCategory;
+
+	}
+
+	private static class LogEvent implements LogEntry {
+
+		@Override
+		public String getMessage() {
+			return _loggingEvent.getRenderedMessage();
+		}
+
+		@Override
+		public String getPriority() {
+			return String.valueOf(_loggingEvent.getLevel());
+		}
+
+		@Override
+		public Throwable getThrowable() {
+			ThrowableInformation throwableInformation =
+				_loggingEvent.getThrowableInformation();
+
+			if (throwableInformation != null) {
+				return throwableInformation.getThrowable();
+			}
+
+			return null;
+		}
+
+		@Override
+		public Object getWrappedObject() {
+			return _loggingEvent;
+		}
+
+		@Override
+		public String toString() {
+			StringBundler sb = new StringBundler(5);
+
+			sb.append("{level=");
+			sb.append(getPriority());
+			sb.append(", message=");
+			sb.append(getMessage());
+			sb.append("}");
+
+			return sb.toString();
+		}
+
+		private LogEvent(LoggingEvent loggingEvent) {
+			_loggingEvent = loggingEvent;
+		}
+
+		private final LoggingEvent _loggingEvent;
+
 	}
 
 }
