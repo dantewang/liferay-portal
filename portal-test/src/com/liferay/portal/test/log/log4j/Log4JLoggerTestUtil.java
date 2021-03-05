@@ -59,12 +59,6 @@ public class Log4JLoggerTestUtil {
 	public static LogCapture configureLog4JLogger(
 		String name, String priority) {
 
-		return _configureLog4JLogger(name, Level.toLevel(priority));
-	}
-
-	private static Log4JLogCapture _configureLog4JLogger(
-		String name, Level level) {
-
 		LogWrapper logWrapper = (LogWrapper)LogFactoryUtil.getLog(name);
 
 		Log log = logWrapper.getWrappedLog();
@@ -83,7 +77,7 @@ public class Log4JLoggerTestUtil {
 
 		logger.addAppender(log4JLogCapture);
 
-		logger.setLevel(level);
+		logger.setLevel(Level.toLevel(priority));
 
 		return log4JLogCapture;
 	}
