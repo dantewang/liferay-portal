@@ -14,12 +14,19 @@
 
 package com.liferay.portal.test.log.jdk;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Jdk14LogImpl;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.log.LogWrapper;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 /**
@@ -53,6 +60,122 @@ public class JDKLoggerTestUtil {
 		// See LPS-32051 and LPS-32471
 
 		LogFactoryUtil.getLog(JDKLoggerTestUtil.class);
+	}
+
+	private static class CaptureHandler extends Handler implements LogCapture {
+
+		@Override
+		public void close() {
+			_logEntries.clear();
+
+			_logger.removeHandler(this);
+
+			for (Handler handler : _handlers) {
+				_logger.addHandler(handler);
+			}
+
+			_logger.setLevel(_level);
+			_logger.setUseParentHandlers(_useParentHandlers);
+		}
+
+		@Override
+		public void flush() {
+			_logEntries.clear();
+		}
+
+		@Override
+		public List<LogEntry> getLogEntries() {
+			return _logEntries;
+		}
+
+		@Override
+		public boolean isLoggable(LogRecord logRecord) {
+			return false;
+		}
+
+		@Override
+		public void publish(LogRecord logRecord) {
+			_logEntries.add(new PrintableLogRecord(logRecord));
+		}
+
+		@Override
+		public List<LogEntry> resetPriority(String priority) {
+			_logEntries.clear();
+
+			_logger.setLevel(Level.parse(priority));
+
+			return _logEntries;
+		}
+
+		private CaptureHandler(Logger logger, Level level) {
+			_logger = logger;
+
+			_handlers = logger.getHandlers();
+			_level = logger.getLevel();
+			_useParentHandlers = logger.getUseParentHandlers();
+
+			for (Handler handler : _handlers) {
+				logger.removeHandler(handler);
+			}
+
+			logger.setLevel(level);
+			logger.setUseParentHandlers(false);
+		}
+
+		private final Handler[] _handlers;
+		private final Level _level;
+		private final List<LogEntry> _logEntries = new CopyOnWriteArrayList<>();
+		private final Logger _logger;
+		private final boolean _useParentHandlers;
+
+		private static class PrintableLogRecord
+			extends LogRecord implements LogEntry {
+
+			@Override
+			public String getPriority() {
+				return String.valueOf(getLevel());
+			}
+
+			@Override
+			public Throwable getThrowable() {
+				return getThrown();
+			}
+
+			@Override
+			public Object getWrappedObject() {
+				return this;
+			}
+
+			@Override
+			public String toString() {
+				StringBundler sb = new StringBundler(5);
+
+				sb.append("{level=");
+				sb.append(getLevel());
+				sb.append(", message=");
+				sb.append(getMessage());
+				sb.append("}");
+
+				return sb.toString();
+			}
+
+			private PrintableLogRecord(LogRecord logRecord) {
+				super(logRecord.getLevel(), logRecord.getMessage());
+
+				setLoggerName(logRecord.getLoggerName());
+				setMillis(logRecord.getMillis());
+				setParameters(logRecord.getParameters());
+				setResourceBundle(logRecord.getResourceBundle());
+				setResourceBundleName(logRecord.getResourceBundleName());
+				setSequenceNumber(logRecord.getSequenceNumber());
+				setSourceClassName(logRecord.getSourceClassName());
+				setSourceMethodName(logRecord.getSourceMethodName());
+				setThreadID(logRecord.getThreadID());
+				setThrown(logRecord.getThrown());
+			}
+
+		}
+
 	}
 
 }

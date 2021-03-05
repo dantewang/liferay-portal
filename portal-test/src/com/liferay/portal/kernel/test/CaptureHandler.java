@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 /**
  * @author Shuyang Zhou
  * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
- *             com.liferay.portal.test.log.jdk.CaptureHandler}
+ *             JDKLoggerTestUtil.CaptureHandler}
  */
 @Deprecated
 public class CaptureHandler extends Handler implements Closeable {
