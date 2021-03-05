@@ -32,9 +32,9 @@ import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.spring.aop.AopInvocationHandler;
-import com.liferay.portal.test.log.log4j.CaptureAppender;
-import com.liferay.portal.test.log.log4j.Log4JLoggerTestUtil;
-import com.liferay.portal.test.log.log4j.LogEvent;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upgrade.test.model.impl.BuildAutoUpgradeTestEntityModelImpl;
@@ -443,16 +443,14 @@ public abstract class BaseBuildAutoUpgradeTestCase {
 		ENTITY_PATH = path.concat(".class");
 	}
 
-	private String _assertAndGetFirstLogRecordMessage(
-		CaptureAppender captureAppender) {
+	private String _assertAndGetFirstLogRecordMessage(LogCapture logCapture) {
+		List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-		List<LogEvent> logEvents = captureAppender.getLogEvents();
+		Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
 
-		Assert.assertEquals(logEvents.toString(), 1, logEvents.size());
+		LogEntry logEntry = logEntrys.get(0);
 
-		LogEvent logEvent = logEvents.get(0);
-
-		return logEvent.getMessage();
+		return logEntry.getMessage();
 	}
 
 	private void _initTableColumns(
@@ -504,15 +502,14 @@ public abstract class BaseBuildAutoUpgradeTestCase {
 	}
 
 	private void _updateBundle(InputStream inputStream) throws Exception {
-		try (CaptureAppender serviceComponentCaptureHandler =
-				Log4JLoggerTestUtil.configureLog4JLogger(
+		try (LogCapture serviceComponentCaptureHandler =
+				LoggerTestUtil.configureLog4JLogger(
 					"com.liferay.portal.service.impl." +
 						"ServiceComponentLocalServiceImpl",
-					Log4JLoggerTestUtil.WARN);
-			CaptureAppender baseDBCaptureHandler =
-				Log4JLoggerTestUtil.configureLog4JLogger(
-					"com.liferay.portal.dao.db.BaseDB",
-					Log4JLoggerTestUtil.WARN)) {
+					LoggerTestUtil.WARN);
+			LogCapture baseDBCaptureHandler =
+				LoggerTestUtil.configureLog4JLogger(
+					"com.liferay.portal.dao.db.BaseDB", LoggerTestUtil.WARN)) {
 
 			_bundle.update(inputStream);
 
