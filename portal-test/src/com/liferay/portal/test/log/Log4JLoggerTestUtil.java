@@ -24,8 +24,7 @@ import org.apache.log4j.Logger;
 
 /**
  * @author Shuyang Zhou
- * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
- *             com.liferay.portal.test.log.log4j.Log4JLoggerTestUtil}
+ * @deprecated As of Cavanaugh (7.4.x), replaced by {@link LoggerTestUtil}
  */
 @Deprecated
 public class Log4JLoggerTestUtil {
