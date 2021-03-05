@@ -22,7 +22,7 @@ import org.apache.log4j.spi.ThrowableInformation;
 /**
  * @author Tina Tian
  * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
- *              com.liferay.portal.test.log.log4j.LogEvent}
+ *              Log4JLoggerTestUtil.LogEvent}
  */
 @Deprecated
 public class LogEvent {
