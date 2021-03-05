@@ -209,7 +209,12 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		List<AppenderRef> currentAppenderRefs = new ArrayList<>(
 			currentLoggerConfig.getAppenderRefs());
 
-		_setLoggerConfigAppenderRefs(currentLoggerConfig, currentAppenderRefs);
+		try {
+			_appenderRefsField.set(currentLoggerConfig, currentAppenderRefs);
+		}
+		catch (IllegalAccessException illegalAccessException) {
+			ReflectionUtil.throwException(illegalAccessException);
+		}
 
 		for (Appender newAppender : newAppenders.values()) {
 			String name = newAppender.getName();
@@ -247,17 +252,15 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 		}
 	}
 
-	private void _setLoggerConfigAppenderRefs(
-		LoggerConfig loggerConfig, List<AppenderRef> appenderRefs) {
+	private static final Field _appenderRefsField;
 
+	static {
 		try {
-			Field field = ReflectionUtil.getDeclaredField(
+			_appenderRefsField = ReflectionUtil.getDeclaredField(
 				LoggerConfig.class, "appenderRefs");
-
-			field.set(loggerConfig, appenderRefs);
 		}
 		catch (Exception exception) {
-			ReflectionUtil.throwException(exception);
+			throw new ExceptionInInitializerError(exception);
 		}
 	}
 
