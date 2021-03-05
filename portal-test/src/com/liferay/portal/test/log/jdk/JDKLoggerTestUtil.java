@@ -27,7 +27,25 @@ import java.util.logging.Logger;
  */
 public class JDKLoggerTestUtil {
 
-	public static CaptureHandler configureJDKLogger(String name, Level level) {
+	public static final String ALL = String.valueOf(Level.ALL);
+
+	public static final String CONFIG = String.valueOf(Level.CONFIG);
+
+	public static final String FINE = String.valueOf(Level.FINE);
+
+	public static final String FINER = String.valueOf(Level.FINER);
+
+	public static final String FINEST = String.valueOf(Level.FINEST);
+
+	public static final String INFO = String.valueOf(Level.INFO);
+
+	public static final String OFF = String.valueOf(Level.OFF);
+
+	public static final String SEVERE = String.valueOf(Level.SEVERE);
+
+	public static final String WARNING = String.valueOf(Level.WARNING);
+
+	public static CaptureHandler configureJDKLogger(String name, String level) {
 		LogWrapper logWrapper = (LogWrapper)LogFactoryUtil.getLog(name);
 
 		Log log = logWrapper.getWrappedLog();
@@ -41,7 +59,8 @@ public class JDKLoggerTestUtil {
 
 		Logger logger = jdk14LogImpl.getWrappedLogger();
 
-		CaptureHandler captureHandler = new CaptureHandler(logger, level);
+		CaptureHandler captureHandler = new CaptureHandler(
+			logger, Level.parse(level));
 
 		logger.addHandler(captureHandler);
 
