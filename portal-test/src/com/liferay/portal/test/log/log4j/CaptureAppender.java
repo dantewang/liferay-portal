@@ -15,8 +15,8 @@
 package com.liferay.portal.test.log.log4j;
 
 import com.liferay.petra.reflect.ReflectionUtil;
-
-import java.io.Closeable;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
 
 import java.lang.reflect.Field;
 
@@ -32,7 +32,7 @@ import org.apache.log4j.spi.LoggingEvent;
 /**
  * @author Shuyang Zhou
  */
-public class CaptureAppender extends AppenderSkeleton implements Closeable {
+public class CaptureAppender extends AppenderSkeleton implements LogCapture {
 
 	public CaptureAppender(Logger logger) {
 		_logger = logger;
@@ -65,8 +65,8 @@ public class CaptureAppender extends AppenderSkeleton implements Closeable {
 		}
 	}
 
-	public List<LogEvent> getLogEvents() {
-		return _logEvents;
+	public List<LogEntry> getLogEntries() {
+		return _logEntries;
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class CaptureAppender extends AppenderSkeleton implements Closeable {
 
 	@Override
 	protected void append(LoggingEvent loggingEvent) {
-		_logEvents.add(new LogEvent(loggingEvent));
+		_logEntries.add(new LogEvent(loggingEvent));
 	}
 
 	private static final Field _parentField;
@@ -92,7 +92,7 @@ public class CaptureAppender extends AppenderSkeleton implements Closeable {
 	}
 
 	private final Level _level;
-	private final List<LogEvent> _logEvents = new CopyOnWriteArrayList<>();
+	private final List<LogEntry> _logEntries = new CopyOnWriteArrayList<>();
 	private final Logger _logger;
 	private final Category _parentCategory;
 
