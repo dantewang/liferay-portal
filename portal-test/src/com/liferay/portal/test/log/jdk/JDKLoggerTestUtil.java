@@ -52,7 +52,7 @@ public class JDKLoggerTestUtil {
 
 	public static final String WARNING = String.valueOf(Level.WARNING);
 
-	public static CaptureHandler configureJDKLogger(String name, String level) {
+	public static JDKLogCapture configureJDKLogger(String name, String level) {
 		LogWrapper logWrapper = (LogWrapper)LogFactoryUtil.getLog(name);
 
 		Log log = logWrapper.getWrappedLog();
@@ -66,12 +66,12 @@ public class JDKLoggerTestUtil {
 
 		Logger logger = jdk14LogImpl.getWrappedLogger();
 
-		CaptureHandler captureHandler = new CaptureHandler(
+		JDKLogCapture jdkLogCapture = new JDKLogCapture(
 			logger, Level.parse(level));
 
-		logger.addHandler(captureHandler);
+		logger.addHandler(jdkLogCapture);
 
-		return captureHandler;
+		return jdkLogCapture;
 	}
 
 	static {
@@ -81,7 +81,7 @@ public class JDKLoggerTestUtil {
 		LogFactoryUtil.getLog(JDKLoggerTestUtil.class);
 	}
 
-	private static class CaptureHandler extends Handler implements LogCapture {
+	private static class JDKLogCapture extends Handler implements LogCapture {
 
 		@Override
 		public void close() {
@@ -114,7 +114,7 @@ public class JDKLoggerTestUtil {
 
 		@Override
 		public void publish(LogRecord logRecord) {
-			_logEntries.add(new PrintableLogRecord(logRecord));
+			_logEntries.add(new JDKLogEntry(logRecord));
 		}
 
 		@Override
@@ -126,7 +126,7 @@ public class JDKLoggerTestUtil {
 			return _logEntries;
 		}
 
-		private CaptureHandler(Logger logger, Level level) {
+		private JDKLogCapture(Logger logger, Level level) {
 			_logger = logger;
 
 			_handlers = logger.getHandlers();
@@ -149,8 +149,7 @@ public class JDKLoggerTestUtil {
 
 	}
 
-	private static class PrintableLogRecord
-		extends LogRecord implements LogEntry {
+	private static class JDKLogEntry extends LogRecord implements LogEntry {
 
 		@Override
 		public String getPriority() {
@@ -180,7 +179,7 @@ public class JDKLoggerTestUtil {
 			return sb.toString();
 		}
 
-		private PrintableLogRecord(LogRecord logRecord) {
+		private JDKLogEntry(LogRecord logRecord) {
 			super(logRecord.getLevel(), logRecord.getMessage());
 
 			setLoggerName(logRecord.getLoggerName());
