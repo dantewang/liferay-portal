@@ -29,8 +29,6 @@ import com.liferay.portal.test.log.LoggerTestUtil;
 
 import java.util.List;
 
-import org.apache.log4j.Level;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -56,7 +54,7 @@ public class WorkflowInstanceResourceTest
 	@Test
 	public void testDeleteWorkflowInstance() throws Exception {
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				ProxyMessageListener.class.getName(), Level.WARN)) {
+				ProxyMessageListener.class.getName(), LoggerTestUtil.WARN)) {
 
 			super.testDeleteWorkflowInstance();
 
@@ -68,7 +66,7 @@ public class WorkflowInstanceResourceTest
 	@Test
 	public void testGraphQLDeleteWorkflowInstance() throws Exception {
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				ProxyMessageListener.class.getName(), Level.WARN)) {
+				ProxyMessageListener.class.getName(), LoggerTestUtil.WARN)) {
 
 			super.testGraphQLDeleteWorkflowInstance();
 
@@ -80,7 +78,7 @@ public class WorkflowInstanceResourceTest
 	@Test
 	public void testGraphQLGetWorkflowInstanceNotFound() throws Exception {
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				ProxyMessageListener.class.getName(), Level.WARN)) {
+				ProxyMessageListener.class.getName(), LoggerTestUtil.WARN)) {
 
 			super.testGraphQLGetWorkflowInstanceNotFound();
 
