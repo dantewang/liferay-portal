@@ -25,8 +25,9 @@ import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.URLCodec;
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 
 import java.lang.reflect.Method;
 
@@ -34,7 +35,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -665,21 +665,20 @@ public class HttpImplTest {
 	}
 
 	private void _testDecodeURL(String url, String expectedMessage) {
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					HttpImpl.class.getName(), Level.WARNING)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				HttpImpl.class.getName(), Level.WARNING)) {
 
 			String decodeURL = _httpImpl.decodeURL(url);
 
 			Assert.assertEquals(StringPool.BLANK, decodeURL);
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertEquals(logRecords.toString(), 1, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
 
-			LogRecord logRecord = logRecords.get(0);
+			LogEntry logEntry = logEntrys.get(0);
 
-			String message = logRecord.getMessage();
+			String message = logEntry.getMessage();
 
 			Assert.assertTrue(message, message.contains(expectedMessage));
 		}

@@ -38,8 +38,9 @@ import com.liferay.portal.search.internal.result.SearchResultTranslatorImpl;
 import com.liferay.portal.search.internal.result.SummaryFactoryImpl;
 import com.liferay.portal.search.test.util.BaseSearchResultUtilTestCase;
 import com.liferay.portal.search.test.util.SearchTestUtil;
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -47,7 +48,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -303,18 +303,16 @@ public class SearchResultUtilDLFileEntryTest
 
 		document.add(new Field(Field.SNIPPET, snippet));
 
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					SearchResultTranslatorImpl.class.getName(),
-					Level.WARNING)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				SearchResultTranslatorImpl.class.getName(), Level.WARNING)) {
 
 			SearchResult searchResult = assertOneSearchResult(document);
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertEquals(logRecords.toString(), 1, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
 
-			LogRecord logRecord = logRecords.get(0);
+			LogEntry logEntry = logEntrys.get(0);
 
 			long entryClassPK = GetterUtil.getLong(
 				document.get(Field.ENTRY_CLASS_PK));
@@ -322,7 +320,7 @@ public class SearchResultUtilDLFileEntryTest
 			Assert.assertEquals(
 				"Search index is stale and contains entry {" + entryClassPK +
 					"}",
-				logRecord.getMessage());
+				logEntry.getMessage());
 
 			Assert.assertEquals(
 				SearchTestUtil.ATTACHMENT_OWNER_CLASS_NAME,

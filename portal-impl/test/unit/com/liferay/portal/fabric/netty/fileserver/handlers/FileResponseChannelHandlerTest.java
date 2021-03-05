@@ -21,8 +21,9 @@ import com.liferay.portal.fabric.netty.codec.serialization.AnnotatedObjectDecode
 import com.liferay.portal.fabric.netty.fileserver.FileResponse;
 import com.liferay.portal.fabric.netty.util.NettyUtil;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
@@ -38,7 +39,6 @@ import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -133,25 +133,24 @@ public class FileResponseChannelHandlerTest {
 		FileResponse fileResponse = new FileResponse(
 			_path, FileResponse.FILE_NOT_FOUND, -1, false);
 
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					FileResponseChannelHandler.class.getName(), Level.SEVERE)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				FileResponseChannelHandler.class.getName(), Level.SEVERE)) {
 
 			_fileResponseChannelHandler.channelRead(
 				_channelHandlerContext, fileResponse, null);
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertEquals(logRecords.toString(), 1, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
 
-			LogRecord logRecord = logRecords.get(0);
+			LogEntry logEntry = logEntrys.get(0);
 
 			Assert.assertEquals(
 				StringBundler.concat(
 					"Unable to place result ", fileResponse,
 					" because no future exists with ID ",
 					fileResponse.getPath()),
-				logRecord.getMessage());
+				logEntry.getMessage());
 		}
 	}
 
@@ -173,25 +172,24 @@ public class FileResponseChannelHandlerTest {
 		FileResponse fileResponse = new FileResponse(
 			_path, FileResponse.FILE_NOT_MODIFIED, -1, false);
 
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					FileResponseChannelHandler.class.getName(), Level.SEVERE)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				FileResponseChannelHandler.class.getName(), Level.SEVERE)) {
 
 			_fileResponseChannelHandler.channelRead(
 				_channelHandlerContext, fileResponse, null);
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertEquals(logRecords.toString(), 1, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
 
-			LogRecord logRecord = logRecords.get(0);
+			LogEntry logEntry = logEntrys.get(0);
 
 			Assert.assertEquals(
 				StringBundler.concat(
 					"Unable to place result ", fileResponse,
 					" because no future exists with ID ",
 					fileResponse.getPath()),
-				logRecord.getMessage());
+				logEntry.getMessage());
 		}
 	}
 

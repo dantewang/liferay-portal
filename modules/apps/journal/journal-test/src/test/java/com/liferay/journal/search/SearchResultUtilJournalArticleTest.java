@@ -30,12 +30,12 @@ import com.liferay.portal.search.internal.result.SearchResultTranslatorImpl;
 import com.liferay.portal.search.internal.result.SummaryFactoryImpl;
 import com.liferay.portal.search.test.util.BaseSearchResultUtilTestCase;
 import com.liferay.portal.search.test.util.SearchTestUtil;
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -90,10 +90,8 @@ public class SearchResultUtilJournalArticleTest
 
 		Document document = createDocument();
 
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					SearchResultTranslatorImpl.class.getName(),
-					Level.WARNING)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				SearchResultTranslatorImpl.class.getName(), Level.WARNING)) {
 
 			SearchResult searchResult = assertOneSearchResult(document);
 
@@ -107,16 +105,16 @@ public class SearchResultUtilJournalArticleTest
 				document, StringPool.BLANK, null, null
 			);
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertEquals(logRecords.toString(), 1, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
 
-			LogRecord logRecord = logRecords.get(0);
+			LogEntry logEntry = logEntrys.get(0);
 
 			Assert.assertEquals(
 				"Search index is stale and contains entry {" +
 					document.get(Field.ENTRY_CLASS_PK) + "}",
-				logRecord.getMessage());
+				logEntry.getMessage());
 		}
 	}
 

@@ -21,8 +21,9 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -30,7 +31,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -57,22 +57,21 @@ public class LocalizationImplUnitTest {
 
 	@Test
 	public void testGetDefaultImportLocaleUseCase4() {
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					LocalizationImpl.class.getName(), Level.WARNING)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				LocalizationImpl.class.getName(), Level.WARNING)) {
 
 			verifyDefaultImportLocale("bg_BG", "bg_BG,fr_FR", "bg_BG", true);
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertEquals(logRecords.toString(), 1, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
 
-			LogRecord logRecord = logRecords.get(0);
+			LogEntry logEntry = logEntrys.get(0);
 
 			Assert.assertEquals(
 				"Language es_ES is missing for com.liferay.portal.className " +
 					"with primary key 0. Setting default language to bg_BG.",
-				logRecord.getMessage());
+				logEntry.getMessage());
 		}
 	}
 

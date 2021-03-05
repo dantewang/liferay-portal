@@ -27,8 +27,9 @@ import com.liferay.portal.kernel.nio.intraband.test.MockRegistrationReference;
 import com.liferay.portal.kernel.test.SyncThrowableThread;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.util.Time;
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,7 +56,6 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -504,11 +504,10 @@ public class ExecutorIntrabandTest {
 
 		// Callback timeout, with log
 
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					BaseIntraband.class.getName(), Level.WARNING)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				BaseIntraband.class.getName(), Level.WARNING)) {
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
 			recordCompletionHandler = new RecordCompletionHandler<>();
 
@@ -526,10 +525,10 @@ public class ExecutorIntrabandTest {
 				EnumSet.of(CompletionHandler.CompletionType.DELIVERED),
 				recordCompletionHandler, 10, TimeUnit.MILLISECONDS);
 
-			while (logRecords.isEmpty());
+			while (logEntrys.isEmpty());
 
 			IntrabandTestUtil.assertMessageStartWith(
-				logRecords.get(0), "Removed timeout response waiting datagram");
+				logEntrys.get(0), "Removed timeout response waiting datagram");
 
 			gatheringByteChannel.close();
 			scatteringByteChannel.close();

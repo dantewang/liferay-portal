@@ -16,12 +16,12 @@ package com.liferay.portal.search.elasticsearch7.internal.cluster;
 
 import com.liferay.portal.kernel.cluster.ClusterEvent;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -132,21 +132,20 @@ public class ReplicasClusterListenerTest {
 			Mockito.anyInt(), (String[])Mockito.anyVararg()
 		);
 
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					ReplicasClusterListener.class.getName(), Level.WARNING)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				ReplicasClusterListener.class.getName(), Level.WARNING)) {
 
 			masterTokenAcquired();
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertEquals(logRecords.toString(), 1, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
 
-			LogRecord logRecord = logRecords.get(0);
+			LogEntry logEntry = logEntrys.get(0);
 
 			Assert.assertEquals(
-				"Unable to update number of replicas", logRecord.getMessage());
-			Assert.assertSame(throwable, logRecord.getThrown());
+				"Unable to update number of replicas", logEntry.getMessage());
+			Assert.assertSame(throwable, logEntry.getThrowable());
 		}
 	}
 

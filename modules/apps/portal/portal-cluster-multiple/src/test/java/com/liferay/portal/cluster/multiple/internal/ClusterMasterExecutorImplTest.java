@@ -35,8 +35,9 @@ import com.liferay.portal.kernel.test.util.PropsTestUtil;
 import com.liferay.portal.kernel.util.MethodHandler;
 import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.AdviseWith;
 import com.liferay.portal.test.rule.AspectJNewEnvTestRule;
 
@@ -54,7 +55,6 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -243,48 +243,45 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 		MethodHandler methodHandler = new MethodHandler(
 			_TEST_METHOD, timeString);
 
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					ClusterMasterExecutorImpl.class.getName(), Level.WARNING)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				ClusterMasterExecutorImpl.class.getName(), Level.WARNING)) {
 
 			NoticeableFuture<String> noticeableFuture =
 				clusterMasterExecutorImpl.executeOnMaster(methodHandler);
 
 			Assert.assertSame(timeString, noticeableFuture.get());
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertEquals(logRecords.toString(), 1, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
 
-			LogRecord logRecord = logRecords.get(0);
+			LogEntry logEntry = logEntrys.get(0);
 
 			Assert.assertEquals(
 				"Executing on the local node because the cluster master " +
 					"executor is disabled",
-				logRecord.getMessage());
+				logEntry.getMessage());
 		}
 
 		// Test 2, execute without exception when log is disabled
 
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					ClusterMasterExecutorImpl.class.getName(), Level.OFF)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				ClusterMasterExecutorImpl.class.getName(), Level.OFF)) {
 
 			NoticeableFuture<String> noticeableFuture =
 				clusterMasterExecutorImpl.executeOnMaster(methodHandler);
 
 			Assert.assertSame(timeString, noticeableFuture.get());
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertTrue(logRecords.toString(), logRecords.isEmpty());
+			Assert.assertTrue(logEntrys.toString(), logEntrys.isEmpty());
 		}
 
 		// Test 3, execute with exception
 
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					ClusterMasterExecutorImpl.class.getName(), Level.WARNING)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				ClusterMasterExecutorImpl.class.getName(), Level.WARNING)) {
 
 			try {
 				clusterMasterExecutorImpl.executeOnMaster(null);
@@ -297,17 +294,16 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 				Assert.assertSame(
 					NullPointerException.class, throwable.getClass());
 
-				List<LogRecord> logRecords = captureHandler.getLogRecords();
+				List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-				Assert.assertEquals(
-					logRecords.toString(), 1, logRecords.size());
+				Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
 
-				LogRecord logRecord = logRecords.get(0);
+				LogEntry logEntry = logEntrys.get(0);
 
 				Assert.assertEquals(
 					"Executing on the local node because the cluster master " +
 						"executor is disabled",
-					logRecord.getMessage());
+					logEntry.getMessage());
 			}
 		}
 	}
@@ -431,29 +427,28 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 
 			@Override
 			public void run() {
-				try (CaptureHandler captureHandler =
-						JDKLoggerTestUtil.configureJDKLogger(
-							ClusterMasterExecutorImpl.class.getName(),
-							Level.INFO)) {
+				try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+						ClusterMasterExecutorImpl.class.getName(),
+						Level.INFO)) {
 
 					Assert.assertEquals(
 						_TEST_CLUSTER_NODE_ID,
 						clusterMasterExecutorImpl.getMasterClusterNodeId(
 							false));
 
-					List<LogRecord> logRecords = captureHandler.getLogRecords();
+					List<LogEntry> logEntrys = logCapture.getLogEntries();
 
 					Assert.assertEquals(
-						logRecords.toString(), 1, logRecords.size());
+						logEntrys.toString(), 1, logEntrys.size());
 
-					LogRecord logRecord = logRecords.get(0);
+					LogEntry logEntry = logEntrys.get(0);
 
 					Assert.assertEquals(
 						StringBundler.concat(
 							"Unable to get cluster node information for ",
 							"coordinator address ", _TEST_ADDRESS,
 							". Trying again."),
-						logRecord.getMessage());
+						logEntry.getMessage());
 				}
 			}
 
@@ -491,20 +486,18 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 
 			@Override
 			public void run() {
-				try (CaptureHandler captureHandler =
-						JDKLoggerTestUtil.configureJDKLogger(
-							ClusterMasterExecutorImpl.class.getName(),
-							Level.OFF)) {
+				try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+						ClusterMasterExecutorImpl.class.getName(), Level.OFF)) {
 
 					Assert.assertEquals(
 						_TEST_CLUSTER_NODE_ID,
 						clusterMasterExecutorImpl.getMasterClusterNodeId(
 							false));
 
-					List<LogRecord> logRecords = captureHandler.getLogRecords();
+					List<LogEntry> logEntrys = logCapture.getLogEntries();
 
 					Assert.assertTrue(
-						logRecords.toString(), logRecords.isEmpty());
+						logEntrys.toString(), logEntrys.isEmpty());
 				}
 			}
 

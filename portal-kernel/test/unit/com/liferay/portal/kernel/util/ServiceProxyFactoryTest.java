@@ -25,8 +25,9 @@ import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
 import com.liferay.portal.kernel.test.rule.TimeoutTestRule;
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.registry.BasicRegistryImpl;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
@@ -51,7 +52,6 @@ import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -456,9 +456,8 @@ public class ServiceProxyFactoryTest {
 		Assert.assertTrue(ProxyUtil.isProxyClass(testService.getClass()));
 		Assert.assertNotSame(TestServiceImpl.class, testService.getClass());
 
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					ServiceProxyFactory.class.getName(), Level.SEVERE)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				ServiceProxyFactory.class.getName(), Level.SEVERE)) {
 
 			ReflectionTestUtil.setFieldValue(
 				captureHandler, "_logRecords",
@@ -480,7 +479,7 @@ public class ServiceProxyFactoryTest {
 					private boolean _logged;
 
 				});
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
 			FutureTask<String> futureTask = new FutureTask<>(
 				testService::getTestServiceName);
@@ -491,9 +490,9 @@ public class ServiceProxyFactoryTest {
 
 			thread.join();
 
-			Assert.assertEquals(logRecords.toString(), 2, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 2, logEntrys.size());
 
-			LogRecord logRecord = logRecords.get(0);
+			LogEntry logEntry = logEntrys.get(0);
 
 			StringBundler sb = new StringBundler(9);
 
@@ -511,7 +510,7 @@ public class ServiceProxyFactoryTest {
 			sb.append(TestServiceUtil.class.getName());
 			sb.append("\", will retry...");
 
-			Assert.assertEquals(sb.toString(), logRecord.getMessage());
+			Assert.assertEquals(sb.toString(), logEntry.getMessage());
 		}
 	}
 

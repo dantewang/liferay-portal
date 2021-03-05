@@ -50,8 +50,9 @@ import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.AdviseWith;
 import com.liferay.portal.test.rule.AspectJNewEnvTestRule;
 import com.liferay.registry.BasicRegistryImpl;
@@ -75,7 +76,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -341,9 +341,8 @@ public class ClusterSchedulerEngineTest {
 
 		Assert.assertTrue(_memoryClusteredJobs.isEmpty());
 
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					ClusterSchedulerEngine.class.getName(), Level.OFF)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				ClusterSchedulerEngine.class.getName(), Level.OFF)) {
 
 			_mockClusterMasterExecutor.reset(false, 4, 2);
 
@@ -354,9 +353,9 @@ public class ClusterSchedulerEngineTest {
 
 			clusterMasterTokenTransitionListener.masterTokenReleased();
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertTrue(logRecords.toString(), logRecords.isEmpty());
+			Assert.assertTrue(logEntrys.toString(), logEntrys.isEmpty());
 
 			Assert.assertFalse(_mockClusterMasterExecutor.isMaster());
 
@@ -400,24 +399,24 @@ public class ClusterSchedulerEngineTest {
 
 			clusterMasterTokenTransitionListener.masterTokenReleased();
 
-			Assert.assertEquals(logRecords.toString(), 3, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 3, logEntrys.size());
 
-			LogRecord logRecord = logRecords.get(0);
+			LogEntry logEntry = logEntrys.get(0);
 
 			Assert.assertEquals(
 				"Load 4 memory clustered jobs from master",
-				logRecord.getMessage());
+				logEntry.getMessage());
 
-			logRecord = logRecords.get(1);
+			logEntry = logEntrys.get(1);
 
 			Assert.assertEquals(
 				"4 MEMORY_CLUSTERED jobs stopped running on this node",
-				logRecord.getMessage());
+				logEntry.getMessage());
 
-			logRecord = logRecords.get(2);
+			logRecord = logEntrys.get(2);
 
 			Assert.assertEquals(
-				"Unable to notify slave", logRecord.getMessage());
+				"Unable to notify slave", logEntry.getMessage());
 
 			Assert.assertFalse(_mockClusterMasterExecutor.isMaster());
 
@@ -1000,9 +999,8 @@ public class ClusterSchedulerEngineTest {
 			_TEST_JOB_NAME_0, _MEMORY_CLUSTER_TEST_GROUP_NAME,
 			StorageType.MEMORY_CLUSTERED);
 
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					ClusterSchedulerEngine.class.getName(), Level.OFF)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				ClusterSchedulerEngine.class.getName(), Level.OFF)) {
 
 			_mockClusterMasterExecutor.reset(true, 0, 0);
 
@@ -1013,9 +1011,9 @@ public class ClusterSchedulerEngineTest {
 
 			clusterMasterTokenTransitionListener.masterTokenAcquired();
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertTrue(logRecords.toString(), logRecords.isEmpty());
+			Assert.assertTrue(logEntrys.toString(), logEntrys.isEmpty());
 
 			Assert.assertTrue(_mockClusterMasterExecutor.isMaster());
 
@@ -1064,18 +1062,18 @@ public class ClusterSchedulerEngineTest {
 
 			clusterMasterTokenTransitionListener.masterTokenAcquired();
 
-			Assert.assertEquals(logRecords.toString(), 2, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 2, logEntrys.size());
 
-			LogRecord logRecord = logRecords.get(0);
+			LogEntry logEntry = logEntrys.get(0);
 
 			Assert.assertEquals(
 				"4 MEMORY_CLUSTERED jobs started running on this node",
-				logRecord.getMessage());
+				logEntry.getMessage());
 
-			logRecord = logRecords.get(1);
+			logEntry = logEntrys.get(1);
 
 			Assert.assertEquals(
-				"Unable to notify slave", logRecord.getMessage());
+				"Unable to notify slave", logEntry.getMessage());
 
 			Assert.assertTrue(_mockClusterMasterExecutor.isMaster());
 

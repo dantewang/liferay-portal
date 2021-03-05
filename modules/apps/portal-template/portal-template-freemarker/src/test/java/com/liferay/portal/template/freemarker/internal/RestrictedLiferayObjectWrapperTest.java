@@ -27,8 +27,9 @@ import com.liferay.portal.kernel.transaction.TransactionInvoker;
 import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.spring.aop.AopCacheManager;
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.registry.BasicRegistryImpl;
 import com.liferay.registry.RegistryUtil;
 
@@ -49,7 +50,6 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import org.hamcrest.CoreMatchers;
 
@@ -81,10 +81,8 @@ public class RestrictedLiferayObjectWrapperTest
 
 	@Test
 	public void testConstructor() {
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					RestrictedLiferayObjectWrapper.class.getName(),
-					Level.INFO)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				RestrictedLiferayObjectWrapper.class.getName(), Level.INFO)) {
 
 			Assert.assertEquals(
 				Collections.singletonList("com.liferay.package.name"),
@@ -93,22 +91,20 @@ public class RestrictedLiferayObjectWrapperTest
 						null, new String[] {"com.liferay.package.name"}, null),
 					"_restrictedPackageNames"));
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertEquals(logRecords.toString(), 1, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
 
-			LogRecord logRecord = logRecords.get(0);
+			LogEntry logEntry = logEntrys.get(0);
 
 			Assert.assertEquals(
 				"Unable to find restricted class com.liferay.package.name. " +
 					"Registering as a package.",
-				logRecord.getMessage());
+				logEntry.getMessage());
 		}
 
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					RestrictedLiferayObjectWrapper.class.getName(),
-					Level.OFF)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				RestrictedLiferayObjectWrapper.class.getName(), Level.OFF)) {
 
 			Assert.assertEquals(
 				Collections.singletonList("com.liferay.package.name"),
@@ -117,9 +113,9 @@ public class RestrictedLiferayObjectWrapperTest
 						null, new String[] {"com.liferay.package.name"}, null),
 					"_restrictedPackageNames"));
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertEquals(logRecords.toString(), 0, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 0, logEntrys.size());
 		}
 	}
 
@@ -269,10 +265,8 @@ public class RestrictedLiferayObjectWrapperTest
 
 	@Test
 	public void testRestrictedMethodNamesIncorrectSyntax() {
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					RestrictedLiferayObjectWrapper.class.getName(),
-					Level.INFO)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				RestrictedLiferayObjectWrapper.class.getName(), Level.INFO)) {
 
 			String methodName =
 				TestLiferayMethodObject.class.getName() + ".getName";
@@ -280,17 +274,17 @@ public class RestrictedLiferayObjectWrapperTest
 			new RestrictedLiferayObjectWrapper(
 				null, null, new String[] {methodName});
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertEquals(logRecords.toString(), 1, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
 
-			LogRecord logRecord = logRecords.get(0);
+			LogEntry logEntry = logEntrys.get(0);
 
 			Assert.assertEquals(
 				StringBundler.concat(
 					"\"", methodName, "\" does not match format ",
 					"\"className#methodName\""),
-				logRecord.getMessage());
+				logEntry.getMessage());
 		}
 	}
 
@@ -399,9 +393,8 @@ public class RestrictedLiferayObjectWrapperTest
 			StringModel.class.cast(
 				objectWrapper.wrap(new TestBaseModel(123L))));
 
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					CompanyThreadLocal.class.getName(), Level.OFF)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				CompanyThreadLocal.class.getName(), Level.OFF)) {
 
 			try {
 				CompanyThreadLocal.setCompanyId(1L);

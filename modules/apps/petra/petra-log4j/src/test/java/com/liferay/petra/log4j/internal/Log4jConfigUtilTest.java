@@ -19,15 +19,15 @@ import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.LogRecord;
 
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
@@ -143,21 +143,20 @@ public class Log4jConfigUtilTest {
 
 	@Test
 	public void testConfigureLog4JWithException() {
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					Log4jConfigUtil.class.getName(),
-					java.util.logging.Level.SEVERE)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				Log4jConfigUtil.class.getName(),
+				java.util.logging.Level.SEVERE)) {
 
 			Log4jConfigUtil.configureLog4J(null);
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
-			Assert.assertEquals(logRecords.toString(), 1, logRecords.size());
+			Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
 
-			LogRecord logRecord = logRecords.get(0);
+			LogEntry logEntry = logEntrys.get(0);
 
 			Assert.assertEquals(
-				"java.lang.NullPointerException", logRecord.getMessage());
+				"java.lang.NullPointerException", logEntry.getMessage());
 		}
 	}
 

@@ -25,8 +25,9 @@ import com.liferay.portal.kernel.test.util.PropsTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 
 import java.io.Serializable;
 
@@ -35,7 +36,6 @@ import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -116,13 +116,12 @@ public class ClusterLinkImplTest extends BaseClusterTestCase {
 
 	@Test
 	public void testInitChannels() {
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					ClusterLinkImpl.class.getName(), Level.OFF)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				ClusterLinkImpl.class.getName(), Level.OFF)) {
 
 			// Test 1, create ClusterLinkImpl#MAX_CHANNEL_COUNT channels
 
-			List<LogRecord> logRecords = captureHandler.getLogRecords();
+			List<LogEntry> logEntrys = logCapture.getLogEntries();
 
 			try {
 				getClusterLinkImpl(ClusterLinkImpl.MAX_CHANNEL_COUNT + 1);
@@ -130,8 +129,7 @@ public class ClusterLinkImplTest extends BaseClusterTestCase {
 				Assert.fail();
 			}
 			catch (IllegalStateException illegalStateException) {
-				Assert.assertEquals(
-					logRecords.toString(), 0, logRecords.size());
+				Assert.assertEquals(logEntrys.toString(), 0, logEntrys.size());
 				Assert.assertEquals(
 					"java.lang.IllegalArgumentException: Channel count must " +
 						"be between 1 and " + ClusterLinkImpl.MAX_CHANNEL_COUNT,
@@ -140,7 +138,7 @@ public class ClusterLinkImplTest extends BaseClusterTestCase {
 
 			// Test 2, create 0 channels
 
-			logRecords = captureHandler.resetLogLevel(Level.SEVERE);
+			logEntrys = logCapture.resetPriority(String.valueOf(Level.SEVERE));
 
 			try {
 				getClusterLinkImpl(0);
@@ -148,13 +146,12 @@ public class ClusterLinkImplTest extends BaseClusterTestCase {
 				Assert.fail();
 			}
 			catch (IllegalStateException illegalStateException) {
-				Assert.assertEquals(
-					logRecords.toString(), 1, logRecords.size());
+				Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
 
-				LogRecord logRecord = logRecords.get(0);
+				LogEntry logEntry = logEntrys.get(0);
 
 				Assert.assertEquals(
-					"Unable to initialize channels", logRecord.getMessage());
+					"Unable to initialize channels", logEntry.getMessage());
 
 				Assert.assertEquals(
 					"java.lang.IllegalArgumentException: Channel count must " +

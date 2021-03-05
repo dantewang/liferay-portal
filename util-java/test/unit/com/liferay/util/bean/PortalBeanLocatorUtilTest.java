@@ -17,12 +17,12 @@ package com.liferay.util.bean;
 import com.liferay.portal.kernel.bean.BeanLocator;
 import com.liferay.portal.kernel.bean.BeanLocatorException;
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
-import com.liferay.portal.test.log.jdk.CaptureHandler;
-import com.liferay.portal.test.log.jdk.JDKLoggerTestUtil;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -48,9 +48,8 @@ public class PortalBeanLocatorUtilTest extends PowerMockito {
 
 	@Test
 	public void testBeanLocatorHasNotBeenSet() {
-		try (CaptureHandler captureHandler =
-				JDKLoggerTestUtil.configureJDKLogger(
-					PortalBeanLocatorUtil.class.getName(), Level.SEVERE)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				PortalBeanLocatorUtil.class.getName(), Level.SEVERE)) {
 
 			try {
 				PortalBeanLocatorUtil.locate("beanName");
@@ -62,15 +61,14 @@ public class PortalBeanLocatorUtilTest extends PowerMockito {
 					"BeanLocator is not set",
 					beanLocatorException.getMessage());
 
-				List<LogRecord> logRecords = captureHandler.getLogRecords();
+				List<LogEntry> logEntrys = logCapture.getLogEntries();
+
+				Assert.assertEquals(logEntrys.toString(), 1, logEntrys.size());
+
+				LogEntry logEntry = logEntrys.get(0);
 
 				Assert.assertEquals(
-					logRecords.toString(), 1, logRecords.size());
-
-				LogRecord logRecord = logRecords.get(0);
-
-				Assert.assertEquals(
-					"BeanLocator is null", logRecord.getMessage());
+					"BeanLocator is null", logEntry.getMessage());
 			}
 		}
 	}
