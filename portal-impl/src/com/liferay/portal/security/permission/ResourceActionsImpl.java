@@ -909,22 +909,6 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
-	private void _checkGuestUnsupportedActions(
-		Set<String> guestUnsupportedActions, Set<String> guestDefaultActions) {
-
-		// Guest default actions cannot reference guest unsupported actions
-
-		Iterator<String> iterator = guestDefaultActions.iterator();
-
-		while (iterator.hasNext()) {
-			String actionId = iterator.next();
-
-			if (guestUnsupportedActions.contains(actionId)) {
-				iterator.remove();
-			}
-		}
-	}
-
 	private void _checkPortletGuestUnsupportedActions(Set<String> actions) {
 		actions.add(ActionKeys.CONFIGURATION);
 		actions.add(ActionKeys.PERMISSIONS);
