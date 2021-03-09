@@ -1506,6 +1506,68 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	}
 
+	private static class ResourceActionsBagBuilder {
+
+		public ResourceActionsBagBuilder(String name) {
+			_name = name;
+		}
+
+		public void addSupportsActions(Set<String> supportsActions)
+			throws ResourceActionsException {
+
+			_supportsActions.addAll(supportsActions);
+
+			if (_supportsActions.size() > 64) {
+				throw new ResourceActionsException(
+					"There are more than 64 actions for resource " + _name);
+			}
+		}
+
+		public ResourceActionsBag build() {
+			_guestDefaultActions.removeAll(_guestUnsupportedActions);
+
+			return new ResourceActionsBag(
+				_supportsActions, _groupDefaultActions, _guestDefaultActions,
+				_guestUnsupportedActions, _layoutManagerActions,
+				_ownerDefaultActions);
+		}
+
+		public String getName() {
+			return _name;
+		}
+
+		public void setGroupDefaultActions(Set<String> groupDefaultActions) {
+			_groupDefaultActions = groupDefaultActions;
+		}
+
+		public void setGuestDefaultActions(Set<String> guestDefaultActions) {
+			_guestDefaultActions = guestDefaultActions;
+		}
+
+		public void setGuestUnsupportedActions(
+			Set<String> guestUnsupportedActions) {
+
+			_guestUnsupportedActions = guestUnsupportedActions;
+		}
+
+		public void setLayoutManagerActions(Set<String> layoutManagerActions) {
+			_layoutManagerActions = layoutManagerActions;
+		}
+
+		public void setOwnerDefaultActions(Set<String> ownerDefaultActions) {
+			_ownerDefaultActions = ownerDefaultActions;
+		}
+
+		private Set<String> _groupDefaultActions = Collections.emptySet();
+		private Set<String> _guestDefaultActions = Collections.emptySet();
+		private Set<String> _guestUnsupportedActions = Collections.emptySet();
+		private Set<String> _layoutManagerActions = Collections.emptySet();
+		private final String _name;
+		private Set<String> _ownerDefaultActions = Collections.emptySet();
+		private final Set<String> _supportsActions = new HashSet<>();
+
+	}
+
 	private static class ResourceBundleLoaderListHolder {
 
 		private static final ServiceTrackerList<ResourceBundleLoader>
