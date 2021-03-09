@@ -395,8 +395,9 @@ public class DataFactory {
 
 		if (_assetCategoryCounters == null) {
 			_assetCategoryCounters =
-				(Map<Long, SimpleCounter>[])
-					new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+				(Map<Long, SimpleCounter>[])new HashMap<?, ?>
+					[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
+						BenchmarksPropsValues.MAX_GROUP_COUNT];
 		}
 
 		SimpleCounter counter = getSimpleCounter(
@@ -437,9 +438,9 @@ public class DataFactory {
 		}
 
 		if (_assetTagCounters == null) {
-			_assetTagCounters =
-				(Map<Long, SimpleCounter>[])
-					new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+			_assetTagCounters = (Map<Long, SimpleCounter>[])new HashMap<?, ?>
+				[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
+					BenchmarksPropsValues.MAX_GROUP_COUNT];
 		}
 
 		SimpleCounter counter = getSimpleCounter(
@@ -558,6 +559,18 @@ public class DataFactory {
 
 	public int getMaxSegmentsEntryCount() {
 		return BenchmarksPropsValues.MAX_SEGMENTS_ENTRY_COUNT;
+	}
+
+	public int getMaxUserCount() {
+		return BenchmarksPropsValues.MAX_USER_COUNT;
+	}
+
+	public int getMaxVirtualInstanceCount() {
+		return BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT;
+	}
+
+	public int getMaxVirtualInstanceUserCount() {
+		return BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_USER_COUNT;
 	}
 
 	public int getMaxWikiPageCommentCount() {
@@ -683,7 +696,7 @@ public class DataFactory {
 		unsyncBufferedReader.close();
 	}
 
-	public AccountModel newAccountModel() {
+	public AccountModel newAccountModel(String... name) {
 		AccountModel accountModel = new AccountModelImpl();
 
 		// PK fields
@@ -698,7 +711,13 @@ public class DataFactory {
 
 		// Other fields
 
-		accountModel.setName("Liferay");
+		if (name.length == 0) {
+			accountModel.setName("Liferay");
+		}
+		else {
+			accountModel.setName(name[0]);
+		}
+
 		accountModel.setLegalName("Liferay, Inc.");
 
 		return accountModel;
@@ -1206,6 +1225,34 @@ public class DataFactory {
 		commerceCurrencyModel.setLastPublishDate(new Date());
 
 		return commerceCurrencyModel;
+	}
+
+	public CompanyModel newCompanyModel(int... index) {
+		CompanyModel companyModel = new CompanyModelImpl();
+
+		// PK fields
+
+		companyModel.setCompanyId(_counter.get());
+
+		// Other fields
+
+		companyModel.setAccountId(_counter.get());
+
+		if (index.length == 0) {
+			companyModel.setWebId("liferay.com");
+		}
+		else {
+			companyModel.setWebId(
+				StringBundler.concat("liferay", index[0], ".com"));
+		}
+
+		companyModel.setMx("liferay.com");
+		companyModel.setActive(true);
+
+		_accountId = companyModel.getAccountId();
+		_companyId = companyModel.getCompanyId();
+
+		return companyModel;
 	}
 
 	public ContactModel newContactModel(UserModel userModel) {
@@ -2120,26 +2167,6 @@ public class DataFactory {
 		return newAssetVocabularyModel(
 			_globalGroupId, _defaultUserId, null,
 			PropsValues.ASSET_VOCABULARY_DEFAULT);
-	}
-
-	public CompanyModel newDefaultCompanyModel() {
-		CompanyModel companyModel = new CompanyModelImpl();
-
-		// PK fields
-
-		companyModel.setCompanyId(_counter.get());
-
-		// Other fields
-
-		companyModel.setAccountId(_counter.get());
-		companyModel.setWebId("liferay.com");
-		companyModel.setMx("liferay.com");
-		companyModel.setActive(true);
-
-		_accountId = companyModel.getAccountId();
-		_companyId = companyModel.getCompanyId();
-
-		return companyModel;
 	}
 
 	public DDMStructureLayoutModel newDefaultDLDDMStructureLayoutModel() {
@@ -3909,11 +3936,10 @@ public class DataFactory {
 			getClassNameId(WikiPage.class), wikiPageModel.getResourcePrimKey());
 	}
 
-	public List<UserModel> newUserModels() {
-		List<UserModel> userModels = new ArrayList<>(
-			BenchmarksPropsValues.MAX_USER_COUNT);
+	public List<UserModel> newUserModels(int userCount) {
+		List<UserModel> userModels = new ArrayList<>(userCount);
 
-		for (int i = 0; i < BenchmarksPropsValues.MAX_USER_COUNT; i++) {
+		for (int i = 0; i < userCount; i++) {
 			String[] userName = nextUserName(i);
 
 			userModels.add(
@@ -3931,7 +3957,7 @@ public class DataFactory {
 			_defaultUserId, GroupConstants.USER_PERSONAL_SITE, false);
 	}
 
-	public VirtualHostModel newVirtualHostModel() {
+	public VirtualHostModel newVirtualHostModel(String... hostName) {
 		VirtualHostModel virtualHostModel = new VirtualHostModelImpl();
 
 		//  PK fields
@@ -3944,7 +3970,13 @@ public class DataFactory {
 
 		// Other fields
 
-		virtualHostModel.setHostname(BenchmarksPropsValues.VIRTUAL_HOST_NAME);
+		if (hostName.length == 0) {
+			virtualHostModel.setHostname(
+				BenchmarksPropsValues.VIRTUAL_HOST_NAME);
+		}
+		else {
+			virtualHostModel.setHostname(hostName[0]);
+		}
 
 		return virtualHostModel;
 	}
@@ -5299,8 +5331,9 @@ public class DataFactory {
 	private Map<Long, SimpleCounter>[] _assetCategoryCounters;
 	private final Map<Long, List<AssetCategoryModel>>[]
 		_assetCategoryModelsMaps =
-			(Map<Long, List<AssetCategoryModel>>[])
-				new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+			(Map<Long, List<AssetCategoryModel>>[])new HashMap<?, ?>
+				[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
+					BenchmarksPropsValues.MAX_GROUP_COUNT];
 	private final long[] _assetClassNameIds;
 	private final Map<Long, Integer> _assetClassNameIdsIndexes =
 		new HashMap<>();
@@ -5308,8 +5341,9 @@ public class DataFactory {
 		new HashMap<>();
 	private Map<Long, SimpleCounter>[] _assetTagCounters;
 	private final Map<Long, List<AssetTagModel>>[] _assetTagModelsMaps =
-		(Map<Long, List<AssetTagModel>>[])
-			new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+		(Map<Long, List<AssetTagModel>>[])new HashMap<?, ?>
+			[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
+				BenchmarksPropsValues.MAX_GROUP_COUNT];
 	private final Map<String, ClassNameModel> _classNameModels =
 		new HashMap<>();
 	private long _companyId;
