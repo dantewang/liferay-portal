@@ -42,6 +42,7 @@ import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -53,6 +54,8 @@ import com.liferay.portal.kernel.xml.DocumentType;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.UnsecureSAXReaderUtil;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.collections.ServiceTrackerCollections;
 import com.liferay.registry.collections.ServiceTrackerList;
 
@@ -578,18 +581,26 @@ public class ResourceActionsImpl implements ResourceActions {
 			return;
 		}
 
-		Set<String> modelResourceNames = new HashSet<>();
+		Map<String, ResourceActionsBagBuilder> resourceActionsBagBuilders =
+			new HashMap<>();
 
 		for (String source : sources) {
 			_read(
 				classLoader, source,
 				rootElement -> _readModelResources(
-					rootElement, modelResourceNames));
+					rootElement, resourceActionsBagBuilders));
 		}
 
-		for (String modelResourceName : modelResourceNames) {
+		for (ResourceActionsBagBuilder resourceActionsBagBuilder :
+				resourceActionsBagBuilders.values()) {
+
+			String modelName = resourceActionsBagBuilder.getName();
+
+			_registerResourceActionsBag(
+				modelName, resourceActionsBagBuilder.build());
+
 			resourceActionLocalService.checkResourceActions(
-				modelResourceName, getModelResourceActions(modelResourceName));
+				modelName, getModelResourceActions(modelName));
 		}
 	}
 
@@ -608,13 +619,22 @@ public class ResourceActionsImpl implements ResourceActions {
 			}
 		}
 
-		Set<String> modelResourceNames = new HashSet<>();
+		Map<String, ResourceActionsBagBuilder> resourceActionsBagBuilders =
+			new HashMap<>();
 
-		_readModelResources(document.getRootElement(), modelResourceNames);
+		_readModelResources(
+			document.getRootElement(), resourceActionsBagBuilders);
 
-		for (String modelResourceName : modelResourceNames) {
+		for (ResourceActionsBagBuilder resourceActionsBagBuilder :
+				resourceActionsBagBuilders.values()) {
+
+			String modelName = resourceActionsBagBuilder.getName();
+
+			_registerResourceActionsBag(
+				modelName, resourceActionsBagBuilder.build());
+
 			resourceActionLocalService.checkResourceActions(
-				modelResourceName, getModelResourceActions(modelResourceName));
+				modelName, getModelResourceActions(modelName));
 		}
 	}
 
@@ -626,18 +646,25 @@ public class ResourceActionsImpl implements ResourceActions {
 			throw new IllegalArgumentException("Portlet must not be null");
 		}
 
+		String portletResourceName = PortletIdCodec.decodePortletName(
+			portlet.getPortletId());
+
 		if ((sources != null) &&
 			PropsValues.RESOURCE_ACTIONS_READ_PORTLET_RESOURCES) {
+
+			ResourceActionsBagBuilder resourceActionsBagBuilder =
+				new ResourceActionsBagBuilder(portletResourceName);
 
 			for (String source : sources) {
 				_read(
 					classLoader, source,
-					rootElement -> _readPortletResource(rootElement, portlet));
+					rootElement -> _readPortletResource(
+						rootElement, portlet, resourceActionsBagBuilder));
 			}
-		}
 
-		String portletResourceName = PortletIdCodec.decodePortletName(
-			portlet.getPortletId());
+			_registerResourceActionsBag(
+				portletResourceName, resourceActionsBagBuilder.build());
+		}
 
 		resourceActionLocalService.checkResourceActions(
 			portletResourceName,
@@ -654,19 +681,26 @@ public class ResourceActionsImpl implements ResourceActions {
 			return;
 		}
 
-		Set<String> portletResourceNames = new HashSet<>();
+		Map<String, ResourceActionsBagBuilder> resourceActionsBagBuilders =
+			new HashMap<>();
 
 		for (String source : sources) {
 			_read(
 				classLoader, source,
 				rootElement -> _readPortletResources(
-					rootElement, portletResourceNames));
+					rootElement, resourceActionsBagBuilders));
 		}
 
-		for (String portletResourceName : portletResourceNames) {
+		for (ResourceActionsBagBuilder resourceActionsBagBuilder :
+				resourceActionsBagBuilders.values()) {
+
+			String portletName = resourceActionsBagBuilder.getName();
+
+			_registerResourceActionsBag(
+				portletName, resourceActionsBagBuilder.build());
+
 			resourceActionLocalService.checkResourceActions(
-				portletResourceName,
-				getPortletResourceActions(portletResourceName));
+				portletName, getPortletResourceActions(portletName));
 		}
 	}
 
@@ -719,7 +753,20 @@ public class ResourceActionsImpl implements ResourceActions {
 			}
 		}
 
-		_readModelResources(document.getRootElement(), resourceNames);
+		Map<String, ResourceActionsBagBuilder> resourceActionsBagBuilders =
+			new HashMap<>();
+
+		_readModelResources(
+			document.getRootElement(), resourceActionsBagBuilders);
+
+		for (ResourceActionsBagBuilder resourceActionsBagBuilder :
+				resourceActionsBagBuilders.values()) {
+
+			String modelName = resourceActionsBagBuilder.getName();
+
+			_registerResourceActionsBag(
+				modelName, resourceActionsBagBuilder.build());
+		}
 	}
 
 	/**
@@ -768,18 +815,28 @@ public class ResourceActionsImpl implements ResourceActions {
 	public void readAndCheck(ClassLoader classLoader, String... sources)
 		throws ResourceActionsException {
 
-		Set<String> resourceNames = new HashSet<>();
+		Map<String, ResourceActionsBagBuilder> resourceActionsBagBuilders =
+			new HashMap<>();
 
 		for (String source : sources) {
 			_read(
 				classLoader, source,
 				rootElement -> {
-					_readModelResources(rootElement, resourceNames);
-					_readPortletResources(rootElement, resourceNames);
+					_readModelResources(
+						rootElement, resourceActionsBagBuilders);
+					_readPortletResources(
+						rootElement, resourceActionsBagBuilders);
 				});
 		}
 
-		for (String resourceName : resourceNames) {
+		for (ResourceActionsBagBuilder resourceActionsBagBuilder :
+				resourceActionsBagBuilders.values()) {
+
+			String resourceName = resourceActionsBagBuilder.getName();
+
+			_registerResourceActionsBag(
+				resourceName, resourceActionsBagBuilder.build());
+
 			resourceActionLocalService.checkResourceActions(
 				resourceName, getResourceActions(resourceName));
 		}
@@ -1201,7 +1258,8 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	private void _readModelResources(
-			Element rootElement, Set<String> resourceNames)
+			Element rootElement,
+			Map<String, ResourceActionsBagBuilder> resourceActionsBagBuilders)
 		throws ResourceActionsException {
 
 		for (Element modelResourceElement :
@@ -1266,17 +1324,19 @@ public class ResourceActionsImpl implements ResourceActions {
 
 			_modelResourceWeights.put(modelName, weight);
 
-			_readResource(
-				modelResourceElement, modelName,
-				Collections.singleton(ActionKeys.PERMISSIONS));
+			ResourceActionsBagBuilder resourceActionsBagBuilder =
+				resourceActionsBagBuilders.computeIfAbsent(
+					modelName, ResourceActionsBagBuilder::new);
 
-			if (resourceNames != null) {
-				resourceNames.add(modelName);
-			}
+			_readResource(
+				modelResourceElement, resourceActionsBagBuilder,
+				Collections.singleton(ActionKeys.PERMISSIONS));
 		}
 	}
 
-	private void _readPortletResource(Element rootElement, Portlet portlet)
+	private void _readPortletResource(
+			Element rootElement, Portlet portlet,
+			ResourceActionsBagBuilder resourceActionsBagBuilder)
 		throws ResourceActionsException {
 
 		String deployPortletName = PortletIdCodec.decodePortletName(
@@ -1299,12 +1359,15 @@ public class ResourceActionsImpl implements ResourceActions {
 				_checkPortletLayoutManagerActions(portletActions);
 			}
 
-			_readResource(portletResourceElement, portletName, portletActions);
+			_readResource(
+				portletResourceElement, resourceActionsBagBuilder,
+				portletActions);
 		}
 	}
 
 	private void _readPortletResources(
-			Element rootElement, Set<String> resourceNames)
+			Element rootElement,
+			Map<String, ResourceActionsBagBuilder> resourceActionsBagBuilders)
 		throws ResourceActionsException {
 
 		if (PropsValues.RESOURCE_ACTIONS_READ_PORTLET_RESOURCES) {
@@ -1324,36 +1387,33 @@ public class ResourceActionsImpl implements ResourceActions {
 					_checkPortletLayoutManagerActions(portletActions);
 				}
 
-				_readResource(
-					portletResourceElement, portletName, portletActions);
+				ResourceActionsBagBuilder resourceActionsBagBuilder =
+					resourceActionsBagBuilders.computeIfAbsent(
+						portletName, ResourceActionsBagBuilder::new);
 
-				if (resourceNames != null) {
-					resourceNames.add(portletName);
-				}
+				_readResource(
+					portletResourceElement, resourceActionsBagBuilder,
+					portletActions);
 			}
 		}
 	}
 
 	private void _readResource(
-			Element resourceElement, String name,
+			Element resourceElement,
+			ResourceActionsBagBuilder resourceActionsBagBuilder,
 			Set<String> defaultResourceActions)
 		throws ResourceActionsException {
 
-		ResourceActionsBag resourceActionsBag = _getResourceActionsBag(name);
-
-		Set<String> resourceActions = resourceActionsBag.getSupportsActions();
+		Set<String> resourceActions = new HashSet<>();
 
 		Element supportsElement = _getPermissionsChildElement(
 			resourceElement, "supports");
 
 		_readActionKeys(resourceActions, supportsElement);
 
-		resourceActions.addAll(defaultResourceActions);
+		resourceActionsBagBuilder.addSupportsActions(resourceActions);
 
-		if (resourceActions.size() > 64) {
-			throw new ResourceActionsException(
-				"There are more than 64 actions for resource " + name);
-		}
+		resourceActionsBagBuilder.addSupportsActions(defaultResourceActions);
 
 		Element groupDefaultsElement = _getPermissionsChildElement(
 			resourceElement, "site-member-defaults");
@@ -1370,34 +1430,31 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 
 		if (groupDefaultsElement != null) {
-			Set<String> groupDefaultActions =
-				resourceActionsBag.getGroupDefaultActions();
-
-			groupDefaultActions.clear();
+			Set<String> groupDefaultActions = new HashSet<>();
 
 			_readActionKeys(groupDefaultActions, groupDefaultsElement);
-		}
 
-		Set<String> guestDefaultActions =
-			resourceActionsBag.getGuestDefaultActions();
+			resourceActionsBagBuilder.setGroupDefaultActions(
+				groupDefaultActions);
+		}
 
 		Element guestDefaultsElement = _getPermissionsChildElement(
 			resourceElement, "guest-defaults");
 
 		if (guestDefaultsElement != null) {
-			guestDefaultActions.clear();
+			Set<String> guestDefaultActions = new HashSet<>();
 
 			_readActionKeys(guestDefaultActions, guestDefaultsElement);
+
+			resourceActionsBagBuilder.setGuestDefaultActions(
+				guestDefaultActions);
 		}
 
 		Element guestUnsupportedElement = _getPermissionsChildElement(
 			resourceElement, "guest-unsupported");
 
 		if (guestUnsupportedElement != null) {
-			Set<String> guestUnsupportedActions =
-				resourceActionsBag.getGuestUnsupportedActions();
-
-			guestUnsupportedActions.clear();
+			Set<String> guestUnsupportedActions = new HashSet<>();
 
 			_readActionKeys(guestUnsupportedActions, guestUnsupportedElement);
 
@@ -1407,34 +1464,47 @@ public class ResourceActionsImpl implements ResourceActions {
 				_checkPortletGuestUnsupportedActions(guestUnsupportedActions);
 			}
 
-			_checkGuestUnsupportedActions(
-				guestUnsupportedActions, guestDefaultActions);
+			resourceActionsBagBuilder.setGuestUnsupportedActions(
+				guestUnsupportedActions);
 		}
 
 		Element ownerDefaultsElement = _getPermissionsChildElement(
 			resourceElement, "owner-defaults");
 
 		if (ownerDefaultsElement != null) {
-			_readActionKeys(
-				resourceActionsBag.getOwnerDefaultActions(),
-				ownerDefaultsElement);
+			Set<String> ownerDefaultActions = new HashSet<>();
+
+			_readActionKeys(ownerDefaultActions, ownerDefaultsElement);
+
+			resourceActionsBagBuilder.setOwnerDefaultActions(
+				ownerDefaultActions);
 		}
 
-		Set<String> layoutManagerActions =
-			resourceActionsBag.getLayoutManagerActions();
+		Set<String> layoutManagerActions = new HashSet<>();
 
 		Element layoutManagerElement = _getPermissionsChildElement(
 			resourceElement, "layout-manager");
 
 		if (layoutManagerElement == null) {
 			layoutManagerActions.addAll(resourceActions);
-
-			return;
+		}
+		else {
+			_readActionKeys(layoutManagerActions, layoutManagerElement);
 		}
 
-		layoutManagerActions.clear();
+		resourceActionsBagBuilder.setLayoutManagerActions(layoutManagerActions);
+	}
 
-		_readActionKeys(layoutManagerActions, layoutManagerElement);
+	private void _registerResourceActionsBag(
+		String name, ResourceActionsBag resourceActionsBag) {
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		registry.registerService(
+			ResourceActionsBag.class, resourceActionsBag,
+			HashMapBuilder.put(
+				"resource.name", (Object)name
+			).build());
 	}
 
 	private static final String _ACTION_NAME_PREFIX = "action.";
