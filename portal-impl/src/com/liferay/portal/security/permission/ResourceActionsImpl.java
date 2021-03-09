@@ -257,8 +257,12 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public List<String> getModelResourceGroupDefaultActions(String name) {
-		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
-			name);
+		ResourceActionsBag modelResourceActionsBag =
+			_getLatestResourceActionsBag(name);
+
+		if (modelResourceActionsBag == null) {
+			return new ArrayList<>();
+		}
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getGroupDefaultActions());
@@ -266,8 +270,12 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public List<String> getModelResourceGuestDefaultActions(String name) {
-		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
-			name);
+		ResourceActionsBag modelResourceActionsBag =
+			_getLatestResourceActionsBag(name);
+
+		if (modelResourceActionsBag == null) {
+			return new ArrayList<>();
+		}
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getGuestDefaultActions());
@@ -275,8 +283,12 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public List<String> getModelResourceGuestUnsupportedActions(String name) {
-		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
-			name);
+		ResourceActionsBag modelResourceActionsBag =
+			_getLatestResourceActionsBag(name);
+
+		if (modelResourceActionsBag == null) {
+			return new ArrayList<>();
+		}
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getGuestUnsupportedActions());
@@ -289,8 +301,12 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public List<String> getModelResourceOwnerDefaultActions(String name) {
-		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
-			name);
+		ResourceActionsBag modelResourceActionsBag =
+			_getLatestResourceActionsBag(name);
+
+		if (modelResourceActionsBag == null) {
+			return new ArrayList<>();
+		}
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getOwnerDefaultActions());
@@ -392,8 +408,12 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		name = PortletIdCodec.decodePortletName(name);
 
-		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
-			name);
+		ResourceActionsBag portletResourceActionsBag =
+			_getLatestResourceActionsBag(name);
+
+		if (portletResourceActionsBag == null) {
+			return new ArrayList<>();
+		}
 
 		return new ArrayList<>(
 			portletResourceActionsBag.getGroupDefaultActions());
@@ -403,8 +423,12 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getPortletResourceGuestDefaultActions(String name) {
 		name = PortletIdCodec.decodePortletName(name);
 
-		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
-			name);
+		ResourceActionsBag portletResourceActionsBag =
+			_getLatestResourceActionsBag(name);
+
+		if (portletResourceActionsBag == null) {
+			return new ArrayList<>();
+		}
 
 		return new ArrayList<>(
 			portletResourceActionsBag.getGuestDefaultActions());
@@ -414,8 +438,12 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getPortletResourceGuestUnsupportedActions(String name) {
 		name = PortletIdCodec.decodePortletName(name);
 
-		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
-			name);
+		ResourceActionsBag portletResourceActionsBag =
+			_getLatestResourceActionsBag(name);
+
+		if (portletResourceActionsBag == null) {
+			return new ArrayList<>();
+		}
 
 		return new ArrayList<>(
 			portletResourceActionsBag.getGuestUnsupportedActions());
@@ -425,8 +453,12 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getPortletResourceLayoutManagerActions(String name) {
 		name = PortletIdCodec.decodePortletName(name);
 
-		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
-			name);
+		ResourceActionsBag portletResourceActionsBag =
+			_getLatestResourceActionsBag(name);
+
+		if (portletResourceActionsBag == null) {
+			return new ArrayList<>();
+		}
 
 		return new ArrayList<>(
 			portletResourceActionsBag.getLayoutManagerActions());
@@ -958,6 +990,17 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 
 		return sb.toString();
+	}
+
+	private ResourceActionsBag _getLatestResourceActionsBag(String name) {
+		List<ResourceActionsBag> resourceActionsBags =
+			_resourceActionsBagServiceTrackerMap.getService(name);
+
+		if ((resourceActionsBags == null) || resourceActionsBags.isEmpty()) {
+			return null;
+		}
+
+		return resourceActionsBags.get(resourceActionsBags.size() - 1);
 	}
 
 	private Element _getPermissionsChildElement(
