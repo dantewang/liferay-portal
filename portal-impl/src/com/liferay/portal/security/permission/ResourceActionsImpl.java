@@ -1027,7 +1027,9 @@ public class ResourceActionsImpl implements ResourceActions {
 				return resourceActionsBag;
 			}
 
-			resourceActionsBag = new ResourceActionsBag();
+			resourceActionsBag = new ResourceActionsBag(
+				new HashSet<>(), new HashSet<>(), new HashSet<>(),
+				new HashSet<>(), new HashSet<>(), new HashSet<>());
 
 			_resourceActionsBags.put(name, resourceActionsBag);
 		}
@@ -1457,6 +1459,20 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	private static class ResourceActionsBag {
 
+		public ResourceActionsBag(
+			Set<String> supportsActions, Set<String> groupDefaultActions,
+			Set<String> guestDefaultActions,
+			Set<String> guestUnsupportedActions,
+			Set<String> layoutManagerActions, Set<String> ownerDefaultActions) {
+
+			_supportsActions = supportsActions;
+			_groupDefaultActions = groupDefaultActions;
+			_guestDefaultActions = guestDefaultActions;
+			_guestUnsupportedActions = guestUnsupportedActions;
+			_layoutManagerActions = layoutManagerActions;
+			_ownerDefaultActions = ownerDefaultActions;
+		}
+
 		public Set<String> getGroupDefaultActions() {
 			return _groupDefaultActions;
 		}
@@ -1481,12 +1497,12 @@ public class ResourceActionsImpl implements ResourceActions {
 			return _supportsActions;
 		}
 
-		private final Set<String> _groupDefaultActions = new HashSet<>();
-		private final Set<String> _guestDefaultActions = new HashSet<>();
-		private final Set<String> _guestUnsupportedActions = new HashSet<>();
-		private final Set<String> _layoutManagerActions = new HashSet<>();
-		private final Set<String> _ownerDefaultActions = new HashSet<>();
-		private final Set<String> _supportsActions = new HashSet<>();
+		private final Set<String> _groupDefaultActions;
+		private final Set<String> _guestDefaultActions;
+		private final Set<String> _guestUnsupportedActions;
+		private final Set<String> _layoutManagerActions;
+		private final Set<String> _ownerDefaultActions;
+		private final Set<String> _supportsActions;
 
 	}
 
