@@ -420,8 +420,6 @@ public class DataFactory {
 			getClassNameId(JournalArticle.class), getClassNameId(WikiPage.class)
 		};
 
-		_companyId = _counter.get();
-
 		_dlDDMStructureContent = _readFile("ddm_structure_basic_document.json");
 		_dlDDMStructureLayoutContent = _readFile(
 			"ddm_structure_layout_basic_document.json");
@@ -2151,7 +2149,7 @@ public class DataFactory {
 
 		// PK fields
 
-		companyModel.setCompanyId(_companyId);
+		companyModel.setCompanyId(_counter.get());
 
 		// Audit fields
 
@@ -5475,6 +5473,10 @@ public class DataFactory {
 		return userName;
 	}
 
+	public void setCompanyId(long companyId) {
+		_companyId = companyId;
+	}
+
 	public String toInsertSQL(BaseModel<?> baseModel) {
 		try {
 			StringBundler sb = new StringBundler();
@@ -6982,7 +6984,7 @@ public class DataFactory {
 			new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
 	private final Map<String, ClassNameModel> _classNameModels =
 		new HashMap<>();
-	private final long _companyId;
+	private long _companyId;
 	private final SimpleCounter _counter;
 	private final Map<Long, CPInstanceModel> _cpInstanceModels =
 		new HashMap<>();
