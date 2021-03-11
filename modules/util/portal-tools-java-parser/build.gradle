@@ -1,5 +1,5 @@
 dependencies {
-	compile group: "com.puppycrawl.tools", name: "checkstyle", version: "8.26"
+	compile group: "com.puppycrawl.tools", name: "checkstyle", version: "8.29"
 	compile group: "commons-io", name: "commons-io", version: "2.6"
 	compile group: "org.antlr", name: "antlr4-runtime", version: "4.7.2"
 
