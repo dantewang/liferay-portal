@@ -350,9 +350,6 @@ public class DataFactory {
 			getClassNameId(JournalArticle.class), getClassNameId(WikiPage.class)
 		};
 
-		_accountId = _counter.get();
-		_companyId = _counter.get();
-
 		_dlDDMStructureContent = _readFile("ddm_structure_basic_document.json");
 		_dlDDMStructureLayoutContent = _readFile(
 			"ddm_structure_layout_basic_document.json");
@@ -683,12 +680,12 @@ public class DataFactory {
 		unsyncBufferedReader.close();
 	}
 
-	public AccountModel newAccountModel() {
+	public AccountModel newAccountModel(CompanyModel companyModel) {
 		AccountModel accountModel = new AccountModelImpl();
 
 		// PK fields
 
-		accountModel.setAccountId(_accountId);
+		accountModel.setAccountId(companyModel.getAccountId());
 
 		// Audit fields
 
@@ -700,6 +697,8 @@ public class DataFactory {
 
 		accountModel.setName("Liferay");
 		accountModel.setLegalName("Liferay, Inc.");
+
+		_accountId = accountModel.getAccountId();
 
 		return accountModel;
 	}
@@ -1200,11 +1199,11 @@ public class DataFactory {
 
 		// PK fields
 
-		companyModel.setCompanyId(_companyId);
+		companyModel.setCompanyId(_counter.get());
 
 		// Other fields
 
-		companyModel.setAccountId(_accountId);
+		companyModel.setAccountId(_counter.get());
 		companyModel.setWebId("liferay.com");
 		companyModel.setMx("liferay.com");
 		companyModel.setActive(true);
@@ -3985,6 +3984,10 @@ public class DataFactory {
 		return userName;
 	}
 
+	public void setCompanyId(long companyId) {
+		_companyId = companyId;
+	}
+
 	public String toInsertSQL(BaseModel<?> baseModel) {
 		try {
 			StringBundler sb = new StringBundler();
@@ -5275,7 +5278,7 @@ public class DataFactory {
 	private static final PortletPreferencesFactory _portletPreferencesFactory =
 		new PortletPreferencesFactoryImpl();
 
-	private final long _accountId;
+	private long _accountId;
 	private RoleModel _administratorRoleModel;
 	private Map<Long, SimpleCounter>[] _assetCategoryCounters;
 	private final Map<Long, List<AssetCategoryModel>>[]
@@ -5293,7 +5296,7 @@ public class DataFactory {
 			new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
 	private final Map<String, ClassNameModel> _classNameModels =
 		new HashMap<>();
-	private final long _companyId;
+	private long _companyId;
 	private final SimpleCounter _counter;
 	private long _currentGroupId;
 	private final PortletPreferencesImpl
