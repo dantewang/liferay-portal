@@ -384,7 +384,11 @@ public class DataFactory {
 		_simpleDateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss", TimeZone.getDefault());
 
-		_counter = new SimpleCounter(BenchmarksPropsValues.MAX_GROUP_COUNT + 1);
+		int totalGroupCount =
+			BenchmarksPropsValues.MAX_GROUP_COUNT *
+				(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1);
+
+		_counter = new SimpleCounter(totalGroupCount + 1);
 
 		_groupCounter = new SimpleCounter(1);
 
@@ -460,8 +464,9 @@ public class DataFactory {
 
 		if (_assetCategoryCounters == null) {
 			_assetCategoryCounters =
-				(Map<Long, SimpleCounter>[])
-					new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+				(Map<Long, SimpleCounter>[])new HashMap<?, ?>
+					[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
+						BenchmarksPropsValues.MAX_GROUP_COUNT];
 		}
 
 		SimpleCounter counter = getSimpleCounter(
@@ -502,9 +507,9 @@ public class DataFactory {
 		}
 
 		if (_assetTagCounters == null) {
-			_assetTagCounters =
-				(Map<Long, SimpleCounter>[])
-					new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+			_assetTagCounters = (Map<Long, SimpleCounter>[])new HashMap<?, ?>
+				[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
+					BenchmarksPropsValues.MAX_GROUP_COUNT];
 		}
 
 		SimpleCounter counter = getSimpleCounter(
@@ -826,7 +831,15 @@ public class DataFactory {
 
 		// Other fields
 
-		accountModel.setName("Liferay");
+		String webId = companyModel.getWebId();
+
+		if (webId.equals("liferay.com")) {
+			accountModel.setName("Liferay");
+		}
+		else {
+			accountModel.setName(webId);
+		}
+
 		accountModel.setLegalName("Liferay, Inc.");
 
 		_accountId = accountModel.getAccountId();
@@ -2150,7 +2163,7 @@ public class DataFactory {
 						"commerce_theme_portlet_settings.json"))));
 	}
 
-	public CompanyModel newCompanyModel() {
+	public CompanyModel newCompanyModel(int... index) {
 		CompanyModel companyModel = new CompanyModelImpl();
 
 		// PK fields
@@ -2160,11 +2173,34 @@ public class DataFactory {
 		// Other fields
 
 		companyModel.setAccountId(_counter.get());
-		companyModel.setWebId("liferay.com");
+
+		if (index.length == 0) {
+			companyModel.setWebId("liferay.com");
+		}
+		else {
+			companyModel.setWebId(
+				StringBundler.concat("liferay", index[0], ".com"));
+		}
+
 		companyModel.setMx("liferay.com");
 		companyModel.setActive(true);
 
 		return companyModel;
+	}
+
+	public List<CompanyModel> newCompanyModels() {
+		List<CompanyModel> companyModels = new ArrayList<>(
+			BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1);
+
+		companyModels.add(newCompanyModel());
+
+		for (int i = 1; i <= BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT;
+			 i++) {
+
+			companyModels.add(newCompanyModel(i));
+		}
+
+		return companyModels;
 	}
 
 	public ContactModel newContactModel(UserModel userModel) {
@@ -5410,11 +5446,21 @@ public class DataFactory {
 			getClassNameId(WikiPage.class), wikiPageModel.getResourcePrimKey());
 	}
 
-	public List<UserModel> newUserModels() {
-		List<UserModel> userModels = new ArrayList<>(
-			BenchmarksPropsValues.MAX_USER_COUNT);
+	public List<UserModel> newUserModels(CompanyModel companyModel) {
+		int userCount = 0;
 
-		for (int i = 0; i < BenchmarksPropsValues.MAX_USER_COUNT; i++) {
+		String webId = companyModel.getWebId();
+
+		if (webId.equals("liferay.com")) {
+			userCount = BenchmarksPropsValues.MAX_USER_COUNT;
+		}
+		else {
+			userCount = BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_USER_COUNT;
+		}
+
+		List<UserModel> userModels = new ArrayList<>(userCount);
+
+		for (int i = 0; i < userCount; i++) {
 			String[] userName = nextUserName(i);
 
 			userModels.add(
@@ -5432,7 +5478,7 @@ public class DataFactory {
 			_defaultUserId, GroupConstants.USER_PERSONAL_SITE, false);
 	}
 
-	public VirtualHostModel newVirtualHostModel() {
+	public VirtualHostModel newVirtualHostModel(CompanyModel companyModel) {
 		VirtualHostModel virtualHostModel = new VirtualHostModelImpl();
 
 		//  PK fields
@@ -5445,7 +5491,15 @@ public class DataFactory {
 
 		// Other fields
 
-		virtualHostModel.setHostname(BenchmarksPropsValues.VIRTUAL_HOST_NAME);
+		String webId = companyModel.getWebId();
+
+		if (webId.equals("liferay.com")) {
+			virtualHostModel.setHostname(
+				BenchmarksPropsValues.VIRTUAL_HOST_NAME);
+		}
+		else {
+			virtualHostModel.setHostname(webId);
+		}
 
 		return virtualHostModel;
 	}
@@ -7030,8 +7084,9 @@ public class DataFactory {
 	private Map<Long, SimpleCounter>[] _assetCategoryCounters;
 	private final Map<Long, List<AssetCategoryModel>>[]
 		_assetCategoryModelsMaps =
-			(Map<Long, List<AssetCategoryModel>>[])
-				new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+			(Map<Long, List<AssetCategoryModel>>[])new HashMap<?, ?>
+				[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
+					BenchmarksPropsValues.MAX_GROUP_COUNT];
 	private final long[] _assetClassNameIds;
 	private final Map<Long, Integer> _assetClassNameIdsIndexes =
 		new HashMap<>();
@@ -7039,8 +7094,9 @@ public class DataFactory {
 		new HashMap<>();
 	private Map<Long, SimpleCounter>[] _assetTagCounters;
 	private final Map<Long, List<AssetTagModel>>[] _assetTagModelsMaps =
-		(Map<Long, List<AssetTagModel>>[])
-			new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+		(Map<Long, List<AssetTagModel>>[])new HashMap<?, ?>
+			[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
+				BenchmarksPropsValues.MAX_GROUP_COUNT];
 	private final Map<String, ClassNameModel> _classNameModels =
 		new HashMap<>();
 	private long _companyId;

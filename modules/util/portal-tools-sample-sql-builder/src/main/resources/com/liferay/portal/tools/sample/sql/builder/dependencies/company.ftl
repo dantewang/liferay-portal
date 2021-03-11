@@ -1,15 +1,17 @@
-<#assign companyModel = dataFactory.newCompanyModel() />
+<#list dataFactory.newCompanyModels() as companyModel>
+	${dataFactory.setCompanyId(companyModel.companyId)}
 
-${dataFactory.setCompanyId(companyModel.companyId)}
+	<#assign virtualHostModel = dataFactory.newVirtualHostModel(companyModel) />
 
-${dataFactory.toInsertSQL(companyModel)}
+	${dataFactory.toInsertSQL(companyModel)}
 
-${dataFactory.toInsertSQL(dataFactory.newAccountModel(companyModel))}
+	${dataFactory.toInsertSQL(dataFactory.newAccountModel(companyModel))}
 
-${dataFactory.toInsertSQL(dataFactory.newVirtualHostModel())}
+	${dataFactory.toInsertSQL(virtualHostModel)}
 
-${csvFileWriter.write("company", companyModel.companyId + "\n")}
+	${csvFileWriter.write("company", companyModel.companyId + "\n")}
 
-<#include "roles.ftl">
+	<#include "roles.ftl">
 
-<#include "groups.ftl">
+	<#include "groups.ftl">
+</#list>
