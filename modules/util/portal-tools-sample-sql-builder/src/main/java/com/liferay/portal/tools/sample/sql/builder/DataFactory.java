@@ -2774,6 +2774,11 @@ public class DataFactory {
 
 		if (Validator.isNull(_defaultJournalArticleId)) {
 			_defaultJournalArticleId = journalArticleModel.getArticleId();
+			_currentJournalGroupId = journalArticleModel.getGroupId();
+		}
+		else if (_currentJournalGroupId != journalArticleModel.getGroupId()) {
+			_defaultJournalArticleId = journalArticleModel.getArticleId();
+			_currentJournalGroupId = journalArticleModel.getGroupId();
 		}
 
 		return journalArticleModel;
@@ -5282,6 +5287,7 @@ public class DataFactory {
 		new HashMap<>();
 	private final long _companyId;
 	private final SimpleCounter _counter;
+	private long _currentJournalGroupId;
 	private final PortletPreferencesImpl
 		_defaultAssetPublisherPortletPreferencesImpl;
 	private final long _defaultDLDDMStructureId;
