@@ -23,8 +23,6 @@
 
 	<#include "journal_article.ftl">
 
-	<#include "fragment.ftl">
-
 	<#include "mb.ftl">
 
 	<#include "users.ftl">
