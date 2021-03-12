@@ -1,6 +1,4 @@
-<#assign resourcePermissionModels = dataFactory.newResourcePermissionModels("com.liferay.journal", groupId) />
-
-<#list resourcePermissionModels as resourcePermissionModel>
+<#list dataFactory.newResourcePermissionModels("com.liferay.journal", groupId) as resourcePermissionModel>
 	${dataFactory.toInsertSQL(resourcePermissionModel)}
 </#list>
 
@@ -21,9 +19,7 @@
 
 	${dataFactory.toInsertSQL(fragmentEntryModel)}
 
-	<#assign contentLayoutModels = dataFactory.newContentLayoutModels(groupId) />
-
-	<#list contentLayoutModels as contentLayoutModel>
+	<#list dataFactory.newContentLayoutModels(groupId) as contentLayoutModel>
 		<@insertContentLayout
 			_fragmentEntryModel=fragmentEntryModel
 			_journalArticleModel=journalArticleModel
