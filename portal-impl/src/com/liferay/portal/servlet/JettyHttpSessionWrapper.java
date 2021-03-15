@@ -18,8 +18,8 @@ import com.liferay.portal.kernel.servlet.HttpSessionWrapper;
 
 import javax.servlet.http.HttpSession;
 
-import org.eclipse.jetty.server.session.AbstractSession;
-import org.eclipse.jetty.server.session.AbstractSessionManager;
+import org.eclipse.jetty.server.session.Session;
+import org.eclipse.jetty.server.session.SessionHandler;
 
 /**
  * @author     Brian Wing Shun Chan
@@ -27,7 +27,7 @@ import org.eclipse.jetty.server.session.AbstractSessionManager;
  */
 @Deprecated
 public class JettyHttpSessionWrapper
-	extends HttpSessionWrapper implements AbstractSessionManager.SessionIf {
+	extends HttpSessionWrapper implements SessionHandler.SessionIf {
 
 	public JettyHttpSessionWrapper(HttpSession session) {
 		super(session);
@@ -36,7 +36,7 @@ public class JettyHttpSessionWrapper
 	}
 
 	@Override
-	public AbstractSession getSession() {
+	public Session getSession() {
 		HttpSessionWrapper sessionWrapper = (HttpSessionWrapper)_session;
 
 		JettySharedSessionWrapper jettySharedSessionWrapper =
