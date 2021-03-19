@@ -14,12 +14,14 @@
 
 package com.liferay.portal.service.impl;
 
+import com.liferay.petra.lang.SafeClosable;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.AuditedModel;
 import com.liferay.portal.kernel.model.Resource;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
 import com.liferay.portal.kernel.transaction.Transactional;
@@ -233,9 +235,13 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 			boolean addGuestPermissions)
 		throws PortalException {
 
-		resourcePermissionLocalService.addResourcePermissions(
-			companyId, groupId, userId, name, String.valueOf(primKey),
-			portletActions, addGroupPermissions, addGuestPermissions);
+		try (SafeClosable safeClosable = CompanyThreadLocal.setWithSafeClosable(
+				companyId)) {
+
+			resourcePermissionLocalService.addResourcePermissions(
+				companyId, groupId, userId, name, String.valueOf(primKey),
+				portletActions, addGroupPermissions, addGuestPermissions);
+		}
 	}
 
 	/**
