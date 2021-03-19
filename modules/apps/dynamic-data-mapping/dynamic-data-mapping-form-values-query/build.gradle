@@ -9,7 +9,7 @@ dependencies {
 	antlr group: "org.antlr", name: "antlr4", version: "4.3"
 
 	compileInclude group: "org.abego.treelayout", name: "org.abego.treelayout.core", version: "1.0.1"
-	compileInclude group: "org.antlr", name: "antlr4-runtime", version: "4.3"
+	compileInclude group: "org.antlr", name: "antlr4-runtime", version: "4.8-1"
 
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
 	compileOnly group: "org.antlr", name: "antlr4", version: "4.3"
