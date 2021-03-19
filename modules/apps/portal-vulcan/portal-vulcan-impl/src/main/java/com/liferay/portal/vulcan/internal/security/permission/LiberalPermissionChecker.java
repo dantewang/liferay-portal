@@ -14,12 +14,14 @@
 
 package com.liferay.portal.vulcan.internal.security.permission;
 
+import com.liferay.petra.lang.SafeClosable;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.role.RoleConstants;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.UserBag;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
@@ -126,9 +128,13 @@ public class LiberalPermissionChecker implements PermissionChecker {
 	public void init(User user) {
 		_user = user;
 
-		try {
+		long companyId = user.getCompanyId();
+
+		try (SafeClosable safeClosable = CompanyThreadLocal.setWithSafeClosable(
+				companyId)) {
+
 			_ownerRole = RoleLocalServiceUtil.getRole(
-				user.getCompanyId(), RoleConstants.OWNER);
+				companyId, RoleConstants.OWNER);
 		}
 		catch (Exception exception) {
 			_log.error(exception, exception);
