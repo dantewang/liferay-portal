@@ -171,6 +171,40 @@
 	</#list>
 </#macro>
 
+<#macro insertJournalArticle
+	_journalArticleIndex
+	_journalDDMStructureModel
+	_journalDDMTemplateModel
+	_maxJournalArticleVersionCount
+>
+	<#assign journalArticleResourceModel = dataFactory.newJournalArticleResourceModel(groupId) />
+
+	${dataFactory.toInsertSQL(journalArticleResourceModel)}
+
+	<#list dataFactory.getSequence(_maxJournalArticleVersionCount) as versionCount>
+		<#assign journalArticleModel = dataFactory.newJournalArticleModel(journalArticleResourceModel, _journalArticleIndex, versionCount) />
+
+		${dataFactory.toInsertSQL(journalArticleModel)}
+
+		<#local journalArticleLocalizationModel = dataFactory.newJournalArticleLocalizationModel(journalArticleModel, _journalArticleIndex, versionCount) />
+
+		${dataFactory.toInsertSQL(journalArticleLocalizationModel)}
+
+		${dataFactory.toInsertSQL(dataFactory.newDDMTemplateLinkModel(journalArticleModel, _journalDDMTemplateModel.templateId))}
+
+		${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(journalArticleModel, _journalDDMStructureModel.structureId))}
+
+		${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(journalArticleModel))}
+
+		<#if versionCount = _maxJournalArticleVersionCount>
+			<@insertAssetEntry
+				_categoryAndTag=true
+				_entry=dataFactory.newObjectValuePair(journalArticleModel, journalArticleLocalizationModel)
+			/>
+		</#if>
+	</#list>
+</#macro>
+
 <#macro insertLayout
 	_layoutModel
 >
