@@ -2857,10 +2857,12 @@ public class DataFactory {
 
 	public PortletPreferenceValueModel
 		newJournalContentPortletPreferenceValueModel(
-			PortletPreferencesModel portletPreferencesModel) {
+			PortletPreferencesModel portletPreferencesModel,
+			JournalArticleModel journalArticleModel) {
 
 		return newPortletPreferenceValueModel(
-			portletPreferencesModel, "articleId", 0, _defaultJournalArticleId);
+			portletPreferencesModel, "articleId", 0,
+			journalArticleModel.getArticleId());
 	}
 
 	public JournalContentSearchModel newJournalContentSearchModel(
@@ -5290,7 +5292,6 @@ public class DataFactory {
 		_defaultAssetPublisherPortletPreferencesImpl;
 	private final long _defaultDLDDMStructureId;
 	private final long _defaultDLDDMStructureVersionId;
-	private String _defaultJournalArticleId;
 	private final long _defaultJournalDDMStructureId;
 	private final long _defaultJournalDDMStructureVersionId;
 	private final long _defaultJournalDDMTemplateId;
