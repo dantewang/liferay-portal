@@ -2776,10 +2776,6 @@ public class DataFactory {
 		journalArticleModel.setLastPublishDate(new Date());
 		journalArticleModel.setStatusDate(new Date());
 
-		if (Validator.isNull(_defaultJournalArticleId)) {
-			_defaultJournalArticleId = journalArticleModel.getArticleId();
-		}
-
 		return journalArticleModel;
 	}
 
