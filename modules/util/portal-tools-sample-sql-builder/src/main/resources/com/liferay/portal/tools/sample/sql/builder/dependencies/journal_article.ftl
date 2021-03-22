@@ -19,37 +19,13 @@
 		${dataFactory.toInsertSQL(portletPreferencesModel)}
 	</#list>
 
-	<#assign journalArticleCounts = dataFactory.getSequence(dataFactory.maxJournalArticleCount) />
-
-	<#list journalArticleCounts as journalArticleCount>
-		<#assign journalArticleResourceModel = dataFactory.newJournalArticleResourceModel(groupId) />
-
-		${dataFactory.toInsertSQL(journalArticleResourceModel)}
-
-		<#assign versionCounts = dataFactory.getSequence(dataFactory.maxJournalArticleVersionCount) />
-
-		<#list versionCounts as versionCount>
-			<#assign journalArticleModel = dataFactory.newJournalArticleModel(journalArticleResourceModel, journalArticleCount, versionCount) />
-
-			${dataFactory.toInsertSQL(journalArticleModel)}
-
-			<#assign journalArticleLocalizationModel = dataFactory.newJournalArticleLocalizationModel(journalArticleModel, journalArticleCount, versionCount) />
-
-			${dataFactory.toInsertSQL(journalArticleLocalizationModel)}
-
-			${dataFactory.toInsertSQL(dataFactory.newDDMTemplateLinkModel(journalArticleModel, defaultJournalDDMTemplateModel.templateId))}
-
-			${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(journalArticleModel, defaultJournalDDMStructureModel.structureId))}
-
-			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(journalArticleModel))}
-
-			<#if versionCount = dataFactory.maxJournalArticleVersionCount>
-				<@insertAssetEntry
-					_categoryAndTag=true
-					_entry=dataFactory.newObjectValuePair(journalArticleModel, journalArticleLocalizationModel)
-				/>
-			</#if>
-		</#list>
+	<#list dataFactory.getSequence(dataFactory.maxJournalArticleCount) as journalArticleCount>
+		<@insertJournalArticle
+			_journalArticleIndex=journalArticleCount
+			_journalDDMStructureModel=defaultJournalDDMStructureModel
+			_journalDDMTemplateModel=defaultJournalDDMTemplateModel
+			_maxJournalArticleVersionCount=dataFactory.maxJournalArticleVersionCount
+		/>
 
 		<@insertMBDiscussion
 			_classNameId=dataFactory.journalArticleClassNameId
