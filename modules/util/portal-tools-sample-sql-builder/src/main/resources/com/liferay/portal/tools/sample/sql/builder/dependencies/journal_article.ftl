@@ -1,14 +1,8 @@
-<#assign
-	journalArticlePageCounts = dataFactory.getSequence(dataFactory.maxJournalArticlePageCount)
-
-	resourcePermissionModels = dataFactory.newResourcePermissionModels("com.liferay.journal", groupId)
-/>
-
-<#list resourcePermissionModels as resourcePermissionModel>
+<#list dataFactory.newResourcePermissionModels("com.liferay.journal", groupId) as resourcePermissionModel>
 	${dataFactory.toInsertSQL(resourcePermissionModel)}
 </#list>
 
-<#list journalArticlePageCounts as journalArticlePageCount>
+<#list dataFactory.getSequence(dataFactory.maxJournalArticlePageCount) as journalArticlePageCount>
 	<#assign
 		portletIdPrefix = "com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_TEST_" + journalArticlePageCount + "_"
 
