@@ -10,6 +10,7 @@
 	<#list dataFactory.newContentLayoutModels(groupId) as contentLayoutModel>
 		<@insertContentLayout
 			_fragmentEntryModel=fragmentEntryModel
+			_journalArticleModel=journalArticleModel
 			_layoutModel=contentLayoutModel
 		/>
 
