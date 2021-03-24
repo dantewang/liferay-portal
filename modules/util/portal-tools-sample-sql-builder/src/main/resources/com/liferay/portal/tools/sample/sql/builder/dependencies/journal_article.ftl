@@ -19,29 +19,26 @@
 		${dataFactory.toInsertSQL(portletPreferencesModel)}
 	</#list>
 
-	<#assign journalArticleCounts = dataFactory.getSequence(dataFactory.maxJournalArticleCount) />
-
-	<#list journalArticleCounts as journalArticleCount>
+	<#list dataFactory.getSequence(dataFactory.maxJournalArticleCount) as journalArticleCount>
 		<#assign journalArticleResourceModel = dataFactory.newJournalArticleResourceModel(groupId) />
 
 		${dataFactory.toInsertSQL(journalArticleResourceModel)}
 
-		<#assign versionCounts = dataFactory.getSequence(dataFactory.maxJournalArticleVersionCount) />
-
-		<#list versionCounts as versionCount>
-			<#assign journalArticleModel = dataFactory.newJournalArticleModel(journalArticleResourceModel, journalArticleCount, versionCount) />
+		<#list dataFactory.getSequence(dataFactory.maxJournalArticleVersionCount) as versionCount>
+			<#assign
+				journalArticleModel = dataFactory.newJournalArticleModel(journalArticleResourceModel, journalArticleCount, versionCount)
+				journalArticleLocalizationModel = dataFactory.newJournalArticleLocalizationModel(journalArticleModel, journalArticleCount, versionCount)
+			/>
 
 			${dataFactory.toInsertSQL(journalArticleModel)}
 
-			<#assign journalArticleLocalizationModel = dataFactory.newJournalArticleLocalizationModel(journalArticleModel, journalArticleCount, versionCount) />
-
 			${dataFactory.toInsertSQL(journalArticleLocalizationModel)}
 
-			${dataFactory.toInsertSQL(dataFactory.newDDMTemplateLinkModel(journalArticleModel, defaultJournalDDMTemplateModel.templateId))}
-
-			${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(journalArticleModel, defaultJournalDDMStructureModel.structureId))}
-
-			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(journalArticleModel))}
+			<@insertJournalArticle
+				_journalArticleModel=journalArticleModel
+				_journalDDMStructureModel=defaultJournalDDMStructureModel
+				_journalDDMTemplateModel=defaultJournalDDMTemplateModel
+			/>
 
 			<#if versionCount = dataFactory.maxJournalArticleVersionCount>
 				<@insertAssetEntry
