@@ -43,7 +43,11 @@
 		_parentDLFolderId=0
 	/>
 
-	<#assign groupLayoutModels = dataFactory.newGroupLayoutModels(groupId) />
+	<#assign
+		homePageContentLayoutModels = dataFactory.newContentPageLayoutModels(groupId, "welcome")
+
+		groupLayoutModels = dataFactory.newGroupLayoutModels(groupId)
+	/>
 
 	<#list groupLayoutModels as groupLayoutModel>
 		<@insertLayout _layoutModel=groupLayoutModel />
@@ -53,3 +57,5 @@
 
 	${csvFileWriter.write("repository", groupId + ", " + groupModel.name + "\n")}
 </#list>
+
+<#assign defaultSiteHomePageContentLayoutModels = dataFactory.newContentPageLayoutModels(guestGroupModel.groupId, "welcome") />
