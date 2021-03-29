@@ -36,11 +36,8 @@
 		_parentDLFolderId=0
 	/>
 
-	<#assign homePageContentLayoutModels = dataFactory.newContentPageLayoutModels(groupId, "welcome") />
-
 	<@insertContentPageLayout
-		_fragmentEntryLinkModels=dataFactory.newFragmentEntryLinkModels(homePageContentLayoutModels)
-		_layoutModels=homePageContentLayoutModels
+		_layoutModels=dataFactory.newContentPageLayoutModels(groupId, "welcome")
 		_templateFileName="default-homepage-layout-definition.json"
 	/>
 
@@ -53,10 +50,7 @@
 	${csvFileWriter.write("repository", groupId + ", " + groupModel.name + "\n")}
 </#list>
 
-<#assign defaultSiteHomePageContentLayoutModels = dataFactory.newContentPageLayoutModels(guestGroupModel.groupId, "welcome") />
-
 <@insertContentPageLayout
-	_fragmentEntryLinkModels=dataFactory.newFragmentEntryLinkModels(defaultSiteHomePageContentLayoutModels)
-	_layoutModels=defaultSiteHomePageContentLayoutModels
+	_layoutModels=dataFactory.newContentPageLayoutModels(guestGroupModel.groupId, "welcome")
 	_templateFileName="default-homepage-layout-definition.json"
 />
