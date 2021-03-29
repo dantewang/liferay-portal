@@ -28,6 +28,7 @@
 <#macro insertContentLayout
 	_layoutModel
 	_fragmentEntryModel
+	_journalArticleModel
 >
 	${dataFactory.toInsertSQL(_layoutModel)}
 
@@ -41,7 +42,7 @@
 
 	${dataFactory.toInsertSQL(journalContentPortletPreferencesModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferenceValueModel(journalContentPortletPreferencesModel))}
+	${dataFactory.toInsertSQL(dataFactory.newJournalContentPortletPreferenceValueModel(journalContentPortletPreferencesModel, _journalArticleModel))}
 
 	<#local layoutPageTemplateStructureModel = dataFactory.newLayoutPageTemplateStructureModel(_layoutModel)>
 
@@ -169,6 +170,18 @@
 	<#list layoutSetModels as layoutSetModel>
 		${dataFactory.toInsertSQL(layoutSetModel)}
 	</#list>
+</#macro>
+
+<#macro insertJournalArticle
+	_journalArticleModel
+	_journalDDMStructureModel
+	_journalDDMTemplateModel
+>
+	${dataFactory.toInsertSQL(dataFactory.newDDMTemplateLinkModel(_journalArticleModel, _journalDDMTemplateModel.templateId))}
+
+	${dataFactory.toInsertSQL(dataFactory.newDDMStorageLinkModel(_journalArticleModel, _journalDDMStructureModel.structureId))}
+
+	${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(_journalArticleModel))}
 </#macro>
 
 <#macro insertLayout

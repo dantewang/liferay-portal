@@ -542,6 +542,10 @@ public class DataFactory {
 		return BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_INSTANCE_COUNT;
 	}
 
+	public int getMaxContentLayoutCount() {
+		return BenchmarksPropsValues.MAX_CONTENT_LAYOUT_COUNT;
+	}
+
 	public int getMaxDDLRecordCount() {
 		return BenchmarksPropsValues.MAX_DDL_RECORD_COUNT;
 	}
@@ -2777,10 +2781,6 @@ public class DataFactory {
 		journalArticleModel.setLastPublishDate(new Date());
 		journalArticleModel.setStatusDate(new Date());
 
-		if (Validator.isNull(_defaultJournalArticleId)) {
-			_defaultJournalArticleId = journalArticleModel.getArticleId();
-		}
-
 		return journalArticleModel;
 	}
 
@@ -2858,10 +2858,12 @@ public class DataFactory {
 
 	public PortletPreferenceValueModel
 		newJournalContentPortletPreferenceValueModel(
-			PortletPreferencesModel portletPreferencesModel) {
+			PortletPreferencesModel portletPreferencesModel,
+			JournalArticleModel journalArticleModel) {
 
 		return newPortletPreferenceValueModel(
-			portletPreferencesModel, "articleId", 0, _defaultJournalArticleId);
+			portletPreferencesModel, "articleId", 0,
+			journalArticleModel.getArticleId());
 	}
 
 	public JournalContentSearchModel newJournalContentSearchModel(
@@ -5336,7 +5338,6 @@ public class DataFactory {
 		_defaultAssetPublisherPortletPreferencesImpl;
 	private final long _defaultDLDDMStructureId;
 	private final long _defaultDLDDMStructureVersionId;
-	private String _defaultJournalArticleId;
 	private final long _defaultJournalDDMStructureId;
 	private final long _defaultJournalDDMStructureVersionId;
 	private final long _defaultJournalDDMTemplateId;
