@@ -3887,9 +3887,17 @@ public class DataFactory {
 			_IMAGE_RENDER_KEY, StringUtil.randomId()
 		).put(
 			_PARAGRAPH_RENDER_KEY, StringUtil.randomId()
+		).put(
+			"LoginPortlet", StringUtil.randomId()
 		).build();
 
 		for (LayoutModel layoutModel : layoutModels) {
+			fragmentEntryLinkModels.add(
+				newFragmentEntryLinkModel(
+					layoutModel, "", "", "", "",
+					_readFile("loginPortlet_editValue.json"), 0,
+					nameSpaces.get("LoginPortlet")));
+
 			fragmentEntryLinkModels.add(
 				newFragmentEntryLinkModel(
 					layoutModel, _HEADING_RENDER_KEY,
