@@ -3902,6 +3902,8 @@ public class DataFactory {
 
 		Map<String, String> nameSpaces = HashMapBuilder.put(
 			_HEADING_RENDER_KEY, StringUtil.randomId()
+		).put(
+			_PARAGRAPH_RENDER_KEY, StringUtil.randomId()
 		).build();
 
 		for (LayoutModel layoutModel : layoutModels) {
@@ -3912,6 +3914,14 @@ public class DataFactory {
 					_readFile("heading_configuration.json"),
 					_readFile("heading_editValue.json"), 0,
 					nameSpaces.get(_HEADING_RENDER_KEY)));
+
+			fragmentEntryLinkModels.add(
+				newFragmentEntryLinkModel(
+					layoutModel, _PARAGRAPH_RENDER_KEY,
+					_readFile("paragraph.css"), _readFile("paragraph.html"),
+					_readFile("paragraph_configuration.json"),
+					_replaceReleaseInfo(_readFile("paragraph_editValue.json")),
+					0, nameSpaces.get(_PARAGRAPH_RENDER_KEY)));
 		}
 
 		return fragmentEntryLinkModels;
@@ -7134,6 +7144,16 @@ public class DataFactory {
 		return StringUtil.merge(lines, StringPool.SPACE);
 	}
 
+	private String _replaceReleaseInfo(String resource) throws Exception {
+		StringBundler sb = new StringBundler(3);
+
+		sb.append("Welcome to");
+		sb.append(ReleaseInfo.getReleaseInfo());
+		sb.append(StringPool.PERIOD);
+
+		return StringUtil.replace(resource, "${paragraphValue}", sb.toString());
+	}
+
 	private static final long _CURRENT_TIME = System.currentTimeMillis();
 
 	private static final long _DEFAULT_DL_FILE_ENTRY_TYPE_ID =
@@ -7148,6 +7168,9 @@ public class DataFactory {
 	private static final String _HEADING_RENDER_KEY = "BASIC_COMPONENT-heading";
 
 	private static final String _JOURNAL_STRUCTURE_KEY = "BASIC-WEB-CONTENT";
+
+	private static final String _PARAGRAPH_RENDER_KEY =
+		"BASIC_COMPONENT-paragraph";
 
 	private static final String _SAMPLE_USER_NAME = "Sample";
 
