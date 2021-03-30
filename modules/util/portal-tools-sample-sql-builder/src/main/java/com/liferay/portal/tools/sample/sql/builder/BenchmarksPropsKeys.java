@@ -164,6 +164,9 @@ public interface BenchmarksPropsKeys {
 	public static final String MAX_VIRTUAL_INSTANCE_USER_COUNT =
 		"sample.sql.max.virtual.instance.user.count";
 
+	public static final String MAX_VIRTUAL_INSTANCE_WIKI_PAGE_COMMENT_COUNT =
+		"sample.sql.max.virtual.instance.wiki.page.comment.count";
+
 	public static final String MAX_WIKI_NODE_COUNT =
 		"sample.sql.max.wiki.node.count";
 

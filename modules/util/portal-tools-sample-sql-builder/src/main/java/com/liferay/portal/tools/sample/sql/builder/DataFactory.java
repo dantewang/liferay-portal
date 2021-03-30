@@ -651,8 +651,15 @@ public class DataFactory {
 		return BenchmarksPropsValues.MAX_SEGMENTS_ENTRY_COUNT;
 	}
 
-	public int getMaxWikiPageCommentCount() {
-		return BenchmarksPropsValues.MAX_WIKI_PAGE_COMMENT_COUNT;
+	public int getMaxWikiPageCommentCount(CompanyModel companyModel) {
+		String webId = companyModel.getWebId();
+
+		if (webId.equals("liferay.com")) {
+			return BenchmarksPropsValues.MAX_WIKI_PAGE_COMMENT_COUNT;
+		}
+
+		return BenchmarksPropsValues.
+			MAX_VIRTUAL_INSTANCE_WIKI_PAGE_COMMENT_COUNT;
 	}
 
 	public List<Long> getNewUserGroupIds(

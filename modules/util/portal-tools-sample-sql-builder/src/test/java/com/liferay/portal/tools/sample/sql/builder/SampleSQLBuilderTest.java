@@ -200,6 +200,9 @@ public class SampleSQLBuilderTest {
 			BenchmarksPropsKeys.MAX_VIRTUAL_INSTANCE_USER_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.MAX_WIKI_NODE_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.MAX_WIKI_PAGE_COMMENT_COUNT, "1");
+		properties.put(
+			BenchmarksPropsKeys.MAX_VIRTUAL_INSTANCE_WIKI_PAGE_COMMENT_COUNT,
+			"1");
 		properties.put(BenchmarksPropsKeys.MAX_WIKI_PAGE_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.OPTIMIZE_BUFFER_SIZE, "8192");
 		properties.put(

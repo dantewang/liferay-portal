@@ -237,6 +237,12 @@ public class BenchmarksPropsValues {
 			PropertiesHolder._get(
 				BenchmarksPropsKeys.MAX_VIRTUAL_INSTANCE_USER_COUNT));
 
+	public static final int MAX_VIRTUAL_INSTANCE_WIKI_PAGE_COMMENT_COUNT =
+		GetterUtil.getInteger(
+			PropertiesHolder._get(
+				BenchmarksPropsKeys.
+					MAX_VIRTUAL_INSTANCE_WIKI_PAGE_COMMENT_COUNT));
+
 	public static final int MAX_WIKI_NODE_COUNT = GetterUtil.getInteger(
 		PropertiesHolder._get(BenchmarksPropsKeys.MAX_WIKI_NODE_COUNT));
 

@@ -25,7 +25,7 @@
 			_classNameId=dataFactory.wikiPageClassNameId
 			_classPK=wikiPageModel.resourcePrimKey
 			_groupId=groupId
-			_maxCommentCount=dataFactory.maxWikiPageCommentCount
+			_maxCommentCount=dataFactory.getMaxWikiPageCommentCount(companyModel)
 			_mbRootMessageId=mbRootMessageId
 			_mbThreadId=dataFactory.getCounterNext()
 		/>
