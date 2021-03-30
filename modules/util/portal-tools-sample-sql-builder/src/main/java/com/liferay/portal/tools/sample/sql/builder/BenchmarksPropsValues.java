@@ -222,6 +222,11 @@ public class BenchmarksPropsValues {
 			PropertiesHolder._get(
 				BenchmarksPropsKeys.MAX_VIRTUAL_INSTANCE_MB_CATEGORY_COUNT));
 
+	public static final int MAX_VIRTUAL_INSTANCE_MB_THREAD_COUNT =
+		GetterUtil.getInteger(
+			PropertiesHolder._get(
+				BenchmarksPropsKeys.MAX_VIRTUAL_INSTANCE_MB_THREAD_COUNT));
+
 	public static final int MAX_VIRTUAL_INSTANCE_USER_COUNT =
 		GetterUtil.getInteger(
 			PropertiesHolder._get(

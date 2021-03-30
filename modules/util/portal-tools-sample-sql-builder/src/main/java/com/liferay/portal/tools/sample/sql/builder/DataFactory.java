@@ -4904,12 +4904,23 @@ public class DataFactory {
 	}
 
 	public List<MBThreadModel> newMBThreadModels(
-		MBCategoryModel mbCategoryModel) {
+		MBCategoryModel mbCategoryModel, CompanyModel companyModel) {
 
-		List<MBThreadModel> mbThreadModels = new ArrayList<>(
-			BenchmarksPropsValues.MAX_MB_THREAD_COUNT);
+		int maxMBThreadCount = 0;
 
-		for (int i = 0; i < BenchmarksPropsValues.MAX_MB_THREAD_COUNT; i++) {
+		String webId = companyModel.getWebId();
+
+		if (webId.equals("liferay.com")) {
+			maxMBThreadCount = BenchmarksPropsValues.MAX_MB_THREAD_COUNT;
+		}
+		else {
+			maxMBThreadCount =
+				BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_MB_THREAD_COUNT;
+		}
+
+		List<MBThreadModel> mbThreadModels = new ArrayList<>(maxMBThreadCount);
+
+		for (int i = 0; i < maxMBThreadCount; i++) {
 			mbThreadModels.add(
 				newMBThreadModel(
 					_counter.get(), mbCategoryModel.getGroupId(),
