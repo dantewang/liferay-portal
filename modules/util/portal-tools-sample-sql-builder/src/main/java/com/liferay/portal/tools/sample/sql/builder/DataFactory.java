@@ -596,8 +596,15 @@ public class DataFactory {
 		return BenchmarksPropsValues.MAX_ASSETPUBLISHER_PAGE_COUNT;
 	}
 
-	public int getMaxBlogsEntryCommentCount() {
-		return BenchmarksPropsValues.MAX_BLOGS_ENTRY_COMMENT_COUNT;
+	public int getMaxBlogsEntryCommentCount(CompanyModel companyModel) {
+		String webId = companyModel.getWebId();
+
+		if (webId.equals("liferay.com")) {
+			return BenchmarksPropsValues.MAX_BLOGS_ENTRY_COMMENT_COUNT;
+		}
+
+		return BenchmarksPropsValues.
+			MAX_VIRTUAL_INSTANCE_BLOGS_ENTRY_COMMENT_COUNT;
 	}
 
 	public int getMaxContentLayoutCount() {

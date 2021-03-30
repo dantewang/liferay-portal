@@ -24,7 +24,7 @@
 		_classNameId=dataFactory.blogsEntryClassNameId
 		_classPK=blogsEntryModel.entryId
 		_groupId=groupId
-		_maxCommentCount=dataFactory.maxBlogsEntryCommentCount
+		_maxCommentCount=dataFactory.getMaxBlogsEntryCommentCount(companyModel)
 		_mbRootMessageId=mbRootMessageId
 		_mbThreadId=dataFactory.getCounterNext()
 	/>
