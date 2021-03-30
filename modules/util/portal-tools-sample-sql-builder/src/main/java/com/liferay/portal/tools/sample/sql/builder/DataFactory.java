@@ -4798,10 +4798,22 @@ public class DataFactory {
 	}
 
 	public List<MBMessageModel> newMBMessageModels(
-		MBThreadModel mbThreadModel) {
+		MBThreadModel mbThreadModel, CompanyModel companyModel) {
+
+		int maxMBMessageCount = 0;
+
+		String webId = companyModel.getWebId();
+
+		if (webId.equals("liferay.com")) {
+			maxMBMessageCount = BenchmarksPropsValues.MAX_MB_MESSAGE_COUNT;
+		}
+		else {
+			maxMBMessageCount =
+				BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_MB_THREAD_COUNT;
+		}
 
 		List<MBMessageModel> mbMessageModels = new ArrayList<>(
-			BenchmarksPropsValues.MAX_MB_MESSAGE_COUNT);
+			maxMBMessageCount);
 
 		mbMessageModels.add(
 			newMBMessageModel(
@@ -4811,7 +4823,7 @@ public class DataFactory {
 				MBMessageConstants.DEFAULT_PARENT_MESSAGE_ID, "Test Message 1",
 				"test-message-1", "This is test message 1."));
 
-		for (int i = 2; i <= BenchmarksPropsValues.MAX_MB_MESSAGE_COUNT; i++) {
+		for (int i = 2; i <= maxMBMessageCount; i++) {
 			mbMessageModels.add(
 				newMBMessageModel(
 					mbThreadModel.getGroupId(), 0, 0,
