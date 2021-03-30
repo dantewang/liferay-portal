@@ -13,9 +13,7 @@
 
 		${dataFactory.toInsertSQL(dataFactory.newMBThreadFlagModel(mbThreadModel))}
 
-		<#assign mbMessageModels = dataFactory.newMBMessageModels(mbThreadModel) />
-
-		<#list mbMessageModels as mbMessageModel>
+		<#list dataFactory.newMBMessageModels(mbThreadModel) as mbMessageModel>
 			<@insertMBMessage _mbMessageModel=mbMessageModel />
 
 			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel))}
