@@ -4864,7 +4864,27 @@ public class DataFactory {
 		return mbMessageModels;
 	}
 
-	public MBStatsUserModel newMBStatsUserModel(long groupId) {
+	public MBStatsUserModel newMBStatsUserModel(
+		long groupId, CompanyModel companyModel) {
+
+		int messageCount = 0;
+
+		String webId = companyModel.getWebId();
+
+		if (webId.equals("liferay.com")) {
+			messageCount =
+				BenchmarksPropsValues.MAX_MB_CATEGORY_COUNT *
+					BenchmarksPropsValues.MAX_MB_THREAD_COUNT *
+						BenchmarksPropsValues.MAX_MB_MESSAGE_COUNT;
+		}
+		else {
+			messageCount =
+				BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_MB_CATEGORY_COUNT *
+					BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_MB_THREAD_COUNT *
+						BenchmarksPropsValues.
+							MAX_VIRTUAL_INSTANCE_MB_MESSAGE_COUNT;
+		}
+
 		MBStatsUserModel mbStatsUserModel = new MBStatsUserModelImpl();
 
 		// PK fields
@@ -4881,10 +4901,7 @@ public class DataFactory {
 
 		// Other fields
 
-		mbStatsUserModel.setMessageCount(
-			BenchmarksPropsValues.MAX_MB_CATEGORY_COUNT *
-				BenchmarksPropsValues.MAX_MB_THREAD_COUNT *
-					BenchmarksPropsValues.MAX_MB_MESSAGE_COUNT);
+		mbStatsUserModel.setMessageCount(messageCount);
 		mbStatsUserModel.setLastPostDate(new Date());
 
 		return mbStatsUserModel;
