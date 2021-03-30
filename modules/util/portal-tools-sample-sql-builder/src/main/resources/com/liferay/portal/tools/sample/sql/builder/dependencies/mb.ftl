@@ -4,9 +4,7 @@
 
 	${csvFileWriter.write("mbCategory", mbCategoryModel.categoryId + "," + mbCategoryModel.name + "\n")}
 
-	<#assign mbThreadModels = dataFactory.newMBThreadModels(mbCategoryModel) />
-
-	<#list mbThreadModels as mbThreadModel>
+	<#list dataFactory.newMBThreadModels(mbCategoryModel) as mbThreadModel>
 		${dataFactory.toInsertSQL(mbThreadModel)}
 
 		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(mbThreadModel))}
