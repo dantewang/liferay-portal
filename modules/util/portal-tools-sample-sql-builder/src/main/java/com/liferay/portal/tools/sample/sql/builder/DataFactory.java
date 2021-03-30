@@ -1184,11 +1184,25 @@ public class DataFactory {
 		return assetVocabularyModels;
 	}
 
-	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
-		List<BlogsEntryModel> blogEntryModels = new ArrayList<>(
-			BenchmarksPropsValues.MAX_BLOGS_ENTRY_COUNT);
+	public List<BlogsEntryModel> newBlogsEntryModels(
+		long groupId, CompanyModel companyModel) {
 
-		for (int i = 1; i <= BenchmarksPropsValues.MAX_BLOGS_ENTRY_COUNT; i++) {
+		int maxBlogEnryCount = 0;
+
+		String webId = companyModel.getWebId();
+
+		if (webId.equals("liferay.com")) {
+			maxBlogEnryCount = BenchmarksPropsValues.MAX_BLOGS_ENTRY_COUNT;
+		}
+		else {
+			maxBlogEnryCount =
+				BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_BLOGS_ENTRY_COUNT;
+		}
+
+		List<BlogsEntryModel> blogEntryModels = new ArrayList<>(
+			maxBlogEnryCount);
+
+		for (int i = 1; i <= maxBlogEnryCount; i++) {
 			blogEntryModels.add(newBlogsEntryModel(groupId, i));
 		}
 

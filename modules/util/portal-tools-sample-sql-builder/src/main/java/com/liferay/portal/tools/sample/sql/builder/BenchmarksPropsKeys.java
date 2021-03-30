@@ -152,6 +152,9 @@ public interface BenchmarksPropsKeys {
 	public static final String MAX_VIRTUAL_INSTANCE_BLOGS_ENTRY_COMMENT_COUNT =
 		"sample.sql.max.virtual.instance.blogs.entry.comment.count";
 
+	public static final String MAX_VIRTUAL_INSTANCE_BLOGS_ENTRY_COUNT =
+		"sample.sql.max.virtual.instance.blogs.entry.count";
+
 	public static final String MAX_VIRTUAL_INSTANCE_COUNT =
 		"sample.sql.max.virtual.instance.count";
 

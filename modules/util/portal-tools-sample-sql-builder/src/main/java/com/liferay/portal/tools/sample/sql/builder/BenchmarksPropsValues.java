@@ -220,6 +220,11 @@ public class BenchmarksPropsValues {
 				BenchmarksPropsKeys.
 					MAX_VIRTUAL_INSTANCE_BLOGS_ENTRY_COMMENT_COUNT));
 
+	public static final int MAX_VIRTUAL_INSTANCE_BLOGS_ENTRY_COUNT =
+		GetterUtil.getInteger(
+			PropertiesHolder._get(
+				BenchmarksPropsKeys.MAX_VIRTUAL_INSTANCE_BLOGS_ENTRY_COUNT));
+
 	public static final int MAX_VIRTUAL_INSTANCE_COUNT = GetterUtil.getInteger(
 		PropertiesHolder._get(BenchmarksPropsKeys.MAX_VIRTUAL_INSTANCE_COUNT));
 
