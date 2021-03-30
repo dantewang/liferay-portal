@@ -4640,11 +4640,25 @@ public class DataFactory {
 		return layoutSetModels;
 	}
 
-	public List<MBCategoryModel> newMBCategoryModels(long groupId) {
-		List<MBCategoryModel> mbCategoryModels = new ArrayList<>(
-			BenchmarksPropsValues.MAX_MB_CATEGORY_COUNT);
+	public List<MBCategoryModel> newMBCategoryModels(
+		long groupId, CompanyModel companyModel) {
 
-		for (int i = 1; i <= BenchmarksPropsValues.MAX_MB_CATEGORY_COUNT; i++) {
+		int maxMBCategoryCount = 0;
+
+		String webId = companyModel.getWebId();
+
+		if (webId.equals("liferay.com")) {
+			maxMBCategoryCount = BenchmarksPropsValues.MAX_MB_CATEGORY_COUNT;
+		}
+		else {
+			maxMBCategoryCount =
+				BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_MB_CATEGORY_COUNT;
+		}
+
+		List<MBCategoryModel> mbCategoryModels = new ArrayList<>(
+			maxMBCategoryCount);
+
+		for (int i = 1; i <= maxMBCategoryCount; i++) {
 			mbCategoryModels.add(newMBCategoryModel(groupId, i));
 		}
 

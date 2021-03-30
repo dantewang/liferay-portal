@@ -152,6 +152,9 @@ public interface BenchmarksPropsKeys {
 	public static final String MAX_VIRTUAL_INSTANCE_COUNT =
 		"sample.sql.max.virtual.instance.count";
 
+	public static final String MAX_VIRTUAL_INSTANCE_MB_CATEGORY_COUNT =
+		"sample.sql.max.virtual.instance.mb.category.count";
+
 	public static final String MAX_VIRTUAL_INSTANCE_USER_COUNT =
 		"sample.sql.max.virtual.instance.user.count";
 

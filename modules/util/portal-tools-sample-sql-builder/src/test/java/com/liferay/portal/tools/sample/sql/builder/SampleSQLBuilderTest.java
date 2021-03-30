@@ -184,6 +184,8 @@ public class SampleSQLBuilderTest {
 		properties.put(
 			BenchmarksPropsKeys.MAX_JOURNAL_ARTICLE_VERSION_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.MAX_MB_CATEGORY_COUNT, "1");
+		properties.put(
+			BenchmarksPropsKeys.MAX_VIRTUAL_INSTANCE_MB_CATEGORY_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.MAX_MB_MESSAGE_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.MAX_MB_THREAD_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.MAX_SEGMENTS_ENTRY_COUNT, "1");
