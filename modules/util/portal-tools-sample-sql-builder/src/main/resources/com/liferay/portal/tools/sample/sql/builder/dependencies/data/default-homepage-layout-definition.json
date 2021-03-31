@@ -1,0 +1,273 @@
+{
+	"deletedItems": [
+	],
+	"items": {
+		"022a1002-718b-4ff6-819c-9686afd3a5ee": {
+			"children": [
+			],
+			"config": {
+				"fragmentEntryLinkId": "${paragraphFragmentEntryLinkId}",
+				"landscapeMobile": {
+					"styles": {
+					}
+				},
+				"portraitMobile": {
+					"styles": {
+					}
+				},
+				"styles": {
+					"backgroundImage": {
+					},
+					"borderRadius": "0",
+					"borderWidth": 0,
+					"fontFamily": "fontFamilyBase",
+					"fontSize": "fontSizeBase",
+					"fontWeight": "fontWeightNormal",
+					"height": "",
+					"marginBottom": "0",
+					"marginLeft": "0",
+					"marginRight": "0",
+					"marginTop": "0",
+					"maxHeight": "",
+					"maxWidth": "",
+					"minHeight": "",
+					"minWidth": "",
+					"opacity": 100,
+					"overflow": "visible",
+					"paddingBottom": "0",
+					"paddingLeft": "0",
+					"paddingRight": "0",
+					"paddingTop": "0",
+					"shadow": "none",
+					"textAlign": "none",
+					"width": ""
+				},
+				"tablet": {
+					"styles": {
+					}
+				}
+			},
+			"itemId": "022a1002-718b-4ff6-819c-9686afd3a5ee",
+			"parentId": "e5c60af0-93a7-4181-a8e5-4cd3736832d6",
+			"type": "fragment"
+		},
+		"0d96f15a-dfd1-41a0-ad65-5fb0538204eb": {
+			"children": [
+			],
+			"config": {
+				"fragmentEntryLinkId": "${headingFragmentEntryLinkId}",
+				"headingLevel": "h1",
+				"landscapeMobile": {
+					"styles": {
+					}
+				},
+				"portraitMobile": {
+					"styles": {
+					}
+				},
+				"styles": {
+					"backgroundImage": {
+					},
+					"borderRadius": "0",
+					"borderWidth": 0,
+					"fontFamily": "fontFamilyBase",
+					"fontSize": "fontSizeBase",
+					"fontWeight": "fontWeightNormal",
+					"height": "",
+					"marginBottom": "0",
+					"marginLeft": "0",
+					"marginRight": "0",
+					"marginTop": "0",
+					"maxHeight": "",
+					"maxWidth": "",
+					"minHeight": "",
+					"minWidth": "",
+					"opacity": 100,
+					"overflow": "visible",
+					"paddingBottom": "0",
+					"paddingLeft": "0",
+					"paddingRight": "0",
+					"paddingTop": "0",
+					"shadow": "none",
+					"textAlign": "none",
+					"width": ""
+				},
+				"tablet": {
+					"styles": {
+					}
+				}
+			},
+			"itemId": "0d96f15a-dfd1-41a0-ad65-5fb0538204eb",
+			"parentId": "9b88857c-e083-4775-84aa-4f7f56655a8e",
+			"type": "fragment"
+		},
+		"4509dce2-6bd9-4257-9ed4-181c9ead846f": {
+			"children": [
+			],
+			"config": {
+				"fragmentEntryLinkId": "${loginPortletFragmentEntryLinkId}",
+				"landscapeMobile": {
+					"styles": {
+					}
+				},
+				"portraitMobile": {
+					"styles": {
+					}
+				},
+				"styles": {
+					"backgroundImage": {
+					},
+					"borderRadius": "0",
+					"borderWidth": 0,
+					"fontFamily": "fontFamilyBase",
+					"fontSize": "fontSizeBase",
+					"fontWeight": "fontWeightNormal",
+					"height": "",
+					"marginBottom": "0",
+					"marginLeft": "0",
+					"marginRight": "0",
+					"marginTop": "0",
+					"maxHeight": "",
+					"maxWidth": "",
+					"minHeight": "",
+					"minWidth": "",
+					"opacity": 100,
+					"overflow": "visible",
+					"paddingBottom": "0",
+					"paddingLeft": "0",
+					"paddingRight": "0",
+					"paddingTop": "0",
+					"shadow": "none",
+					"textAlign": "none",
+					"width": ""
+				},
+				"tablet": {
+					"styles": {
+					}
+				}
+			},
+			"itemId": "4509dce2-6bd9-4257-9ed4-181c9ead846f",
+			"parentId": "e5c60af0-93a7-4181-a8e5-4cd3736832d6",
+			"type": "fragment"
+		},
+		"9b88857c-e083-4775-84aa-4f7f56655a8e": {
+			"children": [
+				"0d96f15a-dfd1-41a0-ad65-5fb0538204eb"
+			],
+			"config": {
+				"landscapeMobile": {
+					"styles": {
+					}
+				},
+				"portraitMobile": {
+					"styles": {
+					}
+				},
+				"styles": {
+					"backgroundImage": {
+					},
+					"borderRadius": "0",
+					"borderWidth": 0,
+					"fontFamily": "fontFamilyBase",
+					"fontSize": "fontSizeBase",
+					"fontWeight": "fontWeightNormal",
+					"height": "",
+					"marginBottom": "0",
+					"marginLeft": "0",
+					"marginRight": "0",
+					"marginTop": "0",
+					"maxHeight": "",
+					"maxWidth": "",
+					"minHeight": "",
+					"minWidth": "",
+					"opacity": 100,
+					"overflow": "visible",
+					"paddingBottom": "0",
+					"paddingLeft": "0",
+					"paddingRight": "0",
+					"paddingTop": "0",
+					"shadow": "none",
+					"textAlign": "none",
+					"width": ""
+				},
+				"tablet": {
+					"styles": {
+					}
+				},
+				"widthType": "fluid"
+			},
+			"itemId": "9b88857c-e083-4775-84aa-4f7f56655a8e",
+			"parentId": "e5c60af0-93a7-4181-a8e5-4cd3736832d6",
+			"type": "container"
+		},
+		"e5c60af0-93a7-4181-a8e5-4cd3736832d6": {
+			"children": [
+				"4509dce2-6bd9-4257-9ed4-181c9ead846f",
+				"9b88857c-e083-4775-84aa-4f7f56655a8e",
+				"022a1002-718b-4ff6-819c-9686afd3a5ee"
+			],
+			"config": {
+				"landscapeMobile": {
+					"styles": {
+					}
+				},
+				"portraitMobile": {
+					"styles": {
+					}
+				},
+				"styles": {
+					"backgroundImage": {
+						"title": "welcome_bg_benchmark.png",
+						"url": "/welcome_bg_benchmark.png"
+					},
+					"borderRadius": "0",
+					"borderWidth": 0,
+					"fontFamily": "fontFamilyBase",
+					"fontSize": "fontSizeBase",
+					"fontWeight": "fontWeightNormal",
+					"height": "",
+					"marginBottom": "0",
+					"marginLeft": "0",
+					"marginRight": "0",
+					"marginTop": "0",
+					"maxHeight": "",
+					"maxWidth": "",
+					"minHeight": "",
+					"minWidth": "",
+					"opacity": 100,
+					"overflow": "visible",
+					"paddingBottom": "10",
+					"paddingLeft": "10",
+					"paddingRight": "10",
+					"paddingTop": "10",
+					"shadow": "none",
+					"textAlign": "none",
+					"width": ""
+				},
+				"tablet": {
+					"styles": {
+					}
+				},
+				"widthType": "fluid"
+			},
+			"itemId": "e5c60af0-93a7-4181-a8e5-4cd3736832d6",
+			"parentId": "fbed6082-aaff-4819-a33c-1760a26f6b44",
+			"type": "container"
+		},
+		"fbed6082-aaff-4819-a33c-1760a26f6b44": {
+			"children": [
+				"e5c60af0-93a7-4181-a8e5-4cd3736832d6"
+			],
+			"config": {
+			},
+			"itemId": "fbed6082-aaff-4819-a33c-1760a26f6b44",
+			"parentId": "",
+			"type": "root"
+		}
+	},
+	"rootItems": {
+		"dropZone": "",
+		"main": "fbed6082-aaff-4819-a33c-1760a26f6b44"
+	},
+	"version": 1
+}
