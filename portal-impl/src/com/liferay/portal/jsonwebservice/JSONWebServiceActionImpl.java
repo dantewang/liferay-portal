@@ -56,9 +56,10 @@ import jodd.bean.BeanCopy;
 import jodd.bean.BeanUtil;
 
 import jodd.typeconverter.TypeConversionException;
+import jodd.typeconverter.TypeConverter;
 import jodd.typeconverter.TypeConverterManager;
 
-import jodd.util.ReflectUtil;
+import jodd.util.ClassUtil;
 
 /**
  * @author Igor Spasic
@@ -120,7 +121,7 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 			return;
 		}
 
-		if (!ReflectUtil.isTypeOf(parameterType, targetClass)) {
+		if (!ClassUtil.isTypeOf(parameterType, targetClass)) {
 			throw new IllegalArgumentException(
 				StringBundler.concat(
 					"Unmatched argument type ", parameterTypeName,
@@ -190,10 +191,12 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 			return inputObject;
 		}
 
+		TypeConverterManager typeConverterManager = TypeConverterManager.get();
+
 		Object outputObject = null;
 
 		try {
-			outputObject = TypeConverterManager.convertType(
+			outputObject = typeConverterManager.convertType(
 				inputObject, targetType);
 		}
 		catch (TypeConversionException typeConversionException) {
@@ -229,8 +232,7 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 
 					outputObject = targetType.newInstance();
 
-					BeanCopy beanCopy = BeanCopy.beans(
-						inputObject, outputObject);
+					BeanCopy beanCopy = new BeanCopy(inputObject, outputObject);
 
 					beanCopy.copy();
 
@@ -373,7 +375,7 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 						throw classCastException;
 					}
 
-					BeanCopy beanCopy = BeanCopy.beans(value, parameterValue);
+					BeanCopy beanCopy = new BeanCopy(value, parameterValue);
 
 					beanCopy.copy();
 				}
@@ -479,7 +481,7 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 
 		for (Map.Entry<String, Object> innerParameter : innerParameters) {
 			try {
-				BeanUtil.setProperty(
+				BeanUtil.pojo.setProperty(
 					parameterValue, innerParameter.getKey(),
 					innerParameter.getValue());
 			}
@@ -591,6 +593,28 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 
 	private static final ServiceTracker<Object, Object> _serviceTracker;
 
+	private final JSONWebServiceActionConfig _jsonWebServiceActionConfig;
+	private final JSONWebServiceActionParameters
+		_jsonWebServiceActionParameters;
+	private final JSONWebServiceNaming _jsonWebServiceNaming;
+
+	private static class LocaleTypeConverter implements TypeConverter<Locale> {
+
+		@Override
+		public Locale convert(Object object) {
+			if (object == null) {
+				return null;
+			}
+
+			if (object instanceof Locale) {
+				return (Locale)object;
+			}
+
+			return LocaleUtil.fromLanguageId(String.valueOf(object), false);
+		}
+
+	}
+
 	static {
 		Registry registry = RegistryUtil.getRegistry();
 
@@ -603,11 +627,10 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 					"=*)")));
 
 		_serviceTracker.open();
-	}
 
-	private final JSONWebServiceActionConfig _jsonWebServiceActionConfig;
-	private final JSONWebServiceActionParameters
-		_jsonWebServiceActionParameters;
-	private final JSONWebServiceNaming _jsonWebServiceNaming;
+		TypeConverterManager typeConverterManager = TypeConverterManager.get();
+
+		typeConverterManager.register(Locale.class, new LocaleTypeConverter());
+	}
 
 }
