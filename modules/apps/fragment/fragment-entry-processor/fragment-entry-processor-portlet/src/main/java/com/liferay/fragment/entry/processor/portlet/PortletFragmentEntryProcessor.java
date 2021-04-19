@@ -49,6 +49,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.PortletPreferencesImpl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -159,29 +160,13 @@ public class PortletFragmentEntryProcessor implements FragmentEntryProcessor {
 
 		Document document = _getDocument(html);
 
-		_validateFragmentEntryHTMLDocument(document);
+		List<Element> validPortletElements = _validateFragmentEntryHTMLDocument(
+			document);
 
 		FragmentEntryLink originalFragmentEntryLink = null;
 		Set<String> processedPortletIds = new HashSet<>();
 
-		for (Element element : document.select("*")) {
-			String tagName = element.tagName();
-
-			String portletName = _getPortletName(tagName);
-
-			if (Validator.isNull(portletName)) {
-				continue;
-			}
-
-			if (Validator.isNull(portletName)) {
-				String alias = tagName.substring(11);
-
-				throw new FragmentEntryContentException(
-					LanguageUtil.format(
-						_resourceBundle,
-						"there-is-no-widget-available-for-alias-x", alias));
-			}
-
+		for (Element element : validPortletElements) {
 			if ((originalFragmentEntryLink == null) &&
 				(fragmentEntryLink.getOriginalFragmentEntryLinkId() > 0)) {
 
@@ -189,6 +174,8 @@ public class PortletFragmentEntryProcessor implements FragmentEntryProcessor {
 					_fragmentEntryLinkLocalService.fetchFragmentEntryLink(
 						fragmentEntryLink.getOriginalFragmentEntryLinkId());
 			}
+
+			String portletName = _getPortletName(element.tagName());
 
 			Portlet portlet = _portletLocalService.getPortletById(portletName);
 
@@ -324,7 +311,7 @@ public class PortletFragmentEntryProcessor implements FragmentEntryProcessor {
 			return StringPool.BLANK;
 		}
 
-		String alias = tagName.substring(11);
+		String alias = StringUtil.removeSubstring(tagName, "lfr-widget-");
 
 		return _portletRegistry.getPortletName(alias);
 	}
@@ -451,8 +438,10 @@ public class PortletFragmentEntryProcessor implements FragmentEntryProcessor {
 		}
 	}
 
-	private void _validateFragmentEntryHTMLDocument(Document document)
+	private List<Element> _validateFragmentEntryHTMLDocument(Document document)
 		throws PortalException {
+
+		List<Element> validPortletElements = new ArrayList<>();
 
 		for (Element element : document.select("*")) {
 			String htmlTagName = element.tagName();
@@ -461,14 +450,14 @@ public class PortletFragmentEntryProcessor implements FragmentEntryProcessor {
 				continue;
 			}
 
-			String alias = StringUtil.removeSubstring(
-				htmlTagName, "lfr-widget-");
+			String portletName = _getPortletName(htmlTagName);
 
-			if (Validator.isNull(_portletRegistry.getPortletName(alias))) {
+			if (Validator.isNull(portletName)) {
 				throw new FragmentEntryContentException(
 					LanguageUtil.format(
 						_resourceBundle,
-						"there-is-no-widget-available-for-alias-x", alias));
+						"there-is-no-widget-available-for-alias-x",
+						portletName));
 			}
 
 			String id = element.id();
@@ -478,7 +467,7 @@ public class PortletFragmentEntryProcessor implements FragmentEntryProcessor {
 					LanguageUtil.format(
 						_resourceBundle,
 						"widget-id-must-contain-only-alphanumeric-characters",
-						alias));
+						portletName));
 			}
 
 			if (Validator.isNotNull(id)) {
@@ -513,17 +502,21 @@ public class PortletFragmentEntryProcessor implements FragmentEntryProcessor {
 
 			if (elements.size() > 1) {
 				Portlet portlet = _portletLocalService.getPortletById(
-					_portletRegistry.getPortletName(alias));
+					_portletRegistry.getPortletName(portletName));
 
 				if (!portlet.isInstanceable()) {
 					throw new FragmentEntryContentException(
 						LanguageUtil.format(
 							_resourceBundle,
 							"you-cannot-add-the-widget-x-more-than-once",
-							alias));
+							portletName));
 				}
 			}
+
+			validPortletElements.add(element);
 		}
+
+		return validPortletElements;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
