@@ -682,8 +682,12 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 
 		private static final DateTimeFormatter _dateTimeFormatter =
 			new DateTimeFormatterBuilder().parseCaseInsensitive(
-			).append(
+			).appendOptional(
 				DateTimeFormatter.ISO_LOCAL_DATE
+			).optionalStart(
+			).appendPattern(
+				"yyyy-M-d"
+			).optionalEnd(
 			).optionalStart(
 			).optionalStart(
 			).appendLiteral(
