@@ -6317,13 +6317,6 @@ public class DataFactory {
 			dlFolderModel, "TestFile" + index, "txt", ContentTypes.TEXT_PLAIN);
 	}
 
-	protected GroupModel newGroupModel(
-		long groupId, long classNameId, long classPK, String name,
-		boolean site) {
-
-		return newGroupModel(groupId, classNameId, classPK, name, 0, site);
-	}
-
 	protected FragmentEntryLinkModel newFragmentEntryLinkModel(
 		LayoutModel layoutModel, String renderKey, String css, String html,
 		String configuration, String editValue, int position,
@@ -6368,6 +6361,13 @@ public class DataFactory {
 		fragmentEntryLinkModel.setPosition(position);
 
 		return fragmentEntryLinkModel;
+	}
+
+	protected GroupModel newGroupModel(
+		long groupId, long classNameId, long classPK, String name,
+		boolean site) {
+
+		return newGroupModel(groupId, classNameId, classPK, name, 0, site);
 	}
 
 	protected GroupModel newGroupModel(
