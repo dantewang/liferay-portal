@@ -2305,13 +2305,16 @@ public class DataFactory {
 
 	public List<CounterModel> newCounterModels() {
 		return Arrays.asList(
-			_newCounterModel(Counter.class.getName()),
-			_newCounterModel(DDMField.class.getName()),
-			_newCounterModel(DDMFieldAttribute.class.getName()),
-			_newCounterModel(FriendlyURLEntryLocalization.class.getName()),
-			_newCounterModel(PortletPreferenceValue.class.getName()),
-			_newCounterModel(ResourcePermission.class.getName()),
-			_newCounterModel(SocialActivity.class.getName()));
+			_newCounterModel(Counter.class.getName(), _counter),
+			_newCounterModel(DDMField.class.getName(), _counter),
+			_newCounterModel(DDMFieldAttribute.class.getName(), _counter),
+			_newCounterModel(
+				FriendlyURLEntryLocalization.class.getName(), _counter),
+			_newCounterModel(PortletPreferenceValue.class.getName(), _counter),
+			_newCounterModel(
+				ResourcePermission.class.getName(), _resourcePermissionCounter),
+			_newCounterModel(
+				SocialActivity.class.getName(), _socialActivityCounter));
 	}
 
 	public CountryModel newCountryModel() {
@@ -7270,11 +7273,11 @@ public class DataFactory {
 		return layoutModel;
 	}
 
-	private CounterModel _newCounterModel(String name) {
+	private CounterModel _newCounterModel(String name, SimpleCounter counter) {
 		CounterModel counterModel = new CounterModelImpl();
 
 		counterModel.setName(name);
-		counterModel.setCurrentId(_counter.get());
+		counterModel.setCurrentId(counter.get());
 
 		return counterModel;
 	}
