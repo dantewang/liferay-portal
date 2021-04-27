@@ -2335,22 +2335,26 @@ public class DataFactory {
 	public List<CounterModel> newCounterModels() {
 		List<CounterModel> counterModels = new ArrayList<>();
 
-		counterModels.add(_newCounterModel(Counter.class.getName(), _counter));
-		counterModels.add(_newCounterModel(DDMField.class.getName(), _counter));
 		counterModels.add(
-			_newCounterModel(DDMFieldAttribute.class.getName(), _counter));
+			_newCounterModel(Counter.class.getName(), _counter.get()));
+		counterModels.add(
+			_newCounterModel(DDMField.class.getName(), _counter.get()));
 		counterModels.add(
 			_newCounterModel(
-				FriendlyURLEntryLocalization.class.getName(), _counter));
+				DDMFieldAttribute.class.getName(), _counter.get()));
 		counterModels.add(
-			_newCounterModel(PortletPreferenceValue.class.getName(), _counter));
+			_newCounterModel(
+				FriendlyURLEntryLocalization.class.getName(), _counter.get()));
+		counterModels.add(
+			_newCounterModel(
+				PortletPreferenceValue.class.getName(), _counter.get()));
 		counterModels.add(
 			_newCounterModel(
 				ResourcePermission.class.getName(),
-				_resourcePermissionCounter));
+				_resourcePermissionCounter.get()));
 		counterModels.add(
 			_newCounterModel(
-				SocialActivity.class.getName(), _socialActivityCounter));
+				SocialActivity.class.getName(), _socialActivityCounter.get()));
 
 		counterModels.addAll(_newLayoutCounterModels());
 
@@ -7372,11 +7376,11 @@ public class DataFactory {
 		return layoutModel;
 	}
 
-	private CounterModel _newCounterModel(String name, SimpleCounter counter) {
+	private CounterModel _newCounterModel(String name, long currentId) {
 		CounterModel counterModel = new CounterModelImpl();
 
 		counterModel.setName(name);
-		counterModel.setCurrentId(counter.get());
+		counterModel.setCurrentId(currentId);
 
 		return counterModel;
 	}
@@ -7387,8 +7391,10 @@ public class DataFactory {
 		for (Map.Entry<String, SimpleCounter> entry :
 				_layoutCounters.entrySet()) {
 
+			SimpleCounter simpleCounter = entry.getValue();
+
 			layoutCounterModels.add(
-				_newCounterModel(entry.getKey(), entry.getValue()));
+				_newCounterModel(entry.getKey(), simpleCounter.get()));
 		}
 
 		long totalLayoutId = 0;
@@ -7398,8 +7404,7 @@ public class DataFactory {
 		}
 
 		layoutCounterModels.add(
-			_newCounterModel(
-				Layout.class.getName(), new SimpleCounter(totalLayoutId)));
+			_newCounterModel(Layout.class.getName(), totalLayoutId + 1));
 
 		return layoutCounterModels;
 	}
