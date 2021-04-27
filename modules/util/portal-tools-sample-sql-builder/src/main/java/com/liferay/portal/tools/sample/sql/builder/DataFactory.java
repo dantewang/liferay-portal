@@ -6571,6 +6571,7 @@ public class DataFactory {
 		if (privateLayout) {
 			typeSettingsUnicodeProperties.setProperty(
 				"privateLayout", String.valueOf(privateLayout));
+			layoutModel.setPrivateLayout(true);
 		}
 
 		layoutModel.setTypeSettings(
