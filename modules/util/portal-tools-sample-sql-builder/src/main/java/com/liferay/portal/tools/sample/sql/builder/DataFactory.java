@@ -370,6 +370,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -564,6 +565,12 @@ public class DataFactory {
 		return getClassNameId(CPDefinition.class);
 	}
 
+	public long getCPInstanceId(long cpDefinitionId) {
+		CPInstanceModel cpInstanceModel = _cpInstanceModels.get(cpDefinitionId);
+
+		return cpInstanceModel.getCPInstanceId();
+	}
+
 	public long getCProductClassNameId() {
 		return getClassNameId(CProduct.class);
 	}
@@ -703,6 +710,22 @@ public class DataFactory {
 
 	public RoleModel getPowerUserRoleModel() {
 		return _powerUserRoleModel;
+	}
+
+	public int getRandomCProductModelIndex() {
+		Random random = new Random();
+
+		int count = (int)Math.ceil(
+			BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT /
+				BenchmarksPropsValues.MAX_COMMERCE_CATALOG_COUNT);
+
+		if (BenchmarksPropsValues.MAX_COMMERCE_CATALOG_COUNT >
+				BenchmarksPropsValues.MAX_COMMERCE_PRODUCT_COUNT) {
+
+			count = BenchmarksPropsValues.MAX_COMMERCE_CATALOG_COUNT;
+		}
+
+		return random.nextInt(count);
 	}
 
 	public List<Integer> getSequence(int size) {
@@ -1702,7 +1725,7 @@ public class DataFactory {
 
 	public CommerceOrderItemModel newCommerceOrderItemModel(
 		CommerceOrderModel commerceOrderModel, long commercePriceListId,
-		long cProductId, CPInstanceModel cpInstanceModel) {
+		long cProductId, long cpDefinitionId) {
 
 		CommerceOrderItemModel commerceOrderItemModel =
 			new CommerceOrderItemModelImpl();
@@ -1730,8 +1753,12 @@ public class DataFactory {
 			commerceOrderModel.getCommerceOrderId());
 		commerceOrderItemModel.setCommercePriceListId(commercePriceListId);
 		commerceOrderItemModel.setCProductId(cProductId);
+
+		CPInstanceModel cpInstanceModel = _cpInstanceModels.get(cpDefinitionId);
+
 		commerceOrderItemModel.setCPInstanceId(
 			cpInstanceModel.getCPInstanceId());
+
 		commerceOrderItemModel.setParentCommerceOrderItemId(0);
 		commerceOrderItemModel.setName("Commerce Order Item Name");
 		commerceOrderItemModel.setQuantity(1);
@@ -2641,6 +2668,8 @@ public class DataFactory {
 		cpInstanceModel.setStatusByUserId(_sampleUserId);
 		cpInstanceModel.setStatusByUserName(_SAMPLE_USER_NAME);
 		cpInstanceModel.setStatusDate(new Date());
+
+		_cpInstanceModels.put(cpDefinitionId, cpInstanceModel);
 
 		return cpInstanceModel;
 	}
@@ -7029,6 +7058,8 @@ public class DataFactory {
 		new HashMap<>();
 	private final long _companyId;
 	private final SimpleCounter _counter;
+	private final Map<Long, CPInstanceModel> _cpInstanceModels =
+		new HashMap<>();
 	private final PortletPreferencesImpl
 		_defaultAssetPublisherPortletPreferencesImpl;
 	private final long _defaultDLDDMStructureId;
