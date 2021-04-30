@@ -2247,12 +2247,13 @@ public class DataFactory {
 	public LayoutModel newContentLayoutModel(
 		long groupId, String name, String fragmentEntries) {
 
-		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
+		SimpleCounter simpleCounter = _layoutCounters.get(
+			_getCounterName(groupId, false));
 
 		if (simpleCounter == null) {
 			simpleCounter = new SimpleCounter();
 
-			_layoutCounters.put(groupId, simpleCounter);
+			_layoutCounters.put(_getCounterName(groupId, false), simpleCounter);
 		}
 
 		LayoutModel layoutModel = new LayoutModelImpl();
@@ -2332,17 +2333,28 @@ public class DataFactory {
 	}
 
 	public List<CounterModel> newCounterModels() {
-		return Arrays.asList(
-			_newCounterModel(Counter.class.getName(), _counter),
-			_newCounterModel(DDMField.class.getName(), _counter),
-			_newCounterModel(DDMFieldAttribute.class.getName(), _counter),
+		List<CounterModel> counterModels = new ArrayList<>();
+
+		counterModels.add(_newCounterModel(Counter.class.getName(), _counter));
+		counterModels.add(_newCounterModel(DDMField.class.getName(), _counter));
+		counterModels.add(
+			_newCounterModel(DDMFieldAttribute.class.getName(), _counter));
+		counterModels.add(
 			_newCounterModel(
-				FriendlyURLEntryLocalization.class.getName(), _counter),
-			_newCounterModel(PortletPreferenceValue.class.getName(), _counter),
+				FriendlyURLEntryLocalization.class.getName(), _counter));
+		counterModels.add(
+			_newCounterModel(PortletPreferenceValue.class.getName(), _counter));
+		counterModels.add(
 			_newCounterModel(
-				ResourcePermission.class.getName(), _resourcePermissionCounter),
+				ResourcePermission.class.getName(),
+				_resourcePermissionCounter));
+		counterModels.add(
 			_newCounterModel(
 				SocialActivity.class.getName(), _socialActivityCounter));
+
+		counterModels.addAll(_newLayoutCounterModels());
+
+		return counterModels;
 	}
 
 	public CountryModel newCountryModel() {
@@ -6502,12 +6514,14 @@ public class DataFactory {
 		long groupId, long parentLayoutId, String name, boolean privateLayout,
 		boolean hidden, String layoutTemplateId, String... columns) {
 
-		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
+		SimpleCounter simpleCounter = _layoutCounters.get(
+			_getCounterName(groupId, privateLayout));
 
 		if (simpleCounter == null) {
 			simpleCounter = new SimpleCounter();
 
-			_layoutCounters.put(groupId, simpleCounter);
+			_layoutCounters.put(
+				_getCounterName(groupId, privateLayout), simpleCounter);
 		}
 
 		LayoutModel layoutModel = new LayoutModelImpl();
@@ -7241,6 +7255,18 @@ public class DataFactory {
 		return data;
 	}
 
+	private String _getCounterName(long groupId, boolean privateLayout) {
+		StringBundler sb = new StringBundler(5);
+
+		sb.append(Layout.class.getName());
+		sb.append(StringPool.POUND);
+		sb.append(groupId);
+		sb.append(StringPool.POUND);
+		sb.append(privateLayout);
+
+		return sb.toString();
+	}
+
 	private InputStream _getFragmentComponentInputStream(
 			String fragmentName, String suffix)
 		throws Exception {
@@ -7285,12 +7311,13 @@ public class DataFactory {
 	private LayoutModel _newContentPageLayoutModel(
 		long groupId, String name, long classNameId, long classPK) {
 
-		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
+		SimpleCounter simpleCounter = _layoutCounters.get(
+			_getCounterName(groupId, false));
 
 		if (simpleCounter == null) {
 			simpleCounter = new SimpleCounter();
 
-			_layoutCounters.put(groupId, simpleCounter);
+			_layoutCounters.put(_getCounterName(groupId, false), simpleCounter);
 		}
 
 		LayoutModel layoutModel = new LayoutModelImpl();
@@ -7351,6 +7378,29 @@ public class DataFactory {
 		counterModel.setCurrentId(counter.get());
 
 		return counterModel;
+	}
+
+	private List<CounterModel> _newLayoutCounterModels() {
+		List<CounterModel> layoutCounterModels = new ArrayList<>();
+
+		for (Map.Entry<String, SimpleCounter> entry :
+				_layoutCounters.entrySet()) {
+
+			layoutCounterModels.add(
+				_newCounterModel(entry.getKey(), entry.getValue()));
+		}
+
+		long totalLayoutId = 0;
+
+		for (CounterModel counterModel : layoutCounterModels) {
+			totalLayoutId += counterModel.getCurrentId();
+		}
+
+		layoutCounterModels.add(
+			_newCounterModel(
+				Layout.class.getName(), new SimpleCounter(totalLayoutId)));
+
+		return layoutCounterModels;
 	}
 
 	private String _readFile(InputStream inputStream) throws Exception {
@@ -7446,7 +7496,7 @@ public class DataFactory {
 	private final String _journalDDMStructureContent;
 	private final String _journalDDMStructureLayoutContent;
 	private List<String> _lastNames;
-	private final Map<Long, SimpleCounter> _layoutCounters = new HashMap<>();
+	private final Map<String, SimpleCounter> _layoutCounters = new HashMap<>();
 	private final String _layoutPageTemplateStructureRelData;
 	private RoleModel _ownerRoleModel;
 	private RoleModel _powerUserRoleModel;
