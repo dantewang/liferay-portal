@@ -680,14 +680,16 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 			}
 		}
 
+		// 'M' and 'd' represent non-padded digit form of month-of-year and
+		// day-of-month, while 'MM' and 'dd' represent 2-digit form padded with
+		// 0. For example, May 1 is "5-1" with M-d while "05-01" with MM-dd.
+		// See java.time.format.DateTimeFormatterBuilder#appendPattern(String)
+		// javadoc for details.
+
 		private static final DateTimeFormatter _dateTimeFormatter =
 			new DateTimeFormatterBuilder().parseCaseInsensitive(
-			).appendOptional(
-				DateTimeFormatter.ISO_LOCAL_DATE
-			).optionalStart(
 			).appendPattern(
-				"yyyy-M-d"
-			).optionalEnd(
+				"yyyy-[MM][M]-[dd][d]"
 			).optionalStart(
 			).optionalStart(
 			).appendLiteral(
