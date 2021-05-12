@@ -91,6 +91,8 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 				new CTModelIntegrator());
 			bootstrapServiceRegistryBuilder.applyIntegrator(
 				MVCCEventListenerIntegrator.INSTANCE);
+
+			setEntityInterceptor(new CTSQLInterceptor());
 		}
 
 		setMetadataSources(
@@ -190,10 +192,6 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 						_log.warn(exception, exception);
 					}
 				}
-			}
-
-			if (_mvccEnabled) {
-				configuration.setInterceptor(new CTSQLInterceptor());
 			}
 		}
 		catch (Exception exception) {
