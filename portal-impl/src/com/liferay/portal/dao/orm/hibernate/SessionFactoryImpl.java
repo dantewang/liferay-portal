@@ -32,7 +32,12 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.SessionBuilder;
+import org.hibernate.engine.jdbc.spi.JdbcCoordinator;
+import org.hibernate.engine.jdbc.spi.JdbcServices;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.resource.jdbc.spi.LogicalConnectionImplementor;
+import org.hibernate.resource.jdbc.spi.PhysicalConnectionHandlingMode;
 
 /**
  * @author Brian Wing Shun Chan
@@ -61,7 +66,10 @@ public class SessionFactoryImpl implements SessionFactory {
 
 	@Override
 	public Dialect getDialect() throws ORMException {
-		return new DialectImpl(_sessionFactoryImplementor.getDialect());
+		JdbcServices jdbcServices =
+			_sessionFactoryImplementor.getJdbcServices();
+
+		return new DialectImpl(jdbcServices.getDialect());
 	}
 
 	public SessionFactoryImplementor getSessionFactoryImplementor() {
@@ -70,7 +78,13 @@ public class SessionFactoryImpl implements SessionFactory {
 
 	@Override
 	public Session openNewSession(Connection connection) throws ORMException {
-		return wrapSession(_sessionFactoryImplementor.openSession(connection));
+		SessionBuilder sessionBuilder =
+			_sessionFactoryImplementor.withOptions();
+
+		return wrapSession(
+			sessionBuilder.connection(
+				connection
+			).openSession());
 	}
 
 	@Override
@@ -85,12 +99,20 @@ public class SessionFactoryImpl implements SessionFactory {
 		}
 
 		if (_log.isDebugEnabled()) {
-			org.hibernate.impl.SessionImpl sessionImpl =
-				(org.hibernate.impl.SessionImpl)session;
+			org.hibernate.internal.SessionImpl sessionImpl =
+				(org.hibernate.internal.SessionImpl)session;
+
+			JdbcCoordinator jdbcCoordinator = sessionImpl.getJdbcCoordinator();
+
+			LogicalConnectionImplementor logicalConnectionImplementor =
+				jdbcCoordinator.getLogicalConnection();
+
+			PhysicalConnectionHandlingMode physicalConnectionHandlingMode =
+				logicalConnectionImplementor.getConnectionHandlingMode();
 
 			_log.debug(
 				"Session is using connection release mode " +
-					sessionImpl.getConnectionReleaseMode());
+					physicalConnectionHandlingMode.getReleaseMode());
 		}
 
 		return wrapSession(session);
