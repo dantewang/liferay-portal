@@ -20,7 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.hibernate.engine.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.Type;
 import org.hibernate.usertype.CompositeUserType;
@@ -35,7 +35,8 @@ public class IntegerType implements CompositeUserType, Serializable {
 
 	@Override
 	public Object assemble(
-		Serializable cached, SessionImplementor session, Object owner) {
+		Serializable cached, SharedSessionContractImplementor session,
+		Object owner) {
 
 		return cached;
 	}
@@ -46,7 +47,9 @@ public class IntegerType implements CompositeUserType, Serializable {
 	}
 
 	@Override
-	public Serializable disassemble(Object value, SessionImplementor session) {
+	public Serializable disassemble(
+		Object value, SharedSessionContractImplementor session) {
+
 		return (Serializable)value;
 	}
 
@@ -89,8 +92,8 @@ public class IntegerType implements CompositeUserType, Serializable {
 
 	@Override
 	public Object nullSafeGet(
-		ResultSet resultSet, String[] names, SessionImplementor session,
-		Object owner) {
+		ResultSet resultSet, String[] names,
+		SharedSessionContractImplementor session, Object owner) {
 
 		Integer value = null;
 
@@ -111,7 +114,7 @@ public class IntegerType implements CompositeUserType, Serializable {
 	@Override
 	public void nullSafeSet(
 			PreparedStatement preparedStatement, Object target, int index,
-			SessionImplementor session)
+			SharedSessionContractImplementor session)
 		throws SQLException {
 
 		if (target == null) {
@@ -123,8 +126,8 @@ public class IntegerType implements CompositeUserType, Serializable {
 
 	@Override
 	public Object replace(
-		Object original, Object target, SessionImplementor session,
-		Object owner) {
+		Object original, Object target,
+		SharedSessionContractImplementor session, Object owner) {
 
 		return original;
 	}
