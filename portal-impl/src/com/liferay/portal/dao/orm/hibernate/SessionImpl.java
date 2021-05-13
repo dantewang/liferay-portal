@@ -38,6 +38,8 @@ import org.hibernate.engine.spi.EntityKey;
 import org.hibernate.engine.spi.PersistenceContext;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.event.spi.EventSource;
+import org.hibernate.metamodel.spi.MetamodelImplementor;
+import org.hibernate.persister.entity.EntityPersister;
 
 /**
  * @author Brian Wing Shun Chan
@@ -232,12 +234,14 @@ public class SessionImpl implements Session {
 			SessionFactoryImplementor sessionFactoryImplementor =
 				eventSource.getFactory();
 
+			MetamodelImplementor metamodelImplementor =
+				sessionFactoryImplementor.getMetamodel();
+
+			EntityPersister entityPersister =
+				metamodelImplementor.entityPersister(clazz);
+
 			Object object = persistenceContext.getEntity(
-				new EntityKey(
-					id,
-					sessionFactoryImplementor.getEntityPersister(
-						clazz.getName()),
-					eventSource.getEntityMode()));
+				new EntityKey(id, entityPersister));
 
 			if (object == null) {
 				return;
