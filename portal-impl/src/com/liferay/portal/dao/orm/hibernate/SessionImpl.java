@@ -88,7 +88,9 @@ public class SessionImpl implements Session {
 	@Override
 	public Connection close() throws ORMException {
 		try {
-			return _session.close();
+			_session.close();
+
+			return null;
 		}
 		catch (Exception exception) {
 			throw ExceptionTranslator.translate(exception);
