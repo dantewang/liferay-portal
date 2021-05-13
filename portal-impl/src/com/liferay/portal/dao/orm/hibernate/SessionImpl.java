@@ -34,10 +34,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.hibernate.LockOptions;
-import org.hibernate.engine.EntityKey;
-import org.hibernate.engine.PersistenceContext;
-import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.event.EventSource;
+import org.hibernate.engine.spi.EntityKey;
+import org.hibernate.engine.spi.PersistenceContext;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.event.spi.EventSource;
 
 /**
  * @author Brian Wing Shun Chan
