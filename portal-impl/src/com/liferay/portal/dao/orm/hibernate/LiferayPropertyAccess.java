@@ -34,20 +34,52 @@ import java.util.function.Function;
 
 import org.hibernate.PropertyAccessException;
 import org.hibernate.PropertyNotFoundException;
-import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.engine.SessionImplementor;
-import org.hibernate.property.BasicPropertyAccessor;
-import org.hibernate.property.Getter;
-import org.hibernate.property.Setter;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.internal.util.ReflectHelper;
+import org.hibernate.property.access.spi.Getter;
+import org.hibernate.property.access.spi.GetterMethodImpl;
+import org.hibernate.property.access.spi.PropertyAccess;
+import org.hibernate.property.access.spi.PropertyAccessStrategy;
+import org.hibernate.property.access.spi.Setter;
+import org.hibernate.property.access.spi.SetterMethodImpl;
 
 /**
- * @author Preston Crary
+ * @author Dante Wang
  */
-public class LiferayPropertyAccessor extends BasicPropertyAccessor {
+public class LiferayPropertyAccess implements PropertyAccess {
+
+	public LiferayPropertyAccess(
+		PropertyAccessStrategy propertyAccessStrategy, Class<?> clazz,
+		String propertyName) {
+
+		_propertyAccessStrategy = propertyAccessStrategy;
+
+		_getter = _createGetter(clazz, propertyName);
+		_setter = _createSetter(clazz, propertyName);
+	}
 
 	@Override
+	public Getter getGetter() {
+		return _getter;
+	}
+
+	@Override
+	public PropertyAccessStrategy getPropertyAccessStrategy() {
+		return _propertyAccessStrategy;
+	}
+
+	@Override
+	public Setter getSetter() {
+		return _setter;
+	}
+
+	protected String formatPropertyName(String propertyName) {
+		return TextFormatter.format(propertyName, TextFormatter.G);
+	}
+
 	@SuppressWarnings("unchecked")
-	public Getter getGetter(Class clazz, String propertyName)
+	private Getter _createGetter(Class<?> clazz, String propertyName)
 		throws PropertyNotFoundException {
 
 		LiferayPropertyMutator liferayPropertyMutator =
@@ -75,13 +107,15 @@ public class LiferayPropertyAccessor extends BasicPropertyAccessor {
 					noSuchMethodException);
 			}
 
-			return super.getGetter(clazz, propertyName);
+			Method getterMethod = ReflectHelper.findGetterMethod(
+				clazz, propertyName);
+
+			return new GetterMethodImpl(clazz, propertyName, getterMethod);
 		}
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
-	public Setter getSetter(Class clazz, String propertyName)
+	private Setter _createSetter(Class<?> clazz, String propertyName)
 		throws PropertyNotFoundException {
 
 		LiferayPropertyMutator liferayPropertyMutator =
@@ -113,12 +147,14 @@ public class LiferayPropertyAccessor extends BasicPropertyAccessor {
 					noSuchMethodException);
 			}
 
-			return super.getSetter(clazz, propertyName);
-		}
-	}
+			Method getterMethod = ReflectHelper.findGetterMethod(
+				clazz, propertyName);
 
-	protected String formatPropertyName(String propertyName) {
-		return TextFormatter.format(propertyName, TextFormatter.G);
+			Method setterMethod = ReflectHelper.findSetterMethod(
+				clazz, propertyName, getterMethod.getReturnType());
+
+			return new SetterMethodImpl(clazz, propertyName, setterMethod);
+		}
 	}
 
 	private LiferayPropertyMutator _getLiferayPropertyMutator(
@@ -202,11 +238,15 @@ public class LiferayPropertyAccessor extends BasicPropertyAccessor {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		LiferayPropertyAccessor.class);
+		LiferayPropertyAccess.class);
 
 	private static final Map<Class<?>, ModelMutators> _modelMutators =
 		new ConcurrentReferenceValueHashMap<>(
 			FinalizeManager.WEAK_REFERENCE_FACTORY);
+
+	private final Getter _getter;
+	private final PropertyAccessStrategy _propertyAccessStrategy;
+	private final Setter _setter;
 
 	private static class LiferayPropertyGetter implements Getter {
 
@@ -227,7 +267,8 @@ public class LiferayPropertyAccessor extends BasicPropertyAccessor {
 		@Override
 		public Object getForInsert(
 				Object target, Map mergeMap,
-				SessionImplementor sessionImplementor)
+				SharedSessionContractImplementor
+					sharedSessionContractImplementor)
 			throws PropertyAccessException {
 
 			return get(target);
@@ -273,7 +314,7 @@ public class LiferayPropertyAccessor extends BasicPropertyAccessor {
 		@Override
 		public Object getForInsert(
 			Object target, Map mergeMap,
-			SessionImplementor sessionImplementor) {
+			SharedSessionContractImplementor sharedSessionContractImplementor) {
 
 			return _getterFunction.apply(target);
 		}

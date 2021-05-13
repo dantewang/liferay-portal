@@ -14,29 +14,22 @@
 
 package com.liferay.portal.dao.orm.hibernate;
 
+import org.hibernate.property.access.spi.PropertyAccess;
+import org.hibernate.property.access.spi.PropertyAccessStrategy;
+
 /**
- * @author Brian Wing Shun Chan
+ * @author Dante Wang
  */
-public class CamelCasePropertyAccessor extends LiferayPropertyAccessor {
+public class LiferayPropertyAccessStrategy implements PropertyAccessStrategy {
+
+	public static final LiferayPropertyAccessStrategy INSTANCE =
+		new LiferayPropertyAccessStrategy();
 
 	@Override
-	protected String formatPropertyName(String propertyName) {
-		if (propertyName.length() < 3) {
-			return super.formatPropertyName(propertyName);
-		}
+	public PropertyAccess buildPropertyAccess(
+		Class containerJavaType, String propertyName) {
 
-		char c0 = propertyName.charAt(0);
-		char c1 = propertyName.charAt(1);
-		char c2 = propertyName.charAt(2);
-
-		if (Character.isLowerCase(c0) && Character.isUpperCase(c1) &&
-			Character.isLowerCase(c2)) {
-
-			propertyName =
-				Character.toUpperCase(c0) + propertyName.substring(1);
-		}
-
-		return super.formatPropertyName(propertyName);
+		return new LiferayPropertyAccess(this, containerJavaType, propertyName);
 	}
 
 }
