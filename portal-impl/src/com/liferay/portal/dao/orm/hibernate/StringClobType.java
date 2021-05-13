@@ -18,24 +18,34 @@ import com.liferay.petra.string.StringPool;
 
 import java.util.Objects;
 
+import org.hibernate.type.MaterializedClobType;
+import org.hibernate.type.descriptor.java.StringTypeDescriptor;
+
 /**
  * @author Shuyang Zhou
  */
 @SuppressWarnings("deprecation")
-public class StringClobType extends org.hibernate.type.StringClobType {
+public class StringClobType extends MaterializedClobType {
 
-	@Override
-	public boolean equals(Object x, Object y) {
-		if (Objects.equals(x, y)) {
-			return true;
-		}
-		else if (((x == null) || x.equals(StringPool.BLANK)) &&
-				 ((y == null) || y.equals(StringPool.BLANK))) {
+	public StringClobType() {
+		setJavaTypeDescriptor(
+			new StringTypeDescriptor() {
 
-			return true;
-		}
+				@Override
+				public boolean areEqual(String x, String y) {
+					if (Objects.equals(x, y)) {
+						return true;
+					}
+					else if (((x == null) || x.equals(StringPool.BLANK)) &&
+							 ((y == null) || y.equals(StringPool.BLANK))) {
 
-		return false;
+						return true;
+					}
+
+					return false;
+				}
+
+			});
 	}
 
 }
