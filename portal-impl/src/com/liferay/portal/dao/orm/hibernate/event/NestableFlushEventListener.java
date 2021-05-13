@@ -17,13 +17,13 @@ package com.liferay.portal.dao.orm.hibernate.event;
 import java.util.Map;
 
 import org.hibernate.HibernateException;
-import org.hibernate.engine.PersistenceContext;
-import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.event.EventSource;
-import org.hibernate.event.FlushEvent;
-import org.hibernate.event.def.DefaultFlushEventListener;
+import org.hibernate.engine.spi.PersistenceContext;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.event.internal.DefaultFlushEventListener;
+import org.hibernate.event.spi.EventSource;
+import org.hibernate.event.spi.FlushEvent;
 import org.hibernate.stat.Statistics;
-import org.hibernate.stat.StatisticsImplementor;
+import org.hibernate.stat.spi.StatisticsImplementor;
 
 /**
  * @author Matthew Tambara
