@@ -130,7 +130,7 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 		_mBeanServer = ManagementFactory.getPlatformMBeanServer();
 
 		_serviceTracker = ServiceTrackerFactory.open(
-			_bundleContext, "(&(jmx.objectname=*)(objectClass=*MBean))",
+			_bundleContext, "(jmx.objectname=*)",
 			new MBeanServiceTrackerCustomizer());
 	}
 
