@@ -174,6 +174,16 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 			_log.error(exception, exception);
 		}
 
+		// Make sure that the Hibernate settings from PropsUtil are set.
+
+		String connectionReleaseMode = PropsUtil.get(
+			Environment.RELEASE_CONNECTIONS);
+
+		if (Validator.isNotNull(connectionReleaseMode)) {
+			localSessionFactoryBuilder.setProperty(
+				Environment.RELEASE_CONNECTIONS, connectionReleaseMode);
+		}
+
 		return super.buildSessionFactory(localSessionFactoryBuilder);
 	}
 
@@ -185,23 +195,6 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 
 	protected String[] getConfigurationResources() {
 		return PropsUtil.getArray(PropsKeys.HIBERNATE_CONFIGS);
-	}
-
-	@Override
-	protected void postProcessConfiguration(Configuration configuration) {
-
-		// Make sure that the Hibernate settings from PropsUtil are set. See the
-		// buildSessionFactory implementation in the LocalSessionFactoryBean
-		// class to understand how Spring automates a lot of configuration for
-		// Hibernate.
-
-		String connectionReleaseMode = PropsUtil.get(
-			Environment.RELEASE_CONNECTIONS);
-
-		if (Validator.isNotNull(connectionReleaseMode)) {
-			configuration.setProperty(
-				Environment.RELEASE_CONNECTIONS, connectionReleaseMode);
-		}
 	}
 
 	protected void readResource(
