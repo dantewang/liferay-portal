@@ -56,10 +56,11 @@ import org.hibernate.boot.registry.BootstrapServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.dialect.Dialect;
-import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.engine.query.QueryPlanCache;
+import org.hibernate.engine.query.spi.QueryPlanCache;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 
 /**
  * @author Brian Wing Shun Chan
@@ -159,24 +160,17 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 		}
 	}
 
-	protected ClassLoader getConfigurationClassLoader() {
-		Class<?> clazz = getClass();
-
-		return clazz.getClassLoader();
-	}
-
-	protected String[] getConfigurationResources() {
-		return PropsUtil.getArray(PropsKeys.HIBERNATE_CONFIGS);
-	}
-
 	@Override
-	protected Configuration newConfiguration() {
+	protected SessionFactory buildSessionFactory(
+			LocalSessionFactoryBuilder localSessionFactoryBuilder)
+		throws HibernateException {
+
 		try {
 			String[] resources = getConfigurationResources();
 
 			for (String resource : resources) {
 				try {
-					readResource(configuration, resource);
+					readResource(localSessionFactoryBuilder, resource);
 				}
 				catch (Exception exception) {
 					if (_log.isWarnEnabled()) {
@@ -189,14 +183,8 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 			_log.error(exception, exception);
 		}
 
-		return configuration;
-	}
-
-	@Override
-	protected SessionFactory newSessionFactory(Configuration configuration)
-		throws HibernateException {
-
-		SessionFactory sessionFactory = super.newSessionFactory(configuration);
+		SessionFactory sessionFactory = super.buildSessionFactory(
+			localSessionFactoryBuilder);
 
 		if (Objects.equals(
 				PropsValues.
@@ -222,7 +210,7 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 				queryPlanCache,
 				_wrapSessionFactoryImplementor(
 					(SessionFactoryImplementor)sessionFactory,
-					configuration.getImports()));
+					localSessionFactoryBuilder.getImports()));
 		}
 		catch (Exception exception) {
 			if (_log.isWarnEnabled()) {
@@ -232,6 +220,16 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 		}
 
 		return sessionFactory;
+	}
+
+	protected ClassLoader getConfigurationClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
+	protected String[] getConfigurationResources() {
+		return PropsUtil.getArray(PropsKeys.HIBERNATE_CONFIGS);
 	}
 
 	@Override
