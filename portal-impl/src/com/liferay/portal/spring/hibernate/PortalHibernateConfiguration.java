@@ -16,8 +16,6 @@ package com.liferay.portal.spring.hibernate;
 
 import com.liferay.petra.concurrent.ConcurrentReferenceKeyHashMap;
 import com.liferay.petra.memory.FinalizeManager;
-import com.liferay.petra.reflect.ReflectionUtil;
-import com.liferay.portal.asm.ASMWrapperUtil;
 import com.liferay.portal.internal.change.tracking.hibernate.CTSQLInterceptor;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.db.DBType;
@@ -33,14 +31,11 @@ import com.liferay.portal.util.PropsValues;
 import java.io.IOException;
 import java.io.InputStream;
 
-import java.lang.reflect.Field;
-
 import java.net.URL;
 
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,7 +51,6 @@ import org.hibernate.boot.registry.BootstrapServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.dialect.Dialect;
-import org.hibernate.engine.query.spi.QueryPlanCache;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -183,43 +177,7 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 			_log.error(exception, exception);
 		}
 
-		SessionFactory sessionFactory = super.buildSessionFactory(
-			localSessionFactoryBuilder);
-
-		if (Objects.equals(
-				PropsValues.
-					HIBERNATE_SESSION_FACTORY_IMPORTED_CLASS_NAME_REGEXP,
-				".*")) {
-
-			// For wildcard match, simply disable the optimization
-
-			return sessionFactory;
-		}
-
-		try {
-			Field queryPlanCacheField = ReflectionUtil.getDeclaredField(
-				sessionFactory.getClass(), "queryPlanCache");
-
-			QueryPlanCache queryPlanCache =
-				(QueryPlanCache)queryPlanCacheField.get(sessionFactory);
-
-			Field sessionFactoryField = ReflectionUtil.getDeclaredField(
-				QueryPlanCache.class, "factory");
-
-			sessionFactoryField.set(
-				queryPlanCache,
-				_wrapSessionFactoryImplementor(
-					(SessionFactoryImplementor)sessionFactory,
-					localSessionFactoryBuilder.getImports()));
-		}
-		catch (Exception exception) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(
-					"Unable to inject optimized query plan cache", exception);
-			}
-		}
-
-		return sessionFactory;
+		return super.buildSessionFactory(localSessionFactoryBuilder);
 	}
 
 	protected ClassLoader getConfigurationClassLoader() {
@@ -289,33 +247,6 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 
 			readResource(configuration, inputStream);
 		}
-	}
-
-	private SessionFactoryImplementor _wrapSessionFactoryImplementor(
-		SessionFactoryImplementor sessionFactoryImplementor,
-		Map<String, String> imports) {
-
-		Object sessionFactoryDelegate = null;
-
-		if (Validator.isBlank(
-				PropsValues.
-					HIBERNATE_SESSION_FACTORY_IMPORTED_CLASS_NAME_REGEXP)) {
-
-			sessionFactoryDelegate = new NoPatternSessionFactoryDelegate(
-				imports);
-		}
-		else {
-			sessionFactoryDelegate = new PatternedSessionFactoryDelegate(
-				imports,
-				PropsValues.
-					HIBERNATE_SESSION_FACTORY_IMPORTED_CLASS_NAME_REGEXP,
-				sessionFactoryImplementor);
-		}
-
-		return ASMWrapperUtil.createASMWrapper(
-			SessionFactoryImplementor.class.getClassLoader(),
-			SessionFactoryImplementor.class, sessionFactoryDelegate,
-			sessionFactoryImplementor);
 	}
 
 	private static final String[] _PRELOAD_CLASS_NAMES =
