@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactory;
 
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.LoggerConfig;
@@ -29,15 +28,13 @@ import org.apache.logging.log4j.core.config.LoggerConfig;
 public class Log4jLogFactoryImpl implements LogFactory {
 
 	public Log4jLogFactoryImpl() {
-		LoggerContext loggerContext = LoggerContext.getContext();
-
-		Logger rootLogger = loggerContext.getRootLogger();
+		Logger rootLogger = _loggerContext.getRootLogger();
 
 		LoggerConfig loggerConfig = rootLogger.get();
 
 		loggerConfig.setLevel(Level.ERROR);
 
-		loggerContext.updateLoggers();
+		_loggerContext.updateLoggers();
 	}
 
 	@Override
@@ -47,7 +44,9 @@ public class Log4jLogFactoryImpl implements LogFactory {
 
 	@Override
 	public Log getLog(String name) {
-		return new Log4jLogImpl(LogManager.getLogger(name));
+		return new Log4jLogImpl(_loggerContext.getLogger(name));
 	}
+
+	private final LoggerContext _loggerContext = LoggerContext.getContext();
 
 }

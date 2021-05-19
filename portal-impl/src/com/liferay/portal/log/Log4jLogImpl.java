@@ -18,7 +18,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogWrapper;
 
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.Logger;
 
 /**
  * @author Brian Wing Shun Chan
@@ -26,7 +26,7 @@ import org.apache.logging.log4j.Logger;
 public class Log4jLogImpl implements Log {
 
 	public Log4jLogImpl(Logger logger) {
-		_logger = (org.apache.logging.log4j.core.Logger)logger;
+		_logger = logger;
 	}
 
 	@Override
@@ -170,7 +170,7 @@ public class Log4jLogImpl implements Log {
 			_logWrapperClassName, Level.WARN, null, (Object)null, throwable);
 	}
 
-	private final org.apache.logging.log4j.core.Logger _logger;
+	private final Logger _logger;
 	private String _logWrapperClassName = LogWrapper.class.getName();
 
 }
