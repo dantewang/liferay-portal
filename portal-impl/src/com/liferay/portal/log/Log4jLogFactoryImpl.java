@@ -17,12 +17,28 @@ package com.liferay.portal.log;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactory;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 
 /**
  * @author Brian Wing Shun Chan
  */
 public class Log4jLogFactoryImpl implements LogFactory {
+
+	public Log4jLogFactoryImpl() {
+		LoggerContext loggerContext = LoggerContext.getContext();
+
+		Logger rootLogger = loggerContext.getRootLogger();
+
+		LoggerConfig loggerConfig = rootLogger.get();
+
+		loggerConfig.setLevel(Level.ERROR);
+
+		loggerContext.updateLoggers();
+	}
 
 	@Override
 	public Log getLog(Class<?> c) {
