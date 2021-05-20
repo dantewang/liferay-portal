@@ -56,7 +56,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.impl.CriteriaImpl;
+import org.hibernate.internal.CriteriaImpl;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
