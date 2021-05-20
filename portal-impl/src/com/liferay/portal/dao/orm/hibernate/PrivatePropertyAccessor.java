@@ -14,22 +14,38 @@
 
 package com.liferay.portal.dao.orm.hibernate;
 
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.model.impl.BaseModelImpl;
+
+import org.hibernate.property.access.internal.PropertyAccessFieldImpl;
+import org.hibernate.property.access.internal.PropertyAccessStrategyFieldImpl;
 import org.hibernate.property.access.spi.PropertyAccess;
-import org.hibernate.property.access.spi.PropertyAccessStrategy;
 
 /**
  * @author Dante Wang
  */
-public class LiferayPropertyAccessStrategy implements PropertyAccessStrategy {
+@SuppressWarnings("rawtypes")
+public class PrivatePropertyAccessor extends PropertyAccessStrategyFieldImpl {
 
-	public static final LiferayPropertyAccessStrategy INSTANCE =
-		new LiferayPropertyAccessStrategy();
+	public static final PrivatePropertyAccessor INSTANCE =
+		new PrivatePropertyAccessor();
 
 	@Override
 	public PropertyAccess buildPropertyAccess(
 		Class containerJavaType, String propertyName) {
 
-		return new LiferayPropertyAccess(this, containerJavaType, propertyName);
+		Class<?> superClass = null;
+
+		while ((superClass = containerJavaType.getSuperclass()) !=
+					BaseModelImpl.class) {
+
+			containerJavaType = superClass;
+		}
+
+		propertyName = StringPool.UNDERLINE.concat(propertyName);
+
+		return new PropertyAccessFieldImpl(
+			this, containerJavaType, propertyName);
 	}
 
 }

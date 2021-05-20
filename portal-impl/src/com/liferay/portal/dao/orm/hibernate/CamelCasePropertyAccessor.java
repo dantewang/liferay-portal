@@ -19,11 +19,10 @@ import org.hibernate.property.access.spi.PropertyAccess;
 /**
  * @author Dante Wang
  */
-public class CamelCasePropertyAccessStrategy
-	extends LiferayPropertyAccessStrategy {
+public class CamelCasePropertyAccessor extends LiferayPropertyAccessor {
 
-	public static final CamelCasePropertyAccessStrategy INSTANCE =
-		new CamelCasePropertyAccessStrategy();
+	public static final CamelCasePropertyAccessor INSTANCE =
+		new CamelCasePropertyAccessor();
 
 	@Override
 	public PropertyAccess buildPropertyAccess(
