@@ -21,23 +21,23 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import java.util.Objects;
 
+import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.StandardBasicTypes;
-import org.hibernate.type.Type;
-import org.hibernate.usertype.CompositeUserType;
+import org.hibernate.usertype.UserType;
 
 /**
  * @author Brian Wing Shun Chan
  */
-public class StringType implements CompositeUserType, Serializable {
+public class StringType implements Serializable, UserType {
 
 	@Override
-	public Object assemble(
-		Serializable cached, SharedSessionContractImplementor session,
-		Object owner) {
+	public Object assemble(Serializable cached, Object owner)
+		throws HibernateException {
 
 		return cached;
 	}
@@ -48,9 +48,7 @@ public class StringType implements CompositeUserType, Serializable {
 	}
 
 	@Override
-	public Serializable disassemble(
-		Object value, SharedSessionContractImplementor session) {
-
+	public Serializable disassemble(Object value) throws HibernateException {
 		return (Serializable)value;
 	}
 
@@ -66,21 +64,6 @@ public class StringType implements CompositeUserType, Serializable {
 		}
 
 		return false;
-	}
-
-	@Override
-	public String[] getPropertyNames() {
-		return new String[0];
-	}
-
-	@Override
-	public Type[] getPropertyTypes() {
-		return new Type[] {StandardBasicTypes.STRING};
-	}
-
-	@Override
-	public Object getPropertyValue(Object component, int property) {
-		return component;
 	}
 
 	@Override
@@ -122,9 +105,8 @@ public class StringType implements CompositeUserType, Serializable {
 	}
 
 	@Override
-	public Object replace(
-		Object original, Object target,
-		SharedSessionContractImplementor session, Object owner) {
+	public Object replace(Object original, Object target, Object owner)
+		throws HibernateException {
 
 		return original;
 	}
@@ -135,7 +117,8 @@ public class StringType implements CompositeUserType, Serializable {
 	}
 
 	@Override
-	public void setPropertyValue(Object component, int property, Object value) {
+	public int[] sqlTypes() {
+		return new int[] {Types.VARCHAR};
 	}
 
 }

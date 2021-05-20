@@ -21,23 +21,23 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
+import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.StandardBasicTypes;
-import org.hibernate.type.Type;
-import org.hibernate.usertype.CompositeUserType;
+import org.hibernate.usertype.UserType;
 
 /**
  * @author Brian Wing Shun Chan
  */
-public class LongType implements CompositeUserType, Serializable {
+public class LongType implements Serializable, UserType {
 
 	public static final Long DEFAULT_VALUE = Long.valueOf(0);
 
 	@Override
-	public Object assemble(
-		Serializable cached, SharedSessionContractImplementor session,
-		Object owner) {
+	public Object assemble(Serializable cached, Object owner)
+		throws HibernateException {
 
 		return cached;
 	}
@@ -48,9 +48,7 @@ public class LongType implements CompositeUserType, Serializable {
 	}
 
 	@Override
-	public Serializable disassemble(
-		Object value, SharedSessionContractImplementor session) {
-
+	public Serializable disassemble(Object value) throws HibernateException {
 		return (Serializable)value;
 	}
 
@@ -64,21 +62,6 @@ public class LongType implements CompositeUserType, Serializable {
 		}
 
 		return x.equals(y);
-	}
-
-	@Override
-	public String[] getPropertyNames() {
-		return new String[0];
-	}
-
-	@Override
-	public Type[] getPropertyTypes() {
-		return new Type[] {StandardBasicTypes.LONG};
-	}
-
-	@Override
-	public Object getPropertyValue(Object component, int property) {
-		return component;
 	}
 
 	@Override
@@ -140,9 +123,8 @@ public class LongType implements CompositeUserType, Serializable {
 	}
 
 	@Override
-	public Object replace(
-		Object original, Object target,
-		SharedSessionContractImplementor session, Object owner) {
+	public Object replace(Object original, Object target, Object owner)
+		throws HibernateException {
 
 		return original;
 	}
@@ -153,7 +135,8 @@ public class LongType implements CompositeUserType, Serializable {
 	}
 
 	@Override
-	public void setPropertyValue(Object component, int property, Object value) {
+	public int[] sqlTypes() {
+		return new int[] {Types.BIGINT};
 	}
 
 }
