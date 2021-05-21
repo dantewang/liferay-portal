@@ -12,8 +12,6 @@ ${dataFactory.toInsertSQL(countryModel)}
 
 <#include "default_user.ftl">
 
-<#include "segments.ftl">
-
 <#include "commerce_groups.ftl">
 
 <@insertLayout _layoutModel=dataFactory.newLayoutModel(guestGroupModel.groupId, "welcome", "com_liferay_login_web_portlet_LoginPortlet,", "com_liferay_hello_world_web_portlet_HelloWorldPortlet,") />
@@ -23,6 +21,12 @@ ${dataFactory.toInsertSQL(countryModel)}
 <@insertGroup _groupModel=guestGroupModel />
 
 <@insertGroup _groupModel=dataFactory.newUserPersonalSiteGroupModel() />
+
+<#include "asset.ftl">
+
+<#include "ddm.ftl">
+
+<#include "segments.ftl">
 
 <#list dataFactory.newGroupModels() as groupModel>
 	<#assign groupId = groupModel.groupId />
