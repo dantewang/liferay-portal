@@ -19,6 +19,7 @@ import java.util.Map;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.ActionQueue;
+import org.hibernate.engine.spi.EntityEntry;
 import org.hibernate.engine.spi.PersistenceContext;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.event.internal.DefaultAutoFlushEventListener;
@@ -81,7 +82,7 @@ public class NestableAutoFlushEventListener
 
 			if (statistics.isStatisticsEnabled()) {
 				StatisticsImplementor statisticsImplementor =
-					sessionFactoryImplementor.getStatisticsImplementor();
+					sessionFactoryImplementor.getStatistics();
 
 				statisticsImplementor.flush();
 			}
@@ -108,15 +109,17 @@ public class NestableAutoFlushEventListener
 		PersistenceContext persistenceContext =
 			eventSource.getPersistenceContext();
 
-		Map<?, ?> entityEntries = persistenceContext.getEntityEntries();
+		Map.Entry<Object, EntityEntry>[] entityEntries =
+			persistenceContext.reentrantSafeEntityEntries();
 
-		if (!entityEntries.isEmpty()) {
+		if (entityEntries.length > 0) {
 			return true;
 		}
 
-		Map<?, ?> collectionEntries = persistenceContext.getCollectionEntries();
+		int collectionEntriesSize =
+			persistenceContext.getCollectionEntriesSize();
 
-		if (!collectionEntries.isEmpty()) {
+		if (collectionEntriesSize > 0) {
 			return true;
 		}
 

@@ -17,6 +17,7 @@ package com.liferay.portal.dao.orm.hibernate.event;
 import java.util.Map;
 
 import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.EntityEntry;
 import org.hibernate.engine.spi.PersistenceContext;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.event.internal.DefaultFlushEventListener;
@@ -40,13 +41,14 @@ public class NestableFlushEventListener extends DefaultFlushEventListener {
 		PersistenceContext persistenceContext =
 			eventSource.getPersistenceContext();
 
-		Map<?, ?> entityEntries = persistenceContext.getEntityEntries();
+		Map.Entry<Object, EntityEntry>[] entityEntries =
+			persistenceContext.reentrantSafeEntityEntries();
 
-		if (entityEntries.isEmpty()) {
-			Map<?, ?> collectionEntries =
-				persistenceContext.getCollectionEntries();
+		if (entityEntries.length == 0) {
+			int collectionEntriesSize =
+				persistenceContext.getCollectionEntriesSize();
 
-			if (collectionEntries.isEmpty()) {
+			if (collectionEntriesSize == 0) {
 				return;
 			}
 		}
@@ -73,7 +75,7 @@ public class NestableFlushEventListener extends DefaultFlushEventListener {
 
 		if (statistics.isStatisticsEnabled()) {
 			StatisticsImplementor statisticsImplementor =
-				sessionFactoryImplementor.getStatisticsImplementor();
+				sessionFactoryImplementor.getStatistics();
 
 			statisticsImplementor.flush();
 		}
