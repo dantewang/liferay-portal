@@ -596,15 +596,8 @@ public class DataFactory {
 		return BenchmarksPropsValues.MAX_ASSETPUBLISHER_PAGE_COUNT;
 	}
 
-	public int getMaxBlogsEntryCommentCount(CompanyModel companyModel) {
-		String webId = companyModel.getWebId();
-
-		if (webId.equals("liferay.com")) {
-			return BenchmarksPropsValues.MAX_BLOGS_ENTRY_COMMENT_COUNT;
-		}
-
-		return BenchmarksPropsValues.
-			MAX_VIRTUAL_INSTANCE_BLOGS_ENTRY_COMMENT_COUNT;
+	public int getMaxBlogsEntryCommentCount() {
+		return BenchmarksPropsValues.MAX_BLOGS_ENTRY_COMMENT_COUNT;
 	}
 
 	public int getMaxContentLayoutCount() {
@@ -1184,25 +1177,11 @@ public class DataFactory {
 		return assetVocabularyModels;
 	}
 
-	public List<BlogsEntryModel> newBlogsEntryModels(
-		long groupId, CompanyModel companyModel) {
-
-		int maxBlogEnryCount = 0;
-
-		String webId = companyModel.getWebId();
-
-		if (webId.equals("liferay.com")) {
-			maxBlogEnryCount = BenchmarksPropsValues.MAX_BLOGS_ENTRY_COUNT;
-		}
-		else {
-			maxBlogEnryCount =
-				BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_BLOGS_ENTRY_COUNT;
-		}
-
+	public List<BlogsEntryModel> newBlogsEntryModels(long groupId) {
 		List<BlogsEntryModel> blogEntryModels = new ArrayList<>(
-			maxBlogEnryCount);
+			BenchmarksPropsValues.MAX_BLOGS_ENTRY_COUNT);
 
-		for (int i = 1; i <= maxBlogEnryCount; i++) {
+		for (int i = 1; i <= BenchmarksPropsValues.MAX_BLOGS_ENTRY_COUNT; i++) {
 			blogEntryModels.add(newBlogsEntryModel(groupId, i));
 		}
 

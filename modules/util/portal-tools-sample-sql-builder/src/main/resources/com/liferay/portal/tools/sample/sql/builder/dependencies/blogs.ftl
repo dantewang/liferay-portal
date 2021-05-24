@@ -1,4 +1,4 @@
-<#list dataFactory.newBlogsEntryModels(groupId, companyModel) as blogsEntryModel>
+<#list dataFactory.newBlogsEntryModels(groupId) as blogsEntryModel>
 	${dataFactory.toInsertSQL(blogsEntryModel)}
 
 	<#assign friendlyURLEntryModel = dataFactory.newFriendlyURLEntryModel(blogsEntryModel.groupId, dataFactory.blogsEntryClassNameId, blogsEntryModel.entryId) />
@@ -22,7 +22,7 @@
 		_classNameId=dataFactory.blogsEntryClassNameId
 		_classPK=blogsEntryModel.entryId
 		_groupId=groupId
-		_maxCommentCount=dataFactory.getMaxBlogsEntryCommentCount(companyModel)
+		_maxCommentCount=dataFactory.maxBlogsEntryCommentCount
 		_mbRootMessageId=mbRootMessageId
 		_mbThreadId=dataFactory.getCounterNext()
 	/>
