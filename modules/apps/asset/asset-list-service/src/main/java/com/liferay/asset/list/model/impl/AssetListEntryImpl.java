@@ -198,7 +198,7 @@ public class AssetListEntryImpl extends AssetListEntryBaseImpl {
 			_serviceTracker;
 
 	static {
-		Bundle bundle = FrameworkUtil.getBundle(AssetHelper.class);
+		Bundle bundle = FrameworkUtil.getBundle(AssetListEntryImpl.class);
 
 		ServiceTracker<AssetListAssetEntryProvider, AssetListAssetEntryProvider>
 			serviceTracker = new ServiceTracker<>(
