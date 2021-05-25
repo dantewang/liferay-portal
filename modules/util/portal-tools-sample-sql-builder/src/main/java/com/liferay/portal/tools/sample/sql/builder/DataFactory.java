@@ -2374,7 +2374,7 @@ public class DataFactory {
 		}
 
 		counterModels.add(
-			_newCounterModel(Layout.class.getName(), totalLayoutId + 1));
+			_newCounterModel(Layout.class.getName(), _counter.get() + totalLayoutId + 1));
 
 		return counterModels;
 	}
