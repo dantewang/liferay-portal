@@ -4028,7 +4028,7 @@ public class DataFactory {
 	}
 
 	public GroupModel newGuestGroupModel() {
-		String typeSettings = "";
+		String typeSettings = StringPool.BLANK;
 
 		if (!BenchmarksPropsValues.SEARCH_BAR_ENABLED) {
 			typeSettings = "searchLayoutCreated=true";
@@ -6185,7 +6185,8 @@ public class DataFactory {
 		long groupId, long classNameId, long classPK, String name,
 		boolean site) {
 
-		return newGroupModel(groupId, classNameId, classPK, name, 0, site, "");
+		return newGroupModel(
+			groupId, classNameId, classPK, name, 0, site, StringPool.BLANK);
 	}
 
 	protected GroupModel newGroupModel(
@@ -6193,7 +6194,7 @@ public class DataFactory {
 		boolean site) {
 
 		return newGroupModel(
-			groupId, classNameId, classPK, name, type, site, "");
+			groupId, classNameId, classPK, name, type, site, StringPool.BLANK);
 	}
 
 	protected GroupModel newGroupModel(
