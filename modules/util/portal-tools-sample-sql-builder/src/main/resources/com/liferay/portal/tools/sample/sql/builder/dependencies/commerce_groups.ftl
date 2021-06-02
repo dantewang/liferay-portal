@@ -20,8 +20,6 @@
 
 		cpTaxCategoryModel = dataFactory.newCPTaxCategoryModel()
 
-		countryModel = dataFactory.newCountryModel()
-
 		addressModel = dataFactory.newAddressModel(dataFactory.getCommerceAccountClassNameId(), commerceAccountEntryModels[0].accountEntryId, countryModel.countryId)
 	/>
 
@@ -54,8 +52,6 @@
 	</#list>
 
 	${dataFactory.toInsertSQL(cpTaxCategoryModel)}
-
-	${dataFactory.toInsertSQL(countryModel)}
 
 	${dataFactory.toInsertSQL(addressModel)}
 
