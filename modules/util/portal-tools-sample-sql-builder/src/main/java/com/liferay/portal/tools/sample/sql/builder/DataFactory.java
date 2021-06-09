@@ -266,7 +266,6 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.PortletKeys;
@@ -3876,22 +3875,17 @@ public class DataFactory {
 		List<FragmentEntryLinkModel> fragmentEntryLinkModels =
 			new ArrayList<>();
 
-		Map<String, String> nameSpaces = HashMapBuilder.put(
-			_HEADING_RENDER_KEY, StringUtil.randomId()
-		).put(
-			_IMAGE_RENDER_KEY, StringUtil.randomId()
-		).put(
-			_PARAGRAPH_RENDER_KEY, StringUtil.randomId()
-		).put(
-			"LoginPortlet", StringUtil.randomId()
-		).build();
+		String headingRenderNamespace = StringUtil.randomId();
+		String imageRenderNamespace = StringUtil.randomId();
+		String paragraphRenderNamespace = StringUtil.randomId();
+		String loginPortletNamespace = StringUtil.randomId();
 
 		for (LayoutModel layoutModel : layoutModels) {
 			fragmentEntryLinkModels.add(
 				newFragmentEntryLinkModel(
 					layoutModel, "", "", "", "",
 					_readFile("loginPortlet_editValue.json"), 0,
-					nameSpaces.get("LoginPortlet")));
+					loginPortletNamespace));
 
 			fragmentEntryLinkModels.add(
 				newFragmentEntryLinkModel(
@@ -3902,7 +3896,7 @@ public class DataFactory {
 						_getFragmentComponentInputStream("heading", "html")),
 					_readFile("heading_configuration.json"),
 					_readFile("heading_editValue.json"), 0,
-					nameSpaces.get(_HEADING_RENDER_KEY)));
+					headingRenderNamespace));
 
 			fragmentEntryLinkModels.add(
 				newFragmentEntryLinkModel(
@@ -3913,7 +3907,7 @@ public class DataFactory {
 						_getFragmentComponentInputStream("paragraph", "html")),
 					_readFile("paragraph_configuration.json"),
 					_replaceReleaseInfo(_readFile("paragraph_editValue.json")),
-					0, nameSpaces.get(_PARAGRAPH_RENDER_KEY)));
+					0, paragraphRenderNamespace));
 
 			fragmentEntryLinkModels.add(
 				newFragmentEntryLinkModel(
@@ -3922,7 +3916,7 @@ public class DataFactory {
 						_getFragmentComponentInputStream("image", "html")),
 					_readFile("image_configuration.json"),
 					_readFile("image_editValue.json"), 0,
-					nameSpaces.get(_IMAGE_RENDER_KEY)));
+					imageRenderNamespace));
 		}
 
 		return fragmentEntryLinkModels;
