@@ -18,14 +18,15 @@ import java.util.Map;
 
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
-import org.hibernate.engine.ActionQueue;
-import org.hibernate.engine.PersistenceContext;
-import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.event.AutoFlushEvent;
-import org.hibernate.event.EventSource;
-import org.hibernate.event.def.DefaultAutoFlushEventListener;
+import org.hibernate.engine.spi.ActionQueue;
+import org.hibernate.engine.spi.EntityEntry;
+import org.hibernate.engine.spi.PersistenceContext;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.event.internal.DefaultAutoFlushEventListener;
+import org.hibernate.event.spi.AutoFlushEvent;
+import org.hibernate.event.spi.EventSource;
 import org.hibernate.stat.Statistics;
-import org.hibernate.stat.StatisticsImplementor;
+import org.hibernate.stat.spi.StatisticsImplementor;
 
 /**
  * @author Shuyang Zhou
@@ -81,7 +82,7 @@ public class NestableAutoFlushEventListener
 
 			if (statistics.isStatisticsEnabled()) {
 				StatisticsImplementor statisticsImplementor =
-					sessionFactoryImplementor.getStatisticsImplementor();
+					sessionFactoryImplementor.getStatistics();
 
 				statisticsImplementor.flush();
 			}
@@ -95,7 +96,7 @@ public class NestableAutoFlushEventListener
 	}
 
 	private boolean _isFlushable(EventSource eventSource) {
-		FlushMode flushMode = eventSource.getFlushMode();
+		FlushMode flushMode = eventSource.getHibernateFlushMode();
 
 		if (flushMode.lessThan(FlushMode.AUTO)) {
 			return false;
@@ -108,15 +109,17 @@ public class NestableAutoFlushEventListener
 		PersistenceContext persistenceContext =
 			eventSource.getPersistenceContext();
 
-		Map<?, ?> entityEntries = persistenceContext.getEntityEntries();
+		Map.Entry<Object, EntityEntry>[] entityEntries =
+			persistenceContext.reentrantSafeEntityEntries();
 
-		if (!entityEntries.isEmpty()) {
+		if (entityEntries.length > 0) {
 			return true;
 		}
 
-		Map<?, ?> collectionEntries = persistenceContext.getCollectionEntries();
+		int collectionEntriesSize =
+			persistenceContext.getCollectionEntriesSize();
 
-		if (!collectionEntries.isEmpty()) {
+		if (collectionEntriesSize > 0) {
 			return true;
 		}
 
@@ -126,7 +129,7 @@ public class NestableAutoFlushEventListener
 	private boolean _isFlushReallyNeeded(
 		AutoFlushEvent autoFlushEvent, EventSource eventSource) {
 
-		if (eventSource.getFlushMode() == FlushMode.ALWAYS) {
+		if (eventSource.getHibernateFlushMode() == FlushMode.ALWAYS) {
 			return true;
 		}
 
