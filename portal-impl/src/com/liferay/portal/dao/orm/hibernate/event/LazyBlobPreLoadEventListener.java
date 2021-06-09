@@ -14,8 +14,8 @@
 
 package com.liferay.portal.dao.orm.hibernate.event;
 
-import org.hibernate.event.PreLoadEvent;
-import org.hibernate.event.def.DefaultPreLoadEventListener;
+import org.hibernate.event.internal.DefaultPreLoadEventListener;
+import org.hibernate.event.spi.PreLoadEvent;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.type.OneToOneType;
 import org.hibernate.type.Type;
