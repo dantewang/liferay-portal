@@ -40,10 +40,9 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.SystemEventConstants;
 import com.liferay.portal.kernel.service.BaseLocalServiceImpl;
 import com.liferay.portal.kernel.service.SystemEventLocalService;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-
-import java.lang.reflect.Method;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -54,9 +53,6 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.internal.CriteriaImpl;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -350,33 +346,25 @@ public class DummyReferenceStagedModelRepository
 		public List<DummyReference> dynamicQuery(DynamicQuery dynamicQuery) {
 			DynamicQueryImpl dynamicQueryImpl = (DynamicQueryImpl)dynamicQuery;
 
-			DetachedCriteria detachedCriteria =
-				dynamicQueryImpl.getDetachedCriteria();
-
-			Class<?> detachedCriteriaClass = detachedCriteria.getClass();
+			Object detachedCriteria = dynamicQueryImpl.getDetachedCriteria();
 
 			List<DummyReference> result = _dummyReferences;
 
 			try {
-				Method method = detachedCriteriaClass.getDeclaredMethod(
-					"getCriteriaImpl");
+				Object detachedCriteriaImpl = ReflectionTestUtil.invoke(
+					detachedCriteria.getClass(), "getCriteriaImpl",
+					new Class<?>[0]);
 
-				method.setAccessible(true);
-
-				CriteriaImpl detachedCriteriaImpl = (CriteriaImpl)method.invoke(
-					detachedCriteria);
-
-				Iterator<CriteriaImpl.CriterionEntry> iterator =
-					detachedCriteriaImpl.iterateExpressionEntries();
+				Iterator<?> iterator = ReflectionTestUtil.invoke(
+					detachedCriteriaImpl.getClass(), "iterateExpressionEntries",
+					new Class<?>[0]);
 
 				while (iterator.hasNext()) {
-					CriteriaImpl.CriterionEntry criteriaImpl = iterator.next();
-
 					Stream<DummyReference> dummyReferenceStream =
 						result.stream();
 
 					result = dummyReferenceStream.filter(
-						getPredicate(criteriaImpl.toString())
+						getPredicate(String.valueOf(iterator.next()))
 					).collect(
 						Collectors.toList()
 					);
