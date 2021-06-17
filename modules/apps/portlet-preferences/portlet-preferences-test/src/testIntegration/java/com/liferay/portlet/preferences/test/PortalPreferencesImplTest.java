@@ -47,7 +47,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.FutureTask;
 
-import org.hibernate.util.JDBCExceptionReporter;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -182,7 +182,7 @@ public class PortalPreferencesImplTest {
 			});
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				JDBCExceptionReporter.class.getName(), LoggerTestUtil.OFF)) {
+				SqlExceptionHelper.class.getName(), LoggerTestUtil.OFF)) {
 
 			updateSynchronously(futureTask1, futureTask2);
 
@@ -256,7 +256,7 @@ public class PortalPreferencesImplTest {
 			});
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				JDBCExceptionReporter.class.getName(), LoggerTestUtil.OFF)) {
+				SqlExceptionHelper.class.getName(), LoggerTestUtil.OFF)) {
 
 			updateSynchronously(futureTask1, futureTask2);
 
@@ -330,7 +330,7 @@ public class PortalPreferencesImplTest {
 			});
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				JDBCExceptionReporter.class.getName(), LoggerTestUtil.OFF)) {
+				SqlExceptionHelper.class.getName(), LoggerTestUtil.OFF)) {
 
 			updateSynchronously(futureTask1, futureTask2);
 
