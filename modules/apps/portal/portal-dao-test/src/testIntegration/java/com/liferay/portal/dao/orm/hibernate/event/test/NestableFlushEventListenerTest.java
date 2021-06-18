@@ -28,19 +28,23 @@ import com.liferay.portal.model.impl.ClassNameImpl;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.hibernate.EmptyInterceptor;
-import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionBuilder;
 import org.hibernate.Transaction;
-import org.hibernate.classic.Session;
-import org.hibernate.event.AutoFlushEventListener;
-import org.hibernate.event.EventListeners;
-import org.hibernate.event.FlushEventListener;
-import org.hibernate.event.def.DefaultAutoFlushEventListener;
-import org.hibernate.event.def.DefaultFlushEventListener;
+import org.hibernate.event.internal.DefaultAutoFlushEventListener;
+import org.hibernate.event.service.spi.EventListenerGroup;
+import org.hibernate.event.service.spi.EventListenerRegistry;
+import org.hibernate.event.spi.AutoFlushEventListener;
+import org.hibernate.event.spi.EventEngine;
+import org.hibernate.event.spi.EventType;
+import org.hibernate.event.spi.FlushEventListener;
+import org.hibernate.query.Query;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -77,7 +81,7 @@ public class NestableFlushEventListenerTest {
 		}
 
 		_sessionFactoryImpl =
-			(org.hibernate.impl.SessionFactoryImpl)
+			(org.hibernate.internal.SessionFactoryImpl)
 				sessionFactoryImpl.getSessionFactoryImplementor();
 	}
 
@@ -98,13 +102,25 @@ public class NestableFlushEventListenerTest {
 
 	@Test
 	public void testDefaultAutoFlushEventListener() throws Exception {
-		EventListeners eventListeners = _sessionFactoryImpl.getEventListeners();
+		EventEngine eventEngine = _sessionFactoryImpl.getEventEngine();
 
-		AutoFlushEventListener[] autoFlushEventListeners =
-			eventListeners.getAutoFlushEventListeners();
+		EventListenerRegistry eventListenerRegistry =
+			eventEngine.getListenerRegistry();
 
-		eventListeners.setAutoFlushEventListeners(
-			new AutoFlushEventListener[] {new DefaultAutoFlushEventListener()});
+		EventListenerGroup<AutoFlushEventListener> eventListenerGroup =
+			eventListenerRegistry.getEventListenerGroup(EventType.AUTO_FLUSH);
+
+		List<AutoFlushEventListener> originalAutoFlushEventListeners =
+			new ArrayList<>(eventListenerGroup.count());
+
+		for (AutoFlushEventListener autoFlushEventListener :
+				eventListenerGroup.listeners()) {
+
+			originalAutoFlushEventListeners.add(autoFlushEventListener);
+		}
+
+		eventListenerRegistry.setListeners(
+			EventType.AUTO_FLUSH, new DefaultAutoFlushEventListener());
 
 		try {
 			testNestableAutoFlushEventListener();
@@ -114,19 +130,34 @@ public class NestableFlushEventListenerTest {
 		catch (IndexOutOfBoundsException indexOutOfBoundsException) {
 		}
 		finally {
-			eventListeners.setAutoFlushEventListeners(autoFlushEventListeners);
+			eventListenerRegistry.setListeners(
+				EventType.AUTO_FLUSH,
+				originalAutoFlushEventListeners.toArray(
+					new AutoFlushEventListener[0]));
 		}
 	}
 
 	@Test
 	public void testDefaultFlushEventListener() throws Exception {
-		EventListeners eventListeners = _sessionFactoryImpl.getEventListeners();
+		EventEngine eventEngine = _sessionFactoryImpl.getEventEngine();
 
-		FlushEventListener[] flushEventListeners =
-			eventListeners.getFlushEventListeners();
+		EventListenerRegistry eventListenerRegistry =
+			eventEngine.getListenerRegistry();
 
-		eventListeners.setFlushEventListeners(
-			new FlushEventListener[] {new DefaultFlushEventListener()});
+		EventListenerGroup<FlushEventListener> eventListenerGroup =
+			eventListenerRegistry.getEventListenerGroup(EventType.FLUSH);
+
+		List<FlushEventListener> originalFlushEventListeners = new ArrayList<>(
+			eventListenerGroup.count());
+
+		for (FlushEventListener flushEventListener :
+				eventListenerGroup.listeners()) {
+
+			originalFlushEventListeners.add(flushEventListener);
+		}
+
+		eventListenerRegistry.setListeners(
+			EventType.AUTO_FLUSH, new DefaultAutoFlushEventListener());
 
 		try {
 			testNestableFlushEventListener();
@@ -136,7 +167,9 @@ public class NestableFlushEventListenerTest {
 		catch (IndexOutOfBoundsException indexOutOfBoundsException) {
 		}
 		finally {
-			eventListeners.setFlushEventListeners(flushEventListeners);
+			eventListenerRegistry.setListeners(
+				EventType.FLUSH,
+				originalFlushEventListeners.toArray(new FlushEventListener[0]));
 		}
 	}
 
@@ -224,7 +257,9 @@ public class NestableFlushEventListenerTest {
 	}
 
 	private Session _prepareSession() throws Exception {
-		Session session = _sessionFactoryImpl.openSession(
+		SessionBuilder sessionBuilder = _sessionFactoryImpl.withOptions();
+
+		sessionBuilder.interceptor(
 			new EmptyInterceptor() {
 
 				@Override
@@ -237,6 +272,8 @@ public class NestableFlushEventListenerTest {
 				}
 
 			});
+
+		Session session = sessionBuilder.openSession();
 
 		Transaction transaction = session.beginTransaction();
 
@@ -270,7 +307,8 @@ public class NestableFlushEventListenerTest {
 		return session;
 	}
 
-	private static org.hibernate.impl.SessionFactoryImpl _sessionFactoryImpl;
+	private static org.hibernate.internal.SessionFactoryImpl
+		_sessionFactoryImpl;
 
 	@Inject
 	private static UserPersistence _userPersistence;
