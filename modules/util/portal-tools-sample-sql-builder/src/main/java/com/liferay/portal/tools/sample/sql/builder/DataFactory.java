@@ -181,11 +181,16 @@ import com.liferay.journal.model.impl.JournalArticleResourceModelImpl;
 import com.liferay.journal.model.impl.JournalContentSearchModelImpl;
 import com.liferay.layout.model.LayoutClassedModelUsageModel;
 import com.liferay.layout.model.impl.LayoutClassedModelUsageModelImpl;
+import com.liferay.layout.page.template.constants.LayoutPageTemplateEntryTypeConstants;
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructureModel;
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructureRelModel;
 import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureModelImpl;
 import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureRelModelImpl;
+import com.liferay.layout.page.template.util.LayoutPageTemplateStructureHelperUtil;
 import com.liferay.layout.util.constants.LayoutClassedModelUsageConstants;
+import com.liferay.layout.util.structure.ContainerLayoutStructureItem;
+import com.liferay.layout.util.structure.FragmentLayoutStructureItem;
+import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.constants.MBMessageConstants;
 import com.liferay.message.boards.constants.MBPortletKeys;
@@ -215,6 +220,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.metadata.RawMetadataProcessor;
@@ -4536,14 +4542,13 @@ public class DataFactory {
 		newLayoutPageTemplateStructureRelModel(
 			LayoutModel layoutModel,
 			LayoutPageTemplateStructureModel layoutPageTemplateStructureModel,
-			List<FragmentEntryLinkModel> fragmentEntryLinkModels,
-			String templateFileName) {
+			List<FragmentEntryLinkModel> fragmentEntryLinkModels) {
 
 		List<FragmentEntryLinkModel> targetFragmentEntryLinkModels =
 			new ArrayList<>();
 
 		for (FragmentEntryLinkModel model : fragmentEntryLinkModels) {
-			if (model.getPlid() == layoutModel.getPlid()) {
+			if (model.getClassPK() == layoutModel.getPlid()) {
 				targetFragmentEntryLinkModels.add(model);
 			}
 		}
@@ -4552,37 +4557,36 @@ public class DataFactory {
 			layoutPageTemplateStructureRelModel =
 				new LayoutPageTemplateStructureRelModelImpl();
 
-		// UUID
-
 		layoutPageTemplateStructureRelModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
 		layoutPageTemplateStructureRelModel.setLayoutPageTemplateStructureRelId(
 			_counter.get());
-
-		// Group instance
-
 		layoutPageTemplateStructureRelModel.setGroupId(
 			layoutPageTemplateStructureModel.getGroupId());
-
-		// Audit fields
-
 		layoutPageTemplateStructureRelModel.setCompanyId(_companyId);
 		layoutPageTemplateStructureRelModel.setUserId(_sampleUserId);
 		layoutPageTemplateStructureRelModel.setUserName(_SAMPLE_USER_NAME);
 		layoutPageTemplateStructureRelModel.setCreateDate(new Date());
 		layoutPageTemplateStructureRelModel.setModifiedDate(new Date());
-
-		// Other fields
-
 		layoutPageTemplateStructureRelModel.setLayoutPageTemplateStructureId(
 			layoutPageTemplateStructureModel.
 				getLayoutPageTemplateStructureId());
 		layoutPageTemplateStructureRelModel.setSegmentsExperienceId(0L);
 
-		layoutPageTemplateStructureRelModel.setData(
-			_generateJsonData(targetFragmentEntryLinkModels, templateFileName));
+		JSONObject originJSONObject =
+			LayoutPageTemplateStructureHelperUtil.
+				generateContentLayoutStructure(
+					new ArrayList<>(),
+					LayoutPageTemplateEntryTypeConstants.TYPE_BASIC);
+
+		LayoutStructure originLayoutStructure = LayoutStructure.of(
+			originJSONObject.toString());
+
+		LayoutStructure layoutStructure = _generateJsonData(
+			originLayoutStructure, layoutModel, fragmentEntryLinkModels);
+
+		JSONObject jsonObject = layoutStructure.toJSONObject();
+
+		layoutPageTemplateStructureRelModel.setData(jsonObject.toString());
 
 		return layoutPageTemplateStructureRelModel;
 	}
@@ -7149,51 +7153,121 @@ public class DataFactory {
 		}
 	}
 
-	private String _generateJsonData(
-		List<FragmentEntryLinkModel> fragmentEntryLinkModels,
-		String templateFileName) {
+	private LayoutStructure _generateJsonData(
+		LayoutStructure layoutStructure, LayoutModel layoutModel,
+		List<FragmentEntryLinkModel> fragmentEntryLinkModels) {
 
-		String data = null;
+		//Generate the first Container in the home page
+		String parentItemId = layoutStructure.getMainItemId();
 
-		try {
-			data = _readFile(templateFileName);
+		ContainerLayoutStructureItem containerLayoutStructureItem1 =
+			(ContainerLayoutStructureItem)
+				layoutStructure.addContainerLayoutStructureItem(
+					parentItemId, 0);
 
-			for (FragmentEntryLinkModel fragmentEntryLinkModel :
-					fragmentEntryLinkModels) {
+		containerLayoutStructureItem1.setBackgroundImageJSONObject(
+			JSONUtil.put(
+				"title", _BACKGROUND_PICTURE_TITLE
+			).put(
+				"url", _BACKGROUND_PICTURE_URL
+			));
 
-				String rendererKey = fragmentEntryLinkModel.getRendererKey();
+		containerLayoutStructureItem1.setAlign(null);
+		containerLayoutStructureItem1.setBorderColor(null);
+		containerLayoutStructureItem1.setBorderRadius("");
+		containerLayoutStructureItem1.setBorderWidth(0);
+		containerLayoutStructureItem1.setContentDisplay("block");
+		containerLayoutStructureItem1.setJustify("");
+		containerLayoutStructureItem1.setMarginBottom(0);
+		containerLayoutStructureItem1.setMarginLeft(0);
+		containerLayoutStructureItem1.setMarginRight(0);
+		containerLayoutStructureItem1.setMarginTop(0);
+		containerLayoutStructureItem1.setOpacity(100);
+		containerLayoutStructureItem1.setPaddingBottom(8);
+		containerLayoutStructureItem1.setPaddingLeft(0);
+		containerLayoutStructureItem1.setPaddingRight(0);
+		containerLayoutStructureItem1.setPaddingTop(8);
+		containerLayoutStructureItem1.setShadow("");
+		containerLayoutStructureItem1.setWidthType("fluid");
 
-				if (rendererKey.equals(_HEADING_RENDER_KEY)) {
-					data = StringUtil.replace(
-						data, "${headingFragmentEntryLinkId}",
-						String.valueOf(
-							fragmentEntryLinkModel.getFragmentEntryLinkId()));
-				}
-				else if (rendererKey.equals(_PARAGRAPH_RENDER_KEY)) {
-					data = StringUtil.replace(
-						data, "${paragraphFragmentEntryLinkId}",
-						String.valueOf(
-							fragmentEntryLinkModel.getFragmentEntryLinkId()));
-				}
-				else if (rendererKey.equals(_IMAGE_RENDER_KEY)) {
-					data = StringUtil.replace(
-						data, "${imageFragmentEntryLinkId}",
-						String.valueOf(
-							fragmentEntryLinkModel.getFragmentEntryLinkId()));
-				}
-				else {
-					data = StringUtil.replace(
-						data, "${loginPortletFragmentEntryLinkId}",
-						String.valueOf(
-							fragmentEntryLinkModel.getFragmentEntryLinkId()));
-				}
+		//Generate the login portlet in the first Container of the home page
+
+		for (FragmentEntryLinkModel fragmentEntryLinkModel :
+				fragmentEntryLinkModels) {
+
+			String rendererKey = fragmentEntryLinkModel.getRendererKey();
+
+			if (rendererKey.equals("") &&
+				(fragmentEntryLinkModel.getPlid() == layoutModel.getPlid())) {
+
+				layoutStructure.addFragmentLayoutStructureItem(
+					fragmentEntryLinkModel.getFragmentEntryLinkId(),
+					containerLayoutStructureItem1.getItemId(), 0);
+
+				break;
 			}
 		}
-		catch (Exception exception) {
-			exception.printStackTrace();
+
+		//Generate second Container in the home page
+
+		parentItemId = containerLayoutStructureItem1.getItemId();
+
+		ContainerLayoutStructureItem containerLayoutStructureItem2 =
+			(ContainerLayoutStructureItem)
+				layoutStructure.addContainerLayoutStructureItem(
+					parentItemId, 1);
+
+		containerLayoutStructureItem2.setBackgroundImageJSONObject(
+			JSONFactoryUtil.createJSONObject());
+
+		containerLayoutStructureItem2.setAlign(null);
+		containerLayoutStructureItem2.setBorderColor(null);
+		containerLayoutStructureItem2.setBorderRadius("");
+		containerLayoutStructureItem2.setBorderWidth(0);
+		containerLayoutStructureItem2.setContentDisplay("block");
+		containerLayoutStructureItem2.setJustify("");
+		containerLayoutStructureItem2.setMarginBottom(0);
+		containerLayoutStructureItem2.setMarginLeft(0);
+		containerLayoutStructureItem2.setMarginRight(0);
+		containerLayoutStructureItem2.setMarginTop(0);
+		containerLayoutStructureItem2.setOpacity(100);
+		containerLayoutStructureItem2.setPaddingBottom(0);
+		containerLayoutStructureItem2.setPaddingLeft(3);
+		containerLayoutStructureItem2.setPaddingRight(3);
+		containerLayoutStructureItem2.setPaddingTop(0);
+		containerLayoutStructureItem2.setShadow("");
+		containerLayoutStructureItem2.setWidthType("fixed");
+
+		//Generate fragment components on home page
+		FragmentLayoutStructureItem fragmentLayoutStructureItem = null;
+
+		for (FragmentEntryLinkModel fragmentEntryLinkModel :
+				fragmentEntryLinkModels) {
+
+			String rendererKey = fragmentEntryLinkModel.getRendererKey();
+
+			if (rendererKey.equals(_HEADING_RENDER_KEY) &&
+				(fragmentEntryLinkModel.getPlid() == layoutModel.getPlid())) {
+
+				fragmentLayoutStructureItem =
+					(FragmentLayoutStructureItem)
+						layoutStructure.addFragmentLayoutStructureItem(
+							fragmentEntryLinkModel.getFragmentEntryLinkId(),
+							containerLayoutStructureItem2.getItemId(), 0);
+			}
+			else if (rendererKey.equals(_PARAGRAPH_RENDER_KEY) &&
+					 (fragmentEntryLinkModel.getPlid() ==
+						 layoutModel.getPlid())) {
+
+				fragmentLayoutStructureItem =
+					(FragmentLayoutStructureItem)
+						layoutStructure.addFragmentLayoutStructureItem(
+							fragmentEntryLinkModel.getFragmentEntryLinkId(),
+							containerLayoutStructureItem2.getItemId(), 1);
+			}
 		}
 
-		return data;
+		return layoutStructure;
 	}
 
 	private InputStream _getFragmentComponentInputStream(
@@ -7325,6 +7399,12 @@ public class DataFactory {
 
 		return StringUtil.replace(resource, "${paragraphValue}", sb.toString());
 	}
+
+	private static final String _BACKGROUND_PICTURE_TITLE =
+		"welcome_bg_benchmark.png";
+
+	private static final String _BACKGROUND_PICTURE_URL =
+		"/welcome_bg_benchmark.png";
 
 	private static final long _CURRENT_TIME = System.currentTimeMillis();
 

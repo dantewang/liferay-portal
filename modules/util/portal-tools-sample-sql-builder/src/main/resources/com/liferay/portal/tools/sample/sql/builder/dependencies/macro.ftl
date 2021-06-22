@@ -56,7 +56,6 @@
 <#macro insertContentPageLayout
 	_fragmentEntryLinkModels
 	_layoutModels
-	_templateFileName
 >
 	<#list _fragmentEntryLinkModels as fragmentEntryLinkModel>
 		${dataFactory.toInsertSQL(fragmentEntryLinkModel)}
@@ -71,7 +70,7 @@
 
 		${dataFactory.toInsertSQL(layoutPageTemplateStructureModel)}
 
-		<#local layoutPageTemplateStructureRelModel = dataFactory.newLayoutPageTemplateStructureRelModel(layoutModel, layoutPageTemplateStructureModel, _fragmentEntryLinkModels, _templateFileName)>
+		<#local layoutPageTemplateStructureRelModel = dataFactory.newLayoutPageTemplateStructureRelModel(layoutModel, layoutPageTemplateStructureModel, fragmentEntryLinkModels)>
 
 		${dataFactory.toInsertSQL(layoutPageTemplateStructureRelModel)}
 	</#list>
