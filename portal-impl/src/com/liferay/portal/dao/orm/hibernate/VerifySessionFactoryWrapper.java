@@ -33,6 +33,7 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 
 import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.metamodel.spi.MetamodelImplementor;
 
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -112,11 +113,16 @@ public class VerifySessionFactoryWrapper implements SessionFactory {
 
 		StringBundler sb = new StringBundler(5);
 
+		MetamodelImplementor currentSessionMetamodelImplementor =
+			currentSessionFactoryImplementor.getMetamodel();
+		MetamodelImplementor targetSessionMetamodelImplementor =
+			targetSessionFactoryImplementor.getMetamodel();
+
 		sb.append("Wrong current transaction manager, current session ");
 		sb.append("factory classes metadata: ");
-		sb.append(currentSessionFactoryImplementor.getAllClassMetadata());
+		sb.append(currentSessionMetamodelImplementor.entityPersisters());
 		sb.append(", target session factory classes metadata: ");
-		sb.append(targetSessionFactoryImplementor.getAllClassMetadata());
+		sb.append(targetSessionMetamodelImplementor.entityPersisters());
 
 		_log.error(
 			"Failed session factory verification",
