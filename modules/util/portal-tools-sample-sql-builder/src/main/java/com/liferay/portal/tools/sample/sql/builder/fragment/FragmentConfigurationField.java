@@ -17,7 +17,6 @@ package com.liferay.portal.tools.sample.sql.builder.fragment;
 import com.liferay.info.item.InfoItemReference;
 import com.liferay.layout.display.page.LayoutDisplayPageObjectProvider;
 import com.liferay.layout.display.page.LayoutDisplayPageProvider;
-import com.liferay.layout.display.page.LayoutDisplayPageProviderTracker;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -27,10 +26,9 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Validator;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.util.tracker.ServiceTracker;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -132,13 +130,8 @@ public class FragmentConfigurationField {
 				String className = defaultValueJSONObject.getString(
 					"className");
 
-				LayoutDisplayPageProviderTracker
-					layoutDisplayPageProviderTracker =
-						_serviceTracker.getService();
-
 				LayoutDisplayPageProvider<?> layoutDisplayPageProvider =
-					layoutDisplayPageProviderTracker.
-						getLayoutDisplayPageProviderByClassName(className);
+					_layoutDisplayPageProviders.get(className);
 
 				if (layoutDisplayPageProvider == null) {
 					return _defaultValue;
@@ -174,20 +167,8 @@ public class FragmentConfigurationField {
 	private static final Log _log = LogFactoryUtil.getLog(
 		FragmentConfigurationField.class);
 
-	private static final ServiceTracker
-		<LayoutDisplayPageProviderTracker, LayoutDisplayPageProviderTracker>
-			_serviceTracker;
-
-	static {
-		Bundle bundle = FrameworkUtil.getBundle(
-			FragmentConfigurationField.class);
-
-		_serviceTracker = new ServiceTracker<>(
-			bundle.getBundleContext(), LayoutDisplayPageProviderTracker.class,
-			null);
-
-		_serviceTracker.open();
-	}
+	private static final Map<String, LayoutDisplayPageProvider<?>>
+		_layoutDisplayPageProviders = Collections.emptyMap();
 
 	private final String _dataType;
 	private final String _defaultValue;
