@@ -1623,7 +1623,7 @@ public class DataFactory {
 		List<LayoutModel> layoutModels = new ArrayList<>();
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(
-			StringUtil.read(getResourceInputStream("commerce_layouts.json")));
+			_readFile("commerce_layouts.json"));
 
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -1677,7 +1677,7 @@ public class DataFactory {
 			new ArrayList<>();
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(
-			StringUtil.read(getResourceInputStream("commerce_layouts.json")));
+			_readFile("commerce_layouts.json"));
 
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -1707,9 +1707,7 @@ public class DataFactory {
 			newCommercePortletPreferenceValueModels(
 				portletPreferencesModels,
 				JSONFactoryUtil.createJSONArray(
-					StringUtil.read(
-						getResourceInputStream(
-							"commerce_portlet_settings.json")))));
+					_readFile("commerce_portlet_settings.json"))));
 
 		return portletPreferenceValueModels;
 	}
@@ -2103,9 +2101,7 @@ public class DataFactory {
 		List<DDMTemplateModel> ddmTemplateModels = new ArrayList<>();
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(
-			StringUtil.read(
-				getResourceInputStream(
-					"commerce_theme_portlet_settings.json")));
+			_readFile("commerce_theme_portlet_settings.json"));
 
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -2123,8 +2119,7 @@ public class DataFactory {
 					groupId, _sampleUserId,
 					DDMTemplateConstants.TEMPLATE_MODE_CREATE,
 					displayStyleJSONObject.getString("Name"),
-					StringUtil.read(getResourceInputStream(fileName)),
-					getClassNameId(NavItem.class), 0,
+					_readFile(fileName), getClassNameId(NavItem.class), 0,
 					getClassNameId(PortletDisplayTemplate.class),
 					_counter.get(),
 					StringUtil.removeSubstring(fileName, ".ftl")));
@@ -2142,9 +2137,7 @@ public class DataFactory {
 			new ArrayList<>();
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(
-			StringUtil.read(
-				getResourceInputStream(
-					"commerce_theme_portlet_settings.json")));
+			_readFile("commerce_theme_portlet_settings.json"));
 
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -2168,9 +2161,7 @@ public class DataFactory {
 		return newCommercePortletPreferenceValueModels(
 			portletPreferencesModels,
 			JSONFactoryUtil.createJSONArray(
-				StringUtil.read(
-					getResourceInputStream(
-						"commerce_theme_portlet_settings.json"))));
+				_readFile("commerce_theme_portlet_settings.json")));
 	}
 
 	public CompanyModel newCompanyModel() {
