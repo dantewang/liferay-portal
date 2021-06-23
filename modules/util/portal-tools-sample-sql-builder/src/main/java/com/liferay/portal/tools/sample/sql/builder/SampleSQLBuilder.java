@@ -25,9 +25,11 @@ import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.tools.ToolDependencies;
 import com.liferay.portal.tools.sample.sql.builder.io.CharPipe;
 import com.liferay.portal.tools.sample.sql.builder.io.UnsyncTeeWriter;
+import com.liferay.portal.uuid.PortalUUIDImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,6 +56,10 @@ public class SampleSQLBuilder {
 
 	public SampleSQLBuilder() {
 		ToolDependencies.wireBasic();
+
+		PortalUUIDUtil portalUUIDUtil = new PortalUUIDUtil();
+
+		portalUUIDUtil.setPortalUUID(new PortalUUIDImpl());
 
 		// Generic
 
