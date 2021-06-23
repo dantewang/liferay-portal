@@ -36,10 +36,9 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,7 +56,6 @@ import java.util.ResourceBundle;
  *
  * @author Jürgen Kappler
  */
-@Component(service = FragmentEntryConfigurationParser.class)
 public class FragmentEntryConfigurationParserImpl
 	implements FragmentEntryConfigurationParser {
 
@@ -727,14 +725,12 @@ public class FragmentEntryConfigurationParserImpl
 	private static final Log _log = LogFactoryUtil.getLog(
 		FragmentEntryConfigurationParserImpl.class);
 
-	@Reference
-	private InfoItemServiceTracker _infoItemServiceTracker;
-
-	@Reference
-	private LayoutListRetrieverTracker _layoutListRetrieverTracker;
-
-	@Reference
-	private ListObjectReferenceFactoryTracker
-		_listObjectReferenceFactoryTracker;
+	private final InfoItemServiceTracker _infoItemServiceTracker =
+		ProxyFactory.newDummyInstance(InfoItemServiceTracker.class);
+	private final LayoutListRetrieverTracker _layoutListRetrieverTracker =
+		ProxyFactory.newDummyInstance(LayoutListRetrieverTracker.class);
+	private final ListObjectReferenceFactoryTracker
+		_listObjectReferenceFactoryTracker = ProxyFactory.newDummyInstance(
+			ListObjectReferenceFactoryTracker.class);
 
 }
