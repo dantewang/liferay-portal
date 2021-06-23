@@ -370,8 +370,6 @@ import java.lang.reflect.Method;
 
 import java.math.BigDecimal;
 
-import java.net.URL;
-
 import java.sql.Types;
 
 import java.text.Format;
@@ -3910,7 +3908,7 @@ public class DataFactory {
 					loginPortletNamespace));
 
 			String html = _readFile(
-				_getFragmentComponentInputStream("heading", "html"));
+				_getFragmentComponentResourceName("heading", "html"));
 
 			String configuration = _readFile("heading_configuration.json");
 
@@ -3918,13 +3916,13 @@ public class DataFactory {
 				newFragmentEntryLinkModel(
 					layoutModel, _HEADING_RENDER_KEY,
 					_readFile(
-						_getFragmentComponentInputStream("heading", "css")),
+						_getFragmentComponentResourceName("heading", "css")),
 					html, configuration,
 					_getDefaultEditableValues(html, configuration), 0,
 					headingRenderNamespace));
 
 			html = _readFile(
-				_getFragmentComponentInputStream("paragraph", "html"));
+				_getFragmentComponentResourceName("paragraph", "html"));
 
 			configuration = _readFile("paragraph_configuration.json");
 
@@ -3932,12 +3930,13 @@ public class DataFactory {
 				newFragmentEntryLinkModel(
 					layoutModel, _PARAGRAPH_RENDER_KEY,
 					_readFile(
-						_getFragmentComponentInputStream("paragraph", "css")),
+						_getFragmentComponentResourceName("paragraph", "css")),
 					html, configuration,
 					_getDefaultEditableValues(html, configuration), 0,
 					paragraphRenderNamespace));
 
-			html = _readFile(_getFragmentComponentInputStream("image", "html"));
+			html = _readFile(
+				_getFragmentComponentResourceName("image", "html"));
 
 			configuration = _readFile("image_configuration.json");
 
@@ -5836,6 +5835,10 @@ public class DataFactory {
 
 		ClassLoader classLoader = clazz.getClassLoader();
 
+		if (resourceName.contains(StringPool.SLASH)) {
+			return classLoader.getResourceAsStream(resourceName);
+		}
+
 		return classLoader.getResourceAsStream(
 			_DEPENDENCIES_DIR + resourceName);
 	}
@@ -7305,20 +7308,12 @@ public class DataFactory {
 		return String.valueOf(jsonObject);
 	}
 
-	private InputStream _getFragmentComponentInputStream(
-			String fragmentName, String suffix)
-		throws Exception {
+	private String _getFragmentComponentResourceName(
+		String fragmentName, String suffix) {
 
-		Class<?> clazz = getClass();
-
-		ClassLoader classLoader = clazz.getClassLoader();
-
-		URL url = classLoader.getResource(
-			StringBundler.concat(
-				"com/liferay/fragment/collection/contributor/basic/component",
-				"/dependencies/", fragmentName, "/index.", suffix));
-
-		return url.openStream();
+		return StringBundler.concat(
+			"com/liferay/fragment/collection/contributor/basic/component",
+			"/dependencies/", fragmentName, "/index.", suffix);
 	}
 
 	private String _getMBDiscussionCombinedClassName(Class<?> clazz) {
@@ -7413,16 +7408,12 @@ public class DataFactory {
 		return counterModel;
 	}
 
-	private String _readFile(InputStream inputStream) throws Exception {
+	private String _readFile(String resourceName) throws Exception {
 		List<String> lines = new ArrayList<>();
 
-		StringUtil.readLines(inputStream, lines);
+		StringUtil.readLines(getResourceInputStream(resourceName), lines);
 
 		return StringUtil.merge(lines, StringPool.SPACE);
-	}
-
-	private String _readFile(String resourceName) throws Exception {
-		return _readFile(getResourceInputStream(resourceName));
 	}
 
 	private static final String _BACKGROUND_PICTURE_TITLE =
