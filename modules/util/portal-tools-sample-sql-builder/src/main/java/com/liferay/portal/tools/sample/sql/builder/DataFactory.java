@@ -193,6 +193,7 @@ import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureRe
 import com.liferay.layout.page.template.util.LayoutPageTemplateStructureHelperUtil;
 import com.liferay.layout.util.constants.LayoutClassedModelUsageConstants;
 import com.liferay.layout.util.structure.ContainerLayoutStructureItem;
+import com.liferay.layout.util.structure.ContainerStyledLayoutStructureItem;
 import com.liferay.layout.util.structure.FragmentLayoutStructureItem;
 import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.message.boards.constants.MBCategoryConstants;
@@ -7183,9 +7184,9 @@ public class DataFactory {
 		//Generate the first Container in the home page
 		String parentItemId = layoutStructure.getMainItemId();
 
-		ContainerLayoutStructureItem containerLayoutStructureItem1 =
-			(ContainerLayoutStructureItem)
-				layoutStructure.addContainerLayoutStructureItem(
+		ContainerStyledLayoutStructureItem containerLayoutStructureItem1 =
+			(ContainerStyledLayoutStructureItem)
+				layoutStructure.addContainerStyledLayoutStructureItem(
 					parentItemId, 0);
 
 		containerLayoutStructureItem1.setBackgroundImageJSONObject(
