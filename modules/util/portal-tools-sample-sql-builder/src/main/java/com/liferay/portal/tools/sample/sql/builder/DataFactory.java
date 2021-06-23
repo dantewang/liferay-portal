@@ -192,7 +192,6 @@ import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureMo
 import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureRelModelImpl;
 import com.liferay.layout.page.template.util.LayoutPageTemplateStructureHelperUtil;
 import com.liferay.layout.util.constants.LayoutClassedModelUsageConstants;
-import com.liferay.layout.util.structure.ContainerLayoutStructureItem;
 import com.liferay.layout.util.structure.ContainerStyledLayoutStructureItem;
 import com.liferay.layout.util.structure.FragmentStyledLayoutStructureItem;
 import com.liferay.layout.util.structure.LayoutStructure;
@@ -7424,16 +7423,6 @@ public class DataFactory {
 
 	private String _readFile(String resourceName) throws Exception {
 		return _readFile(getResourceInputStream(resourceName));
-	}
-
-	private String _replaceReleaseInfo(String resource) throws Exception {
-		StringBundler sb = new StringBundler(3);
-
-		sb.append("Welcome to");
-		sb.append(ReleaseInfo.getReleaseInfo());
-		sb.append(StringPool.PERIOD);
-
-		return StringUtil.replace(resource, "${paragraphValue}", sb.toString());
 	}
 
 	private static final String _BACKGROUND_PICTURE_TITLE =
