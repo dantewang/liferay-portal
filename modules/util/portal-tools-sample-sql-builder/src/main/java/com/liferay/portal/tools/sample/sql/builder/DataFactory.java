@@ -156,7 +156,6 @@ import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.entry.processor.background.image.BackgroundImageFragmentEntryProcessor;
 import com.liferay.fragment.entry.processor.editable.EditableFragmentEntryProcessor;
 import com.liferay.fragment.entry.processor.freemarker.FreeMarkerFragmentEntryProcessor;
-import com.liferay.fragment.internal.util.configuration.FragmentEntryConfigurationParserImpl;
 import com.liferay.fragment.model.FragmentCollectionModel;
 import com.liferay.fragment.model.FragmentEntryLinkModel;
 import com.liferay.fragment.model.FragmentEntryModel;
@@ -164,7 +163,6 @@ import com.liferay.fragment.model.impl.FragmentCollectionModelImpl;
 import com.liferay.fragment.model.impl.FragmentEntryLinkModelImpl;
 import com.liferay.fragment.model.impl.FragmentEntryModelImpl;
 import com.liferay.fragment.processor.FragmentEntryProcessor;
-import com.liferay.fragment.util.configuration.FragmentEntryConfigurationParser;
 import com.liferay.friendly.url.model.FriendlyURLEntryLocalization;
 import com.liferay.friendly.url.model.FriendlyURLEntryLocalizationModel;
 import com.liferay.friendly.url.model.FriendlyURLEntryMappingModel;
@@ -320,6 +318,7 @@ import com.liferay.portal.search.web.internal.tag.facet.constants.TagFacetPortle
 import com.liferay.portal.search.web.internal.type.facet.constants.TypeFacetPortletKeys;
 import com.liferay.portal.search.web.internal.user.facet.constants.UserFacetPortletKeys;
 import com.liferay.portal.service.impl.LayoutLocalServiceImpl;
+import com.liferay.portal.tools.sample.sql.builder.fragment.FragmentEntryConfigurationParserImpl;
 import com.liferay.portal.upgrade.PortalUpgradeProcess;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
@@ -390,8 +389,6 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import javax.portlet.PortletPreferences;
-
-import org.osgi.framework.FrameworkUtil;
 
 /**
  * @author Brian Wing Shun Chan
@@ -3940,8 +3937,7 @@ public class DataFactory {
 					_getDefaultEditableValues(html, configuration), 0,
 					paragraphRenderNamespace));
 
-			html = _readFile(
-				_getFragmentComponentInputStream("image", "html"));
+			html = _readFile(_getFragmentComponentInputStream("image", "html"));
 
 			configuration = _readFile("image_configuration.json");
 
@@ -7310,12 +7306,12 @@ public class DataFactory {
 			if (fragmentEntryProcessor instanceof
 					FreeMarkerFragmentEntryProcessor) {
 
-				FragmentEntryConfigurationParser
-					fragmentEntryConfigurationParser =
+				FragmentEntryConfigurationParserImpl
+					fragmentEntryConfigurationParserImpl =
 						new FragmentEntryConfigurationParserImpl();
 
 				defaultEditableValuesJSONObject =
-					fragmentEntryConfigurationParser.
+					fragmentEntryConfigurationParserImpl.
 						getConfigurationDefaultValuesJSONObject(configuration);
 			}
 			else {
