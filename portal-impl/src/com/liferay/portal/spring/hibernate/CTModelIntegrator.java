@@ -77,6 +77,8 @@ public class CTModelIntegrator implements Integrator {
 			if (ctModelRegistration != null) {
 				containCTModel = true;
 
+				CTModelRegistry.registerCTModel(ctModelRegistration);
+
 				_tableNames.add(ctModelRegistration.getTableName());
 			}
 			else {
