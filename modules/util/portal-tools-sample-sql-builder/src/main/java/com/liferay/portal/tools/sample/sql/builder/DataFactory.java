@@ -194,7 +194,7 @@ import com.liferay.layout.page.template.util.LayoutPageTemplateStructureHelperUt
 import com.liferay.layout.util.constants.LayoutClassedModelUsageConstants;
 import com.liferay.layout.util.structure.ContainerLayoutStructureItem;
 import com.liferay.layout.util.structure.ContainerStyledLayoutStructureItem;
-import com.liferay.layout.util.structure.FragmentLayoutStructureItem;
+import com.liferay.layout.util.structure.FragmentStyledLayoutStructureItem;
 import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.constants.MBMessageConstants;
@@ -7197,21 +7197,8 @@ public class DataFactory {
 			));
 
 		containerLayoutStructureItem1.setAlign(null);
-		containerLayoutStructureItem1.setBorderColor(null);
-		containerLayoutStructureItem1.setBorderRadius("");
-		containerLayoutStructureItem1.setBorderWidth(0);
 		containerLayoutStructureItem1.setContentDisplay("block");
 		containerLayoutStructureItem1.setJustify("");
-		containerLayoutStructureItem1.setMarginBottom(0);
-		containerLayoutStructureItem1.setMarginLeft(0);
-		containerLayoutStructureItem1.setMarginRight(0);
-		containerLayoutStructureItem1.setMarginTop(0);
-		containerLayoutStructureItem1.setOpacity(100);
-		containerLayoutStructureItem1.setPaddingBottom(8);
-		containerLayoutStructureItem1.setPaddingLeft(0);
-		containerLayoutStructureItem1.setPaddingRight(0);
-		containerLayoutStructureItem1.setPaddingTop(8);
-		containerLayoutStructureItem1.setShadow("");
 		containerLayoutStructureItem1.setWidthType("fluid");
 
 		//Generate the login portlet in the first Container of the home page
@@ -7224,7 +7211,7 @@ public class DataFactory {
 			if (rendererKey.equals("") &&
 				(fragmentEntryLinkModel.getPlid() == layoutModel.getPlid())) {
 
-				layoutStructure.addFragmentLayoutStructureItem(
+				layoutStructure.addFragmentStyledLayoutStructureItem(
 					fragmentEntryLinkModel.getFragmentEntryLinkId(),
 					containerLayoutStructureItem1.getItemId(), 0);
 
@@ -7236,34 +7223,21 @@ public class DataFactory {
 
 		parentItemId = containerLayoutStructureItem1.getItemId();
 
-		ContainerLayoutStructureItem containerLayoutStructureItem2 =
-			(ContainerLayoutStructureItem)
-				layoutStructure.addContainerLayoutStructureItem(
+		ContainerStyledLayoutStructureItem containerLayoutStructureItem2 =
+			(ContainerStyledLayoutStructureItem)
+				layoutStructure.addContainerStyledLayoutStructureItem(
 					parentItemId, 1);
 
 		containerLayoutStructureItem2.setBackgroundImageJSONObject(
 			JSONFactoryUtil.createJSONObject());
 
 		containerLayoutStructureItem2.setAlign(null);
-		containerLayoutStructureItem2.setBorderColor(null);
-		containerLayoutStructureItem2.setBorderRadius("");
-		containerLayoutStructureItem2.setBorderWidth(0);
 		containerLayoutStructureItem2.setContentDisplay("block");
 		containerLayoutStructureItem2.setJustify("");
-		containerLayoutStructureItem2.setMarginBottom(0);
-		containerLayoutStructureItem2.setMarginLeft(0);
-		containerLayoutStructureItem2.setMarginRight(0);
-		containerLayoutStructureItem2.setMarginTop(0);
-		containerLayoutStructureItem2.setOpacity(100);
-		containerLayoutStructureItem2.setPaddingBottom(0);
-		containerLayoutStructureItem2.setPaddingLeft(3);
-		containerLayoutStructureItem2.setPaddingRight(3);
-		containerLayoutStructureItem2.setPaddingTop(0);
-		containerLayoutStructureItem2.setShadow("");
 		containerLayoutStructureItem2.setWidthType("fixed");
 
 		//Generate fragment components on home page
-		FragmentLayoutStructureItem fragmentLayoutStructureItem = null;
+		FragmentStyledLayoutStructureItem fragmentLayoutStructureItem = null;
 
 		for (FragmentEntryLinkModel fragmentEntryLinkModel :
 				fragmentEntryLinkModels) {
@@ -7274,8 +7248,8 @@ public class DataFactory {
 				(fragmentEntryLinkModel.getPlid() == layoutModel.getPlid())) {
 
 				fragmentLayoutStructureItem =
-					(FragmentLayoutStructureItem)
-						layoutStructure.addFragmentLayoutStructureItem(
+					(FragmentStyledLayoutStructureItem)
+						layoutStructure.addFragmentStyledLayoutStructureItem(
 							fragmentEntryLinkModel.getFragmentEntryLinkId(),
 							containerLayoutStructureItem2.getItemId(), 0);
 			}
@@ -7284,8 +7258,8 @@ public class DataFactory {
 						 layoutModel.getPlid())) {
 
 				fragmentLayoutStructureItem =
-					(FragmentLayoutStructureItem)
-						layoutStructure.addFragmentLayoutStructureItem(
+					(FragmentStyledLayoutStructureItem)
+						layoutStructure.addFragmentStyledLayoutStructureItem(
 							fragmentEntryLinkModel.getFragmentEntryLinkId(),
 							containerLayoutStructureItem2.getItemId(), 1);
 			}
