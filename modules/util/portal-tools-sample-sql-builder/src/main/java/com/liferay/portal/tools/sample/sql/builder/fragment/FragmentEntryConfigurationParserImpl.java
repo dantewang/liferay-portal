@@ -14,8 +14,6 @@
 
 package com.liferay.portal.tools.sample.sql.builder.fragment;
 
-import com.liferay.fragment.util.configuration.FragmentConfigurationField;
-import com.liferay.fragment.util.configuration.FragmentEntryConfigurationParser;
 import com.liferay.info.item.ClassPKInfoItemIdentifier;
 import com.liferay.info.item.InfoItemServiceTracker;
 import com.liferay.info.item.provider.InfoItemObjectProvider;
@@ -56,10 +54,8 @@ import java.util.ResourceBundle;
  *
  * @author Jürgen Kappler
  */
-public class FragmentEntryConfigurationParserImpl
-	implements FragmentEntryConfigurationParser {
+public class FragmentEntryConfigurationParserImpl {
 
-	@Override
 	public JSONObject getConfigurationDefaultValuesJSONObject(
 		String configuration) {
 
@@ -84,7 +80,6 @@ public class FragmentEntryConfigurationParserImpl
 	 * #getConfigurationJSONObject(String, String, Locale)}
 	 */
 	@Deprecated
-	@Override
 	public JSONObject getConfigurationJSONObject(
 			String configuration, String editableValues)
 		throws JSONException {
@@ -93,7 +88,6 @@ public class FragmentEntryConfigurationParserImpl
 			configuration, editableValues, LocaleUtil.getMostRelevantLocale());
 	}
 
-	@Override
 	public JSONObject getConfigurationJSONObject(
 			String configuration, String editableValues, Locale locale)
 		throws JSONException {
@@ -145,7 +139,6 @@ public class FragmentEntryConfigurationParserImpl
 	 *             #getConfigurationJSONObject(String, String)}
 	 */
 	@Deprecated
-	@Override
 	public JSONObject getConfigurationJSONObject(
 			String configuration, String editableValues,
 			long[] segmentsExperienceIds)
@@ -154,7 +147,6 @@ public class FragmentEntryConfigurationParserImpl
 		return getConfigurationJSONObject(configuration, editableValues);
 	}
 
-	@Override
 	public Map<String, Object> getContextObjects(
 		JSONObject configurationValuesJSONObject, String configuration) {
 
@@ -204,7 +196,6 @@ public class FragmentEntryConfigurationParserImpl
 	 *             #getContextObjects(JSONObject, String)}
 	 */
 	@Deprecated
-	@Override
 	public Map<String, Object> getContextObjects(
 		JSONObject configurationValuesJSONObject, String configuration,
 		long[] segmentsExperienceIds) {
@@ -212,7 +203,6 @@ public class FragmentEntryConfigurationParserImpl
 		return getContextObjects(configurationValuesJSONObject, configuration);
 	}
 
-	@Override
 	public Object getFieldValue(
 		FragmentConfigurationField fragmentConfigurationField, Locale locale,
 		String value) {
@@ -290,7 +280,6 @@ public class FragmentEntryConfigurationParserImpl
 	 * #getFieldValue(String, String, Locale, String)}
 	 */
 	@Deprecated
-	@Override
 	public Object getFieldValue(
 		FragmentConfigurationField fragmentConfigurationField, String value) {
 
@@ -299,7 +288,6 @@ public class FragmentEntryConfigurationParserImpl
 			value);
 	}
 
-	@Override
 	public Object getFieldValue(
 		String configuration, String editableValues, Locale locale,
 		String name) {
@@ -348,7 +336,6 @@ public class FragmentEntryConfigurationParserImpl
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
 	 */
 	@Deprecated
-	@Override
 	public Object getFieldValue(
 		String configuration, String editableValues,
 		long[] segmentsExperienceIds, String name) {
@@ -361,7 +348,6 @@ public class FragmentEntryConfigurationParserImpl
 	 * #getFieldValue(String, String, Locale, String)}
 	 */
 	@Deprecated
-	@Override
 	public Object getFieldValue(
 		String configuration, String editableValues, String name) {
 
@@ -370,7 +356,6 @@ public class FragmentEntryConfigurationParserImpl
 			name);
 	}
 
-	@Override
 	public List<FragmentConfigurationField> getFragmentConfigurationFields(
 		String configuration) {
 
@@ -406,7 +391,6 @@ public class FragmentEntryConfigurationParserImpl
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
 	 */
 	@Deprecated
-	@Override
 	public JSONObject getSegmentedConfigurationValues(
 		long[] segmentsExperienceIds,
 		JSONObject configurationValuesJSONObject) {
@@ -418,12 +402,10 @@ public class FragmentEntryConfigurationParserImpl
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
 	 */
 	@Deprecated
-	@Override
 	public boolean isPersonalizationSupported(JSONObject jsonObject) {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public String translateConfiguration(
 		JSONObject jsonObject, ResourceBundle resourceBundle) {
 
