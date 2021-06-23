@@ -26,7 +26,9 @@ classes {
 dependencies {
 	compile group: "com.liferay.portal", name: "com.liferay.util.java", version: "default"
 	compile group: "javax.portlet", name: "portlet-api", transitive: false, version: "3.0.1"
+	compile group: "org.apache.felix", name: "org.apache.felix.http.servlet-api", version: "1.1.2"
 
+	compileInclude group: "com.liferay", name: "org.jsoup", version: "1.10.2.LIFERAY-PATCHED-3"
 	compileInclude project(":apps:account:account-api")
 	compileInclude project(":apps:account:account-service")
 	compileInclude project(":apps:asset:asset-entry-rel-service")
@@ -56,6 +58,7 @@ dependencies {
 	compileInclude project(":apps:dynamic-data-mapping:dynamic-data-mapping-web")
 	compileInclude project(":apps:fragment:fragment-api")
 	compileInclude project(":apps:fragment:fragment-collection-contributor:fragment-collection-contributor-basic-component")
+	compileInclude project(":apps:fragment:fragment-entry-processor:fragment-entry-processor-api")
 	compileInclude project(":apps:fragment:fragment-entry-processor:fragment-entry-processor-background-image")
 	compileInclude project(":apps:fragment:fragment-entry-processor:fragment-entry-processor-editable")
 	compileInclude project(":apps:fragment:fragment-entry-processor:fragment-entry-processor-freemarker")
@@ -64,9 +67,11 @@ dependencies {
 	compileInclude project(":apps:friendly-url:friendly-url-api")
 	compileInclude project(":apps:friendly-url:friendly-url-service")
 	compileInclude project(":apps:info:info-api")
+	compileInclude project(":apps:item-selector:item-selector-api")
 	compileInclude project(":apps:journal:journal-api")
 	compileInclude project(":apps:journal:journal-service")
 	compileInclude project(":apps:layout:layout-api")
+	compileInclude project(":apps:layout:layout-display-page-api")
 	compileInclude project(":apps:layout:layout-page-template-api")
 	compileInclude project(":apps:layout:layout-page-template-service")
 	compileInclude project(":apps:layout:layout-service")
