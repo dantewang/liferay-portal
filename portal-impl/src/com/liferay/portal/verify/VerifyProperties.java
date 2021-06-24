@@ -1700,6 +1700,7 @@ public class VerifyProperties extends VerifyProcess {
 		"hibernate.cache.use_minimal_puts", "hibernate.cache.use_query_cache",
 		"hibernate.cache.use_second_level_cache",
 		"hibernate.cache.use_structured_entries",
+		"hibernate.connection.release_mode",
 		"hibernate.session.factory.imported.class.name.regexp", "icq.jar",
 		"icq.login", "icq.password", "index.filter.search.limit",
 		"index.on.upgrade", "index.portal.field.analyzer.enabled",
