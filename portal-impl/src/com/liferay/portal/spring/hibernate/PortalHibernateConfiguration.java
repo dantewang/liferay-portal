@@ -183,11 +183,11 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 		// Make sure that the Hibernate settings from PropsUtil are set.
 
 		String connectionReleaseMode = PropsUtil.get(
-			Environment.RELEASE_CONNECTIONS);
+			Environment.CONNECTION_HANDLING);
 
 		if (Validator.isNotNull(connectionReleaseMode)) {
 			localSessionFactoryBuilder.setProperty(
-				Environment.RELEASE_CONNECTIONS, connectionReleaseMode);
+				Environment.CONNECTION_HANDLING, connectionReleaseMode);
 		}
 
 		return super.buildSessionFactory(localSessionFactoryBuilder);
