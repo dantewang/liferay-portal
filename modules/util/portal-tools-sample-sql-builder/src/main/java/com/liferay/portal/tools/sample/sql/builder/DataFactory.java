@@ -193,7 +193,6 @@ import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureRe
 import com.liferay.layout.page.template.util.LayoutPageTemplateStructureHelperUtil;
 import com.liferay.layout.util.constants.LayoutClassedModelUsageConstants;
 import com.liferay.layout.util.structure.ContainerStyledLayoutStructureItem;
-import com.liferay.layout.util.structure.FragmentStyledLayoutStructureItem;
 import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.constants.MBMessageConstants;
@@ -216,6 +215,7 @@ import com.liferay.message.boards.model.impl.MBThreadFlagModelImpl;
 import com.liferay.message.boards.model.impl.MBThreadModelImpl;
 import com.liferay.message.boards.social.MBActivityKeys;
 import com.liferay.petra.io.unsync.UnsyncBufferedReader;
+import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
@@ -319,6 +319,7 @@ import com.liferay.portal.search.web.internal.type.facet.constants.TypeFacetPort
 import com.liferay.portal.search.web.internal.user.facet.constants.UserFacetPortletKeys;
 import com.liferay.portal.service.impl.LayoutLocalServiceImpl;
 import com.liferay.portal.tools.sample.sql.builder.fragment.FragmentEntryConfigurationParserImpl;
+import com.liferay.portal.tools.sample.sql.builder.fragment.FragmentEntryLinkLocalServiceUtilDependency;
 import com.liferay.portal.upgrade.PortalUpgradeProcess;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
@@ -7205,11 +7206,17 @@ public class DataFactory {
 			if (rendererKey.equals("") &&
 				(fragmentEntryLinkModel.getPlid() == layoutModel.getPlid())) {
 
-				layoutStructure.addFragmentStyledLayoutStructureItem(
-					fragmentEntryLinkModel.getFragmentEntryLinkId(),
-					containerLayoutStructureItem1.getItemId(), 0);
+				try (SafeCloseable safeCloseable =
+						FragmentEntryLinkLocalServiceUtilDependency.
+							withFragmentEntryLinkModel(
+								fragmentEntryLinkModel)) {
 
-				break;
+					layoutStructure.addFragmentStyledLayoutStructureItem(
+						fragmentEntryLinkModel.getFragmentEntryLinkId(),
+						containerLayoutStructureItem1.getItemId(), 0);
+
+					break;
+				}
 			}
 		}
 
@@ -7235,22 +7242,28 @@ public class DataFactory {
 		for (FragmentEntryLinkModel fragmentEntryLinkModel :
 				fragmentEntryLinkModels) {
 
-			String rendererKey = fragmentEntryLinkModel.getRendererKey();
+			try (SafeCloseable safeCloseable =
+					FragmentEntryLinkLocalServiceUtilDependency.
+						withFragmentEntryLinkModel(fragmentEntryLinkModel)) {
 
-			if (rendererKey.equals(_HEADING_RENDER_KEY) &&
-				(fragmentEntryLinkModel.getPlid() == layoutModel.getPlid())) {
+				String rendererKey = fragmentEntryLinkModel.getRendererKey();
 
-				layoutStructure.addFragmentStyledLayoutStructureItem(
-					fragmentEntryLinkModel.getFragmentEntryLinkId(),
-					containerLayoutStructureItem2.getItemId(), 0);
-			}
-			else if (rendererKey.equals(_PARAGRAPH_RENDER_KEY) &&
-					 (fragmentEntryLinkModel.getPlid() ==
-						 layoutModel.getPlid())) {
+				if (rendererKey.equals(_HEADING_RENDER_KEY) &&
+					(fragmentEntryLinkModel.getPlid() ==
+						layoutModel.getPlid())) {
 
-				layoutStructure.addFragmentStyledLayoutStructureItem(
-					fragmentEntryLinkModel.getFragmentEntryLinkId(),
-					containerLayoutStructureItem2.getItemId(), 1);
+					layoutStructure.addFragmentStyledLayoutStructureItem(
+						fragmentEntryLinkModel.getFragmentEntryLinkId(),
+						containerLayoutStructureItem2.getItemId(), 0);
+				}
+				else if (rendererKey.equals(_PARAGRAPH_RENDER_KEY) &&
+						 (fragmentEntryLinkModel.getPlid() ==
+							 layoutModel.getPlid())) {
+
+					layoutStructure.addFragmentStyledLayoutStructureItem(
+						fragmentEntryLinkModel.getFragmentEntryLinkId(),
+						containerLayoutStructureItem2.getItemId(), 1);
+				}
 			}
 		}
 
