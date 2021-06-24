@@ -7175,6 +7175,7 @@ public class DataFactory {
 		List<FragmentEntryLinkModel> fragmentEntryLinkModels) {
 
 		//Generate the first Container in the home page
+
 		String parentItemId = layoutStructure.getMainItemId();
 
 		ContainerStyledLayoutStructureItem containerLayoutStructureItem1 =
@@ -7230,7 +7231,6 @@ public class DataFactory {
 		containerLayoutStructureItem2.setWidthType("fixed");
 
 		//Generate fragment components on home page
-		FragmentStyledLayoutStructureItem fragmentLayoutStructureItem = null;
 
 		for (FragmentEntryLinkModel fragmentEntryLinkModel :
 				fragmentEntryLinkModels) {
@@ -7240,21 +7240,17 @@ public class DataFactory {
 			if (rendererKey.equals(_HEADING_RENDER_KEY) &&
 				(fragmentEntryLinkModel.getPlid() == layoutModel.getPlid())) {
 
-				fragmentLayoutStructureItem =
-					(FragmentStyledLayoutStructureItem)
-						layoutStructure.addFragmentStyledLayoutStructureItem(
-							fragmentEntryLinkModel.getFragmentEntryLinkId(),
-							containerLayoutStructureItem2.getItemId(), 0);
+				layoutStructure.addFragmentStyledLayoutStructureItem(
+					fragmentEntryLinkModel.getFragmentEntryLinkId(),
+					containerLayoutStructureItem2.getItemId(), 0);
 			}
 			else if (rendererKey.equals(_PARAGRAPH_RENDER_KEY) &&
 					 (fragmentEntryLinkModel.getPlid() ==
 						 layoutModel.getPlid())) {
 
-				fragmentLayoutStructureItem =
-					(FragmentStyledLayoutStructureItem)
-						layoutStructure.addFragmentStyledLayoutStructureItem(
-							fragmentEntryLinkModel.getFragmentEntryLinkId(),
-							containerLayoutStructureItem2.getItemId(), 1);
+				layoutStructure.addFragmentStyledLayoutStructureItem(
+					fragmentEntryLinkModel.getFragmentEntryLinkId(),
+					containerLayoutStructureItem2.getItemId(), 1);
 			}
 		}
 
