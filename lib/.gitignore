@@ -98,6 +98,7 @@
 /portal/ccpp-ri.jar
 /portal/ccpp.jar
 /portal/cglib-nodep.jar
+/portal/classmate.jar
 /portal/closure-compiler.jar
 /portal/commons-beanutils.jar
 /portal/commons-codec.jar
@@ -122,6 +123,7 @@
 /portal/dom4j.jar
 /portal/fontbox.jar
 /portal/hessian.jar
+/portal/hibernate-commons-annotations.jar
 /portal/hibernate-core.jar
 /portal/hikaricp.jar
 /portal/httpclient.jar
@@ -138,6 +140,7 @@
 /portal/jai-imageio-jpeg2000.jar
 /portal/jai_codec.jar
 /portal/jai_core.jar
+/portal/jandex.jar
 /portal/java-libpst.jar
 /portal/javassist.jar
 /portal/jaxb-api.jar
@@ -149,6 +152,7 @@
 /portal/jaxws-rt.jar
 /portal/jazzy.jar
 /portal/jbig2-imageio.jar
+/portal/jboss-logging.jar
 /portal/jcl-over-slf4j.jar
 /portal/jdom2.jar
 /portal/jempbox.jar
