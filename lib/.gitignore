@@ -89,12 +89,15 @@
 /development/websocket-api.jar
 /development/xmlresolver.jar
 /portal/activation.jar
+/portal/antlr.jar
 /portal/asm-analysis.jar
 /portal/asm-commons.jar
 /portal/asm-tree.jar
 /portal/asm-util.jar
 /portal/asm.jar
+/portal/byte-buddy.jar
 /portal/c3p0.jar
+/portal/classmate.jar
 /portal/commons-beanutils.jar
 /portal/commons-codec.jar
 /portal/commons-collections.jar
@@ -113,6 +116,7 @@
 /portal/crypt.jar
 /portal/dom4j.jar
 /portal/fontbox.jar
+/portal/hibernate-commons-annotations.jar
 /portal/hibernate-core.jar
 /portal/hikaricp.jar
 /portal/httpclient.jar
@@ -127,6 +131,7 @@
 /portal/jackson-module-jaxb-annotations.jar
 /portal/jai-imageio-core.jar
 /portal/jai-imageio-jpeg2000.jar
+/portal/jandex.jar
 /portal/javassist.jar
 /portal/jaxb-api.jar
 /portal/jaxb-runtime.jar
@@ -136,6 +141,7 @@
 /portal/jaxws-api.jar
 /portal/jaxws-rt.jar
 /portal/jbig2-imageio.jar
+/portal/jboss-logging.jar
 /portal/jcl-over-slf4j.jar
 /portal/jdom2.jar
 /portal/jempbox.jar
