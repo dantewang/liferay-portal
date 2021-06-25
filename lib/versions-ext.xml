@@ -1122,6 +1122,18 @@
 				</licenses>
 			</library>
 			<library>
+				<file-name>lib/portal/classmate.jar</file-name>
+				<version>1.5.1</version>
+				<project-name>ClassMate</project-name>
+				<project-url>https://github.com/FasterXML/java-classmate</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
 				<file-name>lib/portal/closure-compiler.jar</file-name>
 				<version>v20131014</version>
 				<project-name>Closure Compiler</project-name>
@@ -1418,8 +1430,20 @@
 				</licenses>
 			</library>
 			<library>
+				<file-name>lib/portal/hibernate-commons-annotations.jar</file-name>
+				<version>5.1.2.Final</version>
+				<project-name>Hibernate Commons Annotations</project-name>
+				<project-url>https://github.com/hibernate/hibernate-commons-annotations</project-url>
+				<licenses>
+					<license>
+						<license-name>LGPL 2.1</license-name>
+						<license-url>http://www.gnu.org/licenses/lgpl-2.1.html</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
 				<file-name>lib/portal/hibernate-core.jar</file-name>
-				<version>3.6.10.LIFERAY-PATCHED-6</version>
+				<version>5.6.3.Final</version>
 				<project-name>Hibernate</project-name>
 				<project-url>http://www.hibernate.org</project-url>
 				<licenses>
@@ -1556,6 +1580,18 @@
 				</licenses>
 			</library>
 			<library>
+				<file-name>lib/portal/jandex.jar</file-name>
+				<version>2.2.3.Final</version>
+				<project-name>Jandex</project-name>
+				<project-url>https://github.com/wildfly/jandex</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
 				<file-name>lib/portal/java-libpst.jar</file-name>
 				<version>0.8.1</version>
 				<project-name>java-libpst</project-name>
@@ -1687,6 +1723,12 @@
 						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
 					</license>
 				</licenses>
+			</library>
+			<library>
+				<file-name>lib/portal/jboss-logging.jar</file-name>
+				<version>3.4.2.Final</version>
+				<project-name>JBoss Logging</project-name>
+				<project-url>https://github.com/jboss-logging/jboss-logging</project-url>
 			</library>
 			<library>
 				<file-name>lib/portal/jcl-over-slf4j.jar</file-name>
