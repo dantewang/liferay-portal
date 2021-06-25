@@ -151,6 +151,7 @@
 	<classpathentry kind="lib" path="lib/portal/ccpp-ri.jar"/>
 	<classpathentry kind="lib" path="lib/portal/cglib-nodep.jar"/>
 	<classpathentry kind="lib" path="lib/portal/chardet.jar"/>
+	<classpathentry kind="lib" path="lib/portal/classmate.jar"/>
 	<classpathentry kind="lib" path="lib/portal/closure-compiler.jar"/>
 	<classpathentry kind="lib" path="lib/portal/commons-beanutils.jar"/>
 	<classpathentry kind="lib" path="lib/portal/commons-chain.jar"/>
@@ -183,6 +184,7 @@
 	<classpathentry kind="lib" path="lib/portal/freshcookies-security.jar"/>
 	<classpathentry kind="lib" path="lib/portal/gif89.jar"/>
 	<classpathentry kind="lib" path="lib/portal/hessian.jar"/>
+	<classpathentry kind="lib" path="lib/portal/hibernate-commons-annotations.jar"/>
 	<classpathentry kind="lib" path="lib/portal/hibernate-core.jar"/>
 	<classpathentry kind="lib" path="lib/portal/hikaricp.jar"/>
 	<classpathentry kind="lib" path="lib/portal/htmlparser.jar"/>
@@ -199,6 +201,7 @@
 	<classpathentry kind="lib" path="lib/portal/jai_codec.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jai_core.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jakarta-regexp.jar"/>
+	<classpathentry kind="lib" path="lib/portal/jandex.jar"/>
 	<classpathentry kind="lib" path="lib/portal/java-diff.jar"/>
 	<classpathentry kind="lib" path="lib/portal/java-libpst.jar"/>
 	<classpathentry kind="lib" path="lib/portal/javassist.jar"/>
@@ -211,6 +214,7 @@
 	<classpathentry kind="lib" path="lib/portal/jaxws-rt.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jazzy.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jbig2-imageio.jar"/>
+	<classpathentry kind="lib" path="lib/portal/jboss-logging.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jcifs.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jcommon.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jcl-over-slf4j.jar"/>
