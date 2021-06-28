@@ -100,6 +100,8 @@ public class CTStoreTest {
 
 		_fileSystemStore.deleteDirectory(
 			_companyId, _REPOSITORY_ID, StringPool.BLANK);
+
+		_methods.clear();
 	}
 
 	@Test
