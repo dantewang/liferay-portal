@@ -10,7 +10,7 @@ sourceCompatibility = "1.6"
 targetCompatibility = "1.6"
 
 dependencies {
-	compile group: "org.hibernate", name: "hibernate-core", version: "3.6.10.Final"
+	compile group: "org.hibernate", name: "hibernate-core", version: "5.5.3.Final"
 	compile group: "org.springframework", name: "spring-orm", version: "4.3.22.RELEASE"
 }
 
@@ -53,6 +53,8 @@ patch {
 	ext {
 		autoClean = false
 	}
+
+	fileNames "org/springframework/orm/hibernate5/SpringSessionSynchronization.java"
 
 	originalLibModuleName = "spring-orm"
 }
