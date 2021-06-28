@@ -104,6 +104,8 @@ public class CTStoreTest {
 	public void tearDown() {
 		_fileSystemStore.deleteDirectory(
 			_companyId, _REPOSITORY_ID, StringPool.BLANK);
+
+		_methods.clear();
 	}
 
 	@Test
