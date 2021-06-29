@@ -14,6 +14,7 @@
 
 package com.liferay.portal.spring.hibernate;
 
+import com.liferay.portal.dao.orm.hibernate.event.LazyBlobPreLoadEventListener;
 import com.liferay.portal.dao.orm.hibernate.event.ResetOriginalValuesLoadEventListener;
 import com.liferay.portal.dao.orm.hibernate.event.ResetOriginalValuesPostLoadEventListener;
 
@@ -46,6 +47,9 @@ public class GlobalEventListenerIntegrator implements Integrator {
 		EventListenerRegistry eventListenerRegistry =
 			sessionFactoryServiceRegistry.getService(
 				EventListenerRegistry.class);
+
+		eventListenerRegistry.setListeners(
+			EventType.PRE_LOAD, LazyBlobPreLoadEventListener.INSTANCE);
 
 		eventListenerRegistry.setListeners(
 			EventType.LOAD, ResetOriginalValuesLoadEventListener.INSTANCE);
