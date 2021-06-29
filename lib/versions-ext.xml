@@ -2547,7 +2547,7 @@
 			</library>
 			<library>
 				<file-name>lib/portal/spring-orm.jar</file-name>
-				<version>4.3.22.LIFERAY-PATCHED-1</version>
+				<version>4.3.22.LIFERAY-PATCHED-2</version>
 				<project-name>Spring</project-name>
 				<project-url>http://www.springframework.org</project-url>
 				<licenses>
