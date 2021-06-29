@@ -20,6 +20,7 @@ import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.asm.ASMWrapperUtil;
 import com.liferay.portal.change.tracking.registry.CTModelRegistration;
 import com.liferay.portal.change.tracking.registry.CTModelRegistry;
+import com.liferay.portal.dao.orm.hibernate.event.LazyBlobPreLoadEventListener;
 import com.liferay.portal.dao.orm.hibernate.event.MVCCSynchronizerPostUpdateEventListener;
 import com.liferay.portal.dao.orm.hibernate.event.NestableAutoFlushEventListener;
 import com.liferay.portal.dao.orm.hibernate.event.NestableFlushEventListener;
@@ -70,6 +71,7 @@ import org.hibernate.event.FlushEventListener;
 import org.hibernate.event.LoadEventListener;
 import org.hibernate.event.PostLoadEventListener;
 import org.hibernate.event.PostUpdateEventListener;
+import org.hibernate.event.PreLoadEventListener;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.OuterJoinLoadable;
 
@@ -258,6 +260,10 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 
 			EventListeners eventListeners = configuration.getEventListeners();
 
+			eventListeners.setPreLoadEventListeners(
+				new PreLoadEventListener[] {
+					LazyBlobPreLoadEventListener.INSTANCE
+				});
 			eventListeners.setLoadEventListeners(
 				new LoadEventListener[] {
 					ResetOriginalValuesLoadEventListener.INSTANCE
