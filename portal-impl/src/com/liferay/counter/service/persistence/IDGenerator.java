@@ -27,7 +27,9 @@ import org.hibernate.id.IdentifierGenerator;
 public class IDGenerator implements IdentifierGenerator {
 
 	@Override
-	public Serializable generate(SharedSessionContractImplementor session, Object object) {
+	public Serializable generate(
+		SharedSessionContractImplementor session, Object object) {
+
 		Class<?> clazz = object.getClass();
 
 		String name = clazz.getName();
