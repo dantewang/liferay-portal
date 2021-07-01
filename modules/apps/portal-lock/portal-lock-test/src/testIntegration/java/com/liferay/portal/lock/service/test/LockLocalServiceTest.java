@@ -47,6 +47,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
+import javax.persistence.PersistenceException;
+
 import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.exception.GenericJDBCException;
@@ -273,10 +275,15 @@ public class LockLocalServiceTest {
 			Assert.fail();
 		}
 		catch (ExecutionException executionException) {
-			Throwable throwable = executionException.getCause();
+			Throwable throwable1 = executionException.getCause();
 
 			Assert.assertSame(
-				ConstraintViolationException.class, throwable.getClass());
+				PersistenceException.class, throwable1.getClass());
+
+			Throwable throwable2 = throwable1.getCause();
+
+			Assert.assertSame(
+				ConstraintViolationException.class, throwable2.getClass());
 		}
 	}
 
