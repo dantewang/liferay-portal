@@ -37,6 +37,10 @@ import com.liferay.portal.spring.transaction.TransactionInterceptor;
 import com.liferay.portal.spring.transaction.TransactionStatusAdapter;
 import com.liferay.portal.test.log.LogCapture;
 import com.liferay.portal.test.log.LoggerTestUtil;
+import com.liferay.portal.test.rule.ExpectedDBType;
+import com.liferay.portal.test.rule.ExpectedLog;
+import com.liferay.portal.test.rule.ExpectedLogs;
+import com.liferay.portal.test.rule.ExpectedType;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
@@ -47,6 +51,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.FutureTask;
 
+import org.hibernate.engine.jdbc.batch.internal.BatchingBatch;
 import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 
 import org.junit.After;
@@ -130,6 +135,16 @@ public class PortalPreferencesImplTest {
 			});
 	}
 
+	@ExpectedLogs(
+		expectedLogs = {
+			@ExpectedLog(
+				expectedDBType = ExpectedDBType.NONE,
+				expectedLog = "HHH000315: Exception executing batch [org.hibernate.StaleStateException",
+				expectedType = ExpectedType.PREFIX
+			)
+		},
+		level = "ERROR", loggerClass = BatchingBatch.class
+	)
 	@Test
 	public void testReset() {
 		Callable<Void> callable = () -> {
@@ -156,6 +171,16 @@ public class PortalPreferencesImplTest {
 		}
 	}
 
+	@ExpectedLogs(
+		expectedLogs = {
+			@ExpectedLog(
+				expectedDBType = ExpectedDBType.NONE,
+				expectedLog = "HHH000315: Exception executing batch [java.sql.BatchUpdateException",
+				expectedType = ExpectedType.PREFIX
+			)
+		},
+		level = "ERROR", loggerClass = BatchingBatch.class
+	)
 	@Test
 	public void testSetSameKeyDifferentValues() {
 		FutureTask<Void> futureTask1 = new FutureTask<>(
@@ -231,6 +256,16 @@ public class PortalPreferencesImplTest {
 			_VALUE_1, portalPreferences.getValue(_NAMESPACE, _KEY_2));
 	}
 
+	@ExpectedLogs(
+		expectedLogs = {
+			@ExpectedLog(
+				expectedDBType = ExpectedDBType.NONE,
+				expectedLog = "HHH000315: Exception executing batch [java.sql.BatchUpdateException",
+				expectedType = ExpectedType.PREFIX
+			)
+		},
+		level = "ERROR", loggerClass = BatchingBatch.class
+	)
 	@Test
 	public void testSetValueSameKey() {
 		FutureTask<Void> futureTask1 = new FutureTask<>(
@@ -305,6 +340,16 @@ public class PortalPreferencesImplTest {
 			_VALUES_1, portalPreferences.getValues(_NAMESPACE, _KEY_2));
 	}
 
+	@ExpectedLogs(
+		expectedLogs = {
+			@ExpectedLog(
+				expectedDBType = ExpectedDBType.NONE,
+				expectedLog = "HHH000315: Exception executing batch [java.sql.BatchUpdateException",
+				expectedType = ExpectedType.PREFIX
+			)
+		},
+		level = "ERROR", loggerClass = BatchingBatch.class
+	)
 	@Test
 	public void testSetValuesSameKey() {
 		FutureTask<Void> futureTask1 = new FutureTask<>(
