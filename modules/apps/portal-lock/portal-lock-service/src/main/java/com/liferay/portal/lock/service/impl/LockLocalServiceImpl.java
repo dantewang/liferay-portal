@@ -41,6 +41,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 
+import javax.persistence.PersistenceException;
+
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.exception.LockAcquisitionException;
 
@@ -297,7 +299,9 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 			catch (Throwable throwable) {
 				Throwable causeThrowable = throwable;
 
-				if (throwable instanceof ORMException) {
+				if (throwable instanceof ORMException ||
+					throwable instanceof PersistenceException) {
+
 					causeThrowable = throwable.getCause();
 				}
 
@@ -414,7 +418,9 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 			catch (Throwable throwable) {
 				Throwable causeThrowable = throwable;
 
-				if (throwable instanceof ORMException) {
+				if (throwable instanceof ORMException ||
+					throwable instanceof PersistenceException) {
+
 					causeThrowable = throwable.getCause();
 				}
 
