@@ -51,6 +51,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
+import javax.persistence.PersistenceException;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Shuyang Zhou
@@ -293,7 +295,9 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 			catch (Throwable throwable) {
 				Throwable causeThrowable = throwable;
 
-				if (throwable instanceof ORMException) {
+				if ((throwable instanceof ORMException) ||
+					(throwable instanceof PersistenceException)) {
+
 					causeThrowable = throwable.getCause();
 				}
 
