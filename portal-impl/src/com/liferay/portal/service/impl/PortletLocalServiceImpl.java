@@ -342,6 +342,23 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 			Portlet portlet, String[] categoryNames, boolean eagerDestroy)
 		throws PortalException {
 
+		companyLocalService.forEachCompanyId(
+			companyId -> {
+				deployRemotePortlet(
+					portlet, categoryNames, eagerDestroy, companyId);
+
+				portletPersistence.flush();
+			});
+
+		return portlet;
+	}
+
+	@Override
+	public Portlet deployRemotePortlet(
+			Portlet portlet, String[] categoryNames, boolean eagerDestroy,
+			long companyId)
+		throws PortalException {
+
 		_portletsMap.put(portlet.getRootPortletId(), portlet);
 
 		if (eagerDestroy) {
@@ -352,12 +369,9 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 		clearCache();
 
-		companyLocalService.forEachCompanyId(
-			companyId -> {
-				_deployRemotePortlet(portlet, categoryNames, companyId);
+		_deployRemotePortlet(portlet, categoryNames, companyId);
 
-				portletPersistence.flush();
-			});
+		portletPersistence.flush();
 
 		return portlet;
 	}
