@@ -32,6 +32,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.LockOptions;
 import org.hibernate.engine.spi.EntityKey;
@@ -99,6 +100,25 @@ public class SessionImpl implements Session {
 
 	@Override
 	public boolean contains(Object object) throws ORMException {
+		if (object == null) {
+			return false;
+		}
+
+		SessionFactoryImplementor sessionFactoryImplementor =
+			(SessionFactoryImplementor)_session.getSessionFactory();
+
+		MetamodelImplementor sessionMetamodelImplementor =
+			sessionFactoryImplementor.getMetamodel();
+
+		Map<String, EntityPersister> entityPersisters =
+			sessionMetamodelImplementor.entityPersisters();
+
+		Class<?> clazz = object.getClass();
+
+		if (entityPersisters.get(clazz.getName()) == null) {
+			return false;
+		}
+
 		try {
 			return _session.contains(object);
 		}
