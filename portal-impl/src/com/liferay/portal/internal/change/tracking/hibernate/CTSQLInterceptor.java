@@ -14,8 +14,12 @@
 
 package com.liferay.portal.internal.change.tracking.hibernate;
 
+import com.liferay.expando.kernel.model.adapter.StagedExpandoColumn;
+import com.liferay.expando.kernel.model.adapter.StagedExpandoTable;
 import com.liferay.portal.change.tracking.sql.CTSQLTransformer;
 import com.liferay.portal.kernel.util.ServiceProxyFactory;
+import com.liferay.portlet.expando.model.impl.ExpandoColumnImpl;
+import com.liferay.portlet.expando.model.impl.ExpandoTableImpl;
 
 import org.hibernate.EmptyInterceptor;
 
@@ -23,6 +27,18 @@ import org.hibernate.EmptyInterceptor;
  * @author Preston Crary
  */
 public class CTSQLInterceptor extends EmptyInterceptor {
+
+	@Override
+	public String getEntityName(Object object) {
+		if (object instanceof StagedExpandoTable) {
+			return ExpandoTableImpl.class.getName();
+		}
+		else if (object instanceof StagedExpandoColumn) {
+			return ExpandoColumnImpl.class.getName();
+		}
+
+		return super.getEntityName(object);
+	}
 
 	@Override
 	public String onPrepareStatement(String sql) {
