@@ -15,7 +15,10 @@
 package com.liferay.portal.osgi.web.portlet.tracker.internal;
 
 import com.liferay.osgi.util.StringPlus;
+import com.liferay.petra.concurrent.ThreadPoolHandlerAdapter;
+import com.liferay.petra.executor.PortalExecutorConfig;
 import com.liferay.petra.executor.PortalExecutorManager;
+import com.liferay.petra.lang.CentralizedThreadLocal;
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
@@ -56,6 +59,7 @@ import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.NamedThreadFactory;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -96,6 +100,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletMode;
@@ -123,6 +129,8 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 public class PortletTracker
 	implements ServiceTrackerCustomizer
 		<Portlet, com.liferay.portal.kernel.model.Portlet> {
+
+	private ServiceRegistration<PortalExecutorConfig> _portalExecutorConfigServiceRegistration;
 
 	@Override
 	public com.liferay.portal.kernel.model.Portlet addingService(
@@ -258,6 +266,29 @@ public class PortletTracker
 	@Activate
 	protected void activate(BundleContext bundleContext) {
 		_bundleContext = bundleContext;
+
+		_portalExecutorConfigServiceRegistration =
+			bundleContext.registerService(
+				PortalExecutorConfig.class,
+				new PortalExecutorConfig(
+					PortletTracker.class.getName(), 1, 30, 60L,
+					TimeUnit.SECONDS, Integer.MAX_VALUE,
+					new NamedThreadFactory(
+						PortletTracker.class.getName(), Thread.NORM_PRIORITY,
+						null),
+					new ThreadPoolExecutor.AbortPolicy(),
+					new ThreadPoolHandlerAdapter() {
+
+						@Override
+						public void afterExecute(
+							Runnable runnable, Throwable throwable) {
+
+							CentralizedThreadLocal.
+								clearShortLivedThreadLocals();
+						}
+
+					}),
+				null);
 
 		_executorService = _portalExecutorManager.getPortalExecutor(
 			PortletTracker.class.getName());
@@ -1264,6 +1295,7 @@ public class PortletTracker
 
 	@Deactivate
 	protected void deactivate() {
+		_portalExecutorConfigServiceRegistration.unregister();
 		_executorService.shutdownNow();
 		_serviceTracker.close();
 
