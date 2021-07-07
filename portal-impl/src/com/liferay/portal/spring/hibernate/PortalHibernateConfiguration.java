@@ -27,6 +27,8 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portlet.expando.model.impl.ExpandoColumnImpl;
+import com.liferay.portlet.expando.model.impl.ExpandoTableImpl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,6 +51,9 @@ import org.hibernate.boot.registry.BootstrapServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.dialect.Dialect;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.metamodel.spi.MetamodelImplementor;
+import org.hibernate.persister.entity.EntityPersister;
 
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
@@ -125,6 +130,10 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 			new MetadataSources(bootstrapServiceRegistryBuilder.build()));
 
 		super.afterPropertiesSet();
+
+		if (getClass() == PortalHibernateConfiguration.class) {
+			_setStagedExpandoEntityPersisters();
+		}
 	}
 
 	public void setDataSource(DataSource dataSource) {
@@ -243,6 +252,26 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 
 			readResource(configuration, inputStream);
 		}
+	}
+
+	private void _setStagedExpandoEntityPersisters() {
+		SessionFactoryImplementor sessionFactoryImplementor =
+			(SessionFactoryImplementor)getObject();
+
+		MetamodelImplementor sessionMetamodelImplementor =
+			sessionFactoryImplementor.getMetamodel();
+
+		Map<String, EntityPersister> entityPersisters =
+			sessionMetamodelImplementor.entityPersisters();
+
+		entityPersisters.put(
+			"com.liferay.expando.exportimport.internal.model.adapter." +
+				"StagedExpandoColumnImpl",
+			entityPersisters.get(ExpandoColumnImpl.class.getName()));
+		entityPersisters.put(
+			"com.liferay.expando.exportimport.internal.model.adapter." +
+				"StagedExpandoTableImpl",
+			entityPersisters.get(ExpandoTableImpl.class.getName()));
 	}
 
 	private static final String[] _PRELOAD_CLASS_NAMES =
