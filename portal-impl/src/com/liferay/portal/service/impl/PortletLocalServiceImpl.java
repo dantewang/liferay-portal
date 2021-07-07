@@ -353,11 +353,33 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		clearCache();
 
 		companyLocalService.forEachCompanyId(
-			companyId -> {
-				_deployRemotePortlet(portlet, categoryNames, companyId);
+			companyId -> deployRemotePortlet(
+				portlet, categoryNames, false, companyId, false));
 
-				portletPersistence.flush();
-			});
+		return portlet;
+	}
+
+	@Override
+	public Portlet deployRemotePortlet(
+			Portlet portlet, String[] categoryNames, boolean eagerDestroy,
+			long companyId, boolean clearCache)
+		throws PortalException {
+
+		_portletsMap.put(portlet.getRootPortletId(), portlet);
+
+		if (eagerDestroy) {
+			PortletInstanceFactoryUtil.clear(portlet, false);
+
+			PortletConfigFactoryUtil.destroy(portlet);
+		}
+
+		if (clearCache) {
+			clearCache();
+		}
+
+		_deployRemotePortlet(portlet, categoryNames, companyId);
+
+		portletPersistence.flush();
 
 		return portlet;
 	}
