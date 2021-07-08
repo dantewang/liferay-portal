@@ -92,6 +92,9 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 import javax.portlet.Portlet;
@@ -255,6 +258,8 @@ public class PortletTracker
 	@Activate
 	protected void activate(BundleContext bundleContext) {
 		_bundleContext = bundleContext;
+
+		_executorService = Executors.newWorkStealingPool();
 
 		_serviceTracker = new ServiceTracker<>(
 			_bundleContext, Portlet.class, this);
@@ -1258,6 +1263,7 @@ public class PortletTracker
 
 	@Deactivate
 	protected void deactivate() {
+		_executorService.shutdownNow();
 		_serviceTracker.close();
 
 		if (_log.isInfoEnabled()) {
@@ -1277,6 +1283,8 @@ public class PortletTracker
 			categoryNames.add("category.undefined");
 		}
 
+		List<Future<Void>> futures = new ArrayList<>();
+
 		List<Company> companies = _companyLocalService.getCompanies(false);
 
 		_portletLocalService.clearCache();
@@ -1284,12 +1292,29 @@ public class PortletTracker
 		for (Company company : companies) {
 			long companyId = company.getCompanyId();
 
-			try (SafeCloseable safeCloseable =
-					CompanyThreadLocal.setWithSafeCloseable(companyId)) {
+			futures.add(
+				_executorService.submit(
+					() -> {
+						try (SafeCloseable safeCloseable =
+								CompanyThreadLocal.setWithSafeCloseable(
+									companyId)) {
 
-				_portletLocalService.deployRemotePortlet(
-					portletModel, ArrayUtil.toStringArray(categoryNames), false,
-					companyId, false);
+							_portletLocalService.deployRemotePortlet(
+								portletModel,
+								ArrayUtil.toStringArray(categoryNames), false,
+								companyId, false);
+						}
+
+						return null;
+					}));
+		}
+
+		for (Future<Void> future : futures) {
+			try {
+				future.get();
+			}
+			catch (Exception exception) {
+				throw new PortalException(exception);
 			}
 		}
 	}
@@ -1412,6 +1437,7 @@ public class PortletTracker
 	@Reference
 	private CompanyLocalService _companyLocalService;
 
+	private ExecutorService _executorService;
 	private String _httpServiceEndpoint = StringPool.BLANK;
 
 	@Reference(
@@ -1421,6 +1447,9 @@ public class PortletTracker
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private PortalExecutorManager _portalExecutorManager;
 
 	private com.liferay.portal.kernel.model.Portlet _portalPortletModel;
 
