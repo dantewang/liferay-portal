@@ -21,7 +21,6 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.ResourceConstants;
@@ -82,9 +81,9 @@ public class UserPersonalSitePermissions {
 		}
 	}
 
-	public void initPermissions(Portlet portlet) {
-		_companyLocalService.forEachCompany(
-			company -> _initPermissions(company, portlet));
+	public void initPermissions(Portlet portlet) throws Exception {
+		_companyLocalService.forEachCompanyIdParallel(
+			companyId -> _initPermissions(companyId, portlet));
 	}
 
 	@Activate
@@ -174,9 +173,7 @@ public class UserPersonalSitePermissions {
 		}
 	}
 
-	private void _initPermissions(Company company, Portlet portlet) {
-		long companyId = company.getCompanyId();
-
+	private void _initPermissions(long companyId, Portlet portlet) {
 		Role powerUserRole = getPowerUserRole(companyId);
 
 		if (powerUserRole == null) {
@@ -199,7 +196,7 @@ public class UserPersonalSitePermissions {
 				StringBundler.concat(
 					"Unable to initialize user personal site permissions for ",
 					"portlet ", portlet.getPortletId(), " in company ",
-					company.getCompanyId()),
+					companyId),
 				portalException);
 		}
 	}
@@ -261,7 +258,7 @@ public class UserPersonalSitePermissions {
 			catch (Throwable throwable) {
 				_bundleContext.ungetService(serviceReference);
 
-				throw throwable;
+				throw new RuntimeException(throwable);
 			}
 		}
 

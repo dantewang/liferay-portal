@@ -123,6 +123,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletPreferences;
@@ -501,6 +504,46 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 
 				unsafeConsumer.accept(companyId);
 			}
+		}
+	}
+
+	@Override
+	@Transactional(enabled = false)
+	public <E extends Exception> void forEachCompanyIdParallel(
+			UnsafeConsumer<Long, E> unsafeConsumer)
+		throws Exception {
+
+		forEachCompanyIdParallel(
+			unsafeConsumer,
+			ListUtil.toLongArray(
+				companyLocalService.getCompanies(false),
+				Company::getCompanyId));
+	}
+
+	@Override
+	@Transactional(enabled = false)
+	public <E extends Exception> void forEachCompanyIdParallel(
+			UnsafeConsumer<Long, E> unsafeConsumer, long[] companyIds)
+		throws Exception {
+
+		List<Future<Void>> futures = new ArrayList<>();
+
+		for (long companyId : companyIds) {
+			_executorService.submit(
+				() -> {
+					try (SafeCloseable safeCloseable =
+							CompanyThreadLocal.setWithSafeCloseable(
+								companyId)) {
+
+						unsafeConsumer.accept(companyId);
+					}
+
+					return null;
+				});
+		}
+
+		for (Future<Void> future : futures) {
+			future.get();
 		}
 	}
 
@@ -2153,6 +2196,8 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 	private static final Log _log = LogFactoryUtil.getLog(
 		CompanyLocalServiceImpl.class);
 
+	private final ExecutorService _executorService =
+		Executors.newWorkStealingPool();
 	private final Set<Company> _pendingCompanies = new HashSet<>();
 	private final ServiceTracker
 		<PortalInstanceLifecycleManager, PortalInstanceLifecycleManager>

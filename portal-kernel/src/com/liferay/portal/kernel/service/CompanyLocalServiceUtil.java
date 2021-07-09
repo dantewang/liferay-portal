@@ -364,6 +364,21 @@ public class CompanyLocalServiceUtil {
 		getService().forEachCompanyId(unsafeConsumer, companyIds);
 	}
 
+	public static <E extends Exception> void forEachCompanyIdParallel(
+			com.liferay.petra.function.UnsafeConsumer<Long, E> unsafeConsumer)
+		throws Exception {
+
+		getService().forEachCompanyIdParallel(unsafeConsumer);
+	}
+
+	public static <E extends Exception> void forEachCompanyIdParallel(
+			com.liferay.petra.function.UnsafeConsumer<Long, E> unsafeConsumer,
+			long[] companyIds)
+		throws Exception {
+
+		getService().forEachCompanyIdParallel(unsafeConsumer, companyIds);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 

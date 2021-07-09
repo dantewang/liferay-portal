@@ -329,6 +329,16 @@ public interface CompanyLocalService
 			UnsafeConsumer<Long, E> unsafeConsumer, long[] companyIds)
 		throws E;
 
+	@Transactional(enabled = false)
+	public <E extends Exception> void forEachCompanyIdParallel(
+			UnsafeConsumer<Long, E> unsafeConsumer)
+		throws Exception;
+
+	@Transactional(enabled = false)
+	public <E extends Exception> void forEachCompanyIdParallel(
+			UnsafeConsumer<Long, E> unsafeConsumer, long[] companyIds)
+		throws Exception;
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 

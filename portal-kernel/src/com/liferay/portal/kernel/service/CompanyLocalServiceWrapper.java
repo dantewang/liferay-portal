@@ -406,6 +406,26 @@ public class CompanyLocalServiceWrapper
 	}
 
 	@Override
+	public <E extends java.lang.Exception> void forEachCompanyIdParallel(
+			com.liferay.petra.function.UnsafeConsumer<java.lang.Long, E>
+				unsafeConsumer)
+		throws java.lang.Exception {
+
+		_companyLocalService.forEachCompanyIdParallel(unsafeConsumer);
+	}
+
+	@Override
+	public <E extends java.lang.Exception> void forEachCompanyIdParallel(
+			com.liferay.petra.function.UnsafeConsumer<java.lang.Long, E>
+				unsafeConsumer,
+			long[] companyIds)
+		throws java.lang.Exception {
+
+		_companyLocalService.forEachCompanyIdParallel(
+			unsafeConsumer, companyIds);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 

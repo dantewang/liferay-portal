@@ -86,10 +86,9 @@ public class PanelAppMyAccountPermissions {
 		}
 	}
 
-	public void initPermissions(Portlet portlet) {
-		_companyLocalService.forEachCompany(
-			company -> initPermissions(
-				company.getCompanyId(), Arrays.asList(portlet)));
+	public void initPermissions(Portlet portlet) throws Exception {
+		_companyLocalService.forEachCompanyIdParallel(
+			companyId -> initPermissions(companyId, Arrays.asList(portlet)));
 	}
 
 	@Activate
@@ -215,7 +214,7 @@ public class PanelAppMyAccountPermissions {
 			catch (Throwable throwable) {
 				_bundleContext.ungetService(serviceReference);
 
-				throw throwable;
+				throw new RuntimeException(throwable);
 			}
 		}
 
