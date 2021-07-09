@@ -891,7 +891,7 @@ public class DataFactory {
 		addressModel.setClassNameId(classNameId);
 		addressModel.setClassPK(classPK);
 		addressModel.setCountryId(countryId);
-		addressModel.setTypeId("14001");
+		addressModel.setTypeId(14001);
 		addressModel.setCity("Los Angeles");
 		addressModel.setDescription(null);
 		addressModel.setLatitude(0);
