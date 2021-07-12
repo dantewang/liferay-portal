@@ -31,14 +31,14 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	service = AddResourceActionsPortalInstanceLifecycleListener.class
+	service = TranslationResourceActionsInitializer.class
 )
-public class AddResourceActionsPortalInstanceLifecycleListener {
+public class TranslationResourceActionsInitializer {
 
 	@Activate
 	protected void activate(BundleContext bundleContext) throws Exception {
 		String xml = StringUtil.read(
-			AddResourceActionsPortalInstanceLifecycleListener.class.
+			TranslationResourceActionsInitializer.class.
 				getClassLoader(),
 			"/com/liferay/translation/internal/instance/lifecycle" +
 				"/dependencies/resource-actions.xml.tpl");
