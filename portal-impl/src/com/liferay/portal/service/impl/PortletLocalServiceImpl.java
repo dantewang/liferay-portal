@@ -188,9 +188,9 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 	@Override
 	public void checkPortlet(Portlet portlet) throws PortalException {
-		resourcePermissionLocalService.initPortletDefaultPermissions(portlet);
-
-		initPortletAddToPagePermissions(portlet);
+//		resourcePermissionLocalService.initPortletDefaultPermissions(portlet);
+//
+//		initPortletAddToPagePermissions(portlet);
 	}
 
 	@Override
