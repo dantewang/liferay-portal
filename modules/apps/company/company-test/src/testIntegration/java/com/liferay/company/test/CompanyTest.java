@@ -18,6 +18,7 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
@@ -35,6 +36,7 @@ import com.liferay.portal.util.PropsUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -145,13 +147,25 @@ public class CompanyTest {
 
 			String emailAddress = screenName + StringPool.AT + webId;
 
-			_userLocalService.addUser(
+			User user = _userLocalService.addUser(
 				0, companyId, false, "test", "test", false, screenName,
 				emailAddress, LocaleUtil.US, firstName, middleName, lastName,
 				prefixId, suffixId, male, birthdayMonth, birthdayDay,
 				birthdayYear, jobTitle, new long[] {groupId}, organizationIds,
 				new long[] {role.getRoleId()}, userGroupIds, sendEmail,
 				_getServiceContext(companyId));
+
+			user.setLoginDate(new Date());
+			user.setLastLoginDate(new Date());
+			user.setLockoutDate(new Date());
+			user.setAgreedToTermsOfUse(true);
+			user.setEmailAddressVerified(true);
+			user.setPasswordModified(true);
+			user.setPasswordReset(false);
+			user.setReminderQueryQuestion("What is your screen name?");
+			user.setReminderQueryAnswer(screenName);
+
+			_userLocalService.updateUser(user);
 		}
 	}
 
