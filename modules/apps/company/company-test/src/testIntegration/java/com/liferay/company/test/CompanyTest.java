@@ -169,7 +169,7 @@ public class CompanyTest {
 		PropsUtil.get("company.test.count"), 2);
 
 	private static final int _USERCOUNT = GetterUtil.get(
-		PropsUtil.get("each.company.include.users.count"), 1);
+		PropsUtil.get("each.company.include.users.count"), 2);
 
 	@Inject
 	private CompanyLocalService _companyLocalService;
