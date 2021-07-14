@@ -32,7 +32,6 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PropsUtil;
-import com.liferay.portal.util.PropsValues;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -96,22 +95,6 @@ public class CompanyTest {
 		Assert.assertTrue(
 			"Company count should be " + (_COMPANYCOUNT + 1),
 			_companyLocalService.getCompaniesCount() == (_COMPANYCOUNT + 1));
-
-		_companyLocalService.forEachCompany(
-			company -> {
-				String webId = company.getWebId();
-
-				if (webId.equals(PropsValues.COMPANY_DEFAULT_WEB_ID)) {
-					return;
-				}
-
-				int usersCount = _userLocalService.getCompanyUsersCount(
-					company.getCompanyId());
-
-				Assert.assertTrue(
-					"users count should be " + (_USERCOUNT + 1),
-					usersCount == (_USERCOUNT + 1));
-			});
 	}
 
 	private void _addCompany(String webId) throws Exception {
@@ -127,6 +110,13 @@ public class CompanyTest {
 		// Add user
 
 		_addUser(company.getCompanyId(), company.getGroupId(), webId);
+
+		int usersCount = _userLocalService.getCompanyUsersCount(
+			company.getCompanyId());
+
+		Assert.assertTrue(
+			"users count should be " + (_USERCOUNT + 1),
+			usersCount == (_USERCOUNT + 1));
 	}
 
 	private void _addUser(long companyId, long groupId, String webId)
