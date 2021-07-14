@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -32,8 +33,6 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
-
-import java.io.File;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,9 +49,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.springframework.core.io.FileSystemResourceLoader;
-import org.springframework.mock.web.MockServletContext;
-
 /**
  * @author Hai Yu
  */
@@ -68,11 +64,6 @@ public class CompanyTest {
 	@Before
 	public void setUp() throws Exception {
 		_executorService = Executors.newWorkStealingPool();
-
-		File file = new File("portal-web/docroot");
-
-		_mockServletContext = new MockServletContext(
-			"file:" + file.getAbsolutePath(), new FileSystemResourceLoader());
 	}
 
 	@After
@@ -143,7 +134,8 @@ public class CompanyTest {
 		Company company = _companyLocalService.addCompany(
 			null, webId, webId, webId, false, 0, true);
 
-		PortalInstances.initCompany(_mockServletContext, webId);
+		PortalInstances.initCompany(
+			ServletContextPool.get(StringPool.BLANK), webId);
 
 		// Add user
 
@@ -206,7 +198,6 @@ public class CompanyTest {
 	private CompanyLocalService _companyLocalService;
 
 	private ExecutorService _executorService;
-	private MockServletContext _mockServletContext;
 
 	@Inject
 	private RoleLocalService _roleLocalService;
