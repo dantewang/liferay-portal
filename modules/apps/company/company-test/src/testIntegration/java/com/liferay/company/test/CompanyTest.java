@@ -52,7 +52,7 @@ import org.junit.runner.RunWith;
 /**
  * @author Hai Yu
  */
-@DataGuard(scope = DataGuard.Scope.NONE)
+@DataGuard(scope = DataGuard.Scope.CLASS)
 @RunWith(Arquillian.class)
 public class CompanyTest {
 
@@ -62,26 +62,13 @@ public class CompanyTest {
 		new LiferayIntegrationTestRule();
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		_executorService = Executors.newWorkStealingPool();
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		_executorService.shutdownNow();
-
-		if (System.getenv("JENKINS_HOME") != null) {
-			_companyLocalService.forEachCompany(
-				company -> {
-					String webId = company.getWebId();
-
-					if (webId.equals(PropsValues.COMPANY_DEFAULT_WEB_ID)) {
-						return;
-					}
-
-					_companyLocalService.deleteCompany(company);
-				});
-		}
 	}
 
 	@Test
