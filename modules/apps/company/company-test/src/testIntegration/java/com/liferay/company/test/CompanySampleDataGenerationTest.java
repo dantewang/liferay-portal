@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.kernel.util.CSVUtil;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -201,23 +202,42 @@ public class CompanySampleDataGenerationTest {
 	}
 
 	private void _exportCSV() throws Exception {
-		File csvFile = new File(_OUTPUT_DIR + "/companydata.csv");
+		FileUtil.deltree(_OUTPUT_DIR);
 
-		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
-				csvFile.toPath(), StandardOpenOption.CREATE,
+		File companyCSVFile = new File(_OUTPUT_DIR + "/company.csv");
+		File hostCSVFile = new File(_OUTPUT_DIR + "/host.csv");
+		File userCSVFile = new File(_OUTPUT_DIR + "/user.csv");
+
+		try (BufferedWriter companyBufferedWriter = Files.newBufferedWriter(
+				companyCSVFile.toPath(), StandardOpenOption.CREATE,
+				StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+			BufferedWriter hostBufferedWriter = Files.newBufferedWriter(
+				hostCSVFile.toPath(), StandardOpenOption.CREATE,
+				StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+			BufferedWriter userBufferedWriter = Files.newBufferedWriter(
+				userCSVFile.toPath(), StandardOpenOption.CREATE,
 				StandardOpenOption.WRITE,
 				StandardOpenOption.TRUNCATE_EXISTING)) {
 
 			for (Map.Entry<String, List<String>> entry : _csvMap.entrySet()) {
+				companyBufferedWriter.append(CSVUtil.encode(entry.getKey()));
+				companyBufferedWriter.newLine();
+
+				hostBufferedWriter.append("127.0.0.1 ");
+				hostBufferedWriter.append(CSVUtil.encode(entry.getKey()));
+				hostBufferedWriter.newLine();
+
 				for (String screenName : entry.getValue()) {
-					bufferedWriter.append(CSVUtil.encode(entry.getKey()));
-					bufferedWriter.append(StringPool.COMMA);
-					bufferedWriter.append(CSVUtil.encode(screenName));
-					bufferedWriter.newLine();
+					userBufferedWriter.append(CSVUtil.encode(entry.getKey()));
+					userBufferedWriter.append(StringPool.COMMA);
+					userBufferedWriter.append(CSVUtil.encode(screenName));
+					userBufferedWriter.newLine();
 				}
 			}
 
-			bufferedWriter.flush();
+			companyBufferedWriter.flush();
+			hostBufferedWriter.flush();
+			userBufferedWriter.flush();
 		}
 	}
 
