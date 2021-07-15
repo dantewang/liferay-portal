@@ -66,7 +66,7 @@ import org.junit.runner.RunWith;
  */
 @DataGuard(scope = DataGuard.Scope.CLASS)
 @RunWith(Arquillian.class)
-public class CompanyTest {
+public class CompanySampleDataGenerationTest {
 
 	@ClassRule
 	@Rule
