@@ -201,8 +201,7 @@ public class CompanySampleDataGenerationTest {
 	}
 
 	private void _exportCSV() throws Exception {
-		File csvFile = new File(
-			PropsUtil.get(PropsKeys.LIFERAY_HOME) + "/companydata.csv");
+		File csvFile = new File(_OUTPUT_DIR + "/companydata.csv");
 
 		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
 				csvFile.toPath(), StandardOpenOption.CREATE,
@@ -234,6 +233,10 @@ public class CompanySampleDataGenerationTest {
 
 	private static final int _COMPANY_COUNT = GetterUtil.get(
 		PropsUtil.get("sample.data.company.count"), 2);
+
+	private static final String _OUTPUT_DIR = GetterUtil.get(
+		PropsUtil.get("sample.data.output.dir"),
+		PropsUtil.get(PropsKeys.LIFERAY_HOME) + "/company_sample_data");
 
 	private static final int _USER_PER_COMPANY_COUNT = GetterUtil.get(
 		PropsUtil.get("sample.data.user.per.company.count"), 2);
