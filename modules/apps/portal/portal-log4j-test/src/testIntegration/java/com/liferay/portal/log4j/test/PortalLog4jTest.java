@@ -400,7 +400,7 @@ public class PortalLog4jTest {
 
 		// <log4j:message>...</log4j:message>
 
-		if (expectedThrowable != null) {
+		if (expectedMessage != null) {
 			Assert.assertEquals(
 				StringBundler.concat(
 					"<log4j:message><![CDATA[", expectedMessage,
