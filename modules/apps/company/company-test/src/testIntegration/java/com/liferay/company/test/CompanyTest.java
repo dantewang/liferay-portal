@@ -49,9 +49,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -90,12 +87,12 @@ public class CompanyTest {
 		List<Future<Void>> futures = new ArrayList<>();
 
 		for (int i = 1; i <= _COMPANYCOUNT; i++) {
-			String webId = "liferay" + i + ".com";
+			int companyIndex = i;
 
 			futures.add(
 				_executorService.submit(
 					() -> {
-						_addCompany(webId);
+						_addCompany(companyIndex);
 
 						return null;
 					}));
@@ -114,7 +111,8 @@ public class CompanyTest {
 		}
 	}
 
-	private void _addCompany(String webId) throws Exception {
+	private void _addCompany(int companyIndex) throws Exception {
+		String webId = "liferay" + companyIndex + ".com";
 
 		// Add company
 
@@ -128,7 +126,8 @@ public class CompanyTest {
 
 		// Add user
 
-		_addUser(company.getCompanyId(), company.getGroupId(), webId);
+		_addUser(
+			companyIndex, company.getCompanyId(), company.getGroupId(), webId);
 
 		int usersCount = _userLocalService.getCompanyUsersCount(
 			company.getCompanyId());
@@ -138,7 +137,8 @@ public class CompanyTest {
 			usersCount == (_USERCOUNT + 1));
 	}
 
-	private void _addUser(long companyId, long groupId, String webId)
+	private void _addUser(
+			int companyIndex, long companyId, long groupId, String webId)
 		throws Exception {
 
 		String middleName = StringPool.BLANK;
@@ -158,23 +158,10 @@ public class CompanyTest {
 
 		List<User> users = new ArrayList<>();
 
-		int startNum = 0;
-		int count = 0;
+		int userStartIndex = (companyIndex * _USERCOUNT) + 1;
+		int userEndIndex = (companyIndex + 1) * _USERCOUNT;
 
-		if (_lock.tryLock(1, TimeUnit.MINUTES)) {
-			try {
-				startNum = _startNum * _USERCOUNT + 1;
-
-				_startNum++;
-
-				count = _startNum * _USERCOUNT;
-			}
-			finally {
-				_lock.unlock();
-			}
-		}
-
-		for (int i = startNum; i <= count; i++) {
+		for (int i = userStartIndex; i <= userEndIndex; i++) {
 			String screenName = "test" + i;
 
 			String firstName = screenName;
@@ -275,8 +262,6 @@ public class CompanyTest {
 
 	private static final List<Long> _companyIds = Collections.synchronizedList(
 		new ArrayList<Long>());
-	private static final Lock _lock = new ReentrantLock();
-	private static int _startNum;
 
 	@Inject
 	private CompanyLocalService _companyLocalService;
