@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PortalInstances;
@@ -42,6 +43,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import java.util.ArrayList;
@@ -113,9 +117,7 @@ public class CompanySampleDataGenerationTest {
 			_COMPANY_COUNT + originalCompaniesCount,
 			_companyLocalService.getCompaniesCount());
 
-		if (System.getenv("JENKINS_HOME") == null) {
-			_exportCSV();
-		}
+		_exportCSV();
 	}
 
 	private void _addCompany(int companyIndex) throws Exception {
@@ -203,11 +205,29 @@ public class CompanySampleDataGenerationTest {
 	}
 
 	private void _exportCSV() throws Exception {
-		FileUtil.deltree(_OUTPUT_DIR);
+		String outputDir = PropsUtil.get("sample.data.output.dir");
 
-		File companyCSVFile = new File(_OUTPUT_DIR + "/company.csv");
-		File hostCSVFile = new File(_OUTPUT_DIR + "/host.csv");
-		File userCSVFile = new File(_OUTPUT_DIR + "/user.csv");
+		if (Validator.isNull(outputDir)) {
+			return;
+		}
+
+		Path outputPath = null;
+
+		try {
+			outputPath = Paths.get(outputDir);
+		}
+		catch (InvalidPathException invalidPathException) {
+			outputPath = Paths.get(
+				PropsUtil.get(PropsKeys.LIFERAY_HOME), outputDir);
+		}
+
+		File outputDirFile = outputPath.toFile();
+
+		FileUtil.deltree(outputDirFile);
+
+		File companyCSVFile = new File(outputDirFile, "/company.csv");
+		File hostCSVFile = new File(outputDirFile + "/host.csv");
+		File userCSVFile = new File(outputDirFile + "/user.csv");
 
 		try (BufferedWriter companyBufferedWriter = Files.newBufferedWriter(
 				companyCSVFile.toPath(), StandardOpenOption.CREATE,
@@ -270,10 +290,6 @@ public class CompanySampleDataGenerationTest {
 
 	private static final int _COMPANY_COUNT = GetterUtil.get(
 		PropsUtil.get("sample.data.company.count"), 2);
-
-	private static final String _OUTPUT_DIR = GetterUtil.get(
-		PropsUtil.get("sample.data.output.dir"),
-		PropsUtil.get(PropsKeys.LIFERAY_HOME) + "/company_sample_data");
 
 	private static final int _USER_PER_COMPANY_COUNT = GetterUtil.get(
 		PropsUtil.get("sample.data.user.per.company.count"), 2);
