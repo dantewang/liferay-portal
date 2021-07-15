@@ -225,6 +225,8 @@ public class CompanySampleDataGenerationTest {
 
 		FileUtil.deltree(outputDirFile);
 
+		Files.createDirectory(outputPath);
+
 		File companyCSVFile = new File(outputDirFile, "/company.csv");
 		File hostCSVFile = new File(outputDirFile + "/host.csv");
 		File userCSVFile = new File(outputDirFile + "/user.csv");
