@@ -15,7 +15,6 @@
 package com.liferay.company.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
-import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Role;
@@ -29,7 +28,6 @@ import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.kernel.util.CSVUtil;
-import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -38,7 +36,11 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PropsUtil;
 
+import java.io.BufferedWriter;
 import java.io.File;
+
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -193,24 +195,25 @@ public class CompanyTest {
 	}
 
 	private void _exportCSV() throws Exception {
-		StringBundler sb = new StringBundler(_COMPANYCOUNT * _USERCOUNT);
-
-		for (Map.Entry<String, List<String>> entry : _csvMap.entrySet()) {
-			for (String screenName : entry.getValue()) {
-				sb.append(_getUserCSV(screenName, entry.getKey()));
-			}
-		}
-
-		String csv = sb.toString();
-
 		File csvFile = new File(
 			PropsUtil.get(PropsKeys.LIFERAY_HOME) + "/companydata.csv");
 
-		if (csvFile.exists()) {
-			csvFile.delete();
-		}
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
+				csvFile.toPath(), StandardOpenOption.CREATE,
+				StandardOpenOption.WRITE,
+				StandardOpenOption.TRUNCATE_EXISTING)) {
 
-		FileUtil.write(csvFile, csv.getBytes());
+			for (Map.Entry<String, List<String>> entry : _csvMap.entrySet()) {
+				for (String screenName : entry.getValue()) {
+					bufferedWriter.append(CSVUtil.encode(entry.getKey()));
+					bufferedWriter.append(StringPool.COMMA);
+					bufferedWriter.append(CSVUtil.encode(screenName));
+					bufferedWriter.newLine();
+				}
+			}
+
+			bufferedWriter.flush();
+		}
 	}
 
 	private ServiceContext _getServiceContext(long companyId) {
@@ -221,17 +224,6 @@ public class CompanyTest {
 		serviceContext.setCompanyId(companyId);
 
 		return serviceContext;
-	}
-
-	private String _getUserCSV(String screenName, String mx) {
-		StringBundler sb = new StringBundler(4);
-
-		sb.append(CSVUtil.encode(mx));
-		sb.append(StringPool.COMMA);
-		sb.append(CSVUtil.encode(screenName));
-		sb.append(StringPool.NEW_LINE);
-
-		return sb.toString();
 	}
 
 	private static final int _COMPANYCOUNT = GetterUtil.get(
