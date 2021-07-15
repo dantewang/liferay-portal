@@ -46,6 +46,7 @@ import java.nio.file.StandardOpenOption;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -219,16 +220,24 @@ public class CompanySampleDataGenerationTest {
 				StandardOpenOption.WRITE,
 				StandardOpenOption.TRUNCATE_EXISTING)) {
 
-			for (Map.Entry<String, List<String>> entry : _csvMap.entrySet()) {
-				companyBufferedWriter.append(CSVUtil.encode(entry.getKey()));
+			List<String> keys = new ArrayList<>(_csvMap.keySet());
+
+			Collections.sort(keys);
+
+			for (String key : keys) {
+				companyBufferedWriter.append(CSVUtil.encode(key));
 				companyBufferedWriter.newLine();
 
 				hostBufferedWriter.append("127.0.0.1 ");
-				hostBufferedWriter.append(CSVUtil.encode(entry.getKey()));
+				hostBufferedWriter.append(CSVUtil.encode(key));
 				hostBufferedWriter.newLine();
 
-				for (String screenName : entry.getValue()) {
-					userBufferedWriter.append(CSVUtil.encode(entry.getKey()));
+				List<String> value = _csvMap.get(key);
+
+				Collections.sort(value);
+
+				for (String screenName : value) {
+					userBufferedWriter.append(CSVUtil.encode(key));
 					userBufferedWriter.append(StringPool.COMMA);
 					userBufferedWriter.append(CSVUtil.encode(screenName));
 					userBufferedWriter.newLine();
