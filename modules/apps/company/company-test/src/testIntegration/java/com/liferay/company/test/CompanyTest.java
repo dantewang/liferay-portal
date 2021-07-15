@@ -85,7 +85,7 @@ public class CompanyTest {
 
 	@Test
 	public void testAddCompanyAndUserData() throws Exception {
-		Assert.assertTrue(_companyLocalService.getCompaniesCount() == 1);
+		int originalCompaniesCount = _companyLocalService.getCompaniesCount();
 
 		List<Future<Void>> futures = new ArrayList<>();
 
@@ -106,8 +106,10 @@ public class CompanyTest {
 		}
 
 		Assert.assertEquals(
-			"Company count should be " + (_COMPANY_COUNT + 1),
-			_COMPANY_COUNT + 1, _companyLocalService.getCompaniesCount());
+			"Company count should be " +
+				(_COMPANY_COUNT + originalCompaniesCount),
+			_COMPANY_COUNT + originalCompaniesCount,
+			_companyLocalService.getCompaniesCount());
 
 		if (System.getenv("JENKINS_HOME") == null) {
 			_exportCSV();
@@ -127,14 +129,17 @@ public class CompanyTest {
 
 		// Add user
 
+		int originalCompanyUsersCount = _userLocalService.getCompanyUsersCount(
+			company.getCompanyId());
+
 		_addUser(
 			companyIndex, company.getCompanyId(), company.getGroupId(), webId);
 
 		Assert.assertEquals(
 			StringBundler.concat(
 				"User count for ", webId, "should be ",
-				_USER_PER_COMPANY_COUNT + 1),
-			_USER_PER_COMPANY_COUNT + 1,
+				_USER_PER_COMPANY_COUNT + originalCompanyUsersCount),
+			_USER_PER_COMPANY_COUNT + originalCompanyUsersCount,
 			_userLocalService.getCompanyUsersCount(company.getCompanyId()));
 	}
 
