@@ -46,8 +46,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -206,15 +204,14 @@ public class CompanyTest {
 
 			users.add(user);
 		}
-
-		_companyUsers.put(companyId, users);
 	}
 
 	private void _exportCSV() throws Exception {
 		StringBundler sb = new StringBundler(_COMPANYCOUNT * _USERCOUNT);
 
 		for (Long companyId : _companyIds) {
-			List<User> users = _companyUsers.get(companyId);
+			List<User> users = _userLocalService.getCompanyUsers(
+				companyId, -1, -1);
 
 			String mx = null;
 
@@ -278,8 +275,6 @@ public class CompanyTest {
 
 	private static final List<Long> _companyIds = Collections.synchronizedList(
 		new ArrayList<Long>());
-	private static final Map<Long, List<User>> _companyUsers =
-		new ConcurrentHashMap<>();
 	private static final Lock _lock = new ReentrantLock();
 	private static int _startNum;
 
