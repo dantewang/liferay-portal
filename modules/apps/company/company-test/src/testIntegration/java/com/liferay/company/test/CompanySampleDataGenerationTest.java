@@ -44,10 +44,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 
 import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -219,37 +217,25 @@ public class CompanySampleDataGenerationTest {
 			return;
 		}
 
-		Path outputPath = null;
+		Path outputDirPath = Paths.get(
+			PropsUtil.get(PropsKeys.LIFERAY_HOME), outputDir);
 
-		try {
-			outputPath = Paths.get(outputDir);
+		File outputDirFile = outputDirPath.toFile();
+
+		if (outputDirFile.exists()) {
+			FileUtil.deltree(outputDirFile);
 		}
-		catch (InvalidPathException invalidPathException) {
-			outputPath = Paths.get(
-				PropsUtil.get(PropsKeys.LIFERAY_HOME), outputDir);
-		}
 
-		File outputDirFile = outputPath.toFile();
+		outputDirFile.mkdir();
 
-		FileUtil.deltree(outputDirFile);
-
-		Files.createDirectory(outputPath);
-
-		File companyCSVFile = new File(outputDirFile, "/company.csv");
-		File hostCSVFile = new File(outputDirFile + "/host.csv");
-		File userCSVFile = new File(outputDirFile + "/user.csv");
-
-		try (LoggingTimer loggingTimer = new LoggingTimer();
+		try (LoggingTimer loggingTimer =
+				 new LoggingTimer(outputDirFile.getAbsolutePath());
 			BufferedWriter companyBufferedWriter = Files.newBufferedWriter(
-				companyCSVFile.toPath(), StandardOpenOption.CREATE,
-				StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+				outputDirPath.resolve("company.csv"));
 			BufferedWriter hostBufferedWriter = Files.newBufferedWriter(
-				hostCSVFile.toPath(), StandardOpenOption.CREATE,
-				StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+				outputDirPath.resolve("host.csv"));
 			BufferedWriter userBufferedWriter = Files.newBufferedWriter(
-				userCSVFile.toPath(), StandardOpenOption.CREATE,
-				StandardOpenOption.WRITE,
-				StandardOpenOption.TRUNCATE_EXISTING)) {
+				outputDirPath.resolve("user.csv"))) {
 
 			List<String> keys = new ArrayList<>(_csvMap.keySet());
 
