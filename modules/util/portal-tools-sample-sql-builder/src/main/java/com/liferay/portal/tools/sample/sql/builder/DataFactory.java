@@ -7462,15 +7462,6 @@ public class DataFactory {
 							}
 						}
 					}
-					else {
-						List<Element> userElements = assignmentElement.elements(
-							"user");
-
-						for (Element userElement : userElements) {
-							assignmentsDatas.add(
-								userElement.elementTextTrim("user"));
-						}
-					}
 				}
 			}
 		}
