@@ -88,7 +88,7 @@ public class CompanyTest {
 
 		List<Future<Void>> futures = new ArrayList<>();
 
-		for (int i = 1; i <= _COMPANYCOUNT; i++) {
+		for (int i = 1; i <= _COMPANY_COUNT; i++) {
 			int companyIndex = i;
 
 			futures.add(
@@ -105,8 +105,8 @@ public class CompanyTest {
 		}
 
 		Assert.assertTrue(
-			"Company count should be " + (_COMPANYCOUNT + 1),
-			_companyLocalService.getCompaniesCount() == (_COMPANYCOUNT + 1));
+			"Company count should be " + (_COMPANY_COUNT + 1),
+			_companyLocalService.getCompaniesCount() == (_COMPANY_COUNT + 1));
 
 		if (System.getenv("JENKINS_HOME") == null) {
 			_exportCSV();
@@ -133,8 +133,8 @@ public class CompanyTest {
 			company.getCompanyId());
 
 		Assert.assertTrue(
-			"users count should be " + (_USERCOUNT + 1),
-			usersCount == (_USERCOUNT + 1));
+			"users count should be " + (_USER_COUNT + 1),
+			usersCount == (_USER_COUNT + 1));
 	}
 
 	private void _addUser(
@@ -156,8 +156,8 @@ public class CompanyTest {
 		Role role = _roleLocalService.getRole(
 			companyId, RoleConstants.ADMINISTRATOR);
 
-		int userStartIndex = (companyIndex * _USERCOUNT) + 1;
-		int userEndIndex = (companyIndex + 1) * _USERCOUNT;
+		int userStartIndex = (companyIndex * _USER_COUNT) + 1;
+		int userEndIndex = (companyIndex + 1) * _USER_COUNT;
 
 		for (int i = userStartIndex; i <= userEndIndex; i++) {
 			String screenName = "test" + i;
@@ -226,10 +226,10 @@ public class CompanyTest {
 		return serviceContext;
 	}
 
-	private static final int _COMPANYCOUNT = GetterUtil.get(
+	private static final int _COMPANY_COUNT = GetterUtil.get(
 		PropsUtil.get("company.test.count"), 2);
 
-	private static final int _USERCOUNT = GetterUtil.get(
+	private static final int _USER_COUNT = GetterUtil.get(
 		PropsUtil.get("each.company.include.users.count"), 2);
 
 	@Inject
