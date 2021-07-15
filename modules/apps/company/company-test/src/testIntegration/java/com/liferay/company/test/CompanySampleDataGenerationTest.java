@@ -118,7 +118,7 @@ public class CompanySampleDataGenerationTest {
 	}
 
 	private void _addCompany(int companyIndex) throws Exception {
-		String webId = "liferay" + companyIndex + ".com";
+		String webId = _generateCompanyWebId(companyIndex);
 
 		// Add company
 
@@ -167,7 +167,7 @@ public class CompanySampleDataGenerationTest {
 		long userEndIndex = (companyIndex + 1) * _USER_PER_COMPANY_COUNT;
 
 		for (long i = userStartIndex; i <= userEndIndex; i++) {
-			String screenName = "test" + i;
+			String screenName = _generateUserScreenName(i);
 
 			String firstName = screenName;
 			String lastName = screenName;
@@ -239,6 +239,14 @@ public class CompanySampleDataGenerationTest {
 			hostBufferedWriter.flush();
 			userBufferedWriter.flush();
 		}
+	}
+
+	private String _generateCompanyWebId(int companyIndex) {
+		return "liferay" + companyIndex + ".com";
+	}
+
+	private String _generateUserScreenName(long userIndex) {
+		return "test" + userIndex;
 	}
 
 	private ServiceContext _getServiceContext(long companyId) {
