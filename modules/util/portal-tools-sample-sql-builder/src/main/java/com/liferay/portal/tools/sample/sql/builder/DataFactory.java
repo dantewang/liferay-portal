@@ -5468,24 +5468,24 @@ public class DataFactory {
 
 		// Organization Administrator
 
-		_organizationAdministratorRoleModel = newRoleModel(
+		RoleModel organizationAdministratorRoleModel = newRoleModel(
 			RoleConstants.ORGANIZATION_ADMINISTRATOR,
 			RoleConstants.TYPE_ORGANIZATION);
 
-		roleModels.add(_organizationAdministratorRoleModel);
+		roleModels.add(organizationAdministratorRoleModel);
 
 		_kaleoTaskAssignmentRoleModels.put(
-			"Organization Administrator", _organizationAdministratorRoleModel);
+			"Organization Administrator", organizationAdministratorRoleModel);
 
 		// Organization Owner
 
-		_organizationOwnerRoleModel = newRoleModel(
+		RoleModel organizationOwnerRoleModel = newRoleModel(
 			RoleConstants.ORGANIZATION_OWNER, RoleConstants.TYPE_ORGANIZATION);
 
-		roleModels.add(_organizationOwnerRoleModel);
+		roleModels.add(organizationOwnerRoleModel);
 
 		_kaleoTaskAssignmentRoleModels.put(
-			"Organization Owner", _organizationOwnerRoleModel);
+			"Organization Owner", organizationOwnerRoleModel);
 
 		// Organization User
 
@@ -5510,13 +5510,13 @@ public class DataFactory {
 
 		// Site Administrator
 
-		_siteAdministratorRoleModel = newRoleModel(
+		RoleModel siteAdministratorRoleModel = newRoleModel(
 			RoleConstants.SITE_ADMINISTRATOR, RoleConstants.TYPE_SITE);
 
-		roleModels.add(_siteAdministratorRoleModel);
+		roleModels.add(siteAdministratorRoleModel);
 
 		_kaleoTaskAssignmentRoleModels.put(
-			"Site Administrator", _siteAdministratorRoleModel);
+			"Site Administrator", siteAdministratorRoleModel);
 
 		// Site Member
 
@@ -5527,12 +5527,12 @@ public class DataFactory {
 
 		// Site Owner
 
-		_siteOwnerRoleModel = newRoleModel(
+		RoleModel siteOwnerRoleModel = newRoleModel(
 			RoleConstants.SITE_OWNER, RoleConstants.TYPE_SITE);
 
-		roleModels.add(_siteOwnerRoleModel);
+		roleModels.add(siteOwnerRoleModel);
 
-		_kaleoTaskAssignmentRoleModels.put("Site Owner", _siteOwnerRoleModel);
+		_kaleoTaskAssignmentRoleModels.put("Site Owner", siteOwnerRoleModel);
 
 		// User
 
@@ -5543,65 +5543,65 @@ public class DataFactory {
 
 		// Asset Library Administrator
 
-		_assetLibraryAdministratorRoleModel = newRoleModel(
+		RoleModel assetLibraryAdministratorRoleModel = newRoleModel(
 			"Asset Library Administrator", RoleConstants.TYPE_DEPOT);
 
-		roleModels.add(_assetLibraryAdministratorRoleModel);
+		roleModels.add(assetLibraryAdministratorRoleModel);
 
 		_kaleoTaskAssignmentRoleModels.put(
-			"Asset Library Administrator", _assetLibraryAdministratorRoleModel);
+			"Asset Library Administrator", assetLibraryAdministratorRoleModel);
 
 		// Asset Library Content Reviewer
 
-		_assetLibraryContentReviewerRoleModel = newRoleModel(
+		RoleModel assetLibraryContentReviewerRoleModel = newRoleModel(
 			"Asset Library Content Reviewer", RoleConstants.TYPE_DEPOT);
 
-		roleModels.add(_assetLibraryContentReviewerRoleModel);
+		roleModels.add(assetLibraryContentReviewerRoleModel);
 
 		_kaleoTaskAssignmentRoleModels.put(
 			"Asset Library Content Reviewer",
-			_assetLibraryContentReviewerRoleModel);
+			assetLibraryContentReviewerRoleModel);
 
 		// Asset Library Owner
 
-		_assetLibraryOwnerRoleModel = newRoleModel(
+		RoleModel assetLibraryOwnerRoleModel = newRoleModel(
 			"Asset Library Owner", RoleConstants.TYPE_DEPOT);
 
-		roleModels.add(_assetLibraryOwnerRoleModel);
+		roleModels.add(assetLibraryOwnerRoleModel);
 
 		_kaleoTaskAssignmentRoleModels.put(
-			"Asset Library Owner", _assetLibraryOwnerRoleModel);
+			"Asset Library Owner", assetLibraryOwnerRoleModel);
 
 		// Portal Content Reviewer
 
-		_portalContentReviewerRoleModel = newRoleModel(
+		RoleModel portalContentReviewerRoleModel = newRoleModel(
 			"Portal Content Reviewer", RoleConstants.TYPE_REGULAR);
 
-		roleModels.add(_portalContentReviewerRoleModel);
+		roleModels.add(portalContentReviewerRoleModel);
 
 		_kaleoTaskAssignmentRoleModels.put(
-			"Portal Content Reviewer", _portalContentReviewerRoleModel);
+			"Portal Content Reviewer", portalContentReviewerRoleModel);
 
 		// Organization Content Reviewer
 
-		_organizationContentReviewerRoleModel = newRoleModel(
+		RoleModel organizationContentReviewerRoleModel = newRoleModel(
 			"Organization Content Reviewer", RoleConstants.TYPE_ORGANIZATION);
 
-		roleModels.add(_organizationContentReviewerRoleModel);
+		roleModels.add(organizationContentReviewerRoleModel);
 
 		_kaleoTaskAssignmentRoleModels.put(
 			"Organization Content Reviewer",
-			_organizationContentReviewerRoleModel);
+			organizationContentReviewerRoleModel);
 
 		// Site Content Reviewer
 
-		_siteContentReviewerRoleModel = newRoleModel(
+		RoleModel siteContentReviewerRoleModel = newRoleModel(
 			"Site Content Reviewer", RoleConstants.TYPE_SITE);
 
-		roleModels.add(_siteContentReviewerRoleModel);
+		roleModels.add(siteContentReviewerRoleModel);
 
 		_kaleoTaskAssignmentRoleModels.put(
-			"Site Content Reviewer", _siteContentReviewerRoleModel);
+			"Site Content Reviewer", siteContentReviewerRoleModel);
 
 		return roleModels;
 	}
@@ -7646,9 +7646,6 @@ public class DataFactory {
 	private final long[] _assetClassNameIds;
 	private final Map<Long, Integer> _assetClassNameIdsIndexes =
 		new HashMap<>();
-	private RoleModel _assetLibraryAdministratorRoleModel;
-	private RoleModel _assetLibraryContentReviewerRoleModel;
-	private RoleModel _assetLibraryOwnerRoleModel;
 	private final Map<Long, Integer> _assetPublisherQueryStartIndexes =
 		new HashMap<>();
 	private Map<Long, SimpleCounter>[] _assetTagCounters;
@@ -7690,21 +7687,14 @@ public class DataFactory {
 	private final SimpleCounter _layoutPlidCounter;
 	private final SimpleCounter _layoutSetIdCounter;
 	private String _mbKaleoDefinitionContent;
-	private RoleModel _organizationAdministratorRoleModel;
-	private RoleModel _organizationContentReviewerRoleModel;
-	private RoleModel _organizationOwnerRoleModel;
 	private RoleModel _ownerRoleModel;
-	private RoleModel _portalContentReviewerRoleModel;
 	private final SimpleCounter _portletPreferenceValueIdCounter;
 	private RoleModel _powerUserRoleModel;
 	private final SimpleCounter _resourcePermissionIdCounter;
 	private long _sampleUserId;
 	private final Format _simpleDateFormat;
 	private String _singleApproverKaleoDefinitionContent;
-	private RoleModel _siteAdministratorRoleModel;
-	private RoleModel _siteContentReviewerRoleModel;
 	private RoleModel _siteMemberRoleModel;
-	private RoleModel _siteOwnerRoleModel;
 	private final SimpleCounter _socialActivityIdCounter;
 	private final SimpleCounter _timeCounter;
 	private RoleModel _userRoleModel;
