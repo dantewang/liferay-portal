@@ -37,15 +37,15 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PropsUtil;
-import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -122,8 +122,6 @@ public class CompanyTest {
 		PortalInstances.initCompany(
 			ServletContextPool.get(StringPool.BLANK), webId);
 
-		_companyIds.add(company.getCompanyId());
-
 		// Add user
 
 		_addUser(
@@ -156,8 +154,6 @@ public class CompanyTest {
 		Role role = _roleLocalService.getRole(
 			companyId, RoleConstants.ADMINISTRATOR);
 
-		List<User> users = new ArrayList<>();
-
 		int userStartIndex = (companyIndex * _USERCOUNT) + 1;
 		int userEndIndex = (companyIndex + 1) * _USERCOUNT;
 
@@ -189,35 +185,19 @@ public class CompanyTest {
 
 			_userLocalService.updateUser(user);
 
-			users.add(user);
+			List<String> userScreenNames = _csvMap.computeIfAbsent(
+				webId, key -> new ArrayList<>());
+
+			userScreenNames.add(screenName);
 		}
 	}
 
 	private void _exportCSV() throws Exception {
 		StringBundler sb = new StringBundler(_COMPANYCOUNT * _USERCOUNT);
 
-		for (Long companyId : _companyIds) {
-			List<User> users = _userLocalService.getCompanyUsers(
-				companyId, -1, -1);
-
-			String mx = null;
-
-			for (User user : users) {
-				String screenName = user.getScreenName();
-
-				if (screenName.equals(PropsValues.DEFAULT_ADMIN_SCREEN_NAME)) {
-					continue;
-				}
-
-				if (mx == null) {
-					String emailAddress = user.getEmailAddress();
-
-					mx = emailAddress.substring(
-						emailAddress.indexOf(StringPool.AT) +
-							StringPool.AT.length());
-				}
-
-				sb.append(_getUserCSV(user, mx));
+		for (Map.Entry<String, List<String>> entry : _csvMap.entrySet()) {
+			for (String screenName : entry.getValue()) {
+				sb.append(_getUserCSV(screenName, entry.getKey()));
 			}
 		}
 
@@ -243,12 +223,12 @@ public class CompanyTest {
 		return serviceContext;
 	}
 
-	private String _getUserCSV(User user, String mx) {
+	private String _getUserCSV(String screenName, String mx) {
 		StringBundler sb = new StringBundler(4);
 
 		sb.append(CSVUtil.encode(mx));
 		sb.append(StringPool.COMMA);
-		sb.append(CSVUtil.encode(user.getScreenName()));
+		sb.append(CSVUtil.encode(screenName));
 		sb.append(StringPool.NEW_LINE);
 
 		return sb.toString();
@@ -260,12 +240,10 @@ public class CompanyTest {
 	private static final int _USERCOUNT = GetterUtil.get(
 		PropsUtil.get("each.company.include.users.count"), 2);
 
-	private static final List<Long> _companyIds = Collections.synchronizedList(
-		new ArrayList<Long>());
-
 	@Inject
 	private CompanyLocalService _companyLocalService;
 
+	private final Map<String, List<String>> _csvMap = new ConcurrentHashMap<>();
 	private ExecutorService _executorService;
 
 	@Inject
