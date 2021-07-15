@@ -162,10 +162,10 @@ public class CompanyTest {
 		Role role = _roleLocalService.getRole(
 			companyId, RoleConstants.ADMINISTRATOR);
 
-		int userStartIndex = (companyIndex * _USER_PER_COMPANY_COUNT) + 1;
-		int userEndIndex = (companyIndex + 1) * _USER_PER_COMPANY_COUNT;
+		long userStartIndex = (companyIndex * _USER_PER_COMPANY_COUNT) + 1;
+		long userEndIndex = (companyIndex + 1) * _USER_PER_COMPANY_COUNT;
 
-		for (int i = userStartIndex; i <= userEndIndex; i++) {
+		for (long i = userStartIndex; i <= userEndIndex; i++) {
 			String screenName = "test" + i;
 
 			String firstName = screenName;
