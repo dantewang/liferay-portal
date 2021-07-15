@@ -89,7 +89,7 @@ public class CompanyTest {
 
 		List<Future<Void>> futures = new ArrayList<>();
 
-		for (int i = 0; i < _COMPANYCOUNT; i++) {
+		for (int i = 1; i <= _COMPANYCOUNT; i++) {
 			String webId = "liferay" + i + ".com";
 
 			futures.add(
@@ -163,7 +163,7 @@ public class CompanyTest {
 
 		if (_lock.tryLock(1, TimeUnit.MINUTES)) {
 			try {
-				startNum = _startNum * _USERCOUNT;
+				startNum = _startNum * _USERCOUNT + 1;
 
 				_startNum++;
 
@@ -174,7 +174,7 @@ public class CompanyTest {
 			}
 		}
 
-		for (int i = startNum; i < count; i++) {
+		for (int i = startNum; i <= count; i++) {
 			String screenName = "test" + i;
 
 			String firstName = screenName;
