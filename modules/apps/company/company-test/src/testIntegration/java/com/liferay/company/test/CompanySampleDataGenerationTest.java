@@ -84,7 +84,7 @@ public class CompanySampleDataGenerationTest {
 	}
 
 	@Test
-	public void testAddCompanyAndUserData() throws Exception {
+	public void testGenerateSampleData() throws Exception {
 		int originalCompaniesCount = _companyLocalService.getCompaniesCount();
 
 		List<Future<Void>> futures = new ArrayList<>();
