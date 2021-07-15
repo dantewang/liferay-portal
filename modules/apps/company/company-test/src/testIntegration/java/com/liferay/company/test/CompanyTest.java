@@ -15,6 +15,7 @@
 package com.liferay.company.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Role;
@@ -27,20 +28,32 @@ import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DataGuard;
+import com.liferay.portal.kernel.util.CSVUtil;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PropsUtil;
+import com.liferay.portal.util.PropsValues;
+
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -97,6 +110,10 @@ public class CompanyTest {
 		Assert.assertTrue(
 			"Company count should be " + (_COMPANYCOUNT + 1),
 			_companyLocalService.getCompaniesCount() == (_COMPANYCOUNT + 1));
+
+		if (System.getenv("JENKINS_HOME") == null) {
+			_exportCSV();
+		}
 	}
 
 	private void _addCompany(String webId) throws Exception {
@@ -108,6 +125,8 @@ public class CompanyTest {
 
 		PortalInstances.initCompany(
 			ServletContextPool.get(StringPool.BLANK), webId);
+
+		_companyIds.add(company.getCompanyId());
 
 		// Add user
 
@@ -139,7 +158,25 @@ public class CompanyTest {
 		Role role = _roleLocalService.getRole(
 			companyId, RoleConstants.ADMINISTRATOR);
 
-		for (int i = 0; i < _USERCOUNT; i++) {
+		List<User> users = new ArrayList<>();
+
+		int startNum = 0;
+		int count = 0;
+
+		if (_lock.tryLock(1, TimeUnit.MINUTES)) {
+			try {
+				startNum = _startNum * _USERCOUNT;
+
+				_startNum++;
+
+				count = _startNum * _USERCOUNT;
+			}
+			finally {
+				_lock.unlock();
+			}
+		}
+
+		for (int i = startNum; i < count; i++) {
 			String screenName = "test" + i;
 
 			String firstName = screenName;
@@ -166,7 +203,50 @@ public class CompanyTest {
 			user.setReminderQueryAnswer(screenName);
 
 			_userLocalService.updateUser(user);
+
+			users.add(user);
 		}
+
+		_companyUsers.put(companyId, users);
+	}
+
+	private void _exportCSV() throws Exception {
+		StringBundler sb = new StringBundler(_COMPANYCOUNT * _USERCOUNT);
+
+		for (Long companyId : _companyIds) {
+			List<User> users = _companyUsers.get(companyId);
+
+			String mx = null;
+
+			for (User user : users) {
+				String screenName = user.getScreenName();
+
+				if (screenName.equals(PropsValues.DEFAULT_ADMIN_SCREEN_NAME)) {
+					continue;
+				}
+
+				if (mx == null) {
+					String emailAddress = user.getEmailAddress();
+
+					mx = emailAddress.substring(
+						emailAddress.indexOf(StringPool.AT) +
+							StringPool.AT.length());
+				}
+
+				sb.append(_getUserCSV(user, mx));
+			}
+		}
+
+		String csv = sb.toString();
+
+		File csvFile = new File(
+			PropsUtil.get(PropsKeys.LIFERAY_HOME) + "/companydata.csv");
+
+		if (csvFile.exists()) {
+			csvFile.delete();
+		}
+
+		FileUtil.write(csvFile, csv.getBytes());
 	}
 
 	private ServiceContext _getServiceContext(long companyId) {
@@ -179,11 +259,29 @@ public class CompanyTest {
 		return serviceContext;
 	}
 
+	private String _getUserCSV(User user, String mx) {
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(CSVUtil.encode(mx));
+		sb.append(StringPool.COMMA);
+		sb.append(CSVUtil.encode(user.getScreenName()));
+		sb.append(StringPool.NEW_LINE);
+
+		return sb.toString();
+	}
+
 	private static final int _COMPANYCOUNT = GetterUtil.get(
 		PropsUtil.get("company.test.count"), 2);
 
 	private static final int _USERCOUNT = GetterUtil.get(
 		PropsUtil.get("each.company.include.users.count"), 2);
+
+	private static final List<Long> _companyIds = Collections.synchronizedList(
+		new ArrayList<Long>());
+	private static final Map<Long, List<User>> _companyUsers =
+		new ConcurrentHashMap<>();
+	private static final Lock _lock = new ReentrantLock();
+	private static int _startNum;
 
 	@Inject
 	private CompanyLocalService _companyLocalService;
