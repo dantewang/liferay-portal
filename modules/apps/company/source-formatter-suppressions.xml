@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-
-<suppressions>
-	<checkstyle>
-		<suppress checks="CompanyIterationCheck" files="company-test/src/testIntegration/java/com/liferay/company/test/CompanyTest.java" />
-	</checkstyle>
-</suppressions>
