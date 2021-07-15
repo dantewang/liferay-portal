@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.util.CSVUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.test.rule.Inject;
@@ -95,20 +96,22 @@ public class CompanySampleDataGenerationTest {
 
 		List<Future<Void>> futures = new ArrayList<>();
 
-		for (int i = 1; i <= _COMPANY_COUNT; i++) {
-			int companyIndex = i;
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
+			for (int i = 1; i <= _COMPANY_COUNT; i++) {
+				int companyIndex = i;
 
-			futures.add(
-				_executorService.submit(
-					() -> {
-						_addCompany(companyIndex);
+				futures.add(
+					_executorService.submit(
+						() -> {
+							_addCompany(companyIndex);
 
-						return null;
-					}));
-		}
+							return null;
+						}));
+			}
 
-		for (Future<Void> future : futures) {
-			future.get();
+			for (Future<Void> future : futures) {
+				future.get();
+			}
 		}
 
 		Assert.assertEquals(
@@ -121,30 +124,35 @@ public class CompanySampleDataGenerationTest {
 	}
 
 	private void _addCompany(int companyIndex) throws Exception {
-		String webId = _generateCompanyWebId(companyIndex);
+		try (LoggingTimer loggingTimer = new LoggingTimer(
+				String.valueOf(companyIndex))) {
 
-		// Add company
+			String webId = _generateCompanyWebId(companyIndex);
 
-		Company company = _companyLocalService.addCompany(
-			null, webId, webId, webId, false, 0, true);
+			// Add company
 
-		PortalInstances.initCompany(
-			ServletContextPool.get(StringPool.BLANK), webId);
+			Company company = _companyLocalService.addCompany(
+				null, webId, webId, webId, false, 0, true);
 
-		// Add user
+			PortalInstances.initCompany(
+				ServletContextPool.get(StringPool.BLANK), webId);
 
-		int originalCompanyUsersCount = _userLocalService.getCompanyUsersCount(
-			company.getCompanyId());
+			// Add user
 
-		_addUser(
-			companyIndex, company.getCompanyId(), company.getGroupId(), webId);
+			int originalCompanyUsersCount =
+				_userLocalService.getCompanyUsersCount(company.getCompanyId());
 
-		Assert.assertEquals(
-			StringBundler.concat(
-				"User count for ", webId, "should be ",
-				_USER_PER_COMPANY_COUNT + originalCompanyUsersCount),
-			_USER_PER_COMPANY_COUNT + originalCompanyUsersCount,
-			_userLocalService.getCompanyUsersCount(company.getCompanyId()));
+			_addUser(
+				companyIndex, company.getCompanyId(), company.getGroupId(),
+				webId);
+
+			Assert.assertEquals(
+				StringBundler.concat(
+					"User count for ", webId, "should be ",
+					_USER_PER_COMPANY_COUNT + originalCompanyUsersCount),
+				_USER_PER_COMPANY_COUNT + originalCompanyUsersCount,
+				_userLocalService.getCompanyUsersCount(company.getCompanyId()));
+		}
 	}
 
 	private void _addUser(
@@ -231,7 +239,8 @@ public class CompanySampleDataGenerationTest {
 		File hostCSVFile = new File(outputDirFile + "/host.csv");
 		File userCSVFile = new File(outputDirFile + "/user.csv");
 
-		try (BufferedWriter companyBufferedWriter = Files.newBufferedWriter(
+		try (LoggingTimer loggingTimer = new LoggingTimer();
+			BufferedWriter companyBufferedWriter = Files.newBufferedWriter(
 				companyCSVFile.toPath(), StandardOpenOption.CREATE,
 				StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
 			BufferedWriter hostBufferedWriter = Files.newBufferedWriter(
