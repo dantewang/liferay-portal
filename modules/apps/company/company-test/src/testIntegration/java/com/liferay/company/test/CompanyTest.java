@@ -15,6 +15,7 @@
 package com.liferay.company.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Role;
@@ -104,9 +105,9 @@ public class CompanyTest {
 			future.get();
 		}
 
-		Assert.assertTrue(
+		Assert.assertEquals(
 			"Company count should be " + (_COMPANY_COUNT + 1),
-			_companyLocalService.getCompaniesCount() == (_COMPANY_COUNT + 1));
+			_COMPANY_COUNT + 1, _companyLocalService.getCompaniesCount());
 
 		if (System.getenv("JENKINS_HOME") == null) {
 			_exportCSV();
@@ -129,12 +130,12 @@ public class CompanyTest {
 		_addUser(
 			companyIndex, company.getCompanyId(), company.getGroupId(), webId);
 
-		int usersCount = _userLocalService.getCompanyUsersCount(
-			company.getCompanyId());
-
-		Assert.assertTrue(
-			"users count should be " + (_USER_COUNT + 1),
-			usersCount == (_USER_COUNT + 1));
+		Assert.assertEquals(
+			StringBundler.concat(
+				"User count for ", webId, "should be ",
+				_USER_PER_COMPANY_COUNT + 1),
+			_USER_PER_COMPANY_COUNT + 1,
+			_userLocalService.getCompanyUsersCount(company.getCompanyId()));
 	}
 
 	private void _addUser(
@@ -156,8 +157,8 @@ public class CompanyTest {
 		Role role = _roleLocalService.getRole(
 			companyId, RoleConstants.ADMINISTRATOR);
 
-		int userStartIndex = (companyIndex * _USER_COUNT) + 1;
-		int userEndIndex = (companyIndex + 1) * _USER_COUNT;
+		int userStartIndex = (companyIndex * _USER_PER_COMPANY_COUNT) + 1;
+		int userEndIndex = (companyIndex + 1) * _USER_PER_COMPANY_COUNT;
 
 		for (int i = userStartIndex; i <= userEndIndex; i++) {
 			String screenName = "test" + i;
@@ -227,10 +228,10 @@ public class CompanyTest {
 	}
 
 	private static final int _COMPANY_COUNT = GetterUtil.get(
-		PropsUtil.get("company.test.count"), 2);
+		PropsUtil.get("sample.data.company.count"), 2);
 
-	private static final int _USER_COUNT = GetterUtil.get(
-		PropsUtil.get("each.company.include.users.count"), 2);
+	private static final int _USER_PER_COMPANY_COUNT = GetterUtil.get(
+		PropsUtil.get("sample.data.user.per.company.count"), 2);
 
 	@Inject
 	private CompanyLocalService _companyLocalService;
