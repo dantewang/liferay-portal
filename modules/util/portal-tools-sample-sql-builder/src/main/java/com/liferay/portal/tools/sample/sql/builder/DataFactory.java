@@ -309,8 +309,10 @@ import com.liferay.portal.upgrade.PortalUpgradeProcess;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.workflow.constants.WorkflowDefinitionConstants;
 import com.liferay.portal.workflow.kaleo.model.KaleoDefinitionModel;
+import com.liferay.portal.workflow.kaleo.model.KaleoDefinitionVersionModel;
 import com.liferay.portal.workflow.kaleo.model.KaleoNodeModel;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoDefinitionModelImpl;
+import com.liferay.portal.workflow.kaleo.model.impl.KaleoDefinitionVersionModelImpl;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoNodeModelImpl;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
@@ -4458,6 +4460,48 @@ public class DataFactory {
 				WorkflowDefinitionConstants.SCOPE_ALL));
 
 		return kaleoDefinitionModels;
+	}
+
+	public KaleoDefinitionVersionModel newKaleoDefinitionVersionModel(
+			KaleoDefinitionModel kaleoDefinitionModel,
+			KaleoNodeModel kaleoNodeModel)
+		throws Exception {
+
+		KaleoDefinitionVersionModel kaleoDefinitionVersionModel =
+			new KaleoDefinitionVersionModelImpl();
+
+		// PK fields
+
+		kaleoDefinitionVersionModel.setKaleoDefinitionVersionId(
+			kaleoNodeModel.getKaleoDefinitionVersionId());
+
+		// Audit fields
+
+		kaleoDefinitionVersionModel.setCompanyId(_companyId);
+		kaleoDefinitionVersionModel.setUserId(_defaultUserId);
+		kaleoDefinitionVersionModel.setUserName(_SAMPLE_USER_NAME);
+		kaleoDefinitionVersionModel.setStatusDate(new Date());
+		kaleoDefinitionVersionModel.setCreateDate(new Date());
+		kaleoDefinitionVersionModel.setModifiedDate(new Date());
+
+		// Other fields
+
+		kaleoDefinitionVersionModel.setKaleoDefinitionId(
+			kaleoDefinitionModel.getKaleoDefinitionId());
+
+		kaleoDefinitionVersionModel.setName(kaleoDefinitionModel.getName());
+
+		kaleoDefinitionVersionModel.setTitle(kaleoDefinitionModel.getTitle());
+
+		kaleoDefinitionVersionModel.setContent(
+			kaleoDefinitionModel.getContent());
+		kaleoDefinitionVersionModel.setVersion("1.0");
+		kaleoDefinitionVersionModel.setStartKaleoNodeId(
+			kaleoNodeModel.getKaleoNodeId());
+
+		kaleoDefinitionVersionModel.setStatus(0);
+
+		return kaleoDefinitionVersionModel;
 	}
 
 	public LayoutClassedModelUsageModel newLayoutClassedModelUsageModel(
