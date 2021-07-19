@@ -12,6 +12,8 @@ ${dataFactory.toInsertSQL(dataFactory.newVirtualHostModel())}
 	<#assign startKaleoNodeModel = dataFactory.newStartKaleoNodeModel(kaleoDefinitionModel) />
 
 	${dataFactory.toInsertSQL(startKaleoNodeModel)}
+
+	${dataFactory.toInsertSQL(dataFactory.newKaleoDefinitionVersionModel(kaleoDefinitionModel, startKaleoNodeModel))}
 </#list>
 
 ${csvFileWriter.write("company", companyModel.companyId + "\n")}
