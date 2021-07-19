@@ -314,10 +314,13 @@ import com.liferay.portal.workflow.constants.WorkflowDefinitionConstants;
 import com.liferay.portal.workflow.kaleo.model.KaleoDefinitionModel;
 import com.liferay.portal.workflow.kaleo.model.KaleoDefinitionVersionModel;
 import com.liferay.portal.workflow.kaleo.model.KaleoNodeModel;
+import com.liferay.portal.workflow.kaleo.model.KaleoTask;
+import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignmentModel;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskModel;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoDefinitionModelImpl;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoDefinitionVersionModelImpl;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoNodeModelImpl;
+import com.liferay.portal.workflow.kaleo.model.impl.KaleoTaskAssignmentModelImpl;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoTaskModelImpl;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
@@ -6676,6 +6679,45 @@ public class DataFactory {
 		kaleoNodeModel.setTerminal(terminal);
 
 		return kaleoNodeModel;
+	}
+
+	protected KaleoTaskAssignmentModel newKaleoTaskAssignmentModel(
+		KaleoTaskModel kaleoTaskModel, String assigneeClassName,
+		long assigneeClassPK) {
+
+		KaleoTaskAssignmentModel kaleoTaskAssignmentModel =
+			new KaleoTaskAssignmentModelImpl();
+
+		// PK fields
+
+		kaleoTaskAssignmentModel.setKaleoTaskAssignmentId(_counter.get());
+
+		// Audit fields
+
+		kaleoTaskAssignmentModel.setCompanyId(_companyId);
+		kaleoTaskAssignmentModel.setUserId(_defaultUserId);
+		kaleoTaskAssignmentModel.setUserName(_SAMPLE_USER_NAME);
+		kaleoTaskAssignmentModel.setCreateDate(new Date());
+		kaleoTaskAssignmentModel.setModifiedDate(new Date());
+
+		// Other fields
+
+		kaleoTaskAssignmentModel.setKaleoClassName(KaleoTask.class.getName());
+
+		kaleoTaskAssignmentModel.setKaleoClassPK(
+			kaleoTaskModel.getKaleoTaskId());
+
+		kaleoTaskAssignmentModel.setKaleoDefinitionId(
+			kaleoTaskModel.getKaleoDefinitionId());
+
+		kaleoTaskAssignmentModel.setKaleoDefinitionVersionId(
+			kaleoTaskModel.getKaleoDefinitionVersionId());
+
+		kaleoTaskAssignmentModel.setAssigneeClassName(assigneeClassName);
+
+		kaleoTaskAssignmentModel.setAssigneeClassPK(assigneeClassPK);
+
+		return kaleoTaskAssignmentModel;
 	}
 
 	protected LayoutModel newLayoutModel(
