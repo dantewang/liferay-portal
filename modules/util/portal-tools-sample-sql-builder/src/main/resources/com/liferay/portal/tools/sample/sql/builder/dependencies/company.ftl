@@ -14,4 +14,8 @@
 	<#include "roles.ftl">
 
 	<#include "groups.ftl">
+
+	<#list dataFactory.newKaleoDefinitionModels() as kaleoDefinitionModel>
+		${dataFactory.toInsertSQL(kaleoDefinitionModel)}
+	</#list>
 </#list>
