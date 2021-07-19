@@ -314,9 +314,11 @@ import com.liferay.portal.workflow.constants.WorkflowDefinitionConstants;
 import com.liferay.portal.workflow.kaleo.model.KaleoDefinitionModel;
 import com.liferay.portal.workflow.kaleo.model.KaleoDefinitionVersionModel;
 import com.liferay.portal.workflow.kaleo.model.KaleoNodeModel;
+import com.liferay.portal.workflow.kaleo.model.KaleoTaskModel;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoDefinitionModelImpl;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoDefinitionVersionModelImpl;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoNodeModelImpl;
+import com.liferay.portal.workflow.kaleo.model.impl.KaleoTaskModelImpl;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
@@ -4493,6 +4495,34 @@ public class DataFactory {
 				false, false));
 
 		return kaleoNodeModels;
+	}
+
+	public KaleoTaskModel newKaleoTaskModel(KaleoNodeModel kaleoNodeModel) {
+		KaleoTaskModel kaleoTaskModel = new KaleoTaskModelImpl();
+
+		// PK fields
+
+		kaleoTaskModel.setKaleoTaskId(_counter.get());
+
+		// Audit fields
+
+		kaleoTaskModel.setCompanyId(_companyId);
+		kaleoTaskModel.setUserId(_defaultUserId);
+		kaleoTaskModel.setUserName(_SAMPLE_USER_NAME);
+		kaleoTaskModel.setCreateDate(new Date());
+		kaleoTaskModel.setModifiedDate(new Date());
+
+		// Other fields
+
+		kaleoTaskModel.setKaleoDefinitionId(
+			kaleoNodeModel.getKaleoDefinitionId());
+
+		kaleoTaskModel.setKaleoDefinitionVersionId(
+			kaleoNodeModel.getKaleoDefinitionVersionId());
+
+		kaleoTaskModel.setName(kaleoNodeModel.getName());
+
+		return kaleoTaskModel;
 	}
 
 	public LayoutClassedModelUsageModel newLayoutClassedModelUsageModel(
