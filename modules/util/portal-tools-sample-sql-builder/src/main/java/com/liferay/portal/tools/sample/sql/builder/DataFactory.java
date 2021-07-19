@@ -5318,6 +5318,49 @@ public class DataFactory {
 			RoleConstants.USER, RoleConstants.TYPE_REGULAR);
 
 		roleModels.add(_userRoleModel);
+		
+
+		// Asset Library Administrator
+
+		_assetLibraryAdministratorRoleModel = newRoleModel(
+			"Asset Library Administrator", RoleConstants.TYPE_DEPOT);
+
+		roleModels.add(_assetLibraryAdministratorRoleModel);
+
+		// Asset Library Content Reviewer
+
+		_assetLibraryContentReviewerRoleModel = newRoleModel(
+			"Asset Library Content Reviewer", RoleConstants.TYPE_DEPOT);
+
+		roleModels.add(_assetLibraryContentReviewerRoleModel);
+
+		// Asset Library Owner
+
+		_assetLibraryOwnerRoleModel = newRoleModel(
+			"Asset Library Owner", RoleConstants.TYPE_DEPOT);
+
+		roleModels.add(_assetLibraryOwnerRoleModel);
+
+		// Portal Content Reviewer
+
+		_portalContentReviewerRoleModel = newRoleModel(
+			"Portal Content Reviewer", RoleConstants.TYPE_REGULAR);
+
+		roleModels.add(_portalContentReviewerRoleModel);
+
+		// Organization Content Reviewer
+
+		_organizationContentReviewerRoleModel = newRoleModel(
+			"Organization Content Reviewer", RoleConstants.TYPE_ORGANIZATION);
+
+		roleModels.add(_organizationContentReviewerRoleModel);
+
+		// Site Content Reviewer
+
+		_siteContentReviewerRoleModel = newRoleModel(
+			"Site Content Reviewer", RoleConstants.TYPE_SITE);
+
+		roleModels.add(_siteContentReviewerRoleModel);
 
 		return roleModels;
 	}
@@ -7108,6 +7151,9 @@ public class DataFactory {
 	private final long[] _assetClassNameIds;
 	private final Map<Long, Integer> _assetClassNameIdsIndexes =
 		new HashMap<>();
+	private RoleModel _assetLibraryAdministratorRoleModel;
+	private RoleModel _assetLibraryContentReviewerRoleModel;
+	private RoleModel _assetLibraryOwnerRoleModel;
 	private final Map<Long, Integer> _assetPublisherQueryStartIndexes =
 		new HashMap<>();
 	private Map<Long, SimpleCounter>[] _assetTagCounters;
@@ -7148,12 +7194,15 @@ public class DataFactory {
 	private final String _layoutPageTemplateStructureRelData;
 	private final SimpleCounter _layoutPlidCounter;
 	private final SimpleCounter _layoutSetIdCounter;
+	private RoleModel _organizationContentReviewerRoleModel;
 	private RoleModel _ownerRoleModel;
+	private RoleModel _portalContentReviewerRoleModel;
 	private final SimpleCounter _portletPreferenceValueIdCounter;
 	private RoleModel _powerUserRoleModel;
 	private final SimpleCounter _resourcePermissionIdCounter;
 	private long _sampleUserId;
 	private final Format _simpleDateFormat;
+	private RoleModel _siteContentReviewerRoleModel;
 	private RoleModel _siteMemberRoleModel;
 	private final SimpleCounter _socialActivityIdCounter;
 	private final SimpleCounter _timeCounter;
