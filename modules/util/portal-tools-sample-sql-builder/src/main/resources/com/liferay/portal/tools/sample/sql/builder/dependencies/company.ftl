@@ -17,5 +17,9 @@
 
 	<#list dataFactory.newKaleoDefinitionModels() as kaleoDefinitionModel>
 		${dataFactory.toInsertSQL(kaleoDefinitionModel)}
+
+		<#assign startKaleoNodeModel = dataFactory.newStartKaleoNodeModel(kaleoDefinitionModel) />
+
+		${dataFactory.toInsertSQL(startKaleoNodeModel)}
 	</#list>
 </#list>

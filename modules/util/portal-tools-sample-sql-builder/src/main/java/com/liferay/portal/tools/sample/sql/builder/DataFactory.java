@@ -309,7 +309,9 @@ import com.liferay.portal.upgrade.PortalUpgradeProcess;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.workflow.constants.WorkflowDefinitionConstants;
 import com.liferay.portal.workflow.kaleo.model.KaleoDefinitionModel;
+import com.liferay.portal.workflow.kaleo.model.KaleoNodeModel;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoDefinitionModelImpl;
+import com.liferay.portal.workflow.kaleo.model.impl.KaleoNodeModelImpl;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
@@ -458,6 +460,8 @@ public class DataFactory {
 		initJournalArticleContent();
 
 		initUserNames();
+
+		initKaleoDefinitionContents();
 	}
 
 	public RoleModel getAdministratorRoleModel() {
@@ -778,6 +782,45 @@ public class DataFactory {
 		}
 
 		_journalArticleContent = new String(chars);
+	}
+
+	public void initKaleoDefinitionContents() throws Exception {
+		String rootModulePath = "";
+
+		Class<?> clazz = getClass();
+
+		String classLoaderStr = String.valueOf(clazz.getClassLoader());
+
+		String userDir = System.getProperty("user.dir");
+
+		if (classLoaderStr.contains("AppClassLoader")) {
+			rootModulePath = userDir.substring(0, userDir.indexOf("util"));
+		}
+		else {
+			rootModulePath =
+				userDir.substring(0, userDir.indexOf("benchmarks")) + "modules";
+		}
+
+		StringBundler sb1 = new StringBundler();
+
+		_getScriptAbsolutePath(
+			new File(rootModulePath),
+			"com/liferay/message/boards/moderation/internal/instance" +
+				"/lifecycle/dependencies" +
+					"/message-boards-moderation-definition.xml",
+			sb1);
+
+		_mbKaleoDefinitionContent = StringUtil.read(
+			new FileInputStream(new File(sb1.toString())));
+
+		StringBundler sb2 = new StringBundler();
+
+		_getScriptAbsolutePath(
+			new File(rootModulePath),
+			"META-INF/definitions/single-approver-definition.xml", sb2);
+
+		_singleApproverKaleoDefinitionContent = StringUtil.read(
+			new FileInputStream(new File(sb2.toString())));
 	}
 
 	public void initUserNames() throws IOException {
@@ -4384,33 +4427,22 @@ public class DataFactory {
 
 		List<KaleoDefinitionModel> kaleoDefinitionModels = new ArrayList<>();
 
-		String rootModulePath = "";
+		String content = _mbKaleoDefinitionContent;
 
-		Class<?> clazz = getClass();
+		content = content.replaceAll(StringPool.QUOTE, "\\\\\"");
 
-		String classLoaderStr = String.valueOf(clazz.getClassLoader());
-
-		String userDir = System.getProperty("user.dir");
-
-		if (classLoaderStr.contains("AppClassLoader")) {
-			rootModulePath = userDir.substring(0, userDir.indexOf("util"));
-		}
-		else {
-			rootModulePath =
-				userDir.substring(0, userDir.indexOf("benchmarks")) + "modules";
-		}
+		content = content.replaceAll(StringPool.APOSTROPHE, "\\\\\'");
 
 		StringBundler sb1 = new StringBundler();
 
-		_getScriptAbsolutePath(
-			new File(rootModulePath),
-			"com/liferay/message/boards/moderation/internal/instance" +
-				"/lifecycle/dependencies" +
-					"/message-boards-moderation-definition.xml",
-			sb1);
+		_processScript(content, sb1);
 
-		String content = StringUtil.read(
-			new FileInputStream(new File(sb1.toString())));
+		kaleoDefinitionModels.add(
+			newKaleoDefinitionModel(
+				MBModerationConstants.WORKFLOW_DEFINITION_NAME, sb1.toString(),
+				MBMessage.class.getName()));
+
+		content = _singleApproverKaleoDefinitionContent;
 
 		content = content.replaceAll(StringPool.QUOTE, "\\\\\"");
 
@@ -4422,29 +4454,7 @@ public class DataFactory {
 
 		kaleoDefinitionModels.add(
 			newKaleoDefinitionModel(
-				MBModerationConstants.WORKFLOW_DEFINITION_NAME, sb2.toString(),
-				MBMessage.class.getName()));
-
-		StringBundler sb3 = new StringBundler();
-
-		_getScriptAbsolutePath(
-			new File(rootModulePath),
-			"META-INF/definitions/single-approver-definition.xml", sb3);
-
-		content = StringUtil.read(
-			new FileInputStream(new File(sb3.toString())));
-
-		content = content.replaceAll(StringPool.QUOTE, "\\\\\"");
-
-		content = content.replaceAll(StringPool.APOSTROPHE, "\\\\\'");
-
-		StringBundler sb4 = new StringBundler();
-
-		_processScript(content, sb4);
-
-		kaleoDefinitionModels.add(
-			newKaleoDefinitionModel(
-				"Single Approver", sb4.toString(),
+				"Single Approver", sb2.toString(),
 				WorkflowDefinitionConstants.SCOPE_ALL));
 
 		return kaleoDefinitionModels;
@@ -5590,6 +5600,23 @@ public class DataFactory {
 			mbMessageModel.getGroupId(), classNameId, classPK, type, extraData);
 	}
 
+	public KaleoNodeModel newStartKaleoNodeModel(
+			KaleoDefinitionModel kaleoDefinitionModel)
+		throws Exception {
+
+		String content = _singleApproverKaleoDefinitionContent;
+
+		String name = kaleoDefinitionModel.getName();
+
+		if (name.equals(MBModerationConstants.WORKFLOW_DEFINITION_NAME)) {
+			content = _mbKaleoDefinitionContent;
+		}
+
+		return newKaleoNodeModel(
+			kaleoDefinitionModel.getKaleoDefinitionId(), _counter.get(),
+			"created", _getMetaData(content), "STATE", true, false);
+	}
+
 	public SubscriptionModel newSubscriptionModel(
 		BlogsEntryModel blogsEntryModel) {
 
@@ -6508,6 +6535,39 @@ public class DataFactory {
 		return kaleoDefinitionModel;
 	}
 
+	protected KaleoNodeModel newKaleoNodeModel(
+			long kaleoDefinitionId, long kaleoDefinitionVersionId, String name,
+			String metadata, String type, boolean initial, boolean terminal)
+		throws Exception {
+
+		KaleoNodeModel kaleoNodeModel = new KaleoNodeModelImpl();
+
+		// PK fields
+
+		kaleoNodeModel.setKaleoNodeId(_counter.get());
+
+		// Audit fields
+
+		kaleoNodeModel.setCompanyId(_companyId);
+		kaleoNodeModel.setUserId(_defaultUserId);
+		kaleoNodeModel.setUserName(_SAMPLE_USER_NAME);
+		kaleoNodeModel.setCreateDate(new Date());
+		kaleoNodeModel.setModifiedDate(new Date());
+
+		// Other fields
+
+		kaleoNodeModel.setKaleoDefinitionId(kaleoDefinitionId);
+		kaleoNodeModel.setKaleoDefinitionVersionId(kaleoDefinitionVersionId);
+		kaleoNodeModel.setName(name);
+
+		kaleoNodeModel.setMetadata(metadata);
+		kaleoNodeModel.setType(type);
+		kaleoNodeModel.setInitial(initial);
+		kaleoNodeModel.setTerminal(terminal);
+
+		return kaleoNodeModel;
+	}
+
 	protected LayoutModel newLayoutModel(
 		long groupId, long parentLayoutId, String name, boolean privateLayout,
 		boolean hidden, String layoutTemplateId, String... columns) {
@@ -7207,6 +7267,28 @@ public class DataFactory {
 			clazz.getName());
 	}
 
+	private String _getMetaData(String content) throws Exception {
+		String metaData = "";
+
+		Document document = UnsecureSAXReaderUtil.read(content);
+
+		Element rootElement = document.getRootElement();
+
+		List<Element> stateElements = rootElement.elements("state");
+
+		for (Element stateElement : stateElements) {
+			String name = stateElement.elementTextTrim("name");
+
+			if (name.equals("created")) {
+				metaData = stateElement.elementTextTrim("metadata");
+
+				break;
+			}
+		}
+
+		return metaData;
+	}
+
 	private String _getResourcePermissionModelName(String... classNames) {
 		if (ArrayUtil.isEmpty(classNames)) {
 			return StringPool.BLANK;
@@ -7388,6 +7470,7 @@ public class DataFactory {
 	private final String _layoutPageTemplateStructureRelData;
 	private final SimpleCounter _layoutPlidCounter;
 	private final SimpleCounter _layoutSetIdCounter;
+	private String _mbKaleoDefinitionContent;
 	private RoleModel _organizationContentReviewerRoleModel;
 	private RoleModel _ownerRoleModel;
 	private RoleModel _portalContentReviewerRoleModel;
@@ -7396,6 +7479,7 @@ public class DataFactory {
 	private final SimpleCounter _resourcePermissionIdCounter;
 	private long _sampleUserId;
 	private final Format _simpleDateFormat;
+	private String _singleApproverKaleoDefinitionContent;
 	private RoleModel _siteContentReviewerRoleModel;
 	private RoleModel _siteMemberRoleModel;
 	private final SimpleCounter _socialActivityIdCounter;
