@@ -200,6 +200,7 @@ import com.liferay.message.boards.model.impl.MBMailingListModelImpl;
 import com.liferay.message.boards.model.impl.MBMessageModelImpl;
 import com.liferay.message.boards.model.impl.MBThreadFlagModelImpl;
 import com.liferay.message.boards.model.impl.MBThreadModelImpl;
+import com.liferay.message.boards.moderation.internal.constants.MBModerationConstants;
 import com.liferay.message.boards.social.MBActivityKeys;
 import com.liferay.petra.io.unsync.UnsyncBufferedReader;
 import com.liferay.petra.reflect.ReflectionUtil;
@@ -306,6 +307,9 @@ import com.liferay.portal.search.web.internal.user.facet.constants.UserFacetPort
 import com.liferay.portal.service.impl.LayoutLocalServiceImpl;
 import com.liferay.portal.upgrade.PortalUpgradeProcess;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.workflow.constants.WorkflowDefinitionConstants;
+import com.liferay.portal.workflow.kaleo.model.KaleoDefinitionModel;
+import com.liferay.portal.workflow.kaleo.model.impl.KaleoDefinitionModelImpl;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
@@ -345,6 +349,8 @@ import com.liferay.wiki.model.impl.WikiPageModelImpl;
 import com.liferay.wiki.model.impl.WikiPageResourceModelImpl;
 import com.liferay.wiki.social.WikiActivityKeys;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -354,6 +360,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import java.math.BigDecimal;
+
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import java.sql.Types;
 
@@ -4323,6 +4335,77 @@ public class DataFactory {
 		return journalContentSearchModel;
 	}
 
+	public List<KaleoDefinitionModel> newKaleoDefinitionModels()
+		throws Exception {
+
+		List<KaleoDefinitionModel> kaleoDefinitionModels = new ArrayList<>();
+
+		String rootModulePath = "";
+
+		Class<?> clazz = getClass();
+
+		String classLoaderStr = String.valueOf(clazz.getClassLoader());
+
+		String userDir = System.getProperty("user.dir");
+
+		if (classLoaderStr.contains("AppClassLoader")) {
+			rootModulePath = userDir.substring(0, userDir.indexOf("util"));
+		}
+		else {
+			rootModulePath =
+				userDir.substring(0, userDir.indexOf("benchmarks")) + "modules";
+		}
+
+		StringBundler sb1 = new StringBundler();
+
+		_getScriptAbsolutePath(
+			new File(rootModulePath),
+			"com/liferay/message/boards/moderation/internal/instance" +
+				"/lifecycle/dependencies" +
+					"/message-boards-moderation-definition.xml",
+			sb1);
+
+		String content = StringUtil.read(
+			new FileInputStream(new File(sb1.toString())));
+
+		content = content.replaceAll(StringPool.QUOTE, "\\\\\"");
+
+		content = content.replaceAll(StringPool.APOSTROPHE, "\\\\\'");
+
+		StringBundler sb2 = new StringBundler();
+
+		_processScript(content, sb2);
+
+		kaleoDefinitionModels.add(
+			newKaleoDefinitionModel(
+				MBModerationConstants.WORKFLOW_DEFINITION_NAME, sb2.toString(),
+				MBMessage.class.getName()));
+
+		StringBundler sb3 = new StringBundler();
+
+		_getScriptAbsolutePath(
+			new File(rootModulePath),
+			"META-INF/definitions/single-approver-definition.xml", sb3);
+
+		content = StringUtil.read(
+			new FileInputStream(new File(sb3.toString())));
+
+		content = content.replaceAll(StringPool.QUOTE, "\\\\\"");
+
+		content = content.replaceAll(StringPool.APOSTROPHE, "\\\\\'");
+
+		StringBundler sb4 = new StringBundler();
+
+		_processScript(content, sb4);
+
+		kaleoDefinitionModels.add(
+			newKaleoDefinitionModel(
+				"Single Approver", sb4.toString(),
+				WorkflowDefinitionConstants.SCOPE_ALL));
+
+		return kaleoDefinitionModels;
+	}
+
 	public LayoutClassedModelUsageModel newLayoutClassedModelUsageModel(
 		long groupId, long plid, String containerKey,
 		JournalArticleResourceModel journalArticleResourceModel) {
@@ -5274,7 +5357,6 @@ public class DataFactory {
 			RoleConstants.USER, RoleConstants.TYPE_REGULAR);
 
 		roleModels.add(_userRoleModel);
-		
 
 		// Asset Library Administrator
 
@@ -6319,6 +6401,47 @@ public class DataFactory {
 		return groupModel;
 	}
 
+	protected KaleoDefinitionModel newKaleoDefinitionModel(
+		String name, String content, String scope) {
+
+		KaleoDefinitionModel kaleoDefinitionModel =
+			new KaleoDefinitionModelImpl();
+
+		//  PK fields
+
+		kaleoDefinitionModel.setKaleoDefinitionId(_counter.get());
+
+		// Audit fields
+
+		kaleoDefinitionModel.setCompanyId(_companyId);
+		kaleoDefinitionModel.setUserId(_defaultUserId);
+		kaleoDefinitionModel.setUserName(_SAMPLE_USER_NAME);
+		kaleoDefinitionModel.setCreateDate(new Date());
+		kaleoDefinitionModel.setModifiedDate(new Date());
+
+		// Other fields
+
+		kaleoDefinitionModel.setName(name);
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append("<?xml version=\"1.0\"  encoding=\"UTF-8\"?>");
+		sb.append("<root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\">");
+		sb.append("<title language-id=\"en_US\">");
+		sb.append(name);
+		sb.append("</title></root>");
+
+		kaleoDefinitionModel.setTitle(sb.toString());
+
+		kaleoDefinitionModel.setContent(content);
+		kaleoDefinitionModel.setScope(scope);
+		kaleoDefinitionModel.setVersion(1);
+		kaleoDefinitionModel.setActive(true);
+
+		return kaleoDefinitionModel;
+	}
+
 	protected LayoutModel newLayoutModel(
 		long groupId, long parentLayoutId, String name, boolean privateLayout,
 		boolean hidden, String layoutTemplateId, String... columns) {
@@ -7037,6 +7160,60 @@ public class DataFactory {
 		return sb.toString();
 	}
 
+	private void _getScriptAbsolutePath(
+		File baseDir, String ftlName, StringBundler sb) {
+
+		if (!baseDir.exists() || !baseDir.isDirectory()) {
+			return;
+		}
+
+		try {
+			Files.walkFileTree(
+				baseDir.toPath(),
+				new SimpleFileVisitor<Path>() {
+
+					@Override
+					public FileVisitResult preVisitDirectory(
+							Path path, BasicFileAttributes basicFileAttributes)
+						throws IOException {
+
+						String fileName = String.valueOf(path.getFileName());
+
+						if (_isSkip(fileName) || fileName.contains("test")) {
+							return FileVisitResult.SKIP_SUBTREE;
+						}
+
+						return FileVisitResult.CONTINUE;
+					}
+
+					@Override
+					public FileVisitResult visitFile(
+							Path path, BasicFileAttributes basicFileAttributes)
+						throws IOException {
+
+						if (path.endsWith(ftlName)) {
+							sb.append(path);
+						}
+
+						return FileVisitResult.CONTINUE;
+					}
+
+				});
+		}
+		catch (IOException ioException) {
+		}
+	}
+
+	private boolean _isSkip(String fileName) {
+		if (fileName.startsWith(".") ||
+			_skipModuleFileNames.contains(fileName)) {
+
+			return true;
+		}
+
+		return false;
+	}
+
 	private CounterModel _newCounterModel(String name, long currentId) {
 		CounterModel counterModel = new CounterModelImpl();
 
@@ -7044,6 +7221,19 @@ public class DataFactory {
 		counterModel.setCurrentId(currentId);
 
 		return counterModel;
+	}
+
+	private void _processScript(String script, StringBundler sb) {
+		char[] scriptArray = script.toCharArray();
+
+		for (char item : scriptArray) {
+			if (item == CharPool.NEW_LINE) {
+				sb.append("\\n");
+			}
+			else {
+				sb.append(item);
+			}
+		}
 	}
 
 	private String _readFile(String resourceName) throws Exception {
@@ -7073,6 +7263,10 @@ public class DataFactory {
 
 	private static final PortletPreferencesFactory _portletPreferencesFactory =
 		new PortletPreferencesFactoryImpl();
+	private static final List<String> _skipModuleFileNames = Arrays.asList(
+		"aspectj", "build", "classes", "core", "etl", "node_modules",
+		"node_modules_cache", "post-upgrade-fix", "sdk", "suites",
+		"third-party", "test");
 
 	private final long _accountId;
 	private RoleModel _administratorRoleModel;
