@@ -19,9 +19,9 @@
 		${dataFactory.toInsertSQL(kaleoDefinitionModel)}
 
 		<#assign
-				startKaleoNodeModel = dataFactory.newStartKaleoNodeModel(kaleoDefinitionModel)
-				kaleoDefinitionVersionModel = dataFactory.newKaleoDefinitionVersionModel(kaleoDefinitionModel, startKaleoNodeModel)
-			/>
+			startKaleoNodeModel = dataFactory.newStartKaleoNodeModel(kaleoDefinitionModel)
+			kaleoDefinitionVersionModel = dataFactory.newKaleoDefinitionVersionModel(kaleoDefinitionModel, startKaleoNodeModel)
+		/>
 
 		${dataFactory.toInsertSQL(startKaleoNodeModel)}
 
@@ -30,7 +30,13 @@
 		<#list dataFactory.newKaleoNodeModels(kaleoDefinitionModel, kaleoDefinitionVersionModel) as kaleoNodeModel>
 			${dataFactory.toInsertSQL(kaleoNodeModel)}
 
-			${dataFactory.toInsertSQL(dataFactory.newKaleoTaskModel(kaleoNodeModel))}
+			<#assign kaleoTaskModel = dataFactory.newKaleoTaskModel(kaleoNodeModel) />
+
+			${dataFactory.toInsertSQL(kaleoTaskModel)}
+
+			<#list dataFactory.newKaleoTaskAssignmentModels(kaleoTaskModel, kaleoDefinitionModel) as kaleoTaskAssignmentModel>
+				${dataFactory.toInsertSQL(kaleoTaskAssignmentModel)}
+			</#list>
 		</#list>
 	</#list>
 </#list>
