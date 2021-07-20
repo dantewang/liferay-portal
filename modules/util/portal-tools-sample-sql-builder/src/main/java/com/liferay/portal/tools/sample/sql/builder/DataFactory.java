@@ -200,6 +200,7 @@ import com.liferay.message.boards.model.impl.MBMailingListModelImpl;
 import com.liferay.message.boards.model.impl.MBMessageModelImpl;
 import com.liferay.message.boards.model.impl.MBThreadFlagModelImpl;
 import com.liferay.message.boards.model.impl.MBThreadModelImpl;
+import com.liferay.message.boards.moderation.internal.constants.MBModerationConstants;
 import com.liferay.message.boards.social.MBActivityKeys;
 import com.liferay.petra.io.unsync.UnsyncBufferedReader;
 import com.liferay.petra.reflect.ReflectionUtil;
@@ -274,6 +275,9 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.version.Version;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.xml.Document;
+import com.liferay.portal.kernel.xml.Element;
+import com.liferay.portal.kernel.xml.UnsecureSAXReaderUtil;
 import com.liferay.portal.model.impl.AccountModelImpl;
 import com.liferay.portal.model.impl.AddressModelImpl;
 import com.liferay.portal.model.impl.ClassNameModelImpl;
@@ -306,6 +310,18 @@ import com.liferay.portal.search.web.internal.user.facet.constants.UserFacetPort
 import com.liferay.portal.service.impl.LayoutLocalServiceImpl;
 import com.liferay.portal.upgrade.PortalUpgradeProcess;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.workflow.constants.WorkflowDefinitionConstants;
+import com.liferay.portal.workflow.kaleo.model.KaleoDefinitionModel;
+import com.liferay.portal.workflow.kaleo.model.KaleoDefinitionVersionModel;
+import com.liferay.portal.workflow.kaleo.model.KaleoNodeModel;
+import com.liferay.portal.workflow.kaleo.model.KaleoTask;
+import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignmentModel;
+import com.liferay.portal.workflow.kaleo.model.KaleoTaskModel;
+import com.liferay.portal.workflow.kaleo.model.impl.KaleoDefinitionModelImpl;
+import com.liferay.portal.workflow.kaleo.model.impl.KaleoDefinitionVersionModelImpl;
+import com.liferay.portal.workflow.kaleo.model.impl.KaleoNodeModelImpl;
+import com.liferay.portal.workflow.kaleo.model.impl.KaleoTaskAssignmentModelImpl;
+import com.liferay.portal.workflow.kaleo.model.impl.KaleoTaskModelImpl;
 import com.liferay.portlet.PortletPreferencesFactoryImpl;
 import com.liferay.portlet.PortletPreferencesImpl;
 import com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl;
@@ -345,6 +361,8 @@ import com.liferay.wiki.model.impl.WikiPageModelImpl;
 import com.liferay.wiki.model.impl.WikiPageResourceModelImpl;
 import com.liferay.wiki.social.WikiActivityKeys;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -354,6 +372,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import java.math.BigDecimal;
+
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import java.sql.Types;
 
@@ -439,6 +463,8 @@ public class DataFactory {
 		initJournalArticleContent();
 
 		initUserNames();
+
+		initKaleoDefinitionContents();
 	}
 
 	public RoleModel getAdministratorRoleModel() {
@@ -758,6 +784,45 @@ public class DataFactory {
 		}
 
 		_journalArticleContent = new String(chars);
+	}
+
+	public void initKaleoDefinitionContents() throws Exception {
+		String rootModulePath = "";
+
+		Class<?> clazz = getClass();
+
+		String classLoaderStr = String.valueOf(clazz.getClassLoader());
+
+		String userDir = System.getProperty("user.dir");
+
+		if (classLoaderStr.contains("AppClassLoader")) {
+			rootModulePath = userDir.substring(0, userDir.indexOf("util"));
+		}
+		else {
+			rootModulePath =
+				userDir.substring(0, userDir.indexOf("benchmarks")) + "modules";
+		}
+
+		StringBundler sb1 = new StringBundler();
+
+		_getScriptAbsolutePath(
+			new File(rootModulePath),
+			"com/liferay/message/boards/moderation/internal/instance" +
+				"/lifecycle/dependencies" +
+					"/message-boards-moderation-definition.xml",
+			sb1);
+
+		_mbKaleoDefinitionContent = StringUtil.read(
+			new FileInputStream(new File(sb1.toString())));
+
+		StringBundler sb2 = new StringBundler();
+
+		_getScriptAbsolutePath(
+			new File(rootModulePath),
+			"META-INF/definitions/single-approver-definition.xml", sb2);
+
+		_singleApproverKaleoDefinitionContent = StringUtil.read(
+			new FileInputStream(new File(sb2.toString())));
 	}
 
 	public void initUserNames() throws IOException {
@@ -4323,6 +4388,189 @@ public class DataFactory {
 		return journalContentSearchModel;
 	}
 
+	public List<KaleoDefinitionModel> newKaleoDefinitionModels()
+		throws Exception {
+
+		List<KaleoDefinitionModel> kaleoDefinitionModels = new ArrayList<>();
+
+		String content = _mbKaleoDefinitionContent;
+
+		content = content.replaceAll(StringPool.QUOTE, "\\\\\"");
+
+		content = content.replaceAll(StringPool.APOSTROPHE, "\\\\\'");
+
+		StringBundler sb1 = new StringBundler();
+
+		_processScript(content, sb1);
+
+		kaleoDefinitionModels.add(
+			newKaleoDefinitionModel(
+				MBModerationConstants.WORKFLOW_DEFINITION_NAME, sb1.toString(),
+				MBMessage.class.getName()));
+
+		content = _singleApproverKaleoDefinitionContent;
+
+		content = content.replaceAll(StringPool.QUOTE, "\\\\\"");
+
+		content = content.replaceAll(StringPool.APOSTROPHE, "\\\\\'");
+
+		StringBundler sb2 = new StringBundler();
+
+		_processScript(content, sb2);
+
+		kaleoDefinitionModels.add(
+			newKaleoDefinitionModel(
+				"Single Approver", sb2.toString(),
+				WorkflowDefinitionConstants.SCOPE_ALL));
+
+		return kaleoDefinitionModels;
+	}
+
+	public KaleoDefinitionVersionModel newKaleoDefinitionVersionModel(
+			KaleoDefinitionModel kaleoDefinitionModel,
+			KaleoNodeModel kaleoNodeModel)
+		throws Exception {
+
+		KaleoDefinitionVersionModel kaleoDefinitionVersionModel =
+			new KaleoDefinitionVersionModelImpl();
+
+		// PK fields
+
+		kaleoDefinitionVersionModel.setKaleoDefinitionVersionId(
+			kaleoNodeModel.getKaleoDefinitionVersionId());
+
+		// Audit fields
+
+		kaleoDefinitionVersionModel.setCompanyId(_companyId);
+		kaleoDefinitionVersionModel.setUserId(_defaultUserId);
+		kaleoDefinitionVersionModel.setUserName(_SAMPLE_USER_NAME);
+		kaleoDefinitionVersionModel.setStatusDate(new Date());
+		kaleoDefinitionVersionModel.setCreateDate(new Date());
+		kaleoDefinitionVersionModel.setModifiedDate(new Date());
+
+		// Other fields
+
+		kaleoDefinitionVersionModel.setKaleoDefinitionId(
+			kaleoDefinitionModel.getKaleoDefinitionId());
+
+		kaleoDefinitionVersionModel.setName(kaleoDefinitionModel.getName());
+
+		kaleoDefinitionVersionModel.setTitle(kaleoDefinitionModel.getTitle());
+
+		kaleoDefinitionVersionModel.setContent(
+			kaleoDefinitionModel.getContent());
+		kaleoDefinitionVersionModel.setVersion("1.0");
+		kaleoDefinitionVersionModel.setStartKaleoNodeId(
+			kaleoNodeModel.getKaleoNodeId());
+
+		kaleoDefinitionVersionModel.setStatus(0);
+
+		return kaleoDefinitionVersionModel;
+	}
+
+	public List<KaleoNodeModel> newKaleoNodeModels(
+			KaleoDefinitionModel kaleoDefinitionModel,
+			KaleoDefinitionVersionModel kaleoDefinitionVersionModel)
+		throws Exception {
+
+		List<KaleoNodeModel> kaleoNodeModels = new ArrayList<>();
+
+		String content = _singleApproverKaleoDefinitionContent;
+
+		String name = kaleoDefinitionModel.getName();
+
+		if (name.equals(MBModerationConstants.WORKFLOW_DEFINITION_NAME)) {
+			content = _mbKaleoDefinitionContent;
+		}
+
+		kaleoNodeModels.add(
+			newKaleoNodeModel(
+				kaleoDefinitionModel.getKaleoDefinitionId(),
+				kaleoDefinitionVersionModel.getKaleoDefinitionVersionId(),
+				"review", _getMetaData(content, "task", "review"), "TASK",
+				false, false));
+
+		kaleoNodeModels.add(
+			newKaleoNodeModel(
+				kaleoDefinitionModel.getKaleoDefinitionId(),
+				kaleoDefinitionVersionModel.getKaleoDefinitionVersionId(),
+				"update", _getMetaData(content, "task", "update"), "TASK",
+				false, false));
+
+		return kaleoNodeModels;
+	}
+
+	public List<KaleoTaskAssignmentModel> newKaleoTaskAssignmentModels(
+			KaleoTaskModel kaleoTaskModel,
+			KaleoDefinitionModel kaleoDefinitionModel)
+		throws Exception {
+
+		List<KaleoTaskAssignmentModel> kaleoTaskAssignmentModels =
+			new ArrayList<>();
+
+		String content = _singleApproverKaleoDefinitionContent;
+
+		String name = kaleoDefinitionModel.getName();
+
+		if (name.equals(MBModerationConstants.WORKFLOW_DEFINITION_NAME)) {
+			content = _mbKaleoDefinitionContent;
+		}
+
+		List<String> assignments = _getAssignmentsData(
+			content, "task", kaleoTaskModel.getName());
+
+		for (String assignment : assignments) {
+			String assigneeClassName = User.class.getName();
+
+			long assigneeClassPK = 0;
+
+			Set<String> roleNames = _kaleoTaskAssignmentRoleModels.keySet();
+
+			if (roleNames.contains(assignment)) {
+				assigneeClassName = Role.class.getName();
+
+				RoleModel roleModel = _kaleoTaskAssignmentRoleModels.get(
+					assignment);
+
+				assigneeClassPK = roleModel.getRoleId();
+			}
+
+			kaleoTaskAssignmentModels.add(
+				newKaleoTaskAssignmentModel(
+					kaleoTaskModel, assigneeClassName, assigneeClassPK));
+		}
+
+		return kaleoTaskAssignmentModels;
+	}
+
+	public KaleoTaskModel newKaleoTaskModel(KaleoNodeModel kaleoNodeModel) {
+		KaleoTaskModel kaleoTaskModel = new KaleoTaskModelImpl();
+
+		// PK fields
+
+		kaleoTaskModel.setKaleoTaskId(_counter.get());
+
+		// Audit fields
+
+		kaleoTaskModel.setCompanyId(_companyId);
+		kaleoTaskModel.setUserId(_defaultUserId);
+		kaleoTaskModel.setUserName(_SAMPLE_USER_NAME);
+		kaleoTaskModel.setCreateDate(new Date());
+		kaleoTaskModel.setModifiedDate(new Date());
+
+		// Other fields
+
+		kaleoTaskModel.setKaleoDefinitionId(
+			kaleoNodeModel.getKaleoDefinitionId());
+
+		kaleoTaskModel.setKaleoDefinitionVersionId(
+			kaleoNodeModel.getKaleoDefinitionVersionId());
+
+		kaleoTaskModel.setName(kaleoNodeModel.getName());
+
+		return kaleoTaskModel;
+	}
+
 	public LayoutClassedModelUsageModel newLayoutClassedModelUsageModel(
 		long groupId, long plid, String containerKey,
 		JournalArticleResourceModel journalArticleResourceModel) {
@@ -5208,6 +5456,9 @@ public class DataFactory {
 
 		roleModels.add(_administratorRoleModel);
 
+		_kaleoTaskAssignmentRoleModels.put(
+			"Administrator", _administratorRoleModel);
+
 		// Guest
 
 		_guestRoleModel = newRoleModel(
@@ -5217,17 +5468,24 @@ public class DataFactory {
 
 		// Organization Administrator
 
-		roleModels.add(
-			newRoleModel(
-				RoleConstants.ORGANIZATION_ADMINISTRATOR,
-				RoleConstants.TYPE_ORGANIZATION));
+		RoleModel organizationAdministratorRoleModel = newRoleModel(
+			RoleConstants.ORGANIZATION_ADMINISTRATOR,
+			RoleConstants.TYPE_ORGANIZATION);
+
+		roleModels.add(organizationAdministratorRoleModel);
+
+		_kaleoTaskAssignmentRoleModels.put(
+			"Organization Administrator", organizationAdministratorRoleModel);
 
 		// Organization Owner
 
-		roleModels.add(
-			newRoleModel(
-				RoleConstants.ORGANIZATION_OWNER,
-				RoleConstants.TYPE_ORGANIZATION));
+		RoleModel organizationOwnerRoleModel = newRoleModel(
+			RoleConstants.ORGANIZATION_OWNER, RoleConstants.TYPE_ORGANIZATION);
+
+		roleModels.add(organizationOwnerRoleModel);
+
+		_kaleoTaskAssignmentRoleModels.put(
+			"Organization Owner", organizationOwnerRoleModel);
 
 		// Organization User
 
@@ -5252,9 +5510,13 @@ public class DataFactory {
 
 		// Site Administrator
 
-		roleModels.add(
-			newRoleModel(
-				RoleConstants.SITE_ADMINISTRATOR, RoleConstants.TYPE_SITE));
+		RoleModel siteAdministratorRoleModel = newRoleModel(
+			RoleConstants.SITE_ADMINISTRATOR, RoleConstants.TYPE_SITE);
+
+		roleModels.add(siteAdministratorRoleModel);
+
+		_kaleoTaskAssignmentRoleModels.put(
+			"Site Administrator", siteAdministratorRoleModel);
 
 		// Site Member
 
@@ -5265,8 +5527,12 @@ public class DataFactory {
 
 		// Site Owner
 
-		roleModels.add(
-			newRoleModel(RoleConstants.SITE_OWNER, RoleConstants.TYPE_SITE));
+		RoleModel siteOwnerRoleModel = newRoleModel(
+			RoleConstants.SITE_OWNER, RoleConstants.TYPE_SITE);
+
+		roleModels.add(siteOwnerRoleModel);
+
+		_kaleoTaskAssignmentRoleModels.put("Site Owner", siteOwnerRoleModel);
 
 		// User
 
@@ -5274,6 +5540,68 @@ public class DataFactory {
 			RoleConstants.USER, RoleConstants.TYPE_REGULAR);
 
 		roleModels.add(_userRoleModel);
+
+		// Asset Library Administrator
+
+		RoleModel assetLibraryAdministratorRoleModel = newRoleModel(
+			"Asset Library Administrator", RoleConstants.TYPE_DEPOT);
+
+		roleModels.add(assetLibraryAdministratorRoleModel);
+
+		_kaleoTaskAssignmentRoleModels.put(
+			"Asset Library Administrator", assetLibraryAdministratorRoleModel);
+
+		// Asset Library Content Reviewer
+
+		RoleModel assetLibraryContentReviewerRoleModel = newRoleModel(
+			"Asset Library Content Reviewer", RoleConstants.TYPE_DEPOT);
+
+		roleModels.add(assetLibraryContentReviewerRoleModel);
+
+		_kaleoTaskAssignmentRoleModels.put(
+			"Asset Library Content Reviewer",
+			assetLibraryContentReviewerRoleModel);
+
+		// Asset Library Owner
+
+		RoleModel assetLibraryOwnerRoleModel = newRoleModel(
+			"Asset Library Owner", RoleConstants.TYPE_DEPOT);
+
+		roleModels.add(assetLibraryOwnerRoleModel);
+
+		_kaleoTaskAssignmentRoleModels.put(
+			"Asset Library Owner", assetLibraryOwnerRoleModel);
+
+		// Portal Content Reviewer
+
+		RoleModel portalContentReviewerRoleModel = newRoleModel(
+			"Portal Content Reviewer", RoleConstants.TYPE_REGULAR);
+
+		roleModels.add(portalContentReviewerRoleModel);
+
+		_kaleoTaskAssignmentRoleModels.put(
+			"Portal Content Reviewer", portalContentReviewerRoleModel);
+
+		// Organization Content Reviewer
+
+		RoleModel organizationContentReviewerRoleModel = newRoleModel(
+			"Organization Content Reviewer", RoleConstants.TYPE_ORGANIZATION);
+
+		roleModels.add(organizationContentReviewerRoleModel);
+
+		_kaleoTaskAssignmentRoleModels.put(
+			"Organization Content Reviewer",
+			organizationContentReviewerRoleModel);
+
+		// Site Content Reviewer
+
+		RoleModel siteContentReviewerRoleModel = newRoleModel(
+			"Site Content Reviewer", RoleConstants.TYPE_SITE);
+
+		roleModels.add(siteContentReviewerRoleModel);
+
+		_kaleoTaskAssignmentRoleModels.put(
+			"Site Content Reviewer", siteContentReviewerRoleModel);
 
 		return roleModels;
 	}
@@ -5419,6 +5747,24 @@ public class DataFactory {
 
 		return newSocialActivityModel(
 			mbMessageModel.getGroupId(), classNameId, classPK, type, extraData);
+	}
+
+	public KaleoNodeModel newStartKaleoNodeModel(
+			KaleoDefinitionModel kaleoDefinitionModel)
+		throws Exception {
+
+		String content = _singleApproverKaleoDefinitionContent;
+
+		String name = kaleoDefinitionModel.getName();
+
+		if (name.equals(MBModerationConstants.WORKFLOW_DEFINITION_NAME)) {
+			content = _mbKaleoDefinitionContent;
+		}
+
+		return newKaleoNodeModel(
+			kaleoDefinitionModel.getKaleoDefinitionId(), _counter.get(),
+			"created", _getMetaData(content, "state", "created"), "STATE", true,
+			false);
 	}
 
 	public SubscriptionModel newSubscriptionModel(
@@ -6276,6 +6622,119 @@ public class DataFactory {
 		return groupModel;
 	}
 
+	protected KaleoDefinitionModel newKaleoDefinitionModel(
+		String name, String content, String scope) {
+
+		KaleoDefinitionModel kaleoDefinitionModel =
+			new KaleoDefinitionModelImpl();
+
+		//  PK fields
+
+		kaleoDefinitionModel.setKaleoDefinitionId(_counter.get());
+
+		// Audit fields
+
+		kaleoDefinitionModel.setCompanyId(_companyId);
+		kaleoDefinitionModel.setUserId(_defaultUserId);
+		kaleoDefinitionModel.setUserName(_SAMPLE_USER_NAME);
+		kaleoDefinitionModel.setCreateDate(new Date());
+		kaleoDefinitionModel.setModifiedDate(new Date());
+
+		// Other fields
+
+		kaleoDefinitionModel.setName(name);
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append("<?xml version=\"1.0\"  encoding=\"UTF-8\"?>");
+		sb.append("<root available-locales=\"en_US\" ");
+		sb.append("default-locale=\"en_US\">");
+		sb.append("<title language-id=\"en_US\">");
+		sb.append(name);
+		sb.append("</title></root>");
+
+		kaleoDefinitionModel.setTitle(sb.toString());
+
+		kaleoDefinitionModel.setContent(content);
+		kaleoDefinitionModel.setScope(scope);
+		kaleoDefinitionModel.setVersion(1);
+		kaleoDefinitionModel.setActive(true);
+
+		return kaleoDefinitionModel;
+	}
+
+	protected KaleoNodeModel newKaleoNodeModel(
+			long kaleoDefinitionId, long kaleoDefinitionVersionId, String name,
+			String metadata, String type, boolean initial, boolean terminal)
+		throws Exception {
+
+		KaleoNodeModel kaleoNodeModel = new KaleoNodeModelImpl();
+
+		// PK fields
+
+		kaleoNodeModel.setKaleoNodeId(_counter.get());
+
+		// Audit fields
+
+		kaleoNodeModel.setCompanyId(_companyId);
+		kaleoNodeModel.setUserId(_defaultUserId);
+		kaleoNodeModel.setUserName(_SAMPLE_USER_NAME);
+		kaleoNodeModel.setCreateDate(new Date());
+		kaleoNodeModel.setModifiedDate(new Date());
+
+		// Other fields
+
+		kaleoNodeModel.setKaleoDefinitionId(kaleoDefinitionId);
+		kaleoNodeModel.setKaleoDefinitionVersionId(kaleoDefinitionVersionId);
+		kaleoNodeModel.setName(name);
+
+		kaleoNodeModel.setMetadata(metadata);
+		kaleoNodeModel.setType(type);
+		kaleoNodeModel.setInitial(initial);
+		kaleoNodeModel.setTerminal(terminal);
+
+		return kaleoNodeModel;
+	}
+
+	protected KaleoTaskAssignmentModel newKaleoTaskAssignmentModel(
+		KaleoTaskModel kaleoTaskModel, String assigneeClassName,
+		long assigneeClassPK) {
+
+		KaleoTaskAssignmentModel kaleoTaskAssignmentModel =
+			new KaleoTaskAssignmentModelImpl();
+
+		// PK fields
+
+		kaleoTaskAssignmentModel.setKaleoTaskAssignmentId(_counter.get());
+
+		// Audit fields
+
+		kaleoTaskAssignmentModel.setCompanyId(_companyId);
+		kaleoTaskAssignmentModel.setUserId(_defaultUserId);
+		kaleoTaskAssignmentModel.setUserName(_SAMPLE_USER_NAME);
+		kaleoTaskAssignmentModel.setCreateDate(new Date());
+		kaleoTaskAssignmentModel.setModifiedDate(new Date());
+
+		// Other fields
+
+		kaleoTaskAssignmentModel.setKaleoClassName(KaleoTask.class.getName());
+
+		kaleoTaskAssignmentModel.setKaleoClassPK(
+			kaleoTaskModel.getKaleoTaskId());
+
+		kaleoTaskAssignmentModel.setKaleoDefinitionId(
+			kaleoTaskModel.getKaleoDefinitionId());
+
+		kaleoTaskAssignmentModel.setKaleoDefinitionVersionId(
+			kaleoTaskModel.getKaleoDefinitionVersionId());
+
+		kaleoTaskAssignmentModel.setAssigneeClassName(assigneeClassName);
+
+		kaleoTaskAssignmentModel.setAssigneeClassPK(assigneeClassPK);
+
+		return kaleoTaskAssignmentModel;
+	}
+
 	protected LayoutModel newLayoutModel(
 		long groupId, long parentLayoutId, String name, boolean privateLayout,
 		boolean hidden, String layoutTemplateId, String... columns) {
@@ -6969,10 +7428,76 @@ public class DataFactory {
 		}
 	}
 
+	private List<String> _getAssignmentsData(
+			String content, String parentElementName, String elementName)
+		throws Exception {
+
+		List<String> assignmentsDatas = new ArrayList<>();
+
+		Document document = UnsecureSAXReaderUtil.read(content);
+
+		Element rootElement = document.getRootElement();
+
+		List<Element> elements = rootElement.elements(parentElementName);
+
+		for (Element element : elements) {
+			String name = element.elementTextTrim("name");
+
+			if (name.equals(elementName)) {
+				List<Element> assignmentsElements = element.elements(
+					"assignments");
+
+				for (Element assignmentElement : assignmentsElements) {
+					if (elementName.equals("review")) {
+						List<Element> rolesElements =
+							assignmentElement.elements("roles");
+
+						for (Element rolesElement : rolesElements) {
+							List<Element> roleElements = rolesElement.elements(
+								"role");
+
+							for (Element roleElement : roleElements) {
+								assignmentsDatas.add(
+									roleElement.elementTextTrim("name"));
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return assignmentsDatas;
+	}
+
 	private String _getMBDiscussionCombinedClassName(Class<?> clazz) {
 		return StringBundler.concat(
 			MBDiscussion.class.getName(), StringPool.UNDERLINE,
 			clazz.getName());
+	}
+
+	private String _getMetaData(
+			String content, String parentElementName, String elementName)
+		throws Exception {
+
+		String metaData = "";
+
+		Document document = UnsecureSAXReaderUtil.read(content);
+
+		Element rootElement = document.getRootElement();
+
+		List<Element> elements = rootElement.elements(parentElementName);
+
+		for (Element element : elements) {
+			String name = element.elementTextTrim("name");
+
+			if (name.equals(elementName)) {
+				metaData = element.elementTextTrim("metadata");
+
+				break;
+			}
+		}
+
+		return metaData;
 	}
 
 	private String _getResourcePermissionModelName(String... classNames) {
@@ -6994,6 +7519,60 @@ public class DataFactory {
 		return sb.toString();
 	}
 
+	private void _getScriptAbsolutePath(
+		File baseDir, String ftlName, StringBundler sb) {
+
+		if (!baseDir.exists() || !baseDir.isDirectory()) {
+			return;
+		}
+
+		try {
+			Files.walkFileTree(
+				baseDir.toPath(),
+				new SimpleFileVisitor<Path>() {
+
+					@Override
+					public FileVisitResult preVisitDirectory(
+							Path path, BasicFileAttributes basicFileAttributes)
+						throws IOException {
+
+						String fileName = String.valueOf(path.getFileName());
+
+						if (_isSkip(fileName) || fileName.contains("test")) {
+							return FileVisitResult.SKIP_SUBTREE;
+						}
+
+						return FileVisitResult.CONTINUE;
+					}
+
+					@Override
+					public FileVisitResult visitFile(
+							Path path, BasicFileAttributes basicFileAttributes)
+						throws IOException {
+
+						if (path.endsWith(ftlName)) {
+							sb.append(path);
+						}
+
+						return FileVisitResult.CONTINUE;
+					}
+
+				});
+		}
+		catch (IOException ioException) {
+		}
+	}
+
+	private boolean _isSkip(String fileName) {
+		if (fileName.startsWith(".") ||
+			_skipModuleFileNames.contains(fileName)) {
+
+			return true;
+		}
+
+		return false;
+	}
+
 	private CounterModel _newCounterModel(String name, long currentId) {
 		CounterModel counterModel = new CounterModelImpl();
 
@@ -7001,6 +7580,19 @@ public class DataFactory {
 		counterModel.setCurrentId(currentId);
 
 		return counterModel;
+	}
+
+	private void _processScript(String script, StringBundler sb) {
+		char[] scriptArray = script.toCharArray();
+
+		for (char item : scriptArray) {
+			if (item == CharPool.NEW_LINE) {
+				sb.append("\\n");
+			}
+			else {
+				sb.append(item);
+			}
+		}
 	}
 
 	private String _readFile(String resourceName) throws Exception {
@@ -7030,6 +7622,10 @@ public class DataFactory {
 
 	private static final PortletPreferencesFactory _portletPreferencesFactory =
 		new PortletPreferencesFactoryImpl();
+	private static final List<String> _skipModuleFileNames = Arrays.asList(
+		"aspectj", "build", "classes", "core", "etl", "node_modules",
+		"node_modules_cache", "post-upgrade-fix", "sdk", "suites",
+		"third-party", "test");
 
 	private final long _accountId;
 	private RoleModel _administratorRoleModel;
@@ -7073,18 +7669,22 @@ public class DataFactory {
 		new HashMap<>();
 	private final String _journalDDMStructureContent;
 	private final String _journalDDMStructureLayoutContent;
+	private final Map<String, RoleModel> _kaleoTaskAssignmentRoleModels =
+		new HashMap<>();
 	private List<String> _lastNames;
 	private final Map<String, SimpleCounter> _layoutIdCounters =
 		new HashMap<>();
 	private final String _layoutPageTemplateStructureRelData;
 	private final SimpleCounter _layoutPlidCounter;
 	private final SimpleCounter _layoutSetIdCounter;
+	private String _mbKaleoDefinitionContent;
 	private RoleModel _ownerRoleModel;
 	private final SimpleCounter _portletPreferenceValueIdCounter;
 	private RoleModel _powerUserRoleModel;
 	private final SimpleCounter _resourcePermissionIdCounter;
 	private long _sampleUserId;
 	private final Format _simpleDateFormat;
+	private String _singleApproverKaleoDefinitionContent;
 	private RoleModel _siteMemberRoleModel;
 	private final SimpleCounter _socialActivityIdCounter;
 	private final SimpleCounter _timeCounter;
