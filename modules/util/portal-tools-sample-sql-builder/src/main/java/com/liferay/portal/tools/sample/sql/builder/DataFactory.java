@@ -857,7 +857,7 @@ public class DataFactory {
 
 		// PK fields
 
-		accountModel.setAccountId(companyModel.getAccountId());
+		accountModel.setAccountId(_accountId);
 
 		// Audit fields
 
@@ -877,8 +877,6 @@ public class DataFactory {
 		}
 
 		accountModel.setLegalName("Liferay, Inc.");
-
-		_accountId = accountModel.getAccountId();
 
 		return accountModel;
 	}
@@ -5558,6 +5556,10 @@ public class DataFactory {
 		userName[1] = _lastNames.get((int)(index % _lastNames.size()));
 
 		return userName;
+	}
+
+	public void setAccountId(long accountId) {
+		_accountId = accountId;
 	}
 
 	public void setCompanyId(long companyId) {
