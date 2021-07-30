@@ -3,7 +3,7 @@
 	roleIds = [dataFactory.administratorRoleModel.roleId, dataFactory.powerUserRoleModel.roleId, dataFactory.userRoleModel.roleId]
 />
 
-<#list dataFactory.newUserModels(companyModel) as userModel>
+<#list dataFactory.newUserModels() as userModel>
 	<#assign userGroupModel = dataFactory.newGroupModel(userModel) />
 
 	${csvFileWriter.write("user", virtualHostModel.hostname + "," + userModel.screenName + "\n")}

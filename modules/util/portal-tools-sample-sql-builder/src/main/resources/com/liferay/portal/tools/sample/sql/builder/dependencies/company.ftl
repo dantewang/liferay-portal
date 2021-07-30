@@ -3,11 +3,13 @@
 
 	${dataFactory.setAccountId(companyModel.accountId)}
 
-	<#assign virtualHostModel = dataFactory.newVirtualHostModel(companyModel) />
+	${dataFactory.setWebId(companyModel.webId)}
+
+	<#assign virtualHostModel = dataFactory.newVirtualHostModel() />
 
 	${dataFactory.toInsertSQL(companyModel)}
 
-	${dataFactory.toInsertSQL(dataFactory.newAccountModel(companyModel))}
+	${dataFactory.toInsertSQL(dataFactory.newAccountModel())}
 
 	${dataFactory.toInsertSQL(virtualHostModel)}
 
