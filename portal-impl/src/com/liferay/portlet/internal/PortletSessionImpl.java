@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletSession;
 import com.liferay.portal.kernel.servlet.HttpSessionWrapper;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.PortletSessionAttributeMap;
 
@@ -377,9 +376,7 @@ public class PortletSessionImpl implements LiferayPortletSession {
 
 			ClassLoader classLoader = clazz.getClassLoader();
 
-			if ((classLoader != null) &&
-				!PortalClassLoaderUtil.isPortalClassLoader(classLoader)) {
-
+			if (classLoader != null) {
 				value = new LazySerializableObjectWrapper((Serializable)value);
 			}
 
