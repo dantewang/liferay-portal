@@ -22,7 +22,7 @@
 		layoutModel = dataFactory.newLayoutModel(groupId, groupId + "_asset_publisher_" + pageCount, "", portletId)
 	/>
 
-	${csvFileWriter.write("assetPublisher", layoutModel.friendlyURL + "," + virtualHostModel.hostname + "\n")}
+	${csvFileWriter.write("assetPublisher", virtualHostModel.hostname + "," + layoutModel.friendlyURL + "\n")}
 
 	<@insertLayout _layoutModel=layoutModel />
 

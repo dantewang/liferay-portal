@@ -147,7 +147,7 @@
 
 				${dataFactory.toInsertSQL(dataFactory.newDDMStructureLinkModel(dlFileEntryMetadataModel))}
 
-				${csvFileWriter.write("documentLibrary", dlFileEntryModel.uuid + "," + dlFolderModel.folderId + "," + dlFileEntryModel.name + "," + dlFileEntryModel.fileEntryId + "," + virtualHostModel.hostname + "\n")}
+				${csvFileWriter.write("documentLibrary", virtualHostModel.hostname + "," + dlFileEntryModel.uuid + "," + dlFolderModel.folderId + "," + dlFileEntryModel.name + "," + dlFileEntryModel.fileEntryId + "\n")}
 			</#list>
 
 			<@insertDLFolder
