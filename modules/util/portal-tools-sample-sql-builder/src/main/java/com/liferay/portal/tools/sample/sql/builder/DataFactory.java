@@ -5527,6 +5527,10 @@ public class DataFactory {
 		return userName;
 	}
 
+	public void setAccountId(long accountId) {
+		_accountId = accountId;
+	}
+
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
 	}
