@@ -512,9 +512,9 @@ public class PortletSessionImplTest {
 
 		Assert.assertSame(
 			testSerializable, portletSessionImpl.getAttribute(key));
-		Assert.assertSame(
-			testSerializable,
-			_mockHttpSession.getAttribute(scopePrefix.concat(key)));
+		Assert.assertTrue(
+			_lazySerializableObjectWrapperClass.isInstance(
+				_mockHttpSession.getAttribute(scopePrefix.concat(key))));
 	}
 
 	@Test
