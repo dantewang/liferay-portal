@@ -75,6 +75,13 @@ public class DB2SQLTransformerLogicTest
 			sqlTransformer.transform(getModOriginalSQL()));
 	}
 
+	@Test
+	public void testReplaceSelect() {
+		Assert.assertEquals(
+			"select foo, COALESCE(CAST(? AS VARCHAR(32672)),'') from Foo",
+			sqlTransformer.transform("select foo, ? from Foo"));
+	}
+
 	@Override
 	protected String getBooleanTransformedSQL() {
 		return "select * from Foo where foo = FALSE and bar = TRUE";
