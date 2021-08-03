@@ -60,6 +60,17 @@ public class DB2SQLTransformerLogicTest
 	}
 
 	@Test
+	public void testReplaceCaseWhenThen() {
+		Assert.assertEquals(
+			StringBundler.concat(
+				"select * from Foo where case when foo = COALESCE(CAST(? AS ",
+				"VARCHAR(32672)),'') then COALESCE(CAST(? AS VARCHAR(32672)),",
+				"'') else COALESCE(CAST(? AS VARCHAR(32672)),'') end"),
+			sqlTransformer.transform(
+				"select * from Foo where case when foo = ? then ? else ? end"));
+	}
+
+	@Test
 	public void testReplaceLike() {
 		Assert.assertEquals(
 			"select foo from Foo where foo LIKE COALESCE(" +
