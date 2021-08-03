@@ -37,7 +37,8 @@ public class DB2SQLTransformerLogic extends BaseSQLTransformerLogic {
 			getBooleanFunction(), getCastClobTextFunction(),
 			getCastLongFunction(), getCastTextFunction(), getConcatFunction(),
 			getDropTableIfExistsTextFunction(), getIntegerDivisionFunction(),
-			getNullDateFunction(), _getLikeFunction(), _getSelectFunction()
+			getNullDateFunction(), _getCaseWhenThenFunction(),
+			_getLikeFunction(), _getSelectFunction()
 		};
 
 		if (!db.isSupportsStringCaseSensitiveQuery()) {
@@ -76,6 +77,11 @@ public class DB2SQLTransformerLogic extends BaseSQLTransformerLogic {
 		return matcher.replaceAll(dropTableIfExists);
 	}
 
+	private Function<String, String> _getCaseWhenThenFunction() {
+		return (String sql) -> _replaceQuestionParameterMarker(
+			_caseWhenThenPattern.matcher(sql));
+	}
+
 	private Function<String, String> _getLikeFunction() {
 		return (String sql) -> {
 			Matcher matcher = _likePattern.matcher(sql);
@@ -86,25 +92,28 @@ public class DB2SQLTransformerLogic extends BaseSQLTransformerLogic {
 	}
 
 	private Function<String, String> _getSelectFunction() {
-		return (String sql) -> {
-			StringBuffer sb = new StringBuffer();
-
-			Matcher matcher = _selectPattern.matcher(sql);
-
-			while (matcher.find()) {
-				matcher.appendReplacement(
-					sb,
-					StringUtil.replace(
-						matcher.group(), " ? ",
-						" COALESCE(CAST(? AS VARCHAR(32672)),'') "));
-			}
-
-			matcher.appendTail(sb);
-
-			return sb.toString();
-		};
+		return (String sql) -> _replaceQuestionParameterMarker(
+			_selectPattern.matcher(sql));
 	}
 
+	private String _replaceQuestionParameterMarker(Matcher matcher) {
+		StringBuffer sb = new StringBuffer();
+
+		while (matcher.find()) {
+			matcher.appendReplacement(
+				sb,
+				StringUtil.replace(
+					matcher.group(), " ? ",
+					" COALESCE(CAST(? AS VARCHAR(32672)),'') "));
+		}
+
+		matcher.appendTail(sb);
+
+		return sb.toString();
+	}
+
+	private static final Pattern _caseWhenThenPattern = Pattern.compile(
+		"\\bcase when.+?end\\b", Pattern.CASE_INSENSITIVE);
 	private static final Pattern _likePattern = Pattern.compile(
 		"LIKE \\?", Pattern.CASE_INSENSITIVE);
 	private static final Pattern _selectPattern = Pattern.compile(

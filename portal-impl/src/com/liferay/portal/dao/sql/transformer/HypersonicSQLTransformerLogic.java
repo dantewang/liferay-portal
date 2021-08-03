@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.function.Function;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Manuel de la Peña
@@ -34,7 +35,7 @@ public class HypersonicSQLTransformerLogic extends BaseSQLTransformerLogic {
 			getBooleanFunction(), getCastClobTextFunction(),
 			getCastLongFunction(), getCastTextFunction(),
 			getDropTableIfExistsTextFunction(), getIntegerDivisionFunction(),
-			getNullDateFunction()
+			getNullDateFunction(), _getCaseWhenThenFunction()
 		};
 
 		if (!db.isSupportsStringCaseSensitiveQuery()) {
@@ -64,5 +65,27 @@ public class HypersonicSQLTransformerLogic extends BaseSQLTransformerLogic {
 	protected String replaceDropTableIfExistsText(Matcher matcher) {
 		return matcher.replaceAll("DROP TABLE $1 IF EXISTS");
 	}
+
+	private Function<String, String> _getCaseWhenThenFunction() {
+		return (String sql) -> {
+			StringBuffer sb = new StringBuffer();
+
+			Matcher matcher = _caseWhenThenPattern.matcher(sql);
+
+			while (matcher.find()) {
+				matcher.appendReplacement(
+					sb,
+					StringUtil.replace(
+						matcher.group(), " ? ", " CONVERT(?, SQL_VARCHAR) "));
+			}
+
+			matcher.appendTail(sb);
+
+			return sb.toString();
+		};
+	}
+
+	private static final Pattern _caseWhenThenPattern = Pattern.compile(
+		"\\bcase when.+?end\\b", Pattern.CASE_INSENSITIVE);
 
 }
