@@ -19,6 +19,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.internal.dao.sql.transformer.SQLFunctionTransformer;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -36,7 +37,7 @@ public class DB2SQLTransformerLogic extends BaseSQLTransformerLogic {
 			getBooleanFunction(), getCastClobTextFunction(),
 			getCastLongFunction(), getCastTextFunction(), getConcatFunction(),
 			getDropTableIfExistsTextFunction(), getIntegerDivisionFunction(),
-			getNullDateFunction(), _getLikeFunction()
+			getNullDateFunction(), _getLikeFunction(), _getSelectFunction()
 		};
 
 		if (!db.isSupportsStringCaseSensitiveQuery()) {
@@ -84,7 +85,26 @@ public class DB2SQLTransformerLogic extends BaseSQLTransformerLogic {
 		};
 	}
 
+	private Function<String, String> _getSelectFunction() {
+		return (String sql) -> {
+			Matcher matcher = _selectPattern.matcher(sql);
+
+			while (matcher.find()) {
+				sql = StringUtil.replaceFirst(
+					sql, matcher.group(),
+					StringUtil.replace(
+						matcher.group(), " ? ",
+						" COALESCE(CAST(? AS VARCHAR(32672)),'') "),
+					sql.indexOf(matcher.group()));
+			}
+
+			return sql;
+		};
+	}
+
 	private static final Pattern _likePattern = Pattern.compile(
 		"LIKE \\?", Pattern.CASE_INSENSITIVE);
+	private static final Pattern _selectPattern = Pattern.compile(
+		"select .+?from ", Pattern.CASE_INSENSITIVE);
 
 }
