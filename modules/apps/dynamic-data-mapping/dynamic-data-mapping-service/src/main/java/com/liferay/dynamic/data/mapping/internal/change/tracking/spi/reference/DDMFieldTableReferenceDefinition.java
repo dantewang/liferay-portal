@@ -26,11 +26,8 @@ import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleTable;
 import com.liferay.petra.sql.dsl.DSLFunctionFactoryUtil;
 import com.liferay.petra.sql.dsl.expression.Expression;
-import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.sql.dsl.spi.expression.Scalar;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.dao.db.DB;
-import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.model.ClassNameTable;
 import com.liferay.portal.kernel.model.CompanyTable;
 import com.liferay.portal.kernel.model.LayoutTable;
@@ -303,8 +300,15 @@ public class DDMFieldTableReferenceDefinition
 					privateLayoutDDMFieldAttributeTable.attributeName.eq(
 						"privateLayout"
 					).and(
-						_getPrivateLayoutPredicate(
-							privateLayoutDDMFieldAttributeTable)
+						privateLayoutDDMFieldAttributeTable.smallAttributeValue.
+							eq(
+								DSLFunctionFactoryUtil.caseWhenThen(
+									LayoutTable.INSTANCE.privateLayout.eq(
+										Boolean.TRUE),
+									Boolean.TRUE.toString()
+								).elseEnd(
+									Boolean.FALSE.toString()
+								))
 					).and(
 						privateLayoutDDMFieldAttributeTable.fieldId.eq(
 							DDMFieldTable.INSTANCE.fieldId)
@@ -337,34 +341,6 @@ public class DDMFieldTableReferenceDefinition
 	@Override
 	public DDMFieldTable getTable() {
 		return DDMFieldTable.INSTANCE;
-	}
-
-	private Predicate _getPrivateLayoutPredicate(
-		DDMFieldAttributeTable privateLayoutDDMFieldAttributeTable) {
-
-		DB db = _ddmFieldPersistence.getDB();
-
-		DBType dbType = db.getDBType();
-
-		if (dbType == DBType.HYPERSONIC) {
-			return privateLayoutDDMFieldAttributeTable.smallAttributeValue.eq(
-				DSLFunctionFactoryUtil.caseWhenThen(
-					LayoutTable.INSTANCE.privateLayout.eq(Boolean.TRUE),
-					DSLFunctionFactoryUtil.castText(
-						new Scalar<>(Boolean.TRUE.toString()))
-				).elseEnd(
-					DSLFunctionFactoryUtil.castText(
-						new Scalar<>(Boolean.FALSE.toString()))
-				));
-		}
-
-		return privateLayoutDDMFieldAttributeTable.smallAttributeValue.eq(
-			DSLFunctionFactoryUtil.caseWhenThen(
-				LayoutTable.INSTANCE.privateLayout.eq(Boolean.TRUE),
-				Boolean.TRUE.toString()
-			).elseEnd(
-				Boolean.FALSE.toString()
-			));
 	}
 
 	private static final Expression<String> _quoteExpression = new Scalar<>(
