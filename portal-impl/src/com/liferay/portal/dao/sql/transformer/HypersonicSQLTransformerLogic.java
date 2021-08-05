@@ -14,6 +14,8 @@
 
 package com.liferay.portal.dao.sql.transformer;
 
+import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -70,15 +72,28 @@ public class HypersonicSQLTransformerLogic extends BaseSQLTransformerLogic {
 		return (String sql) -> {
 			Matcher matcher = _caseWhenThenPattern.matcher(sql);
 
+			int index = 0;
+
+			StringBundler sb = new StringBundler();
+
 			while (matcher.find()) {
-				sql = StringUtil.replaceFirst(
-					sql, matcher.group(),
+				if (matcher.start() > index) {
+					sb.append(sql.substring(index, matcher.start()));
+				}
+
+				sb.append(
 					StringUtil.replace(
-						matcher.group(), " ? ", " CONVERT(?, SQL_VARCHAR) "),
-					sql.indexOf(matcher.group()));
+						matcher.group(), CharPool.QUESTION,
+						"CONVERT(?, SQL_VARCHAR)"));
+
+				index = matcher.end();
 			}
 
-			return sql;
+			if (index < (sql.length() - 1)) {
+				sb.append(sql.substring(index));
+			}
+
+			return sb.toString();
 		};
 	}
 

@@ -14,6 +14,7 @@
 
 package com.liferay.portal.dao.sql.transformer;
 
+import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.internal.dao.sql.transformer.SQLFunctionTransformer;
@@ -99,16 +100,28 @@ public class DB2SQLTransformerLogic extends BaseSQLTransformerLogic {
 	private String _replaceQuestionParameterMarker(
 		Matcher matcher, String sql) {
 
+		int index = 0;
+
+		StringBundler sb = new StringBundler();
+
 		while (matcher.find()) {
-			sql = StringUtil.replaceFirst(
-				sql, matcher.group(),
+			if (matcher.start() > index) {
+				sb.append(sql.substring(index, matcher.start()));
+			}
+
+			sb.append(
 				StringUtil.replace(
-					matcher.group(), " ? ",
-					" COALESCE(CAST(? AS VARCHAR(32672)),'') "),
-				sql.indexOf(matcher.group()));
+					matcher.group(), CharPool.QUESTION,
+					"COALESCE(CAST(? AS VARCHAR(32672)),'')"));
+
+			index = matcher.end();
 		}
 
-		return sql;
+		if (index < (sql.length() - 1)) {
+			sb.append(sql.substring(index));
+		}
+
+		return sb.toString();
 	}
 
 	private static final Pattern _caseWhenThenPattern = Pattern.compile(
