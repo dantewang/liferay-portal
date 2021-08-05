@@ -89,8 +89,9 @@ public class DB2SQLTransformerLogicTest
 	@Test
 	public void testReplaceSelect() {
 		Assert.assertEquals(
-			"select foo, COALESCE(CAST(? AS VARCHAR(32672)),'') from Foo",
-			sqlTransformer.transform("select foo, ? from Foo"));
+			"select foo, COALESCE(CAST(? AS VARCHAR(32672)),''), bar, " +
+				"COALESCE(CAST(? AS VARCHAR(32672)),'') from Foo",
+			sqlTransformer.transform("select foo, ?, bar, ? from Foo"));
 	}
 
 	@Override
