@@ -14,7 +14,6 @@
 
 package com.liferay.portal.dao.sql.transformer;
 
-import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.internal.dao.sql.transformer.SQLFunctionTransformer;
@@ -111,8 +110,25 @@ public class DB2SQLTransformerLogic extends BaseSQLTransformerLogic {
 
 			sb.append(
 				StringUtil.replace(
-					matcher.group(), CharPool.QUESTION,
-					"COALESCE(CAST(? AS VARCHAR(32672)),'')"));
+					matcher.group(),
+					new String[] {
+						StringBundler.concat(
+							StringPool.SPACE, StringPool.QUESTION,
+							StringPool.COMMA),
+						StringBundler.concat(
+							StringPool.SPACE, StringPool.QUESTION,
+							StringPool.SPACE)
+					},
+					new String[] {
+						StringBundler.concat(
+							StringPool.SPACE,
+							_QUESTION_PARAMETER_MARKER_REPLACEMENT,
+							StringPool.COMMA),
+						StringBundler.concat(
+							StringPool.SPACE,
+							_QUESTION_PARAMETER_MARKER_REPLACEMENT,
+							StringPool.SPACE)
+					}));
 
 			index = matcher.end();
 		}
@@ -123,6 +139,9 @@ public class DB2SQLTransformerLogic extends BaseSQLTransformerLogic {
 
 		return sb.toString();
 	}
+
+	private static final String _QUESTION_PARAMETER_MARKER_REPLACEMENT =
+		"COALESCE(CAST(? AS VARCHAR(32672)),'')";
 
 	private static final Pattern _caseWhenThenPattern = Pattern.compile(
 		"\\bcase when.+?end\\b", Pattern.CASE_INSENSITIVE);
