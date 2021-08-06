@@ -14,7 +14,6 @@
 
 package com.liferay.portal.dao.sql.transformer;
 
-import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.internal.dao.sql.transformer.SQLFunctionTransformer;
@@ -249,7 +248,21 @@ public abstract class BaseSQLTransformerLogic implements SQLTransformerLogic {
 
 			sb.append(
 				StringUtil.replace(
-					matcher.group(), CharPool.QUESTION, replacement));
+					matcher.group(),
+					new String[] {
+						StringBundler.concat(
+							StringPool.SPACE, StringPool.QUESTION,
+							StringPool.COMMA),
+						StringBundler.concat(
+							StringPool.SPACE, StringPool.QUESTION,
+							StringPool.SPACE)
+					},
+					new String[] {
+						StringBundler.concat(
+							StringPool.SPACE, replacement, StringPool.COMMA),
+						StringBundler.concat(
+							StringPool.SPACE, replacement, StringPool.SPACE)
+					}));
 
 			index = matcher.end();
 		}

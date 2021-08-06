@@ -61,6 +61,15 @@ public class HypersonicSQLTransformerLogicTest
 				"SQL_VARCHAR) end"),
 			sqlTransformer.transform(
 				"select * from Foo where case when foo = ? then ? else ? end"));
+
+		Assert.assertEquals(
+			StringBundler.concat(
+				"select bar, ?, case when foo = CONVERT(?, SQL_VARCHAR) then ",
+				"CONVERT(?, SQL_VARCHAR) else CONVERT(?, SQL_VARCHAR) end as ",
+				"columnA from Foo"),
+			sqlTransformer.transform(
+				"select bar, ?, case when foo = ? then ? else ? end as " +
+					"columnA from Foo"));
 	}
 
 	@Override
