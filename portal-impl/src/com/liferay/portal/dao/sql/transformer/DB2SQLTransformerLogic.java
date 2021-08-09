@@ -37,7 +37,7 @@ public class DB2SQLTransformerLogic extends BaseSQLTransformerLogic {
 			getCastLongFunction(), getCastTextFunction(), getConcatFunction(),
 			getDropTableIfExistsTextFunction(), getIntegerDivisionFunction(),
 			getNullDateFunction(), _getCaseWhenThenFunction(),
-			_getLikeFunction(), _getSelectFunction()
+			_getConcatFunction(), _getLikeFunction(), _getSelectFunction()
 		};
 
 		if (!db.isSupportsStringCaseSensitiveQuery()) {
@@ -82,6 +82,12 @@ public class DB2SQLTransformerLogic extends BaseSQLTransformerLogic {
 			_QUESTION_PARAMETER_MARKER_REPLACEMENT);
 	}
 
+	private Function<String, String> _getConcatFunction() {
+		return (String sql) -> replaceQuestionParameterMarker(
+			_concatPattern.matcher(sql), sql,
+			"COALESCE(CAST(? AS VARCHAR(254)),'')");
+	}
+
 	private Function<String, String> _getLikeFunction() {
 		return (String sql) -> {
 			Matcher matcher = _likePattern.matcher(sql);
@@ -102,6 +108,8 @@ public class DB2SQLTransformerLogic extends BaseSQLTransformerLogic {
 
 	private static final Pattern _caseWhenThenPattern = Pattern.compile(
 		"\\bcase when.+?end\\b", Pattern.CASE_INSENSITIVE);
+	private static final Pattern _concatPattern = Pattern.compile(
+		" \\?[ \t]+(?=concat)|(?<=concat)[ \t]+\\? ", Pattern.CASE_INSENSITIVE);
 	private static final Pattern _likePattern = Pattern.compile(
 		"LIKE \\?", Pattern.CASE_INSENSITIVE);
 	private static final Pattern _selectPattern = Pattern.compile(

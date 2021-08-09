@@ -81,6 +81,20 @@ public class DB2SQLTransformerLogicTest
 	}
 
 	@Test
+	public void testReplaceConcat() {
+		Assert.assertEquals(
+			"select bar CONCAT foo as columnA from Foo",
+			sqlTransformer.transform(
+				"select CONCAT(bar,foo) as columnA from Foo"));
+
+		Assert.assertEquals(
+			"select foo CONCAT COALESCE(CAST(? AS VARCHAR(254)),'') as " +
+				"columnA from Foo",
+			sqlTransformer.transform(
+				"select CONCAT(foo,?) as columnA from Foo"));
+	}
+
+	@Test
 	public void testReplaceLike() {
 		Assert.assertEquals(
 			"select foo from Foo where foo LIKE COALESCE(" +
