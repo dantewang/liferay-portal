@@ -245,11 +245,9 @@ public class WelcomeSiteInitializer implements SiteInitializer {
 		if (fileEntry == null) {
 			URL url = _bundle.getEntry(_PATH + _FILE_NAME_TREE_IMAGE);
 
-			File file = FileUtil.createTempFile(url.openStream());
-
 			byte[] bytes = null;
 
-			try (InputStream inputStream = new FileInputStream(file)) {
+			try (InputStream inputStream = url.openStream()) {
 				bytes = FileUtil.getBytes(inputStream);
 			}
 
