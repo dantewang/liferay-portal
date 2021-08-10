@@ -133,6 +133,13 @@ public class PostgreSQLDB extends BaseDB {
 
 				boolean unique = true;
 
+				if (indexSQL == null) {
+					throw new NullPointerException(
+						StringBundler.concat(
+							"Index name: ", indexName, "\nTable name:",
+							tableName));
+				}
+
 				if (indexSQL.startsWith("create index ")) {
 					unique = false;
 				}
