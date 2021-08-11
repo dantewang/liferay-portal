@@ -14,8 +14,6 @@
 
 package com.liferay.portal.dao.sql.transformer;
 
-import com.liferay.petra.string.StringBundler;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -69,38 +67,9 @@ public class HypersonicSQLTransformerLogic extends BaseSQLTransformerLogic {
 	}
 
 	private Function<String, String> _getCaseWhenThenFunction() {
-		return (String sql) -> {
-			Matcher matcher = _caseWhenThenPattern.matcher(sql);
-
-			int index = 0;
-
-			StringBundler sb = new StringBundler();
-
-			while (matcher.find()) {
-				if (matcher.start() > index) {
-					sb.append(sql.substring(index, matcher.start()));
-				}
-
-				sb.append(
-					StringUtil.replace(
-						matcher.group(),
-						StringBundler.concat(
-							StringPool.SPACE, StringPool.QUESTION,
-							StringPool.SPACE),
-						StringBundler.concat(
-							StringPool.SPACE,
-							_QUESTION_PARAMETER_MARKER_REPLACEMENT,
-							StringPool.SPACE)));
-
-				index = matcher.end();
-			}
-
-			if (index < (sql.length() - 1)) {
-				sb.append(sql.substring(index));
-			}
-
-			return sb.toString();
-		};
+		return (String sql) -> replaceQuestionParameterMarker(
+			_caseWhenThenPattern.matcher(sql), sql,
+			_QUESTION_PARAMETER_MARKER_REPLACEMENT);
 	}
 
 	private static final String _QUESTION_PARAMETER_MARKER_REPLACEMENT =

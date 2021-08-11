@@ -234,6 +234,46 @@ public abstract class BaseSQLTransformerLogic implements SQLTransformerLogic {
 		return matcher.replaceAll("$1 % $2");
 	}
 
+	protected String replaceQuestionParameterMarker(
+		Matcher matcher, String sql, String replacement) {
+
+		int index = 0;
+
+		StringBundler sb = new StringBundler();
+
+		while (matcher.find()) {
+			if (matcher.start() > index) {
+				sb.append(sql.substring(index, matcher.start()));
+			}
+
+			sb.append(
+				StringUtil.replace(
+					matcher.group(),
+					new String[] {
+						StringBundler.concat(
+							StringPool.SPACE, StringPool.QUESTION,
+							StringPool.COMMA),
+						StringBundler.concat(
+							StringPool.SPACE, StringPool.QUESTION,
+							StringPool.SPACE)
+					},
+					new String[] {
+						StringBundler.concat(
+							StringPool.SPACE, replacement, StringPool.COMMA),
+						StringBundler.concat(
+							StringPool.SPACE, replacement, StringPool.SPACE)
+					}));
+
+			index = matcher.end();
+		}
+
+		if (index < (sql.length() - 1)) {
+			sb.append(sql.substring(index));
+		}
+
+		return sb.toString();
+	}
+
 	protected String replaceSubstr(Matcher matcher) {
 		return matcher.replaceAll("SUBSTRING($1, $2, $3)");
 	}

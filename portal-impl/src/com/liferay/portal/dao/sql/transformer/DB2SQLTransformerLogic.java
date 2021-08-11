@@ -19,7 +19,6 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.internal.dao.sql.transformer.SQLFunctionTransformer;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -78,8 +77,9 @@ public class DB2SQLTransformerLogic extends BaseSQLTransformerLogic {
 	}
 
 	private Function<String, String> _getCaseWhenThenFunction() {
-		return (String sql) -> _replaceQuestionParameterMarker(
-			_caseWhenThenPattern.matcher(sql), sql);
+		return (String sql) -> replaceQuestionParameterMarker(
+			_caseWhenThenPattern.matcher(sql), sql,
+			_QUESTION_PARAMETER_MARKER_REPLACEMENT);
 	}
 
 	private Function<String, String> _getLikeFunction() {
@@ -92,52 +92,9 @@ public class DB2SQLTransformerLogic extends BaseSQLTransformerLogic {
 	}
 
 	private Function<String, String> _getSelectFunction() {
-		return (String sql) -> _replaceQuestionParameterMarker(
-			_selectPattern.matcher(sql), sql);
-	}
-
-	private String _replaceQuestionParameterMarker(
-		Matcher matcher, String sql) {
-
-		int index = 0;
-
-		StringBundler sb = new StringBundler();
-
-		while (matcher.find()) {
-			if (matcher.start() > index) {
-				sb.append(sql.substring(index, matcher.start()));
-			}
-
-			sb.append(
-				StringUtil.replace(
-					matcher.group(),
-					new String[] {
-						StringBundler.concat(
-							StringPool.SPACE, StringPool.QUESTION,
-							StringPool.COMMA),
-						StringBundler.concat(
-							StringPool.SPACE, StringPool.QUESTION,
-							StringPool.SPACE)
-					},
-					new String[] {
-						StringBundler.concat(
-							StringPool.SPACE,
-							_QUESTION_PARAMETER_MARKER_REPLACEMENT,
-							StringPool.COMMA),
-						StringBundler.concat(
-							StringPool.SPACE,
-							_QUESTION_PARAMETER_MARKER_REPLACEMENT,
-							StringPool.SPACE)
-					}));
-
-			index = matcher.end();
-		}
-
-		if (index < (sql.length() - 1)) {
-			sb.append(sql.substring(index));
-		}
-
-		return sb.toString();
+		return (String sql) -> replaceQuestionParameterMarker(
+			_selectPattern.matcher(sql), sql,
+			_QUESTION_PARAMETER_MARKER_REPLACEMENT);
 	}
 
 	private static final String _QUESTION_PARAMETER_MARKER_REPLACEMENT =
