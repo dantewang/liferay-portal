@@ -39,21 +39,14 @@ public class SessionReplicationFilter implements Filter {
 			FilterChain filterChain)
 		throws IOException, ServletException {
 
-		if (!(servletRequest instanceof HttpServletRequest)) {
-			filterChain.doFilter(servletRequest, servletResponse);
+		if ((servletRequest instanceof HttpServletRequest) &&
+			!(servletRequest instanceof SessionReplicationHttpServletRequest)) {
+
+			servletRequest = new SessionReplicationHttpServletRequest(
+				(HttpServletRequest)servletRequest);
 		}
 
-		HttpServletRequest httpServletRequest =
-			(HttpServletRequest)servletRequest;
-
-		if (!(httpServletRequest instanceof
-				SessionReplicationHttpServletRequest)) {
-
-			httpServletRequest = new SessionReplicationHttpServletRequest(
-				httpServletRequest);
-		}
-
-		filterChain.doFilter(httpServletRequest, servletResponse);
+		filterChain.doFilter(servletRequest, servletResponse);
 	}
 
 	@Override
