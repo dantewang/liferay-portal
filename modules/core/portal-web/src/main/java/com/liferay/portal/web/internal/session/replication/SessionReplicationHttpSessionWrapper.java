@@ -24,10 +24,6 @@ import java.io.Serializable;
 
 import java.nio.ByteBuffer;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.servlet.http.HttpSession;
 
 /**
@@ -64,15 +60,12 @@ public class SessionReplicationHttpSessionWrapper extends HttpSessionWrapper {
 	@Override
 	public void setAttribute(String name, Object value) {
 		if (!(value instanceof Serializable) ||
-			_safeClasses.contains(value.getClass())) {
+			_isSafeClass(value.getClass())) {
 
 			super.setAttribute(name, value);
 
 			return;
 		}
-
-		// TODO: also skip classes loaded from App Server's class loader or
-		//  JDK's class loader??
 
 		Serializer serializer = new Serializer();
 
@@ -84,15 +77,22 @@ public class SessionReplicationHttpSessionWrapper extends HttpSessionWrapper {
 			_SERIALIZED_ATTRIBUTE_PREFIX.concat(name), byteBuffer.array());
 	}
 
+	private boolean _isSafeClass(Class<?> clazz) {
+		ClassLoader classLoader = clazz.getClassLoader();
+
+		if ((classLoader == String.class.getClassLoader()) ||
+			(classLoader == HttpSession.class.getClassLoader())) {
+
+			return true;
+		}
+
+		return false;
+	}
+
 	private static final String _SERIALIZED_ATTRIBUTE_PREFIX =
 		SessionReplicationHttpSessionWrapper.class.getName() + "_";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		SessionReplicationHttpSessionWrapper.class);
-
-	private static final Set<Class<?>> _safeClasses = new HashSet<>(
-		Arrays.asList(
-			Boolean.class, Byte.class, Character.class, Double.class,
-			Float.class, Integer.class, Long.class, Short.class, String.class));
 
 }
