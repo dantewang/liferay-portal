@@ -14,12 +14,15 @@
 
 package com.liferay.portal.dao.sql.transformer;
 
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.function.Function;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Manuel de la Peña
@@ -34,7 +37,7 @@ public class HypersonicSQLTransformerLogic extends BaseSQLTransformerLogic {
 			getBooleanFunction(), getCastClobTextFunction(),
 			getCastLongFunction(), getCastTextFunction(),
 			getDropTableIfExistsTextFunction(), getIntegerDivisionFunction(),
-			getNullDateFunction()
+			getNullDateFunction(), _getCaseWhenThenFunction()
 		};
 
 		if (!db.isSupportsStringCaseSensitiveQuery()) {
@@ -64,5 +67,46 @@ public class HypersonicSQLTransformerLogic extends BaseSQLTransformerLogic {
 	protected String replaceDropTableIfExistsText(Matcher matcher) {
 		return matcher.replaceAll("DROP TABLE $1 IF EXISTS");
 	}
+
+	private Function<String, String> _getCaseWhenThenFunction() {
+		return (String sql) -> {
+			Matcher matcher = _caseWhenThenPattern.matcher(sql);
+
+			int index = 0;
+
+			StringBundler sb = new StringBundler();
+
+			while (matcher.find()) {
+				if (matcher.start() > index) {
+					sb.append(sql.substring(index, matcher.start()));
+				}
+
+				sb.append(
+					StringUtil.replace(
+						matcher.group(),
+						StringBundler.concat(
+							StringPool.SPACE, StringPool.QUESTION,
+							StringPool.SPACE),
+						StringBundler.concat(
+							StringPool.SPACE,
+							_QUESTION_PARAMETER_MARKER_REPLACEMENT,
+							StringPool.SPACE)));
+
+				index = matcher.end();
+			}
+
+			if (index < (sql.length() - 1)) {
+				sb.append(sql.substring(index));
+			}
+
+			return sb.toString();
+		};
+	}
+
+	private static final String _QUESTION_PARAMETER_MARKER_REPLACEMENT =
+		"CONVERT(?, SQL_VARCHAR)";
+
+	private static final Pattern _caseWhenThenPattern = Pattern.compile(
+		"\\bcase when.+?end\\b", Pattern.CASE_INSENSITIVE);
 
 }
