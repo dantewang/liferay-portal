@@ -306,14 +306,24 @@ public class SessionReplicationHttpServletRequest
 
 	@Override
 	public HttpSession getSession() {
-		return new SessionReplicationHttpSessionWrapper(
-			_httpServletRequest.getSession());
+		HttpSession httpSession = _httpServletRequest.getSession();
+
+		if (httpSession == null) {
+			return null;
+		}
+
+		return new SessionReplicationHttpSessionWrapper(httpSession);
 	}
 
 	@Override
 	public HttpSession getSession(boolean create) {
-		return new SessionReplicationHttpSessionWrapper(
-			_httpServletRequest.getSession(create));
+		HttpSession httpSession = _httpServletRequest.getSession(create);
+
+		if (httpSession == null) {
+			return null;
+		}
+
+		return new SessionReplicationHttpSessionWrapper(httpSession);
 	}
 
 	@Override
