@@ -14,6 +14,7 @@
 
 package com.liferay.portal.dao.sql.transformer;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.dao.db.HypersonicDB;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
@@ -49,6 +50,26 @@ public class HypersonicSQLTransformerLogicTest
 		Assert.assertEquals(
 			getBitwiseCheckTransformedSQL(),
 			sqlTransformer.transform(getBitwiseCheckOriginalSQL()));
+	}
+
+	@Test
+	public void testReplaceCaseWhenThen() {
+		Assert.assertEquals(
+			StringBundler.concat(
+				"select * from Foo where case when foo = CONVERT(?, ",
+				"SQL_VARCHAR) then CONVERT(?, SQL_VARCHAR) else CONVERT(?, ",
+				"SQL_VARCHAR) end"),
+			sqlTransformer.transform(
+				"select * from Foo where case when foo = ? then ? else ? end"));
+
+		Assert.assertEquals(
+			StringBundler.concat(
+				"select bar, ?, case when foo = CONVERT(?, SQL_VARCHAR) then ",
+				"CONVERT(?, SQL_VARCHAR) else CONVERT(?, SQL_VARCHAR) end as ",
+				"columnA from Foo"),
+			sqlTransformer.transform(
+				"select bar, ?, case when foo = ? then ? else ? end as " +
+					"columnA from Foo"));
 	}
 
 	@Override
