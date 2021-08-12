@@ -63,6 +63,8 @@ public class SessionReplicationHttpSessionWrapper extends HttpSessionWrapper {
 			_isSafeClass(value.getClass())) {
 
 			super.setAttribute(name, value);
+
+			return;
 		}
 
 		Serializer serializer = new Serializer();
