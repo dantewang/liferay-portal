@@ -73,8 +73,7 @@ public class DB2SQLTransformerLogic extends BaseSQLTransformerLogic {
 		return (String sql) -> {
 			Matcher matcher = _questionMarkPattern.matcher(sql);
 
-			return matcher.replaceAll(
-				" COALESCE(CAST(? AS VARCHAR(32672)),'')");
+			return matcher.replaceAll(" COALESCE(CAST(? AS VARCHAR(254)),'')");
 		};
 	}
 

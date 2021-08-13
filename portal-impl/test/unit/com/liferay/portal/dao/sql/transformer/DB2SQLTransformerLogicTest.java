@@ -115,8 +115,7 @@ public class DB2SQLTransformerLogicTest
 	private void _testReplaceQuestionMark(String sql) {
 		Assert.assertEquals(
 			StringUtil.replace(
-				sql, CharPool.QUESTION,
-				"COALESCE(CAST(? AS VARCHAR(32672)),'')"),
+				sql, CharPool.QUESTION, "COALESCE(CAST(? AS VARCHAR(254)),'')"),
 			sqlTransformer.transform(sql));
 	}
 
