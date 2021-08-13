@@ -55,6 +55,16 @@ public class DB2SQLTransformerLogicTest
 			sqlTransformer.transform(getBitwiseCheckOriginalSQL()));
 	}
 
+	@Test
+	public void testReplaceLikeWithConcatAndCastText() {
+		Assert.assertEquals(
+			"select * from Foo where foo LIKE CAST(bar AS VARCHAR(254)) " +
+				"CONCAT CAST(id AS VARCHAR(254))",
+			sqlTransformer.transform(
+				"select * from Foo where foo LIKE CONCAT(CAST_TEXT(bar)," +
+					"CAST_TEXT(id))"));
+	}
+
 	@Override
 	@Test
 	public void testReplaceModWithExtraWhitespace() {
