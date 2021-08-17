@@ -33,4 +33,8 @@
 			/>
 		</delete>
 	</target>
+
+	<target name="run-integration-test">
+		<gradle-execute dir="../modules/test/company-sample-data-generation-test" task="testintegration" />
+	</target>
 </project>
