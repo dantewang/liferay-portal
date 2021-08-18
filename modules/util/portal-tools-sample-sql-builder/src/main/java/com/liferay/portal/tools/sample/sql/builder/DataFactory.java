@@ -384,12 +384,12 @@ public class DataFactory {
 
 		_assetCategoryModelsMaps =
 			(Map<Long, List<AssetCategoryModel>>[])new HashMap<?, ?>
-				[(_maxVirtualInstanceCount + 1) *
+				[_maxVirtualInstanceCount *
 					BenchmarksPropsValues.MAX_GROUP_COUNT];
 
 		_assetTagModelsMaps =
 			(Map<Long, List<AssetTagModel>>[])new HashMap<?, ?>
-				[(_maxVirtualInstanceCount + 1) *
+				[_maxVirtualInstanceCount *
 					BenchmarksPropsValues.MAX_GROUP_COUNT];
 
 		_initGroupModelMaps();
@@ -398,13 +398,11 @@ public class DataFactory {
 
 		_defaultUserIdMap = _initDefaultUserIdMap();
 
-		int totalInstanceCount = _maxVirtualInstanceCount + 1;
-
 		int groupCount =
 			BenchmarksPropsValues.MAX_GROUP_COUNT +
 				BenchmarksPropsValues.MAX_COMMERCE_GROUP_COUNT;
 
-		int totalGroupCount = groupCount * totalInstanceCount;
+		int totalGroupCount = groupCount * _maxVirtualInstanceCount;
 
 		_counter = new SimpleCounter(totalGroupCount + 1);
 
