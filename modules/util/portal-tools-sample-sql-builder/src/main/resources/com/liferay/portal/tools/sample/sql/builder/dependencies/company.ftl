@@ -1,6 +1,8 @@
 <#list dataFactory.companyModels as companyModel>
 	${dataFactory.setCompanyId(companyModel.companyId)}
 
+	${dataFactory.setWebId(companyModel.webId)}
+
 	<#list dataFactory.newPortalPreferencesModels() as portalPreferencesModel>
 		${dataFactory.toInsertSQL(portalPreferencesModel)}
 	</#list>
