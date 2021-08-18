@@ -489,7 +489,7 @@ public class SessionMessages {
 				key);
 
 			if ((map == null) && createIfAbsent) {
-				map = new SessionMessagesMap();
+				map = new HashMap<>();
 
 				session.setAttribute(key, map);
 			}
