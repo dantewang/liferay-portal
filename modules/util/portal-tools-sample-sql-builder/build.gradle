@@ -3,8 +3,6 @@ import java.util.jar.JarFile
 
 import org.gradle.util.VersionNumber
 
-task writeReleases
-
 baseline {
 	onlyIf {
 		Properties properties = new Properties()
@@ -17,10 +15,6 @@ baseline {
 
 		return VersionNumber.parse(properties["Bundle-Version"]) > VersionNumber.parse("2.0.0")
 	}
-}
-
-classes {
-	dependsOn writeReleases
 }
 
 dependencies {
@@ -87,42 +81,4 @@ dependencies {
 	compileOnly project(":core:petra:petra-process")
 	compileOnly project(":core:petra:petra-reflect")
 	compileOnly project(":core:petra:petra-string")
-}
-
-writeReleases {
-	dependsOn configurations.compileInclude
-
-	doLast {
-		File releasesTxtFile = new File(processResources.destinationDir, "com/liferay/portal/tools/sample/sql/builder/dependencies/releases.txt")
-
-		List<String> lines = []
-
-		(configurations.compile + configurations.compileInclude).each {
-			JarFile jarFile = new JarFile(it)
-
-			Attributes mainAttributes = jarFile.manifest.mainAttributes
-
-			String schemaVersion = mainAttributes.getValue("Liferay-Require-SchemaVersion")
-
-			if (!schemaVersion) {
-				return
-			}
-
-			logger.lifecycle "Adding release information from {} into {}.", it, releasesTxtFile
-
-			String symbolicName = mainAttributes.getValue("Bundle-SymbolicName")
-
-			lines.add("${symbolicName}:${schemaVersion}")
-		}
-
-		lines.sort()
-
-		if (!releasesTxtFile.exists()) {
-			mkdir releasesTxtFile.getParentFile()
-
-			releasesTxtFile.createNewFile()
-		}
-
-		releasesTxtFile.setText lines.join('\n'), "UTF-8"
-	}
 }
