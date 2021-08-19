@@ -1,5 +1,4 @@
 dependencies {
-	testIntegrationCompile group: "com.liferay", name: "org.hibernate.core", version: "3.6.10.LIFERAY-PATCHED-6"
 	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "default"
 	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
 	testIntegrationCompile group: "org.hibernate", name: "hibernate-core", version: "5.5.3.Final"

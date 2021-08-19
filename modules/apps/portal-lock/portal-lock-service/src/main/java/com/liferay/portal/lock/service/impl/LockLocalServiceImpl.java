@@ -41,6 +41,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 
+import javax.persistence.PersistenceException;
+
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.exception.LockAcquisitionException;
 
@@ -49,8 +51,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
-
-import javax.persistence.PersistenceException;
 
 /**
  * @author Brian Wing Shun Chan
@@ -299,8 +299,8 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 			catch (Throwable throwable) {
 				Throwable causeThrowable = throwable;
 
-				if ((throwable instanceof ORMException) ||
-					(throwable instanceof PersistenceException)) {
+				if (throwable instanceof ORMException ||
+					throwable instanceof PersistenceException) {
 
 					causeThrowable = throwable.getCause();
 				}
