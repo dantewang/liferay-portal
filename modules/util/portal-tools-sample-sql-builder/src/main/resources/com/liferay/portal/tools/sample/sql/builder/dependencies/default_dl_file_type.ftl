@@ -1,1 +1,0 @@
-${dataFactory.toInsertSQL(dataFactory.newDLFileEntryTypeModel())}
