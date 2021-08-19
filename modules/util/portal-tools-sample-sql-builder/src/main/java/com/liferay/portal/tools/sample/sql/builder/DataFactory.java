@@ -405,7 +405,8 @@ public class DataFactory {
 		_resourcePermissionIdCounter = new SimpleCounter(
 			_countersMap.get(ResourcePermission.class.getName()));
 		_socialActivityIdCounter = new SimpleCounter();
-		_userScreenNameCounter = new SimpleCounter();
+		_userScreenNameCounter = new SimpleCounter(
+			_maxVirtualInstanceCount + 1);
 
 		List<SampleSQLBuilderClassNameModel> models = _initClassNameModels();
 
