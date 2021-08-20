@@ -403,13 +403,13 @@ public class DataFactory {
 		_timeCounter = new SimpleCounter();
 		_futureDateCounter = new SimpleCounter();
 		_layoutPlidCounter = new SimpleCounter(
-			_countersMap.get(Layout.class.getName()));
+			_countersMap.get(Layout.class.getName()) + 1);
 		_layoutSetIdCounter = new SimpleCounter(
-			_countersMap.get(LayoutSet.class.getName()));
+			_countersMap.get(LayoutSet.class.getName()) + 1);
 		_portletPreferenceValueIdCounter = new SimpleCounter(
-			_countersMap.get(PortletPreferenceValue.class.getName()));
+			_countersMap.get(PortletPreferenceValue.class.getName()) + 1);
 		_resourcePermissionIdCounter = new SimpleCounter(
-			_countersMap.get(ResourcePermission.class.getName()));
+			_countersMap.get(ResourcePermission.class.getName()) + 1);
 		_socialActivityIdCounter = new SimpleCounter();
 		_userScreenNameCounter = new SimpleCounter(
 			_maxVirtualInstanceCount + 1);
