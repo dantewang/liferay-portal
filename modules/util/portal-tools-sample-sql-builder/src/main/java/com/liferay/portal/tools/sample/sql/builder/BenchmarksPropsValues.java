@@ -43,6 +43,18 @@ public class BenchmarksPropsValues {
 		StringUtil.toUpperCase(
 			PropertiesHolder._get(BenchmarksPropsKeys.DB_TYPE)));
 
+	public static final String JDBC_DRIVER_CLASS_NAME = PropertiesHolder._get(
+		BenchmarksPropsKeys.JDBC_DRIVER_CLASS_NAME);
+
+	public static final String JDBC_PASSWORD = PropertiesHolder._get(
+		BenchmarksPropsKeys.JDBC_PASSWORD);
+
+	public static final String JDBC_URL = PropertiesHolder._get(
+		BenchmarksPropsKeys.JDBC_URL);
+
+	public static final String JDBC_USER_NAME = PropertiesHolder._get(
+		BenchmarksPropsKeys.JDBC_USER_NAME);
+
 	public static final int MAX_ASSET_CATEGORY_COUNT = GetterUtil.getInteger(
 		PropertiesHolder._get(BenchmarksPropsKeys.MAX_ASSET_CATEGORY_COUNT));
 
