@@ -1,6 +1,6 @@
 <#-- Default user -->
 
-<@insertUser _userModel=dataFactory.newDefaultUserModel() />
+${dataFactory.setDefaultUserId()}
 
 <#-- Guest user -->
 
