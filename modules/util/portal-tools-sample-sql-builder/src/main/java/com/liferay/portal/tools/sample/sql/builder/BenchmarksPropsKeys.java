@@ -147,13 +147,8 @@ public interface BenchmarksPropsKeys {
 	public static final String MAX_SEGMENTS_ENTRY_COUNT =
 		"sample.sql.max.segments.entry.count";
 
-	public static final String MAX_USER_COUNT = "sample.sql.max.user.count";
-
 	public static final String MAX_USER_TO_GROUP_COUNT =
 		"sample.sql.max.user.to.group.count";
-
-	public static final String MAX_VIRTUAL_INSTANCE_COUNT =
-		"sample.sql.max.virtual.instance.count";
 
 	public static final String MAX_VIRTUAL_INSTANCE_USER_COUNT =
 		"sample.sql.max.virtual.instance.user.count";
@@ -181,8 +176,5 @@ public interface BenchmarksPropsKeys {
 
 	public static final String SEARCH_BAR_ENABLED =
 		"sample.sql.search.bar.enabled";
-
-	public static final String VIRTUAL_HOST_NAME =
-		"sample.sql.virtual.hostname";
 
 }

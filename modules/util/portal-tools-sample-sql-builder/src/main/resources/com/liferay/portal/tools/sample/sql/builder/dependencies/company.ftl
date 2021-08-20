@@ -1,13 +1,5 @@
-<#list dataFactory.newCompanyModels() as companyModel>
+<#list dataFactory.companyModels as companyModel>
 	${dataFactory.setCompanyId(companyModel.companyId)}
-
-	${dataFactory.setWebId(companyModel.webId)}
-
-	<#assign virtualHostModel = dataFactory.newVirtualHostModel() />
-
-	${dataFactory.toInsertSQL(companyModel)}
-
-	${dataFactory.toInsertSQL(virtualHostModel)}
 
 	<#list dataFactory.newPortalPreferencesModels() as portalPreferencesModel>
 		${dataFactory.toInsertSQL(portalPreferencesModel)}
