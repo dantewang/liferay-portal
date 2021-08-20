@@ -396,6 +396,8 @@ public class DataFactory {
 
 		_sampleSQLBuilderRoleModelsMap = _initRoleModelsMap();
 
+		_defaultUserIdMap = _initDefaultUserIdMap();
+
 		int totalInstanceCount = _maxVirtualInstanceCount + 1;
 
 		int groupCount =
@@ -3555,14 +3557,6 @@ public class DataFactory {
 		return ddmTemplateVersionModelImpl;
 	}
 
-	public UserModel newDefaultUserModel() {
-		_defaultUserId = _counter.get();
-
-		return newUserModel(
-			_defaultUserId, StringPool.BLANK, StringPool.BLANK,
-			StringPool.BLANK, true);
-	}
-
 	public DLFileEntryMetadataModel newDLFileEntryMetadataModel(
 		long ddmStorageLinkId, long ddmStructureId,
 		DLFileVersionModel dlFileVersionModel) {
@@ -5452,6 +5446,10 @@ public class DataFactory {
 		_companyId = companyId;
 	}
 
+	public void setDefaultUserId() {
+		_defaultUserId = _defaultUserIdMap.get(_companyId);
+	}
+
 	public String toInsertSQL(BaseModel<?> baseModel) {
 		try {
 			StringBundler sb = new StringBundler();
@@ -6943,6 +6941,25 @@ public class DataFactory {
 		return sampleSQLBuilderCompanyModels;
 	}
 
+	private Map<Long, Long> _initDefaultUserIdMap() throws Exception {
+		Map<Long, Long> defautUserIdMap = new HashMap<>();
+
+		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
+			new InputStreamReader(
+				getResourceInputStream("csv/defaultUserId.csv")));
+
+		String line = null;
+
+		while ((line = unsyncBufferedReader.readLine()) != null) {
+			String[] items = line.split(",");
+
+			defautUserIdMap.put(
+				GetterUtil.getLong(items[0]), GetterUtil.getLong(items[1]));
+		}
+
+		return defautUserIdMap;
+	}
+
 	private void _initGroupModelMaps() throws Exception {
 		List<SampleSQLBuilderGroupModel> sampleSQLBuilderGroupModels =
 			new ArrayList<>();
@@ -7096,6 +7113,7 @@ public class DataFactory {
 	private long _defaultJournalDDMStructureVersionId;
 	private long _defaultJournalDDMTemplateId;
 	private long _defaultUserId;
+	private final Map<Long, Long> _defaultUserIdMap;
 	private final String _dlDDMStructureContent;
 	private final String _dlDDMStructureLayoutContent;
 	private List<String> _firstNames;
@@ -7120,12 +7138,13 @@ public class DataFactory {
 	private final SimpleCounter _portletPreferenceValueIdCounter;
 	private RoleModel _powerUserRoleModel;
 	private final SimpleCounter _resourcePermissionIdCounter;
-	private List<SampleSQLBuilderCompanyModel> _sampleSQLBuilderCompanyModels;
+	private final List<SampleSQLBuilderCompanyModel>
+		_sampleSQLBuilderCompanyModels;
 	private final Map<Long, SampleSQLBuilderGroupModel>
 		_sampleSQLBuilderGobalGroupModelMap = new HashMap<>();
 	private final Map<Long, SampleSQLBuilderGroupModel>
 		_sampleSQLBuilderGuestGroupModelMap = new HashMap<>();
-	private Map<Long, List<SampleSQLBuilderRoleModel>>
+	private final Map<Long, List<SampleSQLBuilderRoleModel>>
 		_sampleSQLBuilderRoleModelsMap;
 	private long _sampleUserId;
 	private final Format _simpleDateFormat;
