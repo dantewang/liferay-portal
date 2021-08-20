@@ -343,6 +343,11 @@ import java.math.BigDecimal;
 
 import java.net.URL;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 
 import java.text.Format;
@@ -6898,6 +6903,40 @@ public class DataFactory {
 		}
 	}
 
+	private long _fetchCounterCurrenId(String name) throws Exception {
+		long currentId = 0;
+
+		try {
+			Class.forName(BenchmarksPropsValues.JDBC_DRIVER_CLASS_NAME);
+		}
+		catch (ClassNotFoundException classNotFoundException) {
+			classNotFoundException.printStackTrace();
+		}
+
+		try {
+			Connection connection = DriverManager.getConnection(
+				BenchmarksPropsValues.JDBC_URL,
+				BenchmarksPropsValues.JDBC_USER_NAME,
+				BenchmarksPropsValues.JDBC_PASSWORD);
+
+			Statement sql = connection.createStatement();
+
+			ResultSet resultSet = sql.executeQuery(
+				"Select currentId from Counter where name=\"" + name + "\";");
+
+			while (resultSet.next()) {
+				currentId = GetterUtil.getLong(resultSet.getString(1));
+			}
+
+			connection.close();
+		}
+		catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		}
+
+		return currentId;
+	}
+
 	private String _generateJsonData(
 		List<FragmentEntryLinkModel> fragmentEntryLinkModels,
 		String templateFileName) {
@@ -7057,9 +7096,7 @@ public class DataFactory {
 		String line = null;
 
 		while ((line = unsyncBufferedReader.readLine()) != null) {
-			String[] items = line.split(",");
-
-			countersMap.put(items[0], GetterUtil.getLong(items[1]));
+			countersMap.put(line, _fetchCounterCurrenId(line));
 		}
 
 		return countersMap;

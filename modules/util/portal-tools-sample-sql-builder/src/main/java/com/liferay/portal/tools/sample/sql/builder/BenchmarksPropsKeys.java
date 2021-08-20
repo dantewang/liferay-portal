@@ -21,6 +21,17 @@ public interface BenchmarksPropsKeys {
 
 	public static final String DB_TYPE = "sample.sql.db.type";
 
+	public static final String JDBC_DRIVER_CLASS_NAME =
+		"sample.sql.jdbc.default.driverClassName";
+
+	public static final String JDBC_PASSWORD =
+		"sample.sql.jdbc.default.password";
+
+	public static final String JDBC_URL = "sample.sql.jdbc.default.url";
+
+	public static final String JDBC_USER_NAME =
+		"sample.sql.jdbc.default.username";
+
 	public static final String MAX_ASSET_CATEGORY_COUNT =
 		"sample.sql.max.asset.category.count";
 
