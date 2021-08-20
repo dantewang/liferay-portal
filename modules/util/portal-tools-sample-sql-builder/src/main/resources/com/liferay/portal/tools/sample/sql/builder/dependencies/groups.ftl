@@ -14,8 +14,6 @@ ${dataFactory.toInsertSQL(countryModel)}
 
 <#include "commerce_groups.ftl">
 
-<@insertLayout _layoutModel=dataFactory.newLayoutModel(guestGroupModel.groupId, "welcome", "com_liferay_login_web_portlet_LoginPortlet,", "com_liferay_hello_world_web_portlet_HelloWorldPortlet,") />
-
 <#include "asset.ftl">
 
 <#include "ddm.ftl">
@@ -48,9 +46,15 @@ ${dataFactory.toInsertSQL(countryModel)}
 		_parentDLFolderId=0
 	/>
 
-	<#assign groupLayoutModels = dataFactory.newGroupLayoutModels(groupId) />
+	<#assign homePageContentLayoutModels = dataFactory.newContentPageLayoutModels(groupId, "welcome") />
 
-	<#list groupLayoutModels as groupLayoutModel>
+	<@insertContentPageLayout
+		_fragmentEntryLinkModels=dataFactory.newFragmentEntryLinkModels(homePageContentLayoutModels)
+		_layoutModels=homePageContentLayoutModels
+		_templateFileName="default-homepage-layout-definition.json"
+	/>
+
+	<#list dataFactory.newGroupLayoutModels(groupId) as groupLayoutModel>
 		<@insertLayout _layoutModel=groupLayoutModel />
 	</#list>
 
