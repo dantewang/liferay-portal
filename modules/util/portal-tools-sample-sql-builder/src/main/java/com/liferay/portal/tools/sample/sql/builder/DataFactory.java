@@ -394,6 +394,8 @@ public class DataFactory {
 
 		_initGroupModelMaps();
 
+		_sampleSQLBuilderRoleModelsMap = _initRoleModelsMap();
+
 		int totalInstanceCount = _maxVirtualInstanceCount + 1;
 
 		int groupCount =
@@ -5176,84 +5178,48 @@ public class DataFactory {
 			String.valueOf(wikiPageModel.getResourcePrimKey()), _sampleUserId);
 	}
 
-	public List<RoleModel> newRoleModels() {
-		List<RoleModel> roleModels = new ArrayList<>();
+	public void newRoleModels() {
+		List<SampleSQLBuilderRoleModel> roleModels =
+			_sampleSQLBuilderRoleModelsMap.get(_companyId);
 
 		// Administrator
 
-		_administratorRoleModel = newRoleModel(
-			RoleConstants.ADMINISTRATOR, RoleConstants.TYPE_REGULAR);
+		_administratorRoleModel = new RoleModelImpl();
 
-		roleModels.add(_administratorRoleModel);
+		_administratorRoleModel.setRoleId(
+			_getRoleId(roleModels, RoleConstants.ADMINISTRATOR));
 
 		// Guest
 
-		_guestRoleModel = newRoleModel(
-			RoleConstants.GUEST, RoleConstants.TYPE_REGULAR);
+		_guestRoleModel = new RoleModelImpl();
 
-		roleModels.add(_guestRoleModel);
-
-		// Organization Administrator
-
-		roleModels.add(
-			newRoleModel(
-				RoleConstants.ORGANIZATION_ADMINISTRATOR,
-				RoleConstants.TYPE_ORGANIZATION));
-
-		// Organization Owner
-
-		roleModels.add(
-			newRoleModel(
-				RoleConstants.ORGANIZATION_OWNER,
-				RoleConstants.TYPE_ORGANIZATION));
-
-		// Organization User
-
-		roleModels.add(
-			newRoleModel(
-				RoleConstants.ORGANIZATION_USER,
-				RoleConstants.TYPE_ORGANIZATION));
+		_guestRoleModel.setRoleId(_getRoleId(roleModels, RoleConstants.GUEST));
 
 		// Owner
 
-		_ownerRoleModel = newRoleModel(
-			RoleConstants.OWNER, RoleConstants.TYPE_REGULAR);
+		_ownerRoleModel = new RoleModelImpl();
 
-		roleModels.add(_ownerRoleModel);
+		_ownerRoleModel.setRoleId(_getRoleId(roleModels, RoleConstants.OWNER));
 
-		// Power User
+		// Power Userd
 
-		_powerUserRoleModel = newRoleModel(
-			RoleConstants.POWER_USER, RoleConstants.TYPE_REGULAR);
+		_powerUserRoleModel = new RoleModelImpl();
 
-		roleModels.add(_powerUserRoleModel);
-
-		// Site Administrator
-
-		roleModels.add(
-			newRoleModel(
-				RoleConstants.SITE_ADMINISTRATOR, RoleConstants.TYPE_SITE));
+		_powerUserRoleModel.setRoleId(
+			_getRoleId(roleModels, RoleConstants.POWER_USER));
 
 		// Site Member
 
-		_siteMemberRoleModel = newRoleModel(
-			RoleConstants.SITE_MEMBER, RoleConstants.TYPE_SITE);
+		_siteMemberRoleModel = new RoleModelImpl();
 
-		roleModels.add(_siteMemberRoleModel);
-
-		// Site Owner
-
-		roleModels.add(
-			newRoleModel(RoleConstants.SITE_OWNER, RoleConstants.TYPE_SITE));
+		_siteMemberRoleModel.setRoleId(
+			_getRoleId(roleModels, RoleConstants.SITE_MEMBER));
 
 		// User
 
-		_userRoleModel = newRoleModel(
-			RoleConstants.USER, RoleConstants.TYPE_REGULAR);
+		_userRoleModel = new RoleModelImpl();
 
-		roleModels.add(_userRoleModel);
-
-		return roleModels;
+		_userRoleModel.setRoleId(_getRoleId(roleModels, RoleConstants.USER));
 	}
 
 	public UserModel newSampleUserModel() {
@@ -6528,35 +6494,6 @@ public class DataFactory {
 				name, primKey, _siteMemberRoleModel.getRoleId(), 0));
 	}
 
-	protected RoleModel newRoleModel(String name, int type) {
-		RoleModel roleModel = new RoleModelImpl();
-
-		// UUID
-
-		roleModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		roleModel.setRoleId(_counter.get());
-
-		// Audit fields
-
-		roleModel.setCompanyId(_companyId);
-		roleModel.setUserId(_sampleUserId);
-		roleModel.setUserName(_SAMPLE_USER_NAME);
-		roleModel.setCreateDate(new Date());
-		roleModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		roleModel.setClassNameId(getClassNameId(Role.class));
-		roleModel.setClassPK(roleModel.getRoleId());
-		roleModel.setName(name);
-		roleModel.setType(type);
-
-		return roleModel;
-	}
-
 	protected SocialActivityModel newSocialActivityModel(
 		long groupId, long classNameId, long classPK, int type,
 		String extraData) {
@@ -6939,6 +6876,24 @@ public class DataFactory {
 		return sb.toString();
 	}
 
+	private long _getRoleId(
+		List<SampleSQLBuilderRoleModel> roleModels, String name) {
+
+		long roleId = 0;
+
+		for (SampleSQLBuilderRoleModel roleModel : roleModels) {
+			String actualName = roleModel.getName();
+
+			if (actualName.equals(name)) {
+				roleId = roleModel.getRoleId();
+
+				break;
+			}
+		}
+
+		return roleId;
+	}
+
 	private List<SampleSQLBuilderClassNameModel> _initClassNameModels()
 		throws Exception {
 
@@ -7032,6 +6987,52 @@ public class DataFactory {
 		}
 	}
 
+	private Map<Long, List<SampleSQLBuilderRoleModel>> _initRoleModelsMap()
+		throws Exception {
+
+		List<SampleSQLBuilderRoleModel> totalSampleSQLBuilderRoleModels =
+			new ArrayList<>();
+
+		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
+			new InputStreamReader(getResourceInputStream("csv/roleTable.csv")));
+
+		String line = null;
+
+		while ((line = unsyncBufferedReader.readLine()) != null) {
+			String[] items = line.split(",");
+
+			totalSampleSQLBuilderRoleModels.add(
+				new SampleSQLBuilderRoleModel(
+					GetterUtil.getLong(items[0]), GetterUtil.getLong(items[1]),
+					items[2]));
+		}
+
+		Map<Long, List<SampleSQLBuilderRoleModel>>
+			sampleSQLBuilderRoleModelsMap = new HashMap<>();
+
+		for (SampleSQLBuilderCompanyModel sampleSQLBuilderCompanyModel :
+				_sampleSQLBuilderCompanyModels) {
+
+			List<SampleSQLBuilderRoleModel> sampleSQLBuilderRoleModels =
+				new ArrayList<>();
+
+			long companyId = sampleSQLBuilderCompanyModel.getCompanyId();
+
+			for (SampleSQLBuilderRoleModel sampleSQLBuilderRoleModel :
+					totalSampleSQLBuilderRoleModels) {
+
+				if (sampleSQLBuilderRoleModel.getCompanyId() == companyId) {
+					sampleSQLBuilderRoleModels.add(sampleSQLBuilderRoleModel);
+				}
+			}
+
+			sampleSQLBuilderRoleModelsMap.put(
+				companyId, sampleSQLBuilderRoleModels);
+		}
+
+		return sampleSQLBuilderRoleModelsMap;
+	}
+
 	private CounterModel _newCounterModel(String name, long currentId) {
 		CounterModel counterModel = new CounterModelImpl();
 
@@ -7123,6 +7124,8 @@ public class DataFactory {
 		_sampleSQLBuilderGobalGroupModelMap = new HashMap<>();
 	private final Map<Long, SampleSQLBuilderGroupModel>
 		_sampleSQLBuilderGuestGroupModelMap = new HashMap<>();
+	private Map<Long, List<SampleSQLBuilderRoleModel>>
+		_sampleSQLBuilderRoleModelsMap;
 	private long _sampleUserId;
 	private final Format _simpleDateFormat;
 	private RoleModel _siteMemberRoleModel;
