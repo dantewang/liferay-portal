@@ -233,7 +233,6 @@ import com.liferay.portal.kernel.model.LayoutModel;
 import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.LayoutSetModel;
 import com.liferay.portal.kernel.model.LayoutTypePortletConstants;
-import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.model.PortalPreferencesModel;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.PortletPreferenceValue;
@@ -406,23 +405,15 @@ public class DataFactory {
 		_socialActivityIdCounter = new SimpleCounter();
 		_userScreenNameCounter = new SimpleCounter();
 
-		List<String> models = ModelHintsUtil.getModels();
+		List<SampleSQLBuilderClassNameModel> models = _initClassNameModels();
 
-		models.add(Layout.class.getName());
-		models.add(NavItem.class.getName());
-		models.add(PortletDisplayTemplate.class.getName());
-		models.add(UserPersonalSite.class.getName());
-
-		models.add(_getMBDiscussionCombinedClassName(BlogsEntry.class));
-		models.add(_getMBDiscussionCombinedClassName(WikiPage.class));
-
-		for (String model : models) {
+		for (SampleSQLBuilderClassNameModel model : models) {
 			ClassNameModel classNameModel = new ClassNameModelImpl();
 
-			classNameModel.setClassNameId(_counter.get());
-			classNameModel.setValue(model);
+			classNameModel.setClassNameId(model.getClassNameId());
+			classNameModel.setValue(model.getValue());
 
-			_classNameModels.put(model, classNameModel);
+			_classNameModels.put(model.getValue(), classNameModel);
 		}
 
 		_assetClassNameIds = new long[] {
@@ -6986,6 +6977,29 @@ public class DataFactory {
 		sb.setIndex(sb.index() - 1);
 
 		return sb.toString();
+	}
+
+	private List<SampleSQLBuilderClassNameModel> _initClassNameModels()
+		throws Exception {
+
+		List<SampleSQLBuilderClassNameModel> sampleSQLBuilderClassNameModels =
+			new ArrayList<>();
+
+		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
+			new InputStreamReader(
+				getResourceInputStream("csv/classNameTable.csv")));
+
+		String line = null;
+
+		while ((line = unsyncBufferedReader.readLine()) != null) {
+			String[] items = line.split(",");
+
+			sampleSQLBuilderClassNameModels.add(
+				new SampleSQLBuilderClassNameModel(
+					GetterUtil.getLong(items[0]), items[1]));
+		}
+
+		return sampleSQLBuilderClassNameModels;
 	}
 
 	private CounterModel _newCounterModel(String name, long currentId) {
