@@ -1439,55 +1439,6 @@ public class DataFactory {
 		return commerceChannelRelModel;
 	}
 
-	public CommerceCurrencyModel newCommerceCurrencyModel() {
-		CommerceCurrencyModel commerceCurrencyModel =
-			new CommerceCurrencyModelImpl();
-
-		commerceCurrencyModel.setUuid(SequentialUUID.generate());
-
-		// PK fields
-
-		commerceCurrencyModel.setCommerceCurrencyId(_counter.get());
-
-		// Audit fields
-
-		commerceCurrencyModel.setCompanyId(_companyId);
-		commerceCurrencyModel.setUserId(_sampleUserId);
-		commerceCurrencyModel.setUserName(_SAMPLE_USER_NAME);
-		commerceCurrencyModel.setCreateDate(new Date());
-		commerceCurrencyModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		commerceCurrencyModel.setCode("USD");
-
-		String name = StringBundler.concat(
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root available-locales",
-			"=\"en_US\" default-locale=\"en_US\"><Name language-id=\"en_US\">",
-			"US Dollar</Name></root>");
-
-		commerceCurrencyModel.setName(name);
-
-		commerceCurrencyModel.setRate(BigDecimal.valueOf(1));
-
-		String formatPattern = StringBundler.concat(
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root available-locales",
-			"=\"en_US\" default-locale=\"en_US\"><FormatPattern language-id",
-			"=\"en_US\">$###,##0.00</FormatPattern></root>");
-
-		commerceCurrencyModel.setFormatPattern(formatPattern);
-
-		commerceCurrencyModel.setMaxFractionDigits(2);
-		commerceCurrencyModel.setMinFractionDigits(2);
-		commerceCurrencyModel.setRoundingMode("HALF_EVEN");
-		commerceCurrencyModel.setPrimary(true);
-		commerceCurrencyModel.setPriority(1);
-		commerceCurrencyModel.setActive(true);
-		commerceCurrencyModel.setLastPublishDate(new Date());
-
-		return commerceCurrencyModel;
-	}
-
 	public List<GroupModel> newCommerceGroupModels() {
 		List<GroupModel> groupModels = new ArrayList<>(
 			BenchmarksPropsValues.MAX_COMMERCE_GROUP_COUNT);
