@@ -213,7 +213,6 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.metadata.RawMetadataProcessor;
-import com.liferay.portal.kernel.model.AccountModel;
 import com.liferay.portal.kernel.model.Address;
 import com.liferay.portal.kernel.model.AddressModel;
 import com.liferay.portal.kernel.model.BaseModel;
@@ -249,7 +248,6 @@ import com.liferay.portal.kernel.model.RoleModel;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserModel;
 import com.liferay.portal.kernel.model.UserPersonalSite;
-import com.liferay.portal.kernel.model.VirtualHostModel;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
@@ -275,7 +273,6 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.version.Version;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.model.impl.AccountModelImpl;
 import com.liferay.portal.model.impl.AddressModelImpl;
 import com.liferay.portal.model.impl.ClassNameModelImpl;
 import com.liferay.portal.model.impl.CompanyModelImpl;
@@ -293,7 +290,6 @@ import com.liferay.portal.model.impl.ReleaseModelImpl;
 import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.portal.model.impl.UserModelImpl;
-import com.liferay.portal.model.impl.VirtualHostModelImpl;
 import com.liferay.portal.search.web.constants.SearchBarPortletKeys;
 import com.liferay.portal.search.web.internal.category.facet.constants.CategoryFacetPortletKeys;
 import com.liferay.portal.search.web.internal.folder.facet.constants.FolderFacetPortletKeys;
@@ -385,8 +381,19 @@ public class DataFactory {
 		_simpleDateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss", TimeZone.getDefault());
 
-		int totalInstanceCount =
-			BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1;
+		_sampleSQLBuilderCompanyModels = _initCompanyModels();
+
+		_assetCategoryModelsMaps =
+			(Map<Long, List<AssetCategoryModel>>[])new HashMap<?, ?>
+				[(_maxVirtualInstanceCount + 1) *
+					BenchmarksPropsValues.MAX_GROUP_COUNT];
+
+		_assetTagModelsMaps =
+			(Map<Long, List<AssetTagModel>>[])new HashMap<?, ?>
+				[(_maxVirtualInstanceCount + 1) *
+					BenchmarksPropsValues.MAX_GROUP_COUNT];
+
+		int totalInstanceCount = _maxVirtualInstanceCount + 1;
 
 		int groupCount =
 			BenchmarksPropsValues.MAX_GROUP_COUNT +
@@ -466,7 +473,7 @@ public class DataFactory {
 		if (_assetCategoryCounters == null) {
 			_assetCategoryCounters =
 				(Map<Long, SimpleCounter>[])new HashMap<?, ?>
-					[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
+					[(_maxVirtualInstanceCount + 1) *
 						BenchmarksPropsValues.MAX_GROUP_COUNT];
 		}
 
@@ -509,7 +516,7 @@ public class DataFactory {
 
 		if (_assetTagCounters == null) {
 			_assetTagCounters = (Map<Long, SimpleCounter>[])new HashMap<?, ?>
-				[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
+				[(_maxVirtualInstanceCount + 1) *
 					BenchmarksPropsValues.MAX_GROUP_COUNT];
 		}
 
@@ -550,6 +557,10 @@ public class DataFactory {
 
 	public long getCommerceInventoryWarehouseClassNameId() {
 		return getClassNameId(CommerceInventoryWarehouse.class);
+	}
+
+	public List<SampleSQLBuilderCompanyModel> getCompanyModels() {
+		return _sampleSQLBuilderCompanyModels;
 	}
 
 	public long getCounterNext() {
@@ -841,33 +852,6 @@ public class DataFactory {
 		accountEntryUserRelModel.setAccountUserId(user.getUserId());
 
 		return accountEntryUserRelModel;
-	}
-
-	public AccountModel newAccountModel() {
-		AccountModel accountModel = new AccountModelImpl();
-
-		// PK fields
-
-		accountModel.setAccountId(_accountId);
-
-		// Audit fields
-
-		accountModel.setCompanyId(_companyId);
-		accountModel.setCreateDate(new Date());
-		accountModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		if (_webId.equals("liferay.com")) {
-			accountModel.setName("Liferay");
-		}
-		else {
-			accountModel.setName(_webId);
-		}
-
-		accountModel.setLegalName("Liferay, Inc.");
-
-		return accountModel;
 	}
 
 	public AddressModel newAddressModel(long accountEntryId, long countryId) {
@@ -2200,21 +2184,6 @@ public class DataFactory {
 		companyModel.setActive(true);
 
 		return companyModel;
-	}
-
-	public List<CompanyModel> newCompanyModels() {
-		List<CompanyModel> companyModels = new ArrayList<>(
-			BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1);
-
-		companyModels.add(newCompanyModel());
-
-		for (int i = 1; i <= BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT;
-			 i++) {
-
-			companyModels.add(newCompanyModel(i));
-		}
-
-		return companyModels;
 	}
 
 	public ContactModel newContactModel(UserModel userModel) {
@@ -5435,14 +5404,7 @@ public class DataFactory {
 	}
 
 	public List<UserModel> newUserModels() {
-		int userCount = 0;
-
-		if (_webId.equals("liferay.com")) {
-			userCount = BenchmarksPropsValues.MAX_USER_COUNT;
-		}
-		else {
-			userCount = BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_USER_COUNT;
-		}
+		int userCount = BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_USER_COUNT;
 
 		List<UserModel> userModels = new ArrayList<>(userCount);
 
@@ -5462,30 +5424,6 @@ public class DataFactory {
 		return newGroupModel(
 			_counter.get(), getClassNameId(UserPersonalSite.class),
 			_defaultUserId, GroupConstants.USER_PERSONAL_SITE, false);
-	}
-
-	public VirtualHostModel newVirtualHostModel() {
-		VirtualHostModel virtualHostModel = new VirtualHostModelImpl();
-
-		//  PK fields
-
-		virtualHostModel.setVirtualHostId(_counter.get());
-
-		// Audit fields
-
-		virtualHostModel.setCompanyId(_companyId);
-
-		// Other fields
-
-		if (_webId.equals("liferay.com")) {
-			virtualHostModel.setHostname(
-				BenchmarksPropsValues.VIRTUAL_HOST_NAME);
-		}
-		else {
-			virtualHostModel.setHostname(_webId);
-		}
-
-		return virtualHostModel;
 	}
 
 	public List<WikiNodeModel> newWikiNodeModels(long groupId) {
@@ -5549,10 +5487,6 @@ public class DataFactory {
 
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
-	}
-
-	public void setWebId(String webId) {
-		_webId = webId;
 	}
 
 	public String toInsertSQL(BaseModel<?> baseModel) {
@@ -7031,6 +6965,32 @@ public class DataFactory {
 		return sampleSQLBuilderClassNameModels;
 	}
 
+	private List<SampleSQLBuilderCompanyModel> _initCompanyModels()
+		throws Exception {
+
+		List<SampleSQLBuilderCompanyModel> sampleSQLBuilderCompanyModels =
+			new ArrayList<>();
+
+		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
+			new InputStreamReader(
+				getResourceInputStream("csv/companyTable.csv")));
+
+		String line = null;
+
+		while ((line = unsyncBufferedReader.readLine()) != null) {
+			String[] items = line.split(",");
+
+			sampleSQLBuilderCompanyModels.add(
+				new SampleSQLBuilderCompanyModel(
+					GetterUtil.getLong(items[1]), GetterUtil.getLong(items[0]),
+					items[2]));
+		}
+
+		_maxVirtualInstanceCount = sampleSQLBuilderCompanyModels.size();
+
+		return sampleSQLBuilderCompanyModels;
+	}
+
 	private CounterModel _newCounterModel(String name, long currentId) {
 		CounterModel counterModel = new CounterModelImpl();
 
@@ -7072,20 +7032,14 @@ public class DataFactory {
 	private RoleModel _administratorRoleModel;
 	private Map<Long, SimpleCounter>[] _assetCategoryCounters;
 	private final Map<Long, List<AssetCategoryModel>>[]
-		_assetCategoryModelsMaps =
-			(Map<Long, List<AssetCategoryModel>>[])new HashMap<?, ?>
-				[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
-					BenchmarksPropsValues.MAX_GROUP_COUNT];
+		_assetCategoryModelsMaps;
 	private final long[] _assetClassNameIds;
 	private final Map<Long, Integer> _assetClassNameIdsIndexes =
 		new HashMap<>();
 	private final Map<Long, Integer> _assetPublisherQueryStartIndexes =
 		new HashMap<>();
 	private Map<Long, SimpleCounter>[] _assetTagCounters;
-	private final Map<Long, List<AssetTagModel>>[] _assetTagModelsMaps =
-		(Map<Long, List<AssetTagModel>>[])new HashMap<?, ?>
-			[(BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1) *
-				BenchmarksPropsValues.MAX_GROUP_COUNT];
+	private final Map<Long, List<AssetTagModel>>[] _assetTagModelsMaps;
 	private final Map<String, ClassNameModel> _classNameModels =
 		new HashMap<>();
 	private long _companyId;
@@ -7119,10 +7073,12 @@ public class DataFactory {
 	private final String _layoutPageTemplateStructureRelData;
 	private final SimpleCounter _layoutPlidCounter;
 	private final SimpleCounter _layoutSetIdCounter;
+	private int _maxVirtualInstanceCount;
 	private RoleModel _ownerRoleModel;
 	private final SimpleCounter _portletPreferenceValueIdCounter;
 	private RoleModel _powerUserRoleModel;
 	private final SimpleCounter _resourcePermissionIdCounter;
+	private List<SampleSQLBuilderCompanyModel> _sampleSQLBuilderCompanyModels;
 	private long _sampleUserId;
 	private final Format _simpleDateFormat;
 	private RoleModel _siteMemberRoleModel;
@@ -7130,6 +7086,5 @@ public class DataFactory {
 	private final SimpleCounter _timeCounter;
 	private RoleModel _userRoleModel;
 	private final SimpleCounter _userScreenNameCounter;
-	private String _webId;
 
 }
