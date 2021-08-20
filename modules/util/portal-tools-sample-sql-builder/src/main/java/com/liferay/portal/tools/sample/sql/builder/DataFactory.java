@@ -412,7 +412,7 @@ public class DataFactory {
 			_countersMap.get(ResourcePermission.class.getName()) + 1);
 		_socialActivityIdCounter = new SimpleCounter();
 		_userScreenNameCounter = new SimpleCounter(
-			_maxVirtualInstanceCount + 1);
+			_maxVirtualInstanceCount + 2);
 
 		List<SampleSQLBuilderClassNameModel> models = _initClassNameModels();
 
