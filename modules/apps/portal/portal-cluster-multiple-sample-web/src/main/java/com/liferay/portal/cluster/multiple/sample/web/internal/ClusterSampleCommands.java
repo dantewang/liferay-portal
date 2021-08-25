@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.cluster.multiple.sample.internal;
+package com.liferay.portal.cluster.multiple.sample.web.internal;
 
 /**
  * @author Tina Tian
