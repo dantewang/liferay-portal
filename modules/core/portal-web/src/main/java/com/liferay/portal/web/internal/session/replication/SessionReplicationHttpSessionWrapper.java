@@ -14,21 +14,15 @@
 
 package com.liferay.portal.web.internal.session.replication;
 
-import com.liferay.petra.io.Deserializer;
-import com.liferay.petra.io.Serializer;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.cache.PortalCache;
+import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
+import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.servlet.HttpSessionWrapper;
 
 import java.io.Serializable;
 
-import java.nio.ByteBuffer;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -45,52 +39,20 @@ public class SessionReplicationHttpSessionWrapper extends HttpSessionWrapper {
 
 	@Override
 	public Object getAttribute(String name) {
-		Object value = super.getAttribute(
-			_SERIALIZED_ATTRIBUTE_PREFIX.concat(name));
+		Object value = super.getAttribute(name);
 
-		if (value == null) {
-			return super.getAttribute(name);
+		if (Objects.equals(value, _PLACE_HOLDER_VALUE)) {
+			return _portalCache.get(name);
 		}
 
-		Deserializer deserializer = new Deserializer(
-			ByteBuffer.wrap((byte[])value));
-
-		try {
-			return deserializer.readObject();
-		}
-		catch (Exception exception) {
-			_log.error("Unable to deserialize object", exception);
-
-			return null;
-		}
-	}
-
-	@Override
-	public Enumeration<String> getAttributeNames() {
-		Enumeration<String> attributeNameEnumeration =
-			super.getAttributeNames();
-
-		List<String> attributeNames = new ArrayList<>();
-
-		while (attributeNameEnumeration.hasMoreElements()) {
-			String attributeName = attributeNameEnumeration.nextElement();
-
-			if (attributeName.startsWith(_SERIALIZED_ATTRIBUTE_PREFIX)) {
-				attributeName = attributeName.substring(
-					_SERIALIZED_ATTRIBUTE_PREFIX.length());
-			}
-
-			attributeNames.add(attributeName);
-		}
-
-		return Collections.enumeration(attributeNames);
+		return value;
 	}
 
 	@Override
 	public void removeAttribute(String name) {
 		super.removeAttribute(name);
 
-		super.removeAttribute(_SERIALIZED_ATTRIBUTE_PREFIX.concat(name));
+		_portalCache.remove(name);
 	}
 
 	@Override
@@ -99,15 +61,9 @@ public class SessionReplicationHttpSessionWrapper extends HttpSessionWrapper {
 			Class<?> clazz = value.getClass();
 
 			if (!_safeClassLoaders.contains(clazz.getClassLoader())) {
-				Serializer serializer = new Serializer();
+				_portalCache.put(name, value);
 
-				serializer.writeObject((Serializable)value);
-
-				ByteBuffer byteBuffer = serializer.toByteBuffer();
-
-				super.setAttribute(
-					_SERIALIZED_ATTRIBUTE_PREFIX.concat(name),
-					byteBuffer.array());
+				super.setAttribute(name, _PLACE_HOLDER_VALUE);
 
 				return;
 			}
@@ -116,11 +72,7 @@ public class SessionReplicationHttpSessionWrapper extends HttpSessionWrapper {
 		super.setAttribute(name, value);
 	}
 
-	private static final String _SERIALIZED_ATTRIBUTE_PREFIX =
-		"SERIALIZED_ATTRIBUTE_PREFIX_";
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		SessionReplicationHttpSessionWrapper.class);
+	private static final String _PLACE_HOLDER_VALUE = "PLACE_HOLDER_VALUE";
 
 	private static final Set<ClassLoader> _safeClassLoaders =
 		new HashSet<ClassLoader>() {
@@ -130,5 +82,10 @@ public class SessionReplicationHttpSessionWrapper extends HttpSessionWrapper {
 				add(Logger.class.getClassLoader());
 			}
 		};
+
+	private final PortalCache<String, Object> _portalCache =
+		PortalCacheHelperUtil.getPortalCache(
+			PortalCacheManagerNames.MULTI_VM,
+			SessionReplicationHttpSessionWrapper.class.getName());
 
 }
