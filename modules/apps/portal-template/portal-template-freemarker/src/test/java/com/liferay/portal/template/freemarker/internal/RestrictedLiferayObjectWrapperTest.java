@@ -603,7 +603,11 @@ public class RestrictedLiferayObjectWrapperTest
 				TransactionConfig transactionConfig, Callable<T> callable)
 			throws Throwable {
 
-			return callable.call();
+			if (transactionConfig.isStrictReadOnly()) {
+				return callable.call();
+			}
+
+			return null;
 		}
 
 	}
