@@ -32,6 +32,7 @@ import com.liferay.portal.test.log.LogCapture;
 import com.liferay.portal.test.log.LogEntry;
 import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
+import com.liferay.portal.util.PropsValues;
 import com.liferay.registry.BasicRegistryImpl;
 import com.liferay.registry.RegistryUtil;
 
@@ -45,6 +46,8 @@ import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 
 import java.io.Serializable;
+
+import java.lang.reflect.Method;
 
 import java.util.Collections;
 import java.util.List;
@@ -294,7 +297,59 @@ public class RestrictedLiferayObjectWrapperTest
 	}
 
 	@Test
-	public void testWrap() throws Exception {
+	public void testWrapWithStrictReadOnly() throws Exception {
+		testWrap();
+
+		boolean strictReadOnly =
+			PropsValues.FREEMARKER_TEMPLATE_TRANSACTION_STRICT_READ_ONLY;
+
+		boolean value = true;
+
+		if (strictReadOnly) {
+			value = false;
+		}
+
+		try {
+			_setPortalProperty(
+				"FREEMARKER_TEMPLATE_TRANSACTION_STRICT_READ_ONLY", value);
+
+			testWrap();
+		}
+		finally {
+			_setPortalProperty(
+				"FREEMARKER_TEMPLATE_TRANSACTION_STRICT_READ_ONLY",
+				strictReadOnly);
+		}
+	}
+
+	public class TestLiferayMethodObject {
+
+		public String generate(String postfix) {
+			return _name + StringPool.DASH + postfix;
+		}
+
+		public String getName() {
+			return _name;
+		}
+
+		public void setName(String name) {
+			_name = name;
+		}
+
+		@Override
+		public String toString() {
+			return _name;
+		}
+
+		private TestLiferayMethodObject(String name) {
+			_name = name;
+		}
+
+		private String _name;
+
+	}
+
+	protected void testWrap() throws Exception {
 		testWrap(new RestrictedLiferayObjectWrapper(null, null, null));
 
 		testWrap(
@@ -334,33 +389,6 @@ public class RestrictedLiferayObjectWrapperTest
 				}));
 	}
 
-	public class TestLiferayMethodObject {
-
-		public String generate(String postfix) {
-			return _name + StringPool.DASH + postfix;
-		}
-
-		public String getName() {
-			return _name;
-		}
-
-		public void setName(String name) {
-			_name = name;
-		}
-
-		@Override
-		public String toString() {
-			return _name;
-		}
-
-		private TestLiferayMethodObject(String name) {
-			_name = name;
-		}
-
-		private String _name;
-
-	}
-
 	protected void testWrap(ObjectWrapper objectWrapper) throws Exception {
 		super.testWrap(objectWrapper);
 
@@ -370,31 +398,61 @@ public class RestrictedLiferayObjectWrapperTest
 			"TestLocalServiceObject", stringModel -> stringModel.getAsString(),
 			StringModel.class.cast(
 				objectWrapper.wrap(
-					new TestLocalService("TestLocalServiceObject"))));
+					new TestLocalServiceImpl("TestLocalServiceObject"))));
 
 		// Local service object with proxy
 
 		assertTemplateModel(
 			"TestLocalServiceObject1", stringModel -> stringModel.getAsString(),
-			StringModel.class.cast(
-				objectWrapper.wrap(
-					_createAopProxy(
-						new TestLocalService("TestLocalServiceObject1")))));
+			_getStringModelWithProxy(
+				true, "TestLocalServiceObject1", objectWrapper));
 
 		assertTemplateModel(
 			"TestLocalServiceObject2", stringModel -> stringModel.getAsString(),
-			StringModel.class.cast(
-				objectWrapper.wrap(
-					_createAopProxy(
-						new TestLocalService("TestLocalServiceObject2")))));
+			_getStringModelWithProxy(
+				true, "TestLocalServiceObject2", objectWrapper));
+
+		String expectName = "TestLocalServiceObject3";
+
+		IllegalStateException illegalStateException = new IllegalStateException(
+			"Update called with read only transaction");
+
+		if (PropsValues.FREEMARKER_TEMPLATE_TRANSACTION_STRICT_READ_ONLY) {
+			expectName = illegalStateException.toString();
+		}
+
+		Object wrappedObject = _getWrappedObject(
+			true, "TestLocalServiceObject3", objectWrapper);
+
+		Method localServiceAddMethod = ReflectionTestUtil.getMethod(
+			wrappedObject.getClass(), "add");
+
+		assertTemplateModel(
+			expectName, object -> localServiceAddMethod.invoke(object),
+			wrappedObject);
 
 		// Service object
 
 		assertTemplateModel(
-			"TestServiceObject", stringModel -> stringModel.getAsString(),
-			StringModel.class.cast(
-				objectWrapper.wrap(
-					_createAopProxy(new TestService("TestServiceObject")))));
+			"TestServiceObject1", stringModel -> stringModel.getAsString(),
+			_getStringModelWithProxy(
+				false, "TestServiceObject1", objectWrapper));
+
+		expectName = "TestServiceObject2";
+
+		if (PropsValues.FREEMARKER_TEMPLATE_TRANSACTION_STRICT_READ_ONLY) {
+			expectName = illegalStateException.toString();
+		}
+
+		wrappedObject = _getWrappedObject(
+			false, "TestServiceObject2", objectWrapper);
+
+		Method serviceAddMethod = ReflectionTestUtil.getMethod(
+			wrappedObject.getClass(), "add");
+
+		assertTemplateModel(
+			expectName, object -> serviceAddMethod.invoke(object),
+			wrappedObject);
 
 		// System company ID
 
@@ -461,6 +519,30 @@ public class RestrictedLiferayObjectWrapperTest
 			AopCacheManager.create(target, null));
 	}
 
+	private StringModel _getStringModelWithProxy(
+			boolean localService, String name, ObjectWrapper objectWrapper)
+		throws Exception {
+
+		if (localService) {
+			return StringModel.class.cast(
+				objectWrapper.wrap(
+					_createAopProxy(new TestLocalServiceImpl(name))));
+		}
+
+		return StringModel.class.cast(
+			objectWrapper.wrap(_createAopProxy(new TestServiceImpl(name))));
+	}
+
+	private Object _getWrappedObject(
+			boolean localService, String name, ObjectWrapper objectWrapper)
+		throws Exception {
+
+		StringModel stringModel = _getStringModelWithProxy(
+			localService, name, objectWrapper);
+
+		return stringModel.getWrappedObject();
+	}
+
 	private boolean _isRestricted(
 		RestrictedLiferayObjectWrapper restrictedLiferayObjectWrapper,
 		Class<?> targetClass) {
@@ -468,6 +550,11 @@ public class RestrictedLiferayObjectWrapperTest
 		return ReflectionTestUtil.invoke(
 			restrictedLiferayObjectWrapper, "_isRestricted",
 			new Class<?>[] {Class.class}, targetClass);
+	}
+
+	private void _setPortalProperty(String propertyName, Object value) {
+		ReflectionTestUtil.setFieldValue(
+			PropsValues.class, propertyName, value);
 	}
 
 	private void _testRestrictedMethodNames(
@@ -566,14 +653,27 @@ public class RestrictedLiferayObjectWrapperTest
 
 	}
 
-	private static class TestLocalService implements BaseLocalService {
+	private static class TestLocalServiceImpl implements TestLocalService {
+
+		@Override
+		public String add() {
+			if (PropsValues.FREEMARKER_TEMPLATE_TRANSACTION_STRICT_READ_ONLY) {
+				IllegalStateException illegalStateException =
+					new IllegalStateException(
+						"Update called with read only transaction");
+
+				return illegalStateException.toString();
+			}
+
+			return _name;
+		}
 
 		@Override
 		public String toString() {
 			return _name;
 		}
 
-		private TestLocalService(String name) {
+		private TestLocalServiceImpl(String name) {
 			_name = name;
 		}
 
@@ -581,14 +681,27 @@ public class RestrictedLiferayObjectWrapperTest
 
 	}
 
-	private static class TestService implements BaseService {
+	private static class TestServiceImpl implements TestService {
+
+		@Override
+		public String add() {
+			if (PropsValues.FREEMARKER_TEMPLATE_TRANSACTION_STRICT_READ_ONLY) {
+				IllegalStateException illegalStateException =
+					new IllegalStateException(
+						"Update called with read only transaction");
+
+				return illegalStateException.toString();
+			}
+
+			return _name;
+		}
 
 		@Override
 		public String toString() {
 			return _name;
 		}
 
-		private TestService(String name) {
+		private TestServiceImpl(String name) {
 			_name = name;
 		}
 
@@ -603,12 +716,20 @@ public class RestrictedLiferayObjectWrapperTest
 				TransactionConfig transactionConfig, Callable<T> callable)
 			throws Throwable {
 
-			if (transactionConfig.isStrictReadOnly()) {
-				return callable.call();
-			}
-
-			return null;
+			return callable.call();
 		}
+
+	}
+
+	private interface TestLocalService extends BaseLocalService {
+
+		public String add();
+
+	}
+
+	private interface TestService extends BaseService {
+
+		public String add();
 
 	}
 
