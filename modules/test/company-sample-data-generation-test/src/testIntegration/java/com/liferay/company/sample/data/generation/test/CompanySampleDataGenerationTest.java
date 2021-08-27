@@ -276,9 +276,6 @@ public class CompanySampleDataGenerationTest {
 		companyTableBufferedWriter.append(
 			CSVUtil.encode(company.getCompanyId()));
 		companyTableBufferedWriter.append(StringPool.COMMA);
-		companyTableBufferedWriter.append(
-			CSVUtil.encode(company.getAccountId()));
-		companyTableBufferedWriter.append(StringPool.COMMA);
 		companyTableBufferedWriter.append(CSVUtil.encode(company.getWebId()));
 		companyTableBufferedWriter.newLine();
 	}
