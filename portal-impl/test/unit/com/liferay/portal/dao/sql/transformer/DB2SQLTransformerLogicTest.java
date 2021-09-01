@@ -58,8 +58,8 @@ public class DB2SQLTransformerLogicTest
 	@Test
 	public void testReplaceLikeWithConcatAndCastText() {
 		Assert.assertEquals(
-			"select * from Foo where foo LIKE CAST(bar AS VARCHAR(254)) " +
-				"CONCAT CAST(id AS VARCHAR(254))",
+			"select * from Foo where foo LIKE CAST(bar AS VARCHAR(2000)) " +
+				"CONCAT CAST(id AS VARCHAR(2000))",
 			sqlTransformer.transform(
 				"select * from Foo where foo LIKE CONCAT(CAST_TEXT(bar)," +
 					"CAST_TEXT(id))"));
@@ -99,7 +99,7 @@ public class DB2SQLTransformerLogicTest
 
 	@Override
 	protected String getCastClobTextTransformedSQL() {
-		return "select CAST(foo AS VARCHAR(254)) from Foo";
+		return "select CAST(foo AS VARCHAR(2000)) from Foo";
 	}
 
 	@Override
@@ -115,7 +115,8 @@ public class DB2SQLTransformerLogicTest
 	private void _testReplaceQuestionMark(String sql) {
 		Assert.assertEquals(
 			StringUtil.replace(
-				sql, CharPool.QUESTION, "COALESCE(CAST(? AS VARCHAR(254)),'')"),
+				sql, CharPool.QUESTION,
+				"COALESCE(CAST(? AS VARCHAR(2000)),'')"),
 			sqlTransformer.transform(sql));
 	}
 
