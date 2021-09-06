@@ -723,7 +723,6 @@ public class RestrictedLiferayObjectWrapperTest
 			return _name;
 		}
 
-		@Override
 		public String toString() {
 			return _name;
 		}
@@ -743,7 +742,6 @@ public class RestrictedLiferayObjectWrapperTest
 			return _name;
 		}
 
-		@Override
 		public String toString() {
 			return _name;
 		}
