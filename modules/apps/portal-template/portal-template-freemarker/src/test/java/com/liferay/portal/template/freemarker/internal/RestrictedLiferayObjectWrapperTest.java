@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.service.BaseService;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
+import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.transaction.TransactionConfig;
 import com.liferay.portal.kernel.transaction.TransactionInvoker;
 import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
@@ -32,6 +33,7 @@ import com.liferay.portal.test.log.LogCapture;
 import com.liferay.portal.test.log.LogEntry;
 import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
+import com.liferay.portal.util.PropsValues;
 import com.liferay.registry.BasicRegistryImpl;
 import com.liferay.registry.RegistryUtil;
 
@@ -46,6 +48,9 @@ import freemarker.template.TemplateModelException;
 
 import java.io.Serializable;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +61,7 @@ import java.util.logging.Level;
 import org.hamcrest.CoreMatchers;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -73,8 +78,8 @@ public class RestrictedLiferayObjectWrapperTest
 		new AggregateTestRule(
 			CodeCoverageAssertor.INSTANCE, LiferayUnitTestRule.INSTANCE);
 
-	@BeforeClass
-	public static void setUpClass() {
+	@Before
+	public void setUp() {
 		RegistryUtil.setRegistry(new BasicRegistryImpl());
 
 		TransactionInvokerUtil transactionInvokerUtil =
@@ -334,6 +339,117 @@ public class RestrictedLiferayObjectWrapperTest
 				}));
 	}
 
+	@NewEnv(type = NewEnv.Type.CLASSLOADER)
+	@Test
+	public void testWrapWithServiceProxyAndTransactionStrictReadOnlyForFalse()
+		throws Exception {
+
+		_transactionWriteOperation = true;
+
+		boolean strictReadOnly =
+			PropsValues.FREEMARKER_TEMPLATE_TRANSACTION_STRICT_READ_ONLY;
+
+		_setPortalProperty(
+			"FREEMARKER_TEMPLATE_TRANSACTION_STRICT_READ_ONLY", false);
+
+		ObjectWrapper objectWrapper = new RestrictedLiferayObjectWrapper(
+			null, null, null);
+
+		try {
+
+			// Local service object with proxy
+
+			StringModel stringModel = StringModel.class.cast(
+				objectWrapper.wrap(
+					_createAopProxy(
+						new TestLocalServiceImpl("TestLocalServiceObject"))));
+
+			Object wrappedObject = stringModel.getWrappedObject();
+
+			Method localServiceAddMethod = ReflectionTestUtil.getMethod(
+				wrappedObject.getClass(), "add");
+
+			assertTemplateModel(
+				"TestLocalServiceObject",
+				object -> localServiceAddMethod.invoke(object), wrappedObject);
+
+			// Service object with proxy
+
+			stringModel = StringModel.class.cast(
+				objectWrapper.wrap(
+					_createAopProxy(new TestServiceImpl("TestServiceObject"))));
+
+			wrappedObject = stringModel.getWrappedObject();
+
+			Method serviceAddMethod = ReflectionTestUtil.getMethod(
+				wrappedObject.getClass(), "add");
+
+			assertTemplateModel(
+				"TestServiceObject", object -> serviceAddMethod.invoke(object),
+				wrappedObject);
+		}
+		finally {
+			_transactionWriteOperation = false;
+
+			_setPortalProperty(
+				"FREEMARKER_TEMPLATE_TRANSACTION_STRICT_READ_ONLY",
+				strictReadOnly);
+		}
+	}
+
+	@NewEnv(type = NewEnv.Type.CLASSLOADER)
+	@Test
+	public void testWrapWithServiceProxyAndTransactionStrictReadOnlyForTrue()
+		throws Exception {
+
+		_transactionWriteOperation = true;
+
+		boolean strictReadOnly =
+			PropsValues.FREEMARKER_TEMPLATE_TRANSACTION_STRICT_READ_ONLY;
+
+		_setPortalProperty(
+			"FREEMARKER_TEMPLATE_TRANSACTION_STRICT_READ_ONLY", true);
+
+		ObjectWrapper objectWrapper = new RestrictedLiferayObjectWrapper(
+			null, null, null);
+
+		try {
+
+			// Local service object with proxy
+
+			StringModel stringModel = StringModel.class.cast(
+				objectWrapper.wrap(
+					_createAopProxy(
+						new TestLocalServiceImpl("TestLocalServiceObject"))));
+
+			Object wrappedObject = stringModel.getWrappedObject();
+
+			_assertException(
+				ReflectionTestUtil.getMethod(wrappedObject.getClass(), "add"),
+				stringModel.getWrappedObject());
+
+			// Service object with proxy
+
+			stringModel = StringModel.class.cast(
+				objectWrapper.wrap(
+					_createAopProxy(
+						new TestLocalServiceImpl("TestServiceObject"))));
+
+			wrappedObject = stringModel.getWrappedObject();
+
+			_assertException(
+				ReflectionTestUtil.getMethod(wrappedObject.getClass(), "add"),
+				stringModel.getWrappedObject());
+		}
+		finally {
+			_transactionWriteOperation = false;
+
+			_setPortalProperty(
+				"FREEMARKER_TEMPLATE_TRANSACTION_STRICT_READ_ONLY",
+				strictReadOnly);
+		}
+	}
+
 	public class TestLiferayMethodObject {
 
 		public String generate(String postfix) {
@@ -370,7 +486,7 @@ public class RestrictedLiferayObjectWrapperTest
 			"TestLocalServiceObject", stringModel -> stringModel.getAsString(),
 			StringModel.class.cast(
 				objectWrapper.wrap(
-					new TestLocalService("TestLocalServiceObject"))));
+					new TestLocalServiceImpl("TestLocalServiceObject"))));
 
 		// Local service object with proxy
 
@@ -379,14 +495,14 @@ public class RestrictedLiferayObjectWrapperTest
 			StringModel.class.cast(
 				objectWrapper.wrap(
 					_createAopProxy(
-						new TestLocalService("TestLocalServiceObject1")))));
+						new TestLocalServiceImpl("TestLocalServiceObject1")))));
 
 		assertTemplateModel(
 			"TestLocalServiceObject2", stringModel -> stringModel.getAsString(),
 			StringModel.class.cast(
 				objectWrapper.wrap(
 					_createAopProxy(
-						new TestLocalService("TestLocalServiceObject2")))));
+						new TestLocalServiceImpl("TestLocalServiceObject2")))));
 
 		// Service object
 
@@ -394,7 +510,8 @@ public class RestrictedLiferayObjectWrapperTest
 			"TestServiceObject", stringModel -> stringModel.getAsString(),
 			StringModel.class.cast(
 				objectWrapper.wrap(
-					_createAopProxy(new TestService("TestServiceObject")))));
+					_createAopProxy(
+						new TestServiceImpl("TestServiceObject")))));
 
 		// System company ID
 
@@ -453,6 +570,27 @@ public class RestrictedLiferayObjectWrapperTest
 		}
 	}
 
+	private void _assertException(Method method, Object object)
+		throws Exception {
+
+		try {
+			method.invoke(object);
+
+			Assert.fail("Should throw InvocationTargetException");
+		}
+		catch (InvocationTargetException invocationTargetException) {
+			Throwable throwable = invocationTargetException.getCause();
+
+			Assert.assertTrue(
+				throwable.toString(),
+				throwable instanceof IllegalStateException);
+
+			Assert.assertEquals(
+				"Strict read only transaction is not writable",
+				throwable.getMessage());
+		}
+	}
+
 	private Object _createAopProxy(Object target) {
 		Class<?> clazz = target.getClass();
 
@@ -468,6 +606,11 @@ public class RestrictedLiferayObjectWrapperTest
 		return ReflectionTestUtil.invoke(
 			restrictedLiferayObjectWrapper, "_isRestricted",
 			new Class<?>[] {Class.class}, targetClass);
+	}
+
+	private void _setPortalProperty(String propertyName, Object value) {
+		ReflectionTestUtil.setFieldValue(
+			PropsValues.class, propertyName, value);
 	}
 
 	private void _testRestrictedMethodNames(
@@ -490,6 +633,8 @@ public class RestrictedLiferayObjectWrapperTest
 				templateModelException.getMessage());
 		}
 	}
+
+	private static boolean _transactionWriteOperation;
 
 	private static class TestBaseModel extends BaseModelImpl<TestBaseModel> {
 
@@ -571,14 +716,19 @@ public class RestrictedLiferayObjectWrapperTest
 
 	}
 
-	private static class TestLocalService implements BaseLocalService {
+	private static class TestLocalServiceImpl implements TestLocalService {
+
+		@Override
+		public String add() {
+			return _name;
+		}
 
 		@Override
 		public String toString() {
 			return _name;
 		}
 
-		private TestLocalService(String name) {
+		private TestLocalServiceImpl(String name) {
 			_name = name;
 		}
 
@@ -586,14 +736,19 @@ public class RestrictedLiferayObjectWrapperTest
 
 	}
 
-	private static class TestService implements BaseService {
+	private static class TestServiceImpl implements TestService {
+
+		@Override
+		public String add() {
+			return _name;
+		}
 
 		@Override
 		public String toString() {
 			return _name;
 		}
 
-		private TestService(String name) {
+		private TestServiceImpl(String name) {
 			_name = name;
 		}
 
@@ -608,12 +763,27 @@ public class RestrictedLiferayObjectWrapperTest
 				TransactionConfig transactionConfig, Callable<T> callable)
 			throws Throwable {
 
-			if (transactionConfig.isStrictReadOnly()) {
-				return callable.call();
+			if (transactionConfig.isStrictReadOnly() &&
+				_transactionWriteOperation) {
+
+				throw new IllegalStateException(
+					"Strict read only transaction is not writable");
 			}
 
-			return null;
+			return callable.call();
 		}
+
+	}
+
+	private interface TestLocalService extends BaseLocalService {
+
+		public String add();
+
+	}
+
+	private interface TestService extends BaseService {
+
+		public String add();
 
 	}
 
