@@ -499,6 +499,11 @@ public class RestrictedLiferayObjectWrapperTest
 		}
 
 		@Override
+		public TestBaseModel cloneWithOriginalValues() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
 		public int compareTo(TestBaseModel testBaseModel) {
 			return 0;
 		}
