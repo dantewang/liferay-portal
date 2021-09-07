@@ -14,6 +14,7 @@
 
 package com.liferay.portal.template.freemarker.internal;
 
+import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.impl.BaseModelImpl;
@@ -45,9 +46,6 @@ import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 
 import java.io.Serializable;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import java.util.Collections;
 import java.util.List;
@@ -355,34 +353,24 @@ public class RestrictedLiferayObjectWrapperTest
 
 		// Local service object with proxy
 
-		StringModel stringModel = StringModel.class.cast(
+		StringModel testLocalServiceStringModel = StringModel.class.cast(
 			objectWrapper.wrap(
 				_createAopProxy(
 					new TestLocalServiceImpl("TestLocalServiceObject"))));
 
-		Object wrappedObject = stringModel.getWrappedObject();
-
-		Method localServiceAddMethod = ReflectionTestUtil.getMethod(
-			wrappedObject.getClass(), "add");
-
 		assertTemplateModel(
-			"TestLocalServiceObject",
-			object -> localServiceAddMethod.invoke(object), wrappedObject);
+			"TestLocalServiceObject", TestLocalService::add,
+			(TestLocalService)testLocalServiceStringModel.getWrappedObject());
 
 		// Service object with proxy
 
-		stringModel = StringModel.class.cast(
+		StringModel testServiceStringModel = StringModel.class.cast(
 			objectWrapper.wrap(
 				_createAopProxy(new TestServiceImpl("TestServiceObject"))));
 
-		wrappedObject = stringModel.getWrappedObject();
-
-		Method serviceAddMethod = ReflectionTestUtil.getMethod(
-			wrappedObject.getClass(), "add");
-
 		assertTemplateModel(
-			"TestServiceObject", object -> serviceAddMethod.invoke(object),
-			wrappedObject);
+			"TestServiceObject", TestService::add,
+			(TestService)testServiceStringModel.getWrappedObject());
 	}
 
 	@NewEnv(type = NewEnv.Type.CLASSLOADER)
@@ -405,29 +393,24 @@ public class RestrictedLiferayObjectWrapperTest
 
 		// Local service object with proxy
 
-		StringModel stringModel = StringModel.class.cast(
+		StringModel testLocalServiceStringModel = StringModel.class.cast(
 			objectWrapper.wrap(
 				_createAopProxy(
 					new TestLocalServiceImpl("TestLocalServiceObject"))));
 
-		Object wrappedObject = stringModel.getWrappedObject();
-
 		_assertException(
-			ReflectionTestUtil.getMethod(wrappedObject.getClass(), "add"),
-			stringModel.getWrappedObject());
+			TestLocalService::add,
+			(TestLocalService)testLocalServiceStringModel.getWrappedObject());
 
 		// Service object with proxy
 
-		stringModel = StringModel.class.cast(
+		StringModel testServiceStringModel = StringModel.class.cast(
 			objectWrapper.wrap(
-				_createAopProxy(
-					new TestLocalServiceImpl("TestServiceObject"))));
-
-		wrappedObject = stringModel.getWrappedObject();
+				_createAopProxy(new TestServiceImpl("TestServiceObject"))));
 
 		_assertException(
-			ReflectionTestUtil.getMethod(wrappedObject.getClass(), "add"),
-			stringModel.getWrappedObject());
+			TestService::add,
+			(TestService)testServiceStringModel.getWrappedObject());
 	}
 
 	public class TestLiferayMethodObject {
@@ -550,24 +533,22 @@ public class RestrictedLiferayObjectWrapperTest
 		}
 	}
 
-	private void _assertException(Method method, Object object)
-		throws Exception {
+	private <T, R> void _assertException(
+		UnsafeFunction<T, R, Exception> unsafeFunction, T wrappedObject) {
 
 		try {
-			method.invoke(object);
+			unsafeFunction.apply(wrappedObject);
 
-			Assert.fail("Should throw InvocationTargetException");
+			Assert.fail("Should throw IllegalStateException");
 		}
-		catch (InvocationTargetException invocationTargetException) {
-			Throwable throwable = invocationTargetException.getCause();
-
+		catch (Exception exception) {
 			Assert.assertTrue(
-				throwable.toString(),
-				throwable instanceof IllegalStateException);
+				exception.toString(),
+				exception instanceof IllegalStateException);
 
 			Assert.assertEquals(
 				"Strict read only transaction is not writable",
-				throwable.getMessage());
+				exception.getMessage());
 		}
 	}
 
