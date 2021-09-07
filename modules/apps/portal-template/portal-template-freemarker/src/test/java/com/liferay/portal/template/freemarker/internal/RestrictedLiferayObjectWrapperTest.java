@@ -575,7 +575,7 @@ public class RestrictedLiferayObjectWrapperTest
 		try {
 			liferayFreeMarkerStringModel.get(key);
 
-			Assert.assertNull("Should throw TemplateModelException for " + key);
+			Assert.fail("Should throw TemplateModelException for " + key);
 		}
 		catch (TemplateModelException templateModelException) {
 			Assert.assertSame(
