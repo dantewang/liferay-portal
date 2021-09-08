@@ -1038,6 +1038,9 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 	@Deprecated
 	protected boolean finderCacheEnabled = true;
 
+	protected int valueObjectFinderCacheListThreshold = GetterUtil.getInteger(
+		PropsUtil.get(PropsKeys.VALUE_OBJECT_FINDER_CACHE_LIST_THRESHOLD));
+
 	private Object[] _getArguments(
 		DefaultASTNodeListener defaultASTNodeListener) {
 
