@@ -132,8 +132,6 @@ public class Sidecar {
 			_log.info("Stopping sidecar Elasticsearch");
 		}
 
-		PathUtil.deleteDir(_sidecarTempDirPath);
-
 		NoticeableFuture<Serializable> noticeableFuture =
 			_processChannel.getProcessNoticeableFuture();
 
@@ -162,6 +160,8 @@ public class Sidecar {
 				noticeableFuture.cancel(true);
 			}
 		}
+
+		PathUtil.deleteDir(_sidecarTempDirPath);
 
 		_processChannel = null;
 	}
