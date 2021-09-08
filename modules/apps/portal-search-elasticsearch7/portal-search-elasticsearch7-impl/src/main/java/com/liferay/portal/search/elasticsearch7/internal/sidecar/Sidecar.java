@@ -134,10 +134,6 @@ public class Sidecar {
 
 		PathUtil.deleteDir(_sidecarTempDirPath);
 
-		if (_processChannel == null) {
-			return;
-		}
-
 		NoticeableFuture<Serializable> noticeableFuture =
 			_processChannel.getProcessNoticeableFuture();
 
