@@ -6653,6 +6653,15 @@ public class ResourcePermissionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ResourcePermission> resourcePermissions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(resourcePermissions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(resourcePermissions);
+
+			return;
+		}
+
 		for (ResourcePermission resourcePermission : resourcePermissions) {
 			if (resourcePermission.getCtCollectionId() != 0) {
 				continue;

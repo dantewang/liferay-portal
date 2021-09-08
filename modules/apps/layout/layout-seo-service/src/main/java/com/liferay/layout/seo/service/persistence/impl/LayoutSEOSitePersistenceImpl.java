@@ -1765,6 +1765,14 @@ public class LayoutSEOSitePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<LayoutSEOSite> layoutSEOSites) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(layoutSEOSites.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(layoutSEOSites);
+
+			return;
+		}
+
 		for (LayoutSEOSite layoutSEOSite : layoutSEOSites) {
 			if (layoutSEOSite.getCtCollectionId() != 0) {
 				continue;

@@ -4729,6 +4729,14 @@ public class DispatchTriggerPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DispatchTrigger> dispatchTriggers) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(dispatchTriggers.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(dispatchTriggers);
+
+			return;
+		}
+
 		for (DispatchTrigger dispatchTrigger : dispatchTriggers) {
 			if (entityCache.getResult(
 					DispatchTriggerImpl.class,

@@ -2385,6 +2385,15 @@ public class LayoutPageTemplateStructurePersistenceImpl
 	public void cacheResult(
 		List<LayoutPageTemplateStructure> layoutPageTemplateStructures) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(layoutPageTemplateStructures.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(layoutPageTemplateStructures);
+
+			return;
+		}
+
 		for (LayoutPageTemplateStructure layoutPageTemplateStructure :
 				layoutPageTemplateStructures) {
 

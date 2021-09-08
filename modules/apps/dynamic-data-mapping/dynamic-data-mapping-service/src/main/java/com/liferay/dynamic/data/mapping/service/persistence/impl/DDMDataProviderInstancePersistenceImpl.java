@@ -3482,6 +3482,15 @@ public class DDMDataProviderInstancePersistenceImpl
 	public void cacheResult(
 		List<DDMDataProviderInstance> ddmDataProviderInstances) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmDataProviderInstances.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmDataProviderInstances);
+
+			return;
+		}
+
 		for (DDMDataProviderInstance ddmDataProviderInstance :
 				ddmDataProviderInstances) {
 

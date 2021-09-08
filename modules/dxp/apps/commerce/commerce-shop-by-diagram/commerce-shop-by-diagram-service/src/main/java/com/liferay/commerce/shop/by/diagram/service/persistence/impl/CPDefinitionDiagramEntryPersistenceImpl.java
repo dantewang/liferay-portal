@@ -901,6 +901,15 @@ public class CPDefinitionDiagramEntryPersistenceImpl
 	public void cacheResult(
 		List<CPDefinitionDiagramEntry> cpDefinitionDiagramEntries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpDefinitionDiagramEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpDefinitionDiagramEntries);
+
+			return;
+		}
+
 		for (CPDefinitionDiagramEntry cpDefinitionDiagramEntry :
 				cpDefinitionDiagramEntries) {
 

@@ -2413,6 +2413,14 @@ public class KaleoTaskFormPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KaleoTaskForm> kaleoTaskForms) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoTaskForms.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoTaskForms);
+
+			return;
+		}
+
 		for (KaleoTaskForm kaleoTaskForm : kaleoTaskForms) {
 			if (entityCache.getResult(
 					KaleoTaskFormImpl.class, kaleoTaskForm.getPrimaryKey()) ==

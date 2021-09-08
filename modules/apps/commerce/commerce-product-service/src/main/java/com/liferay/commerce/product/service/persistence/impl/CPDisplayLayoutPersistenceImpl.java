@@ -3897,6 +3897,14 @@ public class CPDisplayLayoutPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CPDisplayLayout> cpDisplayLayouts) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpDisplayLayouts.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpDisplayLayouts);
+
+			return;
+		}
+
 		for (CPDisplayLayout cpDisplayLayout : cpDisplayLayouts) {
 			if (entityCache.getResult(
 					CPDisplayLayoutImpl.class,

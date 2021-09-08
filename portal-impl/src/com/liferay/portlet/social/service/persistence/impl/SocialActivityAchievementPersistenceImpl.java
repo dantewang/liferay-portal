@@ -3270,6 +3270,15 @@ public class SocialActivityAchievementPersistenceImpl
 	public void cacheResult(
 		List<SocialActivityAchievement> socialActivityAchievements) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(socialActivityAchievements.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(socialActivityAchievements);
+
+			return;
+		}
+
 		for (SocialActivityAchievement socialActivityAchievement :
 				socialActivityAchievements) {
 

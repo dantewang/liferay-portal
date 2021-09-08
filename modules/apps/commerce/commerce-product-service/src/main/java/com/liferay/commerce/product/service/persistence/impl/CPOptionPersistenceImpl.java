@@ -3461,6 +3461,14 @@ public class CPOptionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CPOption> cpOptions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpOptions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpOptions);
+
+			return;
+		}
+
 		for (CPOption cpOption : cpOptions) {
 			if (entityCache.getResult(
 					CPOptionImpl.class, cpOption.getPrimaryKey()) == null) {

@@ -1830,6 +1830,14 @@ public class StatusPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Status> statuses) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(statuses.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(statuses);
+
+			return;
+		}
+
 		for (Status status : statuses) {
 			if (entityCache.getResult(
 					StatusImpl.class, status.getPrimaryKey()) == null) {

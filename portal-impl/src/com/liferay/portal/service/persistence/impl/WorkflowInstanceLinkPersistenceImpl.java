@@ -1357,6 +1357,15 @@ public class WorkflowInstanceLinkPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<WorkflowInstanceLink> workflowInstanceLinks) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(workflowInstanceLinks.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(workflowInstanceLinks);
+
+			return;
+		}
+
 		for (WorkflowInstanceLink workflowInstanceLink :
 				workflowInstanceLinks) {
 

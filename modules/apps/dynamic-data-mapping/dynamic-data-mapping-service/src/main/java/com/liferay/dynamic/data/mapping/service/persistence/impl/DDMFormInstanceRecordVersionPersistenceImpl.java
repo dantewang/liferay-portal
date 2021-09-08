@@ -2848,6 +2848,15 @@ public class DDMFormInstanceRecordVersionPersistenceImpl
 	public void cacheResult(
 		List<DDMFormInstanceRecordVersion> ddmFormInstanceRecordVersions) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmFormInstanceRecordVersions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmFormInstanceRecordVersions);
+
+			return;
+		}
+
 		for (DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion :
 				ddmFormInstanceRecordVersions) {
 

@@ -6741,6 +6741,14 @@ public class AddressPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Address> addresses) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(addresses.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(addresses);
+
+			return;
+		}
+
 		for (Address address : addresses) {
 			if (EntityCacheUtil.getResult(
 					AddressImpl.class, address.getPrimaryKey()) == null) {

@@ -13196,6 +13196,14 @@ public class MicroblogsEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MicroblogsEntry> microblogsEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(microblogsEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(microblogsEntries);
+
+			return;
+		}
+
 		for (MicroblogsEntry microblogsEntry : microblogsEntries) {
 			if (entityCache.getResult(
 					MicroblogsEntryImpl.class,

@@ -6258,6 +6258,14 @@ public class SyncDLObjectPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SyncDLObject> syncDLObjects) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(syncDLObjects.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(syncDLObjects);
+
+			return;
+		}
+
 		for (SyncDLObject syncDLObject : syncDLObjects) {
 			if (entityCache.getResult(
 					SyncDLObjectImpl.class, syncDLObject.getPrimaryKey()) ==

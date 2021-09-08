@@ -4697,6 +4697,15 @@ public class CommerceSubscriptionEntryPersistenceImpl
 	public void cacheResult(
 		List<CommerceSubscriptionEntry> commerceSubscriptionEntries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceSubscriptionEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceSubscriptionEntries);
+
+			return;
+		}
+
 		for (CommerceSubscriptionEntry commerceSubscriptionEntry :
 				commerceSubscriptionEntries) {
 

@@ -3959,6 +3959,15 @@ public class LayoutSetPrototypePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<LayoutSetPrototype> layoutSetPrototypes) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(layoutSetPrototypes.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(layoutSetPrototypes);
+
+			return;
+		}
+
 		for (LayoutSetPrototype layoutSetPrototype : layoutSetPrototypes) {
 			if (EntityCacheUtil.getResult(
 					LayoutSetPrototypeImpl.class,

@@ -1469,6 +1469,14 @@ public class DDMStructureLinkPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DDMStructureLink> ddmStructureLinks) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmStructureLinks.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmStructureLinks);
+
+			return;
+		}
+
 		for (DDMStructureLink ddmStructureLink : ddmStructureLinks) {
 			if (ddmStructureLink.getCtCollectionId() != 0) {
 				continue;

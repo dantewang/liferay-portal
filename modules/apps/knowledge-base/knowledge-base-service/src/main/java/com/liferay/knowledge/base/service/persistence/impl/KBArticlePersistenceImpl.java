@@ -34800,6 +34800,14 @@ public class KBArticlePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KBArticle> kbArticles) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kbArticles.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kbArticles);
+
+			return;
+		}
+
 		for (KBArticle kbArticle : kbArticles) {
 			if (entityCache.getResult(
 					KBArticleImpl.class, kbArticle.getPrimaryKey()) == null) {

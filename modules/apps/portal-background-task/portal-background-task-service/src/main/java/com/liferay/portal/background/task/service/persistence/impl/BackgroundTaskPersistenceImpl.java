@@ -8693,6 +8693,14 @@ public class BackgroundTaskPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<BackgroundTask> backgroundTasks) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(backgroundTasks.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(backgroundTasks);
+
+			return;
+		}
+
 		for (BackgroundTask backgroundTask : backgroundTasks) {
 			if (entityCache.getResult(
 					BackgroundTaskImpl.class, backgroundTask.getPrimaryKey()) ==

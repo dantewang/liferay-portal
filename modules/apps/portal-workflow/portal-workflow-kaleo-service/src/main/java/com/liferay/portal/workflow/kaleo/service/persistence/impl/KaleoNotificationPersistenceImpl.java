@@ -2416,6 +2416,14 @@ public class KaleoNotificationPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KaleoNotification> kaleoNotifications) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoNotifications.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoNotifications);
+
+			return;
+		}
+
 		for (KaleoNotification kaleoNotification : kaleoNotifications) {
 			if (entityCache.getResult(
 					KaleoNotificationImpl.class,

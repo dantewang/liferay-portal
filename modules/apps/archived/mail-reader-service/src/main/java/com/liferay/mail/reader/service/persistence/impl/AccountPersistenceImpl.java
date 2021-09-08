@@ -878,6 +878,14 @@ public class AccountPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Account> accounts) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(accounts.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(accounts);
+
+			return;
+		}
+
 		for (Account account : accounts) {
 			if (entityCache.getResult(
 					AccountImpl.class, account.getPrimaryKey()) == null) {

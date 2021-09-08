@@ -2235,6 +2235,14 @@ public class CProductPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CProduct> cProducts) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cProducts.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cProducts);
+
+			return;
+		}
+
 		for (CProduct cProduct : cProducts) {
 			if (entityCache.getResult(
 					CProductImpl.class, cProduct.getPrimaryKey()) == null) {

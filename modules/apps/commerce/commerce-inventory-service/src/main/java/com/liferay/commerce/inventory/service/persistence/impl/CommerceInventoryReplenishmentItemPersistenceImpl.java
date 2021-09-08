@@ -3060,6 +3060,15 @@ public class CommerceInventoryReplenishmentItemPersistenceImpl
 		List<CommerceInventoryReplenishmentItem>
 			commerceInventoryReplenishmentItems) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceInventoryReplenishmentItems.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceInventoryReplenishmentItems);
+
+			return;
+		}
+
 		for (CommerceInventoryReplenishmentItem
 				commerceInventoryReplenishmentItem :
 					commerceInventoryReplenishmentItems) {

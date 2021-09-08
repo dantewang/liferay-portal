@@ -2754,6 +2754,14 @@ public class DDLRecordVersionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DDLRecordVersion> ddlRecordVersions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddlRecordVersions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddlRecordVersions);
+
+			return;
+		}
+
 		for (DDLRecordVersion ddlRecordVersion : ddlRecordVersions) {
 			if (ddlRecordVersion.getCtCollectionId() != 0) {
 				continue;

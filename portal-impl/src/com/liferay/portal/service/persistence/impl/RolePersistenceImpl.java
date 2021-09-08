@@ -9969,6 +9969,14 @@ public class RolePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Role> roles) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(roles.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(roles);
+
+			return;
+		}
+
 		for (Role role : roles) {
 			if (role.getCtCollectionId() != 0) {
 				continue;

@@ -1411,6 +1411,14 @@ public class SegmentsEntryRolePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SegmentsEntryRole> segmentsEntryRoles) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(segmentsEntryRoles.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(segmentsEntryRoles);
+
+			return;
+		}
+
 		for (SegmentsEntryRole segmentsEntryRole : segmentsEntryRoles) {
 			if (segmentsEntryRole.getCtCollectionId() != 0) {
 				continue;

@@ -112,6 +112,15 @@ public class NestedSetsTreeEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<NestedSetsTreeEntry> nestedSetsTreeEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(nestedSetsTreeEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(nestedSetsTreeEntries);
+
+			return;
+		}
+
 		for (NestedSetsTreeEntry nestedSetsTreeEntry : nestedSetsTreeEntries) {
 			if (entityCache.getResult(
 					NestedSetsTreeEntryImpl.class,

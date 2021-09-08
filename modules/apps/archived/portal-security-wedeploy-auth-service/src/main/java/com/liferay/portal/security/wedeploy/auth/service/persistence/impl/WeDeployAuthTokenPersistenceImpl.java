@@ -725,6 +725,14 @@ public class WeDeployAuthTokenPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<WeDeployAuthToken> weDeployAuthTokens) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(weDeployAuthTokens.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(weDeployAuthTokens);
+
+			return;
+		}
+
 		for (WeDeployAuthToken weDeployAuthToken : weDeployAuthTokens) {
 			if (entityCache.getResult(
 					WeDeployAuthTokenImpl.class,

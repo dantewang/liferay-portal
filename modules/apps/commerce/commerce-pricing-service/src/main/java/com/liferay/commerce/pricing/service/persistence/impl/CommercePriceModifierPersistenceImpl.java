@@ -6278,6 +6278,15 @@ public class CommercePriceModifierPersistenceImpl
 	public void cacheResult(
 		List<CommercePriceModifier> commercePriceModifiers) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commercePriceModifiers.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commercePriceModifiers);
+
+			return;
+		}
+
 		for (CommercePriceModifier commercePriceModifier :
 				commercePriceModifiers) {
 

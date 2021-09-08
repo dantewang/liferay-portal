@@ -7516,6 +7516,14 @@ public class JournalFolderPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<JournalFolder> journalFolders) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(journalFolders.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(journalFolders);
+
+			return;
+		}
+
 		for (JournalFolder journalFolder : journalFolders) {
 			if (journalFolder.getCtCollectionId() != 0) {
 				continue;

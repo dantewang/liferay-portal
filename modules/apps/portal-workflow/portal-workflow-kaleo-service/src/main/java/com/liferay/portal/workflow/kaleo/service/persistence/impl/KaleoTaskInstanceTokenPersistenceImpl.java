@@ -3629,6 +3629,15 @@ public class KaleoTaskInstanceTokenPersistenceImpl
 	public void cacheResult(
 		List<KaleoTaskInstanceToken> kaleoTaskInstanceTokens) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoTaskInstanceTokens.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoTaskInstanceTokens);
+
+			return;
+		}
+
 		for (KaleoTaskInstanceToken kaleoTaskInstanceToken :
 				kaleoTaskInstanceTokens) {
 

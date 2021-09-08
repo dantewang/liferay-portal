@@ -14156,6 +14156,14 @@ public class DLFolderPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DLFolder> dlFolders) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(dlFolders.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(dlFolders);
+
+			return;
+		}
+
 		for (DLFolder dlFolder : dlFolders) {
 			if (dlFolder.getCtCollectionId() != 0) {
 				continue;

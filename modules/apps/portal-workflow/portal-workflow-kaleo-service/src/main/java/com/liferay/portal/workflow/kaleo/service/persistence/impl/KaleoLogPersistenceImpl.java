@@ -3449,6 +3449,14 @@ public class KaleoLogPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KaleoLog> kaleoLogs) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoLogs.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoLogs);
+
+			return;
+		}
+
 		for (KaleoLog kaleoLog : kaleoLogs) {
 			if (entityCache.getResult(
 					KaleoLogImpl.class, kaleoLog.getPrimaryKey()) == null) {

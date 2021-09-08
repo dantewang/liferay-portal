@@ -2409,6 +2409,14 @@ public class SystemEventPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SystemEvent> systemEvents) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(systemEvents.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(systemEvents);
+
+			return;
+		}
+
 		for (SystemEvent systemEvent : systemEvents) {
 			if (systemEvent.getCtCollectionId() != 0) {
 				continue;

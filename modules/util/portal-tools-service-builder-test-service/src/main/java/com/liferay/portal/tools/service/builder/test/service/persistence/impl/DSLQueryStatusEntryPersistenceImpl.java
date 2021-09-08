@@ -99,6 +99,15 @@ public class DSLQueryStatusEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DSLQueryStatusEntry> dslQueryStatusEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(dslQueryStatusEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(dslQueryStatusEntries);
+
+			return;
+		}
+
 		for (DSLQueryStatusEntry dslQueryStatusEntry : dslQueryStatusEntries) {
 			if (entityCache.getResult(
 					DSLQueryStatusEntryImpl.class,

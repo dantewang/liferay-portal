@@ -3299,6 +3299,15 @@ public class CommercePricingClassPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CommercePricingClass> commercePricingClasses) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commercePricingClasses.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commercePricingClasses);
+
+			return;
+		}
+
 		for (CommercePricingClass commercePricingClass :
 				commercePricingClasses) {
 

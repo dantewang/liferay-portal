@@ -1766,6 +1766,14 @@ public class ExpandoColumnPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ExpandoColumn> expandoColumns) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(expandoColumns.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(expandoColumns);
+
+			return;
+		}
+
 		for (ExpandoColumn expandoColumn : expandoColumns) {
 			if (expandoColumn.getCtCollectionId() != 0) {
 				continue;

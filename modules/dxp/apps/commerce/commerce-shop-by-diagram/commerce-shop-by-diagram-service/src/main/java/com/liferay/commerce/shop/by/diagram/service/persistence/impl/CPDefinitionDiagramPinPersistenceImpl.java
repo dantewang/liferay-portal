@@ -633,6 +633,15 @@ public class CPDefinitionDiagramPinPersistenceImpl
 	public void cacheResult(
 		List<CPDefinitionDiagramPin> cpDefinitionDiagramPins) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpDefinitionDiagramPins.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpDefinitionDiagramPins);
+
+			return;
+		}
+
 		for (CPDefinitionDiagramPin cpDefinitionDiagramPin :
 				cpDefinitionDiagramPins) {
 

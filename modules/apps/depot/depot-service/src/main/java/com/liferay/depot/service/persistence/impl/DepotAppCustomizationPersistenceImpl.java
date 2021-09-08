@@ -1140,6 +1140,15 @@ public class DepotAppCustomizationPersistenceImpl
 	public void cacheResult(
 		List<DepotAppCustomization> depotAppCustomizations) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(depotAppCustomizations.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(depotAppCustomizations);
+
+			return;
+		}
+
 		for (DepotAppCustomization depotAppCustomization :
 				depotAppCustomizations) {
 

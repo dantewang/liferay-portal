@@ -3230,6 +3230,14 @@ public class KaleoDefinitionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KaleoDefinition> kaleoDefinitions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoDefinitions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoDefinitions);
+
+			return;
+		}
+
 		for (KaleoDefinition kaleoDefinition : kaleoDefinitions) {
 			if (entityCache.getResult(
 					KaleoDefinitionImpl.class,

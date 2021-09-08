@@ -918,6 +918,14 @@ public class ResourceActionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ResourceAction> resourceActions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(resourceActions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(resourceActions);
+
+			return;
+		}
+
 		for (ResourceAction resourceAction : resourceActions) {
 			if (EntityCacheUtil.getResult(
 					ResourceActionImpl.class, resourceAction.getPrimaryKey()) ==

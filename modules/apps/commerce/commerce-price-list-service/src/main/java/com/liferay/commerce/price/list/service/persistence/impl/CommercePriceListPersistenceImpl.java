@@ -8680,6 +8680,14 @@ public class CommercePriceListPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CommercePriceList> commercePriceLists) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commercePriceLists.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commercePriceLists);
+
+			return;
+		}
+
 		for (CommercePriceList commercePriceList : commercePriceLists) {
 			if (entityCache.getResult(
 					CommercePriceListImpl.class,

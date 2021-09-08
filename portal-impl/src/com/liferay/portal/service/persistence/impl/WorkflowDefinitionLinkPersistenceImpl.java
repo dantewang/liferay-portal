@@ -3490,6 +3490,15 @@ public class WorkflowDefinitionLinkPersistenceImpl
 	public void cacheResult(
 		List<WorkflowDefinitionLink> workflowDefinitionLinks) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(workflowDefinitionLinks.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(workflowDefinitionLinks);
+
+			return;
+		}
+
 		for (WorkflowDefinitionLink workflowDefinitionLink :
 				workflowDefinitionLinks) {
 

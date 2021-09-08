@@ -16951,6 +16951,14 @@ public class LayoutPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Layout> layouts) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(layouts.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(layouts);
+
+			return;
+		}
+
 		for (Layout layout : layouts) {
 			if (layout.getCtCollectionId() != 0) {
 				continue;

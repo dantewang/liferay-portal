@@ -1458,6 +1458,15 @@ public class DDMDataProviderInstanceLinkPersistenceImpl
 	public void cacheResult(
 		List<DDMDataProviderInstanceLink> ddmDataProviderInstanceLinks) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmDataProviderInstanceLinks.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmDataProviderInstanceLinks);
+
+			return;
+		}
+
 		for (DDMDataProviderInstanceLink ddmDataProviderInstanceLink :
 				ddmDataProviderInstanceLinks) {
 

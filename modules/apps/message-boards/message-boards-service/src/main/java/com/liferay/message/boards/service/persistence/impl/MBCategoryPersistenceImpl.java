@@ -11618,6 +11618,14 @@ public class MBCategoryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MBCategory> mbCategories) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(mbCategories.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(mbCategories);
+
+			return;
+		}
+
 		for (MBCategory mbCategory : mbCategories) {
 			if (mbCategory.getCtCollectionId() != 0) {
 				continue;

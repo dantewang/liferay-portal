@@ -8620,6 +8620,15 @@ public class StyleBookEntryVersionPersistenceImpl
 	public void cacheResult(
 		List<StyleBookEntryVersion> styleBookEntryVersions) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(styleBookEntryVersions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(styleBookEntryVersions);
+
+			return;
+		}
+
 		for (StyleBookEntryVersion styleBookEntryVersion :
 				styleBookEntryVersions) {
 

@@ -1772,6 +1772,15 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	public void cacheResult(
 		List<CommerceAvailabilityEstimate> commerceAvailabilityEstimates) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceAvailabilityEstimates.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceAvailabilityEstimates);
+
+			return;
+		}
+
 		for (CommerceAvailabilityEstimate commerceAvailabilityEstimate :
 				commerceAvailabilityEstimates) {
 

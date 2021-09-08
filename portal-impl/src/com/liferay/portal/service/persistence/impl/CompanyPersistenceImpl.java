@@ -1281,6 +1281,14 @@ public class CompanyPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Company> companies) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(companies.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(companies);
+
+			return;
+		}
+
 		for (Company company : companies) {
 			try (SafeCloseable safeCloseable =
 					CompanyThreadLocal.setWithSafeCloseable(

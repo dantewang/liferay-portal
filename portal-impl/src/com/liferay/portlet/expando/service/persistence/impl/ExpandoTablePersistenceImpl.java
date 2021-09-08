@@ -965,6 +965,14 @@ public class ExpandoTablePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ExpandoTable> expandoTables) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(expandoTables.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(expandoTables);
+
+			return;
+		}
+
 		for (ExpandoTable expandoTable : expandoTables) {
 			if (expandoTable.getCtCollectionId() != 0) {
 				continue;

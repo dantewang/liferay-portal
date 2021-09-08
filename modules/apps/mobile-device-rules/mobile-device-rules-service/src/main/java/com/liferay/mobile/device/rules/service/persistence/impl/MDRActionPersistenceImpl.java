@@ -1995,6 +1995,14 @@ public class MDRActionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MDRAction> mdrActions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(mdrActions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(mdrActions);
+
+			return;
+		}
+
 		for (MDRAction mdrAction : mdrActions) {
 			if (entityCache.getResult(
 					MDRActionImpl.class, mdrAction.getPrimaryKey()) == null) {

@@ -2575,6 +2575,15 @@ public class DLFileEntryMetadataPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DLFileEntryMetadata> dlFileEntryMetadatas) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(dlFileEntryMetadatas.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(dlFileEntryMetadatas);
+
+			return;
+		}
+
 		for (DLFileEntryMetadata dlFileEntryMetadata : dlFileEntryMetadatas) {
 			if (dlFileEntryMetadata.getCtCollectionId() != 0) {
 				continue;

@@ -1408,6 +1408,14 @@ public class CommerceTaxMethodPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CommerceTaxMethod> commerceTaxMethods) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceTaxMethods.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceTaxMethods);
+
+			return;
+		}
+
 		for (CommerceTaxMethod commerceTaxMethod : commerceTaxMethods) {
 			if (entityCache.getResult(
 					CommerceTaxMethodImpl.class,

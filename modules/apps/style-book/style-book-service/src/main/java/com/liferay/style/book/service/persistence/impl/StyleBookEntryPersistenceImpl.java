@@ -7958,6 +7958,14 @@ public class StyleBookEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<StyleBookEntry> styleBookEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(styleBookEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(styleBookEntries);
+
+			return;
+		}
+
 		for (StyleBookEntry styleBookEntry : styleBookEntries) {
 			if (styleBookEntry.getCtCollectionId() != 0) {
 				continue;

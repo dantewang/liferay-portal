@@ -1491,6 +1491,15 @@ public class DDMStructureVersionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DDMStructureVersion> ddmStructureVersions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmStructureVersions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmStructureVersions);
+
+			return;
+		}
+
 		for (DDMStructureVersion ddmStructureVersion : ddmStructureVersions) {
 			if (ddmStructureVersion.getCtCollectionId() != 0) {
 				continue;

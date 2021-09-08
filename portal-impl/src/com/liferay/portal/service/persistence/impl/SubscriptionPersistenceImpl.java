@@ -2856,6 +2856,14 @@ public class SubscriptionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Subscription> subscriptions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(subscriptions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(subscriptions);
+
+			return;
+		}
+
 		for (Subscription subscription : subscriptions) {
 			if (EntityCacheUtil.getResult(
 					SubscriptionImpl.class, subscription.getPrimaryKey()) ==

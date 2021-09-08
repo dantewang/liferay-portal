@@ -316,6 +316,14 @@ public class DLStorageQuotaPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DLStorageQuota> dlStorageQuotas) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(dlStorageQuotas.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(dlStorageQuotas);
+
+			return;
+		}
+
 		for (DLStorageQuota dlStorageQuota : dlStorageQuotas) {
 			if (entityCache.getResult(
 					DLStorageQuotaImpl.class, dlStorageQuota.getPrimaryKey()) ==

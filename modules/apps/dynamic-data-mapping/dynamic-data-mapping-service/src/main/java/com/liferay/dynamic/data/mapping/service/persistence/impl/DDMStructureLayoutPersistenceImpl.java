@@ -4367,6 +4367,15 @@ public class DDMStructureLayoutPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DDMStructureLayout> ddmStructureLayouts) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmStructureLayouts.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmStructureLayouts);
+
+			return;
+		}
+
 		for (DDMStructureLayout ddmStructureLayout : ddmStructureLayouts) {
 			if (ddmStructureLayout.getCtCollectionId() != 0) {
 				continue;

@@ -1746,6 +1746,14 @@ public class ObjectLayoutPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ObjectLayout> objectLayouts) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(objectLayouts.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(objectLayouts);
+
+			return;
+		}
+
 		for (ObjectLayout objectLayout : objectLayouts) {
 			if (entityCache.getResult(
 					ObjectLayoutImpl.class, objectLayout.getPrimaryKey()) ==

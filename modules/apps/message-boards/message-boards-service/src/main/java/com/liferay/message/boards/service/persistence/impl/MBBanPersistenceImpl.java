@@ -3275,6 +3275,14 @@ public class MBBanPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MBBan> mbBans) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(mbBans.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(mbBans);
+
+			return;
+		}
+
 		for (MBBan mbBan : mbBans) {
 			if (mbBan.getCtCollectionId() != 0) {
 				continue;

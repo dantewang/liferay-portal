@@ -3311,6 +3311,14 @@ public class CTCollectionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CTCollection> ctCollections) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ctCollections.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ctCollections);
+
+			return;
+		}
+
 		for (CTCollection ctCollection : ctCollections) {
 			if (entityCache.getResult(
 					CTCollectionImpl.class, ctCollection.getPrimaryKey()) ==

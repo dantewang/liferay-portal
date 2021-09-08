@@ -910,6 +910,15 @@ public class SamlSpIdpConnectionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SamlSpIdpConnection> samlSpIdpConnections) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(samlSpIdpConnections.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(samlSpIdpConnections);
+
+			return;
+		}
+
 		for (SamlSpIdpConnection samlSpIdpConnection : samlSpIdpConnections) {
 			if (entityCache.getResult(
 					SamlSpIdpConnectionImpl.class,

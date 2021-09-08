@@ -2294,6 +2294,14 @@ public class SyncDevicePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SyncDevice> syncDevices) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(syncDevices.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(syncDevices);
+
+			return;
+		}
+
 		for (SyncDevice syncDevice : syncDevices) {
 			if (entityCache.getResult(
 					SyncDeviceImpl.class, syncDevice.getPrimaryKey()) == null) {

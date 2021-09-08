@@ -1426,6 +1426,15 @@ public class CommerceAddressRestrictionPersistenceImpl
 	public void cacheResult(
 		List<CommerceAddressRestriction> commerceAddressRestrictions) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceAddressRestrictions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceAddressRestrictions);
+
+			return;
+		}
+
 		for (CommerceAddressRestriction commerceAddressRestriction :
 				commerceAddressRestrictions) {
 

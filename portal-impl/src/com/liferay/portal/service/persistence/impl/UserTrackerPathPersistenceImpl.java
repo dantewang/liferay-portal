@@ -618,6 +618,14 @@ public class UserTrackerPathPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<UserTrackerPath> userTrackerPaths) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(userTrackerPaths.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(userTrackerPaths);
+
+			return;
+		}
+
 		for (UserTrackerPath userTrackerPath : userTrackerPaths) {
 			if (EntityCacheUtil.getResult(
 					UserTrackerPathImpl.class,

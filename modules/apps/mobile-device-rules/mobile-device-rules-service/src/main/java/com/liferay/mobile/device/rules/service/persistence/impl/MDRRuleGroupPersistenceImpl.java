@@ -2816,6 +2816,14 @@ public class MDRRuleGroupPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MDRRuleGroup> mdrRuleGroups) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(mdrRuleGroups.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(mdrRuleGroups);
+
+			return;
+		}
+
 		for (MDRRuleGroup mdrRuleGroup : mdrRuleGroups) {
 			if (entityCache.getResult(
 					MDRRuleGroupImpl.class, mdrRuleGroup.getPrimaryKey()) ==

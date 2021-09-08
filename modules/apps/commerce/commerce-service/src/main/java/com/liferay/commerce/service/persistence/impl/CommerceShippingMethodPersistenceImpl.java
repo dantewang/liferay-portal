@@ -1423,6 +1423,15 @@ public class CommerceShippingMethodPersistenceImpl
 	public void cacheResult(
 		List<CommerceShippingMethod> commerceShippingMethods) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceShippingMethods.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceShippingMethods);
+
+			return;
+		}
+
 		for (CommerceShippingMethod commerceShippingMethod :
 				commerceShippingMethods) {
 

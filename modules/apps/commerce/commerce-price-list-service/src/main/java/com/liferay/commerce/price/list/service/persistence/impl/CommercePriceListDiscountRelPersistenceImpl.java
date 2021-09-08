@@ -2024,6 +2024,15 @@ public class CommercePriceListDiscountRelPersistenceImpl
 	public void cacheResult(
 		List<CommercePriceListDiscountRel> commercePriceListDiscountRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commercePriceListDiscountRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commercePriceListDiscountRels);
+
+			return;
+		}
+
 		for (CommercePriceListDiscountRel commercePriceListDiscountRel :
 				commercePriceListDiscountRels) {
 

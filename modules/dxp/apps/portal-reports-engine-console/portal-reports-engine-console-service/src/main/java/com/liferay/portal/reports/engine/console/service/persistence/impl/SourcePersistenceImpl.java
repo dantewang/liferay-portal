@@ -2825,6 +2825,14 @@ public class SourcePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Source> sources) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(sources.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(sources);
+
+			return;
+		}
+
 		for (Source source : sources) {
 			if (entityCache.getResult(
 					SourceImpl.class, source.getPrimaryKey()) == null) {

@@ -2594,6 +2594,15 @@ public class SocialActivityCounterPersistenceImpl
 	public void cacheResult(
 		List<SocialActivityCounter> socialActivityCounters) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(socialActivityCounters.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(socialActivityCounters);
+
+			return;
+		}
+
 		for (SocialActivityCounter socialActivityCounter :
 				socialActivityCounters) {
 

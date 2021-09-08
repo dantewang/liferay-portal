@@ -2580,6 +2580,14 @@ public class KaleoProcessPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KaleoProcess> kaleoProcesses) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoProcesses.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoProcesses);
+
+			return;
+		}
+
 		for (KaleoProcess kaleoProcess : kaleoProcesses) {
 			if (entityCache.getResult(
 					KaleoProcessImpl.class, kaleoProcess.getPrimaryKey()) ==

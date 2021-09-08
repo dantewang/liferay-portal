@@ -10352,6 +10352,14 @@ public class DDMStructurePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DDMStructure> ddmStructures) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmStructures.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmStructures);
+
+			return;
+		}
+
 		for (DDMStructure ddmStructure : ddmStructures) {
 			if (ddmStructure.getCtCollectionId() != 0) {
 				continue;

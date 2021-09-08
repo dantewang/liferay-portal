@@ -2300,6 +2300,14 @@ public class MBMailingListPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MBMailingList> mbMailingLists) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(mbMailingLists.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(mbMailingLists);
+
+			return;
+		}
+
 		for (MBMailingList mbMailingList : mbMailingLists) {
 			if (mbMailingList.getCtCollectionId() != 0) {
 				continue;

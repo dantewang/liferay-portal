@@ -317,6 +317,14 @@ public class MFAEmailOTPEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MFAEmailOTPEntry> mfaEmailOTPEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(mfaEmailOTPEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(mfaEmailOTPEntries);
+
+			return;
+		}
+
 		for (MFAEmailOTPEntry mfaEmailOTPEntry : mfaEmailOTPEntries) {
 			if (entityCache.getResult(
 					MFAEmailOTPEntryImpl.class,

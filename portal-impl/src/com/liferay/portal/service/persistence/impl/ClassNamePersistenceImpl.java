@@ -329,6 +329,14 @@ public class ClassNamePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ClassName> classNames) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(classNames.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(classNames);
+
+			return;
+		}
+
 		for (ClassName className : classNames) {
 			if (EntityCacheUtil.getResult(
 					ClassNameImpl.class, className.getPrimaryKey()) == null) {

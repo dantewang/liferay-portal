@@ -6416,6 +6416,14 @@ public class SocialRequestPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SocialRequest> socialRequests) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(socialRequests.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(socialRequests);
+
+			return;
+		}
+
 		for (SocialRequest socialRequest : socialRequests) {
 			if (socialRequest.getCtCollectionId() != 0) {
 				continue;

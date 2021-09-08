@@ -618,6 +618,14 @@ public class AnalyticsMessagePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AnalyticsMessage> analyticsMessages) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(analyticsMessages.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(analyticsMessages);
+
+			return;
+		}
+
 		for (AnalyticsMessage analyticsMessage : analyticsMessages) {
 			if (entityCache.getResult(
 					AnalyticsMessageImpl.class,

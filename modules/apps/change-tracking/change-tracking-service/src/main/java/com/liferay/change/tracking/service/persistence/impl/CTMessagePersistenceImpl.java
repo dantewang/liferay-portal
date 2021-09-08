@@ -610,6 +610,14 @@ public class CTMessagePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CTMessage> ctMessages) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ctMessages.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ctMessages);
+
+			return;
+		}
+
 		for (CTMessage ctMessage : ctMessages) {
 			if (entityCache.getResult(
 					CTMessageImpl.class, ctMessage.getPrimaryKey()) == null) {

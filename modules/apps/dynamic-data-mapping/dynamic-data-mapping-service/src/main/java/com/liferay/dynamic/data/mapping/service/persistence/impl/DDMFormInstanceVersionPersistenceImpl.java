@@ -1505,6 +1505,15 @@ public class DDMFormInstanceVersionPersistenceImpl
 	public void cacheResult(
 		List<DDMFormInstanceVersion> ddmFormInstanceVersions) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmFormInstanceVersions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmFormInstanceVersions);
+
+			return;
+		}
+
 		for (DDMFormInstanceVersion ddmFormInstanceVersion :
 				ddmFormInstanceVersions) {
 

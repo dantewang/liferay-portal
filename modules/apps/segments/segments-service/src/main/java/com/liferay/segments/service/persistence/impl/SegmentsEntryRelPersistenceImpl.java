@@ -2075,6 +2075,14 @@ public class SegmentsEntryRelPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SegmentsEntryRel> segmentsEntryRels) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(segmentsEntryRels.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(segmentsEntryRels);
+
+			return;
+		}
+
 		for (SegmentsEntryRel segmentsEntryRel : segmentsEntryRels) {
 			if (segmentsEntryRel.getCtCollectionId() != 0) {
 				continue;

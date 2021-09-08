@@ -1698,6 +1698,15 @@ public class DLFileVersionPreviewPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DLFileVersionPreview> dlFileVersionPreviews) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(dlFileVersionPreviews.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(dlFileVersionPreviews);
+
+			return;
+		}
+
 		for (DLFileVersionPreview dlFileVersionPreview :
 				dlFileVersionPreviews) {
 

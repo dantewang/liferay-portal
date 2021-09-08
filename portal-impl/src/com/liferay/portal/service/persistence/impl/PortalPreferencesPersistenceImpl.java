@@ -347,6 +347,15 @@ public class PortalPreferencesPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<PortalPreferences> portalPreferenceses) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(portalPreferenceses.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(portalPreferenceses);
+
+			return;
+		}
+
 		for (PortalPreferences portalPreferences : portalPreferenceses) {
 			if (EntityCacheUtil.getResult(
 					PortalPreferencesImpl.class,

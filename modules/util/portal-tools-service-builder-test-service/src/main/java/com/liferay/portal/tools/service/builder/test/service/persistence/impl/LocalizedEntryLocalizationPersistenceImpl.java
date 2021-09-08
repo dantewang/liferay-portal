@@ -903,6 +903,15 @@ public class LocalizedEntryLocalizationPersistenceImpl
 	public void cacheResult(
 		List<LocalizedEntryLocalization> localizedEntryLocalizations) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(localizedEntryLocalizations.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(localizedEntryLocalizations);
+
+			return;
+		}
+
 		for (LocalizedEntryLocalization localizedEntryLocalization :
 				localizedEntryLocalizations) {
 

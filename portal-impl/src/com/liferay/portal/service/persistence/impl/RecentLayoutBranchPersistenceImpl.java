@@ -1867,6 +1867,15 @@ public class RecentLayoutBranchPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<RecentLayoutBranch> recentLayoutBranchs) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(recentLayoutBranchs.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(recentLayoutBranchs);
+
+			return;
+		}
+
 		for (RecentLayoutBranch recentLayoutBranch : recentLayoutBranchs) {
 			if (EntityCacheUtil.getResult(
 					RecentLayoutBranchImpl.class,

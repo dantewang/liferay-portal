@@ -896,6 +896,15 @@ public class BatchPlannerPolicyPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<BatchPlannerPolicy> batchPlannerPolicies) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(batchPlannerPolicies.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(batchPlannerPolicies);
+
+			return;
+		}
+
 		for (BatchPlannerPolicy batchPlannerPolicy : batchPlannerPolicies) {
 			if (entityCache.getResult(
 					BatchPlannerPolicyImpl.class,

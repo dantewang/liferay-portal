@@ -1089,6 +1089,14 @@ public class OrgGroupRolePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<OrgGroupRole> orgGroupRoles) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(orgGroupRoles.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(orgGroupRoles);
+
+			return;
+		}
+
 		for (OrgGroupRole orgGroupRole : orgGroupRoles) {
 			if (EntityCacheUtil.getResult(
 					OrgGroupRoleImpl.class, orgGroupRole.getPrimaryKey()) ==

@@ -5653,6 +5653,15 @@ public class DEDataDefinitionFieldLinkPersistenceImpl
 	public void cacheResult(
 		List<DEDataDefinitionFieldLink> deDataDefinitionFieldLinks) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(deDataDefinitionFieldLinks.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(deDataDefinitionFieldLinks);
+
+			return;
+		}
+
 		for (DEDataDefinitionFieldLink deDataDefinitionFieldLink :
 				deDataDefinitionFieldLinks) {
 

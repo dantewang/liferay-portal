@@ -99,6 +99,14 @@ public class ManyColumnsEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ManyColumnsEntry> manyColumnsEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(manyColumnsEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(manyColumnsEntries);
+
+			return;
+		}
+
 		for (ManyColumnsEntry manyColumnsEntry : manyColumnsEntries) {
 			if (entityCache.getResult(
 					ManyColumnsEntryImpl.class,

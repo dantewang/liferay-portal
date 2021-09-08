@@ -2368,6 +2368,15 @@ public class CommerceDiscountUsageEntryPersistenceImpl
 	public void cacheResult(
 		List<CommerceDiscountUsageEntry> commerceDiscountUsageEntries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceDiscountUsageEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceDiscountUsageEntries);
+
+			return;
+		}
+
 		for (CommerceDiscountUsageEntry commerceDiscountUsageEntry :
 				commerceDiscountUsageEntries) {
 

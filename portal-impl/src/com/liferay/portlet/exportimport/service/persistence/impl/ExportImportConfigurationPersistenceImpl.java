@@ -2806,6 +2806,15 @@ public class ExportImportConfigurationPersistenceImpl
 	public void cacheResult(
 		List<ExportImportConfiguration> exportImportConfigurations) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(exportImportConfigurations.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(exportImportConfigurations);
+
+			return;
+		}
+
 		for (ExportImportConfiguration exportImportConfiguration :
 				exportImportConfigurations) {
 

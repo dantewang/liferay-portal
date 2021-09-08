@@ -973,6 +973,14 @@ public class SamlSpAuthRequestPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SamlSpAuthRequest> samlSpAuthRequests) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(samlSpAuthRequests.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(samlSpAuthRequests);
+
+			return;
+		}
+
 		for (SamlSpAuthRequest samlSpAuthRequest : samlSpAuthRequests) {
 			if (entityCache.getResult(
 					SamlSpAuthRequestImpl.class,

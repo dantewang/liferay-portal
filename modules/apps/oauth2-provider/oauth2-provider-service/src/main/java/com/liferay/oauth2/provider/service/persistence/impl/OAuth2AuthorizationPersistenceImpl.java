@@ -2894,6 +2894,15 @@ public class OAuth2AuthorizationPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<OAuth2Authorization> oAuth2Authorizations) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(oAuth2Authorizations.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(oAuth2Authorizations);
+
+			return;
+		}
+
 		for (OAuth2Authorization oAuth2Authorization : oAuth2Authorizations) {
 			if (entityCache.getResult(
 					OAuth2AuthorizationImpl.class,

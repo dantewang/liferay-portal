@@ -4483,6 +4483,15 @@ public class CommerceNotificationTemplatePersistenceImpl
 	public void cacheResult(
 		List<CommerceNotificationTemplate> commerceNotificationTemplates) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceNotificationTemplates.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceNotificationTemplates);
+
+			return;
+		}
+
 		for (CommerceNotificationTemplate commerceNotificationTemplate :
 				commerceNotificationTemplates) {
 

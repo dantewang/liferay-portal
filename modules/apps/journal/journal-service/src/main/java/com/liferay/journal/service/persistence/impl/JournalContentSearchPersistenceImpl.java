@@ -5260,6 +5260,15 @@ public class JournalContentSearchPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<JournalContentSearch> journalContentSearchs) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(journalContentSearchs.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(journalContentSearchs);
+
+			return;
+		}
+
 		for (JournalContentSearch journalContentSearch :
 				journalContentSearchs) {
 

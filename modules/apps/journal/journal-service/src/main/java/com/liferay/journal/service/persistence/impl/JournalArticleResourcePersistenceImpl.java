@@ -2366,6 +2366,15 @@ public class JournalArticleResourcePersistenceImpl
 	public void cacheResult(
 		List<JournalArticleResource> journalArticleResources) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(journalArticleResources.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(journalArticleResources);
+
+			return;
+		}
+
 		for (JournalArticleResource journalArticleResource :
 				journalArticleResources) {
 

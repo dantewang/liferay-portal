@@ -3287,6 +3287,15 @@ public class ObjectRelationshipPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ObjectRelationship> objectRelationships) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(objectRelationships.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(objectRelationships);
+
+			return;
+		}
+
 		for (ObjectRelationship objectRelationship : objectRelationships) {
 			if (entityCache.getResult(
 					ObjectRelationshipImpl.class,

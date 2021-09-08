@@ -6168,6 +6168,14 @@ public class DLFileShortcutPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DLFileShortcut> dlFileShortcuts) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(dlFileShortcuts.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(dlFileShortcuts);
+
+			return;
+		}
+
 		for (DLFileShortcut dlFileShortcut : dlFileShortcuts) {
 			if (dlFileShortcut.getCtCollectionId() != 0) {
 				continue;

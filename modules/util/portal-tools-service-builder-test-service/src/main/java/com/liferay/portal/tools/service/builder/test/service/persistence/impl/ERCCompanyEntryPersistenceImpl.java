@@ -386,6 +386,14 @@ public class ERCCompanyEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ERCCompanyEntry> ercCompanyEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ercCompanyEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ercCompanyEntries);
+
+			return;
+		}
+
 		for (ERCCompanyEntry ercCompanyEntry : ercCompanyEntries) {
 			if (entityCache.getResult(
 					ERCCompanyEntryImpl.class,

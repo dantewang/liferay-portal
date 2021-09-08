@@ -844,6 +844,14 @@ public class PasswordPolicyRelPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<PasswordPolicyRel> passwordPolicyRels) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(passwordPolicyRels.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(passwordPolicyRels);
+
+			return;
+		}
+
 		for (PasswordPolicyRel passwordPolicyRel : passwordPolicyRels) {
 			if (EntityCacheUtil.getResult(
 					PasswordPolicyRelImpl.class,

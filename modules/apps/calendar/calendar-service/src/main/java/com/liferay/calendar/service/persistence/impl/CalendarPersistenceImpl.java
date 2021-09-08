@@ -3518,6 +3518,14 @@ public class CalendarPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Calendar> calendars) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(calendars.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(calendars);
+
+			return;
+		}
+
 		for (Calendar calendar : calendars) {
 			if (calendar.getCtCollectionId() != 0) {
 				continue;

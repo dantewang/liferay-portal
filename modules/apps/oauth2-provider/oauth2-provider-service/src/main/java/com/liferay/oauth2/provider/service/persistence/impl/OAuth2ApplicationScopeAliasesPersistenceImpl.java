@@ -1171,6 +1171,15 @@ public class OAuth2ApplicationScopeAliasesPersistenceImpl
 	public void cacheResult(
 		List<OAuth2ApplicationScopeAliases> oAuth2ApplicationScopeAliaseses) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(oAuth2ApplicationScopeAliaseses.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(oAuth2ApplicationScopeAliaseses);
+
+			return;
+		}
+
 		for (OAuth2ApplicationScopeAliases oAuth2ApplicationScopeAliases :
 				oAuth2ApplicationScopeAliaseses) {
 

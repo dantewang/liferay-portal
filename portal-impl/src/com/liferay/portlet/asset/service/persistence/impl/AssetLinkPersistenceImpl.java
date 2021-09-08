@@ -3051,6 +3051,14 @@ public class AssetLinkPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AssetLink> assetLinks) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(assetLinks.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(assetLinks);
+
+			return;
+		}
+
 		for (AssetLink assetLink : assetLinks) {
 			if (assetLink.getCtCollectionId() != 0) {
 				continue;

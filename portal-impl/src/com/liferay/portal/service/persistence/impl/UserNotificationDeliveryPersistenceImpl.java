@@ -953,6 +953,15 @@ public class UserNotificationDeliveryPersistenceImpl
 	public void cacheResult(
 		List<UserNotificationDelivery> userNotificationDeliveries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(userNotificationDeliveries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(userNotificationDeliveries);
+
+			return;
+		}
+
 		for (UserNotificationDelivery userNotificationDelivery :
 				userNotificationDeliveries) {
 

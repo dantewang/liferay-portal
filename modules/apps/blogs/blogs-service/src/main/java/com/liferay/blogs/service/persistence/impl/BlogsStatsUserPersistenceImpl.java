@@ -2965,6 +2965,14 @@ public class BlogsStatsUserPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<BlogsStatsUser> blogsStatsUsers) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(blogsStatsUsers.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(blogsStatsUsers);
+
+			return;
+		}
+
 		for (BlogsStatsUser blogsStatsUser : blogsStatsUsers) {
 			if (entityCache.getResult(
 					BlogsStatsUserImpl.class, blogsStatsUser.getPrimaryKey()) ==

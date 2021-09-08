@@ -2515,6 +2515,14 @@ public class TrashEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<TrashEntry> trashEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(trashEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(trashEntries);
+
+			return;
+		}
+
 		for (TrashEntry trashEntry : trashEntries) {
 			if (trashEntry.getCtCollectionId() != 0) {
 				continue;

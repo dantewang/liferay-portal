@@ -5785,6 +5785,14 @@ public class SocialRelationPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SocialRelation> socialRelations) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(socialRelations.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(socialRelations);
+
+			return;
+		}
+
 		for (SocialRelation socialRelation : socialRelations) {
 			if (socialRelation.getCtCollectionId() != 0) {
 				continue;

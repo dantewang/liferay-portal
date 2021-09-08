@@ -5936,6 +5936,14 @@ public class LVEntryVersionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<LVEntryVersion> lvEntryVersions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(lvEntryVersions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(lvEntryVersions);
+
+			return;
+		}
+
 		for (LVEntryVersion lvEntryVersion : lvEntryVersions) {
 			if (entityCache.getResult(
 					LVEntryVersionImpl.class, lvEntryVersion.getPrimaryKey()) ==

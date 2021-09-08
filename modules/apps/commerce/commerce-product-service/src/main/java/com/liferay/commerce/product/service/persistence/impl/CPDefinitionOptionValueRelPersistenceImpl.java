@@ -5002,6 +5002,15 @@ public class CPDefinitionOptionValueRelPersistenceImpl
 	public void cacheResult(
 		List<CPDefinitionOptionValueRel> cpDefinitionOptionValueRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpDefinitionOptionValueRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpDefinitionOptionValueRels);
+
+			return;
+		}
+
 		for (CPDefinitionOptionValueRel cpDefinitionOptionValueRel :
 				cpDefinitionOptionValueRels) {
 

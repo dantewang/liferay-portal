@@ -4453,6 +4453,15 @@ public class CommerceInventoryWarehousePersistenceImpl
 	public void cacheResult(
 		List<CommerceInventoryWarehouse> commerceInventoryWarehouses) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceInventoryWarehouses.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceInventoryWarehouses);
+
+			return;
+		}
+
 		for (CommerceInventoryWarehouse commerceInventoryWarehouse :
 				commerceInventoryWarehouses) {
 

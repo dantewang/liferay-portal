@@ -1742,6 +1742,14 @@ public class BigDecimalEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<BigDecimalEntry> bigDecimalEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(bigDecimalEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(bigDecimalEntries);
+
+			return;
+		}
+
 		for (BigDecimalEntry bigDecimalEntry : bigDecimalEntries) {
 			if (entityCache.getResult(
 					BigDecimalEntryImpl.class,

@@ -4556,6 +4556,15 @@ public class KaleoTaskAssignmentInstancePersistenceImpl
 	public void cacheResult(
 		List<KaleoTaskAssignmentInstance> kaleoTaskAssignmentInstances) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoTaskAssignmentInstances.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoTaskAssignmentInstances);
+
+			return;
+		}
+
 		for (KaleoTaskAssignmentInstance kaleoTaskAssignmentInstance :
 				kaleoTaskAssignmentInstances) {
 

@@ -882,6 +882,14 @@ public class DDMTemplateLinkPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DDMTemplateLink> ddmTemplateLinks) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmTemplateLinks.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmTemplateLinks);
+
+			return;
+		}
+
 		for (DDMTemplateLink ddmTemplateLink : ddmTemplateLinks) {
 			if (ddmTemplateLink.getCtCollectionId() != 0) {
 				continue;

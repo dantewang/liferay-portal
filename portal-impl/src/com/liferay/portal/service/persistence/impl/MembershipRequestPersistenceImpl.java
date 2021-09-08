@@ -2221,6 +2221,14 @@ public class MembershipRequestPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MembershipRequest> membershipRequests) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(membershipRequests.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(membershipRequests);
+
+			return;
+		}
+
 		for (MembershipRequest membershipRequest : membershipRequests) {
 			if (EntityCacheUtil.getResult(
 					MembershipRequestImpl.class,

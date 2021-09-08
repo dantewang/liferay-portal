@@ -3782,6 +3782,14 @@ public class KBFolderPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KBFolder> kbFolders) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kbFolders.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kbFolders);
+
+			return;
+		}
+
 		for (KBFolder kbFolder : kbFolders) {
 			if (entityCache.getResult(
 					KBFolderImpl.class, kbFolder.getPrimaryKey()) == null) {

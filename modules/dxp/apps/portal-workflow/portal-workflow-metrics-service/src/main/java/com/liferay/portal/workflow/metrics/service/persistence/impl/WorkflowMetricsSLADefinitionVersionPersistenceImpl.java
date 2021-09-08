@@ -2453,6 +2453,15 @@ public class WorkflowMetricsSLADefinitionVersionPersistenceImpl
 		List<WorkflowMetricsSLADefinitionVersion>
 			workflowMetricsSLADefinitionVersions) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(workflowMetricsSLADefinitionVersions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(workflowMetricsSLADefinitionVersions);
+
+			return;
+		}
+
 		for (WorkflowMetricsSLADefinitionVersion
 				workflowMetricsSLADefinitionVersion :
 					workflowMetricsSLADefinitionVersions) {

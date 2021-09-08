@@ -1133,6 +1133,14 @@ public class ContactPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Contact> contacts) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(contacts.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(contacts);
+
+			return;
+		}
+
 		for (Contact contact : contacts) {
 			if (EntityCacheUtil.getResult(
 					ContactImpl.class, contact.getPrimaryKey()) == null) {

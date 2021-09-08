@@ -3933,6 +3933,14 @@ public class WebsitePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Website> websites) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(websites.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(websites);
+
+			return;
+		}
+
 		for (Website website : websites) {
 			if (EntityCacheUtil.getResult(
 					WebsiteImpl.class, website.getPrimaryKey()) == null) {

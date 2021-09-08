@@ -23751,6 +23751,15 @@ public class LayoutPageTemplateEntryPersistenceImpl
 	public void cacheResult(
 		List<LayoutPageTemplateEntry> layoutPageTemplateEntries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(layoutPageTemplateEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(layoutPageTemplateEntries);
+
+			return;
+		}
+
 		for (LayoutPageTemplateEntry layoutPageTemplateEntry :
 				layoutPageTemplateEntries) {
 

@@ -385,6 +385,14 @@ public class ERCGroupEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ERCGroupEntry> ercGroupEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ercGroupEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ercGroupEntries);
+
+			return;
+		}
+
 		for (ERCGroupEntry ercGroupEntry : ercGroupEntries) {
 			if (entityCache.getResult(
 					ERCGroupEntryImpl.class, ercGroupEntry.getPrimaryKey()) ==

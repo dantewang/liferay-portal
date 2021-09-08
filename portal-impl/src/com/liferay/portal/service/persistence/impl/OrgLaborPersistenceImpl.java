@@ -599,6 +599,14 @@ public class OrgLaborPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<OrgLabor> orgLabors) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(orgLabors.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(orgLabors);
+
+			return;
+		}
+
 		for (OrgLabor orgLabor : orgLabors) {
 			if (EntityCacheUtil.getResult(
 					OrgLaborImpl.class, orgLabor.getPrimaryKey()) == null) {

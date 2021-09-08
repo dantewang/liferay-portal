@@ -856,6 +856,14 @@ public class PortletPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Portlet> portlets) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(portlets.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(portlets);
+
+			return;
+		}
+
 		for (Portlet portlet : portlets) {
 			if (EntityCacheUtil.getResult(
 					PortletImpl.class, portlet.getPrimaryKey()) == null) {
