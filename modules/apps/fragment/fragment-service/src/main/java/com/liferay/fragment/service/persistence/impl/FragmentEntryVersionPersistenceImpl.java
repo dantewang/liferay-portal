@@ -15094,6 +15094,15 @@ public class FragmentEntryVersionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<FragmentEntryVersion> fragmentEntryVersions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(fragmentEntryVersions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(fragmentEntryVersions);
+
+			return;
+		}
+
 		for (FragmentEntryVersion fragmentEntryVersion :
 				fragmentEntryVersions) {
 

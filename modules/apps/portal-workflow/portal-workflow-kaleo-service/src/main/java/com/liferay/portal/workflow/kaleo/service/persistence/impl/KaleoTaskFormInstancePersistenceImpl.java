@@ -2924,6 +2924,15 @@ public class KaleoTaskFormInstancePersistenceImpl
 	public void cacheResult(
 		List<KaleoTaskFormInstance> kaleoTaskFormInstances) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoTaskFormInstances.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoTaskFormInstances);
+
+			return;
+		}
+
 		for (KaleoTaskFormInstance kaleoTaskFormInstance :
 				kaleoTaskFormInstances) {
 

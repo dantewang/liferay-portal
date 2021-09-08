@@ -2561,6 +2561,14 @@ public class DDMContentPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DDMContent> ddmContents) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmContents.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmContents);
+
+			return;
+		}
+
 		for (DDMContent ddmContent : ddmContents) {
 			if (ddmContent.getCtCollectionId() != 0) {
 				continue;

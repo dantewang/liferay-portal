@@ -871,6 +871,14 @@ public class EntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Entry> entries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(entries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(entries);
+
+			return;
+		}
+
 		for (Entry entry : entries) {
 			if (entityCache.getResult(EntryImpl.class, entry.getPrimaryKey()) ==
 					null) {

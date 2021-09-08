@@ -2705,6 +2705,15 @@ public class SocialActivitySettingPersistenceImpl
 	public void cacheResult(
 		List<SocialActivitySetting> socialActivitySettings) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(socialActivitySettings.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(socialActivitySettings);
+
+			return;
+		}
+
 		for (SocialActivitySetting socialActivitySetting :
 				socialActivitySettings) {
 

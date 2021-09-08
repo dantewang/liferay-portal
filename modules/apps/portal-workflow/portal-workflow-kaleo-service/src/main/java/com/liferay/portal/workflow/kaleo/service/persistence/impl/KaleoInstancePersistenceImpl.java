@@ -4362,6 +4362,14 @@ public class KaleoInstancePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KaleoInstance> kaleoInstances) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoInstances.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoInstances);
+
+			return;
+		}
+
 		for (KaleoInstance kaleoInstance : kaleoInstances) {
 			if (entityCache.getResult(
 					KaleoInstanceImpl.class, kaleoInstance.getPrimaryKey()) ==

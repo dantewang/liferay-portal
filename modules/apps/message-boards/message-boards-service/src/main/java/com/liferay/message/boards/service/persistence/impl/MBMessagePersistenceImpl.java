@@ -21457,6 +21457,14 @@ public class MBMessagePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MBMessage> mbMessages) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(mbMessages.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(mbMessages);
+
+			return;
+		}
+
 		for (MBMessage mbMessage : mbMessages) {
 			if (mbMessage.getCtCollectionId() != 0) {
 				continue;

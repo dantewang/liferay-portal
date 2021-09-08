@@ -101,6 +101,14 @@ public class LocalizedEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<LocalizedEntry> localizedEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(localizedEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(localizedEntries);
+
+			return;
+		}
+
 		for (LocalizedEntry localizedEntry : localizedEntries) {
 			if (entityCache.getResult(
 					LocalizedEntryImpl.class, localizedEntry.getPrimaryKey()) ==

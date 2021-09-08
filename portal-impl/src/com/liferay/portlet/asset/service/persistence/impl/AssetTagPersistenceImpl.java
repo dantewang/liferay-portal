@@ -4298,6 +4298,14 @@ public class AssetTagPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AssetTag> assetTags) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(assetTags.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(assetTags);
+
+			return;
+		}
+
 		for (AssetTag assetTag : assetTags) {
 			if (assetTag.getCtCollectionId() != 0) {
 				continue;

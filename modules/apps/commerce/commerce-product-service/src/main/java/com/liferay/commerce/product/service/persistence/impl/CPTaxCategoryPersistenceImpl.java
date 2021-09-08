@@ -886,6 +886,14 @@ public class CPTaxCategoryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CPTaxCategory> cpTaxCategories) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpTaxCategories.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpTaxCategories);
+
+			return;
+		}
+
 		for (CPTaxCategory cpTaxCategory : cpTaxCategories) {
 			if (entityCache.getResult(
 					CPTaxCategoryImpl.class, cpTaxCategory.getPrimaryKey()) ==

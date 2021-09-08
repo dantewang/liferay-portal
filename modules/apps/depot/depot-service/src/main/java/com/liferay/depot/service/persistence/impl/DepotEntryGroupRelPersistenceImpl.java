@@ -3846,6 +3846,15 @@ public class DepotEntryGroupRelPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DepotEntryGroupRel> depotEntryGroupRels) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(depotEntryGroupRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(depotEntryGroupRels);
+
+			return;
+		}
+
 		for (DepotEntryGroupRel depotEntryGroupRel : depotEntryGroupRels) {
 			if (entityCache.getResult(
 					DepotEntryGroupRelImpl.class,

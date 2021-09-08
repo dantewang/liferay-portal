@@ -1172,6 +1172,14 @@ public class DispatchLogPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DispatchLog> dispatchLogs) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(dispatchLogs.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(dispatchLogs);
+
+			return;
+		}
+
 		for (DispatchLog dispatchLog : dispatchLogs) {
 			if (entityCache.getResult(
 					DispatchLogImpl.class, dispatchLog.getPrimaryKey()) ==

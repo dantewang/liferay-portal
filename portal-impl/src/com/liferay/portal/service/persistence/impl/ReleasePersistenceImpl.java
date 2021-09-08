@@ -354,6 +354,14 @@ public class ReleasePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Release> releases) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(releases.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(releases);
+
+			return;
+		}
+
 		for (Release release : releases) {
 			if (EntityCacheUtil.getResult(
 					ReleaseImpl.class, release.getPrimaryKey()) == null) {

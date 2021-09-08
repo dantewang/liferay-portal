@@ -1421,6 +1421,15 @@ public class CommerceChannelRelPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CommerceChannelRel> commerceChannelRels) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceChannelRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceChannelRels);
+
+			return;
+		}
+
 		for (CommerceChannelRel commerceChannelRel : commerceChannelRels) {
 			if (entityCache.getResult(
 					CommerceChannelRelImpl.class,

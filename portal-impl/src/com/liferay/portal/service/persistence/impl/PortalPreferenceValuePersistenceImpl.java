@@ -2998,6 +2998,15 @@ public class PortalPreferenceValuePersistenceImpl
 	public void cacheResult(
 		List<PortalPreferenceValue> portalPreferenceValues) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(portalPreferenceValues.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(portalPreferenceValues);
+
+			return;
+		}
+
 		for (PortalPreferenceValue portalPreferenceValue :
 				portalPreferenceValues) {
 

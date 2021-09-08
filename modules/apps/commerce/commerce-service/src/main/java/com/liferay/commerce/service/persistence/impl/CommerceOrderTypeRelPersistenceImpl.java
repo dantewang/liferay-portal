@@ -1718,6 +1718,15 @@ public class CommerceOrderTypeRelPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CommerceOrderTypeRel> commerceOrderTypeRels) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceOrderTypeRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceOrderTypeRels);
+
+			return;
+		}
+
 		for (CommerceOrderTypeRel commerceOrderTypeRel :
 				commerceOrderTypeRels) {
 

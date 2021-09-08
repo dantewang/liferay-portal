@@ -2165,6 +2165,14 @@ public class KaleoTransitionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KaleoTransition> kaleoTransitions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoTransitions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoTransitions);
+
+			return;
+		}
+
 		for (KaleoTransition kaleoTransition : kaleoTransitions) {
 			if (entityCache.getResult(
 					KaleoTransitionImpl.class,

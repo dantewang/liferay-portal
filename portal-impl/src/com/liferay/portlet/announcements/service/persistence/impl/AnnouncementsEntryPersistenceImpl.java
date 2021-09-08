@@ -7915,6 +7915,15 @@ public class AnnouncementsEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AnnouncementsEntry> announcementsEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(announcementsEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(announcementsEntries);
+
+			return;
+		}
+
 		for (AnnouncementsEntry announcementsEntry : announcementsEntries) {
 			if (EntityCacheUtil.getResult(
 					AnnouncementsEntryImpl.class,

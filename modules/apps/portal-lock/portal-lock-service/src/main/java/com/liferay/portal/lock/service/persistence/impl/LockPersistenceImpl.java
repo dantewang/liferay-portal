@@ -2560,6 +2560,14 @@ public class LockPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Lock> locks) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(locks.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(locks);
+
+			return;
+		}
+
 		for (Lock lock : locks) {
 			if (entityCache.getResult(LockImpl.class, lock.getPrimaryKey()) ==
 					null) {

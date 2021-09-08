@@ -3305,6 +3305,14 @@ public class CommerceOrderTypePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CommerceOrderType> commerceOrderTypes) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceOrderTypes.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceOrderTypes);
+
+			return;
+		}
+
 		for (CommerceOrderType commerceOrderType : commerceOrderTypes) {
 			if (entityCache.getResult(
 					CommerceOrderTypeImpl.class,

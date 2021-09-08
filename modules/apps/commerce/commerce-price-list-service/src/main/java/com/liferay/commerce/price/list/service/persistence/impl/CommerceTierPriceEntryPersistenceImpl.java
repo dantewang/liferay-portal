@@ -5055,6 +5055,15 @@ public class CommerceTierPriceEntryPersistenceImpl
 	public void cacheResult(
 		List<CommerceTierPriceEntry> commerceTierPriceEntries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceTierPriceEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceTierPriceEntries);
+
+			return;
+		}
+
 		for (CommerceTierPriceEntry commerceTierPriceEntry :
 				commerceTierPriceEntries) {
 

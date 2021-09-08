@@ -2150,6 +2150,14 @@ public class FriendlyURLEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<FriendlyURLEntry> friendlyURLEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(friendlyURLEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(friendlyURLEntries);
+
+			return;
+		}
+
 		for (FriendlyURLEntry friendlyURLEntry : friendlyURLEntries) {
 			if (friendlyURLEntry.getCtCollectionId() != 0) {
 				continue;

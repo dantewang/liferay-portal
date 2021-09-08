@@ -1752,6 +1752,14 @@ public class ReadingTimeEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ReadingTimeEntry> readingTimeEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(readingTimeEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(readingTimeEntries);
+
+			return;
+		}
+
 		for (ReadingTimeEntry readingTimeEntry : readingTimeEntries) {
 			if (entityCache.getResult(
 					ReadingTimeEntryImpl.class,

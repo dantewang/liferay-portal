@@ -1259,6 +1259,15 @@ public class ObjectLayoutBoxColumnPersistenceImpl
 	public void cacheResult(
 		List<ObjectLayoutBoxColumn> objectLayoutBoxColumns) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(objectLayoutBoxColumns.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(objectLayoutBoxColumns);
+
+			return;
+		}
+
 		for (ObjectLayoutBoxColumn objectLayoutBoxColumn :
 				objectLayoutBoxColumns) {
 

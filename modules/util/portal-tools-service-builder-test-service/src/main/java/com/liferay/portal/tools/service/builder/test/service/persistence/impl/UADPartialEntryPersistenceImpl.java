@@ -99,6 +99,14 @@ public class UADPartialEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<UADPartialEntry> uadPartialEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(uadPartialEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(uadPartialEntries);
+
+			return;
+		}
+
 		for (UADPartialEntry uadPartialEntry : uadPartialEntries) {
 			if (entityCache.getResult(
 					UADPartialEntryImpl.class,

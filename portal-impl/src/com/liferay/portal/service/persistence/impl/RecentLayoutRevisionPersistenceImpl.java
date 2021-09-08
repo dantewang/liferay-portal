@@ -1878,6 +1878,15 @@ public class RecentLayoutRevisionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<RecentLayoutRevision> recentLayoutRevisions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(recentLayoutRevisions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(recentLayoutRevisions);
+
+			return;
+		}
+
 		for (RecentLayoutRevision recentLayoutRevision :
 				recentLayoutRevisions) {
 

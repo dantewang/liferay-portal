@@ -1521,6 +1521,15 @@ public class KaleoDefinitionVersionPersistenceImpl
 	public void cacheResult(
 		List<KaleoDefinitionVersion> kaleoDefinitionVersions) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoDefinitionVersions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoDefinitionVersions);
+
+			return;
+		}
+
 		for (KaleoDefinitionVersion kaleoDefinitionVersion :
 				kaleoDefinitionVersions) {
 

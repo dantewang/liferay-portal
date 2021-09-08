@@ -13278,6 +13278,14 @@ public class MBThreadPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MBThread> mbThreads) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(mbThreads.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(mbThreads);
+
+			return;
+		}
+
 		for (MBThread mbThread : mbThreads) {
 			if (mbThread.getCtCollectionId() != 0) {
 				continue;

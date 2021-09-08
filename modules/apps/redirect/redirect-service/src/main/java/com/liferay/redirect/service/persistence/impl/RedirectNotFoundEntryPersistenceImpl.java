@@ -889,6 +889,15 @@ public class RedirectNotFoundEntryPersistenceImpl
 	public void cacheResult(
 		List<RedirectNotFoundEntry> redirectNotFoundEntries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(redirectNotFoundEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(redirectNotFoundEntries);
+
+			return;
+		}
+
 		for (RedirectNotFoundEntry redirectNotFoundEntry :
 				redirectNotFoundEntries) {
 

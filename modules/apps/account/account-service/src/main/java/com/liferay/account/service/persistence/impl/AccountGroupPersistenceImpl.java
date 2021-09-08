@@ -2633,6 +2633,14 @@ public class AccountGroupPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AccountGroup> accountGroups) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(accountGroups.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(accountGroups);
+
+			return;
+		}
+
 		for (AccountGroup accountGroup : accountGroups) {
 			if (entityCache.getResult(
 					AccountGroupImpl.class, accountGroup.getPrimaryKey()) ==

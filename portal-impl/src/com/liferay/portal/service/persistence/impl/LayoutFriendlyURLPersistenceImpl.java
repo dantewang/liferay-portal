@@ -5358,6 +5358,14 @@ public class LayoutFriendlyURLPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<LayoutFriendlyURL> layoutFriendlyURLs) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(layoutFriendlyURLs.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(layoutFriendlyURLs);
+
+			return;
+		}
+
 		for (LayoutFriendlyURL layoutFriendlyURL : layoutFriendlyURLs) {
 			if (layoutFriendlyURL.getCtCollectionId() != 0) {
 				continue;

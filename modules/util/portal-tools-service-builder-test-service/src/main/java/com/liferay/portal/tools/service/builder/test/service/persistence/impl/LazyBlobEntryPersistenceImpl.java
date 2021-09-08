@@ -897,6 +897,14 @@ public class LazyBlobEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<LazyBlobEntry> lazyBlobEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(lazyBlobEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(lazyBlobEntries);
+
+			return;
+		}
+
 		for (LazyBlobEntry lazyBlobEntry : lazyBlobEntries) {
 			if (entityCache.getResult(
 					LazyBlobEntryImpl.class, lazyBlobEntry.getPrimaryKey()) ==

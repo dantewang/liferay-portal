@@ -1380,6 +1380,15 @@ public class AnnouncementsDeliveryPersistenceImpl
 	public void cacheResult(
 		List<AnnouncementsDelivery> announcementsDeliveries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(announcementsDeliveries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(announcementsDeliveries);
+
+			return;
+		}
+
 		for (AnnouncementsDelivery announcementsDelivery :
 				announcementsDeliveries) {
 

@@ -1446,6 +1446,14 @@ public class CommerceOrderNotePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CommerceOrderNote> commerceOrderNotes) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceOrderNotes.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceOrderNotes);
+
+			return;
+		}
+
 		for (CommerceOrderNote commerceOrderNote : commerceOrderNotes) {
 			if (entityCache.getResult(
 					CommerceOrderNoteImpl.class,

@@ -630,6 +630,15 @@ public class CommerceDiscountRulePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CommerceDiscountRule> commerceDiscountRules) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceDiscountRules.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceDiscountRules);
+
+			return;
+		}
+
 		for (CommerceDiscountRule commerceDiscountRule :
 				commerceDiscountRules) {
 

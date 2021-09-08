@@ -9958,6 +9958,14 @@ public class SegmentsEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SegmentsEntry> segmentsEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(segmentsEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(segmentsEntries);
+
+			return;
+		}
+
 		for (SegmentsEntry segmentsEntry : segmentsEntries) {
 			if (segmentsEntry.getCtCollectionId() != 0) {
 				continue;

@@ -12493,6 +12493,14 @@ public class BookmarksEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<BookmarksEntry> bookmarksEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(bookmarksEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(bookmarksEntries);
+
+			return;
+		}
+
 		for (BookmarksEntry bookmarksEntry : bookmarksEntries) {
 			if (entityCache.getResult(
 					BookmarksEntryImpl.class, bookmarksEntry.getPrimaryKey()) ==

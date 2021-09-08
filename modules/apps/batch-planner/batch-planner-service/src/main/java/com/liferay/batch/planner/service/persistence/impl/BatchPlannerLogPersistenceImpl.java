@@ -1473,6 +1473,14 @@ public class BatchPlannerLogPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<BatchPlannerLog> batchPlannerLogs) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(batchPlannerLogs.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(batchPlannerLogs);
+
+			return;
+		}
+
 		for (BatchPlannerLog batchPlannerLog : batchPlannerLogs) {
 			if (entityCache.getResult(
 					BatchPlannerLogImpl.class,

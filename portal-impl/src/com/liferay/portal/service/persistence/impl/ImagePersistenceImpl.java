@@ -614,6 +614,14 @@ public class ImagePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Image> images) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(images.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(images);
+
+			return;
+		}
+
 		for (Image image : images) {
 			if (image.getCtCollectionId() != 0) {
 				continue;

@@ -2603,6 +2603,14 @@ public class ObjectFieldPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ObjectField> objectFields) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(objectFields.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(objectFields);
+
+			return;
+		}
+
 		for (ObjectField objectField : objectFields) {
 			if (entityCache.getResult(
 					ObjectFieldImpl.class, objectField.getPrimaryKey()) ==

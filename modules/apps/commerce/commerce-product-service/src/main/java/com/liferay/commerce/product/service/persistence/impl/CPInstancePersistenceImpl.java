@@ -6541,6 +6541,14 @@ public class CPInstancePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CPInstance> cpInstances) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpInstances.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpInstances);
+
+			return;
+		}
+
 		for (CPInstance cpInstance : cpInstances) {
 			if (entityCache.getResult(
 					CPInstanceImpl.class, cpInstance.getPrimaryKey()) == null) {

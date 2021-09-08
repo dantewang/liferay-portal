@@ -2984,6 +2984,14 @@ public class RegionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Region> regions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(regions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(regions);
+
+			return;
+		}
+
 		for (Region region : regions) {
 			if (EntityCacheUtil.getResult(
 					RegionImpl.class, region.getPrimaryKey()) == null) {

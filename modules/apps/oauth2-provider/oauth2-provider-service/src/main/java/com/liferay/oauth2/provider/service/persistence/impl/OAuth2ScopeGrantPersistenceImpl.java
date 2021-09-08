@@ -1087,6 +1087,14 @@ public class OAuth2ScopeGrantPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<OAuth2ScopeGrant> oAuth2ScopeGrants) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(oAuth2ScopeGrants.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(oAuth2ScopeGrants);
+
+			return;
+		}
+
 		for (OAuth2ScopeGrant oAuth2ScopeGrant : oAuth2ScopeGrants) {
 			if (entityCache.getResult(
 					OAuth2ScopeGrantImpl.class,

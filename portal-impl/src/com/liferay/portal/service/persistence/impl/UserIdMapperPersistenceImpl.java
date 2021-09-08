@@ -1138,6 +1138,14 @@ public class UserIdMapperPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<UserIdMapper> userIdMappers) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(userIdMappers.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(userIdMappers);
+
+			return;
+		}
+
 		for (UserIdMapper userIdMapper : userIdMappers) {
 			if (EntityCacheUtil.getResult(
 					UserIdMapperImpl.class, userIdMapper.getPrimaryKey()) ==

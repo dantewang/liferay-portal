@@ -972,6 +972,14 @@ public class SamlSpMessagePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SamlSpMessage> samlSpMessages) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(samlSpMessages.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(samlSpMessages);
+
+			return;
+		}
+
 		for (SamlSpMessage samlSpMessage : samlSpMessages) {
 			if (entityCache.getResult(
 					SamlSpMessageImpl.class, samlSpMessage.getPrimaryKey()) ==

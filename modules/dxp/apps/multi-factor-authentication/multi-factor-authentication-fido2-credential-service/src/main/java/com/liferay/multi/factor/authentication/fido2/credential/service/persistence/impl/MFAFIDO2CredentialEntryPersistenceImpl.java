@@ -1376,6 +1376,15 @@ public class MFAFIDO2CredentialEntryPersistenceImpl
 	public void cacheResult(
 		List<MFAFIDO2CredentialEntry> mfaFIDO2CredentialEntries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(mfaFIDO2CredentialEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(mfaFIDO2CredentialEntries);
+
+			return;
+		}
+
 		for (MFAFIDO2CredentialEntry mfaFIDO2CredentialEntry :
 				mfaFIDO2CredentialEntries) {
 

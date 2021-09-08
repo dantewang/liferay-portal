@@ -11443,6 +11443,15 @@ public class UserNotificationEventPersistenceImpl
 	public void cacheResult(
 		List<UserNotificationEvent> userNotificationEvents) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(userNotificationEvents.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(userNotificationEvents);
+
+			return;
+		}
+
 		for (UserNotificationEvent userNotificationEvent :
 				userNotificationEvents) {
 

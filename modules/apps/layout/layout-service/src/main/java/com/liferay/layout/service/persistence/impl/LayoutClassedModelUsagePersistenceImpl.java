@@ -4257,6 +4257,15 @@ public class LayoutClassedModelUsagePersistenceImpl
 	public void cacheResult(
 		List<LayoutClassedModelUsage> layoutClassedModelUsages) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(layoutClassedModelUsages.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(layoutClassedModelUsages);
+
+			return;
+		}
+
 		for (LayoutClassedModelUsage layoutClassedModelUsage :
 				layoutClassedModelUsages) {
 

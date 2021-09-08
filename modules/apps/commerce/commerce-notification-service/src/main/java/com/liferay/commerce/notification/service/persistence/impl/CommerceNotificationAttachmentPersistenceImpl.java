@@ -2092,6 +2092,15 @@ public class CommerceNotificationAttachmentPersistenceImpl
 	public void cacheResult(
 		List<CommerceNotificationAttachment> commerceNotificationAttachments) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceNotificationAttachments.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceNotificationAttachments);
+
+			return;
+		}
+
 		for (CommerceNotificationAttachment commerceNotificationAttachment :
 				commerceNotificationAttachments) {
 

@@ -2055,6 +2055,15 @@ public class AssetCategoryPropertyPersistenceImpl
 	public void cacheResult(
 		List<AssetCategoryProperty> assetCategoryProperties) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(assetCategoryProperties.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(assetCategoryProperties);
+
+			return;
+		}
+
 		for (AssetCategoryProperty assetCategoryProperty :
 				assetCategoryProperties) {
 

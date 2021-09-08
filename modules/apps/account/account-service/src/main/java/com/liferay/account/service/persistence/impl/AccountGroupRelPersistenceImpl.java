@@ -1439,6 +1439,14 @@ public class AccountGroupRelPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AccountGroupRel> accountGroupRels) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(accountGroupRels.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(accountGroupRels);
+
+			return;
+		}
+
 		for (AccountGroupRel accountGroupRel : accountGroupRels) {
 			if (entityCache.getResult(
 					AccountGroupRelImpl.class,

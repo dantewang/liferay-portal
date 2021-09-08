@@ -2875,6 +2875,15 @@ public class CommerceNotificationQueueEntryPersistenceImpl
 	public void cacheResult(
 		List<CommerceNotificationQueueEntry> commerceNotificationQueueEntries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceNotificationQueueEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceNotificationQueueEntries);
+
+			return;
+		}
+
 		for (CommerceNotificationQueueEntry commerceNotificationQueueEntry :
 				commerceNotificationQueueEntries) {
 

@@ -5996,6 +5996,14 @@ public class LVEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<LVEntry> lvEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(lvEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(lvEntries);
+
+			return;
+		}
+
 		for (LVEntry lvEntry : lvEntries) {
 			if (entityCache.getResult(
 					LVEntryImpl.class, lvEntry.getPrimaryKey()) == null) {

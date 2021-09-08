@@ -1907,6 +1907,15 @@ public class VersionedEntryVersionPersistenceImpl
 	public void cacheResult(
 		List<VersionedEntryVersion> versionedEntryVersions) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(versionedEntryVersions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(versionedEntryVersions);
+
+			return;
+		}
+
 		for (VersionedEntryVersion versionedEntryVersion :
 				versionedEntryVersions) {
 

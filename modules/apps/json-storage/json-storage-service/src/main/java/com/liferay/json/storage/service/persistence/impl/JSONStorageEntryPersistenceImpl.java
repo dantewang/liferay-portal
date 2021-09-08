@@ -2448,6 +2448,14 @@ public class JSONStorageEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<JSONStorageEntry> jsonStorageEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(jsonStorageEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(jsonStorageEntries);
+
+			return;
+		}
+
 		for (JSONStorageEntry jsonStorageEntry : jsonStorageEntries) {
 			if (jsonStorageEntry.getCtCollectionId() != 0) {
 				continue;

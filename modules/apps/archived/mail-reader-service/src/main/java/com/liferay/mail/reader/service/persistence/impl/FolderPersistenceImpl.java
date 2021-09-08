@@ -872,6 +872,14 @@ public class FolderPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Folder> folders) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(folders.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(folders);
+
+			return;
+		}
+
 		for (Folder folder : folders) {
 			if (entityCache.getResult(
 					FolderImpl.class, folder.getPrimaryKey()) == null) {

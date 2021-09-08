@@ -106,6 +106,14 @@ public class DataLimitEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DataLimitEntry> dataLimitEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(dataLimitEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(dataLimitEntries);
+
+			return;
+		}
+
 		for (DataLimitEntry dataLimitEntry : dataLimitEntries) {
 			if (entityCache.getResult(
 					DataLimitEntryImpl.class, dataLimitEntry.getPrimaryKey()) ==

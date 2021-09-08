@@ -616,6 +616,14 @@ public class AttachmentPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Attachment> attachments) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(attachments.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(attachments);
+
+			return;
+		}
+
 		for (Attachment attachment : attachments) {
 			if (entityCache.getResult(
 					AttachmentImpl.class, attachment.getPrimaryKey()) == null) {

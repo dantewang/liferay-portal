@@ -323,6 +323,15 @@ public class MFATimeBasedOTPEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MFATimeBasedOTPEntry> mfaTimeBasedOTPEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(mfaTimeBasedOTPEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(mfaTimeBasedOTPEntries);
+
+			return;
+		}
+
 		for (MFATimeBasedOTPEntry mfaTimeBasedOTPEntry :
 				mfaTimeBasedOTPEntries) {
 

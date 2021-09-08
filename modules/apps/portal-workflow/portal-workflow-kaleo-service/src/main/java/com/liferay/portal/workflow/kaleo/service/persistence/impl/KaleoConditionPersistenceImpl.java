@@ -1354,6 +1354,14 @@ public class KaleoConditionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KaleoCondition> kaleoConditions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoConditions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoConditions);
+
+			return;
+		}
+
 		for (KaleoCondition kaleoCondition : kaleoConditions) {
 			if (entityCache.getResult(
 					KaleoConditionImpl.class, kaleoCondition.getPrimaryKey()) ==

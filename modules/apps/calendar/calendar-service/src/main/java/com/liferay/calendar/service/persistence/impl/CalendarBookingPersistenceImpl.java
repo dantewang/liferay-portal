@@ -5596,6 +5596,14 @@ public class CalendarBookingPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CalendarBooking> calendarBookings) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(calendarBookings.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(calendarBookings);
+
+			return;
+		}
+
 		for (CalendarBooking calendarBooking : calendarBookings) {
 			if (calendarBooking.getCtCollectionId() != 0) {
 				continue;

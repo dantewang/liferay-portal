@@ -1965,6 +1965,15 @@ public class FriendlyURLEntryLocalizationPersistenceImpl
 	public void cacheResult(
 		List<FriendlyURLEntryLocalization> friendlyURLEntryLocalizations) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(friendlyURLEntryLocalizations.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(friendlyURLEntryLocalizations);
+
+			return;
+		}
+
 		for (FriendlyURLEntryLocalization friendlyURLEntryLocalization :
 				friendlyURLEntryLocalizations) {
 

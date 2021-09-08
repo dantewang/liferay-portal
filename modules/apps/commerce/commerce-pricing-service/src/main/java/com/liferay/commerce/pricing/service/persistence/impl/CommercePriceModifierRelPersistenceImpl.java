@@ -2003,6 +2003,15 @@ public class CommercePriceModifierRelPersistenceImpl
 	public void cacheResult(
 		List<CommercePriceModifierRel> commercePriceModifierRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commercePriceModifierRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commercePriceModifierRels);
+
+			return;
+		}
+
 		for (CommercePriceModifierRel commercePriceModifierRel :
 				commercePriceModifierRels) {
 

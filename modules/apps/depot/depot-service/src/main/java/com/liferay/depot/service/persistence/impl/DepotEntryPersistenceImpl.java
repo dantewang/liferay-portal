@@ -1684,6 +1684,14 @@ public class DepotEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DepotEntry> depotEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(depotEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(depotEntries);
+
+			return;
+		}
+
 		for (DepotEntry depotEntry : depotEntries) {
 			if (entityCache.getResult(
 					DepotEntryImpl.class, depotEntry.getPrimaryKey()) == null) {

@@ -2409,6 +2409,14 @@ public class TranslationEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<TranslationEntry> translationEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(translationEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(translationEntries);
+
+			return;
+		}
+
 		for (TranslationEntry translationEntry : translationEntries) {
 			if (translationEntry.getCtCollectionId() != 0) {
 				continue;

@@ -2291,6 +2291,14 @@ public class CTEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CTEntry> ctEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ctEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ctEntries);
+
+			return;
+		}
+
 		for (CTEntry ctEntry : ctEntries) {
 			if (entityCache.getResult(
 					CTEntryImpl.class, ctEntry.getPrimaryKey()) == null) {

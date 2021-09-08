@@ -3174,6 +3174,14 @@ public class TeamPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Team> teams) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(teams.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(teams);
+
+			return;
+		}
+
 		for (Team team : teams) {
 			if (team.getCtCollectionId() != 0) {
 				continue;

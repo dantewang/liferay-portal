@@ -4366,6 +4366,15 @@ public class SiteNavigationMenuItemPersistenceImpl
 	public void cacheResult(
 		List<SiteNavigationMenuItem> siteNavigationMenuItems) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(siteNavigationMenuItems.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(siteNavigationMenuItems);
+
+			return;
+		}
+
 		for (SiteNavigationMenuItem siteNavigationMenuItem :
 				siteNavigationMenuItems) {
 

@@ -1487,6 +1487,15 @@ public class CPDefinitionDiagramSettingPersistenceImpl
 	public void cacheResult(
 		List<CPDefinitionDiagramSetting> cpDefinitionDiagramSettings) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpDefinitionDiagramSettings.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpDefinitionDiagramSettings);
+
+			return;
+		}
+
 		for (CPDefinitionDiagramSetting cpDefinitionDiagramSetting :
 				cpDefinitionDiagramSettings) {
 

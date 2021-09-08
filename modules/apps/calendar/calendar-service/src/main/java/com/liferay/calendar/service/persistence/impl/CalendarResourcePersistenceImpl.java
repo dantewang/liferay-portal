@@ -6405,6 +6405,14 @@ public class CalendarResourcePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CalendarResource> calendarResources) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(calendarResources.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(calendarResources);
+
+			return;
+		}
+
 		for (CalendarResource calendarResource : calendarResources) {
 			if (calendarResource.getCtCollectionId() != 0) {
 				continue;

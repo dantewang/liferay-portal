@@ -5997,6 +5997,15 @@ public class CPAttachmentFileEntryPersistenceImpl
 	public void cacheResult(
 		List<CPAttachmentFileEntry> cpAttachmentFileEntries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpAttachmentFileEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpAttachmentFileEntries);
+
+			return;
+		}
+
 		for (CPAttachmentFileEntry cpAttachmentFileEntry :
 				cpAttachmentFileEntries) {
 

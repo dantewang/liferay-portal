@@ -2797,6 +2797,14 @@ public class MBThreadFlagPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MBThreadFlag> mbThreadFlags) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(mbThreadFlags.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(mbThreadFlags);
+
+			return;
+		}
+
 		for (MBThreadFlag mbThreadFlag : mbThreadFlags) {
 			if (mbThreadFlag.getCtCollectionId() != 0) {
 				continue;

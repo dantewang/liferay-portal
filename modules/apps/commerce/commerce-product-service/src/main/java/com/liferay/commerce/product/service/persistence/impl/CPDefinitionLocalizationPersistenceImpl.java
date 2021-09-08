@@ -905,6 +905,15 @@ public class CPDefinitionLocalizationPersistenceImpl
 	public void cacheResult(
 		List<CPDefinitionLocalization> cpDefinitionLocalizations) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpDefinitionLocalizations.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpDefinitionLocalizations);
+
+			return;
+		}
+
 		for (CPDefinitionLocalization cpDefinitionLocalization :
 				cpDefinitionLocalizations) {
 

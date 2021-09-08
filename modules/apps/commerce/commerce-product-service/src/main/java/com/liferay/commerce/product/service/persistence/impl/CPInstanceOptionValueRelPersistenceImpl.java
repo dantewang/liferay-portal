@@ -3662,6 +3662,15 @@ public class CPInstanceOptionValueRelPersistenceImpl
 	public void cacheResult(
 		List<CPInstanceOptionValueRel> cpInstanceOptionValueRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpInstanceOptionValueRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpInstanceOptionValueRels);
+
+			return;
+		}
+
 		for (CPInstanceOptionValueRel cpInstanceOptionValueRel :
 				cpInstanceOptionValueRels) {
 

@@ -5029,6 +5029,14 @@ public class KBCommentPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KBComment> kbComments) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kbComments.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kbComments);
+
+			return;
+		}
+
 		for (KBComment kbComment : kbComments) {
 			if (entityCache.getResult(
 					KBCommentImpl.class, kbComment.getPrimaryKey()) == null) {

@@ -2318,6 +2318,14 @@ public class OAuthUserPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<OAuthUser> oAuthUsers) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(oAuthUsers.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(oAuthUsers);
+
+			return;
+		}
+
 		for (OAuthUser oAuthUser : oAuthUsers) {
 			if (entityCache.getResult(
 					OAuthUserImpl.class, oAuthUser.getPrimaryKey()) == null) {

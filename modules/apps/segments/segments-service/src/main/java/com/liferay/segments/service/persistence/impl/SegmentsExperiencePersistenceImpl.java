@@ -10704,6 +10704,15 @@ public class SegmentsExperiencePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SegmentsExperience> segmentsExperiences) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(segmentsExperiences.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(segmentsExperiences);
+
+			return;
+		}
+
 		for (SegmentsExperience segmentsExperience : segmentsExperiences) {
 			if (segmentsExperience.getCtCollectionId() != 0) {
 				continue;

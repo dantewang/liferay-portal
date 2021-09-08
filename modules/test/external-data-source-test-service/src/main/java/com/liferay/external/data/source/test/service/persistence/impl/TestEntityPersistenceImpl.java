@@ -106,6 +106,14 @@ public class TestEntityPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<TestEntity> testEntities) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(testEntities.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(testEntities);
+
+			return;
+		}
+
 		for (TestEntity testEntity : testEntities) {
 			if (entityCache.getResult(
 					TestEntityImpl.class, testEntity.getPrimaryKey()) == null) {

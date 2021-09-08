@@ -1252,6 +1252,15 @@ public class ListTypeDefinitionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ListTypeDefinition> listTypeDefinitions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(listTypeDefinitions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(listTypeDefinitions);
+
+			return;
+		}
+
 		for (ListTypeDefinition listTypeDefinition : listTypeDefinitions) {
 			if (entityCache.getResult(
 					ListTypeDefinitionImpl.class,

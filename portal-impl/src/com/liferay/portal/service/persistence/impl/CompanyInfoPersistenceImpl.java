@@ -312,6 +312,14 @@ public class CompanyInfoPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CompanyInfo> companyInfos) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(companyInfos.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(companyInfos);
+
+			return;
+		}
+
 		for (CompanyInfo companyInfo : companyInfos) {
 			if (EntityCacheUtil.getResult(
 					CompanyInfoImpl.class, companyInfo.getPrimaryKey()) ==

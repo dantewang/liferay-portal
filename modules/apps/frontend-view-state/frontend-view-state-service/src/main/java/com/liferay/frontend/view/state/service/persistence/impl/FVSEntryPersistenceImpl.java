@@ -1231,6 +1231,14 @@ public class FVSEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<FVSEntry> fvsEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(fvsEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(fvsEntries);
+
+			return;
+		}
+
 		for (FVSEntry fvsEntry : fvsEntries) {
 			if (entityCache.getResult(
 					FVSEntryImpl.class, fvsEntry.getPrimaryKey()) == null) {

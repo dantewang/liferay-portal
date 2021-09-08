@@ -873,6 +873,15 @@ public class RegionLocalizationPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<RegionLocalization> regionLocalizations) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(regionLocalizations.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(regionLocalizations);
+
+			return;
+		}
+
 		for (RegionLocalization regionLocalization : regionLocalizations) {
 			if (EntityCacheUtil.getResult(
 					RegionLocalizationImpl.class,

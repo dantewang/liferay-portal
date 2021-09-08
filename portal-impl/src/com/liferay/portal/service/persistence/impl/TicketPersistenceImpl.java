@@ -1547,6 +1547,14 @@ public class TicketPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Ticket> tickets) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(tickets.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(tickets);
+
+			return;
+		}
+
 		for (Ticket ticket : tickets) {
 			if (EntityCacheUtil.getResult(
 					TicketImpl.class, ticket.getPrimaryKey()) == null) {

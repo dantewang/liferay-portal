@@ -1044,6 +1044,14 @@ public class SamlPeerBindingPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SamlPeerBinding> samlPeerBindings) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(samlPeerBindings.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(samlPeerBindings);
+
+			return;
+		}
+
 		for (SamlPeerBinding samlPeerBinding : samlPeerBindings) {
 			if (entityCache.getResult(
 					SamlPeerBindingImpl.class,

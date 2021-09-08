@@ -2451,6 +2451,14 @@ public class AppPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<App> apps) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(apps.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(apps);
+
+			return;
+		}
+
 		for (App app : apps) {
 			if (entityCache.getResult(AppImpl.class, app.getPrimaryKey()) ==
 					null) {

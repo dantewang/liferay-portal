@@ -2888,6 +2888,14 @@ public class SiteFriendlyURLPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SiteFriendlyURL> siteFriendlyURLs) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(siteFriendlyURLs.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(siteFriendlyURLs);
+
+			return;
+		}
+
 		for (SiteFriendlyURL siteFriendlyURL : siteFriendlyURLs) {
 			if (entityCache.getResult(
 					SiteFriendlyURLImpl.class,

@@ -1629,6 +1629,14 @@ public class UserTrackerPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<UserTracker> userTrackers) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(userTrackers.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(userTrackers);
+
+			return;
+		}
+
 		for (UserTracker userTracker : userTrackers) {
 			if (EntityCacheUtil.getResult(
 					UserTrackerImpl.class, userTracker.getPrimaryKey()) ==

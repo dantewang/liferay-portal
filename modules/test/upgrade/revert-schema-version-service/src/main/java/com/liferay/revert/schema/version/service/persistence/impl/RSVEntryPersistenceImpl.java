@@ -109,6 +109,14 @@ public class RSVEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<RSVEntry> rsvEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(rsvEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(rsvEntries);
+
+			return;
+		}
+
 		for (RSVEntry rsvEntry : rsvEntries) {
 			if (entityCache.getResult(
 					RSVEntryImpl.class, rsvEntry.getPrimaryKey()) == null) {

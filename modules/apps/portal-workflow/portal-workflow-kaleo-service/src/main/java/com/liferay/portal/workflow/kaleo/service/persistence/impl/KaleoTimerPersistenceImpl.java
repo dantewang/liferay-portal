@@ -1337,6 +1337,14 @@ public class KaleoTimerPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KaleoTimer> kaleoTimers) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoTimers.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoTimers);
+
+			return;
+		}
+
 		for (KaleoTimer kaleoTimer : kaleoTimers) {
 			if (entityCache.getResult(
 					KaleoTimerImpl.class, kaleoTimer.getPrimaryKey()) == null) {

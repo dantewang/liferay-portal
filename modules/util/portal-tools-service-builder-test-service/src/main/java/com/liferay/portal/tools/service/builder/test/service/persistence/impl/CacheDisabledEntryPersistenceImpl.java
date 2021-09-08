@@ -331,6 +331,15 @@ public class CacheDisabledEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CacheDisabledEntry> cacheDisabledEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cacheDisabledEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cacheDisabledEntries);
+
+			return;
+		}
+
 		for (CacheDisabledEntry cacheDisabledEntry : cacheDisabledEntries) {
 			if (dummyEntityCache.getResult(
 					CacheDisabledEntryImpl.class,

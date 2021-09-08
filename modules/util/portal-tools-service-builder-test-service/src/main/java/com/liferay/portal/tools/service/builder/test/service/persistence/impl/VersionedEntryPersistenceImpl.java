@@ -1337,6 +1337,14 @@ public class VersionedEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<VersionedEntry> versionedEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(versionedEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(versionedEntries);
+
+			return;
+		}
+
 		for (VersionedEntry versionedEntry : versionedEntries) {
 			if (entityCache.getResult(
 					VersionedEntryImpl.class, versionedEntry.getPrimaryKey()) ==

@@ -2538,6 +2538,15 @@ public class CommerceDiscountAccountRelPersistenceImpl
 	public void cacheResult(
 		List<CommerceDiscountAccountRel> commerceDiscountAccountRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceDiscountAccountRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceDiscountAccountRels);
+
+			return;
+		}
+
 		for (CommerceDiscountAccountRel commerceDiscountAccountRel :
 				commerceDiscountAccountRels) {
 

@@ -3931,6 +3931,14 @@ public class PhonePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Phone> phones) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(phones.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(phones);
+
+			return;
+		}
+
 		for (Phone phone : phones) {
 			if (EntityCacheUtil.getResult(
 					PhoneImpl.class, phone.getPrimaryKey()) == null) {

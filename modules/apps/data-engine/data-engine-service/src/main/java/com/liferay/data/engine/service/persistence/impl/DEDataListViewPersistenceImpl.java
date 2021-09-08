@@ -2674,6 +2674,14 @@ public class DEDataListViewPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DEDataListView> deDataListViews) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(deDataListViews.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(deDataListViews);
+
+			return;
+		}
+
 		for (DEDataListView deDataListView : deDataListViews) {
 			if (deDataListView.getCtCollectionId() != 0) {
 				continue;

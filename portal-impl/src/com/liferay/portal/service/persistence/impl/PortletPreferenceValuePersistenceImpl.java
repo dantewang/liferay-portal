@@ -2253,6 +2253,15 @@ public class PortletPreferenceValuePersistenceImpl
 	public void cacheResult(
 		List<PortletPreferenceValue> portletPreferenceValues) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(portletPreferenceValues.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(portletPreferenceValues);
+
+			return;
+		}
+
 		for (PortletPreferenceValue portletPreferenceValue :
 				portletPreferenceValues) {
 

@@ -7790,6 +7790,14 @@ public class LayoutRevisionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<LayoutRevision> layoutRevisions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(layoutRevisions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(layoutRevisions);
+
+			return;
+		}
+
 		for (LayoutRevision layoutRevision : layoutRevisions) {
 			if (EntityCacheUtil.getResult(
 					LayoutRevisionImpl.class, layoutRevision.getPrimaryKey()) ==

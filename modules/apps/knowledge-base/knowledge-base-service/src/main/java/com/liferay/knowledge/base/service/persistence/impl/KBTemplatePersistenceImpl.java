@@ -2357,6 +2357,14 @@ public class KBTemplatePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KBTemplate> kbTemplates) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kbTemplates.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kbTemplates);
+
+			return;
+		}
+
 		for (KBTemplate kbTemplate : kbTemplates) {
 			if (entityCache.getResult(
 					KBTemplateImpl.class, kbTemplate.getPrimaryKey()) == null) {

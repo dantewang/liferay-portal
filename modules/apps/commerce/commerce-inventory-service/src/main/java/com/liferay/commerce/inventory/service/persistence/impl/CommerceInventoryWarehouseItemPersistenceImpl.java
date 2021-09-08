@@ -2334,6 +2334,15 @@ public class CommerceInventoryWarehouseItemPersistenceImpl
 	public void cacheResult(
 		List<CommerceInventoryWarehouseItem> commerceInventoryWarehouseItems) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceInventoryWarehouseItems.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceInventoryWarehouseItems);
+
+			return;
+		}
+
 		for (CommerceInventoryWarehouseItem commerceInventoryWarehouseItem :
 				commerceInventoryWarehouseItems) {
 

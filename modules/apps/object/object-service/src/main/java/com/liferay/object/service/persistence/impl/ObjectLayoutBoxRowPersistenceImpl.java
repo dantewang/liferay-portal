@@ -1252,6 +1252,15 @@ public class ObjectLayoutBoxRowPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ObjectLayoutBoxRow> objectLayoutBoxRows) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(objectLayoutBoxRows.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(objectLayoutBoxRows);
+
+			return;
+		}
+
 		for (ObjectLayoutBoxRow objectLayoutBoxRow : objectLayoutBoxRows) {
 			if (entityCache.getResult(
 					ObjectLayoutBoxRowImpl.class,

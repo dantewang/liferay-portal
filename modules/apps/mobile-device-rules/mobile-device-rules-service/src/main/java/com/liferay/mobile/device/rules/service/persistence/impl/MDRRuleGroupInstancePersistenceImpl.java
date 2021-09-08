@@ -4721,6 +4721,15 @@ public class MDRRuleGroupInstancePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MDRRuleGroupInstance> mdrRuleGroupInstances) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(mdrRuleGroupInstances.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(mdrRuleGroupInstances);
+
+			return;
+		}
+
 		for (MDRRuleGroupInstance mdrRuleGroupInstance :
 				mdrRuleGroupInstances) {
 

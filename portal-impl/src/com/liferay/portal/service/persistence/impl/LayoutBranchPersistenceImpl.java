@@ -2014,6 +2014,14 @@ public class LayoutBranchPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<LayoutBranch> layoutBranchs) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(layoutBranchs.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(layoutBranchs);
+
+			return;
+		}
+
 		for (LayoutBranch layoutBranch : layoutBranchs) {
 			if (EntityCacheUtil.getResult(
 					LayoutBranchImpl.class, layoutBranch.getPrimaryKey()) ==

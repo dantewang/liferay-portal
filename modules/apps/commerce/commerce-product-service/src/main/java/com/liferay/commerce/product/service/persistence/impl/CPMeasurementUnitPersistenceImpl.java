@@ -3394,6 +3394,14 @@ public class CPMeasurementUnitPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CPMeasurementUnit> cpMeasurementUnits) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpMeasurementUnits.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpMeasurementUnits);
+
+			return;
+		}
+
 		for (CPMeasurementUnit cpMeasurementUnit : cpMeasurementUnits) {
 			if (entityCache.getResult(
 					CPMeasurementUnitImpl.class,

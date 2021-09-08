@@ -900,6 +900,14 @@ public class EagerBlobEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<EagerBlobEntry> eagerBlobEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(eagerBlobEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(eagerBlobEntries);
+
+			return;
+		}
+
 		for (EagerBlobEntry eagerBlobEntry : eagerBlobEntries) {
 			if (dummyEntityCache.getResult(
 					EagerBlobEntryImpl.class, eagerBlobEntry.getPrimaryKey()) ==

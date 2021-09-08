@@ -1997,6 +1997,15 @@ public class CPDAvailabilityEstimatePersistenceImpl
 	public void cacheResult(
 		List<CPDAvailabilityEstimate> cpdAvailabilityEstimates) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpdAvailabilityEstimates.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpdAvailabilityEstimates);
+
+			return;
+		}
+
 		for (CPDAvailabilityEstimate cpdAvailabilityEstimate :
 				cpdAvailabilityEstimates) {
 

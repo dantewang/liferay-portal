@@ -7246,6 +7246,15 @@ public class SiteNavigationMenuPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SiteNavigationMenu> siteNavigationMenus) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(siteNavigationMenus.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(siteNavigationMenus);
+
+			return;
+		}
+
 		for (SiteNavigationMenu siteNavigationMenu : siteNavigationMenus) {
 			if (siteNavigationMenu.getCtCollectionId() != 0) {
 				continue;

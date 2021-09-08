@@ -3882,6 +3882,15 @@ public class AssetListEntryAssetEntryRelPersistenceImpl
 	public void cacheResult(
 		List<AssetListEntryAssetEntryRel> assetListEntryAssetEntryRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(assetListEntryAssetEntryRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(assetListEntryAssetEntryRels);
+
+			return;
+		}
+
 		for (AssetListEntryAssetEntryRel assetListEntryAssetEntryRel :
 				assetListEntryAssetEntryRels) {
 

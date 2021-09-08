@@ -1212,6 +1212,15 @@ public class CommerceShippingFixedOptionRelPersistenceImpl
 	public void cacheResult(
 		List<CommerceShippingFixedOptionRel> commerceShippingFixedOptionRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceShippingFixedOptionRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceShippingFixedOptionRels);
+
+			return;
+		}
+
 		for (CommerceShippingFixedOptionRel commerceShippingFixedOptionRel :
 				commerceShippingFixedOptionRels) {
 

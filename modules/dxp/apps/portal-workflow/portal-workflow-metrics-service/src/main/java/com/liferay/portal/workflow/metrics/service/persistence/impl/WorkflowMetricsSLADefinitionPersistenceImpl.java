@@ -4957,6 +4957,15 @@ public class WorkflowMetricsSLADefinitionPersistenceImpl
 	public void cacheResult(
 		List<WorkflowMetricsSLADefinition> workflowMetricsSLADefinitions) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(workflowMetricsSLADefinitions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(workflowMetricsSLADefinitions);
+
+			return;
+		}
+
 		for (WorkflowMetricsSLADefinition workflowMetricsSLADefinition :
 				workflowMetricsSLADefinitions) {
 

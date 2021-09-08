@@ -1421,6 +1421,15 @@ public class AssetAutoTaggerEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AssetAutoTaggerEntry> assetAutoTaggerEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(assetAutoTaggerEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(assetAutoTaggerEntries);
+
+			return;
+		}
+
 		for (AssetAutoTaggerEntry assetAutoTaggerEntry :
 				assetAutoTaggerEntries) {
 

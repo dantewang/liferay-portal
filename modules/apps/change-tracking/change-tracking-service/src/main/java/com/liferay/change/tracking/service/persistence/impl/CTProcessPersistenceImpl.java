@@ -1107,6 +1107,14 @@ public class CTProcessPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CTProcess> ctProcesses) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ctProcesses.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ctProcesses);
+
+			return;
+		}
+
 		for (CTProcess ctProcess : ctProcesses) {
 			if (entityCache.getResult(
 					CTProcessImpl.class, ctProcess.getPrimaryKey()) == null) {

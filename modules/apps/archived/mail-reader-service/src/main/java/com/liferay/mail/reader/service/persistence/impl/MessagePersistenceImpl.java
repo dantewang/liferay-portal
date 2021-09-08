@@ -1343,6 +1343,14 @@ public class MessagePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Message> messages) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(messages.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(messages);
+
+			return;
+		}
+
 		for (Message message : messages) {
 			if (entityCache.getResult(
 					MessageImpl.class, message.getPrimaryKey()) == null) {

@@ -377,6 +377,15 @@ public class DDMFormInstanceReportPersistenceImpl
 	public void cacheResult(
 		List<DDMFormInstanceReport> ddmFormInstanceReports) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmFormInstanceReports.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmFormInstanceReports);
+
+			return;
+		}
+
 		for (DDMFormInstanceReport ddmFormInstanceReport :
 				ddmFormInstanceReports) {
 

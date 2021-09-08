@@ -1679,6 +1679,15 @@ public class CommerceTaxFixedRateAddressRelPersistenceImpl
 	public void cacheResult(
 		List<CommerceTaxFixedRateAddressRel> commerceTaxFixedRateAddressRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceTaxFixedRateAddressRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceTaxFixedRateAddressRels);
+
+			return;
+		}
+
 		for (CommerceTaxFixedRateAddressRel commerceTaxFixedRateAddressRel :
 				commerceTaxFixedRateAddressRels) {
 

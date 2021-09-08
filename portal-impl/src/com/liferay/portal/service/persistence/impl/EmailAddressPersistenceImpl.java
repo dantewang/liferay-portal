@@ -3950,6 +3950,14 @@ public class EmailAddressPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<EmailAddress> emailAddresses) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(emailAddresses.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(emailAddresses);
+
+			return;
+		}
+
 		for (EmailAddress emailAddress : emailAddresses) {
 			if (EntityCacheUtil.getResult(
 					EmailAddressImpl.class, emailAddress.getPrimaryKey()) ==

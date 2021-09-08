@@ -879,6 +879,15 @@ public class CountryLocalizationPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CountryLocalization> countryLocalizations) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(countryLocalizations.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(countryLocalizations);
+
+			return;
+		}
+
 		for (CountryLocalization countryLocalization : countryLocalizations) {
 			if (EntityCacheUtil.getResult(
 					CountryLocalizationImpl.class,

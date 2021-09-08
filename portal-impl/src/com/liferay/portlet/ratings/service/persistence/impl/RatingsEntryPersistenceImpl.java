@@ -3062,6 +3062,14 @@ public class RatingsEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<RatingsEntry> ratingsEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ratingsEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ratingsEntries);
+
+			return;
+		}
+
 		for (RatingsEntry ratingsEntry : ratingsEntries) {
 			if (ratingsEntry.getCtCollectionId() != 0) {
 				continue;

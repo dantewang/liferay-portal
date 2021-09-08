@@ -6559,6 +6559,14 @@ public class AssetVocabularyPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AssetVocabulary> assetVocabularies) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(assetVocabularies.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(assetVocabularies);
+
+			return;
+		}
+
 		for (AssetVocabulary assetVocabulary : assetVocabularies) {
 			if (assetVocabulary.getCtCollectionId() != 0) {
 				continue;

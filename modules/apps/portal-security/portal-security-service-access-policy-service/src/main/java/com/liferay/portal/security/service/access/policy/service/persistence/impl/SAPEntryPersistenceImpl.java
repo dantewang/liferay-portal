@@ -4149,6 +4149,14 @@ public class SAPEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SAPEntry> sapEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(sapEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(sapEntries);
+
+			return;
+		}
+
 		for (SAPEntry sapEntry : sapEntries) {
 			if (entityCache.getResult(
 					SAPEntryImpl.class, sapEntry.getPrimaryKey()) == null) {
