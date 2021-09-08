@@ -1749,6 +1749,14 @@ public class ObjectLayoutTabPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ObjectLayoutTab> objectLayoutTabs) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(objectLayoutTabs.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(objectLayoutTabs);
+
+			return;
+		}
+
 		for (ObjectLayoutTab objectLayoutTab : objectLayoutTabs) {
 			if (entityCache.getResult(
 					ObjectLayoutTabImpl.class,

@@ -5977,6 +5977,15 @@ public class SegmentsExperimentPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SegmentsExperiment> segmentsExperiments) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(segmentsExperiments.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(segmentsExperiments);
+
+			return;
+		}
+
 		for (SegmentsExperiment segmentsExperiment : segmentsExperiments) {
 			if (segmentsExperiment.getCtCollectionId() != 0) {
 				continue;

@@ -1496,6 +1496,14 @@ public class RemoteAppEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<RemoteAppEntry> remoteAppEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(remoteAppEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(remoteAppEntries);
+
+			return;
+		}
+
 		for (RemoteAppEntry remoteAppEntry : remoteAppEntries) {
 			if (entityCache.getResult(
 					RemoteAppEntryImpl.class, remoteAppEntry.getPrimaryKey()) ==

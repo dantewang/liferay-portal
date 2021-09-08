@@ -924,6 +924,15 @@ public class SegmentsExperimentRelPersistenceImpl
 	public void cacheResult(
 		List<SegmentsExperimentRel> segmentsExperimentRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(segmentsExperimentRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(segmentsExperimentRels);
+
+			return;
+		}
+
 		for (SegmentsExperimentRel segmentsExperimentRel :
 				segmentsExperimentRels) {
 

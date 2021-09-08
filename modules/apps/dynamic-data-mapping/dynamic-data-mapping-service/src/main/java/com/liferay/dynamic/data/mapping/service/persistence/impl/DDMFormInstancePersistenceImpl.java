@@ -2918,6 +2918,14 @@ public class DDMFormInstancePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DDMFormInstance> ddmFormInstances) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmFormInstances.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmFormInstances);
+
+			return;
+		}
+
 		for (DDMFormInstance ddmFormInstance : ddmFormInstances) {
 			if (ddmFormInstance.getCtCollectionId() != 0) {
 				continue;

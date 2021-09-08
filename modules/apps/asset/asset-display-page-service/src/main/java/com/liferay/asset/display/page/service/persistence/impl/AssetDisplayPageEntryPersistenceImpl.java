@@ -2906,6 +2906,15 @@ public class AssetDisplayPageEntryPersistenceImpl
 	public void cacheResult(
 		List<AssetDisplayPageEntry> assetDisplayPageEntries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(assetDisplayPageEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(assetDisplayPageEntries);
+
+			return;
+		}
+
 		for (AssetDisplayPageEntry assetDisplayPageEntry :
 				assetDisplayPageEntries) {
 

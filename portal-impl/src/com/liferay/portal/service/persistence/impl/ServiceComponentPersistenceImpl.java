@@ -927,6 +927,14 @@ public class ServiceComponentPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ServiceComponent> serviceComponents) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(serviceComponents.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(serviceComponents);
+
+			return;
+		}
+
 		for (ServiceComponent serviceComponent : serviceComponents) {
 			if (EntityCacheUtil.getResult(
 					ServiceComponentImpl.class,

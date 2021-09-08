@@ -1237,6 +1237,14 @@ public class WebhookEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<WebhookEntry> webhookEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(webhookEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(webhookEntries);
+
+			return;
+		}
+
 		for (WebhookEntry webhookEntry : webhookEntries) {
 			if (entityCache.getResult(
 					WebhookEntryImpl.class, webhookEntry.getPrimaryKey()) ==

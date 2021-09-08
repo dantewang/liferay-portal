@@ -4130,6 +4130,15 @@ public class LayoutPageTemplateCollectionPersistenceImpl
 	public void cacheResult(
 		List<LayoutPageTemplateCollection> layoutPageTemplateCollections) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(layoutPageTemplateCollections.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(layoutPageTemplateCollections);
+
+			return;
+		}
+
 		for (LayoutPageTemplateCollection layoutPageTemplateCollection :
 				layoutPageTemplateCollections) {
 

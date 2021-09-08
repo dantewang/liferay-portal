@@ -1543,6 +1543,15 @@ public class CommerceNotificationTemplateCommerceAccountGroupRelPersistenceImpl
 		List<CommerceNotificationTemplateCommerceAccountGroupRel>
 			commerceNotificationTemplateCommerceAccountGroupRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceNotificationTemplateCommerceAccountGroupRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceNotificationTemplateCommerceAccountGroupRels);
+
+			return;
+		}
+
 		for (CommerceNotificationTemplateCommerceAccountGroupRel
 				commerceNotificationTemplateCommerceAccountGroupRel :
 					commerceNotificationTemplateCommerceAccountGroupRels) {

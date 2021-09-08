@@ -898,6 +898,15 @@ public class SharepointOAuth2TokenEntryPersistenceImpl
 	public void cacheResult(
 		List<SharepointOAuth2TokenEntry> sharepointOAuth2TokenEntries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(sharepointOAuth2TokenEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(sharepointOAuth2TokenEntries);
+
+			return;
+		}
+
 		for (SharepointOAuth2TokenEntry sharepointOAuth2TokenEntry :
 				sharepointOAuth2TokenEntries) {
 

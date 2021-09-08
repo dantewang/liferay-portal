@@ -4414,6 +4414,15 @@ public class CommerceMLForecastAlertEntryPersistenceImpl
 	public void cacheResult(
 		List<CommerceMLForecastAlertEntry> commerceMLForecastAlertEntries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceMLForecastAlertEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceMLForecastAlertEntries);
+
+			return;
+		}
+
 		for (CommerceMLForecastAlertEntry commerceMLForecastAlertEntry :
 				commerceMLForecastAlertEntries) {
 

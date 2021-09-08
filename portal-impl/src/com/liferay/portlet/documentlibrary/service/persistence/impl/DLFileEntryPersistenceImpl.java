@@ -15049,6 +15049,14 @@ public class DLFileEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DLFileEntry> dlFileEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(dlFileEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(dlFileEntries);
+
+			return;
+		}
+
 		for (DLFileEntry dlFileEntry : dlFileEntries) {
 			if (dlFileEntry.getCtCollectionId() != 0) {
 				continue;

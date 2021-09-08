@@ -1389,6 +1389,15 @@ public class AccountEntryUserRelPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AccountEntryUserRel> accountEntryUserRels) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(accountEntryUserRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(accountEntryUserRels);
+
+			return;
+		}
+
 		for (AccountEntryUserRel accountEntryUserRel : accountEntryUserRels) {
 			if (entityCache.getResult(
 					AccountEntryUserRelImpl.class,

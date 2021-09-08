@@ -718,6 +718,14 @@ public class WeDeployAuthAppPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<WeDeployAuthApp> weDeployAuthApps) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(weDeployAuthApps.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(weDeployAuthApps);
+
+			return;
+		}
+
 		for (WeDeployAuthApp weDeployAuthApp : weDeployAuthApps) {
 			if (entityCache.getResult(
 					WeDeployAuthAppImpl.class,

@@ -1208,6 +1208,14 @@ public class VirtualHostPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<VirtualHost> virtualHosts) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(virtualHosts.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(virtualHosts);
+
+			return;
+		}
+
 		for (VirtualHost virtualHost : virtualHosts) {
 			if (virtualHost.getCtCollectionId() != 0) {
 				continue;

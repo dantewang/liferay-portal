@@ -1766,6 +1766,15 @@ public class ObjectLayoutColumnPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ObjectLayoutColumn> objectLayoutColumns) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(objectLayoutColumns.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(objectLayoutColumns);
+
+			return;
+		}
+
 		for (ObjectLayoutColumn objectLayoutColumn : objectLayoutColumns) {
 			if (entityCache.getResult(
 					ObjectLayoutColumnImpl.class,

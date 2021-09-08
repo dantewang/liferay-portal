@@ -1619,6 +1619,14 @@ public class PortletItemPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<PortletItem> portletItems) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(portletItems.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(portletItems);
+
+			return;
+		}
+
 		for (PortletItem portletItem : portletItems) {
 			if (EntityCacheUtil.getResult(
 					PortletItemImpl.class, portletItem.getPrimaryKey()) ==

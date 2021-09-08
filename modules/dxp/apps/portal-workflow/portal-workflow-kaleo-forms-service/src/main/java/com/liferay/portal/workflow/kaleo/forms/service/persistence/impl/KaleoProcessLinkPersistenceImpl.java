@@ -887,6 +887,14 @@ public class KaleoProcessLinkPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KaleoProcessLink> kaleoProcessLinks) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoProcessLinks.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoProcessLinks);
+
+			return;
+		}
+
 		for (KaleoProcessLink kaleoProcessLink : kaleoProcessLinks) {
 			if (entityCache.getResult(
 					KaleoProcessLinkImpl.class,

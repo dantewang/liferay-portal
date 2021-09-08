@@ -1860,6 +1860,15 @@ public class JournalArticleLocalizationPersistenceImpl
 	public void cacheResult(
 		List<JournalArticleLocalization> journalArticleLocalizations) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(journalArticleLocalizations.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(journalArticleLocalizations);
+
+			return;
+		}
+
 		for (JournalArticleLocalization journalArticleLocalization :
 				journalArticleLocalizations) {
 

@@ -614,6 +614,14 @@ public class CTSchemaVersionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CTSchemaVersion> ctSchemaVersions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ctSchemaVersions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ctSchemaVersions);
+
+			return;
+		}
+
 		for (CTSchemaVersion ctSchemaVersion : ctSchemaVersions) {
 			if (entityCache.getResult(
 					CTSchemaVersionImpl.class,

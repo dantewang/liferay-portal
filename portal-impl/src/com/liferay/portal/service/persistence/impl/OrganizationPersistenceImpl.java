@@ -9244,6 +9244,14 @@ public class OrganizationPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Organization> organizations) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(organizations.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(organizations);
+
+			return;
+		}
+
 		for (Organization organization : organizations) {
 			if (organization.getCtCollectionId() != 0) {
 				continue;

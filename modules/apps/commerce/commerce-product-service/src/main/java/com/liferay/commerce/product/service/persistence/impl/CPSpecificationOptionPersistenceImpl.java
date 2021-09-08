@@ -4182,6 +4182,15 @@ public class CPSpecificationOptionPersistenceImpl
 	public void cacheResult(
 		List<CPSpecificationOption> cpSpecificationOptions) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpSpecificationOptions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpSpecificationOptions);
+
+			return;
+		}
+
 		for (CPSpecificationOption cpSpecificationOption :
 				cpSpecificationOptions) {
 

@@ -1715,6 +1715,15 @@ public class CommerceDiscountRelPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CommerceDiscountRel> commerceDiscountRels) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceDiscountRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceDiscountRels);
+
+			return;
+		}
+
 		for (CommerceDiscountRel commerceDiscountRel : commerceDiscountRels) {
 			if (entityCache.getResult(
 					CommerceDiscountRelImpl.class,

@@ -2544,6 +2544,15 @@ public class CommerceDiscountOrderTypeRelPersistenceImpl
 	public void cacheResult(
 		List<CommerceDiscountOrderTypeRel> commerceDiscountOrderTypeRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceDiscountOrderTypeRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceDiscountOrderTypeRels);
+
+			return;
+		}
+
 		for (CommerceDiscountOrderTypeRel commerceDiscountOrderTypeRel :
 				commerceDiscountOrderTypeRels) {
 

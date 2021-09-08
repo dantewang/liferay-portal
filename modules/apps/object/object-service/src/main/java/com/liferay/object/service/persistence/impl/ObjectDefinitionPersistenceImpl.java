@@ -5109,6 +5109,14 @@ public class ObjectDefinitionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ObjectDefinition> objectDefinitions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(objectDefinitions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(objectDefinitions);
+
+			return;
+		}
+
 		for (ObjectDefinition objectDefinition : objectDefinitions) {
 			if (entityCache.getResult(
 					ObjectDefinitionImpl.class,

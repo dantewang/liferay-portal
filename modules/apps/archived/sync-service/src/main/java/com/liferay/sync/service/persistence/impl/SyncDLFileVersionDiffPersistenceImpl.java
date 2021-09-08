@@ -1443,6 +1443,15 @@ public class SyncDLFileVersionDiffPersistenceImpl
 	public void cacheResult(
 		List<SyncDLFileVersionDiff> syncDLFileVersionDiffs) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(syncDLFileVersionDiffs.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(syncDLFileVersionDiffs);
+
+			return;
+		}
+
 		for (SyncDLFileVersionDiff syncDLFileVersionDiff :
 				syncDLFileVersionDiffs) {
 

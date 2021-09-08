@@ -5371,6 +5371,14 @@ public class SharingEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SharingEntry> sharingEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(sharingEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(sharingEntries);
+
+			return;
+		}
+
 		for (SharingEntry sharingEntry : sharingEntries) {
 			if (entityCache.getResult(
 					SharingEntryImpl.class, sharingEntry.getPrimaryKey()) ==

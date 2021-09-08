@@ -1479,6 +1479,15 @@ public class DDMTemplateVersionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DDMTemplateVersion> ddmTemplateVersions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmTemplateVersions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmTemplateVersions);
+
+			return;
+		}
+
 		for (DDMTemplateVersion ddmTemplateVersion : ddmTemplateVersions) {
 			if (ddmTemplateVersion.getCtCollectionId() != 0) {
 				continue;

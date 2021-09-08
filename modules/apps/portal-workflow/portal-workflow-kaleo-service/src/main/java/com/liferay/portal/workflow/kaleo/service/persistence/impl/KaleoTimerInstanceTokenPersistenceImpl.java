@@ -2038,6 +2038,15 @@ public class KaleoTimerInstanceTokenPersistenceImpl
 	public void cacheResult(
 		List<KaleoTimerInstanceToken> kaleoTimerInstanceTokens) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoTimerInstanceTokens.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoTimerInstanceTokens);
+
+			return;
+		}
+
 		for (KaleoTimerInstanceToken kaleoTimerInstanceToken :
 				kaleoTimerInstanceTokens) {
 

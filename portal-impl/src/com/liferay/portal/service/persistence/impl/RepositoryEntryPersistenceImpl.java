@@ -2248,6 +2248,14 @@ public class RepositoryEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<RepositoryEntry> repositoryEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(repositoryEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(repositoryEntries);
+
+			return;
+		}
+
 		for (RepositoryEntry repositoryEntry : repositoryEntries) {
 			if (EntityCacheUtil.getResult(
 					RepositoryEntryImpl.class,

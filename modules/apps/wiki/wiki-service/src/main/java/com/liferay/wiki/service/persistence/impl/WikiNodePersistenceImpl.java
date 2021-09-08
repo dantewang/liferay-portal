@@ -4819,6 +4819,14 @@ public class WikiNodePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<WikiNode> wikiNodes) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(wikiNodes.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(wikiNodes);
+
+			return;
+		}
+
 		for (WikiNode wikiNode : wikiNodes) {
 			if (entityCache.getResult(
 					WikiNodeImpl.class, wikiNode.getPrimaryKey()) == null) {

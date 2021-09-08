@@ -3955,6 +3955,14 @@ public class CPDefinitionLinkPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CPDefinitionLink> cpDefinitionLinks) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpDefinitionLinks.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpDefinitionLinks);
+
+			return;
+		}
+
 		for (CPDefinitionLink cpDefinitionLink : cpDefinitionLinks) {
 			if (entityCache.getResult(
 					CPDefinitionLinkImpl.class,

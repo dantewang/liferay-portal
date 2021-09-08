@@ -884,6 +884,14 @@ public class AkismetEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AkismetEntry> akismetEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(akismetEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(akismetEntries);
+
+			return;
+		}
+
 		for (AkismetEntry akismetEntry : akismetEntries) {
 			if (entityCache.getResult(
 					AkismetEntryImpl.class, akismetEntry.getPrimaryKey()) ==

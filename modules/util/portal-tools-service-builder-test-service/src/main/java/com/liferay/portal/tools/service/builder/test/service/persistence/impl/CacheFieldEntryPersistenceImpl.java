@@ -598,6 +598,14 @@ public class CacheFieldEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CacheFieldEntry> cacheFieldEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cacheFieldEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cacheFieldEntries);
+
+			return;
+		}
+
 		for (CacheFieldEntry cacheFieldEntry : cacheFieldEntries) {
 			CacheFieldEntry cachedCacheFieldEntry =
 				(CacheFieldEntry)entityCache.getResult(

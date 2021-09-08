@@ -3397,6 +3397,14 @@ public class ModulePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Module> modules) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(modules.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(modules);
+
+			return;
+		}
+
 		for (Module module : modules) {
 			if (entityCache.getResult(
 					ModuleImpl.class, module.getPrimaryKey()) == null) {

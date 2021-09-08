@@ -1546,6 +1546,15 @@ public class CTAutoResolutionInfoPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CTAutoResolutionInfo> ctAutoResolutionInfos) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ctAutoResolutionInfos.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ctAutoResolutionInfos);
+
+			return;
+		}
+
 		for (CTAutoResolutionInfo ctAutoResolutionInfo :
 				ctAutoResolutionInfos) {
 

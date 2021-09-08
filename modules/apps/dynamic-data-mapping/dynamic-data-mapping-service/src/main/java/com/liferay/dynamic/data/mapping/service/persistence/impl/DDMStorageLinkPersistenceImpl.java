@@ -2813,6 +2813,14 @@ public class DDMStorageLinkPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DDMStorageLink> ddmStorageLinks) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmStorageLinks.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmStorageLinks);
+
+			return;
+		}
+
 		for (DDMStorageLink ddmStorageLink : ddmStorageLinks) {
 			if (ddmStorageLink.getCtCollectionId() != 0) {
 				continue;

@@ -1237,6 +1237,15 @@ public class CommerceInventoryAuditPersistenceImpl
 	public void cacheResult(
 		List<CommerceInventoryAudit> commerceInventoryAudits) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceInventoryAudits.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceInventoryAudits);
+
+			return;
+		}
+
 		for (CommerceInventoryAudit commerceInventoryAudit :
 				commerceInventoryAudits) {
 

@@ -1485,6 +1485,15 @@ public class CommerceDiscountCommerceAccountGroupRelPersistenceImpl
 		List<CommerceDiscountCommerceAccountGroupRel>
 			commerceDiscountCommerceAccountGroupRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceDiscountCommerceAccountGroupRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceDiscountCommerceAccountGroupRels);
+
+			return;
+		}
+
 		for (CommerceDiscountCommerceAccountGroupRel
 				commerceDiscountCommerceAccountGroupRel :
 					commerceDiscountCommerceAccountGroupRels) {

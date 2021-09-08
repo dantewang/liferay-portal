@@ -119,6 +119,15 @@ public class OpenIdConnectSessionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<OpenIdConnectSession> openIdConnectSessions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(openIdConnectSessions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(openIdConnectSessions);
+
+			return;
+		}
+
 		for (OpenIdConnectSession openIdConnectSession :
 				openIdConnectSessions) {
 

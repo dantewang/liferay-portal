@@ -2000,6 +2000,14 @@ public class MBDiscussionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MBDiscussion> mbDiscussions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(mbDiscussions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(mbDiscussions);
+
+			return;
+		}
+
 		for (MBDiscussion mbDiscussion : mbDiscussions) {
 			if (mbDiscussion.getCtCollectionId() != 0) {
 				continue;

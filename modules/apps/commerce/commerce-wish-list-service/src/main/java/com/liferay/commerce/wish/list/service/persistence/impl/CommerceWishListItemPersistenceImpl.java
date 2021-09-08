@@ -3141,6 +3141,15 @@ public class CommerceWishListItemPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CommerceWishListItem> commerceWishListItems) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceWishListItems.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceWishListItems);
+
+			return;
+		}
+
 		for (CommerceWishListItem commerceWishListItem :
 				commerceWishListItems) {
 

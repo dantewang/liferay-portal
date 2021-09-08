@@ -8263,6 +8263,14 @@ public class UserPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<User> users) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(users.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(users);
+
+			return;
+		}
+
 		for (User user : users) {
 			if (user.getCtCollectionId() != 0) {
 				continue;

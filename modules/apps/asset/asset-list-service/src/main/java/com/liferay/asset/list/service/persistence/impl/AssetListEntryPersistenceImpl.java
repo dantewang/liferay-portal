@@ -13579,6 +13579,14 @@ public class AssetListEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AssetListEntry> assetListEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(assetListEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(assetListEntries);
+
+			return;
+		}
+
 		for (AssetListEntry assetListEntry : assetListEntries) {
 			if (assetListEntry.getCtCollectionId() != 0) {
 				continue;

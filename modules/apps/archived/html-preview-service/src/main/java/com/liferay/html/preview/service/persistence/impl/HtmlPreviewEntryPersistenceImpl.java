@@ -388,6 +388,14 @@ public class HtmlPreviewEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<HtmlPreviewEntry> htmlPreviewEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(htmlPreviewEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(htmlPreviewEntries);
+
+			return;
+		}
+
 		for (HtmlPreviewEntry htmlPreviewEntry : htmlPreviewEntries) {
 			if (entityCache.getResult(
 					HtmlPreviewEntryImpl.class,

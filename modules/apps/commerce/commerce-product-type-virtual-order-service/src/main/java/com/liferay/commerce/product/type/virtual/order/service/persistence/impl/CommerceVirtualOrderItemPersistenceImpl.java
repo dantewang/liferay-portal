@@ -1728,6 +1728,15 @@ public class CommerceVirtualOrderItemPersistenceImpl
 	public void cacheResult(
 		List<CommerceVirtualOrderItem> commerceVirtualOrderItems) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceVirtualOrderItems.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceVirtualOrderItems);
+
+			return;
+		}
+
 		for (CommerceVirtualOrderItem commerceVirtualOrderItem :
 				commerceVirtualOrderItems) {
 

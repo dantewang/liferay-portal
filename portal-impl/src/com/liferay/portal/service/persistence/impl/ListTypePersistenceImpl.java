@@ -916,6 +916,14 @@ public class ListTypePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ListType> listTypes) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(listTypes.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(listTypes);
+
+			return;
+		}
+
 		for (ListType listType : listTypes) {
 			if (EntityCacheUtil.getResult(
 					ListTypeImpl.class, listType.getPrimaryKey()) == null) {

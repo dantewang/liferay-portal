@@ -331,6 +331,14 @@ public class WebDAVPropsPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<WebDAVProps> webDAVPropses) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(webDAVPropses.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(webDAVPropses);
+
+			return;
+		}
+
 		for (WebDAVProps webDAVProps : webDAVPropses) {
 			if (EntityCacheUtil.getResult(
 					WebDAVPropsImpl.class, webDAVProps.getPrimaryKey()) ==

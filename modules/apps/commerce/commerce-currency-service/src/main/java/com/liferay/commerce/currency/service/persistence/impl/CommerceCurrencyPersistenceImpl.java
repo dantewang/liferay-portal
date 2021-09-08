@@ -3653,6 +3653,14 @@ public class CommerceCurrencyPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CommerceCurrency> commerceCurrencies) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceCurrencies.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceCurrencies);
+
+			return;
+		}
+
 		for (CommerceCurrency commerceCurrency : commerceCurrencies) {
 			if (entityCache.getResult(
 					CommerceCurrencyImpl.class,

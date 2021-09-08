@@ -2014,6 +2014,14 @@ public class DDMFieldPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DDMField> ddmFields) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmFields.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmFields);
+
+			return;
+		}
+
 		for (DDMField ddmField : ddmFields) {
 			if (ddmField.getCtCollectionId() != 0) {
 				continue;

@@ -2848,6 +2848,14 @@ public class ObjectEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ObjectEntry> objectEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(objectEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(objectEntries);
+
+			return;
+		}
+
 		for (ObjectEntry objectEntry : objectEntries) {
 			ObjectEntry cachedObjectEntry = (ObjectEntry)entityCache.getResult(
 				ObjectEntryImpl.class, objectEntry.getPrimaryKey());

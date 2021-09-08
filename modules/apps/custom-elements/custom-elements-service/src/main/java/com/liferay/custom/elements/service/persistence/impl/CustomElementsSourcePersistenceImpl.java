@@ -2027,6 +2027,15 @@ public class CustomElementsSourcePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CustomElementsSource> customElementsSources) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(customElementsSources.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(customElementsSources);
+
+			return;
+		}
+
 		for (CustomElementsSource customElementsSource :
 				customElementsSources) {
 

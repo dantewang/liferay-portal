@@ -3480,6 +3480,14 @@ public class PasswordPolicyPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<PasswordPolicy> passwordPolicies) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(passwordPolicies.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(passwordPolicies);
+
+			return;
+		}
+
 		for (PasswordPolicy passwordPolicy : passwordPolicies) {
 			if (EntityCacheUtil.getResult(
 					PasswordPolicyImpl.class, passwordPolicy.getPrimaryKey()) ==

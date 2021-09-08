@@ -3012,6 +3012,14 @@ public class PollsVotePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<PollsVote> pollsVotes) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(pollsVotes.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(pollsVotes);
+
+			return;
+		}
+
 		for (PollsVote pollsVote : pollsVotes) {
 			if (entityCache.getResult(
 					PollsVoteImpl.class, pollsVote.getPrimaryKey()) == null) {

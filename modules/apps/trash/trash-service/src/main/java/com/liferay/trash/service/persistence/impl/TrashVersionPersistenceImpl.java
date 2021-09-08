@@ -1426,6 +1426,14 @@ public class TrashVersionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<TrashVersion> trashVersions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(trashVersions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(trashVersions);
+
+			return;
+		}
+
 		for (TrashVersion trashVersion : trashVersions) {
 			if (trashVersion.getCtCollectionId() != 0) {
 				continue;

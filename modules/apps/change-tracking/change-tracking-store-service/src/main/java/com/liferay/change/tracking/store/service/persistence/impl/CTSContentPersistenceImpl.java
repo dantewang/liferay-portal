@@ -2603,6 +2603,14 @@ public class CTSContentPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CTSContent> ctsContents) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ctsContents.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ctsContents);
+
+			return;
+		}
+
 		for (CTSContent ctsContent : ctsContents) {
 			if (ctsContent.getCtCollectionId() != 0) {
 				continue;

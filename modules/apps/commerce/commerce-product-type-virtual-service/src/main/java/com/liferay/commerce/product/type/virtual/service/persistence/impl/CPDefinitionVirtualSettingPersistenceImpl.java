@@ -1755,6 +1755,15 @@ public class CPDefinitionVirtualSettingPersistenceImpl
 	public void cacheResult(
 		List<CPDefinitionVirtualSetting> cpDefinitionVirtualSettings) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpDefinitionVirtualSettings.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpDefinitionVirtualSettings);
+
+			return;
+		}
+
 		for (CPDefinitionVirtualSetting cpDefinitionVirtualSetting :
 				cpDefinitionVirtualSettings) {
 

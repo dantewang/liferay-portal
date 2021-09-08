@@ -2506,6 +2506,15 @@ public class ChangesetCollectionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ChangesetCollection> changesetCollections) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(changesetCollections.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(changesetCollections);
+
+			return;
+		}
+
 		for (ChangesetCollection changesetCollection : changesetCollections) {
 			if (entityCache.getResult(
 					ChangesetCollectionImpl.class,

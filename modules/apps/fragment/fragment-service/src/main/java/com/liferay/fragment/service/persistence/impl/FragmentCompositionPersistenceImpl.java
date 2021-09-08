@@ -5378,6 +5378,15 @@ public class FragmentCompositionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<FragmentComposition> fragmentCompositions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(fragmentCompositions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(fragmentCompositions);
+
+			return;
+		}
+
 		for (FragmentComposition fragmentComposition : fragmentCompositions) {
 			if (fragmentComposition.getCtCollectionId() != 0) {
 				continue;

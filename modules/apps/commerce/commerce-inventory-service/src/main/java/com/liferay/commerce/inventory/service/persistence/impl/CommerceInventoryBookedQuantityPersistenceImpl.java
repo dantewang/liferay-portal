@@ -1819,6 +1819,15 @@ public class CommerceInventoryBookedQuantityPersistenceImpl
 		List<CommerceInventoryBookedQuantity>
 			commerceInventoryBookedQuantities) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceInventoryBookedQuantities.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceInventoryBookedQuantities);
+
+			return;
+		}
+
 		for (CommerceInventoryBookedQuantity commerceInventoryBookedQuantity :
 				commerceInventoryBookedQuantities) {
 

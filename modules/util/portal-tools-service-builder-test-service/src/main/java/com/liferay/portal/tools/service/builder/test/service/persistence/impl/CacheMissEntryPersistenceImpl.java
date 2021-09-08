@@ -111,6 +111,14 @@ public class CacheMissEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CacheMissEntry> cacheMissEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cacheMissEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cacheMissEntries);
+
+			return;
+		}
+
 		for (CacheMissEntry cacheMissEntry : cacheMissEntries) {
 			if (cacheMissEntry.getCtCollectionId() != 0) {
 				continue;

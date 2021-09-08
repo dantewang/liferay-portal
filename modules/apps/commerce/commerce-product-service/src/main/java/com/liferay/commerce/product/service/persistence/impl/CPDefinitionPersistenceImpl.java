@@ -5401,6 +5401,14 @@ public class CPDefinitionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CPDefinition> cpDefinitions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpDefinitions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpDefinitions);
+
+			return;
+		}
+
 		for (CPDefinition cpDefinition : cpDefinitions) {
 			if (entityCache.getResult(
 					CPDefinitionImpl.class, cpDefinition.getPrimaryKey()) ==

@@ -6165,6 +6165,14 @@ public class UserGroupPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<UserGroup> userGroups) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(userGroups.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(userGroups);
+
+			return;
+		}
+
 		for (UserGroup userGroup : userGroups) {
 			if (userGroup.getCtCollectionId() != 0) {
 				continue;

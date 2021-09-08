@@ -34031,6 +34031,14 @@ public class JournalArticlePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<JournalArticle> journalArticles) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(journalArticles.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(journalArticles);
+
+			return;
+		}
+
 		for (JournalArticle journalArticle : journalArticles) {
 			if (journalArticle.getCtCollectionId() != 0) {
 				continue;

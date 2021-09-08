@@ -113,6 +113,14 @@ public class ViewCountEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ViewCountEntry> viewCountEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(viewCountEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(viewCountEntries);
+
+			return;
+		}
+
 		for (ViewCountEntry viewCountEntry : viewCountEntries) {
 			if (entityCache.getResult(
 					ViewCountEntryImpl.class, viewCountEntry.getPrimaryKey()) ==

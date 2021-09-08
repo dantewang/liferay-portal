@@ -2229,6 +2229,14 @@ public class DDMFieldAttributePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DDMFieldAttribute> ddmFieldAttributes) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ddmFieldAttributes.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ddmFieldAttributes);
+
+			return;
+		}
+
 		for (DDMFieldAttribute ddmFieldAttribute : ddmFieldAttributes) {
 			if (ddmFieldAttribute.getCtCollectionId() != 0) {
 				continue;

@@ -2486,6 +2486,14 @@ public class DLFileRankPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DLFileRank> dlFileRanks) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(dlFileRanks.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(dlFileRanks);
+
+			return;
+		}
+
 		for (DLFileRank dlFileRank : dlFileRanks) {
 			if (entityCache.getResult(
 					DLFileRankImpl.class, dlFileRank.getPrimaryKey()) == null) {

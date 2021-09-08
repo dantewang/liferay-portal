@@ -1373,6 +1373,15 @@ public class CommerceTaxFixedRatePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CommerceTaxFixedRate> commerceTaxFixedRates) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceTaxFixedRates.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceTaxFixedRates);
+
+			return;
+		}
+
 		for (CommerceTaxFixedRate commerceTaxFixedRate :
 				commerceTaxFixedRates) {
 

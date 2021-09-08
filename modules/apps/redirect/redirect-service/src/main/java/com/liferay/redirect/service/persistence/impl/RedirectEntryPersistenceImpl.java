@@ -3656,6 +3656,14 @@ public class RedirectEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<RedirectEntry> redirectEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(redirectEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(redirectEntries);
+
+			return;
+		}
+
 		for (RedirectEntry redirectEntry : redirectEntries) {
 			if (entityCache.getResult(
 					RedirectEntryImpl.class, redirectEntry.getPrimaryKey()) ==

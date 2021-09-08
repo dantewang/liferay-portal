@@ -1711,6 +1711,15 @@ public class CPDefinitionInventoryPersistenceImpl
 	public void cacheResult(
 		List<CPDefinitionInventory> cpDefinitionInventories) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpDefinitionInventories.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpDefinitionInventories);
+
+			return;
+		}
+
 		for (CPDefinitionInventory cpDefinitionInventory :
 				cpDefinitionInventories) {
 

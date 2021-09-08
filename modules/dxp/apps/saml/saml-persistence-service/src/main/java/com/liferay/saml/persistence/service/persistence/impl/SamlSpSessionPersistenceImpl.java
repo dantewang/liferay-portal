@@ -1391,6 +1391,14 @@ public class SamlSpSessionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SamlSpSession> samlSpSessions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(samlSpSessions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(samlSpSessions);
+
+			return;
+		}
+
 		for (SamlSpSession samlSpSession : samlSpSessions) {
 			if (entityCache.getResult(
 					SamlSpSessionImpl.class, samlSpSession.getPrimaryKey()) ==

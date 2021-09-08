@@ -13226,6 +13226,14 @@ public class GroupPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Group> groups) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(groups.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(groups);
+
+			return;
+		}
+
 		for (Group group : groups) {
 			if (group.getCtCollectionId() != 0) {
 				continue;

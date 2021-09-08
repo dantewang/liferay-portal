@@ -922,6 +922,14 @@ public class PluginSettingPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<PluginSetting> pluginSettings) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(pluginSettings.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(pluginSettings);
+
+			return;
+		}
+
 		for (PluginSetting pluginSetting : pluginSettings) {
 			if (EntityCacheUtil.getResult(
 					PluginSettingImpl.class, pluginSetting.getPrimaryKey()) ==

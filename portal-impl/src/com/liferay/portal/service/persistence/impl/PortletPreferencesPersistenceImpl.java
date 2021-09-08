@@ -5760,6 +5760,15 @@ public class PortletPreferencesPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<PortletPreferences> portletPreferenceses) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(portletPreferenceses.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(portletPreferenceses);
+
+			return;
+		}
+
 		for (PortletPreferences portletPreferences : portletPreferenceses) {
 			if (portletPreferences.getCtCollectionId() != 0) {
 				continue;

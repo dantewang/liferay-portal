@@ -1359,6 +1359,14 @@ public class AnnouncementsFlagPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AnnouncementsFlag> announcementsFlags) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(announcementsFlags.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(announcementsFlags);
+
+			return;
+		}
+
 		for (AnnouncementsFlag announcementsFlag : announcementsFlags) {
 			if (EntityCacheUtil.getResult(
 					AnnouncementsFlagImpl.class,

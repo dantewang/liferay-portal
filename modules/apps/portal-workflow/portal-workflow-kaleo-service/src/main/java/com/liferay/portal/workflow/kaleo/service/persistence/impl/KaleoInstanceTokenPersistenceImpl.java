@@ -2869,6 +2869,15 @@ public class KaleoInstanceTokenPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KaleoInstanceToken> kaleoInstanceTokens) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoInstanceTokens.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoInstanceTokens);
+
+			return;
+		}
+
 		for (KaleoInstanceToken kaleoInstanceToken : kaleoInstanceTokens) {
 			if (entityCache.getResult(
 					KaleoInstanceTokenImpl.class,

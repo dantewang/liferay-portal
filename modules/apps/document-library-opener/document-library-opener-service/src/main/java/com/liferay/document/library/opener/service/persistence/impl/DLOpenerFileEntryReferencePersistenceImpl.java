@@ -607,6 +607,15 @@ public class DLOpenerFileEntryReferencePersistenceImpl
 	public void cacheResult(
 		List<DLOpenerFileEntryReference> dlOpenerFileEntryReferences) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(dlOpenerFileEntryReferences.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(dlOpenerFileEntryReferences);
+
+			return;
+		}
+
 		for (DLOpenerFileEntryReference dlOpenerFileEntryReference :
 				dlOpenerFileEntryReferences) {
 

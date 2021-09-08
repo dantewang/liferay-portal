@@ -6797,6 +6797,14 @@ public class BookmarksFolderPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<BookmarksFolder> bookmarksFolders) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(bookmarksFolders.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(bookmarksFolders);
+
+			return;
+		}
+
 		for (BookmarksFolder bookmarksFolder : bookmarksFolders) {
 			if (entityCache.getResult(
 					BookmarksFolderImpl.class,

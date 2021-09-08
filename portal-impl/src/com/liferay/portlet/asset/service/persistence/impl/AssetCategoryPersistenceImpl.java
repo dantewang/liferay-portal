@@ -12205,6 +12205,14 @@ public class AssetCategoryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AssetCategory> assetCategories) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(assetCategories.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(assetCategories);
+
+			return;
+		}
+
 		for (AssetCategory assetCategory : assetCategories) {
 			if (assetCategory.getCtCollectionId() != 0) {
 				continue;

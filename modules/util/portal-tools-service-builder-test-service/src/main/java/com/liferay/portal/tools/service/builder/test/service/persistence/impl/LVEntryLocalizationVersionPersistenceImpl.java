@@ -2839,6 +2839,15 @@ public class LVEntryLocalizationVersionPersistenceImpl
 	public void cacheResult(
 		List<LVEntryLocalizationVersion> lvEntryLocalizationVersions) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(lvEntryLocalizationVersions.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(lvEntryLocalizationVersions);
+
+			return;
+		}
+
 		for (LVEntryLocalizationVersion lvEntryLocalizationVersion :
 				lvEntryLocalizationVersions) {
 

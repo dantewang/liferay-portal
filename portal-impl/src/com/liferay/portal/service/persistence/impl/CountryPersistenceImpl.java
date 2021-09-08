@@ -4913,6 +4913,14 @@ public class CountryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Country> countries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(countries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(countries);
+
+			return;
+		}
+
 		for (Country country : countries) {
 			if (EntityCacheUtil.getResult(
 					CountryImpl.class, country.getPrimaryKey()) == null) {

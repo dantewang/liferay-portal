@@ -1242,6 +1242,14 @@ public class FVSCustomEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<FVSCustomEntry> fvsCustomEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(fvsCustomEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(fvsCustomEntries);
+
+			return;
+		}
+
 		for (FVSCustomEntry fvsCustomEntry : fvsCustomEntries) {
 			if (entityCache.getResult(
 					FVSCustomEntryImpl.class, fvsCustomEntry.getPrimaryKey()) ==

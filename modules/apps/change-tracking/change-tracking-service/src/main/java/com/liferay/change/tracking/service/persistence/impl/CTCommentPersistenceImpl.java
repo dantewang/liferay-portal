@@ -1107,6 +1107,14 @@ public class CTCommentPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CTComment> ctComments) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ctComments.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ctComments);
+
+			return;
+		}
+
 		for (CTComment ctComment : ctComments) {
 			if (entityCache.getResult(
 					CTCommentImpl.class, ctComment.getPrimaryKey()) == null) {

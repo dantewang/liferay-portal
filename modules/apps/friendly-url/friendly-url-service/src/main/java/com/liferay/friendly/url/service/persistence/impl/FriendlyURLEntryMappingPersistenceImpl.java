@@ -375,6 +375,15 @@ public class FriendlyURLEntryMappingPersistenceImpl
 	public void cacheResult(
 		List<FriendlyURLEntryMapping> friendlyURLEntryMappings) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(friendlyURLEntryMappings.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(friendlyURLEntryMappings);
+
+			return;
+		}
+
 		for (FriendlyURLEntryMapping friendlyURLEntryMapping :
 				friendlyURLEntryMappings) {
 

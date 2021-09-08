@@ -1360,6 +1360,14 @@ public class CTPreferencesPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CTPreferences> ctPreferenceses) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(ctPreferenceses.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(ctPreferenceses);
+
+			return;
+		}
+
 		for (CTPreferences ctPreferences : ctPreferenceses) {
 			if (entityCache.getResult(
 					CTPreferencesImpl.class, ctPreferences.getPrimaryKey()) ==

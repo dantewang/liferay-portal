@@ -608,6 +608,14 @@ public class PasswordTrackerPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<PasswordTracker> passwordTrackers) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(passwordTrackers.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(passwordTrackers);
+
+			return;
+		}
+
 		for (PasswordTracker passwordTracker : passwordTrackers) {
 			if (EntityCacheUtil.getResult(
 					PasswordTrackerImpl.class,

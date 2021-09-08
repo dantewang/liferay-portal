@@ -800,6 +800,14 @@ public class DLSyncEventPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DLSyncEvent> dlSyncEvents) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(dlSyncEvents.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(dlSyncEvents);
+
+			return;
+		}
+
 		for (DLSyncEvent dlSyncEvent : dlSyncEvents) {
 			if (entityCache.getResult(
 					DLSyncEventImpl.class, dlSyncEvent.getPrimaryKey()) ==

@@ -2846,6 +2846,14 @@ public class DefinitionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<Definition> definitions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(definitions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(definitions);
+
+			return;
+		}
+
 		for (Definition definition : definitions) {
 			if (entityCache.getResult(
 					DefinitionImpl.class, definition.getPrimaryKey()) == null) {

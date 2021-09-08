@@ -2493,6 +2493,15 @@ public class CalendarNotificationTemplatePersistenceImpl
 	public void cacheResult(
 		List<CalendarNotificationTemplate> calendarNotificationTemplates) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(calendarNotificationTemplates.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(calendarNotificationTemplates);
+
+			return;
+		}
+
 		for (CalendarNotificationTemplate calendarNotificationTemplate :
 				calendarNotificationTemplates) {
 

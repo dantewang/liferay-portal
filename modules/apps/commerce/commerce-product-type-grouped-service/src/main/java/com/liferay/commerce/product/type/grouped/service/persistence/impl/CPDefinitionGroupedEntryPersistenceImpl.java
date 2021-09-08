@@ -2261,6 +2261,15 @@ public class CPDefinitionGroupedEntryPersistenceImpl
 	public void cacheResult(
 		List<CPDefinitionGroupedEntry> cpDefinitionGroupedEntries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpDefinitionGroupedEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpDefinitionGroupedEntries);
+
+			return;
+		}
+
 		for (CPDefinitionGroupedEntry cpDefinitionGroupedEntry :
 				cpDefinitionGroupedEntries) {
 

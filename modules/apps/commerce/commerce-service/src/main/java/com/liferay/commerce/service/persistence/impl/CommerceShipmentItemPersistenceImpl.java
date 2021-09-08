@@ -2472,6 +2472,15 @@ public class CommerceShipmentItemPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CommerceShipmentItem> commerceShipmentItems) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceShipmentItems.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceShipmentItems);
+
+			return;
+		}
+
 		for (CommerceShipmentItem commerceShipmentItem :
 				commerceShipmentItems) {
 

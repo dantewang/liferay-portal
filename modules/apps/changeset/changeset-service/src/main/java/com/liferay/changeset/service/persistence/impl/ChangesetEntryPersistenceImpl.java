@@ -2971,6 +2971,14 @@ public class ChangesetEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ChangesetEntry> changesetEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(changesetEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(changesetEntries);
+
+			return;
+		}
+
 		for (ChangesetEntry changesetEntry : changesetEntries) {
 			if (entityCache.getResult(
 					ChangesetEntryImpl.class, changesetEntry.getPrimaryKey()) ==

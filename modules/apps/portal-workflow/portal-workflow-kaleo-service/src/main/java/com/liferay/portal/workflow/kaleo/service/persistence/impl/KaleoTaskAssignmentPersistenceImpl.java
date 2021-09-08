@@ -2423,6 +2423,15 @@ public class KaleoTaskAssignmentPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<KaleoTaskAssignment> kaleoTaskAssignments) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoTaskAssignments.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoTaskAssignments);
+
+			return;
+		}
+
 		for (KaleoTaskAssignment kaleoTaskAssignment : kaleoTaskAssignments) {
 			if (entityCache.getResult(
 					KaleoTaskAssignmentImpl.class,

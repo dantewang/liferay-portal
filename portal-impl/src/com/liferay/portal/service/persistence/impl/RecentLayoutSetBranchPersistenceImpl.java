@@ -1857,6 +1857,15 @@ public class RecentLayoutSetBranchPersistenceImpl
 	public void cacheResult(
 		List<RecentLayoutSetBranch> recentLayoutSetBranchs) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(recentLayoutSetBranchs.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(recentLayoutSetBranchs);
+
+			return;
+		}
+
 		for (RecentLayoutSetBranch recentLayoutSetBranch :
 				recentLayoutSetBranchs) {
 

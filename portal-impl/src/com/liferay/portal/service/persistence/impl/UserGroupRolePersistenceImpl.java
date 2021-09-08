@@ -3006,6 +3006,14 @@ public class UserGroupRolePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<UserGroupRole> userGroupRoles) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(userGroupRoles.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(userGroupRoles);
+
+			return;
+		}
+
 		for (UserGroupRole userGroupRole : userGroupRoles) {
 			if (userGroupRole.getCtCollectionId() != 0) {
 				continue;

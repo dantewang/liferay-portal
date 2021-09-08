@@ -1574,6 +1574,14 @@ public class AccountRolePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AccountRole> accountRoles) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(accountRoles.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(accountRoles);
+
+			return;
+		}
+
 		for (AccountRole accountRole : accountRoles) {
 			if (entityCache.getResult(
 					AccountRoleImpl.class, accountRole.getPrimaryKey()) ==

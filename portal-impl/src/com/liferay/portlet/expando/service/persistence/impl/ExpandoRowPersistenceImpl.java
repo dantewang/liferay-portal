@@ -1373,6 +1373,14 @@ public class ExpandoRowPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<ExpandoRow> expandoRows) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(expandoRows.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(expandoRows);
+
+			return;
+		}
+
 		for (ExpandoRow expandoRow : expandoRows) {
 			if (expandoRow.getCtCollectionId() != 0) {
 				continue;

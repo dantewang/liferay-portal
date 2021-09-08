@@ -8673,6 +8673,14 @@ public class FragmentEntryLinkPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<FragmentEntryLink> fragmentEntryLinks) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(fragmentEntryLinks.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(fragmentEntryLinks);
+
+			return;
+		}
+
 		for (FragmentEntryLink fragmentEntryLink : fragmentEntryLinks) {
 			if (fragmentEntryLink.getCtCollectionId() != 0) {
 				continue;

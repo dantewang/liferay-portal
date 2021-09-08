@@ -1442,6 +1442,15 @@ public class CommercePaymentMethodGroupRelPersistenceImpl
 	public void cacheResult(
 		List<CommercePaymentMethodGroupRel> commercePaymentMethodGroupRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commercePaymentMethodGroupRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commercePaymentMethodGroupRels);
+
+			return;
+		}
+
 		for (CommercePaymentMethodGroupRel commercePaymentMethodGroupRel :
 				commercePaymentMethodGroupRels) {
 

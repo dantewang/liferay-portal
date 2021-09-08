@@ -4178,6 +4178,14 @@ public class CommerceWishListPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<CommerceWishList> commerceWishLists) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commerceWishLists.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commerceWishLists);
+
+			return;
+		}
+
 		for (CommerceWishList commerceWishList : commerceWishLists) {
 			if (entityCache.getResult(
 					CommerceWishListImpl.class,

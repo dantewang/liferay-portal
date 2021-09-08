@@ -1976,6 +1976,14 @@ public class MDRRulePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<MDRRule> mdrRules) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(mdrRules.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(mdrRules);
+
+			return;
+		}
+
 		for (MDRRule mdrRule : mdrRules) {
 			if (entityCache.getResult(
 					MDRRuleImpl.class, mdrRule.getPrimaryKey()) == null) {

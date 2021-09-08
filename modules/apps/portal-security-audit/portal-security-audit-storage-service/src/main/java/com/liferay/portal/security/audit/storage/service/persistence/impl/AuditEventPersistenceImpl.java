@@ -611,6 +611,14 @@ public class AuditEventPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AuditEvent> auditEvents) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(auditEvents.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(auditEvents);
+
+			return;
+		}
+
 		for (AuditEvent auditEvent : auditEvents) {
 			if (entityCache.getResult(
 					AuditEventImpl.class, auditEvent.getPrimaryKey()) == null) {

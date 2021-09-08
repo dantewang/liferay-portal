@@ -1082,6 +1082,15 @@ public class LVEntryLocalizationPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<LVEntryLocalization> lvEntryLocalizations) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(lvEntryLocalizations.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(lvEntryLocalizations);
+
+			return;
+		}
+
 		for (LVEntryLocalization lvEntryLocalization : lvEntryLocalizations) {
 			if (entityCache.getResult(
 					LVEntryLocalizationImpl.class,

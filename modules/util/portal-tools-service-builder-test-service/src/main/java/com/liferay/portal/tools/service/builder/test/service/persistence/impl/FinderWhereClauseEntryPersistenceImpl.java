@@ -650,6 +650,15 @@ public class FinderWhereClauseEntryPersistenceImpl
 	public void cacheResult(
 		List<FinderWhereClauseEntry> finderWhereClauseEntries) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(finderWhereClauseEntries.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(finderWhereClauseEntries);
+
+			return;
+		}
+
 		for (FinderWhereClauseEntry finderWhereClauseEntry :
 				finderWhereClauseEntries) {
 

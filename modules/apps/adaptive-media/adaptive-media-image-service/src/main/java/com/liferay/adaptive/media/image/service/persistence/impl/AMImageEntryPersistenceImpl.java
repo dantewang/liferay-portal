@@ -4376,6 +4376,14 @@ public class AMImageEntryPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<AMImageEntry> amImageEntries) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(amImageEntries.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(amImageEntries);
+
+			return;
+		}
+
 		for (AMImageEntry amImageEntry : amImageEntries) {
 			if (entityCache.getResult(
 					AMImageEntryImpl.class, amImageEntry.getPrimaryKey()) ==

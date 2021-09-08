@@ -3235,6 +3235,14 @@ public class LayoutSetBranchPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<LayoutSetBranch> layoutSetBranchs) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(layoutSetBranchs.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(layoutSetBranchs);
+
+			return;
+		}
+
 		for (LayoutSetBranch layoutSetBranch : layoutSetBranchs) {
 			if (EntityCacheUtil.getResult(
 					LayoutSetBranchImpl.class,

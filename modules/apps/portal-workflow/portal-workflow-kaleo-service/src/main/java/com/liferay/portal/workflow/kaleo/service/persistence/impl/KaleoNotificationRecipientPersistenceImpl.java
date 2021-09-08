@@ -1690,6 +1690,15 @@ public class KaleoNotificationRecipientPersistenceImpl
 	public void cacheResult(
 		List<KaleoNotificationRecipient> kaleoNotificationRecipients) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(kaleoNotificationRecipients.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(kaleoNotificationRecipients);
+
+			return;
+		}
+
 		for (KaleoNotificationRecipient kaleoNotificationRecipient :
 				kaleoNotificationRecipients) {
 

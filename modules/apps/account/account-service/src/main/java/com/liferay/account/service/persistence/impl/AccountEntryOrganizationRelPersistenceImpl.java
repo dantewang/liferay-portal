@@ -1410,6 +1410,15 @@ public class AccountEntryOrganizationRelPersistenceImpl
 	public void cacheResult(
 		List<AccountEntryOrganizationRel> accountEntryOrganizationRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(accountEntryOrganizationRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(accountEntryOrganizationRels);
+
+			return;
+		}
+
 		for (AccountEntryOrganizationRel accountEntryOrganizationRel :
 				accountEntryOrganizationRels) {
 

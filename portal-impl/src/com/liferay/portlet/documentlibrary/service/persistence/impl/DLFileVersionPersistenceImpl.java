@@ -5793,6 +5793,14 @@ public class DLFileVersionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<DLFileVersion> dlFileVersions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(dlFileVersions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(dlFileVersions);
+
+			return;
+		}
+
 		for (DLFileVersion dlFileVersion : dlFileVersions) {
 			if (dlFileVersion.getCtCollectionId() != 0) {
 				continue;

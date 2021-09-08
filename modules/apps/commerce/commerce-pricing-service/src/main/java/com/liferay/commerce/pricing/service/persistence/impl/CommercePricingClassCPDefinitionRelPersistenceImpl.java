@@ -1456,6 +1456,15 @@ public class CommercePricingClassCPDefinitionRelPersistenceImpl
 		List<CommercePricingClassCPDefinitionRel>
 			commercePricingClassCPDefinitionRels) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(commercePricingClassCPDefinitionRels.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(commercePricingClassCPDefinitionRels);
+
+			return;
+		}
+
 		for (CommercePricingClassCPDefinitionRel
 				commercePricingClassCPDefinitionRel :
 					commercePricingClassCPDefinitionRels) {

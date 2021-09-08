@@ -3597,6 +3597,14 @@ public class SocialActivitySetPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SocialActivitySet> socialActivitySets) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(socialActivitySets.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(socialActivitySets);
+
+			return;
+		}
+
 		for (SocialActivitySet socialActivitySet : socialActivitySets) {
 			if (socialActivitySet.getCtCollectionId() != 0) {
 				continue;

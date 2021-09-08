@@ -922,6 +922,14 @@ public class SamlIdpSsoSessionPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<SamlIdpSsoSession> samlIdpSsoSessions) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(samlIdpSsoSessions.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(samlIdpSsoSessions);
+
+			return;
+		}
+
 		for (SamlIdpSsoSession samlIdpSsoSession : samlIdpSsoSessions) {
 			if (entityCache.getResult(
 					SamlIdpSsoSessionImpl.class,

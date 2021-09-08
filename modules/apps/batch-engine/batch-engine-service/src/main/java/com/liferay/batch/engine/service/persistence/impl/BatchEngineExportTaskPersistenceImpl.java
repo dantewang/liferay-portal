@@ -2319,6 +2319,15 @@ public class BatchEngineExportTaskPersistenceImpl
 	public void cacheResult(
 		List<BatchEngineExportTask> batchEngineExportTasks) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(batchEngineExportTasks.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(batchEngineExportTasks);
+
+			return;
+		}
+
 		for (BatchEngineExportTask batchEngineExportTask :
 				batchEngineExportTasks) {
 

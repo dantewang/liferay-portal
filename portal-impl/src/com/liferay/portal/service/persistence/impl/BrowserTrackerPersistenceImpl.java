@@ -304,6 +304,14 @@ public class BrowserTrackerPersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<BrowserTracker> browserTrackers) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(browserTrackers.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(browserTrackers);
+
+			return;
+		}
+
 		for (BrowserTracker browserTracker : browserTrackers) {
 			if (EntityCacheUtil.getResult(
 					BrowserTrackerImpl.class, browserTracker.getPrimaryKey()) ==

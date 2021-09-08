@@ -5173,6 +5173,15 @@ public class CPDefinitionSpecificationOptionValuePersistenceImpl
 		List<CPDefinitionSpecificationOptionValue>
 			cpDefinitionSpecificationOptionValues) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(cpDefinitionSpecificationOptionValues.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(cpDefinitionSpecificationOptionValues);
+
+			return;
+		}
+
 		for (CPDefinitionSpecificationOptionValue
 				cpDefinitionSpecificationOptionValue :
 					cpDefinitionSpecificationOptionValues) {

@@ -1248,6 +1248,15 @@ public class PushNotificationsDevicePersistenceImpl
 	public void cacheResult(
 		List<PushNotificationsDevice> pushNotificationsDevices) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(pushNotificationsDevices.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(pushNotificationsDevices);
+
+			return;
+		}
+
 		for (PushNotificationsDevice pushNotificationsDevice :
 				pushNotificationsDevices) {
 

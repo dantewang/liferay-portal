@@ -23535,6 +23535,14 @@ public class WikiPagePersistenceImpl
 	 */
 	@Override
 	public void cacheResult(List<WikiPage> wikiPages) {
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(wikiPages.size() > valueObjectFinderCacheListThreshold)) {
+
+			clearCache(wikiPages);
+
+			return;
+		}
+
 		for (WikiPage wikiPage : wikiPages) {
 			if (entityCache.getResult(
 					WikiPageImpl.class, wikiPage.getPrimaryKey()) == null) {

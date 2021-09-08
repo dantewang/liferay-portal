@@ -1290,6 +1290,15 @@ public class CustomElementsPortletDescriptorPersistenceImpl
 		List<CustomElementsPortletDescriptor>
 			customElementsPortletDescriptors) {
 
+		if ((valueObjectFinderCacheListThreshold >= 0) &&
+			(customElementsPortletDescriptors.size() >
+				valueObjectFinderCacheListThreshold)) {
+
+			clearCache(customElementsPortletDescriptors);
+
+			return;
+		}
+
 		for (CustomElementsPortletDescriptor customElementsPortletDescriptor :
 				customElementsPortletDescriptors) {
 
