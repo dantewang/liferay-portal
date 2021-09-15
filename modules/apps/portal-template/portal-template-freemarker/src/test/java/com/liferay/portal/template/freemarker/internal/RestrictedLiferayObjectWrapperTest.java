@@ -354,29 +354,31 @@ public class RestrictedLiferayObjectWrapperTest
 		// Local service object with proxy
 
 		assertTemplateModel(
-			"Test Local Service",
+			"TestLocalServiceAdded",
 			stringModel -> {
 				TestLocalService testLocalService =
 					(TestLocalService)stringModel.getWrappedObject();
 
-				return testLocalService.add("Test Local Service");
+				return testLocalService.add("Added");
 			},
 			StringModel.class.cast(
 				objectWrapper.wrap(
-					_createAopProxy(new TestLocalServiceImpl("")))));
+					_createAopProxy(
+						new TestLocalServiceImpl("TestLocalService")))));
 
 		// Service object with proxy
 
 		assertTemplateModel(
-			"Test Service",
+			"TestServiceAdded",
 			stringModel -> {
 				TestService testServiceObject =
 					(TestService)stringModel.getWrappedObject();
 
-				return testServiceObject.add("Test Service");
+				return testServiceObject.add("Added");
 			},
 			StringModel.class.cast(
-				objectWrapper.wrap(_createAopProxy(new TestServiceImpl("")))));
+				objectWrapper.wrap(
+					_createAopProxy(new TestServiceImpl("TestService")))));
 	}
 
 	@NewEnv(type = NewEnv.Type.CLASSLOADER)
@@ -400,25 +402,27 @@ public class RestrictedLiferayObjectWrapperTest
 		// Local service object with proxy
 
 		StringModel testLocalServiceStringModel = StringModel.class.cast(
-			objectWrapper.wrap(_createAopProxy(new TestLocalServiceImpl(""))));
+			objectWrapper.wrap(
+				_createAopProxy(new TestLocalServiceImpl("TestLocalService"))));
 
 		TestLocalService testLocalServiceObject =
 			(TestLocalService)testLocalServiceStringModel.getWrappedObject();
 
 		_assertException(
-			testLocalService -> testLocalService.add("Test Local Service"),
+			testLocalService -> testLocalService.add("Added"),
 			testLocalServiceObject);
 
 		// Service object with proxy
 
 		StringModel testServiceStringModel = StringModel.class.cast(
-			objectWrapper.wrap(_createAopProxy(new TestServiceImpl(""))));
+			objectWrapper.wrap(
+				_createAopProxy(new TestServiceImpl("TestService"))));
 
 		TestService testServiceObject =
 			(TestService)testServiceStringModel.getWrappedObject();
 
 		_assertException(
-			testService -> testService.add("Test Service"), testServiceObject);
+			testService -> testService.add("Added"), testServiceObject);
 	}
 
 	public class TestLiferayMethodObject {
@@ -682,9 +686,9 @@ public class RestrictedLiferayObjectWrapperTest
 
 		@Override
 		public String add(String value) {
-			_value = value;
+			_name = _name.concat(value);
 
-			return _value;
+			return _name;
 		}
 
 		@Override
@@ -696,8 +700,7 @@ public class RestrictedLiferayObjectWrapperTest
 			_name = name;
 		}
 
-		private final String _name;
-		private String _value;
+		private String _name;
 
 	}
 
@@ -705,9 +708,9 @@ public class RestrictedLiferayObjectWrapperTest
 
 		@Override
 		public String add(String value) {
-			_value = value;
+			_name = _name.concat(value);
 
-			return _value;
+			return _name;
 		}
 
 		@Override
@@ -719,8 +722,7 @@ public class RestrictedLiferayObjectWrapperTest
 			_name = name;
 		}
 
-		private final String _name;
-		private String _value;
+		private String _name;
 
 	}
 
