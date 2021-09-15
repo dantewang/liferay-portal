@@ -70,6 +70,11 @@ public class HypersonicSQLTransformerLogicTest
 	}
 
 	@Override
+	protected String getCastTextTransformedSQL() {
+		return "select CONVERT(foo, SQL_VARCHAR) from Foo";
+	}
+
+	@Override
 	protected String getIntegerDivisionTransformedSQL() {
 		return "select foo / bar from Foo";
 	}

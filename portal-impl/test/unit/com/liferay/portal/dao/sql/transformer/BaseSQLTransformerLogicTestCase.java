@@ -71,6 +71,13 @@ public abstract class BaseSQLTransformerLogicTestCase {
 	}
 
 	@Test
+	public void testReplaceCastText() {
+		Assert.assertEquals(
+			getCastTextTransformedSQL(),
+			sqlTransformer.transform(getCastTextOriginalSQL()));
+	}
+
+	@Test
 	public void testReplaceCrossJoin() {
 		Assert.assertEquals(
 			getCrossJoinTransformedSQL(),
@@ -200,6 +207,10 @@ public abstract class BaseSQLTransformerLogicTestCase {
 
 	protected String getCastTextOriginalSQL() {
 		return "select CAST_TEXT(foo) from Foo";
+	}
+
+	protected String getCastTextTransformedSQL() {
+		return "select foo from Foo";
 	}
 
 	protected String getCrossJoinOriginalSQL() {
