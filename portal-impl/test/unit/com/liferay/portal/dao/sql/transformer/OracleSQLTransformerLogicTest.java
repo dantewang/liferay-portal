@@ -62,6 +62,14 @@ public class OracleSQLTransformerLogicTest
 			sqlTransformer.transform(getCastTextOriginalSQL()));
 	}
 
+	@Override
+	@Test
+	public void testReplaceConcat() {
+		Assert.assertEquals(
+			"select foo || bar from Foo",
+			sqlTransformer.transform(getConcatOriginalSQL()));
+	}
+
 	@Test
 	public void testReplaceEscape() {
 		Assert.assertEquals(

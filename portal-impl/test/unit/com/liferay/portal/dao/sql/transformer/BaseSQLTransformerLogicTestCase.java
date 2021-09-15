@@ -78,6 +78,13 @@ public abstract class BaseSQLTransformerLogicTestCase {
 	}
 
 	@Test
+	public void testReplaceConcat() {
+		Assert.assertEquals(
+			getConcatTransformedSQL(),
+			sqlTransformer.transform(getConcatOriginalSQL()));
+	}
+
+	@Test
 	public void testReplaceCrossJoin() {
 		Assert.assertEquals(
 			getCrossJoinTransformedSQL(),
@@ -211,6 +218,14 @@ public abstract class BaseSQLTransformerLogicTestCase {
 
 	protected String getCastTextTransformedSQL() {
 		return "select foo from Foo";
+	}
+
+	protected String getConcatOriginalSQL() {
+		return "select CONCAT(foo,bar) from Foo";
+	}
+
+	protected String getConcatTransformedSQL() {
+		return getConcatOriginalSQL();
 	}
 
 	protected String getCrossJoinOriginalSQL() {

@@ -63,6 +63,7 @@ public class DB2SQLTransformerLogicTest
 			sqlTransformer.transform(getCastTextOriginalSQL()));
 	}
 
+	@Override
 	@Test
 	public void testReplaceConcat() {
 		Assert.assertEquals(

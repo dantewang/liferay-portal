@@ -51,6 +51,14 @@ public class SQLServerSQLTransformerLogicTest
 	}
 
 	@Override
+	@Test
+	public void testReplaceConcat() {
+		Assert.assertEquals(
+			"select foo + bar from Foo",
+			sqlTransformer.transform(getConcatOriginalSQL()));
+	}
+
+	@Override
 	protected String getBitwiseCheckTransformedSQL() {
 		return "select (foo & bar) from Foo";
 	}
