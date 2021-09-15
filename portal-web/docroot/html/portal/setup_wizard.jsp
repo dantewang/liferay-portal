@@ -241,6 +241,18 @@
 
 						<aui:button-row>
 							<aui:button name="finishButton" type="submit" value="finish-configuration" />
+
+							<div class="btn float-right" id="basicConfiguration">
+								<a href="https://learn.liferay.com/dxp/latest/en/installation-and-upgrades/installing-liferay/running-liferay-for-the-first-time.html" target="_blank">
+									Want some tips?
+								</a>
+							</div>
+
+							<div class="btn float-right hide" id="databaseConfiguration">
+								<a href="https://learn.liferay.com/dxp/latest/en/installation-and-upgrades/reference/database-configurations.html" target="_blank">
+									Need to set up a database?
+								</a>
+							</div>
 						</aui:button-row>
 					</aui:form>
 
@@ -263,6 +275,9 @@
 						var sampleData = A.one('#sampleData');
 						var addSampleData = A.one('#addSampleData');
 
+						var basicConfiguration = A.one('#basicConfiguration');
+						var databaseConfiguration = A.one('#databaseConfiguration');
+
 						var command = A.one('#<%= Constants.CMD %>');
 						var setupForm = A.one('#fm');
 
@@ -280,6 +295,10 @@
 							sampleData.toggle(!showDefault);
 
 							defaultDatabase.val(showDefault);
+
+							databaseConfiguration.toggle(!showDefault);
+
+							basicConfiguration.toggle(showDefault);
 						};
 
 						databaseSelector.on(
