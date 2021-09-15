@@ -92,6 +92,11 @@ public class OracleSQLTransformerLogicTest
 	}
 
 	@Override
+	protected String getConcatTransformedSQL() {
+		return "select foo || bar from Foo";
+	}
+
+	@Override
 	protected String getIntegerDivisionTransformedSQL() {
 		return "select TRUNC(foo / bar) from Foo";
 	}

@@ -64,6 +64,11 @@ public class SybaseSQLTransformerLogicTest
 	}
 
 	@Override
+	protected String getConcatTransformedSQL() {
+		return "select foo + bar from Foo";
+	}
+
+	@Override
 	protected String getCrossJoinTransformedSQL() {
 		return "select * from Foo , Bar";
 	}

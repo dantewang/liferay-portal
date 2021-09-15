@@ -55,15 +55,6 @@ public class DB2SQLTransformerLogicTest
 			sqlTransformer.transform(getBitwiseCheckOriginalSQL()));
 	}
 
-	@Test
-	public void testReplaceConcat() {
-		Assert.assertEquals(
-			"select * from Foo where foo LIKE CAST(bar AS VARCHAR(2000)) " +
-				"CONCAT COALESCE(CAST(? AS VARCHAR(2000)),'')",
-			sqlTransformer.transform(
-				"select * from Foo where foo LIKE CONCAT(CAST_TEXT(bar),?)"));
-	}
-
 	@Override
 	@Test
 	public void testReplaceModWithExtraWhitespace() {
@@ -104,6 +95,17 @@ public class DB2SQLTransformerLogicTest
 	@Override
 	protected String getCastTextTransformedSQL() {
 		return "select CAST(foo AS VARCHAR(2000)) from Foo";
+	}
+
+	@Override
+	protected String getConcatOriginalSQL() {
+		return "select * from Foo where foo LIKE CONCAT(CAST_TEXT(bar),?)";
+	}
+
+	@Override
+	protected String getConcatTransformedSQL() {
+		return "select * from Foo where foo LIKE CAST(bar AS VARCHAR(2000)) " +
+			"CONCAT COALESCE(CAST(? AS VARCHAR(2000)),'')";
 	}
 
 	@Override
