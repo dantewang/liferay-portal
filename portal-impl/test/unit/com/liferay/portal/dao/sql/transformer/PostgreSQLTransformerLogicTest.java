@@ -44,6 +44,14 @@ public class PostgreSQLTransformerLogicTest
 
 	@Override
 	@Test
+	public void testReplaceCastText() {
+		Assert.assertEquals(
+			"select CAST(foo AS TEXT) from Foo",
+			sqlTransformer.transform(getCastTextOriginalSQL()));
+	}
+
+	@Override
+	@Test
 	public void testReplaceModWithExtraWhitespace() {
 		Assert.assertEquals(
 			getModTransformedSQL(),

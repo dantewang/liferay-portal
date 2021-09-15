@@ -54,6 +54,7 @@ public class OracleSQLTransformerLogicTest
 			sqlTransformer.transform(getBitwiseCheckOriginalSQL()));
 	}
 
+	@Override
 	@Test
 	public void testReplaceCastText() {
 		Assert.assertEquals(

@@ -45,6 +45,7 @@ public class SybaseSQLTransformerLogicTest
 			"'U')\n", "BEGIN\n", "DROP TABLE Foo\n", "END");
 	}
 
+	@Override
 	@Test
 	public void testReplaceCastText() {
 		Assert.assertEquals(

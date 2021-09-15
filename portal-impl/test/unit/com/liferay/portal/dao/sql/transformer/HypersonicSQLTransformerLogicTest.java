@@ -53,6 +53,14 @@ public class HypersonicSQLTransformerLogicTest
 
 	@Override
 	@Test
+	public void testReplaceCastText() {
+		Assert.assertEquals(
+			"select CONVERT(foo, SQL_VARCHAR) from Foo",
+			sqlTransformer.transform(getCastTextOriginalSQL()));
+	}
+
+	@Override
+	@Test
 	public void testReplaceModWithExtraWhitespace() {
 		Assert.assertEquals(
 			getModTransformedSQL(),

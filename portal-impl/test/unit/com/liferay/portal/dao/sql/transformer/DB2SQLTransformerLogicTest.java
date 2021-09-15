@@ -55,6 +55,7 @@ public class DB2SQLTransformerLogicTest
 			sqlTransformer.transform(getBitwiseCheckOriginalSQL()));
 	}
 
+	@Override
 	@Test
 	public void testReplaceCastText() {
 		Assert.assertEquals(

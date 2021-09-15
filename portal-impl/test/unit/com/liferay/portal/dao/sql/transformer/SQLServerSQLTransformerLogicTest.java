@@ -42,6 +42,7 @@ public class SQLServerSQLTransformerLogicTest
 		return "IF OBJECT_ID('Foo', 'U') IS NOT NULL DROP TABLE Foo";
 	}
 
+	@Override
 	@Test
 	public void testReplaceCastText() {
 		Assert.assertEquals(
