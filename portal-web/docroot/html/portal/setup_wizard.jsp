@@ -241,6 +241,22 @@
 
 						<aui:button-row>
 							<aui:button name="finishButton" type="submit" value="finish-configuration" />
+
+							<div class="btn float-right" id="basicConfiguration">
+
+								<%
+								SetupWizardUtil.renderLearnTag(pageContext.getOut(), locale, "basic-configuration", "portal-web");
+								%>
+
+							</div>
+
+							<div class="btn float-right hide" id="databaseConfiguration">
+
+								<%
+								SetupWizardUtil.renderLearnTag(pageContext.getOut(), locale, "database-configuration", "portal-web");
+								%>
+
+							</div>
 						</aui:button-row>
 					</aui:form>
 
@@ -263,6 +279,9 @@
 						var sampleData = A.one('#sampleData');
 						var addSampleData = A.one('#addSampleData');
 
+						var basicConfiguration = A.one('#basicConfiguration');
+						var databaseConfiguration = A.one('#databaseConfiguration');
+
 						var command = A.one('#<%= Constants.CMD %>');
 						var setupForm = A.one('#fm');
 
@@ -280,6 +299,10 @@
 							sampleData.toggle(!showDefault);
 
 							defaultDatabase.val(showDefault);
+
+							databaseConfiguration.toggle(!showDefault);
+
+							basicConfiguration.toggle(showDefault);
 						};
 
 						databaseSelector.on(

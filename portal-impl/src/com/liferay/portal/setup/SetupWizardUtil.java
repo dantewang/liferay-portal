@@ -20,6 +20,8 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.events.EventsProcessorUtil;
 import com.liferay.portal.kernel.dao.jdbc.DataSourceFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -30,6 +32,8 @@ import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.service.PasswordPolicyLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.Http;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropertiesParamUtil;
@@ -39,6 +43,8 @@ import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.webcache.WebCacheItem;
+import com.liferay.portal.kernel.webcache.WebCachePoolUtil;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PropsValues;
 
@@ -53,6 +59,7 @@ import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.JspWriter;
 
 import javax.sql.DataSource;
 
@@ -105,6 +112,50 @@ public class SetupWizardUtil {
 		}
 
 		return false;
+	}
+
+	public static void renderLearnTag(
+			JspWriter jspWriter, Locale locale, String key, String resource)
+		throws Exception {
+
+		JSONObject jsonObject = JSONObjectWebCacheItem.get(resource);
+
+		if (jsonObject.length() == 0) {
+			return;
+		}
+
+		JSONObject keyJSONObject = jsonObject.getJSONObject(key);
+
+		if (keyJSONObject == null) {
+			return;
+		}
+
+		String languageId = LanguageUtil.getLanguageId(locale);
+
+		JSONObject languageIdJSONObject = keyJSONObject.getJSONObject(
+			languageId);
+
+		if (languageIdJSONObject == null) {
+			if (languageId.equals("en_US")) {
+				return;
+			}
+
+			languageIdJSONObject = keyJSONObject.getJSONObject("en_US");
+
+			if (languageIdJSONObject == null) {
+				return;
+			}
+		}
+
+		StringBundler sb = new StringBundler(5);
+
+		sb.append("<a href=\"");
+		sb.append(languageIdJSONObject.getString("url"));
+		sb.append("\" target=\"_blank\">");
+		sb.append(languageIdJSONObject.getString("message"));
+		sb.append("</a>");
+
+		jspWriter.write(sb.toString());
 	}
 
 	public static void testDatabase(HttpServletRequest httpServletRequest)
@@ -487,5 +538,64 @@ public class SetupWizardUtil {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		SetupWizardUtil.class);
+
+	private static class JSONObjectWebCacheItem implements WebCacheItem {
+
+		public static JSONObject get(String resource) {
+			return (JSONObject)WebCachePoolUtil.get(
+				JSONObjectWebCacheItem.class.getName() + StringPool.POUND +
+					resource,
+				new JSONObjectWebCacheItem(resource));
+		}
+
+		public JSONObjectWebCacheItem(String resource) {
+			_resource = resource;
+		}
+
+		@Override
+		public JSONObject convert(String key) {
+			try {
+				if (!PropsValues.LEARN_RESOURCES_ENABLED) {
+					return JSONFactoryUtil.createJSONObject();
+				}
+
+				StringBundler sb = new StringBundler(5);
+
+				sb.append(Http.HTTPS_WITH_SLASH);
+
+				if (!PropsValues.LEARN_RESOURCES_CDN_ENABLED) {
+					sb.append("s3.amazonaws.com/");
+				}
+
+				sb.append("learn-resources.liferay.com/");
+				sb.append(_resource);
+				sb.append(".json");
+
+				String url = sb.toString();
+
+				if (_log.isDebugEnabled()) {
+					_log.debug("Reading " + url);
+				}
+
+				return JSONFactoryUtil.createJSONObject(
+					HttpUtil.URLtoString(url));
+			}
+			catch (Exception exception) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(exception, exception);
+				}
+
+				return JSONFactoryUtil.createJSONObject();
+			}
+		}
+
+		@Override
+		public long getRefreshTime() {
+			return PropsValues.LEARN_RESOURCES_REFRESH_TIME;
+		}
+
+		private final String _resource;
+
+	}
 
 }
