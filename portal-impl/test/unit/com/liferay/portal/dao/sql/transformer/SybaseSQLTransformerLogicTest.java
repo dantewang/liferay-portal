@@ -37,13 +37,6 @@ public class SybaseSQLTransformerLogicTest
 	}
 
 	@Override
-	public String getDropTableIfExistsTextTransformedSQL() {
-		return StringBundler.concat(
-			"IF EXISTS(select 1 from sysobjects where name = 'Foo' and type = ",
-			"'U')\n", "BEGIN\n", "DROP TABLE Foo\n", "END");
-	}
-
-	@Override
 	protected String getBitwiseCheckTransformedSQL() {
 		return "select (foo & bar) from Foo";
 	}
@@ -71,6 +64,13 @@ public class SybaseSQLTransformerLogicTest
 	@Override
 	protected String getCrossJoinTransformedSQL() {
 		return "select * from Foo , Bar";
+	}
+
+	@Override
+	protected String getDropTableIfExistsTextTransformedSQL() {
+		return StringBundler.concat(
+			"IF EXISTS(select 1 from sysobjects where name = 'Foo' and type = ",
+			"'U')\n", "BEGIN\n", "DROP TABLE Foo\n", "END");
 	}
 
 	@Override

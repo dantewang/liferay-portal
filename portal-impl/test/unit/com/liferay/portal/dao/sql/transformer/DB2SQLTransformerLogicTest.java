@@ -41,13 +41,6 @@ public class DB2SQLTransformerLogicTest
 	}
 
 	@Override
-	public String getDropTableIfExistsTextTransformedSQL() {
-		return StringBundler.concat(
-			"BEGIN\n", "DECLARE CONTINUE HANDLER FOR SQLSTATE '42704'\n",
-			"BEGIN END;\n", "EXECUTE IMMEDIATE 'DROP TABLE Foo';\n", "END");
-	}
-
-	@Override
 	@Test
 	public void testReplaceBitwiseCheckWithExtraWhitespace() {
 		Assert.assertEquals(
@@ -106,6 +99,13 @@ public class DB2SQLTransformerLogicTest
 	protected String getConcatTransformedSQL() {
 		return "select * from Foo where foo LIKE CAST(bar AS VARCHAR(2000)) " +
 			"CONCAT COALESCE(CAST(? AS VARCHAR(2000)),'')";
+	}
+
+	@Override
+	protected String getDropTableIfExistsTextTransformedSQL() {
+		return StringBundler.concat(
+			"BEGIN\n", "DECLARE CONTINUE HANDLER FOR SQLSTATE '42704'\n",
+			"BEGIN END;\n", "EXECUTE IMMEDIATE 'DROP TABLE Foo';\n", "END");
 	}
 
 	@Override

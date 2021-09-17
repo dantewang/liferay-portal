@@ -45,11 +45,6 @@ public class MySQLSQLTransformerLogicTest
 			});
 	}
 
-	@Override
-	public String getDropTableIfExistsTextTransformedSQL() {
-		return "DROP TABLE IF EXISTS Foo";
-	}
-
 	@Test
 	public void testReplaceLower() {
 		Assert.assertEquals(
@@ -126,6 +121,11 @@ public class MySQLSQLTransformerLogicTest
 	@Override
 	protected String getCastLongTransformedSQL() {
 		return "select foo from Foo";
+	}
+
+	@Override
+	protected String getDropTableIfExistsTextTransformedSQL() {
+		return "DROP TABLE IF EXISTS Foo";
 	}
 
 	@Override

@@ -36,11 +36,6 @@ public class SQLServerSQLTransformerLogicTest
 	}
 
 	@Override
-	public String getDropTableIfExistsTextTransformedSQL() {
-		return "IF OBJECT_ID('Foo', 'U') IS NOT NULL DROP TABLE Foo";
-	}
-
-	@Override
 	protected String getBitwiseCheckTransformedSQL() {
 		return "select (foo & bar) from Foo";
 	}
@@ -63,6 +58,11 @@ public class SQLServerSQLTransformerLogicTest
 	@Override
 	protected String getConcatTransformedSQL() {
 		return "select foo + bar from Foo";
+	}
+
+	@Override
+	protected String getDropTableIfExistsTextTransformedSQL() {
+		return "IF OBJECT_ID('Foo', 'U') IS NOT NULL DROP TABLE Foo";
 	}
 
 	@Override

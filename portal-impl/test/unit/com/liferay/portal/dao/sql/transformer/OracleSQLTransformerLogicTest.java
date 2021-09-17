@@ -39,14 +39,6 @@ public class OracleSQLTransformerLogicTest
 	}
 
 	@Override
-	public String getDropTableIfExistsTextTransformedSQL() {
-		return StringBundler.concat(
-			"BEGIN\n", "EXECUTE IMMEDIATE 'DROP TABLE Foo';\n", "EXCEPTION\n",
-			"WHEN OTHERS THEN\n", "IF SQLCODE != -942 THEN\n", "RAISE;\n",
-			"END IF;\n", "END;\n", "/");
-	}
-
-	@Override
 	@Test
 	public void testReplaceBitwiseCheckWithExtraWhitespace() {
 		Assert.assertEquals(
@@ -94,6 +86,14 @@ public class OracleSQLTransformerLogicTest
 	@Override
 	protected String getConcatTransformedSQL() {
 		return "select foo || bar from Foo";
+	}
+
+	@Override
+	protected String getDropTableIfExistsTextTransformedSQL() {
+		return StringBundler.concat(
+			"BEGIN\n", "EXECUTE IMMEDIATE 'DROP TABLE Foo';\n", "EXCEPTION\n",
+			"WHEN OTHERS THEN\n", "IF SQLCODE != -942 THEN\n", "RAISE;\n",
+			"END IF;\n", "END;\n", "/");
 	}
 
 	@Override

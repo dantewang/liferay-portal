@@ -39,11 +39,6 @@ public class HypersonicSQLTransformerLogicTest
 	}
 
 	@Override
-	public String getDropTableIfExistsTextTransformedSQL() {
-		return "DROP TABLE Foo IF EXISTS";
-	}
-
-	@Override
 	@Test
 	public void testReplaceBitwiseCheckWithExtraWhitespace() {
 		Assert.assertEquals(
@@ -72,6 +67,11 @@ public class HypersonicSQLTransformerLogicTest
 	@Override
 	protected String getCastTextTransformedSQL() {
 		return "select CONVERT(foo, SQL_VARCHAR) from Foo";
+	}
+
+	@Override
+	protected String getDropTableIfExistsTextTransformedSQL() {
+		return "DROP TABLE Foo IF EXISTS";
 	}
 
 	@Override
