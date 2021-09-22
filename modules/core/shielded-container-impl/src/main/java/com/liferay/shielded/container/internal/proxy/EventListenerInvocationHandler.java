@@ -50,8 +50,10 @@ public class EventListenerInvocationHandler
 				_sourceField.set(eventObject, _servletContext);
 			}
 			else if (source instanceof HttpSession) {
+				HttpSession httpSession = (HttpSession)source;
+
 				Object updatedHttpSession = _servletContext.getAttribute(
-					HttpSession.class.getName());
+					httpSession.getId());
 
 				if (updatedHttpSession != null) {
 					_sourceField.set(eventObject, updatedHttpSession);
