@@ -37,8 +37,8 @@ import javax.servlet.http.HttpSession;
  */
 public class SessionReplicationHttpSessionWrapper extends HttpSessionWrapper {
 
-	public SessionReplicationHttpSessionWrapper(HttpSession session) {
-		super(session);
+	public SessionReplicationHttpSessionWrapper(HttpSession httpSession) {
+		super(httpSession);
 	}
 
 	@Override
