@@ -86,6 +86,8 @@ public class SessionReplicationHttpSessionWrapper extends HttpSessionWrapper {
 
 				scrubbedNames.add(name);
 
+				super.setAttribute(_SCRUBBED_NAMES_NAME, scrubbedNames);
+
 				Serializer serializer = new Serializer();
 
 				serializer.writeObject((Serializable)value);
