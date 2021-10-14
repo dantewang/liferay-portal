@@ -271,6 +271,14 @@ public class LocaleUtil {
 			else {
 				locale = new Locale(languageCode, countryCode);
 			}
+
+			if (_locales.containsKey(languageCode) ||
+				_locales.containsKey(
+					StringBundler.concat(
+						languageCode, StringPool.UNDERLINE, countryCode))) {
+
+				return locale;
+			}
 		}
 
 		if (validate && !LanguageUtil.isAvailableLocale(locale)) {
