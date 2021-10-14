@@ -263,6 +263,20 @@ public class LocaleUtil {
 
 			if (languageIdParts.length > 2) {
 				variant = languageIdParts[2];
+
+				locale = _locales.get(
+					StringBundler.concat(
+						languageCode, StringPool.UNDERLINE, countryCode));
+
+				if (locale != null) {
+					return locale;
+				}
+			}
+
+			locale = _locales.get(languageCode);
+
+			if (locale != null) {
+				return locale;
 			}
 
 			if (Validator.isNotNull(variant)) {
