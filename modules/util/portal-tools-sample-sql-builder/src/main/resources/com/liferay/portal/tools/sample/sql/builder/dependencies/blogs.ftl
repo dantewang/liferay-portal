@@ -31,5 +31,5 @@
 
 	${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(blogsEntryModel))}
 
-	${csvFileWriter.write("blog", blogsEntryModel.entryId + "," + blogsEntryModel.urlTitle + "," + mbRootMessageId + "\n")}
+	${csvFileWriter.write("blog", blogsEntryModel.entryId + "," + blogsEntryModel.urlTitle + "," + mbRootMessageId + "," + dataFactory.blogLayoutPlid + "\n")}
 </#list>

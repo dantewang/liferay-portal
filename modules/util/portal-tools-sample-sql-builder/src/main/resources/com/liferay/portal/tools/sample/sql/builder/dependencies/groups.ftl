@@ -25,7 +25,11 @@ ${dataFactory.toInsertSQL(countryModel)}
 <@insertGroup _groupModel=dataFactory.newUserPersonalSiteGroupModel() />
 
 <#list dataFactory.newGroupModels() as groupModel>
-	<#assign groupId = groupModel.groupId />
+	<#assign
+		groupId = groupModel.groupId
+
+		groupLayoutModels = dataFactory.newGroupLayoutModels(groupId)
+	/>
 
 	<#include "asset_publisher.ftl">
 
@@ -49,8 +53,6 @@ ${dataFactory.toInsertSQL(countryModel)}
 		_groupId=groupId
 		_parentDLFolderId=0
 	/>
-
-	<#assign groupLayoutModels = dataFactory.newGroupLayoutModels(groupId) />
 
 	<#list groupLayoutModels as groupLayoutModel>
 		<@insertLayout _layoutModel=groupLayoutModel />

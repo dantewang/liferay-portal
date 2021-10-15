@@ -529,6 +529,10 @@ public class DataFactory {
 		return assetTagIds;
 	}
 
+	public long getBlogLayoutPlid() {
+		return _blogLayoutPlid;
+	}
+
 	public long getBlogsEntryClassNameId() {
 		return getClassNameId(BlogsEntry.class);
 	}
@@ -6182,6 +6186,12 @@ public class DataFactory {
 			LayoutLocalServiceImpl.getCounterName(groupId, privateLayout),
 			counterName -> new SimpleCounter());
 
+		long plid = _layoutPlidCounter.get();
+
+		if (name.equals("blogs")) {
+			_blogLayoutPlid = plid;
+		}
+
 		LayoutModel layoutModel = new LayoutModelImpl();
 
 		// UUID
@@ -6190,7 +6200,7 @@ public class DataFactory {
 
 		// PK fields
 
-		layoutModel.setPlid(_layoutPlidCounter.get());
+		layoutModel.setPlid(plid);
 
 		// Group instance
 
@@ -6952,6 +6962,7 @@ public class DataFactory {
 	private final Map<Long, List<AssetTagModel>>[] _assetTagModelsMaps =
 		(Map<Long, List<AssetTagModel>>[])
 			new HashMap<?, ?>[BenchmarksPropsValues.MAX_GROUP_COUNT];
+	private long _blogLayoutPlid;
 	private final Map<String, ClassNameModel> _classNameModels =
 		new HashMap<>();
 	private final long _companyId;
