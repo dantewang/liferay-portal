@@ -1,0 +1,26 @@
+diff --git a/org/jdom2/input/SAXBuilder.java b/org/jdom2/input/SAXBuilder.java
+index f52dafe95af77..2820b7fcdcf07 100644
+--- a/org/jdom2/input/SAXBuilder.java
++++ b/org/jdom2/input/SAXBuilder.java
+@@ -332,7 +332,7 @@ public class SAXBuilder implements SAXEngine {
+ 	public SAXBuilder(final XMLReaderJDOMFactory xmlreaderfactory, final SAXHandlerFactory handlerfactory,
+ 			final JDOMFactory jdomfactory) {
+ 		// force default state of Expanding DTD entries, ensures features map has entry to support getExpandEntities
+-		setExpandEntities(true);
++		setExpandEntities(false);
+ 		this.readerfac = xmlreaderfactory == null
+ 				? XMLReaders.NONVALIDATING
+ 				: xmlreaderfactory;
+@@ -715,6 +715,12 @@ public class SAXBuilder implements SAXEngine {
+ 	 *        occur.
+ 	 */
+ 	public void setExpandEntities(final boolean expand) {
++		if (expand) {
++			throw new IllegalArgumentException(
++				"Liferay patches JDom to disable expand entities feature, " +
++					"see https://github.com/hunterhacker/jdom/issues/189");
++		}
++
+ 		features.put(JDOMConstants.SAX_FEATURE_EXTERNAL_ENT, expand ? Boolean.TRUE : Boolean.FALSE);
+ 		engine = null;
+ 	}
