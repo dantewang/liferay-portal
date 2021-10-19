@@ -690,7 +690,7 @@ public class SAXBuilder implements SAXEngine {
 	 */
 	@Override
 	public boolean getExpandEntities() {
-		return expand;
+		return false;
 	}
 
 	/**
@@ -989,23 +989,23 @@ public class SAXBuilder implements SAXEngine {
 		// XXX It might make sense to setEntityResolver() with a resolver
 		// that simply ignores external general entities
 		try {
-			if (parser.getFeature(SAX_FEATURE_EXTERNAL_ENT) != expand) {
-				parser.setFeature(SAX_FEATURE_EXTERNAL_ENT, expand);
-			}
+
+			// LPS-137136
+
+			parser.setFeature(SAX_FEATURE_EXTERNAL_ENT, false);
 		} catch (final SAXException e) { /* Ignore... */
 		}
 
 		// Try setting the DeclHandler if entity expansion is off
-		if (!expand) {
-			try {
-				parser.setProperty(SAX_PROPERTY_DECLARATION_HANDLER,
-						contentHandler);
-				success = true;
-			} catch (final SAXNotSupportedException e) {
-				// No lexical reporting available
-			} catch (final SAXNotRecognizedException e) {
-				// No lexical reporting available
-			}
+
+		try {
+			parser.setProperty(SAX_PROPERTY_DECLARATION_HANDLER,
+					contentHandler);
+			success = true;
+		} catch (final SAXNotSupportedException e) {
+			// No lexical reporting available
+		} catch (final SAXNotRecognizedException e) {
+			// No lexical reporting available
 		}
 
 	}
@@ -1303,3 +1303,4 @@ public class SAXBuilder implements SAXEngine {
 	}
 
 }
+/* @generated */
