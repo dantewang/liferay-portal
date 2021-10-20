@@ -1,7 +1,7 @@
 task jarPatched(type: Zip)
 
 dependencies {
-	compileOnly group: "org.bouncycastle", name: "bcmail-jdk15on", transitive: false, version: "1.61"
+	compileOnly group: "org.bouncycastle", name: "bcmail-jdk15on", transitive: false, version: "1.69"
 }
 
 jar {
@@ -15,7 +15,7 @@ jarPatched {
 	destinationDir = jar.destinationDir
 	duplicatesStrategy = "exclude"
 
-	exclude "module-info.class"
+	exclude "META-INF/versions/9/module-info.class"
 
 	from sourceSets.main.output
 
