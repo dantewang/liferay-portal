@@ -1,6 +1,6 @@
 dependencies {
+	compileInclude group: "com.liferay", name: "org.bouncycastle.provider", version: "1.69.LIFERAY-PATCHED-1"
 	compileInclude group: "org.bouncycastle", name: "bcpkix-jdk15on", version: "1.69"
-	compileInclude group: "org.bouncycastle", name: "bcprov-jdk15on", version: "1.69"
 	compileInclude group: "org.bouncycastle", name: "bcutil-jdk15on", version: "1.69"
 	compileInclude group: "org.jasig.cas.client", name: "cas-client-core", version: "3.6.1"
 
