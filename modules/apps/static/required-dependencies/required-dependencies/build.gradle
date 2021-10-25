@@ -44,6 +44,7 @@ dependencies {
 	compileOnly group: "org.apache.geronimo.specs", name: "geronimo-jcdi_2.0_spec", version: "1.3"
 	compileOnly group: "org.apache.geronimo.specs", name: "geronimo-json_1.1_spec", version: "1.5"
 	compileOnly group: "org.apache.johnzon", name: "johnzon-core", version: "1.2.11"
+	compileOnly group: "org.bouncycastle", name: "bcprov-jdk15on", version: "1.69"
 	compileOnly group: "org.eclipse.platform", name: "org.eclipse.equinox.console", version: "1.4.300"
 	compileOnly group: "org.glassfish", name: "javax.el", version: "3.0.1-b10"
 	compileOnly group: "org.jboss.classfilewriter", name: "jboss-classfilewriter", version: "1.2.3.Final"
