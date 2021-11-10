@@ -406,7 +406,7 @@ public class PropsUtil {
 			PropsKeys.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR);
 
 		if (portalShieldedContainerLibDirProperty == null) {
-			portalShieldedContainerLibDirProperty = portalLibDir;
+			portalShieldedContainerLibDirProperty = _getLibDir(PropsUtil.class);
 		}
 
 		SystemProperties.set(
