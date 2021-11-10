@@ -127,6 +127,8 @@ public class PortalClassPathUtil {
 
 		String bootstrapClassPath = sb.toString();
 
+		sb.setIndex(0);
+
 		sb.append(
 			_buildClassPath(
 				classLoader, ServletException.class.getName(),
