@@ -402,16 +402,25 @@ public class PropsUtil {
 
 		// Portal shielded container lib directory
 
+		String portalShieldedContainerLibDir = _getLibDir(PropsUtil.class);
+
 		String portalShieldedContainerLibDirProperty = System.getProperty(
 			PropsKeys.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR);
 
-		if (portalShieldedContainerLibDirProperty == null) {
-			portalShieldedContainerLibDirProperty = _getLibDir(PropsUtil.class);
+		if (portalShieldedContainerLibDirProperty != null) {
+			if (!portalShieldedContainerLibDirProperty.endsWith(
+					StringPool.SLASH)) {
+
+				portalShieldedContainerLibDirProperty += StringPool.SLASH;
+			}
+
+			portalShieldedContainerLibDir =
+				portalShieldedContainerLibDirProperty;
 		}
 
 		SystemProperties.set(
 			PropsKeys.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR,
-			portalShieldedContainerLibDirProperty);
+			portalShieldedContainerLibDir);
 
 		// Portal web directory
 
