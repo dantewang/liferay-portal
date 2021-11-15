@@ -50,14 +50,14 @@ public class PortalDirTest {
 		Assert.assertTrue(
 			"LIFERAY_LIB_PORTAL_DIR should point to \"WEB-INF/lib\": " +
 				PropsValues.LIFERAY_LIB_PORTAL_DIR,
-			PropsValues.LIFERAY_LIB_PORTAL_DIR.endsWith("WEB-INF/lib"));
+			PropsValues.LIFERAY_LIB_PORTAL_DIR.endsWith("WEB-INF/lib/"));
 
 		Assert.assertTrue(
 			"LIFERAY_LIB_PORTAL_DIR should point to \"WEB-INF/shielded-" +
 				"container-lib\": " +
 					PropsValues.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR,
 			PropsValues.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR.endsWith(
-				"WEB-INF/shielded-container-lib"));
+				"WEB-INF/shielded-container-lib/"));
 	}
 
 }
