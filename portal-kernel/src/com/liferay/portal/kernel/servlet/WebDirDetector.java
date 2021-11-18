@@ -25,8 +25,7 @@ public class WebDirDetector {
 
 	public static String getLibDir(ClassLoader classLoader) {
 		String libDir = ClassUtil.getParentPath(
-			classLoader,
-			"com.liferay.shielded.container.ShieldedContainerInitializer");
+			classLoader, "com.liferay.util.bean.PortletBeanLocatorUtil");
 
 		if (libDir.endsWith("/WEB-INF/classes/")) {
 			return libDir.substring(0, libDir.length() - 8) + "lib/";
