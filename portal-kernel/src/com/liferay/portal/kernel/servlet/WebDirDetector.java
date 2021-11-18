@@ -31,7 +31,7 @@ public class WebDirDetector {
 			return libDir.substring(0, libDir.length() - 8) + "lib/";
 		}
 
-		int pos = libDir.indexOf("/WEB-INF/lib/");
+		int pos = libDir.indexOf("/WEB-INF/shielded-container-lib/");
 
 		if (pos != -1) {
 			return libDir.substring(0, pos) + "/WEB-INF/lib/";
