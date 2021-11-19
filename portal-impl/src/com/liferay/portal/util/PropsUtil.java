@@ -362,29 +362,6 @@ public class PropsUtil {
 
 		SystemProperties.set(PropsKeys.LIFERAY_LIB_GLOBAL_DIR, globalLibDir);
 
-		// Portal lib directory
-
-		String portalLibDir = WebDirDetector.getLibDir(
-			PropsUtil.class.getClassLoader(),
-			"com.liferay.shielded.container.ShieldedContainerInitializer");
-
-		String portalLibDirProperty = System.getProperty(
-			PropsKeys.LIFERAY_LIB_PORTAL_DIR);
-
-		if (portalLibDirProperty != null) {
-			if (!portalLibDirProperty.endsWith(StringPool.SLASH)) {
-				portalLibDirProperty += StringPool.SLASH;
-			}
-
-			portalLibDir = portalLibDirProperty;
-		}
-
-		if (_log.isInfoEnabled()) {
-			_log.info("Portal lib directory " + portalLibDir);
-		}
-
-		SystemProperties.set(PropsKeys.LIFERAY_LIB_PORTAL_DIR, portalLibDir);
-
 		// Portal shielded container lib directory
 
 		String portalShieldedContainerLibDir = WebDirDetector.getLibDir(
@@ -407,6 +384,33 @@ public class PropsUtil {
 		SystemProperties.set(
 			PropsKeys.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR,
 			portalShieldedContainerLibDir);
+
+		// Portal lib directory
+
+		String portalLibDir = WebDirDetector.getLibDir(
+			PropsUtil.class.getClassLoader(),
+			"com.liferay.shielded.container.ShieldedContainerInitializer");
+
+		if (portalLibDir == null) {
+			portalLibDir = portalShieldedContainerLibDir;
+		}
+
+		String portalLibDirProperty = System.getProperty(
+			PropsKeys.LIFERAY_LIB_PORTAL_DIR);
+
+		if (portalLibDirProperty != null) {
+			if (!portalLibDirProperty.endsWith(StringPool.SLASH)) {
+				portalLibDirProperty += StringPool.SLASH;
+			}
+
+			portalLibDir = portalLibDirProperty;
+		}
+
+		if (_log.isInfoEnabled()) {
+			_log.info("Portal lib directory " + portalLibDir);
+		}
+
+		SystemProperties.set(PropsKeys.LIFERAY_LIB_PORTAL_DIR, portalLibDir);
 
 		// Portal web directory
 
