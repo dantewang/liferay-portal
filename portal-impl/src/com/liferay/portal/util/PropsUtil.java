@@ -366,7 +366,7 @@ public class PropsUtil {
 
 		String portalLibDir = WebDirDetector.getLibDir(
 			PropsUtil.class.getClassLoader(),
-			"com.liferay.util.bean.PortletBeanLocatorUtil");
+			"com.liferay.shielded.container.ShieldedContainerInitializer");
 
 		String portalLibDirProperty = System.getProperty(
 			PropsKeys.LIFERAY_LIB_PORTAL_DIR);
