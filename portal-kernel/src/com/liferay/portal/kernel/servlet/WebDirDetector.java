@@ -23,9 +23,22 @@ import com.liferay.portal.kernel.util.StringUtil;
  */
 public class WebDirDetector {
 
+	public static String getLibDir(Class<?> clazz) {
+		return getLibDir(clazz.getClassLoader(), clazz.getName());
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link #getLibDir(
+	 *             ClassLoader, String)}
+	 */
+	@Deprecated
 	public static String getLibDir(ClassLoader classLoader) {
-		String libDir = ClassUtil.getParentPath(
+		return getLibDir(
 			classLoader, "com.liferay.util.bean.PortletBeanLocatorUtil");
+	}
+
+	public static String getLibDir(ClassLoader classLoader, String name) {
+		String libDir = ClassUtil.getParentPath(classLoader, name);
 
 		if (libDir.endsWith("/WEB-INF/classes/")) {
 			return libDir.substring(0, libDir.length() - 8) + "lib/";
@@ -37,15 +50,15 @@ public class WebDirDetector {
 			return libDir.substring(0, pos) + "/WEB-INF/lib/";
 		}
 
-		if (libDir.endsWith(".jar!/")) {
-			pos = libDir.lastIndexOf(CharPool.SLASH, libDir.length() - 7);
+		pos = libDir.lastIndexOf(".jar!");
 
-			if (pos != -1) {
-				return libDir.substring(0, pos + 1);
-			}
+		if (pos == -1) {
+			pos = libDir.lastIndexOf(".jar/");
 		}
 
-		return libDir;
+		pos = libDir.lastIndexOf(CharPool.SLASH, pos);
+
+		return libDir.substring(0, pos + 1);
 	}
 
 	public static String getRootDir(ClassLoader classLoader) {

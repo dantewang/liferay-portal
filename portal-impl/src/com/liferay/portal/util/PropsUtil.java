@@ -29,7 +29,6 @@ import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.WebDirDetector;
-import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ServerDetector;
@@ -329,21 +328,6 @@ public class PropsUtil {
 		return defaultLiferayHome;
 	}
 
-	private static String _getLibDir(Class<?> clazz) {
-		String path = ClassUtil.getParentPath(
-			clazz.getClassLoader(), clazz.getName());
-
-		int pos = path.lastIndexOf(".jar!");
-
-		if (pos == -1) {
-			pos = path.lastIndexOf(".jar/");
-		}
-
-		pos = path.lastIndexOf(CharPool.SLASH, pos);
-
-		return path.substring(0, pos + 1);
-	}
-
 	private static final Log _log = LogFactoryUtil.getLog(PropsUtil.class);
 
 	private static final Configuration _configuration;
@@ -358,7 +342,7 @@ public class PropsUtil {
 
 		// Global shared lib directory
 
-		String globalSharedLibDir = _getLibDir(Servlet.class);
+		String globalSharedLibDir = WebDirDetector.getLibDir(Servlet.class);
 
 		if (_log.isInfoEnabled()) {
 			_log.info("Global shared lib directory " + globalSharedLibDir);
@@ -369,7 +353,8 @@ public class PropsUtil {
 
 		// Global lib directory
 
-		String globalLibDir = _getLibDir(CentralizedThreadLocal.class);
+		String globalLibDir = WebDirDetector.getLibDir(
+			CentralizedThreadLocal.class);
 
 		if (_log.isInfoEnabled()) {
 			_log.info("Global lib directory " + globalLibDir);
@@ -379,9 +364,9 @@ public class PropsUtil {
 
 		// Portal lib directory
 
-		ClassLoader classLoader = PropsUtil.class.getClassLoader();
-
-		String portalLibDir = WebDirDetector.getLibDir(classLoader);
+		String portalLibDir = WebDirDetector.getLibDir(
+			PropsUtil.class.getClassLoader(),
+			"com.liferay.util.bean.PortletBeanLocatorUtil");
 
 		String portalLibDirProperty = System.getProperty(
 			PropsKeys.LIFERAY_LIB_PORTAL_DIR);
