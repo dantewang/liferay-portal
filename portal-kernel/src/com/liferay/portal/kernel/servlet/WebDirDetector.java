@@ -61,6 +61,10 @@ public class WebDirDetector {
 		return libDir.substring(0, pos + 1);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no replacement
+	 */
+	@Deprecated
 	public static String getRootDir(ClassLoader classLoader) {
 		return getRootDir(getLibDir(classLoader));
 	}
