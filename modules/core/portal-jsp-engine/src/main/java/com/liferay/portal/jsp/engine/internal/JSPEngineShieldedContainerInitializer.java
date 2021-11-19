@@ -66,10 +66,15 @@ public class JSPEngineShieldedContainerInitializer
 	public void initialize(ServletContext servletContext)
 		throws ServletException {
 
+		File portalLib = new File(servletContext.getRealPath("WEB-INF/lib"));
+
 		File shieldedContainerLib = new File(
 			servletContext.getRealPath(SHIELDED_CONTAINER_LIB));
 
 		try {
+			System.setProperty(
+				PropsKeys.LIFERAY_LIB_PORTAL_DIR, portalLib.getCanonicalPath());
+
 			System.setProperty(
 				PropsKeys.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR,
 				shieldedContainerLib.getCanonicalPath());

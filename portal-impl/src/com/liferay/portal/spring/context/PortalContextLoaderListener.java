@@ -203,16 +203,6 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 
 		ServletContext servletContext = servletContextEvent.getServletContext();
 
-		String portalLibDir = servletContext.getRealPath("/WEB-INF/lib");
-
-		portalLibDir = StringUtil.replace(
-			portalLibDir, CharPool.BACK_SLASH, CharPool.FORWARD_SLASH);
-
-		if (Validator.isNotNull(portalLibDir)) {
-			SystemProperties.set(
-				PropsKeys.LIFERAY_LIB_PORTAL_DIR, portalLibDir);
-		}
-
 		PortalClassPathUtil.initializeClassPaths(servletContext);
 
 		InitUtil.init();
