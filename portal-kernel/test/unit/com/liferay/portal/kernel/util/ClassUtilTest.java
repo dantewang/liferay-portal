@@ -176,6 +176,9 @@ public class ClassUtilTest {
 			expectedParentPath,
 			ClassUtil.getParentPath(classLoader, "java.lang.String"));
 
+		Assert.assertEquals(
+			null, ClassUtil.getParentPath(classLoader, "foo.bar.Class"));
+
 		//Test log output
 
 		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(

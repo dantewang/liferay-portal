@@ -40,6 +40,10 @@ public class WebDirDetector {
 	public static String getLibDir(ClassLoader classLoader, String name) {
 		String libDir = ClassUtil.getParentPath(classLoader, name);
 
+		if (libDir == null) {
+			return null;
+		}
+
 		if (libDir.endsWith("/WEB-INF/classes/")) {
 			return libDir.substring(0, libDir.length() - 8) + "lib/";
 		}

@@ -157,6 +157,10 @@ public class ClassUtil {
 
 		URL url = classLoader.getResource(className);
 
+		if (url == null) {
+			return null;
+		}
+
 		Path path = Paths.get(_getPathURIFromURL(url));
 
 		String parentPath = StringUtil.replace(
