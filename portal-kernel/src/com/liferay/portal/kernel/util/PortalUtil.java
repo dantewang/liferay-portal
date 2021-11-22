@@ -1317,6 +1317,10 @@ public class PortalUtil {
 		return _portal.getPortalInetSocketAddressEventListeners();
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
 	public static String getPortalLibDir() {
 		return _portal.getPortalLibDir();
 	}
