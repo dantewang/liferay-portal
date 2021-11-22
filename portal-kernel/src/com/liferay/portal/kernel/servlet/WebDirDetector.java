@@ -20,7 +20,9 @@ import com.liferay.portal.kernel.util.StringUtil;
 
 /**
  * @author Brian Wing Shun Chan
+ * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
  */
+@Deprecated
 public class WebDirDetector {
 
 	public static String getLibDir(ClassLoader classLoader) {
@@ -56,8 +58,8 @@ public class WebDirDetector {
 		String rootDir = StringUtil.replace(
 			libDir, CharPool.BACK_SLASH, CharPool.FORWARD_SLASH);
 
-		if (rootDir.endsWith("/WEB-INF/lib/")) {
-			rootDir = rootDir.substring(0, rootDir.length() - 12);
+		if (rootDir.endsWith("/WEB-INF/shielded-container-lib/")) {
+			rootDir = rootDir.substring(0, rootDir.length() - 32);
 		}
 
 		return rootDir;

@@ -4060,6 +4060,10 @@ public class PortalImpl implements Portal {
 			new PortalInetSocketAddressEventListener[0]);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public String getPortalLibDir() {
 		return PropsValues.LIFERAY_LIB_PORTAL_DIR;

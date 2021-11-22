@@ -873,6 +873,10 @@ public interface Portal {
 	public PortalInetSocketAddressEventListener[]
 		getPortalInetSocketAddressEventListeners();
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
 	public String getPortalLibDir();
 
 	public InetAddress getPortalLocalInetAddress(boolean secure);
