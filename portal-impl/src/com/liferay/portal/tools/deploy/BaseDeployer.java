@@ -40,7 +40,6 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ServerDetector;
@@ -352,7 +351,9 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 			}
 
 			try {
-				String portalJarPath = PortalUtil.getPortalLibDir() + portalJar;
+				String portalJarPath =
+					PropsValues.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR +
+						portalJar;
 
 				FileUtil.copyFile(
 					portalJarPath, srcFile + "/WEB-INF/lib/" + portalJar, true);
@@ -398,7 +399,8 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 
 			if (ArrayUtil.isEmpty(commonsLoggingJars)) {
 				String portalJarPath =
-					PortalUtil.getPortalLibDir() + "commons-logging.jar";
+					PropsValues.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR +
+						"commons-logging.jar";
 
 				FileUtil.copyFile(
 					portalJarPath, srcFile + "/WEB-INF/lib/commons-logging.jar",
@@ -414,20 +416,24 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 
 			if (ArrayUtil.isEmpty(log4jJars)) {
 				String portalJarPath =
-					PortalUtil.getPortalLibDir() + "log4j-api.jar";
+					PropsValues.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR +
+						"log4j-api.jar";
 
 				FileUtil.copyFile(
 					portalJarPath, srcFile + "/WEB-INF/lib/log4j-api.jar",
 					true);
 
 				portalJarPath =
-					PortalUtil.getPortalLibDir() + "log4j-1.2-api.jar";
+					PropsValues.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR +
+						"log4j-1.2-api.jar";
 
 				FileUtil.copyFile(
 					portalJarPath, srcFile + "/WEB-INF/lib/log4j-1.2-api.jar",
 					true);
 
-				portalJarPath = PortalUtil.getPortalLibDir() + "log4j-core.jar";
+				portalJarPath =
+					PropsValues.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR +
+						"log4j-core.jar";
 
 				FileUtil.copyFile(
 					portalJarPath, srcFile + "/WEB-INF/lib/log4j-core.jar",
