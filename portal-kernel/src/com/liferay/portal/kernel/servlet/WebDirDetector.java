@@ -23,6 +23,10 @@ import com.liferay.portal.kernel.util.StringUtil;
  */
 public class WebDirDetector {
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
 	public static String getLibDir(ClassLoader classLoader) {
 		String libDir = ClassUtil.getParentPath(
 			classLoader, "com.liferay.util.bean.PortletBeanLocatorUtil");
@@ -48,6 +52,10 @@ public class WebDirDetector {
 		return libDir;
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
 	public static String getRootDir(ClassLoader classLoader) {
 		return getRootDir(getLibDir(classLoader));
 	}
