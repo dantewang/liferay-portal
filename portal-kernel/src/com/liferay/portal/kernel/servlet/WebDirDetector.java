@@ -20,7 +20,9 @@ import com.liferay.portal.kernel.util.StringUtil;
 
 /**
  * @author Brian Wing Shun Chan
+ * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
  */
+@Deprecated
 public class WebDirDetector {
 
 	public static String getLibDir(ClassLoader classLoader) {
