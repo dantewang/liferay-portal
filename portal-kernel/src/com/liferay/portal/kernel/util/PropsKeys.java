@@ -1792,6 +1792,10 @@ public interface PropsKeys {
 	public static final String LIFERAY_LIB_GLOBAL_SHARED_DIR =
 		"liferay.lib.global.shared.dir";
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String LIFERAY_LIB_PORTAL_DIR =
 		"liferay.lib.portal.dir";
 
