@@ -1532,6 +1532,10 @@ public class PropsValues {
 	public static final String LIFERAY_LIB_GLOBAL_SHARED_DIR = PropsUtil.get(
 		PropsKeys.LIFERAY_LIB_GLOBAL_SHARED_DIR);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String LIFERAY_LIB_PORTAL_DIR = PropsUtil.get(
 		PropsKeys.LIFERAY_LIB_PORTAL_DIR);
 
