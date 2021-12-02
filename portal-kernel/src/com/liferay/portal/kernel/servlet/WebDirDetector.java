@@ -26,25 +26,11 @@ import com.liferay.portal.kernel.util.StringUtil;
 public class WebDirDetector {
 
 	public static String getLibDir(ClassLoader classLoader) {
-		String libDir = ClassUtil.getParentPath(
+		String libDir = ClassUtil.getParentDir(
 			classLoader, "com.liferay.util.bean.PortletBeanLocatorUtil");
 
 		if (libDir.endsWith("/WEB-INF/classes/")) {
 			return libDir.substring(0, libDir.length() - 8) + "lib/";
-		}
-
-		int pos = libDir.indexOf("/WEB-INF/lib/");
-
-		if (pos != -1) {
-			return libDir.substring(0, pos) + "/WEB-INF/lib/";
-		}
-
-		if (libDir.endsWith(".jar!/")) {
-			pos = libDir.lastIndexOf(CharPool.SLASH, libDir.length() - 7);
-
-			if (pos != -1) {
-				return libDir.substring(0, pos + 1);
-			}
 		}
 
 		return libDir;

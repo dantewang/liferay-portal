@@ -15,7 +15,6 @@
 package com.liferay.util.resiliency.spi.provider;
 
 import com.liferay.petra.reflect.ReflectionUtil;
-import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -183,13 +182,7 @@ public class SPIClassPathContextListener implements ServletContextListener {
 	protected void addJarFiles(
 		Set<File> jarFiles, ClassLoader classLoader, String className) {
 
-		String path = ClassUtil.getParentPath(classLoader, className);
-
-		int pos = path.lastIndexOf(".jar");
-
-		pos = path.lastIndexOf(CharPool.SLASH, pos);
-
-		path = path.substring(0, pos);
+		String path = ClassUtil.getParentDir(classLoader, className);
 
 		addJarFiles(jarFiles, new File(path));
 	}

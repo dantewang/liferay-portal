@@ -139,6 +139,22 @@ public class ClassUtil {
 		return clazz.getName();
 	}
 
+	public static String getParentDir(
+		ClassLoader classLoader, String className) {
+
+		String path = getParentPath(classLoader, className);
+
+		int pos = path.lastIndexOf(".jar!");
+
+		if (pos == -1) {
+			pos = path.lastIndexOf(".jar/");
+		}
+
+		pos = path.lastIndexOf(CharPool.SLASH, pos);
+
+		return path.substring(0, pos + 1);
+	}
+
 	public static String getParentPath(
 		ClassLoader classLoader, String className) {
 
