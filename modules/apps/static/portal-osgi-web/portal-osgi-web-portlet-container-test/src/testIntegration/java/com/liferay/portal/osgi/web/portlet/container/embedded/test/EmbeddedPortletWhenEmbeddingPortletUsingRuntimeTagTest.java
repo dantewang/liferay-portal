@@ -94,7 +94,7 @@ public class EmbeddedPortletWhenEmbeddingPortletUsingRuntimeTagTest
 
 				PortletRequestDispatcher portletRequestDispatcher =
 					portletContext.getRequestDispatcher(
-						"/runtime_portlet_with_random_instanceid.jsp");
+						"/runtime_portlet_with_random_instance_id.jsp");
 
 				portletRequestDispatcher.include(renderRequest, renderResponse);
 			}
