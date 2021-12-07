@@ -154,14 +154,10 @@ public class ClassUtil {
 
 		String path = getParentPath(classLoader, className, urlMappers);
 
-		int pos = path.lastIndexOf(".jar!");
+		int pos = path.lastIndexOf("!/");
 
 		if (pos == -1) {
 			pos = path.lastIndexOf(".jar/");
-		}
-
-		if (pos == -1) {
-			pos = path.lastIndexOf("!/");
 		}
 
 		pos = path.lastIndexOf(CharPool.SLASH, pos);
