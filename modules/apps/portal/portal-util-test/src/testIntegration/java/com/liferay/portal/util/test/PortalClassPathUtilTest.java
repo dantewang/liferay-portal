@@ -15,6 +15,7 @@
 package com.liferay.portal.util.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.layout.test.util.LayoutTestUtil;
 import com.liferay.petra.process.ProcessConfig;
 import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -43,6 +44,47 @@ public class PortalClassPathUtilTest {
 	@Rule
 	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
 		new LiferayIntegrationTestRule();
+
+	@Test
+	public void testCreateProcessConfig() {
+		ProcessConfig portalProcessConfig =
+			PortalClassPathUtil.getPortalProcessConfig();
+
+		ProcessConfig testProcessConfig =
+			PortalClassPathUtil.createProcessConfig(
+				PortalClassPathUtilTest.class, LayoutTestUtil.class);
+
+		String bootstrapClassPath = testProcessConfig.getBootstrapClassPath();
+
+		Assert.assertEquals(
+			bootstrapClassPath, testProcessConfig.getRuntimeClassPath());
+
+		List<String> bootstrapClassPathEntries = StringUtil.split(
+			bootstrapClassPath, File.pathSeparatorChar);
+
+		bootstrapClassPathEntries.removeAll(
+			StringUtil.split(
+				portalProcessConfig.getBootstrapClassPath(),
+				File.pathSeparatorChar));
+
+		Assert.assertEquals(
+			bootstrapClassPathEntries.toString(), 2,
+			bootstrapClassPathEntries.size());
+
+		for (String bootstrapClassPathEntry : bootstrapClassPathEntries) {
+			Assert.assertTrue(
+				"The unique items in the test bootstrap class path should be " +
+					"in osgi/state",
+				bootstrapClassPathEntry.contains("osgi/state"));
+
+			File file = new File(bootstrapClassPathEntry);
+
+			Assert.assertTrue(
+				"The unique items in the test bootstrap class path should " +
+					"exist",
+				file.isFile());
+		}
+	}
 
 	@Test
 	public void testGetPortalProcessConfig() {
