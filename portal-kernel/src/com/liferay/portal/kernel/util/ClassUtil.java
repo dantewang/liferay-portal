@@ -280,7 +280,10 @@ public class ClassUtil {
 				throw new SystemException(exception);
 			}
 		}
-		else if (urlProtocol.equals("jar") || urlProtocol.equals("wsjar")) {
+
+		urlProtocol = url.getProtocol();
+
+		if (urlProtocol.equals("jar") || urlProtocol.equals("wsjar")) {
 			try {
 				url = new URL(url.getPath());
 			}
