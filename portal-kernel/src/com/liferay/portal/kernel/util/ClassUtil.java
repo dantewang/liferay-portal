@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -37,8 +38,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -142,7 +145,14 @@ public class ClassUtil {
 	public static String getParentDir(
 		ClassLoader classLoader, String className) {
 
-		String path = getParentPath(classLoader, className);
+		return getParentDir(classLoader, className, Collections.emptyMap());
+	}
+
+	public static String getParentDir(
+		ClassLoader classLoader, String className,
+		Map<String, UnsafeFunction<URL, URL, Exception>> urlMappers) {
+
+		String path = getParentPath(classLoader, className, urlMappers);
 
 		int pos = path.lastIndexOf(".jar!");
 
@@ -157,6 +167,13 @@ public class ClassUtil {
 
 	public static String getParentPath(
 		ClassLoader classLoader, String className) {
+
+		return getParentPath(classLoader, className, Collections.emptyMap());
+	}
+
+	public static String getParentPath(
+		ClassLoader classLoader, String className,
+		Map<String, UnsafeFunction<URL, URL, Exception>> urlMappers) {
 
 		if (_log.isDebugEnabled()) {
 			_log.debug("Class name " + className);
@@ -173,7 +190,7 @@ public class ClassUtil {
 
 		URL url = classLoader.getResource(className);
 
-		Path path = Paths.get(_getPathURIFromURL(url));
+		Path path = Paths.get(_getPathURIFromURL(url, urlMappers));
 
 		String parentPath = StringUtil.replace(
 			path.toString(), CharPool.BACK_SLASH, CharPool.SLASH);
@@ -247,10 +264,23 @@ public class ClassUtil {
 		return false;
 	}
 
-	private static URI _getPathURIFromURL(URL url) {
+	private static URI _getPathURIFromURL(
+		URL url, Map<String, UnsafeFunction<URL, URL, Exception>> urlMappers) {
+
 		String urlProtocol = url.getProtocol();
 
-		if (urlProtocol.equals("jar") || urlProtocol.equals("wsjar")) {
+		UnsafeFunction<URL, URL, Exception> urlMapper = urlMappers.get(
+			urlProtocol);
+
+		if (urlMapper != null) {
+			try {
+				url = urlMapper.apply(url);
+			}
+			catch (Exception exception) {
+				throw new SystemException(exception);
+			}
+		}
+		else if (urlProtocol.equals("jar") || urlProtocol.equals("wsjar")) {
 			try {
 				url = new URL(url.getPath());
 			}
