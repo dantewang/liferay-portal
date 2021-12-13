@@ -34,12 +34,12 @@ import com.liferay.portal.util.PropsValues;
 import java.io.File;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import java.util.Arrays;
 import java.util.Dictionary;
 
 import org.apache.felix.cm.file.ConfigurationHandler;
@@ -87,17 +87,6 @@ public class UpgradeConfigurationPidUpgradeTest {
 		db.runSQL(
 			"delete from Configuration_ where configurationId like '" +
 				_SERVICE_FACTORY_PID + "%'");
-
-		for (char separator :
-				Arrays.asList(
-					CharPool.TILDE, CharPool.DASH, CharPool.UNDERLINE)) {
-
-			File file = new File(
-				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
-				_SERVICE_FACTORY_PID + separator + "default.config");
-
-			Files.deleteIfExists(file.toPath());
-		}
 	}
 
 	@Test
@@ -122,19 +111,6 @@ public class UpgradeConfigurationPidUpgradeTest {
 	}
 
 	@Test
-	public void testUpgradeDashFileSeparator() throws Exception {
-		_createFileConfiguration(CharPool.DASH);
-
-		_upgradeConfigurationPidUpgradeProcess.upgrade();
-
-		Dictionary<String, String> dictionary = _getConfiguration();
-
-		Assert.assertEquals(
-			_SERVICE_FACTORY_PID + "~default.config",
-			dictionary.get("service.pid"));
-	}
-
-	@Test
 	public void testUpgradeDictionary() throws Exception {
 		_createUIConfiguration();
 
@@ -150,29 +126,18 @@ public class UpgradeConfigurationPidUpgradeTest {
 	}
 
 	@Test
-	public void testUpgradeTildeFileSeparator() throws Exception {
-		_createFileConfiguration(CharPool.TILDE);
-
-		_upgradeConfigurationPidUpgradeProcess.upgrade();
-
-		Dictionary<String, String> dictionary = _getConfiguration();
-
-		Assert.assertEquals(
-			_SERVICE_FACTORY_PID + "~default.config",
-			dictionary.get("service.pid"));
+	public void testUpgradeFileConfigurationWithDash() throws Exception {
+		_testUpgradeFileConfiguration(CharPool.DASH);
 	}
 
 	@Test
-	public void testUpgradeUnderlineFileSeparator() throws Exception {
-		_createFileConfiguration(CharPool.UNDERLINE);
+	public void testUpgradeFileConfigurationWithTilde() throws Exception {
+		_testUpgradeFileConfiguration(CharPool.TILDE);
+	}
 
-		_upgradeConfigurationPidUpgradeProcess.upgrade();
-
-		Dictionary<String, String> dictionary = _getConfiguration();
-
-		Assert.assertEquals(
-			_SERVICE_FACTORY_PID + "~default.config",
-			dictionary.get("service.pid"));
+	@Test
+	public void testUpgradeFileConfigurationWithUnderline() throws Exception {
+		_testUpgradeFileConfiguration(CharPool.UNDERLINE);
 	}
 
 	private void _createConfiguration(Dictionary<String, String> dictionary)
@@ -195,26 +160,6 @@ public class UpgradeConfigurationPidUpgradeTest {
 
 			preparedStatement.execute();
 		}
-	}
-
-	private void _createFileConfiguration(char separator) throws Exception {
-		String fileName = _SERVICE_FACTORY_PID + separator + "default.config";
-
-		File file = new File(
-			PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, fileName);
-
-		if (!file.exists()) {
-			Files.createFile(file.toPath());
-		}
-
-		_createConfiguration(
-			HashMapDictionaryBuilder.put(
-				"felix.fileinstall.filename", fileName
-			).put(
-				"service.factoryPid", _SERVICE_FACTORY_PID
-			).put(
-				"service.pid", _CONFIGURATION_PID
-			).build());
 	}
 
 	private void _createUIConfiguration() throws Exception {
@@ -244,6 +189,40 @@ public class UpgradeConfigurationPidUpgradeTest {
 		return ConfigurationHandler.read(
 			new UnsyncByteArrayInputStream(
 				dictionaryString.getBytes(StringPool.UTF8)));
+	}
+
+	private void _testUpgradeFileConfiguration(char separator)
+		throws Exception {
+
+		String fileName = _SERVICE_FACTORY_PID + separator + "default.config";
+
+		File file = new File(
+			PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, fileName);
+
+		Path path = file.toPath();
+
+		if (!file.exists()) {
+			Files.createFile(path);
+		}
+
+		_createConfiguration(
+			HashMapDictionaryBuilder.put(
+				"felix.fileinstall.filename", fileName
+			).put(
+				"service.factoryPid", _SERVICE_FACTORY_PID
+			).put(
+				"service.pid", _CONFIGURATION_PID
+			).build());
+
+		_upgradeConfigurationPidUpgradeProcess.upgrade();
+
+		Dictionary<String, String> dictionary = _getConfiguration();
+
+		Assert.assertEquals(
+			_SERVICE_FACTORY_PID + "~default.config",
+			dictionary.get("service.pid"));
+
+		Files.deleteIfExists(path);
 	}
 
 	private static final String _CLASS_NAME =
