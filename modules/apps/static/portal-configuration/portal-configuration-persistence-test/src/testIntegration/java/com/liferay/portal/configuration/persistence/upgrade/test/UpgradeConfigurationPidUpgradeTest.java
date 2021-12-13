@@ -108,13 +108,6 @@ public class UpgradeConfigurationPidUpgradeTest {
 					resultSet.getString("configurationId"));
 			}
 		}
-	}
-
-	@Test
-	public void testUpgradeDictionary() throws Exception {
-		_createUIConfiguration();
-
-		_upgradeConfigurationPidUpgradeProcess.upgrade();
 
 		Dictionary<String, String> dictionary = _getConfiguration();
 
