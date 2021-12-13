@@ -91,7 +91,12 @@ public class UpgradeConfigurationPidUpgradeTest {
 
 	@Test
 	public void testUpgradeConfigurationPid() throws Exception {
-		_createUIConfiguration();
+		_createConfiguration(
+			HashMapDictionaryBuilder.put(
+				"service.factoryPid", _SERVICE_FACTORY_PID
+			).put(
+				"service.pid", _CONFIGURATION_PID
+			).build());
 
 		_upgradeConfigurationPidUpgradeProcess.upgrade();
 
@@ -153,15 +158,6 @@ public class UpgradeConfigurationPidUpgradeTest {
 
 			preparedStatement.execute();
 		}
-	}
-
-	private void _createUIConfiguration() throws Exception {
-		_createConfiguration(
-			HashMapDictionaryBuilder.put(
-				"service.factoryPid", _SERVICE_FACTORY_PID
-			).put(
-				"service.pid", _CONFIGURATION_PID
-			).build());
 	}
 
 	private Dictionary<String, String> _getConfiguration() throws Exception {
