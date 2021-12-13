@@ -123,7 +123,7 @@ public class UpgradeConfigurationPidUpgradeTest {
 
 		_upgradeConfigurationPidUpgradeProcess.upgrade();
 
-		Dictionary<String, String> dictionary = _getDictionary();
+		Dictionary<String, String> dictionary = _getConfiguration();
 
 		Assert.assertEquals(
 			_SERVICE_FACTORY_PID + "~default.config",
@@ -136,7 +136,7 @@ public class UpgradeConfigurationPidUpgradeTest {
 
 		_upgradeConfigurationPidUpgradeProcess.upgrade();
 
-		Dictionary<String, String> dictionary = _getDictionary();
+		Dictionary<String, String> dictionary = _getConfiguration();
 
 		Assert.assertEquals(
 			_SERVICE_FACTORY_PID, dictionary.get("service.factoryPid"));
@@ -151,7 +151,7 @@ public class UpgradeConfigurationPidUpgradeTest {
 
 		_upgradeConfigurationPidUpgradeProcess.upgrade();
 
-		Dictionary<String, String> dictionary = _getDictionary();
+		Dictionary<String, String> dictionary = _getConfiguration();
 
 		Assert.assertEquals(
 			_SERVICE_FACTORY_PID + "~default.config",
@@ -164,7 +164,7 @@ public class UpgradeConfigurationPidUpgradeTest {
 
 		_upgradeConfigurationPidUpgradeProcess.upgrade();
 
-		Dictionary<String, String> dictionary = _getDictionary();
+		Dictionary<String, String> dictionary = _getConfiguration();
 
 		Assert.assertEquals(
 			_SERVICE_FACTORY_PID + "~default.config",
@@ -222,7 +222,7 @@ public class UpgradeConfigurationPidUpgradeTest {
 			).build());
 	}
 
-	private Dictionary<String, String> _getDictionary() throws Exception {
+	private Dictionary<String, String> _getConfiguration() throws Exception {
 		String dictionaryString = null;
 
 		try (Connection connection = DataAccess.getConnection();
