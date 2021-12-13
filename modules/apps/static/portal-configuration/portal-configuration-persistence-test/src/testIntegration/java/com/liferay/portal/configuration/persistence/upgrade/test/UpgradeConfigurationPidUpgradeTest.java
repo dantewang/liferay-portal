@@ -67,14 +67,10 @@ public class UpgradeConfigurationPidUpgradeTest {
 			"delete from Configuration_ where configurationId like '" +
 				_SERVICE_FACTORY_PID + "%'");
 
-		char[] separators = {'~', '-', '_'};
-
-		for (char separator : separators) {
-			String fileName =
-				_SERVICE_FACTORY_PID + separator + "default.config";
-
+		for (char separator : new char[] {'~', '-', '_'}) {
 			File file = new File(
-				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, fileName);
+				PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
+				_SERVICE_FACTORY_PID + separator + "default.config");
 
 			if (file.exists()) {
 				file.delete();
