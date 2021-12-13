@@ -100,6 +100,8 @@ public class UpgradeConfigurationPidUpgradeTest {
 	public void testUpgradeConfigurationPid() throws Exception {
 		_createUIConfiguration();
 
+		_upgradeConfigurationPidUpgradeProcess.upgrade();
+
 		try (Connection connection = DataAccess.getConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement(
 				StringBundler.concat(
@@ -119,6 +121,8 @@ public class UpgradeConfigurationPidUpgradeTest {
 	public void testUpgradeDashFileSeparator() throws Exception {
 		_createFileConfiguration(CharPool.DASH);
 
+		_upgradeConfigurationPidUpgradeProcess.upgrade();
+
 		Dictionary<String, String> dictionary = _getDictionary();
 
 		Assert.assertEquals(
@@ -129,6 +133,8 @@ public class UpgradeConfigurationPidUpgradeTest {
 	@Test
 	public void testUpgradeDictionary() throws Exception {
 		_createUIConfiguration();
+
+		_upgradeConfigurationPidUpgradeProcess.upgrade();
 
 		Dictionary<String, String> dictionary = _getDictionary();
 
@@ -143,6 +149,8 @@ public class UpgradeConfigurationPidUpgradeTest {
 	public void testUpgradeTildeFileSeparator() throws Exception {
 		_createFileConfiguration(CharPool.TILDE);
 
+		_upgradeConfigurationPidUpgradeProcess.upgrade();
+
 		Dictionary<String, String> dictionary = _getDictionary();
 
 		Assert.assertEquals(
@@ -154,11 +162,35 @@ public class UpgradeConfigurationPidUpgradeTest {
 	public void testUpgradeUnderlineFileSeparator() throws Exception {
 		_createFileConfiguration(CharPool.UNDERLINE);
 
+		_upgradeConfigurationPidUpgradeProcess.upgrade();
+
 		Dictionary<String, String> dictionary = _getDictionary();
 
 		Assert.assertEquals(
 			_SERVICE_FACTORY_PID + "~default.config",
 			dictionary.get("service.pid"));
+	}
+
+	private void _createConfiguration(Dictionary<String, String> dictionary)
+		throws Exception {
+
+		UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
+			new UnsyncByteArrayOutputStream();
+
+		ConfigurationHandler.write(unsyncByteArrayOutputStream, dictionary);
+
+		try (Connection connection = DataAccess.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(
+				"insert into Configuration_ (configurationId, dictionary) " +
+					"values(?, ?)")) {
+
+			preparedStatement.setString(1, _CONFIGURATION_PID);
+
+			preparedStatement.setString(
+				2, unsyncByteArrayOutputStream.toString());
+
+			preparedStatement.execute();
+		}
 	}
 
 	private void _createFileConfiguration(char separator) throws Exception {
@@ -171,7 +203,7 @@ public class UpgradeConfigurationPidUpgradeTest {
 			file.createNewFile();
 		}
 
-		_updateDatabase(
+		_createConfiguration(
 			HashMapDictionaryBuilder.put(
 				"felix.fileinstall.filename", fileName
 			).put(
@@ -182,7 +214,7 @@ public class UpgradeConfigurationPidUpgradeTest {
 	}
 
 	private void _createUIConfiguration() throws Exception {
-		_updateDatabase(
+		_createConfiguration(
 			HashMapDictionaryBuilder.put(
 				"service.factoryPid", _SERVICE_FACTORY_PID
 			).put(
@@ -208,30 +240,6 @@ public class UpgradeConfigurationPidUpgradeTest {
 		return ConfigurationHandler.read(
 			new UnsyncByteArrayInputStream(
 				dictionaryString.getBytes(StringPool.UTF8)));
-	}
-
-	private void _updateDatabase(Dictionary<String, String> dictionary)
-		throws Exception {
-
-		UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
-			new UnsyncByteArrayOutputStream();
-
-		ConfigurationHandler.write(unsyncByteArrayOutputStream, dictionary);
-
-		try (Connection connection = DataAccess.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(
-				"insert into Configuration_ (configurationId, dictionary) " +
-					"values(?, ?)")) {
-
-			preparedStatement.setString(1, _CONFIGURATION_PID);
-
-			preparedStatement.setString(
-				2, unsyncByteArrayOutputStream.toString());
-
-			preparedStatement.execute();
-		}
-
-		_upgradeConfigurationPidUpgradeProcess.upgrade();
 	}
 
 	private static final String _CLASS_NAME =
