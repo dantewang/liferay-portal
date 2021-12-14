@@ -194,24 +194,27 @@ public class UpgradeConfigurationPidUpgradeTest {
 			Files.createFile(path);
 		}
 
-		_createConfiguration(
-			HashMapDictionaryBuilder.put(
-				"felix.fileinstall.filename", fileName
-			).put(
-				"service.factoryPid", _SERVICE_FACTORY_PID
-			).put(
-				"service.pid", _CONFIGURATION_PID
-			).build());
+		try {
+			_createConfiguration(
+				HashMapDictionaryBuilder.put(
+					"felix.fileinstall.filename", fileName
+				).put(
+					"service.factoryPid", _SERVICE_FACTORY_PID
+				).put(
+					"service.pid", _CONFIGURATION_PID
+				).build());
 
-		_upgradeConfigurationPidUpgradeProcess.upgrade();
+			_upgradeConfigurationPidUpgradeProcess.upgrade();
 
-		Dictionary<String, String> dictionary = _getDictionary();
+			Dictionary<String, String> dictionary = _getDictionary();
 
-		Assert.assertEquals(
-			_SERVICE_FACTORY_PID + "~default.config",
-			dictionary.get("service.pid"));
-
-		Files.deleteIfExists(path);
+			Assert.assertEquals(
+				_SERVICE_FACTORY_PID + "~default.config",
+				dictionary.get("service.pid"));
+		}
+		finally {
+			Files.deleteIfExists(path);
+		}
 	}
 
 	private static final String _CLASS_NAME =
