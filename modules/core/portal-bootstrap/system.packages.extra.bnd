@@ -116,6 +116,8 @@ Export-Package:\
 	\
 	java_cup.runtime.*;version='2.7.1',\
 	\
+	javassist.util.proxy.*;version='3.28.0',\
+	\
 	javax.jws;version='1.1',\
 	javax.jws.soap;version='1.1',\
 	\
@@ -322,6 +324,7 @@ Provide-Capability:\
 	@../../../lib/portal/commons-logging.jar,\
 	@../../../lib/portal/dom4j.jar,\
 	@../../../lib/portal/hibernate-core.jar,\
+	@../../../lib/portal/javassist.jar,\
 	@../../../lib/portal/jaxen.jar,\
 	@../../../lib/portal/jaxrpc.jar,\
 	@../../../lib/portal/jdom2.jar!/org/**,\
