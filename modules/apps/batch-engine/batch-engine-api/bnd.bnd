@@ -10,3 +10,7 @@ Export-Package:\
 	com.liferay.batch.engine.pagination,\
 	com.liferay.batch.engine.service,\
 	com.liferay.batch.engine.service.persistence
+Import-Package:\
+	org.hibernate.proxy,\
+	\
+	*
