@@ -92,40 +92,6 @@ public class JarUtil {
 		}
 	}
 
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #downloadAndInstallJar(URL, Path, String)}
-	 */
-	@Deprecated
-	public static Path downloadAndInstallJar(
-			URL url, String libPath, String name)
-		throws Exception {
-
-		File file = new File(libPath, name);
-
-		Path path = file.toPath();
-
-		downloadAndInstallJar(url, path, null);
-
-		return path;
-	}
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #downloadAndInstallJar(URL, Path, URLClassLoader, String)}
-	 */
-	@Deprecated
-	public static void downloadAndInstallJar(
-			URL url, String libPath, String name, URLClassLoader urlClassLoader)
-		throws Exception {
-
-		File file = new File(libPath, name);
-
-		Path path = file.toPath();
-
-		downloadAndInstallJar(url, path, urlClassLoader, null);
-	}
-
 	private static final Log _log = LogFactoryUtil.getLog(JarUtil.class);
 
 	private static final Method _addURLMethod;
