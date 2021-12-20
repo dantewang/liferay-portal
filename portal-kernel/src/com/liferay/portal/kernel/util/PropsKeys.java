@@ -2997,6 +2997,9 @@ public interface PropsKeys {
 	public static final String SETUP_DATABASE_JAR_NAME =
 		"setup.database.jar.name";
 
+	public static final String SETUP_DATABASE_JAR_SHA1 =
+		"setup.database.jar.sha1";
+
 	public static final String SETUP_DATABASE_JAR_URL =
 		"setup.database.jar.url";
 
