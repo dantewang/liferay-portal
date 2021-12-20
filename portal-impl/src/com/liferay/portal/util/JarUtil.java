@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Digester;
 import com.liferay.portal.kernel.util.DigesterUtil;
 
-import java.io.File;
 import java.io.InputStream;
 
 import java.lang.reflect.Method;
@@ -90,40 +89,6 @@ public class JarUtil {
 				StringBundler.concat(
 					"Installed ", path, " to ", urlClassLoader));
 		}
-	}
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #downloadAndInstallJar(URL, Path, String)}
-	 */
-	@Deprecated
-	public static Path downloadAndInstallJar(
-			URL url, String libPath, String name)
-		throws Exception {
-
-		File file = new File(libPath, name);
-
-		Path path = file.toPath();
-
-		downloadAndInstallJar(url, path, null);
-
-		return path;
-	}
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #downloadAndInstallJar(URL, Path, URLClassLoader, String)}
-	 */
-	@Deprecated
-	public static void downloadAndInstallJar(
-			URL url, String libPath, String name, URLClassLoader urlClassLoader)
-		throws Exception {
-
-		File file = new File(libPath, name);
-
-		Path path = file.toPath();
-
-		downloadAndInstallJar(url, path, urlClassLoader, null);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(JarUtil.class);
