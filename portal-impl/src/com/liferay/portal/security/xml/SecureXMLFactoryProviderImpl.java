@@ -14,6 +14,7 @@
 
 package com.liferay.portal.security.xml;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -23,6 +24,7 @@ import com.liferay.portal.util.PropsValues;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.transform.TransformerFactory;
 
 import org.apache.xerces.parsers.SAXParser;
 
@@ -79,6 +81,23 @@ public class SecureXMLFactoryProviderImpl implements SecureXMLFactoryProvider {
 		}
 
 		return documentBuilderFactory;
+	}
+
+	@Override
+	public TransformerFactory newTransformerFactory() {
+		TransformerFactory transformerFactory =
+			TransformerFactory.newInstance();
+
+		if (!PropsValues.XML_SECURITY_ENABLED) {
+			return transformerFactory;
+		}
+
+		transformerFactory.setAttribute(
+			XMLConstants.ACCESS_EXTERNAL_DTD, StringPool.BLANK);
+		transformerFactory.setAttribute(
+			XMLConstants.ACCESS_EXTERNAL_STYLESHEET, StringPool.BLANK);
+
+		return transformerFactory;
 	}
 
 	@Override
