@@ -112,7 +112,6 @@ public class DirectoryWatcher extends Thread implements BundleListener {
 		_filter = bundleContext.getProperty(FILTER);
 		_noInitialDelay = GetterUtil.getBoolean(
 			bundleContext.getProperty(NO_INITIAL_DELAY));
-		_poll = PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL;
 		_startBundles = GetterUtil.getBoolean(
 			bundleContext.getProperty(START_NEW_BUNDLES), true);
 		_startLevel = GetterUtil.getInteger(
@@ -241,7 +240,7 @@ public class DirectoryWatcher extends Thread implements BundleListener {
 	public void run() {
 		if (!_noInitialDelay) {
 			try {
-				Thread.sleep(_poll);
+				Thread.sleep(PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL);
 			}
 			catch (InterruptedException interruptedException) {
 				if (_log.isDebugEnabled()) {
@@ -270,7 +269,7 @@ public class DirectoryWatcher extends Thread implements BundleListener {
 				}
 
 				synchronized (this) {
-					wait(_poll);
+					wait(PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL);
 				}
 			}
 			catch (InterruptedException interruptedException) {
@@ -1403,7 +1402,6 @@ public class DirectoryWatcher extends Thread implements BundleListener {
 	private int _frameworkStartLevel;
 	private final Map<File, Artifact> _installationFailures = new HashMap<>();
 	private final boolean _noInitialDelay;
-	private final long _poll;
 	private final Set<File> _processingFailures = new HashSet<>();
 	private final Scanner _scanner;
 	private final boolean _startBundles;
