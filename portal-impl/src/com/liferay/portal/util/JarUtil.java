@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Digester;
 import com.liferay.portal.kernel.util.DigesterUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.io.InputStream;
 
@@ -54,7 +55,7 @@ public class JarUtil {
 		try (InputStream inputStream = Files.newInputStream(path)) {
 			String digest = DigesterUtil.digestHex(Digester.SHA_1, inputStream);
 
-			if (!Objects.equals(sha1, digest)) {
+			if (!StringUtil.equalsIgnoreCase(sha1, digest)) {
 				throw new Exception(
 					StringBundler.concat(
 						"Failed to download ", url, " to ", path, " due to ",
