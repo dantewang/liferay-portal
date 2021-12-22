@@ -1781,6 +1781,10 @@ public class VerifyProperties extends VerifyProcess {
 		"microsoft.translator.client.id", "microsoft.translator.client.secret",
 		"minifier.inline.content.cache.size",
 		"mobile.device.styling.wap.enabled", "module.framework.initial.bundles",
+		"module.framework.properties.felix.fileinstall.disableNio2",
+		"module.framework.properties.felix.fileinstall.log.level",
+		"module.framework.properties.file.install.disableNio2",
+		"module.framework.properties.file.install.log.level",
 		"module.framework.properties.file.install.optionalImportRefreshScope",
 		"module.framework.properties.lpkg.index.validator.enabled",
 		"module.framework.register.liferay.services", "msn.login",
@@ -1970,14 +1974,6 @@ public class VerifyProperties extends VerifyProcess {
 			"module.framework.properties.felix.fileinstall.bundles." +
 				"startTransient",
 			"module.framework.properties.file.install.bundles.startTransient"
-		},
-		{
-			"module.framework.properties.felix.fileinstall.disableNio2",
-			"module.framework.properties.file.install.disableNio2"
-		},
-		{
-			"module.framework.properties.felix.fileinstall.log.level",
-			"module.framework.properties.file.install.log.level"
 		},
 		{
 			"module.framework.properties.felix.fileinstall.noInitialDelay",
