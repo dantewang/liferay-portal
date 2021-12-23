@@ -18,7 +18,6 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.file.install.FileInstaller;
-import com.liferay.portal.file.install.internal.DirectoryWatcher;
 import com.liferay.portal.file.install.internal.properties.ConfigurationProperties;
 import com.liferay.portal.file.install.internal.properties.ConfigurationPropertiesFactory;
 import com.liferay.portal.kernel.log.Log;
@@ -44,6 +43,8 @@ import org.osgi.service.cm.ConfigurationAdmin;
  * @author Matthew Tambara
  */
 public class ConfigurationFileInstaller implements FileInstaller {
+
+	public static final String FILENAME = "felix.fileinstall.filename";
 
 	public ConfigurationFileInstaller(
 		ConfigurationAdmin configurationAdmin, String encoding) {
@@ -109,7 +110,7 @@ public class ConfigurationFileInstaller implements FileInstaller {
 		String oldFileName = null;
 
 		if (old != null) {
-			oldFileName = (String)old.remove(DirectoryWatcher.FILENAME);
+			oldFileName = (String)old.remove(FILENAME);
 
 			old.remove(Constants.SERVICE_PID);
 			old.remove(ConfigurationAdmin.SERVICE_FACTORYPID);
@@ -129,7 +130,7 @@ public class ConfigurationFileInstaller implements FileInstaller {
 		if (!_equals(dictionary, old) ||
 			!Objects.equals(oldFileName, currentFileName)) {
 
-			dictionary.put(DirectoryWatcher.FILENAME, currentFileName);
+			dictionary.put(FILENAME, currentFileName);
 
 			String logString = StringPool.BLANK;
 
@@ -226,9 +227,8 @@ public class ConfigurationFileInstaller implements FileInstaller {
 
 		Configuration[] configurations = _configurationAdmin.listConfigurations(
 			StringBundler.concat(
-				StringPool.OPEN_PARENTHESIS, DirectoryWatcher.FILENAME,
-				StringPool.EQUAL, _escapeFilterValue(fileName),
-				StringPool.CLOSE_PARENTHESIS));
+				StringPool.OPEN_PARENTHESIS, FILENAME, StringPool.EQUAL,
+				_escapeFilterValue(fileName), StringPool.CLOSE_PARENTHESIS));
 
 		if ((configurations != null) && (configurations.length > 0)) {
 			return configurations[0];
