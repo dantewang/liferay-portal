@@ -1161,7 +1161,7 @@ public class DirectoryWatcher extends Thread implements BundleListener {
 				}
 
 				if (PropsValues.
-						MODULE_FRAMEWORK_FILE_INSTALL_BUNDLES_START_ACTIVATION_POLICY) {
+						MODULE_FRAMEWORK_FILE_INSTALL_BUNDLES_USE_START_ACTIVATION_POLICY) {
 
 					options |= Bundle.START_ACTIVATION_POLICY;
 				}

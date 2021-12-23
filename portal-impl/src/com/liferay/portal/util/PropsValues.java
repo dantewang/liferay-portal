@@ -1746,14 +1746,6 @@ public class PropsValues {
 				PropsKeys.MODULE_FRAMEWORK_EXPORT_PASSWORD_ATTRIBUTES));
 
 	public static final boolean
-		MODULE_FRAMEWORK_FILE_INSTALL_BUNDLES_START_ACTIVATION_POLICY =
-			GetterUtil.getBoolean(
-				PropsUtil.get(
-					PropsKeys.
-						MODULE_FRAMEWORK_FILE_INSTALL_BUNDLES_START_ACTIVATION_POLICY),
-				true);
-
-	public static final boolean
 		MODULE_FRAMEWORK_FILE_INSTALL_BUNDLES_START_NEW = GetterUtil.getBoolean(
 			PropsUtil.get(
 				PropsKeys.MODULE_FRAMEWORK_FILE_INSTALL_BUNDLES_START_NEW));
@@ -1764,6 +1756,14 @@ public class PropsValues {
 				PropsUtil.get(
 					PropsKeys.
 						MODULE_FRAMEWORK_FILE_INSTALL_BUNDLES_START_TRANSIENT));
+
+	public static final boolean
+		MODULE_FRAMEWORK_FILE_INSTALL_BUNDLES_USE_START_ACTIVATION_POLICY =
+			GetterUtil.getBoolean(
+				PropsUtil.get(
+					PropsKeys.
+						MODULE_FRAMEWORK_FILE_INSTALL_BUNDLES_USE_START_ACTIVATION_POLICY),
+				true);
 
 	public static final boolean MODULE_FRAMEWORK_FILE_INSTALL_CFG_ENABLED =
 		GetterUtil.getBoolean(
