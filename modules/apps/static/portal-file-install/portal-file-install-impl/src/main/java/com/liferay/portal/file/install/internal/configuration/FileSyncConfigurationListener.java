@@ -15,7 +15,6 @@
 package com.liferay.portal.file.install.internal.configuration;
 
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.file.install.internal.DirectoryWatcher;
 import com.liferay.portal.file.install.internal.activator.FileInstallImplBundleActivator;
 import com.liferay.portal.file.install.internal.properties.ConfigurationProperties;
 import com.liferay.portal.file.install.internal.properties.ConfigurationPropertiesFactory;
@@ -72,7 +71,7 @@ public class FileSyncConfigurationListener implements ConfigurationListener {
 
 					if (dictionary != null) {
 						fileName = (String)dictionary.get(
-							DirectoryWatcher.FILENAME);
+							ConfigurationFileInstaller.FILENAME);
 					}
 
 					if (fileName != null) {
@@ -105,7 +104,7 @@ public class FileSyncConfigurationListener implements ConfigurationListener {
 
 				if (dictionary != null) {
 					fileName = (String)dictionary.get(
-						DirectoryWatcher.FILENAME);
+						ConfigurationFileInstaller.FILENAME);
 				}
 
 				File file = null;
@@ -127,7 +126,8 @@ public class FileSyncConfigurationListener implements ConfigurationListener {
 							!Objects.equals(Constants.SERVICE_PID, key) &&
 							!Objects.equals(
 								ConfigurationAdmin.SERVICE_FACTORYPID, key) &&
-							!Objects.equals(DirectoryWatcher.FILENAME, key)) {
+							!Objects.equals(
+								ConfigurationFileInstaller.FILENAME, key)) {
 
 							toRemovePropertyKeys.add(key);
 						}
@@ -141,7 +141,8 @@ public class FileSyncConfigurationListener implements ConfigurationListener {
 						if (!Objects.equals(Constants.SERVICE_PID, key) &&
 							!Objects.equals(
 								ConfigurationAdmin.SERVICE_FACTORYPID, key) &&
-							!Objects.equals(DirectoryWatcher.FILENAME, key)) {
+							!Objects.equals(
+								ConfigurationFileInstaller.FILENAME, key)) {
 
 							Object value = dictionary.get(key);
 
