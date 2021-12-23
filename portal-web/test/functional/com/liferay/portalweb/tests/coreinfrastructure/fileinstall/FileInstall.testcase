@@ -21,7 +21,7 @@ definition {
 
 	@priority = "3"
 	test CustomizeFileFilter {
-		property custom.properties = "module.framework.properties.file.install.filter=^(?!test-theme).*\\..*";
+		property custom.properties = "module.framework.file.install.filter=^(?!test-theme).*\\..*";
 		property test.name.skip.portal.instance = "FileInstall#CustomizeFileFilter";
 
 		GogoShell.openGogoShellAdmin();
@@ -55,7 +55,7 @@ definition {
 
 	@priority = "3"
 	test CustomizeRecursiveSubdirectoryMode {
-		property custom.properties = "module.framework.properties.file.install.subdir.mode=recurse";
+		property custom.properties = "module.framework.file.install.subdir.mode=recurse";
 		property test.name.skip.portal.instance = "FileInstall#CustomizeRecursiveSubdirectoryMode";
 
 		Clustering.deployClusteringModule(nodePort = "8080");
@@ -73,7 +73,7 @@ definition {
 
 	@priority = "3"
 	test CustomizeSkipSubdirectoryMode {
-		property custom.properties = "module.framework.properties.file.install.subdir.mode=skip";
+		property custom.properties = "module.framework.file.install.subdir.mode=skip";
 		property test.name.skip.portal.instance = "FileInstall#CustomizeSkipSubdirectoryMode";
 
 		Clustering.deployClusteringModule(nodePort = "8080");
