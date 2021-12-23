@@ -75,10 +75,6 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  */
 public class DirectoryWatcher extends Thread implements BundleListener {
 
-	public static final String ACTIVE_LEVEL = "file.install.active.level";
-
-	public static final String FILTER = "file.install.filter";
-
 	public DirectoryWatcher(BundleContext bundleContext) {
 		super("fileinstall-directory-watcher");
 
