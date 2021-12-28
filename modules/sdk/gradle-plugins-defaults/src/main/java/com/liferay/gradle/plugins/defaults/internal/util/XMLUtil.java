@@ -18,6 +18,7 @@ import com.liferay.gradle.util.Validator;
 
 import java.io.File;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -105,6 +106,10 @@ public class XMLUtil {
 	public static void write(Document document, File file) throws Exception {
 		TransformerFactory transformerFactory =
 			TransformerFactory.newInstance();
+
+		transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+		transformerFactory.setAttribute(
+			XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
 		Transformer transformer = transformerFactory.newTransformer();
 
