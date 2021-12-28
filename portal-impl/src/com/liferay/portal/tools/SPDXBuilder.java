@@ -17,11 +17,13 @@ package com.liferay.portal.tools;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.petra.xml.Dom4jUtil;
+import com.liferay.portal.kernel.security.xml.SecureXMLFactoryProvider;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CSVUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.security.xml.SecureXMLFactoryProviderImpl;
 import com.liferay.portal.xml.SAXReaderFactory;
 
 import java.io.BufferedReader;
@@ -124,8 +126,11 @@ public class SPDXBuilder {
 				new File(spdxFile.getParentFile(), "versions-spdx.csv"),
 				_toCSV(document));
 
+			SecureXMLFactoryProvider secureXMLFactoryProvider =
+				new SecureXMLFactoryProviderImpl();
+
 			TransformerFactory transformerFactory =
-				TransformerFactory.newInstance();
+				secureXMLFactoryProvider.newTransformerFactory();
 
 			Transformer transformer = transformerFactory.newTransformer(
 				new StreamSource(
