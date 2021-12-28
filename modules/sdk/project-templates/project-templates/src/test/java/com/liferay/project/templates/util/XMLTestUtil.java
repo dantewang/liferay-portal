@@ -14,6 +14,8 @@
 
 package com.liferay.project.templates.util;
 
+import com.liferay.petra.string.StringPool;
+
 import java.io.StringWriter;
 
 import java.nio.file.Path;
@@ -21,6 +23,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.XMLConstants;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -148,6 +151,11 @@ public class XMLTestUtil {
 	static {
 		TransformerFactory transformerFactory =
 			TransformerFactory.newInstance();
+
+		transformerFactory.setAttribute(
+			XMLConstants.ACCESS_EXTERNAL_DTD, StringPool.BLANK);
+		transformerFactory.setAttribute(
+			XMLConstants.ACCESS_EXTERNAL_STYLESHEET, StringPool.BLANK);
 
 		try {
 			_transformer = transformerFactory.newTransformer();
