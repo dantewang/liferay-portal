@@ -14,6 +14,7 @@
 
 package com.liferay.portal.template.xsl.internal;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.template.StringTemplateResource;
@@ -63,6 +64,11 @@ public class XSLTemplate extends BaseTemplate {
 
 		_transformerFactory = TransformerFactory.newInstance(
 			_TRANSFORMER_FACTORY_CLASS_NAME, _TRANSFORMER_FACTORY_CLASS_LOADER);
+
+		_transformerFactory.setAttribute(
+			XMLConstants.ACCESS_EXTERNAL_DTD, StringPool.BLANK);
+		_transformerFactory.setAttribute(
+			XMLConstants.ACCESS_EXTERNAL_STYLESHEET, StringPool.BLANK);
 
 		try {
 			_transformerFactory.setFeature(
