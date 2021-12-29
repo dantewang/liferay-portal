@@ -151,25 +151,25 @@ public class SecureXMLFactoryProviderImplTest {
 			transformerFactoryTest, _xxeGeneralEntitiesXML1,
 			ConnectException.class,
 			"General Entities XXE attack using SYSTEM entity does not work.",
-			IllegalArgumentException.class,
+			SAXParseException.class,
 			"Vulnerable to General Entities XXE attack using SYSTEM entity.");
 		runXMLSecurityTest(
 			transformerFactoryTest, _xxeGeneralEntitiesXML2,
 			ConnectException.class,
 			"General Entities XXE attack using PUBLIC entity does not work.",
-			IllegalArgumentException.class,
+			SAXParseException.class,
 			"Vulnerable to General Entities XXE attack using PUBLIC entity.");
 		runXMLSecurityTest(
 			transformerFactoryTest, _xxeParameterEntitiesXML1,
 			ConnectException.class,
 			"Parameter Entities XXE using SYSTEM entity does not work.",
-			IllegalArgumentException.class,
+			SAXParseException.class,
 			"Vulnerable to Parameter Entities XXE using SYSTEM entity.");
 		runXMLSecurityTest(
 			transformerFactoryTest, _xxeParameterEntitiesXML2,
 			ConnectException.class,
 			"Parameter Entities XXE attack using PUBLIC entity does not work.",
-			IllegalArgumentException.class,
+			SAXParseException.class,
 			"Vulnerable to Parameter Entities XXE attack using PUBLIC entity.");
 	}
 
