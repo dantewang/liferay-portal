@@ -423,14 +423,14 @@ public class MainServlet extends HttpServlet {
 					User adminUser =
 						UserLocalServiceUtil.fetchUserByEmailAddress(
 							company.getCompanyId(),
-							PropsValues.ADMIN_EMAIL_FROM_ADDRESS);
+							PropsValues.DEFAULT_ADMIN_EMAIL_ADDRESS_PREFIX +
+								"@" + company.getMx());
 
 					if (adminUser == null) {
 						adminUser =
 							UserLocalServiceUtil.fetchUserByEmailAddress(
 								company.getCompanyId(),
-								PropsValues.DEFAULT_ADMIN_EMAIL_ADDRESS_PREFIX +
-									"@" + company.getMx());
+								PropsValues.ADMIN_EMAIL_FROM_ADDRESS);
 					}
 
 					adminUser.setPasswordReset(true);
