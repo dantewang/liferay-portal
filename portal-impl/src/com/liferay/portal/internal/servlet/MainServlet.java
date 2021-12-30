@@ -407,12 +407,39 @@ public class MainServlet extends HttpServlet {
 			}
 		}
 
-		if (StartupHelperUtil.isDBNew() &&
-			PropsValues.SETUP_WIZARD_ADD_SAMPLE_DATA) {
-
+		if (StartupHelperUtil.isDBNew()) {
 			try {
-				SetupWizardSampleDataUtil.addSampleData(
-					PortalInstances.getDefaultCompanyId());
+				if (PropsValues.SETUP_WIZARD_ADD_SAMPLE_DATA) {
+					SetupWizardSampleDataUtil.addSampleData(
+						PortalInstances.getDefaultCompanyId());
+				}
+
+				if (PropsValues.
+						SETUP_WIZARD_DEFAULT_ADMIN_PASSWORD_RESET_ENABLED) {
+
+					Company company = CompanyLocalServiceUtil.getCompanyByWebId(
+						PropsValues.COMPANY_DEFAULT_WEB_ID);
+
+					String emailAddress = PropsValues.ADMIN_EMAIL_FROM_ADDRESS;
+
+					User adminUser =
+						UserLocalServiceUtil.fetchUserByEmailAddress(
+							company.getCompanyId(), emailAddress);
+
+					if (adminUser == null) {
+						emailAddress =
+							PropsValues.DEFAULT_ADMIN_EMAIL_ADDRESS_PREFIX +
+								"@" + company.getMx();
+
+						adminUser =
+							UserLocalServiceUtil.fetchUserByEmailAddress(
+								company.getCompanyId(), emailAddress);
+					}
+
+					adminUser.setPasswordReset(true);
+
+					UserLocalServiceUtil.updateUser(adminUser);
+				}
 			}
 			catch (Exception exception) {
 				_log.error(exception, exception);
