@@ -154,7 +154,7 @@ public class MainServlet extends HttpServlet {
 		List<Portlet> portlets = PortletLocalServiceUtil.getPortlets();
 
 		if (_log.isDebugEnabled()) {
-			_log.debug("Destroy portlets");
+			_log.debug("Destroy portlets");_log.debug("Destroy portlets");
 		}
 
 		try {
@@ -420,20 +420,17 @@ public class MainServlet extends HttpServlet {
 					Company company = CompanyLocalServiceUtil.getCompanyByWebId(
 						PropsValues.COMPANY_DEFAULT_WEB_ID);
 
-					String emailAddress = PropsValues.ADMIN_EMAIL_FROM_ADDRESS;
-
 					User adminUser =
 						UserLocalServiceUtil.fetchUserByEmailAddress(
-							company.getCompanyId(), emailAddress);
+							company.getCompanyId(),
+							PropsValues.ADMIN_EMAIL_FROM_ADDRESS);
 
 					if (adminUser == null) {
-						emailAddress =
-							PropsValues.DEFAULT_ADMIN_EMAIL_ADDRESS_PREFIX +
-								"@" + company.getMx();
-
 						adminUser =
 							UserLocalServiceUtil.fetchUserByEmailAddress(
-								company.getCompanyId(), emailAddress);
+								company.getCompanyId(),
+								PropsValues.DEFAULT_ADMIN_EMAIL_ADDRESS_PREFIX +
+									"@" + company.getMx());
 					}
 
 					adminUser.setPasswordReset(true);
