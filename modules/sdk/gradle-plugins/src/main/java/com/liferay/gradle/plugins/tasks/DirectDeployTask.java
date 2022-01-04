@@ -17,12 +17,14 @@ package com.liferay.gradle.plugins.tasks;
 import com.liferay.gradle.plugins.LiferayBasePlugin;
 import com.liferay.gradle.plugins.internal.util.FileUtil;
 import com.liferay.gradle.plugins.internal.util.GradleUtil;
+import com.liferay.gradle.plugins.util.PortalTools;
 import com.liferay.gradle.util.StringUtil;
 
 import java.io.File;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.tasks.CacheableTask;
@@ -57,7 +59,7 @@ public class DirectDeployTask extends BasePortalToolsTask {
 	public List<String> getArgs() {
 		List<String> args = new ArrayList<>(3);
 
-		File appServerLibPortalDir = _getAppServerLibPortalDir();
+		File appServerLibPortalDir = _getLibDir();
 
 		String path = appServerLibPortalDir.getAbsolutePath();
 
@@ -86,9 +88,14 @@ public class DirectDeployTask extends BasePortalToolsTask {
 		jvmArgs.add(
 			"-Dexternal-properties=com/liferay/portal/tools/dependencies" +
 				"/portal-tools.properties");
-		jvmArgs.add(
-			"-Dliferay.lib.portal.dir=" +
-				FileUtil.getAbsolutePath(_getAppServerLibPortalDir()));
+
+		String libDirProperty = "-Dliferay.lib.portal.dir=";
+
+		if (_isPortalVersionGTE_7_4_x()) {
+			libDirProperty = "-Dliferay.shielded.container.lib.portal.dir=";
+		}
+
+		jvmArgs.add(libDirProperty + FileUtil.getAbsolutePath(_getLibDir()));
 
 		String webAppType = getWebAppType();
 
@@ -213,8 +220,27 @@ public class DirectDeployTask extends BasePortalToolsTask {
 		return "Deployer";
 	}
 
-	private File _getAppServerLibPortalDir() {
+	private File _getLibDir() {
+		if (_isPortalVersionGTE_7_4_x()) {
+			return new File(
+				getAppServerPortalDir(), "WEB-INF/shielded-container-lib");
+		}
+
 		return new File(getAppServerPortalDir(), "WEB-INF/lib");
+	}
+
+	private boolean _isPortalVersionGTE_7_4_x() {
+		String version = PortalTools.getPortalVersion(project);
+
+		if (Objects.equals(version, PortalTools.PORTAL_VERSION_7_0_X) ||
+			Objects.equals(version, PortalTools.PORTAL_VERSION_7_1_X) ||
+			Objects.equals(version, PortalTools.PORTAL_VERSION_7_2_X) ||
+			Objects.equals(version, PortalTools.PORTAL_VERSION_7_3_X)) {
+
+			return false;
+		}
+
+		return true;
 	}
 
 	private Object _appServerDeployDir;
