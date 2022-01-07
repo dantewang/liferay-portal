@@ -76,44 +76,23 @@ public class SessionClicksTest {
 					return null;
 				}));
 
-		HttpServletRequest httpServletRequest = new MockHttpServletRequest();
-
-		_testPutIntoPortalPreferences(
-			httpServletRequest, "key1", "value1", null);
-
-		_testPutIntoPortalPreferences(
-			httpServletRequest, "key2", SessionClicks.class.getName(),
-			_MAX_SIZE_TERMS_WARNING_PREFIX);
-
-		_testPutIntoPortalPreferences(
-			httpServletRequest, SessionClicks.class.getName(), "value2",
-			_MAX_SIZE_TERMS_WARNING_PREFIX);
-
-		for (int i = 1; i <= 20; i++) {
-			String warningMessagePrefix = null;
-
-			if (i > 10) {
-				warningMessagePrefix = _MAX_ALLOWED_VALUES_WARNING_PREFIX;
-			}
-
-			_testPutIntoPortalPreferences(
-				httpServletRequest, "key" + i, "value" + i,
-				warningMessagePrefix);
-		}
+		_testPut(new MockHttpServletRequest());
 	}
 
 	@Test
 	public void testPutIntoSession() {
-		HttpSession httpSession = new MockHttpSession();
+		_testPut(new MockHttpSession());
+	}
 
-		_testPutIntoSession(httpSession, "key1", "value1", null);
+	private void _testPut(Object target) {
+		_testPut(target, "key1", "value1", null);
 
-		_testPutIntoSession(
-			httpSession, "key2", SessionClicks.class.getName(),
+		_testPut(
+			target, "key2", SessionClicks.class.getName(),
 			_MAX_SIZE_TERMS_WARNING_PREFIX);
 
-		_testPutIntoSession(
-			httpSession, SessionClicks.class.getName(), "value2",
+		_testPut(
+			target, SessionClicks.class.getName(), "value2",
 			_MAX_SIZE_TERMS_WARNING_PREFIX);
 
 		for (int i = 1; i <= 20; i++) {
@@ -123,60 +102,40 @@ public class SessionClicksTest {
 				warningMessagePrefix = _MAX_ALLOWED_VALUES_WARNING_PREFIX;
 			}
 
-			_testPutIntoSession(
-				httpSession, "key" + i, "value" + i, warningMessagePrefix);
+			_testPut(target, "key" + i, "value" + i, warningMessagePrefix);
 		}
 	}
 
-	private void _testPutIntoPortalPreferences(
-		HttpServletRequest httpServletRequest, String key, String value,
-		String expectedMessagePrefix) {
+	private void _testPut(
+		Object target, String key, String value, String expectedMessagePrefix) {
 
 		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
 				SessionClicks.class.getName(), Level.WARNING)) {
 
-			SessionClicks.put(httpServletRequest, key, value);
+			if (target instanceof HttpServletRequest) {
+				SessionClicks.put((HttpServletRequest)target, key, value);
+			}
+			else {
+				SessionClicks.put((HttpSession)target, key, value);
+			}
+
+			String actualValue = null;
+
+			if (target instanceof HttpServletRequest) {
+				actualValue = SessionClicks.get(
+					(HttpServletRequest)target, key, null);
+			}
+			else {
+				actualValue = SessionClicks.get((HttpSession)target, key, null);
+			}
 
 			if (expectedMessagePrefix == null) {
-				Assert.assertEquals(
-					value, SessionClicks.get(httpServletRequest, key, null));
+				Assert.assertEquals(value, actualValue);
 
 				return;
 			}
 
-			Assert.assertNull(SessionClicks.get(httpServletRequest, key, null));
-
-			List<LogEntry> logEntries = logCapture.getLogEntries();
-
-			Assert.assertEquals(logEntries.toString(), 1, logEntries.size());
-
-			LogEntry logEntry = logEntries.get(0);
-
-			Assert.assertEquals(
-				StringBundler.concat(
-					expectedMessagePrefix, " {key=", key, ", value=", value,
-					"}"),
-				logEntry.getMessage());
-		}
-	}
-
-	private void _testPutIntoSession(
-		HttpSession httpSession, String key, String value,
-		String expectedMessagePrefix) {
-
-		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
-				SessionClicks.class.getName(), Level.WARNING)) {
-
-			SessionClicks.put(httpSession, key, value);
-
-			if (expectedMessagePrefix == null) {
-				Assert.assertEquals(
-					value, SessionClicks.get(httpSession, key, null));
-
-				return;
-			}
-
-			Assert.assertNull(SessionClicks.get(httpSession, key, null));
+			Assert.assertNull(actualValue);
 
 			List<LogEntry> logEntries = logCapture.getLogEntries();
 
