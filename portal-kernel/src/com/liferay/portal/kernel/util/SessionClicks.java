@@ -170,22 +170,22 @@ public class SessionClicks {
 			size++;
 		}
 
-		if (size >= _SESSION_CLICKS_MAX_ALLOWED_VALUES) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(
-					StringBundler.concat(
-						"Session clicks has attempted to exceed the maximum ",
-						"number of allowed values with {key=", key, ", value=",
-						value, "}"));
-			}
+		if (size < _SESSION_CLICKS_MAX_ALLOWED_VALUES) {
+			String sessionKey = StringBundler.concat(
+				namespace, StringPool.COLON, key);
+
+			httpSession.setAttribute(sessionKey, value);
 
 			return;
 		}
 
-		String sessionKey = StringBundler.concat(
-			namespace, StringPool.COLON, key);
-
-		httpSession.setAttribute(sessionKey, value);
+		if (_log.isWarnEnabled()) {
+			_log.warn(
+				StringBundler.concat(
+					"Session clicks has attempted to exceed the maximum ",
+					"number of allowed values with {key=", key, ", value=",
+					value, "}"));
+		}
 	}
 
 	private static final String _DEFAULT_NAMESPACE =
