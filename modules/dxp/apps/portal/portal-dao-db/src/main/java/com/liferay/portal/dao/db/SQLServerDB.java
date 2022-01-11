@@ -117,6 +117,11 @@ public class SQLServerDB extends BaseDB {
 	}
 
 	@Override
+	protected int[] getSQLTypeSizes() {
+		return _SQL_TYPE_SIZES;
+	}
+
+	@Override
 	protected String[] getTemplate() {
 		return _SQL_SERVER;
 	}
@@ -186,6 +191,8 @@ public class SQLServerDB extends BaseDB {
 	};
 
 	private static final int _SQL_SERVER_2000 = 8;
+
+	private static final int[] _SQL_TYPE_SIZES = {4000, 2147483647};
 
 	private static final int[] _SQL_TYPES = {
 		Types.LONGVARBINARY, Types.LONGVARBINARY, Types.BIT, Types.TIMESTAMP,
