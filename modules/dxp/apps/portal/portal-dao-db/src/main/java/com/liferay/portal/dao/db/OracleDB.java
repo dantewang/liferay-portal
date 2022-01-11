@@ -147,6 +147,11 @@ public class OracleDB extends BaseDB {
 	}
 
 	@Override
+	protected int[] getSQLTypeSizes() {
+		return _SQL_TYPE_SIZES;
+	}
+
+	@Override
 	protected String[] getTemplate() {
 		return _ORACLE;
 	}
@@ -262,6 +267,8 @@ public class OracleDB extends BaseDB {
 		" number(30,0)", " number(30,0)", " varchar2(4000 char)", " clob",
 		" varchar2", "", "commit"
 	};
+
+	private static final int[] _SQL_TYPE_SIZES = {4000, -1};
 
 	private static final int[] _SQL_TYPES = {
 		Types.BLOB, Types.BLOB, Types.NUMERIC, Types.TIMESTAMP, Types.NUMERIC,
