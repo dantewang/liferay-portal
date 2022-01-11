@@ -120,6 +120,11 @@ public class DB2DB extends BaseDB {
 	}
 
 	@Override
+	protected int[] getSQLTypeSizes() {
+		return _SQL_TYPE_SIZES;
+	}
+
+	@Override
 	protected String[] getTemplate() {
 		return _DB2;
 	}
@@ -280,6 +285,8 @@ public class DB2DB extends BaseDB {
 		" bigint", " varchar(4000)", " clob", " varchar",
 		" generated always as identity", "commit"
 	};
+
+	private static final int[] _SQL_TYPE_SIZES = {4000, -1};
 
 	private static final int[] _SQL_TYPES = {
 		Types.BLOB, Types.BLOB, Types.SMALLINT, Types.TIMESTAMP, Types.DOUBLE,

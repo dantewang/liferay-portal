@@ -130,6 +130,11 @@ public class PostgreSQLDB extends BaseDB {
 	}
 
 	@Override
+	protected int[] getSQLTypeSizes() {
+		return _SQL_TYPE_SIZES;
+	}
+
+	@Override
 	protected String[] getTemplate() {
 		return _POSTGRESQL;
 	}
@@ -232,6 +237,8 @@ public class PostgreSQLDB extends BaseDB {
 		" bytea", " bool", " timestamp", " double precision", " integer",
 		" bigint", " text", " text", " varchar", "", "commit"
 	};
+
+	private static final int[] _SQL_TYPE_SIZES = {2147483647, 2147483647};
 
 	private static final int[] _SQL_TYPES = {
 		Types.BIGINT, Types.BINARY, Types.BIT, Types.TIMESTAMP, Types.DOUBLE,
