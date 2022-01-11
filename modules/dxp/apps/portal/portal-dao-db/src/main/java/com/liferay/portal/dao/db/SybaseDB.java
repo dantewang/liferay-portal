@@ -95,6 +95,11 @@ public class SybaseDB extends BaseDB {
 	}
 
 	@Override
+	protected int[] getSQLTypeSizes() {
+		return _SQL_TYPE_SIZES;
+	}
+
+	@Override
 	protected String[] getTemplate() {
 		return _SYBASE;
 	}
@@ -194,6 +199,8 @@ public class SybaseDB extends BaseDB {
 	}
 
 	protected static final String DROP_COLUMN = "drop column";
+
+	private static final int[] _SQL_TYPE_SIZES = {4000, -1};
 
 	private static final int _SQL_TYPE_TIMESTAMP = 11;
 
