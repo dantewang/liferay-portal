@@ -14,55 +14,43 @@
 
 package com.liferay.portal.dao.db.test;
 
-import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBInspector;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
-import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.sql.Connection;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * @author Alberto Chaparro
  */
-@RunWith(Arquillian.class)
-public class DBTest {
-
-	@ClassRule
-	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new LiferayIntegrationTestRule();
+public abstract class BaseDBTestCase {
 
 	@Before
 	public void setUp() throws Exception {
 		_connection = DataAccess.getConnection();
 
-		_dbInspector = new DBInspector(_connection);
+		dbInspector = new DBInspector(_connection);
 
 		_db = DBManagerUtil.getDB();
 
 		_db.runSQL(
 			StringBundler.concat(
-				"create table ", _TABLE_NAME, "(id LONG not null primary key, ",
+				"create table ", TABLE_NAME, "(id LONG not null primary key, ",
 				"notNilColumn VARCHAR(75) not null, nilColumn VARCHAR(75) ",
 				"null)"));
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		_db.runSQL("drop table " + _TABLE_NAME);
+		_db.runSQL("drop table " + TABLE_NAME);
 
 		DataAccess.cleanUp(_connection);
 	}
@@ -72,8 +60,8 @@ public class DBTest {
 		_db.runSQL(_getAlterColumType("notNilColumn", "VARCHAR(200) not null"));
 
 		Assert.assertTrue(
-			_dbInspector.hasColumnType(
-				_TABLE_NAME, "notNilColumn", "VARCHAR(200) not null"));
+			dbInspector.hasColumnType(
+				TABLE_NAME, "notNilColumn", "VARCHAR(200) not null"));
 	}
 
 	@Test
@@ -81,8 +69,8 @@ public class DBTest {
 		_db.runSQL(_getAlterColumType("nilColumn", "VARCHAR(75) not null"));
 
 		Assert.assertTrue(
-			_dbInspector.hasColumnType(
-				_TABLE_NAME, "nilColumn", "VARCHAR(75) not null"));
+			dbInspector.hasColumnType(
+				TABLE_NAME, "nilColumn", "VARCHAR(75) not null"));
 	}
 
 	@Test
@@ -90,8 +78,8 @@ public class DBTest {
 		_db.runSQL(_getAlterColumType("notNilColumn", "VARCHAR(75) null"));
 
 		Assert.assertTrue(
-			_dbInspector.hasColumnType(
-				_TABLE_NAME, "notNilColumn", "VARCHAR(75) null"));
+			dbInspector.hasColumnType(
+				TABLE_NAME, "notNilColumn", "VARCHAR(75) null"));
 	}
 
 	@Test
@@ -99,8 +87,8 @@ public class DBTest {
 		_db.runSQL(_getAlterColumType("notNilColumn", "VARCHAR(75) not null"));
 
 		Assert.assertTrue(
-			_dbInspector.hasColumnType(
-				_TABLE_NAME, "notNilColumn", "VARCHAR(75) not null"));
+			dbInspector.hasColumnType(
+				TABLE_NAME, "notNilColumn", "VARCHAR(75) not null"));
 	}
 
 	@Test
@@ -108,20 +96,21 @@ public class DBTest {
 		_db.runSQL(_getAlterColumType("nilColumn", "VARCHAR(75) null"));
 
 		Assert.assertTrue(
-			_dbInspector.hasColumnType(
-				_TABLE_NAME, "nilColumn", "VARCHAR(75) null"));
+			dbInspector.hasColumnType(
+				TABLE_NAME, "nilColumn", "VARCHAR(75) null"));
 	}
+
+	protected static final String TABLE_NAME = "DBTest";
+
+	protected DBInspector dbInspector;
 
 	private String _getAlterColumType(String columnName, String newType) {
 		return StringBundler.concat(
-			"alter_column_type ", _TABLE_NAME, StringPool.SPACE, columnName,
+			"alter_column_type ", TABLE_NAME, StringPool.SPACE, columnName,
 			StringPool.SPACE, newType);
 	}
 
-	private static final String _TABLE_NAME = "DBTest";
-
 	private Connection _connection;
 	private DB _db;
-	private DBInspector _dbInspector;
 
 }
