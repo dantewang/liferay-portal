@@ -31,7 +31,6 @@ dependencies {
 	compileInclude group: "org.jfree", name: "jcommon", version: "1.0.24"
 	compileInclude group: "org.jfree", name: "jfreechart", version: "1.0.19"
 	compileInclude group: "org.olap4j", name: "olap4j", version: "1.2.0"
-	compileInclude group: "xalan", name: "xalan", version: "2.7.2"
 
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
 	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations", version: "1.4.0"
