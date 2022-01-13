@@ -2,12 +2,6 @@ package ${packagePath}.service.http;
 
 import ${apiPackagePath}.service.${entity.name}ServiceUtil;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.LocalizationUtil;
-
 import java.rmi.RemoteException;
 
 import java.util.Locale;
@@ -168,113 +162,9 @@ public class ${entity.name}ServiceSoap {
 			</#list>
 
 			) throws RemoteException {
-				try {
-					${localizationMapVariables}
-
-					<#if !stringUtil.equals(returnValueName, "void")>
-						${returnTypeGenericsName} returnValue =
-					</#if>
-
-					${entity.name}ServiceUtil.${method.name}(
-
-					<#list method.parameters as parameter>
-						<#assign
-							parameterTypeName = serviceBuilder.getTypeGenericsName(parameter.type)
-							parameterListActualType = serviceBuilder.getListActualTypeArguments(parameter.type)
-						/>
-
-						<#if parameterTypeName == "java.util.Locale">
-							LocaleUtil.fromLanguageId(
-						<#elseif parameterTypeName == "java.util.List<java.lang.Long>">
-							ListUtil.toList(
-						<#elseif (parameter.type.fullyQualifiedName == "java.util.List") && serviceBuilder.hasEntityByGenericsName(parameterListActualType)>
-							<#assign parameterEntity = serviceBuilder.getEntityByGenericsName(parameterListActualType) />
-
-							${parameterEntity.packagePath}.model.impl.${parameterEntity.name}ModelImpl.toModels(
-						<#elseif serviceBuilder.hasEntityByParameterTypeValue(parameter.type.fullyQualifiedName)>
-							<#assign parameterEntity = serviceBuilder.getEntityByGenericsName(parameter.type.fullyQualifiedName) />
-
-							${parameterEntity.packagePath}.model.impl.${parameterEntity.name}ModelImpl.toModel(
-						</#if>
-
-						${parameter.name}
-
-						<#if parameterTypeName == "java.util.Locale">
-							)
-						<#elseif parameterTypeName == "java.util.List<java.lang.Long>">
-							)
-						<#elseif (parameter.type.fullyQualifiedName == "java.util.List") && serviceBuilder.hasEntityByGenericsName(parameterListActualType)>
-							)
-						<#elseif serviceBuilder.hasEntityByParameterTypeValue(parameter.type.fullyQualifiedName)>
-							)
-						</#if>
-
-						<#if parameter_has_next>
-							,
-						</#if>
-					</#list>
-
-					);
-
-					<#if !stringUtil.equals(returnValueName, "void")>
-						<#if returnValueName == extendedModelName>
-							<#if validator.isNull(returnValueDimension)>
-								return ${soapModelName}.toSoapModel(returnValue);
-							<#else>
-								return ${soapModelName}.toSoapModels(returnValue);
-							</#if>
-						<#elseif stringUtil.startsWith(returnValueName, apiPackagePath + ".model.") && serviceBuilder.hasEntityByGenericsName(returnValueName)>
-							<#if validator.isNull(returnValueDimension)>
-								return ${returnValueName}Soap.toSoapModel(returnValue);
-							<#else>
-								return ${returnValueName}Soap.toSoapModels(returnValue);
-							</#if>
-						<#elseif stringUtil.startsWith(returnValueName, "com.liferay.portal.kernel.json.JSON")>
-							return returnValue.toString();
-						<#elseif stringUtil.startsWith(returnValueName, "com.liferay.portal.kernel.repository.model.")>
-							return ${returnValueName}Soap.toSoapModel(returnValue);
-						<#elseif returnValueName == "java.util.List">
-							<#if returnTypeGenericsName == "java.util.List<java.lang.Boolean>">
-								return returnValue.toArray(new java.lang.Boolean[returnValue.size()]);
-							<#elseif returnTypeGenericsName == "java.util.List<java.lang.Double>">
-								return returnValue.toArray(new java.lang.Double[returnValue.size()]);
-							<#elseif returnTypeGenericsName == "java.util.List<java.lang.Integer>">
-								return returnValue.toArray(new java.lang.Integer[returnValue.size()]);
-							<#elseif returnTypeGenericsName == "java.util.List<java.lang.Float>">
-								return returnValue.toArray(new java.lang.Float[returnValue.size()]);
-							<#elseif returnTypeGenericsName == "java.util.List<java.lang.Long>">
-								return returnValue.toArray(new java.lang.Long[returnValue.size()]);
-							<#elseif returnTypeGenericsName == "java.util.List<java.lang.Short>">
-								return returnValue.toArray(new java.lang.Short[returnValue.size()]);
-							<#elseif returnTypeGenericsName == "java.util.List<java.lang.String>">
-								return returnValue.toArray(new java.lang.String[returnValue.size()]);
-							<#elseif returnTypeGenericsName == ("java.util.List<" + extendedModelName + ">")>
-								return ${extendedModelName}Soap.toSoapModels(returnValue);
-							<#elseif stringUtil.startsWith(returnTypeGenericsName, "java.util.List<com.liferay.portal.kernel.repository.model.")>
-								return ${serviceBuilder.getListActualTypeArguments(method.getReturns())}Soap.toSoapModels(returnValue);
-							<#elseif entity.hasEntityColumns() && (extendedModelName == serviceBuilder.getListActualTypeArguments(method.getReturns()))>
-								return ${soapModelName}.toSoapModels(returnValue);
-							<#elseif !entity.hasEntityColumns()>
-								return returnValue.toArray(new ${serviceBuilder.getListActualTypeArguments(method.getReturns())}[returnValue.size()]);
-							<#else>
-								return ${serviceBuilder.getListActualTypeArguments(method.getReturns())}Soap.toSoapModels(returnValue);
-							</#if>
-						<#else>
-							return returnValue;
-						</#if>
-					</#if>
-				}
-				catch (Exception exception) {
-					_log.error(exception, exception);
-
-					throw new RemoteException(exception.getMessage());
-				}
+				throw new UnsupportedOperationException();
 			}
 		</#if>
 	</#list>
-
-	<#if hasMethods>
-		private static Log _log = LogFactoryUtil.getLog(${entity.name}ServiceSoap.class);
-	</#if>
 
 }
