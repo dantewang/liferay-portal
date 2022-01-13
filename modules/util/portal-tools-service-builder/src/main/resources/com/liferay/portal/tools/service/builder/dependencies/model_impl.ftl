@@ -355,21 +355,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		 */
 		</#if>
 		public static ${entity.name} toModel(${entity.name}Soap soapModel) {
-			if (soapModel == null) {
-				return null;
-			}
-
-			${entity.name} model = new ${entity.name}Impl();
-
-			<#list entity.regularEntityColumns as entityColumn>
-				<#if stringUtil.equals(entityColumn.type, "boolean")>
-					model.set${entityColumn.methodName}(soapModel.is${entityColumn.methodName}());
-				<#else>
-					model.set${entityColumn.methodName}(soapModel.get${entityColumn.methodName}());
-				</#if>
-			</#list>
-
-			return model;
+			throw new UnsupportedOperationException();
 		}
 
 		/**
@@ -385,17 +371,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		 */
 		</#if>
 		public static List<${entity.name}> toModels(${entity.name}Soap[] soapModels) {
-			if (soapModels == null) {
-				return null;
-			}
-
-			List<${entity.name}> models = new ArrayList<${entity.name}>(soapModels.length);
-
-			for (${entity.name}Soap soapModel : soapModels) {
-				models.add(toModel(soapModel));
-			}
-
-			return models;
+			throw new UnsupportedOperationException();
 		}
 	</#if>
 
