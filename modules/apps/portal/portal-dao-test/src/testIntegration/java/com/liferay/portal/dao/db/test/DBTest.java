@@ -20,6 +20,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBInspector;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
+import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -28,6 +29,7 @@ import java.sql.Connection;
 
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -110,6 +112,32 @@ public class DBTest {
 		Assert.assertTrue(
 			_dbInspector.hasColumnType(
 				_TABLE_NAME, "nilColumn", "VARCHAR(75) null"));
+	}
+
+	@Test
+	public void testNotHasColumnTypeString() throws Exception {
+		DBType dbType = _db.getDBType();
+
+		Assume.assumeTrue(
+			(dbType == DBType.DB2) || (dbType == DBType.HYPERSONIC) ||
+			(dbType == DBType.ORACLE) || (dbType == DBType.POSTGRESQL) ||
+			(dbType == DBType.SQLSERVER) || (dbType == DBType.SYBASE));
+
+		Assert.assertFalse(
+			_dbInspector.hasColumnType(
+				_TABLE_NAME, "nilColumn", "STRING null"));
+	}
+
+	@Test
+	public void testNotHasColumnTypeText() throws Exception {
+		DBType dbType = _db.getDBType();
+
+		Assume.assumeTrue(
+			(dbType == DBType.HYPERSONIC) || (dbType == DBType.POSTGRESQL) ||
+			(dbType == DBType.SQLSERVER));
+
+		Assert.assertFalse(
+			_dbInspector.hasColumnType(_TABLE_NAME, "nilColumn", "TEXT null"));
 	}
 
 	private String _getAlterColumType(String columnName, String newType) {
