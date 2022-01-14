@@ -12829,10 +12829,6 @@ if (ppstate.equals("normal")) {
 				<ant dir="portal-impl" inheritAll="false" target="test-class">
 					<property name="test.class" value="ServiceHttpTestSuite" />
 				</ant>
-
-				<ant dir="portal-impl" inheritAll="false" target="test-class">
-					<property name="test.class" value="ServiceSoapTestSuite" />
-				</ant>
 			</then>
 		</if>
 
