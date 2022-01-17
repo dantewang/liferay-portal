@@ -25,8 +25,10 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import java.lang.reflect.Method;
 
 import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import java.util.Objects;
 
@@ -118,8 +120,18 @@ public class StringClobType extends MaterializedClobType {
 						WrapperOptions options)
 					throws SQLException {
 
-					return javaTypeDescriptor.wrap(
-						statement.getClob(index), options);
+					boolean autoCommit = _isAutoCommit(statement);
+
+					try {
+						return javaTypeDescriptor.wrap(
+							statement.getClob(index), options);
+					}
+					finally {
+						if (autoCommit) {
+							_setAutoCommit(
+								statement.getConnection(), autoCommit);
+						}
+					}
 				}
 
 				@Override
@@ -128,8 +140,18 @@ public class StringClobType extends MaterializedClobType {
 						WrapperOptions options)
 					throws SQLException {
 
-					return javaTypeDescriptor.wrap(
-						statement.getClob(name), options);
+					boolean autoCommit = _isAutoCommit(statement);
+
+					try {
+						return javaTypeDescriptor.wrap(
+							statement.getClob(name), options);
+					}
+					finally {
+						if (autoCommit) {
+							_setAutoCommit(
+								statement.getConnection(), autoCommit);
+						}
+					}
 				}
 
 				@Override
@@ -138,8 +160,41 @@ public class StringClobType extends MaterializedClobType {
 						WrapperOptions options)
 					throws SQLException {
 
-					return javaTypeDescriptor.wrap(
-						resultSet.getClob(name), options);
+					Statement statement = resultSet.getStatement();
+
+					boolean autoCommit = _isAutoCommit(statement);
+
+					try {
+						return javaTypeDescriptor.wrap(
+							resultSet.getClob(name), options);
+					}
+					finally {
+						if (autoCommit) {
+							_setAutoCommit(
+								statement.getConnection(), autoCommit);
+						}
+					}
+				}
+
+				private boolean _isAutoCommit(Statement statement)
+					throws SQLException {
+
+					Connection connection = statement.getConnection();
+
+					boolean autoCommit = connection.getAutoCommit();
+
+					if (autoCommit) {
+						connection.setAutoCommit(false);
+					}
+
+					return autoCommit;
+				}
+
+				private void _setAutoCommit(
+						Connection connection, boolean autoCommit)
+					throws SQLException {
+
+					connection.setAutoCommit(autoCommit);
 				}
 
 			};
