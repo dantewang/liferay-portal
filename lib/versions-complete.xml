@@ -990,7 +990,7 @@
 			</library>
 			<library>
 				<file-name>com.liferay.diff.impl.jar!org.outerj.daisy.diff.jar</file-name>
-				<version>1.2.0-atlassian-hosted.LIFERAY-PATCHED-1</version>
+				<version>1.2.0-atlassian-hosted.LIFERAY-PATCHED-2</version>
 				<project-name>org.outerj.daisy.diff</project-name>
 				<licenses>
 					<license>
@@ -4217,6 +4217,18 @@
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
 						<license-url>https://www.apache.org/licenses/LICENSE-2.0</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.portal.template.xsl.jar!xalan.jar</file-name>
+				<version>2.7.2</version>
+				<project-name>Xalan Java</project-name>
+				<project-url>http://xml.apache.org/xalan-j/</project-url>
+				<licenses>
+					<license>
+						<license-name>The Apache Software License, Version 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
 			</library>
@@ -7840,29 +7852,6 @@
 					<license>
 						<license-name>Apache License 2.0</license-name>
 						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
-					</license>
-				</licenses>
-			</library>
-			<library>
-				<file-name>lib/portal/xalan.jar</file-name>
-				<version>2.7.2</version>
-				<project-name>Xalan</project-name>
-				<project-url>http://xalan.apache.org/xalan-j</project-url>
-				<licenses>
-					<license>
-						<license-name>Apache License 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
-						<copyright-notice>Copyright (c) 1999-2002, Lotus Development Corporation</copyright-notice>
-					</license>
-					<license>
-						<license-name>Apache License 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
-						<copyright-notice>Copyright (c) 2001-2002, Sun Microsystems.</copyright-notice>
-					</license>
-					<license>
-						<license-name>Apache License 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
-						<copyright-notice>Copyright (c) 2003, IBM Corporation., http://www.ibm.com</copyright-notice>
 					</license>
 				</licenses>
 			</library>
