@@ -88,6 +88,7 @@
 /development/xmlresolver.jar
 /portal/activation.jar
 /portal/ant.jar
+/portal/antlr.jar
 /portal/asm-analysis.jar
 /portal/asm-commons.jar
 /portal/asm-tree.jar
