@@ -132,6 +132,7 @@
 	<classpathentry kind="lib" path="lib/portal/asm-util.jar"/>
 	<classpathentry kind="lib" path="lib/portal/asm.jar"/>
 	<classpathentry kind="lib" path="lib/portal/axis.jar"/>
+	<classpathentry kind="lib" path="lib/portal/byte-buddy.jar"/>
 	<classpathentry kind="lib" path="lib/portal/c3p0.jar"/>
 	<classpathentry kind="lib" path="lib/portal/ccpp.jar"/>
 	<classpathentry kind="lib" path="lib/portal/ccpp-ri.jar"/>
