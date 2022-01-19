@@ -48,6 +48,8 @@ Import-Package:\
 	!org.apache.oro.*,\
 	!org.apache.poi.*,\
 	!org.apache.tools.ant.*,\
+	!org.apache.xml.utils.*,\
+	!org.apache.xpath.*,\
 	\
 	!org.checkerframework.*,\
 	\
