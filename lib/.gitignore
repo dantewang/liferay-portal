@@ -95,6 +95,7 @@
 /portal/asm-util.jar
 /portal/asm.jar
 /portal/axis.jar
+/portal/byte-buddy.jar
 /portal/c3p0.jar
 /portal/cglib-nodep.jar
 /portal/classmate.jar
