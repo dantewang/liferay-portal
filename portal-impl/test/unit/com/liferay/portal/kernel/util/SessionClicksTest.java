@@ -17,9 +17,10 @@ package com.liferay.portal.kernel.util;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
+import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
-import com.liferay.portal.test.rule.PortalProps;
+import com.liferay.portal.util.PropsImpl;
 import com.liferay.portlet.PortalPreferencesImpl;
 
 import java.util.List;
@@ -38,6 +39,7 @@ import org.springframework.mock.web.MockHttpSession;
 /**
  * @author Dante Wang
  */
+@NewEnv(type = NewEnv.Type.CLASSLOADER)
 public class SessionClicksTest {
 
 	@ClassRule
@@ -45,11 +47,12 @@ public class SessionClicksTest {
 	public static final LiferayUnitTestRule liferayUnitTestRule =
 		LiferayUnitTestRule.INSTANCE;
 
-	@PortalProps(
-		properties = PropsKeys.SESSION_CLICKS_MAX_ALLOWED_VALUES + "=" + _MAX_ALLOWED_VALUES
-	)
 	@Test
 	public void testPutMaxAllowedValues() {
+		_setUpPropsUtil(
+			PropsKeys.SESSION_CLICKS_MAX_ALLOWED_VALUES,
+			String.valueOf(_MAX_ALLOWED_VALUES));
+
 		PortalPreferences portalPreferences = new PortalPreferencesImpl();
 
 		PortletPreferencesFactoryUtil portletPreferencesFactoryUtil =
@@ -106,11 +109,12 @@ public class SessionClicksTest {
 			attributeNames.size());
 	}
 
-	@PortalProps(
-		properties = PropsKeys.SESSION_CLICKS_MAX_SIZE_TERMS + "=" + _MAX_SIZE_TERMS
-	)
 	@Test
 	public void testPutMaxSizeTerms() {
+		_setUpPropsUtil(
+			PropsKeys.SESSION_CLICKS_MAX_SIZE_TERMS,
+			String.valueOf(_MAX_SIZE_TERMS));
+
 		HttpSession httpSession = new MockHttpSession();
 
 		String key = RandomTestUtil.randomString(_MAX_SIZE_TERMS - 1);
@@ -126,6 +130,23 @@ public class SessionClicksTest {
 			httpSession, key, RandomTestUtil.randomString(_MAX_SIZE_TERMS - 1));
 
 		Assert.assertNull(SessionClicks.get(httpSession, key, null));
+	}
+
+	private void _setUpPropsUtil(String key, String value) {
+		Props props = new PropsImpl();
+
+		PropsUtil.setProps(
+			(Props)ProxyUtil.newProxyInstance(
+				Props.class.getClassLoader(), new Class<?>[] {Props.class},
+				(proxy, method, args) -> {
+					String methodName = method.getName();
+
+					if (methodName.equals("get") && key.equals(args[0])) {
+						return value;
+					}
+
+					return method.invoke(props, args);
+				}));
 	}
 
 	private static final int _MAX_ALLOWED_VALUES = 10;
