@@ -39,9 +39,11 @@ import com.liferay.portal.kernel.nio.intraband.rpc.RPCResponse;
 import com.liferay.portal.kernel.nio.intraband.test.MockIntraband;
 import com.liferay.portal.kernel.nio.intraband.test.MockRegistrationReference;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
+import com.liferay.portal.kernel.test.SwappableSecurityManager;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.rule.NewEnv;
+import com.liferay.portal.kernel.test.util.SecurityManagerTestUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.MethodHandler;
@@ -49,7 +51,6 @@ import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.TextFormatter;
-import com.liferay.portal.test.aspects.ReflectionUtilAdvice;
 import com.liferay.portal.test.log.LogCapture;
 import com.liferay.portal.test.log.LogEntry;
 import com.liferay.portal.test.log.LoggerTestUtil;
@@ -563,21 +564,21 @@ public class IntrabandProxyUtilTest {
 			IntrabandProxyUtil.getProxyMethodSignatures(TestClass.class));
 	}
 
-	@AdviseWith(adviceClasses = ReflectionUtilAdvice.class)
 	@NewEnv(type = NewEnv.Type.CLASSLOADER)
 	@Test
 	public void testInitializationFailure() throws ClassNotFoundException {
-		Throwable throwable = new Throwable();
+		SecurityException securityException = new SecurityException();
 
-		ReflectionUtilAdvice.setDeclaredMethodThrowable(throwable);
+		try (SwappableSecurityManager swappableSecurityManager =
+				SecurityManagerTestUtil.installForCheckPermission(
+					ReflectionUtil.class, securityException)) {
 
-		try {
 			new IntrabandProxyUtil();
 
 			Assert.fail();
 		}
 		catch (ExceptionInInitializerError eiie) {
-			Assert.assertSame(throwable, eiie.getCause());
+			Assert.assertSame(securityException, eiie.getCause());
 		}
 	}
 

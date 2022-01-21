@@ -14,13 +14,14 @@
 
 package com.liferay.portal.fabric.netty.codec.serialization;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.fabric.netty.util.NettyUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
+import com.liferay.portal.kernel.test.SwappableSecurityManager;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.rule.NewEnv;
-import com.liferay.portal.test.aspects.ReflectionUtilAdvice;
-import com.liferay.portal.test.rule.AdviseWith;
+import com.liferay.portal.kernel.test.util.SecurityManagerTestUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import io.netty.buffer.ByteBuf;
@@ -86,21 +87,21 @@ public class ObjectDecodeChannelInboundHandlerTest {
 			DateChannelHandler._exception, dateChannelHandler.getThrowable());
 	}
 
-	@AdviseWith(adviceClasses = ReflectionUtilAdvice.class)
 	@NewEnv(type = NewEnv.Type.CLASSLOADER)
 	@Test
-	public void testClassLoadingFailure() {
-		Throwable throwable = new Throwable();
+	public void testClassLoadingFailure() throws ClassNotFoundException {
+		SecurityException securityException = new SecurityException();
 
-		ReflectionUtilAdvice.setDeclaredFieldThrowable(throwable);
+		try (SwappableSecurityManager swappableSecurityManager =
+				SecurityManagerTestUtil.installForCheckPermission(
+					ReflectionUtil.class, securityException)) {
 
-		try {
 			new DateChannelHandler();
 
 			Assert.fail();
 		}
 		catch (ExceptionInInitializerError eiie) {
-			Assert.assertSame(throwable, eiie.getCause());
+			Assert.assertSame(securityException, eiie.getCause());
 		}
 	}
 
