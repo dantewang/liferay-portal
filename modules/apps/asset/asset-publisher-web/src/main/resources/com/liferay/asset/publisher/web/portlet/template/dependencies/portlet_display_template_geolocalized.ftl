@@ -1,7 +1,4 @@
 <#assign
-	defaultLatitude = -3.6833
-	defaultLongitude = 40.40
-
 	group = themeDisplay.getScopeGroup()
 
 	mapsAPIProvider = group.getLiveParentTypeSettingsProperty("mapsAPIProvider")!""
@@ -25,7 +22,7 @@
 
 		ddmFormValuesReader = assetRenderer.getDDMFormValuesReader()
 
-		ddmFormFieldValues = ddmFormValuesReader.getDDMFormFieldValues("ddm-geolocation")
+		ddmFormFieldValues = ddmFormValuesReader.getDDMFormFieldValues("geolocation")
 
 		coordinatesJSONObjects = []
 	/>
@@ -49,7 +46,7 @@
 
 		<@liferay.silently geometryJSONObject.put("type", "Point") />
 
-		<#assign coordinatesJSONArray = [coordinatesJSONObject.getDouble("longitude"), coordinatesJSONObject.getDouble("latitude")] />
+		<#assign coordinatesJSONArray = [coordinatesJSONObject.getDouble("lng"), coordinatesJSONObject.getDouble("lat")] />
 
 		<@liferay.silently geometryJSONObject.put("coordinates", coordinatesJSONArray) />
 

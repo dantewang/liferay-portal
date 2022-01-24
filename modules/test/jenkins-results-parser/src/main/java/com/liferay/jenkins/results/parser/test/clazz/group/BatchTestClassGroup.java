@@ -22,6 +22,7 @@ import com.liferay.jenkins.results.parser.Job;
 import com.liferay.jenkins.results.parser.PortalGitWorkingDirectory;
 import com.liferay.jenkins.results.parser.PortalTestClassJob;
 import com.liferay.jenkins.results.parser.TestSuiteJob;
+import com.liferay.jenkins.results.parser.job.property.GlobJobProperty;
 import com.liferay.jenkins.results.parser.job.property.JobProperty;
 import com.liferay.jenkins.results.parser.job.property.JobPropertyFactory;
 import com.liferay.jenkins.results.parser.test.clazz.TestClass;
@@ -382,6 +383,30 @@ public abstract class BatchTestClassGroup extends BaseTestClassGroup {
 		return null;
 	}
 
+	protected List<String> getGlobs(List<JobProperty> jobProperties) {
+		List<String> globs = new ArrayList<>();
+
+		for (JobProperty jobProperty : jobProperties) {
+			if (!(jobProperty instanceof GlobJobProperty)) {
+				continue;
+			}
+
+			GlobJobProperty globJobProperty = (GlobJobProperty)jobProperty;
+
+			for (String relativeGlob : globJobProperty.getRelativeGlobs()) {
+				if ((relativeGlob == null) || globs.contains(relativeGlob)) {
+					continue;
+				}
+
+				globs.add(relativeGlob);
+			}
+		}
+
+		Collections.sort(globs);
+
+		return globs;
+	}
+
 	protected String getJobName() {
 		return portalTestClassJob.getJobName();
 	}
@@ -407,10 +432,65 @@ public abstract class BatchTestClassGroup extends BaseTestClassGroup {
 	}
 
 	protected JobProperty getJobProperty(
+		String basePropertyName, JobProperty.Type type) {
+
+		return _getJobProperty(basePropertyName, null, null, null, type, true);
+	}
+
+	protected JobProperty getJobProperty(
+		String basePropertyName, String testSuiteName, File testBaseDir,
+		JobProperty.Type type) {
+
+		return _getJobProperty(
+			basePropertyName, testSuiteName, null, testBaseDir, type, true);
+	}
+
+	protected JobProperty getJobProperty(
 		String basePropertyName, String testSuiteName, String testBatchName) {
 
 		return _getJobProperty(
 			basePropertyName, testSuiteName, testBatchName, null, null, true);
+	}
+
+	protected JobProperty getJobProperty(
+		String basePropertyName, String testSuiteName, String testBatchName,
+		JobProperty.Type type) {
+
+		return _getJobProperty(
+			basePropertyName, testSuiteName, testBatchName, null, type, true);
+	}
+
+	protected List<PathMatcher> getPathMatchers(
+		List<JobProperty> jobProperties) {
+
+		List<PathMatcher> pathMatchers = new ArrayList<>();
+
+		for (JobProperty jobProperty : jobProperties) {
+			if (!(jobProperty instanceof GlobJobProperty)) {
+				continue;
+			}
+
+			GlobJobProperty globJobProperty = (GlobJobProperty)jobProperty;
+
+			List<PathMatcher> globPathMatchers =
+				globJobProperty.getPathMatchers();
+
+			if (globPathMatchers == null) {
+				continue;
+			}
+
+			for (PathMatcher globPathMatcher : globPathMatchers) {
+				if ((globPathMatcher == null) ||
+					pathMatchers.contains(globPathMatcher)) {
+
+					continue;
+				}
+
+				pathMatchers.add(globPathMatcher);
+			}
+		}
+
+		return pathMatchers;
 	}
 
 	protected List<PathMatcher> getPathMatchers(
@@ -531,6 +611,10 @@ public abstract class BatchTestClassGroup extends BaseTestClassGroup {
 	}
 
 	protected boolean isStableTestSuiteBatch() {
+		return isStableTestSuiteBatch(batchName);
+	}
+
+	protected boolean isStableTestSuiteBatch(String batchName) {
 		List<String> testBatchNames = new ArrayList<>();
 
 		JobProperty jobProperty = getJobProperty("test.batch.names[stable]");
@@ -541,9 +625,7 @@ public abstract class BatchTestClassGroup extends BaseTestClassGroup {
 			Collections.addAll(testBatchNames, jobPropertyValue.split(","));
 		}
 
-		if (testBatchNames.contains(batchName) ||
-			testBatchNames.contains(batchName + "_stable")) {
-
+		if (testBatchNames.contains(batchName)) {
 			return true;
 		}
 
@@ -618,8 +700,6 @@ public abstract class BatchTestClassGroup extends BaseTestClassGroup {
 	protected final List<AxisTestClassGroup> axisTestClassGroups =
 		new ArrayList<>();
 	protected final String batchName;
-	protected final List<PathMatcher> excludesPathMatchers = new ArrayList<>();
-	protected final List<PathMatcher> includesPathMatchers = new ArrayList<>();
 	protected boolean includeStableTestSuite;
 	protected final Properties jobProperties;
 	protected final PortalGitWorkingDirectory portalGitWorkingDirectory;

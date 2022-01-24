@@ -114,9 +114,7 @@ public class DDLDisplayContext {
 			return;
 		}
 
-		DDLRecordSet recordSet = getRecordSet();
-
-		if ((recordSet == null) || !_hasViewPermission()) {
+		if ((getRecordSet() == null) || !_hasViewPermission()) {
 			renderRequest.setAttribute(
 				WebKeys.PORTLET_CONFIGURATOR_VISIBILITY, Boolean.TRUE);
 		}
@@ -478,9 +476,17 @@ public class DDLDisplayContext {
 			getDDLRecordSetOrderByComparator(
 				getOrderByCol(), getOrderByType()));
 		recordSetSearch.setOrderByType(getOrderByType());
-
-		_setDDLRecordSetSearchResults(recordSetSearch);
-		_setDDLRecordSetSearchTotal(recordSetSearch);
+		recordSetSearch.setResultsAndTotal(
+			() -> _ddlRecordSetLocalService.search(
+				_ddlRequestHelper.getCompanyId(),
+				_ddlRequestHelper.getScopeGroupId(), getKeywords(),
+				DDLRecordSetConstants.SCOPE_DYNAMIC_DATA_LISTS,
+				recordSetSearch.getStart(), recordSetSearch.getEnd(),
+				recordSetSearch.getOrderByComparator()),
+			_ddlRecordSetLocalService.searchCount(
+				_ddlRequestHelper.getCompanyId(),
+				_ddlRequestHelper.getScopeGroupId(), getKeywords(),
+				DDLRecordSetConstants.SCOPE_DYNAMIC_DATA_LISTS));
 
 		return recordSetSearch;
 	}
@@ -898,28 +904,6 @@ public class DDLDisplayContext {
 				_getStructureTypeClassNameId(), _getStructureTypeClassNameId());
 
 		return _hasAddDDMTemplatePermission;
-	}
-
-	private void _setDDLRecordSetSearchResults(
-		RecordSetSearch recordSetSearch) {
-
-		List<DDLRecordSet> results = _ddlRecordSetLocalService.search(
-			_ddlRequestHelper.getCompanyId(),
-			_ddlRequestHelper.getScopeGroupId(), getKeywords(),
-			DDLRecordSetConstants.SCOPE_DYNAMIC_DATA_LISTS,
-			recordSetSearch.getStart(), recordSetSearch.getEnd(),
-			recordSetSearch.getOrderByComparator());
-
-		recordSetSearch.setResults(results);
-	}
-
-	private void _setDDLRecordSetSearchTotal(RecordSetSearch recordSetSearch) {
-		int total = _ddlRecordSetLocalService.searchCount(
-			_ddlRequestHelper.getCompanyId(),
-			_ddlRequestHelper.getScopeGroupId(), getKeywords(),
-			DDLRecordSetConstants.SCOPE_DYNAMIC_DATA_LISTS);
-
-		recordSetSearch.setTotal(total);
 	}
 
 	private static final String[] _DISPLAY_VIEWS = {"descriptive", "list"};

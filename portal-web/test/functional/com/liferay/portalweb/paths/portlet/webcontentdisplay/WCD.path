@@ -54,22 +54,12 @@
 </tr>
 <tr>
 	<td>WEB_CONTENT_CONTENT</td>
-	<td>//div[contains(@class,'journal-content-article')]</td>
+	<td>xpath=(//div[contains(@class,'journal-content-article')])[${index}]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>WEB_CONTENT_CONTENT_ANY</td>
 	<td>//div[contains(@class,'journal-content-article')]${key_content}</td>
-	<td></td>
-</tr>
-<tr>
-	<td>WEB_CONTENT_CONTENT_2</td>
-	<td>xPath=(//div[contains(@class,'journal-content-article')])[2]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>WEB_CONTENT_CONTENT_3</td>
-	<td>xPath=(//div[contains(@class,'journal-content-article')])[3]</td>
 	<td></td>
 </tr>
 <tr>
@@ -79,7 +69,7 @@
 </tr>
 <tr>
 	<td>WEB_CONTENT_TITLE</td>
-	<td>//section[contains(@id,'journal_content_web')]//h2[contains(@class,'title')]</td>
+	<td>xpath=(//section[contains(@id,'JournalContentPortlet')])[${index}]//h2[contains(@class,'title')]</td>
 	<td></td>
 </tr>
 <tr>

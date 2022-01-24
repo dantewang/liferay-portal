@@ -552,6 +552,20 @@ definition {
 			locator1 = "ObjectAdmin#SELECT_LANGUAGE");
 	}
 
+	macro changePicklistFieldEntry {
+		Click(
+			key_entrySelected = "${entrySelected}",
+			locator1 = "ObjectPortlet#OBJECT_FIELD_SELECTED");
+
+		Click(
+			key_picklistOption = "${newPicklistOption}",
+			locator1 = "ObjectAdmin#ENTRY_PICKLIST_OPTION");
+
+		Button.clickSave();
+
+		WaitForSPARefresh();
+	}
+
 	macro changePluralLabelLanguage {
 		Click(locator1 = "ObjectAdmin#DROPDOWN_LANGUAGEM_PLURAL_LABEL");
 
@@ -616,7 +630,7 @@ definition {
 		if (isSet(fieldLabelName)) {
 			Type(
 				locator1 = "ObjectAdmin#DETAILS_LABEL_CUSTOM_OBJECT",
-				value1 = "${labelName}");
+				value1 = "${fieldLabelName}");
 		}
 
 		if (isSet(pluralLabelName)) {

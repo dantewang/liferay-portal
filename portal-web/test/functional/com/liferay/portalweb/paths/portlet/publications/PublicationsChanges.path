@@ -46,23 +46,28 @@
 	<td></td>
 </tr>
 <tr>
+	<td>CONFLICTING_CHANGE_CONTENT_LINK</td>
+	<td>//div[contains(@class,'autofit-col-expand') and contains(.,'${key_entryTitle}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CONFLICTING_CHANGES_DETAILS_IFRAME_TITLE</td>
+	<td>//div[contains(@class,'modal-header')]/div[@class='modal-title' and contains(.,'${key_iframeTitle}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CONFLICTING_CHANGES_DISCARD_ELLIPSIS</td>
+	<td>//div[contains(@class,'autofit-col-expand') and contains(.,'${key_entryTitle}')]//following-sibling::div//button</td>
+	<td></td>
+</tr>
+<tr>
 	<td>CONTEXT_CHANGE_TITLE</td>
 	<td>//div[contains(@class,'publication-name') and contains(.,'${key_changeTitle}')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>DDL_RECORD_DIFF_ADDED_VALUE</td>
-	<td>//span[contains(@class,'diff-html-added') and contains(.,'${key_diffAddedValue}')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>FIELD_VALUE_IN_PRODUCTION</td>
-	<td>//label[contains(.,'${key_fieldName}')]//following-sibling::input[contains(@value,'${key_fieldValueInProduction}')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>FIELD_VALUE_IN_PUBLICATION</td>
-	<td>//label[contains(.,'${key_fieldName}')]//following-sibling::input[contains(@value,'${key_fieldValueInPublication}')]</td>
+	<td>DISCARDED_CHANGES_TITLE</td>
+	<td>//h2[contains(.,'Discarded Changes')]</td>
 	<td></td>
 </tr>
 <tr>

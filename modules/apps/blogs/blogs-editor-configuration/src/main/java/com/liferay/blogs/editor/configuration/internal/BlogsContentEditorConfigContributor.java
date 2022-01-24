@@ -103,6 +103,22 @@ public class BlogsContentEditorConfigContributor
 					"/blogs/upload_temp_image"
 				).buildString());
 		}
+
+		String editorName = GetterUtil.getString(
+			inputEditorTaglibAttributes.get(
+				"liferay-ui:input-editor:editorName"));
+
+		if (editorName.equals("ballooneditor")) {
+			jsonObject.put(
+				"extraPlugins",
+				"itemselector,stylescombo,ballooneditor," +
+					"videoembed,insertbutton,codemirror"
+			).put(
+				"toolbarText",
+				"Styles,Bold,Italic,Underline,BulletedList" +
+					",NumberedList,TextLink,SourceEditor"
+			);
+		}
 	}
 
 	private String _getAllowedContentLists() {

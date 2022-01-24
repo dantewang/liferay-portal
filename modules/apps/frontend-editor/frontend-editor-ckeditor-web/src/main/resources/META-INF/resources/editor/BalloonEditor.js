@@ -20,11 +20,22 @@ import DEFAULT_BALLOON_EDITOR_CONFIG from './config/DefaultBalloonEditorConfigur
 
 import '../css/main.scss';
 
-const BalloonEditor = ({config = {}, contents, name, ...otherProps}) => {
+const EMPTY_OBJECT = {};
+
+const BalloonEditor = ({
+	config = EMPTY_OBJECT,
+	contents,
+	name,
+	...otherProps
+}) => {
 	const editorConfig = {
 		...DEFAULT_BALLOON_EDITOR_CONFIG,
 		...config,
 	};
+
+	if (!editorConfig.balloonEditorEnabled) {
+		return null;
+	}
 
 	return (
 		<Editor
@@ -74,6 +85,16 @@ const BalloonEditor = ({config = {}, contents, name, ...otherProps}) => {
 					});
 				}
 
+				if (editorConfig.toolbarTable) {
+					balloonToolbars.create({
+						buttons: editorConfig.toolbarTable,
+						cssSelector: 'td',
+						priority:
+							window.CKEDITOR.plugins.balloontoolbar.PRIORITY
+								.HIGH,
+					});
+				}
+
 				if (editorConfig.toolbarVideo) {
 					balloonToolbars.create({
 						buttons: editorConfig.toolbarVideo,
@@ -92,6 +113,7 @@ const BalloonEditor = ({config = {}, contents, name, ...otherProps}) => {
 
 BalloonEditor.propTypes = {
 	config: PropTypes.object,
+	contents: PropTypes.string,
 	name: PropTypes.string,
 };
 

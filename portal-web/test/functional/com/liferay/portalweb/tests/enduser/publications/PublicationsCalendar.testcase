@@ -173,12 +173,12 @@ definition {
 			entryTitle = "Publication Calendar Event Title Edit",
 			warningMessage = "Deletion Modification Conflict: Modification conflicts with a deletion.");
 
-		PublicationsNavigator.gotoViewChangeDiffInConflictingPublications(entryTitle = "Publication Calendar Event Title Edit");
+		PublicationsNavigator.gotoViewConflictingChangeDetails(entryTitle = "Publication Calendar Event Title Edit");
 
-		PublicationsChanges.viewChangeDiff(
+		PublicationsChangeDetails.viewConflictingChangeDetails(
 			columnName = "Title",
 			columnValueInPublication = "Publication Calendar Event Title Edit",
-			entryDeletedInProduction = "true",
+			deletionModificationConflict = "true",
 			publicationName = "Publication Name");
 
 		IFrame.closeFrame();

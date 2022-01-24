@@ -150,6 +150,24 @@ public class UserGroupServiceImpl extends UserGroupServiceBaseImpl {
 	}
 
 	@Override
+	public UserGroup fetchUserGroupByExternalReferenceCode(
+			long companyId, String externalReferenceCode)
+		throws PortalException {
+
+		UserGroup userGroup =
+			userGroupLocalService.fetchUserGroupByExternalReferenceCode(
+				companyId, externalReferenceCode);
+
+		if (userGroup != null) {
+			UserGroupPermissionUtil.check(
+				getPermissionChecker(), userGroup.getUserGroupId(),
+				ActionKeys.VIEW);
+		}
+
+		return userGroup;
+	}
+
+	@Override
 	public List<UserGroup> getGtUserGroups(
 		long gtUserGroupId, long companyId, long parentUserGroupId, int size) {
 

@@ -19,6 +19,7 @@ import com.google.common.collect.Lists;
 import com.liferay.jenkins.results.parser.JenkinsResultsParserUtil;
 import com.liferay.jenkins.results.parser.Job;
 import com.liferay.jenkins.results.parser.PortalTestClassJob;
+import com.liferay.jenkins.results.parser.job.property.JobProperty;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,47 +44,45 @@ public class ModulesJUnitBatchTestClassGroup extends JUnitBatchTestClassGroup {
 	}
 
 	@Override
-	protected List<String> getReleaseTestClassNamesRelativeIncludesGlobs(
-		List<String> testClassNamesRelativeIncludesGlobs) {
+	protected List<JobProperty> getDefaultExcludesJobProperties() {
+		List<JobProperty> excludesJobProperties = new ArrayList<>();
+
+		excludesJobProperties.addAll(super.getDefaultExcludesJobProperties());
+
+		for (File modulePullSubrepoDir :
+				portalGitWorkingDirectory.getModulePullSubrepoDirs()) {
+
+			excludesJobProperties.add(
+				getJobProperty(
+					"test.batch.class.names.excludes.subrepo",
+					modulePullSubrepoDir, JobProperty.Type.EXCLUDE_GLOB));
+		}
+
+		return excludesJobProperties;
+	}
+
+	@Override
+	protected List<JobProperty> getReleaseIncludesJobProperties() {
+		List<JobProperty> includesJobProperties = new ArrayList<>();
 
 		Set<File> releaseModuleAppDirs = _getReleaseModuleAppDirs();
 
-		if (releaseModuleAppDirs.isEmpty()) {
-			return testClassNamesRelativeIncludesGlobs;
+		if (releaseModuleAppDirs == null) {
+			return includesJobProperties;
 		}
-
-		List<String> testClassNameRelativeIncludesGlobs = new ArrayList<>();
 
 		for (File releaseModuleAppDir : releaseModuleAppDirs) {
-			String releaseModuleAppAbsolutePath =
-				JenkinsResultsParserUtil.getCanonicalPath(releaseModuleAppDir);
-
-			String appSourceRelativePath =
-				releaseModuleAppAbsolutePath.substring(
-					releaseModuleAppAbsolutePath.indexOf("modules/"));
-
-			for (String testClassNamesRelativeGlob :
-					testClassNamesRelativeIncludesGlobs) {
-
-				testClassNameRelativeIncludesGlobs.add(
-					JenkinsResultsParserUtil.combine(
-						appSourceRelativePath, "/",
-						testClassNamesRelativeGlob));
-
-				if (testClassNamesRelativeGlob.startsWith("**/")) {
-					testClassNameRelativeIncludesGlobs.add(
-						JenkinsResultsParserUtil.combine(
-							appSourceRelativePath, "/",
-							testClassNamesRelativeGlob.substring(3)));
-				}
-			}
+			includesJobProperties.add(
+				getJobProperty(
+					"test.batch.class.names.includes.modules",
+					releaseModuleAppDir, JobProperty.Type.INCLUDE_GLOB));
 		}
 
-		return testClassNameRelativeIncludesGlobs;
+		return includesJobProperties;
 	}
 
 	@Override
-	protected List<String> getRelevantTestClassNamesRelativeExcludesGlobs() {
+	protected List<JobProperty> getRelevantExcludesJobProperties() {
 		Set<File> modifiedModuleDirsList = new HashSet<>();
 
 		try {
@@ -101,50 +100,23 @@ public class ModulesJUnitBatchTestClassGroup extends JUnitBatchTestClassGroup {
 				ioException);
 		}
 
-		List<String> relevantTestClassNameRelativeExcludesGlobs =
-			new ArrayList<>();
+		List<JobProperty> excludesJobProperties = new ArrayList<>();
 
 		for (File modifiedModuleDir : modifiedModuleDirsList) {
-			String modulesTestBatchClassNamesExcludes = null;
-
-			File modifiedDirTestProperties = new File(
-				modifiedModuleDir, "test.properties");
-
-			Properties testProperties = JenkinsResultsParserUtil.getProperties(
-				modifiedDirTestProperties);
-
-			if (modifiedDirTestProperties.exists()) {
-				String firstMatchingPropertyName = getFirstMatchingPropertyName(
+			excludesJobProperties.add(
+				getJobProperty(
 					"modules.includes.required.test.batch.class.names.excludes",
-					testProperties, testSuiteName);
-
-				if (firstMatchingPropertyName != null) {
-					modulesTestBatchClassNamesExcludes =
-						JenkinsResultsParserUtil.getProperty(
-							testProperties, firstMatchingPropertyName);
-				}
-			}
-
-			if (modulesTestBatchClassNamesExcludes == null) {
-				continue;
-			}
-
-			for (String modulesTestBatchClassNamesExclude :
-					JenkinsResultsParserUtil.getGlobsFromProperty(
-						modulesTestBatchClassNamesExcludes)) {
-
-				relevantTestClassNameRelativeExcludesGlobs.add(
-					JenkinsResultsParserUtil.combine(
-						"modules/", modulesTestBatchClassNamesExclude));
-			}
+					modifiedModuleDir, JobProperty.Type.MODULE_EXCLUDE_GLOB));
 		}
 
-		return relevantTestClassNameRelativeExcludesGlobs;
+		return excludesJobProperties;
 	}
 
 	@Override
-	protected List<String> getRelevantTestClassNamesRelativeIncludesGlobs(
-		List<String> testClassNamesRelativeIncludesGlobs) {
+	protected List<JobProperty> getRelevantIncludesJobProperties() {
+		if (includeStableTestSuite && isStableTestSuiteBatch()) {
+			return super.getRelevantIncludesJobProperties();
+		}
 
 		Set<File> modifiedModuleDirsList = new HashSet<>();
 
@@ -162,15 +134,14 @@ public class ModulesJUnitBatchTestClassGroup extends JUnitBatchTestClassGroup {
 					workingDirectory.getPath()),
 				ioException);
 		}
-
-		List<String> relevantTestClassNameRelativeIncludesGlobs =
-			new ArrayList<>();
 
 		if (testRelevantChanges) {
 			modifiedModuleDirsList.addAll(
 				getRequiredModuleDirs(
 					Lists.newArrayList(modifiedModuleDirsList)));
 		}
+
+		List<JobProperty> includesJobProperties = new ArrayList<>();
 
 		Matcher matcher = _singleModuleBatchNamePattern.matcher(batchName);
 
@@ -194,74 +165,18 @@ public class ModulesJUnitBatchTestClassGroup extends JUnitBatchTestClassGroup {
 				continue;
 			}
 
-			for (String testClassNamesRelativeGlob :
-					testClassNamesRelativeIncludesGlobs) {
+			includesJobProperties.add(
+				getJobProperty(
+					"test.batch.class.names.includes.modules",
+					modifiedModuleDir, JobProperty.Type.INCLUDE_GLOB));
 
-				relevantTestClassNameRelativeIncludesGlobs.add(
-					JenkinsResultsParserUtil.combine(
-						modifiedModuleRelativePath, "/",
-						testClassNamesRelativeGlob));
-
-				if (testClassNamesRelativeGlob.startsWith("**/")) {
-					relevantTestClassNameRelativeIncludesGlobs.add(
-						JenkinsResultsParserUtil.combine(
-							modifiedModuleRelativePath, "/",
-							testClassNamesRelativeGlob.substring(3)));
-				}
-			}
-
-			String modulesTestBatchClassNamesIncludes = null;
-
-			File modifiedDirTestProperties = new File(
-				modifiedModuleDir, "test.properties");
-
-			if (modifiedDirTestProperties.exists()) {
-				Properties testProperties =
-					JenkinsResultsParserUtil.getProperties(
-						modifiedDirTestProperties);
-
-				String firstMatchingPropertyName = getFirstMatchingPropertyName(
+			includesJobProperties.add(
+				getJobProperty(
 					"modules.includes.required.test.batch.class.names.includes",
-					testProperties, testSuiteName);
-
-				if (firstMatchingPropertyName != null) {
-					modulesTestBatchClassNamesIncludes =
-						JenkinsResultsParserUtil.getProperty(
-							testProperties, firstMatchingPropertyName);
-				}
-			}
-
-			if (modulesTestBatchClassNamesIncludes == null) {
-				continue;
-			}
-
-			for (String modulesTestBatchClassNamesInclude :
-					JenkinsResultsParserUtil.getGlobsFromProperty(
-						modulesTestBatchClassNamesIncludes)) {
-
-				relevantTestClassNameRelativeIncludesGlobs.add(
-					JenkinsResultsParserUtil.combine(
-						"modules/", modulesTestBatchClassNamesInclude));
-			}
+					modifiedModuleDir, JobProperty.Type.MODULE_INCLUDE_GLOB));
 		}
 
-		return relevantTestClassNameRelativeIncludesGlobs;
-	}
-
-	@Override
-	protected void setTestClassNamesExcludesRelativeGlobs() {
-		super.setTestClassNamesExcludesRelativeGlobs();
-
-		if (!testRelevantChanges) {
-			List<File> modulePullSubrepoDirs =
-				portalGitWorkingDirectory.getModulePullSubrepoDirs();
-
-			for (File modulePullSubrepoDir : modulePullSubrepoDirs) {
-				testClassNamesExcludesPathMatchers.addAll(
-					JenkinsResultsParserUtil.toPathMatchers(
-						modulePullSubrepoDir.getAbsolutePath(), "/**"));
-			}
-		}
+		return includesJobProperties;
 	}
 
 	private String _getAppTitle(File appBndFile) {

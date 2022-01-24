@@ -501,30 +501,30 @@ public class DLAdminDisplayContext {
 			}
 		}
 
+		String emptyResultsMessage = null;
+
+		if (fileEntryTypeId >= 0) {
+			emptyResultsMessage = LanguageUtil.format(
+				_httpServletRequest,
+				"there-are-no-documents-or-media-files-of-type-x",
+				HtmlUtil.escape(dlFileEntryTypeName));
+		}
+		else {
+			emptyResultsMessage =
+				"there-are-no-documents-or-media-files-in-this-folder";
+		}
+
 		SearchContainer<RepositoryEntry> dlSearchContainer =
 			new SearchContainer<>(
 				_liferayPortletRequest, null, null, "curEntry",
 				_dlPortletInstanceSettings.getEntriesPerPage(), portletURL,
-				null, null);
-
-		if (fileEntryTypeId >= 0) {
-			dlSearchContainer.setEmptyResultsMessage(
-				LanguageUtil.format(
-					_httpServletRequest,
-					"there-are-no-documents-or-media-files-of-type-x",
-					HtmlUtil.escape(dlFileEntryTypeName)));
-		}
-		else {
-			dlSearchContainer.setEmptyResultsMessage(
-				"there-are-no-documents-or-media-files-in-this-folder");
-		}
+				null, emptyResultsMessage);
 
 		dlSearchContainer.setHeaderNames(
 			ListUtil.fromArray(
 				_dlPortletInstanceSettingsHelper.getEntryColumns()));
 
-		String orderByCol = getOrderByCol();
-		String orderByType = getOrderByType();
+		dlSearchContainer.setOrderByCol(getOrderByCol());
 
 		boolean orderByModel = false;
 
@@ -534,18 +534,16 @@ public class DLAdminDisplayContext {
 
 		OrderByComparator<RepositoryEntry> orderByComparator =
 			DLUtil.getRepositoryModelOrderByComparator(
-				orderByCol, orderByType, orderByModel);
+				getOrderByCol(), getOrderByType(), orderByModel);
 
 		if (navigation.equals("recent")) {
 			orderByComparator = new RepositoryModelModifiedDateComparator();
 		}
 
-		dlSearchContainer.setOrderByCol(orderByCol);
 		dlSearchContainer.setOrderByComparator(orderByComparator);
-		dlSearchContainer.setOrderByType(orderByType);
+		dlSearchContainer.setOrderByType(getOrderByType());
 
 		List<RepositoryEntry> results = new ArrayList<>();
-		int total = 0;
 
 		if (fileEntryTypeId >= 0) {
 			Indexer<?> indexer = IndexerRegistryUtil.getIndexer(
@@ -562,33 +560,28 @@ public class DLAdminDisplayContext {
 			}
 
 			int type = Sort.STRING_TYPE;
-			String fieldName = orderByCol;
+			String fieldName = getOrderByCol();
 
-			if (orderByCol.equals("creationDate")) {
+			if (Objects.equals(getOrderByCol(), "creationDate")) {
 				fieldName = Field.CREATE_DATE;
 				type = Sort.LONG_TYPE;
 			}
-			else if (orderByCol.equals("modifiedDate")) {
+			else if (Objects.equals(getOrderByCol(), "modifiedDate")) {
 				fieldName = Field.MODIFIED_DATE;
 				type = Sort.LONG_TYPE;
 			}
-			else if (orderByCol.equals("size")) {
+			else if (Objects.equals(getOrderByCol(), "size")) {
 				type = Sort.LONG_TYPE;
 			}
 
-			Sort sort = new Sort(
-				fieldName, type,
-				!StringUtil.equalsIgnoreCase(orderByType, "asc"));
-
-			searchContext.setSorts(sort);
+			searchContext.setSorts(
+				new Sort(
+					fieldName, type,
+					!StringUtil.equalsIgnoreCase(getOrderByType(), "asc")));
 
 			searchContext.setStart(dlSearchContainer.getStart());
 
 			Hits hits = indexer.search(searchContext);
-
-			total = hits.getLength();
-
-			dlSearchContainer.setTotal(total);
 
 			for (Document doc : hits.getDocs()) {
 				long fileEntryId = GetterUtil.getLong(
@@ -613,6 +606,9 @@ public class DLAdminDisplayContext {
 
 				results.add(fileEntry);
 			}
+
+			dlSearchContainer.setResultsAndTotal(
+				() -> results, hits.getLength());
 		}
 		else {
 			if (navigation.equals("home")) {
@@ -629,11 +625,6 @@ public class DLAdminDisplayContext {
 
 					assetEntryQuery.setEnablePermissions(true);
 					assetEntryQuery.setExcludeZeroViewCount(false);
-
-					total = AssetEntryServiceUtil.getEntriesCount(
-						assetEntryQuery);
-
-					dlSearchContainer.setTotal(total);
 
 					for (AssetEntry assetEntry :
 							AssetEntryServiceUtil.getEntries(assetEntryQuery)) {
@@ -652,25 +643,29 @@ public class DLAdminDisplayContext {
 									assetEntry.getClassPK()));
 						}
 					}
+
+					dlSearchContainer.setResultsAndTotal(
+						() -> results,
+						AssetEntryServiceUtil.getEntriesCount(assetEntryQuery));
 				}
 				else {
 					long repositoryId = getRepositoryId();
 
-					total =
+					int dlAppStatus = status;
+
+					dlSearchContainer.setResultsAndTotal(
+						() ->
+							(List)
+								DLAppServiceUtil.
+									getFoldersAndFileEntriesAndFileShortcuts(
+										repositoryId, folderId, dlAppStatus,
+										true, dlSearchContainer.getStart(),
+										dlSearchContainer.getEnd(),
+										dlSearchContainer.
+											getOrderByComparator()),
 						DLAppServiceUtil.
 							getFoldersAndFileEntriesAndFileShortcutsCount(
-								repositoryId, folderId, status, true);
-
-					dlSearchContainer.setTotal(total);
-
-					results =
-						(List)
-							DLAppServiceUtil.
-								getFoldersAndFileEntriesAndFileShortcuts(
-									repositoryId, folderId, status, true,
-									dlSearchContainer.getStart(),
-									dlSearchContainer.getEnd(),
-									dlSearchContainer.getOrderByComparator());
+								repositoryId, folderId, dlAppStatus, true));
 				}
 			}
 			else if (navigation.equals("mine") || navigation.equals("recent")) {
@@ -684,26 +679,31 @@ public class DLAdminDisplayContext {
 
 				long repositoryId = getRepositoryId();
 
-				total = DLAppServiceUtil.getGroupFileEntriesCount(
-					repositoryId, groupFileEntriesUserId, folderId, null,
-					status);
-
-				dlSearchContainer.setTotal(total);
-
 				OrderByComparator<FileEntry> fileEntryOrderByComparator =
 					DLUtil.getRepositoryModelOrderByComparator(
-						orderByCol, orderByType, orderByModel);
+						getOrderByCol(), getOrderByType(), orderByModel);
 
-				results.addAll(
-					DLAppServiceUtil.getGroupFileEntries(
-						repositoryId, groupFileEntriesUserId, folderId, null,
-						status, dlSearchContainer.getStart(),
-						dlSearchContainer.getEnd(),
-						fileEntryOrderByComparator));
+				int dlAppStatus = status;
+
+				long dlAppGroupFileEntriesUserId = groupFileEntriesUserId;
+
+				dlSearchContainer.setResultsAndTotal(
+					() -> {
+						results.addAll(
+							DLAppServiceUtil.getGroupFileEntries(
+								repositoryId, dlAppGroupFileEntriesUserId,
+								folderId, null, dlAppStatus,
+								dlSearchContainer.getStart(),
+								dlSearchContainer.getEnd(),
+								fileEntryOrderByComparator));
+
+						return results;
+					},
+					DLAppServiceUtil.getGroupFileEntriesCount(
+						repositoryId, dlAppGroupFileEntriesUserId, folderId,
+						null, dlAppStatus));
 			}
 		}
-
-		dlSearchContainer.setResults(results);
 
 		return dlSearchContainer;
 	}
@@ -726,10 +726,10 @@ public class DLAdminDisplayContext {
 		searchContext.setAttribute("searchRepositoryId", searchRepositoryId);
 		searchContext.setEnd(searchContainer.getEnd());
 
-		long searchFolderId = ParamUtil.getLong(
-			_httpServletRequest, "searchFolderId");
-
-		searchContext.setFolderIds(new long[] {searchFolderId});
+		searchContext.setFolderIds(
+			new long[] {
+				ParamUtil.getLong(_httpServletRequest, "searchFolderId")
+			});
 
 		searchContext.setIncludeDiscussions(true);
 		searchContext.setIncludeInternalAssetCategories(true);
@@ -803,8 +803,8 @@ public class DLAdminDisplayContext {
 
 		Hits hits = _getHits(searchContainer);
 
-		searchContainer.setResults(_getSearchResults(hits));
-		searchContainer.setTotal(hits.getLength());
+		searchContainer.setResultsAndTotal(
+			() -> _getSearchResults(hits), hits.getLength());
 
 		return searchContainer;
 	}

@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -142,18 +143,9 @@ public class GroupFragmentEntryLinkDisplayContext {
 
 		groupsSearchContainer.setId("groups" + getFragmentCollectionId());
 
-		if (FragmentPermission.contains(
-				themeDisplay.getPermissionChecker(),
-				themeDisplay.getScopeGroupId(),
-				FragmentActionKeys.MANAGE_FRAGMENT_ENTRIES)) {
-
-			groupsSearchContainer.setRowChecker(
-				new EmptyOnClickRowChecker(_renderResponse));
-		}
-
 		boolean orderByAsc = false;
 
-		if (getOrderByType().equals("asc")) {
+		if (Objects.equals(getOrderByType(), "asc")) {
 			orderByAsc = true;
 		}
 
@@ -169,9 +161,17 @@ public class GroupFragmentEntryLinkDisplayContext {
 
 		Collections.sort(groups, groupsSearchContainer.getOrderByComparator());
 
-		groupsSearchContainer.setResults(groups);
+		groupsSearchContainer.setResultsAndTotal(
+			() -> groups, groupFragmentEntryUsages.size());
 
-		groupsSearchContainer.setTotal(groupFragmentEntryUsages.size());
+		if (FragmentPermission.contains(
+				themeDisplay.getPermissionChecker(),
+				themeDisplay.getScopeGroupId(),
+				FragmentActionKeys.MANAGE_FRAGMENT_ENTRIES)) {
+
+			groupsSearchContainer.setRowChecker(
+				new EmptyOnClickRowChecker(_renderResponse));
+		}
 
 		_searchContainer = groupsSearchContainer;
 

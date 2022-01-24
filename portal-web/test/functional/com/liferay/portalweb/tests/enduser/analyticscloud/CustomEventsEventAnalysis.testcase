@@ -193,6 +193,16 @@ definition {
 				timeToSendCustomEvent = "3");
 		}
 
+		task ("Close sessions") {
+			ACUtils.closeAllSessions();
+		}
+
+		task ("Sign in as new user") {
+			User.logoutAndLoginPG(
+				userLoginEmailAddress = "test@liferay.com",
+				userLoginFullName = "test test");
+		}
+
 		task ("Create new pages and place custom event fields") {
 			for (var layoutName : list "${layoutNameList}") {
 				ACUtils.addPage(layoutName = "${layoutName}");
@@ -205,6 +215,10 @@ definition {
 			ACCustomEvents.createCustomEvent(
 				customEventName = "${customEventName}",
 				timeToSendCustomEvent = "2");
+		}
+
+		task ("Close sessions") {
+			ACUtils.closeAllSessions();
 		}
 
 		task ("Fill fields and make new interactions with custom event") {

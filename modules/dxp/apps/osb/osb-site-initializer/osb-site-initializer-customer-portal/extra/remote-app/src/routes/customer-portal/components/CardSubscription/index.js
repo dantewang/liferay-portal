@@ -11,8 +11,11 @@
 
 import {useModal} from '@clayui/modal';
 import {useState} from 'react';
+import {useCustomerPortal} from '../../context';
+import {status as statusCard} from '../../utils/constants';
 import getDateCustomFormat from '../../utils/dateCustomFormat';
 import ModalCardSubscription from '../ModalCardSubscription';
+import StatusTag from '../StatusTag';
 
 const dateFormat = {
 	day: '2-digit',
@@ -20,14 +23,26 @@ const dateFormat = {
 	year: 'numeric',
 };
 
+const SUBSCRIPTION_IMAGE_FILE = {
+	'Analytics': 'analytics_icon.svg',
+	'Commerce': 'commerce.icon.svg',
+	'DXP': 'dxp_icon.svg',
+	'DXP Cloud': 'dxp_icon.svg',
+	'Enterprise Search': 'enterprise_icon.svg',
+	'Portal': 'portal_icon.svg',
+};
+
 const CardSubscription = ({
 	cardSubscriptionData,
 	selectedSubscriptionGroup,
 }) => {
+	const [{assetsPath}] = useCustomerPortal();
 	const [visible, setVisible] = useState(false);
 	const {observer, onClose} = useModal({
 		onClose: () => setVisible(false),
 	});
+
+	const subscriptionStatus = cardSubscriptionData.subscriptionStatus.toLowerCase();
 
 	const parseAccountSubscriptionTerms = (subscriptionName) =>
 		subscriptionName.toLowerCase().replace(' ', '-');
@@ -48,30 +63,32 @@ const CardSubscription = ({
 				/>
 			)}
 			<div
-				className="card-subscription d-flex mr-4"
+				className="border border-light card-subscription p-4 rounded"
 				onClick={() => setVisible(true)}
 			>
-				<div className="align-self-center d-flex flex-column mx-auto pb-4 pt-3 px-4">
-					<div
-						className="d-flex head-text justify-content-center mb-1 row"
-						type="text"
-					>
-						{cardSubscriptionData?.name || ' - '}
-					</div>
+				<div className="text-center">
+					<img
+						className="w-25"
+						src={`${assetsPath}/assets/navigation-menu/${
+							SUBSCRIPTION_IMAGE_FILE[
+								selectedSubscriptionGroup
+							] || 'portal_icon.svg'
+						}`}
+					/>
+				</div>
 
-					<div
-						className="d-flex head-text-2 justify-content-center row"
-						type="text"
-					>
+				<div className="mt-4">
+					<h5 className="mb-1 text-center title">
+						{cardSubscriptionData?.name || ' - '}
+					</h5>
+
+					<p className="mb-1 text-center text-neutral-7 text-paragraph-sm">
 						{`Instance size: ${
 							cardSubscriptionData?.instanceSize || ' - '
 						}`}
-					</div>
+					</p>
 
-					<div
-						className="card-date d-flex justify-content-center mb-4 row"
-						type="text"
-					>
+					<p className="mb-3 text-center">
 						{`${getDateCustomFormat(
 							cardSubscriptionData?.startDate,
 							dateFormat
@@ -79,10 +96,12 @@ const CardSubscription = ({
 							cardSubscriptionData?.endDate,
 							dateFormat
 						)}`}
-					</div>
+					</p>
 
-					<div className="badge-card-subscription d-flex justify-content-center">
-						Active
+					<div className="d-flex justify-content-center">
+						<StatusTag
+							currentStatus={statusCard[subscriptionStatus]}
+						/>
 					</div>
 				</div>
 			</div>

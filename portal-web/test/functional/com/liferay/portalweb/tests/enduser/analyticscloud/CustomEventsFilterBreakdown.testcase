@@ -189,6 +189,12 @@ definition {
 				timeToSendCustomEvent = "3");
 		}
 
+		task ("Sign in as new user") {
+			User.logoutAndLoginPG(
+				userLoginEmailAddress = "test@liferay.com",
+				userLoginFullName = "test test");
+		}
+
 		task ("Create new pages and place custom event fields") {
 			for (var layoutName : list "${layoutNameList}") {
 				ACUtils.addPage(layoutName = "${layoutName}");
@@ -451,6 +457,12 @@ definition {
 			ACCustomEvents.createCustomEvent(
 				customEventName = "${customEventName}",
 				timeToSendCustomEvent = "3");
+		}
+
+		task ("Sign in as new user") {
+			User.logoutAndLoginPG(
+				userLoginEmailAddress = "test@liferay.com",
+				userLoginFullName = "test test");
 		}
 
 		task ("Create new pages and place custom event fields") {
@@ -746,7 +758,8 @@ definition {
 				filterName = "${filterName}",
 				inputValue = "25",
 				month = "November",
-				optionValue = "is");
+				optionValue = "is",
+				year = "2021");
 		}
 
 		task ("Change the time filter to 24 hours") {
@@ -768,7 +781,8 @@ definition {
 				filterName = "${filterName}",
 				inputValue = "24",
 				month = "November",
-				optionValue = "before");
+				optionValue = "before",
+				year = "2021");
 		}
 
 		task ("Check that the analysis result does not appear") {
@@ -784,7 +798,8 @@ definition {
 				filterName = "${filterName}",
 				inputValue = "24",
 				month = "November",
-				optionValue = "after");
+				optionValue = "after",
+				year = "2021");
 		}
 
 		task ("Check that the analysis result appears") {
@@ -801,7 +816,8 @@ definition {
 				inputEndValue = "26",
 				inputValue = "23",
 				month = "November",
-				optionValue = "is between");
+				optionValue = "is between",
+				year = "2021");
 		}
 
 		task ("Check that the analysis result appears") {
@@ -1032,7 +1048,7 @@ definition {
 	@description = "Feature ID: LRAC-7868 | Automation ID: LRAC-10272 | Test Summary: Sorting the analysis result after rearranging the breakdowns"
 	@priority = "3"
 	test SortTheResultsAnalysisAfterRearrangingBreakdowns {
-		var attributeNameList = "pageTitle,url,category";
+		var attributeNameList = "pageTitle,category";
 		var layoutNameList = "Custom 1,Custom 2";
 		var dataSource = StringUtil.extractFirst("${assignedPropertyName}", " ");
 
@@ -1042,6 +1058,12 @@ definition {
 			ACCustomEvents.createCustomEvent(
 				customEventName = "${customEventName}",
 				timeToSendCustomEvent = "3");
+		}
+
+		task ("Sign in as new user") {
+			User.logoutAndLoginPG(
+				userLoginEmailAddress = "test@liferay.com",
+				userLoginFullName = "test test");
 		}
 
 		task ("Create new pages and place custom event fields") {
@@ -1097,7 +1119,7 @@ definition {
 		task ("Change the breakdown position order") {
 			ACEventAnalysis.changeBreakdownPosition(
 				indexEnd = "1",
-				indexStart = "3");
+				indexStart = "2");
 		}
 
 		task ("Sort the analysis list and check the positions") {
@@ -1122,7 +1144,7 @@ definition {
 		task ("Change the breakdown position order") {
 			ACEventAnalysis.changeBreakdownPosition(
 				indexEnd = "1",
-				indexStart = "3");
+				indexStart = "2");
 		}
 
 		task ("Sort the analysis list and check the positions") {

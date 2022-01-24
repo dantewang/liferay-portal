@@ -71,6 +71,11 @@ definition {
 				locator1 = "ACSegments#MONTH_AND_YEAR_CALENDAR",
 				value1 = "${month}");
 
+			Select(
+				key_indexCalendar = "2",
+				locator1 = "ACSegments#MONTH_AND_YEAR_CALENDAR",
+				value1 = "${year}");
+
 			Click(
 				key_day = "${inputValue}",
 				locator1 = "ACSegments#DAY_CALENDAR_OPTION");
@@ -256,7 +261,7 @@ definition {
 		for (var name : list "${eventList}") {
 			var key_buttonName = "${name}";
 
-			while (IsElementNotPresent(locator1 = "ACUtils#GENERIC_BUTTON") && (maxIterations = "50")) {
+			while (IsElementNotPresent(locator1 = "ACUtils#GENERIC_BUTTON") && (maxIterations = "100")) {
 				ACEventAnalysis.searchEventAnalysis(searchItem = "${name}");
 			}
 

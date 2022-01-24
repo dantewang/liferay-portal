@@ -109,6 +109,14 @@ public class UserGroupServiceUtil {
 		return getService().fetchUserGroup(userGroupId);
 	}
 
+	public static UserGroup fetchUserGroupByExternalReferenceCode(
+			long companyId, String externalReferenceCode)
+		throws PortalException {
+
+		return getService().fetchUserGroupByExternalReferenceCode(
+			companyId, externalReferenceCode);
+	}
+
 	public static List<UserGroup> getGtUserGroups(
 		long gtUserGroupId, long companyId, long parentUserGroupId, int size) {
 

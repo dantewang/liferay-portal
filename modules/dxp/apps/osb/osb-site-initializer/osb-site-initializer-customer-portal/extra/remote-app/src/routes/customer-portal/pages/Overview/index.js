@@ -9,6 +9,7 @@
  * distribution rights of the Software.
  */
 
+import classNames from 'classnames';
 import {useEffect, useState} from 'react';
 import client from '../../../../apolloClient';
 import {getAccountSubscriptions} from '../../../../common/services/liferay/graphql/queries';
@@ -113,20 +114,28 @@ const Overview = ({project, subscriptionGroups}) => {
 	}, [dispatch, project, subscriptionGroups]);
 
 	return (
-		<div className="d-flex flex-column">
+		<div className="d-flex flex-column mr-4">
 			<h3>Subscriptions</h3>
 
-			<SubscriptionsNavbar
-				setSelectedSubscriptionGroup={setSelectedSubscriptionGroup}
-				subscriptionGroups={subscriptionGroups}
-			/>
+			<div
+				className={classNames('align-items-center d-flex', {
+					'justify-content-between': subscriptionGroups.length < 5,
+					'justify-content-evenly': subscriptionGroups.length > 4,
+				})}
+			>
+				<SubscriptionsNavbar
+					selectedSubscriptionGroup={selectedSubscriptionGroup}
+					setSelectedSubscriptionGroup={setSelectedSubscriptionGroup}
+					subscriptionGroups={subscriptionGroups}
+				/>
 
-			<SubscriptionsFilterByStatus
-				selectedStatus={selectedStatus}
-				setSelectedStatus={setSelectedStatus}
-			/>
+				<SubscriptionsFilterByStatus
+					selectedStatus={selectedStatus}
+					setSelectedStatus={setSelectedStatus}
+				/>
+			</div>
 
-			<div className="d-flex flex-wrap mt-4">
+			<div className="d-flex flex-wrap mt-4 overview-cards-subscription">
 				{accountSubscriptions.length ? (
 					accountSubscriptions.map((accountSubscription, index) => (
 						<CardSubscription

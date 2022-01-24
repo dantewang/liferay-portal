@@ -1073,13 +1073,38 @@ public class ManagementToolbarTag extends BaseContainerTag {
 
 				LinkTag linkTag = new LinkTag();
 
-				linkTag.setCssClass(
-					"nav-btn nav-btn-monospaced btn btn-primary");
+				if (FFManagementToolbarConfigurationUtil.
+						showDesignImprovements()) {
+
+					linkTag.setCssClass(
+						"d-md-none nav-btn nav-btn-monospaced btn btn-primary");
+				}
+				else {
+					linkTag.setCssClass(
+						"nav-btn nav-btn-monospaced btn btn-primary");
+				}
+
 				linkTag.setIcon("plus");
 
 				linkTag.doTag(pageContext);
 
 				jspWriter.write("</li>");
+
+				if (FFManagementToolbarConfigurationUtil.
+						showDesignImprovements()) {
+
+					jspWriter.write("<li class=\"nav-item\">");
+
+					linkTag = new LinkTag();
+
+					linkTag.setCssClass(
+						"nav-btn d-md-flex d-none pl-4 pr-4 btn btn-primary");
+					linkTag.setLabel(LanguageUtil.get(resourceBundle, "new"));
+
+					linkTag.doTag(pageContext);
+
+					jspWriter.write("</li>");
+				}
 			}
 
 			if (FFManagementToolbarConfigurationUtil.showDesignImprovements() &&

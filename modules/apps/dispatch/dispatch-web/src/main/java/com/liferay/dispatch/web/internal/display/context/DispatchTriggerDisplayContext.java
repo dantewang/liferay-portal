@@ -14,6 +14,7 @@
 
 package com.liferay.dispatch.web.internal.display.context;
 
+import com.liferay.dispatch.constants.DispatchPortletKeys;
 import com.liferay.dispatch.executor.DispatchTaskExecutorRegistry;
 import com.liferay.dispatch.metadata.DispatchTriggerMetadata;
 import com.liferay.dispatch.metadata.DispatchTriggerMetadataProvider;
@@ -25,10 +26,10 @@ import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.portlet.SearchOrderByUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -57,11 +58,10 @@ public class DispatchTriggerDisplayContext extends BaseDisplayContext {
 	public String getDispatchTaskExecutorName(
 		String dispatchTaskExecutorType, Locale locale) {
 
-		String name =
+		return LanguageUtil.get(
+			locale,
 			_dispatchTaskExecutorRegistry.fetchDispatchTaskExecutorName(
-				dispatchTaskExecutorType);
-
-		return LanguageUtil.get(locale, name);
+				dispatchTaskExecutorType));
 	}
 
 	public Set<String> getDispatchTaskExecutorTypes() {
@@ -80,15 +80,27 @@ public class DispatchTriggerDisplayContext extends BaseDisplayContext {
 	}
 
 	public String getOrderByCol() {
-		return ParamUtil.getString(
-			dispatchRequestHelper.getRequest(),
-			SearchContainer.DEFAULT_ORDER_BY_COL_PARAM, "modified-date");
+		if (Validator.isNotNull(_orderByCol)) {
+			return _orderByCol;
+		}
+
+		_orderByCol = SearchOrderByUtil.getOrderByCol(
+			dispatchRequestHelper.getRequest(), DispatchPortletKeys.DISPATCH,
+			"trigger-order-by-col", "modified-date");
+
+		return _orderByCol;
 	}
 
 	public String getOrderByType() {
-		return ParamUtil.getString(
-			dispatchRequestHelper.getRequest(),
-			SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM, "desc");
+		if (Validator.isNotNull(_orderByType)) {
+			return _orderByType;
+		}
+
+		_orderByType = SearchOrderByUtil.getOrderByType(
+			dispatchRequestHelper.getRequest(), DispatchPortletKeys.DISPATCH,
+			"trigger-order-by-type", "desc");
+
+		return _orderByType;
 	}
 
 	public PortletURL getPortletURL() throws PortalException {
@@ -135,23 +147,16 @@ public class DispatchTriggerDisplayContext extends BaseDisplayContext {
 			null, null);
 
 		_searchContainer.setEmptyResultsMessage("no-items-were-found");
-
 		_searchContainer.setOrderByCol(getOrderByCol());
 		_searchContainer.setOrderByComparator(null);
 		_searchContainer.setOrderByType(getOrderByType());
-		_searchContainer.setRowChecker(getRowChecker());
-
-		int total = _dispatchTriggerLocalService.getDispatchTriggersCount(
-			dispatchRequestHelper.getCompanyId());
-
-		_searchContainer.setTotal(total);
-
-		List<DispatchTrigger> results =
-			_dispatchTriggerLocalService.getDispatchTriggers(
+		_searchContainer.setResultsAndTotal(
+			() -> _dispatchTriggerLocalService.getDispatchTriggers(
 				dispatchRequestHelper.getCompanyId(),
-				_searchContainer.getStart(), _searchContainer.getEnd());
-
-		_searchContainer.setResults(results);
+				_searchContainer.getStart(), _searchContainer.getEnd()),
+			_dispatchTriggerLocalService.getDispatchTriggersCount(
+				dispatchRequestHelper.getCompanyId()));
+		_searchContainer.setRowChecker(getRowChecker());
 
 		return _searchContainer;
 	}
@@ -160,6 +165,8 @@ public class DispatchTriggerDisplayContext extends BaseDisplayContext {
 	private final DispatchTriggerLocalService _dispatchTriggerLocalService;
 	private final DispatchTriggerMetadataProvider
 		_dispatchTriggerMetadataProvider;
+	private String _orderByCol;
+	private String _orderByType;
 	private RowChecker _rowChecker;
 	private SearchContainer<DispatchTrigger> _searchContainer;
 

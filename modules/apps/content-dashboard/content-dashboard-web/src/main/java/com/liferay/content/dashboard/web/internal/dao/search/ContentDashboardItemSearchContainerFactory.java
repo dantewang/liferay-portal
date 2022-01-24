@@ -16,6 +16,7 @@ package com.liferay.content.dashboard.web.internal.dao.search;
 
 import com.liferay.asset.kernel.service.AssetCategoryLocalService;
 import com.liferay.asset.kernel.service.AssetVocabularyLocalService;
+import com.liferay.content.dashboard.web.internal.constants.ContentDashboardPortletKeys;
 import com.liferay.content.dashboard.web.internal.item.ContentDashboardItem;
 import com.liferay.content.dashboard.web.internal.item.ContentDashboardItemFactory;
 import com.liferay.content.dashboard.web.internal.item.ContentDashboardItemFactoryTracker;
@@ -27,14 +28,15 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
+import com.liferay.portal.kernel.portlet.SearchOrderByUtil;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.searcher.SearchResponse;
 import com.liferay.portal.search.searcher.Searcher;
 
@@ -119,9 +121,9 @@ public class ContentDashboardItemSearchContainerFactory {
 
 		SearchResponse searchResponse = _getSearchResponse(end, start);
 
-		searchContainer.setResults(
-			_getContentDashboardItems(searchResponse.getDocuments71()));
-		searchContainer.setTotal(searchResponse.getTotalHits());
+		searchContainer.setResultsAndTotal(
+			() -> _getContentDashboardItems(searchResponse.getDocuments71()),
+			searchResponse.getTotalHits());
 
 		return searchContainer;
 	}
@@ -163,30 +165,38 @@ public class ContentDashboardItemSearchContainerFactory {
 	}
 
 	private String _getOrderByCol() {
-		return ParamUtil.getString(
-			_portletRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM,
-			"modified-date");
+		if (Validator.isNotNull(_orderByCol)) {
+			return _orderByCol;
+		}
+
+		_orderByCol = SearchOrderByUtil.getOrderByCol(
+			_portletRequest,
+			ContentDashboardPortletKeys.CONTENT_DASHBOARD_ADMIN,
+			"item-search-order-by-col", "modified-date");
+
+		return _orderByCol;
 	}
 
 	private String _getOrderByType() {
-		String orderByCol = _getOrderByCol();
-
-		String orderByType = ParamUtil.getString(
-			_portletRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
-
-		if (Objects.equals(orderByCol, "title")) {
-			if (Objects.equals("desc", orderByType)) {
-				return "desc";
-			}
-
-			return "asc";
+		if (Validator.isNotNull(_orderByType)) {
+			return _orderByType;
 		}
 
-		if (Objects.equals("asc", orderByType)) {
-			return "asc";
+		if (Objects.equals(_getOrderByCol(), "title")) {
+			_orderByType = SearchOrderByUtil.getOrderByType(
+				_portletRequest,
+				ContentDashboardPortletKeys.CONTENT_DASHBOARD_ADMIN,
+				"item-search-order-by-type", "asc");
+
+			return _orderByType;
 		}
 
-		return "desc";
+		_orderByType = SearchOrderByUtil.getOrderByType(
+			_portletRequest,
+			ContentDashboardPortletKeys.CONTENT_DASHBOARD_ADMIN,
+			"item-search-order-by-type", "desc");
+
+		return _orderByType;
 	}
 
 	private SearchResponse _getSearchResponse(int end, int start) {
@@ -213,10 +223,11 @@ public class ContentDashboardItemSearchContainerFactory {
 		}
 
 		if (orderByCol.equals("title")) {
-			String sortFieldName = Field.getSortableFieldName(
-				"localized_title_".concat(LocaleUtil.toLanguageId(_locale)));
-
-			return new Sort(sortFieldName, Sort.STRING_TYPE, !orderByAsc);
+			return new Sort(
+				Field.getSortableFieldName(
+					"localized_title_".concat(
+						LocaleUtil.toLanguageId(_locale))),
+				Sort.STRING_TYPE, !orderByAsc);
 		}
 
 		return new Sort(Field.MODIFIED_DATE, Sort.LONG_TYPE, !orderByAsc);
@@ -263,6 +274,8 @@ public class ContentDashboardItemSearchContainerFactory {
 	private final ContentDashboardSearchRequestBuilderFactory
 		_contentDashboardSearchRequestBuilderFactory;
 	private final Locale _locale;
+	private String _orderByCol;
+	private String _orderByType;
 	private final Portal _portal;
 	private final PortletRequest _portletRequest;
 	private final PortletResponse _portletResponse;

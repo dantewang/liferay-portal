@@ -389,18 +389,20 @@ definition {
 			changeType = "Modified",
 			changeUser = "Test Test");
 
-		PublicationsNavigator.gotoViewChangeDiff(
+		PublicationsNavigator.gotoViewChangeDetails(
 			changeCategory = "Dynamic Data Lists Record",
 			changeTitle = "${changeTitle}");
 
-		PublicationsChanges.viewDDLRecordChangeDiff(
+		PublicationsChangeDetails.viewDDLRecordChangeDetails(
+			changeType = "Modified",
 			diffAddedValue = "Edit",
 			fieldName = "Text",
 			fieldValueInProduction = "Record Text",
 			fieldValueInPublication = "Record Text Edited",
 			publicationName = "Publication Name");
 
-		PublicationsChanges.viewDDLRecordChangeDiff(
+		PublicationsChangeDetails.viewDDLRecordChangeDetails(
+			changeType = "Modified",
 			diffAddedValue = "3/30/21",
 			fieldName = "Date",
 			fieldValueInPublication = "3/30/21",

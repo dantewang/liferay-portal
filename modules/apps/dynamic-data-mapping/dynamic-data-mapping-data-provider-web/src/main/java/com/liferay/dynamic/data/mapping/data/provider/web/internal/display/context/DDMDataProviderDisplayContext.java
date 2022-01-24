@@ -122,12 +122,9 @@ public class DDMDataProviderDisplayContext {
 			return _ddmDataProviderInstance;
 		}
 
-		long dataProviderInstanceId = ParamUtil.getLong(
-			_renderRequest, "dataProviderInstanceId");
-
 		_ddmDataProviderInstance =
 			_ddmDataProviderInstanceService.fetchDataProviderInstance(
-				dataProviderInstanceId);
+				ParamUtil.getLong(_renderRequest, "dataProviderInstanceId"));
 
 		return _ddmDataProviderInstance;
 	}
@@ -189,12 +186,9 @@ public class DDMDataProviderDisplayContext {
 			DDMFormValues ddmFormValues = _deserialize(
 				ddmDataProviderInstance.getDefinition(), ddmForm);
 
-			Set<String> passwordDDMFormFieldNames =
-				DDMDataProviderPortletUtil.getDDMFormFieldNamesByType(
-					ddmForm, "password");
-
 			_obfuscateDDMFormFieldValues(
-				passwordDDMFormFieldNames,
+				DDMDataProviderPortletUtil.getDDMFormFieldNamesByType(
+					ddmForm, "password"),
 				ddmFormValues.getDDMFormFieldValues());
 
 			ddmFormRenderingContext.setDDMFormValues(ddmFormValues);
@@ -268,11 +262,8 @@ public class DDMDataProviderDisplayContext {
 			return StringPool.BLANK;
 		}
 
-		HttpServletRequest httpServletRequest =
-			_ddmDataProviderRequestHelper.getRequest();
-
 		return LanguageUtil.get(
-			httpServletRequest,
+			_ddmDataProviderRequestHelper.getRequest(),
 			"create-a-data-provider-to-automatically-populate-your-select-" +
 				"fields");
 	}
@@ -280,11 +271,9 @@ public class DDMDataProviderDisplayContext {
 	public String getEmptyResultsMessage() {
 		SearchContainer<?> search = getSearch();
 
-		HttpServletRequest httpServletRequest =
-			_ddmDataProviderRequestHelper.getRequest();
-
 		return LanguageUtil.get(
-			httpServletRequest, search.getEmptyResultsMessage());
+			_ddmDataProviderRequestHelper.getRequest(),
+			search.getEmptyResultsMessage());
 	}
 
 	public List<DropdownItem> getFilterItemsDropdownItems() {
@@ -468,9 +457,15 @@ public class DDMDataProviderDisplayContext {
 			DDMDataProviderPortletUtil.getDDMDataProviderOrderByComparator(
 				getOrderByCol(), getOrderByType()));
 		ddmDataProviderSearch.setOrderByType(getOrderByType());
-
-		_setDDMDataProviderInstanceSearchResults(ddmDataProviderSearch);
-		_setDDMDataProviderInstanceSearchTotal(ddmDataProviderSearch);
+		ddmDataProviderSearch.setResultsAndTotal(
+			() -> _ddmDataProviderInstanceService.search(
+				_ddmDataProviderRequestHelper.getCompanyId(), _getGroupIds(),
+				_getKeywords(), ddmDataProviderSearch.getStart(),
+				ddmDataProviderSearch.getEnd(),
+				ddmDataProviderSearch.getOrderByComparator()),
+			_ddmDataProviderInstanceService.searchCount(
+				_ddmDataProviderRequestHelper.getCompanyId(), _getGroupIds(),
+				_getKeywords()));
 
 		return ddmDataProviderSearch;
 	}
@@ -766,29 +761,6 @@ public class DDMDataProviderDisplayContext {
 				ddmFormFieldNamesToBeObfuscated,
 				ddmFormFieldValue.getNestedDDMFormFieldValues());
 		}
-	}
-
-	private void _setDDMDataProviderInstanceSearchResults(
-		DDMDataProviderSearch ddmDataProviderSearch) {
-
-		List<DDMDataProviderInstance> results =
-			_ddmDataProviderInstanceService.search(
-				_ddmDataProviderRequestHelper.getCompanyId(), _getGroupIds(),
-				_getKeywords(), ddmDataProviderSearch.getStart(),
-				ddmDataProviderSearch.getEnd(),
-				ddmDataProviderSearch.getOrderByComparator());
-
-		ddmDataProviderSearch.setResults(results);
-	}
-
-	private void _setDDMDataProviderInstanceSearchTotal(
-		DDMDataProviderSearch ddmDataProviderSearch) {
-
-		int total = _ddmDataProviderInstanceService.searchCount(
-			_ddmDataProviderRequestHelper.getCompanyId(), _getGroupIds(),
-			_getKeywords());
-
-		ddmDataProviderSearch.setTotal(total);
 	}
 
 	private static final String[] _DISPLAY_VIEWS = {"descriptive", "list"};

@@ -37,7 +37,7 @@
 	</tr>
 	<tr>
 		<td>PANEL_CATEGORY_KEY_SELECTED</td>
-		<td>//select[contains(@id,'_panelCategoryKey')]//option[contains(@selected,'') and contains(text(),'${key_panelCategoryKey}')]</td>
+		<td>//select[@id='_com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_panelCategoryKey']</td>
 		<td></td>
 	</tr>
 	<tr>
@@ -184,7 +184,37 @@
 		<td>ASSERT_SELECTED_VALUE</td>
 		<td>//label[contains(.,'${key_fieldLabel}')]/../select/option[@selected and contains(.,'${key_value}')]</td>
 		<td></td>
-</tr>
+	</tr>
+	<tr>
+		<td>ASSERT_TWO_COLUMN_FIELD_ENTRY</td>
+		<td>//div[contains(@class,'col-md-6')]</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>ASSERT_ONE_COLUMN_FIELD_ENTRY</td>
+		<td>//div[contains(@class,'col-md-12')]</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>VIEW_OBJECT_ENTRY_DISPLAY_DISABLED</td>
+		<td>//label[contains(text(),'${key_nameDisabled}')]/..//select[@class='form-control disabled']</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>VIEW_OBJECT_DATA_DISABLED</td>
+		<td>//label[contains(text(),'${key_nameDisabled}')]/..//*[contains(@class,'disabled form-control')]</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>SAVE_BUTTON_DISABLED</td>
+		<td>//button[contains(@id,'save') and @disabled]</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>ERROR_MESSAGE</td>
+		<td>//div[contains(@class,'${key_className}') and contains(.,'${key_errorMessage}')]</td>
+		<td></td>
+	</tr>
 </tbody>
 </table>
 </body>
