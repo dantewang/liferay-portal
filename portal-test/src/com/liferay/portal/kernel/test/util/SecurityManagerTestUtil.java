@@ -19,12 +19,14 @@ import com.liferay.portal.kernel.test.SwappableSecurityManager;
 
 import java.security.Permission;
 
+import java.util.Objects;
+
 /**
  * @author Janis Zhang
  */
 public class SecurityManagerTestUtil {
 
-	public static SwappableSecurityManager installForCheckPermission(
+	public static SwappableSecurityManager installForSuppressAccessChecks(
 			Class<?> callerClass, SecurityException securityException)
 		throws ClassNotFoundException {
 
@@ -35,7 +37,9 @@ public class SecurityManagerTestUtil {
 
 				@Override
 				public void checkPermission(Permission permission) {
-					if (!_ACCESS_PERMISSION.equals(permission.getName())) {
+					if (!Objects.equals(
+							permission.getName(), _SUPPRESS_ACCESS_CHECKS)) {
+
 						return;
 					}
 
@@ -53,6 +57,7 @@ public class SecurityManagerTestUtil {
 		return swappableSecurityManager;
 	}
 
-	private static final String _ACCESS_PERMISSION = "suppressAccessChecks";
+	private static final String _SUPPRESS_ACCESS_CHECKS =
+		"suppressAccessChecks";
 
 }

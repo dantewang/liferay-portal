@@ -59,7 +59,7 @@ public class ConstantsBeanFactoryImplTest {
 		SecurityException securityException = new SecurityException();
 
 		try (SwappableSecurityManager swappableSecurityManager =
-				SecurityManagerTestUtil.installForCheckPermission(
+				SecurityManagerTestUtil.installForSuppressAccessChecks(
 					ReflectionUtil.class, securityException)) {
 
 			Class.forName(ConstantsBeanFactoryImpl.class.getName());

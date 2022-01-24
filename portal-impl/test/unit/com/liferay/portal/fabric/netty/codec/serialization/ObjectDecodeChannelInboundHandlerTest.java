@@ -93,7 +93,7 @@ public class ObjectDecodeChannelInboundHandlerTest {
 		SecurityException securityException = new SecurityException();
 
 		try (SwappableSecurityManager swappableSecurityManager =
-				SecurityManagerTestUtil.installForCheckPermission(
+				SecurityManagerTestUtil.installForSuppressAccessChecks(
 					ReflectionUtil.class, securityException)) {
 
 			new DateChannelHandler();
