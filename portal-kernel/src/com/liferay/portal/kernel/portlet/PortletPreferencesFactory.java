@@ -57,6 +57,11 @@ public interface PortletPreferencesFactory {
 			PortletRequest portletRequest)
 		throws PortalException;
 
+	public boolean getLayoutPortletAndPortletSetup(
+			HttpServletRequest httpServletRequest, Portlet portlet,
+			String defaultPreferences)
+		throws Exception;
+
 	public PortletPreferences getLayoutPortletSetup(
 		Layout layout, String portletId);
 

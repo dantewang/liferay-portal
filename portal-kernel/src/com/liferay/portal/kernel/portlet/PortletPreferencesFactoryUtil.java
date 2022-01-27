@@ -76,6 +76,15 @@ public class PortletPreferencesFactoryUtil {
 			portletRequest);
 	}
 
+	public static boolean getLayoutPortletAndPortletSetup(
+			HttpServletRequest httpServletRequest, Portlet portlet,
+			String defaultPreferences)
+		throws Exception {
+
+		return _portletPreferencesFactory.getLayoutPortletAndPortletSetup(
+			httpServletRequest, portlet, defaultPreferences);
+	}
+
 	public static PortletPreferences getLayoutPortletSetup(
 		Layout layout, String portletId) {
 

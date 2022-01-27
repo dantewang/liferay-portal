@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.LiferayPortletMode;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
+import com.liferay.portal.kernel.portlet.PortletLayoutListener;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.portlet.constants.PortletPreferencesFactoryConstants;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
@@ -270,6 +271,54 @@ public class PortletPreferencesFactoryImpl
 
 		return getExistingPortletSetup(
 			themeDisplay.getLayout(), portletResource);
+	}
+
+	@Override
+	public boolean getLayoutPortletAndPortletSetup(
+			HttpServletRequest httpServletRequest, Portlet portlet,
+			String defaultPreferences)
+		throws Exception {
+
+		boolean writeObject = false;
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+		Layout layout = themeDisplay.getLayout();
+
+		String portletId = portlet.getPortletId();
+
+		if (!layout.isPortletEmbedded(portletId, layout.getGroupId())) {
+			getLayoutPortletSetup(
+				layout.getCompanyId(), layout.getGroupId(),
+				PortletKeys.PREFS_OWNER_TYPE_LAYOUT,
+				PortletKeys.PREFS_PLID_SHARED, portletId, defaultPreferences);
+
+			writeObject = true;
+		}
+
+		long count =
+			PortletPreferencesLocalServiceUtil.getPortletPreferencesCount(
+				PortletKeys.PREFS_OWNER_TYPE_LAYOUT, layout.getPlid(),
+				portletId);
+
+		if (count < 1) {
+			getLayoutPortletSetup(layout, portletId, defaultPreferences);
+			getPortletSetup(httpServletRequest, portletId, defaultPreferences);
+
+			PortletLayoutListener portletLayoutListener =
+				portlet.getPortletLayoutListenerInstance();
+
+			if (portletLayoutListener != null) {
+				portletLayoutListener.onAddToLayout(
+					portletId, layout.getPlid());
+			}
+
+			writeObject = true;
+		}
+
+		return writeObject;
 	}
 
 	@Override
