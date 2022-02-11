@@ -79,10 +79,16 @@ public class PostgreSQLDB extends BaseDB {
 	public List<Index> getIndexes(Connection connection) throws SQLException {
 		List<Index> indexes = new ArrayList<>();
 
+		// https://www.postgresql.org/docs/13/view-pg-indexes.html
+		// https://www.postgresql.org/docs/13/catalog-pg-class.html
+		// https://www.postgresql.org/docs/13/catalog-pg-index.html
+
 		String sql = StringBundler.concat(
-			"select indexname, tablename, indexdef from pg_indexes where ",
-			"schemaname = current_schema() and (indexname like 'liferay_%' or ",
-			"indexname like 'ix_%')");
+			"select x.indexname, x.tablename, y.indisunique from pg_indexes ",
+			"as x, pg_index as y, pg_class as z where x.schemaname = ",
+			"current_schema() and (x.indexname like 'liferay_%' or ",
+			"x.indexname like 'ix_%') and z.relname = x.indexname and ",
+			"y.indexrelid = z.oid");
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
 				sql);
@@ -91,14 +97,7 @@ public class PostgreSQLDB extends BaseDB {
 			while (resultSet.next()) {
 				String indexName = resultSet.getString("indexname");
 				String tableName = resultSet.getString("tablename");
-				String indexSQL = StringUtil.toLowerCase(
-					StringUtil.trim(resultSet.getString("indexdef")));
-
-				boolean unique = true;
-
-				if (indexSQL.startsWith("create index ")) {
-					unique = false;
-				}
+				boolean unique = resultSet.getBoolean("indisunique");
 
 				indexes.add(new Index(indexName, tableName, unique));
 			}
