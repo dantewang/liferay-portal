@@ -93,48 +93,52 @@ public abstract class BaseUpgradeTableImpl extends Table {
 		try {
 			DB db = DBManagerUtil.getDB();
 
-			if (Validator.isNotNull(tempFileName) && deleteSource) {
-				db.runSQL(sourceConnection, getDeleteSQL());
-			}
-
-			String createSQL = getCreateSQL();
-
-			if (Validator.isNotNull(createSQL)) {
-				if (deleteSource) {
-					db.runSQL(sourceConnection, "drop table " + getTableName());
+			synchronized (DB.class) {
+				if (Validator.isNotNull(tempFileName) && deleteSource) {
+					db.runSQL(sourceConnection, getDeleteSQL());
 				}
 
-				db.runSQL(targetConnection, createSQL);
-			}
+				String createSQL = getCreateSQL();
 
-			populateTable(targetConnection);
+				if (Validator.isNotNull(createSQL)) {
+					if (deleteSource) {
+						db.runSQL(
+							sourceConnection, "drop table " + getTableName());
+					}
 
-			String[] indexesSQL = getIndexesSQL();
-
-			boolean dropIndexes = false;
-
-			for (String indexSQL : indexesSQL) {
-				if (!isAllowUniqueIndexes() &&
-					indexSQL.contains("create unique index")) {
-
-					indexSQL = StringUtil.replace(
-						indexSQL, "create unique index ", "create index ");
-
-					dropIndexes = true;
+					db.runSQL(targetConnection, createSQL);
 				}
 
-				try {
-					db.runSQLTemplateString(targetConnection, indexSQL, false);
-				}
-				catch (Exception exception) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(exception.getMessage() + ": " + indexSQL);
+				populateTable(targetConnection);
+
+				String[] indexesSQL = getIndexesSQL();
+
+				boolean dropIndexes = false;
+
+				for (String indexSQL : indexesSQL) {
+					if (!isAllowUniqueIndexes() &&
+						indexSQL.contains("create unique index")) {
+
+						indexSQL = StringUtil.replace(
+							indexSQL, "create unique index ", "create index ");
+
+						dropIndexes = true;
+					}
+
+					try {
+						db.runSQLTemplateString(
+							targetConnection, indexSQL, false);
+					}
+					catch (Exception exception) {
+						if (_log.isWarnEnabled()) {
+							_log.warn(exception.getMessage() + ": " + indexSQL);
+						}
 					}
 				}
-			}
 
-			if (dropIndexes) {
-				StartupHelperUtil.setDropIndexes(true);
+				if (dropIndexes) {
+					StartupHelperUtil.setDropIndexes(true);
+				}
 			}
 		}
 		finally {

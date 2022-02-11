@@ -642,13 +642,19 @@ public abstract class BaseDB implements DB {
 						"Updating database indexes for company " + companyId);
 				}
 
-				List<Index> indexes = getIndexes(connection);
+				List<Index> indexes = null;
+
+				synchronized (DB.class) {
+					indexes = getIndexes(connection);
+				}
 
 				Set<String> validIndexNames = null;
 
 				if (dropIndexes) {
-					validIndexNames = dropIndexes(
-						connection, tablesSQL, indexesSQL, indexes);
+					synchronized (DB.class) {
+						validIndexNames = dropIndexes(
+							connection, tablesSQL, indexesSQL, indexes);
+					}
 				}
 				else {
 					validIndexNames = new HashSet<>();
