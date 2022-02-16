@@ -15,6 +15,7 @@
 package com.liferay.blogs.web.internal.display.context;
 
 import com.liferay.asset.kernel.model.AssetEntry;
+import com.liferay.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.blogs.service.BlogsEntryServiceUtil;
 import com.liferay.blogs.util.comparator.EntryModifiedDateComparator;
 import com.liferay.blogs.web.internal.configuration.BlogsPortletInstanceConfiguration;
@@ -164,10 +165,19 @@ public class BlogsDisplayContext {
 		else {
 			searchContainer.setResultsAndTotal(
 				() -> new ArrayList<>(
-					BlogsEntryServiceUtil.getGroupEntries(
+					BlogsEntryLocalServiceUtil.getGroupEntries(
 						_themeDisplay.getScopeGroupId(),
-						WorkflowConstants.STATUS_APPROVED,
-						searchContainer.getStart(), searchContainer.getEnd())),
+						new com.liferay.portal.kernel.dao.orm.QueryDefinition(
+							WorkflowConstants.STATUS_APPROVED,
+							searchContainer.getStart(), searchContainer.getEnd(),
+							new com.liferay.portal.kernel.util.OrderByComparator() {
+								public int compare(Object obj1, Object obj2) {return 0;}
+								public String getOrderBy() {return "displayDate ASC";}
+								public String[] getOrderByFields() {
+									String[] orderByFields = {"displayDate"};
+									return orderByFields;
+								}
+							}))),
 				BlogsEntryServiceUtil.getGroupEntriesCount(
 					_themeDisplay.getScopeGroupId(),
 					WorkflowConstants.STATUS_APPROVED));
