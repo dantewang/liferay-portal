@@ -32,13 +32,13 @@ public class PropsTestUtil {
 
 	public static Props setProps(Map<String, Object> propertie) {
 		Props props = _propsProxyProviderFunction.apply(
-				(Object proxy, Method method, Object[] args) -> {
-			if (args.length > 0) {
-				return propertie.get(args[0]);
-			}
+			(Object proxy, Method method, Object[] args) -> {
+				if (args.length > 0) {
+					return propertie.get(args[0]);
+				}
 
-			return null;
-		});
+				return null;
+			});
 
 		PropsUtil.setProps(props);
 
@@ -49,8 +49,8 @@ public class PropsTestUtil {
 		return setProps(Collections.singletonMap(key, value));
 	}
 
-	private static final Function<InvocationHandler,Props>
-			_propsProxyProviderFunction = ProxyUtil.getProxyProviderFunction(
-					Props.class);
+	private static final Function<InvocationHandler, Props>
+		_propsProxyProviderFunction = ProxyUtil.getProxyProviderFunction(
+			Props.class);
 
 }

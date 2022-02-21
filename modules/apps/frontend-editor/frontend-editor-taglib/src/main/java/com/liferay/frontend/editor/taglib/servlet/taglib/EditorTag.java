@@ -383,7 +383,7 @@ public class EditorTag extends BaseValidatorTagSupport {
 
 		setNamespacedAttribute(
 			httpServletRequest, "data",
-				_mapProxyProviderFunction.apply(new LazyDataInvocationHandler()));
+			_mapProxyProviderFunction.apply(new LazyDataInvocationHandler()));
 	}
 
 	private String _getConfigKey() {
@@ -548,7 +548,7 @@ public class EditorTag extends BaseValidatorTagSupport {
 	private static final String _TOOLBAR_SET_DEFAULT = "liferay";
 
 	private static final Function<InvocationHandler, Map<?, ?>>
-			_mapProxyProviderFunction = ProxyUtil.getProxyProviderFunction(
+		_mapProxyProviderFunction = ProxyUtil.getProxyProviderFunction(
 			Map.class);
 
 	private boolean _allowBrowseDocuments = true;
