@@ -17,6 +17,7 @@ package com.liferay.diff.internal;
 import com.liferay.diff.DiffHtml;
 import com.liferay.petra.io.unsync.UnsyncStringWriter;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.security.xml.SecureXMLFactoryProvider;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
@@ -24,12 +25,12 @@ import java.io.Reader;
 
 import java.util.Locale;
 
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import org.outerj.daisy.diff.HtmlCleaner;
 import org.outerj.daisy.diff.XslFilter;
@@ -85,7 +86,8 @@ public class DiffHtmlImpl implements DiffHtml {
 
 		try {
 			SAXTransformerFactory saxTransformerFactory =
-				(SAXTransformerFactory)TransformerFactory.newInstance();
+				(SAXTransformerFactory)
+					_secureXMLFactoryProvider.newTransformerFactory();
 
 			TransformerHandler tranformHandler =
 				saxTransformerFactory.newTransformerHandler();
@@ -181,5 +183,8 @@ public class DiffHtmlImpl implements DiffHtml {
 	private static final String _DIFF = "diff";
 
 	private static final String _DIFF_REPORT = "diffreport";
+
+	@Reference
+	private SecureXMLFactoryProvider _secureXMLFactoryProvider;
 
 }

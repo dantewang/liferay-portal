@@ -19,8 +19,10 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.petra.xml.Dom4jUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.xml.SecureXMLFactoryProvider;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.security.xml.SecureXMLFactoryProviderImpl;
 import com.liferay.portal.xml.SAXReaderFactory;
 
 import java.io.BufferedReader;
@@ -97,8 +99,11 @@ public class XSLTBuilder {
 					completeContent.getBytes(StandardCharsets.UTF_8));
 			}
 
+			SecureXMLFactoryProvider secureXMLFactoryProvider =
+				new SecureXMLFactoryProviderImpl();
+
 			TransformerFactory transformerFactory =
-				TransformerFactory.newInstance();
+				secureXMLFactoryProvider.newTransformerFactory();
 
 			Transformer transformer = transformerFactory.newTransformer(
 				new StreamSource(xsl));

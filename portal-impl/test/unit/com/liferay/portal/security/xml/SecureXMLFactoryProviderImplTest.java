@@ -21,6 +21,7 @@ import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -30,6 +31,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -118,6 +123,50 @@ public class SecureXMLFactoryProviderImplTest {
 			"Vulnerable to Parameter Entities XXE using SYSTEM entity.");
 		runXMLSecurityTest(
 			documentBuilderTest, _xxeParameterEntitiesXML2,
+			ConnectException.class,
+			"Parameter Entities XXE attack using PUBLIC entity does not work.",
+			SAXParseException.class,
+			"Vulnerable to Parameter Entities XXE attack using PUBLIC entity.");
+	}
+
+	@Test
+	public void testNewTransformerFactory() throws Throwable {
+		XMLSecurityTest transformerFactoryTest = new XMLSecurityTest() {
+
+			@Override
+			public void run(String xml) throws Exception {
+				TransformerFactory transformerFactory =
+					_secureXMLFactoryProviderImpl.newTransformerFactory();
+
+				Transformer transformer = transformerFactory.newTransformer();
+
+				transformer.transform(
+					new StreamSource(new ByteArrayInputStream(xml.getBytes())),
+					new StreamResult(new ByteArrayOutputStream()));
+			}
+
+		};
+
+		runXMLSecurityTest(
+			transformerFactoryTest, _xxeGeneralEntitiesXML1,
+			ConnectException.class,
+			"General Entities XXE attack using SYSTEM entity does not work.",
+			SAXParseException.class,
+			"Vulnerable to General Entities XXE attack using SYSTEM entity.");
+		runXMLSecurityTest(
+			transformerFactoryTest, _xxeGeneralEntitiesXML2,
+			ConnectException.class,
+			"General Entities XXE attack using PUBLIC entity does not work.",
+			SAXParseException.class,
+			"Vulnerable to General Entities XXE attack using PUBLIC entity.");
+		runXMLSecurityTest(
+			transformerFactoryTest, _xxeParameterEntitiesXML1,
+			ConnectException.class,
+			"Parameter Entities XXE using SYSTEM entity does not work.",
+			SAXParseException.class,
+			"Vulnerable to Parameter Entities XXE using SYSTEM entity.");
+		runXMLSecurityTest(
+			transformerFactoryTest, _xxeParameterEntitiesXML2,
 			ConnectException.class,
 			"Parameter Entities XXE attack using PUBLIC entity does not work.",
 			SAXParseException.class,

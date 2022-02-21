@@ -16,7 +16,9 @@ package com.liferay.sharepoint.soap.repository.connector;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.security.xml.SecureXMLFactoryProviderUtil;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.security.xml.SecureXMLFactoryProviderImpl;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.sharepoint.soap.repository.connector.internal.util.test.SharepointConnectionTestUtil;
 import com.liferay.sharepoint.soap.repository.connector.schema.query.Query;
@@ -55,6 +57,12 @@ public class SharepointConnectionTest {
 
 	@BeforeClass
 	public static void setUpClass() {
+		SecureXMLFactoryProviderUtil secureXMLFactoryProviderUtil =
+			new SecureXMLFactoryProviderUtil();
+
+		secureXMLFactoryProviderUtil.setSecureXMLFactoryProvider(
+			new SecureXMLFactoryProviderImpl());
+
 		_sharepointConnection = SharepointConnectionFactory.getInstance(
 			_SERVER_VERSION, _SERVER_PROTOCOL,
 			SharepointConnectionTestUtil.getSharepointVMHostname(),
