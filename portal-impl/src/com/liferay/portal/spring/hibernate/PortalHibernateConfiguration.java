@@ -40,8 +40,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import javassist.util.proxy.ProxyFactory;
-
 import javax.sql.DataSource;
 
 import org.hibernate.HibernateException;
@@ -280,40 +278,6 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		PortalHibernateConfiguration.class);
-
-	private static final Map<ProxyFactory, ClassLoader>
-		_proxyFactoryClassLoaders = new ConcurrentReferenceKeyHashMap<>(
-			FinalizeManager.WEAK_REFERENCE_FACTORY);
-
-	static {
-		ProxyFactory.classLoaderProvider =
-			new ProxyFactory.ClassLoaderProvider() {
-
-				@Override
-				public ClassLoader get(ProxyFactory proxyFactory) {
-					return _proxyFactoryClassLoaders.computeIfAbsent(
-						proxyFactory,
-						(ProxyFactory pf) -> {
-							ClassLoader classLoader =
-								PortalClassLoaderUtil.getClassLoader();
-
-							Thread currentThread = Thread.currentThread();
-
-							ClassLoader contextClassLoader =
-								currentThread.getContextClassLoader();
-
-							if (classLoader != contextClassLoader) {
-								classLoader = new PreloadClassLoader(
-									contextClassLoader,
-									getPreloadClassLoaderClasses());
-							}
-
-							return classLoader;
-						});
-				}
-
-			};
-	}
 
 	private DataSource _dataSource;
 	private boolean _mvccEnabled = true;
