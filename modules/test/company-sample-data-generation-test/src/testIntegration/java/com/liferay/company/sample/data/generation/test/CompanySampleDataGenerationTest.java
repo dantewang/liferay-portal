@@ -291,16 +291,15 @@ public class CompanySampleDataGenerationTest {
 		List<ClassName> classNames = _classNameLocalService.getClassNames(
 			QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-		try (BufferedWriter classNameTableBufferedWriter =
-				Files.newBufferedWriter(
-					_outputDirPath.resolve(_CLASS_NAME_TABLE_CSV))) {
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
+				_outputDirPath.resolve(_CLASS_NAME_TABLE_CSV))) {
 
 			for (ClassName className : classNames) {
-				classNameTableBufferedWriter.append(
+				bufferedWriter.append(
 					String.valueOf(className.getClassNameId()));
-				classNameTableBufferedWriter.append(StringPool.COMMA);
-				classNameTableBufferedWriter.append(className.getValue());
-				classNameTableBufferedWriter.newLine();
+				bufferedWriter.append(StringPool.COMMA);
+				bufferedWriter.append(className.getValue());
+				bufferedWriter.newLine();
 			}
 		}
 	}
@@ -313,30 +312,26 @@ public class CompanySampleDataGenerationTest {
 				companyId,
 				CommerceCatalogConstants.MASTER_COMMERCE_DEFAULT_CURRENCY);
 
-		try (BufferedWriter commerceCurrencyTableBufferedWriter =
-				Files.newBufferedWriter(
-					_outputDirPath.resolve(_COMMERCE_CURRENCY_TABLE_CSV),
-					_openOptions)) {
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
+				_outputDirPath.resolve(_COMMERCE_CURRENCY_TABLE_CSV),
+				_openOptions)) {
 
-			commerceCurrencyTableBufferedWriter.append(
-				String.valueOf(companyId));
-			commerceCurrencyTableBufferedWriter.append(StringPool.COMMA);
-			commerceCurrencyTableBufferedWriter.append(
+			bufferedWriter.append(String.valueOf(companyId));
+			bufferedWriter.append(StringPool.COMMA);
+			bufferedWriter.append(
 				String.valueOf(commerceCurrency.getCommerceCurrencyId()));
-			commerceCurrencyTableBufferedWriter.newLine();
+			bufferedWriter.newLine();
 		}
 	}
 
 	private void _exportCompanyTableData(Company company) throws Exception {
-		try (BufferedWriter companyTableBufferedWriter =
-				Files.newBufferedWriter(
-					_outputDirPath.resolve(_COMPANY_TABLE_CSV), _openOptions)) {
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
+				_outputDirPath.resolve(_COMPANY_TABLE_CSV), _openOptions)) {
 
-			companyTableBufferedWriter.append(
-				String.valueOf(company.getCompanyId()));
-			companyTableBufferedWriter.append(StringPool.COMMA);
-			companyTableBufferedWriter.append(company.getWebId());
-			companyTableBufferedWriter.newLine();
+			bufferedWriter.append(String.valueOf(company.getCompanyId()));
+			bufferedWriter.append(StringPool.COMMA);
+			bufferedWriter.append(company.getWebId());
+			bufferedWriter.newLine();
 		}
 	}
 
@@ -346,19 +341,17 @@ public class CompanySampleDataGenerationTest {
 				"select name, currentId from Counter")) {
 
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				try (BufferedWriter counterTableBufferedWriter =
-						Files.newBufferedWriter(
-							_outputDirPath.resolve(_COUNTER_TABLE_CSV))) {
+				try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
+						_outputDirPath.resolve(_COUNTER_TABLE_CSV))) {
 
 					while (resultSet.next()) {
 						String name = resultSet.getString("name");
 						long currentId = resultSet.getLong("currentId");
 
-						counterTableBufferedWriter.append(name);
-						counterTableBufferedWriter.append(StringPool.COMMA);
-						counterTableBufferedWriter.append(
-							String.valueOf(currentId));
-						counterTableBufferedWriter.newLine();
+						bufferedWriter.append(name);
+						bufferedWriter.append(StringPool.COMMA);
+						bufferedWriter.append(String.valueOf(currentId));
+						bufferedWriter.newLine();
 					}
 				}
 			}
@@ -413,10 +406,9 @@ public class CompanySampleDataGenerationTest {
 	private void _exportDDMStructureVersionTableData(long companyId)
 		throws Exception {
 
-		try (BufferedWriter ddmStructureVersionTableBufferedWriter =
-				Files.newBufferedWriter(
-					_outputDirPath.resolve(_DDM_STRUCTURE_VERSION_TABLE_CSV),
-					_openOptions)) {
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
+				_outputDirPath.resolve(_DDM_STRUCTURE_VERSION_TABLE_CSV),
+				_openOptions)) {
 
 			for (DDMStructure ddmStructure :
 					_dDMStructureLocalService.getStructures()) {
@@ -429,13 +421,11 @@ public class CompanySampleDataGenerationTest {
 							ddmStructure.getStructureId(),
 							DDMStructureConstants.VERSION_DEFAULT);
 
-					ddmStructureVersionTableBufferedWriter.append(
-						String.valueOf(companyId));
-					ddmStructureVersionTableBufferedWriter.append(
-						StringPool.COMMA);
-					ddmStructureVersionTableBufferedWriter.append(
+					bufferedWriter.append(String.valueOf(companyId));
+					bufferedWriter.append(StringPool.COMMA);
+					bufferedWriter.append(
 						String.valueOf(ddmStructureVersion.getPrimaryKey()));
-					ddmStructureVersionTableBufferedWriter.newLine();
+					bufferedWriter.newLine();
 				}
 			}
 		}
@@ -449,33 +439,30 @@ public class CompanySampleDataGenerationTest {
 			globalGroup.getGroupId(),
 			_classNameLocalService.getClassNameId(DDMStructure.class));
 
-		try (BufferedWriter ddmTemplateTableBufferedWriter =
-				Files.newBufferedWriter(
-					_outputDirPath.resolve(_DDM_TEMPLATE_TABLE_CSV),
-					_openOptions)) {
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
+				_outputDirPath.resolve(_DDM_TEMPLATE_TABLE_CSV),
+				_openOptions)) {
 
 			for (DDMTemplate ddmTemplate : ddmTemplates) {
-				ddmTemplateTableBufferedWriter.append(
+				bufferedWriter.append(
 					String.valueOf(ddmTemplate.getCompanyId()));
-				ddmTemplateTableBufferedWriter.append(StringPool.COMMA);
-				ddmTemplateTableBufferedWriter.append(
+				bufferedWriter.append(StringPool.COMMA);
+				bufferedWriter.append(
 					String.valueOf(ddmTemplate.getTemplateId()));
-				ddmTemplateTableBufferedWriter.newLine();
+				bufferedWriter.newLine();
 			}
 		}
 	}
 
 	private void _exportDefaultUserId(long companyId) throws Exception {
-		try (BufferedWriter defaultUserIdBufferedWriter =
-				Files.newBufferedWriter(
-					_outputDirPath.resolve(_DEFAULT_USER_ID_CSV),
-					_openOptions)) {
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
+				_outputDirPath.resolve(_DEFAULT_USER_ID_CSV), _openOptions)) {
 
-			defaultUserIdBufferedWriter.append(String.valueOf(companyId));
-			defaultUserIdBufferedWriter.append(StringPool.COMMA);
-			defaultUserIdBufferedWriter.append(
+			bufferedWriter.append(String.valueOf(companyId));
+			bufferedWriter.append(StringPool.COMMA);
+			bufferedWriter.append(
 				String.valueOf(_userLocalService.getDefaultUserId(companyId)));
-			defaultUserIdBufferedWriter.newLine();
+			bufferedWriter.newLine();
 		}
 	}
 
@@ -486,40 +473,39 @@ public class CompanySampleDataGenerationTest {
 		List<Group> groups = _groupLocalService.getCompanyGroups(
 			companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-		try (BufferedWriter groupTableBufferedWriter = Files.newBufferedWriter(
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
 				_outputDirPath.resolve(_GROUP_TABLE_CSV), _openOptions)) {
 
 			for (Group group : groups) {
 				String groupKey = group.getGroupKey();
 
 				if (expectedGroupKeyNames.contains(groupKey)) {
-					groupTableBufferedWriter.append(String.valueOf(companyId));
-					groupTableBufferedWriter.append(StringPool.COMMA);
-					groupTableBufferedWriter.append(
-						String.valueOf(group.getGroupId()));
-					groupTableBufferedWriter.append(StringPool.COMMA);
+					bufferedWriter.append(String.valueOf(companyId));
+					bufferedWriter.append(StringPool.COMMA);
+					bufferedWriter.append(String.valueOf(group.getGroupId()));
+					bufferedWriter.append(StringPool.COMMA);
 
 					if (groupKey.equals(String.valueOf(companyId))) {
-						groupTableBufferedWriter.append(GroupConstants.GLOBAL);
+						bufferedWriter.append(GroupConstants.GLOBAL);
 					}
 					else {
-						groupTableBufferedWriter.append(groupKey);
+						bufferedWriter.append(groupKey);
 					}
 
-					groupTableBufferedWriter.newLine();
+					bufferedWriter.newLine();
 				}
 			}
 		}
 	}
 
 	private void _exportHost(String hostName) throws Exception {
-		try (BufferedWriter hostBufferedWriter = Files.newBufferedWriter(
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
 				_outputDirPath.resolve(_HOST_CSV), _openOptions)) {
 
-			hostBufferedWriter.append(_PORTAL_SERVER_IP_ADDRESS);
-			hostBufferedWriter.append(StringPool.SPACE);
-			hostBufferedWriter.append(hostName);
-			hostBufferedWriter.newLine();
+			bufferedWriter.append(_PORTAL_SERVER_IP_ADDRESS);
+			bufferedWriter.append(StringPool.SPACE);
+			bufferedWriter.append(hostName);
+			bufferedWriter.newLine();
 		}
 	}
 
@@ -538,18 +524,17 @@ public class CompanySampleDataGenerationTest {
 				RoleConstants.TYPE_ORGANIZATION, RoleConstants.TYPE_DEPOT
 			});
 
-		try (BufferedWriter roleTableBufferedWriter = Files.newBufferedWriter(
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
 				_outputDirPath.resolve(_ROLE_TABLE_CSV), _openOptions)) {
 
 			for (Role role : roles) {
 				if (!unexpectedRoleNames.contains(role.getName())) {
-					roleTableBufferedWriter.append(String.valueOf(companyId));
-					roleTableBufferedWriter.append(StringPool.COMMA);
-					roleTableBufferedWriter.append(
-						String.valueOf(role.getRoleId()));
-					roleTableBufferedWriter.append(StringPool.COMMA);
-					roleTableBufferedWriter.append(role.getName());
-					roleTableBufferedWriter.newLine();
+					bufferedWriter.append(String.valueOf(companyId));
+					bufferedWriter.append(StringPool.COMMA);
+					bufferedWriter.append(String.valueOf(role.getRoleId()));
+					bufferedWriter.append(StringPool.COMMA);
+					bufferedWriter.append(role.getName());
+					bufferedWriter.newLine();
 				}
 			}
 		}
@@ -560,14 +545,14 @@ public class CompanySampleDataGenerationTest {
 
 		Collections.sort(screenNames);
 
-		try (BufferedWriter userBufferedWriter = Files.newBufferedWriter(
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
 				_outputDirPath.resolve(_USER_CSV), _openOptions)) {
 
 			for (String screenName : screenNames) {
-				userBufferedWriter.append(hostName);
-				userBufferedWriter.append(StringPool.COMMA);
-				userBufferedWriter.append(screenName);
-				userBufferedWriter.newLine();
+				bufferedWriter.append(hostName);
+				bufferedWriter.append(StringPool.COMMA);
+				bufferedWriter.append(screenName);
+				bufferedWriter.newLine();
 			}
 		}
 	}
