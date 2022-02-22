@@ -26,6 +26,7 @@ import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMStructureVersionLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMTemplateLocalService;
+import com.liferay.petra.function.UnsafeBiConsumer;
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -269,24 +270,34 @@ public class CompanySampleDataGenerationTest {
 		}
 	}
 
-	private void _exportByCompany(Company company) throws Exception {
-		try (SafeCloseable safeCloseable =
-				CompanyThreadLocal.setWithSafeCloseable(
-					company.getCompanyId())) {
+	private void _exportByCompanies(List<Company> companies) throws Exception {
+		_exportCompanyTableData(company);
 
-			_exportCompanyTableData(company);
+		_exportCommerceCurrencyTableData(company.getCompanyId());
 
-			_exportCommerceCurrencyTableData(company.getCompanyId());
+		_exportDDMStructureVersionTableData(company.getCompanyId());
 
-			_exportDDMStructureVersionTableData(company.getCompanyId());
+		_exportDDMTemplateTableData(company.getCompanyId());
 
-			_exportDDMTemplateTableData(company.getCompanyId());
+		_exportDefaultUserId(company.getCompanyId());
 
-			_exportDefaultUserId(company.getCompanyId());
+		_exportGroupTableData(company.getCompanyId());
 
-			_exportGroupTableData(company.getCompanyId());
+		_exportRoleTableData(companies);
+	}
 
-			_exportRoleTableData(company.getCompanyId());
+	private void _writeCSVForEachCompany(
+			String csvFileName, List<Company> companies,
+			UnsafeBiConsumer<BufferedWriter, Company, Exception>
+				unsafeBiConsumer)
+		throws Exception {
+
+		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
+			_outputDirPath.resolve(csvFileName))) {
+
+			for (Company company : companies) {
+				unsafeBiConsumer.accept(bufferedWriter, company);
+			}
 		}
 	}
 
@@ -380,21 +391,24 @@ public class CompanySampleDataGenerationTest {
 		try (LoggingTimer loggingTimer = new LoggingTimer(
 				_outputDirPath.toString())) {
 
-			_exportByCompany(
-				_companyLocalService.getCompanyByWebId(_DEFAULT_COMPANY_WEBID));
-
 			List<String> hostNames = new ArrayList<>(_csvMap.keySet());
 
 			Collections.sort(hostNames);
 
 			_exportHosts(hostNames);
 
-			for (String hostName : hostNames) {
-				_exportByCompany(
-					_companyLocalService.getCompanyByWebId(hostName));
+			List<Company> companies = new ArrayList<>();
 
+			companies.add(
+				_companyLocalService.getCompanyByWebId(_DEFAULT_COMPANY_WEBID));
+
+			for (String hostName : hostNames) {
 				_exportUserData(hostName);
+
+				companies.add(_companyLocalService.getCompanyByWebId(hostName));
 			}
+
+			_exportByCompanies(companies);
 
 			_exportClassNameTableData();
 
@@ -510,7 +524,9 @@ public class CompanySampleDataGenerationTest {
 		}
 	}
 
-	private void _exportRoleTableData(long companyId) throws Exception {
+	private void _exportRoleTableData(List<Company> companies)
+		throws Exception {
+
 		Set<String> unexpectedRoleNames = new HashSet<>(
 			Arrays.asList(
 				RoleConstants.ANALYTICS_ADMINISTRATOR,
@@ -518,27 +534,30 @@ public class CompanySampleDataGenerationTest {
 				DepotRolesConstants.ASSET_LIBRARY_CONNECTED_SITE_MEMBER,
 				DepotRolesConstants.ASSET_LIBRARY_MEMBER));
 
-		List<Role> roles = _roleLocalService.getRoles(
-			companyId,
-			new int[] {
-				RoleConstants.TYPE_REGULAR, RoleConstants.TYPE_SITE,
-				RoleConstants.TYPE_ORGANIZATION, RoleConstants.TYPE_DEPOT
-			});
+		_writeCSVForEachCompany(
+			_ROLE_TABLE_CSV, companies,
+			(bufferedWriter, company) -> {
+				List<Role> roles = _roleLocalService.getRoles(
+					company.getCompanyId(),
+					new int[] {
+						RoleConstants.TYPE_REGULAR, RoleConstants.TYPE_SITE,
+						RoleConstants.TYPE_ORGANIZATION,
+						RoleConstants.TYPE_DEPOT
+					});
 
-		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
-				_outputDirPath.resolve(_ROLE_TABLE_CSV), _openOptions)) {
-
-			for (Role role : roles) {
-				if (!unexpectedRoleNames.contains(role.getName())) {
-					bufferedWriter.append(String.valueOf(companyId));
-					bufferedWriter.append(StringPool.COMMA);
-					bufferedWriter.append(String.valueOf(role.getRoleId()));
-					bufferedWriter.append(StringPool.COMMA);
-					bufferedWriter.append(role.getName());
-					bufferedWriter.newLine();
+				for (Role role : roles) {
+					if (!unexpectedRoleNames.contains(role.getName())) {
+						bufferedWriter.append(
+							String.valueOf(company.getCompanyId()));
+						bufferedWriter.append(StringPool.COMMA);
+						bufferedWriter.append(String.valueOf(role.getRoleId()));
+						bufferedWriter.append(StringPool.COMMA);
+						bufferedWriter.append(role.getName());
+						bufferedWriter.newLine();
+					}
 				}
 			}
-		}
+		);
 	}
 
 	private void _exportUserData(String hostName) throws Exception {
