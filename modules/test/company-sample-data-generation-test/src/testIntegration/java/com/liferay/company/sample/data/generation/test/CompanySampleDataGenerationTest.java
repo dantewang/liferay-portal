@@ -383,16 +383,17 @@ public class CompanySampleDataGenerationTest {
 			_exportByCompany(
 				_companyLocalService.getCompanyByWebId(_DEFAULT_COMPANY_WEBID));
 
-			List<String> keys = new ArrayList<>(_csvMap.keySet());
+			List<String> hostNames = new ArrayList<>(_csvMap.keySet());
 
-			Collections.sort(keys);
+			Collections.sort(hostNames);
 
-			for (String key : keys) {
-				_exportByCompany(_companyLocalService.getCompanyByWebId(key));
+			_exportHosts(hostNames);
 
-				_exportHost(key);
+			for (String hostName : hostNames) {
+				_exportByCompany(
+					_companyLocalService.getCompanyByWebId(hostName));
 
-				_exportUserData(key);
+				_exportUserData(hostName);
 			}
 
 			_exportClassNameTableData();
@@ -496,14 +497,16 @@ public class CompanySampleDataGenerationTest {
 		}
 	}
 
-	private void _exportHost(String hostName) throws Exception {
+	private void _exportHosts(List<String> hostNames) throws Exception {
 		try (BufferedWriter bufferedWriter = Files.newBufferedWriter(
 				_outputDirPath.resolve(_HOST_CSV), _openOptions)) {
 
-			bufferedWriter.append(_PORTAL_SERVER_IP_ADDRESS);
-			bufferedWriter.append(StringPool.SPACE);
-			bufferedWriter.append(hostName);
-			bufferedWriter.newLine();
+			for (String hostName : hostNames) {
+				bufferedWriter.append(_PORTAL_SERVER_IP_ADDRESS);
+				bufferedWriter.append(StringPool.SPACE);
+				bufferedWriter.append(hostName);
+				bufferedWriter.newLine();
+			}
 		}
 	}
 
