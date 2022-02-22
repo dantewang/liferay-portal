@@ -102,7 +102,7 @@ public class StringClobType extends MaterializedClobType {
 					DEFAULT, javaTypeDescriptor);
 			}
 			catch (Exception exception) {
-				_log.error(exception, exception);
+				_log.error(exception);
 
 				return null;
 			}
