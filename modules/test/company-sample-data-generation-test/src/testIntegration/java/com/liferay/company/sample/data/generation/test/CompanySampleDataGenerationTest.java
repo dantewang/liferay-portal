@@ -64,14 +64,14 @@ import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PropsUtil;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 
 import java.net.InetSocketAddress;
 
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -313,13 +313,10 @@ public class CompanySampleDataGenerationTest {
 				companyId,
 				CommerceCatalogConstants.MASTER_COMMERCE_DEFAULT_CURRENCY);
 
-		Path commerceCurrencyTableCSVFilePath = _outputDirPath.resolve(
-			_COMMERCE_CURRENCY_TABLE_CSV);
-
 		try (BufferedWriter commerceCurrencyTableBufferedWriter =
-				new BufferedWriter(
-					new FileWriter(
-						commerceCurrencyTableCSVFilePath.toFile(), true))) {
+				Files.newBufferedWriter(
+					_outputDirPath.resolve(_COMMERCE_CURRENCY_TABLE_CSV),
+					_openOptions)) {
 
 			commerceCurrencyTableBufferedWriter.append(
 				String.valueOf(companyId));
@@ -331,11 +328,9 @@ public class CompanySampleDataGenerationTest {
 	}
 
 	private void _exportCompanyTableData(Company company) throws Exception {
-		Path companyTableCSVFilePath = _outputDirPath.resolve(
-			_COMPANY_TABLE_CSV);
-
-		try (BufferedWriter companyTableBufferedWriter = new BufferedWriter(
-				new FileWriter(companyTableCSVFilePath.toFile(), true))) {
+		try (BufferedWriter companyTableBufferedWriter =
+				Files.newBufferedWriter(
+					_outputDirPath.resolve(_COMPANY_TABLE_CSV), _openOptions)) {
 
 			companyTableBufferedWriter.append(
 				String.valueOf(company.getCompanyId()));
@@ -380,18 +375,16 @@ public class CompanySampleDataGenerationTest {
 		_outputDirPath = Paths.get(
 			PropsUtil.get(PropsKeys.LIFERAY_HOME), outputDir);
 
-		File outputDirFile = _outputDirPath.toFile();
-
-		if (outputDirFile.exists()) {
-			FileUtil.deltree(outputDirFile);
+		if (Files.exists(_outputDirPath)) {
+			FileUtil.deltree(_outputDirPath.toFile());
 		}
 
-		outputDirFile.mkdir();
+		Files.createDirectories(_outputDirPath);
 
 		long oldCompanyId = CompanyThreadLocal.getCompanyId();
 
 		try (LoggingTimer loggingTimer = new LoggingTimer(
-				outputDirFile.getAbsolutePath())) {
+				_outputDirPath.toString())) {
 
 			_exportByCompany(
 				_companyLocalService.getCompanyByWebId(_DEFAULT_COMPANY_WEBID));
@@ -420,13 +413,10 @@ public class CompanySampleDataGenerationTest {
 	private void _exportDDMStructureVersionTableData(long companyId)
 		throws Exception {
 
-		Path ddmStructureVersionTableCSVFilePath = _outputDirPath.resolve(
-			_DDM_STRUCTURE_VERSION_TABLE_CSV);
-
 		try (BufferedWriter ddmStructureVersionTableBufferedWriter =
-				new BufferedWriter(
-					new FileWriter(
-						ddmStructureVersionTableCSVFilePath.toFile(), true))) {
+				Files.newBufferedWriter(
+					_outputDirPath.resolve(_DDM_STRUCTURE_VERSION_TABLE_CSV),
+					_openOptions)) {
 
 			for (DDMStructure ddmStructure :
 					_dDMStructureLocalService.getStructures()) {
@@ -459,11 +449,10 @@ public class CompanySampleDataGenerationTest {
 			globalGroup.getGroupId(),
 			_classNameLocalService.getClassNameId(DDMStructure.class));
 
-		Path ddmTemplateTableCSVFilePath = _outputDirPath.resolve(
-			_DDM_TEMPLATE_TABLE_CSV);
-
-		try (BufferedWriter ddmTemplateTableBufferedWriter = new BufferedWriter(
-				new FileWriter(ddmTemplateTableCSVFilePath.toFile(), true))) {
+		try (BufferedWriter ddmTemplateTableBufferedWriter =
+				Files.newBufferedWriter(
+					_outputDirPath.resolve(_DDM_TEMPLATE_TABLE_CSV),
+					_openOptions)) {
 
 			for (DDMTemplate ddmTemplate : ddmTemplates) {
 				ddmTemplateTableBufferedWriter.append(
@@ -477,11 +466,10 @@ public class CompanySampleDataGenerationTest {
 	}
 
 	private void _exportDefaultUserId(long companyId) throws Exception {
-		Path defaultUserIdCSVFilePath = _outputDirPath.resolve(
-			_DEFAULT_USER_ID_CSV);
-
-		try (BufferedWriter defaultUserIdBufferedWriter = new BufferedWriter(
-				new FileWriter(defaultUserIdCSVFilePath.toFile(), true))) {
+		try (BufferedWriter defaultUserIdBufferedWriter =
+				Files.newBufferedWriter(
+					_outputDirPath.resolve(_DEFAULT_USER_ID_CSV),
+					_openOptions)) {
 
 			defaultUserIdBufferedWriter.append(String.valueOf(companyId));
 			defaultUserIdBufferedWriter.append(StringPool.COMMA);
@@ -498,10 +486,8 @@ public class CompanySampleDataGenerationTest {
 		List<Group> groups = _groupLocalService.getCompanyGroups(
 			companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-		Path groupTableCSVFilePath = _outputDirPath.resolve(_GROUP_TABLE_CSV);
-
-		try (BufferedWriter groupTableBufferedWriter = new BufferedWriter(
-				new FileWriter(groupTableCSVFilePath.toFile(), true))) {
+		try (BufferedWriter groupTableBufferedWriter = Files.newBufferedWriter(
+				_outputDirPath.resolve(_GROUP_TABLE_CSV), _openOptions)) {
 
 			for (Group group : groups) {
 				String groupKey = group.getGroupKey();
@@ -527,10 +513,8 @@ public class CompanySampleDataGenerationTest {
 	}
 
 	private void _exportHost(String hostName) throws Exception {
-		Path hostCSVFilePath = _outputDirPath.resolve(_HOST_CSV);
-
-		try (BufferedWriter hostBufferedWriter = new BufferedWriter(
-				new FileWriter(hostCSVFilePath.toFile(), true))) {
+		try (BufferedWriter hostBufferedWriter = Files.newBufferedWriter(
+				_outputDirPath.resolve(_HOST_CSV), _openOptions)) {
 
 			hostBufferedWriter.append(_PORTAL_SERVER_IP_ADDRESS);
 			hostBufferedWriter.append(StringPool.SPACE);
@@ -554,10 +538,8 @@ public class CompanySampleDataGenerationTest {
 				RoleConstants.TYPE_ORGANIZATION, RoleConstants.TYPE_DEPOT
 			});
 
-		Path roleTableCSVFilePath = _outputDirPath.resolve(_ROLE_TABLE_CSV);
-
-		try (BufferedWriter roleTableBufferedWriter = new BufferedWriter(
-				new FileWriter(roleTableCSVFilePath.toFile(), true))) {
+		try (BufferedWriter roleTableBufferedWriter = Files.newBufferedWriter(
+				_outputDirPath.resolve(_ROLE_TABLE_CSV), _openOptions)) {
 
 			for (Role role : roles) {
 				if (!unexpectedRoleNames.contains(role.getName())) {
@@ -578,10 +560,8 @@ public class CompanySampleDataGenerationTest {
 
 		Collections.sort(screenNames);
 
-		Path userCSVFilePath = _outputDirPath.resolve(_USER_CSV);
-
-		try (BufferedWriter userBufferedWriter = new BufferedWriter(
-				new FileWriter(userCSVFilePath.toFile(), true))) {
+		try (BufferedWriter userBufferedWriter = Files.newBufferedWriter(
+				_outputDirPath.resolve(_USER_CSV), _openOptions)) {
 
 			for (String screenName : screenNames) {
 				userBufferedWriter.append(hostName);
@@ -647,6 +627,10 @@ public class CompanySampleDataGenerationTest {
 
 	private static final int _USER_PER_COMPANY_COUNT = GetterUtil.get(
 		PropsUtil.get("sample.data.user.per.company.count"), 2);
+
+	private static final OpenOption[] _openOptions = {
+		StandardOpenOption.CREATE, StandardOpenOption.APPEND
+	};
 
 	@Inject
 	private ClassNameLocalService _classNameLocalService;
