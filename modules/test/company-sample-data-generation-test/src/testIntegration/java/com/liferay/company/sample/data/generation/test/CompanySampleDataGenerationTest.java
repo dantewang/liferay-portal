@@ -270,21 +270,24 @@ public class CompanySampleDataGenerationTest {
 	}
 
 	private void _exportByCompany(Company company) throws Exception {
-		CompanyThreadLocal.setCompanyId(company.getCompanyId());
+		try (SafeCloseable safeCloseable =
+				CompanyThreadLocal.setWithSafeCloseable(
+					company.getCompanyId())) {
 
-		_exportCompanyTableData(company);
+			_exportCompanyTableData(company);
 
-		_exportCommerceCurrencyTableData(company.getCompanyId());
+			_exportCommerceCurrencyTableData(company.getCompanyId());
 
-		_exportDDMStructureVersionTableData(company.getCompanyId());
+			_exportDDMStructureVersionTableData(company.getCompanyId());
 
-		_exportDDMTemplateTableData(company.getCompanyId());
+			_exportDDMTemplateTableData(company.getCompanyId());
 
-		_exportDefaultUserId(company.getCompanyId());
+			_exportDefaultUserId(company.getCompanyId());
 
-		_exportGroupTableData(company.getCompanyId());
+			_exportGroupTableData(company.getCompanyId());
 
-		_exportRoleTableData(company.getCompanyId());
+			_exportRoleTableData(company.getCompanyId());
+		}
 	}
 
 	private void _exportClassNameTableData() throws Exception {
@@ -374,8 +377,6 @@ public class CompanySampleDataGenerationTest {
 
 		Files.createDirectories(_outputDirPath);
 
-		long oldCompanyId = CompanyThreadLocal.getCompanyId();
-
 		try (LoggingTimer loggingTimer = new LoggingTimer(
 				_outputDirPath.toString())) {
 
@@ -397,9 +398,6 @@ public class CompanySampleDataGenerationTest {
 			_exportClassNameTableData();
 
 			_exportCounterTableData();
-		}
-		finally {
-			CompanyThreadLocal.setCompanyId(oldCompanyId);
 		}
 	}
 
