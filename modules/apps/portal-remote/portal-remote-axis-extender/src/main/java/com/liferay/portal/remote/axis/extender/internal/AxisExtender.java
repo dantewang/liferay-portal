@@ -23,11 +23,14 @@ import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.servlet.filters.authverifier.AuthVerifierFilter;
 import com.liferay.util.axis.AxisServlet;
 
+import java.lang.reflect.InvocationHandler;
+
 import java.net.URL;
 
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.function.Function;
 
 import javax.servlet.Filter;
 import javax.servlet.Servlet;
@@ -67,6 +70,10 @@ public class AxisExtender {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(AxisExtender.class);
+
+	private static final Function<InvocationHandler, Servlet>
+		_servletProxyProviderFunction = ProxyUtil.getProxyProviderFunction(
+			Servlet.class);
 
 	private BundleTracker<BundleRegistrationInfo> _bundleTracker;
 
@@ -199,8 +206,7 @@ public class AxisExtender {
 					bundleContextBundleBundleWiring.getClassLoader(),
 					bundleWiring.getClassLoader());
 
-			Servlet servlet = (Servlet)ProxyUtil.newProxyInstance(
-				aggregateClassLoader, new Class<?>[] {Servlet.class},
+			Servlet servlet = _servletProxyProviderFunction.apply(
 				new ClassLoaderBeanHandler(
 					new AxisServlet(), aggregateClassLoader));
 
