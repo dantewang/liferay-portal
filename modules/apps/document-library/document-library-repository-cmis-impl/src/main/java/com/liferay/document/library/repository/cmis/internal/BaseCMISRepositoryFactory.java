@@ -35,6 +35,10 @@ import com.liferay.portal.kernel.service.RepositoryLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.ProxyUtil;
 
+import java.lang.reflect.InvocationHandler;
+
+import java.util.function.Function;
+
 /**
  * @author Adolfo Pérez
  */
@@ -66,9 +70,7 @@ public abstract class BaseCMISRepositoryFactory<T extends CMISRepositoryHandler>
 	public Repository createRepository(long repositoryId)
 		throws PortalException {
 
-		return (Repository)ProxyUtil.newProxyInstance(
-			Repository.class.getClassLoader(),
-			new Class<?>[] {Repository.class},
+		return _repositoryProxyProviderFunction.apply(
 			new ClassLoaderBeanHandler(
 				new RepositoryProxyBean(
 					createBaseRepository(repositoryId),
@@ -175,6 +177,10 @@ public abstract class BaseCMISRepositoryFactory<T extends CMISRepositoryHandler>
 			repository.getTypeSettingsProperties());
 		baseRepository.setUserLocalService(_userLocalService);
 	}
+
+	private static final Function<InvocationHandler, Repository>
+		_repositoryProxyProviderFunction = ProxyUtil.getProxyProviderFunction(
+			Repository.class);
 
 	private AssetEntryLocalService _assetEntryLocalService;
 	private CMISRepositoryConfiguration _cmisRepositoryConfiguration;
