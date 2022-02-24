@@ -18,10 +18,12 @@ import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author Tina Tian
@@ -29,8 +31,7 @@ import java.util.Map;
 public class PropsTestUtil {
 
 	public static Props setProps(Map<String, Object> propertie) {
-		Props props = (Props)ProxyUtil.newProxyInstance(
-			Props.class.getClassLoader(), new Class<?>[] {Props.class},
+		Props props = _propsProxyProviderFunction.apply(
 			(Object proxy, Method method, Object[] args) -> {
 				if (args.length > 0) {
 					return propertie.get(args[0]);
@@ -47,5 +48,9 @@ public class PropsTestUtil {
 	public static Props setProps(String key, Object value) {
 		return setProps(Collections.singletonMap(key, value));
 	}
+
+	private static final Function<InvocationHandler, Props>
+		_propsProxyProviderFunction = ProxyUtil.getProxyProviderFunction(
+			Props.class);
 
 }
