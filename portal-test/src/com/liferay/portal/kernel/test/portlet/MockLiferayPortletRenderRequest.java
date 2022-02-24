@@ -15,10 +15,8 @@
 package com.liferay.portal.kernel.test.portlet;
 
 import com.liferay.portal.kernel.model.Portlet;
-import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.util.JavaConstants;
-import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portletmvc4spring.test.mock.web.portlet.MockRenderRequest;
 
 import java.util.Enumeration;
@@ -51,9 +49,7 @@ public class MockLiferayPortletRenderRequest
 
 		_mockHttpServletRequest.setAttribute(
 			JavaConstants.JAVAX_PORTLET_CONFIG,
-			ProxyUtil.newProxyInstance(
-				LiferayPortletConfig.class.getClassLoader(),
-				new Class<?>[] {LiferayPortletConfig.class},
+			MockLiferayResourceRequest.newProxyInstance(
 				(proxy, method, args) -> {
 					if (Objects.equals(method.getName(), "getPortletId")) {
 						return "testPortlet";

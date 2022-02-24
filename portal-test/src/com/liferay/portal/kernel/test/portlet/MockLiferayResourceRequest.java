@@ -23,10 +23,13 @@ import com.liferay.portletmvc4spring.test.mock.web.portlet.MockResourceRequest;
 
 import java.io.IOException;
 
+import java.lang.reflect.InvocationHandler;
+
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 
 import javax.portlet.PortletAsyncContext;
 import javax.portlet.PortletConfig;
@@ -50,6 +53,13 @@ import org.springframework.mock.web.MockHttpServletRequest;
 public class MockLiferayResourceRequest
 	extends MockResourceRequest implements LiferayResourceRequest {
 
+	public static LiferayPortletConfig newProxyInstance(
+		InvocationHandler invocationHandler) {
+
+		return _liferayPortletConfigProxyProviderFunction.apply(
+			invocationHandler);
+	}
+
 	public MockLiferayResourceRequest() {
 		this(new MockHttpServletRequest());
 	}
@@ -61,9 +71,7 @@ public class MockLiferayResourceRequest
 
 		_mockHttpServletRequest.setAttribute(
 			JavaConstants.JAVAX_PORTLET_CONFIG,
-			ProxyUtil.newProxyInstance(
-				LiferayPortletConfig.class.getClassLoader(),
-				new Class<?>[] {LiferayPortletConfig.class},
+			newProxyInstance(
 				(proxy, method, args) -> {
 					if (Objects.equals(method.getName(), "getPortletId")) {
 						return "testPortlet";
@@ -254,6 +262,10 @@ public class MockLiferayResourceRequest
 
 		return null;
 	}
+
+	private static final Function<InvocationHandler, LiferayPortletConfig>
+		_liferayPortletConfigProxyProviderFunction =
+			ProxyUtil.getProxyProviderFunction(LiferayPortletConfig.class);
 
 	private final MockHttpServletRequest _mockHttpServletRequest;
 	private Portlet _portlet;
