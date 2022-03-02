@@ -93,6 +93,17 @@ public class SessionImpl implements Session {
 		try {
 			return _session.contains(object);
 		}
+		catch (IllegalArgumentException illegalArgumentException) {
+			String message = illegalArgumentException.getMessage();
+
+			if (message.startsWith("Could not resolve entity-name") ||
+				message.startsWith("Not an entity")) {
+
+				return false;
+			}
+
+			throw ExceptionTranslator.translate(illegalArgumentException);
+		}
 		catch (Exception exception) {
 			throw ExceptionTranslator.translate(exception);
 		}
