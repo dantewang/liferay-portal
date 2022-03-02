@@ -32,11 +32,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.LockOptions;
 import org.hibernate.engine.spi.EntityKey;
 import org.hibernate.engine.spi.PersistenceContext;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.event.spi.EventSource;
 import org.hibernate.metamodel.spi.MetamodelImplementor;
 import org.hibernate.persister.entity.EntityPersister;
@@ -91,18 +94,25 @@ public class SessionImpl implements Session {
 	@Override
 	public boolean contains(Object object) throws ORMException {
 		try {
-			return _session.contains(object);
-		}
-		catch (IllegalArgumentException illegalArgumentException) {
-			String message = illegalArgumentException.getMessage();
+			SessionImplementor sessionImplementor =
+				(SessionImplementor)_session;
 
-			if (message.startsWith("Could not resolve entity-name") ||
-				message.startsWith("Not an entity")) {
+			SessionFactoryImplementor sessionFactoryImplementor =
+				sessionImplementor.getSessionFactory();
 
+			MetamodelImplementor metamodelImplementor =
+				sessionFactoryImplementor.getMetamodel();
+
+			Map<String, EntityPersister> entityPersisters =
+				metamodelImplementor.entityPersisters();
+
+			Class<?> clazz = object.getClass();
+
+			if (!entityPersisters.containsKey(clazz.getName())) {
 				return false;
 			}
 
-			throw ExceptionTranslator.translate(illegalArgumentException);
+			return _session.contains(object);
 		}
 		catch (Exception exception) {
 			throw ExceptionTranslator.translate(exception);
