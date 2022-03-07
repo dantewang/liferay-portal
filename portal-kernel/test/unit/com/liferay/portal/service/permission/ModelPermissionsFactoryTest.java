@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleWrapper;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.security.permission.ResourceActions;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.RoleLocalServiceWrapper;
@@ -26,6 +27,10 @@ import com.liferay.portal.kernel.service.permission.ModelPermissionsFactory;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.ProxyUtil;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,25 +38,19 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
  * @author Jorge Ferrer
  */
-@PrepareForTest(ResourceActionsUtil.class)
-@RunWith(PowerMockRunner.class)
-public class ModelPermissionsFactoryTest extends PowerMockito {
+public class ModelPermissionsFactoryTest {
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -189,19 +188,31 @@ public class ModelPermissionsFactoryTest extends PowerMockito {
 
 		String className = RandomTestUtil.randomString();
 
-		mockStatic(ResourceActionsUtil.class);
+		ReflectionTestUtil.setFieldValue(
+			ResourceActionsUtil.class, "_resourceActions",
+			ProxyUtil.newProxyInstance(
+				ResourceActions.class.getClassLoader(),
+				new Class<?>[] {ResourceActions.class},
+				new InvocationHandler() {
 
-		when(
-			ResourceActionsUtil.getModelResourceGroupDefaultActions(className)
-		).thenReturn(
-			Arrays.asList(ActionKeys.VIEW)
-		);
+					@Override
+					public Object invoke(
+						Object proxy, Method method, Object[] args) {
 
-		when(
-			ResourceActionsUtil.getModelResourceGuestDefaultActions(className)
-		).thenReturn(
-			Arrays.asList(ActionKeys.VIEW)
-		);
+						if (Objects.equals(
+								method.getName(),
+								"getModelResourceGroupDefaultActions") ||
+							Objects.equals(
+								method.getName(),
+								"getModelResourceGuestDefaultActions")) {
+
+							return Arrays.asList(ActionKeys.VIEW);
+						}
+
+						return null;
+					}
+
+				}));
 
 		ModelPermissions modelPermissions = ModelPermissionsFactory.create(
 			mockHttpServletRequest, className);
