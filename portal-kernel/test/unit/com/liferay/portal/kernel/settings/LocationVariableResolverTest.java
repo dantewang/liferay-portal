@@ -14,30 +14,37 @@
 
 package com.liferay.portal.kernel.settings;
 
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
+import com.liferay.portal.kernel.util.ProxyFactory;
+import com.liferay.portal.kernel.util.ProxyUtil;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+
 import java.util.List;
+import java.util.Objects;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.powermock.api.mockito.PowerMockito;
-
 /**
  * @author Iván Zaera
  */
-public class LocationVariableResolverTest extends PowerMockito {
+public class LocationVariableResolverTest {
 
 	@Before
 	public void setUp() throws Exception {
 		_mockResourceManager = new MockResourceManager(
 			"En un lugar de la Mancha...");
 
-		_mockSettingsLocatorHelper = mock(SettingsLocatorHelper.class);
+		_mockSettingsLocatorHelper = ProxyFactory.newDummyInstance(
+			SettingsLocatorHelper.class);
 
 		_locationVariableResolver = new LocationVariableResolver(
 			_mockResourceManager, _mockSettingsLocatorHelper);
@@ -124,11 +131,29 @@ public class LocationVariableResolverTest extends PowerMockito {
 
 		memorySettings.setValue("admin.email.from.address", expectedValue);
 
-		when(
-			_mockSettingsLocatorHelper.getServerSettings("com.liferay.portal")
-		).thenReturn(
-			memorySettings
-		);
+		ReflectionTestUtil.setFieldValue(
+			_locationVariableResolver, "_settingsLocatorHelper",
+			ProxyUtil.newProxyInstance(
+				SettingsLocatorHelper.class.getClassLoader(),
+				new Class<?>[] {SettingsLocatorHelper.class},
+				new InvocationHandler() {
+
+					@Override
+					public Object invoke(
+						Object proxy, Method method, Object[] args) {
+
+						if (Objects.equals(
+								method.getName(), "getServerSettings")) {
+
+							if (Objects.equals(args[0], "com.liferay.portal"))
+
+								return memorySettings;
+						}
+
+						return null;
+					}
+
+				}));
 
 		Assert.assertEquals(
 			expectedValue,
