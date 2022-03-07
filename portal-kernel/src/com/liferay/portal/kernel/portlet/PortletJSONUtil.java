@@ -261,9 +261,7 @@ public class PortletJSONUtil {
 		// Workaround for portlet#getRootPortletId because that does not return
 		// the proper root portlet ID for OpenSocial and WSRP portlets
 
-		Portlet rootPortlet = portlet.getRootPortlet();
-
-		return rootPortlet.getPortletId();
+		return portlet.getRootPortletId();
 	}
 
 	private static void _writePaths(
