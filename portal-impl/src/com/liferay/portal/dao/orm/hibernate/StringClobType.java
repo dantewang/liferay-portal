@@ -14,18 +14,19 @@
 
 package com.liferay.portal.dao.orm.hibernate;
 
+import com.liferay.petra.function.UnsafeSupplier;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.db.DBType;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -49,7 +50,7 @@ public class StringClobType extends MaterializedClobType {
 
 	public StringClobType() {
 		if (_dbType.equals(DBType.POSTGRESQL)) {
-			setSqlTypeDescriptor(new ClobTypeDescriptorImpl());
+			setSqlTypeDescriptor(_autoCommitAwareClobTypeDescriptor);
 		}
 
 		setJavaTypeDescriptor(
@@ -72,132 +73,183 @@ public class StringClobType extends MaterializedClobType {
 			});
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(StringClobType.class);
-
+	private static final AutoCommitAwareClobTypeDescriptor
+		_autoCommitAwareClobTypeDescriptor =
+			new AutoCommitAwareClobTypeDescriptor();
+	private static final Field _basicBinderSQLTypeDescriptorField;
 	private static final DBType _dbType;
+	private static final Method _doBindMethodWithIndex;
+	private static final Method _doBindMethodWithName;
 
 	static {
 		DB db = DBManagerUtil.getDB();
 
 		_dbType = db.getDBType();
+
+		try {
+			_basicBinderSQLTypeDescriptorField =
+				ReflectionUtil.getDeclaredField(
+					BasicBinder.class, "sqlDescriptor");
+
+			_doBindMethodWithIndex = ReflectionUtil.getDeclaredMethod(
+				BasicBinder.class, "doBind", PreparedStatement.class,
+				Object.class, int.class, WrapperOptions.class);
+
+			_doBindMethodWithName = ReflectionUtil.getDeclaredMethod(
+				BasicBinder.class, "doBind", CallableStatement.class,
+				Object.class, String.class, WrapperOptions.class);
+		}
+		catch (Exception exception) {
+			throw new ExceptionInInitializerError(exception);
+		}
 	}
 
-	private class ClobTypeDescriptorImpl extends ClobTypeDescriptor {
+	private static class AutoCommitAwareClobTypeDescriptor
+		extends ClobTypeDescriptor {
 
 		@Override
 		public boolean canBeRemapped() {
+
+			// If this method returns true, this instance will be replaced with
+			// the one provided by
+			// PostgreSQL81Dialect#getSqlTypeDescriptorOverride
+
 			return false;
 		}
 
 		@Override
-		public <X> BasicBinder<X> getClobBinder(
-			JavaTypeDescriptor<X> javaTypeDescriptor) {
-
-			try {
-				Method method = ReflectionUtil.getDeclaredMethod(
-					ClobTypeDescriptor.class, "getClobBinder",
-					JavaTypeDescriptor.class);
-
-				return (BasicBinder<X>)method.invoke(
-					DEFAULT, javaTypeDescriptor);
-			}
-			catch (Exception exception) {
-				_log.error(exception);
-
-				return null;
-			}
-		}
-
-		@Override
 		public <X> ValueExtractor<X> getExtractor(
-			final JavaTypeDescriptor<X> javaTypeDescriptor) {
+			JavaTypeDescriptor<X> javaTypeDescriptor) {
 
 			return new BasicExtractor<X>(javaTypeDescriptor, this) {
 
 				@Override
-				protected X doExtract(
-						CallableStatement statement, int index,
-						WrapperOptions options)
+				public X doExtract(
+						CallableStatement callableStatement, int index,
+						WrapperOptions wrapperOptions)
 					throws SQLException {
 
-					boolean autoCommit = _isAutoCommit(statement);
-
-					try {
-						return javaTypeDescriptor.wrap(
-							statement.getClob(index), options);
-					}
-					finally {
-						if (autoCommit) {
-							_setAutoCommit(
-								statement.getConnection(), autoCommit);
-						}
-					}
+					return _executeWithDisabledAutoCommit(
+						callableStatement.getConnection(),
+						() -> javaTypeDescriptor.wrap(
+							callableStatement.getClob(index), wrapperOptions));
 				}
 
 				@Override
-				protected X doExtract(
-						CallableStatement statement, String name,
-						WrapperOptions options)
-					throws SQLException {
-
-					boolean autoCommit = _isAutoCommit(statement);
-
-					try {
-						return javaTypeDescriptor.wrap(
-							statement.getClob(name), options);
-					}
-					finally {
-						if (autoCommit) {
-							_setAutoCommit(
-								statement.getConnection(), autoCommit);
-						}
-					}
-				}
-
-				@Override
-				protected X doExtract(
+				public X doExtract(
 						ResultSet resultSet, String name,
-						WrapperOptions options)
+						WrapperOptions wrapperOptions)
 					throws SQLException {
 
 					Statement statement = resultSet.getStatement();
 
-					boolean autoCommit = _isAutoCommit(statement);
-
-					try {
-						return javaTypeDescriptor.wrap(
-							resultSet.getClob(name), options);
-					}
-					finally {
-						if (autoCommit) {
-							_setAutoCommit(
-								statement.getConnection(), autoCommit);
-						}
-					}
+					return _executeWithDisabledAutoCommit(
+						statement.getConnection(),
+						() -> javaTypeDescriptor.wrap(
+							resultSet.getClob(name), wrapperOptions));
 				}
 
-				private boolean _isAutoCommit(Statement statement)
+				@Override
+				protected X doExtract(
+						CallableStatement callableStatement, String name,
+						WrapperOptions wrapperOptions)
 					throws SQLException {
 
-					Connection connection = statement.getConnection();
-
-					boolean autoCommit = connection.getAutoCommit();
-
-					if (autoCommit) {
-						connection.setAutoCommit(false);
-					}
-
-					return autoCommit;
-				}
-
-				private void _setAutoCommit(
-						Connection connection, boolean autoCommit)
-					throws SQLException {
-
-					connection.setAutoCommit(autoCommit);
+					return _executeWithDisabledAutoCommit(
+						callableStatement.getConnection(),
+						() -> javaTypeDescriptor.wrap(
+							callableStatement.getClob(name), wrapperOptions));
 				}
 
 			};
+		}
+
+		@Override
+		protected <X> BasicBinder<X> getClobBinder(
+			JavaTypeDescriptor<X> javaTypeDescriptor) {
+
+			BasicBinder<X> basicBinder = (BasicBinder<X>)DEFAULT.getBinder(
+				javaTypeDescriptor);
+
+			try {
+				_basicBinderSQLTypeDescriptorField.set(basicBinder, this);
+			}
+			catch (IllegalAccessException illegalAccessException) {
+				throw new RuntimeException(illegalAccessException);
+			}
+
+			return new BasicBinder<X>(javaTypeDescriptor, this) {
+
+				@Override
+				public void doBind(
+						CallableStatement callableStatement, X value,
+						String name, WrapperOptions wrapperOptions)
+					throws SQLException {
+
+					_executeWithDisabledAutoCommit(
+						callableStatement.getConnection(),
+						() -> {
+							try {
+								_doBindMethodWithName.invoke(
+									basicBinder, callableStatement, value, name,
+									wrapperOptions);
+							}
+							catch (ReflectiveOperationException
+										reflectiveOperationException) {
+
+								throw new SQLException(
+									reflectiveOperationException);
+							}
+
+							return null;
+						});
+				}
+
+				@Override
+				public void doBind(
+						PreparedStatement preparedStatement, X value, int index,
+						WrapperOptions wrapperOptions)
+					throws SQLException {
+
+					_executeWithDisabledAutoCommit(
+						preparedStatement.getConnection(),
+						() -> {
+							try {
+								_doBindMethodWithIndex.invoke(
+									basicBinder, preparedStatement, value,
+									index, wrapperOptions);
+							}
+							catch (ReflectiveOperationException
+										reflectiveOperationException) {
+
+								throw new SQLException(
+									reflectiveOperationException);
+							}
+
+							return null;
+						});
+				}
+
+			};
+		}
+
+		private <X> X _executeWithDisabledAutoCommit(
+				Connection connection,
+				UnsafeSupplier<X, SQLException> unsafeSupplier)
+			throws SQLException {
+
+			boolean autoCommit = connection.getAutoCommit();
+
+			try {
+				if (autoCommit) {
+					connection.setAutoCommit(false);
+				}
+
+				return unsafeSupplier.get();
+			}
+			finally {
+				connection.setAutoCommit(autoCommit);
+			}
 		}
 
 	}
