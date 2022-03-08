@@ -112,24 +112,24 @@ public class RenderContentLayoutDisplayContext {
 	}
 
 	private List<Portlet> _getAllPortlets() {
-		if (_allPortlets != null) {
-			return _allPortlets;
+		if (_staticPortlets != null) {
+			return _staticPortlets;
 		}
 
 		LayoutTypePortlet layoutTypePortlet =
 			_themeDisplay.getLayoutTypePortlet();
 
-		_allPortlets = layoutTypePortlet.getAllPortlets();
+		_staticPortlets = layoutTypePortlet.getAllPortlets();
 
-		return _allPortlets;
+		return _staticPortlets;
 	}
 
 	private List<Portlet> _getPortlets() {
-		if (_portlets != null) {
-			return _portlets;
+		if (_layoutPortlets != null) {
+			return _layoutPortlets;
 		}
 
-		_portlets = new ArrayList<>();
+		_layoutPortlets = new ArrayList<>();
 
 		Set<String> uniquePortletNames = new HashSet<>();
 
@@ -150,20 +150,20 @@ public class RenderContentLayoutDisplayContext {
 			}
 
 			if (uniquePortletNames.add(portlet.getPortletName())) {
-				_portlets.add(portlet);
+				_layoutPortlets.add(portlet);
 			}
 		}
 
-		return _portlets;
+		return _layoutPortlets;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		RenderContentLayoutDisplayContext.class);
 
-	private List<Portlet> _allPortlets;
 	private final HttpServletRequest _httpServletRequest;
 	private final HttpServletResponse _httpServletResponse;
-	private List<Portlet> _portlets;
+	private List<Portlet> _layoutPortlets;
+	private List<Portlet> _staticPortlets;
 	private final ThemeDisplay _themeDisplay;
 
 }
