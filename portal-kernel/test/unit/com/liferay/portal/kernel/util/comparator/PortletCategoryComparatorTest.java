@@ -19,28 +19,22 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.model.PortletCategory;
 import com.liferay.portal.kernel.test.util.PropsTestUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.ProxyUtil;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 
 import java.util.Collections;
-import java.util.Locale;
+import java.util.Objects;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import org.mockito.Matchers;
-import org.mockito.Mock;
-
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Eduardo García
  */
-@PrepareForTest(LanguageUtil.class)
-@RunWith(PowerMockRunner.class)
-public class PortletCategoryComparatorTest extends PowerMockito {
+public class PortletCategoryComparatorTest {
 
 	@Before
 	public void setUp() {
@@ -66,21 +60,33 @@ public class PortletCategoryComparatorTest extends PowerMockito {
 	protected void setUpLanguageUtil() {
 		LanguageUtil languageUtil = new LanguageUtil();
 
+		_language = (Language)ProxyUtil.newProxyInstance(
+			Language.class.getClassLoader(), new Class<?>[] {Language.class},
+			new InvocationHandler() {
+
+				@Override
+				public Object invoke(Object proxy, Method method, Object[] args)
+					throws Throwable {
+
+					if (Objects.equals(method.getName(), "get") &&
+						Objects.equals(args[0], LocaleUtil.SPAIN)) {
+
+						if (Objects.equals(args[1], "area")) {
+							return "Área";
+						}
+						else if (Objects.equals(args[1], "zone")) {
+							return "Zona";
+						}
+					}
+
+					return method.invoke(_language, args);
+				}
+
+			});
+
 		languageUtil.setLanguage(_language);
-
-		whenLanguageGet(LocaleUtil.SPAIN, "area", "Área");
-		whenLanguageGet(LocaleUtil.SPAIN, "zone", "Zona");
 	}
 
-	protected void whenLanguageGet(Locale locale, String key, String value) {
-		when(
-			_language.get(Matchers.eq(locale), Matchers.eq(key))
-		).thenReturn(
-			value
-		);
-	}
-
-	@Mock
 	private Language _language;
 
 }
