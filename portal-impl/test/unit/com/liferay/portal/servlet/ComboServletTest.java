@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.language.LanguageImpl;
 import com.liferay.portal.model.impl.PortletAppImpl;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
@@ -34,12 +35,16 @@ import com.liferay.portal.util.PortalImpl;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portlet.PortalPreferencesWrapper;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+
 import java.util.Objects;
 
 import javax.portlet.PortletPreferences;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
@@ -48,11 +53,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-
-import org.powermock.api.mockito.PowerMockito;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -63,7 +63,7 @@ import org.springframework.mock.web.MockServletContext;
  * @author Carlos Sierra Andrés
  * @author Raymond Augé
  */
-public class ComboServletTest extends PowerMockito {
+public class ComboServletTest {
 
 	@ClassRule
 	public static LiferayUnitTestRule liferayUnitTestRule =
@@ -106,8 +106,6 @@ public class ComboServletTest extends PowerMockito {
 
 	@Before
 	public void setUp() throws ServletException {
-		MockitoAnnotations.initMocks(this);
-
 		ReflectionTestUtil.setFieldValue(
 			PortletLocalServiceUtil.class, "_service",
 			new PortletLocalServiceWrapper() {
@@ -157,6 +155,8 @@ public class ComboServletTest extends PowerMockito {
 		_mockHttpServletRequest.setScheme("http");
 
 		_mockHttpServletResponse = new MockHttpServletResponse();
+
+		_invocationCount = 0;
 	}
 
 	@Test
@@ -194,7 +194,7 @@ public class ComboServletTest extends PowerMockito {
 			_mockHttpServletRequest, _mockHttpServletResponse,
 			"/js/javascript.js");
 
-		Mockito.verify(_portalServletContext);
+		Assert.assertEquals(1, _invocationCount);
 
 		_portalServletContext.getRequestDispatcher(path);
 	}
@@ -205,7 +205,7 @@ public class ComboServletTest extends PowerMockito {
 			_mockHttpServletRequest, _mockHttpServletResponse,
 			_TEST_PORTLET_ID + ":/js/javascript.js");
 
-		Mockito.verify(_pluginServletContext);
+		Assert.assertEquals(1, _invocationCount);
 
 		_pluginServletContext.getRequestDispatcher("/js/javascript.js");
 	}
@@ -279,7 +279,10 @@ public class ComboServletTest extends PowerMockito {
 	}
 
 	protected void setUpPluginServletContext() {
-		_pluginServletContext = spy(new MockServletContext());
+		_pluginServletContext = (ServletContext)ProxyUtil.newProxyInstance(
+			ServletContext.class.getClassLoader(),
+			new Class<?>[] {ServletContext.class},
+			new CountingInvocationHandler(new MockServletContext()));
 	}
 
 	protected void setUpPortalPortlet() {
@@ -313,9 +316,18 @@ public class ComboServletTest extends PowerMockito {
 	}
 
 	protected void setUpPortalServletContext() {
-		_portalServletContext = spy(new MockServletContext());
+		_portalServletContext = (ServletContext)ProxyUtil.newProxyInstance(
+			ServletContext.class.getClassLoader(),
+			new Class<?>[] {ServletContext.class},
+			new CountingInvocationHandler(
+				new MockServletContext() {
 
-		_portalServletContext.setContextPath("portal");
+					@Override
+					public String getContextPath() {
+						return "portal";
+					}
+
+				}));
 	}
 
 	protected void setUpTestPortlet() {
@@ -348,14 +360,34 @@ public class ComboServletTest extends PowerMockito {
 	private static final String _TEST_PORTLET_ID = "TEST_PORTLET_ID";
 
 	private ComboServlet _comboServlet;
+	private int _invocationCount;
 	private MockHttpServletRequest _mockHttpServletRequest;
 	private MockHttpServletResponse _mockHttpServletResponse;
-	private MockServletContext _pluginServletContext;
+	private ServletContext _pluginServletContext;
 	private Portlet _portalPortlet;
 	private PortletApp _portalPortletApp;
-	private MockServletContext _portalServletContext;
+	private ServletContext _portalServletContext;
 	private Portlet _portletUndeployed;
 	private Portlet _testPortlet;
 	private PortletApp _testPortletApp;
+
+	private class CountingInvocationHandler implements InvocationHandler {
+
+		public CountingInvocationHandler(Object target) {
+			_target = target;
+		}
+
+		@Override
+		public Object invoke(Object proxy, Method method, Object[] args)
+			throws Throwable {
+
+			_invocationCount++;
+
+			return method.invoke(_target, args);
+		}
+
+		private final Object _target;
+
+	}
 
 }
