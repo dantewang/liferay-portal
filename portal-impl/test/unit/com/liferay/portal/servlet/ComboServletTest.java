@@ -26,8 +26,10 @@ import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.language.LanguageImpl;
 import com.liferay.portal.model.impl.PortletAppImpl;
+import com.liferay.portal.test.rule.CountingInvocationHandler;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.portal.tools.ToolDependencies;
 import com.liferay.portal.util.PortalImpl;
@@ -40,6 +42,7 @@ import javax.portlet.PortletPreferences;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
@@ -48,11 +51,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-
-import org.powermock.api.mockito.PowerMockito;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -63,7 +61,7 @@ import org.springframework.mock.web.MockServletContext;
  * @author Carlos Sierra Andrés
  * @author Raymond Augé
  */
-public class ComboServletTest extends PowerMockito {
+public class ComboServletTest {
 
 	@ClassRule
 	public static LiferayUnitTestRule liferayUnitTestRule =
@@ -106,8 +104,6 @@ public class ComboServletTest extends PowerMockito {
 
 	@Before
 	public void setUp() throws ServletException {
-		MockitoAnnotations.initMocks(this);
-
 		ReflectionTestUtil.setFieldValue(
 			PortletLocalServiceUtil.class, "_service",
 			new PortletLocalServiceWrapper() {
@@ -133,11 +129,25 @@ public class ComboServletTest extends PowerMockito {
 
 		setUpComboServlet();
 
-		setUpPortalServletContext();
+		_portalServletContext = (ServletContext)ProxyUtil.newProxyInstance(
+			ServletContext.class.getClassLoader(),
+			new Class<?>[] {ServletContext.class},
+			new CountingInvocationHandler(
+				new MockServletContext() {
+
+					@Override
+					public String getContextPath() {
+						return "portal";
+					}
+
+				}));
 
 		setUpPortalPortlet();
 
-		setUpPluginServletContext();
+		_pluginServletContext = (ServletContext)ProxyUtil.newProxyInstance(
+			ServletContext.class.getClassLoader(),
+			new Class<?>[] {ServletContext.class},
+			new CountingInvocationHandler(new MockServletContext()));
 
 		setUpTestPortlet();
 
@@ -157,6 +167,8 @@ public class ComboServletTest extends PowerMockito {
 		_mockHttpServletRequest.setScheme("http");
 
 		_mockHttpServletResponse = new MockHttpServletResponse();
+
+		CountingInvocationHandler.invocationCount = 0;
 	}
 
 	@Test
@@ -194,7 +206,7 @@ public class ComboServletTest extends PowerMockito {
 			_mockHttpServletRequest, _mockHttpServletResponse,
 			"/js/javascript.js");
 
-		Mockito.verify(_portalServletContext);
+		Assert.assertEquals(1, CountingInvocationHandler.invocationCount);
 
 		_portalServletContext.getRequestDispatcher(path);
 	}
@@ -205,7 +217,7 @@ public class ComboServletTest extends PowerMockito {
 			_mockHttpServletRequest, _mockHttpServletResponse,
 			_TEST_PORTLET_ID + ":/js/javascript.js");
 
-		Mockito.verify(_pluginServletContext);
+		Assert.assertEquals(1, CountingInvocationHandler.invocationCount);
 
 		_pluginServletContext.getRequestDispatcher("/js/javascript.js");
 	}
@@ -278,10 +290,6 @@ public class ComboServletTest extends PowerMockito {
 		_comboServlet.init(getServletConfig());
 	}
 
-	protected void setUpPluginServletContext() {
-		_pluginServletContext = spy(new MockServletContext());
-	}
-
 	protected void setUpPortalPortlet() {
 		_portalPortletApp = new PortletAppImpl(StringPool.BLANK);
 
@@ -310,12 +318,6 @@ public class ComboServletTest extends PowerMockito {
 			}
 
 		};
-	}
-
-	protected void setUpPortalServletContext() {
-		_portalServletContext = spy(new MockServletContext());
-
-		_portalServletContext.setContextPath("portal");
 	}
 
 	protected void setUpTestPortlet() {
@@ -350,10 +352,10 @@ public class ComboServletTest extends PowerMockito {
 	private ComboServlet _comboServlet;
 	private MockHttpServletRequest _mockHttpServletRequest;
 	private MockHttpServletResponse _mockHttpServletResponse;
-	private MockServletContext _pluginServletContext;
+	private ServletContext _pluginServletContext;
 	private Portlet _portalPortlet;
 	private PortletApp _portalPortletApp;
-	private MockServletContext _portalServletContext;
+	private ServletContext _portalServletContext;
 	private Portlet _portletUndeployed;
 	private Portlet _testPortlet;
 	private PortletApp _testPortletApp;
