@@ -86,6 +86,21 @@ public class JSONLocalizer {
 		return json;
 	}
 
+	public JSONObject getJSONObject(Locale locale) {
+		JSONObject jsonObject = _jsonObjects.computeIfAbsent(
+			locale,
+			key -> {
+				try {
+					return _jsonFactory.createJSONObject(getJSON(locale));
+				}
+				catch (Exception exception) {
+					throw new RuntimeException(exception);
+				}
+			});
+
+		return _jsonFactory.createJSONObject(jsonObject.toMap());
+	}
+
 	private void _localize(JSONObject jsonObject, Locale locale) {
 		if (locale == null) {
 			return;
@@ -156,6 +171,8 @@ public class JSONLocalizer {
 
 	private final String _json;
 	private final JSONFactory _jsonFactory;
+	private final Map<Locale, JSONObject> _jsonObjects =
+		new ConcurrentHashMap<>();
 	private final Map<Locale, String> _jsons = new ConcurrentHashMap<>();
 	private final ResourceBundleLoader _resourceBundleLoader;
 	private final String _themeId;
