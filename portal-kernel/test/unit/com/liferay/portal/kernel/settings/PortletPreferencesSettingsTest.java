@@ -14,16 +14,18 @@
 
 package com.liferay.portal.kernel.settings;
 
+import com.liferay.portal.kernel.upgrade.MockPortletPreferences;
+import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.test.rule.CountingInvocationHandler;
+
+import java.util.Objects;
+
 import javax.portlet.PortletPreferences;
+import javax.portlet.ReadOnlyException;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.mockito.Matchers;
-import org.mockito.Mockito;
-
-import org.powermock.api.mockito.PowerMockito;
 
 /**
  * @author Iván Zaera
@@ -31,24 +33,38 @@ import org.powermock.api.mockito.PowerMockito;
 public class PortletPreferencesSettingsTest {
 
 	@Before
-	public void setUp() {
-		_portletPreferences = PowerMockito.mock(PortletPreferences.class);
+	public void setUp() throws ReadOnlyException {
+		_portletPreferences = (PortletPreferences)ProxyUtil.newProxyInstance(
+			PortletPreferences.class.getClassLoader(),
+			new Class<?>[] {PortletPreferences.class},
+			new CountingInvocationHandler(
+				new MockPortletPreferences() {
 
-		Mockito.when(
-			_portletPreferences.getValue(
-				Matchers.eq(_PORTLET_PREFERENCES_SINGLE_KEY),
-				Matchers.anyString())
-		).thenReturn(
-			_PORTLET_PREFERENCES_SINGLE_VALUE
-		);
+					@Override
+					public String getValue(String key, String defaultValue) {
+						if (Objects.equals(
+								key, _PORTLET_PREFERENCES_SINGLE_KEY)) {
 
-		Mockito.when(
-			_portletPreferences.getValues(
-				Matchers.eq(_PORTLET_PREFERENCES_MULTIPLE_KEY),
-				(String[])Matchers.any())
-		).thenReturn(
-			_PORTLET_PREFERENCES_MULTIPLE_VALUES
-		);
+							return _PORTLET_PREFERENCES_SINGLE_VALUE;
+						}
+
+						return null;
+					}
+
+					@Override
+					public String[] getValues(
+						String key, String[] defaultValues) {
+
+						if (Objects.equals(
+								key, _PORTLET_PREFERENCES_MULTIPLE_KEY)) {
+
+							return _PORTLET_PREFERENCES_MULTIPLE_VALUES;
+						}
+
+						return null;
+					}
+
+				}));
 
 		ModifiableSettings modifiableSettings = new MemorySettings();
 
@@ -59,6 +75,8 @@ public class PortletPreferencesSettingsTest {
 
 		_portletPreferencesSettings = new PortletPreferencesSettings(
 			_portletPreferences, modifiableSettings);
+
+		CountingInvocationHandler.invocationCount = 0;
 	}
 
 	@Test
@@ -115,8 +133,7 @@ public class PortletPreferencesSettingsTest {
 
 		_portletPreferencesSettings.setValue("key", "value");
 
-		Mockito.verify(_portletPreferences);
-
+		Assert.assertEquals(1, CountingInvocationHandler.invocationCount);
 		_portletPreferences.setValue("key", "value");
 	}
 
@@ -128,8 +145,7 @@ public class PortletPreferencesSettingsTest {
 
 		_portletPreferencesSettings.setValues("key", values);
 
-		Mockito.verify(_portletPreferences);
-
+		Assert.assertEquals(1, CountingInvocationHandler.invocationCount);
 		_portletPreferences.setValues("key", values);
 	}
 
@@ -137,8 +153,7 @@ public class PortletPreferencesSettingsTest {
 	public void testStoreIsPerformedOnPortletPreferences() throws Exception {
 		_portletPreferencesSettings.store();
 
-		Mockito.verify(_portletPreferences);
-
+		Assert.assertEquals(1, CountingInvocationHandler.invocationCount);
 		_portletPreferences.store();
 	}
 
