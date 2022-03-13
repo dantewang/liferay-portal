@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.test.log.LogCapture;
 import com.liferay.portal.test.log.LogEntry;
@@ -21,33 +22,41 @@ import com.liferay.portal.test.log.LoggerTestUtil;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.logging.Level;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Wesley Gong
  */
-@PrepareForTest(LanguageUtil.class)
-@RunWith(PowerMockRunner.class)
-public class LocaleUtilTest extends PowerMockito {
+public class LocaleUtilTest {
+
+	@Before
+	public void setUp() {
+		LanguageUtil languageUtil = new LanguageUtil();
+
+		Language language = (Language)ProxyUtil.newProxyInstance(
+			Language.class.getClassLoader(), new Class<?>[] {Language.class},
+			(proxy, method, args) -> {
+				if (Objects.equals(method.getName(), "isAvailableLocale")) {
+					if (Objects.equals(args[0], Locale.US) ||
+						Objects.equals(args[0], Locale.SIMPLIFIED_CHINESE) ||
+						Objects.equals(args[0], Locale.TRADITIONAL_CHINESE))
+
+						return true;
+				}
+
+				return false;
+			});
+
+		languageUtil.setLanguage(language);
+	}
 
 	@Test
 	public void testFromLanguageId() {
-		mockStatic(LanguageUtil.class);
-
-		when(
-			LanguageUtil.isAvailableLocale(Locale.US)
-		).thenReturn(
-			true
-		);
-
 		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
 				LocaleUtil.class.getName(), Level.WARNING)) {
 
@@ -71,30 +80,10 @@ public class LocaleUtilTest extends PowerMockito {
 
 	@Test
 	public void testFromLanguageIdBCP47() {
-		mockStatic(LanguageUtil.class);
-
-		when(
-			LanguageUtil.isAvailableLocale(Locale.US)
-		).thenReturn(
-			true
-		);
-
 		Assert.assertEquals(Locale.US, LocaleUtil.fromLanguageId("en-US"));
-
-		when(
-			LanguageUtil.isAvailableLocale(Locale.SIMPLIFIED_CHINESE)
-		).thenReturn(
-			true
-		);
 
 		Assert.assertEquals(
 			Locale.SIMPLIFIED_CHINESE, LocaleUtil.fromLanguageId("zh-Hans-CN"));
-
-		when(
-			LanguageUtil.isAvailableLocale(Locale.TRADITIONAL_CHINESE)
-		).thenReturn(
-			true
-		);
 
 		Assert.assertEquals(
 			Locale.TRADITIONAL_CHINESE,
