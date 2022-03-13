@@ -14,30 +14,47 @@
 
 package com.liferay.portal.kernel.settings;
 
+import com.liferay.portal.kernel.util.ProxyUtil;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.powermock.api.mockito.PowerMockito;
-
 /**
  * @author Iván Zaera
  */
-public class LocationVariableResolverTest extends PowerMockito {
+public class LocationVariableResolverTest {
 
 	@Before
 	public void setUp() throws Exception {
 		_mockResourceManager = new MockResourceManager(
 			"En un lugar de la Mancha...");
 
-		_mockSettingsLocatorHelper = mock(SettingsLocatorHelper.class);
+		MemorySettings memorySettings = new MemorySettings();
+
+		memorySettings.setValue("admin.email.from.address", "test@liferay.com");
+
+		_mockSettingsLocatorHelper =
+			(SettingsLocatorHelper)ProxyUtil.newProxyInstance(
+				SettingsLocatorHelper.class.getClassLoader(),
+				new Class<?>[] {SettingsLocatorHelper.class},
+				(proxy, method, args) -> {
+					if (Objects.equals(method.getName(), "getServerSettings")) {
+						if (Objects.equals(args[0], "com.liferay.portal"))
+
+							return memorySettings;
+					}
+
+					return null;
+				});
 
 		_locationVariableResolver = new LocationVariableResolver(
 			_mockResourceManager, _mockSettingsLocatorHelper);
@@ -119,16 +136,6 @@ public class LocationVariableResolverTest extends PowerMockito {
 	@Test
 	public void testResolveVariableWithServerProperty() {
 		String expectedValue = "test@liferay.com";
-
-		MemorySettings memorySettings = new MemorySettings();
-
-		memorySettings.setValue("admin.email.from.address", expectedValue);
-
-		when(
-			_mockSettingsLocatorHelper.getServerSettings("com.liferay.portal")
-		).thenReturn(
-			memorySettings
-		);
 
 		Assert.assertEquals(
 			expectedValue,
