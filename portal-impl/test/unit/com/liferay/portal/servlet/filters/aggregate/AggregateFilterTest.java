@@ -59,7 +59,7 @@ public class AggregateFilterTest extends PowerMockito {
 				Portal.class.getClassLoader(), new Class<?>[] {Portal.class},
 				(proxy, method, args) -> {
 					if (Objects.equals(method.getName(), "getPathModule")) {
-						return "";
+						return StringPool.BLANK;
 					}
 
 					return null;
