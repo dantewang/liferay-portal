@@ -38,21 +38,21 @@ public class LocaleUtilTest {
 	public void setUp() {
 		LanguageUtil languageUtil = new LanguageUtil();
 
-		Language language = (Language)ProxyUtil.newProxyInstance(
-			Language.class.getClassLoader(), new Class<?>[] {Language.class},
-			(proxy, method, args) -> {
-				if (Objects.equals(method.getName(), "isAvailableLocale") &&
-					(Objects.equals(args[0], Locale.US) ||
-					 Objects.equals(args[0], Locale.SIMPLIFIED_CHINESE) ||
-					 Objects.equals(args[0], Locale.TRADITIONAL_CHINESE))) {
+		languageUtil.setLanguage(
+			(Language)ProxyUtil.newProxyInstance(
+				Language.class.getClassLoader(),
+				new Class<?>[] {Language.class},
+				(proxy, method, args) -> {
+					if (Objects.equals(method.getName(), "isAvailableLocale") &&
+						(Objects.equals(args[0], Locale.US) ||
+						 Objects.equals(args[0], Locale.SIMPLIFIED_CHINESE) ||
+						 Objects.equals(args[0], Locale.TRADITIONAL_CHINESE))) {
 
-					return true;
-				}
+						return true;
+					}
 
-				return null;
-			});
-
-		languageUtil.setLanguage(language);
+					return null;
+				}));
 	}
 
 	@Test
