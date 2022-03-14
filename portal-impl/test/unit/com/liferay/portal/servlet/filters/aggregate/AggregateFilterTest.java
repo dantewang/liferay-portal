@@ -16,6 +16,7 @@ package com.liferay.portal.servlet.filters.aggregate;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
@@ -32,11 +33,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.mockito.Matchers;
-import org.mockito.Mockito;
 
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import org.springframework.mock.web.MockServletContext;
 
 /**
  * @author Cleydyr de Albuquerque
@@ -87,47 +89,46 @@ public class AggregateFilterTest extends PowerMockito {
 	}
 
 	private ServletPaths _createMockServletPaths(String fileName, String css) {
-		ServletPaths servletPaths = mock(ServletPaths.class);
+		ServletPaths cssServletPaths = new ServletPaths(
+			new MockServletContext(), RandomTestUtil.randomString()) {
 
-		when(
-			servletPaths.down(Mockito.anyString())
-		).thenReturn(
-			servletPaths
-		);
+			@Override
+			public String getContent() {
+				return css;
+			}
 
-		ServletPaths cssServletPaths = mock(ServletPaths.class);
+			@Override
+			public String getResourcePath() {
+				return StringPool.BLANK;
+			}
 
-		when(
-			cssServletPaths.getContent()
-		).thenReturn(
-			css
-		);
+		};
 
-		when(
-			cssServletPaths.getResourcePath()
-		).thenReturn(
-			StringPool.BLANK
-		);
+		return new ServletPaths(
+			new MockServletContext(), RandomTestUtil.randomString()) {
 
-		when(
-			servletPaths.down(StringPool.QUOTE + fileName + StringPool.QUOTE)
-		).thenReturn(
-			cssServletPaths
-		);
+			@Override
+			public ServletPaths down(String path) {
+				if (path.equals(
+						StringPool.QUOTE + fileName + StringPool.QUOTE)) {
 
-		when(
-			servletPaths.getContent()
-		).thenReturn(
-			null
-		);
+					return cssServletPaths;
+				}
 
-		when(
-			servletPaths.getResourcePath()
-		).thenReturn(
-			StringPool.BLANK
-		);
+				return this;
+			}
 
-		return servletPaths;
+			@Override
+			public String getContent() {
+				return null;
+			}
+
+			@Override
+			public String getResourcePath() {
+				return StringPool.BLANK;
+			}
+
+		};
 	}
 
 	private void _setUpServiceProxyFactory() {
