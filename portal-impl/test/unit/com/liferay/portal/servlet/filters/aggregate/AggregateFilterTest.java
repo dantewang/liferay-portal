@@ -54,17 +54,16 @@ public class AggregateFilterTest extends PowerMockito {
 	public void setUp() {
 		PortalUtil portalUtil = new PortalUtil();
 
-		Portal portal = (Portal)ProxyUtil.newProxyInstance(
-			Portal.class.getClassLoader(), new Class<?>[] {Portal.class},
-			(proxy, method, args) -> {
-				if (Objects.equals(method.getName(), "getPathModule")) {
-					return "";
-				}
+		portalUtil.setPortal(
+			(Portal)ProxyUtil.newProxyInstance(
+				Portal.class.getClassLoader(), new Class<?>[] {Portal.class},
+				(proxy, method, args) -> {
+					if (Objects.equals(method.getName(), "getPathModule")) {
+						return "";
+					}
 
-				return null;
-			});
-
-		portalUtil.setPortal(portal);
+					return null;
+				}));
 
 		_setUpServiceProxyFactory();
 	}
