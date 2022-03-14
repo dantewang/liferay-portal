@@ -34,6 +34,8 @@ import com.liferay.portal.util.PortalImpl;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portlet.PortalPreferencesWrapper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.portlet.PortletPreferences;
@@ -49,11 +51,6 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-
-import org.powermock.api.mockito.PowerMockito;
-
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletConfig;
@@ -63,7 +60,7 @@ import org.springframework.mock.web.MockServletContext;
  * @author Carlos Sierra Andrés
  * @author Raymond Augé
  */
-public class ComboServletTest extends PowerMockito {
+public class ComboServletTest {
 
 	@ClassRule
 	public static LiferayUnitTestRule liferayUnitTestRule =
@@ -106,8 +103,6 @@ public class ComboServletTest extends PowerMockito {
 
 	@Before
 	public void setUp() throws ServletException {
-		MockitoAnnotations.initMocks(this);
-
 		ReflectionTestUtil.setFieldValue(
 			PortletLocalServiceUtil.class, "_service",
 			new PortletLocalServiceWrapper() {
@@ -133,11 +128,13 @@ public class ComboServletTest extends PowerMockito {
 
 		setUpComboServlet();
 
-		setUpPortalServletContext();
+		_portalServletContext = new TestServletContext();
+
+		_portalServletContext.setContextPath("portal");
 
 		setUpPortalPortlet();
 
-		setUpPluginServletContext();
+		_pluginServletContext = new TestServletContext();
 
 		setUpTestPortlet();
 
@@ -194,9 +191,8 @@ public class ComboServletTest extends PowerMockito {
 			_mockHttpServletRequest, _mockHttpServletResponse,
 			"/js/javascript.js");
 
-		Mockito.verify(_portalServletContext);
-
-		_portalServletContext.getRequestDispatcher(path);
+		Assert.assertEquals(1, _portalServletContext._invokedPaths.size());
+		Assert.assertEquals(path, _portalServletContext._invokedPaths.get(0));
 	}
 
 	@Test
@@ -205,9 +201,9 @@ public class ComboServletTest extends PowerMockito {
 			_mockHttpServletRequest, _mockHttpServletResponse,
 			_TEST_PORTLET_ID + ":/js/javascript.js");
 
-		Mockito.verify(_pluginServletContext);
-
-		_pluginServletContext.getRequestDispatcher("/js/javascript.js");
+		Assert.assertEquals(1, _pluginServletContext._invokedPaths.size());
+		Assert.assertEquals(
+			"/js/javascript.js", _pluginServletContext._invokedPaths.get(0));
 	}
 
 	@Test
@@ -278,10 +274,6 @@ public class ComboServletTest extends PowerMockito {
 		_comboServlet.init(getServletConfig());
 	}
 
-	protected void setUpPluginServletContext() {
-		_pluginServletContext = spy(new MockServletContext());
-	}
-
 	protected void setUpPortalPortlet() {
 		_portalPortletApp = new PortletAppImpl(StringPool.BLANK);
 
@@ -310,12 +302,6 @@ public class ComboServletTest extends PowerMockito {
 			}
 
 		};
-	}
-
-	protected void setUpPortalServletContext() {
-		_portalServletContext = spy(new MockServletContext());
-
-		_portalServletContext.setContextPath("portal");
 	}
 
 	protected void setUpTestPortlet() {
@@ -350,12 +336,25 @@ public class ComboServletTest extends PowerMockito {
 	private ComboServlet _comboServlet;
 	private MockHttpServletRequest _mockHttpServletRequest;
 	private MockHttpServletResponse _mockHttpServletResponse;
-	private MockServletContext _pluginServletContext;
+	private TestServletContext _pluginServletContext;
 	private Portlet _portalPortlet;
 	private PortletApp _portalPortletApp;
-	private MockServletContext _portalServletContext;
+	private TestServletContext _portalServletContext;
 	private Portlet _portletUndeployed;
 	private Portlet _testPortlet;
 	private PortletApp _testPortletApp;
+
+	private static class TestServletContext extends MockServletContext {
+
+		@Override
+		public RequestDispatcher getRequestDispatcher(String path) {
+			_invokedPaths.add(path);
+
+			return super.getRequestDispatcher(path);
+		}
+
+		private final List<String> _invokedPaths = new ArrayList<>();
+
+	}
 
 }
