@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Objects;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -49,7 +48,6 @@ public class FallbackSettingsTest {
 		verifyGetValues("key1", "key2");
 	}
 
-	@Ignore
 	@Test
 	public void testGetValuesWhenUnconfigured() {
 		String[] defaultValues = {"default"};
