@@ -186,7 +186,8 @@ public class ModelPermissionsFactoryTest {
 		String className = RandomTestUtil.randomString();
 
 		ResourceActionsUtil resourceActionsUtil = new ResourceActionsUtil();
-		ResourceActions resourceActions =
+
+		resourceActionsUtil.setResourceActions(
 			(ResourceActions)ProxyUtil.newProxyInstance(
 				ResourceActions.class.getClassLoader(),
 				new Class<?>[] {ResourceActions.class},
@@ -202,9 +203,7 @@ public class ModelPermissionsFactoryTest {
 					}
 
 					return null;
-				});
-
-		resourceActionsUtil.setResourceActions(resourceActions);
+				}));
 
 		ModelPermissions modelPermissions = ModelPermissionsFactory.create(
 			mockHttpServletRequest, className);
