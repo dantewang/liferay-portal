@@ -43,15 +43,20 @@ public class LocaleUtilTest {
 				Language.class.getClassLoader(),
 				new Class<?>[] {Language.class},
 				(proxy, method, args) -> {
-					if (Objects.equals(method.getName(), "isAvailableLocale") &&
-						(Objects.equals(args[0], Locale.US) ||
-						 Objects.equals(args[0], Locale.SIMPLIFIED_CHINESE) ||
-						 Objects.equals(args[0], Locale.TRADITIONAL_CHINESE))) {
+					if (!Objects.equals(
+							method.getName(), "isAvailableLocale")) {
+
+						return null;
+					}
+
+					if (Objects.equals(args[0], Locale.US) ||
+						Objects.equals(args[0], Locale.SIMPLIFIED_CHINESE) ||
+						Objects.equals(args[0], Locale.TRADITIONAL_CHINESE)) {
 
 						return true;
 					}
 
-					return null;
+					return false;
 				}));
 	}
 
