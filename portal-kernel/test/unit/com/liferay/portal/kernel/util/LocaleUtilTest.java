@@ -49,7 +49,7 @@ public class LocaleUtilTest {
 					return true;
 				}
 
-				return false;
+				return null;
 			});
 
 		languageUtil.setLanguage(language);
