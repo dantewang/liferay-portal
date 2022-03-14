@@ -14,16 +14,17 @@
 
 package com.liferay.portal.kernel.settings;
 
+import com.liferay.portal.kernel.upgrade.MockPortletPreferences;
+
+import java.util.Map;
+import java.util.Objects;
+
 import javax.portlet.PortletPreferences;
+import javax.portlet.ReadOnlyException;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.mockito.Matchers;
-import org.mockito.Mockito;
-
-import org.powermock.api.mockito.PowerMockito;
 
 /**
  * @author Iván Zaera
@@ -31,24 +32,33 @@ import org.powermock.api.mockito.PowerMockito;
 public class PortletPreferencesSettingsTest {
 
 	@Before
-	public void setUp() {
-		_portletPreferences = PowerMockito.mock(PortletPreferences.class);
+	public void setUp() throws ReadOnlyException {
+		_portletPreferences = new MockPortletPreferences() {
 
-		Mockito.when(
-			_portletPreferences.getValue(
-				Matchers.eq(_PORTLET_PREFERENCES_SINGLE_KEY),
-				Matchers.anyString())
-		).thenReturn(
-			_PORTLET_PREFERENCES_SINGLE_VALUE
-		);
+			@Override
+			public String getValue(String key, String defaultValue) {
+				if (Objects.equals(key, _PORTLET_PREFERENCES_SINGLE_KEY)) {
+					return _PORTLET_PREFERENCES_SINGLE_VALUE;
+				}
 
-		Mockito.when(
-			_portletPreferences.getValues(
-				Matchers.eq(_PORTLET_PREFERENCES_MULTIPLE_KEY),
-				(String[])Matchers.any())
-		).thenReturn(
-			_PORTLET_PREFERENCES_MULTIPLE_VALUES
-		);
+				return null;
+			}
+
+			@Override
+			public String[] getValues(String key, String[] defaultValues) {
+				if (Objects.equals(key, _PORTLET_PREFERENCES_MULTIPLE_KEY)) {
+					return _PORTLET_PREFERENCES_MULTIPLE_VALUES;
+				}
+
+				return null;
+			}
+
+			@Override
+			public void store() {
+				++_storeCalledCounter;
+			}
+
+		};
 
 		ModifiableSettings modifiableSettings = new MemorySettings();
 
@@ -110,36 +120,32 @@ public class PortletPreferencesSettingsTest {
 	}
 
 	@Test
-	public void testSetValueSetsPropertyInPortletPreferences()
-		throws Exception {
-
+	public void testSetValueSetsPropertyInPortletPreferences() {
 		_portletPreferencesSettings.setValue("key", "value");
 
-		Mockito.verify(_portletPreferences);
+		Map<String, String[]> map = _portletPreferences.getMap();
 
-		_portletPreferences.setValue("key", "value");
+		Assert.assertEquals(map.toString(), 1, map.size());
+		Assert.assertArrayEquals(new String[] {"value"}, map.get("key"));
 	}
 
 	@Test
-	public void testSetValuesSetsPropertyInPortletPreferences()
-		throws Exception {
-
+	public void testSetValuesSetsPropertyInPortletPreferences() {
 		String[] values = {"a", "b"};
 
 		_portletPreferencesSettings.setValues("key", values);
 
-		Mockito.verify(_portletPreferences);
+		Map<String, String[]> map = _portletPreferences.getMap();
 
-		_portletPreferences.setValues("key", values);
+		Assert.assertEquals(map.toString(), 1, map.size());
+		Assert.assertArrayEquals(values, map.get("key"));
 	}
 
 	@Test
 	public void testStoreIsPerformedOnPortletPreferences() throws Exception {
 		_portletPreferencesSettings.store();
 
-		Mockito.verify(_portletPreferences);
-
-		_portletPreferences.store();
+		Assert.assertEquals(1, _storeCalledCounter);
 	}
 
 	private static final String _DEFAULT_SETTINGS_MULTIPLE_KEY = "defaultKeys";
@@ -166,5 +172,6 @@ public class PortletPreferencesSettingsTest {
 
 	private PortletPreferences _portletPreferences;
 	private PortletPreferencesSettings _portletPreferencesSettings;
+	private int _storeCalledCounter;
 
 }
