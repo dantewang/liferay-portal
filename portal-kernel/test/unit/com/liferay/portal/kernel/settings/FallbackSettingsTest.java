@@ -27,11 +27,13 @@ import org.junit.Test;
 public class FallbackSettingsTest {
 
 	public FallbackSettingsTest() {
-		_fallbackKeys.add("key1", "key2", "key3");
-		_fallbackKeys.add("key2", "key7");
-		_fallbackKeys.add("key3", "key5");
+		FallbackKeys fallbackKeys = new FallbackKeys();
 
-		_fallbackSettings = new FallbackSettings(_settings, _fallbackKeys);
+		fallbackKeys.add("key1", "key2", "key3");
+		fallbackKeys.add("key2", "key7");
+		fallbackKeys.add("key3", "key5");
+
+		_fallbackSettings = new FallbackSettings(_settings, fallbackKeys);
 	}
 
 	@Test
@@ -45,7 +47,8 @@ public class FallbackSettingsTest {
 		Assert.assertArrayEquals(
 			mockValues, _fallbackSettings.getValues("key1", defaultValues));
 
-		verifyGetValues("key1", "key2");
+		Assert.assertArrayEquals(
+			new String[] {"key1", "key2"}, _settings._invokedKeys.toArray());
 	}
 
 	@Test
@@ -55,7 +58,9 @@ public class FallbackSettingsTest {
 		Assert.assertArrayEquals(
 			defaultValues, _fallbackSettings.getValues("key1", defaultValues));
 
-		verifyGetValues("key1", "key2", "key3");
+		Assert.assertArrayEquals(
+			new String[] {"key1", "key2", "key3"},
+			_settings._invokedKeys.toArray());
 	}
 
 	@Test
@@ -65,7 +70,8 @@ public class FallbackSettingsTest {
 		Assert.assertEquals(
 			"value", _fallbackSettings.getValue("key1", "default"));
 
-		verifyGetValue("key1", "key2");
+		Assert.assertArrayEquals(
+			new String[] {"key1", "key2"}, _settings._invokedKeys.toArray());
 	}
 
 	@Test
@@ -73,30 +79,11 @@ public class FallbackSettingsTest {
 		Assert.assertEquals(
 			"default", _fallbackSettings.getValue("key1", "default"));
 
-		verifyGetValue("key1", "key2", "key3");
+		Assert.assertArrayEquals(
+			new String[] {"key1", "key2", "key3"},
+			_settings._invokedKeys.toArray());
 	}
 
-	protected void verifyGetValue(String... keys) {
-		for (String key : keys) {
-			Assert.assertTrue(_settings._invokedKeys.contains(key));
-		}
-
-		Assert.assertEquals(keys.length, _settings._invokedKeys.size());
-
-		_settings._invokedKeys.clear();
-	}
-
-	protected void verifyGetValues(String... keys) {
-		for (String key : keys) {
-			Assert.assertTrue(_settings._invokedKeys.contains(key));
-		}
-
-		Assert.assertEquals(keys.length, _settings._invokedKeys.size());
-
-		_settings._invokedKeys.clear();
-	}
-
-	private final FallbackKeys _fallbackKeys = new FallbackKeys();
 	private final FallbackSettings _fallbackSettings;
 	private final TestSettings _settings = new TestSettings();
 
