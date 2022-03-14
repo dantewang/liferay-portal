@@ -53,7 +53,7 @@ public class PortletCategoryComparatorTest {
 					}
 				}
 
-				return method.invoke(_language, args);
+				return null;
 			});
 
 		languageUtil.setLanguage(_language);
