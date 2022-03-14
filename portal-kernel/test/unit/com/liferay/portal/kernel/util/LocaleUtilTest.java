@@ -41,12 +41,12 @@ public class LocaleUtilTest {
 		Language language = (Language)ProxyUtil.newProxyInstance(
 			Language.class.getClassLoader(), new Class<?>[] {Language.class},
 			(proxy, method, args) -> {
-				if (Objects.equals(method.getName(), "isAvailableLocale")) {
-					if (Objects.equals(args[0], Locale.US) ||
-						Objects.equals(args[0], Locale.SIMPLIFIED_CHINESE) ||
-						Objects.equals(args[0], Locale.TRADITIONAL_CHINESE))
+				if (Objects.equals(method.getName(), "isAvailableLocale") &&
+					(Objects.equals(args[0], Locale.US) ||
+					 Objects.equals(args[0], Locale.SIMPLIFIED_CHINESE) ||
+					 Objects.equals(args[0], Locale.TRADITIONAL_CHINESE))) {
 
-						return true;
+					return true;
 				}
 
 				return false;
