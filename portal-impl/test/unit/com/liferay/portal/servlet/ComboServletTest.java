@@ -26,23 +26,22 @@ import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.language.LanguageImpl;
 import com.liferay.portal.model.impl.PortletAppImpl;
-import com.liferay.portal.test.rule.CountingInvocationHandler;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.portal.tools.ToolDependencies;
 import com.liferay.portal.util.PortalImpl;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portlet.PortalPreferencesWrapper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.portlet.PortletPreferences;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
@@ -129,25 +128,13 @@ public class ComboServletTest {
 
 		setUpComboServlet();
 
-		_portalServletContext = (ServletContext)ProxyUtil.newProxyInstance(
-			ServletContext.class.getClassLoader(),
-			new Class<?>[] {ServletContext.class},
-			new CountingInvocationHandler(
-				new MockServletContext() {
+		_portalServletContext = new TestServletContext();
 
-					@Override
-					public String getContextPath() {
-						return "portal";
-					}
-
-				}));
+		_portalServletContext.setContextPath("portal");
 
 		setUpPortalPortlet();
 
-		_pluginServletContext = (ServletContext)ProxyUtil.newProxyInstance(
-			ServletContext.class.getClassLoader(),
-			new Class<?>[] {ServletContext.class},
-			new CountingInvocationHandler(new MockServletContext()));
+		_pluginServletContext = new TestServletContext();
 
 		setUpTestPortlet();
 
@@ -167,8 +154,6 @@ public class ComboServletTest {
 		_mockHttpServletRequest.setScheme("http");
 
 		_mockHttpServletResponse = new MockHttpServletResponse();
-
-		CountingInvocationHandler.invocationCount = 0;
 	}
 
 	@Test
@@ -206,9 +191,8 @@ public class ComboServletTest {
 			_mockHttpServletRequest, _mockHttpServletResponse,
 			"/js/javascript.js");
 
-		Assert.assertEquals(1, CountingInvocationHandler.invocationCount);
-
-		_portalServletContext.getRequestDispatcher(path);
+		Assert.assertEquals(1, _portalServletContext._invokedPaths.size());
+		Assert.assertEquals(path, _portalServletContext._invokedPaths.get(0));
 	}
 
 	@Test
@@ -217,9 +201,9 @@ public class ComboServletTest {
 			_mockHttpServletRequest, _mockHttpServletResponse,
 			_TEST_PORTLET_ID + ":/js/javascript.js");
 
-		Assert.assertEquals(1, CountingInvocationHandler.invocationCount);
-
-		_pluginServletContext.getRequestDispatcher("/js/javascript.js");
+		Assert.assertEquals(1, _pluginServletContext._invokedPaths.size());
+		Assert.assertEquals(
+			"/js/javascript.js", _pluginServletContext._invokedPaths.get(0));
 	}
 
 	@Test
@@ -352,12 +336,25 @@ public class ComboServletTest {
 	private ComboServlet _comboServlet;
 	private MockHttpServletRequest _mockHttpServletRequest;
 	private MockHttpServletResponse _mockHttpServletResponse;
-	private ServletContext _pluginServletContext;
+	private TestServletContext _pluginServletContext;
 	private Portlet _portalPortlet;
 	private PortletApp _portalPortletApp;
-	private ServletContext _portalServletContext;
+	private TestServletContext _portalServletContext;
 	private Portlet _portletUndeployed;
 	private Portlet _testPortlet;
 	private PortletApp _testPortletApp;
+
+	private static class TestServletContext extends MockServletContext {
+
+		@Override
+		public RequestDispatcher getRequestDispatcher(String path) {
+			_invokedPaths.add(path);
+
+			return super.getRequestDispatcher(path);
+		}
+
+		private final List<String> _invokedPaths = new ArrayList<>();
+
+	}
 
 }
