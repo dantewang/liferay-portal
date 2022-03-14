@@ -55,6 +55,7 @@ public class ServletResponseUtilRangeTest {
 	public void setUp() {
 		_httpServletRequest = ProxyFactory.newDummyInstance(
 			HttpServletRequest.class);
+
 		FileUtil fileUtil = new FileUtil();
 
 		_file = new MockFile() {
@@ -80,7 +81,8 @@ public class ServletResponseUtilRangeTest {
 
 		fileUtil.setFile(_file);
 
-		setUpPropsUtil();
+		PropsTestUtil.setProps(
+			PropsKeys.WEB_SERVER_SERVLET_MAX_RANGE_FIELDS, "10");
 	}
 
 	@Test
@@ -215,11 +217,6 @@ public class ServletResponseUtilRangeTest {
 		Assert.assertEquals(range.getStart(), start);
 		Assert.assertEquals(range.getEnd(), end);
 		Assert.assertEquals(range.getLength(), length);
-	}
-
-	protected void setUpPropsUtil() {
-		PropsTestUtil.setProps(
-			PropsKeys.WEB_SERVER_SERVLET_MAX_RANGE_FIELDS, "10");
 	}
 
 	protected void setUpRange(
