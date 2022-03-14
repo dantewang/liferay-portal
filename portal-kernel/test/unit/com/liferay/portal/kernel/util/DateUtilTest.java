@@ -118,7 +118,7 @@ public class DateUtilTest {
 	private void _testGetDaysBetween(Date date1, Date date2, int expected) {
 		CalendarFactoryUtil calendarFactoryUtil = new CalendarFactoryUtil();
 
-		CalendarFactory calendarFactory =
+		calendarFactoryUtil.setCalendarFactory(
 			(CalendarFactory)ProxyUtil.newProxyInstance(
 				CalendarFactory.class.getClassLoader(),
 				new Class<?>[] {CalendarFactory.class},
@@ -128,9 +128,7 @@ public class DateUtilTest {
 					}
 
 					return null;
-				});
-
-		calendarFactoryUtil.setCalendarFactory(calendarFactory);
+				}));
 
 		Assert.assertEquals(
 			expected, DateUtil.getDaysBetween(date1, date2, null));
@@ -139,7 +137,8 @@ public class DateUtilTest {
 	private void _testGetISOFormat(String text, String pattern) {
 		DateFormatFactoryUtil dateFormatFactoryUtil =
 			new DateFormatFactoryUtil();
-		DateFormatFactory dateFormatFactory =
+
+		dateFormatFactoryUtil.setDateFormatFactory(
 			(DateFormatFactory)ProxyUtil.newProxyInstance(
 				DateFormatFactory.class.getClassLoader(),
 				new Class<?>[] {DateFormatFactory.class},
@@ -151,9 +150,7 @@ public class DateUtilTest {
 					}
 
 					return null;
-				});
-
-		dateFormatFactoryUtil.setDateFormatFactory(dateFormatFactory);
+				}));
 
 		DateFormat dateFormat = DateUtil.getISOFormat(text);
 
@@ -165,7 +162,8 @@ public class DateUtilTest {
 	private void _testGetUTCFormat(String date, String pattern) {
 		DateFormatFactoryUtil dateFormatFactoryUtil =
 			new DateFormatFactoryUtil();
-		DateFormatFactory dateFormatFactory =
+
+		dateFormatFactoryUtil.setDateFormatFactory(
 			(DateFormatFactory)ProxyUtil.newProxyInstance(
 				DateFormatFactory.class.getClassLoader(),
 				new Class<?>[] {DateFormatFactory.class},
@@ -177,9 +175,7 @@ public class DateUtilTest {
 					}
 
 					return null;
-				});
-
-		dateFormatFactoryUtil.setDateFormatFactory(dateFormatFactory);
+				}));
 
 		DateFormat utcDateFormat = DateUtil.getUTCFormat(date);
 
