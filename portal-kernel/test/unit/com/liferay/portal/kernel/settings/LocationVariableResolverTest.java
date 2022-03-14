@@ -42,7 +42,7 @@ public class LocationVariableResolverTest {
 
 		memorySettings.setValue("admin.email.from.address", "test@liferay.com");
 
-		_mockSettingsLocatorHelper =
+		SettingsLocatorHelper mockSettingsLocatorHelper =
 			(SettingsLocatorHelper)ProxyUtil.newProxyInstance(
 				SettingsLocatorHelper.class.getClassLoader(),
 				new Class<?>[] {SettingsLocatorHelper.class},
@@ -57,7 +57,7 @@ public class LocationVariableResolverTest {
 				});
 
 		_locationVariableResolver = new LocationVariableResolver(
-			_mockResourceManager, _mockSettingsLocatorHelper);
+			_mockResourceManager, mockSettingsLocatorHelper);
 	}
 
 	@Test
@@ -146,6 +146,5 @@ public class LocationVariableResolverTest {
 
 	private LocationVariableResolver _locationVariableResolver;
 	private MockResourceManager _mockResourceManager;
-	private SettingsLocatorHelper _mockSettingsLocatorHelper;
 
 }
