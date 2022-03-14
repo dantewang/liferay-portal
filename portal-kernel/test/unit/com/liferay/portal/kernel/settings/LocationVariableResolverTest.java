@@ -47,10 +47,10 @@ public class LocationVariableResolverTest {
 				SettingsLocatorHelper.class.getClassLoader(),
 				new Class<?>[] {SettingsLocatorHelper.class},
 				(proxy, method, args) -> {
-					if (Objects.equals(method.getName(), "getServerSettings")) {
-						if (Objects.equals(args[0], "com.liferay.portal"))
+					if (Objects.equals(method.getName(), "getServerSettings") &&
+						Objects.equals(args[0], "com.liferay.portal")) {
 
-							return memorySettings;
+						return memorySettings;
 					}
 
 					return null;
