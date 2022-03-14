@@ -39,24 +39,24 @@ public class PortletCategoryComparatorTest {
 
 		LanguageUtil languageUtil = new LanguageUtil();
 
-		_language = (Language)ProxyUtil.newProxyInstance(
-			Language.class.getClassLoader(), new Class<?>[] {Language.class},
-			(proxy, method, args) -> {
-				if (Objects.equals(method.getName(), "get") &&
-					Objects.equals(args[0], LocaleUtil.SPAIN)) {
+		languageUtil.setLanguage(
+			(Language)ProxyUtil.newProxyInstance(
+				Language.class.getClassLoader(),
+				new Class<?>[] {Language.class},
+				(proxy, method, args) -> {
+					if (Objects.equals(method.getName(), "get") &&
+						Objects.equals(args[0], LocaleUtil.SPAIN)) {
 
-					if (Objects.equals(args[1], "area")) {
-						return "Área";
+						if (Objects.equals(args[1], "area")) {
+							return "Área";
+						}
+						else if (Objects.equals(args[1], "zone")) {
+							return "Zona";
+						}
 					}
-					else if (Objects.equals(args[1], "zone")) {
-						return "Zona";
-					}
-				}
 
-				return null;
-			});
-
-		languageUtil.setLanguage(_language);
+					return null;
+				}));
 	}
 
 	@Test
@@ -72,7 +72,5 @@ public class PortletCategoryComparatorTest {
 
 		Assert.assertTrue(value < 0);
 	}
-
-	private Language _language;
 
 }
