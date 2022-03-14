@@ -58,28 +58,27 @@ public class ServletResponseUtilRangeTest {
 
 		FileUtil fileUtil = new FileUtil();
 
-		_file = new MockFile() {
+		fileUtil.setFile(
+			new MockFile() {
 
-			@Override
-			public File createTempFile() {
-				String name = String.valueOf(System.currentTimeMillis());
+				@Override
+				public File createTempFile() {
+					String name = String.valueOf(System.currentTimeMillis());
 
-				try {
-					return File.createTempFile(name, null);
+					try {
+						return File.createTempFile(name, null);
+					}
+					catch (IOException ioException) {
+						return null;
+					}
 				}
-				catch (IOException ioException) {
-					return null;
+
+				@Override
+				public boolean delete(File file) {
+					return file.delete();
 				}
-			}
 
-			@Override
-			public boolean delete(File file) {
-				return file.delete();
-			}
-
-		};
-
-		fileUtil.setFile(_file);
+			});
 
 		PropsTestUtil.setProps(
 			PropsKeys.WEB_SERVER_SERVLET_MAX_RANGE_FIELDS, "10");
@@ -304,7 +303,6 @@ public class ServletResponseUtilRangeTest {
 	private static final String _CONTENT_TYPE_BOUNDARY_PREFACE =
 		"multipart/byteranges; boundary=";
 
-	private com.liferay.portal.kernel.util.File _file;
 	private HttpServletRequest _httpServletRequest;
 
 }
