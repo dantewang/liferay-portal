@@ -23,6 +23,11 @@ import com.liferay.layout.taglib.internal.servlet.ServletContextUtil;
 import com.liferay.layout.util.structure.DropZoneLayoutStructureItem;
 import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.layout.util.structure.LayoutStructureItem;
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.cache.PortalCache;
+import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
+import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Layout;
@@ -36,6 +41,8 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.segments.constants.SegmentsExperienceConstants;
 import com.liferay.segments.constants.SegmentsWebKeys;
 import com.liferay.taglib.util.IncludeTag;
+
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
@@ -152,8 +159,10 @@ public class RenderFragmentLayoutTag extends IncludeTag {
 					fetchLayoutPageTemplateStructure(
 						layout.getGroupId(), layout.getPlid(), true);
 
+			long segmentsExperienceId = _getSegmentsExperienceId();
+
 			String data = layoutPageTemplateStructure.getData(
-				_getSegmentsExperienceId());
+				segmentsExperienceId);
 
 			if (Validator.isNull(data)) {
 				return _layoutStructure;
@@ -162,7 +171,35 @@ public class RenderFragmentLayoutTag extends IncludeTag {
 			String masterLayoutData = _getMasterLayoutData(httpServletRequest);
 
 			if (Validator.isNull(masterLayoutData)) {
-				_layoutStructure = LayoutStructure.of(data);
+				PortalCache<String, LayoutStructure> portalCache =
+					PortalCacheHelperUtil.getPortalCache(
+						PortalCacheManagerNames.MULTI_VM,
+						RenderFragmentLayoutTag.class.getName());
+
+				Date modifiedDate =
+					layoutPageTemplateStructure.getModifiedDate();
+
+				StringBundler cacheKeySB = new StringBundler(5);
+
+				cacheKeySB.append(
+					layoutPageTemplateStructure.
+						getLayoutPageTemplateStructureId());
+				cacheKeySB.append(StringPool.DASH);
+				cacheKeySB.append(segmentsExperienceId);
+				cacheKeySB.append(StringPool.DASH);
+				cacheKeySB.append(modifiedDate.getTime());
+
+				LayoutStructure layoutStructure = portalCache.get(
+					cacheKeySB.toString());
+
+				if (layoutStructure != null) {
+					_layoutStructure = layoutStructure;
+				}
+				else {
+					_layoutStructure = LayoutStructure.of(data);
+
+					portalCache.put(cacheKeySB.toString(), _layoutStructure);
+				}
 
 				return _layoutStructure;
 			}
