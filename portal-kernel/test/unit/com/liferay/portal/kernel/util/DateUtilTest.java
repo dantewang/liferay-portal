@@ -112,7 +112,32 @@ public class DateUtilTest {
 
 	@Test
 	public void testGetUTCFormat() {
-		_testGetUTCFormat("19721223", "yyyyMMdd");
+		DateFormatFactoryUtil dateFormatFactoryUtil =
+			new DateFormatFactoryUtil();
+
+		dateFormatFactoryUtil.setDateFormatFactory(
+			(DateFormatFactory)ProxyUtil.newProxyInstance(
+				DateFormatFactory.class.getClassLoader(),
+				new Class<?>[] {DateFormatFactory.class},
+				(proxy, method, args) -> {
+					if (Objects.equals(
+							method.getName(), "getSimpleDateFormat")) {
+
+						return new TestSimpleDateFormat((String)args[0]);
+					}
+
+					return null;
+				}));
+
+		DateFormat utcDateFormat = DateUtil.getUTCFormat("19721223");
+
+		Assert.assertNotNull(utcDateFormat);
+		Assert.assertTrue(utcDateFormat instanceof SimpleDateFormat);
+
+		TestSimpleDateFormat testSimpleDateFormat =
+			(TestSimpleDateFormat)utcDateFormat;
+
+		Assert.assertEquals("yyyyMMdd", testSimpleDateFormat.getPattern());
 	}
 
 	private void _testGetDaysBetween(Date date1, Date date2, int expected) {
@@ -157,35 +182,6 @@ public class DateUtilTest {
 		SimpleDateFormat simpleDateFormat = (SimpleDateFormat)dateFormat;
 
 		Assert.assertEquals(pattern, simpleDateFormat.toPattern());
-	}
-
-	private void _testGetUTCFormat(String date, String pattern) {
-		DateFormatFactoryUtil dateFormatFactoryUtil =
-			new DateFormatFactoryUtil();
-
-		dateFormatFactoryUtil.setDateFormatFactory(
-			(DateFormatFactory)ProxyUtil.newProxyInstance(
-				DateFormatFactory.class.getClassLoader(),
-				new Class<?>[] {DateFormatFactory.class},
-				(proxy, method, args) -> {
-					if (Objects.equals(
-							method.getName(), "getSimpleDateFormat")) {
-
-						return new TestSimpleDateFormat((String)args[0]);
-					}
-
-					return null;
-				}));
-
-		DateFormat utcDateFormat = DateUtil.getUTCFormat(date);
-
-		Assert.assertNotNull(utcDateFormat);
-		Assert.assertTrue(utcDateFormat instanceof SimpleDateFormat);
-
-		TestSimpleDateFormat testSimpleDateFormat =
-			(TestSimpleDateFormat)utcDateFormat;
-
-		Assert.assertEquals(testSimpleDateFormat.getPattern(), pattern);
 	}
 
 	private static class TestSimpleDateFormat extends SimpleDateFormat {
