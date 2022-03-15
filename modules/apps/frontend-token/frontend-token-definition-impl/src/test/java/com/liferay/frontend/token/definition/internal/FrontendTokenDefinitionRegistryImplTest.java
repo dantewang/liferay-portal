@@ -90,7 +90,8 @@ public class FrontendTokenDefinitionRegistryImplTest {
 			Assert.assertEquals(
 				jsonFactory.looseSerializeDeep(
 					jsonFactory.createJSONObject(StringUtil.read(inputStream))),
-				frontendTokenDefinition.getJSON(LocaleUtil.ENGLISH));
+				jsonFactory.looseSerializeDeep(
+					frontendTokenDefinition.getJSONObject(LocaleUtil.ENGLISH)));
 		}
 	}
 
