@@ -66,9 +66,12 @@ public class JSONLocalizerTest {
 			_FRONTEND_TOKEN_DEFINITION_JSON, new JSONFactoryImpl(),
 			resourceBundleLoader, "theme_id");
 
+		JSONFactory jsonFactory = new JSONFactoryImpl();
+
 		Assert.assertEquals(
 			_TRANSLATED_FRONTEND_TOKEN_DEFINITION_JSON,
-			jsonLocalizer.getJSON(LocaleUtil.ENGLISH));
+			jsonFactory.looseSerializeDeep(
+				jsonLocalizer.getJSONObject(LocaleUtil.ENGLISH)));
 	}
 
 	@Test
@@ -76,10 +79,12 @@ public class JSONLocalizerTest {
 		JSONLocalizer jsonLocalizer = new JSONLocalizer(
 			_FRONTEND_TOKEN_DEFINITION_JSON, new JSONFactoryImpl(),
 			Mockito.mock(ResourceBundleLoader.class), "theme_id");
+		JSONFactory jsonFactory = new JSONFactoryImpl();
 
 		Assert.assertEquals(
 			_FRONTEND_TOKEN_DEFINITION_JSON,
-			jsonLocalizer.getJSON(LocaleUtil.SPAIN));
+			jsonFactory.looseSerializeDeep(
+				jsonLocalizer.getJSONObject(LocaleUtil.SPAIN)));
 	}
 
 	@Test
@@ -87,9 +92,11 @@ public class JSONLocalizerTest {
 		JSONLocalizer jsonLocalizer = new JSONLocalizer(
 			_FRONTEND_TOKEN_DEFINITION_JSON, new JSONFactoryImpl(),
 			Mockito.mock(ResourceBundleLoader.class), "theme_id");
+		JSONFactory jsonFactory = new JSONFactoryImpl();
 
 		Assert.assertEquals(
-			_FRONTEND_TOKEN_DEFINITION_JSON, jsonLocalizer.getJSON(null));
+			_FRONTEND_TOKEN_DEFINITION_JSON,
+			jsonFactory.looseSerializeDeep(jsonLocalizer.getJSONObject(null)));
 	}
 
 	@Test
@@ -111,8 +118,8 @@ public class JSONLocalizerTest {
 			resourceBundleLoader, "theme_id");
 
 		Assert.assertSame(
-			jsonLocalizer.getJSON(LocaleUtil.ENGLISH),
-			jsonLocalizer.getJSON(LocaleUtil.ENGLISH));
+			jsonLocalizer.getJSONObject(LocaleUtil.ENGLISH),
+			jsonLocalizer.getJSONObject(LocaleUtil.ENGLISH));
 	}
 
 	private static final String _FRONTEND_TOKEN_DEFINITION_JSON;

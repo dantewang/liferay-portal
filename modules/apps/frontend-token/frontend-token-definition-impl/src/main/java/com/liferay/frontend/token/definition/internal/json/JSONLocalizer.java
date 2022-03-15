@@ -52,16 +52,36 @@ public class JSONLocalizer {
 		_themeId = themeId;
 	}
 
-	/**
-	 * Get a translated JSON
-	 * @param locale the target locale or null to get the untranslated JSON
-	 * @return the translated JSON
-	 */
-	public String getJSON(Locale locale) {
+	public JSONObject getJSONObject(Locale locale) {
 		if ((_resourceBundleLoader == null) || (locale == null)) {
-			return _json;
+			try {
+				return _jsonFactory.createJSONObject(_json);
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
 		}
 
+		JSONObject jsonObject = _jsonObjects.computeIfAbsent(
+			locale,
+			key -> {
+				try {
+					return _jsonFactory.createJSONObject(_getJSON(locale));
+				}
+				catch (Exception exception) {
+					throw new RuntimeException(exception);
+				}
+			});
+
+		return _jsonFactory.createJSONObject(jsonObject.toMap());
+	}
+
+	/**
+	 * Get a translated JSON
+	 * @param locale the target locale
+	 * @return the translated JSON
+	 */
+	private String _getJSON(Locale locale) {
 		String json = _jsons.get(locale);
 
 		if (json == null) {
@@ -84,21 +104,6 @@ public class JSONLocalizer {
 		}
 
 		return json;
-	}
-
-	public JSONObject getJSONObject(Locale locale) {
-		JSONObject jsonObject = _jsonObjects.computeIfAbsent(
-			locale,
-			key -> {
-				try {
-					return _jsonFactory.createJSONObject(getJSON(locale));
-				}
-				catch (Exception exception) {
-					throw new RuntimeException(exception);
-				}
-			});
-
-		return _jsonFactory.createJSONObject(jsonObject.toMap());
 	}
 
 	private void _localize(JSONObject jsonObject, Locale locale) {

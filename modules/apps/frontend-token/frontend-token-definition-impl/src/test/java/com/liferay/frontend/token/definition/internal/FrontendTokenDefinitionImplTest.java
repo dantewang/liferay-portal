@@ -259,7 +259,8 @@ public class FrontendTokenDefinitionImplTest {
 
 		Assert.assertEquals(
 			_TRANSLATED_FRONTEND_TOKEN_DEFINITION_JSON,
-			frontendTokenDefinitionImpl.getJSON(LocaleUtil.ENGLISH));
+			jsonFactory.looseSerializeDeep(
+				frontendTokenDefinitionImpl.getJSONObject(LocaleUtil.ENGLISH)));
 	}
 
 	private void _assertCollectionEquals(

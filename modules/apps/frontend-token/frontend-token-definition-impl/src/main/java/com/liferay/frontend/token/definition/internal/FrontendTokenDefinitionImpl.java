@@ -89,11 +89,6 @@ public class FrontendTokenDefinitionImpl implements FrontendTokenDefinition {
 	}
 
 	@Override
-	public String getJSON(Locale locale) {
-		return _jsonLocalizer.getJSON(locale);
-	}
-
-	@Override
 	public JSONObject getJSONObject(Locale locale) {
 		return _jsonLocalizer.getJSONObject(locale);
 	}
