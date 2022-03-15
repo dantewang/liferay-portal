@@ -16,27 +16,16 @@ package com.liferay.portal.kernel.security.auth;
 
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.portal.kernel.model.CompanyConstants;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
-import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
-import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
 
 import java.util.function.Consumer;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 
 /**
  * @author Alberto Chaparro
  */
 public class CompanyThreadLocalTest {
-
-	@ClassRule
-	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			CodeCoverageAssertor.INSTANCE, NewEnvTestRule.INSTANCE);
 
 	@Test
 	public void testLock() {
