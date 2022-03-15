@@ -14,8 +14,6 @@
 
 package com.liferay.frontend.token.definition;
 
-import java.util.Locale;
-
 /**
  * @author Iván Zaera
  */
@@ -24,8 +22,6 @@ public interface FrontendTokenMapping {
 	public static final String TYPE_CSS_VARIABLE = "cssVariable";
 
 	public FrontendToken getFrontendToken();
-
-	public String getJSON(Locale locale);
 
 	public String getType();
 

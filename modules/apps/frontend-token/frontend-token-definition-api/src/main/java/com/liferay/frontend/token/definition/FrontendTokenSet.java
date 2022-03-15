@@ -15,7 +15,6 @@
 package com.liferay.frontend.token.definition;
 
 import java.util.Collection;
-import java.util.Locale;
 
 /**
  * @author Iván Zaera
@@ -27,7 +26,5 @@ public interface FrontendTokenSet {
 	public Collection<FrontendTokenMapping> getFrontendTokenMappings();
 
 	public Collection<FrontendToken> getFrontendTokens();
-
-	public String getJSON(Locale locale);
 
 }

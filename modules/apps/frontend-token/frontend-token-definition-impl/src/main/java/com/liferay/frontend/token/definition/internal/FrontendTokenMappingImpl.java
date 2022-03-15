@@ -19,8 +19,6 @@ import com.liferay.frontend.token.definition.FrontendTokenMapping;
 import com.liferay.frontend.token.definition.internal.json.JSONLocalizer;
 import com.liferay.portal.kernel.json.JSONObject;
 
-import java.util.Locale;
-
 /**
  * @author Iván Zaera
  */
@@ -44,11 +42,6 @@ public class FrontendTokenMappingImpl implements FrontendTokenMapping {
 	@Override
 	public FrontendToken getFrontendToken() {
 		return _frontendTokenImpl;
-	}
-
-	@Override
-	public String getJSON(Locale locale) {
-		return _jsonLocalizer.getJSON(locale);
 	}
 
 	@Override

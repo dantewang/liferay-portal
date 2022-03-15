@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Locale;
 
 /**
  * @author Iván Zaera
@@ -73,11 +72,6 @@ public class FrontendTokenSetImpl implements FrontendTokenSet {
 	@Override
 	public Collection<FrontendToken> getFrontendTokens() {
 		return _frontendTokens;
-	}
-
-	@Override
-	public String getJSON(Locale locale) {
-		return _jsonLocalizer.getJSON(locale);
 	}
 
 	protected FrontendTokenDefinitionImpl getFrontendTokenDefinition() {
