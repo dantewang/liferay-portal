@@ -21,35 +21,34 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.util.PropsTestUtil;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.transaction.Isolation;
+import com.liferay.portal.kernel.util.Http;
+import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 import java.util.Collections;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.Mockito;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
  * @author Igor Spasic
  */
-@PrepareForTest(ServiceContextFactory.class)
-@RunWith(PowerMockRunner.class)
 public class JSONWebServiceTest extends BaseJSONWebServiceTestCase {
 
 	@BeforeClass
@@ -84,19 +83,6 @@ public class JSONWebServiceTest extends BaseJSONWebServiceTestCase {
 		registerActionClass(CamelFooService.class);
 		registerActionClass(FooService.class);
 		registerActionClass(FooService.class, "test-context");
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		Method method = method(
-			ServiceContextFactory.class, "getInstance",
-			HttpServletRequest.class);
-
-		stub(
-			method
-		).toReturn(
-			new ServiceContext()
-		);
 	}
 
 	@Test
@@ -437,6 +423,19 @@ public class JSONWebServiceTest extends BaseJSONWebServiceTestCase {
 
 		mockHttpServletRequest.setParameter(
 			"serviceContext", "{\"failOnPortalException\" : false}");
+
+		ThemeDisplay themeDisplay = Mockito.mock(ThemeDisplay.class);
+
+		PortalUtil portalUtil = new PortalUtil();
+
+		portalUtil.setPortal(ProxyFactory.newDummyInstance(Portal.class));
+
+		HttpUtil httpUtil = new HttpUtil();
+
+		httpUtil.setHttp(ProxyFactory.newDummyInstance(Http.class));
+
+		mockHttpServletRequest.setAttribute(
+			WebKeys.THEME_DISPLAY, themeDisplay);
 
 		JSONWebServiceAction jsonWebServiceAction = lookupJSONWebServiceAction(
 			mockHttpServletRequest);
