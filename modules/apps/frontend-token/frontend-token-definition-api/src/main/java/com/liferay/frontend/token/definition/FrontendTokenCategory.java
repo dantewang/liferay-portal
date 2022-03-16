@@ -32,6 +32,6 @@ public interface FrontendTokenCategory {
 
 	public Collection<FrontendTokenSet> getFrontendTokenSets();
 
-	public JSONObject getJSON(Locale locale);
+	public JSONObject getJSONObject(Locale locale);
 
 }

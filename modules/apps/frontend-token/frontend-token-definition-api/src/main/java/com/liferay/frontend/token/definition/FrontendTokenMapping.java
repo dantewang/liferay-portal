@@ -27,7 +27,7 @@ public interface FrontendTokenMapping {
 
 	public FrontendToken getFrontendToken();
 
-	public JSONObject getJSON(Locale locale);
+	public JSONObject getJSONObject(Locale locale);
 
 	public String getType();
 
