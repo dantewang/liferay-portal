@@ -120,13 +120,13 @@ public class JSONLocalizerTest {
 			_FRONTEND_TOKEN_DEFINITION_JSON, new JSONFactoryImpl(),
 			resourceBundleLoader, "theme_id");
 
-		JSONObject expectJSONObject = jsonLocalizer.getJSONObject(
+		JSONObject jsonObject1 = jsonLocalizer.getJSONObject(
 			LocaleUtil.ENGLISH);
 
-		JSONObject actualJSONObject = jsonLocalizer.getJSONObject(
+		JSONObject jsonObject2 = jsonLocalizer.getJSONObject(
 			LocaleUtil.ENGLISH);
 
-		Assert.assertEquals(expectJSONObject.toMap(), actualJSONObject.toMap());
+		Assert.assertEquals(jsonObject1.toMap(), jsonObject2.toMap());
 	}
 
 	private static final String _FRONTEND_TOKEN_DEFINITION_JSON;
