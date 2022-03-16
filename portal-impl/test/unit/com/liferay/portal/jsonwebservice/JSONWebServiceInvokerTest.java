@@ -20,13 +20,19 @@ import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceAction;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.util.PropsTestUtil;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.Http;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
+import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -37,24 +43,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.Mockito;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
  * @author Igor Spasic
  */
-@PrepareForTest(ServiceContextFactory.class)
-@RunWith(PowerMockRunner.class)
 public class JSONWebServiceInvokerTest extends BaseJSONWebServiceTestCase {
 
 	@BeforeClass
@@ -87,19 +86,6 @@ public class JSONWebServiceInvokerTest extends BaseJSONWebServiceTestCase {
 		initPortalServices();
 
 		registerActionClass(FooService.class);
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		Method method = method(
-			ServiceContextFactory.class, "getInstance",
-			HttpServletRequest.class);
-
-		stub(
-			method
-		).toReturn(
-			new ServiceContext()
-		);
 	}
 
 	@Test
@@ -964,11 +950,22 @@ public class JSONWebServiceInvokerTest extends BaseJSONWebServiceTestCase {
 		Assert.assertFalse(jsonResult, jsonResult.contains("secret"));
 	}
 
-	protected JSONWebServiceAction prepareInvokerAction(String content)
-		throws Exception {
-
+	protected JSONWebServiceAction prepareInvokerAction(String content) {
 		MockHttpServletRequest mockHttpServletRequest = createHttpRequest(
 			"/invoker");
+
+		ThemeDisplay themeDisplay = Mockito.mock(ThemeDisplay.class);
+
+		PortalUtil portalUtil = new PortalUtil();
+
+		portalUtil.setPortal(ProxyFactory.newDummyInstance(Portal.class));
+
+		HttpUtil httpUtil = new HttpUtil();
+
+		httpUtil.setHttp(ProxyFactory.newDummyInstance(Http.class));
+
+		mockHttpServletRequest.setAttribute(
+			WebKeys.THEME_DISPLAY, themeDisplay);
 
 		mockHttpServletRequest.setContent(content.getBytes());
 
