@@ -53,15 +53,40 @@ public class JSONLocalizer {
 	}
 
 	/**
-	 * Get a translated JSON
-	 * @param locale the target locale or null to get the untranslated JSON
-	 * @return the translated JSON
+	 * Get a JSONObject
+	 * @param locale the target locale or null to get the default JSONObject
+	 * @return the JSONObject that created with the translated JSON
 	 */
-	public String getJSON(Locale locale) {
+	public JSONObject getJSON(Locale locale) {
 		if ((_resourceBundleLoader == null) || (locale == null)) {
-			return _json;
+			try {
+				return _jsonFactory.createJSONObject(_json);
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
 		}
 
+		JSONObject jsonObject = _jsonObjects.computeIfAbsent(
+			locale,
+			key -> {
+				try {
+					return _jsonFactory.createJSONObject(_getJSON(locale));
+				}
+				catch (Exception exception) {
+					throw new RuntimeException(exception);
+				}
+			});
+
+		return _jsonFactory.createJSONObject(jsonObject.toMap());
+	}
+
+	/**
+	 * Get a translated JSON
+	 * @param locale the target locale
+	 * @return the translated JSON
+	 */
+	private String _getJSON(Locale locale) {
 		String json = _jsons.get(locale);
 
 		if (json == null) {
@@ -156,6 +181,8 @@ public class JSONLocalizer {
 
 	private final String _json;
 	private final JSONFactory _jsonFactory;
+	private final Map<Locale, JSONObject> _jsonObjects =
+		new ConcurrentHashMap<>();
 	private final Map<Locale, String> _jsons = new ConcurrentHashMap<>();
 	private final ResourceBundleLoader _resourceBundleLoader;
 	private final String _themeId;

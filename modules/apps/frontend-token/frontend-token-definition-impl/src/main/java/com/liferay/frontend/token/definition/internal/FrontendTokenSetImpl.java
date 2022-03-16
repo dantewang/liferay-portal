@@ -76,7 +76,7 @@ public class FrontendTokenSetImpl implements FrontendTokenSet {
 	}
 
 	@Override
-	public String getJSON(Locale locale) {
+	public JSONObject getJSON(Locale locale) {
 		return _jsonLocalizer.getJSON(locale);
 	}
 

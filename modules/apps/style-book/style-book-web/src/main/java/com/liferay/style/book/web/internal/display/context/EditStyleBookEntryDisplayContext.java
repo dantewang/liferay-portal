@@ -335,8 +335,7 @@ public class EditStyleBookEntryDisplayContext {
 				layoutSet.getThemeId());
 
 		if (frontendTokenDefinition != null) {
-			return JSONFactoryUtil.createJSONObject(
-				frontendTokenDefinition.getJSON(_themeDisplay.getLocale()));
+			return frontendTokenDefinition.getJSON(_themeDisplay.getLocale());
 		}
 
 		return JSONFactoryUtil.createJSONObject();
