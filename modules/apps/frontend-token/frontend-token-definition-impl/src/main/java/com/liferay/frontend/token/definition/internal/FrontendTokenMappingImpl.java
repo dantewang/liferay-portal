@@ -47,7 +47,7 @@ public class FrontendTokenMappingImpl implements FrontendTokenMapping {
 	}
 
 	@Override
-	public String getJSON(Locale locale) {
+	public JSONObject getJSON(Locale locale) {
 		return _jsonLocalizer.getJSON(locale);
 	}
 
