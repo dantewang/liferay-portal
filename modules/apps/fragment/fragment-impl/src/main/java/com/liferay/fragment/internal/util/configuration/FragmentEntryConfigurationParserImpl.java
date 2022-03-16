@@ -465,7 +465,7 @@ public class FragmentEntryConfigurationParserImpl
 			frontendTokenDefinition.getFrontendTokens();
 
 		for (FrontendToken frontendToken : frontendTokens) {
-			JSONObject jsonObject = frontendToken.getJSON(
+			JSONObject jsonObject = frontendToken.getJSONObject(
 				LocaleUtil.getMostRelevantLocale());
 
 			if (!Objects.equals(jsonObject.getString("name"), fieldValue)) {

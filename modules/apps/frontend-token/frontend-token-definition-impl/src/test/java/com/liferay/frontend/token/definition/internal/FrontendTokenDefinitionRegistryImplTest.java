@@ -91,7 +91,7 @@ public class FrontendTokenDefinitionRegistryImplTest {
 			JSONObject expectJSONObject = jsonFactory.createJSONObject(
 				StringUtil.read(inputStream));
 
-			JSONObject actualJSONObject = frontendTokenDefinition.getJSON(
+			JSONObject actualJSONObject = frontendTokenDefinition.getJSONObject(
 				LocaleUtil.ENGLISH);
 
 			Assert.assertEquals(
