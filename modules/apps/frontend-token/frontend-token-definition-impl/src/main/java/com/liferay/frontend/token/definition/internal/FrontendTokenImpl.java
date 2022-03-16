@@ -23,9 +23,8 @@ import com.liferay.portal.kernel.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Iván Zaera
@@ -89,13 +88,17 @@ public class FrontendTokenImpl implements FrontendToken {
 	public Collection<FrontendTokenMapping> getFrontendTokenMappings(
 		String type) {
 
-		Stream<FrontendTokenMapping> stream = _frontendTokenMappings.stream();
+		List<FrontendTokenMapping> frontendTokenMappings = new ArrayList<>();
 
-		return stream.filter(
-			frontendTokenMapping -> type.equals(frontendTokenMapping.getType())
-		).collect(
-			Collectors.toList()
-		);
+		for (FrontendTokenMapping frontendTokenMapping :
+				_frontendTokenMappings) {
+
+			if (type.equals(frontendTokenMapping.getType())) {
+				frontendTokenMappings.add(frontendTokenMapping);
+			}
+		}
+
+		return frontendTokenMappings;
 	}
 
 	@Override
