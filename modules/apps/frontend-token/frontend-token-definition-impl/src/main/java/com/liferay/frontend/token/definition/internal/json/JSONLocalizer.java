@@ -71,44 +71,23 @@ public class JSONLocalizer {
 			locale,
 			key -> {
 				try {
-					return _jsonFactory.createJSONObject(_getJSON(locale));
+					JSONObject newJSONObject = _jsonFactory.createJSONObject(
+						_json);
+
+					_localize(newJSONObject, locale);
+
+					return newJSONObject;
 				}
-				catch (Exception exception) {
-					throw new RuntimeException(exception);
+				catch (JSONException jsonException) {
+					_log.error(
+						"Unable to parse JSON for theme " + _themeId,
+						jsonException);
+
+					return null;
 				}
 			});
 
 		return _jsonFactory.createJSONObject(jsonObject.toMap());
-	}
-
-	/**
-	 * Get a translated JSON
-	 * @param locale the target locale
-	 * @return the translated JSON
-	 */
-	private String _getJSON(Locale locale) {
-		String json = _jsons.get(locale);
-
-		if (json == null) {
-			try {
-				JSONObject jsonObject = _jsonFactory.createJSONObject(_json);
-
-				_localize(jsonObject, locale);
-
-				json = _jsonFactory.looseSerializeDeep(jsonObject);
-			}
-			catch (JSONException jsonException) {
-				_log.error(
-					"Unable to parse JSON for theme " + _themeId,
-					jsonException);
-
-				json = _json;
-			}
-
-			_jsons.put(locale, json);
-		}
-
-		return json;
 	}
 
 	private void _localize(JSONObject jsonObject, Locale locale) {
