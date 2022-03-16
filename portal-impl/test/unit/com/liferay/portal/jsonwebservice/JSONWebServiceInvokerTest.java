@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -45,6 +46,8 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 
 import org.mockito.Mockito;
@@ -55,6 +58,11 @@ import org.springframework.mock.web.MockHttpServletRequest;
  * @author Igor Spasic
  */
 public class JSONWebServiceInvokerTest extends BaseJSONWebServiceTestCase {
+
+	@ClassRule
+	@Rule
+	public static final LiferayUnitTestRule liferayUnitTestRule =
+		LiferayUnitTestRule.INSTANCE;
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
