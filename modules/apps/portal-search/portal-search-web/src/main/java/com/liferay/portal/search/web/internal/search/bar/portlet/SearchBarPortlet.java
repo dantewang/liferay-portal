@@ -104,66 +104,6 @@ public class SearchBarPortlet extends MVCPortlet {
 		super.render(renderRequest, renderResponse);
 	}
 
-	protected String getKeywordsParameterName(
-		SearchSettings searchSettings,
-		SearchBarPortletPreferences searchBarPortletPreferences,
-		ThemeDisplay themeDisplay) {
-
-		Optional<com.liferay.portal.kernel.model.Portlet>
-			headerSearchBarOptional =
-				searchBarPrecedenceHelper.findHeaderSearchBarPortletOptional(
-					themeDisplay);
-
-		if (headerSearchBarOptional.isPresent()) {
-			Optional<PortletPreferences> headerPortletPreferencesOptional =
-				portletPreferencesLookup.fetchPreferences(
-					headerSearchBarOptional.get(), themeDisplay);
-
-			if (headerPortletPreferencesOptional.isPresent() &&
-				SearchBarPortletDestinationUtil.isSameDestination(
-					headerPortletPreferencesOptional.get(), themeDisplay)) {
-
-				Optional<String> optional =
-					searchSettings.getKeywordsParameterName();
-
-				return optional.orElse(
-					searchBarPortletPreferences.getKeywordsParameterName());
-			}
-		}
-
-		return searchBarPortletPreferences.getKeywordsParameterName();
-	}
-
-	protected String getScopeParameterName(
-		SearchSettings searchSettings,
-		SearchBarPortletPreferences searchBarPortletPreferences,
-		ThemeDisplay themeDisplay) {
-
-		Optional<com.liferay.portal.kernel.model.Portlet>
-			headerSearchBarOptional =
-				searchBarPrecedenceHelper.findHeaderSearchBarPortletOptional(
-					themeDisplay);
-
-		if (headerSearchBarOptional.isPresent()) {
-			Optional<PortletPreferences> headerPortletPreferencesOptional =
-				portletPreferencesLookup.fetchPreferences(
-					headerSearchBarOptional.get(), themeDisplay);
-
-			if (headerPortletPreferencesOptional.isPresent() &&
-				SearchBarPortletDestinationUtil.isSameDestination(
-					headerPortletPreferencesOptional.get(), themeDisplay)) {
-
-				Optional<String> optional =
-					searchSettings.getScopeParameterName();
-
-				return optional.orElse(
-					searchBarPortletPreferences.getScopeParameterName());
-			}
-		}
-
-		return searchBarPortletPreferences.getScopeParameterName();
-	}
-
 	protected boolean isEmptySearchEnabled(
 		PortletSharedSearchResponse portletSharedSearchResponse) {
 
@@ -207,13 +147,44 @@ public class SearchBarPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = portletSharedSearchResponse.getThemeDisplay(
 			renderRequest);
 
-		String keywordsParameterName = getKeywordsParameterName(
-			portletSharedSearchResponse.getSearchSettings(),
-			searchBarPortletPreferences, themeDisplay);
+		String keywordsParameterName =
+			searchBarPortletPreferences.getKeywordsParameterName();
 
-		String scopeParameterName = getScopeParameterName(
-			portletSharedSearchResponse.getSearchSettings(),
-			searchBarPortletPreferences, themeDisplay);
+		String scopeParameterName =
+			searchBarPortletPreferences.getScopeParameterName();
+
+		Optional<com.liferay.portal.kernel.model.Portlet>
+			headerSearchBarOptional =
+				searchBarPrecedenceHelper.findHeaderSearchBarPortletOptional(
+					themeDisplay);
+
+		if (headerSearchBarOptional.isPresent()) {
+			Optional<PortletPreferences> headerPortletPreferencesOptional =
+				portletPreferencesLookup.fetchPreferences(
+					headerSearchBarOptional.get(), themeDisplay);
+
+			if (headerPortletPreferencesOptional.isPresent() &&
+				SearchBarPortletDestinationUtil.isSameDestination(
+					headerPortletPreferencesOptional.get(), themeDisplay)) {
+
+				SearchSettings searchSettings =
+					portletSharedSearchResponse.getSearchSettings();
+
+				Optional<String> keywordsParameterNameOptional =
+					searchSettings.getKeywordsParameterName();
+
+				if (keywordsParameterNameOptional.isPresent()) {
+					keywordsParameterName = keywordsParameterNameOptional.get();
+				}
+
+				Optional<String> scopeParameterNameOptional =
+					searchSettings.getScopeParameterName();
+
+				if (scopeParameterNameOptional.isPresent()) {
+					scopeParameterName = scopeParameterNameOptional.get();
+				}
+			}
+		}
 
 		SearchResponse searchResponse = _getSearchResponse(
 			portletSharedSearchResponse, searchBarPortletPreferences);
