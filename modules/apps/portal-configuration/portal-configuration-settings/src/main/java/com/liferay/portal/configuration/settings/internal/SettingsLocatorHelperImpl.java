@@ -271,33 +271,7 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 	}
 
 	@Reference(unbind = "-")
-	protected void setGroupLocalService(GroupLocalService groupLocalService) {
-		_groupLocalService = groupLocalService;
-	}
-
-	@Reference(unbind = "-")
-	protected void setLayoutLocalService(
-		LayoutLocalService layoutLocalService) {
-
-		_layoutLocalService = layoutLocalService;
-	}
-
-	@Reference(unbind = "-")
 	protected void setPortal(Portal portal) {
-	}
-
-	@Reference(unbind = "-")
-	protected void setPortletPreferencesFactory(
-		PortletPreferencesFactory portletPreferencesFactory) {
-
-		_portletPreferencesFactory = portletPreferencesFactory;
-	}
-
-	@Reference(unbind = "-")
-	protected void setPortletPreferencesLocalService(
-		PortletPreferencesLocalService portletPreferencesLocalService) {
-
-		_portletPreferencesLocalService = portletPreferencesLocalService;
 	}
 
 	@Reference(unbind = "-")
@@ -354,15 +328,24 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 			_configurationBeanDeclarationServiceTrackerFactory;
 	private final Map<Class<?>, Settings> _configurationBeanSettings =
 		new ConcurrentHashMap<>();
+
+	@Reference
 	private GroupLocalService _groupLocalService;
+
+	@Reference
 	private LayoutLocalService _layoutLocalService;
+
 	private Settings _portalPropertiesSettings;
 
 	@Reference
 	private PortletLocalService _portletLocalService;
 
+	@Reference
 	private PortletPreferencesFactory _portletPreferencesFactory;
+
+	@Reference
 	private PortletPreferencesLocalService _portletPreferencesLocalService;
+
 	private final Map<String, ScopedConfigurationManagedServiceFactory>
 		_scopedConfigurationManagedServiceFactories = new ConcurrentHashMap<>();
 
