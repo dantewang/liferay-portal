@@ -943,8 +943,7 @@ public class RenderLayoutStructureDisplayContext {
 		}
 
 		JSONObject frontendTokenDefinitionJSONObject =
-			JSONFactoryUtil.createJSONObject(
-				frontendTokenDefinition.getJSON(_themeDisplay.getLocale()));
+			frontendTokenDefinition.getJSONObject(_themeDisplay.getLocale());
 
 		JSONArray frontendTokenCategoriesJSONArray =
 			frontendTokenDefinitionJSONObject.getJSONArray(
