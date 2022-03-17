@@ -38,7 +38,6 @@ import com.liferay.portal.kernel.settings.Settings;
 import com.liferay.portal.kernel.settings.SettingsLocatorHelper;
 import com.liferay.portal.kernel.settings.definition.ConfigurationBeanDeclaration;
 import com.liferay.portal.kernel.settings.definition.ConfigurationPidMapping;
-import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.Props;
@@ -268,10 +267,6 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 		_configurationBeanClasses.put(
 			configurationPidMapping.getConfigurationPid(),
 			configurationPidMapping.getConfigurationBeanClass());
-	}
-
-	@Reference(unbind = "-")
-	protected void setPortal(Portal portal) {
 	}
 
 	@Reference(unbind = "-")
