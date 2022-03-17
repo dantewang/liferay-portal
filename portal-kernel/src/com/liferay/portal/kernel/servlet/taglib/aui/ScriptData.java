@@ -237,7 +237,6 @@ public class ScriptData implements Mergeable<ScriptData>, Serializable {
 				}
 
 				es6Modules.addAll(modules);
-				es6Variables.addAll(variables);
 
 				es6CallbacksSB.append(tagInvocationData.getContent(variables));
 				es6CallbacksSB.append(StringPool.NEW_LINE);
