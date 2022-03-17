@@ -162,7 +162,6 @@ public class JSONLocalizer {
 	private final JSONFactory _jsonFactory;
 	private final Map<Locale, JSONObject> _jsonObjects =
 		new ConcurrentHashMap<>();
-	private final Map<Locale, String> _jsons = new ConcurrentHashMap<>();
 	private final ResourceBundleLoader _resourceBundleLoader;
 	private final String _themeId;
 
