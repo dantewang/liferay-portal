@@ -21,6 +21,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutConstants;
+import com.liferay.portal.kernel.model.Portlet;
+import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.resource.manager.ClassLoaderResourceManager;
@@ -36,7 +38,6 @@ import com.liferay.portal.kernel.settings.Settings;
 import com.liferay.portal.kernel.settings.SettingsLocatorHelper;
 import com.liferay.portal.kernel.settings.definition.ConfigurationBeanDeclaration;
 import com.liferay.portal.kernel.settings.definition.ConfigurationPidMapping;
-import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.Props;
@@ -80,7 +81,7 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 	public PortletPreferences getCompanyPortletPreferences(
 		long companyId, String settingsId) {
 
-		return _portletPreferencesLocalService.getStrictPreferences(
+		return _getPortletPreferences(
 			companyId, companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY, 0,
 			settingsId);
 	}
@@ -128,7 +129,7 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 		try {
 			Group group = _groupLocalService.getGroup(groupId);
 
-			return _portletPreferencesLocalService.getStrictPreferences(
+			return _getPortletPreferences(
 				group.getCompanyId(), groupId,
 				PortletKeys.PREFS_OWNER_TYPE_GROUP, 0, settingsId);
 		}
@@ -250,41 +251,6 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 	}
 
 	@Reference(unbind = "-")
-	protected void setGroupLocalService(GroupLocalService groupLocalService) {
-		_groupLocalService = groupLocalService;
-	}
-
-	@Reference(unbind = "-")
-	protected void setLayoutLocalService(
-		LayoutLocalService layoutLocalService) {
-
-		_layoutLocalService = layoutLocalService;
-	}
-
-	@Reference(unbind = "-")
-	protected void setPortal(Portal portal) {
-	}
-
-	@Reference(unbind = "-")
-	protected void setPortletLocalService(
-		PortletLocalService portletLocalService) {
-	}
-
-	@Reference(unbind = "-")
-	protected void setPortletPreferencesFactory(
-		PortletPreferencesFactory portletPreferencesFactory) {
-
-		_portletPreferencesFactory = portletPreferencesFactory;
-	}
-
-	@Reference(unbind = "-")
-	protected void setPortletPreferencesLocalService(
-		PortletPreferencesLocalService portletPreferencesLocalService) {
-
-		_portletPreferencesLocalService = portletPreferencesLocalService;
-	}
-
-	@Reference(unbind = "-")
 	protected void setProps(Props props) {
 		_portalPropertiesSettings = new PropertiesSettings(
 			new LocationVariableResolver(
@@ -299,6 +265,23 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 
 		_configurationBeanClasses.remove(
 			configurationPidMapping.getConfigurationPid());
+	}
+
+	private PortletPreferences _getPortletPreferences(
+		long companyId, long ownerId, int ownerType, long plid,
+		String settingsId) {
+
+		Portlet portlet = _portletLocalService.fetchPortletById(
+			companyId, settingsId);
+
+		if (portlet == null) {
+			return _portletPreferencesFactory.strictFromXML(
+				companyId, ownerId, ownerType, plid, settingsId,
+				PortletConstants.DEFAULT_PREFERENCES);
+		}
+
+		return _portletPreferencesLocalService.getStrictPreferences(
+			companyId, ownerId, ownerType, plid, settingsId);
 	}
 
 	private Settings _getScopedConfigurationBeanSettings(
@@ -338,11 +321,24 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 			_configurationBeanDeclarationServiceTrackerFactory;
 	private final Map<Class<?>, Settings> _configurationBeanSettings =
 		new ConcurrentHashMap<>();
+
+	@Reference
 	private GroupLocalService _groupLocalService;
+
+	@Reference
 	private LayoutLocalService _layoutLocalService;
+
 	private Settings _portalPropertiesSettings;
+
+	@Reference
+	private PortletLocalService _portletLocalService;
+
+	@Reference
 	private PortletPreferencesFactory _portletPreferencesFactory;
+
+	@Reference
 	private PortletPreferencesLocalService _portletPreferencesLocalService;
+
 	private final Map<String, ScopedConfigurationManagedServiceFactory>
 		_scopedConfigurationManagedServiceFactories = new ConcurrentHashMap<>();
 

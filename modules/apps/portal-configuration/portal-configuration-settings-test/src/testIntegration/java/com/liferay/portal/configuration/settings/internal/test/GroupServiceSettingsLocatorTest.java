@@ -39,6 +39,8 @@ public class GroupServiceSettingsLocatorTest
 		settingsLocator = new GroupServiceSettingsLocator(
 			groupId, portletId,
 			SettingsLocatorTestConstants.TEST_CONFIGURATION_PID);
+
+		registerTestPortlet(portletId, Boolean.FALSE);
 	}
 
 	@Test

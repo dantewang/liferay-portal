@@ -34,6 +34,8 @@ public class CompanyServiceSettingsLocatorTest
 		settingsLocator = new CompanyServiceSettingsLocator(
 			companyId, portletId,
 			SettingsLocatorTestConstants.TEST_CONFIGURATION_PID);
+
+		registerTestPortlet(portletId, Boolean.FALSE);
 	}
 
 	@Test
