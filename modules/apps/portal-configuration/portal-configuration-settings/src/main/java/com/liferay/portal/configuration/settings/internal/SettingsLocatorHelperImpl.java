@@ -81,16 +81,7 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 	public PortletPreferences getCompanyPortletPreferences(
 		long companyId, String settingsId) {
 
-		Portlet portlet = _portletLocalService.fetchPortletById(
-			companyId, settingsId);
-
-		if (portlet == null) {
-			return _portletPreferencesFactory.strictFromXML(
-				companyId, companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY, 0,
-				settingsId, PortletConstants.DEFAULT_PREFERENCES);
-		}
-
-		return _portletPreferencesLocalService.getStrictPreferences(
+		return _getPortletPreferences(
 			companyId, companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY, 0,
 			settingsId);
 	}
@@ -138,17 +129,7 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 		try {
 			Group group = _groupLocalService.getGroup(groupId);
 
-			Portlet portlet = _portletLocalService.fetchPortletById(
-				group.getCompanyId(), settingsId);
-
-			if (portlet == null) {
-				return _portletPreferencesFactory.strictFromXML(
-					group.getCompanyId(), groupId,
-					PortletKeys.PREFS_OWNER_TYPE_GROUP, 0, settingsId,
-					PortletConstants.DEFAULT_PREFERENCES);
-			}
-
-			return _portletPreferencesLocalService.getStrictPreferences(
+			return _getPortletPreferences(
 				group.getCompanyId(), groupId,
 				PortletKeys.PREFS_OWNER_TYPE_GROUP, 0, settingsId);
 		}
@@ -284,6 +265,23 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 
 		_configurationBeanClasses.remove(
 			configurationPidMapping.getConfigurationPid());
+	}
+
+	private PortletPreferences _getPortletPreferences(
+		long companyId, long ownerId, int ownerType, long plid,
+		String settingsId) {
+
+		Portlet portlet = _portletLocalService.fetchPortletById(
+			companyId, settingsId);
+
+		if (portlet == null) {
+			return _portletPreferencesFactory.strictFromXML(
+				companyId, ownerId, ownerType, plid, settingsId,
+				PortletConstants.DEFAULT_PREFERENCES);
+		}
+
+		return _portletPreferencesLocalService.getStrictPreferences(
+			companyId, ownerId, ownerType, plid, settingsId);
 	}
 
 	private Settings _getScopedConfigurationBeanSettings(
