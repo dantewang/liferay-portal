@@ -43,6 +43,8 @@ public class PortletInstanceSettingsLocatorTest
 		settingsLocator = new PortletInstanceSettingsLocator(
 			_layout, _portletInstanceKey,
 			SettingsLocatorTestConstants.TEST_CONFIGURATION_PID);
+
+		registerTestPortlet(portletId, Boolean.TRUE);
 	}
 
 	@Test

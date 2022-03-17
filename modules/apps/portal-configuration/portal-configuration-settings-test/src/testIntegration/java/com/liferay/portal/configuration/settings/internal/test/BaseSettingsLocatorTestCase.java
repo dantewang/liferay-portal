@@ -42,6 +42,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.portlet.GenericPortlet;
+import javax.portlet.Portlet;
 
 import org.junit.After;
 import org.junit.BeforeClass;
@@ -49,7 +53,11 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
@@ -68,6 +76,11 @@ public abstract class BaseSettingsLocatorTestCase {
 	public static void setUpClass() throws Exception {
 		companyId = TestPropsValues.getCompanyId();
 		groupId = TestPropsValues.getGroupId();
+
+		Bundle bundle = FrameworkUtil.getBundle(
+			BaseSettingsLocatorTestCase.class);
+
+		_bundleContext = bundle.getBundleContext();
 	}
 
 	@After
@@ -86,6 +99,14 @@ public abstract class BaseSettingsLocatorTestCase {
 		}
 
 		_factoryConfigurationPids.clear();
+
+		for (ServiceRegistration<?> serviceRegistration :
+				_serviceRegistrations) {
+
+			serviceRegistration.unregister();
+		}
+
+		_serviceRegistrations.clear();
 	}
 
 	protected void deleteFactoryConfiguration(
@@ -110,6 +131,17 @@ public abstract class BaseSettingsLocatorTestCase {
 		Settings settings = settingsLocator.getSettings();
 
 		return settings.getValue(SettingsLocatorTestConstants.TEST_KEY, null);
+	}
+
+	protected void registerTestPortlet(String portletId, Boolean instanceable) {
+		_serviceRegistrations.add(
+			_bundleContext.registerService(
+				Portlet.class, new TestPortlet(),
+				HashMapDictionaryBuilder.put(
+					"com.liferay.portlet.instanceable", instanceable.toString()
+				).put(
+					"javax.portlet.name", portletId
+				).build()));
 	}
 
 	protected String saveConfiguration() throws Exception {
@@ -251,6 +283,7 @@ public abstract class BaseSettingsLocatorTestCase {
 			StringPool.CLOSE_PARENTHESIS);
 	}
 
+	private static BundleContext _bundleContext;
 	private static final Set<String> _configurationPids = new HashSet<>();
 	private static final Set<String> _factoryConfigurationPids =
 		new HashSet<>();
@@ -265,5 +298,11 @@ public abstract class BaseSettingsLocatorTestCase {
 	@DeleteAfterTestRun
 	private final List<PortletPreferences> _portletPreferencesList =
 		new ArrayList<>();
+
+	private final List<ServiceRegistration<?>> _serviceRegistrations =
+		new CopyOnWriteArrayList<>();
+
+	private class TestPortlet extends GenericPortlet {
+	}
 
 }
