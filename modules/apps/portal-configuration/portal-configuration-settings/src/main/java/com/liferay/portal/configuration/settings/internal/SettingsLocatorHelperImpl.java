@@ -21,6 +21,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutConstants;
+import com.liferay.portal.kernel.model.Portlet;
+import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.resource.manager.ClassLoaderResourceManager;
@@ -80,6 +82,15 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 	public PortletPreferences getCompanyPortletPreferences(
 		long companyId, String settingsId) {
 
+		Portlet portlet = _portletLocalService.fetchPortletById(
+			companyId, settingsId);
+
+		if (portlet == null) {
+			return _portletPreferencesFactory.strictFromXML(
+				companyId, companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY, 0,
+				settingsId, PortletConstants.DEFAULT_PREFERENCES);
+		}
+
 		return _portletPreferencesLocalService.getStrictPreferences(
 			companyId, companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY, 0,
 			settingsId);
@@ -127,6 +138,16 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 
 		try {
 			Group group = _groupLocalService.getGroup(groupId);
+
+			Portlet portlet = _portletLocalService.fetchPortletById(
+				group.getCompanyId(), settingsId);
+
+			if (portlet == null) {
+				return _portletPreferencesFactory.strictFromXML(
+					group.getCompanyId(), groupId,
+					PortletKeys.PREFS_OWNER_TYPE_GROUP, 0, settingsId,
+					PortletConstants.DEFAULT_PREFERENCES);
+			}
 
 			return _portletPreferencesLocalService.getStrictPreferences(
 				group.getCompanyId(), groupId,
@@ -266,11 +287,6 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 	}
 
 	@Reference(unbind = "-")
-	protected void setPortletLocalService(
-		PortletLocalService portletLocalService) {
-	}
-
-	@Reference(unbind = "-")
 	protected void setPortletPreferencesFactory(
 		PortletPreferencesFactory portletPreferencesFactory) {
 
@@ -341,6 +357,10 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 	private GroupLocalService _groupLocalService;
 	private LayoutLocalService _layoutLocalService;
 	private Settings _portalPropertiesSettings;
+
+	@Reference
+	private PortletLocalService _portletLocalService;
+
 	private PortletPreferencesFactory _portletPreferencesFactory;
 	private PortletPreferencesLocalService _portletPreferencesLocalService;
 	private final Map<String, ScopedConfigurationManagedServiceFactory>
