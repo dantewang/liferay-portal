@@ -18,6 +18,7 @@ import com.liferay.petra.executor.PortalExecutorManager;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
@@ -35,13 +36,11 @@ import org.mockito.MockitoAnnotations;
 import org.osgi.framework.BundleContext;
 
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Cleydyr de Albuquerque
  */
-@PrepareForTest(PortalUtil.class)
 @RunWith(PowerMockRunner.class)
 public class AggregateFilterTest extends PowerMockito {
 
@@ -126,9 +125,11 @@ public class AggregateFilterTest extends PowerMockito {
 	}
 
 	private void _setUpPortalUtil() {
-		mockStatic(PortalUtil.class);
+		PortalUtil portalUtil = new PortalUtil();
 
-		PowerMockito.when(
+		portalUtil.setPortal(Mockito.mock(Portal.class));
+
+		Mockito.when(
 			PortalUtil.getPathModule()
 		).thenReturn(
 			StringPool.BLANK
