@@ -60,6 +60,23 @@ public class SearchBarPortletDisplayContextBuilder {
 		SearchBarPortletDisplayContext searchBarPortletDisplayContext =
 			new SearchBarPortletDisplayContext();
 
+		if (!Validator.isBlank(_destination) &&
+			(_getDestinationURL(_destination) == null)) {
+
+			searchBarPortletDisplayContext.setDestinationUnreachable(true);
+			searchBarPortletDisplayContext.setRenderNothing(true);
+
+			return searchBarPortletDisplayContext;
+		}
+
+		if (Validator.isBlank(_destination)) {
+			searchBarPortletDisplayContext.setSearchURL(_getURLCurrentPath());
+		}
+		else {
+			searchBarPortletDisplayContext.setSearchURL(
+				_getDestinationURL(_destination));
+		}
+
 		HttpServletRequest httpServletRequest = getHttpServletRequest(
 			_renderRequest);
 
@@ -102,21 +119,6 @@ public class SearchBarPortletDisplayContextBuilder {
 			searchBarPortletInstanceConfiguration);
 
 		_setSelectedSearchScope(searchBarPortletDisplayContext);
-
-		if (Validator.isBlank(_destination)) {
-			searchBarPortletDisplayContext.setSearchURL(_getURLCurrentPath());
-		}
-		else {
-			String destinationURL = _getDestinationURL(_destination);
-
-			if (destinationURL == null) {
-				searchBarPortletDisplayContext.setDestinationUnreachable(true);
-				searchBarPortletDisplayContext.setRenderNothing(true);
-			}
-			else {
-				searchBarPortletDisplayContext.setSearchURL(destinationURL);
-			}
-		}
 
 		if (_invisible) {
 			searchBarPortletDisplayContext.setRenderNothing(true);
