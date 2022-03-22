@@ -60,22 +60,16 @@ public class SearchBarPortletDisplayContextBuilder {
 		SearchBarPortletDisplayContext searchBarPortletDisplayContext =
 			new SearchBarPortletDisplayContext();
 
-		if (!Validator.isBlank(_destination) &&
-			(_getDestinationURL(_destination) == null)) {
-
+		if (isDestinationUnreachable()) {
 			searchBarPortletDisplayContext.setDestinationUnreachable(true);
 			searchBarPortletDisplayContext.setRenderNothing(true);
 
 			return searchBarPortletDisplayContext;
 		}
 
-		if (Validator.isBlank(_destination)) {
-			searchBarPortletDisplayContext.setSearchURL(_getURLCurrentPath());
-		}
-		else {
-			searchBarPortletDisplayContext.setSearchURL(
+		searchBarPortletDisplayContext.setSearchURL(
+			Validator.isBlank(_destination) ? _getURLCurrentPath() :
 				_getDestinationURL(_destination));
-		}
 
 		HttpServletRequest httpServletRequest = getHttpServletRequest(
 			_renderRequest);
@@ -125,6 +119,16 @@ public class SearchBarPortletDisplayContextBuilder {
 		}
 
 		return searchBarPortletDisplayContext;
+	}
+
+	public boolean isDestinationUnreachable() {
+		if (!Validator.isBlank(_destination) &&
+			(_getDestinationURL(_destination) == null)) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	public SearchBarPortletDisplayContextBuilder setDestination(
