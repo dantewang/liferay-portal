@@ -85,13 +85,9 @@ public class SearchBarPortlet extends MVCPortlet {
 			new SearchBarPortletPreferencesImpl(
 				Optional.ofNullable(renderRequest.getPreferences()));
 
-		PortletSharedSearchResponse portletSharedSearchResponse =
-			portletSharedSearchRequest.search(renderRequest);
-
 		SearchBarPortletDisplayContext searchBarPortletDisplayContext =
 			_buildDisplayContext(
-				portletSharedSearchResponse, renderRequest,
-				searchBarPortletPreferences);
+				renderRequest, searchBarPortletPreferences);
 
 		renderRequest.setAttribute(
 			WebKeys.PORTLET_DISPLAY_CONTEXT, searchBarPortletDisplayContext);
@@ -194,7 +190,6 @@ public class SearchBarPortlet extends MVCPortlet {
 	protected SearchBarPrecedenceHelper searchBarPrecedenceHelper;
 
 	private SearchBarPortletDisplayContext _buildDisplayContext(
-			PortletSharedSearchResponse portletSharedSearchResponse,
 			RenderRequest renderRequest,
 			SearchBarPortletPreferences searchBarPortletPreferences)
 		throws PortletException {
@@ -203,6 +198,9 @@ public class SearchBarPortlet extends MVCPortlet {
 			searchBarPortletDisplayContextBuilder =
 				new SearchBarPortletDisplayContextBuilder(
 					http, layoutLocalService, portal, renderRequest);
+
+		PortletSharedSearchResponse portletSharedSearchResponse =
+			portletSharedSearchRequest.search(renderRequest);
 
 		ThemeDisplay themeDisplay = portletSharedSearchResponse.getThemeDisplay(
 			renderRequest);
