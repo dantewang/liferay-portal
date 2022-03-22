@@ -81,13 +81,8 @@ public class SearchBarPortlet extends MVCPortlet {
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
 
-		SearchBarPortletPreferences searchBarPortletPreferences =
-			new SearchBarPortletPreferencesImpl(
-				Optional.ofNullable(renderRequest.getPreferences()));
-
 		SearchBarPortletDisplayContext searchBarPortletDisplayContext =
-			_buildDisplayContext(
-				renderRequest, searchBarPortletPreferences);
+			_buildDisplayContext(renderRequest);
 
 		renderRequest.setAttribute(
 			WebKeys.PORTLET_DISPLAY_CONTEXT, searchBarPortletDisplayContext);
@@ -190,14 +185,24 @@ public class SearchBarPortlet extends MVCPortlet {
 	protected SearchBarPrecedenceHelper searchBarPrecedenceHelper;
 
 	private SearchBarPortletDisplayContext _buildDisplayContext(
-			RenderRequest renderRequest,
-			SearchBarPortletPreferences searchBarPortletPreferences)
+			RenderRequest renderRequest)
 		throws PortletException {
+
+		SearchBarPortletPreferences searchBarPortletPreferences =
+			new SearchBarPortletPreferencesImpl(
+				Optional.ofNullable(renderRequest.getPreferences()));
 
 		SearchBarPortletDisplayContextBuilder
 			searchBarPortletDisplayContextBuilder =
 				new SearchBarPortletDisplayContextBuilder(
 					http, layoutLocalService, portal, renderRequest);
+
+		searchBarPortletDisplayContextBuilder.setDestination(
+			searchBarPortletPreferences.getDestinationString());
+
+		if (searchBarPortletDisplayContextBuilder.hasSearchURL()) {
+			return searchBarPortletDisplayContextBuilder.build();
+		}
 
 		PortletSharedSearchResponse portletSharedSearchResponse =
 			portletSharedSearchRequest.search(renderRequest);

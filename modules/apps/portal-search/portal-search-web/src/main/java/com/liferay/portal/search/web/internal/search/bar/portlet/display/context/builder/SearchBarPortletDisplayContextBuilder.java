@@ -47,6 +47,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class SearchBarPortletDisplayContextBuilder {
 
+	private String _searchURL;
+
 	public SearchBarPortletDisplayContextBuilder(
 		Http http, LayoutLocalService layoutLocalService, Portal portal,
 		RenderRequest renderRequest) {
@@ -60,6 +62,16 @@ public class SearchBarPortletDisplayContextBuilder {
 	public SearchBarPortletDisplayContext build() throws PortletException {
 		SearchBarPortletDisplayContext searchBarPortletDisplayContext =
 			new SearchBarPortletDisplayContext();
+
+		if (_searchURL == null) {
+			searchBarPortletDisplayContext.setDestinationUnreachable(true);
+			searchBarPortletDisplayContext.setRenderNothing(true);
+
+			return searchBarPortletDisplayContext;
+		}
+		else {
+			searchBarPortletDisplayContext.setSearchURL(_searchURL);
+		}
 
 		HttpServletRequest httpServletRequest = getHttpServletRequest(
 			_renderRequest);
@@ -108,21 +120,6 @@ public class SearchBarPortletDisplayContextBuilder {
 
 		_setSelectedSearchScope(searchBarPortletDisplayContext);
 
-		if (Validator.isBlank(_destination)) {
-			searchBarPortletDisplayContext.setSearchURL(_getURLCurrentPath());
-		}
-		else {
-			String destinationURL = _getDestinationURL(_destination);
-
-			if (destinationURL == null) {
-				searchBarPortletDisplayContext.setDestinationUnreachable(true);
-				searchBarPortletDisplayContext.setRenderNothing(true);
-			}
-			else {
-				searchBarPortletDisplayContext.setSearchURL(destinationURL);
-			}
-		}
-
 		if (_invisible) {
 			searchBarPortletDisplayContext.setRenderNothing(true);
 		}
@@ -133,7 +130,8 @@ public class SearchBarPortletDisplayContextBuilder {
 	public SearchBarPortletDisplayContextBuilder setDestination(
 		String destination) {
 
-		_destination = destination;
+		_searchURL = Validator.isBlank(destination) ?
+			_getURLCurrentPath() : _getDestinationURL(destination);
 
 		return this;
 	}
@@ -362,7 +360,6 @@ public class SearchBarPortletDisplayContextBuilder {
 	private static final Log _log = LogFactoryUtil.getLog(
 		SearchBarPortletDisplayContextBuilder.class);
 
-	private String _destination;
 	private boolean _emptySearchEnabled;
 	private final Http _http;
 	private boolean _invisible;
@@ -376,5 +373,9 @@ public class SearchBarPortletDisplayContextBuilder {
 	private String _scopeParameterValue;
 	private SearchScopePreference _searchScopePreference;
 	private ThemeDisplay _themeDisplay;
+
+	public boolean hasSearchURL() {
+		return _searchURL != null;
+	}
 
 }
