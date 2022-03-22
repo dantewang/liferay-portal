@@ -192,16 +192,27 @@ public class SearchBarPortlet extends MVCPortlet {
 			new SearchBarPortletPreferencesImpl(
 				Optional.ofNullable(renderRequest.getPreferences()));
 
-		PortletSharedSearchResponse portletSharedSearchResponse =
-			portletSharedSearchRequest.search(renderRequest);
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
 		SearchBarPortletDisplayContextBuilder
 			searchBarPortletDisplayContextBuilder =
 				new SearchBarPortletDisplayContextBuilder(
 					http, layoutLocalService, portal, renderRequest);
+
+		searchBarPortletDisplayContextBuilder =
+			searchBarPortletDisplayContextBuilder.setDestination(
+				searchBarPortletPreferences.getDestinationString());
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		searchBarPortletDisplayContextBuilder =
+			searchBarPortletDisplayContextBuilder.setThemeDisplay(themeDisplay);
+
+		if (searchBarPortletDisplayContextBuilder.isDestinationUnreachable()) {
+			return searchBarPortletDisplayContextBuilder.build();
+		}
+
+		PortletSharedSearchResponse portletSharedSearchResponse =
+			portletSharedSearchRequest.search(renderRequest);
 
 		String keywordsParameterName = getKeywordsParameterName(
 			portletSharedSearchResponse.getSearchSettings(),
@@ -216,9 +227,7 @@ public class SearchBarPortlet extends MVCPortlet {
 
 		SearchRequest searchRequest = searchResponse.getRequest();
 
-		return searchBarPortletDisplayContextBuilder.setDestination(
-			searchBarPortletPreferences.getDestinationString()
-		).setEmptySearchEnabled(
+		return searchBarPortletDisplayContextBuilder.setEmptySearchEnabled(
 			isEmptySearchEnabled(portletSharedSearchResponse)
 		).setInvisible(
 			searchBarPortletPreferences.isInvisible()
@@ -235,8 +244,6 @@ public class SearchBarPortlet extends MVCPortlet {
 				scopeParameterName, renderRequest)
 		).setSearchScopePreference(
 			searchBarPortletPreferences.getSearchScopePreference()
-		).setThemeDisplay(
-			themeDisplay
 		).build();
 	}
 
