@@ -29,7 +29,6 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.search.web.internal.display.context.SearchScope;
 import com.liferay.portal.search.web.internal.display.context.SearchScopePreference;
 import com.liferay.portal.search.web.internal.search.bar.portlet.configuration.SearchBarPortletInstanceConfiguration;
@@ -64,14 +63,10 @@ public class SearchBarPortletDisplayContextBuilder {
 		HttpServletRequest httpServletRequest = getHttpServletRequest(
 			_renderRequest);
 
-		ThemeDisplay themeDisplay =
-			(ThemeDisplay)httpServletRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
-
 		SearchBarPortletInstanceConfiguration
 			searchBarPortletInstanceConfiguration =
 				getSearchBarPortletInstanceConfiguration(
-					themeDisplay.getPortletDisplay());
+					_themeDisplay.getPortletDisplay());
 
 		searchBarPortletDisplayContext.setAvailableEverythingSearchScope(
 			isAvailableEverythingSearchScope());
@@ -79,7 +74,7 @@ public class SearchBarPortletDisplayContextBuilder {
 			SearchScope.THIS_SITE.getParameterString());
 		searchBarPortletDisplayContext.setDisplayStyleGroupId(
 			getDisplayStyleGroupId(
-				searchBarPortletInstanceConfiguration, themeDisplay));
+				searchBarPortletInstanceConfiguration, _themeDisplay));
 		searchBarPortletDisplayContext.setEmptySearchEnabled(
 			_emptySearchEnabled);
 		searchBarPortletDisplayContext.setEverythingSearchScopeParameterString(
