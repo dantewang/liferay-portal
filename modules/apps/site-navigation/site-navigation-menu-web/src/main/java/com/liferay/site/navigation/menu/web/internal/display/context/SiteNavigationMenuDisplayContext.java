@@ -214,6 +214,10 @@ public class SiteNavigationMenuDisplayContext {
 	}
 
 	public long getSelectSiteNavigationMenuId() {
+		if (_selectSiteNavigationMenuId != null) {
+			return _selectSiteNavigationMenuId;
+		}
+
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay)_httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
@@ -229,10 +233,15 @@ public class SiteNavigationMenuDisplayContext {
 					_getDefaultSelectSiteNavigationMenuType());
 
 			if (siteNavigationMenu != null) {
-				return siteNavigationMenu.getSiteNavigationMenuId();
+				_selectSiteNavigationMenuId =
+					siteNavigationMenu.getSiteNavigationMenuId();
+
+				return _selectSiteNavigationMenuId;
 			}
 
-			return 0;
+			_selectSiteNavigationMenuId = (long)0;
+
+			return _selectSiteNavigationMenuId;
 		}
 
 		if (siteNavigationMenuType > 0) {
@@ -241,23 +250,37 @@ public class SiteNavigationMenuDisplayContext {
 					themeDisplay.getScopeGroupId(), siteNavigationMenuType);
 
 			if (siteNavigationMenu != null) {
-				return siteNavigationMenu.getSiteNavigationMenuId();
+				_selectSiteNavigationMenuId =
+					siteNavigationMenu.getSiteNavigationMenuId();
+
+				return _selectSiteNavigationMenuId;
 			}
 
-			return 0;
+			_selectSiteNavigationMenuId = (long)0;
+
+			return _selectSiteNavigationMenuId;
 		}
 
-		return siteNavigationMenuId;
+		_selectSiteNavigationMenuId = siteNavigationMenuId;
+
+		return _selectSiteNavigationMenuId;
 	}
 
 	public int getSelectSiteNavigationMenuType() {
-		int selectSiteNavigationMenuType = getSiteNavigationMenuType();
-
-		if (selectSiteNavigationMenuType > 0) {
-			return selectSiteNavigationMenuType;
+		if (_selectSiteNavigationMenuType != null) {
+			return _selectSiteNavigationMenuType;
 		}
 
-		return _getDefaultSelectSiteNavigationMenuType();
+		_selectSiteNavigationMenuType = getSiteNavigationMenuType();
+
+		if (_selectSiteNavigationMenuType > 0) {
+			return _selectSiteNavigationMenuType;
+		}
+
+		_selectSiteNavigationMenuType =
+			_getDefaultSelectSiteNavigationMenuType();
+
+		return _selectSiteNavigationMenuType;
 	}
 
 	public String getSelectSiteNavigationMenuTypeLabel() {
@@ -506,6 +529,8 @@ public class SiteNavigationMenuDisplayContext {
 	private String _rootMenuItemId;
 	private Integer _rootMenuItemLevel;
 	private String _rootMenuItemType;
+	private Long _selectSiteNavigationMenuId;
+	private Integer _selectSiteNavigationMenuType;
 	private SiteNavigationMenu _siteNavigationMenu;
 	private Long _siteNavigationMenuId;
 	private String _siteNavigationMenuName;
