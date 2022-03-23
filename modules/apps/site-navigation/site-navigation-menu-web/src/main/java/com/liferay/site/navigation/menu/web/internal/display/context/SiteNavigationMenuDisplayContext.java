@@ -240,36 +240,16 @@ public class SiteNavigationMenuDisplayContext {
 		long siteNavigationMenuId = getSiteNavigationMenuId();
 
 		if ((siteNavigationMenuType == -1) && (siteNavigationMenuId <= 0)) {
-			SiteNavigationMenu siteNavigationMenu =
-				SiteNavigationMenuLocalServiceUtil.fetchSiteNavigationMenu(
-					themeDisplay.getScopeGroupId(),
-					_getDefaultSelectSiteNavigationMenuType());
-
-			if (siteNavigationMenu != null) {
-				_selectSiteNavigationMenuId =
-					siteNavigationMenu.getSiteNavigationMenuId();
-
-				return _selectSiteNavigationMenuId;
-			}
-
-			_selectSiteNavigationMenuId = (long)0;
+			_selectSiteNavigationMenuId = _getSelectSiteNavigationMenuId(
+				themeDisplay.getScopeGroupId(),
+				_getDefaultSelectSiteNavigationMenuType());
 
 			return _selectSiteNavigationMenuId;
 		}
 
 		if (siteNavigationMenuType > 0) {
-			SiteNavigationMenu siteNavigationMenu =
-				SiteNavigationMenuLocalServiceUtil.fetchSiteNavigationMenu(
-					themeDisplay.getScopeGroupId(), siteNavigationMenuType);
-
-			if (siteNavigationMenu != null) {
-				_selectSiteNavigationMenuId =
-					siteNavigationMenu.getSiteNavigationMenuId();
-
-				return _selectSiteNavigationMenuId;
-			}
-
-			_selectSiteNavigationMenuId = (long)0;
+			_selectSiteNavigationMenuId = _getSelectSiteNavigationMenuId(
+				themeDisplay.getScopeGroupId(), siteNavigationMenuType);
 
 			return _selectSiteNavigationMenuId;
 		}
@@ -570,6 +550,20 @@ public class SiteNavigationMenuDisplayContext {
 		}
 
 		return _defaultSelectSiteNavigationMenuType;
+	}
+
+	private long _getSelectSiteNavigationMenuId(
+		long groupId, int siteNavigationMenuType) {
+
+		SiteNavigationMenu siteNavigationMenu =
+			SiteNavigationMenuLocalServiceUtil.fetchSiteNavigationMenu(
+				groupId, siteNavigationMenuType);
+
+		if (siteNavigationMenu != null) {
+			return siteNavigationMenu.getSiteNavigationMenuId();
+		}
+
+		return 0;
 	}
 
 	private String _ddmTemplateKey;
