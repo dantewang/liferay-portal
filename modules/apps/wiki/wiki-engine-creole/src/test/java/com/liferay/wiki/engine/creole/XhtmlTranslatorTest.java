@@ -15,6 +15,7 @@
 package com.liferay.wiki.engine.creole;
 
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.portal.util.HtmlImpl;
 import com.liferay.wiki.engine.creole.internal.antlrwiki.translator.XhtmlTranslator;
 import com.liferay.wiki.engine.creole.util.test.CreoleTestUtil;
@@ -22,18 +23,21 @@ import com.liferay.wiki.model.WikiPage;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.mockito.Mockito;
-
-import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Roberto Díaz
  */
-@RunWith(PowerMockRunner.class)
 public class XhtmlTranslatorTest {
+
+	@ClassRule
+	@Rule
+	public static final LiferayUnitTestRule liferayUnitTestRule =
+		LiferayUnitTestRule.INSTANCE;
 
 	@BeforeClass
 	public static void setUpClass() {
