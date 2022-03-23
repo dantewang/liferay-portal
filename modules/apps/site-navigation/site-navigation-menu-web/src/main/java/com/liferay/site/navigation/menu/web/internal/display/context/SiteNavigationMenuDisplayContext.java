@@ -385,11 +385,15 @@ public class SiteNavigationMenuDisplayContext {
 				(ThemeDisplay)_httpServletRequest.getAttribute(
 					WebKeys.THEME_DISPLAY);
 
+			String siteNavigationMenuName = ParamUtil.getString(
+				_httpServletRequest, "siteNavigationMenuName",
+				_siteNavigationMenuPortletInstanceConfiguration.
+					siteNavigationMenuName());
+
 			SiteNavigationMenu siteNavigationMenu =
 				SiteNavigationMenuLocalServiceUtil.
 					fetchSiteNavigationMenuByName(
-						themeDisplay.getScopeGroupId(),
-						_getSiteNavigationMenuName());
+						themeDisplay.getScopeGroupId(), siteNavigationMenuName);
 
 			if (siteNavigationMenu != null) {
 				_siteNavigationMenuId =
@@ -430,10 +434,17 @@ public class SiteNavigationMenuDisplayContext {
 	}
 
 	public String getSiteNavigationMenuName() {
+		if (_siteNavigationMenuName != null) {
+			return _siteNavigationMenuName;
+		}
+
 		SiteNavigationMenu siteNavigationMenu = getSiteNavigationMenu();
 
 		if (siteNavigationMenu != null) {
-			return HtmlUtil.escape(siteNavigationMenu.getName());
+			_siteNavigationMenuName = HtmlUtil.escape(
+				siteNavigationMenu.getName());
+
+			return _siteNavigationMenuName;
 		}
 
 		ThemeDisplay themeDisplay =
@@ -443,29 +454,38 @@ public class SiteNavigationMenuDisplayContext {
 		Group group = themeDisplay.getScopeGroup();
 
 		if (!group.isPrivateLayoutsEnabled()) {
-			return LanguageUtil.get(_httpServletRequest, "pages-hierarchy");
+			_siteNavigationMenuName = LanguageUtil.get(
+				_httpServletRequest, "pages-hierarchy");
+
+			return _siteNavigationMenuName;
 		}
 
 		if (getSelectSiteNavigationMenuType() ==
 				SiteNavigationConstants.TYPE_PRIVATE_PAGES_HIERARCHY) {
 
-			return LanguageUtil.get(
+			_siteNavigationMenuName = LanguageUtil.get(
 				_httpServletRequest, "private-pages-hierarchy");
+
+			return _siteNavigationMenuName;
 		}
 
 		if (getSelectSiteNavigationMenuType() ==
 				SiteNavigationConstants.TYPE_PUBLIC_PAGES_HIERARCHY) {
 
-			return LanguageUtil.get(
+			_siteNavigationMenuName = LanguageUtil.get(
 				_httpServletRequest, "public-pages-hierarchy");
+
+			return _siteNavigationMenuName;
 		}
 
 		Layout layout = themeDisplay.getLayout();
 
-		return LanguageUtil.get(
+		_siteNavigationMenuName = LanguageUtil.get(
 			_httpServletRequest,
 			layout.isPrivateLayout() ? "private-pages-hierarchy" :
 				"public-pages-hierarchy");
+
+		return _siteNavigationMenuName;
 	}
 
 	public int getSiteNavigationMenuType() {
@@ -550,19 +570,6 @@ public class SiteNavigationMenuDisplayContext {
 		}
 
 		return _defaultSelectSiteNavigationMenuType;
-	}
-
-	private String _getSiteNavigationMenuName() {
-		if (_siteNavigationMenuName != null) {
-			return _siteNavigationMenuName;
-		}
-
-		_siteNavigationMenuName = ParamUtil.getString(
-			_httpServletRequest, "siteNavigationMenuName",
-			_siteNavigationMenuPortletInstanceConfiguration.
-				siteNavigationMenuName());
-
-		return _siteNavigationMenuName;
 	}
 
 	private String _ddmTemplateKey;
