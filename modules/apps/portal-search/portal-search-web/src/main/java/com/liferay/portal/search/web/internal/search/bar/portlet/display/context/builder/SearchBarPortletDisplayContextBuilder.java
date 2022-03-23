@@ -35,6 +35,7 @@ import com.liferay.portal.search.web.internal.search.bar.portlet.configuration.S
 import com.liferay.portal.search.web.internal.search.bar.portlet.display.context.SearchBarPortletDisplayContext;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -65,6 +66,10 @@ public class SearchBarPortletDisplayContextBuilder {
 			searchBarPortletDisplayContext.setRenderNothing(true);
 
 			return searchBarPortletDisplayContext;
+		}
+
+		if (_deferredSetter != null) {
+			_deferredSetter.accept(this);
 		}
 
 		searchBarPortletDisplayContext.setSearchURL(
@@ -129,6 +134,14 @@ public class SearchBarPortletDisplayContextBuilder {
 		}
 
 		return false;
+	}
+
+	public SearchBarPortletDisplayContextBuilder setDeferred(
+		Consumer<SearchBarPortletDisplayContextBuilder> consumer) {
+
+		_deferredSetter = consumer;
+
+		return this;
 	}
 
 	public SearchBarPortletDisplayContextBuilder setDestination(
@@ -363,6 +376,7 @@ public class SearchBarPortletDisplayContextBuilder {
 	private static final Log _log = LogFactoryUtil.getLog(
 		SearchBarPortletDisplayContextBuilder.class);
 
+	private Consumer<SearchBarPortletDisplayContextBuilder> _deferredSetter;
 	private String _destination;
 	private boolean _emptySearchEnabled;
 	private final Http _http;
