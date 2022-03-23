@@ -61,20 +61,28 @@ public class SearchBarPortletDisplayContextBuilder {
 		SearchBarPortletDisplayContext searchBarPortletDisplayContext =
 			new SearchBarPortletDisplayContext();
 
-		if (isDestinationUnreachable()) {
-			searchBarPortletDisplayContext.setDestinationUnreachable(true);
-			searchBarPortletDisplayContext.setRenderNothing(true);
+		String searchURL = null;
 
-			return searchBarPortletDisplayContext;
+		if (!Validator.isBlank(_destination)) {
+			searchURL = _getDestinationURL(_destination);
+
+			if (searchURL == null) {
+				searchBarPortletDisplayContext.setDestinationUnreachable(true);
+				searchBarPortletDisplayContext.setRenderNothing(true);
+
+				return searchBarPortletDisplayContext;
+			}
 		}
 
 		if (_deferredSetter != null) {
 			_deferredSetter.accept(this);
 		}
 
-		searchBarPortletDisplayContext.setSearchURL(
-			Validator.isBlank(_destination) ? _getURLCurrentPath() :
-				_getDestinationURL(_destination));
+		if (Validator.isBlank(_destination)) {
+			searchURL = _getURLCurrentPath();
+		}
+
+		searchBarPortletDisplayContext.setSearchURL(searchURL);
 
 		HttpServletRequest httpServletRequest = getHttpServletRequest(
 			_renderRequest);
@@ -124,16 +132,6 @@ public class SearchBarPortletDisplayContextBuilder {
 		}
 
 		return searchBarPortletDisplayContext;
-	}
-
-	public boolean isDestinationUnreachable() {
-		if (!Validator.isBlank(_destination) &&
-			(_getDestinationURL(_destination) == null)) {
-
-			return true;
-		}
-
-		return false;
 	}
 
 	public SearchBarPortletDisplayContextBuilder setDeferred(
