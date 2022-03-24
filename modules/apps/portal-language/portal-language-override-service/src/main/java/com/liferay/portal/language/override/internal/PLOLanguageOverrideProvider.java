@@ -25,8 +25,10 @@ import com.liferay.portal.language.override.internal.provider.PLOOriginalTransla
 import com.liferay.portal.language.override.model.PLOEntry;
 import com.liferay.portal.language.override.service.PLOEntryLocalService;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -80,7 +82,11 @@ public class PLOLanguageOverrideProvider implements LanguageOverrideProvider {
 	}
 
 	protected void clear(long companyId, String languageId) {
+		String key = _encodeKey(companyId, languageId);
+
 		_portalCache.remove(_encodeKey(companyId, languageId));
+
+		_keysWithNoEntries.remove(key);
 	}
 
 	@Deactivate
@@ -98,15 +104,27 @@ public class PLOLanguageOverrideProvider implements LanguageOverrideProvider {
 
 		String key = _encodeKey(companyId, languageId);
 
+		if (_keysWithNoEntries.contains(key)) {
+			return Collections.emptyMap();
+		}
+
 		HashMap<String, String> overrideMap = _portalCache.get(key);
 
 		if (overrideMap == null) {
+			List<PLOEntry> ploEntries = _ploEntryLocalService.getPLOEntries(
+				companyId, languageId);
+
+			if (ploEntries.isEmpty()) {
+				if (!_keysWithNoEntries.contains(key)) {
+					_keysWithNoEntries.add(key);
+				}
+
+				return Collections.emptyMap();
+			}
+
 			overrideMap = new HashMap<>();
 
-			for (PLOEntry ploEntry :
-					_ploEntryLocalService.getPLOEntries(
-						companyId, languageId)) {
-
+			for (PLOEntry ploEntry : ploEntries) {
 				overrideMap.put(ploEntry.getKey(), ploEntry.getValue());
 			}
 
@@ -123,5 +141,6 @@ public class PLOLanguageOverrideProvider implements LanguageOverrideProvider {
 	private PLOEntryLocalService _ploEntryLocalService;
 
 	private PortalCache<String, HashMap<String, String>> _portalCache;
+	private final List<String> _keysWithNoEntries = new ArrayList<>();
 
 }
