@@ -14,35 +14,18 @@
 
 package com.liferay.product.navigation.product.menu.web.internal.servlet.taglib;
 
-import com.liferay.application.list.PanelAppRegistry;
-import com.liferay.application.list.PanelCategory;
-import com.liferay.application.list.PanelCategoryRegistry;
-import com.liferay.application.list.constants.PanelCategoryKeys;
-import com.liferay.application.list.display.context.logic.PanelCategoryHelper;
 import com.liferay.petra.reflect.ReflectionUtil;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Group;
-import com.liferay.portal.kernel.model.Layout;
-import com.liferay.portal.kernel.module.configuration.ConfigurationException;
-import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.servlet.taglib.BaseDynamicInclude;
 import com.liferay.portal.kernel.servlet.taglib.DynamicInclude;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.Constants;
-import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.SessionClicks;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.product.navigation.applications.menu.configuration.ApplicationsMenuInstanceConfiguration;
 import com.liferay.product.navigation.product.menu.constants.ProductNavigationProductMenuPortletKeys;
+import com.liferay.product.navigation.product.menu.helper.ProductNavigationProductMenuHelper;
 import com.liferay.taglib.portletext.RuntimeTag;
 import com.liferay.taglib.servlet.PageContextFactoryUtil;
 
 import java.io.IOException;
 
-import java.util.List;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,26 +51,9 @@ public class ProductMenuBodyTopDynamicInclude extends BaseDynamicInclude {
 			HttpServletResponse httpServletResponse, String key)
 		throws IOException {
 
-		String layoutMode = ParamUtil.getString(
-			httpServletRequest, "p_l_mode", Constants.VIEW);
+		if (!_productNavigationProductMenuHelper.isShowProductMenu(
+				httpServletRequest)) {
 
-		if (layoutMode.equals(Constants.PREVIEW)) {
-			return;
-		}
-
-		ThemeDisplay themeDisplay =
-			(ThemeDisplay)httpServletRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
-
-		Group scopeGroup = themeDisplay.getScopeGroup();
-
-		if ((_isApplicationsMenuApp(themeDisplay) || scopeGroup.isDepot()) &&
-			_isEnableApplicationsMenu(themeDisplay.getCompanyId())) {
-
-			return;
-		}
-
-		if (!_hasPanelCategories(themeDisplay)) {
 			return;
 		}
 
@@ -152,93 +118,13 @@ public class ProductMenuBodyTopDynamicInclude extends BaseDynamicInclude {
 		_bundleContext = bundleContext;
 	}
 
-	private boolean _hasPanelCategories(ThemeDisplay themeDisplay) {
-		List<PanelCategory> childPanelCategories =
-			_panelCategoryRegistry.getChildPanelCategories(
-				PanelCategoryKeys.ROOT, themeDisplay.getPermissionChecker(),
-				themeDisplay.getScopeGroup());
-
-		if (!childPanelCategories.isEmpty()) {
-			return true;
-		}
-
-		if (!_isEnableApplicationsMenu(themeDisplay.getCompanyId())) {
-			childPanelCategories =
-				_panelCategoryRegistry.getChildPanelCategories(
-					PanelCategoryKeys.APPLICATIONS_MENU,
-					themeDisplay.getPermissionChecker(),
-					themeDisplay.getScopeGroup());
-
-			if (!childPanelCategories.isEmpty()) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private boolean _isApplicationsMenuApp(ThemeDisplay themeDisplay) {
-		if (Validator.isNull(themeDisplay.getPpid())) {
-			return false;
-		}
-
-		PanelCategoryHelper panelCategoryHelper = new PanelCategoryHelper(
-			_panelAppRegistry, _panelCategoryRegistry);
-
-		if (!panelCategoryHelper.isApplicationsMenuApp(
-				themeDisplay.getPpid())) {
-
-			return false;
-		}
-
-		Layout layout = themeDisplay.getLayout();
-
-		if ((layout != null) && !layout.isTypeControlPanel()) {
-			return false;
-		}
-
-		return true;
-	}
-
-	private boolean _isEnableApplicationsMenu(long companyId) {
-		try {
-			ApplicationsMenuInstanceConfiguration
-				applicationsMenuInstanceConfiguration =
-					_configurationProvider.getCompanyConfiguration(
-						ApplicationsMenuInstanceConfiguration.class, companyId);
-
-			if (applicationsMenuInstanceConfiguration.
-					enableApplicationsMenu()) {
-
-				return true;
-			}
-		}
-		catch (ConfigurationException configurationException) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(
-					"Unable to get applications menu instance configuration",
-					configurationException);
-			}
-		}
-
-		return false;
-	}
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		ProductMenuBodyTopDynamicInclude.class);
-
 	private volatile BundleContext _bundleContext;
 
 	@Reference
-	private ConfigurationProvider _configurationProvider;
-
-	@Reference
-	private PanelAppRegistry _panelAppRegistry;
-
-	@Reference
-	private PanelCategoryRegistry _panelCategoryRegistry;
-
-	@Reference
 	private Portal _portal;
+
+	@Reference
+	private ProductNavigationProductMenuHelper
+		_productNavigationProductMenuHelper;
 
 }
