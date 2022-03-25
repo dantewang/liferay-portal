@@ -25,13 +25,13 @@ import com.liferay.portal.language.override.internal.provider.PLOOriginalTransla
 import com.liferay.portal.language.override.model.PLOEntry;
 import com.liferay.portal.language.override.service.PLOEntryLocalService;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -93,6 +93,8 @@ public class PLOLanguageOverrideProvider implements LanguageOverrideProvider {
 	protected void deactivate() {
 		_multiVMPool.removePortalCache(
 			PLOLanguageOverrideProvider.class.getName());
+
+		_keysWithNoEntries.clear();
 	}
 
 	private String _encodeKey(long companyId, String languageId) {
@@ -115,9 +117,7 @@ public class PLOLanguageOverrideProvider implements LanguageOverrideProvider {
 				companyId, languageId);
 
 			if (ploEntries.isEmpty()) {
-				if (!_keysWithNoEntries.contains(key)) {
-					_keysWithNoEntries.add(key);
-				}
+				_keysWithNoEntries.add(key);
 
 				return Collections.emptyMap();
 			}
@@ -141,6 +141,6 @@ public class PLOLanguageOverrideProvider implements LanguageOverrideProvider {
 	private PLOEntryLocalService _ploEntryLocalService;
 
 	private PortalCache<String, HashMap<String, String>> _portalCache;
-	private final List<String> _keysWithNoEntries = new ArrayList<>();
+	private final Set<String> _keysWithNoEntries = new CopyOnWriteArraySet<>();
 
 }
