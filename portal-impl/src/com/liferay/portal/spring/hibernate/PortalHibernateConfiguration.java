@@ -131,6 +131,16 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 		_mvccEnabled = mvccEnabled;
 	}
 
+	protected ClassLoader getConfigurationClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
+	protected String[] getConfigurationResources() {
+		return PropsUtil.getArray(PropsKeys.HIBERNATE_CONFIGS);
+	}
+
 	protected static Map<String, Class<?>> getPreloadClassLoaderClasses() {
 		try {
 			Map<String, Class<?>> classes = new HashMap<>();
