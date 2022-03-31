@@ -18,7 +18,9 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
+import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.language.LanguageOverrideProvider;
 import com.liferay.portal.language.override.internal.provider.PLOOriginalTranslationThreadLocal;
@@ -41,10 +43,12 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	service = {
-		LanguageOverrideProvider.class, PLOLanguageOverrideProvider.class
+		IdentifiableOSGiService.class, LanguageOverrideProvider.class,
+		PLOLanguageOverrideProvider.class
 	}
 )
-public class PLOLanguageOverrideProvider implements LanguageOverrideProvider {
+public class PLOLanguageOverrideProvider
+	implements IdentifiableOSGiService, LanguageOverrideProvider {
 
 	@Override
 	public String get(String key, Locale locale) {
@@ -56,6 +60,11 @@ public class PLOLanguageOverrideProvider implements LanguageOverrideProvider {
 			CompanyThreadLocal.getCompanyId(), locale);
 
 		return overrideMap.get(key);
+	}
+
+	@Override
+	public String getOSGiServiceIdentifier() {
+		return PLOLanguageOverrideProvider.class.getName();
 	}
 
 	@Override
@@ -79,6 +88,7 @@ public class PLOLanguageOverrideProvider implements LanguageOverrideProvider {
 					PLOLanguageOverrideProvider.class.getName());
 	}
 
+	@Clusterable
 	protected void clear(long companyId, String languageId) {
 		_portalCache.remove(_encodeKey(companyId, languageId));
 	}
