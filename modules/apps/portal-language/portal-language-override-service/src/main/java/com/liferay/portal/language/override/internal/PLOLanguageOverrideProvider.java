@@ -16,8 +16,6 @@ package com.liferay.portal.language.override.internal;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.cache.MultiVMPool;
-import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
@@ -32,10 +30,10 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 /**
@@ -80,23 +78,13 @@ public class PLOLanguageOverrideProvider
 	}
 
 	@Activate
-	@SuppressWarnings("unchecked")
 	protected void activate() {
-		_portalCache =
-			(PortalCache<String, HashMap<String, String>>)
-				_multiVMPool.getPortalCache(
-					PLOLanguageOverrideProvider.class.getName());
+		_overrideMaps = new ConcurrentHashMap<>();
 	}
 
 	@Clusterable
 	protected void clear(long companyId, String languageId) {
-		_portalCache.remove(_encodeKey(companyId, languageId));
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		_multiVMPool.removePortalCache(
-			PLOLanguageOverrideProvider.class.getName());
+		_overrideMaps.remove(_encodeKey(companyId, languageId));
 	}
 
 	private String _encodeKey(long companyId, String languageId) {
@@ -108,7 +96,7 @@ public class PLOLanguageOverrideProvider
 
 		String key = _encodeKey(companyId, languageId);
 
-		HashMap<String, String> overrideMap = _portalCache.get(key);
+		HashMap<String, String> overrideMap = _overrideMaps.get(key);
 
 		if (overrideMap == null) {
 			overrideMap = new HashMap<>();
@@ -120,18 +108,15 @@ public class PLOLanguageOverrideProvider
 				overrideMap.put(ploEntry.getKey(), ploEntry.getValue());
 			}
 
-			_portalCache.put(key, overrideMap);
+			_overrideMaps.put(key, overrideMap);
 		}
 
 		return overrideMap;
 	}
 
-	@Reference
-	private MultiVMPool _multiVMPool;
+	private Map<String, HashMap<String, String>> _overrideMaps;
 
 	@Reference
 	private PLOEntryLocalService _ploEntryLocalService;
-
-	private PortalCache<String, HashMap<String, String>> _portalCache;
 
 }
