@@ -157,7 +157,26 @@ public class RenderFragmentLayoutTag extends IncludeTag {
 				return _layoutStructure;
 			}
 
-			String masterLayoutData = _getMasterLayoutData(layout);
+			String masterLayoutData = null;
+
+			LayoutPageTemplateEntry masterLayoutPageTemplateEntry =
+				LayoutPageTemplateEntryLocalServiceUtil.
+					fetchLayoutPageTemplateEntryByPlid(
+						layout.getMasterLayoutPlid());
+
+			if (masterLayoutPageTemplateEntry != null) {
+				LayoutPageTemplateStructure masterLayoutPageTemplateStructure =
+					LayoutPageTemplateStructureLocalServiceUtil.
+						fetchLayoutPageTemplateStructure(
+							masterLayoutPageTemplateEntry.getGroupId(),
+							masterLayoutPageTemplateEntry.getPlid());
+
+				if (masterLayoutPageTemplateStructure != null) {
+					masterLayoutData =
+						masterLayoutPageTemplateStructure.
+							getDefaultSegmentsExperienceData();
+				}
+			}
 
 			if (Validator.isNull(masterLayoutData)) {
 				_layoutStructure = LayoutStructure.of(data);
@@ -174,30 +193,6 @@ public class RenderFragmentLayoutTag extends IncludeTag {
 
 			return null;
 		}
-	}
-
-	private String _getMasterLayoutData(Layout layout) {
-		LayoutPageTemplateEntry masterLayoutPageTemplateEntry =
-			LayoutPageTemplateEntryLocalServiceUtil.
-				fetchLayoutPageTemplateEntryByPlid(
-					layout.getMasterLayoutPlid());
-
-		if (masterLayoutPageTemplateEntry == null) {
-			return null;
-		}
-
-		LayoutPageTemplateStructure masterLayoutPageTemplateStructure =
-			LayoutPageTemplateStructureLocalServiceUtil.
-				fetchLayoutPageTemplateStructure(
-					masterLayoutPageTemplateEntry.getGroupId(),
-					masterLayoutPageTemplateEntry.getPlid());
-
-		if (masterLayoutPageTemplateStructure == null) {
-			return null;
-		}
-
-		return masterLayoutPageTemplateStructure.
-			getDefaultSegmentsExperienceData();
 	}
 
 	private long _getPlid(HttpServletRequest httpServletRequest) {
