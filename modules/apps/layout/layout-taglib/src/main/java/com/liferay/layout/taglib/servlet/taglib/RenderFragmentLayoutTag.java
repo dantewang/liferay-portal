@@ -157,7 +157,7 @@ public class RenderFragmentLayoutTag extends IncludeTag {
 				return _layoutStructure;
 			}
 
-			String masterLayoutData = _getMasterLayoutData(httpServletRequest);
+			String masterLayoutData = _getMasterLayoutData(layout);
 
 			if (Validator.isNull(masterLayoutData)) {
 				_layoutStructure = LayoutStructure.of(data);
@@ -176,9 +176,7 @@ public class RenderFragmentLayoutTag extends IncludeTag {
 		}
 	}
 
-	private String _getMasterLayoutData(HttpServletRequest httpServletRequest) {
-		Layout layout = _getLayout(httpServletRequest);
-
+	private String _getMasterLayoutData(Layout layout) {
 		LayoutPageTemplateEntry masterLayoutPageTemplateEntry =
 			LayoutPageTemplateEntryLocalServiceUtil.
 				fetchLayoutPageTemplateEntryByPlid(
