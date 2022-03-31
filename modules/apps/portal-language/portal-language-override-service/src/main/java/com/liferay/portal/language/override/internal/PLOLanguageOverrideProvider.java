@@ -79,11 +79,21 @@ public class PLOLanguageOverrideProvider
 
 	@Activate
 	protected void activate() {
+		if (_ploEntryLocalService.getPLOEntriesCount() == 0) {
+			return;
+		}
+
 		_overrideMaps = new ConcurrentHashMap<>();
 	}
 
 	@Clusterable
 	protected void clear(long companyId, String languageId) {
+		if (_overrideMaps == null) {
+			synchronized (this) {
+				_overrideMaps = new ConcurrentHashMap<>();
+			}
+		}
+
 		_overrideMaps.remove(_encodeKey(companyId, languageId));
 	}
 
@@ -92,6 +102,10 @@ public class PLOLanguageOverrideProvider
 	}
 
 	private Map<String, String> _getOverrideMap(long companyId, Locale locale) {
+		if (_overrideMaps == null) {
+			return Collections.emptyMap();
+		}
+
 		String languageId = LanguageUtil.getLanguageId(locale);
 
 		String key = _encodeKey(companyId, languageId);
