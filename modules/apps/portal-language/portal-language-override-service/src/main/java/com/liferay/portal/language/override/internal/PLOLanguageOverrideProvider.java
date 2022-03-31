@@ -138,24 +138,20 @@ public class PLOLanguageOverrideProvider
 
 		String languageId = LanguageUtil.getLanguageId(locale);
 
-		String key = _encodeKey(companyId, languageId);
+		return _overrideMaps.computeIfAbsent(
+			_encodeKey(companyId, languageId),
+			key -> {
+				HashMap<String, String> hashMap = new HashMap<>();
 
-		HashMap<String, String> overrideMap = _overrideMaps.get(key);
+				for (PLOEntry ploEntry :
+						_ploEntryLocalService.getPLOEntries(
+							companyId, languageId)) {
 
-		if (overrideMap == null) {
-			overrideMap = new HashMap<>();
+					hashMap.put(ploEntry.getKey(), ploEntry.getValue());
+				}
 
-			for (PLOEntry ploEntry :
-					_ploEntryLocalService.getPLOEntries(
-						companyId, languageId)) {
-
-				overrideMap.put(ploEntry.getKey(), ploEntry.getValue());
-			}
-
-			_overrideMaps.put(key, overrideMap);
-		}
-
-		return overrideMap;
+				return hashMap;
+			});
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
