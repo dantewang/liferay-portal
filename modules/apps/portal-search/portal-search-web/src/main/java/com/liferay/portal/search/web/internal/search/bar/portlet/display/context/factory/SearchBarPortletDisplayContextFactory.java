@@ -97,9 +97,8 @@ public class SearchBarPortletDisplayContextFactory {
 				searchBarPortletDisplayContext.setDestinationUnreachable(true);
 				searchBarPortletDisplayContext.setRenderNothing(true);
 			}
-			else {
-				searchBarPortletDisplayContext.setSearchURL(destinationURL);
-			}
+
+			searchBarPortletDisplayContext.setSearchURL(destinationURL);
 		}
 
 		PortletSharedSearchResponse portletSharedSearchResponse =
