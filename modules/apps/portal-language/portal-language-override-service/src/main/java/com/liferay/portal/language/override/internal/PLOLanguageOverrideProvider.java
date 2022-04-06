@@ -18,9 +18,16 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
+import com.liferay.portal.kernel.cluster.ClusterExecutor;
+import com.liferay.portal.kernel.cluster.ClusterLink;
+import com.liferay.portal.kernel.cluster.ClusterRequest;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
+import com.liferay.portal.kernel.util.MethodHandler;
+import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.language.LanguageOverrideProvider;
 import com.liferay.portal.language.override.internal.provider.PLOOriginalTranslationThreadLocal;
 import com.liferay.portal.language.override.model.PLOEntry;
@@ -88,13 +95,38 @@ public class PLOLanguageOverrideProvider
 	}
 
 	protected void clear(long companyId, String languageId) {
-		_portalCache.remove(_encodeKey(companyId, languageId));
+		String key = _encodeKey(companyId, languageId);
+
+		_clear(key);
+
+		if (!_clusterLink.isEnabled()) {
+			return;
+		}
+
+		try {
+			MethodHandler methodHandler = new MethodHandler(
+				_clearMethodKey, key);
+
+			ClusterRequest clusterRequest =
+				ClusterRequest.createMulticastRequest(methodHandler, true);
+
+			clusterRequest.setFireAndForget(true);
+
+			_clusterExecutor.execute(clusterRequest);
+		}
+		catch (Throwable throwable) {
+			_log.error("Unable to execute on cluster", throwable);
+		}
 	}
 
 	@Deactivate
 	protected void deactivate() {
 		_multiVMPool.removePortalCache(
 			PLOLanguageOverrideProvider.class.getName());
+	}
+
+	private void _clear(String key) {
+		_portalCache.remove(key);
 	}
 
 	private String _encodeKey(long companyId, String languageId) {
@@ -123,6 +155,18 @@ public class PLOLanguageOverrideProvider
 
 		return overrideMap;
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		PLOLanguageOverrideProvider.class.getName());
+
+	private static final MethodKey _clearMethodKey = new MethodKey(
+		PLOLanguageOverrideProvider.class, "_clear", String.class);
+
+	@Reference
+	private ClusterExecutor _clusterExecutor;
+
+	@Reference
+	private ClusterLink _clusterLink;
 
 	@Reference
 	private MultiVMPool _multiVMPool;
