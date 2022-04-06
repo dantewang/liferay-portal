@@ -152,12 +152,12 @@ public class SearchBarPortletDisplayContextFactory {
 				true);
 		}
 
-		String paginationStartParameterName =
-			searchRequest.getPaginationStartParameterName();
-
 		searchBarPortletDisplayContext.setPaginationStartParameterName(
-			(paginationStartParameterName != null) ?
-				paginationStartParameterName : StringPool.BLANK);
+			Optional.ofNullable(
+				searchRequest.getPaginationStartParameterName()
+			).orElse(
+				StringPool.BLANK
+			));
 
 		String scopeParameterName = _getScopeParameterName(
 			portletPreferencesLookup, searchBarPrecedenceHelper,
@@ -168,19 +168,17 @@ public class SearchBarPortletDisplayContextFactory {
 			portletSharedSearchResponse.getParameter(
 				scopeParameterName, _renderRequest);
 
-		String scopeParameterValue = scopeParameterValueOptional.orElse(null);
-
 		searchBarPortletDisplayContext.setScopeParameterName(
 			scopeParameterName);
+
 		searchBarPortletDisplayContext.setScopeParameterValue(
-			(scopeParameterValue != null) ? scopeParameterValue :
-				StringPool.BLANK);
+			scopeParameterValueOptional.orElse(StringPool.BLANK));
 		searchBarPortletDisplayContext.setSearchBarPortletInstanceConfiguration(
 			searchBarPortletInstanceConfiguration);
 
 		_setSelectedSearchScope(
 			searchBarPortletDisplayContext, searchScopePreference,
-			scopeParameterValue);
+			scopeParameterValueOptional.orElse(null));
 
 		if (searchBarPortletPreferences.isInvisible()) {
 			searchBarPortletDisplayContext.setRenderNothing(true);
