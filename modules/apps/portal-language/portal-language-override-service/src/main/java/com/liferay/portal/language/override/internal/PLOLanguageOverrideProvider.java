@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
+import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiServiceInvokerUtil;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.util.MethodHandler;
 import com.liferay.portal.kernel.util.MethodKey;
@@ -102,8 +103,9 @@ public class PLOLanguageOverrideProvider
 		}
 
 		try {
-			MethodHandler methodHandler = new MethodHandler(
-				_clearMethodKey, key);
+			MethodHandler methodHandler =
+				IdentifiableOSGiServiceInvokerUtil.createMethodHandler(
+					this, _clearMethodKey.getMethod(), new Object[] {key});
 
 			ClusterRequest clusterRequest =
 				ClusterRequest.createMulticastRequest(methodHandler, true);
