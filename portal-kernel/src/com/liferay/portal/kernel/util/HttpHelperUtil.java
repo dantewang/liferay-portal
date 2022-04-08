@@ -247,9 +247,11 @@ public class HttpHelperUtil {
 		}
 
 		URI uri = null;
+
 		try {
 			uri = getURI(url);
-		} catch (URISyntaxException uriSyntaxException) {
+		}
+		catch (URISyntaxException uriSyntaxException) {
 			_log.error(uriSyntaxException);
 		}
 
@@ -333,9 +335,11 @@ public class HttpHelperUtil {
 		}
 
 		URI uri = null;
+
 		try {
 			uri = getURI(url);
-		} catch (URISyntaxException uriSyntaxException) {
+		}
+		catch (URISyntaxException uriSyntaxException) {
 			_log.error(uriSyntaxException);
 		}
 
@@ -378,9 +382,11 @@ public class HttpHelperUtil {
 		}
 
 		URI uri = null;
+
 		try {
 			uri = getURI(url);
-		} catch (URISyntaxException uriSyntaxException) {
+		}
+		catch (URISyntaxException uriSyntaxException) {
 			_log.error(uriSyntaxException);
 		}
 
@@ -413,9 +419,11 @@ public class HttpHelperUtil {
 		}
 
 		URI uri = null;
+
 		try {
 			uri = getURI(url);
-		} catch (URISyntaxException uriSyntaxException) {
+		}
+		catch (URISyntaxException uriSyntaxException) {
 			_log.error(uriSyntaxException);
 		}
 
