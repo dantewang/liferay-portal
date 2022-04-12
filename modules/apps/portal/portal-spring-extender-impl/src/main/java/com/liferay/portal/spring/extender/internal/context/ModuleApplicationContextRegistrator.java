@@ -97,6 +97,14 @@ public class ModuleApplicationContextRegistrator {
 				new BeanLocatorImpl(
 					bundleWiring.getClassLoader(), _moduleApplicationContext));
 
+			if (_serviceRegistrations != null) {
+				for (ServiceRegistration<?> serviceRegistration :
+						_serviceRegistrations) {
+
+					serviceRegistration.unregister();
+				}
+			}
+
 			_serviceRegistrations =
 				ApplicationContextServicePublisherUtil.registerContext(
 					_moduleApplicationContext,
