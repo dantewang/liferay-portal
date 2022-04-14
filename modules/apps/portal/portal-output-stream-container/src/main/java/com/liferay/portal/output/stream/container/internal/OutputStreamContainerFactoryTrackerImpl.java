@@ -18,8 +18,10 @@ import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.log.LogListener;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.output.stream.container.OutputStreamContainer;
 import com.liferay.portal.output.stream.container.OutputStreamContainerFactory;
 import com.liferay.portal.output.stream.container.OutputStreamContainerFactoryTracker;
@@ -36,11 +38,6 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Logger;
-import org.apache.logging.log4j.core.appender.WriterAppender;
-import org.apache.logging.log4j.core.layout.PatternLayout;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -168,21 +165,10 @@ public class OutputStreamContainerFactoryTrackerImpl
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
-		PatternLayout.Builder build = PatternLayout.newBuilder();
-
-		build.withPattern("%level - %m%n");
-
-		PatternLayout patternLayout = build.build();
-
-		_writerAppender = WriterAppender.createAppender(
-			patternLayout, null, new ThreadLocalWriter(), "WriterAppender",
-			false, false);
-
-		_writerAppender.start();
-
-		Logger rootLogger = (Logger)LogManager.getRootLogger();
-
-		rootLogger.addAppender(_writerAppender);
+		_serviceRegistrations.add(
+			bundleContext.registerService(
+				LogListener.class,
+				new WriterLogListener(new ThreadLocalWriter()), null));
 
 		Dictionary<String, Object> dictionary =
 			HashMapDictionaryBuilder.<String, Object>put(
@@ -231,12 +217,6 @@ public class OutputStreamContainerFactoryTrackerImpl
 		}
 
 		_serviceRegistrations.clear();
-
-		Logger rootLogger = (Logger)LogManager.getRootLogger();
-
-		if (rootLogger != null) {
-			rootLogger.removeAppender(_writerAppender);
-		}
 	}
 
 	@Reference(target = ModuleServiceLifecycle.PORTAL_INITIALIZED, unbind = "-")
@@ -259,7 +239,6 @@ public class OutputStreamContainerFactoryTrackerImpl
 
 	private final List<ServiceRegistration<?>> _serviceRegistrations =
 		new ArrayList<>();
-	private WriterAppender _writerAppender;
 	private final ThreadLocal<Writer> _writerThreadLocal = new ThreadLocal<>();
 
 	private class ThreadLocalWriter extends Writer {
@@ -292,6 +271,35 @@ public class OutputStreamContainerFactoryTrackerImpl
 				writer.write(chars, offset, length);
 			}
 		}
+
+	}
+
+	private class WriterLogListener implements LogListener {
+
+		public WriterLogListener(Writer writer) {
+			_writer = writer;
+		}
+
+		@Override
+		public void onLogged(
+			String level, String loggerName, String formattedMessage) {
+
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(level);
+			sb.append(" - ");
+			sb.append(formattedMessage);
+			sb.append(System.lineSeparator());
+
+			try {
+				_writer.write(sb.toString());
+			}
+			catch (IOException ioException) {
+				_log.error(ioException);
+			}
+		}
+
+		private final Writer _writer;
 
 	}
 
