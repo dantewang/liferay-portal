@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.dependency.manager.DependencyManagerSyncUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.log.LogListener;
 import com.liferay.portal.kernel.messaging.proxy.ProxyModeThreadLocal;
 import com.liferay.portal.kernel.model.ReleaseConstants;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
@@ -57,7 +58,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import org.apache.commons.lang.time.StopWatch;
-import org.apache.logging.log4j.core.Appender;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -124,7 +124,7 @@ public class DBUpgrader {
 					ProxyModeThreadLocal.setWithSafeCloseable(false)) {
 
 				if (PropsValues.UPGRADE_REPORT_ENABLED) {
-					_startUpgradeReportLogAppender();
+					_startUpgradeReportLogListener();
 				}
 
 				upgrade();
@@ -143,7 +143,7 @@ public class DBUpgrader {
 		}
 		finally {
 			if (PropsValues.UPGRADE_REPORT_ENABLED) {
-				_stopUpgradeReportLogAppender();
+				_stopUpgradeReportLogListener();
 			}
 		}
 
@@ -266,32 +266,32 @@ public class DBUpgrader {
 			).build());
 	}
 
-	private static void _startUpgradeReportLogAppender() {
+	private static void _startUpgradeReportLogListener() {
 		ServiceLatch serviceLatch = SystemBundleUtil.newServiceLatch();
 
-		serviceLatch.<Appender>waitFor(
+		serviceLatch.<LogListener>waitFor(
 			StringBundler.concat(
-				"(&(appender.name=UpgradeReportLogAppender)(objectClass=",
-				Appender.class.getName(), "))"),
-			appender -> {
-				_appender = appender;
+				"(&(log.listener.name=UpgradeReportLogListener)(objectClass=",
+				LogListener.class.getName(), "))"),
+			logListener -> {
+				_logListener = logListener;
 
-				_appender.start();
+				_logListener.start();
 			});
 		serviceLatch.openOn(
 			() -> {
 			});
 	}
 
-	private static void _stopUpgradeReportLogAppender() {
-		if (_appender != null) {
-			_appender.stop();
+	private static void _stopUpgradeReportLogListener() {
+		if (_logListener != null) {
+			_logListener.stop();
 		}
 
-		if (_appenderServiceReference != null) {
+		if (_logListenerServiceReference != null) {
 			BundleContext bundleContext = SystemBundleUtil.getBundleContext();
 
-			bundleContext.ungetService(_appenderServiceReference);
+			bundleContext.ungetService(_logListenerServiceReference);
 		}
 	}
 
@@ -423,8 +423,8 @@ public class DBUpgrader {
 
 	private static final Log _log = LogFactoryUtil.getLog(DBUpgrader.class);
 
-	private static volatile Appender _appender;
-	private static volatile ServiceReference<Appender>
-		_appenderServiceReference;
+	private static volatile LogListener _logListener;
+	private static volatile ServiceReference<LogListener>
+		_logListenerServiceReference;
 
 }
