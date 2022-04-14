@@ -14,23 +14,14 @@
 
 package com.liferay.portal.upgrade.internal.apache.logging.log4j.core;
 
+import com.liferay.portal.kernel.log.LogListener;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.upgrade.internal.release.osgi.commands.ReleaseManagerOSGiCommands;
 import com.liferay.portal.upgrade.internal.report.UpgradeReport;
 
-import java.io.Serializable;
-
 import java.util.Objects;
 
 import org.apache.felix.cm.PersistenceManager;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.core.ErrorHandler;
-import org.apache.logging.log4j.core.Layout;
-import org.apache.logging.log4j.core.LogEvent;
-import org.apache.logging.log4j.core.Logger;
-import org.apache.logging.log4j.message.Message;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -40,64 +31,10 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
  * @author Sam Ziemer
  */
 @Component(
-	immediate = true, property = "appender.name=UpgradeReportLogAppender",
-	service = Appender.class
+	immediate = true, property = "log.listener.name=UpgradeReportLogListener",
+	service = LogListener.class
 )
-public class UpgradeReportLogAppender implements Appender {
-
-	@Override
-	public void append(LogEvent logEvent) {
-		Message message = logEvent.getMessage();
-
-		if (logEvent.getLevel() == Level.ERROR) {
-			_upgradeReport.addErrorMessage(
-				logEvent.getLoggerName(), message.getFormattedMessage());
-		}
-		else if (logEvent.getLevel() == Level.INFO) {
-			String formattedMessage = message.getFormattedMessage();
-
-			if (Objects.equals(
-					logEvent.getLoggerName(), UpgradeProcess.class.getName()) &&
-				formattedMessage.startsWith("Completed upgrade process ")) {
-
-				_upgradeReport.addEventMessage(
-					logEvent.getLoggerName(), formattedMessage);
-			}
-		}
-		else if (logEvent.getLevel() == Level.WARN) {
-			_upgradeReport.addWarningMessage(
-				logEvent.getLoggerName(), message.getFormattedMessage());
-		}
-	}
-
-	@Override
-	public ErrorHandler getHandler() {
-		return null;
-	}
-
-	@Override
-	public Layout<? extends Serializable> getLayout() {
-		return null;
-	}
-
-	@Override
-	public String getName() {
-		return "UpgradeReportLogAppender";
-	}
-
-	@Override
-	public State getState() {
-		return null;
-	}
-
-	@Override
-	public boolean ignoreExceptions() {
-		return false;
-	}
-
-	@Override
-	public void initialize() {
-	}
+public class UpgradeReportLogAppender implements LogListener {
 
 	@Override
 	public boolean isStarted() {
@@ -105,12 +42,22 @@ public class UpgradeReportLogAppender implements Appender {
 	}
 
 	@Override
-	public boolean isStopped() {
-		return !_started;
-	}
+	public void onLogged(
+		String level, String loggerName, String formattedMessage) {
 
-	@Override
-	public void setHandler(ErrorHandler handler) {
+		if (level.equals("INFO")) {
+			if (Objects.equals(loggerName, UpgradeProcess.class.getName()) &&
+				formattedMessage.startsWith("Completed upgrade process ")) {
+
+				_upgradeReport.addEventMessage(loggerName, formattedMessage);
+			}
+		}
+		else if (level.equals("WARN")) {
+			_upgradeReport.addWarningMessage(loggerName, formattedMessage);
+		}
+		else if (level.equals("ERROR")) {
+			_upgradeReport.addErrorMessage(loggerName, formattedMessage);
+		}
 	}
 
 	@Override
@@ -118,8 +65,6 @@ public class UpgradeReportLogAppender implements Appender {
 		_started = true;
 
 		_upgradeReport = new UpgradeReport();
-
-		_rootLogger.addAppender(this);
 	}
 
 	@Override
@@ -133,9 +78,6 @@ public class UpgradeReportLogAppender implements Appender {
 
 		_started = false;
 	}
-
-	private static final Logger _rootLogger =
-		(Logger)LogManager.getRootLogger();
 
 	@Reference
 	private PersistenceManager _persistenceManager;
