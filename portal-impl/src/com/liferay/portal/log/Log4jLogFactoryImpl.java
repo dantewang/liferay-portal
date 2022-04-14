@@ -47,8 +47,8 @@ public class Log4jLogFactoryImpl implements LogFactory {
 			new Log4jLogImpl(LogManager.getLogger(name)));
 	}
 
-	private static volatile ServiceTrackerList<LogListener> _serviceTrackerList;
 	private static volatile LogListenerAppender _logListenerAppender;
+	private static volatile ServiceTrackerList<LogListener> _serviceTrackerList;
 
 	private static class LogListenerAppender extends AbstractAppender {
 
@@ -114,8 +114,7 @@ public class Log4jLogFactoryImpl implements LogFactory {
 
 					Logger rootLogger = (Logger)LogManager.getRootLogger();
 
-					_logListenerAppender =
-						new LogListenerAppender();
+					_logListenerAppender = new LogListenerAppender();
 
 					_logListenerAppender.start();
 
