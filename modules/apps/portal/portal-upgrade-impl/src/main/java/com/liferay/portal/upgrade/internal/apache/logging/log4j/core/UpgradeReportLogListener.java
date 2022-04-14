@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 	immediate = true, property = "log.listener.name=UpgradeReportLogListener",
 	service = LogListener.class
 )
-public class UpgradeReportLogAppender implements LogListener {
+public class UpgradeReportLogListener implements LogListener {
 
 	@Override
 	public boolean isStarted() {
