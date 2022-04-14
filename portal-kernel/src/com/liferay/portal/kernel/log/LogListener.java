@@ -19,13 +19,17 @@ package com.liferay.portal.kernel.log;
  */
 public interface LogListener {
 
-	public boolean isStarted();
+	public default boolean isStarted() {
+		return true;
+	}
 
 	public void onLogged(
 		String level, String loggerName, String formattedMessage);
 
-	public void start();
+	public default void start() {
+	}
 
-	public void stop();
+	public default void stop() {
+	}
 
 }
