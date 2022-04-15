@@ -8039,22 +8039,16 @@ public class PortalImpl implements Portal {
 		return i18nErrorPath.concat(redirect);
 	}
 
-	private List<Portlet> _getAllPortlets(
-		Layout layout, LayoutTypePortlet layoutTypePortlet) {
+	private List<Portlet> _getAllNonembeddedPortlets(Layout layout) {
+		LayoutTypePortlet layoutTypePortlet =
+			(LayoutTypePortlet)layout.getLayoutType();
 
 		List<Portlet> staticPortlets = layoutTypePortlet.getStaticPortlets(
 			PropsKeys.LAYOUT_STATIC_PORTLETS_ALL);
 
-		List<Portlet> explicitlyAddedPortlets = new ArrayList<>();
-
-		if (!layout.isTypeAssetDisplay() && !layout.isTypeContent()) {
-			explicitlyAddedPortlets =
-				layoutTypePortlet.getExplicitlyAddedPortlets(false);
-		}
-
 		return layoutTypePortlet.addStaticPortlets(
-			explicitlyAddedPortlets, staticPortlets,
-			layoutTypePortlet.getEmbeddedPortlets());
+			layoutTypePortlet.getExplicitlyAddedPortlets(), staticPortlets,
+			null);
 	}
 
 	private Map<Locale, String> _getAlternateURLs(
@@ -8756,13 +8750,9 @@ public class PortalImpl implements Portal {
 	}
 
 	private boolean _layoutContainsPortletId(Layout layout, String portletId) {
-		LayoutTypePortlet layoutTypePortlet =
-			(LayoutTypePortlet)layout.getLayoutType();
-
-		for (Portlet portlet : _getAllPortlets(layout, layoutTypePortlet)) {
-			if ((portletId.equals(portlet.getPortletId()) ||
-				 portletId.equals(portlet.getRootPortletId())) &&
-				!layout.isPortletEmbedded(portletId, layout.getGroupId())) {
+		for (Portlet portlet : _getAllNonembeddedPortlets(layout)) {
+			if (portletId.equals(portlet.getPortletId()) ||
+				portletId.equals(portlet.getRootPortletId())) {
 
 				return true;
 			}
