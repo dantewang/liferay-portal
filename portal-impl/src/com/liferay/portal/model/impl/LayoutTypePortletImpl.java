@@ -302,16 +302,7 @@ public class LayoutTypePortletImpl
 	public List<Portlet> getAllPortlets(String columnId) {
 		String[] portletIds = StringUtil.split(getColumnValue(columnId));
 
-		List<Portlet> portlets = new ArrayList<>(portletIds.length);
-
-		for (String portletId : portletIds) {
-			Portlet portlet = PortletLocalServiceUtil.getPortletById(
-				getCompanyId(), portletId);
-
-			if (portlet != null) {
-				portlets.add(portlet);
-			}
-		}
+		List<Portlet> portlets = _getPortlets(portletIds);
 
 		List<Portlet> startPortlets = getStaticPortlets(
 			PropsKeys.LAYOUT_STATIC_PORTLETS_START + columnId);
@@ -340,22 +331,44 @@ public class LayoutTypePortletImpl
 
 		List<Portlet> portlets = new ArrayList<>();
 
-		List<String> columns = getColumns();
+		Layout layout = getLayout();
 
-		for (String columnId : columns) {
-			if (!includeCustomizableColumns) {
-				String customizableString = getTypeSettingsProperty(
-					CustomizedPages.namespaceColumnId(columnId));
+		if (layout.isTypeAssetDisplay() || layout.isTypeContent()) {
+			List<String> portletIds = new ArrayList<>();
 
-				boolean customizable = GetterUtil.getBoolean(
-					customizableString);
+			List<com.liferay.portal.kernel.model.PortletPreferences>
+				portletPreferencesList =
+					PortletPreferencesLocalServiceUtil.
+						getPortletPreferencesByPlid(layout.getPlid());
 
-				if (customizable && !isLayoutSetPrototype()) {
-					continue;
+			for (com.liferay.portal.kernel.model.PortletPreferences
+					portletPreferences : portletPreferencesList) {
+
+				if (!portletIds.contains(portletPreferences.getPortletId())) {
+					portletIds.add(portletPreferences.getPortletId());
 				}
 			}
 
-			portlets.addAll(getAllPortlets(columnId));
+			portlets = _getPortlets(portletIds.toArray(new String[0]));
+		}
+		else {
+			List<String> columns = getColumns();
+
+			for (String columnId : columns) {
+				if (!includeCustomizableColumns) {
+					String customizableString = getTypeSettingsProperty(
+						CustomizedPages.namespaceColumnId(columnId));
+
+					boolean customizable = GetterUtil.getBoolean(
+						customizableString);
+
+					if (customizable && !isLayoutSetPrototype()) {
+						continue;
+					}
+				}
+
+				portlets.addAll(getAllPortlets(columnId));
+			}
 		}
 
 		return portlets;
@@ -2127,6 +2140,21 @@ public class LayoutTypePortletImpl
 		}
 
 		return columnIds;
+	}
+
+	private List<Portlet> _getPortlets(String[] portletIds) {
+		List<Portlet> portlets = new ArrayList<>(portletIds.length);
+
+		for (String portletId : portletIds) {
+			Portlet portlet = PortletLocalServiceUtil.getPortletById(
+				getCompanyId(), portletId);
+
+			if (portlet != null) {
+				portlets.add(portlet);
+			}
+		}
+
+		return portlets;
 	}
 
 	private PortletPreferences _getUserColumnPortletPreferences(
