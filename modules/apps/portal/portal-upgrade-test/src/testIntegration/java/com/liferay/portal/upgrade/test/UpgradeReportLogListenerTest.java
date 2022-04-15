@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.log.LogListener;
 import com.liferay.portal.kernel.model.Release;
 import com.liferay.portal.kernel.service.ReleaseLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -42,8 +43,6 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.logging.log4j.core.Appender;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -57,7 +56,7 @@ import org.junit.runner.RunWith;
  * @author Sam Ziemer
  */
 @RunWith(Arquillian.class)
-public class UpgradeReportLogAppenderTest {
+public class UpgradeReportLogListenerTest {
 
 	@ClassRule
 	@Rule
@@ -82,7 +81,7 @@ public class UpgradeReportLogAppenderTest {
 
 	@After
 	public void tearDown() {
-		_appender.stop();
+		_logListener.stop();
 
 		_reportContent = null;
 
@@ -103,13 +102,13 @@ public class UpgradeReportLogAppenderTest {
 	public void testDatabaseTablesCounts() throws Exception {
 		_db.runSQL("insert into UpgradeReportTable2 (id_) values (1)");
 
-		_appender.start();
+		_logListener.start();
 
 		_db.runSQL("insert into UpgradeReportTable1 (id_) values (1)");
 
 		_db.runSQL("delete from UpgradeReportTable2 where id_ = 1");
 
-		_appender.stop();
+		_logListener.stop();
 
 		if (_reportContent == null) {
 			_reportContent = _getReportContent();
@@ -150,9 +149,9 @@ public class UpgradeReportLogAppenderTest {
 
 	@Test
 	public void testDatabaseTablesIsSorted() throws Exception {
-		_appender.start();
+		_logListener.start();
 
-		_appender.stop();
+		_logListener.stop();
 
 		if (_reportContent == null) {
 			_reportContent = _getReportContent();
@@ -182,7 +181,7 @@ public class UpgradeReportLogAppenderTest {
 
 	@Test
 	public void testInfoEventsInOrder() throws Exception {
-		_appender.start();
+		_logListener.start();
 
 		Log log = LogFactoryUtil.getLog(UpgradeProcess.class);
 
@@ -200,7 +199,7 @@ public class UpgradeReportLogAppenderTest {
 			"Completed upgrade process " + slowerUpgradeProcessName +
 				" in 20401 ms");
 
-		_appender.stop();
+		_logListener.stop();
 
 		String reportContent = _getReportContent();
 
@@ -211,9 +210,9 @@ public class UpgradeReportLogAppenderTest {
 
 	@Test
 	public void testLogEvents() throws Exception {
-		_appender.start();
+		_logListener.start();
 
-		Log log = LogFactoryUtil.getLog(UpgradeReportLogAppenderTest.class);
+		Log log = LogFactoryUtil.getLog(UpgradeReportLogListenerTest.class);
 
 		log.warn("Warning");
 		log.warn("Warning");
@@ -224,7 +223,7 @@ public class UpgradeReportLogAppenderTest {
 			"Completed upgrade process com.liferay.portal.UpgradeTest in " +
 				"20401 ms");
 
-		_appender.stop();
+		_logListener.stop();
 
 		_assertReport("2 occurrences of the following warnings: Warning");
 		_assertReport(
@@ -243,9 +242,9 @@ public class UpgradeReportLogAppenderTest {
 
 		_releaseLocalService.updateRelease(release);
 
-		_appender.start();
+		_logListener.start();
 
-		_appender.stop();
+		_logListener.stop();
 
 		release = _releaseLocalService.fetchRelease(bundleSymbolicName);
 
@@ -261,9 +260,9 @@ public class UpgradeReportLogAppenderTest {
 
 	@Test
 	public void testNoLogEvents() throws Exception {
-		_appender.start();
+		_logListener.start();
 
-		_appender.stop();
+		_logListener.stop();
 
 		_assertReport("No errors thrown during upgrade");
 		_assertReport("No upgrade processes registered");
@@ -272,9 +271,9 @@ public class UpgradeReportLogAppenderTest {
 
 	@Test
 	public void testProperties() throws Exception {
-		_appender.start();
+		_logListener.start();
 
-		_appender.stop();
+		_logListener.stop();
 
 		_assertReport(
 			StringBundler.concat(
@@ -302,7 +301,7 @@ public class UpgradeReportLogAppenderTest {
 
 		_releaseLocalService.updateRelease(release);
 
-		_appender.start();
+		_logListener.start();
 
 		release = _releaseLocalService.getRelease(1);
 
@@ -311,7 +310,7 @@ public class UpgradeReportLogAppenderTest {
 
 		_releaseLocalService.updateRelease(release);
 
-		_appender.stop();
+		_logListener.stop();
 
 		Version latestSchemaVersion =
 			PortalUpgradeProcess.getLatestSchemaVersion();
@@ -353,8 +352,8 @@ public class UpgradeReportLogAppenderTest {
 	private static final Pattern _pattern = Pattern.compile(
 		"(\\w+_?)\\s+(\\d+|-)\\s+(\\d+|-)\n");
 
-	@Inject
-	private Appender _appender;
+	@Inject(filter = "log.listener.name=UpgradeReportLogListener")
+	private LogListener _logListener;
 
 	@Inject
 	private ReleaseLocalService _releaseLocalService;
