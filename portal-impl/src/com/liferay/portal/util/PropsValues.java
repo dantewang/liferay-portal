@@ -895,6 +895,10 @@ public class PropsValues {
 	public static final int HIBERNATE_JDBC_BATCH_SIZE = GetterUtil.getInteger(
 		PropsUtil.get(PropsKeys.HIBERNATE_JDBC_BATCH_SIZE));
 
+	public static final String
+		HIBERNATE_SESSION_FACTORY_IMPORTED_CLASS_NAME_REGEXP = PropsUtil.get(
+			PropsKeys.HIBERNATE_SESSION_FACTORY_IMPORTED_CLASS_NAME_REGEXP);
+
 	public static final String HTTP_HEADER_VERSION_VERBOSITY = PropsUtil.get(
 		PropsKeys.HTTP_HEADER_VERSION_VERBOSITY);
 
