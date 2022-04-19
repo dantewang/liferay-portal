@@ -117,7 +117,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * @author Pablo Carvalho
  * @author Miguel Angelo Caldas Gallindo
  */
-@PrepareForTest({LocaleUtil.class, PropsValues.class})
+@PrepareForTest(PropsValues.class)
 @RunWith(PowerMockRunner.class)
 @SuppressStaticInitializationFor(
 	{
@@ -708,61 +708,18 @@ public abstract class BaseDDMTestCase extends PowerMockito {
 	}
 
 	protected void setUpLocaleUtil() {
-		mockStatic(LocaleUtil.class);
+		LocaleUtil localeUtil = ReflectionTestUtil.getFieldValue(
+			LocaleUtil.class, "_localeUtil");
 
-		when(
-			LocaleUtil.fromLanguageId("en_US")
-		).thenReturn(
-			LocaleUtil.US
-		);
+		Map<String, Locale> locales = ReflectionTestUtil.getFieldValue(
+			localeUtil, "_locales");
 
-		when(
-			LocaleUtil.fromLanguageId("pt_BR")
-		).thenReturn(
-			LocaleUtil.BRAZIL
-		);
+		locales.clear();
 
-		when(
-			LocaleUtil.fromLanguageId("en_US", true, false)
-		).thenReturn(
-			LocaleUtil.US
-		);
+		locales.put("en_US", LocaleUtil.US);
+		locales.put("pt_BR", LocaleUtil.BRAZIL);
 
-		when(
-			LocaleUtil.getDefault()
-		).thenReturn(
-			LocaleUtil.US
-		);
-
-		when(
-			LocaleUtil.toLanguageId(LocaleUtil.US)
-		).thenReturn(
-			"en_US"
-		);
-
-		when(
-			LocaleUtil.toLanguageId(LocaleUtil.BRAZIL)
-		).thenReturn(
-			"pt_BR"
-		);
-
-		when(
-			LocaleUtil.toLanguageIds((Locale[])Matchers.any())
-		).then(
-			(Answer<String[]>)invocationOnMock -> {
-				Object[] args = invocationOnMock.getArguments();
-
-				Locale[] locales = (Locale[])args[0];
-
-				String[] languageIds = new String[locales.length];
-
-				for (int i = 0; i < locales.length; i++) {
-					languageIds[i] = LocaleUtil.toLanguageId(locales[i]);
-				}
-
-				return languageIds;
-			}
-		);
+		ReflectionTestUtil.setFieldValue(localeUtil, "_locale", LocaleUtil.US);
 	}
 
 	protected void setUpLocalizationUtil() {
