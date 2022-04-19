@@ -6,6 +6,7 @@
 **/liferay/logs/*.log
 **/liferay/logs/*.xml
 **/pmd-reports
+**/pom.xml
 *.bak
 *.iml
 *.ipr
